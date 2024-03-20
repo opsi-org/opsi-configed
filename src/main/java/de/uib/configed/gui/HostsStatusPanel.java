@@ -16,8 +16,6 @@ import javax.swing.JTextField;
 
 import org.java_websocket.handshake.ServerHandshake;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.messagebus.MessagebusListener;
@@ -179,19 +177,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
-		String pathConnectedIcon;
-		String pathDisconnectedIcon;
-
-		if (FlatLaf.isLafDark()) {
-			pathConnectedIcon = "images/network-wireless-connected-100_invert.png";
-			pathDisconnectedIcon = "images/network-wireless-disconnected_invert.png";
-		} else {
-			pathConnectedIcon = "images/network-wireless-connected-100.png";
-			pathDisconnectedIcon = "images/network-wireless-disconnected.png";
-		}
-
-		connectedIcon = Utils.createImageIcon(pathConnectedIcon, "");
-		disconnectedIcon = Utils.createImageIcon(pathDisconnectedIcon, "");
+		connectedIcon = Utils.createImageIcon("bootstrap/check_blue.png", "", 28, 28);
+		disconnectedIcon = Utils.createImageIcon("bootstrap/circle_red.png", "", 22, 22);
 
 		connectionStateLabel = new JLabel();
 
@@ -230,7 +217,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addGap(Globals.GAP_SIZE).addComponent(connectionStateLabel).addGap(Globals.GAP_SIZE));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelAllClientsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(labelActivated, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)

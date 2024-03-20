@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.Component;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
@@ -33,9 +32,9 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
+	private ImageIcon configServerConnectedIcon = Utils.createImageIcon("bootstrap/check_blue.png", "");
+	private ImageIcon configServerDisconnectedIcon = Utils.createImageIcon("bootstrap/circle_red.png", "");
 	private ImageIcon connectedIcon = Utils.createImageIcon("bootstrap/check_green.png", "");
-	private Set<String> clientsConnectedByMessagebus = persistenceController.getHostDataService()
-			.getMessagebusConnectedClients();
 
 	public DepotListCellRenderer(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -65,11 +64,7 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 		}
 
 		if (ServerFacade.isOpsi43()) {
-			if (configedMain.getConnectedClientsByMessagebus().contains(value)) {
-				setIcon(connectedIcon);
-			} else {
-				setIcon(new EmptyIcon(connectedIcon.getIconWidth(), 0));
-			}
+			setConnectionIcon(value);
 		}
 
 		String depot = (String) value;
@@ -83,5 +78,19 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 		}
 
 		return this;
+	}
+
+	private void setConnectionIcon(Object value) {
+		if (configedMain.getConnectedClientsByMessagebus().contains(value)) {
+			setIcon(connectedIcon);
+		} else if (value != null && value.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
+			if (configedMain.getMessagebus().isConnected()) {
+				setIcon(configServerConnectedIcon);
+			} else {
+				setIcon(configServerDisconnectedIcon);
+			}
+		} else {
+			setIcon(new EmptyIcon(connectedIcon.getIconWidth(), 0));
+		}
 	}
 }
