@@ -75,8 +75,9 @@ public class Main {
 		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
 		options.addOption("u", "user", true, "User for authentication. DEFAULT: give interactive");
 		options.addOption("p", "password", true, "Password for authentication. DEFAULT: give interactive");
-		options.addOption("o", "otp", true, "One time password for authentication. DEFAULT: give interactive\n"
-				+ "OTP is a paid feature. Should be used when license is available and OTP is enabled for a user");
+		options.addOption("otp", "one-time-password", true,
+				"One time password for authentication. DEFAULT: give interactive\n"
+						+ "OTP is a paid feature. Should be used when license is available and OTP is enabled for a user");
 		options.addOption("c", "client", true, "CLIENT to preselect.  DEFAULT: no client selected");
 		options.addOption("g", "clientgroup", true,
 				"clientgroup to preselect. DEFAULT: last selected group reselected");
