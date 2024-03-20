@@ -58,14 +58,9 @@ import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsicommand.terminalcommand.TerminalCommandCurl;
-import de.uib.opsicommand.terminalcommand.TerminalCommandDeployClientAgent;
-import de.uib.opsicommand.terminalcommand.TerminalCommandModulesUpload;
-import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiMakeProductFile;
-import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerInstall;
-import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiPackageManagerUninstall;
-import de.uib.opsicommand.terminalcommand.TerminalCommandOpsiSetRights;
-import de.uib.opsicommand.terminalcommand.TerminalCommandPackageUpdater;
+import de.uib.opsicommand.terminalcommand.TerminalCommand;
+import de.uib.opsicommand.terminalcommand.TerminalCommandFactory;
+import de.uib.opsicommand.terminalcommand.TerminalCommandNeedParameter;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
@@ -451,68 +446,28 @@ public class MainFrame extends JFrame {
 		jMenuTerminal.setText("Terminal");
 		jMenuTerminal.add(jMenuTerminal);
 
-		TerminalCommandOpsiSetRights opsiSetRightsCommand = new TerminalCommandOpsiSetRights();
-		JMenuItem opsiSetRightsCommandMenuItem = new JMenuItem();
-		opsiSetRightsCommandMenuItem.setText(opsiSetRightsCommand.getMenuText());
-		opsiSetRightsCommandMenuItem.setToolTipText(opsiSetRightsCommand.getToolTipText());
-		opsiSetRightsCommandMenuItem
-				.addActionListener((ActionEvent e) -> opsiSetRightsCommand.startParameterGui(configedMain));
-		jMenuTerminal.add(opsiSetRightsCommandMenuItem);
+		JMenu menuOpsi = new JMenu(TerminalCommandFactory.PARENT_OPSI);
+		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
+				|| UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE) == null
+				|| !UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE);
+		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
+		addTerminalCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
+		jMenuTerminal.add(menuOpsi);
+	}
 
-		TerminalCommandCurl curlCommand = new TerminalCommandCurl();
-		JMenuItem curlCommandMenuItem = new JMenuItem();
-		curlCommandMenuItem.setText(curlCommand.getMenuText());
-		curlCommandMenuItem.setToolTipText(curlCommand.getToolTipText());
-		curlCommandMenuItem.addActionListener((ActionEvent e) -> curlCommand.startParameterGui(configedMain));
-		jMenuTerminal.add(curlCommandMenuItem);
-
-		TerminalCommandModulesUpload modulesUploadCommand = new TerminalCommandModulesUpload();
-		JMenuItem modulesUploadCommandMenuItem = new JMenuItem();
-		modulesUploadCommandMenuItem.setText(modulesUploadCommand.getMenuText());
-		modulesUploadCommandMenuItem.setToolTipText(modulesUploadCommand.getToolTipText());
-		modulesUploadCommandMenuItem
-				.addActionListener((ActionEvent e) -> modulesUploadCommand.startParameterGui(configedMain));
-		jMenuTerminal.add(modulesUploadCommandMenuItem);
-
-		TerminalCommandOpsiPackageManagerInstall opsiPackageManagerInstallCommand = new TerminalCommandOpsiPackageManagerInstall();
-		JMenuItem opsiPackageManagerInstallCommandMenuItem = new JMenuItem();
-		opsiPackageManagerInstallCommandMenuItem.setText(opsiPackageManagerInstallCommand.getMenuText());
-		opsiPackageManagerInstallCommandMenuItem.setToolTipText(opsiPackageManagerInstallCommand.getToolTipText());
-		opsiPackageManagerInstallCommandMenuItem
-				.addActionListener((ActionEvent e) -> opsiPackageManagerInstallCommand.startParameterGui(configedMain));
-		jMenuTerminal.add(opsiPackageManagerInstallCommandMenuItem);
-
-		TerminalCommandOpsiPackageManagerUninstall opsiPackageManagerUninstallCommand = new TerminalCommandOpsiPackageManagerUninstall();
-		JMenuItem opsiPackageManagerUninstallCommandMenuItem = new JMenuItem();
-		opsiPackageManagerUninstallCommandMenuItem.setText(opsiPackageManagerUninstallCommand.getMenuText());
-		opsiPackageManagerUninstallCommandMenuItem.setToolTipText(opsiPackageManagerUninstallCommand.getToolTipText());
-		opsiPackageManagerUninstallCommandMenuItem.addActionListener(
-				(ActionEvent e) -> opsiPackageManagerUninstallCommand.startParameterGui(configedMain));
-		jMenuTerminal.add(opsiPackageManagerUninstallCommandMenuItem);
-
-		TerminalCommandOpsiMakeProductFile opsiMakeProductFileCommand = new TerminalCommandOpsiMakeProductFile();
-		JMenuItem opsiMakeProductFileCommandMenuItem = new JMenuItem();
-		opsiMakeProductFileCommandMenuItem.setText(opsiMakeProductFileCommand.getMenuText());
-		opsiMakeProductFileCommandMenuItem.setToolTipText(opsiMakeProductFileCommand.getToolTipText());
-		opsiMakeProductFileCommandMenuItem
-				.addActionListener((ActionEvent e) -> opsiMakeProductFileCommand.startParameterGui(configedMain));
-		jMenuTerminal.add(opsiMakeProductFileCommandMenuItem);
-
-		TerminalCommandDeployClientAgent deployClientAgentCommand = new TerminalCommandDeployClientAgent();
-		JMenuItem deployClientAgentCommandMenuItem = new JMenuItem();
-		deployClientAgentCommandMenuItem.setText(deployClientAgentCommand.getMenuText());
-		deployClientAgentCommandMenuItem.setToolTipText(deployClientAgentCommand.getToolTipText());
-		deployClientAgentCommandMenuItem
-				.addActionListener((ActionEvent e) -> deployClientAgentCommand.startParameterGui(configedMain));
-		jMenuTerminal.add(deployClientAgentCommandMenuItem);
-
-		TerminalCommandPackageUpdater packageUpdaterCommand = new TerminalCommandPackageUpdater();
-		JMenuItem packageUpdaterCommandMenuItem = new JMenuItem();
-		packageUpdaterCommandMenuItem.setText(packageUpdaterCommand.getMenuText());
-		packageUpdaterCommandMenuItem.setToolTipText(packageUpdaterCommand.getToolTipText());
-		packageUpdaterCommandMenuItem
-				.addActionListener((ActionEvent e) -> packageUpdaterCommand.startParameterGui(configedMain));
-		jMenuTerminal.add(packageUpdaterCommandMenuItem);
+	private void addTerminalCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
+		final TerminalCommandFactory factory = TerminalCommandFactory.getInstance();
+		TerminalCommand[] commands = factory.getDefaultOpsiCommands();
+		for (final TerminalCommand command : commands) {
+			JMenuItem jMenuOpsiCommand = new JMenuItem();
+			jMenuOpsiCommand.setText(command.getMenuText());
+			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
+			jMenuOpsiCommand.addActionListener(
+					(ActionEvent e) -> ((TerminalCommandNeedParameter) command).startParameterGui(configedMain));
+			menuOpsi.add(jMenuOpsiCommand);
+			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
+		}
 	}
 
 	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {

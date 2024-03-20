@@ -17,7 +17,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.terminal.PackageUpdaterDialog;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 
 public class TerminalCommandPackageUpdater implements TerminalCommand, TerminalCommandNeedParameter {
 	private static final int PRIORITY = 105;
@@ -53,7 +52,7 @@ public class TerminalCommandPackageUpdater implements TerminalCommand, TerminalC
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 
 public class TerminalCommandHelp implements TerminalCommand {
 	private boolean needParameter;
@@ -43,7 +42,7 @@ public class TerminalCommandHelp implements TerminalCommand {
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

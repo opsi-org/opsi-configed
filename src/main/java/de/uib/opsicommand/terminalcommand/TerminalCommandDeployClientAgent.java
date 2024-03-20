@@ -13,7 +13,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.terminal.DeployClientAgentParameterDialog;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 
 public class TerminalCommandDeployClientAgent implements TerminalCommand, TerminalCommandNeedParameter {
 	private String command;
@@ -44,7 +43,7 @@ public class TerminalCommandDeployClientAgent implements TerminalCommand, Termin
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

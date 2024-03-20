@@ -11,7 +11,6 @@ import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 
 public class TerminalCommandFileUpload implements TerminalCommandNeedParameter, TerminalCommand {
 	private static final int PRIORITY = 0;
@@ -153,7 +152,7 @@ public class TerminalCommandFileUpload implements TerminalCommandNeedParameter, 
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

@@ -13,7 +13,6 @@ import java.util.List;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommand;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -50,7 +49,7 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 	 * @return SSHCommand_Template instance
 	 */
 	public TerminalMultiCommand() {
-		position = SSHCommandFactory.POSITION_DEFAULT;
+		position = TerminalCommandFactory.DEFAULT_POSITION;
 	}
 
 	/**
@@ -66,7 +65,7 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 	 * @return SSHCommand_Template instance
 	 */
 	public TerminalMultiCommand(String id, List<String> c, String mt, String pmt, String ttt, int p) {
-		position = SSHCommandFactory.POSITION_DEFAULT;
+		position = TerminalCommandFactory.DEFAULT_POSITION;
 
 		initValues(id, c, mt, pmt, ttt, p);
 	}
@@ -155,7 +154,7 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isEmpty()) {
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}
@@ -338,12 +337,13 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");
-		com.append(SSHCommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
-		com.append(SSHCommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
-		com.append(SSHCommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
-		com.append(SSHCommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
-		com.append(SSHCommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
-		com.append(SSHCommandFactory.COMMAND_MAP_COMMANDS).append(":").append("[");
+		com.append(TerminalCommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
+		com.append(TerminalCommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText())
+				.append(",");
+		com.append(TerminalCommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
+		com.append(TerminalCommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
+		com.append(TerminalCommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
+		com.append(TerminalCommandFactory.COMMAND_MAP_COMMANDS).append(":").append("[");
 		for (int i = 0; i < getCommandsRaw().size(); i++) {
 			String c = getCommandsRaw().get(i);
 			if (i == getCommandsRaw().size() - 1) {
