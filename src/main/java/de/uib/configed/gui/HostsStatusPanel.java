@@ -25,7 +25,6 @@ import utils.Utils;
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	public static final int MAX_CLIENT_NAMES_IN_FIELD = 10;
 
-	private static final int ICON_SIZE = 22;
 	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
@@ -178,8 +177,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Utils.createImageIcon("bootstrap/check_circle_blue.png", "", ICON_SIZE, ICON_SIZE);
-		disconnectedIcon = Utils.createImageIcon("bootstrap/circle_blue.png", "", ICON_SIZE, ICON_SIZE);
+		connectedIcon = Utils.createImageIcon("bootstrap/check_circle_blue_large.png", "");
+		disconnectedIcon = Utils.createImageIcon("bootstrap/circle_blue_large.png", "");
 
 		connectionStateLabel = new JLabel();
 
