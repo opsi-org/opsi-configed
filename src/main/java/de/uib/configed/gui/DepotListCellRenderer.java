@@ -80,7 +80,6 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	}
 
 	private void setConnectionIcon(Object value) {
-		Logging.devel(this, "setting icon " + value);
 		if (configedMain.getConnectedClientsByMessagebus().contains(value)) {
 			setIcon(connectedIcon);
 		} else if (value != null && value.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
