@@ -364,14 +364,10 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	// /* This method gets called when button 1 is pressed */
 	private void cancel() {
 		super.doAction1();
 	}
 
-	// 
-
-	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
 		Logging.info(this, "doAction2 deploy-clientagent ");

@@ -313,7 +313,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		commandPMUninstall.setOpsiproduct(prod);
 	}
 
-	/* This method is called when button 1 is pressed */
 	private boolean confirmAction() {
 		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"), true,

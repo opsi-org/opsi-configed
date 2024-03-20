@@ -67,14 +67,10 @@ public class TerminalCommandOpsiPackageManager implements TerminalCommand {
 		return "";
 	}
 
-	/**
-	 * Sets the given command
-	 * 
-	 * @param c (command): String
-	 **/
 	@Override
 	public void setCommand(String c) {
-		/* Not needed in this class */}
+		/* Not needed in this class */
+	}
 
 	@Override
 	public boolean needParameter() {

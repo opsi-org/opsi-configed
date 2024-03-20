@@ -15,55 +15,27 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.utilities.logging.Logging;
 
-/**
- * This class represent a ssh-command
- **/
 public class TerminalMultiCommand implements TerminalCommand, Comparable<TerminalMultiCommand> {
 	private static final String CONFIDENTIAL_INFORMATION = null;
 
-	/** boolean needParameter = false **/
 	private boolean needParameter;
-	/** boolean isMultiCommand = true **/
 	private boolean isMultiCommand = true;
-	/** String unique command id **/
 	private String id;
-	/** String unique menu text **/
 	private String menuText;
-	/** LinkedList<SSHCommand> ssh_command **/
 	private List<TerminalCommand> commands = new LinkedList<>();
 	private List<TerminalCommand> sshCommandOriginal = new LinkedList<>();
-	/** String parent menu text **/
 	private String parentMenuText;
-	/** String tooltip text **/
 	private String tooltipText = "";
-	/** integer position **/
 	private int position;
 
 	private String mainName = "";
 
 	private boolean firstInitCommands = true;
 
-	/**
-	 * Creates an empty SSHCommand_Template instance
-	 * 
-	 * @return SSHCommand_Template instance
-	 */
 	public TerminalMultiCommand() {
 		position = TerminalCommandFactory.DEFAULT_POSITION;
 	}
 
-	/**
-	 * Creates an SSHCommand_Template instance with given parameter
-	 * 
-	 * @param id  : String
-	 * @param c   (commands): LinkedList<String>
-	 * @param mt  (menu text): String
-	 * @param ns  (needSudo): boolean
-	 * @param pmt (parent menu text) : String
-	 * @param ttt (tooltip text): String
-	 * @param p   (position): int
-	 * @return SSHCommand_Template instance
-	 */
 	public TerminalMultiCommand(String id, List<String> c, String mt, String pmt, String ttt, int p) {
 		position = TerminalCommandFactory.DEFAULT_POSITION;
 
@@ -99,20 +71,10 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		mainName = n;
 	}
 
-	/**
-	 * Sets the Id
-	 * 
-	 * @param i (id): String
-	 **/
 	public void setId(String i) {
 		id = i;
 	}
 
-	/**
-	 * Sets the given commandlist
-	 * 
-	 * @param cList: List<String>
-	 **/
 	public void setCommands(List<String> cList) {
 		if (cList != null) {
 			commands.clear();
@@ -127,20 +89,11 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		}
 	}
 
-	/**
-	 * Sets the given command
-	 * 
-	 * @param c (command): String
-	 **/
 	@Override
 	public void setCommand(String c) {
-		/* Not needed here */}
+		/* Not needed here */
+	}
 
-	/**
-	 * Add given SSHCommand to commandlist
-	 * 
-	 * @param sshc: SSHCommand
-	 **/
 	public void addCommand(TerminalCommand sshc) {
 		commands.add(sshc);
 		sshCommandOriginal.add(sshc);
@@ -160,57 +113,27 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		}
 	}
 
-	/**
-	 * Sets the menu text
-	 * 
-	 * @param mt (menu text): String
-	 **/
 	public void setMenuText(String mt) {
 		menuText = mt;
 	}
 
-	/**
-	 * Sets the parent menu text
-	 * 
-	 * @param pmt (parent menu text): String
-	 **/
 	public void setParentMenuText(String pmt) {
 		parentMenuText = pmt;
 	}
 
-	/**
-	 * Sets the tooltip text
-	 * 
-	 * @param ttt (tooltip text): String
-	 **/
 	public void setTooltipText(String ttt) {
 		tooltipText = ttt;
 	}
 
-	/**
-	 * Sets the position
-	 * 
-	 * @param p (position): int
-	 **/
 	public void setPriority(int p) {
 		position = p;
 	}
 
-	/**
-	 * Get the command id
-	 * 
-	 * @return id
-	 **/
 	@Override
 	public String getId() {
 		return id;
 	}
 
-	/**
-	 * Get the trimmed command menutext
-	 * 
-	 * @return menuText
-	 **/
 	@Override
 	public String getMenuText() {
 		if (menuText != null && menuText.length() > 0) {
@@ -220,31 +143,16 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		return menuText;
 	}
 
-	/**
-	 * Get the command parent menutext
-	 * 
-	 * @return parentMenuText
-	 **/
 	@Override
 	public String getParentMenuText() {
 		return parentMenuText;
 	}
 
-	/**
-	 * Get the command tooltip text
-	 * 
-	 * @return tooltip text
-	 **/
 	@Override
 	public String getToolTipText() {
 		return tooltipText;
 	}
 
-	/**
-	 * Get the command from sshcommand
-	 * 
-	 * @return command
-	 **/
 	@Override
 	public String getCommand() {
 		StringBuilder sb = new StringBuilder();
@@ -259,11 +167,6 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		return sb.toString();
 	}
 
-	/**
-	 * Get the all commands in sshcommand
-	 * 
-	 * @return List of SSHCommand
-	 **/
 	public List<TerminalCommand> getCommands() {
 		return commands;
 	}
@@ -272,29 +175,16 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		return sshCommandOriginal;
 	}
 
-	/**
-	 * Get the command without parameter from SSHCommand
-	 * 
-	 * @return command
-	 **/
 	@Override
 	public String getCommandRaw() {
 		return "";
 	}
 
-	/**
-	 * @return the position
-	 */
 	@Override
 	public int getPriority() {
 		return position;
 	}
 
-	/**
-	 * Format the commands(List<SSHCommands>) to LinkedList<String>
-	 * 
-	 * @return LinkedList<String> with the commands
-	 **/
 	public List<String> getCommandsRaw() {
 		List<String> commandsStringList = new LinkedList<>();
 		for (TerminalCommand c : commands) {
@@ -307,33 +197,21 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		return commandsStringList;
 	}
 
-	/**
-	 * @return True if the commands needs Parameter
-	 **/
 	@Override
 	public boolean needParameter() {
 		return needParameter;
 	}
 
-	/**
-	 * @return null (SSHCommand_Template does not have a parameter dialog)
-	 **/
 	@Override
 	public FGeneralDialog getDialog() {
 		return null;
 	}
 
-	/**
-	 * @return True
-	 */
 	@Override
 	public boolean isMultiCommand() {
 		return isMultiCommand;
 	}
 
-	/**
-	 * @return a string representation of this command
-	 */
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");
@@ -371,13 +249,6 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		return commandString.toString();
 	}
 
-	/**
-	 * Compares the position of SSHCommandTemplates. If it is equal compare by
-	 * menuText
-	 * 
-	 * @param compareCom Compares the compareCom to this command
-	 * @return difference
-	 */
 	@Override
 	public int compareTo(TerminalMultiCommand compareCom) {
 		int dif = this.position - compareCom.getPriority();
@@ -387,12 +258,6 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		return dif;
 	}
 
-	/**
-	 * Update all fields of this command to the fields of given command
-	 * 
-	 * @param TerminalMultiCommand com
-	 * @return the updated command (this)
-	 */
 	public TerminalMultiCommand update(TerminalMultiCommand com) {
 		if (this.id.equals(com.getId())) {
 			Logging.debug(this, "update this (" + this.toString() + ") with (" + com.toString() + ")");
@@ -467,9 +332,6 @@ public class TerminalMultiCommand implements TerminalCommand, Comparable<Termina
 		return getId().hashCode();
 	}
 
-	/**
-	 * * @return empty list
-	 */
 	@Override
 	public List<String> getParameterList() {
 		return new ArrayList<>();

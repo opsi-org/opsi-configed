@@ -10,7 +10,6 @@ import de.uib.configed.Configed;
 
 public final class TerminalCommandFactory {
 	public static final String STRING_REPLACEMENT_DIRECTORY = "*.dir.*";
-	// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
 	public static final String STRING_COMMAND_GET_LINUX_COMMANDS = "COMMANDS=`echo -n $PATH "
 			+ "| xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ;"
 			+ " ALIASES=`alias | cut -d '=' -f 1`; echo \"$COMMANDS\"$'\\n'\"$ALIASES\" | sort -u ";

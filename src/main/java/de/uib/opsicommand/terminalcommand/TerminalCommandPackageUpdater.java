@@ -98,11 +98,6 @@ public class TerminalCommandPackageUpdater implements TerminalCommand, TerminalC
 		return command;
 	}
 
-	/**
-	 * Sets the given command
-	 * 
-	 * @param c (command): String
-	 **/
 	@Override
 	public void setCommand(String c) {
 		command = c;

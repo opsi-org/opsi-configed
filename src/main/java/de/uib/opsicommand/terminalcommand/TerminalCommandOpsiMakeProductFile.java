@@ -130,11 +130,6 @@ public class TerminalCommandOpsiMakeProductFile implements TerminalCommand, Term
 		return commandName;
 	}
 
-	/**
-	 * Sets the given command
-	 * 
-	 * @param c (command): String
-	 **/
 	@Override
 	public void setCommand(String c) {
 		commandName = c;

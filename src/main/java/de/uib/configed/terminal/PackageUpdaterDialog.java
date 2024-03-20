@@ -134,7 +134,6 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 		jButtonDoAction.setEnabled(value);
 	}
 
-	/* This method is called when button 2 is pressed */
 	@Override
 	public void doAction2() {
 		command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
@@ -151,7 +150,6 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 		executor.execute(command);
 	}
 
-	// /* This method gets called when button 1 is pressed */
 	private void cancel() {
 		super.doAction1();
 	}

@@ -165,8 +165,6 @@ public class TerminalCommandFileUpload implements TerminalCommandNeedParameter, 
 
 	@Override
 	public String getToolTipText() {
-		// return
-
 		return "";
 	}
 
@@ -197,7 +195,8 @@ public class TerminalCommandFileUpload implements TerminalCommandNeedParameter, 
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		/* Not needed */}
+		/* Not needed */
+	}
 
 	@Override
 	public FGeneralDialog getDialog() {

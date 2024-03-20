@@ -18,31 +18,18 @@ import de.uib.utilities.logging.Logging;
  **/
 public class TerminalEmptyCommand implements TerminalCommand {
 	public static final String TESTCOMMAND = "pwd";
-	/** boolean needParameter = false **/
 	private boolean needParameter;
-	/** boolean isMultiCommand = false **/
 	private boolean isMultiCommand;
-	/** String unique command id **/
 	private String id;
-	/** String unique menu text **/
 	private String menuText;
-	/** String command **/
 	private String command;
-	/** String parent menu text **/
 	private String parentMenuText;
-	/** String tooltip text **/
 	private String tooltipText = "";
-	/** integer position **/
 	private int position;
 	private String confidentialInformation;
 
 	private String myTmpCommand;
 
-	/**
-	 * Creates an empty SSHCommand_Template instance
-	 * 
-	 * @return SSHCommand_Template instance
-	 */
 	public TerminalEmptyCommand(String id, String c, String mt) {
 		position = TerminalCommandFactory.DEFAULT_POSITION;
 		setId(id);
@@ -56,9 +43,6 @@ public class TerminalEmptyCommand implements TerminalCommand {
 		getParameterList();
 	}
 
-	/**
-	 * Empty constuctor for creatiing empty instances
-	 */
 	public TerminalEmptyCommand() {
 	}
 
@@ -76,66 +60,31 @@ public class TerminalEmptyCommand implements TerminalCommand {
 		}
 	}
 
-	/**
-	 * Sets the Id
-	 * 
-	 * @param i (id): String
-	 **/
 	public final void setId(String i) {
 		id = i;
 	}
 
-	/**
-	 * Sets the given command
-	 * 
-	 * @param c (command): String
-	 **/
 	@Override
 	public final void setCommand(String c) {
 		command = c;
 	}
 
-	/**
-	 * Sets the menu text
-	 * 
-	 * @param mt (menu text): String
-	 **/
 	public final void setMenuText(String mt) {
 		menuText = mt;
 	}
 
-	/**
-	 * Sets the parent menu text
-	 * 
-	 * @param pmt (parent menu text): String
-	 **/
 	public void setParentMenuText(String pmt) {
 		parentMenuText = pmt;
 	}
 
-	/**
-	 * Sets the tooltip text
-	 * 
-	 * @param ttt (tooltip text): String
-	 **/
 	public void setTooltipText(String ttt) {
 		tooltipText = ttt;
 	}
 
-	/**
-	 * Sets the position
-	 * 
-	 * @param p (position): int
-	 **/
 	public void setPriority(int p) {
 		position = p;
 	}
 
-	/**
-	 * Get the command id
-	 * 
-	 * @return id
-	 **/
 	@Override
 	public String getId() {
 		return id;
@@ -146,51 +95,26 @@ public class TerminalEmptyCommand implements TerminalCommand {
 		return isMultiCommand;
 	}
 
-	/**
-	 * Get the command menutext
-	 * 
-	 * @return menuText
-	 **/
 	@Override
 	public String getMenuText() {
 		return menuText;
 	}
 
-	/**
-	 * Get the command parent menutext
-	 * 
-	 * @return parentMenuText
-	 **/
 	@Override
 	public String getParentMenuText() {
 		return parentMenuText;
 	}
 
-	/**
-	 * Get the command tooltiptext
-	 * 
-	 * @return tooltipText
-	 **/
 	@Override
 	public String getToolTipText() {
 		return tooltipText;
 	}
 
-	/**
-	 * Get the command without parameter (e.g. sudo text)
-	 * 
-	 * @return command
-	 **/
 	@Override
 	public String getCommandRaw() {
 		return command;
 	}
 
-	/**
-	 * Searches placeholders like <<<sth>>>
-	 * 
-	 * @return List with placeholdern for parameter
-	 */
 	@Override
 	public final List<String> getParameterList() {
 		List<String> paramlist = new ArrayList<>();
@@ -210,11 +134,6 @@ public class TerminalEmptyCommand implements TerminalCommand {
 		return paramlist;
 	}
 
-	/**
-	 * Searches placeholder like <<<sth>>>
-	 * 
-	 * @return String with and between "<<<" and ">>>"
-	 */
 	private String searchPlaceholder() {
 		String temp1 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1;
 		String temp2 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
@@ -227,9 +146,6 @@ public class TerminalEmptyCommand implements TerminalCommand {
 		return temp1 + splittedText + temp2;
 	}
 
-	/**
-	 * @return the placeholder count
-	 */
 	private int counterString(String s, String search) {
 		int times = 0;
 		int index = s.indexOf(search, 0);
@@ -241,44 +157,27 @@ public class TerminalEmptyCommand implements TerminalCommand {
 		return times;
 	}
 
-	/**
-	 * @return False if the commands does not need Parameter
-	 **/
 	@Override
 	public boolean needParameter() {
 		return needParameter;
 	}
 
-	/**
-	 * @return the position
-	 */
 	@Override
 	public int getPriority() {
 		return position;
 	}
 
-	/**
-	 * Get the whole command with e.g. sudo text
-	 * 
-	 * @return command
-	 **/
 	@Override
 	@SuppressWarnings({ "java:S4144" })
 	public String getCommand() {
 		return command;
 	}
 
-	/**
-	 * @return null (SSHCommand_Template does not have a parameter dialog)
-	 **/
 	@Override
 	public FGeneralDialog getDialog() {
 		return null;
 	}
 
-	/**
-	 * @return a string representation of this command
-	 */
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");

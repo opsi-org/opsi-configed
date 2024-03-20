@@ -107,21 +107,11 @@ public class TerminalCommandOpsiSetRights implements TerminalCommand, TerminalCo
 		return needParameter;
 	}
 
-	/**
-	 * Sets the given command
-	 * 
-	 * @param c (command): String
-	 **/
 	@Override
 	public void setCommand(String c) {
 		command = c;
 	}
 
-	/**
-	 * Searches placeholders like <<<sth>>>
-	 * 
-	 * @return List with placeholdern for parameter
-	 */
 	@Override
 	public List<String> getParameterList() {
 		List<String> paramlist = new ArrayList<>();
@@ -141,11 +131,6 @@ public class TerminalCommandOpsiSetRights implements TerminalCommand, TerminalCo
 		return paramlist;
 	}
 
-	/**
-	 * Searches placeholder like <<<sth>>>
-	 * 
-	 * @return String with and between "<<<" and ">>>"
-	 */
 	private String searchPlaceholder() {
 		String temp1 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1;
 		String temp2 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
@@ -158,9 +143,6 @@ public class TerminalCommandOpsiSetRights implements TerminalCommand, TerminalCo
 		return temp1 + splittedText + temp2;
 	}
 
-	/**
-	 * @return the placeholder count
-	 */
 	private int counterString(String s, String search) {
 		int times = 0;
 		int index = s.indexOf(search, 0);
