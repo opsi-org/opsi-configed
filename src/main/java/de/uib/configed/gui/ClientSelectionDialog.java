@@ -970,29 +970,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 
 			if (!childList.isEmpty()) {
-				switch (complex.type) {
-				case SOFTWARE_GROUP:
-					manager.addGroupOperation("Software", groupStatus, childList);
-					break;
-
-				case PROPERTIES_GROUP:
-					manager.addGroupOperation("Properties", groupStatus, childList);
-					break;
-
-				case SOFTWARE_WITH_PROPERTIES_GROUP:
-					manager.addGroupOperation("SoftwareWithProperties", groupStatus, childList);
-					break;
-
-				case SW_AUDIT_GROUP:
-					manager.addGroupOperation("SwAudit", groupStatus, childList);
-					break;
-				case HARDWARE_GROUP:
-					manager.addGroupOperation("Hardware", groupStatus, childList);
-					break;
-				case HOST_GROUP:
-					manager.addGroupOperation("Host", groupStatus, childList);
-					break;
-				}
+				manager.addGroupOperation(complex.type, groupStatus, childList);
 			}
 		}
 	}
@@ -1168,7 +1146,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		private IconAsButton closeParenthesis;
 	}
 
-	private enum GroupType {
+	public enum GroupType {
 		HOST_GROUP, SOFTWARE_GROUP, PROPERTIES_GROUP, SOFTWARE_WITH_PROPERTIES_GROUP, SW_AUDIT_GROUP, HARDWARE_GROUP
 	}
 
