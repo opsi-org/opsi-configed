@@ -681,52 +681,8 @@ public class SoftwareDataService {
 			Logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely " + softwareToAssignTruely);
 			Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
 
-			if (!onlyAdding) {
-				List<Map<String, String>> deleteItems = new ArrayList<>();
-
-				for (String swIdent : oldEntriesTruely) {
-					// software exists in audit software
-					entriesToRemove.add(swIdent);
-					Map<String, String> item = new HashMap<>();
-					item.put("ident", swIdent + ";" + licensePoolId);
-					item.put("type", "AuditSoftwareToLicensePool");
-					deleteItems.add(item);
-
-					Logging.info(this, "" + instSwI.get(swIdent));
-				}
-				Logging.info(this, "entriesToRemove " + entriesToRemove);
-				Logging.info(this, "deleteItems " + deleteItems);
-
-				if (!deleteItems.isEmpty()) {
-					OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
-							new Object[] { deleteItems });
-					result = exec.doCall(omc);
-				}
-
-				if (!result) {
-					return false;
-				} else {
-					// do it locally
-					instSwI.keySet().removeAll(entriesToRemove);
-				}
-			}
-
-			List<Map<String, String>> createItems = new ArrayList<>();
-
-			for (String swIdent : softwareToAssignTruely) {
-				Map<String, String> item = new HashMap<>();
-				item.put("ident", swIdent + ";" + licensePoolId);
-				item.put("type", "AuditSoftwareToLicensePool");
-				createItems.add(item);
-			}
-
-			Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
-
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
-					new Object[] { createItems });
-
-			result = exec.doCall(omc);
-
+			result = updateLicensepoolsOnServer(onlyAdding, oldEntriesTruely, entriesToRemove, licensePoolId, instSwI,
+					softwareToAssignTruely);
 			// we build the correct data locally
 			if (result) {
 				Set<String> intermediateSet = new HashSet<>(fLicensePool2SoftwareList.get(licensePoolId));
@@ -760,6 +716,58 @@ public class SoftwareDataService {
 		}
 
 		return result;
+	}
+
+	private boolean updateLicensepoolsOnServer(boolean onlyAdding, List<String> oldEntriesTruely,
+			Set<String> entriesToRemove, String licensePoolId, Map<String, SWAuditEntry> instSwI,
+			List<String> softwareToAssignTruely) {
+		boolean result = true;
+
+		if (!onlyAdding) {
+			List<Map<String, String>> deleteItems = new ArrayList<>();
+
+			for (String swIdent : oldEntriesTruely) {
+				// software exists in audit software
+				entriesToRemove.add(swIdent);
+				Map<String, String> item = new HashMap<>();
+				item.put("ident", swIdent + ";" + licensePoolId);
+				item.put("type", "AuditSoftwareToLicensePool");
+				deleteItems.add(item);
+
+				Logging.info(this, "" + instSwI.get(swIdent));
+			}
+			Logging.info(this, "entriesToRemove " + entriesToRemove);
+			Logging.info(this, "deleteItems " + deleteItems);
+
+			if (!deleteItems.isEmpty()) {
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
+						new Object[] { deleteItems });
+				result = exec.doCall(omc);
+			}
+
+			if (!result) {
+				return false;
+			} else {
+				// do it locally
+				instSwI.keySet().removeAll(entriesToRemove);
+			}
+		}
+
+		List<Map<String, String>> createItems = new ArrayList<>();
+
+		for (String swIdent : softwareToAssignTruely) {
+			Map<String, String> item = new HashMap<>();
+			item.put("ident", swIdent + ";" + licensePoolId);
+			item.put("type", "AuditSoftwareToLicensePool");
+			createItems.add(item);
+		}
+
+		Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
+				new Object[] { createItems });
+
+		return exec.doCall(omc);
 	}
 
 	// we have got a SW from software table, therefore we do not serve the unknown

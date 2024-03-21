@@ -459,13 +459,13 @@ public class PanelEnterLicense extends MultiTablePanel {
 				.addGroup(layoutTask.createSequentialGroup()
 						.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(18, 18, 18)
+						.addGap(18)
 						.addComponent(jButtonCreateVolume, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(18, 18, 18)
+						.addGap(18)
 						.addComponent(jButtonCreateOEM, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(18, 18, 18)
+						.addGap(18)
 						.addComponent(jButtonCreateConcurrent, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(1226, Short.MAX_VALUE))
@@ -484,7 +484,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		layoutTask.setVerticalGroup(layoutTask.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(jLabelTask).addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(panelLicenseContracts, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelConfigure).addGap(2, 2, 2)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelConfigure).addGap(2)
 				.addGroup(layoutTask.createParallelGroup(Alignment.BASELINE)
 						.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -496,10 +496,10 @@ public class PanelEnterLicense extends MultiTablePanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(panelLicenseModel, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(2, 2, 2)
+				.addGap(2)
 				.addComponent(panelEnterKey, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(2, 2, 2).addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+				.addGap(2).addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE));
 

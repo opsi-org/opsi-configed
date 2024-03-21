@@ -237,7 +237,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			SwingUtilities.invokeLater(() -> {
 				manager.getBackend().setReloadRequested();
-				manager.getBackend().reload();
 				configedMain.callNewClientSelectionDialog();
 				// we lose all components of this dialog, there is nothing to reset
 			});
@@ -363,7 +362,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			manager.getBackend().setReloadRequested();
-			manager.getBackend().reload();
 			buttonReload.setEnabled(true);
 			buttonRestart.setEnabled(true);
 			setCursor(null);

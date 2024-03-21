@@ -411,9 +411,6 @@ public final class OpsiDataBackend {
 
 		hardwareOnClient = null;
 		clientToHardware = null;
-	}
-
-	public void reload() {
 		persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 	}
 
