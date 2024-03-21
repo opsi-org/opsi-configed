@@ -59,23 +59,10 @@ public class FEditorPane extends FGeneralDialog {
 		return result;
 	}
 
-	private static String hexNoForColorizing(int indentationCount) {
-		switch (indentationCount) {
-		case 0:
-			return "aa";
-		case 1:
-			return "cc";
-		case 2:
-			return "ff";
-		default:
-			return "ff";
-		}
-	}
-
 	public void insertHTMLTable(String s, String title) {
 		final String BASE_R_G = "f8f0f0";
 		final String HEADER = "<HTML>\n <head>\n  <title>" + title + "</title>\n  </head>\n"
-				+ "<body style=\"background-color: " + BASE_R_G + hexNoForColorizing(1) + "\">\n";
+				+ "<body style=\"background-color: " + BASE_R_G + "cc" + "\">\n";
 
 		final String FOOTER = "\n</body>\n</html>";
 

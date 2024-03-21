@@ -639,15 +639,15 @@ public class OpsiDataSerializer {
 			throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
 		}
 		if ("Hardware".equals(name)) {
-			return new HardwareOperation(children);
+			return new HardwareOperation(children.get(0));
 		}
 
 		if ("Software".equals(name)) {
-			return new SoftwareOperation(children);
+			return new SoftwareOperation(children.get(0));
 		}
 
 		if ("SwAudit".equals(name)) {
-			return new SwAuditOperation(children);
+			return new SwAuditOperation(children.get(0));
 		}
 
 		if ("and".equals(name)) {
@@ -659,7 +659,7 @@ public class OpsiDataSerializer {
 		}
 
 		if ("not".equals(name)) {
-			return new NotOperation(children);
+			return new NotOperation(children.get(0));
 		}
 
 		throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);

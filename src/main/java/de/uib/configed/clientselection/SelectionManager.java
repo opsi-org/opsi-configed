@@ -70,36 +70,35 @@ public class SelectionManager {
 			List<OperationWithStatus> operationsWithStatuses) {
 		Logging.debug(this, "Adding group operation " + groupType + " with " + operationsWithStatuses.toString());
 
-		List<AbstractSelectOperation> tmpList = new LinkedList<>();
-		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
-		Logging.debug(this, "addGroupOperation: " + groupType + " " + tmpList.size() + " " + tmpList.get(0));
+		AbstractSelectOperation operation = build(operationsWithStatuses, new int[] { 0 });
+		Logging.debug(this, "addGroupOperation: " + groupType + " " + operation + " " + operation);
 
 		switch (groupType) {
 		case SOFTWARE_GROUP:
-			groupStatus.setOperation(new SoftwareOperation(tmpList));
+			groupStatus.setOperation(new SoftwareOperation(operation));
 			hasSoftware = true;
 			break;
 
 		case PROPERTIES_GROUP:
-			groupStatus.setOperation(new PropertiesOperation(tmpList));
+			groupStatus.setOperation(new PropertiesOperation(operation));
 			break;
 
 		case SOFTWARE_WITH_PROPERTIES_GROUP:
-			groupStatus.setOperation(new SoftwareWithPropertiesOperation(tmpList));
+			groupStatus.setOperation(new SoftwareWithPropertiesOperation(operation));
 			break;
 
 		case HARDWARE_GROUP:
-			groupStatus.setOperation(new HardwareOperation(tmpList));
+			groupStatus.setOperation(new HardwareOperation(operation));
 			hasHardware = true;
 			break;
 
 		case SW_AUDIT_GROUP:
-			groupStatus.setOperation(new SwAuditOperation(tmpList));
+			groupStatus.setOperation(new SwAuditOperation(operation));
 			hasSwAudit = true;
 			break;
 
 		case HOST_GROUP:
-			groupStatus.setOperation(new HostOperation(tmpList));
+			groupStatus.setOperation(new HostOperation(operation));
 			break;
 		}
 
@@ -357,7 +356,7 @@ public class SelectionManager {
 		List<AbstractSelectOperation> arg = new LinkedList<>();
 		arg.add(operation.getOperation());
 
-		return new NotOperation(arg);
+		return new NotOperation(arg.get(0));
 	}
 
 	/* See if there's a NotOperation and replace the status accordingly. */

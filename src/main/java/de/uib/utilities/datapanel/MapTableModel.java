@@ -260,7 +260,7 @@ public class MapTableModel extends AbstractTableModel {
 	public Class<?> getColumnClass(int c) {
 		switch (c) {
 		case 0:
-			return "".getClass();
+			return String.class;
 
 		case 1:
 			return List.class;
