@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 
 import org.java_websocket.handshake.ServerHandshake;
@@ -22,7 +21,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.utilities.logging.Logging;
+import de.uib.utilities.ThreadLocker;
 
 public class TerminalCommandExecutor implements MessagebusListener {
 	private static final Pattern MORE_THAN_ONE_SPACE_PATTERN = Pattern.compile("\\s{2,}",
@@ -30,7 +29,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 
 	private ConfigedMain configedMain;
 	private TerminalFrame terminalFrame;
-	private CountDownLatch locker;
+	private ThreadLocker locker;
 
 	private StringBuilder result;
 
@@ -47,6 +46,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		this.configedMain = configedMain;
 		this.terminalFrame = new TerminalFrame(true);
 		this.withGUI = withGUI;
+		this.locker = new ThreadLocker();
 		configedMain.getMessagebus().getWebSocket().registerListener(TerminalCommandExecutor.this);
 		result = new StringBuilder();
 	}
@@ -80,8 +80,8 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			if (currentCommand instanceof TerminalCommandFileUpload) {
 				TerminalCommandFileUpload fileUploadCommand = (TerminalCommandFileUpload) currentCommand;
 				terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
-						fileUploadCommand.getTargetPath(), withGUI, this::unlock);
-				lock();
+						fileUploadCommand.getTargetPath(), withGUI, () -> locker.unlock());
+				locker.lock();
 			} else {
 				commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand()).replaceAll(" ");
 				sendProcessStartRequest();
@@ -100,21 +100,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		data.put("command", commandToExecute.split(" "));
 		data.put("shell", true);
 		configedMain.getMessagebus().sendMessage(data);
-		lock();
-	}
-
-	private void lock() {
-		try {
-			locker = new CountDownLatch(1);
-			locker.await();
-		} catch (InterruptedException ie) {
-			Logging.warning(this, "thread was interrupted");
-			Thread.currentThread().interrupt();
-		}
-	}
-
-	private void unlock() {
-		locker.countDown();
+		locker.lock();
 	}
 
 	@Override
@@ -154,7 +140,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		if (WebSocketEvent.PROCESS_STOP_EVENT.toString().equals(type)) {
 			String stoppedProcessId = (String) message.get("process_id");
 			if (stoppedProcessId != null && stoppedProcessId.equals(processId)) {
-				unlock();
+				locker.unlock();
 			}
 		}
 
