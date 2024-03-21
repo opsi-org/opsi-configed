@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.X.X] - XXXX-XX-XX
+## [4.3.2.9] - 2024-03-21
 ## Changed
 - Don't show server defaults for WAN, UEFI and Install on Shutdown in new client dialogue
 - Make it possible to edit WAN, UEFI and Install on Shutdown in new client dialogue even when enabled by server default
