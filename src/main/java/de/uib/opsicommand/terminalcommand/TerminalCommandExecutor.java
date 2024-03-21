@@ -7,12 +7,8 @@
 package de.uib.opsicommand.terminalcommand;
 
 import java.io.File;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.java_websocket.handshake.ServerHandshake;
@@ -31,12 +27,10 @@ public class TerminalCommandExecutor implements MessagebusListener {
 	private TerminalFrame terminalFrame;
 	private ThreadLocker locker;
 
-	private StringBuilder result;
-
-	private String processId;
 	private String commandToExecute;
 
 	private boolean withGUI;
+	private TerminalCommandProcess commandProcess;
 
 	public TerminalCommandExecutor(ConfigedMain configedMain) {
 		this(configedMain, true);
@@ -48,7 +42,6 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		this.withGUI = withGUI;
 		this.locker = new ThreadLocker();
 		configedMain.getMessagebus().getWebSocket().registerListener(TerminalCommandExecutor.this);
-		result = new StringBuilder();
 	}
 
 	public String execute(TerminalCommand command) {
@@ -65,12 +58,13 @@ public class TerminalCommandExecutor implements MessagebusListener {
 					executeMultiCommand(terminalFrame, (TerminalMultiCommand) command);
 				} else {
 					commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
-					sendProcessStartRequest();
+					commandProcess = new TerminalCommandProcess(configedMain, locker, commandToExecute);
+					commandProcess.sendProcessStartRequest();
 				}
 			}
 		}.start();
 
-		return result.toString();
+		return commandProcess != null ? commandProcess.getResult() : "";
 	}
 
 	private void executeMultiCommand(TerminalFrame terminalFrame, TerminalMultiCommand multiCommand) {
@@ -84,23 +78,10 @@ public class TerminalCommandExecutor implements MessagebusListener {
 				locker.lock();
 			} else {
 				commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand()).replaceAll(" ");
-				sendProcessStartRequest();
+				commandProcess = new TerminalCommandProcess(configedMain, locker, commandToExecute);
+				commandProcess.sendProcessStartRequest();
 			}
 		}
-	}
-
-	private void sendProcessStartRequest() {
-		Map<String, Object> data = new HashMap<>();
-		data.put("type", WebSocketEvent.PROCESS_START_REQUEST.toString());
-		data.put("id", UUID.randomUUID().toString());
-		data.put("sender", "@");
-		data.put("channel", "service:config:process");
-		data.put("created", System.currentTimeMillis());
-		data.put("expires", System.currentTimeMillis() + 10000);
-		data.put("command", commandToExecute.split(" "));
-		data.put("shell", true);
-		configedMain.getMessagebus().sendMessage(data);
-		locker.lock();
 	}
 
 	@Override
@@ -126,69 +107,17 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			if (withGUI) {
 				terminalFrame.writeToWidget(("Executing command: " + commandToExecute + "\r\n").getBytes());
 			}
-			processId = (String) message.get("process_id");
-			Float processTimeout = ((String) message.get("timeout")) != null
-					? Float.parseFloat((String) message.get("timeout"))
-					: 0;
-			Instant processStartTime = Instant.now();
-			if (processTimeout != 0) {
-				ProcessStopThread stopThread = new ProcessStopThread(processTimeout, processStartTime);
-				stopThread.start();
-			}
+			commandProcess.onStart(message);
 		}
 
 		if (WebSocketEvent.PROCESS_STOP_EVENT.toString().equals(type)) {
-			String stoppedProcessId = (String) message.get("process_id");
-			if (stoppedProcessId != null && stoppedProcessId.equals(processId)) {
-				locker.unlock();
-			}
+			commandProcess.onStop(message);
 		}
 
 		if (WebSocketEvent.PROCESS_DATA_READ.toString().equals(type)) {
-			String streamToReadFrom = determineStreamFromWhichToRead(message);
-			byte[] data = (byte[]) message.get(streamToReadFrom);
+			String data = commandProcess.onDataRead(message);
 			if (withGUI) {
-				terminalFrame.writeToWidget(new String(data).replace("\n", "\r\n").getBytes());
-			}
-			String currentProcessId = (String) message.get("process_id");
-			if (currentProcessId.equals(processId) && !"stderr".equals(streamToReadFrom)) {
-				result.append(new String(data));
-			}
-		}
-	}
-
-	private static String determineStreamFromWhichToRead(Map<String, Object> message) {
-		return message.get("stderr") != null && !(new String((byte[]) message.get("stderr"))).isEmpty() ? "stderr"
-				: "stdout";
-	}
-
-	@SuppressWarnings({ "java:S2972" })
-	private class ProcessStopThread extends Thread {
-		private Instant processStartTime;
-		private Float processTimeout;
-
-		public ProcessStopThread(Float processTimeout, Instant processStartTime) {
-			this.processTimeout = processTimeout;
-			this.processStartTime = processStartTime;
-		}
-
-		@Override
-		public void run() {
-			Instant now = Instant.now();
-			Duration duration = Duration.between(processStartTime, now);
-			while (true) {
-				if (duration.getSeconds() >= processTimeout) {
-					Map<String, Object> data = new HashMap<>();
-					data.put("type", WebSocketEvent.PROCESS_STOP_REQUEST.toString());
-					data.put("id", UUID.randomUUID().toString());
-					data.put("process_id", processId);
-					data.put("sender", "@");
-					data.put("channel", "service:config:process");
-					data.put("created", System.currentTimeMillis());
-					data.put("expires", System.currentTimeMillis() + 10000);
-					configedMain.getMessagebus().sendMessage(data);
-					break;
-				}
+				terminalFrame.writeToWidget(data.replace("\n", "\r\n").getBytes());
 			}
 		}
 	}
