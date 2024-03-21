@@ -11,7 +11,6 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -66,9 +65,6 @@ public final class Configed {
 
 	private static String sshKey;
 	private static String sshKeyPass;
-	private static String client;
-	private static String clientgroup;
-	private static Integer tab;
 	private static boolean optionCLIQuerySearch;
 	private static String savedSearch;
 	private static boolean optionCLIDefineGroupBySearch;
@@ -90,14 +86,10 @@ public final class Configed {
 	private static String paramUser;
 	private static String paramPassword;
 	private static String paramOTP;
-	private static String paramClient;
-	private static String paramClientgroup;
-	private static Integer paramTab;
 
 	/** construct the application */
-	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP,
-			final String paramClient, final String paramClientgroup, final Integer paramTab) {
-		setParamValues(paramHost, paramUser, paramPassword, paramOTP, paramTab, paramClient, paramClientgroup);
+	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP) {
+		setParamValues(paramHost, paramUser, paramPassword, paramOTP);
 
 		Logging.debug("starting " + getClass().getName());
 		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
@@ -128,44 +120,13 @@ public final class Configed {
 		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, sshKey, sshKeyPass);
 
 		SwingUtilities.invokeLater(configedMain::init);
-
-		try {
-			SwingUtilities.invokeAndWait(() -> setStartSettings(configedMain));
-		} catch (InvocationTargetException ex) {
-			Logging.info(" run " + ex);
-		} catch (InterruptedException ie) {
-			Logging.info(" run " + ie);
-			Thread.currentThread().interrupt();
-		}
 	}
 
-	private static void setStartSettings(ConfigedMain configedMain) {
-		if (paramClient != null || paramClientgroup != null) {
-			if (paramClientgroup != null) {
-				configedMain.setGroupAndSelect(paramClientgroup);
-			}
-
-			if (paramClient != null) {
-				configedMain.setClient(paramClient);
-			}
-
-			Logging.info("set client " + paramClient);
-
-			if (paramTab != null) {
-				configedMain.setVisualViewIndex(paramTab);
-			}
-		}
-	}
-
-	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP,
-			Integer paramTab, String paramClient, String paramClientgroup) {
+	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP) {
 		Configed.paramHost = paramHost;
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
 		Configed.paramOTP = paramOTP;
-		Configed.paramTab = paramTab;
-		Configed.paramClient = paramClient;
-		Configed.paramClientgroup = paramClientgroup;
 	}
 
 	public static boolean isSSHConnectionOnStart() {
@@ -237,27 +198,6 @@ public final class Configed {
 
 		if (cmd.hasOption("otp")) {
 			otp = cmd.getOptionValue("otp");
-		}
-	}
-
-	private static void processGuiOptions(CommandLine cmd) {
-		if (cmd.hasOption("c")) {
-			client = cmd.getOptionValue("c");
-		}
-
-		if (cmd.hasOption("g")) {
-			clientgroup = cmd.getOptionValue("g");
-		}
-
-		if (cmd.hasOption("t")) {
-			String tabString = cmd.getOptionValue("t");
-			try {
-				tab = Integer.parseInt(tabString);
-			} catch (NumberFormatException ex) {
-				Logging.debug("  \n\nArgument >" + tabString + "< has no integer format");
-				Main.showHelp();
-				Main.endApp(Main.ERROR_INVALID_OPTION);
-			}
 		}
 	}
 
@@ -333,8 +273,6 @@ public final class Configed {
 
 	private static void processArgs(CommandLine cmd) {
 		processLoginOptions(cmd);
-
-		processGuiOptions(cmd);
 
 		processSSHOptions(cmd);
 
@@ -505,7 +443,7 @@ public final class Configed {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
-		new Configed(host, user, password, otp, client, clientgroup, tab);
+		new Configed(host, user, password, otp);
 	}
 
 	public static void initSavedStates() {

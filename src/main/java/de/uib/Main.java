@@ -78,11 +78,6 @@ public class Main {
 		options.addOption("otp", "one-time-password", true,
 				"One time password for authentication. DEFAULT: give interactive\n"
 						+ "OTP is a paid feature. Should be used when license is available and OTP is enabled for a user");
-		options.addOption("c", "client", true, "CLIENT to preselect.  DEFAULT: no client selected");
-		options.addOption("g", "clientgroup", true,
-				"clientgroup to preselect. DEFAULT: last selected group reselected");
-		options.addOption("t", "tab", true,
-				"Start with tab number <arg>, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0");
 		options.addOption("s", "savedstates", true,
 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
 		options.addOption("r", "refreshminutes", true,
