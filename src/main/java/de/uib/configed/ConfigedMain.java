@@ -1454,7 +1454,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		Logging.info(this, "setSelectedClientsArray " + a.size());
-		Logging.info(this, "selectedClients up to now size " + Logging.getSize(selectedClients));
+		Logging.info(this, "selectedClients up to now size " + selectedClients.size());
 
 		selectedClients = new ArrayList<>(a);
 		if (selectedClients.isEmpty()) {

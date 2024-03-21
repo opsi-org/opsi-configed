@@ -364,10 +364,10 @@ public final class Configed {
 
 	private static void initLogging() {
 		Logging.setLogfileMarker(host);
-		Logging.init();
+		Logging.initLogFile();
 		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
-			Logging.setSuppressConsole();
+			Logging.setLogLevelConsole(0);
 		}
 	}
 

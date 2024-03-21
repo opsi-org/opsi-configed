@@ -87,10 +87,6 @@ public final class Logging {
 		return LEVEL_TO_NAME.get(level);
 	}
 
-	public static void setSuppressConsole() {
-		setLogLevelConsole(LEVEL_NONE);
-	}
-
 	public static synchronized Integer getLogLevelConsole() {
 		return logLevelConsole;
 	}
@@ -133,7 +129,7 @@ public final class Logging {
 		}
 	}
 
-	private static synchronized void initLogFile() {
+	public static synchronized void initLogFile() {
 		// Try to initialize only once!
 		logFileInitialized = true;
 		String logFilename = "";
@@ -199,20 +195,12 @@ public final class Logging {
 		}
 	}
 
-	public static synchronized void init() {
-		initLogFile();
-	}
-
 	public static String getCurrentLogfilePath() {
 		return logFilenameInUse;
 	}
 
 	private static boolean showOnGUI(int level) {
 		return level != LEVEL_ESSENTIAL && level <= MIN_LEVEL_FOR_SHOWING_MESSAGES;
-	}
-
-	private static String now() {
-		return formatter.format(LocalDateTime.now());
 	}
 
 	private static void addErrorToList(String mesg, String time) {
@@ -225,14 +213,6 @@ public final class Logging {
 		if (configedMain != null) {
 			configedMain.logEventOccurred();
 		}
-	}
-
-	public static String getSize(Object[] a) {
-		if (a == null) {
-			return null;
-		}
-
-		return "" + a.length;
 	}
 
 	public static String getSize(Collection<String> c) {
@@ -248,7 +228,7 @@ public final class Logging {
 			return;
 		}
 
-		String curTime = now();
+		String currentTime = formatter.format(LocalDateTime.now());
 		String context = Thread.currentThread().getName();
 		if (caller instanceof Class) {
 			mesg += "   (" + ((Class<?>) caller).getName() + ")";
@@ -269,20 +249,21 @@ public final class Logging {
 			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
 					"\033[0m");
 
-			System.err.println(String.format(format, level, curTime, context, mesg) + exMesg);
+			System.err.println(String.format(format, level, currentTime, context, mesg) + exMesg);
 		}
+
 		if (level <= logLevelFile) {
 			if (!logFileInitialized) {
 				initLogFile();
 			}
 			if (logFileWriter != null) {
-				logFileWriter.println(String.format(logFormat, level, curTime, context, mesg) + exMesg);
+				logFileWriter.println(String.format(logFormat, level, currentTime, context, mesg) + exMesg);
 				logFileWriter.flush();
 			}
 		}
 
 		if (showOnGUI(level)) {
-			addErrorToList(mesg, curTime);
+			addErrorToList(mesg, currentTime);
 		}
 	}
 

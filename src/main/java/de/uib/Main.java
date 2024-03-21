@@ -149,8 +149,7 @@ public class Main {
 				loglevelString = cmd.getOptionValue("loglevel");
 				Integer loglevel = Integer.valueOf(loglevelString);
 
-				Logging.setLogLevelConsole(loglevel);
-				Logging.setLogLevelFile(loglevel);
+				Logging.setLogLevel(loglevel);
 			} catch (NumberFormatException ex) {
 				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
 			}
