@@ -1160,36 +1160,15 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		case 1:
 			return globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 
-		case 2:
-			return combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).get(actualProduct);
-
 		case 3:
 			InstallationStatus is = InstallationStatus.produceFromLabel(
 					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
 			return InstallationStatus.getDisplayLabel(is.getVal());
 
-		case 4:
-			return combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).get(actualProduct);
-
-		case 5:
-			return combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).get(actualProduct);
-
-		case 6:
-			return combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
-
-		case 7:
-			return combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
-
 		case 8:
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 			return ActionRequest.getDisplayLabel(ar.getVal());
-
-		case 9:
-			return combinedVisualValues.get(ProductState.KEY_PRODUCT_PRIORITY).get(actualProduct);
-
-		case 10:
-			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
 			return getDisplayLabelForPosition();
@@ -1197,17 +1176,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		case 12:
 			return actualProductVersion();
 
-		case 13:
-			return combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
-
-		case 14:
-			return combinedVisualValues.get(ProductState.KEY_PACKAGE_VERSION).get(actualProduct);
-
-		case 15:
-			return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
-
 		default:
-			return null;
+			return combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
 		}
 	}
 
