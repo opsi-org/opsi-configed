@@ -73,9 +73,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
 	private JTextArea jTextNotes;
-	private JCheckBox labelShutdownDefault;
-	private JCheckBox labelUefiDefault;
-	private JCheckBox labelWanDefault;
 	private JCheckBox jCheckUefi;
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
@@ -130,13 +127,9 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
-		labelUefiDefault.setSelected(uefiIsDefault);
-		labelWanDefault.setSelected(wanIsDefault);
-		labelShutdownDefault.setSelected(shutdownINSTALLIsDefault);
-
-		jCheckUefi.setVisible(!uefiIsDefault);
-		jCheckWan.setVisible(!wanIsDefault);
-		jCheckShutdownInstall.setVisible(!shutdownINSTALLIsDefault);
+		jCheckUefi.setSelected(uefiIsDefault);
+		jCheckWan.setSelected(wanIsDefault);
+		jCheckShutdownInstall.setSelected(shutdownINSTALLIsDefault);
 	}
 
 	private void init() {
@@ -246,38 +239,16 @@ public final class NewClientDialog extends FGeneralDialog {
 				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
 				"", 24);
 
-		labelShutdownDefault = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown") + " "
-				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
-		labelShutdownDefault.setEnabled(false);
-
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
-		labelUefiDefault = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype") + " "
-				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
-		labelUefiDefault.setEnabled(false);
-
-		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
-			labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-		}
-
-		jCheckUefi = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype") + " "
-				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
+		jCheckUefi = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
 
 		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
 			jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			jCheckUefi.setEnabled(false);
 		}
 
-		labelWanDefault = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
-				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
-		labelWanDefault.setEnabled(false);
-
-		if (!persistenceController.getModuleDataService().isWithWANPD()) {
-			labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
-		}
-
-		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
-				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
+		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		if (!persistenceController.getModuleDataService().isWithWANPD()) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
@@ -292,15 +263,9 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		if (!ServerFacade.isOpsi43()) {
 			uefiVerticalGroup.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-					.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addComponent(labelUefiDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-									Globals.LINE_HEIGHT)
-							.addComponent(jCheckUefi, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
+					.addComponent(jCheckUefi, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 
 			uefiHorizontalGroup.addGap(Globals.GAP_SIZE)
-					.addComponent(labelUefiDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
-							3 * Globals.BUTTON_WIDTH)
-					.addGap(Globals.GAP_SIZE)
 					.addComponent(jCheckUefi, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 					.addGap(Globals.MIN_GAP_SIZE);
 		}
@@ -373,23 +338,15 @@ public final class NewClientDialog extends FGeneralDialog {
 						.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.MIN_GAP_SIZE))
-				/////// InstallByShutdown
+				/////// InstallByShutdown and WAN
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelShutdownDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
-								3 * Globals.BUTTON_WIDTH)
-						.addGap(Globals.GAP_SIZE)
 						.addComponent(jCheckShutdownInstall, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				/////// UEFI
-				.addGroup(uefiHorizontalGroup)
-				/////// WAN
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelWanDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
-								3 * Globals.BUTTON_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(jCheckWan, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
+				/////// UEFI
+				.addGroup(uefiHorizontalGroup)
 				// depot
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelDepot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
@@ -443,20 +400,14 @@ public final class NewClientDialog extends FGeneralDialog {
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(gpl.createParallelGroup().addComponent(jLabelIpAddress).addComponent(labelInfoIP))
 				.addComponent(ipAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				/////// SHUTDOWN
+				/////// SHUTDOWN and WAN
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelShutdownDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
 						.addComponent(jCheckShutdownInstall, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT))
+								Globals.LINE_HEIGHT)
+						.addComponent(jCheckWan, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				/////// UEFI
 				.addGroup(uefiVerticalGroup)
-				/////// WAN
-				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWanDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(jCheckWan, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				/////// depot
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(

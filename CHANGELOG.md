@@ -1,5 +1,9 @@
 # Changelog
 ## [4.3.X.X] - XXXX-XX-XX
+## Changed
+- Don't show server defaults for WAN, UEFI and Install on Shutdown in new client dialogue
+- Make it possible to edit WAN, UEFI and Install on Shutdown in new client dialogue even when enabled by server default
+
 ## Added
 - Connectivity status of depots
 - OTP field to login dialog
