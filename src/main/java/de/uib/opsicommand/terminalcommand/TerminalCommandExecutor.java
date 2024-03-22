@@ -18,6 +18,7 @@ import de.uib.configed.terminal.TerminalFrame;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.ThreadLocker;
+import de.uib.utilities.logging.Logging;
 
 public class TerminalCommandExecutor implements MessagebusListener {
 	private static final Pattern MORE_THAN_ONE_SPACE_PATTERN = Pattern.compile("\\s{2,}",
@@ -51,7 +52,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
 
-		new Thread() {
+		Thread backgroundThread = new Thread() {
 			@Override
 			public void run() {
 				if (command instanceof TerminalMultiCommand) {
@@ -62,7 +63,17 @@ public class TerminalCommandExecutor implements MessagebusListener {
 					commandProcess.sendProcessStartRequest();
 				}
 			}
-		}.start();
+		};
+		backgroundThread.start();
+
+		if (!withGUI) {
+			try {
+				backgroundThread.join();
+			} catch (InterruptedException e) {
+				Logging.warning(this, "Thread was interrupted");
+				Thread.currentThread().interrupt();
+			}
+		}
 
 		return commandProcess != null ? commandProcess.getResult() : "";
 	}
