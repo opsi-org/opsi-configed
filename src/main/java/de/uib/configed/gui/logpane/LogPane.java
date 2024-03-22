@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
@@ -83,8 +82,7 @@ public class LogPane extends JPanel implements KeyListener {
 	private final StyleContext styleContext;
 	private final Style[] logLevelStyles;
 
-	private Integer minLevel = MIN_LEVEL;
-	private Integer showLevel = minLevel;
+	private Integer showLevel = MIN_LEVEL;
 
 	private boolean showTypeRestricted;
 	private int typesListMaxShowCount = 25;
@@ -697,8 +695,6 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	private void search() {
-		Logging.devel("search");
-		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()));
 		Logging.debug(this, "Searching string in log");
 
 		if (jComboBoxSearch.getSelectedItem() == null || jComboBoxSearch.getSelectedItem().toString().isEmpty()) {
