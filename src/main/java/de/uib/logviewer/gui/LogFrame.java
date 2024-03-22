@@ -11,8 +11,8 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,7 +50,7 @@ import de.uib.utilities.logging.Logging;
 import utils.ExtractorUtil;
 import utils.Utils;
 
-public class LogFrame extends JFrame implements WindowListener {
+public class LogFrame extends JFrame {
 	private static final Pattern IS_FILE_EXTENSION_NUMBER_PATTERN = Pattern.compile("\\d+");
 
 	private static String fileName = "";
@@ -183,7 +183,12 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void guiInit() {
-		this.addWindowListener(this);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				Main.endApp(Main.NO_ERROR);
+			}
+		});
 
 		this.setIconImage(Utils.getMainIcon());
 
@@ -313,36 +318,6 @@ public class LogFrame extends JFrame implements WindowListener {
 			}
 		}
 	}
-
-	/* WindowListener implementation */
-	@Override
-	public void windowClosing(WindowEvent e) {
-		Main.endApp(Main.NO_ERROR);
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		/* Not needed */}
 
 	/**********************************************************************************************/
 	// File operations

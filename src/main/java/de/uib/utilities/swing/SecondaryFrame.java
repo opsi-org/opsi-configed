@@ -9,7 +9,6 @@ package de.uib.utilities.swing;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
@@ -17,7 +16,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.GlassPane;
 import de.uib.utilities.logging.Logging;
 
-public class SecondaryFrame extends JFrame implements WindowListener {
+public class SecondaryFrame extends JFrame {
 	protected Container masterFrame;
 
 	private GlassPane glassPane;
@@ -27,8 +26,6 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 		if (masterFrame == null) {
 			Logging.warning(this.getClass(), "masterFrame yet null");
 		}
-
-		super.addWindowListener(this);
 
 		glassPane = new GlassPane();
 		super.setGlassPane(glassPane);
@@ -45,11 +42,6 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 		setLocationRelativeTo(masterFrame);
 	}
 
-	// for overriding
-	private void callExit() {
-		setVisible(false);
-	}
-
 	public void activateLoadingCursor() {
 		glassPane.activateLoadingCursor();
 	}
@@ -61,37 +53,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			callExit();
+			setVisible(false);
 		}
 	}
-
-	/* WindowListener implementation */
-	@Override
-	public void windowClosing(WindowEvent e) {
-		callExit();
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		/* Not needed */}
 }
