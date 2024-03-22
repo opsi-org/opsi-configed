@@ -364,16 +364,17 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void showExtraOptions() {
 		if (isExtraOptionsHidden) {
-			isExtraOptionsHidden = false;
 			buttonShowHideExtraOptions.setIcon(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
 		} else {
-			isExtraOptionsHidden = true;
 			buttonShowHideExtraOptions.setIcon(Utils.getThemeIconPNG("bootstrap/caret_left_fill", ""));
 		}
-		comboSearchFields.setVisible(!comboSearchFields.isVisible());
-		comboSearchFieldsMode.setVisible(!comboSearchFieldsMode.isVisible());
-		labelSearch.setVisible(!labelSearch.isVisible());
-		labelSearchMode.setVisible(!labelSearchMode.isVisible());
+
+		comboSearchFields.setVisible(isExtraOptionsHidden);
+		comboSearchFieldsMode.setVisible(isExtraOptionsHidden);
+		labelSearch.setVisible(isExtraOptionsHidden);
+		labelSearchMode.setVisible(isExtraOptionsHidden);
+
+		isExtraOptionsHidden = !isExtraOptionsHidden;
 	}
 
 	private void setupNarrowLayout() {
