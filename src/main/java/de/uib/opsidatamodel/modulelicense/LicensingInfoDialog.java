@@ -65,8 +65,8 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		PanelGenEditTable centerPanel = new PanelGenEditTable();
 		JPanel bottomPanel = new JPanel();
 
-		bottomPanel = this.initClientInfo();
-		centerPanel = this.initMainPanel();
+		bottomPanel = initClientInfo();
+		centerPanel = initMainPanel();
 
 		super.setCenterPaneInScrollpane(centerPanel);
 		super.setAdditionalPane(bottomPanel);
@@ -265,7 +265,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		gLayout.setAutoCreateContainerGaps(true);
 
 		gLayout.setHorizontalGroup(
-				gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(extraInfoPanel)
 						.addGroup(gLayout.createSequentialGroup().addComponent(redWarningLabel).addGap(20)
 								.addComponent(orangeWarningLabel))
 						.addGroup(gLayout
@@ -290,15 +290,13 @@ public class LicensingInfoDialog extends FGeneralDialog {
 										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 												.addComponent(customerNames)))));
 
-		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
-
+		gLayout.setVerticalGroup(gLayout.createSequentialGroup().addComponent(extraInfoPanel).addGap(Globals.GAP_SIZE)
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(redWarningLabel)
 						.addComponent(orangeWarningLabel))
 				.addGap(15)
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
 						.addComponent(warningLevelPercent).addComponent(warningLevelDays))
 				.addGap(25)
-
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(clientTitle)
 						.addGap(30).addComponent(customerTitle))
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(gLayout
@@ -312,27 +310,11 @@ public class LicensingInfoDialog extends FGeneralDialog {
 						.addGroup(
 								gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(checksumTitle))
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(gLayout.createSequentialGroup().addComponent(checksum))
-
-								.addGap(20)))
+								.addGroup(gLayout.createSequentialGroup().addComponent(checksum)).addGap(20)))
 						.addGap(30).addGroup(gLayout.createSequentialGroup()
-								.addGroup(gLayout.createSequentialGroup().addComponent(customerNames)
+								.addGroup(gLayout.createSequentialGroup().addComponent(customerNames)))));
 
-								))
-
-				));
-
-		JPanel xPanel = new JPanel();
-		GroupLayout xLayout = new GroupLayout(xPanel);
-		xPanel.setLayout(xLayout);
-
-		xLayout.setHorizontalGroup(xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(extraInfoPanel).addComponent(panel));
-
-		xLayout.setVerticalGroup(xLayout.createSequentialGroup().addComponent(extraInfoPanel).addGap(Globals.GAP_SIZE)
-				.addComponent(panel));
-
-		return xPanel;
+		return panel;
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {
