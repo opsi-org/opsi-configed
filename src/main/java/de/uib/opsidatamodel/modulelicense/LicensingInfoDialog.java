@@ -228,17 +228,16 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		checksum.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
 
-		JLabel labelExtendedView = new JLabel(Configed.getResourceValue("LicensingInfo.buttonExtendedView"));
-		JCheckBox checkExtendedView = new JCheckBox("", extendedView);
+		JCheckBox checkExtendedView = new JCheckBox(Configed.getResourceValue("LicensingInfo.buttonExtendedView"),
+				extendedView);
 
 		checkExtendedView.addActionListener((ActionEvent actionEvent) -> {
 			setExtendedView(checkExtendedView.isSelected());
 			thePanel.reload();
 		});
 
-		JLabel labelShowOnlyAvailableModules = new JLabel(
-				Configed.getResourceValue("LicensingInfo.buttonShowOnlyAvailableModules"));
-		JCheckBox checkShowOnlyAvailableModules = new JCheckBox("", showOnlyAvailableModules);
+		JCheckBox checkShowOnlyAvailableModules = new JCheckBox(
+				Configed.getResourceValue("LicensingInfo.buttonShowOnlyAvailableModules"), showOnlyAvailableModules);
 
 		checkShowOnlyAvailableModules.addActionListener((ActionEvent actionEvent) -> {
 			showOnlyAvailableModules(checkShowOnlyAvailableModules.isSelected());
@@ -254,7 +253,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		});
 
 		JComponent[] linedComponents = new JComponent[] { buttonReload, new JLabel("   "), checkExtendedView,
-				labelExtendedView, checkShowOnlyAvailableModules, labelShowOnlyAvailableModules };
+				checkShowOnlyAvailableModules };
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
 

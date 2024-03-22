@@ -1098,9 +1098,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		}
 	}
 
-	private int findViewRowFromValue(int startviewrow, Object value, int col) {
-		Logging.debug(this,
-				"findViewRowFromValue startviewrow, value, col " + startviewrow + ", " + value + ", " + col);
+	public int findViewRowFromValue(Object value, int col) {
+		Logging.debug(this, "findViewRowFromValue value, col " + value + ", " + col);
 
 		if (value == null) {
 			return -1;
@@ -1108,43 +1107,16 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		String val = value.toString();
 
-		boolean found = false;
-
-		int viewrow = 0;
-
-		if (startviewrow > 0) {
-			viewrow = startviewrow;
-		}
-
-		while (!found && viewrow < tableModel.getRowCount()) {
+		for (int viewrow = 0; viewrow < tableModel.getRowCount(); viewrow++) {
 			Object compareValue = tableModel.getValueAt(theTable.convertRowIndexToModel(viewrow), col);
 
-			if (compareValue == null) {
-				if (val == null || val.isEmpty()) {
-					found = true;
-				}
-			} else {
-				String compareVal = compareValue.toString();
-
-				if (val.equals(compareVal)) {
-					found = true;
-				}
+			if ((compareValue == null && val.isEmpty())
+					|| (compareValue != null && val.equals(compareValue.toString()))) {
+				return viewrow;
 			}
-
-			if (!found) {
-				viewrow++;
-			}
-		}
-
-		if (found) {
-			return viewrow;
 		}
 
 		return -1;
-	}
-
-	public int findViewRowFromValue(Object value, int col) {
-		return findViewRowFromValue(0, value, col);
 	}
 
 	public boolean moveToValue(String value, int col) {
