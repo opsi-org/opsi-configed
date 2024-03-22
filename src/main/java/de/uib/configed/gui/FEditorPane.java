@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.swing.JEditorPane;
@@ -26,8 +25,6 @@ public class FEditorPane extends FGeneralDialog {
 		editPane.setEditable(false);
 
 		scrollpane.getViewport().add(editPane, null);
-
-		editPane.addKeyListener(this);
 	}
 
 	public boolean setPage(String url) {
@@ -69,18 +66,5 @@ public class FEditorPane extends FGeneralDialog {
 		editPane.setContentType("text/html");
 		editPane.setText(HEADER + s + FOOTER);
 		editPane.setCaretPosition(0);
-	}
-
-	// KeyListener
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !e.isShiftDown() && e.getSource() == editPane) {
-			jButton1.requestFocus();
-		}
-
-		if (e.getKeyCode() == KeyEvent.VK_TAB && e.isShiftDown() && e.getSource() == jButton1) {
-			editPane.requestFocus();
-		}
 	}
 }

@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -57,7 +58,7 @@ import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.SeparatedDocument;
 import utils.Utils;
 
-public final class NewClientDialog extends FGeneralDialog {
+public final class NewClientDialog extends FGeneralDialog implements KeyListener {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
 
 	private ConfigedMain configedMain;
@@ -224,9 +225,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		systemUUIDField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
 				36);
-
-		systemUUIDField.addKeyListener(this);
-		systemUUIDField.addMouseListener(this);
 
 		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
 
@@ -810,11 +808,17 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == jTextNotes && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
+		if (e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextInventoryNumber.requestFocusInWindow();
-		} else {
-			Logging.info(this, "keyPressed source " + e.getSource());
-			super.keyPressed(e);
 		}
 	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		/* Not needed */}
+
 }

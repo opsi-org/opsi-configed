@@ -11,10 +11,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Window;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 
@@ -33,7 +29,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
 import utils.Utils;
 
-public class FGeneralDialog extends JDialog implements KeyListener, MouseListener {
+public class FGeneralDialog extends JDialog {
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;
 	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
 
@@ -363,10 +359,6 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 			jPanelButtonGrid.add(jButton3, null);
 		}
 
-		jButton1.addKeyListener(this);
-		jButton2.addKeyListener(this);
-		jButton3.addKeyListener(this);
-
 		jButton1.addActionListener(event -> doAction1());
 		jButton2.addActionListener(event -> doAction2());
 		jButton3.addActionListener(event -> doAction3());
@@ -428,57 +420,5 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 		} else {
 			super.processWindowEvent(e);
 		}
-	}
-
-	// KeyListener
-	@Override
-	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, "key event " + e);
-		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
-			if (e.getSource() == jButton1) {
-				// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/
-				// since otherwise doAction1 is called twice on Enter
-			} else if (e.getSource() == jButton2) {
-				doAction2();
-			} else if (e.getSource() == jButton3) {
-				doAction3();
-			} else {
-				Logging.warning(this, "unexpected action on source " + e.getSource());
-			}
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
-
-	// MouseListener
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		Logging.debug(this, "mouseClicked");
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		Logging.debug(this, "mouseEntered");
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		Logging.debug(this, "mouseExited");
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		Logging.debug(this, "mousePressed");
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		Logging.debug(this, "mouseReleased");
 	}
 }

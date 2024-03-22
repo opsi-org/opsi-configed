@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -70,8 +69,6 @@ public class FShowList extends FTextArea {
 
 		scrollpane.getViewport().add(jTextArea1, null);
 
-		jTextArea1.addKeyListener(this);
-
 		pack();
 	}
 
@@ -83,17 +80,5 @@ public class FShowList extends FTextArea {
 		}
 
 		super.doAction1();
-	}
-
-	// KeyListener
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !e.isShiftDown() && e.getSource() == jTextArea1) {
-			jButton1.requestFocus();
-		} else if (e.getKeyCode() == KeyEvent.VK_TAB && e.isShiftDown() && e.getSource() == jButton1) {
-			jTextArea1.requestFocus();
-		} else {
-			// Do nothing on other key events
-		}
 	}
 }
