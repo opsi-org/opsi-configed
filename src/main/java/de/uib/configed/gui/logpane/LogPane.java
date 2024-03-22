@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
@@ -209,7 +210,6 @@ public class LogPane extends JPanel implements KeyListener {
 		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
 
 		buttonSearch.addActionListener(event -> search());
-		buttonSearch.addKeyListener(this);
 
 		jCheckBoxCaseSensitive = new JCheckBox(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive"));
 		jCheckBoxCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
@@ -697,6 +697,8 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	private void search() {
+		Logging.devel("search");
+		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()));
 		Logging.debug(this, "Searching string in log");
 
 		if (jComboBoxSearch.getSelectedItem() == null || jComboBoxSearch.getSelectedItem().toString().isEmpty()) {
@@ -731,26 +733,16 @@ public class LogPane extends JPanel implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		Logging.debug(this, "KeyEvent " + e);
 
-		if (e.getSource() == buttonSearch) {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				search();
-			}
-		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
-			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
-				search();
-			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS
-					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-				Logging.info(this, "Ctrl-Plus");
-				increaseFontSize();
-			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS
-					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-				Logging.info(this, "Ctrl-Minus");
-				reduceFontSize();
-			} else {
-				// Do nothing on other keys on jComboBoxSearch and jTextPane
-			}
+		if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
+			search();
+		} else if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+			Logging.info(this, "Ctrl-Plus");
+			increaseFontSize();
+		} else if (e.getKeyCode() == KeyEvent.VK_MINUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+			Logging.info(this, "Ctrl-Minus");
+			reduceFontSize();
 		} else {
-			Logging.warning(this, "unexpected keyevent on source " + e.getSource());
+			// Do nothing on other keys on jTextPane
 		}
 	}
 
