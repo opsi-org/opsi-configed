@@ -79,8 +79,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		myListCellRenderer.setInfo(persistenceController.getHostInfoCollections().getDepots());
 		listDepots.setCellRenderer(myListCellRenderer);
 
-		listSelectedDepots = new ArrayList<>();
-
 		JScrollPane scrollpaneDepots = new JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
 
