@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.messagebus.MessagebusListener;
@@ -28,10 +29,12 @@ public class TerminalCommandExecutor implements MessagebusListener {
 	private TerminalFrame terminalFrame;
 	private ThreadLocker locker;
 
-	private String commandToExecute;
+	private TerminalCommand commandToExecute;
 
 	private boolean withGUI;
 	private TerminalCommandProcess commandProcess;
+
+	private int commandNumber;
 
 	public TerminalCommandExecutor(ConfigedMain configedMain) {
 		this(configedMain, true);
@@ -58,8 +61,10 @@ public class TerminalCommandExecutor implements MessagebusListener {
 				if (command instanceof TerminalMultiCommand) {
 					executeMultiCommand(terminalFrame, (TerminalMultiCommand) command);
 				} else {
-					commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
-					commandProcess = new TerminalCommandProcess(configedMain, locker, commandToExecute);
+					String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand())
+							.replaceAll(" ");
+					commandToExecute = command;
+					commandProcess = new TerminalCommandProcess(configedMain, locker, commandRepresentation);
 					commandProcess.sendProcessStartRequest();
 				}
 			}
@@ -88,8 +93,10 @@ public class TerminalCommandExecutor implements MessagebusListener {
 						fileUploadCommand.getTargetPath(), withGUI, () -> locker.unlock());
 				locker.lock();
 			} else {
-				commandToExecute = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand()).replaceAll(" ");
-				commandProcess = new TerminalCommandProcess(configedMain, locker, commandToExecute);
+				String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand())
+						.replaceAll(" ");
+				commandToExecute = currentCommand;
+				commandProcess = new TerminalCommandProcess(configedMain, locker, commandRepresentation);
 				commandProcess.sendProcessStartRequest();
 			}
 		}
@@ -115,13 +122,19 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		String type = (String) message.get("type");
 
 		if (WebSocketEvent.PROCESS_START_EVENT.toString().equals(type)) {
+			commandNumber++;
 			if (withGUI) {
-				terminalFrame.writeToWidget(("Executing command: " + commandToExecute + "\r\n").getBytes());
+				String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(commandToExecute.getSecuredCommand())
+						.replaceAll(" ");
+				terminalFrame.writeToWidget(("(" + commandNumber + ") " + commandRepresentation + "\r\n").getBytes());
 			}
 			commandProcess.onStart(message);
 		}
 
 		if (WebSocketEvent.PROCESS_STOP_EVENT.toString().equals(type)) {
+			if (withGUI) {
+				terminalFrame.writeToWidget("\r\n".getBytes());
+			}
 			commandProcess.onStop(message);
 		}
 
@@ -129,6 +142,23 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			String data = commandProcess.onDataRead(message);
 			if (withGUI) {
 				terminalFrame.writeToWidget(data.replace("\n", "\r\n").getBytes());
+			}
+		}
+
+		if (WebSocketEvent.PROCESS_ERROR_EVENT.toString().equals(type)) {
+			String error = commandProcess.onError(message);
+			if (withGUI) {
+				commandNumber++;
+				String red = "\u001B[31m";
+				String reset = "\u001B[0m";
+				String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(commandToExecute.getSecuredCommand())
+						.replaceAll(" ");
+				String errorMessage = String.format(
+						Configed.getResourceValue("TerminalCommandExecutor.processErrorMessage"),
+						commandRepresentation);
+				terminalFrame.writeToWidget(
+						(red + "(" + commandNumber + ") " + errorMessage + " " + error + reset).getBytes());
+				terminalFrame.writeToWidget("\r\n".getBytes());
 			}
 		}
 	}

@@ -12,9 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import de.uib.configed.ConfigedMain;
 import de.uib.messagebus.WebSocketEvent;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.utilities.ThreadLocker;
+import de.uib.utilities.logging.Logging;
 
 public class TerminalCommandProcess {
 	private String processId;
@@ -80,6 +84,18 @@ public class TerminalCommandProcess {
 	private static String determineStreamFromWhichToRead(Map<String, Object> message) {
 		return message.get("stderr") != null && !(new String((byte[]) message.get("stderr"))).isEmpty() ? "stderr"
 				: "stdout";
+	}
+
+	public String onError(Map<String, Object> message) {
+		String stoppedProcessId = (String) message.get("process_id");
+		if (stoppedProcessId != null && stoppedProcessId.equals(processId)) {
+			locker.unlock();
+		}
+		Map<String, Object> error = POJOReMapper.remap(message.get("error"), new TypeReference<Map<String, Object>>() {
+		});
+		Logging.warning(this, "Command execution failed: " + error.get("code") + " - " + error.get("message") + ": "
+				+ error.get("details"));
+		return (String) error.get("message");
 	}
 
 	@SuppressWarnings({ "java:S2972" })
