@@ -704,10 +704,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 				sortDescriptor.put(tableModel.getKeyCol(), SortOrder.ASCENDING);
 			} else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
-				Iterator<Integer> iter = tableModel.getFinalCols().iterator();
-
-				while (iter.hasNext()) {
-					Integer col = iter.next();
+				for (Integer col : tableModel.getFinalCols()) {
 					sortKeys.add(new SortKey(col, SortOrder.ASCENDING));
 
 					sortDescriptor.put(col, SortOrder.ASCENDING);

@@ -429,6 +429,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		dialogRemoteControl.setDividerLocation(0.8);
 	}
 
+	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -441,7 +442,6 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		}
 	}
 
-	// KeyListener interface
 	@Override
 	public void keyReleased(KeyEvent e) {
 		/* Not needed */}

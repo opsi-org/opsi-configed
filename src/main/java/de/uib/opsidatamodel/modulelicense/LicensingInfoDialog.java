@@ -17,6 +17,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -28,7 +29,6 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.IconAsButton;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -244,8 +244,9 @@ public class LicensingInfoDialog extends FGeneralDialog {
 			thePanel.reload();
 		});
 
-		IconAsButton buttonReload = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonReload"),
-				"images/reload16.png", "images/reload16.png", "images/reload16.png", "images/reload16.png");
+		JButton buttonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
+		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
+		buttonReload.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonReload.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();

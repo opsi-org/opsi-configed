@@ -87,14 +87,12 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
+		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"),
 				"images/reload16.png", "images/reload16.png", "", true);
-		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
 				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", "", true);
-		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		Map<String, String> values = new LinkedHashMap<>();

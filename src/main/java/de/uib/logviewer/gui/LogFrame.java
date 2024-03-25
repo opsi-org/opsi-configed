@@ -6,8 +6,6 @@
 
 package de.uib.logviewer.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -34,7 +32,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import de.uib.Main;
@@ -61,11 +58,8 @@ public class LogFrame extends JFrame {
 	private JButton iconButtonSave;
 	private JButton iconButtonCopy;
 
-	private Container baseContainer;
-
 	public LogFrame() {
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		baseContainer = super.getContentPane();
 		guiInit();
 	}
 
@@ -194,24 +188,29 @@ public class LogFrame extends JFrame {
 
 		setupIcons();
 
-		JPanel iconPane = new JPanel();
-		GroupLayout layoutIconPane1 = new GroupLayout(iconPane);
-		iconPane.setLayout(layoutIconPane1);
+		logPane = new StandaloneLogPane();
+
+		GroupLayout layoutIconPane1 = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layoutIconPane1);
 
 		layoutIconPane1
 				.setHorizontalGroup(
-						layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE).addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE));
+						layoutIconPane1.createParallelGroup()
+								.addGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
+								.addComponent(logPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -223,23 +222,14 @@ public class LogFrame extends JFrame {
 								Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(logPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());
 		jMenuBar.add(setupMenuView());
 		jMenuBar.add(setupMenuHelp());
 		this.setJMenuBar(jMenuBar);
-
-		logPane = new StandaloneLogPane();
-
-		JPanel allPane = new JPanel();
-		allPane.setLayout(new BorderLayout());
-
-		allPane.add(iconPane, BorderLayout.NORTH);
-		allPane.add(logPane, BorderLayout.CENTER);
-
-		baseContainer.add(allPane);
 	}
 
 	public void initLogPane() {
@@ -259,7 +249,7 @@ public class LogFrame extends JFrame {
 
 	private void setEmptyData() {
 		logPane.setText("");
-		logPane.setTitle("unknown");
+		logPane.setTitle("");
 		setTitle(null);
 	}
 
