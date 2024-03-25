@@ -49,7 +49,8 @@ public class InstallationStateUpdateManager {
 				&& tableNetbootProducts.getModel() instanceof InstallationStateTableModel) {
 			updateTableForClient(clientId, attributes, tableNetbootProducts);
 		} else {
-			Logging.warning(this, "Cannot update table because we're not in Localboot or Netboot");
+			Logging.notice(this,
+					"Cannot update table because the Product table with the product to update is not open");
 		}
 	}
 
