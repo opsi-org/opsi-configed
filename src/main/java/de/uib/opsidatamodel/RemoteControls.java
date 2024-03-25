@@ -21,43 +21,44 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 
 		if (rcPartOfKey.length() < 2 || rcPartOfKey.charAt(0) != '.') {
 			Logging.error("No remote control key given after '" + RemoteControl.CONFIG_KEY + "'");
+			return;
+		}
+
+		rcPartOfKey = rcPartOfKey.substring(1);
+
+		int i = nextPartAt(rcPartOfKey);
+
+		// first level key
+
+		if (i == -1) {
+			RemoteControl rc = retrieveRC(rcPartOfKey);
+			if (rc.getCommand().isEmpty()) {
+				rc.setCommand(value);
+			}
+
+			// if command is specified by an explicit command key, leave it
 		} else {
-			rcPartOfKey = rcPartOfKey.substring(1);
+			// second level key
 
-			int i = nextPartAt(rcPartOfKey);
+			String name = rcPartOfKey.substring(0, i);
 
-			// first level key
+			RemoteControl rc = retrieveRC(name);
 
-			if (i == -1) {
-				RemoteControl rc = retrieveRC(rcPartOfKey);
-				if (rc.getCommand().isEmpty()) {
-					rc.setCommand(value);
-				}
+			String remainder = rcPartOfKey.substring(i + 1);
 
-				// if command is specified by an explicit command key, leave it
+			i = nextPartAt(remainder);
+
+			if (i != -1) {
+				// there are no 3rd level keys
+				Logging.error("Remote control key has too many parts");
+			} else if (remainder.equals(RemoteControl.DESCRIPTION_KEY)) {
+				rc.setDescription(value);
+			} else if (remainder.equals(RemoteControl.COMMAND_KEY)) {
+				rc.setCommand(value);
+			} else if (remainder.equals(RemoteControl.EDITABLE_KEY)) {
+				rc.setEditable(value);
 			} else {
-				// second level key
-
-				String name = rcPartOfKey.substring(0, i);
-
-				RemoteControl rc = retrieveRC(name);
-
-				String remainder = rcPartOfKey.substring(i + 1);
-
-				i = nextPartAt(remainder);
-
-				if (i != -1) {
-					// there are no 3rd level keys
-					Logging.error("Remote control key has too many parts");
-				} else if (remainder.equals(RemoteControl.DESCRIPTION_KEY)) {
-					rc.setDescription(value);
-				} else if (remainder.equals(RemoteControl.COMMAND_KEY)) {
-					rc.setCommand(value);
-				} else if (remainder.equals(RemoteControl.EDITABLE_KEY)) {
-					rc.setEditable(value);
-				} else {
-					Logging.warning(this, "unexpected remainder " + remainder);
-				}
+				Logging.warning(this, "unexpected remainder " + remainder);
 			}
 		}
 	}

@@ -50,12 +50,11 @@ public class GenTableModel extends AbstractTableModel {
 	private int keyCol = -1;
 	private List<MapBasedTableEditItem> updates;
 	private boolean modelDataValid;
-	private boolean modelStructureValid;
 
 	private DefaultTableProvider tableProvider;
 	private MapTableUpdateItemFactory itemFactory;
 
-	private final ChainedTableModelFilter chainedFilter;
+	private final ChainedTableModelFilter chainedFilter = new ChainedTableModelFilter();
 	private TableModelFilter workingFilter;
 
 	private Integer sortCol;
@@ -79,7 +78,7 @@ public class GenTableModel extends AbstractTableModel {
 		initColumns();
 
 		if (cancelRequestReload) {
-			cancelRequestReload();
+			tableProvider.cancelRequestReload();
 		}
 
 		setRows(dataProvider.getRows());
@@ -99,7 +98,6 @@ public class GenTableModel extends AbstractTableModel {
 		}
 
 		modelDataValid = false;
-		modelStructureValid = true;
 
 		if (rows == null) {
 			rowsLength = 0;
@@ -111,8 +109,7 @@ public class GenTableModel extends AbstractTableModel {
 			super.addTableModelListener(l);
 		}
 
-		chainedFilter = new ChainedTableModelFilter();
-		setFilter(chainedFilter);
+		workingFilter = chainedFilter;
 	}
 
 	public GenTableModel(MapTableUpdateItemFactory itemFactory, DefaultTableProvider dataProvider, int keyCol,
@@ -167,24 +164,9 @@ public class GenTableModel extends AbstractTableModel {
 		tableProvider.requestReloadRows();
 	}
 
-	public final void cancelRequestReload() {
-		tableProvider.cancelRequestReload();
-	}
-
-	public void structureChanged() {
-		tableProvider.structureChanged();
-		modelStructureValid = false;
-		requestReload();
-	}
-
 	public void startWithCurrentData() {
 		tableProvider.setWorkingCopyAsNewOriginalRows();
 		invalidate();
-	}
-
-	private void setFilter(TableModelFilter filter) {
-		Logging.info(this, "setFilter " + filter);
-		workingFilter = filter;
 	}
 
 	/**
@@ -320,12 +302,6 @@ public class GenTableModel extends AbstractTableModel {
 
 			produceRows();
 
-			if (!modelStructureValid) {
-				initColumns();
-				fireTableStructureChanged();
-				modelStructureValid = true;
-			}
-
 			fireTableDataChanged();
 			modelDataValid = true;
 		}
@@ -338,11 +314,6 @@ public class GenTableModel extends AbstractTableModel {
 	public boolean isUsingFilter(String name) {
 		if (name == null) {
 			Logging.info(this, "isUsingFilter, name == null");
-			return false;
-		}
-
-		if (chainedFilter == null) {
-			Logging.info(this, "isUsingFilter, chainedFilter == null");
 			return false;
 		}
 
@@ -583,7 +554,15 @@ public class GenTableModel extends AbstractTableModel {
 		}
 	}
 
-	private void addRow(List<Object> rowV) {
+	public void addRow(Object[] a) {
+		List<Object> rowV = new ArrayList<>();
+		for (int i = 0; i < colsLength; i++) {
+			rowV.add(null);
+		}
+		for (int j = 0; j < a.length; j++) {
+			rowV.set(j, a[j]);
+		}
+
 		Logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
 
 		rows.add(rowV);
@@ -597,18 +576,6 @@ public class GenTableModel extends AbstractTableModel {
 		rowsLength++;
 
 		fireTableRowsInserted(rowsLength - 1, rowsLength - 1);
-	}
-
-	public void addRow(Object[] a) {
-		List<Object> rowV = new ArrayList<>();
-		for (int i = 0; i < colsLength; i++) {
-			rowV.add(null);
-		}
-		for (int j = 0; j < a.length; j++) {
-			rowV.set(j, a[j]);
-		}
-
-		addRow(rowV);
 	}
 
 	private boolean checkDeletionOfAddedRow(int rowNum) {
