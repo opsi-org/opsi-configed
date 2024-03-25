@@ -1,4 +1,7 @@
 # Changelog
+## [4.3.x.x] - 2024-xx-xx
+- Invalid Range error when updating product table (Manually or by messagebus)
+
 ## [4.3.2.9] - 2024-03-21
 ## Changed
 - Don't show server defaults for WAN, UEFI and Install on Shutdown in new client dialogue
