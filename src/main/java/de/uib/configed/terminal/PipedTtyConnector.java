@@ -11,6 +11,8 @@ import java.io.PipedReader;
 import java.io.PipedWriter;
 import java.nio.charset.StandardCharsets;
 
+import com.jediterm.core.util.TermSize;
+import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
 
 import de.uib.utilities.logging.Logging;
@@ -49,6 +51,11 @@ public class PipedTtyConnector implements TtyConnector {
 	@Override
 	public String getName() {
 		return terminalWidget.getTitle();
+	}
+
+	@Override
+	public void resize(TermSize termSize) {
+		terminalWidget.getTerminalPanel().onResize(termSize, RequestOrigin.User);
 	}
 
 	@Override
