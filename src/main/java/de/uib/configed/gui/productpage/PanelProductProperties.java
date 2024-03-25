@@ -84,6 +84,8 @@ public class PanelProductProperties extends JSplitPane {
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
+
+		setResizeWeight(1.0);
 	}
 
 	private GenTableModel createTableModel() {
