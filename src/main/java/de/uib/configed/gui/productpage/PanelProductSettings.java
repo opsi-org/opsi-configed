@@ -104,7 +104,7 @@ public class PanelProductSettings extends JSplitPane {
 		this.type = type;
 		init();
 
-		super.setResizeWeight(1);
+		super.setResizeWeight(1.0);
 	}
 
 	private void initTopPane() {

@@ -113,6 +113,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		clientInfoPanel = new ClientInfoPanel(configedMain);
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTable(), clientInfoPanel);
+		panelClientSelection.setResizeWeight(1.0);
 
 		insertTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), null, panelClientSelection, null,
 				ConfigedMain.VIEW_CLIENTS);

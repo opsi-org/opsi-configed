@@ -33,7 +33,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -657,16 +656,13 @@ public class MainFrame extends JFrame {
 
 		setJMenuBar(initMenuBar());
 
-		JPanel allPanel = new JPanel();
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
-		allPanel.setLayout(new BorderLayout());
-		allPanel.add(iconBarPanel, BorderLayout.NORTH);
-		allPanel.add(centralPane, BorderLayout.CENTER);
-		allPanel.add(statusPane, BorderLayout.SOUTH);
-
-		getContentPane().add(allPanel);
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(iconBarPanel, BorderLayout.NORTH);
+		getContentPane().add(centralPane, BorderLayout.CENTER);
+		getContentPane().add(statusPane, BorderLayout.SOUTH);
 
 		setTitle(configedMain.getAppTitle());
 
