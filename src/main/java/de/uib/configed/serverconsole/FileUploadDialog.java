@@ -32,7 +32,7 @@ import de.uib.configed.serverconsole.terminalcommand.TerminalCommandCurl;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFileUpload;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiSetRights;
-import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommand;
+import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommandTemplate;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -341,7 +341,7 @@ public class FileUploadDialog extends FGeneralDialog {
 	private void uploadFile() {
 		String modulesServerPath = doAction1AdditionalSetPath();
 
-		TerminalMultiCommand fullcommand = new TerminalMultiCommand();
+		TerminalMultiCommandTemplate fullcommand = new TerminalMultiCommandTemplate();
 		fullcommand.setMainName("FileUpload");
 		if (jRadioButtonFromServer.isSelected()) {
 			TerminalCommandCurl curlCommand = new TerminalCommandCurl();
@@ -366,7 +366,7 @@ public class FileUploadDialog extends FGeneralDialog {
 		}
 
 		TerminalCommandExecutor execute = new TerminalCommandExecutor(configedMain);
-		execute.execute(fullcommand);
+		execute.executeMultiCommand(fullcommand);
 	}
 
 	protected TerminalCommandCurl doAction1AdditionalSetWget(TerminalCommandCurl c, String path) {

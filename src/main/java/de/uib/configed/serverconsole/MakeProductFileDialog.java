@@ -32,8 +32,8 @@ import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFactory;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiMakeProductFile;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiSetRights;
-import de.uib.configed.serverconsole.terminalcommand.TerminalEmptyCommand;
-import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommand;
+import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommandTemplate;
+import de.uib.configed.serverconsole.terminalcommand.TerminalSingleCommandTemplate;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -393,8 +393,9 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private String doActionGetVersions() {
 		String dir = jComboBoxMainDir.getEditor().getItem() + "/OPSI/control";
 		Logging.info(this, "doActionGetVersions, dir " + dir);
-		TerminalEmptyCommand getVersions = new TerminalEmptyCommand(TerminalCommandFactory.STRING_COMMAND_GET_VERSIONS
-				.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
+		TerminalSingleCommandTemplate getVersions = new TerminalSingleCommandTemplate(
+				TerminalCommandFactory.STRING_COMMAND_GET_VERSIONS
+						.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
 		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
 		Logging.info(this, "doActionGetVersions, command " + getVersions);
 		String result = executor.execute(getVersions);
@@ -464,7 +465,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 			Logging.warning(this, "Please select a valid opsi product directory.");
 			return;
 		}
-		TerminalMultiCommand commands = new TerminalMultiCommand();
+		TerminalMultiCommandTemplate commands = new TerminalMultiCommandTemplate();
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
 
 		String prodVersion = jTextFieldProductVersion.getText();
@@ -488,18 +489,18 @@ public class MakeProductFileDialog extends FGeneralDialog {
 			String command = "[ -f " + filename + " ] &&  rm " + filename + " && echo \"File " + filename
 					+ " removed\" || echo \"File did not exist\"";
 
-			TerminalEmptyCommand removeExistingPackage = new TerminalEmptyCommand(command);
+			TerminalSingleCommandTemplate removeExistingPackage = new TerminalSingleCommandTemplate(command);
 			commands.addCommand(removeExistingPackage);
 
 			command = "[ -f " + filename + ".zsync ] &&  rm " + filename + ".zsync && echo \"File " + filename
 					+ ".zsync removed\" || echo \"File  " + filename + ".zsync did not exist\"";
 
-			removeExistingPackage = new TerminalEmptyCommand(command);
+			removeExistingPackage = new TerminalSingleCommandTemplate(command);
 			commands.addCommand(removeExistingPackage);
 
 			command = "[ -f " + filename + ".md5 ] &&  rm " + filename + ".md5 && echo \"File " + filename
 					+ ".md5 removed\" || echo \"File  " + filename + ".md5 did not exist\"";
-			removeExistingPackage = new TerminalEmptyCommand(command);
+			removeExistingPackage = new TerminalSingleCommandTemplate(command);
 
 			commands.addCommand(removeExistingPackage);
 		}
@@ -513,7 +514,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 			@Override
 			public void run() {
 				TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
-				executor.execute(commands);
+				executor.executeMultiCommand(commands);
 			}
 		}.start();
 	}
@@ -527,8 +528,9 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private String getPackageID(String dir) {
-		TerminalEmptyCommand getPackageId = new TerminalEmptyCommand(TerminalCommandFactory.STRING_COMMAND_CAT_DIRECTORY
-				.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
+		TerminalSingleCommandTemplate getPackageId = new TerminalSingleCommandTemplate(
+				TerminalCommandFactory.STRING_COMMAND_CAT_DIRECTORY
+						.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
 		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
 		String result = executor.execute(getPackageId);
 		Logging.debug(this, "getPackageID result " + result);

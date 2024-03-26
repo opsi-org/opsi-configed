@@ -12,12 +12,11 @@ import java.util.List;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 
-public class TerminalCommandFileUpload implements TerminalCommandNeedParameter, TerminalCommand {
+public class TerminalCommandFileUpload implements TerminalSingleCommand, TerminalCommandNeedParameter {
 	private static final int PRIORITY = 0;
 
 	protected FGeneralDialog dialog;
 	private boolean needParameter = true;
-	private boolean isMultiCommand;
 
 	private String title = "File Upload";
 	private String baseName = "File Upload";
@@ -131,11 +130,6 @@ public class TerminalCommandFileUpload implements TerminalCommandNeedParameter, 
 	@Override
 	public String getBasicName() {
 		return baseName;
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
 	}
 
 	@Override

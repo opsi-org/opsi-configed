@@ -16,7 +16,7 @@ import de.uib.configed.serverconsole.OpsiSetRightsParameterDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandOpsiSetRights implements TerminalCommand, TerminalCommandNeedParameter {
+public class TerminalCommandOpsiSetRights implements TerminalSingleCommand, TerminalCommandNeedParameter {
 	private static final int PRIORITY = 110;
 
 	private static final String BASE_NAME = "opsi-set-rights ";
@@ -25,7 +25,6 @@ public class TerminalCommandOpsiSetRights implements TerminalCommand, TerminalCo
 
 	private FGeneralDialog dialog;
 	private boolean needParameter = true;
-	private boolean isMultiCommand = true;
 	private String dir;
 	private String myTmpCommand;
 
@@ -95,11 +94,6 @@ public class TerminalCommandOpsiSetRights implements TerminalCommand, TerminalCo
 	@Override
 	public int getPriority() {
 		return PRIORITY;
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
 	}
 
 	@Override

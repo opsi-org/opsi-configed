@@ -29,7 +29,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 	private TerminalFrame terminalFrame;
 	private ThreadLocker locker;
 
-	private TerminalCommand commandToExecute;
+	private TerminalSingleCommand commandToExecute;
 
 	private boolean withGUI;
 	private TerminalCommandProcess commandProcess;
@@ -48,27 +48,52 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		configedMain.getMessagebus().getWebSocket().registerListener(TerminalCommandExecutor.this);
 	}
 
-	public String execute(TerminalCommand command) {
+	public String execute(TerminalSingleCommand command) {
 		terminalFrame.setMessagebus(configedMain.getMessagebus());
 		if (withGUI) {
 			terminalFrame.display();
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
 
-		Thread backgroundThread = new Thread() {
-			@Override
-			public void run() {
-				if (command instanceof TerminalMultiCommand) {
-					executeMultiCommand(terminalFrame, (TerminalMultiCommand) command);
+		startBackgroundThread(() -> {
+			commandToExecute = command;
+			String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
+			commandProcess = new TerminalCommandProcess(configedMain, locker, commandRepresentation);
+			commandProcess.sendProcessStartRequest();
+		});
+
+		return commandProcess != null ? commandProcess.getResult() : "";
+	}
+
+	public void executeMultiCommand(TerminalMultiCommand multiCommand) {
+		terminalFrame.setMessagebus(configedMain.getMessagebus());
+		if (withGUI) {
+			terminalFrame.display();
+			terminalFrame.disableUserInputForSelectedWidget();
+		}
+
+		startBackgroundThread(() -> {
+			List<TerminalSingleCommand> commands = multiCommand.getCommands();
+			for (int i = 0; i < commands.size(); i++) {
+				TerminalSingleCommand currentCommand = commands.get(i);
+				if (currentCommand instanceof TerminalCommandFileUpload) {
+					TerminalCommandFileUpload fileUploadCommand = (TerminalCommandFileUpload) currentCommand;
+					terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
+							fileUploadCommand.getTargetPath(), withGUI, () -> locker.unlock());
+					locker.lock();
 				} else {
-					String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand())
+					String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand())
 							.replaceAll(" ");
-					commandToExecute = command;
+					commandToExecute = currentCommand;
 					commandProcess = new TerminalCommandProcess(configedMain, locker, commandRepresentation);
 					commandProcess.sendProcessStartRequest();
 				}
 			}
-		};
+		});
+	}
+
+	private void startBackgroundThread(Runnable runnable) {
+		Thread backgroundThread = new Thread(runnable);
 		backgroundThread.start();
 
 		if (!withGUI) {
@@ -77,27 +102,6 @@ public class TerminalCommandExecutor implements MessagebusListener {
 			} catch (InterruptedException e) {
 				Logging.warning(this, "Thread was interrupted");
 				Thread.currentThread().interrupt();
-			}
-		}
-
-		return commandProcess != null ? commandProcess.getResult() : "";
-	}
-
-	private void executeMultiCommand(TerminalFrame terminalFrame, TerminalMultiCommand multiCommand) {
-		List<TerminalCommand> commands = multiCommand.getCommands();
-		for (int i = 0; i < commands.size(); i++) {
-			TerminalCommand currentCommand = commands.get(i);
-			if (currentCommand instanceof TerminalCommandFileUpload) {
-				TerminalCommandFileUpload fileUploadCommand = (TerminalCommandFileUpload) currentCommand;
-				terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
-						fileUploadCommand.getTargetPath(), withGUI, () -> locker.unlock());
-				locker.lock();
-			} else {
-				String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand())
-						.replaceAll(" ");
-				commandToExecute = currentCommand;
-				commandProcess = new TerminalCommandProcess(configedMain, locker, commandRepresentation);
-				commandProcess.sendProcessStartRequest();
 			}
 		}
 	}

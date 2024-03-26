@@ -12,10 +12,9 @@ import java.util.List;
 import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 
-public class TerminalCommandOpsiPackageManager implements TerminalCommand {
+public class TerminalCommandOpsiPackageManager implements TerminalSingleCommand {
 	private FGeneralDialog dialog;
 	private boolean needParameter = true;
-	private boolean isMultiCommand;
 	private int priority = 100;
 
 	@Override
@@ -50,11 +49,6 @@ public class TerminalCommandOpsiPackageManager implements TerminalCommand {
 	@Override
 	public String getToolTipText() {
 		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager.tooltip");
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
 	}
 
 	@Override

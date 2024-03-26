@@ -25,7 +25,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.CompletionComboBox;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFactory;
-import de.uib.configed.serverconsole.terminalcommand.TerminalEmptyCommand;
+import de.uib.configed.serverconsole.terminalcommand.TerminalSingleCommandTemplate;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -248,7 +248,7 @@ public class CompletionComboButton {
 	}
 
 	private String getDirectories(String curdir) {
-		TerminalEmptyCommand getDirectoriesCommand = new TerminalEmptyCommand(
+		TerminalSingleCommandTemplate getDirectoriesCommand = new TerminalSingleCommandTemplate(
 				TerminalCommandFactory.STRING_COMMAND_GET_DIRECTORIES
 						.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
@@ -256,7 +256,7 @@ public class CompletionComboButton {
 	}
 
 	private String getFiles(String curdir) {
-		TerminalEmptyCommand getFilesCommand = new TerminalEmptyCommand(
+		TerminalSingleCommandTemplate getFilesCommand = new TerminalSingleCommandTemplate(
 				TerminalCommandFactory.STRING_COMMAND_GET_OPSI_FILES
 						.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 

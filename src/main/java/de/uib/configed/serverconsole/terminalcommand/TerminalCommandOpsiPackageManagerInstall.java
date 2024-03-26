@@ -58,11 +58,6 @@ public class TerminalCommandOpsiPackageManagerInstall extends TerminalCommandOps
 	}
 
 	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
-	}
-
-	@Override
 	public String getCommand() {
 		command = "opsi-package-manager  --force -q " + verbosity + updateInstalled + setupInstalled + property + depot
 				+ freeInput + opsiproduct;

@@ -15,7 +15,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.MakeProductFileDialog;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandOpsiMakeProductFile implements TerminalCommand, TerminalCommandNeedParameter {
+public class TerminalCommandOpsiMakeProductFile implements TerminalSingleCommand, TerminalCommandNeedParameter {
 	private static final int PRIORITY = 110;
 
 	private String baseName = "opsi-makepackage";
@@ -23,7 +23,6 @@ public class TerminalCommandOpsiMakeProductFile implements TerminalCommand, Term
 
 	private FGeneralDialog dialog;
 	private boolean needParameter = true;
-	private boolean isMultiCommand;
 
 	private String dir = "";
 	private String keepVersions = "";
@@ -87,11 +86,6 @@ public class TerminalCommandOpsiMakeProductFile implements TerminalCommand, Term
 		} else {
 			keepVersions = "";
 		}
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
 	}
 
 	@Override

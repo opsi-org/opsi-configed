@@ -16,10 +16,9 @@ import de.uib.utilities.logging.Logging;
 /**
  * This class represent a simple single command
  **/
-public class TerminalEmptyCommand implements TerminalCommand {
+public class TerminalSingleCommandTemplate implements TerminalSingleCommand {
 	public static final String TESTCOMMAND = "pwd";
 	private boolean needParameter;
-	private boolean isMultiCommand;
 	private String id;
 	private String menuText;
 	private String command;
@@ -30,7 +29,7 @@ public class TerminalEmptyCommand implements TerminalCommand {
 
 	private String myTmpCommand;
 
-	public TerminalEmptyCommand(String id, String c, String mt) {
+	public TerminalSingleCommandTemplate(String id, String c, String mt) {
 		position = TerminalCommandFactory.DEFAULT_POSITION;
 		setId(id);
 		setCommand(c);
@@ -38,12 +37,22 @@ public class TerminalEmptyCommand implements TerminalCommand {
 		setMenuText(mt);
 	}
 
-	public TerminalEmptyCommand(String c) {
+	public TerminalSingleCommandTemplate(TerminalSingleCommand command) {
+		position = TerminalCommandFactory.DEFAULT_POSITION;
+		setId(command.getId());
+		setMenuText(command.getMenuText());
+		setParentMenuText(command.getParentMenuText());
+		setTooltipText(command.getToolTipText());
+		setPriority(command.getPriority());
+		setCommand(command.getCommand());
+	}
+
+	public TerminalSingleCommandTemplate(String c) {
 		setCommand(c);
 		getParameterList();
 	}
 
-	public TerminalEmptyCommand() {
+	public TerminalSingleCommandTemplate() {
 	}
 
 	@Override
@@ -73,26 +82,21 @@ public class TerminalEmptyCommand implements TerminalCommand {
 		menuText = mt;
 	}
 
-	public void setParentMenuText(String pmt) {
+	public final void setParentMenuText(String pmt) {
 		parentMenuText = pmt;
 	}
 
-	public void setTooltipText(String ttt) {
+	public final void setTooltipText(String ttt) {
 		tooltipText = ttt;
 	}
 
-	public void setPriority(int p) {
+	public final void setPriority(int p) {
 		position = p;
 	}
 
 	@Override
 	public String getId() {
 		return id;
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
 	}
 
 	@Override

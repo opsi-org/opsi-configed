@@ -22,7 +22,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFileUpload;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiPackageManagerInstall;
-import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommand;
+import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommandTemplate;
 import de.uib.utilities.logging.Logging;
 
 public class PackageManagerInstallParameterDialog extends PackageManagerParameterDialog {
@@ -184,7 +184,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 	@Override
 	public void doAction3() {
 		Logging.info(this, " doAction3 install ");
-		TerminalMultiCommand commands = new TerminalMultiCommand();
+		TerminalMultiCommandTemplate commands = new TerminalMultiCommandTemplate();
 		commands.setMainName("PackageInstallation");
 		TerminalCommandOpsiPackageManagerInstall pmInstallCom;
 
@@ -230,7 +230,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		installSettingsPanel.updateCommand(pmInstallCom);
 
 		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
-		executor.execute(commands);
+		executor.executeMultiCommand(commands);
 		Logging.info(this, "doAction3 end ");
 	}
 }

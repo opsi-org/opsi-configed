@@ -15,9 +15,8 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.CurlParameterDialog;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeedParameter {
+public class TerminalCommandCurl implements TerminalSingleCommand, TerminalCommandNeedParameter {
 	private static final String BASE_NAME = "curl";
-	private static final boolean IS_MULTI_COMMAND = false;
 	private static final int PRIORITY = 110;
 
 	private String command = "curl ";
@@ -72,11 +71,6 @@ public class TerminalCommandCurl implements TerminalCommand, TerminalCommandNeed
 		if (a != null) {
 			authentication = a;
 		}
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return IS_MULTI_COMMAND;
 	}
 
 	@Override

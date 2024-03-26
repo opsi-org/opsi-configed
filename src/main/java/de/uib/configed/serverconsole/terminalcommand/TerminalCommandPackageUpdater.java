@@ -18,14 +18,13 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageUpdaterDialog;
 
-public class TerminalCommandPackageUpdater implements TerminalCommand, TerminalCommandNeedParameter {
+public class TerminalCommandPackageUpdater implements TerminalSingleCommand, TerminalCommandNeedParameter {
 	private static final int PRIORITY = 105;
 
 	private String command;
 	private String baseName = "opsi-package-updater";
 	private FGeneralDialog dialog;
 	private boolean needParameter = true;
-	private boolean isMultiCommand;
 
 	private String action = "list --repos";
 	private String repo = "";
@@ -66,11 +65,6 @@ public class TerminalCommandPackageUpdater implements TerminalCommand, TerminalC
 	@Override
 	public String getBasicName() {
 		return baseName;
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
 	}
 
 	@Override

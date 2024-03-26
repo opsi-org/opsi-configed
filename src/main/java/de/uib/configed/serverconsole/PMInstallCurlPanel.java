@@ -21,8 +21,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandCurl;
-import de.uib.configed.serverconsole.terminalcommand.TerminalEmptyCommand;
-import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommand;
+import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommandTemplate;
+import de.uib.configed.serverconsole.terminalcommand.TerminalSingleCommandTemplate;
 import de.uib.utilities.logging.Logging;
 
 public class PMInstallCurlPanel extends PMInstallPanel {
@@ -113,7 +113,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxCompareMD5.tooltip"));
 	}
 
-	public TerminalMultiCommand getCommand(TerminalMultiCommand commands) {
+	public TerminalMultiCommandTemplate getCommand(TerminalMultiCommandTemplate commands) {
 		if (jTextFieldURL.getText() == null || jTextFieldURL.getText().isBlank()
 				|| jTextFieldURL.getText().trim().equals(urlDefText)) {
 			return null;
@@ -133,8 +133,8 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		if (jCheckBoxCompareMD5.isSelected()) {
 			String product = mainDir + "/" + getFilenameFromUrl(mainProduct);
 
-			commands.addCommand(new TerminalEmptyCommand("md5_vergleich", " if [ -z $((cat " + product + ".md5" + ") | "
-					+ "grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
+			commands.addCommand(new TerminalSingleCommandTemplate("md5_vergleich", " if [ -z $((cat " + product + ".md5"
+					+ ") | " + "grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
 					+ Configed.getResourceValue(
 							"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreNotEqual")
 					+ "\"; else echo \""

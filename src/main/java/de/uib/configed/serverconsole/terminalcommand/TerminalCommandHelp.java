@@ -11,22 +11,15 @@ import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
 
-public class TerminalCommandHelp implements TerminalCommand {
+public class TerminalCommandHelp implements TerminalSingleCommand {
 	private boolean needParameter;
-	private TerminalCommand basicCommand;
+	private TerminalSingleCommand basicCommand;
 	private FGeneralDialog dialog;
 
-	private boolean isMultiCommand;
-
-	public TerminalCommandHelp(TerminalCommand basicCommand) {
+	public TerminalCommandHelp(TerminalSingleCommand basicCommand) {
 		this.basicCommand = basicCommand;
 
 		this.dialog = this.basicCommand.getDialog();
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
 	}
 
 	@Override

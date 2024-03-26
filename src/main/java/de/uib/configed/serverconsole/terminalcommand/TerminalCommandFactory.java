@@ -38,7 +38,7 @@ public final class TerminalCommandFactory {
 
 	private static TerminalCommandFactory instance;
 
-	private static final TerminalCommand[] DEFAULT_OPSI_COMMANDS = new TerminalCommand[] {
+	private static final TerminalSingleCommand[] DEFAULT_OPSI_COMMANDS = new TerminalSingleCommand[] {
 			new TerminalCommandPackageUpdater(), new TerminalCommandOpsiPackageManagerInstall(),
 			new TerminalCommandOpsiPackageManagerUninstall(), new TerminalCommandOpsiMakeProductFile(),
 			new TerminalCommandCurl(), new TerminalCommandModulesUpload(), new TerminalCommandOpsiSetRights(),
@@ -55,7 +55,7 @@ public final class TerminalCommandFactory {
 		instance = null;
 	}
 
-	public TerminalCommand[] getDefaultOpsiCommands() {
+	public TerminalSingleCommand[] getDefaultOpsiCommands() {
 		return DEFAULT_OPSI_COMMANDS;
 	}
 }

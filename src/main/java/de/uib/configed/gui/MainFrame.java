@@ -50,9 +50,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommand;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFactory;
 import de.uib.configed.serverconsole.terminalcommand.TerminalCommandNeedParameter;
+import de.uib.configed.serverconsole.terminalcommand.TerminalSingleCommand;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.messages.Messages;
@@ -457,8 +457,8 @@ public class MainFrame extends JFrame {
 
 	private void addTerminalCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
 		final TerminalCommandFactory factory = TerminalCommandFactory.getInstance();
-		TerminalCommand[] commands = factory.getDefaultOpsiCommands();
-		for (final TerminalCommand command : commands) {
+		TerminalSingleCommand[] commands = factory.getDefaultOpsiCommands();
+		for (final TerminalSingleCommand command : commands) {
 			JMenuItem jMenuOpsiCommand = new JMenuItem();
 			jMenuOpsiCommand.setText(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());

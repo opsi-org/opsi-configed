@@ -14,7 +14,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.DeployClientAgentParameterDialog;
 
-public class TerminalCommandDeployClientAgent implements TerminalCommand, TerminalCommandNeedParameter {
+public class TerminalCommandDeployClientAgent implements TerminalSingleCommand, TerminalCommandNeedParameter {
 	private String command;
 	private String baseDir = "/var/lib/opsi/depot";
 	private String opsiClientAgentDir;
@@ -22,7 +22,6 @@ public class TerminalCommandDeployClientAgent implements TerminalCommand, Termin
 	private FGeneralDialog dialog;
 	private boolean pingIsRequired = true;
 	private boolean needParameter = true;
-	private boolean isMultiCommand;
 	private int priority = 105;
 
 	private String client = "";
@@ -95,11 +94,6 @@ public class TerminalCommandDeployClientAgent implements TerminalCommand, Termin
 			finishAction = "";
 			break;
 		}
-	}
-
-	@Override
-	public boolean isMultiCommand() {
-		return isMultiCommand;
 	}
 
 	@Override
