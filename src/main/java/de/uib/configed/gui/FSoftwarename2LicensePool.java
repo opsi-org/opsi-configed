@@ -89,46 +89,9 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 		this.myController = myController;
 		this.configedMain = configedMain;
 
-		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, true) {
-			@Override
-			public void setDataChanged(boolean b) {
-				Logging.info(this, "panelSWNames setDataChanged " + b);
-				super.setDataChanged(b);
-			}
-		};
+		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 
-		panelSWxLicensepool = new PanelGenEditTable("", true, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, false) {
-			@Override
-			public void setDataChanged(boolean b) {
-				Logging.info(this, "panelSWxLicensepool setDataChanged " + b);
-				super.setDataChanged(b);
-			}
-
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				Logging.info(this, "panelSWxLicensepool ListSelectionEvent " + e);
-				super.valueChanged(e);
-
-				String labelText = Configed
-						.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow");
-
-				Object val = null;
-				int selRow = getSelectedRow();
-				if (selRow > -1) {
-					val = getValueAt(selRow, 1);
-				}
-
-				if (val != null && isSingleSelection() && getTableModel().getRowCount() > 1
-						&& !((String) val).equals(VALUE_NO_LICENSE_POOL)) {
-					buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
-					labelSetAllAssignmentsToPoolFromSelectedRow
-							.setText(labelText + " " + getValueAt(getSelectedRow(), 1));
-				} else {
-					buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
-					labelSetAllAssignmentsToPoolFromSelectedRow.setText(labelText);
-				}
-			}
-		};
+		panelSWxLicensepool = new PanelSWxLicensepool();
 
 		panelSWxLicensepool.setDeleteAllowed(false);
 
@@ -137,6 +100,36 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 		initDataStructure();
 
 		initLayout();
+	}
+
+	private class PanelSWxLicensepool extends PanelGenEditTable {
+		private String labelText = Configed
+				.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow");
+
+		public PanelSWxLicensepool() {
+			super("", true, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			Logging.info(this, "panelSWxLicensepool ListSelectionEvent " + e);
+			super.valueChanged(e);
+
+			Object val = null;
+			int selRow = getSelectedRow();
+			if (selRow > -1) {
+				val = getValueAt(selRow, 1);
+			}
+
+			if (val != null && getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
+					&& !((String) val).equals(VALUE_NO_LICENSE_POOL)) {
+				buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
+				labelSetAllAssignmentsToPoolFromSelectedRow.setText(labelText + " " + getValueAt(getSelectedRow(), 1));
+			} else {
+				buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
+				labelSetAllAssignmentsToPoolFromSelectedRow.setText(labelText);
+			}
+		}
 	}
 
 	private void initLayout() {
@@ -424,13 +417,13 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(buttonActive);
 	}
 
-	private Map<String, Map<String, String>> produceModelSWxLicensepool(String swName) {
+	private Map<String, Map<String, Object>> produceModelSWxLicensepool(String swName) {
 		Logging.info(this, "produceModelSWxLicensepool for swName: " + swName);
 
-		TreeMap<String, Map<String, String>> result = new TreeMap<>();
+		TreeMap<String, Map<String, Object>> result = new TreeMap<>();
 
 		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			Map<String, String> rowMap = new LinkedHashMap<>();
+			Map<String, Object> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicensePool.SW_ID, swID);
 			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
 
@@ -467,7 +460,7 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 
 						@Override
 						public Map<String, Map<String, Object>> retrieveMap() {
-							return (Map) produceModelSWxLicensepool(swName);
+							return produceModelSWxLicensepool(swName);
 						}
 					})), 0, new int[] {}, panelSWnames, updateCollection);
 		}

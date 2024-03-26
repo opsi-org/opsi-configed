@@ -145,7 +145,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	protected TableSearchPane searchPane;
 
 	private boolean filteringActive;
-	private boolean singleSelection;
 
 	private String title = "";
 
@@ -1292,25 +1291,16 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		if (lsm.isSelectionEmpty()) {
 			Logging.info(this, "no rows selected");
-			singleSelection = false;
 			if (menuItemDeleteRelation != null) {
 				menuItemDeleteRelation.setEnabled(false);
 			}
 		} else {
-			int selectedRow = lsm.getMinSelectionIndex();
-
 			selectedRowChanged();
 
 			if (menuItemDeleteRelation != null) {
 				menuItemDeleteRelation.setEnabled(true);
 			}
-
-			singleSelection = selectedRow == lsm.getMaxSelectionIndex();
 		}
-	}
-
-	public boolean isSingleSelection() {
-		return singleSelection;
 	}
 
 	// MouseListener, hook for subclasses
