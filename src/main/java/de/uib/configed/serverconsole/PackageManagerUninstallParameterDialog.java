@@ -350,7 +350,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 			public void run() {
 				Logging.info(this, "start exec thread ");
 				CommandExecutor executor = new CommandExecutor(configedMain);
-				executor.execute(commandPMUninstall);
+				executor.executeSingleCommand(commandPMUninstall);
 				Logging.debug(this, "end exec thread");
 			}
 		};

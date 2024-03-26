@@ -54,7 +54,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 
 	private void retrieveRepos() {
 		CommandExecutor executor = new CommandExecutor(configedMain, false);
-		String result = executor.execute(command);
+		String result = executor.executeSingleCommand(command);
 
 		if (result == null) {
 			Logging.error("retrieve repos FAILED");
@@ -147,7 +147,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 
 		Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
 		CommandExecutor executor = new CommandExecutor(configedMain);
-		executor.execute(command);
+		executor.executeSingleCommand(command);
 	}
 
 	private void cancel() {

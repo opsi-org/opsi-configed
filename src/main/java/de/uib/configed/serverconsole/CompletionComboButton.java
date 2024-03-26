@@ -252,7 +252,7 @@ public class CompletionComboButton {
 				CommandFactory.STRING_COMMAND_GET_DIRECTORIES.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY,
 						curdir));
 		CommandExecutor executor = new CommandExecutor(configedMain, false);
-		return executor.execute(getDirectoriesCommand);
+		return executor.executeSingleCommand(getDirectoriesCommand);
 	}
 
 	private String getFiles(String curdir) {
@@ -262,7 +262,7 @@ public class CompletionComboButton {
 		////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
 		// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
 		CommandExecutor executor = new CommandExecutor(configedMain, false);
-		return executor.execute(getFilesCommand);
+		return executor.executeSingleCommand(getFilesCommand);
 	}
 
 	private boolean containsInDefaults(String other) {

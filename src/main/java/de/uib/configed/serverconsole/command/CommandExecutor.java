@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.swing.JFrame;
+
 import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.Configed;
@@ -48,19 +50,18 @@ public class CommandExecutor implements MessagebusListener {
 		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
 	}
 
-	public String execute(SingleCommand command) {
+	public JFrame getDialog() {
+		return terminalFrame.getFrame();
+	}
+
+	public String executeSingleCommand(SingleCommand command) {
 		terminalFrame.setMessagebus(configedMain.getMessagebus());
 		if (withGUI) {
 			terminalFrame.display();
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
 
-		startBackgroundThread(() -> {
-			commandToExecute = command;
-			String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
-			commandProcess = new CommandProcess(configedMain, locker, commandRepresentation);
-			commandProcess.sendProcessStartRequest();
-		});
+		startBackgroundThread(() -> execute(command));
 
 		return commandProcess != null ? commandProcess.getResult() : "";
 	}
@@ -74,22 +75,30 @@ public class CommandExecutor implements MessagebusListener {
 
 		startBackgroundThread(() -> {
 			List<SingleCommand> commands = multiCommand.getCommands();
-			for (int i = 0; i < commands.size(); i++) {
-				SingleCommand currentCommand = commands.get(i);
-				if (currentCommand instanceof SingleCommandFileUpload) {
-					SingleCommandFileUpload fileUploadCommand = (SingleCommandFileUpload) currentCommand;
-					terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
-							fileUploadCommand.getTargetPath(), withGUI, () -> locker.unlock());
-					locker.lock();
-				} else {
-					String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand())
-							.replaceAll(" ");
-					commandToExecute = currentCommand;
-					commandProcess = new CommandProcess(configedMain, locker, commandRepresentation);
-					commandProcess.sendProcessStartRequest();
-				}
+			for (SingleCommand command : commands) {
+				execute(command);
 			}
 		});
+	}
+
+	private void execute(SingleCommand command) {
+		if (command instanceof SingleCommandFileUpload) {
+			SingleCommandFileUpload fileUploadCommand = (SingleCommandFileUpload) command;
+			terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()), fileUploadCommand.getTargetPath(),
+					withGUI, () -> locker.unlock());
+			locker.lock();
+		} else {
+			CommandParameterMethods parameterMethods = CommandFactory.getInstance(configedMain)
+					.getParameterMethodHandler();
+			startCommandProcess(parameterMethods.parseParameter(command, this));
+		}
+	}
+
+	private void startCommandProcess(SingleCommand command) {
+		commandToExecute = command;
+		String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
+		commandProcess = new CommandProcess(configedMain, locker, commandRepresentation);
+		commandProcess.sendProcessStartRequest();
 	}
 
 	private void startBackgroundThread(Runnable runnable) {
@@ -123,6 +132,10 @@ public class CommandExecutor implements MessagebusListener {
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
+		if (commandProcess == null || commandToExecute == null) {
+			return;
+		}
+
 		String type = (String) message.get("type");
 
 		if (WebSocketEvent.PROCESS_START_EVENT.toString().equals(type)) {

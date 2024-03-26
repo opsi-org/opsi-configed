@@ -6,7 +6,23 @@
 
 package de.uib.configed.serverconsole.command;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utilities.logging.Logging;
 
 public final class CommandFactory {
 	public static final String STRING_REPLACEMENT_DIRECTORY = "*.dir.*";
@@ -44,9 +60,25 @@ public final class CommandFactory {
 			new SingleCommandCurl(), new SingleCommandModulesUpload(), new SingleCommandOpsiSetRights(),
 			new SingleCommandDeployClientAgent() };
 
-	public static CommandFactory getInstance() {
+	private List<Map<String, Object>> commandlist;
+	private List<MultiCommandTemplate> sshCommandList;
+	private Set<String> knownMenus;
+	private Set<String> knownParents;
+
+	private CommandParameterMethods pmethodHandler;
+	private ConfigedMain configedMain;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
+	public CommandFactory(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
+		this.pmethodHandler = new CommandParameterMethods(configedMain);
+	}
+
+	public static CommandFactory getInstance(ConfigedMain configedMain) {
 		if (instance == null) {
-			instance = new CommandFactory();
+			instance = new CommandFactory(configedMain);
 		}
 		return instance;
 	}
@@ -55,7 +87,100 @@ public final class CommandFactory {
 		instance = null;
 	}
 
+	public CommandParameterMethods getParameterMethodHandler() {
+		if (pmethodHandler == null) {
+			pmethodHandler = new CommandParameterMethods(configedMain);
+		}
+		return pmethodHandler;
+	}
+
 	public SingleCommand[] getDefaultOpsiCommands() {
 		return DEFAULT_OPSI_COMMANDS;
+	}
+
+	public List<MultiCommandTemplate> retrieveCommandList() {
+		Logging.info(this, "retrieveSSHCommandList ");
+		if (commandlist == null) {
+			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
+		}
+
+		sshCommandList = new ArrayList<>();
+		knownMenus = new HashSet<>();
+		knownParents = new HashSet<>();
+
+		if (!commandlist.isEmpty()) {
+			knownParents.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
+		}
+
+		knownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
+
+		for (Map<String, Object> map : commandlist) {
+			MultiCommandTemplate com = buildSSHCommand((String) map.get(COMMAND_MAP_ID),
+					(String) map.get(COMMAND_MAP_PARENT_MENU_TEXT), (String) map.get(COMMAND_MAP_MENU_TEXT),
+					(String) map.get(COMMAND_MAP_TOOLTIP_TEXT), (int) map.get(COMMAND_MAP_POSITION), null);
+			if (map.get(COMMAND_MAP_COMMANDS) != null) {
+				List<String> commandCommands = new LinkedList<>(
+						POJOReMapper.remap(map.get(COMMAND_MAP_COMMANDS), new TypeReference<List<String>>() {
+						}));
+
+				com.setCommands(commandCommands);
+			}
+			knownMenus.add(com.getMenuText());
+
+			String parent = com.getParentMenuText();
+
+			Logging.info(this, "parent menu text " + parent);
+
+			if (parent == null || "null".equalsIgnoreCase(parent) || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
+				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
+			}
+			if (!knownParents.contains(parent)) {
+				knownParents.add(parent);
+			}
+
+			Logging.info(this, "parent menu text changed  " + parent);
+
+			Logging.info(this, "list_knownParents " + knownParents);
+
+			sshCommandList.add(com);
+		}
+		return sshCommandList;
+	}
+
+	public Map<String, List<MultiCommandTemplate>> getCommandMapSortedByParent() {
+		if (commandlist == null) {
+			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
+		}
+
+		Logging.info(this, "getSSHCommandMapSortedByParent sorting commands ");
+		Collections.sort(sshCommandList);
+
+		Map<String, List<MultiCommandTemplate>> sortedComs = new LinkedHashMap<>();
+
+		sortedComs.put(PARENT_DEFAULT_FOR_OWN_COMMANDS, new LinkedList<>());
+		sortedComs.put(PARENT_OPSI, new LinkedList<>());
+
+		for (MultiCommandTemplate com : sshCommandList) {
+			String parent = com.getParentMenuText();
+			if (parent == null || parent.isBlank()) {
+				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
+			}
+			List<MultiCommandTemplate> parentList = new LinkedList<>();
+			if (sortedComs.containsKey(parent)) {
+				parentList = sortedComs.get(parent);
+			} else {
+				sortedComs.put(parent, parentList);
+			}
+
+			if (!(parentList.contains(com))) {
+				parentList.add(com);
+			}
+		}
+		return sortedComs;
+	}
+
+	public static MultiCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p,
+			List<String> c) {
+		return new MultiCommandTemplate(id, c, mt, pmt, ttt, p);
 	}
 }

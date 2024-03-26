@@ -106,7 +106,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 			@Override
 			public void run() {
 				CommandExecutor executor = new CommandExecutor(configedMain);
-				executor.execute(commandOpsiSetRights);
+				executor.executeSingleCommand(commandOpsiSetRights);
 			}
 		}.start();
 	}

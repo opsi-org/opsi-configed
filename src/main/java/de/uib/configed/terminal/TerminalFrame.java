@@ -73,6 +73,10 @@ public final class TerminalFrame implements MessagebusListener {
 		this.messagebus = messagebus;
 	}
 
+	public JFrame getFrame() {
+		return frame;
+	}
+
 	private void createAndShowGUI() {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
 		frame.setIconImage(Utils.getMainIcon());

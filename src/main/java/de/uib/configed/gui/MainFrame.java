@@ -50,9 +50,11 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
+import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
-import de.uib.configed.serverconsole.command.SingleCommandNeedParameter;
+import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommand;
+import de.uib.configed.serverconsole.command.SingleCommandNeedParameter;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.messages.Messages;
@@ -451,12 +453,18 @@ public class MainFrame extends JFrame {
 				|| UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE) == null
 				|| !UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE);
 		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
-		addTerminalCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
+		CommandFactory factory = CommandFactory.getInstance(configedMain);
+		factory.retrieveCommandList();
+		addCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
+		if (menuOpsi.getSubElements().length != 0) {
+			menuOpsi.addSeparator();
+		}
+		addCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 		jMenuTerminal.add(menuOpsi);
 	}
 
-	private void addTerminalCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
-		final CommandFactory factory = CommandFactory.getInstance();
+	private void addCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
+		final CommandFactory factory = CommandFactory.getInstance(configedMain);
 		SingleCommand[] commands = factory.getDefaultOpsiCommands();
 		for (final SingleCommand command : commands) {
 			JMenuItem jMenuOpsiCommand = new JMenuItem();
@@ -466,6 +474,65 @@ public class MainFrame extends JFrame {
 					(ActionEvent e) -> ((SingleCommandNeedParameter) command).startParameterGui(configedMain));
 			menuOpsi.add(jMenuOpsiCommand);
 			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
+		}
+	}
+
+	private void addCommandsToMenuServer(JMenu menuOpsi, boolean commandsAreDeactivated) {
+		final CommandFactory factory = CommandFactory.getInstance(configedMain);
+		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
+
+		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
+		boolean firstParentGroup = true;
+		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
+			String parentMenuName = entry.getKey();
+			List<MultiCommandTemplate> listCom = new LinkedList<>(entry.getValue());
+			Collections.sort(listCom);
+			JMenu parentMenu = new JMenu(parentMenuName);
+
+			Logging.info(this, "ssh parent menu text " + parentMenuName);
+			if (parentMenuName.equals(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
+				parentMenu.setText("");
+				parentMenu.setIcon(Utils.createImageIcon("images/burger_menu_09.png", "..."));
+			} else if ((parentMenuName.equals(CommandFactory.PARENT_NULL))) {
+				// Do nothing in that case
+			} else {
+				firstParentGroup = false;
+			}
+
+			addSubCommands(menuOpsi, parentMenu, listCom, commandsAreDeactivated);
+			if (firstParentGroup && !listCom.isEmpty()) {
+				jMenuTerminal.addSeparator();
+			}
+
+			firstParentGroup = false;
+		}
+	}
+
+	private void addSubCommands(JMenu menuOpsi, JMenu parentMenu, List<MultiCommandTemplate> listCom,
+			boolean commandsAreDeactivated) {
+		for (final MultiCommandTemplate com : listCom) {
+			JMenuItem jMenuItem = new JMenuItem();
+			jMenuItem.setText(com.getMenuText());
+			Logging.info(this, "ssh command menuitem text " + com.getMenuText());
+			jMenuItem.setToolTipText(com.getToolTipText());
+			jMenuItem.addActionListener((ActionEvent e) -> {
+				CommandExecutor executor = new CommandExecutor(configedMain);
+				executor.executeMultiCommand(com);
+			});
+
+			String parentMenuName = parentMenu.getText();
+			if (parentMenuName.equals(CommandFactory.PARENT_NULL)) {
+				jMenuTerminal.add(jMenuItem);
+			} else {
+				if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
+					menuOpsi.add(jMenuItem);
+				} else {
+					parentMenu.add(jMenuItem);
+					jMenuTerminal.add(parentMenu);
+				}
+			}
+			jMenuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
 		}
 	}

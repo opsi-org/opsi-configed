@@ -397,7 +397,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 				CommandFactory.STRING_COMMAND_GET_VERSIONS.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
 		CommandExecutor executor = new CommandExecutor(configedMain, false);
 		Logging.info(this, "doActionGetVersions, command " + getVersions);
-		String result = executor.execute(getVersions);
+		String result = executor.executeSingleCommand(getVersions);
 		Logging.info(this, "doActionGetVersions result " + result);
 
 		if (result == null || result.isEmpty()) {
@@ -451,7 +451,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
 		SingleCommandOpsiSetRights opsiSetRightsCommand = new SingleCommandOpsiSetRights(dir);
 		CommandExecutor executor = new CommandExecutor(configedMain);
-		executor.execute(opsiSetRightsCommand);
+		executor.executeSingleCommand(opsiSetRightsCommand);
 	}
 
 	private void cancel() {
@@ -530,7 +530,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		SingleCommandTemplate getPackageId = new SingleCommandTemplate(
 				CommandFactory.STRING_COMMAND_CAT_DIRECTORY.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
 		CommandExecutor executor = new CommandExecutor(configedMain, false);
-		String result = executor.execute(getPackageId);
+		String result = executor.executeSingleCommand(getPackageId);
 		Logging.debug(this, "getPackageID result " + result);
 		return result != null ? result.replace("id:", "").trim() : "";
 	}
