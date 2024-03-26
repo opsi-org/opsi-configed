@@ -80,8 +80,6 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 	private String globalLicensePool;
 
-	private boolean foundVariantLicensepools;
-
 	private ConfigedMain configedMain;
 
 	public FSoftwarename2LicensePool(ControlPanelAssignToLPools myController, ConfigedMain configedMain) {
@@ -290,10 +288,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	}
 
 	private void initDataStructure() {
-		columnNames = new ArrayList<>();
-		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
-			columnNames.add(key);
-		}
+		columnNames = new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS);
 
 		updateCollection = new ArrayList<>();
 
@@ -375,7 +370,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 			public void produceRows() {
 				super.produceRows();
 				Logging.info(this, "producing rows for modelSWnames");
-				foundVariantLicensepools = false;
+				boolean foundVariantLicensepools = false;
 				int i = 0;
 				while (!foundVariantLicensepools && i < getRowCount()) {
 					foundVariantLicensepools = checkExistNamesWithVariantLicensepools((String) getValueAt(i, 0));
