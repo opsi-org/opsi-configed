@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -46,7 +48,7 @@ import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import utils.Utils;
 
-public class FSoftwarename2LicensePool extends FDialogSubTable {
+public class FSoftwarename2LicensePool extends FGeneralDialog {
 	public static final String VALUE_NO_LICENSE_POOL = "---";
 	private PanelGenEditTable panelSWnames;
 	private GenTableModel modelSWnames;
@@ -84,7 +86,7 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 
 	public FSoftwarename2LicensePool(ControlPanelAssignToLPools myController, ConfigedMain configedMain) {
 		super(ConfigedMain.getLicensesFrame(), Configed.getResourceValue("FSoftwarename2LicensePool.title"), false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800);
+				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800, true);
 
 		this.myController = myController;
 		this.configedMain = configedMain;
@@ -100,6 +102,54 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 		initDataStructure();
 
 		initLayout();
+	}
+
+	@Override
+	protected void allLayout() {
+		Logging.info(this, "allLayout");
+
+		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+		allpane.setBorder(BorderFactory.createEtchedBorder());
+
+		if (centerPanel == null) {
+			centerPanel = new JPanel();
+		}
+
+		southPanel = new JPanel();
+
+		GroupLayout southLayout = new GroupLayout(southPanel);
+		southPanel.setLayout(southLayout);
+
+		southLayout.setHorizontalGroup(southLayout.createParallelGroup(Alignment.LEADING).addGroup(southLayout
+				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
+
+		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(additionalPane, 300, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
+				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.MIN_GAP_SIZE));
+
+		GroupLayout allLayout = new GroupLayout(allpane);
+		allpane.setLayout(allLayout);
+
+		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(centerPanel, 200, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
+				.addComponent(southPanel, 300, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE));
+
+		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(allLayout.createSequentialGroup()
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+				.addGroup(allLayout.createSequentialGroup()
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
 	}
 
 	private class PanelSWxLicensepool extends PanelGenEditTable {
