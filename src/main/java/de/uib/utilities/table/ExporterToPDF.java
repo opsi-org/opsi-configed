@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import com.itextpdf.text.BaseColor;
@@ -40,9 +41,9 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
@@ -79,33 +80,33 @@ public class ExporterToPDF extends AbstractExportTable {
 	public void execute(String fileName, boolean onlySelectedRows) {
 		setPageSizeA4Landscape();
 
-		Boolean saveAction = true;
-
+		int result = 0;
 		defaultFilename = "report_" + client + extension;
 
 		if (fileName == null) {
-			OpenSaveDialog dialog = new OpenSaveDialog(Configed.getResourceValue("OpenSaveDialog.title"));
+			result = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), null,
+					Configed.getResourceValue("OpenSaveDialog.title"), JOptionPane.DEFAULT_OPTION, -1, null,
+					new Object[] { Configed.getResourceValue("OpenSaveDialog.save"),
+							Configed.getResourceValue("OpenSaveDialog.open") },
+					null);
 
-			saveAction = dialog.getSaveAction();
-			Logging.info(this, "fileName was null, saveAction now has value " + saveAction);
+			Logging.info(this, "fileName was null, result now has value " + result);
 		}
 
-		if (saveAction == null) {
+		if (result == JOptionPane.DEFAULT_OPTION) {
 			return;
 		}
 
 		String filePath = null;
-		File temp = null;
 
-		if (Boolean.TRUE.equals(saveAction)) {
+		if (result == 0) {
+			// Save file
 			if (fileName == null) {
 				fileName = getFileLocation();
 			}
 
 			// FileName is null if nothing chosen, then we do nothing
-			if (fileName == null) {
-				return;
-			} else {
+			if (fileName != null) {
 				Logging.info(this, "filename for saving PDF: " + fileName);
 				File file = new File(fileName);
 				if (file.isDirectory()) {
@@ -118,20 +119,21 @@ public class ExporterToPDF extends AbstractExportTable {
 				fileName = checkExtension(fileName);
 				Logging.notice(this, "after checkExtension(..), fileName is now: " + fileName);
 				fileName = checkFile(fileName, extensionFilter);
+
+				writeFile(filePath, fileName);
 			}
 		} else {
+			// Open file
 			try {
-				temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
+				File temp = Files.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf")
 						.toFile();
 				Utils.restrictAccessToFile(temp);
-				filePath = temp.getAbsolutePath();
+				writeFile(temp.getAbsolutePath(), fileName);
+				openFile(temp);
 			} catch (IOException e) {
 				Logging.error("Failed to create temp file", e);
 			}
 		}
-
-		writeFile(filePath, fileName);
-		openFile(saveAction, temp);
 	}
 
 	private void writeFile(String filePath, String fileName) {
@@ -190,9 +192,9 @@ public class ExporterToPDF extends AbstractExportTable {
 		document.addCreator(Globals.APPNAME);
 	}
 
-	private static void openFile(boolean saveAction, File temp) {
+	private static void openFile(File temp) {
 		// saveAction is not null here, open PDF if created only temp file
-		if (!saveAction && temp != null && temp.getAbsolutePath() != null) {
+		if (temp != null && temp.getAbsolutePath() != null) {
 			try {
 				Desktop.getDesktop().open(temp);
 			} catch (IOException e) {
