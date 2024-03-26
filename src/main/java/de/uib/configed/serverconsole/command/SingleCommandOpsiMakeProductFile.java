@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.MakeProductFileDialog;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandOpsiMakeProductFile implements TerminalSingleCommand, TerminalCommandNeedParameter {
+public class SingleCommandOpsiMakeProductFile implements SingleCommand, SingleCommandNeedParameter {
 	private static final int PRIORITY = 110;
 
 	private String baseName = "opsi-makepackage";
@@ -31,7 +31,7 @@ public class TerminalCommandOpsiMakeProductFile implements TerminalSingleCommand
 	private String md5sum = "-m";
 	private String zsync = "-z";
 
-	public TerminalCommandOpsiMakeProductFile(String d, String pav, String prv, boolean m, boolean z) {
+	public SingleCommandOpsiMakeProductFile(String d, String pav, String prv, boolean m, boolean z) {
 		setDir(d);
 		setPackageVersion(pav);
 		setProductVersion(prv);
@@ -42,18 +42,18 @@ public class TerminalCommandOpsiMakeProductFile implements TerminalSingleCommand
 		Logging.info(this.getClass(), "CommandOpsimakeproductfile productVersion " + productVersion);
 	}
 
-	public TerminalCommandOpsiMakeProductFile(String d, String pav, String prv) {
+	public SingleCommandOpsiMakeProductFile(String d, String pav, String prv) {
 		this(d, pav, prv, false, false);
 	}
 
-	public TerminalCommandOpsiMakeProductFile(String d, boolean o, boolean m, boolean z) {
+	public SingleCommandOpsiMakeProductFile(String d, boolean o, boolean m, boolean z) {
 		setDir(d);
 		setKeepVersions(o);
 		setMd5sum(m);
 		setZsync(z);
 	}
 
-	public TerminalCommandOpsiMakeProductFile() {
+	public SingleCommandOpsiMakeProductFile() {
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class TerminalCommandOpsiMakeProductFile implements TerminalSingleCommand
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), CommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

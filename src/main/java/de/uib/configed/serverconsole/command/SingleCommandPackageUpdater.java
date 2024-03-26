@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageUpdaterDialog;
 
-public class TerminalCommandPackageUpdater implements TerminalSingleCommand, TerminalCommandNeedParameter {
+public class SingleCommandPackageUpdater implements SingleCommand, SingleCommandNeedParameter {
 	private static final int PRIORITY = 105;
 
 	private String command;
@@ -33,7 +33,7 @@ public class TerminalCommandPackageUpdater implements TerminalSingleCommand, Ter
 	private Map<String, String> repohash = new HashMap<>();
 	private String verbosity = "-v";
 
-	public TerminalCommandPackageUpdater() {
+	public SingleCommandPackageUpdater() {
 		command = baseName;
 		actionSet.add("list");
 		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"), "list");
@@ -51,7 +51,7 @@ public class TerminalCommandPackageUpdater implements TerminalSingleCommand, Ter
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), CommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

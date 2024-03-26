@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.DeployClientAgentParameterDialog;
 
-public class TerminalCommandDeployClientAgent implements TerminalSingleCommand, TerminalCommandNeedParameter {
+public class SingleCommandDeployClientAgent implements SingleCommand, SingleCommandNeedParameter {
 	private String command;
 	private String baseDir = "/var/lib/opsi/depot";
 	private String opsiClientAgentDir;
@@ -30,7 +30,7 @@ public class TerminalCommandDeployClientAgent implements TerminalSingleCommand, 
 	private String finishAction = "";
 	private String verbosity = "";
 
-	public TerminalCommandDeployClientAgent() {
+	public SingleCommandDeployClientAgent() {
 		command = baseDir;
 	}
 
@@ -42,7 +42,7 @@ public class TerminalCommandDeployClientAgent implements TerminalSingleCommand, 
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), CommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

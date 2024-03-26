@@ -20,9 +20,9 @@ import javax.swing.JTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandCurl;
-import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommandTemplate;
-import de.uib.configed.serverconsole.terminalcommand.TerminalSingleCommandTemplate;
+import de.uib.configed.serverconsole.command.MultiCommandTemplate;
+import de.uib.configed.serverconsole.command.SingleCommandCurl;
+import de.uib.configed.serverconsole.command.SingleCommandTemplate;
 import de.uib.utilities.logging.Logging;
 
 public class PMInstallCurlPanel extends PMInstallPanel {
@@ -113,13 +113,13 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxCompareMD5.tooltip"));
 	}
 
-	public TerminalMultiCommandTemplate getCommand(TerminalMultiCommandTemplate commands) {
+	public MultiCommandTemplate getCommand(MultiCommandTemplate commands) {
 		if (jTextFieldURL.getText() == null || jTextFieldURL.getText().isBlank()
 				|| jTextFieldURL.getText().trim().equals(urlDefText)) {
 			return null;
 		}
 
-		TerminalCommandCurl curl = getCurlCommand();
+		SingleCommandCurl curl = getCurlCommand();
 		if (curl != null) {
 			if (((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
 				curl.setAuthentication("--insecure -u " + curlAuthPanel.getUser() + ":" + curlAuthPanel.getPw());
@@ -133,7 +133,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		if (jCheckBoxCompareMD5.isSelected()) {
 			String product = mainDir + "/" + getFilenameFromUrl(mainProduct);
 
-			commands.addCommand(new TerminalSingleCommandTemplate("md5_vergleich", " if [ -z $((cat " + product + ".md5"
+			commands.addCommand(new SingleCommandTemplate("md5_vergleich", " if [ -z $((cat " + product + ".md5"
 					+ ") | " + "grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
 					+ Configed.getResourceValue(
 							"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreNotEqual")
@@ -145,7 +145,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		return commands;
 	}
 
-	private TerminalCommandCurl getCurlCommand() {
+	private SingleCommandCurl getCurlCommand() {
 		String d;
 		String wgetDir = (String) jComboBoxAutoCompletion.getSelectedItem();
 
@@ -180,7 +180,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 			additionalProds = additionalProds + " " + u.replace(".opsi", ".opsi.md5");
 		}
 
-		return new TerminalCommandCurl(d, u, additionalProds);
+		return new SingleCommandCurl(d, u, additionalProds);
 	}
 
 	public String getProduct() {

@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiPackageManagerInstall;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 
 public class PMInstallServerPanel extends PMInstallPanel {
 	private JLabel jLabelServerDir = new JLabel();
@@ -99,16 +99,16 @@ public class PMInstallServerPanel extends PMInstallPanel {
 				.addGap(2 * Globals.GAP_SIZE));
 	}
 
-	public TerminalCommandOpsiPackageManagerInstall getCommand() {
+	public SingleCommandOpsiPackageManagerInstall getCommand() {
 		return PMInstallServerPanel.getCommand(jTextFieldProduct.getText());
 	}
 
-	public static TerminalCommandOpsiPackageManagerInstall getCommand(String product) {
+	public static SingleCommandOpsiPackageManagerInstall getCommand(String product) {
 		if (product == null || product.isEmpty()) {
 			return null;
 		}
 
-		TerminalCommandOpsiPackageManagerInstall com = new TerminalCommandOpsiPackageManagerInstall();
+		SingleCommandOpsiPackageManagerInstall com = new SingleCommandOpsiPackageManagerInstall();
 		com.setOpsiproduct(product.replace("\n", ""));
 
 		if (com.checkCommand()) {

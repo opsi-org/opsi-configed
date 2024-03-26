@@ -4,11 +4,11 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import de.uib.configed.ConfigedMain;
 
-public interface TerminalCommandNeedParameter {
+public interface SingleCommandNeedParameter {
 	void startParameterGui(ConfigedMain configedMain);
 
 	String getBasicName();

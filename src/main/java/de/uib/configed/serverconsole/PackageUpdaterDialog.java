@@ -24,8 +24,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandPackageUpdater;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.SingleCommandPackageUpdater;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -38,14 +38,14 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 	private JComboBox<String> jComboBoxActions;
 	private JComboBox<String> jComboBoxRepos;
 	private JButton jButtonDoAction;
-	private TerminalCommandPackageUpdater command;
+	private SingleCommandPackageUpdater command;
 
 	private ConfigedMain configedMain;
 
 	public PackageUpdaterDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.title"), false);
 		this.configedMain = configedMain;
-		command = new TerminalCommandPackageUpdater();
+		command = new SingleCommandPackageUpdater();
 		Logging.info(this.getClass(), "with command");
 		retrieveRepos();
 		init();
@@ -53,7 +53,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 	}
 
 	private void retrieveRepos() {
-		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
+		CommandExecutor executor = new CommandExecutor(configedMain, false);
 		String result = executor.execute(command);
 
 		if (result == null) {
@@ -146,7 +146,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 		}
 
 		Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
-		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
+		CommandExecutor executor = new CommandExecutor(configedMain);
 		executor.execute(command);
 	}
 

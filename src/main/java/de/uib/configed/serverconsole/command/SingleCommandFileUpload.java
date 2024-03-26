@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 
-public class TerminalCommandFileUpload implements TerminalSingleCommand, TerminalCommandNeedParameter {
+public class SingleCommandFileUpload implements SingleCommand, SingleCommandNeedParameter {
 	private static final int PRIORITY = 0;
 
 	protected FGeneralDialog dialog;
@@ -32,14 +32,14 @@ public class TerminalCommandFileUpload implements TerminalSingleCommand, Termina
 
 	protected String command = "";
 
-	public TerminalCommandFileUpload(String title) {
+	public SingleCommandFileUpload(String title) {
 		setTitle(title);
 		title = "File Upload";
 		baseName = "File Upload";
 		command = "File Upload (via sftp)";
 	}
 
-	public TerminalCommandFileUpload() {
+	public SingleCommandFileUpload() {
 	}
 
 	public boolean isShowOutputDialog() {
@@ -146,7 +146,7 @@ public class TerminalCommandFileUpload implements TerminalSingleCommand, Termina
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), CommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

@@ -1,10 +1,10 @@
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
 
-public interface TerminalSingleCommand extends TerminalCommandMetadata {
+public interface SingleCommand extends CommandMetadata {
 	String getCommand();
 
 	String getSecuredCommand();

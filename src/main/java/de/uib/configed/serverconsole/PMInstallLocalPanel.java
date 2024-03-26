@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFileUpload;
+import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import utils.Utils;
 
 public class PMInstallLocalPanel extends PMInstallPanel {
@@ -117,12 +117,12 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 				.addGap(2 * Globals.GAP_SIZE));
 	}
 
-	public TerminalCommandFileUpload getCommand() {
+	public SingleCommandFileUpload getCommand() {
 		if (jTextFieldPath.getText() == null || jTextFieldPath.getText().isEmpty()) {
 			return null;
 		}
 
-		TerminalCommandFileUpload com1 = new TerminalCommandFileUpload("PackegeUpload");
+		SingleCommandFileUpload com1 = new SingleCommandFileUpload("PackegeUpload");
 		com1.setCommand("local file upload to server");
 		com1.setFullSourcePath(jTextFieldPath.getText());
 		com1.setTargetPath((String) jComboBoxAutoCompletion.getSelectedItem());

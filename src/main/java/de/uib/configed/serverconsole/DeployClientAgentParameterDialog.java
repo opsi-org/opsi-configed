@@ -34,9 +34,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandDeployClientAgent;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandDeployClientAgent.FinalActionType;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
+import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent.FinalActionType;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -94,7 +94,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private String defaultWinUser = "";
 
-	private TerminalCommandDeployClientAgent commandDeployClientAgent = new TerminalCommandDeployClientAgent();
+	private SingleCommandDeployClientAgent commandDeployClientAgent = new SingleCommandDeployClientAgent();
 	private ConfigedMain configedMain;
 
 	private boolean aktive;
@@ -413,7 +413,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 		commandDeployClientAgent.setOpsiClientAgentDir(opsiClientAgentDir);
 		commandDeployClientAgent.finish(finalAction);
-		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
+		CommandExecutor executor = new CommandExecutor(configedMain);
 		executor.execute(commandDeployClientAgent);
 	}
 

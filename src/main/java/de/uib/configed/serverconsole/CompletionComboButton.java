@@ -23,9 +23,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.CompletionComboBox;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFactory;
-import de.uib.configed.serverconsole.terminalcommand.TerminalSingleCommandTemplate;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.CommandFactory;
+import de.uib.configed.serverconsole.command.SingleCommandTemplate;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -248,21 +248,20 @@ public class CompletionComboButton {
 	}
 
 	private String getDirectories(String curdir) {
-		TerminalSingleCommandTemplate getDirectoriesCommand = new TerminalSingleCommandTemplate(
-				TerminalCommandFactory.STRING_COMMAND_GET_DIRECTORIES
-						.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
-		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
+		SingleCommandTemplate getDirectoriesCommand = new SingleCommandTemplate(
+				CommandFactory.STRING_COMMAND_GET_DIRECTORIES.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY,
+						curdir));
+		CommandExecutor executor = new CommandExecutor(configedMain, false);
 		return executor.execute(getDirectoriesCommand);
 	}
 
 	private String getFiles(String curdir) {
-		TerminalSingleCommandTemplate getFilesCommand = new TerminalSingleCommandTemplate(
-				TerminalCommandFactory.STRING_COMMAND_GET_OPSI_FILES
-						.replace(TerminalCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
+		SingleCommandTemplate getFilesCommand = new SingleCommandTemplate(CommandFactory.STRING_COMMAND_GET_OPSI_FILES
+				.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 
 		////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
 		// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
-		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain, false);
+		CommandExecutor executor = new CommandExecutor(configedMain, false);
 		return executor.execute(getFilesCommand);
 	}
 

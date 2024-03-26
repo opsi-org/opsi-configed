@@ -50,9 +50,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFactory;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandNeedParameter;
-import de.uib.configed.serverconsole.terminalcommand.TerminalSingleCommand;
+import de.uib.configed.serverconsole.command.CommandFactory;
+import de.uib.configed.serverconsole.command.SingleCommandNeedParameter;
+import de.uib.configed.serverconsole.command.SingleCommand;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.messages.Messages;
@@ -446,7 +446,7 @@ public class MainFrame extends JFrame {
 		jMenuTerminal.setText("Terminal");
 		jMenuTerminal.add(jMenuTerminal);
 
-		JMenu menuOpsi = new JMenu(TerminalCommandFactory.PARENT_OPSI);
+		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
 		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
 				|| UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE) == null
 				|| !UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE);
@@ -456,14 +456,14 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addTerminalCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
-		final TerminalCommandFactory factory = TerminalCommandFactory.getInstance();
-		TerminalSingleCommand[] commands = factory.getDefaultOpsiCommands();
-		for (final TerminalSingleCommand command : commands) {
+		final CommandFactory factory = CommandFactory.getInstance();
+		SingleCommand[] commands = factory.getDefaultOpsiCommands();
+		for (final SingleCommand command : commands) {
 			JMenuItem jMenuOpsiCommand = new JMenuItem();
 			jMenuOpsiCommand.setText(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(
-					(ActionEvent e) -> ((TerminalCommandNeedParameter) command).startParameterGui(configedMain));
+					(ActionEvent e) -> ((SingleCommandNeedParameter) command).startParameterGui(configedMain));
 			menuOpsi.add(jMenuOpsiCommand);
 			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);

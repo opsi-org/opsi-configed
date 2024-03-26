@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -12,8 +12,8 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageManagerInstallParameterDialog;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandOpsiPackageManagerInstall extends TerminalCommandOpsiPackageManager
-		implements TerminalCommandNeedParameter {
+public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPackageManager
+		implements SingleCommandNeedParameter {
 	private String command;
 	private int priority = 8;
 	private FGeneralDialog dialog;
@@ -28,7 +28,7 @@ public class TerminalCommandOpsiPackageManagerInstall extends TerminalCommandOps
 	private String updateInstalled = "";
 	private String setupInstalled = "";
 
-	public TerminalCommandOpsiPackageManagerInstall() {
+	public SingleCommandOpsiPackageManagerInstall() {
 		command = "opsi-package-manager";
 	}
 

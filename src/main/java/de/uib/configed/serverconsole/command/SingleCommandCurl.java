@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.CurlParameterDialog;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandCurl implements TerminalSingleCommand, TerminalCommandNeedParameter {
+public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParameter {
 	private static final String BASE_NAME = "curl";
 	private static final int PRIORITY = 110;
 
@@ -33,20 +33,20 @@ public class TerminalCommandCurl implements TerminalSingleCommand, TerminalComma
 
 	private FGeneralDialog dialog;
 
-	public TerminalCommandCurl() {
+	public SingleCommandCurl() {
 	}
 
-	public TerminalCommandCurl(String d, String u, String au, String auth) {
+	public SingleCommandCurl(String d, String u, String au, String auth) {
 		this(d, u, au);
 		setAuthentication(auth);
 	}
 
-	public TerminalCommandCurl(String d, String u, String au) {
+	public SingleCommandCurl(String d, String u, String au) {
 		this(d, u);
 		additionalURL = "-O " + au;
 	}
 
-	public TerminalCommandCurl(String d, String u) {
+	public SingleCommandCurl(String d, String u) {
 		setVerbosity(1);
 		setDir(d);
 		setUrl(u);
@@ -118,7 +118,7 @@ public class TerminalCommandCurl implements TerminalSingleCommand, TerminalComma
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), CommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

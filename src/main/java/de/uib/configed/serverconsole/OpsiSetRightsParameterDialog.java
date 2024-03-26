@@ -23,9 +23,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFactory;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiSetRights;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.CommandFactory;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -38,13 +38,13 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JButton jButtonSearchDir;
 
 	private JButton jButtonDoAction;
-	private TerminalCommandOpsiSetRights commandOpsiSetRights;
+	private SingleCommandOpsiSetRights commandOpsiSetRights;
 	private List<String> additionalDefaultPaths = new ArrayList<>();
 	private CompletionComboButton completion;
 
 	private ConfigedMain configedMain;
 
-	public OpsiSetRightsParameterDialog(ConfigedMain configedMain, TerminalCommandOpsiSetRights command) {
+	public OpsiSetRightsParameterDialog(ConfigedMain configedMain, SingleCommandOpsiSetRights command) {
 		super(null, Configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
 		this.configedMain = configedMain;
 		commandOpsiSetRights = command;
@@ -53,7 +53,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additionalDefaultPaths.add(TerminalCommandFactory.OPSI_PATH_VAR_DEPOT);
+		additionalDefaultPaths.add(CommandFactory.OPSI_PATH_VAR_DEPOT);
 		completion = new CompletionComboButton(configedMain, additionalDefaultPaths);
 
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
@@ -105,7 +105,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 		new Thread() {
 			@Override
 			public void run() {
-				TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
+				CommandExecutor executor = new CommandExecutor(configedMain);
 				executor.execute(commandOpsiSetRights);
 			}
 		}.start();

@@ -4,11 +4,11 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import de.uib.configed.Configed;
 
-public final class TerminalCommandFactory {
+public final class CommandFactory {
 	public static final String STRING_REPLACEMENT_DIRECTORY = "*.dir.*";
 	public static final String STRING_COMMAND_GET_LINUX_COMMANDS = "COMMANDS=`echo -n $PATH "
 			+ "| xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ;"
@@ -36,17 +36,17 @@ public final class TerminalCommandFactory {
 
 	public static final String CONFIDENTIAL = "***confidential***";
 
-	private static TerminalCommandFactory instance;
+	private static CommandFactory instance;
 
-	private static final TerminalSingleCommand[] DEFAULT_OPSI_COMMANDS = new TerminalSingleCommand[] {
-			new TerminalCommandPackageUpdater(), new TerminalCommandOpsiPackageManagerInstall(),
-			new TerminalCommandOpsiPackageManagerUninstall(), new TerminalCommandOpsiMakeProductFile(),
-			new TerminalCommandCurl(), new TerminalCommandModulesUpload(), new TerminalCommandOpsiSetRights(),
-			new TerminalCommandDeployClientAgent() };
+	private static final SingleCommand[] DEFAULT_OPSI_COMMANDS = new SingleCommand[] {
+			new SingleCommandPackageUpdater(), new SingleCommandOpsiPackageManagerInstall(),
+			new SingleCommandOpsiPackageManagerUninstall(), new SingleCommandOpsiMakeProductFile(),
+			new SingleCommandCurl(), new SingleCommandModulesUpload(), new SingleCommandOpsiSetRights(),
+			new SingleCommandDeployClientAgent() };
 
-	public static TerminalCommandFactory getInstance() {
+	public static CommandFactory getInstance() {
 		if (instance == null) {
-			instance = new TerminalCommandFactory();
+			instance = new CommandFactory();
 		}
 		return instance;
 	}
@@ -55,7 +55,7 @@ public final class TerminalCommandFactory {
 		instance = null;
 	}
 
-	public TerminalSingleCommand[] getDefaultOpsiCommands() {
+	public SingleCommand[] getDefaultOpsiCommands() {
 		return DEFAULT_OPSI_COMMANDS;
 	}
 }

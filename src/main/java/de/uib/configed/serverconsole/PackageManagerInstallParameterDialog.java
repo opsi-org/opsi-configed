@@ -19,10 +19,10 @@ import javax.swing.JRadioButton;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFileUpload;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiPackageManagerInstall;
-import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommandTemplate;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.MultiCommandTemplate;
+import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.utilities.logging.Logging;
 
 public class PackageManagerInstallParameterDialog extends PackageManagerParameterDialog {
@@ -184,12 +184,12 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 	@Override
 	public void doAction3() {
 		Logging.info(this, " doAction3 install ");
-		TerminalMultiCommandTemplate commands = new TerminalMultiCommandTemplate();
+		MultiCommandTemplate commands = new MultiCommandTemplate();
 		commands.setMainName("PackageInstallation");
-		TerminalCommandOpsiPackageManagerInstall pmInstallCom;
+		SingleCommandOpsiPackageManagerInstall pmInstallCom;
 
 		if (jRadioButtonLocal.isSelected()) {
-			TerminalCommandFileUpload fileUploadCommand = installLocalPanel.getCommand();
+			SingleCommandFileUpload fileUploadCommand = installLocalPanel.getCommand();
 			if (fileUploadCommand == null) {
 				Logging.warning(this, "No opsi-package given. 1");
 				return;
@@ -229,7 +229,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 
 		installSettingsPanel.updateCommand(pmInstallCom);
 
-		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
+		CommandExecutor executor = new CommandExecutor(configedMain);
 		executor.executeMultiCommand(commands);
 		Logging.info(this, "doAction3 end ");
 	}

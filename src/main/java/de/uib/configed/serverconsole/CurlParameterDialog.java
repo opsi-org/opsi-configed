@@ -30,9 +30,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandCurl;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandHelp;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.SingleCommandCurl;
+import de.uib.configed.serverconsole.command.SingleCommandHelp;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -55,7 +55,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 	private JComboBox<Integer> jComboBoxVerbosity;
 	private JTextField jTextFieldFreeInput;
 
-	private TerminalCommandCurl commandCurl = new TerminalCommandCurl();
+	private SingleCommandCurl commandCurl = new SingleCommandCurl();
 	private CompletionComboButton completion;
 	private CurlAuthenticationPanel curlAuthPanel;
 
@@ -240,7 +240,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 				@Override
 				public void run() {
 					Logging.info(this, "doAction3 wget ");
-					TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
+					CommandExecutor executor = new CommandExecutor(configedMain);
 					executor.execute(commandCurl);
 				}
 			}.start();
@@ -248,8 +248,8 @@ public class CurlParameterDialog extends FGeneralDialog {
 	}
 
 	private void doActionHelp() {
-		TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
-		executor.execute(new TerminalCommandHelp(commandCurl));
+		CommandExecutor executor = new CommandExecutor(configedMain);
+		executor.execute(new SingleCommandHelp(commandCurl));
 	}
 
 	private void cancel() {

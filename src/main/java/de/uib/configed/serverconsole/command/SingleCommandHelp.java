@@ -4,18 +4,28 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 
-public class TerminalCommandOpsiPackageManager implements TerminalSingleCommand {
+public class SingleCommandHelp implements SingleCommand {
+	private boolean needParameter;
+	private SingleCommand basicCommand;
 	private FGeneralDialog dialog;
-	private boolean needParameter = true;
-	private int priority = 100;
+
+	public SingleCommandHelp(SingleCommand basicCommand) {
+		this.basicCommand = basicCommand;
+
+		this.dialog = this.basicCommand.getDialog();
+	}
+
+	@Override
+	public String getId() {
+		return basicCommand.getId();
+	}
 
 	@Override
 	public String getSecureInfoInCommand() {
@@ -25,20 +35,15 @@ public class TerminalCommandOpsiPackageManager implements TerminalSingleCommand 
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), CommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}
 	}
 
 	@Override
-	public String getId() {
-		return "CommandOpsiPackageManager";
-	}
-
-	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager");
+		return null;
 	}
 
 	@Override
@@ -48,22 +53,22 @@ public class TerminalCommandOpsiPackageManager implements TerminalSingleCommand 
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager.tooltip");
+		return null;
 	}
 
 	@Override
 	public String getCommand() {
-		return "";
-	}
-
-	@Override
-	public String getCommandRaw() {
-		return "";
+		return ((SingleCommandNeedParameter) this.basicCommand).getBasicName() + " --help";
 	}
 
 	@Override
 	public void setCommand(String c) {
-		/* Not needed in this class */
+		// Leave empty, never used actually and never needed
+	}
+
+	@Override
+	public String getCommandRaw() {
+		return basicCommand.getCommandRaw();
 	}
 
 	@Override
@@ -78,7 +83,7 @@ public class TerminalCommandOpsiPackageManager implements TerminalSingleCommand 
 
 	@Override
 	public int getPriority() {
-		return priority;
+		return 0;
 	}
 
 	@Override

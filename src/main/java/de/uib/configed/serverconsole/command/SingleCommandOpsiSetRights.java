@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import de.uib.configed.serverconsole.OpsiSetRightsParameterDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandOpsiSetRights implements TerminalSingleCommand, TerminalCommandNeedParameter {
+public class SingleCommandOpsiSetRights implements SingleCommand, SingleCommandNeedParameter {
 	private static final int PRIORITY = 110;
 
 	private static final String BASE_NAME = "opsi-set-rights ";
@@ -28,12 +28,12 @@ public class TerminalCommandOpsiSetRights implements TerminalSingleCommand, Term
 	private String dir;
 	private String myTmpCommand;
 
-	public TerminalCommandOpsiSetRights() {
+	public SingleCommandOpsiSetRights() {
 		command = "opsi-set-rights " + Configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath")
 				+ " ";
 	}
 
-	public TerminalCommandOpsiSetRights(String d) {
+	public SingleCommandOpsiSetRights(String d) {
 		setDir(d);
 		command = BASE_NAME + dir;
 		if (d.length() > 0 && d.charAt(d.length() - 1) != '/') {
@@ -71,7 +71,7 @@ public class TerminalCommandOpsiSetRights implements TerminalSingleCommand, Term
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), CommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}

@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiPackageManagerInstall;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -244,8 +244,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jTextFieldSelecteddepots.setText("" + depots.get(0));
 	}
 
-	public TerminalCommandOpsiPackageManagerInstall updateCommand(
-			TerminalCommandOpsiPackageManagerInstall basicCommand) {
+	public SingleCommandOpsiPackageManagerInstall updateCommand(SingleCommandOpsiPackageManagerInstall basicCommand) {
 		basicCommand.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
 		basicCommand.setProperty(jCheckBoxProperties.isSelected());
 		basicCommand.setUpdateInstalled(jCheckBoxUpdateInstalled.isSelected());

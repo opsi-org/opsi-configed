@@ -4,18 +4,18 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import de.uib.utilities.logging.Logging;
 
-public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Comparable<TerminalMultiCommandTemplate> {
+public class MultiCommandTemplate implements MultiCommand, Comparable<MultiCommandTemplate> {
 	private String id;
 	private String menuText;
-	private List<TerminalSingleCommand> commands = new LinkedList<>();
-	private List<TerminalSingleCommand> sshCommandOriginal = new LinkedList<>();
+	private List<SingleCommand> commands = new LinkedList<>();
+	private List<SingleCommand> sshCommandOriginal = new LinkedList<>();
 	private String parentMenuText;
 	private String tooltipText = "";
 	private int priority;
@@ -24,22 +24,22 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 
 	private boolean firstInitCommands = true;
 
-	public TerminalMultiCommandTemplate() {
-		priority = TerminalCommandFactory.DEFAULT_POSITION;
+	public MultiCommandTemplate() {
+		priority = CommandFactory.DEFAULT_POSITION;
 	}
 
-	public TerminalMultiCommandTemplate(String id, List<String> c, String mt, String pmt, String ttt, int p) {
-		priority = TerminalCommandFactory.DEFAULT_POSITION;
+	public MultiCommandTemplate(String id, List<String> c, String mt, String pmt, String ttt, int p) {
+		priority = CommandFactory.DEFAULT_POSITION;
 
 		initValues(id, c, mt, pmt, ttt, p);
 	}
 
-	public TerminalMultiCommandTemplate(TerminalCommandMetadata orig, List<String> commandlist) {
+	public MultiCommandTemplate(CommandMetadata orig, List<String> commandlist) {
 		this(orig.getId(), commandlist, orig.getMenuText(), orig.getParentMenuText(), orig.getToolTipText(),
 				orig.getPriority());
 	}
 
-	public TerminalMultiCommandTemplate(TerminalMultiCommandTemplate orig) {
+	public MultiCommandTemplate(MultiCommandTemplate orig) {
 		this(orig.getId(), orig.getCommandsRaw(), orig.getMenuText(), orig.getParentMenuText(), orig.getToolTipText(),
 				orig.getPriority());
 	}
@@ -72,7 +72,7 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 		if (cList != null) {
 			commands.clear();
 			for (String c : cList) {
-				TerminalSingleCommand sshc = new TerminalSingleCommandTemplate(getId(), c, getMenuText());
+				SingleCommand sshc = new SingleCommandTemplate(getId(), c, getMenuText());
 				commands.add(sshc);
 				if (firstInitCommands) {
 					sshCommandOriginal.add(sshc);
@@ -82,7 +82,7 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 		}
 	}
 
-	public void addCommand(TerminalSingleCommand sshc) {
+	public void addCommand(SingleCommand sshc) {
 		commands.add(sshc);
 		sshCommandOriginal.add(sshc);
 	}
@@ -128,11 +128,11 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 	}
 
 	@Override
-	public List<TerminalSingleCommand> getCommands() {
+	public List<SingleCommand> getCommands() {
 		return commands;
 	}
 
-	public List<TerminalSingleCommand> getOriginalCommands() {
+	public List<SingleCommand> getOriginalCommands() {
 		return sshCommandOriginal;
 	}
 
@@ -144,7 +144,7 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 	@Override
 	public List<String> getCommandsRaw() {
 		List<String> commandsStringList = new LinkedList<>();
-		for (TerminalSingleCommand c : commands) {
+		for (SingleCommand c : commands) {
 			String comstr = c.getCommandRaw();
 			if (!(comstr == null || comstr.isBlank())) {
 				commandsStringList.add(c.getCommandRaw());
@@ -157,13 +157,12 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");
-		com.append(TerminalCommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
-		com.append(TerminalCommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText())
-				.append(",");
-		com.append(TerminalCommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
-		com.append(TerminalCommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
-		com.append(TerminalCommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
-		com.append(TerminalCommandFactory.COMMAND_MAP_COMMANDS).append(":").append("[");
+		com.append(CommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
+		com.append(CommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
+		com.append(CommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
+		com.append(CommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
+		com.append(CommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
+		com.append(CommandFactory.COMMAND_MAP_COMMANDS).append(":").append("[");
 		for (int i = 0; i < getCommandsRaw().size(); i++) {
 			String c = getCommandsRaw().get(i);
 			if (i == getCommandsRaw().size() - 1) {
@@ -180,7 +179,7 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 	public String commandlistToString() {
 		StringBuilder commandString = new StringBuilder("[");
 		for (int i = 0; i < getCommands().size(); i++) {
-			String c = ((TerminalSingleCommandTemplate) getCommands().get(i)).commandToString();
+			String c = ((SingleCommandTemplate) getCommands().get(i)).commandToString();
 			if (i == getCommands().size() - 1) {
 				commandString.append(c);
 			} else {
@@ -191,7 +190,7 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 		return commandString.toString();
 	}
 
-	public TerminalMultiCommandTemplate update(TerminalMultiCommandTemplate com) {
+	public MultiCommandTemplate update(MultiCommandTemplate com) {
 		if (this.id.equals(com.getId())) {
 			Logging.debug(this, "update this (" + this.toString() + ") with (" + com.toString() + ")");
 			setCommands(com.getCommandsRaw());
@@ -205,7 +204,7 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 	}
 
 	@Override
-	public int compareTo(TerminalMultiCommandTemplate compareCom) {
+	public int compareTo(MultiCommandTemplate compareCom) {
 		int dif = this.getPriority() - compareCom.getPriority();
 		if (dif == 0) {
 			return this.getMenuText().compareTo(compareCom.getMenuText());
@@ -215,9 +214,9 @@ public class TerminalMultiCommandTemplate implements TerminalMultiCommand, Compa
 
 	@Override
 	public boolean equals(Object o) {
-		TerminalMultiCommandTemplate com = null;
-		if (o instanceof TerminalMultiCommandTemplate) {
-			com = (TerminalMultiCommandTemplate) o;
+		MultiCommandTemplate com = null;
+		if (o instanceof MultiCommandTemplate) {
+			com = (MultiCommandTemplate) o;
 		} else {
 			Logging.debug(this, "equals object is not instance of SSHCommandTemplate");
 			return false;

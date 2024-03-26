@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -20,14 +20,14 @@ import de.uib.opsicommand.POJOReMapper;
 import de.uib.utilities.ThreadLocker;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandProcess {
+public class CommandProcess {
 	private String processId;
 	private StringBuilder result;
 	private ThreadLocker locker;
 	private ConfigedMain configedMain;
 	private String command;
 
-	public TerminalCommandProcess(ConfigedMain configedMain, ThreadLocker locker, String command) {
+	public CommandProcess(ConfigedMain configedMain, ThreadLocker locker, String command) {
 		this.configedMain = configedMain;
 		this.locker = locker;
 		this.command = command;

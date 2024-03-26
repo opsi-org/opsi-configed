@@ -28,11 +28,11 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandCurl;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandFileUpload;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiSetRights;
-import de.uib.configed.serverconsole.terminalcommand.TerminalMultiCommandTemplate;
+import de.uib.configed.serverconsole.command.MultiCommandTemplate;
+import de.uib.configed.serverconsole.command.SingleCommandCurl;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
@@ -66,21 +66,21 @@ public class FileUploadDialog extends FGeneralDialog {
 	protected GroupLayout inputPanelLayout;
 
 	private CurlAuthenticationPanel wgetAuthPanel;
-	protected TerminalCommandFileUpload command;
+	protected SingleCommandFileUpload command;
 
 	private ConfigedMain configedMain;
 
-	public FileUploadDialog(String title, TerminalCommandFileUpload com, ConfigedMain configedMain) {
+	public FileUploadDialog(String title, SingleCommandFileUpload com, ConfigedMain configedMain) {
 		this(title, com, Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100, configedMain);
 	}
 
-	public FileUploadDialog(String title, TerminalCommandFileUpload com, int width, int height,
+	public FileUploadDialog(String title, SingleCommandFileUpload com, int width, int height,
 			ConfigedMain configedMain) {
 		super(null, title, false);
 		this.configedMain = configedMain;
 		this.command = com;
 		if (this.command == null) {
-			command = new TerminalCommandFileUpload();
+			command = new SingleCommandFileUpload();
 		}
 
 		init();
@@ -341,10 +341,10 @@ public class FileUploadDialog extends FGeneralDialog {
 	private void uploadFile() {
 		String modulesServerPath = doAction1AdditionalSetPath();
 
-		TerminalMultiCommandTemplate fullcommand = new TerminalMultiCommandTemplate();
+		MultiCommandTemplate fullcommand = new MultiCommandTemplate();
 		fullcommand.setMainName("FileUpload");
 		if (jRadioButtonFromServer.isSelected()) {
-			TerminalCommandCurl curlCommand = new TerminalCommandCurl();
+			SingleCommandCurl curlCommand = new SingleCommandCurl();
 			curlCommand = doAction1AdditionalSetWget(curlCommand, modulesServerPath);
 
 			curlCommand.setUrl(jTextFieldURL.getText());
@@ -362,14 +362,14 @@ public class FileUploadDialog extends FGeneralDialog {
 		}
 
 		if (jComboBoxSetRights.isSelected()) {
-			fullcommand.addCommand(new TerminalCommandOpsiSetRights(""));
+			fullcommand.addCommand(new SingleCommandOpsiSetRights(""));
 		}
 
-		TerminalCommandExecutor execute = new TerminalCommandExecutor(configedMain);
+		CommandExecutor execute = new CommandExecutor(configedMain);
 		execute.executeMultiCommand(fullcommand);
 	}
 
-	protected TerminalCommandCurl doAction1AdditionalSetWget(TerminalCommandCurl c, String path) {
+	protected SingleCommandCurl doAction1AdditionalSetWget(SingleCommandCurl c, String path) {
 		c.setDir(Paths.get(path).getParent().toString());
 		return c;
 	}

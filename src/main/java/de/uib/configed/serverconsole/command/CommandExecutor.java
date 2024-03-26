@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.io.File;
 import java.util.List;
@@ -21,7 +21,7 @@ import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.ThreadLocker;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandExecutor implements MessagebusListener {
+public class CommandExecutor implements MessagebusListener {
 	private static final Pattern MORE_THAN_ONE_SPACE_PATTERN = Pattern.compile("\\s{2,}",
 			Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -29,26 +29,26 @@ public class TerminalCommandExecutor implements MessagebusListener {
 	private TerminalFrame terminalFrame;
 	private ThreadLocker locker;
 
-	private TerminalSingleCommand commandToExecute;
+	private SingleCommand commandToExecute;
 
 	private boolean withGUI;
-	private TerminalCommandProcess commandProcess;
+	private CommandProcess commandProcess;
 
 	private int commandNumber;
 
-	public TerminalCommandExecutor(ConfigedMain configedMain) {
+	public CommandExecutor(ConfigedMain configedMain) {
 		this(configedMain, true);
 	}
 
-	public TerminalCommandExecutor(ConfigedMain configedMain, boolean withGUI) {
+	public CommandExecutor(ConfigedMain configedMain, boolean withGUI) {
 		this.configedMain = configedMain;
 		this.terminalFrame = new TerminalFrame(true);
 		this.withGUI = withGUI;
 		this.locker = new ThreadLocker();
-		configedMain.getMessagebus().getWebSocket().registerListener(TerminalCommandExecutor.this);
+		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
 	}
 
-	public String execute(TerminalSingleCommand command) {
+	public String execute(SingleCommand command) {
 		terminalFrame.setMessagebus(configedMain.getMessagebus());
 		if (withGUI) {
 			terminalFrame.display();
@@ -58,14 +58,14 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		startBackgroundThread(() -> {
 			commandToExecute = command;
 			String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
-			commandProcess = new TerminalCommandProcess(configedMain, locker, commandRepresentation);
+			commandProcess = new CommandProcess(configedMain, locker, commandRepresentation);
 			commandProcess.sendProcessStartRequest();
 		});
 
 		return commandProcess != null ? commandProcess.getResult() : "";
 	}
 
-	public void executeMultiCommand(TerminalMultiCommand multiCommand) {
+	public void executeMultiCommand(MultiCommand multiCommand) {
 		terminalFrame.setMessagebus(configedMain.getMessagebus());
 		if (withGUI) {
 			terminalFrame.display();
@@ -73,11 +73,11 @@ public class TerminalCommandExecutor implements MessagebusListener {
 		}
 
 		startBackgroundThread(() -> {
-			List<TerminalSingleCommand> commands = multiCommand.getCommands();
+			List<SingleCommand> commands = multiCommand.getCommands();
 			for (int i = 0; i < commands.size(); i++) {
-				TerminalSingleCommand currentCommand = commands.get(i);
-				if (currentCommand instanceof TerminalCommandFileUpload) {
-					TerminalCommandFileUpload fileUploadCommand = (TerminalCommandFileUpload) currentCommand;
+				SingleCommand currentCommand = commands.get(i);
+				if (currentCommand instanceof SingleCommandFileUpload) {
+					SingleCommandFileUpload fileUploadCommand = (SingleCommandFileUpload) currentCommand;
 					terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()),
 							fileUploadCommand.getTargetPath(), withGUI, () -> locker.unlock());
 					locker.lock();
@@ -85,7 +85,7 @@ public class TerminalCommandExecutor implements MessagebusListener {
 					String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(currentCommand.getCommand())
 							.replaceAll(" ");
 					commandToExecute = currentCommand;
-					commandProcess = new TerminalCommandProcess(configedMain, locker, commandRepresentation);
+					commandProcess = new CommandProcess(configedMain, locker, commandRepresentation);
 					commandProcess.sendProcessStartRequest();
 				}
 			}

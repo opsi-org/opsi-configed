@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -12,8 +12,8 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageManagerUninstallParameterDialog;
 import de.uib.utilities.logging.Logging;
 
-public class TerminalCommandOpsiPackageManagerUninstall extends TerminalCommandOpsiPackageManager
-		implements TerminalCommandNeedParameter {
+public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiPackageManager
+		implements SingleCommandNeedParameter {
 	private FGeneralDialog dialog;
 	private String command;
 	private int priority = 10;
@@ -24,7 +24,7 @@ public class TerminalCommandOpsiPackageManagerUninstall extends TerminalCommandO
 	private String keepFiles = "";
 	private String freeInput = "";
 
-	public TerminalCommandOpsiPackageManagerUninstall() {
+	public SingleCommandOpsiPackageManagerUninstall() {
 		command = "opsi-package-manager";
 	}
 

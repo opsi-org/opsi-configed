@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
 /**
  * This class represent a simple single command
  **/
-public class TerminalSingleCommandTemplate implements TerminalSingleCommand {
+public class SingleCommandTemplate implements SingleCommand {
 	public static final String TESTCOMMAND = "pwd";
 	private boolean needParameter;
 	private String id;
@@ -29,16 +29,16 @@ public class TerminalSingleCommandTemplate implements TerminalSingleCommand {
 
 	private String myTmpCommand;
 
-	public TerminalSingleCommandTemplate(String id, String c, String mt) {
-		position = TerminalCommandFactory.DEFAULT_POSITION;
+	public SingleCommandTemplate(String id, String c, String mt) {
+		position = CommandFactory.DEFAULT_POSITION;
 		setId(id);
 		setCommand(c);
 		getParameterList();
 		setMenuText(mt);
 	}
 
-	public TerminalSingleCommandTemplate(TerminalSingleCommand command) {
-		position = TerminalCommandFactory.DEFAULT_POSITION;
+	public SingleCommandTemplate(SingleCommand command) {
+		position = CommandFactory.DEFAULT_POSITION;
 		setId(command.getId());
 		setMenuText(command.getMenuText());
 		setParentMenuText(command.getParentMenuText());
@@ -47,12 +47,12 @@ public class TerminalSingleCommandTemplate implements TerminalSingleCommand {
 		setCommand(command.getCommand());
 	}
 
-	public TerminalSingleCommandTemplate(String c) {
+	public SingleCommandTemplate(String c) {
 		setCommand(c);
 		getParameterList();
 	}
 
-	public TerminalSingleCommandTemplate() {
+	public SingleCommandTemplate() {
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class TerminalSingleCommandTemplate implements TerminalSingleCommand {
 	@Override
 	public String getSecuredCommand() {
 		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isBlank()) {
-			return getCommand().replace(getSecureInfoInCommand(), TerminalCommandFactory.CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), CommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
 		}
@@ -185,12 +185,11 @@ public class TerminalSingleCommandTemplate implements TerminalSingleCommand {
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");
-		com.append(TerminalCommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
-		com.append(TerminalCommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText())
-				.append(",");
-		com.append(TerminalCommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
-		com.append(TerminalCommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
-		com.append(TerminalCommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
+		com.append(CommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
+		com.append(CommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
+		com.append(CommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
+		com.append(CommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
+		com.append(CommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
 		com.append("command:").append(getCommand()).append(";");
 		com.append("}");
 		return com.toString();

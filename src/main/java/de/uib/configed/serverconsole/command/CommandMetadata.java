@@ -4,9 +4,9 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.serverconsole.terminalcommand;
+package de.uib.configed.serverconsole.command;
 
-public interface TerminalCommandMetadata {
+public interface CommandMetadata {
 	String getId();
 
 	String getMenuText();

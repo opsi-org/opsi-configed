@@ -30,8 +30,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.configed.gui.FShowList;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandExecutor;
-import de.uib.configed.serverconsole.terminalcommand.TerminalCommandOpsiPackageManagerUninstall;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -60,7 +60,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private List<String> possibleDepots;
 
-	private TerminalCommandOpsiPackageManagerUninstall commandPMUninstall = new TerminalCommandOpsiPackageManagerUninstall();
+	private SingleCommandOpsiPackageManagerUninstall commandPMUninstall = new SingleCommandOpsiPackageManagerUninstall();
 
 	public PackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
 		super(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
@@ -349,7 +349,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 			@Override
 			public void run() {
 				Logging.info(this, "start exec thread ");
-				TerminalCommandExecutor executor = new TerminalCommandExecutor(configedMain);
+				CommandExecutor executor = new CommandExecutor(configedMain);
 				executor.execute(commandPMUninstall);
 				Logging.debug(this, "end exec thread");
 			}
