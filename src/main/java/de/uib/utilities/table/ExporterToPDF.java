@@ -44,7 +44,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 
 public class ExporterToPDF extends AbstractExportTable {
@@ -70,10 +69,6 @@ public class ExporterToPDF extends AbstractExportTable {
 		super(table);
 		extension = FILE_EXTENSION;
 		writeToFile = defaultFilename;
-	}
-
-	public ExporterToPDF(PanelGenEditTable table) {
-		this(table.getTheTable());
 	}
 
 	@Override
@@ -286,15 +281,12 @@ public class ExporterToPDF extends AbstractExportTable {
 
 		table.setHeaderRows(1);
 
-		for (int j : theTable.getSelectedRows()) {
+		for (int j = 0; j < theTable.getRowCount(); j++) {
 			for (int i = 0; i < theTable.getColumnCount(); i++) {
 				value = new PdfPCell(new Phrase(" "));
 				String s = theTable.getValueAt(j, i) != null ? theTable.getValueAt(j, i).toString() : "";
 
 				switch (s) {
-				case "∞":
-					value = new PdfPCell(new Phrase("\u221e", symbolFont));
-					break;
 				case "true":
 					value = new PdfPCell(new Phrase("\u221a", symbolFont)); // radic
 					break;
