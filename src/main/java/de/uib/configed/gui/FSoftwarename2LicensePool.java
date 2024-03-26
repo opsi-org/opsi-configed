@@ -132,7 +132,7 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 
 		panelSWxLicensepool.setDeleteAllowed(false);
 
-		owner.setVisible(true);
+		super.getOwner().setVisible(true);
 
 		initDataStructure();
 
@@ -508,7 +508,7 @@ public class FSoftwarename2LicensePool extends FDialogSubTable {
 	public void doAction2() {
 		Logging.debug(this, "doAction2");
 		result = 2;
-		owner.setVisible(true);
+		getOwner().setVisible(true);
 		leave();
 	}
 

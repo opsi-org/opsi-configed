@@ -64,11 +64,8 @@ public class FGeneralDialog extends JDialog {
 	protected JPanel additionalPane = new JPanel();
 	private GridLayout gridLayout1 = new GridLayout();
 
-	protected Window owner;
-
 	public FGeneralDialog(JFrame owner, String title) {
 		super(owner, false);
-		this.owner = owner;
 
 		Logging.info(this.getClass(), "created by constructor 1, owner " + owner);
 		registerWithRunningInstances();
@@ -81,7 +78,6 @@ public class FGeneralDialog extends JDialog {
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal) {
 		super(owner, modal);
-		this.owner = owner;
 
 		Logging.info(this.getClass(), "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
@@ -115,7 +111,6 @@ public class FGeneralDialog extends JDialog {
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, modal);
-		this.owner = owner;
 		Logging.info(this.getClass(), "created by constructor 3  owner " + owner);
 
 		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
@@ -145,6 +140,7 @@ public class FGeneralDialog extends JDialog {
 
 	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
 			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
+
 		registerWithRunningInstances();
 
 		setIconImage(Utils.getMainIcon());
@@ -172,7 +168,7 @@ public class FGeneralDialog extends JDialog {
 			// else we have to call setupLayout later explicitly
 			guiInit();
 		}
-		setLocationRelativeTo(owner);
+		setLocationRelativeTo(getOwner());
 	}
 
 	public int getResult() {
@@ -368,7 +364,7 @@ public class FGeneralDialog extends JDialog {
 		getContentPane().add(allpane);
 
 		pack();
-		setLocationRelativeTo(owner);
+		setLocationRelativeTo(getOwner());
 	}
 
 	@Override

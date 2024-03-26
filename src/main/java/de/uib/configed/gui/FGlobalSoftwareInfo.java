@@ -91,7 +91,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public void doAction1() {
 		Logging.debug(this, "doAction1");
 		result = 1;
-		owner.setVisible(true);
+		getOwner().setVisible(true);
 		leave();
 	}
 

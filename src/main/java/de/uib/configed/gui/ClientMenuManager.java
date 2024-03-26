@@ -233,7 +233,7 @@ public final class ClientMenuManager implements MenuListener {
 		labelledDelays.put("1 h", 3600);
 
 		JMenuItem jMenuNewScheduledWOL = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
-		jMenuNewScheduledWOL.addActionListener(event -> {
+		jMenuNewScheduledWOL.addActionListener((ActionEvent event) -> {
 			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(Configed.getResourceValue("FStartWakeOnLan.title"),
 					configedMain);
 			fStartWakeOnLan.setLocationRelativeTo(mainFrame);

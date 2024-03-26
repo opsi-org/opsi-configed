@@ -38,7 +38,6 @@ public class FSelectionList extends FGeneralDialog {
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int preferredWidth, int preferredHeight) {
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false, null);
-		this.owner = owner;
 	}
 
 	@Override

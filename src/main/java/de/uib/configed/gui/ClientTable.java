@@ -197,18 +197,6 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		return table.getSelectedRowCount() == 0;
 	}
 
-	private Map<Integer, Integer> getSelectionMap() {
-		Map<Integer, Integer> selectionMap = new HashMap<>();
-		int selectedKeysCount = 0;
-
-		for (int i : table.getSelectedRows()) {
-			selectionMap.put(selectedKeysCount, i);
-			selectedKeysCount++;
-		}
-
-		return selectionMap;
-	}
-
 	public Set<String> getSelectedSet() {
 		Set<String> result = new HashSet<>();
 

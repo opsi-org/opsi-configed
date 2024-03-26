@@ -27,7 +27,6 @@ public class FShowList extends FTextArea {
 	public FShowList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
 		super(owner, title, modal, buttonList);
-		this.owner = owner;
 		initFShowList(preferredWidth, preferredHeight);
 	}
 
@@ -75,9 +74,7 @@ public class FShowList extends FTextArea {
 	@Override
 	public void doAction1() {
 		Logging.clearErrorList();
-		if (owner != null) {
-			owner.toFront();
-		}
+		getOwner().toFront();
 
 		super.doAction1();
 	}
