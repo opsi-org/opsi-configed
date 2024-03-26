@@ -43,10 +43,9 @@ public class ProductInfoPane extends JSplitPane {
 	private JButton propertiesActivateButton;
 	private boolean isPanelEditPropertiesVisible = true;
 
-	private JScrollPane jScrollPaneProductInfo;
+	private JSplitPane productSplitPane;
 	private TextMarkdownPane jTextAreaProductAdvice;
 
-	private JScrollPane jScrollPaneProductAdvice;
 	private TextMarkdownPane jTextAreaProductInfo;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -66,10 +65,8 @@ public class ProductInfoPane extends JSplitPane {
 		jLabelProductVersion = new JTextField();
 		jLabelLabelProductVersion = new JLabel();
 
-		jScrollPaneProductInfo = new JScrollPane();
 		jTextAreaProductInfo = new TextMarkdownPane();
 
-		jScrollPaneProductAdvice = new JScrollPane();
 		jTextAreaProductAdvice = new TextMarkdownPane();
 
 		dependenciesTextLabel = new JLabel(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
@@ -88,13 +85,21 @@ public class ProductInfoPane extends JSplitPane {
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
 
+		JScrollPane jScrollPaneProductInfo = new JScrollPane();
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
+		JScrollPane jScrollPaneProductAdvice = new JScrollPane();
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		productSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		productSplitPane.setTopComponent(jScrollPaneProductInfo);
+		productSplitPane.setBottomComponent(jScrollPaneProductAdvice);
+		productSplitPane.setDividerLocation(Globals.PREF_VSIZE);
+		productSplitPane.setResizeWeight(0.5);
 
 		dependenciesActivateButton = new JButton(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
 		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
@@ -131,9 +136,7 @@ public class ProductInfoPane extends JSplitPane {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelProductVersion, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE))
 
-				.addComponent(jScrollPaneProductInfo, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
-
-				.addComponent(jScrollPaneProductAdvice, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE));
+				.addComponent(productSplitPane, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE));
 
 		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -149,9 +152,7 @@ public class ProductInfoPane extends JSplitPane {
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addComponent(jScrollPaneProductInfo, 0, Globals.PREF_VSIZE, Short.MAX_VALUE)
-				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addComponent(jScrollPaneProductAdvice, 0, Globals.PREF_VSIZE, Short.MAX_VALUE));
+				.addComponent(productSplitPane, 0, Globals.PREF_VSIZE * 2, Short.MAX_VALUE));
 
 		setTopComponent(productDescriptionsPanel);
 	}

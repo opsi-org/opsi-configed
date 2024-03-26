@@ -1,10 +1,11 @@
 # Changelog
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.2.10] - 2024-03-26
 ## Fixed
 - Invalid Range error when updating product table (Manually or by messagebus)
 
 ## Changed
 - Export whole table into PDF and not only selected rows
+- Add item to change size between product info and product description
 
 ## [4.3.2.9] - 2024-03-21
 ## Changed
