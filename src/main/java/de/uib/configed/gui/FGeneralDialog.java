@@ -47,8 +47,6 @@ public class FGeneralDialog extends JDialog {
 	protected int preferredWidth;
 	protected int preferredHeight;
 
-	protected int additionalPaneMaxWidth = GroupLayout.PREFERRED_SIZE;
-
 	private String button1Text;
 	private String button2Text;
 	private String button3Text;
@@ -62,7 +60,6 @@ public class FGeneralDialog extends JDialog {
 
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected JPanel additionalPane = new JPanel();
-	private GridLayout gridLayout1 = new GridLayout();
 
 	public FGeneralDialog(JFrame owner, String title) {
 		super(owner, false);
@@ -320,7 +317,7 @@ public class FGeneralDialog extends JDialog {
 		initComponents();
 		allLayout();
 
-		jPanelButtonGrid.setLayout(gridLayout1);
+		jPanelButtonGrid.setLayout(new GridLayout());
 
 		jButton1.setMinimumSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 

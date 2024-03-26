@@ -22,7 +22,6 @@ public class FDialogSubTable extends FGeneralDialog {
 			int preferredWidth, int preferredHeight) {
 		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, true);
 		Logging.info(this.getClass(), "created ");
-		additionalPaneMaxWidth = Short.MAX_VALUE;
 	}
 
 	@Override
