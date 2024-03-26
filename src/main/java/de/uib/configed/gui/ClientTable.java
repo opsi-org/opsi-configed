@@ -319,27 +319,6 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		table.setModel(tm);
 	}
 
-	public DefaultTableModel getSelectedRowsModel() {
-		final Map<Integer, Integer> selectionMap = getSelectionMap();
-
-		return new DefaultTableModel() {
-			@Override
-			public Object getValueAt(int row, int col) {
-				return table.getValueAt(selectionMap.get(row), col);
-			}
-
-			@Override
-			public int getRowCount() {
-				return selectionMap.size();
-			}
-
-			@Override
-			public int getColumnCount() {
-				return table.getColumnCount();
-			}
-		};
-	}
-
 	public DefaultTableModel getTableModel() {
 		return (DefaultTableModel) table.getModel();
 	}

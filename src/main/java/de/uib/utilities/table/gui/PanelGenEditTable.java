@@ -651,7 +651,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
-		pdfExportTable.execute(null, true);
+		pdfExportTable.execute(null, false);
 	}
 
 	public void addPopupItem(JMenuItem item) {

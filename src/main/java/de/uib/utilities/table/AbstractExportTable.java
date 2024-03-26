@@ -68,12 +68,7 @@ public abstract class AbstractExportTable {
 
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
-
-		menuItem.addActionListener((ActionEvent actionEvent) -> {
-			boolean onlySelected = true;
-			Logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
-			execute(null, onlySelected);
-		});
+		menuItem.addActionListener((ActionEvent actionEvent) -> execute(null, true));
 
 		return menuItem;
 	}
