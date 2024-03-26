@@ -1031,9 +1031,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		return tableModel.getValueAt(theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
 	}
 
-	public void selectedRowChanged() {
-		/* To be implemented in subclass */}
-
 	public void setAwareOfSelectionListener(boolean b) {
 		Logging.debug(this, "setAwareOfSelectionListener  " + b);
 
@@ -1295,8 +1292,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				menuItemDeleteRelation.setEnabled(false);
 			}
 		} else {
-			selectedRowChanged();
-
 			if (menuItemDeleteRelation != null) {
 				menuItemDeleteRelation.setEnabled(true);
 			}

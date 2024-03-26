@@ -148,24 +148,15 @@ public class PanelProductProperties extends JSplitPane {
 			if (!e.getValueIsAdjusting()) {
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			}
-		}
 
-		@Override
-		public void selectedRowChanged() {
-			// if we got a new selection
-			Logging.debug(this, "selectedRowChanged in paneProducts ");
-
-			ListSelectionModel lsm = getListSelectionModel();
-
-			if (lsm.getSelectedItemsCount() == 1) {
-				int row = lsm.getMinSelectionIndex();
-				updateInfoPane(row);
-			} else {
-				Logging.info(this, "selected not a unique row ");
-				infoPane.clearEditing();
-				propertiesPanel.init();
-				panelEditProperties.clearDepotListData();
+				if (lsm.getSelectedItemsCount() == 1) {
+					updateInfoPane(lsm.getMinSelectionIndex());
+				} else {
+					Logging.info(this, "selected not a unique row ");
+					infoPane.clearEditing();
+					propertiesPanel.init();
+					panelEditProperties.clearDepotListData();
+				}
 			}
 		}
 
