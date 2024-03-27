@@ -8,12 +8,15 @@ package de.uib.configed.serverconsole.command;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.swing.SwingUtilities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -60,8 +63,7 @@ public final class CommandFactory {
 			new SingleCommandCurl(), new SingleCommandModulesUpload(), new SingleCommandOpsiSetRights(),
 			new SingleCommandDeployClientAgent() };
 
-	private List<Map<String, Object>> commandlist;
-	private List<MultiCommandTemplate> sshCommandList;
+	private List<MultiCommandTemplate> commandList;
 	private Set<String> knownMenus;
 	private Set<String> knownParents;
 
@@ -99,12 +101,9 @@ public final class CommandFactory {
 	}
 
 	public List<MultiCommandTemplate> retrieveCommandList() {
-		Logging.info(this, "retrieveSSHCommandList ");
-		if (commandlist == null) {
-			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
-		}
+		List<Map<String, Object>> commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
 
-		sshCommandList = new ArrayList<>();
+		commandList = new ArrayList<>();
 		knownMenus = new HashSet<>();
 		knownParents = new HashSet<>();
 
@@ -129,8 +128,6 @@ public final class CommandFactory {
 
 			String parent = com.getParentMenuText();
 
-			Logging.info(this, "parent menu text " + parent);
-
 			if (parent == null || "null".equalsIgnoreCase(parent) || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 			}
@@ -138,49 +135,135 @@ public final class CommandFactory {
 				knownParents.add(parent);
 			}
 
-			Logging.info(this, "parent menu text changed  " + parent);
-
-			Logging.info(this, "list_knownParents " + knownParents);
-
-			sshCommandList.add(com);
+			commandList.add(com);
 		}
-		return sshCommandList;
+		return commandList;
 	}
 
 	public Map<String, List<MultiCommandTemplate>> getCommandMapSortedByParent() {
-		if (commandlist == null) {
-			commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
-		}
+		Logging.info(this, "getCommandMapSortedByParent sorting commands");
+		Collections.sort(commandList);
 
-		Logging.info(this, "getSSHCommandMapSortedByParent sorting commands ");
-		Collections.sort(sshCommandList);
+		Map<String, List<MultiCommandTemplate>> sortedCommands = new LinkedHashMap<>();
+		sortedCommands.put(PARENT_DEFAULT_FOR_OWN_COMMANDS, new LinkedList<>());
+		sortedCommands.put(PARENT_OPSI, new LinkedList<>());
 
-		Map<String, List<MultiCommandTemplate>> sortedComs = new LinkedHashMap<>();
-
-		sortedComs.put(PARENT_DEFAULT_FOR_OWN_COMMANDS, new LinkedList<>());
-		sortedComs.put(PARENT_OPSI, new LinkedList<>());
-
-		for (MultiCommandTemplate com : sshCommandList) {
-			String parent = com.getParentMenuText();
+		for (MultiCommandTemplate command : commandList) {
+			String parent = command.getParentMenuText();
 			if (parent == null || parent.isBlank()) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 			}
 			List<MultiCommandTemplate> parentList = new LinkedList<>();
-			if (sortedComs.containsKey(parent)) {
-				parentList = sortedComs.get(parent);
+			if (sortedCommands.containsKey(parent)) {
+				parentList = sortedCommands.get(parent);
 			} else {
-				sortedComs.put(parent, parentList);
+				sortedCommands.put(parent, parentList);
 			}
 
-			if (!(parentList.contains(com))) {
-				parentList.add(com);
+			if (!(parentList.contains(command))) {
+				parentList.add(command);
 			}
 		}
-		return sortedComs;
+		return sortedCommands;
 	}
 
 	public static MultiCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p,
 			List<String> c) {
 		return new MultiCommandTemplate(id, c, mt, pmt, ttt, p);
+	}
+
+	public MultiCommandTemplate getCommandByMenu(String menu) {
+		for (MultiCommandTemplate c : commandList) {
+			if (c.getMenuText().equals(menu)) {
+				return c;
+			}
+		}
+		return null;
+	}
+
+	public List<String> getCommandMenuNames() {
+		List<String> knownMenusList = new ArrayList<>(knownMenus);
+		Collections.sort(knownMenusList, String::compareToIgnoreCase);
+		return knownMenusList;
+	}
+
+	public List<String> getCommandMenuParents() {
+		List<String> knownParentsList = new ArrayList<>(knownParents);
+		Collections.sort(knownParentsList, String::compareToIgnoreCase);
+		return knownParentsList;
+	}
+
+	public boolean saveCommand(MultiCommandTemplate command) {
+		Logging.info(this, "saveCommand command " + command.toString());
+		List<Object> jsonObjects = new ArrayList<>();
+		jsonObjects.add(buildCommandMap(command));
+
+		if (knownMenus.contains(command.getMenuText())) {
+			Logging.info(this, "saveCommand command already exists - updating command");
+			if (persistenceController.getSSHCommandDataService().updateSSHCommand(jsonObjects)) {
+				commandList.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))).update(command);
+				return true;
+			}
+		} else {
+			Logging.info(this, "saveCommand command doesn't exist - creating new command");
+			if (persistenceController.getSSHCommandDataService().createSSHCommand(jsonObjects)) {
+				commandList.add(command);
+				knownMenus.add(command.getMenuText());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static Map<String, Object> buildCommandMap(MultiCommandTemplate c) {
+		Map<String, Object> com = new HashMap<>();
+		com.put(COMMAND_MAP_MENU_TEXT, c.getMenuText());
+		com.put(COMMAND_MAP_PARENT_MENU_TEXT, c.getParentMenuText());
+		com.put(COMMAND_MAP_TOOLTIP_TEXT, c.getToolTipText());
+		com.put(COMMAND_MAP_POSITION, c.getPriority());
+		com.put(COMMAND_MAP_COMMANDS, c.getCommandsRaw());
+		return com;
+	}
+
+	public boolean isCommandEqualSavedCommand(MultiCommandTemplate command) {
+		boolean result = false;
+		if (knownMenus.contains(command.getMenuText())) {
+			Logging.debug(this, "isCommandEqualSavedCommand comparing command " + command.toString());
+			if (commandList == null) {
+				Logging.debug(this, "isCommandEqualSavedCommand command list is null");
+				result = false;
+			} else if (commandList.isEmpty()) {
+				Logging.debug(this, "isCommandEqualSavedCommand command list has no elements");
+				result = false;
+			} else if (getCommandByMenu(command.getMenuText()) == null) {
+				Logging.debug(this, "isCommandEqualSavedCommand command has no menu text");
+				result = false;
+			} else if (commandList.indexOf(getCommandByMenu(command.getMenuText())) == -1) {
+				Logging.debug(this, "isCommandEqualSavedCommand command is new");
+				result = false;
+			} else {
+				Logging.debug(this, "isCommandEqualSavedCommand command list " + commandList);
+				Logging.debug(this, "isCommandEqualSavedCommand found command "
+						+ commandList.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))));
+				Logging.debug(this, "isCommandEqualSavedCommand are commands equal? " + commandList
+						.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))).equals(command));
+				result = commandList.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))).equals(command);
+			}
+		}
+		return result;
+	}
+
+	public void deleteCommandByMenu(String menu) {
+		Logging.info(this, "deleting command menu " + menu);
+		List<String> jsonObjects = new ArrayList<>();
+		jsonObjects.add(menu);
+		if (persistenceController.getSSHCommandDataService().deleteSSHCommand(jsonObjects)) {
+			commandList.remove(getCommandByMenu(menu));
+			knownMenus.remove(menu);
+		}
+	}
+
+	public void reloadServerMenu() {
+		SwingUtilities.invokeLater(configedMain::reloadServerMenu);
 	}
 }

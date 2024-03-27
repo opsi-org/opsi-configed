@@ -222,22 +222,23 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 			return false;
 		}
 
-		if (!areBothNull(this.getId(), com.getId()) || !this.getId().trim().equals(com.getId().trim())) {
-			Logging.debug(this, "equals different id's " + this.getId() + " != " + com.getId() + "");
+		if (isAnyNull(this.getId(), com.getId()) || !this.getId().trim().equals(com.getId().trim())) {
+			Logging.debug(this, "equals different id's " + this.getId().trim() + " != " + com.getId().trim() + " "
+					+ this.getId().trim().equals(com.getId().trim()));
 			return false;
 		}
-		if (!areBothNull(this.getMenuText(), com.getMenuText())
+		if (isAnyNull(this.getMenuText(), com.getMenuText())
 				|| !this.getMenuText().trim().equals(com.getMenuText().trim())) {
 			Logging.debug(this, "equals different menuText's " + this.getMenuText() + " != " + com.getMenuText() + "");
 			return false;
 		}
-		if (!areBothNull(this.getParentMenuText(), com.getParentMenuText())
+		if (isAnyNull(this.getParentMenuText(), com.getParentMenuText())
 				|| !this.getParentMenuText().trim().equals(com.getParentMenuText().trim())) {
 			Logging.debug(this, "equals different parentMenuText's " + this.getParentMenuText() + " != "
 					+ com.getParentMenuText() + "");
 			return false;
 		}
-		if (!areBothNull(this.getToolTipText(), com.getToolTipText())
+		if (isAnyNull(this.getToolTipText(), com.getToolTipText())
 				|| !this.getToolTipText().trim().equals(com.getToolTipText().trim())) {
 			Logging.debug(this,
 					"equals different toolTipText's " + this.getToolTipText() + " != " + com.getToolTipText() + "");
@@ -264,8 +265,8 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 		return true;
 	}
 
-	private static boolean areBothNull(String a, String b) {
-		return a == null && b == null;
+	private static boolean isAnyNull(String a, String b) {
+		return a == null || b == null;
 	}
 
 	@Override

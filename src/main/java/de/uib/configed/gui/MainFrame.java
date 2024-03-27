@@ -291,7 +291,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void reloadServerMenu() {
-		setupMenuServer();
+		setupMenuTerminal();
 	}
 
 	/**
@@ -446,7 +446,11 @@ public class MainFrame extends JFrame {
 	private void setupMenuTerminal() {
 		jMenuTerminal.removeAll();
 		jMenuTerminal.setText("Terminal");
-		jMenuTerminal.add(jMenuTerminal);
+
+		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
+		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
+		jMenuTerminal.add(jMenuCommandControl);
+		jMenuTerminal.addSeparator();
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
 		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
@@ -461,6 +465,12 @@ public class MainFrame extends JFrame {
 		}
 		addCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 		jMenuTerminal.add(menuOpsi);
+
+		boolean userConfigExists = UserConfig.getCurrentUserConfig() != null;
+		jMenuTerminal.setEnabled(userConfigExists
+				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_MENU_ACTIVE));
 	}
 
 	private void addCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
@@ -913,6 +923,11 @@ public class MainFrame extends JFrame {
 	private void startSSHControlAction() {
 		Logging.debug(this, "jMenuSSHControlAction");
 		configedMain.startSSHControlDialog();
+	}
+
+	private void startControlAction() {
+		Logging.debug(this, "jMenuControlAction");
+		configedMain.startControlDialog();
 	}
 
 	public void setClientFilterAction(boolean b) {

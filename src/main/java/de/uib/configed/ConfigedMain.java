@@ -88,6 +88,7 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateUpdateManager;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
+import de.uib.configed.serverconsole.CommandControlDialog;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.type.DateExtendedByVars;
@@ -299,6 +300,7 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 
 	private SSHConfigDialog sshConfigDialog;
 	private SSHCommandControlDialog sshCommandControlDialog;
+	private CommandControlDialog commandControlDialog;
 	private NewClientDialog newClientDialog;
 
 	private boolean isAllLicenseDataReloaded;
@@ -3648,6 +3650,13 @@ public class ConfigedMain implements ListSelectionListener, MessagebusListener {
 			sshCommandControlDialog = new SSHCommandControlDialog(this);
 		}
 		sshCommandControlDialog.setVisible(true);
+	}
+
+	public void startControlDialog() {
+		if (commandControlDialog == null) {
+			commandControlDialog = new CommandControlDialog(this);
+		}
+		commandControlDialog.setVisible(true);
 	}
 
 	private boolean confirmActionForSelectedClients(String confirmInfo) {
