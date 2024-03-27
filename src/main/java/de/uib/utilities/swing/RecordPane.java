@@ -24,9 +24,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
 public class RecordPane extends JPanel implements KeyListener, DocumentListener {
-	private static final int LINE_HEIGHT = Globals.LINE_HEIGHT;
 	private static final int MIN_FIELD_WIDTH = 60;
-	private static final int MAX_FIELD_WIDTH = Short.MAX_VALUE;
 	private static final int MIN_LABEL_WIDTH = 30;
 	private static final int MAX_LABEL_WIDTH = 100;
 
@@ -79,7 +77,7 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 			hGroup.addGroup(baseLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 					.addComponent(labelfields.get(key), MIN_LABEL_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_LABEL_WIDTH)
 					.addGap(Globals.MIN_GAP_SIZE)
-					.addComponent(datafields.get(key), MIN_FIELD_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_FIELD_WIDTH)
+					.addComponent(datafields.get(key), MIN_FIELD_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 					.addGap(Globals.MIN_GAP_SIZE));
 		}
 
@@ -91,8 +89,8 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 		for (String key : data.keySet()) {
 			vGroup.addGap(Globals.GAP_SIZE);
 			vGroup.addGroup(baseLayout.createParallelGroup()
-					.addComponent(labelfields.get(key), LINE_HEIGHT, LINE_HEIGHT, LINE_HEIGHT)
-					.addComponent(datafields.get(key), LINE_HEIGHT, LINE_HEIGHT, LINE_HEIGHT));
+					.addComponent(labelfields.get(key), Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+					.addComponent(datafields.get(key), Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
 		}
 		vGroup.addGap(Globals.GAP_SIZE);
 
