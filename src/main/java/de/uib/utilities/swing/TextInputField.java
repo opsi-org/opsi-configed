@@ -16,7 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import de.uib.utilities.observer.swing.AbstractValueChangeListener;
+import de.uib.configed.gui.ClientSelectionDialog;
 
 public class TextInputField extends JPanel {
 	private JTextField textfield;
@@ -87,9 +87,9 @@ public class TextInputField extends JPanel {
 		}
 	}
 
-	public void addValueChangeListener(AbstractValueChangeListener listener) {
-		combo.addActionListener(listener);
-		textfield.getDocument().addDocumentListener(listener);
+	public void setClientSelectionDialog(ClientSelectionDialog dialog) {
+		combo.addActionListener(dialog);
+		textfield.getDocument().addDocumentListener(dialog);
 	}
 
 	public void setEditable(boolean b) {

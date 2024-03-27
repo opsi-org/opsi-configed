@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayDeque;
@@ -34,6 +35,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -76,14 +79,13 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.swing.AbstractValueChangeListener;
 import de.uib.utilities.swing.LowerCaseTextField;
 import de.uib.utilities.swing.TextInputField;
 
 /**
  * This dialog shows a number of options you can use to select specific clients.
  */
-public class ClientSelectionDialog extends FGeneralDialog {
+public class ClientSelectionDialog extends FGeneralDialog implements ActionListener, DocumentListener {
 	private static final Pattern searchNamePattern = Pattern.compile("[\\p{javaLowerCase}\\d_-]*");
 
 	private static final int FRAME_WIDTH = 750;
@@ -871,12 +873,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldText.setToolTipText(
 				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-		fieldText.addValueChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		fieldText.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldText;
 	}
 
@@ -884,12 +881,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 		box.setEditable(true);
 		box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-		box.addValueChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		box.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = box;
 	}
 
@@ -897,34 +889,19 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		TextInputField fieldDate = new TextInputField(null);
 		fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldDate.setToolTipText("yyyy-mm-dd");
-		fieldDate.addValueChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		fieldDate.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDate;
 	}
 
 	private void addIntegerTypeComponent(SimpleGroup sourceGroup) {
 		JSpinner spinner = new JSpinner();
-		spinner.addChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		spinner.addChangeListener(event -> buildParentheses());
 		sourceGroup.dataComponent = spinner;
 	}
 
 	private void addBigIntegerTypeComponent(SimpleGroup sourceGroup) {
 		SpinnerWithExtension swx = new SpinnerWithExtension();
-		swx.addChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		swx.addChangeListener(event -> buildParentheses());
 
 		sourceGroup.dataComponent = swx;
 	}
@@ -934,12 +911,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldDouble.setToolTipText(
 				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-		fieldDouble.addValueChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		fieldDouble.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDouble;
 	}
 
@@ -1294,5 +1266,25 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
 			toFront();
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		buildParentheses();
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		buildParentheses();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		buildParentheses();
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		buildParentheses();
 	}
 }
