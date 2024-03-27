@@ -288,7 +288,8 @@ public class LogFrame extends JFrame {
 				return readFile(fn);
 			} else {
 				Logging.error(this, "File does not exist: " + fn);
-				showDialog("No location: \n" + fn);
+				JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn,
+						null, JOptionPane.WARNING_MESSAGE);
 				return "";
 			}
 		}
@@ -313,10 +314,6 @@ public class LogFrame extends JFrame {
 	// File operations
 	public static void setFileName(String fn) {
 		LogFrame.fileName = fn;
-	}
-
-	private void showDialog(String errorMsg) {
-		JOptionPane.showMessageDialog(this, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
 	}
 
 	private static String openFile() {
@@ -367,7 +364,9 @@ public class LogFrame extends JFrame {
 		if (file.isDirectory()) {
 			Logging.error("This is not a file, it is a directory: " + fileName);
 			resetFileName();
-			showDialog("This is not a file, it is a directory: \n" + fileName);
+			JOptionPane.showMessageDialog(this,
+					Configed.getResourceValue("LogFrame.notFileButDirectory") + " " + fileName, null,
+					JOptionPane.WARNING_MESSAGE);
 		} else if (file.exists()) {
 			String fileExtension = getFileExtension(fileName);
 			if (!isFileExtensionSupported(fileExtension)) {
@@ -389,7 +388,8 @@ public class LogFrame extends JFrame {
 		} else {
 			Logging.error("This file does not exist: " + fileName);
 			resetFileName();
-			showDialog("This file does not exist: \n" + fileName);
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fileName,
+					null, JOptionPane.WARNING_MESSAGE);
 		}
 
 		return result;
@@ -448,7 +448,8 @@ public class LogFrame extends JFrame {
 			fis.close();
 		} catch (IOException ex) {
 			Logging.error("Error opening file: " + ex);
-			showDialog("Error opening file: " + ex);
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.errorOpeningFile") + "\n" + ex,
+					null, JOptionPane.WARNING_MESSAGE);
 		}
 
 		return result;
@@ -467,7 +468,8 @@ public class LogFrame extends JFrame {
 			br.close();
 		} catch (IOException ex) {
 			Logging.error("Error reading file: " + ex);
-			showDialog("Error reading file: " + ex);
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.errorReadingFile") + "\n" + ex,
+					null, JOptionPane.WARNING_MESSAGE);
 		}
 		return sb.toString();
 	}
