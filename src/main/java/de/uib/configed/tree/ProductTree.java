@@ -99,10 +99,7 @@ public class ProductTree extends AbstractGroupTree {
 		Set<String> allPermittedProducts = new TreeSet<>(persistenceController.getProductDataService()
 				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet());
 
-		if (persistenceController.getUserRolesConfigDataService().getPermittedProductsPD() != null) {
-			allPermittedProducts
-					.retainAll(persistenceController.getUserRolesConfigDataService().getPermittedProductsPD());
-		}
+		persistenceController.getProductDataService().filterPermittedProducts(allPermittedProducts);
 
 		for (String productId : allPermittedProducts) {
 			groupNodeFullList.add(new DefaultMutableTreeNode(productId, false));

@@ -171,11 +171,9 @@ public class OpsiServiceNOMPersistenceController {
 	private PanelCompleteWinProducts panelCompleteWinProducts;
 
 	private String user;
-	private String otp;
 
 	private AbstractExecutioner exec;
 
-	private String connectionServer;
 	private HostInfoCollections hostInfoCollections;
 
 	private ConfigDataService configDataService;
@@ -197,9 +195,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
-		this.connectionServer = server;
 		this.user = user;
-		this.otp = otp;
 
 		Logging.debug(this.getClass(), "create");
 
@@ -470,7 +466,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	public AbstractExecutioner retrieveWorkingExec(String depot) {
 		Logging.debug(this, "retrieveWorkingExec , compare depotname " + depot + " to config server "
-				+ hostInfoCollections.getConfigServer() + " ( named as " + connectionServer + ")");
+				+ hostInfoCollections.getConfigServer());
 
 		if (depot.equals(hostInfoCollections.getConfigServer())) {
 			Logging.debug(this, "retrieveWorkingExec for config server");
@@ -478,7 +474,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		String password = (String) hostInfoCollections.getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
-		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password, otp);
+		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password, "");
 
 		if (makeConnection(exec1)) {
 			Logging.info(this, "retrieveWorkingExec new for server " + depot);

@@ -158,7 +158,7 @@ public class ProductDataService {
 		return localbootProductNames;
 	}
 
-	private void filterPermittedProducts(List<String> products) {
+	public void filterPermittedProducts(Collection<String> products) {
 		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
 		if (permittedProducts != null) {
 			products.retainAll(permittedProducts);

@@ -626,8 +626,6 @@ public class ConfigedMain implements MessagebusListener {
 				.getProductGroupsPD();
 		fillterPermittedProductGroups(productGroups.keySet());
 
-		persistenceController.getDepotDataService().retrieveProductsPD();
-
 		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
 		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();

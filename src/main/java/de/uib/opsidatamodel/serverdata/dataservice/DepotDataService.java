@@ -13,7 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeSet;
 
 import de.uib.configed.type.OpsiPackage;
@@ -102,25 +101,6 @@ public class DepotDataService {
 		}
 
 		return depotPropertiesForPermittedDepots;
-	}
-
-	public void retrieveProductsPD() {
-		retrieveDepotProductsPD(cacheManager.getCachedData(CacheIdentifier.DEPOT, String.class));
-	}
-
-	private void retrieveDepotProductsPD(String depotId) {
-		Logging.debug(this, "retrieveDepotProducts for " + depotId);
-
-		// we don't have a productsgroupsFullPermission.
-		List<String> netbootProductNames = productDataService.getAllNetbootProductNames(depotId);
-		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
-		if (permittedProducts != null) {
-			netbootProductNames.retainAll(permittedProducts);
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.ALL_NETBOOT_PRODUCT_NAMES, netbootProductNames);
-		cacheManager.setCachedData(CacheIdentifier.ALL_LOCALBOOT_PRODUCT_NAMES,
-				productDataService.getAllLocalbootProductNames(depotId));
 	}
 
 	public List<String> getAllDepotsWithIdenticalProductStock(String depot) {
