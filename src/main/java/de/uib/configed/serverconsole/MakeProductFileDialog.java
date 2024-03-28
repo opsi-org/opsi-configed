@@ -63,7 +63,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	public MakeProductFileDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.title"), false);
 		this.configedMain = configedMain;
-		autocompletion = new CompletionComboButton(configedMain);
+		autocompletion = new CompletionComboButton();
 		initGUI();
 
 		filename = "";

@@ -20,20 +20,14 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.CompletionComboBox;
-import de.uib.configed.serverconsole.command.CommandExecutor;
-import de.uib.configed.serverconsole.command.CommandFactory;
-import de.uib.configed.serverconsole.command.SingleCommandTemplate;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utilities.WebDAVClient;
 import de.uib.utilities.logging.Logging;
 
 public class CompletionComboButton {
-	private static final String ROOT_DIRECTORY = "/";
-	private static final String HOME_DIRECTORY = "~";
-
 	private JComboBox<String> combobox;
 	private JButton button;
 	private JTextField textfield;
@@ -47,20 +41,16 @@ public class CompletionComboButton {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private ConfigedMain configedMain;
-
-	public CompletionComboButton(ConfigedMain configedMain) {
-		this(configedMain, null, null, null);
+	public CompletionComboButton() {
+		this(null, null, null);
 	}
 
-	public CompletionComboButton(ConfigedMain configedMain, List<String> values) {
-		this(configedMain, values, null, null);
+	public CompletionComboButton(List<String> values) {
+		this(values, null, null);
 	}
 
-	public CompletionComboButton(ConfigedMain configedMain, List<String> values, String searchSpecificFiles,
-			String comboboxDefaultPath) {
+	public CompletionComboButton(List<String> values, String searchSpecificFiles, String comboboxDefaultPath) {
 		Logging.info(this.getClass(), "instance created");
-		this.configedMain = configedMain;
 		this.searchSpecificFiles = searchSpecificFiles;
 		this.comboboxDefaultPath = comboboxDefaultPath;
 		init(values);
@@ -104,11 +94,9 @@ public class CompletionComboButton {
 
 		if (comboboxDefaultPath != null) {
 			defaultvalues.add(comboboxDefaultPath);
-			defaultvalues.add(ROOT_DIRECTORY);
 			defaultvalues.add(opsiRepo);
 		} else {
 			defaultvalues.add(opsiRepo);
-			defaultvalues.add(ROOT_DIRECTORY);
 		}
 		if (defvalues != null) {
 			for (String elem : defvalues) {
@@ -166,11 +154,10 @@ public class CompletionComboButton {
 		enableComponents(false);
 
 		String strcbtext = combobox.getEditor().getItem().toString();
-		if (strcbtext != null && !strcbtext.isEmpty()
-				&& !strcbtext.substring(strcbtext.length() - 1).equals(ROOT_DIRECTORY)) {
+		if (strcbtext != null && !strcbtext.isEmpty() && !"/".equals(strcbtext.substring(strcbtext.length() - 1))) {
 			combobox.removeItem(strcbtext);
 			Logging.info(this, "doButtonAction combo.removeItem(" + strcbtext + ")");
-			strcbtext = strcbtext + ROOT_DIRECTORY;
+			strcbtext = strcbtext + "/";
 			combobox.addItem(strcbtext);
 			Logging.info(this, "doButtonAction combo.additem(" + strcbtext + ")");
 			combobox.setSelectedItem(strcbtext);
@@ -217,11 +204,8 @@ public class CompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-				String result = getDirectories(curdir);
-				if (result == null || result.isEmpty()) {
-					result = HOME_DIRECTORY;
-				}
-
+				WebDAVClient webDAVClient = new WebDAVClient();
+				List<String> result = webDAVClient.getDirectoriesIn(curdir);
 				setItems(result, curdir);
 				enableComponents(true);
 			}
@@ -232,37 +216,12 @@ public class CompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-				String result = getDirectories(curdir);
-				if (result == null || result.isEmpty()) {
-					result = ROOT_DIRECTORY;
-				}
-				String tempResult = getFiles(curdir);
-				if (tempResult != null && !"null".equals(tempResult.trim())) {
-					result += tempResult;
-				}
-
+				WebDAVClient webDAVClient = new WebDAVClient();
+				List<String> result = webDAVClient.getDirectoriesAndFilesIn(curdir);
 				setItems(result, curdir);
 				enableComponents(true);
 			}
 		}.start();
-	}
-
-	private String getDirectories(String curdir) {
-		SingleCommandTemplate getDirectoriesCommand = new SingleCommandTemplate(
-				CommandFactory.STRING_COMMAND_GET_DIRECTORIES.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY,
-						curdir));
-		CommandExecutor executor = new CommandExecutor(configedMain, false);
-		return executor.executeSingleCommand(getDirectoriesCommand);
-	}
-
-	private String getFiles(String curdir) {
-		SingleCommandTemplate getFilesCommand = new SingleCommandTemplate(CommandFactory.STRING_COMMAND_GET_OPSI_FILES
-				.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
-
-		////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
-		// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
-		CommandExecutor executor = new CommandExecutor(configedMain, false);
-		return executor.executeSingleCommand(getFilesCommand);
 	}
 
 	private boolean containsInDefaults(String other) {
@@ -271,8 +230,8 @@ public class CompletionComboButton {
 		return contains;
 	}
 
-	private final void setItems(String result, final String curdir) {
-		if (result == null) {
+	private final void setItems(List<String> items, final String curdir) {
+		if (items == null) {
 			Logging.warning("getDirectoriesIn could not find directories in " + curdir);
 		} else {
 			combobox.removeAllItems();
@@ -286,7 +245,7 @@ public class CompletionComboButton {
 			}
 
 			Logging.debug(this, "setItems add " + curDirLocated);
-			for (String item : result.split("\n")) {
+			for (String item : items) {
 				Logging.debug(this, "setItems add " + item);
 				if (item.contains("//")) {
 					combobox.addItem(item.replace("//", "/"));
@@ -322,12 +281,11 @@ public class CompletionComboButton {
 			String text = getText().trim();
 			String basicPath = autocompletion.getBasicPath();
 
-			// könnte eigtl raus. funktiniert sonst aber nicht...
 			if (!basicPath.isEmpty() && !text.isEmpty()) {
 				basicPath = basicPath.replace("//", "/");
 				text = text.replace("//", "/");
 
-				if (text.startsWith(basicPath) && !text.equals(basicPath) && !basicPath.equals(ROOT_DIRECTORY)) {
+				if (text.startsWith(basicPath) && !text.equals(basicPath) && !"/".equals(basicPath)) {
 					setText(text.replace(basicPath, ""));
 				}
 			}

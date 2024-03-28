@@ -68,7 +68,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		jLabelCompareMD5Sum.setText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetCompareMD5Sum"));
 
-		CompletionComboButton autocompletion = new CompletionComboButton(configedMain, additionalDefaultPaths);
+		CompletionComboButton autocompletion = new CompletionComboButton(additionalDefaultPaths);
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.addItem(workbench);
 		jComboBoxAutoCompletion.setSelectedItem(workbench);

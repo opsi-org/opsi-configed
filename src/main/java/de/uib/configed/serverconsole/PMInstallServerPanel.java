@@ -28,7 +28,7 @@ public class PMInstallServerPanel extends PMInstallPanel {
 
 	public PMInstallServerPanel(ConfigedMain configedMain, String fullPathToPackage) {
 		super();
-		autocompletion = new CompletionComboButton(configedMain, additionalDefaultPaths, ".opsi", fullPathToPackage);
+		autocompletion = new CompletionComboButton(additionalDefaultPaths, ".opsi", fullPathToPackage);
 
 		initComponents();
 		setPackagePath(fullPathToPackage);

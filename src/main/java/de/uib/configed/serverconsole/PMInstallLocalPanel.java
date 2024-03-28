@@ -36,7 +36,7 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 
 	public PMInstallLocalPanel(ConfigedMain configedMain) {
 		super();
-		autocompletion = new CompletionComboButton(configedMain, additionalDefaultPaths);
+		autocompletion = new CompletionComboButton(additionalDefaultPaths);
 		initComponents();
 		initLayout();
 	}

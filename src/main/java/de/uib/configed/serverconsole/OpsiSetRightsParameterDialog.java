@@ -54,7 +54,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 
 	private void init() {
 		additionalDefaultPaths.add(CommandFactory.OPSI_PATH_VAR_DEPOT);
-		completion = new CompletionComboButton(configedMain, additionalDefaultPaths);
+		completion = new CompletionComboButton(additionalDefaultPaths);
 
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);

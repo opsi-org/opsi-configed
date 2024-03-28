@@ -64,7 +64,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 	public CurlParameterDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("CurlParameterDialog.title"), false);
 		this.configedMain = configedMain;
-		this.completion = new CompletionComboButton(configedMain);
+		this.completion = new CompletionComboButton();
 
 		init();
 		initLayout();
