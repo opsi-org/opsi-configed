@@ -370,12 +370,7 @@ public final class TerminalFrame implements MessagebusListener {
 		widget.setViewRestricted(true);
 	}
 
-	public void uploadFile(File file, String destinationDir, boolean visualizeProgress, Runnable callback) {
-		FileUploadQueue queue = new FileUploadQueue();
-		queue.add(file);
-		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
-		BackgroundFileUploader fileUploader = new BackgroundFileUploader(this, widget, queue, destinationDir,
-				visualizeProgress, callback);
+	public void uploadFile(AbstractBackgroundFileUploader fileUploader) {
 		fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + 1);
 		fileUploader.execute();
 	}

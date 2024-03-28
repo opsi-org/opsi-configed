@@ -452,4 +452,18 @@ public final class Utils {
 		f.setVisible(true);
 		return f.getResult() == 2;
 	}
+
+	public static boolean hasPort(String host) {
+		boolean result = false;
+
+		if (host.contains("[") && host.contains("]")) {
+			Logging.info("Host is IPv6: " + host);
+			result = host.indexOf(":", host.indexOf("]")) != -1;
+		} else {
+			Logging.info("Host is either IPv4 or FQDN: " + host);
+			result = host.contains(":");
+		}
+
+		return result;
+	}
 }

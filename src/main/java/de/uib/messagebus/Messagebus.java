@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.CertificateValidator;
 import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
@@ -129,8 +130,8 @@ public class Messagebus implements MessagebusListener {
 		String protocol = "wss";
 		String host = ConfigedMain.getHost();
 
-		if (!hasPort(host)) {
-			host = host + ":4447";
+		if (!Utils.hasPort(host)) {
+			host = host + ":" + Globals.DEFAULT_PORT;
 			Logging.info(this, "Host doesn't have specified port (using default): " + host);
 		} else {
 			Logging.info(this, "Host does have specified port (using specified port): " + host);
@@ -140,20 +141,6 @@ public class Messagebus implements MessagebusListener {
 		Logging.info(this, "Connecting to messagebus using the following URL: " + url);
 
 		return url;
-	}
-
-	private boolean hasPort(String host) {
-		boolean result = false;
-
-		if (host.contains("[") && host.contains("]")) {
-			Logging.info(this, "Host is IPv6: " + host);
-			result = host.indexOf(":", host.indexOf("]")) != -1;
-		} else {
-			Logging.info(this, "Host is either IPv4 or FQDN: " + host);
-			result = host.contains(":");
-		}
-
-		return result;
 	}
 
 	private ServerFacade getServerFacadeExecutor() {

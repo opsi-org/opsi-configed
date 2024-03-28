@@ -18,6 +18,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.TerminalFrame;
+import de.uib.configed.terminal.WebDAVBackgroundFileUploader;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.ThreadLocker;
@@ -84,8 +85,10 @@ public class CommandExecutor implements MessagebusListener {
 	private void execute(SingleCommand command) {
 		if (command instanceof SingleCommandFileUpload) {
 			SingleCommandFileUpload fileUploadCommand = (SingleCommandFileUpload) command;
-			terminalFrame.uploadFile(new File(fileUploadCommand.getFullSourcePath()), fileUploadCommand.getTargetPath(),
-					withGUI, () -> locker.unlock());
+			WebDAVBackgroundFileUploader fileUploader = new WebDAVBackgroundFileUploader(terminalFrame,
+					new File(fileUploadCommand.getFullSourcePath()), fileUploadCommand.getTargetPath(), withGUI,
+					() -> locker.unlock());
+			terminalFrame.uploadFile(fileUploader);
 			locker.lock();
 		} else {
 			CommandParameterMethods parameterMethods = CommandFactory.getInstance(configedMain)

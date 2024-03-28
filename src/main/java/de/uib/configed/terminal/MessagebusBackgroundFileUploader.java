@@ -13,13 +13,9 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
@@ -29,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.utilities.logging.Logging;
 
-public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
+public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUploader {
 	private static final int MAX_CHUNK_SIZE = 1_500_000;
 	private static final int MIN_CHUNK_SIZE = 8000;
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
@@ -37,57 +33,26 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private static final int LATENCY_WINDOW_SIZE = 10;
 
 	private FileUploadQueue queue;
-	private TerminalFrame terminal;
 	private TerminalWidget terminalWidget;
 	private String destinationDir;
 
-	private File currentFile;
-	private int totalFilesToUpload;
-	private int uploadedFiles;
-
 	private boolean visualizeProgress;
 
-	private Runnable callback;
-
-	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue) {
-		this(terminal, terminalWidget, queue, null, false, null);
+	public MessagebusBackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget,
+			FileUploadQueue queue) {
+		this(terminal, terminalWidget, queue, null, null);
 	}
 
-	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue,
-			String destinationDir, Runnable callback) {
-		this(terminal, terminalWidget, queue, destinationDir, false, callback);
-	}
-
-	public BackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget, FileUploadQueue queue,
-			String destinationDir, boolean visualizeProgress, Runnable callback) {
-		this.terminal = terminal;
+	public MessagebusBackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget,
+			FileUploadQueue queue, String destinationDir, Runnable callback) {
+		super(terminal, true, callback);
 		this.terminalWidget = terminalWidget;
 		this.queue = queue;
 		this.destinationDir = destinationDir;
-		this.visualizeProgress = visualizeProgress;
-		this.callback = callback;
 	}
 
 	@Override
-	protected void process(List<Integer> chunkSizes) {
-		if (!visualizeProgress) {
-			return;
-		}
-		for (Integer chunkSize : chunkSizes) {
-			if (currentFile == null) {
-				return;
-			}
-
-			try {
-				terminal.updateFileUploadProgressBar(chunkSize, (int) Files.size(currentFile.toPath()));
-			} catch (IOException e) {
-				Logging.warning(this, "unable to retrieve file size: ", e);
-			}
-		}
-	}
-
-	@Override
-	protected Void doInBackground() {
+	protected void upload() {
 		File file = null;
 
 		while ((file = queue.get()) != null) {
@@ -109,8 +74,6 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 			queue.remove(file);
 		}
-
-		return null;
 	}
 
 	private void uploadFileInChunks(File file, FileChannel channel, String fileId) throws IOException {
@@ -227,27 +190,5 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			Logging.warning(this, "thread was interrupted");
 			Thread.currentThread().interrupt();
 		}
-	}
-
-	@Override
-	protected void done() {
-		if (visualizeProgress) {
-			terminal.showFileUploadProgress(false);
-		}
-		totalFilesToUpload = 0;
-		uploadedFiles = 0;
-		callback.run();
-	}
-
-	public int getTotalFilesToUpload() {
-		return totalFilesToUpload;
-	}
-
-	public void setTotalFilesToUpload(int totalFiles) {
-		this.totalFilesToUpload = totalFiles;
-	}
-
-	public void updateTotalFilesToUpload() {
-		SwingUtilities.invokeLater(() -> terminal.indicateFileUpload(currentFile, uploadedFiles, totalFilesToUpload));
 	}
 }
