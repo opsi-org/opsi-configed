@@ -348,5 +348,13 @@
             <version>1.9</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.lookfirst/sardine -->
+        <dependency>
+            <groupId>com.github.lookfirst</groupId>
+            <artifactId>sardine</artifactId>
+            <version>5.12</version>
+        </dependency>
+
+
     </dependencies>
 </project>
