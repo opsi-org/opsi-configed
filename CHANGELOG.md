@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.2.11] - 2024-03-28
 ## Fixed
 - Correctly init ClientTree when reloading and when user roles have been changed
 - User roles product group access
