@@ -106,6 +106,30 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		setDropMode(DropMode.ON);
 	}
 
+	public void reInitTree() {
+		String nodeToSelect;
+
+		if (getSelectionPath() == null) {
+			nodeToSelect = null;
+		} else if (((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getAllowsChildren()) {
+			nodeToSelect = getSelectionPath().getLastPathComponent().toString();
+		} else {
+			nodeToSelect = ((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getParent().toString();
+		}
+
+		groupNodes.clear();
+		groups.clear();
+		rootNode.removeAllChildren();
+		createTopNodes();
+		setModel(new DefaultTreeModel(rootNode));
+
+		if (groupNodes.get(nodeToSelect) != null) {
+			TreePath pathToSelect = new TreePath(getModel().getPathToRoot(groupNodes.get(nodeToSelect)));
+			setSelectionPath(pathToSelect);
+			expandPath(pathToSelect);
+		}
+	}
+
 	abstract void createTopNodes();
 
 	abstract void setGroupAndSelect(DefaultMutableTreeNode groupNode);

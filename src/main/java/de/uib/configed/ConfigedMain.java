@@ -2628,8 +2628,9 @@ public class ConfigedMain implements MessagebusListener {
 				mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients().rebuildModel();
 			}
 
-			fetchDepots();
 			productTree.reInitTree();
+			clientTree.reInitTree();
+			fetchDepots();
 			setEditingTarget(editingTarget);
 
 			// if depot selection changed, we adapt the clients
