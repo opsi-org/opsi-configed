@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.x.x] - 2024-xx-xx
+## Fixed
+- Correctly init ClientTree when reloading and when user roles have been changed
+
 ## [4.3.2.10] - 2024-03-26
 ## Fixed
 - Invalid Range error when updating product table (Manually or by messagebus)
