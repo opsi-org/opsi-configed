@@ -82,8 +82,11 @@ public class ProductTree extends AbstractGroupTree {
 			}
 		}
 
-		for (Entry<String, Set<String>> groupMembers : persistenceController.getGroupDataService()
-				.getFProductGroup2Members().entrySet()) {
+		Map<String, Set<String>> allowedGroups2Members = persistenceController.getGroupDataService()
+				.getFProductGroup2Members();
+		allowedGroups2Members.keySet().retainAll(nodeMap.keySet());
+
+		for (Entry<String, Set<String>> groupMembers : allowedGroups2Members.entrySet()) {
 			DefaultMutableTreeNode groupNode = nodeMap.get(groupMembers.getKey());
 
 			for (String productId : groupMembers.getValue()) {
@@ -93,8 +96,15 @@ public class ProductTree extends AbstractGroupTree {
 			}
 		}
 
-		for (String productId : new TreeSet<>(persistenceController.getProductDataService()
-				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet())) {
+		Set<String> allPermittedProducts = new TreeSet<>(persistenceController.getProductDataService()
+				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet());
+
+		if (persistenceController.getUserRolesConfigDataService().getPermittedProductsPD() != null) {
+			allPermittedProducts
+					.retainAll(persistenceController.getUserRolesConfigDataService().getPermittedProductsPD());
+		}
+
+		for (String productId : allPermittedProducts) {
 			groupNodeFullList.add(new DefaultMutableTreeNode(productId, false));
 		}
 

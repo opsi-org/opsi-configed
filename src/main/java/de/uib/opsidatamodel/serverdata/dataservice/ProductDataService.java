@@ -155,7 +155,7 @@ public class ProductDataService {
 		}
 		filterPermittedProducts(localbootProductNames);
 		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
-		return new ArrayList<>(localbootProductNames);
+		return localbootProductNames;
 	}
 
 	private void filterPermittedProducts(List<String> products) {
