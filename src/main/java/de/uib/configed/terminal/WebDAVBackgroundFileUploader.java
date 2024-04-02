@@ -36,7 +36,7 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 			}
 			ProgressTrackerInputStream progressTrackerInputStream = new ProgressTrackerInputStream(inputStream);
 			WebDAVClient webDAVClient = new WebDAVClient();
-			webDAVClient.uploadFile(destinationDir + currentFile.getName(), progressTrackerInputStream);
+			webDAVClient.uploadFile(destinationDir + "/" + currentFile.getName(), progressTrackerInputStream);
 		} catch (IOException e) {
 			Logging.error(this, "Unable to upload file to a server through WebDAV", e);
 		}
