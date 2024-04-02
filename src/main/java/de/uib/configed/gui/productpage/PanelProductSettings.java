@@ -78,8 +78,6 @@ public class PanelProductSettings extends JSplitPane {
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
-	private Map<String, Boolean> productDisplayFields;
-
 	private JPopupMenu popup;
 	private JMenuItem itemOnDemand;
 
@@ -95,12 +93,11 @@ public class PanelProductSettings extends JSplitPane {
 			.getPersistenceController();
 
 	public PanelProductSettings(String title, ConfigedMain configedMain, ProductTree productTree,
-			Map<String, Boolean> productDisplayFields, ProductSettingsType type) {
+			ProductSettingsType type) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
 		this.productTree = productTree;
 		this.configedMain = configedMain;
-		this.productDisplayFields = productDisplayFields;
 		this.type = type;
 		init();
 
@@ -189,7 +186,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		setRightComponent(infoPane);
 
-		producePopupMenu(productDisplayFields);
+		producePopupMenu();
 
 		paneProducts.addMouseListener(new PopupMouseListener(popup));
 		tableProducts.addMouseListener(new PopupMouseListener(popup));
@@ -201,7 +198,7 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.updateSearchFields();
 	}
 
-	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
+	private void producePopupMenu() {
 		popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
@@ -272,24 +269,30 @@ public class PanelProductSettings extends JSplitPane {
 		popup.addSeparator();
 		popup.add(sub);
 
-		for (Entry<String, Boolean> checkColumn : checkColumns.entrySet()) {
-			if ("productId".equals(checkColumn.getKey())) {
+		for (Entry<String, Boolean> productDisplayField : getProductDisplayFieldsBasedOnType(type).entrySet()) {
+			if ("productId".equals(productDisplayField.getKey())) {
 				// fixed column
 				continue;
 			}
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
-			item.setText(InstallationStateTableModel.getColumnTitle(checkColumn.getKey()));
-			item.setState(checkColumn.getValue());
+			item.setText(InstallationStateTableModel.getColumnTitle(productDisplayField.getKey()));
+			item.setState(productDisplayField.getValue());
 			item.addItemListener((ItemEvent e) -> {
-				boolean oldstate = checkColumn.getValue();
-				checkColumns.put(checkColumn.getKey(), !oldstate);
+				boolean oldstate = productDisplayField.getValue();
+				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
 				configedMain.requestReloadStatesAndActions();
 				configedMain.resetView(configedMain.getViewIndex());
 			});
 
 			sub.add(item);
 		}
+	}
+
+	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
+		return type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+				? persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts()
+				: persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts();
 	}
 
 	private void createReport() {
