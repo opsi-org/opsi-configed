@@ -116,6 +116,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.tabbedpane.TabClient;
@@ -1308,12 +1309,16 @@ public class ConfigedMain implements MessagebusListener {
 
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
+		List<String> displayFields = new ArrayList<>();
 		for (Entry<String, Boolean> entry : persistenceController.getHostDataService().getHostDisplayFields()
 				.entrySet()) {
 			if (Boolean.TRUE.equals(entry.getValue())) {
 				model.addColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
+				displayFields.add(entry.getKey());
 			}
 		}
+
+		UserPreferences.set(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
 
 		Logging.info(this, "buildPclistTableModel host_displayFields "
 				+ persistenceController.getHostDataService().getHostDisplayFields());
@@ -2072,6 +2077,9 @@ public class ConfigedMain implements MessagebusListener {
 			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
 		}
 
+		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
+				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
+				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
 		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(this, changedProductStates,
 				productNames, statesAndActions, possibleActions,
 				persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),

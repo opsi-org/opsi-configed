@@ -38,6 +38,7 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
+import de.uib.utilities.savedstates.UserPreferences;
 import utils.Utils;
 
 /**
@@ -617,8 +618,11 @@ public class HostDataService {
 		// always shown, we put it here because of ordering and repeat the statement
 		// after the loop if it has been set to false
 
+		List<String> userSavedDisplayFields = Arrays
+				.asList(UserPreferences.get(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS).split(","));
 		for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
-			hostDisplayFields.put(field, configuredByService.indexOf(field) > -1);
+			hostDisplayFields.put(field,
+					configuredByService.indexOf(field) > -1 || userSavedDisplayFields.contains(field));
 		}
 
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
