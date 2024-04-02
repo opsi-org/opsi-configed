@@ -45,10 +45,6 @@ public class WebDAVClient {
 		sardine.setCredentials(ConfigedMain.getUser(), ConfigedMain.getPassword());
 	}
 
-	private String getBaseURL() {
-		return "https://" + ConfigedMain.getHost() + ":" + getPortFromHost(ConfigedMain.getHost()) + "/dav/";
-	}
-
 	private int getPortFromHost(String host) {
 		int port = Globals.DEFAULT_PORT;
 
@@ -93,15 +89,18 @@ public class WebDAVClient {
 	public List<String> getDirectoriesAndFilesIn(String currentDirectory) {
 		List<String> directoriesAndFiles = new ArrayList<>();
 		try {
-			List<DavResource> resources = sardine.list(getBaseURL() + "/dav/" + currentDirectory);
+			List<DavResource> resources = sardine.list(getBaseURL() + currentDirectory);
 			for (DavResource resource : resources) {
 				directoriesAndFiles.add(resource.getPath().replace("/dav/", ""));
 			}
 		} catch (IOException e) {
-			Logging.error(this,
-					"Failed to retrieve directories and files from " + getBaseURL() + "/dav/" + currentDirectory, e);
+			Logging.error(this, "Failed to retrieve directories and files from " + getBaseURL() + currentDirectory, e);
 		}
 		return directoriesAndFiles;
+	}
+
+	private String getBaseURL() {
+		return "https://" + ConfigedMain.getHost() + ":" + getPortFromHost(ConfigedMain.getHost()) + "/dav/";
 	}
 
 	private static class SSLSocketFactoryWrapper implements ConnectionSocketFactory {
