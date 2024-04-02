@@ -31,6 +31,11 @@ public class SingleCommandModulesUpload extends SingleCommandFileUpload {
 	}
 
 	@Override
+	public String getCommand() {
+		return Configed.getResourceValue("SingleCommandModulesUpload.uploadingModulesFile");
+	}
+
+	@Override
 	public String getMenuText() {
 		return Configed.getResourceValue("SSHConnection.command.modulesupload");
 	}

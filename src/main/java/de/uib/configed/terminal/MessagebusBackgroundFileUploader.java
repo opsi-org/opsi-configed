@@ -40,12 +40,12 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 
 	public MessagebusBackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget,
 			FileUploadQueue queue) {
-		this(terminal, terminalWidget, queue, null, null);
+		this(terminal, terminalWidget, queue, null);
 	}
 
 	public MessagebusBackgroundFileUploader(TerminalFrame terminal, TerminalWidget terminalWidget,
-			FileUploadQueue queue, String destinationDir, Runnable callback) {
-		super(terminal, true, callback);
+			FileUploadQueue queue, String destinationDir) {
+		super(terminal, true);
 		this.terminalWidget = terminalWidget;
 		this.queue = queue;
 		this.destinationDir = destinationDir;
@@ -176,9 +176,12 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 			terminalWidget.getMessagebus().sendMessage(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
+			isFileUploadSuccessfull = true;
 		} catch (JsonProcessingException ex) {
+			isFileUploadSuccessfull = false;
 			Logging.warning(this, "error occurred while processing JSON: ", ex);
 		} catch (IOException ex) {
+			isFileUploadSuccessfull = false;
 			Logging.warning(this, "unable to retrieve file size: ", ex);
 		}
 	}

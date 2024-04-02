@@ -86,8 +86,19 @@ public class CommandExecutor implements MessagebusListener {
 		if (command instanceof SingleCommandFileUpload) {
 			SingleCommandFileUpload fileUploadCommand = (SingleCommandFileUpload) command;
 			WebDAVBackgroundFileUploader fileUploader = new WebDAVBackgroundFileUploader(terminalFrame,
-					new File(fileUploadCommand.getFullSourcePath()), fileUploadCommand.getTargetPath(), withGUI,
-					() -> locker.unlock());
+					new File(fileUploadCommand.getFullSourcePath()), fileUploadCommand.getTargetPath(), withGUI);
+			fileUploader.setOnDone(() -> {
+				String message = fileUploader.isFileUploaded()
+						? String.format(Configed.getResourceValue("CommandExecutor.fileUploadSuccessfull"),
+								fileUploadCommand.getSourceFilename(), fileUploadCommand.getTargetPath())
+						: Configed.getResourceValue("CommandExecutor.fileUploadUnsuccessfull");
+				terminalFrame.writeToWidget((message + "\r\n").getBytes());
+				terminalFrame.writeToWidget("\r\n".getBytes());
+				locker.unlock();
+			});
+			commandNumber++;
+			terminalFrame.writeToWidget(
+					("(" + commandNumber + ") " + fileUploadCommand.getSecuredCommand() + "\r\n").getBytes());
 			terminalFrame.uploadFile(fileUploader);
 			locker.lock();
 		} else {
@@ -173,8 +184,7 @@ public class CommandExecutor implements MessagebusListener {
 				String reset = "\u001B[0m";
 				String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(commandToExecute.getSecuredCommand())
 						.replaceAll(" ");
-				String errorMessage = String.format(
-						Configed.getResourceValue("TerminalCommandExecutor.processErrorMessage"),
+				String errorMessage = String.format(Configed.getResourceValue("CommandExecutor.processErrorMessage"),
 						commandRepresentation);
 				terminalFrame.writeToWidget(
 						(red + "(" + commandNumber + ") " + errorMessage + " " + error + reset).getBytes());

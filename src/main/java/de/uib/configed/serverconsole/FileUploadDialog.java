@@ -28,9 +28,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandCurl;
-import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -182,11 +182,13 @@ public class FileUploadDialog extends FGeneralDialog {
 		int returnVal = jFileChooserLocal.showOpenDialog(inputPanel);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			String pathModules = jFileChooserLocal.getSelectedFile().getPath();
-			jTextFieldLocalPath.setText(pathModules);
+			String modulesPath = jFileChooserLocal.getSelectedFile().getPath();
+			String modulesName = jFileChooserLocal.getSelectedFile().getName();
+			jTextFieldLocalPath.setText(modulesPath);
 
-			command.setFullSourcePath(pathModules);
-			jTextFieldLocalPath.setCaretPosition(pathModules.length());
+			command.setSourceFilename(modulesName);
+			command.setFullSourcePath(modulesPath);
+			jTextFieldLocalPath.setCaretPosition(modulesPath.length());
 		} else {
 			jTextFieldLocalPath.setText("");
 		}

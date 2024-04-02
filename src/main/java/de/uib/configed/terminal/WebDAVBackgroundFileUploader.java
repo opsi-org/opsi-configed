@@ -20,12 +20,11 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 	private boolean visualizeProgress;
 
 	public WebDAVBackgroundFileUploader(TerminalFrame terminal, File file, String destinationDir,
-			boolean visualizeProgress, Runnable callback) {
-		super(terminal, visualizeProgress, callback);
+			boolean visualizeProgress) {
+		super(terminal, visualizeProgress);
 		this.currentFile = file;
 		this.destinationDir = destinationDir;
 		this.visualizeProgress = visualizeProgress;
-		this.callback = callback;
 	}
 
 	@Override
@@ -37,7 +36,9 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 			ProgressTrackerInputStream progressTrackerInputStream = new ProgressTrackerInputStream(inputStream);
 			WebDAVClient webDAVClient = new WebDAVClient();
 			webDAVClient.uploadFile(destinationDir + "/" + currentFile.getName(), progressTrackerInputStream);
+			isFileUploadSuccessfull = true;
 		} catch (IOException e) {
+			isFileUploadSuccessfull = false;
 			Logging.error(this, "Unable to upload file to a server through WebDAV", e);
 		}
 	}

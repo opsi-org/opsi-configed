@@ -123,7 +123,8 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		}
 
 		SingleCommandFileUpload com1 = new SingleCommandFileUpload("PackegeUpload");
-		com1.setCommand("local file upload to server");
+		com1.setCommand(Configed.getResourceValue("PMInstallLocalPanel.uploadingPackage"));
+		com1.setSourceFilename(getFilename(jTextFieldPath.getText()));
 		com1.setFullSourcePath(jTextFieldPath.getText());
 		com1.setTargetPath((String) jComboBoxAutoCompletion.getSelectedItem());
 		com1.setTargetFilename(getFilename(com1.getFullSourcePath()));

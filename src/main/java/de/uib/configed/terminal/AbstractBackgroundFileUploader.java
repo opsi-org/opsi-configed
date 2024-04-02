@@ -22,22 +22,22 @@ public abstract class AbstractBackgroundFileUploader extends SwingWorker<Void, I
 	protected File currentFile;
 	private int totalFilesToUpload;
 	protected int uploadedFiles;
+	protected boolean isFileUploadSuccessfull;
 
 	private boolean visualizeProgress;
 
 	protected Runnable callback;
 
 	protected AbstractBackgroundFileUploader(TerminalFrame terminal) {
-		this(terminal, null);
+		this(terminal, false);
 	}
 
-	protected AbstractBackgroundFileUploader(TerminalFrame terminal, Runnable callback) {
-		this(terminal, false, callback);
-	}
-
-	protected AbstractBackgroundFileUploader(TerminalFrame terminal, boolean visualizeProgress, Runnable callback) {
+	protected AbstractBackgroundFileUploader(TerminalFrame terminal, boolean visualizeProgress) {
 		this.terminal = terminal;
 		this.visualizeProgress = visualizeProgress;
+	}
+
+	public void setOnDone(Runnable callback) {
 		this.callback = callback;
 	}
 
@@ -89,5 +89,9 @@ public abstract class AbstractBackgroundFileUploader extends SwingWorker<Void, I
 
 	public void updateTotalFilesToUpload() {
 		SwingUtilities.invokeLater(() -> terminal.indicateFileUpload(currentFile, uploadedFiles, totalFilesToUpload));
+	}
+
+	public boolean isFileUploaded() {
+		return isFileUploadSuccessfull;
 	}
 }

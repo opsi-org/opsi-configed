@@ -164,7 +164,7 @@ public class SingleCommandFileUpload implements SingleCommand, SingleCommandNeed
 
 	@Override
 	public String getCommand() {
-		return "# this is no usually command";
+		return command;
 	}
 
 	@Override
