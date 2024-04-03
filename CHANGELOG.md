@@ -1,4 +1,11 @@
 # Changelog
+## [4.3.2.XX] - 2024-XX-XX
+## Fixed
+- Can't change table column visibility in product table after full reload
+
+## Changed
+- Save user preferences on table's display fields
+
 ## [4.3.2.11] - 2024-03-28
 ## Fixed
 - Correctly init ClientTree when reloading and when user roles have been changed
