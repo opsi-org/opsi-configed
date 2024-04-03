@@ -72,9 +72,9 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		group.add(jRadioButtonServer);
 		group.add(jRadioButtonCurl);
 
-		installLocalPanel = new PMInstallLocalPanel(configedMain);
-		installServerPanel = new PMInstallServerPanel(configedMain, fromMakeProductfile);
-		installCurlPanel = new PMInstallCurlPanel(configedMain);
+		installLocalPanel = new PMInstallLocalPanel();
+		installServerPanel = new PMInstallServerPanel(fromMakeProductfile);
+		installCurlPanel = new PMInstallCurlPanel();
 		installSettingsPanel = new PMInstallSettingsPanel(this);
 
 		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {

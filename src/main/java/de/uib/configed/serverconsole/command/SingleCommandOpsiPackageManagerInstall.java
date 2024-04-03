@@ -17,7 +17,6 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 	private String command;
 	private int priority = 8;
 	private FGeneralDialog dialog;
-	private boolean isMultiCommand;
 
 	private String opsiproduct = "";
 	private String depot = "";

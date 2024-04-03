@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import utils.Utils;
@@ -34,7 +33,7 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	private JButton jButtonAutoCompletion;
 	private CompletionComboButton autocompletion;
 
-	public PMInstallLocalPanel(ConfigedMain configedMain) {
+	public PMInstallLocalPanel() {
 		super();
 		autocompletion = new CompletionComboButton(additionalDefaultPaths);
 		initComponents();

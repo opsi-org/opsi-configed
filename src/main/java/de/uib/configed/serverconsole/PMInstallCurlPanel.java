@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandCurl;
@@ -46,11 +45,8 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 	private String mainDir;
 	private String urlDefText;
 
-	private ConfigedMain configedMain;
-
-	public PMInstallCurlPanel(ConfigedMain configedMain) {
+	public PMInstallCurlPanel() {
 		super();
-		this.configedMain = configedMain;
 		urlDefText = Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		initComponents();
 		initLayout();

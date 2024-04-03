@@ -55,9 +55,9 @@ public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParame
 			d = d + "/";
 		}
 		setProduct(d + getFilenameFromUrl(url));
-		Logging.debug(this.getClass(), "CommandCurl dir " + dir);
-		Logging.debug(this.getClass(), "CommandCurl url " + url);
-		Logging.debug(this.getClass(), "CommandCurl product " + getProduct());
+		Logging.debug(this.getClass(), "SingleCommandCurl dir " + dir);
+		Logging.debug(this.getClass(), "SingleCommandCurl url " + url);
+		Logging.debug(this.getClass(), "SingleCommandCurl product " + getProduct());
 		needParameter = false;
 	}
 
@@ -67,7 +67,7 @@ public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParame
 		}
 	}
 
-	public void setAuthentication(String a) {
+	public final void setAuthentication(String a) {
 		if (a != null) {
 			authentication = a;
 		}
@@ -149,7 +149,7 @@ public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParame
 		return dialog;
 	}
 
-	public void setDir(String d) {
+	public final void setDir(String d) {
 		if (!d.isEmpty()) {
 			dir = "--output-dir " + d;
 		} else {
@@ -157,7 +157,7 @@ public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParame
 		}
 	}
 
-	public void setUrl(String u) {
+	public final void setUrl(String u) {
 		if (!u.isEmpty()) {
 			url = "-O " + u;
 		} else {
@@ -165,7 +165,7 @@ public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParame
 		}
 	}
 
-	public void setVerbosity(int vSum) {
+	public final void setVerbosity(int vSum) {
 		StringBuilder v = new StringBuilder();
 		for (int i = 0; i < vSum; i++) {
 			v.append("v");
@@ -177,15 +177,15 @@ public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParame
 		}
 	}
 
-	public void setFreeInput(String fI) {
+	public final void setFreeInput(String fI) {
 		freeInput = fI;
 	}
 
-	public void setProduct(String pr) {
+	public final void setProduct(String pr) {
 		product = pr;
 	}
 
-	public String getProduct() {
+	public final String getProduct() {
 		return product;
 	}
 
@@ -194,7 +194,7 @@ public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParame
 		command = c;
 	}
 
-	public boolean checkCommand() {
+	public final boolean checkCommand() {
 		return !dir.isEmpty() && !url.isEmpty();
 	}
 

@@ -13,7 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 
@@ -26,7 +25,7 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	private JButton jButtonAutoCompletion;
 	private CompletionComboButton autocompletion;
 
-	public PMInstallServerPanel(ConfigedMain configedMain, String fullPathToPackage) {
+	public PMInstallServerPanel(String fullPathToPackage) {
 		super();
 		autocompletion = new CompletionComboButton(additionalDefaultPaths, ".opsi", fullPathToPackage);
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -96,7 +97,7 @@ public final class CommandFactory {
 		return pmethodHandler;
 	}
 
-	public SingleCommand[] getDefaultOpsiCommands() {
+	public static SingleCommand[] getDefaultOpsiCommands() {
 		return DEFAULT_OPSI_COMMANDS;
 	}
 
@@ -258,7 +259,12 @@ public final class CommandFactory {
 		List<String> jsonObjects = new ArrayList<>();
 		jsonObjects.add(menu);
 		if (persistenceController.getSSHCommandDataService().deleteSSHCommand(jsonObjects)) {
-			commandList.remove(getCommandByMenu(menu));
+			Iterator<MultiCommandTemplate> iterator = commandList.iterator();
+			while (iterator.hasNext()) {
+				if (iterator.next().equals(getCommandByMenu(menu))) {
+					iterator.remove();
+				}
+			}
 			knownMenus.remove(menu);
 		}
 	}

@@ -33,10 +33,9 @@ public class SingleCommandFileUpload implements SingleCommand, SingleCommandNeed
 	protected String command = "";
 
 	public SingleCommandFileUpload(String title) {
-		setTitle(title);
-		title = "File Upload";
+		this.title = title;
 		baseName = "File Upload";
-		command = "File Upload (via sftp)";
+		command = "File Upload (via webDAV)";
 	}
 
 	public SingleCommandFileUpload() {

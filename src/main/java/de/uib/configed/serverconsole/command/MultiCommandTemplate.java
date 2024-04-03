@@ -214,11 +214,16 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 
 	@Override
 	public boolean equals(Object o) {
+		if (this == o) {
+			Logging.debug(this, "equals object is the same instance");
+			return true;
+		}
+
 		MultiCommandTemplate com = null;
-		if (o instanceof MultiCommandTemplate) {
+		if ((o != null && o.getClass() == this.getClass())) {
 			com = (MultiCommandTemplate) o;
 		} else {
-			Logging.debug(this, "equals object is not instance of SSHCommandTemplate");
+			Logging.debug(this, "equals object is not instance of MultiCommandTemplate");
 			return false;
 		}
 

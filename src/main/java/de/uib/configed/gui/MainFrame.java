@@ -474,9 +474,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
-		final CommandFactory factory = CommandFactory.getInstance(configedMain);
-		SingleCommand[] commands = factory.getDefaultOpsiCommands();
-		for (final SingleCommand command : commands) {
+		for (final SingleCommand command : CommandFactory.getDefaultOpsiCommands()) {
 			JMenuItem jMenuOpsiCommand = new JMenuItem();
 			jMenuOpsiCommand.setText(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
