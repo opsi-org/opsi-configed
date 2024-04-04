@@ -1,7 +1,10 @@
 # Changelog
 ## [4.3.2.X] - 2024-XX-XX
 ## Fixed
-- On reload in "default properties" tab no changes are made to the table (removed packages are shown and installend packages aren't shown)
+- On reload in "default properties" tab no changes are made to the table (removed packages are shown and installed packages aren't shown)
+
+## Change
+- On reload in "localboot products" and "netboot products", installed packages are shown in and deleted packages are removed from the table
 
 ## [4.3.2.11] - 2024-03-28
 ## Fixed
