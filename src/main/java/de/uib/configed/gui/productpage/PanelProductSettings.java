@@ -53,6 +53,7 @@ import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
@@ -403,6 +404,7 @@ public class PanelProductSettings extends JSplitPane {
 	protected void reloadAction() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
+		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 		configedMain.requestReloadStatesAndActions();
 		configedMain.resetView(configedMain.getViewIndex());
 		configedMain.setDataChanged(false);
