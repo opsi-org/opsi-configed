@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.2.X] - 2024-XX-XX
+## Fixed
+- On reload in "default properties" tab no changes are made to the table (removed packages are shown and installend packages aren't shown)
+
 ## [4.3.2.11] - 2024-03-28
 ## Fixed
 - Correctly init ClientTree when reloading and when user roles have been changed
