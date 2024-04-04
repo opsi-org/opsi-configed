@@ -18,7 +18,6 @@ import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -132,12 +131,12 @@ public class PanelProductProperties extends JSplitPane {
 		@Override
 		public void reload() {
 			Logging.info(this, "reload()");
-			ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+			ConfigedMain.getMainFrame().activateLoadingCursor();;
 			if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
 				persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 			}
 			super.reload();
-			ConfigedMain.getMainFrame().setCursor(null);
+			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
 
 		@Override
