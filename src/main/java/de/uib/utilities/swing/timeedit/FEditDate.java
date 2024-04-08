@@ -17,6 +17,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEdit;
 import javafx.application.Platform;
@@ -45,13 +47,18 @@ public class FEditDate extends FEdit implements MouseListener {
 		Platform.setImplicitExit(false);
 		Platform.runLater(() -> {
 			datePicker = new DatePicker();
-			DatePickerSkin skin = new DatePickerSkin(datePicker);
 			datePicker.setOnAction((ActionEvent event) -> {
 				setDataChanged(true);
 				updateCaller(datePicker.getValue().toString());
 			});
+			DatePickerSkin skin = new DatePickerSkin(datePicker);
 			StackPane pane = new StackPane(skin.getPopupContent());
 			Scene scene = new Scene(pane);
+			if (FlatLaf.isLafDark()) {
+				scene.getStylesheets().add(getClass().getResource("/css/date-picker-dark.css").toExternalForm());
+			} else {
+				scene.getStylesheets().add(getClass().getResource("/css/date-picker-light.css").toExternalForm());
+			}
 			jfxPanel.setScene(scene);
 		});
 
