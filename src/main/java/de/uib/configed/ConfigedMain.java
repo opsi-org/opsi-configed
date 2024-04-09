@@ -1505,10 +1505,14 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
+		toggleFilterClientList(rebuildClientListTableModel, !filterClientList);
+	}
+
+	private void toggleFilterClientList(boolean rebuildClientListTableModel, boolean filterClientList) {
 		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
 				+ rebuildClientListTableModel);
 
-		filterClientList = !filterClientList;
+		this.filterClientList = filterClientList;
 		if (rebuildClientListTableModel) {
 			setRebuiltClientListTableModel(true, false, clientTable.getSelectedSet());
 		}
@@ -2626,6 +2630,7 @@ public class ConfigedMain implements MessagebusListener {
 				mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients().rebuildModel();
 			}
 
+			boolean wasFilterClientListToggled = filterClientList;
 			productTree.reInitTree();
 			clientTree.reInitTree();
 			fetchDepots();
@@ -2652,6 +2657,10 @@ public class ConfigedMain implements MessagebusListener {
 			mainFrame.setupMenuServer();
 			updateHostInfo();
 			hostInfo.resetGui();
+
+			if (wasFilterClientListToggled) {
+				toggleFilterClientList(true, true);
+			}
 		}
 
 		mainFrame.deactivateLoadingPane();
