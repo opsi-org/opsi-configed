@@ -17,6 +17,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -444,5 +445,9 @@ public final class Utils {
 		f.setMessage(message.toString());
 		f.setVisible(true);
 		return f.getResult() == 2;
+	}
+
+	public static <T> String getCollectionStringRepresentation(Collection<T> collection) {
+		return collection.toString().replace("[", "").replace("]", "");
 	}
 }
