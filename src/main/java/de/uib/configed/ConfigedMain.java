@@ -1504,11 +1504,7 @@ public class ConfigedMain implements MessagebusListener {
 		return filterClientList;
 	}
 
-	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
-		toggleFilterClientList(rebuildClientListTableModel, !filterClientList);
-	}
-
-	private void toggleFilterClientList(boolean rebuildClientListTableModel, boolean filterClientList) {
+	public void toggleFilterClientList(boolean rebuildClientListTableModel, boolean filterClientList) {
 		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
 				+ rebuildClientListTableModel);
 
@@ -2659,7 +2655,7 @@ public class ConfigedMain implements MessagebusListener {
 			hostInfo.resetGui();
 
 			if (wasFilterClientListToggled) {
-				toggleFilterClientList(true, true);
+				mainFrame.toggleClientFilterAction(true, true);
 			}
 		}
 
