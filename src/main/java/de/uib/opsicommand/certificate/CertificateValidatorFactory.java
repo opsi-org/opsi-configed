@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsicommand;
+package de.uib.opsicommand.certificate;
 
 import de.uib.utilities.logging.Logging;
 import utils.Utils;

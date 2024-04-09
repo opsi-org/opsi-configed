@@ -16,6 +16,8 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 
 import de.uib.configed.Configed;
+import de.uib.opsicommand.certificate.CertificateValidator;
+import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.utilities.logging.Logging;
 
 public class ConnectionHandler {
