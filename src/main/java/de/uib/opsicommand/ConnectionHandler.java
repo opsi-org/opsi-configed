@@ -17,7 +17,6 @@ import javax.net.ssl.SSLException;
 
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 public class ConnectionHandler {
 	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET" };
@@ -143,14 +142,7 @@ public class ConnectionHandler {
 			return null;
 		}
 
-		Logging.info(this, "certificate verification is disabled: " + Utils.isCertificateVerificationDisabled());
-		CertificateValidator certValidator = !Utils.isCertificateVerificationDisabled()
-				? CertificateValidatorFactory.createSecure()
-				: CertificateValidatorFactory.createInsecure();
-
-		Logging.info(this,
-				"using insecure certificate validator: " + (certValidator instanceof InsecureCertificateValidator));
-
+		CertificateValidator certValidator = CertificateValidatorFactory.createValidator();
 		HttpsURLConnection connection = null;
 
 		try {

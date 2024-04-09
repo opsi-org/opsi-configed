@@ -81,7 +81,7 @@ public class Messagebus implements MessagebusListener {
 			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 
-		CertificateValidator certValidator = CertificateValidatorFactory.createSecure();
+		CertificateValidator certValidator = CertificateValidatorFactory.createValidator();
 		messagebusWebSocket.setSocketFactory(certValidator.createSSLSocketFactory());
 		messagebusWebSocket.setReuseAddr(true);
 		messagebusWebSocket.setTcpNoDelay(true);
