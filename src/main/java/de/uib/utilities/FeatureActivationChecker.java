@@ -15,13 +15,13 @@ import utils.Utils;
 /**
  * The {@code FeatureActivationChecker} class provides methods to check the
  * activation status of features within an application. It allows checking if a
- * feature is available or activated, and retrieving the available features.
+ * feature is activated, and retrieving the available features.
  * <p>
  * This class is designed for scenarios where clients need to test currently in
  * development features without making them available to all clients. Features
  * can be activated for testing purposes by including them in the {@code -ff} or
- * {@code --feature-flags} configuration option. Once activated, features cannot
- * be deactivated during runtime.
+ * {@code --feature-flags} command option. Once activated, features cannot be
+ * deactivated during runtime.
  * </p>
  * <p>
  * To indicate which features are currently in development and available for
