@@ -32,7 +32,6 @@ import de.uib.utilities.logging.Logging;
  */
 public final class FeatureActivationChecker {
 	public enum Feature {
-		LOG_VIEWER, DASHBOARD, MESSAGEBUS
 	}
 
 	private static EnumSet<Feature> activatedFeatures;
