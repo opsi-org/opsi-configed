@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.2.X] - 2024-XX-XX
+## Added
+- Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
+
 ## [4.3.2.11] - 2024-03-28
 ## Fixed
 - Correctly init ClientTree when reloading and when user roles have been changed
