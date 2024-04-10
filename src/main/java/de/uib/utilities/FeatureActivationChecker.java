@@ -6,11 +6,11 @@
 
 package de.uib.utilities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Locale;
 
 import de.uib.utilities.logging.Logging;
-import utils.Utils;
 
 /**
  * The {@code FeatureActivationChecker} class provides methods to check the
@@ -24,15 +24,18 @@ import utils.Utils;
  * deactivated during runtime.
  * </p>
  * <p>
- * To indicate which features are currently in development and available for
- * testing, developers should include the feature names in the
- * {@code AVAILABLE_FEATURES} set. An empty set signifies that no features are
- * currently in development.
+ * The available features are retrieved from the {@code Feature} enum, which
+ * should contain all features available in the application. Developers can
+ * include new features by adding enum constants to the {@code Feature} enum. An
+ * empty enum signifies that no features are currently in development.
  * </p>
  */
 public final class FeatureActivationChecker {
-	private static final Set<String> AVAILABLE_FEATURES = Set.of("");
-	private static Set<String> activatedFeatures = new HashSet<>();
+	public enum Feature {
+		LOG_VIEWER, DASHBOARD, MESSAGEBUS
+	}
+
+	private static EnumSet<Feature> activatedFeatures;
 
 	private FeatureActivationChecker() {
 	}
@@ -42,22 +45,36 @@ public final class FeatureActivationChecker {
 	 *
 	 * @param activatedFeatures a set containing the names of activated features
 	 */
-	public static void setActivatedFeatures(Set<String> activatedFeatures) {
-		Set<String> nonExistentFeatures = new HashSet<>(activatedFeatures);
-		if (nonExistentFeatures.removeAll(AVAILABLE_FEATURES) || !AVAILABLE_FEATURES.containsAll(nonExistentFeatures)) {
-			Logging.info("Following features were included, but are unavailable: "
-					+ Utils.getCollectionStringRepresentation(nonExistentFeatures));
+	public static void setActivatedFeatures(String[] activatedFeatures) {
+		FeatureActivationChecker.activatedFeatures = convertToEnumSet(activatedFeatures);
+	}
+
+	private static EnumSet<Feature> convertToEnumSet(String[] featureNames) {
+		EnumSet<Feature> enumSet = EnumSet.noneOf(Feature.class);
+		for (String featureName : featureNames) {
+			try {
+				Feature feature = Feature.valueOf(featureName.toUpperCase(Locale.ROOT));
+				enumSet.add(feature);
+			} catch (IllegalArgumentException e) {
+				Logging.warning("Invalid feature name: " + featureName);
+			}
 		}
-		FeatureActivationChecker.activatedFeatures = activatedFeatures;
+		return enumSet;
 	}
 
 	/**
-	 * Retrieves the set of available features.
+	 * Retrieves a string representation of available features.
+	 * <p>
+	 * This method returns a comma-separated string containing the names of
+	 * available features defined in the {@code Feature} enum. The returned
+	 * string does not include square brackets.
+	 * </p>
 	 *
-	 * @return a set containing the names of available features
+	 * @return a string representing the names of available features
 	 */
-	public static Set<String> getAvailableFeatures() {
-		return AVAILABLE_FEATURES;
+	public static String getAvailableFeaturesAsString() {
+		String features = Arrays.toString(Feature.values());
+		return features.substring(1, features.length() - 1);
 	}
 
 	/**
@@ -67,7 +84,7 @@ public final class FeatureActivationChecker {
 	 *         otherwise
 	 */
 	public static boolean hasAvailableFeatures() {
-		return !AVAILABLE_FEATURES.contains("");
+		return Feature.values().length != 0;
 	}
 
 	/**
@@ -76,7 +93,7 @@ public final class FeatureActivationChecker {
 	 * @param feature the name of the feature to check
 	 * @return {@code true} if the feature is activated, {@code false} otherwise
 	 */
-	public static boolean isFeatureActivated(String feature) {
+	public static boolean isFeatureActivated(Feature feature) {
 		return activatedFeatures.contains(feature);
 	}
 }

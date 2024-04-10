@@ -10,8 +10,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -41,7 +39,6 @@ import de.uib.utilities.FeatureActivationChecker;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 import de.uib.utilities.savedstates.UserPreferences;
-import utils.Utils;
 
 public class Main {
 	// --------------------------------------------------------------------------------------------------------
@@ -114,8 +111,7 @@ public class Main {
 		options.addOption("ff", "feature-flags", true,
 				"A list of features to activate on start. Available features are: "
 						+ (FeatureActivationChecker.hasAvailableFeatures()
-								? Utils.getCollectionStringRepresentation(
-										FeatureActivationChecker.getAvailableFeatures())
+								? FeatureActivationChecker.getAvailableFeaturesAsString()
 								: "NONE"));
 		options.getOption("ff").setArgs(Option.UNLIMITED_VALUES);
 
@@ -187,9 +183,8 @@ public class Main {
 		}
 
 		if (cmd.hasOption("ff")) {
-			Logging.devel("fff");
 			String[] activatedFeatures = cmd.getOptionValues("ff");
-			FeatureActivationChecker.setActivatedFeatures(new HashSet<>(Arrays.asList(activatedFeatures)));
+			FeatureActivationChecker.setActivatedFeatures(activatedFeatures);
 		}
 
 		// After setting locale then we can use localization values
