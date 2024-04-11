@@ -121,6 +121,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		groups.clear();
 		rootNode.removeAllChildren();
 		createTopNodes();
+		removeTreeSelectionListener(this);
 		setModel(new DefaultTreeModel(rootNode));
 
 		if (groupNodes.get(nodeToSelect) != null) {
@@ -128,6 +129,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			setSelectionPath(pathToSelect);
 			expandPath(pathToSelect);
 		}
+		addTreeSelectionListener(this);
 	}
 
 	abstract void createTopNodes();
