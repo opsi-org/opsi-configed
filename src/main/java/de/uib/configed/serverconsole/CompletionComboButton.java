@@ -32,28 +32,22 @@ public class CompletionComboButton {
 	private JTextField textfield;
 	private Set<String> defaultvalues;
 	private String searchSpecificFiles;
-	private String comboboxDefaultPath;
 
 	public CompletionComboButton() {
-		this(null, null, null);
+		this(null, null);
 	}
 
 	public CompletionComboButton(List<String> values) {
-		this(values, null, null);
+		this(values, null);
 	}
 
-	public CompletionComboButton(List<String> values, String searchSpecificFiles, String comboboxDefaultPath) {
+	public CompletionComboButton(List<String> values, String searchSpecificFiles) {
 		Logging.info(this.getClass(), "instance created");
 		this.searchSpecificFiles = searchSpecificFiles;
-		this.comboboxDefaultPath = comboboxDefaultPath;
 		init(values);
 		createInstances();
 
 		textfield = new JTextField();
-
-		if (comboboxDefaultPath != null) {
-			textfield.setText(comboboxDefaultPath);
-		}
 
 		initCombobox();
 	}
@@ -73,15 +67,8 @@ public class CompletionComboButton {
 	}
 
 	private void init(List<String> defvalues) {
-		String opsiRepo = CommandFactory.WEBDAV_OPSI_PATH_VAR_WORKBENCH;
 		defaultvalues = new HashSet<>();
-
-		if (comboboxDefaultPath != null) {
-			defaultvalues.add(comboboxDefaultPath);
-			defaultvalues.add(opsiRepo);
-		} else {
-			defaultvalues.add(opsiRepo);
-		}
+		defaultvalues.add(CommandFactory.WEBDAV_OPSI_PATH_VAR_WORKBENCH);
 		if (defvalues != null) {
 			for (String elem : defvalues) {
 				if (elem != null && !elem.isBlank()) {
@@ -113,10 +100,6 @@ public class CompletionComboButton {
 		combobox.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.cb_serverDir.tooltip"));
 		combobox.setEditable(true);
-
-		if (comboboxDefaultPath != null) {
-			combobox.setSelectedItem(comboboxDefaultPath);
-		}
 
 		if (searchSpecificFiles != null && !searchSpecificFiles.isEmpty()) {
 			combobox.addActionListener((ActionEvent actionEvent) -> {
@@ -152,12 +135,6 @@ public class CompletionComboButton {
 		} else {
 			getDirectoriesIn(strcbtext);
 		}
-
-		setComboDefault(null);
-	}
-
-	private void setComboDefault(String value) {
-		comboboxDefaultPath = value;
 	}
 
 	public JTextField getTextField() {
@@ -238,10 +215,6 @@ public class CompletionComboButton {
 				}
 			}
 			combobox.setSelectedItem(curdir);
-		}
-		if (comboboxDefaultPath != null && !comboboxDefaultPath.isEmpty()) {
-			combobox.setSelectedItem(comboboxDefaultPath);
-			setComboDefault(null);
 		}
 	}
 

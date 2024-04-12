@@ -25,24 +25,16 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	private JButton jButtonAutoCompletion;
 	private CompletionComboButton autocompletion;
 
-	public PMInstallServerPanel(String fullPathToPackage) {
+	public PMInstallServerPanel() {
 		super();
-		autocompletion = new CompletionComboButton(additionalDefaultPaths, ".opsi", fullPathToPackage);
+		autocompletion = new CompletionComboButton(additionalDefaultPaths, ".opsi");
 
 		initComponents();
-		setPackagePath(fullPathToPackage);
 		initLayout();
 
 		jComboBoxAutoCompletion.setEnabled(true);
 		jButtonAutoCompletion.setEnabled(true);
 		jComboBoxAutoCompletion.setSelectedItem(workbench);
-	}
-
-	public final void setPackagePath(String pPath) {
-		if (!(pPath.isEmpty())) {
-			jComboBoxAutoCompletion.addItem(pPath);
-			jComboBoxAutoCompletion.setSelectedItem(pPath);
-		}
 	}
 
 	private void initComponents() {

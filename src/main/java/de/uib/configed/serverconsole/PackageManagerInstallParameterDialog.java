@@ -39,17 +39,11 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 	private JRadioButton jRadioButtonLocal;
 	private JRadioButton jRadioButtonServer;
 	private JRadioButton jRadioButtonCurl;
-	private String fromMakeProductfile;
 
 	public PackageManagerInstallParameterDialog(ConfigedMain configedMain) {
-		this(configedMain, "");
-	}
-
-	public PackageManagerInstallParameterDialog(ConfigedMain configedMain, String fullPathToPackage) {
 		super(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.title"));
 
 		this.configedMain = configedMain;
-		fromMakeProductfile = fullPathToPackage;
 
 		initInstances();
 		init();
@@ -75,29 +69,18 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		group.add(jRadioButtonCurl);
 
 		installLocalPanel = new PMInstallLocalPanel();
-		installServerPanel = new PMInstallServerPanel(fromMakeProductfile);
+		installServerPanel = new PMInstallServerPanel();
 		installCurlPanel = new PMInstallCurlPanel();
 		installSettingsPanel = new PMInstallSettingsPanel(this);
 
-		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {
-			jRadioButtonServer.setSelected(true);
+		jRadioButtonLocal.setSelected(true);
 
-			installLocalPanel.isOpen(true);
-			installLocalPanel.close();
+		installLocalPanel.isOpen(false);
+		installLocalPanel.open();
 
-			installServerPanel.isOpen(false);
-			installServerPanel.open();
+		installServerPanel.isOpen(true);
+		installServerPanel.close();
 
-			installServerPanel.setPackagePath(fromMakeProductfile);
-		} else {
-			jRadioButtonLocal.setSelected(true);
-
-			installLocalPanel.isOpen(false);
-			installLocalPanel.open();
-
-			installServerPanel.isOpen(true);
-			installServerPanel.close();
-		}
 		installCurlPanel.isOpen(true);
 		installCurlPanel.close();
 
