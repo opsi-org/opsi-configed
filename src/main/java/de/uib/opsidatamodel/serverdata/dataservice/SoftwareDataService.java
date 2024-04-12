@@ -458,7 +458,7 @@ public class SoftwareDataService {
 		for (SWAuditClientEntry entry : swAuditClientEntries) {
 			if (swEntryExists(entry)) {
 				result.put(entry.getSWident(),
-						entry.getExpandedMap(getInstalledSoftwareInformationPD(), entry.getSWident()));
+						entry.getExpandedMap(getInstalledSoftwareInformationPD().get(entry.getSWident())));
 			}
 		}
 

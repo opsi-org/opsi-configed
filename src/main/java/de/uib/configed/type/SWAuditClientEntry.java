@@ -78,10 +78,9 @@ public class SWAuditClientEntry {
 		return KEYS_FOR_GUI_TABLES;
 	}
 
-	public Map<String, Object> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
+	public Map<String, Object> getExpandedMap(SWAuditEntry swAuditEntry) {
 		Map<String, Object> dataMap = new HashMap<>(data);
-		dataMap.putAll(installedSoftwareInformation.get(swIdent));
-
+		dataMap.putAll(swAuditEntry);
 		return dataMap;
 	}
 
