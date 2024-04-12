@@ -40,7 +40,7 @@ public class SWAuditClientEntry {
 	public SWAuditClientEntry(final Map<String, Object> m) {
 		data = new HashMap<>();
 		data.put(SWAuditEntry.ID, produceNonNull(m.get(CLIENT_ID)));
-		swIdent = produceSWident(m);
+		swIdent = produceSWIdent(m);
 		data.put(LICENSE_KEY, produceNonNull(m.get(LICENSE_KEY)));
 		lastModificationS = produceNonNull(m.get(LAST_MODIFICATION));
 	}
@@ -49,7 +49,7 @@ public class SWAuditClientEntry {
 		return o != null ? o.toString() : "";
 	}
 
-	public static String produceSWident(Map<String, Object> readMap) {
+	private static String produceSWIdent(Map<String, Object> readMap) {
 		return Utils.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUB_VERSION)),
@@ -65,7 +65,7 @@ public class SWAuditClientEntry {
 		return lastModificationS;
 	}
 
-	public String getSWident() {
+	public String getSWIdent() {
 		return swIdent;
 	}
 

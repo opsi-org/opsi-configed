@@ -29,7 +29,7 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 	public boolean doesMatch(OpsiDataClient client) {
 		List<SWAuditClientEntry> auditList = client.getSwAuditList();
 		for (SWAuditClientEntry swEntry : auditList) {
-			String swIdent = swEntry.getSWident();
+			String swIdent = swEntry.getSWIdent();
 			if (!persistenceController.getSoftwareDataService().swEntryExists(swEntry)) {
 				Logging.info(this, "no swIdent " + swIdent);
 				return false;

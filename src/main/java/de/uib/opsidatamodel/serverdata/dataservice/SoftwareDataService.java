@@ -253,18 +253,18 @@ public class SoftwareDataService {
 	}
 
 	public boolean swEntryExists(SWAuditClientEntry swAuditClientEntry) {
-		Logging.info(this, "Check if software ident " + swAuditClientEntry.getSWident() + " entry exists");
+		Logging.info(this, "Check if software ident " + swAuditClientEntry.getSWIdent() + " entry exists");
 		retrieveInstalledSoftwareInformationPD();
 		boolean swIdent = false;
 		Set<String> softwareList = getSoftwareListPD();
-		if (softwareList == null || !softwareList.contains(swAuditClientEntry.getSWident())) {
+		if (softwareList == null || !softwareList.contains(swAuditClientEntry.getSWIdent())) {
 			if (softwareList != null) {
 				Logging.info(this, "Until now existing installed software entries " + softwareList.size());
 			}
 
 			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 					String.format(Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
-							swAuditClientEntry.getSWident(), swAuditClientEntry.getClientId()),
+							swAuditClientEntry.getSWIdent(), swAuditClientEntry.getClientId()),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
@@ -273,14 +273,14 @@ public class SoftwareDataService {
 				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 				softwareList = getSoftwareListPD();
 				Logging.info(this, "Now existing installed software entries " + softwareList.size());
-				if (softwareList.contains(swAuditClientEntry.getSWident())) {
-					Logging.info(this, "Found software ident " + swAuditClientEntry.getSWident() + " after reload");
+				if (softwareList.contains(swAuditClientEntry.getSWIdent())) {
+					Logging.info(this, "Found software ident " + swAuditClientEntry.getSWIdent() + " after reload");
 					swIdent = true;
 				}
 			}
 
 			if (!swIdent) {
-				Logging.warning(this, "Missing installed software entry " + swAuditClientEntry.getSWident());
+				Logging.warning(this, "Missing installed software entry " + swAuditClientEntry.getSWIdent());
 			}
 		} else {
 			swIdent = true;
@@ -457,8 +457,8 @@ public class SoftwareDataService {
 		List<SWAuditClientEntry> swAuditClientEntries = entries.get(clientId);
 		for (SWAuditClientEntry entry : swAuditClientEntries) {
 			if (swEntryExists(entry)) {
-				result.put(entry.getSWident(),
-						entry.getExpandedMap(getInstalledSoftwareInformationPD().get(entry.getSWident())));
+				result.put(entry.getSWIdent(),
+						entry.getExpandedMap(getInstalledSoftwareInformationPD().get(entry.getSWIdent())));
 			}
 		}
 
@@ -1067,7 +1067,7 @@ public class SoftwareDataService {
 
 			for (Map<String, Object> item : softwareAuditOnClients) {
 				SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
-				Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(clientEntry.getSWident(),
+				Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(clientEntry.getSWIdent(),
 						s -> new HashSet<>());
 				clientsWithThisSW.add(clientEntry.getClientId());
 			}
