@@ -247,16 +247,16 @@ public class SoftwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class);
 	}
 
-	public List<String> getSoftwareListPD() {
+	public Set<String> getSoftwareListPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class);
+		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, Set.class);
 	}
 
 	public boolean swEntryExists(SWAuditClientEntry swAuditClientEntry) {
 		Logging.info(this, "Check if software ident " + swAuditClientEntry.getSWident() + " entry exists");
 		retrieveInstalledSoftwareInformationPD();
 		boolean swIdent = false;
-		List<String> softwareList = getSoftwareListPD();
+		Set<String> softwareList = getSoftwareListPD();
 		if (softwareList == null || !softwareList.contains(swAuditClientEntry.getSWident())) {
 			if (softwareList != null) {
 				Logging.info(this, "Until now existing installed software entries " + softwareList.size());
@@ -354,8 +354,7 @@ public class SoftwareDataService {
 			}
 		}
 
-		List<String> softwareList = new ArrayList<>(installedSoftwareInformation.keySet());
-		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, softwareList);
+		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, installedSoftwareInformation.keySet());
 		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION, installedSoftwareInformation);
 		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
 				installedSoftwareInformationForLicensing);

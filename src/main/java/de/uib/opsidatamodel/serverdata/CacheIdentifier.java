@@ -248,7 +248,7 @@ public enum CacheIdentifier {
 	DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS("depot_to_product_to_dependency_infos"),
 
 	/**
-	 * return type {@code List<String>}
+	 * return type {@code Set<String>}
 	 */
 	SOFTWARE_LIST("software_list"),
 
