@@ -257,37 +257,39 @@ public class SoftwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, NavigableMap.class);
 	}
 
-	public String getSWident(Integer i) {
-		Logging.debug(this, "getSWident for " + i);
+	public boolean swEntryExists(SWAuditClientEntry swAuditClientEntry) {
+		Logging.debug(this, "getSWident for " + swAuditClientEntry.getSWid());
 		retrieveInstalledSoftwareInformationPD();
-		String swIdent = null;
+		boolean swIdent = false;
 		List<String> softwareList = getSoftwareListPD();
-		if (softwareList == null || softwareList.size() < i + 1 || i == -1) {
+		if (softwareList == null || softwareList.size() < swAuditClientEntry.getSWid() + 1
+				|| swAuditClientEntry.getSWid() == -1) {
 			if (softwareList != null) {
-				Logging.info(this, "getSWident " + " until now softwareList.size() " + softwareList.size());
+				Logging.info(this, "getSWident until now softwareList.size() " + softwareList.size());
 			}
 
-			boolean infoFound = false;
-
-			// try reloading?
 			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
+					String.format(Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
+							swAuditClientEntry.getSWident()),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-				if (i > -1 && softwareList != null && softwareList.size() >= i + 1) {
-					infoFound = true;
+				softwareList = getSoftwareListPD();
+				if (swAuditClientEntry.getSWid() > -1 && softwareList != null
+						&& softwareList.size() >= swAuditClientEntry.getSWid() + 1) {
+					swIdent = true;
 				}
 			}
 
-			if (!infoFound) {
-				Logging.warning(this, "missing softwareList entry " + i + " " + softwareList);
+			if (!swIdent) {
+				Logging.warning(this, "missing softwareList entry " + swAuditClientEntry.getSWid());
 			}
 		} else {
-			swIdent = softwareList.get(i);
+			swIdent = true;
 		}
+
 		return swIdent;
 	}
 
@@ -470,9 +472,9 @@ public class SoftwareDataService {
 
 		List<SWAuditClientEntry> swAuditClientEntries = entries.get(clientId);
 		for (SWAuditClientEntry entry : swAuditClientEntries) {
-			if (entry.getSWid() != null && entry.getSWid() != -1) {
+			if (swEntryExists(entry)) {
 				result.put("" + entry.getSWid(),
-						entry.getExpandedMap(getInstalledSoftwareInformationPD(), getSWident(entry.getSWid())));
+						entry.getExpandedMap(getInstalledSoftwareInformationPD(), entry.getSWident()));
 			}
 		}
 
