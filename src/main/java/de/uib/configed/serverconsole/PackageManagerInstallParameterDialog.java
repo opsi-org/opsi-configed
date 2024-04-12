@@ -222,7 +222,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 	}
 
 	private SingleCommandOpsiPackageManagerInstall handleCurlFileUpload(MultiCommandTemplate commands) {
-		SingleCommandOpsiPackageManagerInstall pmInstallCom = installServerPanel.getCommand();
+		SingleCommandOpsiPackageManagerInstall pmInstallCom = null;
 		commands = installCurlPanel.getCommand(commands);
 		if (commands == null) {
 			Logging.warning(this, "No opsi-package given.4");
