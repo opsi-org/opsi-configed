@@ -32,7 +32,6 @@ public class SWAuditClientEntry {
 	}
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
-	private Integer swId;
 	private String swIdent;
 	private String lastModificationS;
 
@@ -64,10 +63,6 @@ public class SWAuditClientEntry {
 
 	public String getLastModification() {
 		return lastModificationS;
-	}
-
-	public Integer getSWid() {
-		return swId;
 	}
 
 	public String getSWident() {
