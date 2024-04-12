@@ -170,7 +170,7 @@ public abstract class AbstractSWExporter {
 			updateModel();
 		}
 
-		setWriteToFile(filepathStart + hostId + ".pdf");
+		setWriteToFile(filepathStart + hostId + getExtension());
 	}
 
 	private void initModel(String hostId) {
