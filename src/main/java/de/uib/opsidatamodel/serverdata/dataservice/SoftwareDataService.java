@@ -264,7 +264,7 @@ public class SoftwareDataService {
 
 			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 					String.format(Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
-							swAuditClientEntry.getSWident()),
+							swAuditClientEntry.getSWident(), swAuditClientEntry.getClientId()),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
