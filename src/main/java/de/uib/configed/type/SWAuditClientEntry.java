@@ -14,33 +14,9 @@ import java.util.Map;
 import utils.Utils;
 
 public class SWAuditClientEntry {
-	/*
-	 * type of auditSoftwareOnClient_getObjects resp
-	 * SOFTWARE_CONFIG in opsi data base
-	 * 
-	 * | Field | Type | Null | Key | Default
-	 * | config_id | int(11) | NO | PRI | NULL
-	 * | clientId | varchar(255) | NO | MUL | NULL
-	 * | firstseen | timestamp | NO | | 0000-00-00 00:00:00
-	 * | lastseen | timestamp | NO | | 0000-00-00 00:00:00
-	 * | state | tinyint(4) | NO | | NULL
-	 * | usageFrequency | int(11) | NO | | -1
-	 * | lastUsed | timestamp | NO | | 0000-00-00 00:00:00
-	 * | name | varchar(100) | NO | MUL | NULL
-	 * | version | varchar(100) | NO | | NULL
-	 * | subVersion | varchar(100) | NO | | NULL
-	 * | language | varchar(10) | NO | | NULL
-	 * | architecture | varchar(3) | NO | | NULL
-	 * | uninstallString | varchar(200) | YES | | NULL
-	 * | binaryName | varchar(100) | YES | | NULL
-	 * | licenseKey | varchar(100) | YES | | NULL
-	 * 
-	 */
-
 	public static final String CLIENT_ID = "clientId";
 	public static final String LICENSE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
-	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 	public static final List<String> KEYS = List.of(SWAuditEntry.ID, SWAuditEntry.NAME, SWAuditEntry.VERSION,
 			SWAuditEntry.SUB_VERSION, SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENSE_KEY,
 			SWAuditEntry.WINDOWS_SOFTWARE_ID);
