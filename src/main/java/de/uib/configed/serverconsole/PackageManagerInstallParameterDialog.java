@@ -20,9 +20,11 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class PackageManagerInstallParameterDialog extends PackageManagerParameterDialog {
@@ -189,42 +191,15 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		SingleCommandOpsiPackageManagerInstall pmInstallCom;
 
 		if (jRadioButtonLocal.isSelected()) {
-			SingleCommandFileUpload fileUploadCommand = installLocalPanel.getCommand();
-			if (fileUploadCommand == null) {
-				Logging.warning(this, "No opsi-package given. 1");
-				return;
-			}
-			commands.addCommand(fileUploadCommand);
-			pmInstallCom = PMInstallServerPanel.getCommand(fileUploadCommand.getFullTargetPath());
-			if (pmInstallCom == null) {
-				Logging.warning(this, "No url given. 2");
-				Logging.warning(this, "ERROR 0 command = null");
-				return;
-			} else {
-				commands.addCommand(pmInstallCom);
-			}
+			pmInstallCom = handleLocalFileUpload(commands);
 		} else if (jRadioButtonServer.isSelected()) {
-			pmInstallCom = installServerPanel.getCommand();
-			if (pmInstallCom == null) {
-				Logging.warning(this, "No opsi-package selected. 3");
-				return;
-			} else {
-				commands.addCommand(pmInstallCom);
-			}
+			pmInstallCom = handleServerFileUpload(commands);
 		} else {
-			commands = installCurlPanel.getCommand(commands);
-			if (commands == null) {
-				Logging.warning(this, "No opsi-package given.4");
-				return;
-			}
+			pmInstallCom = handleCurlFileUpload(commands);
+		}
 
-			pmInstallCom = PMInstallServerPanel.getCommand(installCurlPanel.getProduct());
-			Logging.info(this, "c " + pmInstallCom);
-			if (pmInstallCom != null) {
-				commands.addCommand(pmInstallCom);
-			} else {
-				Logging.warning(this, "ERROR 3 command = null");
-			}
+		if (pmInstallCom == null) {
+			return;
 		}
 
 		installSettingsPanel.updateCommand(pmInstallCom);
@@ -232,5 +207,68 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		CommandExecutor executor = new CommandExecutor(configedMain);
 		executor.executeMultiCommand(commands);
 		Logging.info(this, "doAction3 end ");
+	}
+
+	private SingleCommandOpsiPackageManagerInstall handleLocalFileUpload(MultiCommandTemplate commands) {
+		SingleCommandFileUpload fileUploadCommand = installLocalPanel.getCommand();
+		SingleCommandOpsiPackageManagerInstall pmInstallCom = null;
+		if (fileUploadCommand == null) {
+			Logging.warning(this, "No opsi-package given. 1");
+			return pmInstallCom;
+		}
+		commands.addCommand(fileUploadCommand);
+		String dir = getServerDirPathFromWebDAVPath(fileUploadCommand.getTargetPath());
+		pmInstallCom = PMInstallServerPanel.getCommand(dir + fileUploadCommand.getTargetFilename());
+		if (pmInstallCom == null) {
+			Logging.warning(this, "No url given. 2");
+			Logging.warning(this, "ERROR 0 command = null");
+		} else {
+			commands.addCommand(pmInstallCom);
+		}
+		return pmInstallCom;
+	}
+
+	private SingleCommandOpsiPackageManagerInstall handleServerFileUpload(MultiCommandTemplate commands) {
+		SingleCommandOpsiPackageManagerInstall pmInstallCom = installServerPanel.getCommand();
+		if (pmInstallCom == null) {
+			Logging.warning(this, "No opsi-package selected. 3");
+		} else {
+			commands.addCommand(pmInstallCom);
+		}
+		return pmInstallCom;
+	}
+
+	private SingleCommandOpsiPackageManagerInstall handleCurlFileUpload(MultiCommandTemplate commands) {
+		SingleCommandOpsiPackageManagerInstall pmInstallCom = installServerPanel.getCommand();
+		commands = installCurlPanel.getCommand(commands);
+		if (commands == null) {
+			Logging.warning(this, "No opsi-package given.4");
+			return pmInstallCom;
+		}
+
+		pmInstallCom = PMInstallServerPanel.getCommand(installCurlPanel.getProduct());
+		Logging.info(this, "c " + pmInstallCom);
+		if (pmInstallCom != null) {
+			commands.addCommand(pmInstallCom);
+		} else {
+			Logging.warning(this, "ERROR 3 command = null");
+		}
+		return pmInstallCom;
+	}
+
+	private String getServerDirPathFromWebDAVPath(String webDAVDirPath) {
+		String dir = "";
+		if (webDAVDirPath.startsWith("workbench")) {
+			dir = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+					.getConfigedWorkbenchDefaultValuePD();
+			if (dir.charAt(dir.length() - 1) != '/') {
+				dir = dir + "/";
+			}
+		} else if (webDAVDirPath.startsWith("repository")) {
+			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY;
+		} else {
+			Logging.warning(this, "expected repository or workbench");
+		}
+		return dir;
 	}
 }
