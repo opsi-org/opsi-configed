@@ -12,23 +12,16 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import de.uib.configed.serverconsole.command.CommandFactory;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class PMInstallPanel extends JPanel {
 	private boolean isOpen;
 
 	protected List<String> additionalDefaultPaths = new ArrayList<>();
-
 	protected String workbench;
 
 	public PMInstallPanel() {
-		additionalDefaultPaths.add(CommandFactory.OPSI_PATH_VAR_REPOSITORY);
-
-		workbench = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
-				.getConfigedWorkbenchDefaultValuePD();
-		if (workbench.charAt(workbench.length() - 1) != '/') {
-			workbench = workbench + "/";
-		}
+		additionalDefaultPaths.add(CommandFactory.WEBDAV_OPSI_PATH_VAR_REPOSITORY);
+		workbench = CommandFactory.WEBDAV_OPSI_PATH_VAR_WORKBENCH;
 	}
 
 	protected void isOpen(boolean isOpen) {

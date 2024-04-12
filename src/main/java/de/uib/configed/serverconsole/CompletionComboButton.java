@@ -22,8 +22,7 @@ import javax.swing.JTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.CompletionComboBox;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.utilities.WebDAVClient;
 import de.uib.utilities.logging.Logging;
 
@@ -34,12 +33,6 @@ public class CompletionComboButton {
 	private Set<String> defaultvalues;
 	private String searchSpecificFiles;
 	private String comboboxDefaultPath;
-
-	// will be overwritten with config
-	private String opsiRepo = "/";
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	public CompletionComboButton() {
 		this(null, null, null);
@@ -80,16 +73,7 @@ public class CompletionComboButton {
 	}
 
 	private void init(List<String> defvalues) {
-		if (persistenceController == null) {
-			Logging.info(this, "init PersistenceController null");
-		} else {
-			opsiRepo = persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD();
-		}
-
-		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/') {
-			opsiRepo = opsiRepo + "/";
-		}
-
+		String opsiRepo = CommandFactory.WEBDAV_OPSI_PATH_VAR_WORKBENCH;
 		defaultvalues = new HashSet<>();
 
 		if (comboboxDefaultPath != null) {
