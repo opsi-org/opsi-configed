@@ -252,20 +252,14 @@ public class SoftwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class);
 	}
 
-	public NavigableMap<String, Integer> getSoftware2NumberPD() {
-		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, NavigableMap.class);
-	}
-
 	public boolean swEntryExists(SWAuditClientEntry swAuditClientEntry) {
-		Logging.debug(this, "getSWident for " + swAuditClientEntry.getSWid());
+		Logging.info(this, "Check if software ident " + swAuditClientEntry.getSWident() + " entry exists");
 		retrieveInstalledSoftwareInformationPD();
 		boolean swIdent = false;
 		List<String> softwareList = getSoftwareListPD();
-		if (softwareList == null || softwareList.size() < swAuditClientEntry.getSWid() + 1
-				|| swAuditClientEntry.getSWid() == -1) {
+		if (softwareList == null || !softwareList.contains(swAuditClientEntry.getSWident())) {
 			if (softwareList != null) {
-				Logging.info(this, "getSWident until now softwareList.size() " + softwareList.size());
+				Logging.info(this, "Until now existing installed software entries " + softwareList.size());
 			}
 
 			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
@@ -275,16 +269,18 @@ public class SoftwareDataService {
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
+				Logging.info(this, "Reloading installed software information");
 				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 				softwareList = getSoftwareListPD();
-				if (swAuditClientEntry.getSWid() > -1 && softwareList != null
-						&& softwareList.size() >= swAuditClientEntry.getSWid() + 1) {
+				Logging.info(this, "Now existing installed software entries " + softwareList.size());
+				if (softwareList.contains(swAuditClientEntry.getSWident())) {
+					Logging.info(this, "Found software ident " + swAuditClientEntry.getSWident() + " after reload");
 					swIdent = true;
 				}
 			}
 
 			if (!swIdent) {
-				Logging.warning(this, "missing softwareList entry " + swAuditClientEntry.getSWid());
+				Logging.warning(this, "Missing installed software entry " + swAuditClientEntry.getSWident());
 			}
 		} else {
 			swIdent = true;
@@ -294,10 +290,10 @@ public class SoftwareDataService {
 	}
 
 	public void retrieveInstalledSoftwareInformationPD() {
-		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.SOFTWARE_TO_NUMBER,
-				CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
-				CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING, CacheIdentifier.NAME_TO_SW_IDENTS,
-				CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO))) {
+		if (cacheManager.isDataCached(
+				Arrays.asList(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
+						CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING, CacheIdentifier.NAME_TO_SW_IDENTS,
+						CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO))) {
 			return;
 		}
 
@@ -359,18 +355,7 @@ public class SoftwareDataService {
 		}
 
 		List<String> softwareList = new ArrayList<>(installedSoftwareInformation.keySet());
-		NavigableMap<String, Integer> software2Number = new TreeMap<>();
-		int n = 0;
-		for (String sw : softwareList) {
-			if (sw.startsWith("NULL")) {
-				Logging.info(this, "retrieveInstalledSoftwareInformation, we get index " + n + " for " + sw);
-			}
-			software2Number.put(sw, n);
-			n++;
-		}
-
 		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, softwareList);
-		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, software2Number);
 		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION, installedSoftwareInformation);
 		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
 				installedSoftwareInformationForLicensing);
@@ -473,7 +458,7 @@ public class SoftwareDataService {
 		List<SWAuditClientEntry> swAuditClientEntries = entries.get(clientId);
 		for (SWAuditClientEntry entry : swAuditClientEntries) {
 			if (swEntryExists(entry)) {
-				result.put("" + entry.getSWid(),
+				result.put(entry.getSWident(),
 						entry.getExpandedMap(getInstalledSoftwareInformationPD(), entry.getSWident()));
 			}
 		}

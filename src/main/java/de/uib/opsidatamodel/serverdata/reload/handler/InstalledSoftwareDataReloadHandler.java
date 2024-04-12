@@ -25,7 +25,6 @@ public class InstalledSoftwareDataReloadHandler implements ReloadHandler {
 	@Override
 	public void handle(String event) {
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
-		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);

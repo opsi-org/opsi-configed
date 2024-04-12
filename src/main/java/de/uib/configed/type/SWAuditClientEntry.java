@@ -7,17 +7,10 @@
 package de.uib.configed.type;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.Set;
 
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
 public class SWAuditClientEntry {
@@ -63,103 +56,22 @@ public class SWAuditClientEntry {
 	}
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
-	private Set<String> notFoundSoftwareIDs;
-	private Long lastUpdateTime;
-
 	private Integer swId;
 	private String swIdent;
 	private String lastModificationS;
 
 	private final Map<String, String> data;
-	private List<String> software;
-	private NavigableMap<String, Integer> software2Number;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	public SWAuditClientEntry(final Map<String, Object> m) {
 		data = new HashMap<>();
 		data.put(SWAuditEntry.ID, produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
-		this.software = persistenceController.getSoftwareDataService().getSoftwareListPD();
-		this.software2Number = persistenceController.getSoftwareDataService().getSoftware2NumberPD();
-		produceSWid();
 		data.put(LICENSE_KEY, produceNonNull(m.get(LICENSE_KEY)));
 		lastModificationS = produceNonNull(m.get(LAST_MODIFICATION));
 	}
 
 	private static String produceNonNull(Object o) {
 		return o != null ? o.toString() : "";
-	}
-
-	private void updateSoftware() {
-		Logging.info(this, "updateSoftware");
-		if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE) {
-			persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-			software = persistenceController.getSoftwareDataService().getSoftwareListPD();
-			lastUpdateTime = System.currentTimeMillis();
-			notFoundSoftwareIDs = new HashSet<>();
-		} else {
-			Logging.warning(this, "updateSoftware: doing nothing since we just updated");
-		}
-	}
-
-	private Integer getIndex(List<String> list, String element) {
-		int result = -1;
-
-		if (!swIdent.equals(element)) {
-			Logging.warning(this,
-					"getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". " + element);
-		}
-
-		Integer j = software2Number.get(element);
-
-		if (j == null) {
-			Logging.info(this,
-					"getIndex, probably because of an upper-lower case or a null issue, not found for  " + element);
-		} else {
-			result = j;
-		}
-
-		if (result == -1 && list != null) {
-			int i = 0;
-			while (result == -1 && i < list.size()) {
-				if (list.get(i).equalsIgnoreCase(element)) {
-					result = i;
-					Logging.warning(this, "indexOfIgnoreCase found equality of " + element + " to entry \n" + i + " : "
-							+ list.get(i));
-				}
-				i++;
-			}
-			if (result == -1) {
-				Logging.warning(this, "tried indexOfIgnoreCase in vain for " + element);
-			}
-		}
-
-		return result;
-	}
-
-	private Integer produceSWid() {
-		swId = getIndex(software, swIdent);
-		Logging.debug(this, "search index for software with ident " + swIdent + " \nswId " + swId);
-
-		if (swId == -1) {
-			Logging.info(this, "software with ident " + swIdent + " not yet indexed");
-			if (notFoundSoftwareIDs != null && !notFoundSoftwareIDs.contains(swIdent)) {
-				updateSoftware();
-				swId = getIndex(software, swIdent);
-			}
-
-			if (swId == -1) {
-				Logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
-				if (notFoundSoftwareIDs == null) {
-					notFoundSoftwareIDs = new HashSet<>();
-				}
-				notFoundSoftwareIDs.add(swIdent);
-			}
-		}
-
-		return swId;
 	}
 
 	public static String produceSWident(Map<String, Object> readMap) {

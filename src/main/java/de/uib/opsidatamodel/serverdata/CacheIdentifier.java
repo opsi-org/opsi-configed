@@ -253,11 +253,6 @@ public enum CacheIdentifier {
 	SOFTWARE_LIST("software_list"),
 
 	/**
-	 * return type {@code NavigableMap<String, Integer>}
-	 */
-	SOFTWARE_TO_NUMBER("software_to_number"),
-
-	/**
 	 * return type {@code NavigableMap<String, SWAuditEntry>}
 	 */
 	INSTALLED_SOFTWARE_INFORMATION("installed_software_information"),
