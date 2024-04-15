@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
+import utils.Utils;
 
 public class PMInstallServerPanel extends PMInstallPanel {
 	private JLabel jLabelServerDir = new JLabel();
@@ -76,7 +77,8 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	}
 
 	public SingleCommandOpsiPackageManagerInstall getCommand() {
-		return PMInstallServerPanel.getCommand(autocompletion.getTextField().getText());
+		return PMInstallServerPanel
+				.getCommand(Utils.getServerPathFromWebDAVPath(autocompletion.getTextField().getText()));
 	}
 
 	public static SingleCommandOpsiPackageManagerInstall getCommand(String product) {

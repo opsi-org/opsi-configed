@@ -20,12 +20,11 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.CommandExecutor;
-import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class PackageManagerInstallParameterDialog extends PackageManagerParameterDialog {
 	private JPanel mainPanel = new JPanel();
@@ -200,8 +199,8 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 			return pmInstallCom;
 		}
 		commands.addCommand(fileUploadCommand);
-		String dir = getServerDirPathFromWebDAVPath(fileUploadCommand.getTargetPath());
-		pmInstallCom = PMInstallServerPanel.getCommand(dir + fileUploadCommand.getTargetFilename());
+		pmInstallCom = PMInstallServerPanel
+				.getCommand(Utils.getServerPathFromWebDAVPath(fileUploadCommand.getFullTargetPath()));
 		if (pmInstallCom == null) {
 			Logging.warning(this, "No url given. 2");
 			Logging.warning(this, "ERROR 0 command = null");
@@ -237,21 +236,5 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 			Logging.warning(this, "ERROR 3 command = null");
 		}
 		return pmInstallCom;
-	}
-
-	private String getServerDirPathFromWebDAVPath(String webDAVDirPath) {
-		String dir = "";
-		if (webDAVDirPath.startsWith("workbench")) {
-			dir = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
-					.getConfigedWorkbenchDefaultValuePD();
-			if (dir.charAt(dir.length() - 1) != '/') {
-				dir = dir + "/";
-			}
-		} else if (webDAVDirPath.startsWith("repository")) {
-			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY;
-		} else {
-			Logging.warning(this, "expected repository or workbench");
-		}
-		return dir;
 	}
 }

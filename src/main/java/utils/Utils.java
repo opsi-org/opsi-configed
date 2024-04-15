@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.sql.Timestamp;
@@ -33,8 +34,10 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -465,5 +468,23 @@ public final class Utils {
 		}
 
 		return result;
+	}
+
+	public static String getServerPathFromWebDAVPath(String webDAVPath) {
+		String dir = "";
+		if (webDAVPath.startsWith("workbench")) {
+			dir = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+					.getConfigedWorkbenchDefaultValuePD();
+			if (dir.charAt(dir.length() - 1) != '/') {
+				dir = dir + "/";
+			}
+			String filename = Paths.get(webDAVPath).getFileName().toString();
+			dir = dir + filename;
+		} else if (webDAVPath.startsWith("repository")) {
+			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY + Paths.get(webDAVPath).getFileName().toString();
+		} else {
+			Logging.warning("expected repository or workbench");
+		}
+		return dir;
 	}
 }
