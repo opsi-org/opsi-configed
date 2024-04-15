@@ -8,9 +8,9 @@ package de.uib.opsidatamodel.serverdata;
 
 import java.util.regex.Pattern;
 
-import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
