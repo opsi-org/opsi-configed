@@ -78,8 +78,9 @@ public class PanelProductSettings extends JSplitPane {
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
-	private JPopupMenu popup;
+	private PopupMouseListener popupMouseListener;
 	private JMenuItem itemOnDemand;
+	private JScrollPane paneProducts;
 
 	private String title;
 
@@ -135,7 +136,7 @@ public class PanelProductSettings extends JSplitPane {
 	private void init() {
 		initTopPane();
 
-		JScrollPane paneProducts = new JScrollPane();
+		paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -186,10 +187,9 @@ public class PanelProductSettings extends JSplitPane {
 
 		setRightComponent(infoPane);
 
-		producePopupMenu();
-
-		paneProducts.addMouseListener(new PopupMouseListener(popup));
-		tableProducts.addMouseListener(new PopupMouseListener(popup));
+		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		paneProducts.addMouseListener(popupMouseListener);
+		tableProducts.addMouseListener(popupMouseListener);
 
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
@@ -198,8 +198,16 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.updateSearchFields();
 	}
 
-	private void producePopupMenu() {
-		popup = new JPopupMenu();
+	public void reInitPopupMenu() {
+		paneProducts.removeMouseListener(popupMouseListener);
+		tableProducts.removeMouseListener(popupMouseListener);
+		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		paneProducts.addMouseListener(popupMouseListener);
+		tableProducts.addMouseListener(popupMouseListener);
+	}
+
+	private JPopupMenu producePopupMenu() {
+		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
 		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
@@ -287,6 +295,7 @@ public class PanelProductSettings extends JSplitPane {
 
 			sub.add(item);
 		}
+		return popup;
 	}
 
 	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
