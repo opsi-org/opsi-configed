@@ -161,7 +161,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(2);
 
-		FEditDate fedConclusionDate = new FEditDate("", false);
+		FEditDate fedConclusionDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorConclusionDate = new CellEditor4TableText(fedConclusionDate,
 				FEditDate.AREA_DIMENSION);
@@ -170,7 +170,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		col.setCellEditor(cellEditorConclusionDate);
 
 		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(3);
-		FEditDate fedNotificationDate = new FEditDate("", false);
+		FEditDate fedNotificationDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorNotificationDate = new CellEditor4TableText(fedNotificationDate,
 				FEditDate.AREA_DIMENSION);
@@ -179,7 +179,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		col.setCellEditor(cellEditorNotificationDate);
 
 		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(4);
-		FEditDate fedExpirationDate = new FEditDate("", false);
+		FEditDate fedExpirationDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorExpirationDate = new CellEditor4TableText(fedExpirationDate,
 				FEditDate.AREA_DIMENSION);

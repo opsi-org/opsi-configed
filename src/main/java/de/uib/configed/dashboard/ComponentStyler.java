@@ -7,6 +7,7 @@
 package de.uib.configed.dashboard;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.util.Set;
 
 import javax.swing.UIManager;
@@ -24,6 +25,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
@@ -233,6 +235,18 @@ public final class ComponentStyler {
 	public static void styleTextComponent(Text text) {
 		String textForegroundColor = getHexColor(UIManager.getColor("TextArea.foreground"));
 		text.setStyle("-fx-fill: " + textForegroundColor);
+	}
+
+	public static void styleLabelComponent(Label label) {
+		String labelForegroundColor = getHexColor(UIManager.getColor("Label.foreground"));
+		label.setStyle(getFontStyle() + "-fx-text-fill: " + labelForegroundColor + ";");
+	}
+
+	private static String getFontStyle() {
+		Font font = UIManager.getFont("defaultFont");
+		return "-fx-font-family: '" + font.getFamily() + "'; -fx-font-size: " + font.getSize() + "px;"
+				+ "-fx-font-weight: " + (font.isBold() ? "bold" : "normal") + "; -fx-font-style: "
+				+ (font.isItalic() ? "italic" : "normal") + ";";
 	}
 
 	public static void styleButtonComponent(Button button) {
