@@ -76,6 +76,8 @@ public class GlassPane extends JComponent implements KeyListener {
 
 	private void initFXComponents(JFXPanel jfxPanel) {
 		wheel = new ProgressIndicator();
+		wheel.setScaleX(0.5);
+		wheel.setScaleY(0.5);
 		wheel.setStyle(
 				"-fx-progress-color: " + ComponentStyler.getHexColor(UIManager.getColor("ProgressBar.foreground")));
 		jLabelInfo = new Label();
@@ -86,7 +88,6 @@ public class GlassPane extends JComponent implements KeyListener {
 		vbox.getChildren().add(jLabelInfo);
 		vbox.setAlignment(Pos.CENTER);
 		vbox.setStyle("-fx-background-color: transparent;");
-		vbox.setSpacing(10);
 
 		Scene scene = new Scene(vbox, javafx.scene.paint.Color.TRANSPARENT);
 		jfxPanel.setScene(scene);
