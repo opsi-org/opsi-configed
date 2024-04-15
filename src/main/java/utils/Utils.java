@@ -478,8 +478,7 @@ public final class Utils {
 			if (dir.charAt(dir.length() - 1) != '/') {
 				dir = dir + "/";
 			}
-			String filename = Paths.get(webDAVPath).getFileName().toString();
-			dir = dir + filename;
+			dir = dir + Paths.get(webDAVPath).getFileName().toString();
 		} else if (webDAVPath.startsWith("repository")) {
 			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY + Paths.get(webDAVPath).getFileName().toString();
 		} else {
