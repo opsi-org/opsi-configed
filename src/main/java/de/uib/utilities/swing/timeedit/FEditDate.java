@@ -45,25 +45,27 @@ public class FEditDate extends FEdit implements MouseListener {
 		JFXPanel jfxPanel = new JFXPanel();
 
 		Platform.setImplicitExit(false);
-		Platform.runLater(() -> {
-			datePicker = new DatePicker();
-			datePicker.setOnAction((ActionEvent event) -> {
-				setDataChanged(true);
-				updateCaller(datePicker.getValue().toString());
-			});
-			DatePickerSkin skin = new DatePickerSkin(datePicker);
-			StackPane pane = new StackPane(skin.getPopupContent());
-			Scene scene = new Scene(pane);
-			if (FlatLaf.isLafDark()) {
-				scene.getStylesheets().add(getClass().getResource("/css/date-picker-dark.css").toExternalForm());
-			} else {
-				scene.getStylesheets().add(getClass().getResource("/css/date-picker-light.css").toExternalForm());
-			}
-			jfxPanel.setScene(scene);
-		});
+		Platform.runLater(() -> showDatePicker(jfxPanel));
 
 		editingArea.add(jfxPanel);
 		jfxPanel.addKeyListener(this);
+	}
+
+	private void showDatePicker(JFXPanel jfxPanel) {
+		datePicker = new DatePicker();
+		datePicker.setOnAction((ActionEvent event) -> {
+			setDataChanged(true);
+			updateCaller(datePicker.getValue().toString());
+		});
+		DatePickerSkin skin = new DatePickerSkin(datePicker);
+		StackPane pane = new StackPane(skin.getPopupContent());
+		Scene scene = new Scene(pane);
+		if (FlatLaf.isLafDark()) {
+			scene.getStylesheets().add(getClass().getResource("/css/date-picker-dark.css").toExternalForm());
+		} else {
+			scene.getStylesheets().add(getClass().getResource("/css/date-picker-light.css").toExternalForm());
+		}
+		jfxPanel.setScene(scene);
 	}
 
 	@Override
