@@ -10,7 +10,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -18,9 +17,6 @@ import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInst
 
 public class PMInstallServerPanel extends PMInstallPanel {
 	private JLabel jLabelServerDir = new JLabel();
-	private JLabel jLabelOpsiProduct = new JLabel();
-	private JTextField jTextFieldProduct;
-
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonAutoCompletion;
 	private CompletionComboButton autocompletion;
@@ -38,15 +34,14 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelOpsiProduct.setText(
+		jLabelServerDir.setText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
-		jTextFieldProduct = autocompletion.getTextField();
 
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.setToolTipText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.combo.tooltip"));
-
 		jComboBoxAutoCompletion.setEnabled(true);
+
 		jButtonAutoCompletion = autocompletion.getButton();
 		jButtonAutoCompletion.setText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage"));
@@ -65,33 +60,23 @@ public class PMInstallServerPanel extends PMInstallPanel {
 						Globals.BUTTON_HEIGHT)
 				.addComponent(jButtonAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 						Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelOpsiProduct, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jTextFieldProduct, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(2 * Globals.GAP_SIZE));
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)).addGap(2 * Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup()
-						.addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createSequentialGroup().addComponent(jLabelOpsiProduct,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
+				.addGroup(layout.createParallelGroup().addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
 						.addGroup(layout.createSequentialGroup()
 								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 										Short.MAX_VALUE)
 								.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createSequentialGroup().addComponent(jTextFieldProduct, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(2 * Globals.GAP_SIZE));
 	}
 
 	public SingleCommandOpsiPackageManagerInstall getCommand() {
-		return PMInstallServerPanel.getCommand(jTextFieldProduct.getText());
+		return PMInstallServerPanel.getCommand(autocompletion.getTextField().getText());
 	}
 
 	public static SingleCommandOpsiPackageManagerInstall getCommand(String product) {
