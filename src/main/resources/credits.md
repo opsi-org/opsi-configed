@@ -93,10 +93,6 @@ Author(s): QOS.CH
 Website: https://www.slf4j.org/
 License: [MIT License](https://www.slf4j.org/license.html)
 
-**SwingX extension of Swing**
-Author(s): Swing Labs
-License: [GNU Lesser General Public License 2.1 (GNU LGPL-2.1)](https://opensource.org/license/lgpl-2-1/)
-
 **XZ for Java**
 Author(s): Lasse Collin, Igor Pavlov, and Brett Okken
 Website: https://xz.tukaani.org/xz-for-java/

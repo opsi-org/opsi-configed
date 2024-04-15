@@ -1,6 +1,10 @@
 # Changelog
 ## [4.3.2.X] - 2024-XX-XX
+## Changed
+- Maintain consistent log levels for unspecified lines
+
 ## Fixed
+- The lower control panel in logviewer keeps disappearing on resize
 - For hardware devices with the same name in different hardware class, the information is shown incorrectly
 
 ## [4.3.2.11] - 2024-03-28

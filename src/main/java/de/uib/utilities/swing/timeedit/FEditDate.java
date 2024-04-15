@@ -15,89 +15,76 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.time.LocalDate;
 
-import org.jdesktop.swingx.event.DateSelectionListener;
+import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEdit;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.event.ActionEvent;
+import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.skin.DatePickerSkin;
+import javafx.scene.layout.StackPane;
 
-public class FEditDate extends FEdit implements DateSelectionListener, MouseListener {
+public class FEditDate extends FEdit implements MouseListener {
 	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);
-	private DateTimeEditor dateEditor;
+	private DatePicker datePicker;
 
-	private DateFormat dateFormat;
-
-	public FEditDate(String initialText, boolean withTime) {
+	public FEditDate(String initialText) {
 		super(initialText);
-
-		init(withTime);
-	}
-
-	private void init(boolean withTime) {
 		areaDimension = AREA_DIMENSION;
 
-		dateFormat = DateFormat.getDateInstance(Globals.DATE_FORMAT_STYLE_PATTERN);
-
-		dateEditor = new DateTimeEditor(withTime);
-
-		editingArea.add(dateEditor);
-
-		dateEditor.addDateSelectionListener(this);
-		dateEditor.addKeyListener(this);
-		dateEditor.addMonthViewMouseListener(this);
-
+		initFX();
 		setStartText(this.initialText);
 	}
 
+	private void initFX() {
+		JFXPanel jfxPanel = new JFXPanel();
+
+		Platform.setImplicitExit(false);
+		Platform.runLater(() -> showDatePicker(jfxPanel));
+
+		editingArea.add(jfxPanel);
+		jfxPanel.addKeyListener(this);
+	}
+
+	private void showDatePicker(JFXPanel jfxPanel) {
+		datePicker = new DatePicker();
+		datePicker.setOnAction((ActionEvent event) -> {
+			setDataChanged(true);
+			updateCaller(datePicker.getValue().toString());
+		});
+		DatePickerSkin skin = new DatePickerSkin(datePicker);
+		StackPane pane = new StackPane(skin.getPopupContent());
+		Scene scene = new Scene(pane);
+		if (FlatLaf.isLafDark()) {
+			scene.getStylesheets().add(getClass().getResource("/css/date-picker-dark.css").toExternalForm());
+		} else {
+			scene.getStylesheets().add(getClass().getResource("/css/date-picker-light.css").toExternalForm());
+		}
+		jfxPanel.setScene(scene);
+	}
+
 	@Override
-	public void setStartText(String s) {
+	public final void setStartText(String s) {
 		super.setStartText(s);
 
 		Logging.info(this, "setStartText(): " + s);
-		setDataChanged(false);
 
-		if (s == null || s.isEmpty()) {
-			dateEditor.setDate(false);
-		} else {
-			String s1 = null;
-			java.util.Date newDate = null;
-
-			try {
-				newDate = dateFormat.parse(s);
-				dateEditor.setSelectionDate(newDate);
-				setDataChanged(false);
-			} catch (ParseException pex) {
-				try {
-					// fallback for standard sql time format
-					s1 = s;
-					if (s1.indexOf(' ') == -1) {
-						s1 = s1 + " 00:00:00";
-					}
-
-					newDate = Timestamp.valueOf(s1);
-					Logging.info(this, "after supplement setStartText(): " + s1);
-					dateEditor.setSelectionDate(newDate);
-
-					setDataChanged(false);
-				} catch (IllegalArgumentException ex) {
-					Logging.warning("not valid date: " + s1);
-					dateEditor.setDate(true);
-					setDataChanged(true);
-				}
-			}
+		if (s != null && !s.isEmpty()) {
+			datePicker.setValue(LocalDate.parse(s));
+			setDataChanged(false);
 		}
 	}
 
 	@Override
 	public void setVisible(boolean b) {
 		if (b) {
-			dateEditor.requestFocus();
+			Platform.runLater(() -> datePicker.requestFocus());
 		}
-		// get focus in order to receive keyboard events
 		super.setVisible(b);
 		setSize(areaDimension);
 		if (b) {
@@ -105,44 +92,14 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 		}
 	}
 
-	private String getSelectedDateTime() {
-		Logging.debug(this, " getSelectedDateTime() : " + dateEditor.getSelectedSqlTime());
-
-		if (dateEditor.getSelectedSqlTime() == null) {
-			return "";
-		}
-
-		return dateEditor.getSelectedSqlTime().toString();
-	}
-
-	private String getSelectedDateString() {
-		// at the moment, the implementation decides about the date formatting
-
-		return getSelectedDateTime();
-	}
-
 	@Override
 	public String getText() {
-		String oldText = initialText;
-		Logging.info(this, "getText initialText was " + oldText);
-
-		// set new initial text for use in processWindowEvent
-		initialText = getSelectedDateString();
+		Logging.info(this, "getText initialText was " + initialText);
+		initialText = datePicker.getValue() != null ? datePicker.getValue().toString() : "";
 		Logging.info(this, "getText initialText changed to  " + initialText);
 		return initialText;
 	}
 
-	// DateSelectionListener
-	@Override
-	public void valueChanged(org.jdesktop.swingx.event.DateSelectionEvent ev) {
-		Logging.info(this, "valueChanged dateSelectionEvent");
-
-		setDataChanged(true);
-
-		updateCaller(getSelectedDateString());
-	}
-
-	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
 		Logging.debug(this, " key event " + e);
@@ -157,7 +114,6 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 		}
 	}
 
-	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {

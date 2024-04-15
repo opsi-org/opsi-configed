@@ -172,7 +172,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		}));
 
 		col = thePanel.getPanelSoftwarelicenses().getColumnModel().getColumn(5);
-		col.setCellEditor(new CellEditor4TableText(new FEditDate("", false), FEditDate.AREA_DIMENSION));
+		col.setCellEditor(new CellEditor4TableText(new FEditDate(""), FEditDate.AREA_DIMENSION));
 
 		JMenuItem menuItemAddLicense = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewSoftwarelicense"));
@@ -240,7 +240,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		TableColumn col = thePanel.getPanelLicensecontracts().getColumnModel().getColumn(2);
 
-		FEditDate fedConclusionDate = new FEditDate("", false);
+		FEditDate fedConclusionDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorConclusionDate = new CellEditor4TableText(fedConclusionDate,
 				FEditDate.AREA_DIMENSION);
@@ -249,7 +249,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		col.setCellEditor(cellEditorConclusionDate);
 
 		col = thePanel.getPanelLicensecontracts().getColumnModel().getColumn(3);
-		FEditDate fedNotificationDate = new FEditDate("", false);
+		FEditDate fedNotificationDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorNotificationDate = new CellEditor4TableText(fedNotificationDate,
 				FEditDate.AREA_DIMENSION);
@@ -258,7 +258,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		col.setCellEditor(cellEditorNotificationDate);
 
 		col = thePanel.getPanelLicensecontracts().getColumnModel().getColumn(4);
-		FEditDate fedExpirationDate = new FEditDate("", false);
+		FEditDate fedExpirationDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorExpirationDate = new CellEditor4TableText(fedExpirationDate,
 				FEditDate.AREA_DIMENSION);

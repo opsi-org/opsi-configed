@@ -209,8 +209,7 @@ public class LogFrame extends JFrame {
 										.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE,
 												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 										.addGap(Globals.MIN_GAP_SIZE))
-								.addComponent(logPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE));
+								.addComponent(logPane));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -222,8 +221,7 @@ public class LogFrame extends JFrame {
 								Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(logPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(logPane));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());
