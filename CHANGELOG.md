@@ -1,4 +1,21 @@
 # Changelog
+## [4.3.2.X] - 2024-XX-XX
+## Changed
+- Use insecure connection in Messagebus, when certificate verification is disabled
+- Maintain consistent log levels for unspecified lines
+
+
+## Fixed
+- `NullPointerException` on product reset
+- `MySQLdb.integrityError` when moving clients to NOT_ASSIGNED directory/group
+- Product filter disabled after a reload or switching client selection
+- "Failed actions" search and selection
+- The lower control panel in logviewer keeps disappearing on resize
+- The lower control panel in logviewer keeps disappearing on resize
+- For hardware devices with the same name in different hardware class, the information is shown incorrectly
+
+
+
 ## [4.3.2.11] - 2024-03-28
 ## Fixed
 - Correctly init ClientTree when reloading and when user roles have been changed
