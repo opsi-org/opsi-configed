@@ -3,6 +3,9 @@
 ## Changed
 - Maintain consistent log levels for unspecified lines
 
+## Fixed
+- The lower control panel in logviewer keeps disappearing on resize
+
 ## [4.3.2.11] - 2024-03-28
 ## Fixed
 - Correctly init ClientTree when reloading and when user roles have been changed
