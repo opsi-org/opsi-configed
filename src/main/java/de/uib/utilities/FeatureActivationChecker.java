@@ -93,6 +93,6 @@ public final class FeatureActivationChecker {
 	 * @return {@code true} if the feature is activated, {@code false} otherwise
 	 */
 	public static boolean isFeatureActivated(Feature feature) {
-		return activatedFeatures.contains(feature);
+		return activatedFeatures != null && activatedFeatures.contains(feature);
 	}
 }
