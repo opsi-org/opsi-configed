@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsicommand;
+package de.uib.opsicommand.certificate;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +19,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import de.uib.opsicommand.MyHandshakeCompletedListener;
+import de.uib.opsicommand.SecureSSLSocketFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -34,6 +36,9 @@ import de.uib.utilities.logging.Logging;
  * certificate from the server for the first time.
  */
 public class InsecureCertificateValidator implements CertificateValidator {
+	InsecureCertificateValidator() {
+	}
+
 	@Override
 	public SSLSocketFactory createSSLSocketFactory() {
 		SSLSocketFactory sslFactory = null;

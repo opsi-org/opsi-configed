@@ -557,9 +557,11 @@ public class OpsiDataSerializer {
 			if (element != null) {
 				Logging.info(this, "getOperation element != null, element  " + element);
 				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
+			} else if (children.size() == 1) {
+				Class<?> list = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
+				Logging.info(this, "getOperation List name: " + list.toString());
+				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children.get(0));
 			} else {
-				// GroupOperation
-
 				Class<?> list = Class.forName("java.util.List");
 				Logging.info(this, "getOperation List name: " + list.toString());
 				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
