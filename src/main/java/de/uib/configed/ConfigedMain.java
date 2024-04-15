@@ -2626,7 +2626,6 @@ public class ConfigedMain implements MessagebusListener {
 				mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients().rebuildModel();
 			}
 
-			boolean wasFilterClientListToggled = filterClientList;
 			productTree.reInitTree();
 			clientTree.reInitTree();
 			fetchDepots();
@@ -2653,10 +2652,6 @@ public class ConfigedMain implements MessagebusListener {
 			mainFrame.setupMenuServer();
 			updateHostInfo();
 			hostInfo.resetGui();
-
-			if (wasFilterClientListToggled) {
-				mainFrame.toggleClientFilterAction(true, true);
-			}
 		}
 
 		mainFrame.deactivateLoadingPane();

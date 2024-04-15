@@ -755,11 +755,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
-		toggleClientFilterAction(rebuildClientListTableModel, !configedMain.isFilterClientList());
-	}
-
-	public void toggleClientFilterAction(boolean rebuildClientListTableModel, boolean filterClientList) {
-		configedMain.toggleFilterClientList(rebuildClientListTableModel, filterClientList);
+		configedMain.toggleFilterClientList(rebuildClientListTableModel, !configedMain.isFilterClientList());
 		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
 		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
