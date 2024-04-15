@@ -5,6 +5,10 @@
 - Maintain consistent log levels for unspecified lines
 
 
+## Added
+- Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
+
+
 ## Fixed
 - `NullPointerException` on product reset
 - `MySQLdb.integrityError` when moving clients to NOT_ASSIGNED directory/group
