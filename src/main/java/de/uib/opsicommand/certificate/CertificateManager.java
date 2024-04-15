@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsicommand;
+package de.uib.opsicommand.certificate;
 
 import java.io.File;
 import java.io.FileInputStream;

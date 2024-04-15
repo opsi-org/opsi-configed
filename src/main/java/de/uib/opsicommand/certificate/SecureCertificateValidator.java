@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsicommand;
+package de.uib.opsicommand.certificate;
 
 import java.io.File;
 import java.security.KeyManagementException;
@@ -33,6 +33,10 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import de.uib.configed.Configed;
+import de.uib.opsicommand.ConnectionErrorReporter;
+import de.uib.opsicommand.ConnectionErrorType;
+import de.uib.opsicommand.MyHandshakeCompletedListener;
+import de.uib.opsicommand.SecureSSLSocketFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -50,7 +54,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 	private boolean certificateExists;
 	private KeyStore ks;
 
-	public SecureCertificateValidator() {
+	SecureCertificateValidator() {
 		ks = CertificateManager.initializeKeyStore();
 	}
 
