@@ -86,12 +86,14 @@ public class WebDAVClient {
 		return directories;
 	}
 
-	public List<String> getDirectoriesAndFilesIn(String currentDirectory) {
+	public List<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension) {
 		List<String> directoriesAndFiles = new ArrayList<>();
 		try {
 			List<DavResource> resources = sardine.list(getBaseURL() + currentDirectory);
 			for (DavResource resource : resources) {
-				directoriesAndFiles.add(resource.getPath().replace("/dav/", ""));
+				if (resource.isDirectory() || resource.getDisplayName().endsWith(fileExtension)) {
+					directoriesAndFiles.add(resource.getPath().replace("/dav/", ""));
+				}
 			}
 		} catch (IOException e) {
 			Logging.error(this, "Failed to retrieve directories and files from " + getBaseURL() + currentDirectory, e);

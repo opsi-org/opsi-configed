@@ -31,7 +31,7 @@ public class CompletionComboButton {
 	private JButton button;
 	private JTextField textfield;
 	private Set<String> defaultvalues;
-	private String searchSpecificFiles;
+	private String fileExtension;
 
 	public CompletionComboButton() {
 		this(null, null);
@@ -41,9 +41,9 @@ public class CompletionComboButton {
 		this(values, null);
 	}
 
-	public CompletionComboButton(List<String> values, String searchSpecificFiles) {
+	public CompletionComboButton(List<String> values, String fileExtension) {
 		Logging.info(this.getClass(), "instance created");
-		this.searchSpecificFiles = searchSpecificFiles;
+		this.fileExtension = fileExtension;
 		init(values);
 		createInstances();
 
@@ -101,10 +101,10 @@ public class CompletionComboButton {
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.cb_serverDir.tooltip"));
 		combobox.setEditable(true);
 
-		if (searchSpecificFiles != null && !searchSpecificFiles.isEmpty()) {
+		if (fileExtension != null && !fileExtension.isEmpty()) {
 			combobox.addActionListener((ActionEvent actionEvent) -> {
 				if (combobox.getSelectedItem() != null
-						&& ((String) combobox.getSelectedItem()).endsWith(searchSpecificFiles)) {
+						&& ((String) combobox.getSelectedItem()).endsWith(fileExtension)) {
 					textfield.setText((String) combobox.getSelectedItem());
 				} else {
 					textfield.setText("");
@@ -130,7 +130,7 @@ public class CompletionComboButton {
 			combobox.setSelectedItem(strcbtext);
 		}
 
-		if (searchSpecificFiles != null && !searchSpecificFiles.isEmpty()) {
+		if (fileExtension != null && !fileExtension.isEmpty()) {
 			getDirectoriesAndFilesIn(strcbtext);
 		} else {
 			getDirectoriesIn(strcbtext);
@@ -178,7 +178,7 @@ public class CompletionComboButton {
 			@Override
 			public void run() {
 				WebDAVClient webDAVClient = new WebDAVClient();
-				List<String> result = webDAVClient.getDirectoriesAndFilesIn(curdir);
+				List<String> result = webDAVClient.getDirectoriesAndFilesIn(curdir, fileExtension);
 				setItems(result, curdir);
 				enableComponents(true);
 			}
