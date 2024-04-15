@@ -21,7 +21,7 @@ import de.uib.utilities.ThreadLocker;
 import de.uib.utilities.logging.Logging;
 
 public class CommandProcess {
-	private String processId;
+	private String id;
 	private StringBuilder result;
 	private ThreadLocker locker;
 	private ConfigedMain configedMain;
@@ -53,7 +53,7 @@ public class CommandProcess {
 	}
 
 	public void onStart(Map<String, Object> message) {
-		processId = (String) message.get("process_id");
+		id = (String) message.get("process_id");
 		Float processTimeout = ((String) message.get("timeout")) != null
 				? Float.parseFloat((String) message.get("timeout"))
 				: 0;
@@ -66,7 +66,7 @@ public class CommandProcess {
 
 	public void onStop(Map<String, Object> message) {
 		String stoppedProcessId = (String) message.get("process_id");
-		if (stoppedProcessId != null && stoppedProcessId.equals(processId)) {
+		if (stoppedProcessId != null && stoppedProcessId.equals(id)) {
 			locker.unlock();
 		}
 	}
@@ -75,7 +75,7 @@ public class CommandProcess {
 		String streamToReadFrom = determineStreamFromWhichToRead(message);
 		byte[] data = (byte[]) message.get(streamToReadFrom);
 		String currentProcessId = (String) message.get("process_id");
-		if (currentProcessId.equals(processId) && !"stderr".equals(streamToReadFrom)) {
+		if (currentProcessId.equals(id) && !"stderr".equals(streamToReadFrom)) {
 			result.append(new String(data));
 		}
 		return new String(data);
@@ -88,7 +88,7 @@ public class CommandProcess {
 
 	public String onError(Map<String, Object> message) {
 		String stoppedProcessId = (String) message.get("process_id");
-		if (stoppedProcessId != null && stoppedProcessId.equals(processId)) {
+		if (stoppedProcessId != null && stoppedProcessId.equals(id)) {
 			locker.unlock();
 		}
 		Map<String, Object> error = POJOReMapper.remap(message.get("error"), new TypeReference<Map<String, Object>>() {
@@ -117,7 +117,7 @@ public class CommandProcess {
 					Map<String, Object> data = new HashMap<>();
 					data.put("type", WebSocketEvent.PROCESS_STOP_REQUEST.toString());
 					data.put("id", UUID.randomUUID().toString());
-					data.put("process_id", processId);
+					data.put("process_id", id);
 					data.put("sender", "@");
 					data.put("channel", "service:config:process");
 					data.put("created", System.currentTimeMillis());
