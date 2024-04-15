@@ -3018,39 +3018,17 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
-		if (getSelectedClients().isEmpty()) {
-			return;
-		}
-
-		String confirmInfo;
-
-		if (resetLocalbootProducts && resetNetbootProducts) {
-			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetProducts.question");
-		} else if (resetLocalbootProducts) {
-			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetLocalbootProducts.question");
-		} else if (resetNetbootProducts) {
-			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetNetbootProducts.question");
-		} else {
-			Logging.warning(this, "cannot reset products because they're neither localboot nor netboot");
-			return;
-		}
-
-		if (!confirmActionForSelectedClients(confirmInfo)) {
+		String confirmInfoMessage = getConfirmInfoMessage(resetLocalbootProducts, resetNetbootProducts);
+		if (getSelectedClients().isEmpty() || confirmInfoMessage.isEmpty()
+				|| !confirmActionForSelectedClients(confirmInfoMessage)) {
 			return;
 		}
 
 		mainFrame.activateLoadingCursor();
 
-		if (resetLocalbootProducts) {
-			persistenceController.getProductDataService().resetProducts(preSaveSelectedClients, withDependencies,
-					OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-		}
-
-		if (resetNetbootProducts) {
-			persistenceController.getProductDataService().resetProducts(preSaveSelectedClients, withDependencies,
-					OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-
-		}
+		persistenceController.getProductDataService().resetProducts(getSelectedClients(), withDependencies,
+				resetLocalbootProducts ? OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING
+						: OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
 		requestReloadStatesAndActions();
 
@@ -3059,6 +3037,20 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		mainFrame.deactivateLoadingCursor();
+	}
+
+	private String getConfirmInfoMessage(boolean resetLocalbootProducts, boolean resetNetbootProducts) {
+		String confirmInfo = "";
+		if (resetLocalbootProducts && resetNetbootProducts) {
+			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetProducts.question");
+		} else if (resetLocalbootProducts) {
+			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetLocalbootProducts.question");
+		} else if (resetNetbootProducts) {
+			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetNetbootProducts.question");
+		} else {
+			Logging.warning(this, "cannot reset products because they're neither localboot nor netboot");
+		}
+		return confirmInfo;
 	}
 
 	public boolean freeAllPossibleLicensesForSelectedClients() {
