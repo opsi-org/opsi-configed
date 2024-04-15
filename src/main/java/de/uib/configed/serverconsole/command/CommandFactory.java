@@ -40,6 +40,7 @@ public final class CommandFactory {
 
 	public static final String OPSI_PATH_VAR_REPOSITORY = "/var/lib/opsi/repository/";
 	public static final String OPSI_PATH_VAR_DEPOT = "/var/lib/opsi/depot/";
+	public static final String WEBDAV_OPSI_PATH_VAR_DEPOT = "depot/";
 	public static final String WEBDAV_OPSI_PATH_VAR_REPOSITORY = "repository/";
 	public static final String WEBDAV_OPSI_PATH_VAR_WORKBENCH = "workbench/";
 

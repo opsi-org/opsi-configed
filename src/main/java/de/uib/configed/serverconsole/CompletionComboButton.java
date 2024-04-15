@@ -154,11 +154,7 @@ public class CompletionComboButton {
 	}
 
 	public String comboBoxGetStringItem() {
-		if (combobox.getEditor().getItem().toString().startsWith("/")) {
-			return combobox.getEditor().getItem().toString();
-		} else {
-			return getBasicPath() + combobox.getEditor().getItem().toString();
-		}
+		return combobox.getEditor().getItem().toString();
 	}
 
 	private void getDirectoriesIn(final String curdir) {

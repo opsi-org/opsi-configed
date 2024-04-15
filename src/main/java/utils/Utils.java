@@ -478,12 +478,18 @@ public final class Utils {
 			if (dir.charAt(dir.length() - 1) != '/') {
 				dir = dir + "/";
 			}
-			dir = dir + Paths.get(webDAVPath).getFileName().toString();
+			dir = dir + retrieveFileNameIfPresentFrom(webDAVPath);
 		} else if (webDAVPath.startsWith("repository")) {
-			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY + Paths.get(webDAVPath).getFileName().toString();
+			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY + retrieveFileNameIfPresentFrom(webDAVPath);
+		} else if (webDAVPath.startsWith("depot")) {
+			dir = CommandFactory.OPSI_PATH_VAR_DEPOT + retrieveFileNameIfPresentFrom(webDAVPath);
 		} else {
 			Logging.warning("expected repository or workbench");
 		}
 		return dir;
+	}
+
+	private static String retrieveFileNameIfPresentFrom(String filePath) {
+		return (filePath.charAt(filePath.length() - 1) != '/') ? Paths.get(filePath).getFileName().toString() : "";
 	}
 }

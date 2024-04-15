@@ -28,6 +28,7 @@ import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -53,7 +54,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additionalDefaultPaths.add(CommandFactory.OPSI_PATH_VAR_DEPOT);
+		additionalDefaultPaths.add(CommandFactory.WEBDAV_OPSI_PATH_VAR_DEPOT);
 		completion = new CompletionComboButton(additionalDefaultPaths);
 
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
@@ -100,7 +101,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 
 	@Override
 	public void doAction2() {
-		commandOpsiSetRights.setDir(completion.comboBoxGetStringItem());
+		commandOpsiSetRights.setDir(Utils.getServerPathFromWebDAVPath(completion.comboBoxGetStringItem()));
 		Logging.info(this, "doAction2 opsi-set-rights with path: " + commandOpsiSetRights.getDir());
 		new Thread() {
 			@Override
