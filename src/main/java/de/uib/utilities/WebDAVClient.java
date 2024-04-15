@@ -91,7 +91,8 @@ public class WebDAVClient {
 		try {
 			List<DavResource> resources = sardine.list(getBaseURL() + currentDirectory);
 			for (DavResource resource : resources) {
-				if (resource.isDirectory() || resource.getDisplayName().endsWith(fileExtension)) {
+				if ((!resource.getDisplayName().equals(currentDirectory.substring(0, currentDirectory.length() - 1))
+						&& resource.isDirectory()) || resource.getDisplayName().endsWith(fileExtension)) {
 					directoriesAndFiles.add(resource.getPath().replace("/dav/", ""));
 				}
 			}
