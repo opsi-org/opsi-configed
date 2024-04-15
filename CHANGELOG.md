@@ -1,10 +1,14 @@
 # Changelog
 ## [4.3.2.X] - 2024-XX-XX
+## Fixed
+- `NullPointerException` on product reset
+- `MySQLdb.integrityError` when moving clients to NOT_ASSIGNED directory/group
+- Product filter disabled after a reload or switching client selection
+- "Failed actions" search and selection
+- The lower control panel in logviewer keeps disappearing on resize
+
 ## Changed
 - Maintain consistent log levels for unspecified lines
-
-## Fixed
-- The lower control panel in logviewer keeps disappearing on resize
 
 ## [4.3.2.11] - 2024-03-28
 ## Fixed
