@@ -567,7 +567,9 @@ public class PanelProductSettings extends JSplitPane {
 		productSettingsTableModel.setRenderer(istm);
 
 		// We don't want to call setSelection here, since it will be called after this method
-		valueChanged(productTree.getSelectionPaths(), false);
+		if (!isFilteredMode()) {
+			valueChanged(productTree.getSelectionPaths(), false);
+		}
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();

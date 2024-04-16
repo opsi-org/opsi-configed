@@ -290,7 +290,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
 					if (fEditDate == null) {
-						fEditDate = new FEditDate(jTextFieldEndOfLicense.getText(), false);
+						fEditDate = new FEditDate(jTextFieldEndOfLicense.getText());
 					} else {
 						fEditDate.setStartText(jTextFieldEndOfLicense.getText());
 					}

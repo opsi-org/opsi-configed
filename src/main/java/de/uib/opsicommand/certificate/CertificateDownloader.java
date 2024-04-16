@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.opsicommand;
+package de.uib.opsicommand.certificate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +19,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.opsicommand.ConnectionErrorReporter;
+import de.uib.opsicommand.ConnectionErrorType;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 

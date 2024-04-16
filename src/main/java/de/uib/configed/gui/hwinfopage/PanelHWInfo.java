@@ -279,7 +279,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		List<Map<String, Object>> devices = hwInfo.get(hwClass);
 
-		Map<String, Object> deviceInfo = devicesInfo.get(node.toString());
+		Map<String, Object> deviceInfo = devicesInfo.get(hwClass + "-" + node.toString());
 
 		return devices != null && deviceInfo != null;
 	}
@@ -311,7 +311,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		String hwClassUI = path[1].toString();
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-		Map<String, Object> deviceInfo = devicesInfo.get(node.toString());
+		Map<String, Object> deviceInfo = devicesInfo.get(hwClass + "-" + node.toString());
 
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
@@ -546,7 +546,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				if (name.equals(device.get("displayName"))) {
 					IconNode iconNode = new IconNode(device.get("displayName"));
 					iconNode.setIcon(classIcon);
-					devicesInfo.put((String) device.get("displayName"), device);
+					devicesInfo.put(hwClassMapping.get(classNode.getUserObject()) + "-" + device.get("displayName"),
+							device);
 					classNode.add(iconNode);
 					scanNodes(iconNode);
 					break;
