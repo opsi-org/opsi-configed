@@ -6,21 +6,29 @@
 
 package de.uib.configed.gui.licenses;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.LicensesTabStatus;
 import de.uib.utilities.swing.SecondaryFrame;
-import de.uib.utilities.swing.tabbedpane.TabbedPaneX;
 
 public class LicensesFrame extends SecondaryFrame {
-	private TabbedPaneX panel;
+	private JTabbedPane jTabbedPaneMain;
+
+	private List<LicensesTabStatus> tabOrder;
 
 	public LicensesFrame(ConfigedMain configedMain) {
 		super();
-		panel = new TabbedPaneX(configedMain);
-		super.add(panel);
+		super.add(createPanel(configedMain));
 	}
 
 	@Override
@@ -29,10 +37,53 @@ public class LicensesFrame extends SecondaryFrame {
 		setExtendedState(Frame.NORMAL);
 	}
 
+	private JPanel createPanel(ConfigedMain configedMain) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.setSize(600, 400);
+
+		panel.setLayout(new BorderLayout());
+		jTabbedPaneMain = new JTabbedPane(SwingConstants.TOP);
+
+		tabOrder = new ArrayList<>();
+
+		jTabbedPaneMain.addChangeListener((ChangeEvent changeEvent) -> {
+			int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
+
+			LicensesTabStatus newS = tabOrder.get(newVisualIndex);
+
+			// report state change request to controller and look, what it produces
+			LicensesTabStatus s = configedMain.reactToStateChangeRequest(newS);
+
+			// if the controller did not accept the new index set it back
+			// observe that we get a recursion since we initiate another state change
+			// the recursion breaks since newVisualIndex is identical with
+			// the old and does not yield a different value
+			if (newS != s) {
+				jTabbedPaneMain.setSelectedIndex(tabOrder.indexOf(s));
+			}
+		});
+
+		panel.add(jTabbedPaneMain, BorderLayout.CENTER);
+		return panel;
+	}
+
 	/**
 	 * adds a tab to the incorporated JTabbedMain, using an extra title
 	 */
 	public void addTab(LicensesTabStatus s, String title, Component c) {
-		panel.addTab(s, title, c);
+		tabOrder.add(s);
+		jTabbedPaneMain.addTab(title, c);
+	}
+
+	/**
+	 * removes a tab
+	 */
+	public void removeTab(LicensesTabStatus s) {
+		int tabIndex = tabOrder.indexOf(s);
+		if (tabIndex > 0) {
+			jTabbedPaneMain.remove(tabIndex);
+			tabOrder.remove(tabIndex);
+		}
 	}
 }
