@@ -20,13 +20,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
+import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelEditLicenses;
 import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditPane;
-import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
@@ -55,7 +55,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	}
 
 	@Override
-	public TabClientAdapter getTabClient() {
+	public MultiTablePanel getTabClient() {
 		return thePanel;
 	}
 

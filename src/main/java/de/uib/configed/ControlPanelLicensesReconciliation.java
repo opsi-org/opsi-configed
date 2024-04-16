@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.swing.table.TableColumn;
 
+import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelLicensesReconciliation;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -21,7 +22,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.CheckBoxTableCellRenderer;
@@ -53,7 +53,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 	}
 
 	@Override
-	public TabClientAdapter getTabClient() {
+	public MultiTablePanel getTabClient() {
 		return thePanel;
 	}
 

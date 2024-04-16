@@ -79,6 +79,7 @@ import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.configed.gui.licenses.LicensesFrame;
+import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.ssh.SSHCommandControlDialog;
 import de.uib.configed.gui.ssh.SSHConfigDialog;
@@ -118,7 +119,6 @@ import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
-import de.uib.utilities.swing.tabbedpane.TabClient;
 import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
@@ -262,7 +262,7 @@ public class ConfigedMain implements MessagebusListener {
 		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
 	}
 
-	private Map<LicensesTabStatus, TabClient> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
+	private Map<LicensesTabStatus, MultiTablePanel> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
 	private LicensesTabStatus licensesStatus;
 
 	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
@@ -326,7 +326,7 @@ public class ConfigedMain implements MessagebusListener {
 		return loginDialog;
 	}
 
-	private void addClient(LicensesTabStatus status, TabClient panel) {
+	private void addClient(LicensesTabStatus status, MultiTablePanel panel) {
 		licensesPanels.put(status, panel);
 		licensesFrame.addTab(status, licensesPanelsTabNames.get(status), (JComponent) panel);
 	}

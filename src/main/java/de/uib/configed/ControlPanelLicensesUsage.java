@@ -15,13 +15,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
+import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelLicensesUsage;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.CellEditor4TableText;
 import de.uib.utilities.table.provider.DefaultTableProvider;
@@ -83,7 +83,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 	}
 
 	@Override
-	public TabClientAdapter getTabClient() {
+	public MultiTablePanel getTabClient() {
 		return thePanel;
 	}
 

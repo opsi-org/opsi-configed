@@ -12,7 +12,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
+import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.updates.MapBasedTableEditItem;
@@ -25,7 +25,7 @@ public abstract class AbstractControlMultiTablePanel {
 
 	protected List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 
-	public abstract TabClientAdapter getTabClient();
+	public abstract MultiTablePanel getTabClient();
 
 	public List<GenTableModel> getTableModels() {
 		return tableModels;
