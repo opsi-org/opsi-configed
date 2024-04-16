@@ -17,6 +17,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
 
+import de.uib.opsicommand.certificate.CertificateValidator;
+import de.uib.opsicommand.certificate.CertificateValidatorFactory;
+import de.uib.opsicommand.certificate.InsecureCertificateValidator;
 import de.uib.utilities.logging.Logging;
 
 /**

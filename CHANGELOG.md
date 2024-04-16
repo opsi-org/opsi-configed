@@ -1,10 +1,27 @@
 # Changelog
 ## [4.3.2.X] - 2024-XX-XX
+## Changed
+- Use insecure connection in Messagebus, when certificate verification is disabled
+- Maintain consistent log levels for unspecified lines
+- Save user preferences on table's display fields
+- On reload in "localboot products" and "netboot products" tabs, installed packages are shown in and deleted packages are removed from the table
+
+
+## Added
+- Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
+
+
 ## Fixed
+- `NullPointerException` on product reset
+- `MySQLdb.integrityError` when moving clients to NOT_ASSIGNED directory/group
+- Product filter disabled after a reload or switching client selection
+- "Failed actions" search and selection
+- The lower control panel in logviewer keeps disappearing on resize
+- The lower control panel in logviewer keeps disappearing on resize
+- For hardware devices with the same name in different hardware class, the information is shown incorrectly
+- Can't change table column visibility in product table after full reload
 - On reload in "default properties" tab no changes are made to the table (removed packages are shown and installed packages aren't shown)
 
-## Change
-- On reload in "localboot products" and "netboot products" tabs, installed packages are shown in and deleted packages are removed from the table
 
 ## [4.3.2.11] - 2024-03-28
 ## Fixed

@@ -18,6 +18,8 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
+import de.uib.opsicommand.certificate.CertificateDownloader;
+import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditRecord;
 
