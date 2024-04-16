@@ -6,6 +6,7 @@
 
 package de.uib.utilities.table.gui;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -29,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,13 +38,13 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
-import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.NavigationPanel;
 import utils.Utils;
 
@@ -62,7 +64,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private boolean filtering;
 
 	private JComboBox<String> comboSearchFields;
-	private JComboBoxToolTip comboSearchFieldsMode;
+	private JComboBox<String> comboSearchFieldsMode;
 
 	private JLabel labelSearch;
 	private CheckedLabel checkmarkSearch;
@@ -339,8 +341,22 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 					Configed.getResourceValue("SearchPane.mode.regex.tooltip"));
 		}
 
-		comboSearchFieldsMode = new JComboBoxToolTip();
-		comboSearchFieldsMode.setValues(tooltipsMap, false);
+		comboSearchFieldsMode = new JComboBox<>();
+		for (String key : tooltipsMap.keySet()) {
+			comboSearchFieldsMode.addItem(key);
+		}
+		comboSearchFieldsMode.setRenderer(new BasicComboBoxRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				if (isSelected && -1 < index && index < tooltipsMap.size()) {
+					list.setToolTipText(new ArrayList<>(tooltipsMap.values()).get(index));
+				}
+
+				setText(value != null ? value.toString() : "");
+				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			}
+		});
 		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
