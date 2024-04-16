@@ -42,7 +42,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelEnterLicense;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licenses.LicenseEntry;
-import de.uib.utilities.swing.timeedit.FEditDate;
+import de.uib.utilities.swing.FEditDate;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import utils.Utils;
 

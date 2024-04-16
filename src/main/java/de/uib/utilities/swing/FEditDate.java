@@ -9,7 +9,7 @@
  *
  */
 
-package de.uib.utilities.swing.timeedit;
+package de.uib.utilities.swing;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEdit;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
