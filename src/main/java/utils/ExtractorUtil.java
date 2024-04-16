@@ -108,6 +108,7 @@ public final class ExtractorUtil {
 		return files;
 	}
 
+	@SuppressWarnings("resource")
 	private static InputStream retrieveInputStream(File file) {
 		InputStream is = null;
 		try {
