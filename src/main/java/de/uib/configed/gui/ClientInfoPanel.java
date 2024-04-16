@@ -30,9 +30,9 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
-import de.uib.utilities.swing.JTextHideField;
 import de.uib.utilities.swing.RevertibleTextField;
 import de.uib.utilities.swing.SeparatedDocument;
+import de.uib.utilities.swing.ToggleableTextField;
 import utils.Utils;
 
 public class ClientInfoPanel extends JPanel implements KeyListener {
@@ -48,7 +48,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	private RevertibleTextField macAddressField;
 	private RevertibleTextField ipAddressField;
 	private RevertibleTextField jTextFieldOneTimePassword;
-	private JTextHideField jTextFieldHostKey;
+	private ToggleableTextField jTextFieldHostKey;
 
 	private Map<String, Map<String, String>> changedClientInfos;
 	private String oldNotes;
@@ -147,7 +147,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		jTextFieldOneTimePassword = new RevertibleTextField("");
 		jTextFieldOneTimePassword.addKeyListener(this);
 
-		jTextFieldHostKey = new JTextHideField();
+		jTextFieldHostKey = new ToggleableTextField();
 
 		GroupLayout layoutClientPane = new GroupLayout(this);
 		setLayout(layoutClientPane);

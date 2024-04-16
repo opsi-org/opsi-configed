@@ -23,7 +23,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import utils.Utils;
 
-public class JTextHideField extends JPanel {
+public class ToggleableTextField extends JPanel {
 	private JPasswordField invisibleField;
 	private JTextField visibleField;
 	private JButton button;
@@ -45,7 +45,7 @@ public class JTextHideField extends JPanel {
 		}
 	}
 
-	public JTextHideField() {
+	public ToggleableTextField() {
 		invisibleField = new JPasswordField();
 		visibleField = new JTextField() {
 			@Override
