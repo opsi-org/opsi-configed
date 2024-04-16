@@ -68,17 +68,11 @@ public class LicensesFrame extends SecondaryFrame {
 		return panel;
 	}
 
-	/**
-	 * adds a tab to the incorporated JTabbedMain, using an extra title
-	 */
 	public void addTab(LicensesTabStatus s, String title, Component c) {
 		tabOrder.add(s);
 		jTabbedPaneMain.addTab(title, c);
 	}
 
-	/**
-	 * removes a tab
-	 */
 	public void removeTab(LicensesTabStatus s) {
 		int tabIndex = tabOrder.indexOf(s);
 		if (tabIndex > 0) {
