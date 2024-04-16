@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 import de.uib.utilities.logging.Logging;
-import utils.ProductPackageVersionSeparator;
 
 public class ProductState extends HashMap<String, String> {
 	private static ProductState defaultProductState;
@@ -154,8 +154,7 @@ public class ProductState extends HashMap<String, String> {
 		String versionInfo = "";
 
 		if (!get(KEY_PRODUCT_VERSION).isEmpty()) {
-			versionInfo = get(KEY_PRODUCT_VERSION) + ProductPackageVersionSeparator.FOR_DISPLAY
-					+ get(KEY_PACKAGE_VERSION);
+			versionInfo = get(KEY_PRODUCT_VERSION) + ProductDataService.FOR_DISPLAY + get(KEY_PACKAGE_VERSION);
 		}
 
 		put(KEY_VERSION_INFO, versionInfo);
