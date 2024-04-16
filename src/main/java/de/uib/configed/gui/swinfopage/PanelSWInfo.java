@@ -63,7 +63,6 @@ public class PanelSWInfo extends JPanel {
 	private JLabel labelWithMSUpdates;
 	private JLabel labelWithMSUpdates2;
 
-	private final SWInfoTableModel voidTableModel = new SWInfoTableModel();
 	private GenTableModel modelSWInfo;
 
 	private JLabel labelSuperTitle;
@@ -151,10 +150,8 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setSearchSelectMode(true);
 		panelTable.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 
-		List<String> columnNames;
+		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
-		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
-		columnNames.remove(0);
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			finalColumns[i] = i;
@@ -271,7 +268,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void buildPanel() {
-		JTable jTable = new JTable(voidTableModel, null);
+		JTable jTable = new JTable(new SWInfoTableModel());
 
 		jTable.setAutoCreateRowSorter(true);
 		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
@@ -484,31 +481,28 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private static class SWInfoTableModel extends AbstractTableModel {
-		private List<String[]> data;
-
 		public SWInfoTableModel() {
 			super();
-			data = new ArrayList<>();
 		}
 
 		@Override
 		public int getRowCount() {
-			return data.size();
+			return 0;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return SWAuditClientEntry.getDisplayKeys().size();
+			return SWAuditClientEntry.KEYS.size();
 		}
 
 		@Override
 		public String getColumnName(int column) {
-			return SWAuditClientEntry.KEYS.get(column + 1);
+			return SWAuditClientEntry.KEYS.get(column);
 		}
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			return data.get(row)[col + 1];
+			return null;
 		}
 	}
 }

@@ -8,7 +8,6 @@ package de.uib.configed.type;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -48,19 +47,9 @@ public class SWAuditClientEntry {
 	public static final String LICENSE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
 	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
-	public static final List<String> KEYS = List.of(SWAuditEntry.ID, SWAuditEntry.NAME, SWAuditEntry.VERSION,
-			SWAuditEntry.SUB_VERSION, SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENSE_KEY,
-			SWAuditEntry.WINDOWS_SOFTWARE_ID);
-	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();
-	static {
-		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.ID);
-		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.NAME);
-		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.VERSION);
-		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.ARCHITECTURE);
-		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.LANGUAGE);
-		KEYS_FOR_GUI_TABLES.add(LICENSE_KEY);
-		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
-	}
+	public static final List<String> KEYS = List.of(SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
+			SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENSE_KEY, SWAuditEntry.WINDOWS_SOFTWARE_ID);
+
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
 	private Set<String> notFoundSoftwareIDs;
@@ -184,10 +173,6 @@ public class SWAuditClientEntry {
 
 	public String getSWident() {
 		return swIdent;
-	}
-
-	public static List<String> getDisplayKeys() {
-		return KEYS_FOR_GUI_TABLES;
 	}
 
 	public Map<String, Object> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
