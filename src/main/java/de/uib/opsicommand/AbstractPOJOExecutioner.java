@@ -21,7 +21,7 @@ import de.uib.utils.logging.Logging;
  * This class extends the Executioner abstract class in such a way that the data
  * will be retrieved in POJO.
  */
-public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
+public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 	protected ConnectionState conStat;
 
 	@Override

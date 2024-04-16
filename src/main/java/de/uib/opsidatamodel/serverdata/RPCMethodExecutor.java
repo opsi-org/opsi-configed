@@ -71,21 +71,15 @@ public class RPCMethodExecutor {
 	private List<String> wakeOnLan(Map<String, List<String>> hostSeparationByDepot) {
 		Map<String, Object> responses = new HashMap<>();
 
-		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();
-
 		for (Entry<String, List<String>> hostSeparationEntry : hostSeparationByDepot.entrySet()) {
 			Logging.info(this,
 					"from depot " + hostSeparationEntry.getKey() + " we have hosts " + hostSeparationEntry.getValue());
 
-			AbstractExecutioner exec1 = executionerForDepots.get(hostSeparationEntry.getKey());
+			Logging.info(this, "working exec for depot " + hostSeparationEntry.getKey());
 
-			Logging.info(this, "working exec for depot " + hostSeparationEntry.getKey() + " " + (exec1 != null));
+			AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(hostSeparationEntry.getKey());
 
-			if (exec1 == null) {
-				exec1 = persistenceController.retrieveWorkingExec(hostSeparationEntry.getKey());
-			}
-
-			if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
+			if (exec1 != null) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
 						new Object[] { hostSeparationEntry.getValue() });
 
@@ -106,9 +100,7 @@ public class RPCMethodExecutor {
 				Set<String> hostsToWake = new HashSet<>(hostIds);
 				hostsToWake.retainAll(hostSeparationEntry.getValue());
 
-				if (execsByDepot.get(hostSeparationEntry.getKey()) != null
-						&& execsByDepot.get(hostSeparationEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
-						&& !hostsToWake.isEmpty()) {
+				if (execsByDepot.get(hostSeparationEntry.getKey()) != null && !hostsToWake.isEmpty()) {
 					Logging.debug(this, "wakeOnLan execute for " + hostsToWake);
 					OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
 							new Object[] { hostsToWake });
@@ -130,7 +122,7 @@ public class RPCMethodExecutor {
 		Logging.info(this,
 				"working exec for config server " + hostInfoCollections.getConfigServer() + " " + (exec1 != null));
 
-		if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
+		if (exec1 != null) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });
 
 			response = exec1.getMapResult(omc);

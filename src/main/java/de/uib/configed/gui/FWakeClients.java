@@ -56,11 +56,9 @@ public class FWakeClients extends FShowList {
 
 			for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
 				Logging.info(this, "act on depot " + depotEntry.getKey() + ", executioner != NONE  "
-						+ (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner())
 						+ " counterByDepots.get(depot) " + counterByDepots.get(depotEntry.getKey()));
 
-				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
-						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
+				if (counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
 					// Get the executioner for the depot, and create new one if non-existant
 					AbstractExecutioner executioner = executionerForDepots.computeIfAbsent(depotEntry.getKey(),
 							this::computeExecutionerForDepot);
@@ -86,7 +84,7 @@ public class FWakeClients extends FShowList {
 	private AbstractExecutioner computeExecutionerForDepot(String depot) {
 		AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(depot);
 		// we try to connect when the first client of a depot should be connected
-		if (exec1 == AbstractExecutioner.getNoneExecutioner()) {
+		if (exec1 == null) {
 			appendLine("!! giving up connecting to  " + depot);
 		}
 		return exec1;
@@ -94,7 +92,7 @@ public class FWakeClients extends FShowList {
 
 	private void addHostToWake(AbstractExecutioner executioner, Entry<String, List<String>> depotEntry, int turn,
 			Set<String> hostsToWakeOnThisTurn, Map<String, Integer> counterByDepots) {
-		if (executioner != AbstractExecutioner.getNoneExecutioner()) {
+		if (executioner != null) {
 			String host = depotEntry.getValue().get(turn);
 
 			String line = String.format("trying to start up   %s    from depot    %s  ", host, depotEntry.getKey());

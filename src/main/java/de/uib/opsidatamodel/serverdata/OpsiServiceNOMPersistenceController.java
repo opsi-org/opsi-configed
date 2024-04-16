@@ -483,7 +483,7 @@ public class OpsiServiceNOMPersistenceController {
 
 		Logging.info(this, "no connection to server " + depot);
 
-		return AbstractExecutioner.getNoneExecutioner();
+		return null;
 	}
 
 	public boolean makeConnection() {

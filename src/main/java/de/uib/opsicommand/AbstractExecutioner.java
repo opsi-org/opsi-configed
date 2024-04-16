@@ -9,49 +9,39 @@ package de.uib.opsicommand;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractExecutioner {
-	private static AbstractExecutioner nonExecutioner;
+public interface AbstractExecutioner {
+	ConnectionState getConnectionState();
 
-	public abstract ConnectionState getConnectionState();
+	boolean doCall(OpsiMethodCall omc);
 
-	public abstract boolean doCall(OpsiMethodCall omc);
+	String getErrorFromResponse(Map<String, Object> retrieved);
 
-	public abstract String getErrorFromResponse(Map<String, Object> retrieved);
+	Map<String, Object> getResponses(Map<String, Object> retrieved);
 
-	public abstract Map<String, Object> getResponses(Map<String, Object> retrieved);
+	Map<String, Object> retrieveResponse(OpsiMethodCall omc);
 
-	public abstract Map<String, Object> retrieveResponse(OpsiMethodCall omc);
+	List<Object> getListResult(OpsiMethodCall omc);
 
-	public abstract List<Object> getListResult(OpsiMethodCall omc);
+	List<String> getStringListResult(OpsiMethodCall omc);
 
-	public abstract List<String> getStringListResult(OpsiMethodCall omc);
+	List<List<String>> getListOfStringLists(OpsiMethodCall omc);
 
-	public abstract List<List<String>> getListOfStringLists(OpsiMethodCall omc);
+	Map<String, Object> getMapResult(OpsiMethodCall omc);
 
-	public abstract Map<String, Object> getMapResult(OpsiMethodCall omc);
+	Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc);
 
-	public abstract Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc);
+	List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc);
 
-	public abstract List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc);
+	Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key, String[] sourceVars,
+			String[] targetVars);
 
-	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars);
+	List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc);
 
-	public abstract List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc);
+	String getStringResult(OpsiMethodCall omc);
 
-	public abstract String getStringResult(OpsiMethodCall omc);
+	boolean getBooleanResult(OpsiMethodCall omc);
 
-	public abstract boolean getBooleanResult(OpsiMethodCall omc);
+	Map<String, Object> getMapFromItem(Object s);
 
-	public abstract Map<String, Object> getMapFromItem(Object s);
-
-	public abstract List<Object> getListFromItem(String s);
-
-	public static AbstractExecutioner getNoneExecutioner() {
-		if (nonExecutioner == null) {
-			nonExecutioner = new NONEexecutioner();
-		}
-
-		return nonExecutioner;
-	}
+	List<Object> getListFromItem(String s);
 }
