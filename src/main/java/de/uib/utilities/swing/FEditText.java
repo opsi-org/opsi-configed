@@ -9,20 +9,30 @@ package de.uib.utilities.swing;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class FEditText extends FEdit implements DocumentListener {
 	protected JScrollPane scrollpane;
 	protected JTextArea textarea;
+	private JTextField extraField;
 
 	private boolean singleLine;
 
 	public FEditText(String initialText, String hint) {
 		super(initialText, hint);
 		initFEditText();
+		setSingleLine(false);
+	}
+
+	public FEditText(String initialText, String hint, String extraName) {
+		super(initialText, hint);
+		initFEditTextWithExtra(extraName);
 		setSingleLine(false);
 	}
 
@@ -40,6 +50,17 @@ public class FEditText extends FEdit implements DocumentListener {
 		textarea.addKeyListener(this);
 		textarea.getDocument().addDocumentListener(this);
 		setStartText(this.initialText);
+	}
+
+	private void initFEditTextWithExtra(String extraName) {
+		initFEditText();
+		JPanel extraPanel = new JPanel();
+		JLabel extraLabel = new JLabel(extraName);
+		extraField = new JTextField();
+		extraField.setColumns(20);
+		extraPanel.add(extraLabel);
+		extraPanel.add(extraField);
+		editingArea.add(extraPanel, BorderLayout.NORTH);
 	}
 
 	public final void setSingleLine(boolean b) {
@@ -64,6 +85,10 @@ public class FEditText extends FEdit implements DocumentListener {
 		// set new initial text for use in processWindowEvent
 		initialText = textarea.getText();
 		return initialText;
+	}
+
+	public String getExtra() {
+		return extraField != null ? extraField.getText() : "";
 	}
 
 	public void select(int selectionStart, int selectionEnd) {

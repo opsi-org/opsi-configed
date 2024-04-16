@@ -39,7 +39,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
-import de.uib.utilities.swing.FEditTextWithExtra;
+import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ClientTableExporterToCSV;
 import de.uib.utilities.table.ExporterToCSV;
@@ -443,7 +443,7 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void showPopupOnClientsAction() {
-		FEditTextWithExtra fText = new FEditTextWithExtra("", Configed.getResourceValue("MainFrame.writePopupMessage"),
+		FEditText fText = new FEditText("", Configed.getResourceValue("MainFrame.writePopupMessage"),
 				Configed.getResourceValue("MainFrame.writePopupDuration")) {
 			@Override
 			protected void commit() {
