@@ -1509,11 +1509,11 @@ public class ConfigedMain implements MessagebusListener {
 		return filterClientList;
 	}
 
-	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
+	public void toggleFilterClientList(boolean rebuildClientListTableModel, boolean filterClientList) {
 		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
 				+ rebuildClientListTableModel);
 
-		filterClientList = !filterClientList;
+		this.filterClientList = filterClientList;
 		if (rebuildClientListTableModel) {
 			setRebuiltClientListTableModel(true, false, clientTable.getSelectedSet());
 		}

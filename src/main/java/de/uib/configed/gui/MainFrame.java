@@ -87,6 +87,7 @@ public class MainFrame extends JFrame {
 
 	private JMenuItem jMenuFrameLicenses;
 	private JMenuItem jMenuFrameShowDialogs;
+	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter;
 
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
@@ -487,7 +488,7 @@ public class MainFrame extends JFrame {
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
 
-		JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
+		jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		jMenuClientselectionToggleClientFilter.setState(false);
 		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
@@ -754,7 +755,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
-		configedMain.toggleFilterClientList(rebuildClientListTableModel);
+		configedMain.toggleFilterClientList(rebuildClientListTableModel, !configedMain.isFilterClientList());
+		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
 		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
 		clientTable.setFilterMark(configedMain.isFilterClientList());
