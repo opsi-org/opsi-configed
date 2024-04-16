@@ -35,8 +35,8 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.Object2GroupEntry;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditList;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditList;
 
 public class ClientTree extends AbstractGroupTree {
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");

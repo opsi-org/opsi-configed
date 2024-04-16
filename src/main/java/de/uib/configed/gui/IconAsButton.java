@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import utils.Utils;
+import de.uib.utils.Utils;
 
 /**
  * a button-like panel

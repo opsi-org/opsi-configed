@@ -10,7 +10,7 @@ import java.awt.Component;
 
 import javax.swing.JTable;
 
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
 
 public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 	@Override

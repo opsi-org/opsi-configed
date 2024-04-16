@@ -16,8 +16,8 @@ import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelRegisteredSoftware extends PanelGenEditTable {
 	private ControlPanelAssignToLPools controller;

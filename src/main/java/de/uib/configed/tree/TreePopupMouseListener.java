@@ -18,8 +18,8 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
-import de.uib.utilities.logging.Logging;
-import utils.PopupMouseListener;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.logging.Logging;
 
 public class TreePopupMouseListener extends PopupMouseListener {
 	private AbstractGroupTree tree;

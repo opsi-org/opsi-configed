@@ -41,12 +41,12 @@ import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PopupMenuTrait;
-import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.tree.XTree;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.utils.table.ExporterToPDF;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.tree.XTree;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";

@@ -17,15 +17,15 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.swinfopage.PanelSWInfo.KindOfExport;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JTextShowField;
-import de.uib.utilities.swing.PanelStateSwitch;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PanelStateSwitch;
 
 public class PanelSWMultiClientReport extends JPanel {
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";
@@ -42,8 +42,8 @@ public class PanelSWMultiClientReport extends JPanel {
 	private File exportDirectory;
 	private String exportDirectoryS;
 	private JFileChooser chooserDirectory;
-	private JTextShowField fieldExportDirectory;
-	private JTextShowField fieldFilenamePrefix;
+	private JTextField fieldExportDirectory;
+	private JTextField fieldFilenamePrefix;
 
 	public PanelSWMultiClientReport() {
 		setupPanel();
@@ -108,7 +108,7 @@ public class PanelSWMultiClientReport extends JPanel {
 			filenamePrefix = FILENAME_PREFIX_DEFAULT;
 		}
 
-		fieldFilenamePrefix = new JTextShowField(filenamePrefix);
+		fieldFilenamePrefix = new JTextField(filenamePrefix);
 		fieldFilenamePrefix.setEditable(true);
 		JLabel labelFilenameInformation = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
@@ -151,7 +151,8 @@ public class PanelSWMultiClientReport extends JPanel {
 		chooserDirectory.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);
 
-		fieldExportDirectory = new JTextShowField(exportDirectoryS);
+		fieldExportDirectory = new JTextField(exportDirectoryS);
+		fieldExportDirectory.setEditable(false);
 
 		JLabel labelExportDirectory = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));

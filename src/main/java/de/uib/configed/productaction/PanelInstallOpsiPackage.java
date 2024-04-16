@@ -30,10 +30,10 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.NameProducer;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.SecondaryFrame;
-import utils.Utils;
+import de.uib.utils.NameProducer;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.SecondaryFrame;
 
 public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private static final String PAGE_SHARE_S = "opsi_workbench";

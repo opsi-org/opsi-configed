@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 //data source product table
 public class OpsiProductInfo extends OpsiPackage {

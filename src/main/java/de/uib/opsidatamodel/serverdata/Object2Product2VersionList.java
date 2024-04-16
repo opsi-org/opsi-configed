@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class Object2Product2VersionList extends HashMap<String, HashMap<String, List<String>>> {
 	public void addPackage(String depot, String productName, String versionInfo) {

@@ -12,8 +12,8 @@ import java.util.Map;
 
 import javax.swing.ListSelectionModel;
 
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ListCellOptions;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ListCellOptions;
 
 // has a problem with type of defaultValues
 public class ConfigOption extends RetrievedMap implements ListCellOptions {

@@ -15,7 +15,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ProductData;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

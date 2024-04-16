@@ -38,8 +38,8 @@ import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.ssh.SSHOutputCollector;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.ssh.SSHOutputCollector;
 
 /**
  * This Class handles SSHCommands.

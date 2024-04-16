@@ -32,7 +32,7 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class TerminalWidget extends JediTermWidget implements MessagebusListener {
 	public static final int DEFAULT_TERMINAL_COLUMNS = 80;

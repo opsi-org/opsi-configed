@@ -11,7 +11,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * This class is intended to show a list in text area

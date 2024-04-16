@@ -25,9 +25,9 @@ import javax.swing.JScrollPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditObject;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditObject;
 
 public class FGeneralDialog extends JDialog {
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;

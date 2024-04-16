@@ -35,11 +35,11 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.datapanel.MapTableModel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.table.ListCellOptions;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.MapTableModel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.TimeCheck;
+import de.uib.utils.table.ListCellOptions;
 
 /**
  * Provides methods for working with configuration data on the server.

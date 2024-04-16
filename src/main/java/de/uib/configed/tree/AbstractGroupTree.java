@@ -37,8 +37,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditRecord;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditRecord;
 
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");

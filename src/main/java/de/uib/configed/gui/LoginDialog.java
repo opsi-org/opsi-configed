@@ -44,13 +44,13 @@ import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.swing.PanelLinedComponents;
-import de.uib.utilities.swing.SeparatedDocument;
-import de.uib.utilities.thread.WaitingSleeper;
-import de.uib.utilities.thread.WaitingWorker;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.swing.PanelLinedComponents;
+import de.uib.utils.swing.SeparatedDocument;
+import de.uib.utils.thread.WaitingSleeper;
+import de.uib.utils.thread.WaitingWorker;
 
 public class LoginDialog extends JFrame implements WaitingSleeper {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;

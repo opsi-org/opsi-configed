@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateManager;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public final class PersistenceControllerFactory {
 	private static final Pattern OTP_PATTERN = Pattern.compile("^[\\d]{6}$");
