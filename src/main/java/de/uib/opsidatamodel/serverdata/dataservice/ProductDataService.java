@@ -46,6 +46,7 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
 import de.uib.utils.datapanel.MapTableModel;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
 import de.uib.utils.table.ListCellOptions;
 
 /**
@@ -1538,6 +1539,7 @@ public class ProductDataService {
 		}
 
 		// We have a LinkedHashMap here so that fields will appear in this order
+
 		Map<String, Boolean> productOnClientsDisplayFields = new LinkedHashMap<>();
 
 		// key names from ProductState
@@ -1565,6 +1567,17 @@ public class ProductDataService {
 				configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
 
 		productOnClientsDisplayFields.put(ProductState.KEY_VERSION_INFO, true);
+
+		String[] userSavedDisplayFields = UserPreferences
+				.get(cacheId == CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS
+						? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
+						: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS)
+				.split(",");
+
+		for (String displayField : userSavedDisplayFields) {
+			productOnClientsDisplayFields.put(displayField, true);
+		}
+
 		cacheManager.setCachedData(cacheId, productOnClientsDisplayFields);
 	}
 

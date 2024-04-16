@@ -113,6 +113,12 @@ public final class ClientMenuManager implements MenuListener {
 		return jMenu;
 	}
 
+	public void reInitJMenu() {
+		jMenu.removeAll();
+		jMenu.removeMenuListener(this);
+		initJMenu();
+	}
+
 	private void initJMenu() {
 		jMenu.addMenuListener(this);
 

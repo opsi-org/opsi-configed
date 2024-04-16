@@ -12,6 +12,9 @@ public final class UserPreferences {
 	public static final String THEME = "theme";
 	public static final String LANGUAGE = "language";
 	public static final String OTP = "otp";
+	public static final String CLIENTS_TABLE_DISPLAY_FIELDS = "clients_table_display_fields";
+	public static final String LOCALBOOT_TABLE_DISPLAY_FIELDS = "localboot_table_display_fields";
+	public static final String NETBOOT_TABLE_DISPLAY_FIELDS = "netboot_table_display_fields";
 
 	private static Preferences prefs = Preferences.userNodeForPackage(UserPreferences.class);
 
