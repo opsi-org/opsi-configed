@@ -367,8 +367,8 @@ public class FileUploadDialog extends FGeneralDialog {
 			fullcommand.addCommand(new SingleCommandOpsiSetRights(""));
 		}
 
-		CommandExecutor execute = new CommandExecutor(configedMain);
-		execute.executeMultiCommand(fullcommand);
+		CommandExecutor execute = new CommandExecutor(configedMain, fullcommand);
+		execute.execute();
 	}
 
 	protected SingleCommandCurl doAction1AdditionalSetWget(SingleCommandCurl c, String path) {

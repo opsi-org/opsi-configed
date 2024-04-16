@@ -39,47 +39,63 @@ public class CommandExecutor implements MessagebusListener {
 
 	private int commandNumber;
 
-	public CommandExecutor(ConfigedMain configedMain) {
-		this(configedMain, true);
+	private SingleCommand singleCommand;
+	private MultiCommand multiCommand;
+
+	public CommandExecutor(ConfigedMain configedMain, SingleCommand singleCommand) {
+		this(configedMain, singleCommand, true);
 	}
 
-	public CommandExecutor(ConfigedMain configedMain, boolean withGUI) {
+	public CommandExecutor(ConfigedMain configedMain, MultiCommand multiCommand) {
+		this(configedMain, multiCommand, true);
+	}
+
+	public CommandExecutor(ConfigedMain configedMain, SingleCommand singleCommand, boolean withGUI) {
+		initValues(configedMain, withGUI);
+		this.singleCommand = singleCommand;
+		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
+	}
+
+	public CommandExecutor(ConfigedMain configedMain, MultiCommand multiCommand, boolean withGUI) {
+		initValues(configedMain, withGUI);
+		this.multiCommand = multiCommand;
+		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
+	}
+
+	private void initValues(ConfigedMain configedMain, boolean withGUI) {
 		this.configedMain = configedMain;
 		this.terminalFrame = new TerminalFrame(true);
 		this.withGUI = withGUI;
 		this.locker = new ThreadLocker();
-		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
 	}
 
 	public JFrame getDialog() {
 		return terminalFrame.getFrame();
 	}
 
-	public String executeSingleCommand(SingleCommand command) {
+	public String execute() {
+		if (singleCommand == null && multiCommand == null) {
+			return null;
+		}
+
 		terminalFrame.setMessagebus(configedMain.getMessagebus());
 		if (withGUI) {
 			terminalFrame.display();
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
 
-		startBackgroundThread(() -> execute(command));
+		if (singleCommand != null) {
+			startBackgroundThread(() -> execute(singleCommand));
+		} else {
+			startBackgroundThread(() -> {
+				List<SingleCommand> commands = multiCommand.getCommands();
+				for (SingleCommand command : commands) {
+					execute(command);
+				}
+			});
+		}
 
 		return commandProcess != null ? commandProcess.getResult() : "";
-	}
-
-	public void executeMultiCommand(MultiCommand multiCommand) {
-		terminalFrame.setMessagebus(configedMain.getMessagebus());
-		if (withGUI) {
-			terminalFrame.display();
-			terminalFrame.disableUserInputForSelectedWidget();
-		}
-
-		startBackgroundThread(() -> {
-			List<SingleCommand> commands = multiCommand.getCommands();
-			for (SingleCommand command : commands) {
-				execute(command);
-			}
-		});
 	}
 
 	private void execute(SingleCommand command) {

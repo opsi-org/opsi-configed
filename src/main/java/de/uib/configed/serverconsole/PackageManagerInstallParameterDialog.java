@@ -186,8 +186,8 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 
 		installSettingsPanel.updateCommand(pmInstallCom);
 
-		CommandExecutor executor = new CommandExecutor(configedMain);
-		executor.executeMultiCommand(commands);
+		CommandExecutor executor = new CommandExecutor(configedMain, commands);
+		executor.execute();
 		Logging.info(this, "doAction3 end ");
 	}
 

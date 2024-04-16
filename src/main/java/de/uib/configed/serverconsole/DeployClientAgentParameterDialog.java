@@ -413,8 +413,8 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 		commandDeployClientAgent.setOpsiClientAgentDir(opsiClientAgentDir);
 		commandDeployClientAgent.finish(finalAction);
-		CommandExecutor executor = new CommandExecutor(configedMain);
-		executor.executeSingleCommand(commandDeployClientAgent);
+		CommandExecutor executor = new CommandExecutor(configedMain, commandDeployClientAgent);
+		executor.execute();
 	}
 
 	private Set<String> getNonExistingHostNames(Set<String> hostNames) {

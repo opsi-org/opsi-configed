@@ -240,16 +240,16 @@ public class CurlParameterDialog extends FGeneralDialog {
 				@Override
 				public void run() {
 					Logging.info(this, "doAction3 wget ");
-					CommandExecutor executor = new CommandExecutor(configedMain);
-					executor.executeSingleCommand(commandCurl);
+					CommandExecutor executor = new CommandExecutor(configedMain, commandCurl);
+					executor.execute();
 				}
 			}.start();
 		}
 	}
 
 	private void doActionHelp() {
-		CommandExecutor executor = new CommandExecutor(configedMain);
-		executor.executeSingleCommand(new SingleCommandHelp(commandCurl));
+		CommandExecutor executor = new CommandExecutor(configedMain, new SingleCommandHelp(commandCurl));
+		executor.execute();
 	}
 
 	private void cancel() {

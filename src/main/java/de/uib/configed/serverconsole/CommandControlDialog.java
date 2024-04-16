@@ -506,8 +506,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 		new Thread() {
 			@Override
 			public void run() {
-				CommandExecutor executor = new CommandExecutor(configedMain);
-				executor.executeMultiCommand(command);
+				CommandExecutor executor = new CommandExecutor(configedMain, command);
+				executor.execute();
 			}
 		}.start();
 	}

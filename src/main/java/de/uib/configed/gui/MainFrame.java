@@ -525,8 +525,8 @@ public class MainFrame extends JFrame {
 			Logging.info(this, "ssh command menuitem text " + com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> {
-				CommandExecutor executor = new CommandExecutor(configedMain);
-				executor.executeMultiCommand(com);
+				CommandExecutor executor = new CommandExecutor(configedMain, com);
+				executor.execute();
 			});
 
 			String parentMenuName = parentMenu.getText();

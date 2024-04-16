@@ -395,9 +395,9 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		Logging.info(this, "doActionGetVersions, dir " + dir);
 		SingleCommandTemplate getVersions = new SingleCommandTemplate(
 				CommandFactory.STRING_COMMAND_GET_VERSIONS.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
-		CommandExecutor executor = new CommandExecutor(configedMain, false);
+		CommandExecutor executor = new CommandExecutor(configedMain, getVersions, false);
 		Logging.info(this, "doActionGetVersions, command " + getVersions);
-		String result = executor.executeSingleCommand(getVersions);
+		String result = executor.execute();
 		Logging.info(this, "doActionGetVersions result " + result);
 
 		if (result == null || result.isEmpty()) {
@@ -450,8 +450,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private void doExecSetRights() {
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
 		SingleCommandOpsiSetRights opsiSetRightsCommand = new SingleCommandOpsiSetRights(dir);
-		CommandExecutor executor = new CommandExecutor(configedMain);
-		executor.executeSingleCommand(opsiSetRightsCommand);
+		CommandExecutor executor = new CommandExecutor(configedMain, opsiSetRightsCommand);
+		executor.execute();
 	}
 
 	private void cancel() {
@@ -512,8 +512,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		new Thread() {
 			@Override
 			public void run() {
-				CommandExecutor executor = new CommandExecutor(configedMain);
-				executor.executeMultiCommand(commands);
+				CommandExecutor executor = new CommandExecutor(configedMain, commands);
+				executor.execute();
 			}
 		}.start();
 	}
@@ -529,8 +529,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private String getPackageID(String dir) {
 		SingleCommandTemplate getPackageId = new SingleCommandTemplate(
 				CommandFactory.STRING_COMMAND_CAT_DIRECTORY.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
-		CommandExecutor executor = new CommandExecutor(configedMain, false);
-		String result = executor.executeSingleCommand(getPackageId);
+		CommandExecutor executor = new CommandExecutor(configedMain, getPackageId, false);
+		String result = executor.execute();
 		Logging.debug(this, "getPackageID result " + result);
 		return result != null ? result.replace("id:", "").trim() : "";
 	}
