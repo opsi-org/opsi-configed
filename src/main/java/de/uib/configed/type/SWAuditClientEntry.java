@@ -16,7 +16,6 @@ public class SWAuditClientEntry {
 	public static final String CLIENT_ID = "clientId";
 	public static final String LICENSE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
-	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 	public static final List<String> KEYS = List.of(SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
 			SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENSE_KEY, SWAuditEntry.WINDOWS_SOFTWARE_ID);
 

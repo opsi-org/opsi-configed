@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.GroupLayout;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -329,7 +328,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void addClient(LicensesTabStatus status, MultiTablePanel panel) {
 		licensesPanels.put(status, panel);
-		licensesFrame.addTab(status, licensesPanelsTabNames.get(status), (JComponent) panel);
+		licensesFrame.addTab(status, licensesPanelsTabNames.get(status), panel);
 	}
 
 	public LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {
