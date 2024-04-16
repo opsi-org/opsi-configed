@@ -53,13 +53,11 @@ public class CommandExecutor implements MessagebusListener {
 	public CommandExecutor(ConfigedMain configedMain, SingleCommand singleCommand, boolean withGUI) {
 		initValues(configedMain, withGUI);
 		this.singleCommand = singleCommand;
-		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
 	}
 
 	public CommandExecutor(ConfigedMain configedMain, MultiCommand multiCommand, boolean withGUI) {
 		initValues(configedMain, withGUI);
 		this.multiCommand = multiCommand;
-		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
 	}
 
 	private void initValues(ConfigedMain configedMain, boolean withGUI) {
@@ -84,14 +82,20 @@ public class CommandExecutor implements MessagebusListener {
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
 
+		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
+
 		if (singleCommand != null) {
-			startBackgroundThread(() -> execute(singleCommand));
+			startBackgroundThread(() -> {
+				execute(singleCommand);
+				configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
+			});
 		} else {
 			startBackgroundThread(() -> {
 				List<SingleCommand> commands = multiCommand.getCommands();
 				for (SingleCommand command : commands) {
 					execute(command);
 				}
+				configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
 			});
 		}
 
