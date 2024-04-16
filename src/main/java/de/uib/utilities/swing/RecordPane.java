@@ -21,7 +21,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.observer.swing.JTextFieldObserved;
 
 public class RecordPane extends JPanel implements KeyListener, DocumentListener {
 	private static final int MIN_FIELD_WIDTH = 60;
@@ -128,7 +127,7 @@ public class RecordPane extends JPanel implements KeyListener, DocumentListener 
 			jTextField = new JPasswordField();
 			jTextField.getDocument().addDocumentListener(this);
 		} else {
-			jTextField = new JTextFieldObserved();
+			jTextField = new RevertibleTextField();
 			jTextField.getDocument().addDocumentListener(this);
 		}
 
