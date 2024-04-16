@@ -7,6 +7,7 @@
 package de.uib.utilities.table.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -45,7 +46,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
-import de.uib.utilities.swing.NavigationPanel;
 import utils.Utils;
 
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
@@ -74,7 +74,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JButton buttonShowHideExtraOptions;
 	private JLabel labelFilterMarkGap;
 
-	private NavigationPanel navPane;
+	private JPanel navPane;
 	private PanelGenEditTable associatedPanel;
 
 	private Map<JMenuItem, Boolean> searchMenuEntries;
@@ -255,8 +255,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initComponents() {
-		navPane = new NavigationPanel(associatedPanel);
-
+		initNavigationPanel();
 		navPane.setVisible(false);
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
@@ -376,6 +375,55 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
 		buttonShowHideExtraOptions.setVisible(false);
 		buttonShowHideExtraOptions.addActionListener(event -> showExtraOptions());
+	}
+
+	private void initNavigationPanel() {
+		navPane = new JPanel();
+		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
+
+		JButton nextButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
+		nextButton.setToolTipText(Configed.getResourceValue("NavigationPanel.nextEntryTooltip"));
+		nextButton.setPreferredSize(navButtonDimension);
+		nextButton.addActionListener(event -> associatedPanel.advanceCursor(+1));
+
+		JButton previousButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-left.png", ""));
+		previousButton.setToolTipText(Configed.getResourceValue("NavigationPanel.previousEntryTooltip"));
+		previousButton.setPreferredSize(navButtonDimension);
+		previousButton.addActionListener(event -> associatedPanel.advanceCursor(-1));
+
+		JButton firstButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleleft.png", ""));
+		firstButton.setToolTipText(Configed.getResourceValue("NavigationPanel.firstEntryTooltip"));
+		firstButton.setPreferredSize(navButtonDimension);
+		firstButton.addActionListener(event -> associatedPanel.setCursorToFirstRow());
+
+		JButton lastButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleright.png", ""));
+		lastButton.setToolTipText(Configed.getResourceValue("NavigationPanel.lastEntryTooltip"));
+		lastButton.setPreferredSize(navButtonDimension);
+		lastButton.addActionListener(event -> associatedPanel.setCursorToLastRow());
+
+		GroupLayout layout = new GroupLayout(navPane);
+		navPane.setLayout(layout);
+		navPane.setVisible(false);
+
+		layout.setVerticalGroup(layout.createParallelGroup()
+				.addComponent(firstButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(previousButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(nextButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(lastButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
+
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+				.addComponent(firstButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(previousButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(nextButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(lastButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 
 	private void showExtraOptions() {
