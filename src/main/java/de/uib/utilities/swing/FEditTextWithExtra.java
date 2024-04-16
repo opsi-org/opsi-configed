@@ -38,7 +38,6 @@ public class FEditTextWithExtra extends FEditText {
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 		textarea.setEditable(true);
 		textarea.addKeyListener(this);
-		textarea.addMouseListener(this);
 		textarea.getDocument().addDocumentListener(this);
 		setStartText(this.initialText);
 	}

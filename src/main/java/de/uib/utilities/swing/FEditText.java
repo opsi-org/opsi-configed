@@ -8,17 +8,13 @@ package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.utilities.logging.Logging;
-
-public class FEditText extends FEdit implements DocumentListener, MouseListener {
+public class FEditText extends FEdit implements DocumentListener {
 	protected JScrollPane scrollpane;
 	protected JTextArea textarea;
 
@@ -42,7 +38,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 		textarea.setEditable(true);
 		textarea.addKeyListener(this);
-		textarea.addMouseListener(this);
 		textarea.getDocument().addDocumentListener(this);
 		setStartText(this.initialText);
 	}
@@ -101,30 +96,8 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 		setDataChanged(true);
 	}
 
-	// MouseListener
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		Logging.debug(getText());
-	}
-
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		setDataChanged(true);
 	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		/* Not needed */}
 }
