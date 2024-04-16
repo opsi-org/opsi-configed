@@ -46,11 +46,11 @@ import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.configed.type.RemoteControl;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.table.gui.TableSearchPane;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class ClientTable extends JPanel implements ListSelectionListener, KeyListener {
 	private JScrollPane scrollpane;

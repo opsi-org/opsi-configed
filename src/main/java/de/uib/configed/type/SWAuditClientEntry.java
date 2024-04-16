@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import utils.Utils;
+import de.uib.utils.Utils;
 
 public class SWAuditClientEntry {
 	public static final String CLIENT_ID = "clientId";

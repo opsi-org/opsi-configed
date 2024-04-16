@@ -34,9 +34,9 @@ import de.uib.configed.tree.ProductTree;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import utils.PopupMouseListener;
-import utils.Utils;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private ConfigedMain configedMain;
@@ -120,12 +120,10 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		panelLocalbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain, productTree,
-				persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts(),
 				PanelProductSettings.ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
 
 		panelNetbootProductSettings = new PanelProductSettings(
 				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain, productTree,
-				persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts(),
 				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 		productTree.setPanels(panelLocalbootProductSettings, panelNetbootProductSettings);
 

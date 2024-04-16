@@ -28,7 +28,7 @@ import de.uib.configed.dashboard.collector.LicenseData;
 import de.uib.configed.dashboard.collector.ModuleData;
 import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.messages.Messages;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

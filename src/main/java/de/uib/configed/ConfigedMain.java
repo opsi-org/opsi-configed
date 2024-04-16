@@ -79,6 +79,7 @@ import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.configed.gui.licenses.LicensesFrame;
+import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.ssh.SSHCommandControlDialog;
 import de.uib.configed.gui.ssh.SSHConfigDialog;
@@ -114,21 +115,21 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.DataChangedKeeper;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedDocument;
-import de.uib.utilities.swing.FEditText;
-import de.uib.utilities.swing.tabbedpane.TabClient;
-import de.uib.utilities.table.ListCellOptions;
-import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
-import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utils.DataChangedKeeper;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.swing.CheckedDocument;
+import de.uib.utils.swing.FEditText;
+import de.uib.utils.table.ListCellOptions;
+import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
+import de.uib.utils.table.gui.ConnectionStatusTableCellRenderer;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import utils.Utils;
 
 public class ConfigedMain implements MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -262,7 +263,7 @@ public class ConfigedMain implements MessagebusListener {
 		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
 	}
 
-	private Map<LicensesTabStatus, TabClient> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
+	private Map<LicensesTabStatus, MultiTablePanel> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
 	private LicensesTabStatus licensesStatus;
 
 	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
@@ -326,7 +327,7 @@ public class ConfigedMain implements MessagebusListener {
 		return loginDialog;
 	}
 
-	private void addClient(LicensesTabStatus status, TabClient panel) {
+	private void addClient(LicensesTabStatus status, MultiTablePanel panel) {
 		licensesPanels.put(status, panel);
 		licensesFrame.addTab(status, licensesPanelsTabNames.get(status), (JComponent) panel);
 	}
@@ -1308,12 +1309,16 @@ public class ConfigedMain implements MessagebusListener {
 
 		Map<String, HostInfo> pcinfos = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 
+		List<String> displayFields = new ArrayList<>();
 		for (Entry<String, Boolean> entry : persistenceController.getHostDataService().getHostDisplayFields()
 				.entrySet()) {
 			if (Boolean.TRUE.equals(entry.getValue())) {
 				model.addColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
+				displayFields.add(entry.getKey());
 			}
 		}
+
+		UserPreferences.set(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
 
 		Logging.info(this, "buildPclistTableModel host_displayFields "
 				+ persistenceController.getHostDataService().getHostDisplayFields());
@@ -2072,6 +2077,9 @@ public class ConfigedMain implements MessagebusListener {
 			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
 		}
 
+		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
+				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
+				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
 		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(this, changedProductStates,
 				productNames, statesAndActions, possibleActions,
 				persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
@@ -2650,6 +2658,9 @@ public class ConfigedMain implements MessagebusListener {
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
 			mainFrame.setupMenuServer();
+			mainFrame.getClientMenu().reInitJMenu();
+			mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().reInitPopupMenu();
+			mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().reInitPopupMenu();
 			updateHostInfo();
 			hostInfo.resetGui();
 		}

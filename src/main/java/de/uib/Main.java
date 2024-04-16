@@ -20,6 +20,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -34,9 +35,10 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
-import de.uib.utilities.savedstates.UserPreferences;
+import de.uib.utils.FeatureActivationChecker;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
+import de.uib.utils.savedstates.UserPreferences;
 
 public class Main {
 	// --------------------------------------------------------------------------------------------------------
@@ -106,6 +108,12 @@ public class Main {
 		options.getOption("swaudit-csv").setArgs(2);
 		options.addOption(null, "disable-certificate-verification", false,
 				"Disable opsi-certificate verification with server, by DEFAULT enabled");
+		options.addOption("ff", "feature-flags", true,
+				"A list of features to activate on start. Available features are: "
+						+ (FeatureActivationChecker.hasAvailableFeatures()
+								? FeatureActivationChecker.getAvailableFeaturesAsString()
+								: "NONE"));
+		options.getOption("ff").setArgs(Option.UNLIMITED_VALUES);
 
 		// Logviewer specific options
 		options.addOption("f", "filename", true, "filename for the log file");
@@ -172,6 +180,11 @@ public class Main {
 		if (cmd.hasOption("l")) {
 			String locale = cmd.getOptionValue("l");
 			Messages.setLocale(locale);
+		}
+
+		if (cmd.hasOption("ff")) {
+			String[] activatedFeatures = cmd.getOptionValues("ff");
+			FeatureActivationChecker.setActivatedFeatures(activatedFeatures);
 		}
 
 		// After setting locale then we can use localization values

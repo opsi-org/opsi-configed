@@ -15,7 +15,7 @@ import java.util.TreeMap;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * This class extends the Executioner abstract class in such a way that the data

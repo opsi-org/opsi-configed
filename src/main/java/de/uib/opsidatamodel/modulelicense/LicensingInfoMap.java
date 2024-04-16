@@ -27,7 +27,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
 import de.uib.opsicommand.POJOReMapper;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class LicensingInfoMap {
 	public static final String RESULT = "result";

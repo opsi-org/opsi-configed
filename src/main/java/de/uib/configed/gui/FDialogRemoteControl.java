@@ -16,8 +16,8 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditStringList;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditStringList;
 
 public class FDialogRemoteControl extends FEditStringList {
 	private Map<String, String> meanings;

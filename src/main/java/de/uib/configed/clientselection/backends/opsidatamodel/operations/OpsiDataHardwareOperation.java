@@ -10,7 +10,7 @@ import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.HardwareOperation;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class OpsiDataHardwareOperation extends HardwareOperation implements ExecutableOperation {
 	public OpsiDataHardwareOperation(AbstractSelectOperation operation) {

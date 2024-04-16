@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.type.licenses.AuditSoftwareXLicensePool;
-import de.uib.utilities.datastructure.AbstractTableEntry;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datastructure.AbstractTableEntry;
+import de.uib.utils.datastructure.StringValuedRelationElement;
 
 public class SWAuditEntry extends AbstractTableEntry {
 	/*

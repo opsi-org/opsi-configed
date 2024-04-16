@@ -20,7 +20,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class InstallationStateUpdateManager {
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();

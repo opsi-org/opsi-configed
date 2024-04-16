@@ -43,9 +43,9 @@ import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
-import de.uib.utilities.logging.Logging;
-import utils.ExtractorUtil;
-import utils.Utils;
+import de.uib.utils.ExtractorUtil;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class LogFrame extends JFrame {
 	private static final Pattern IS_FILE_EXTENSION_NUMBER_PATTERN = Pattern.compile("\\d+");

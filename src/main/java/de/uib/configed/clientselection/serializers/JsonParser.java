@@ -11,7 +11,7 @@ import java.io.StringReader;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * This is a small parser for the JSON-like syntax of the OpsiDataSerializer.

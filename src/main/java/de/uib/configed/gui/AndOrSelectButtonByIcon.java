@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * Select AND or OR Created for the ClientSelectionDialog.

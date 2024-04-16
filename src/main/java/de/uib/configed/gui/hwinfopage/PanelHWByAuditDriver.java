@@ -17,18 +17,17 @@ import javax.swing.JTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
 	private String byAuditPath;
 
 	private JRadioButton selectionBaseBoard = new JRadioButton();
 
-	private JTextField fieldComputerSystemVendor = new JTextShowField();
-	private JTextField fieldComputerSystemLabel = new JTextShowField();
+	private JTextField fieldComputerSystemVendor = new JTextField();
+	private JTextField fieldComputerSystemLabel = new JTextField();
 
-	private JTextField fieldBaseBoardVendor = new JTextShowField();
-	private JTextField fieldBaseBoardLabel = new JTextShowField();
+	private JTextField fieldBaseBoardVendor = new JTextField();
+	private JTextField fieldBaseBoardLabel = new JTextField();
 
 	private FDriverUpload fDriverUpload;
 	private ConfigedMain configedMain;
@@ -58,6 +57,11 @@ public class PanelHWByAuditDriver extends JPanel {
 		ButtonGroup selectionGroup = new ButtonGroup();
 		selectionGroup.add(selectionComputerSystem);
 		selectionGroup.add(selectionBaseBoard);
+
+		fieldComputerSystemVendor.setEditable(false);
+		fieldComputerSystemLabel.setEditable(false);
+		fieldBaseBoardVendor.setEditable(false);
+		fieldBaseBoardLabel.setEditable(false);
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);

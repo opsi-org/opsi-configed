@@ -37,7 +37,7 @@ import de.uib.opsicommand.ConnectionErrorReporter;
 import de.uib.opsicommand.ConnectionErrorType;
 import de.uib.opsicommand.MyHandshakeCompletedListener;
 import de.uib.opsicommand.SecureSSLSocketFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * {@code SecureCertificateValidator} is a secure implementation of

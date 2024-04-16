@@ -42,8 +42,8 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.ComboBoxModeller;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.ComboBoxModeller;
+import de.uib.utils.logging.Logging;
 
 /**
  * Defining the TableModel for the product table for a specific client. Since we

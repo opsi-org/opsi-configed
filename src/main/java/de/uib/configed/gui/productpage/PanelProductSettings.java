@@ -53,15 +53,15 @@ import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ExporterToCSV;
-import de.uib.utilities.table.ExporterToPDF;
-import utils.PopupMouseListener;
-import utils.ProductPackageVersionSeparator;
-import utils.Utils;
+import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.utils.datapanel.EditMapPanelX;
+import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ExporterToCSV;
+import de.uib.utils.table.ExporterToPDF;
 
 public class PanelProductSettings extends JSplitPane {
 	public enum ProductSettingsType {
@@ -78,10 +78,9 @@ public class PanelProductSettings extends JSplitPane {
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
-	private Map<String, Boolean> productDisplayFields;
-
-	private JPopupMenu popup;
+	private PopupMouseListener popupMouseListener;
 	private JMenuItem itemOnDemand;
+	private JScrollPane paneProducts;
 
 	private String title;
 
@@ -95,12 +94,11 @@ public class PanelProductSettings extends JSplitPane {
 			.getPersistenceController();
 
 	public PanelProductSettings(String title, ConfigedMain configedMain, ProductTree productTree,
-			Map<String, Boolean> productDisplayFields, ProductSettingsType type) {
+			ProductSettingsType type) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
 		this.productTree = productTree;
 		this.configedMain = configedMain;
-		this.productDisplayFields = productDisplayFields;
 		this.type = type;
 		init();
 
@@ -138,7 +136,7 @@ public class PanelProductSettings extends JSplitPane {
 	private void init() {
 		initTopPane();
 
-		JScrollPane paneProducts = new JScrollPane();
+		paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -189,10 +187,9 @@ public class PanelProductSettings extends JSplitPane {
 
 		setRightComponent(infoPane);
 
-		producePopupMenu(productDisplayFields);
-
-		paneProducts.addMouseListener(new PopupMouseListener(popup));
-		tableProducts.addMouseListener(new PopupMouseListener(popup));
+		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		paneProducts.addMouseListener(popupMouseListener);
+		tableProducts.addMouseListener(popupMouseListener);
 
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
@@ -201,8 +198,16 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.updateSearchFields();
 	}
 
-	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
-		popup = new JPopupMenu();
+	public void reInitPopupMenu() {
+		paneProducts.removeMouseListener(popupMouseListener);
+		tableProducts.removeMouseListener(popupMouseListener);
+		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		paneProducts.addMouseListener(popupMouseListener);
+		tableProducts.addMouseListener(popupMouseListener);
+	}
+
+	private JPopupMenu producePopupMenu() {
+		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
 		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
@@ -272,24 +277,31 @@ public class PanelProductSettings extends JSplitPane {
 		popup.addSeparator();
 		popup.add(sub);
 
-		for (Entry<String, Boolean> checkColumn : checkColumns.entrySet()) {
-			if ("productId".equals(checkColumn.getKey())) {
+		for (Entry<String, Boolean> productDisplayField : getProductDisplayFieldsBasedOnType(type).entrySet()) {
+			if ("productId".equals(productDisplayField.getKey())) {
 				// fixed column
 				continue;
 			}
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
-			item.setText(InstallationStateTableModel.getColumnTitle(checkColumn.getKey()));
-			item.setState(checkColumn.getValue());
+			item.setText(InstallationStateTableModel.getColumnTitle(productDisplayField.getKey()));
+			item.setState(productDisplayField.getValue());
 			item.addItemListener((ItemEvent e) -> {
-				boolean oldstate = checkColumn.getValue();
-				checkColumns.put(checkColumn.getKey(), !oldstate);
+				boolean oldstate = productDisplayField.getValue();
+				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
 				configedMain.requestReloadStatesAndActions();
 				configedMain.resetView(configedMain.getViewIndex());
 			});
 
 			sub.add(item);
 		}
+		return popup;
+	}
+
+	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
+		return type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+				? persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts()
+				: persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts();
 	}
 
 	private void createReport() {
@@ -573,7 +585,7 @@ public class PanelProductSettings extends JSplitPane {
 		infoPane.setProductName(persistenceController.getProductDataService().getProductTitle(productID));
 		infoPane.setProductInfo(persistenceController.getProductDataService().getProductInfo(productID));
 		infoPane.setProductVersion(persistenceController.getProductDataService().getProductVersion(productID)
-				+ ProductPackageVersionSeparator.FOR_DISPLAY
+				+ ProductDataService.FOR_DISPLAY
 				+ persistenceController.getProductDataService().getProductPackageVersion(productID) + "   "
 				+ persistenceController.getProductDataService().getProductLockedInfo(productID));
 

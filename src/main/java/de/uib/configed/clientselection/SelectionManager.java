@@ -25,7 +25,7 @@ import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
 import de.uib.configed.gui.ClientSelectionDialog.GroupType;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * The SelectionManager is used by the gui to create the tree of operations.

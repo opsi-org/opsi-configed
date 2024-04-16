@@ -14,9 +14,9 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.cli.CommandLine;
 
 import de.uib.logviewer.gui.LogFrame;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
 
 public final class Logviewer {
 	private static String fileName = "";

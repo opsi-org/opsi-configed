@@ -27,17 +27,17 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FPanel;
-import de.uib.utilities.swing.SecondaryFrame;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.TableModelFilter;
-import de.uib.utilities.table.TableModelFilterCondition;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FPanel;
+import de.uib.utils.swing.SecondaryFrame;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.TableModelFilter;
+import de.uib.utils.table.TableModelFilterCondition;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
 
 public class ControllerHWinfoMultiClients {
 	private static final int KEY_COL = 0;

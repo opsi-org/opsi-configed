@@ -45,10 +45,10 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.ExtendedInteger;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.ExtendedInteger;
+import de.uib.utils.Utils;
+import de.uib.utils.datastructure.StringValuedRelationElement;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with software data on the server.
@@ -65,18 +65,14 @@ import utils.Utils;
  */
 @SuppressWarnings({ "unchecked" })
 public class SoftwareDataService {
+	private static final String LINUX_SUBVERSION_MARKER = "lin:";
+
 	private static final Set<String> linuxSWnameMarkers = new HashSet<>();
 	static {
 		linuxSWnameMarkers.add("linux");
 		linuxSWnameMarkers.add("Linux");
 		linuxSWnameMarkers.add("lib");
 		linuxSWnameMarkers.add("ubuntu");
-		linuxSWnameMarkers.add("ubuntu");
-	}
-
-	private static final Set<String> linuxSubversionMarkers = new HashSet<>();
-	static {
-		linuxSubversionMarkers.add("lin:");
 	}
 
 	private CacheManager cacheManager;
@@ -371,14 +367,7 @@ public class SoftwareDataService {
 			}
 		}
 
-		String subversion = entry.get(SWAuditEntry.SUB_VERSION);
-		for (String marker : linuxSubversionMarkers) {
-			if (subversion.startsWith(marker)) {
-				return false;
-			}
-		}
-
-		return true;
+		return !entry.get(SWAuditEntry.SUB_VERSION).startsWith(LINUX_SUBVERSION_MARKER);
 	}
 
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(Collection<String> clients) {

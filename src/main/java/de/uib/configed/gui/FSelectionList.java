@@ -21,10 +21,10 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.SearchTargetModel;
-import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TableSearchPane;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.SearchTargetModel;
+import de.uib.utils.table.gui.SearchTargetModelFromJList;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;

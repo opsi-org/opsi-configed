@@ -21,7 +21,7 @@ import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SwExporter implements ActionListener {
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;

@@ -1,10 +1,13 @@
 # Changelog
-## [4.3.2.X] - 2024-XX-XX
+## [4.3.2.X] - 2024-XX-XXs
 ## Changed
 - Include software entry's ident to "Missing software entry" dialog's message to make apparent which software entry is missing
 - Use insecure connection in Messagebus, when certificate verification is disabled
 - Maintain consistent log levels for unspecified lines
+- Save user preferences on table's display fields
 
+## Added
+- Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
 
 ## Fixed
 - `NullPointerException` on product reset
@@ -13,7 +16,7 @@
 - "Failed actions" search and selection
 - The lower control panel in logviewer keeps disappearing on resize
 - For hardware devices with the same name in different hardware class, the information is shown incorrectly
-
+- Can't change table column visibility in product table after full reload
 
 
 ## [4.3.2.11] - 2024-03-28

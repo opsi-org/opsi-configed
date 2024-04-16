@@ -20,9 +20,9 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
 
 public class RequirementsTableModel extends AbstractTableModel {
 	private static final int NO_OF_ROW_TYPES = 3;

@@ -18,7 +18,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class TerminalFileUploadProgressIndicator extends JPanel {
 	private JProgressBar fileUploadProgressBar;

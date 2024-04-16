@@ -20,8 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.list.StandardListCellRenderer;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.list.StandardListCellRenderer;
 
 public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 	private JList<String> theList;

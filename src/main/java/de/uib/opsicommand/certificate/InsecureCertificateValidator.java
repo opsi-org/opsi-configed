@@ -21,7 +21,7 @@ import javax.net.ssl.X509TrustManager;
 
 import de.uib.opsicommand.MyHandshakeCompletedListener;
 import de.uib.opsicommand.SecureSSLSocketFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * {@code InsecureCeritifcateValidator} is an insecure implementation of

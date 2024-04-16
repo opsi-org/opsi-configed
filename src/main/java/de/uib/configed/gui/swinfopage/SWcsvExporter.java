@@ -8,8 +8,8 @@ package de.uib.configed.gui.swinfopage;
 
 import javax.swing.JTable;
 
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ExporterToCSV;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ExporterToCSV;
 
 /**
  * A class to implement pdf export of SWAudit data

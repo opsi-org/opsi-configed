@@ -8,9 +8,9 @@ package de.uib.opsidatamodel.permission;
 
 import java.util.Map;
 
-import de.uib.utilities.ExtendedDate;
-import de.uib.utilities.ExtendedInteger;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.ExtendedDate;
+import de.uib.utils.ExtendedInteger;
+import de.uib.utils.logging.Logging;
 
 public class ModulePermissionValue {
 	public static final Map<String, Boolean> MODULE_CHECKED = Map.ofEntries(Map.entry("license_management", true),

@@ -6,8 +6,8 @@
 
 package de.uib.opsicommand.certificate;
 
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * {@code CertificateValidatorFactory} creates secure/insecure certificate
