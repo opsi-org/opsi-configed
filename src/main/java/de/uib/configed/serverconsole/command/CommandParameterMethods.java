@@ -542,7 +542,8 @@ public final class CommandParameterMethods {
 		}
 
 		public void execute() {
-			CommandExecutor executor = new CommandExecutor(configedMain, cmd, false);
+			CommandExecutor executor = new CommandExecutor(configedMain, cmd);
+			executor.setWithGUI(false);
 			List<String> values = Arrays.asList(executor.execute().split("\n"));
 			value = retrieveSelectedValue(values);
 		}

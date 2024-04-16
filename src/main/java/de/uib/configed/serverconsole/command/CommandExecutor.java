@@ -34,7 +34,7 @@ public class CommandExecutor implements MessagebusListener {
 
 	private SingleCommand commandToExecute;
 
-	private boolean withGUI;
+	private boolean withGUI = true;
 	private CommandProcess commandProcess;
 
 	private int commandNumber;
@@ -43,27 +43,22 @@ public class CommandExecutor implements MessagebusListener {
 	private MultiCommand multiCommand;
 
 	public CommandExecutor(ConfigedMain configedMain, SingleCommand singleCommand) {
-		this(configedMain, singleCommand, true);
-	}
-
-	public CommandExecutor(ConfigedMain configedMain, MultiCommand multiCommand) {
-		this(configedMain, multiCommand, true);
-	}
-
-	public CommandExecutor(ConfigedMain configedMain, SingleCommand singleCommand, boolean withGUI) {
-		initValues(configedMain, withGUI);
+		initValues(configedMain);
 		this.singleCommand = singleCommand;
 	}
 
-	public CommandExecutor(ConfigedMain configedMain, MultiCommand multiCommand, boolean withGUI) {
-		initValues(configedMain, withGUI);
+	public CommandExecutor(ConfigedMain configedMain, MultiCommand multiCommand) {
+		initValues(configedMain);
 		this.multiCommand = multiCommand;
 	}
 
-	private void initValues(ConfigedMain configedMain, boolean withGUI) {
+	public void setWithGUI(boolean withGUI) {
+		this.withGUI = withGUI;
+	}
+
+	private void initValues(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		this.terminalFrame = new TerminalFrame(true);
-		this.withGUI = withGUI;
 		this.locker = new ThreadLocker();
 	}
 

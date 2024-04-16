@@ -53,7 +53,8 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 	}
 
 	private void retrieveRepos() {
-		CommandExecutor executor = new CommandExecutor(configedMain, command, false);
+		CommandExecutor executor = new CommandExecutor(configedMain, command);
+		executor.setWithGUI(false);
 		String result = executor.execute();
 
 		if (result == null) {

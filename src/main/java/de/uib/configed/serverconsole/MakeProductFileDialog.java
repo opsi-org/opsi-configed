@@ -395,7 +395,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		Logging.info(this, "doActionGetVersions, dir " + dir);
 		SingleCommandTemplate getVersions = new SingleCommandTemplate(
 				CommandFactory.STRING_COMMAND_GET_VERSIONS.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
-		CommandExecutor executor = new CommandExecutor(configedMain, getVersions, false);
+		CommandExecutor executor = new CommandExecutor(configedMain, getVersions);
+		executor.setWithGUI(false);
 		Logging.info(this, "doActionGetVersions, command " + getVersions);
 		String result = executor.execute();
 		Logging.info(this, "doActionGetVersions result " + result);
@@ -529,7 +530,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private String getPackageID(String dir) {
 		SingleCommandTemplate getPackageId = new SingleCommandTemplate(
 				CommandFactory.STRING_COMMAND_CAT_DIRECTORY.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
-		CommandExecutor executor = new CommandExecutor(configedMain, getPackageId, false);
+		CommandExecutor executor = new CommandExecutor(configedMain, getPackageId);
+		executor.setWithGUI(false);
 		String result = executor.execute();
 		Logging.debug(this, "getPackageID result " + result);
 		return result != null ? result.replace("id:", "").trim() : "";
