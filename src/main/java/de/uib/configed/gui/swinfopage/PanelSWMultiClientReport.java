@@ -23,9 +23,9 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.swinfopage.PanelSWInfo.KindOfExport;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PanelStateSwitch;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PanelStateSwitch;
 
 public class PanelSWMultiClientReport extends JPanel {
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";

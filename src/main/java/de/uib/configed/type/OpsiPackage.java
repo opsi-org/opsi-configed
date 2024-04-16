@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 //data source table productOnDepot
 public class OpsiPackage implements Comparable<OpsiPackage> {

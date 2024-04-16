@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.util.Map;
 
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public abstract class AbstractOpsiDataDateMatcher {
 	private String map;

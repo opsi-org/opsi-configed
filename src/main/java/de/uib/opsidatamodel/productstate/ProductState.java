@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class ProductState extends HashMap<String, String> {
 	private static ProductState defaultProductState;

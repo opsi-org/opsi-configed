@@ -33,8 +33,8 @@ import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class SSHFileUploadDialog extends FGeneralDialog {
 	private static final String WGET_DEFAULT_URL_TEXT = Configed

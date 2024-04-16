@@ -28,12 +28,12 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedLabel;
-import de.uib.utilities.swing.RevertibleTextField;
-import de.uib.utilities.swing.SeparatedDocument;
-import de.uib.utilities.swing.ToggleableTextField;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.CheckedLabel;
+import de.uib.utils.swing.RevertibleTextField;
+import de.uib.utils.swing.SeparatedDocument;
+import de.uib.utils.swing.ToggleableTextField;
 
 public class ClientInfoPanel extends JPanel implements KeyListener {
 	private JLabel labelClientID;

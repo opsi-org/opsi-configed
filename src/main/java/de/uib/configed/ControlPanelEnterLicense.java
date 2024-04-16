@@ -21,15 +21,15 @@ import de.uib.configed.gui.licenses.PanelEnterLicense;
 import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.swing.FEditDate;
-import de.uib.utilities.swing.FEditPane;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.CellEditor4TableText;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.MapBasedUpdater;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.swing.FEditDate;
+import de.uib.utils.swing.FEditPane;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.CellEditor4TableText;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
+import de.uib.utils.table.updates.MapBasedUpdater;
+import de.uib.utils.table.updates.MapItemsUpdateController;
+import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	private PanelEnterLicense thePanel;

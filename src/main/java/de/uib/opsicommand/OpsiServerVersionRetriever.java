@@ -20,7 +20,7 @@ import org.apache.maven.artifact.versioning.ComparableVersion;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsicommand.certificate.InsecureCertificateValidator;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * {@code OpsiServerVersionRetriever} retrieves version of the opsi server.

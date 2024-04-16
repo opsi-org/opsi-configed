@@ -22,7 +22,7 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 @SuppressWarnings({ "java:S6411" })
 public class WebSocketClientEndpoint extends WebSocketClient {

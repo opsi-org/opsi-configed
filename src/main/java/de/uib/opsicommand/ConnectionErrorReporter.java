@@ -20,8 +20,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
 import de.uib.opsicommand.certificate.CertificateDownloader;
 import de.uib.opsicommand.certificate.CertificateManager;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditRecord;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditRecord;
 
 /**
  * {@code ConnectionErrorReporter} reports connection errors, that occur during

@@ -18,7 +18,7 @@ import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class HostInfo {
 	public static final String DEPOT_OF_CLIENT_KEY = "depotId";

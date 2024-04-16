@@ -25,10 +25,10 @@ import de.uib.configed.dashboard.view.ClientView;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.dashboard.view.ProductView;
 import de.uib.configed.dashboard.view.ViewManager;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import utils.Utils;
 
 public class Dashboard {
 	public static final String MAIN_VIEW = "main";

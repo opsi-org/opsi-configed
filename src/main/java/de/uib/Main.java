@@ -35,10 +35,10 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.utilities.FeatureActivationChecker;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
-import de.uib.utilities.savedstates.UserPreferences;
+import de.uib.utils.FeatureActivationChecker;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
+import de.uib.utils.savedstates.UserPreferences;
 
 public class Main {
 	// --------------------------------------------------------------------------------------------------------

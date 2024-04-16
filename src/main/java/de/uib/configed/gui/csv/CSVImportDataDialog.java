@@ -34,8 +34,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class CSVImportDataDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;

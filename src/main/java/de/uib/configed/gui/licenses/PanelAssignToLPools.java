@@ -30,10 +30,10 @@ import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicensePool;
 import de.uib.configed.gui.FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PanelStateSwitch;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PanelStateSwitch;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 	private static final int MIN_V_SIZE = 80;

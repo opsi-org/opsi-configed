@@ -42,11 +42,11 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.NameProducer;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FLoadingWaiter;
-import de.uib.utilities.swing.SecondaryFrame;
-import utils.Utils;
+import de.uib.utils.NameProducer;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FLoadingWaiter;
+import de.uib.utils.swing.SecondaryFrame;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };

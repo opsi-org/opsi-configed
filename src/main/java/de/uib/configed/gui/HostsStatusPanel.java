@@ -19,8 +19,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.messagebus.MessagebusListener;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	public static final int MAX_CLIENT_NAMES_IN_FIELD = 10;

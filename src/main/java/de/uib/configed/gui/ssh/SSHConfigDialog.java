@@ -37,8 +37,8 @@ import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedDocument;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.CheckedDocument;
 
 public final class SSHConfigDialog extends FGeneralDialog {
 	private JCheckBox jCheckBoxDefault;

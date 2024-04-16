@@ -12,7 +12,7 @@ import javax.swing.JTable;
 
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
 	public ProductVersionCellRenderer() {

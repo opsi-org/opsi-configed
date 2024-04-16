@@ -18,8 +18,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.AbstractClosableTabComponent;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.AbstractClosableTabComponent;
 
 public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 	private JTabbedPane jTabbedPane;

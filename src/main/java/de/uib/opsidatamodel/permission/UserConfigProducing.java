@@ -19,9 +19,9 @@ import java.util.TreeSet;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ListCellOptions;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ListCellOptions;
 
 public class UserConfigProducing {
 	private boolean notUsingDefaultUser;

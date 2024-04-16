@@ -13,10 +13,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import de.uib.configed.gui.licenses.MultiTablePanel;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
 
 public abstract class AbstractControlMultiTablePanel {
 	protected List<GenTableModel> tableModels = new ArrayList<>();

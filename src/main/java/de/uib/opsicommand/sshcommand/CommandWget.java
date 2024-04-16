@@ -14,7 +14,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHWgetParameterDialog;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private static final String BASE_NAME = "wget ";

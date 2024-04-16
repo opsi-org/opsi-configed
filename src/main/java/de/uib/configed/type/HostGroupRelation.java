@@ -8,7 +8,7 @@ package de.uib.configed.type;
 
 import java.util.ArrayList;
 
-import de.uib.utilities.datastructure.Relation;
+import de.uib.utils.datastructure.Relation;
 
 public class HostGroupRelation extends Relation {
 	public HostGroupRelation() {

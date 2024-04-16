@@ -8,7 +8,7 @@ package de.uib.configed;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class ReachableUpdater extends Thread {
 	private ConfigedMain configedMain;

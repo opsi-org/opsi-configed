@@ -9,7 +9,7 @@ package de.uib.configed.type;
 import java.sql.Date;
 import java.util.Calendar;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class DateExtendedByVars extends Date {
 	public static final String MINUS = "minus";

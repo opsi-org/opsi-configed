@@ -19,7 +19,7 @@ import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.LicensesTabStatus;
-import de.uib.utilities.swing.SecondaryFrame;
+import de.uib.utils.swing.SecondaryFrame;
 
 public class LicensesFrame extends SecondaryFrame {
 	private JTabbedPane jTabbedPaneMain;
