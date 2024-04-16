@@ -9,7 +9,7 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.logging.Logging;
@@ -28,10 +28,10 @@ import de.uib.utils.logging.Logging;
  * {@code Persistent Data}.
  */
 public class SSHCommandDataService {
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 
-	public SSHCommandDataService(AbstractExecutioner exec) {
+	public SSHCommandDataService(AbstractPOJOExecutioner exec) {
 		this.exec = exec;
 	}
 

@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
@@ -30,9 +30,9 @@ import de.uib.utils.logging.Logging;
  * {@code Persistent Data}.
  */
 public class LogDataService {
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 
-	public LogDataService(AbstractExecutioner exec) {
+	public LogDataService(AbstractPOJOExecutioner exec) {
 		this.exec = exec;
 	}
 

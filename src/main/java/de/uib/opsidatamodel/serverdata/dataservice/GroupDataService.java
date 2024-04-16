@@ -17,7 +17,6 @@ import java.util.TreeSet;
 import de.uib.configed.tree.AbstractGroupTree;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.Object2GroupEntry;
-import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostGroups;
@@ -44,11 +43,11 @@ import de.uib.utils.logging.Logging;
 @SuppressWarnings({ "unchecked" })
 public class GroupDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public GroupDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public GroupDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;

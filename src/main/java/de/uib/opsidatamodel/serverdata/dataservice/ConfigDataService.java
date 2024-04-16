@@ -23,7 +23,7 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -60,7 +60,7 @@ public class ConfigDataService {
 	protected static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private HardwareDataService hardwareDataService;
@@ -69,7 +69,7 @@ public class ConfigDataService {
 	private List<Map<String, Object>> configStateCollection;
 	private List<Map<String, Object>> deleteConfigStateItems;
 
-	public ConfigDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public ConfigDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;

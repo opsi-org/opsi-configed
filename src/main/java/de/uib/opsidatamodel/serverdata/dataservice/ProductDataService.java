@@ -31,7 +31,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.configed.type.RetrievedMap;
 import de.uib.connectx.SmbConnect;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -77,7 +77,7 @@ public class ProductDataService {
 	private static final String KEY_PRODUCT_ON_CLIENT_FIELD_NETBOOT = "configed.productonclient_displayfields_netboot";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
@@ -88,7 +88,7 @@ public class ProductDataService {
 	private List<Map<String, Object>> productPropertyStateUpdateCollection;
 	private List<Map<String, Object>> productPropertyStateDeleteCollection;
 
-	public ProductDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public ProductDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;

@@ -37,7 +37,7 @@ import de.uib.configed.type.licenses.LicenseStatisticsRow;
 import de.uib.configed.type.licenses.LicenseUsableForEntry;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -76,14 +76,15 @@ public class SoftwareDataService {
 	}
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ModuleDataService moduleDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private LicenseDataService licenseDataService;
 	private HostInfoCollections hostInfoCollections;
 
-	public SoftwareDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public SoftwareDataService(AbstractPOJOExecutioner exec,
+			OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;

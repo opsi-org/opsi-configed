@@ -17,7 +17,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.HostInfoCollections;
@@ -30,12 +30,12 @@ import de.uib.utils.logging.Logging;
  * depot or firing an event on a host.
  */
 public class RPCMethodExecutor {
-	AbstractExecutioner exec;
+	AbstractPOJOExecutioner exec;
 	OpsiServiceNOMPersistenceController persistenceController;
 	HostDataService hostDataService;
 	HostInfoCollections hostInfoCollections;
 
-	public RPCMethodExecutor(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public RPCMethodExecutor(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.exec = exec;
 		this.persistenceController = persistenceController;
 	}
@@ -77,7 +77,7 @@ public class RPCMethodExecutor {
 
 			Logging.info(this, "working exec for depot " + hostSeparationEntry.getKey());
 
-			AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(hostSeparationEntry.getKey());
+			AbstractPOJOExecutioner exec1 = persistenceController.retrieveWorkingExec(hostSeparationEntry.getKey());
 
 			if (exec1 != null) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
@@ -92,7 +92,7 @@ public class RPCMethodExecutor {
 	}
 
 	public List<String> wakeOnLan(Set<String> hostIds, Map<String, List<String>> hostSeparationByDepot,
-			Map<String, AbstractExecutioner> execsByDepot) {
+			Map<String, AbstractPOJOExecutioner> execsByDepot) {
 		Map<String, Object> responses = new HashMap<>();
 
 		for (Entry<String, List<String>> hostSeparationEntry : hostSeparationByDepot.entrySet()) {
@@ -117,7 +117,8 @@ public class RPCMethodExecutor {
 	public List<String> wakeOnLanOpsi43(Collection<String> hostIds) {
 		Map<String, Object> response = new HashMap<>();
 
-		AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(hostInfoCollections.getConfigServer());
+		AbstractPOJOExecutioner exec1 = persistenceController
+				.retrieveWorkingExec(hostInfoCollections.getConfigServer());
 
 		Logging.info(this,
 				"working exec for config server " + hostInfoCollections.getConfigServer() + " " + (exec1 != null));

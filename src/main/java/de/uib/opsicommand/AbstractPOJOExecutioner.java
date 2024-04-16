@@ -21,22 +21,21 @@ import de.uib.utils.logging.Logging;
  * This class extends the Executioner abstract class in such a way that the data
  * will be retrieved in POJO.
  */
-public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
+public abstract class AbstractPOJOExecutioner {
 	protected ConnectionState conStat;
 
-	@Override
+	public abstract Map<String, Object> retrieveResponse(OpsiMethodCall omc);
+
 	public ConnectionState getConnectionState() {
 		return conStat;
 	}
 
-	@Override
 	public boolean doCall(OpsiMethodCall omc) {
 		Map<String, Object> jO = retrieveResponse(omc);
 
 		return checkResponse(jO);
 	}
 
-	@Override
 	public List<List<String>> getListOfStringLists(OpsiMethodCall omc) {
 		List<List<String>> result = new ArrayList<>();
 		Map<String, Object> response = retrieveResponse(omc);
@@ -49,7 +48,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public List<Object> getListResult(OpsiMethodCall omc) {
 		List<Object> result = new ArrayList<>();
 		Map<String, Object> response = retrieveResponse(omc);
@@ -62,7 +60,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public List<String> getStringListResult(OpsiMethodCall omc) {
 		List<String> result = new ArrayList<>();
 		Map<String, Object> response = retrieveResponse(omc);
@@ -75,7 +72,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public Map<String, Object> getMapResult(OpsiMethodCall omc) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> response = retrieveResponse(omc);
@@ -88,7 +84,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc) {
 		Map<String, List<String>> result = new HashMap<>();
 		Map<String, Object> response = retrieveResponse(omc);
@@ -101,7 +96,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public String getErrorFromResponse(Map<String, Object> retrieved) {
 		String errorMessage = null;
 
@@ -122,7 +116,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return errorMessage;
 	}
 
-	@Override
 	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> responses = POJOReMapper.remap(retrieved.get("result"),
@@ -170,7 +163,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		}
 	}
 
-	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars) {
 		List<Object> resultlist = getListResult(omc);
@@ -250,7 +242,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return detailMap;
 	}
 
-	@Override
 	public List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc) {
 		List<Map<String, Object>> result = new ArrayList<>();
 		Map<String, Object> response = retrieveResponse(omc);
@@ -263,7 +254,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
 		List<Map<String, List<Map<String, Object>>>> result = new ArrayList<>();
 		Map<String, Object> response = retrieveResponse(omc);
@@ -277,7 +267,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public String getStringResult(OpsiMethodCall omc) {
 		String result = "";
 		Map<String, Object> response = retrieveResponse(omc);
@@ -290,7 +279,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public boolean getBooleanResult(OpsiMethodCall omc) {
 		Boolean result = null;
 		Map<String, Object> response = retrieveResponse(omc);
@@ -303,7 +291,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return Boolean.TRUE.equals(result);
 	}
 
-	@Override
 	public Map<String, Object> getMapFromItem(Object item) {
 		Map<String, Object> result = null;
 
@@ -313,7 +300,6 @@ public abstract class AbstractPOJOExecutioner implements AbstractExecutioner {
 		return result;
 	}
 
-	@Override
 	public List<Object> getListFromItem(String item) {
 		List<Object> result = null;
 

@@ -21,7 +21,7 @@ import de.uib.configed.type.licenses.LicensePoolXOpsiProduct;
 import de.uib.configed.type.licenses.LicenseUsableForEntry;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -47,13 +47,13 @@ import de.uib.utils.logging.Logging;
 @SuppressWarnings({ "unchecked" })
 public class LicenseDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private ModuleDataService moduleDataService;
 
 	private List<LicenseUsageEntry> itemsDeletionLicenseUsage;
 
-	public LicenseDataService(AbstractExecutioner exec) {
+	public LicenseDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}

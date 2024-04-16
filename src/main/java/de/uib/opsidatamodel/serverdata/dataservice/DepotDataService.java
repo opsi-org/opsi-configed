@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -39,12 +39,12 @@ import de.uib.utils.logging.Logging;
  */
 public class DepotDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private ProductDataService productDataService;
 	private HostInfoCollections hostInfoCollections;
 
-	public DepotDataService(AbstractExecutioner exec) {
+	public DepotDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}

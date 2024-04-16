@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -58,12 +58,12 @@ public class ModuleDataService {
 	private static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private HostInfoCollections hostInfoCollections;
 
-	public ModuleDataService(AbstractExecutioner exec) {
+	public ModuleDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}

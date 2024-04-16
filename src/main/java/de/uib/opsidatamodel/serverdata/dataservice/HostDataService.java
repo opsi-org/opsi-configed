@@ -24,7 +24,7 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -59,7 +59,7 @@ public class HostDataService {
 	private static final String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
@@ -67,7 +67,7 @@ public class HostDataService {
 
 	private Map<String, Map<String, Object>> hostUpdates;
 
-	public HostDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public HostDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;

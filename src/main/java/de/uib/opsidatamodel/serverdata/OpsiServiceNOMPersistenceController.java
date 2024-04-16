@@ -19,7 +19,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
@@ -70,10 +70,10 @@ import de.uib.utils.logging.Logging;
  * which mediate access to remote objects (and buffer the data) The
  * {@link OpsiServiceNOMPersistenceController} retrieves its data from a server
  * that is compatible with the opsi data server resp. its stub (proxy) It has a
- * {@link AbstractExecutioner} component that transmits requests to the opsi
+ * {@link AbstractPOJOExecutioner} component that transmits requests to the opsi
  * server and receives the responses. There are several classes which implement
- * the {@link AbstractExecutioner} methods in different ways dependent on the
- * used means and protocols.
+ * the {@link AbstractPOJOExecutioner} methods in different ways dependent on
+ * the used means and protocols.
  */
 public class OpsiServiceNOMPersistenceController {
 	public static final List<String> NONE_LIST = new ArrayList<>() {
@@ -172,7 +172,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	private String user;
 
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 
 	private HostInfoCollections hostInfoCollections;
 
@@ -464,7 +464,7 @@ public class OpsiServiceNOMPersistenceController {
 		configKeyStartersNotForClients.add("configed");
 	}
 
-	public AbstractExecutioner retrieveWorkingExec(String depot) {
+	public AbstractPOJOExecutioner retrieveWorkingExec(String depot) {
 		Logging.debug(this, "retrieveWorkingExec , compare depotname " + depot + " to config server "
 				+ hostInfoCollections.getConfigServer());
 
@@ -474,7 +474,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		String password = (String) hostInfoCollections.getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
-		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password, "");
+		AbstractPOJOExecutioner exec1 = new ServerFacade(depot, depot, password, "");
 
 		if (makeConnection(exec1)) {
 			Logging.info(this, "retrieveWorkingExec new for server " + depot);
@@ -490,7 +490,7 @@ public class OpsiServiceNOMPersistenceController {
 		return makeConnection(exec);
 	}
 
-	private boolean makeConnection(AbstractExecutioner exec1) {
+	private boolean makeConnection(AbstractPOJOExecutioner exec1) {
 		Logging.info(this, "trying to make connection");
 		boolean result = exec1.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new String[] {}));
 
@@ -507,7 +507,7 @@ public class OpsiServiceNOMPersistenceController {
 		return exec.getConnectionState();
 	}
 
-	public AbstractExecutioner getExecutioner() {
+	public AbstractPOJOExecutioner getExecutioner() {
 		return exec;
 	}
 

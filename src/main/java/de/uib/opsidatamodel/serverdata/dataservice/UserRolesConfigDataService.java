@@ -24,7 +24,7 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
@@ -68,10 +68,10 @@ public class UserRolesConfigDataService {
 	public static final String ITEM_FREE_LICENSES = "free licenses for client";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public UserRolesConfigDataService(AbstractExecutioner exec,
+	public UserRolesConfigDataService(AbstractPOJOExecutioner exec,
 			OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
