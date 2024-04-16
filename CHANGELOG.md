@@ -1,9 +1,12 @@
 # Changelog
-## [4.3.2.X] - 2024-XX-XX
+## [4.3.2.X] - 2024-XX-XXs
 ## Changed
 - Use insecure connection in Messagebus, when certificate verification is disabled
 - Maintain consistent log levels for unspecified lines
+- Save user preferences on table's display fields
 
+## Added
+- Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
 
 ## Fixed
 - `NullPointerException` on product reset
@@ -13,7 +16,7 @@
 - The lower control panel in logviewer keeps disappearing on resize
 - The lower control panel in logviewer keeps disappearing on resize
 - For hardware devices with the same name in different hardware class, the information is shown incorrectly
-
+- Can't change table column visibility in product table after full reload
 
 
 ## [4.3.2.11] - 2024-03-28
