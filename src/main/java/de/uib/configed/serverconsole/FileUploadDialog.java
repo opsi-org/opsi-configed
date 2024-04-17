@@ -167,8 +167,6 @@ public class FileUploadDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonExecute);
 
 		enableComponents(jRadioButtonFromServer.isSelected());
-
-		initAdditional();
 	}
 
 	private void chooseFileDialog() {
@@ -186,9 +184,6 @@ public class FileUploadDialog extends FGeneralDialog {
 			jTextFieldLocalPath.setText("");
 		}
 	}
-
-	protected void initAdditional() {
-		/* To be implemented in subclass(es) */}
 
 	private void enableComponents(boolean isSelected) {
 		((JCheckBox) wgetAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).setEnabled(isSelected);
