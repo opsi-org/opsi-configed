@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import utils.Utils;
+import de.uib.utils.Utils;
 
 /**
  * This class is responsible for adding a suffix to a client's name.

@@ -19,12 +19,12 @@ import javax.swing.JPanel;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
-import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.DefaultListCellOptions;
-import de.uib.utilities.table.ListCellOptions;
+import de.uib.utils.DataChangedObserver;
+import de.uib.utils.datapanel.EditMapPanelX;
+import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.DefaultListCellOptions;
+import de.uib.utils.table.ListCellOptions;
 
 public class PanelHostProperties extends JPanel {
 	// delegate

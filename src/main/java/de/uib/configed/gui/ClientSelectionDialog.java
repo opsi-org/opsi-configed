@@ -78,9 +78,9 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.LowerCaseTextField;
-import de.uib.utilities.swing.TextInputField;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.LowerCaseTextField;
+import de.uib.utils.swing.TextInputField;
 
 /**
  * This dialog shows a number of options you can use to select specific clients.

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.reload.handler.ReloadHandler;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides a way to trigger specific {@link ReloadHandler} implementation for

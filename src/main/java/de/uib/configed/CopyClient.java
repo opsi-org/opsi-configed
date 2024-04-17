@@ -19,8 +19,8 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * This class is responsible for copying the client. By creating a new client

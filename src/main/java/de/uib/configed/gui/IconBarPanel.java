@@ -28,8 +28,8 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class IconBarPanel extends JPanel {
 	private JButton jButtonServerConfiguration;

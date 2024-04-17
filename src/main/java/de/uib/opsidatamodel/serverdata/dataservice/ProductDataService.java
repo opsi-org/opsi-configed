@@ -31,7 +31,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.configed.type.RetrievedMap;
 import de.uib.connectx.SmbConnect;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -43,12 +43,11 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.Object2Product2VersionList;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.datapanel.MapTableModel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.UserPreferences;
-import de.uib.utilities.table.ListCellOptions;
-import utils.ProductPackageVersionSeparator;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.MapTableModel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.table.ListCellOptions;
 
 /**
  * Provides methods for working with proudct data on the server.
@@ -65,6 +64,9 @@ import utils.Utils;
  */
 @SuppressWarnings({ "unchecked" })
 public class ProductDataService {
+	public static final String FOR_DISPLAY = "-";
+	public static final String FOR_KEY = ";";
+
 	private static final String EMPTYFIELD = "-";
 	private static final String NAME_REQUIREMENT_TYPE_BEFORE = "before";
 	private static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
@@ -75,7 +77,7 @@ public class ProductDataService {
 	private static final String KEY_PRODUCT_ON_CLIENT_FIELD_NETBOOT = "configed.productonclient_displayfields_netboot";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
@@ -86,7 +88,7 @@ public class ProductDataService {
 	private List<Map<String, Object>> productPropertyStateUpdateCollection;
 	private List<Map<String, Object>> productPropertyStateDeleteCollection;
 
-	public ProductDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public ProductDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
@@ -378,7 +380,7 @@ public class ProductDataService {
 			String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 			String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 
-			String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+			String versionInfo = productVersion + FOR_KEY + packageVersion;
 
 			Map<String, Map<String, List<String>>> product2VersionInfo2Depots = cacheManager
 					.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class);
@@ -433,7 +435,7 @@ public class ProductDataService {
 
 			String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 			String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-			String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+			String versionInfo = productVersion + FOR_KEY + packageVersion;
 
 			String action = "" + dependencyItem.get("productAction");
 			String requirementType = "";
@@ -578,8 +580,7 @@ public class ProductDataService {
 
 					aProductInfo.put(ProductState.KEY_PRODUCT_ID, product.getKey());
 
-					aProductInfo.put(ProductState.KEY_VERSION_INFO,
-							ProductPackageVersionSeparator.formatKeyForDisplay(productInfo.getVersionInfo()));
+					aProductInfo.put(ProductState.KEY_VERSION_INFO, formatKeyForDisplay(productInfo.getVersionInfo()));
 
 					aProductInfo.put(ProductState.KEY_PRODUCT_PRIORITY, productInfo.getPriority());
 
@@ -607,6 +608,24 @@ public class ProductDataService {
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, productGlobalInfos);
 		cacheManager.setCachedData(CacheIdentifier.POSSIBLE_ACTIONS, possibleActions);
 		Logging.info(this, "retrieveProductGlobalInfos  found number  " + productGlobalInfos.size());
+	}
+
+	private static String formatKeyForDisplay(String key) {
+		if (key == null) {
+			return null;
+		}
+
+		int i = key.indexOf(FOR_KEY);
+		if (i == -1) {
+			return key;
+		}
+
+		String result = key.substring(0, i);
+		if (i < key.length()) {
+			result = result + FOR_DISPLAY + key.substring(i + 1);
+		}
+
+		return result;
 	}
 
 	private String getVersionInfoForLocalbootProduct(String depotId, String productId) {

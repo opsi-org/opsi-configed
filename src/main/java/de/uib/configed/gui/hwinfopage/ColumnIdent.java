@@ -7,7 +7,7 @@
 package de.uib.configed.gui.hwinfopage;
 
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class ColumnIdent {
 	private String dbColumnName;

@@ -51,8 +51,8 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.HeaderOptionsPanel;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;

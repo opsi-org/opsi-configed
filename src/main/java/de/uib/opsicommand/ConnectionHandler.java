@@ -18,7 +18,7 @@ import javax.net.ssl.SSLException;
 import de.uib.configed.Configed;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class ConnectionHandler {
 	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET" };

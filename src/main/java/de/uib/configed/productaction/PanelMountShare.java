@@ -20,9 +20,9 @@ import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utilities.NameProducer;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.NameProducer;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class PanelMountShare extends JPanel {
 	private static List<PanelMountShare> instances = new ArrayList<>();

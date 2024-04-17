@@ -25,7 +25,7 @@ import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private JLabel jLabelOn = new JLabel();

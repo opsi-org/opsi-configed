@@ -21,7 +21,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class BackendMySQL {
 	private static final String KEY_CHILDREN = "children";

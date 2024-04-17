@@ -24,16 +24,16 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.TimeCheck;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.TimeCheck;
 
 /**
  * Provides methods for working with hardware data on the server.
@@ -60,12 +60,13 @@ public class HardwareDataService {
 	private static final String HOST_HARDWARE_ADDRESS = "HOST.hardwareAdress";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private HostInfoCollections hostInfoCollections;
 
-	public HardwareDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public HardwareDataService(AbstractPOJOExecutioner exec,
+			OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;

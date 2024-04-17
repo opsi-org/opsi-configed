@@ -35,10 +35,10 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.RunningInstances;
-import de.uib.utilities.thread.WaitingSleeper;
-import de.uib.utilities.thread.WaitingWorker;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.observer.RunningInstances;
+import de.uib.utils.thread.WaitingSleeper;
+import de.uib.utils.thread.WaitingWorker;
 
 public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(

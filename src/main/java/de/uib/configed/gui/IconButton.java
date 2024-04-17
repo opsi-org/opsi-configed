@@ -9,7 +9,7 @@ package de.uib.configed.gui;
 import javax.swing.JButton;
 
 import de.uib.configed.Globals;
-import utils.Utils;
+import de.uib.utils.Utils;
 
 public class IconButton extends JButton {
 	/** The url for the image displayed if active */

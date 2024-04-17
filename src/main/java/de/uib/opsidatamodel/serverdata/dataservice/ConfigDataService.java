@@ -23,7 +23,7 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -35,11 +35,11 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.datapanel.MapTableModel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.table.ListCellOptions;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.MapTableModel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.TimeCheck;
+import de.uib.utils.table.ListCellOptions;
 
 /**
  * Provides methods for working with configuration data on the server.
@@ -60,7 +60,7 @@ public class ConfigDataService {
 	protected static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private HardwareDataService hardwareDataService;
@@ -69,7 +69,7 @@ public class ConfigDataService {
 	private List<Map<String, Object>> configStateCollection;
 	private List<Map<String, Object>> deleteConfigStateItems;
 
-	public ConfigDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public ConfigDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;

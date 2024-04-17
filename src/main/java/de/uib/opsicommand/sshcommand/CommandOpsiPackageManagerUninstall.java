@@ -11,7 +11,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHPackageManagerUninstallParameterDialog;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	private FGeneralDialog dialog;

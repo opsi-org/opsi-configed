@@ -23,7 +23,7 @@ import com.jediterm.core.util.TermSize;
 import com.jediterm.terminal.TtyConnector;
 
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class WebSocketTtyConnector implements TtyConnector {
 	private BufferedReader reader;

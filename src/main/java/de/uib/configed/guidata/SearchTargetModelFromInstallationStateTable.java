@@ -11,8 +11,8 @@ import java.util.Arrays;
 import javax.swing.JTable;
 
 import de.uib.configed.gui.productpage.PanelProductSettings;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.SearchTargetModelFromTable;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.SearchTargetModelFromTable;
 
 public class SearchTargetModelFromInstallationStateTable extends SearchTargetModelFromTable {
 	private PanelProductSettings panelProductSettings;

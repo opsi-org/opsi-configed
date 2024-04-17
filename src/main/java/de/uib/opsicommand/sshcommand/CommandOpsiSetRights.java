@@ -15,7 +15,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHOpsiSetRightsParameterDialog;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHCommandNeedParameter {
 	private static final int PRIORITY = 110;

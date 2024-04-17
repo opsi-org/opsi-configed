@@ -20,9 +20,9 @@ import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utilities.table.gui.SearchTargetModel;
-import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TableSearchPane;
+import de.uib.utils.table.gui.SearchTargetModel;
+import de.uib.utils.table.gui.SearchTargetModelFromJList;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class ValueSelectorList extends JPanel {
 	private DepotsList valueList;
