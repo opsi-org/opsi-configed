@@ -30,18 +30,7 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 
 	public MultiCommandTemplate(String id, List<String> c, String mt, String pmt, String ttt, int p) {
 		priority = CommandFactory.DEFAULT_POSITION;
-
 		initValues(id, c, mt, pmt, ttt, p);
-	}
-
-	public MultiCommandTemplate(CommandMetadata orig, List<String> commandlist) {
-		this(orig.getId(), commandlist, orig.getMenuText(), orig.getParentMenuText(), orig.getToolTipText(),
-				orig.getPriority());
-	}
-
-	public MultiCommandTemplate(MultiCommandTemplate orig) {
-		this(orig.getId(), orig.getCommandsRaw(), orig.getMenuText(), orig.getParentMenuText(), orig.getToolTipText(),
-				orig.getPriority());
 	}
 
 	private void initValues(String id, List<String> c, String mt, String pmt, String ttt, int p) {
