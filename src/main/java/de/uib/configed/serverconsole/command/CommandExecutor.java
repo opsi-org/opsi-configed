@@ -117,9 +117,8 @@ public class CommandExecutor implements MessagebusListener {
 			terminalFrame.uploadFile(fileUploader);
 			locker.lock();
 		} else {
-			CommandParameterMethods parameterMethods = CommandFactory.getInstance(configedMain)
-					.getParameterMethodHandler();
-			startCommandProcess(parameterMethods.parseParameter(command, this));
+			CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
+			startCommandProcess(parameterParser.parseParameter(command, this));
 		}
 	}
 

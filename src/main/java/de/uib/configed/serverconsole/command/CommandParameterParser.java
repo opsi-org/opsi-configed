@@ -39,7 +39,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
 
-public final class CommandParameterMethods {
+public final class CommandParameterParser {
 	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
 	public static final String REPLACEMENT_DEFAULT_2 = ">>>";
 	public static final String PARAM_SPLITTER_DEFAULT = "><";
@@ -76,7 +76,7 @@ public final class CommandParameterMethods {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public CommandParameterMethods(ConfigedMain configedMain) {
+	public CommandParameterParser(ConfigedMain configedMain) {
 		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
 		methods.put(METHOD_GET_SELECTED_CLIENT_NAMES, "getSelectedClientNames");
 		methods.put(METHOD_GET_SELECTED_CLIENT_IPS, "getSelectedClientIPs");

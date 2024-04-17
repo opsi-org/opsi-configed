@@ -71,7 +71,6 @@ public final class CommandFactory {
 	private Set<String> knownMenus;
 	private Set<String> knownParents;
 
-	private CommandParameterMethods pmethodHandler;
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -79,7 +78,6 @@ public final class CommandFactory {
 
 	public CommandFactory(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
-		this.pmethodHandler = new CommandParameterMethods(configedMain);
 	}
 
 	public static CommandFactory getInstance(ConfigedMain configedMain) {
@@ -91,13 +89,6 @@ public final class CommandFactory {
 
 	public static void destroyInstance() {
 		instance = null;
-	}
-
-	public CommandParameterMethods getParameterMethodHandler() {
-		if (pmethodHandler == null) {
-			pmethodHandler = new CommandParameterMethods(configedMain);
-		}
-		return pmethodHandler;
 	}
 
 	public static SingleCommand[] getDefaultOpsiCommands() {
