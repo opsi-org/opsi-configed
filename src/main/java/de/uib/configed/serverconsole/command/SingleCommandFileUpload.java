@@ -43,7 +43,7 @@ public class SingleCommandFileUpload implements SingleCommand, CommandWithParame
 	}
 
 	public String getFullSourcePath() {
-		return getTargetPath() + getSourceFileName();
+		return getSourcePath() + getSourceFileName();
 	}
 
 	public String getSourcePath() {
