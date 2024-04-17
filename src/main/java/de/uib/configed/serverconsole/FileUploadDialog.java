@@ -55,10 +55,8 @@ public class FileUploadDialog extends FGeneralDialog {
 	protected JLabel jLabelSetRights;
 	protected JLabel jLabelmodulesFrom;
 	private JLabel jLabelURL;
-	protected JLabel jLabelOverwriteExisting;
 
 	protected JCheckBox jComboBoxSetRights;
-	protected JCheckBox jCheckBoxOverwriteExisting;
 	private JTextField jTextFieldURL;
 
 	protected GroupLayout.Group horizontalParallelGroup;
@@ -115,9 +113,6 @@ public class FileUploadDialog extends FGeneralDialog {
 		wgetAuthPanel.close();
 
 		jLabelURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_url"));
-		jLabelOverwriteExisting = new JLabel();
-		jLabelOverwriteExisting
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_overwriteExisting"));
 
 		jLabelSetRights = new JLabel();
 		jLabelSetRights.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_setRights"));
@@ -141,8 +136,6 @@ public class FileUploadDialog extends FGeneralDialog {
 
 		jComboBoxSetRights = new JCheckBox("", true);
 		jComboBoxSetRights.setSelected(true);
-		jCheckBoxOverwriteExisting = new JCheckBox();
-		jCheckBoxOverwriteExisting.setSelected(true);
 
 		jFileChooserLocal = new JFileChooser();
 		jFileChooserLocal.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -210,15 +203,9 @@ public class FileUploadDialog extends FGeneralDialog {
 						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelmodulesFrom,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelOverwriteExisting, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE).addGroup(
-						inputPanelLayout.createParallelGroup()
-								.addComponent(jComboBoxSetRights, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH)
-								.addComponent(jCheckBoxOverwriteExisting, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH));
+				.addGap(Globals.GAP_SIZE).addGroup(inputPanelLayout.createParallelGroup()
+						.addComponent(jComboBoxSetRights, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH));
 		verticalParallelGroup = inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER);
 	}
 
@@ -310,12 +297,6 @@ public class FileUploadDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jComboBoxSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelOverwriteExisting, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jCheckBoxOverwriteExisting, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE).addGroup(verticalParallelGroup));
 	}
 
