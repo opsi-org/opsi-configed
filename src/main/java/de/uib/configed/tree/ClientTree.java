@@ -266,7 +266,6 @@ public class ClientTree extends AbstractGroupTree {
 		linkGroupNodes(permittedGroups);
 	}
 
-	@SuppressWarnings({ "java:S1541" })
 	private void linkGroupNodes(Set<String> permittedGroups) {
 		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
 			if (topGroupNames.contains(group.getKey())) {
