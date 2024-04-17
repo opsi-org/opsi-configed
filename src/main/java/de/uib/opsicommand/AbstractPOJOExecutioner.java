@@ -292,20 +292,12 @@ public abstract class AbstractPOJOExecutioner {
 	}
 
 	public Map<String, Object> getMapFromItem(Object item) {
-		Map<String, Object> result = null;
-
-		result = POJOReMapper.remap(item, new TypeReference<Map<String, Object>>() {
+		return POJOReMapper.remap(item, new TypeReference<Map<String, Object>>() {
 		});
-
-		return result;
 	}
 
 	public List<Object> getListFromItem(String item) {
-		List<Object> result = null;
-
-		result = POJOReMapper.remap(item, new TypeReference<List<Object>>() {
+		return POJOReMapper.remap(item, new TypeReference<List<Object>>() {
 		});
-
-		return result;
 	}
 }
