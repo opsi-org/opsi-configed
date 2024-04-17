@@ -43,6 +43,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.ClientHardwareDataReloadHa
 import de.uib.opsidatamodel.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.DepotProductPropertiesDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
@@ -184,6 +185,8 @@ public class OpsiServiceNOMPersistenceController {
 	private RPCMethodExecutor rpcMethodExecutor;
 	private ReloadDispatcher reloadDispatcher;
 
+	private String triggeredEvent;
+
 	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.user = user;
@@ -315,6 +318,7 @@ public class OpsiServiceNOMPersistenceController {
 		return rpcMethodExecutor;
 	}
 
+	@SuppressWarnings({ "java:S103", "java:S138" })
 	private void registerReloadHandlers() {
 		reloadDispatcher = new ReloadDispatcher();
 
@@ -391,6 +395,11 @@ public class OpsiServiceNOMPersistenceController {
 		statisticsDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.STATISTICS_DATA_RELOAD.toString(), statisticsDataReloadHandler);
 
+		DepotProductPropertiesDataReloadHandler depotProductPropertiesDataReloadHandler = new DepotProductPropertiesDataReloadHandler();
+		depotProductPropertiesDataReloadHandler.setProductDataService(productDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString(),
+				depotProductPropertiesDataReloadHandler);
+
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
 		defaultDataReloadHandler.setGroupDataService(groupDataService);
 		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
@@ -408,7 +417,12 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public void reloadData(String event) {
+		triggeredEvent = event;
 		reloadDispatcher.dispatch(event);
+	}
+
+	public String getTriggeredEvent() {
+		return triggeredEvent;
 	}
 
 	public void registerPanelCompleteWinProducts(PanelCompleteWinProducts panelCompleteWinProducts) {
