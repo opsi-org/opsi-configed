@@ -22,6 +22,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
@@ -71,6 +72,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 	private JTextField jTextFieldTooltipText = new JTextField();
 	private JTextField jTextFieldPriority = new JTextField();
 	private JTextPane jTextPaneCommands = new JTextPane();
+	private JScrollPane jScrollPane;
 
 	private ConfigedMain configedMain;
 	private final CommandFactory factory;
@@ -135,6 +137,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 				String.valueOf(CommandFactory.DEFAULT_POSITION), 1);
 
 		jTextPaneCommands = new JTextPane();
+		jScrollPane = new JScrollPane(jTextPaneCommands);
 
 		buttonTestCommand = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
 				"images/executing_command_red_22.png", "images/executing_command_red_22.png",
@@ -322,8 +325,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 
-								).addGap(Globals.MIN_GAP_SIZE).addComponent(jTextPaneCommands,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+								).addGap(Globals.MIN_GAP_SIZE).addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE * 3));
 		commandlistPanelLayout.setVerticalGroup(commandlistPanelLayout.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE * 2)
@@ -335,8 +338,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
 
-				).addGap(Globals.MIN_GAP_SIZE).addComponent(jTextPaneCommands, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				).addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE * 1));
 
 		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
