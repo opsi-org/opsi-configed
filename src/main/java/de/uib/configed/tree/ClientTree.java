@@ -278,11 +278,9 @@ public class ClientTree extends AbstractGroupTree {
 				parentId = ALL_GROUPS_NAME;
 			}
 
-			DefaultMutableTreeNode parent = groupNodes.get(parentId) == null ? groupNodes.get(ALL_GROUPS_NAME)
-					: groupNodes.get(parentId);
-
 			if (permittedGroups == null || permittedGroups.contains(group.getKey())
 					|| permittedGroups.contains(parentId)) {
+				DefaultMutableTreeNode parent = getParentNodeForParentId(parentId, permittedGroups);
 				DefaultMutableTreeNode node = groupNodes.get(group.getKey());
 				parent.add(node);
 				model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
@@ -290,6 +288,14 @@ public class ClientTree extends AbstractGroupTree {
 					permittedGroups.add(group.getKey());
 				}
 			}
+		}
+	}
+
+	private DefaultMutableTreeNode getParentNodeForParentId(String parentId, Set<String> permittedGroups) {
+		if (groupNodes.get(parentId) == null || (permittedGroups != null && !permittedGroups.contains(parentId))) {
+			return groupNodeGroups;
+		} else {
+			return groupNodes.get(parentId);
 		}
 	}
 
