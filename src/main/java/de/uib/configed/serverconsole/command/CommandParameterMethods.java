@@ -166,7 +166,7 @@ public final class CommandParameterMethods {
 			return Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
 		}
 
-		if (result.contains("scrip://")) {
+		if (result.contains("script://")) {
 			return result.replace("script://", "");
 		} else {
 			return result;
@@ -389,7 +389,6 @@ public final class CommandParameterMethods {
 		}
 
 		Logging.debug(this, "getConfig_serverName " + ConfigedMain.getHost());
-		//// peristancecontroller methods for depot :
 
 		return ConfigedMain.getHost();
 	}
