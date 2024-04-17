@@ -14,10 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -46,12 +44,12 @@ public class CSVImportDataModifier {
 	private String csvFile;
 	private List<String> columnNames;
 	private List<String> hiddenColumns;
-	private Set<String> tmpHeaderNames;
+	private List<String> tmpHeaderNames;
 
 	public CSVImportDataModifier(String csvFile, List<String> columnNames) {
 		this.csvFile = csvFile;
 		this.columnNames = columnNames;
-		this.tmpHeaderNames = new LinkedHashSet<>(columnNames);
+		this.tmpHeaderNames = new ArrayList<>(columnNames);
 		this.hiddenColumns = new ArrayList<>();
 	}
 

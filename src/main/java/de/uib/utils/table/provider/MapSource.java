@@ -81,7 +81,7 @@ public class MapSource implements TableSource {
 					vRow.add("" + rowCount);
 				} else {
 					vRow.add("");
-					Logging.warning(this,
+					Logging.info(this,
 							"fetchData row " + mRow + " ob == null, possibly the column name is not correct, column "
 									+ i + ", " + columnNames.get(i));
 				}
