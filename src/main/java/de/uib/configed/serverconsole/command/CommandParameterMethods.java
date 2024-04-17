@@ -34,7 +34,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.ValueSelectorList;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -59,8 +58,6 @@ public final class CommandParameterMethods {
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedDepotIPs");
 	public static final String METHOD_GET_CONFIG_SERVER_NAME = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getConfigServerName");
-	public static final String METHOD_GET_CONNECTED_SSH_SERVER_NAME = Configed
-			.getResourceValue("SSHConnection.CommandControl.method.getConnectedSSHServerName");
 	public static final String METHOD_OPTION_SELECTION = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
 
@@ -86,7 +83,6 @@ public final class CommandParameterMethods {
 		methods.put(METHOD_GET_SELECTED_DEPOT_NAMES, "getSelectedDepotNames");
 		methods.put(METHOD_GET_SELECTED_DEPOT_IPS, "getSelectedDepotIPs");
 		methods.put(METHOD_GET_CONFIG_SERVER_NAME, "getConfigServerName");
-		methods.put(METHOD_GET_CONNECTED_SSH_SERVER_NAME, "getConnectedSSHServerName");
 		methods.put(METHOD_OPTION_SELECTION, "ssh://path/to/file");
 
 		this.configedMain = configedMain;
@@ -237,8 +233,6 @@ public final class CommandParameterMethods {
 			result = formatResult(getSelectedDepotIPs(), format);
 		} else if (method.equals(methods.get(METHOD_GET_CONFIG_SERVER_NAME))) {
 			result = formatResult(getConfigServerName(), format);
-		} else if (method.equals(methods.get(METHOD_GET_CONNECTED_SSH_SERVER_NAME))) {
-			result = formatResult(getConfigSSHServerName(), format);
 		} else if (method.contains("ssh://")) {
 			result = getSelectedValue(method);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
@@ -400,11 +394,6 @@ public final class CommandParameterMethods {
 		return ConfigedMain.getHost();
 	}
 
-	private String getConfigSSHServerName() {
-		Logging.debug(this, "getConfig_sshserverName " + SSHConnectionInfo.getInstance().getHost());
-		return SSHConnectionInfo.getInstance().getHost();
-	}
-
 	private String[] getSelectedClientIPs() {
 		Logging.debug(this, "getSelected_clientIPs " + configedMain.getSelectedClients());
 
@@ -505,7 +494,7 @@ public final class CommandParameterMethods {
 	}
 
 	private String getSelectedValue(String method) {
-		if ("ssh://path/to/file".equals(method)) {
+		if (methods.get(METHOD_OPTION_SELECTION).equals(method)) {
 			final List<String> values = new ArrayList<>();
 			values.add("Test 1");
 			values.add("Test 2");
