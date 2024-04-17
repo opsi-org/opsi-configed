@@ -707,23 +707,20 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicensePool " + removeKeysFromOtherLicensePool);
 
-		boolean result = true;
-
 		if (removeKeysFromOtherLicensePool != null) {
 			for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicensePool.entrySet()) {
-				if (result && !otherStringPoolEntry.getValue().isEmpty()) {
-					result = persistenceController.getSoftwareDataService()
-							.removeAssociations(otherStringPoolEntry.getKey(), otherStringPoolEntry.getValue());
-					if (result) {
-						removeKeysFromOtherLicensePool.remove(otherStringPoolEntry.getKey());
-					}
+				if (otherStringPoolEntry.getValue().isEmpty()) {
+					Logging.info(this,
+							"we wont remove association since entry is empty: " + otherStringPoolEntry.getKey());
+				} else if (persistenceController.getSoftwareDataService()
+						.removeAssociations(otherStringPoolEntry.getKey(), otherStringPoolEntry.getValue())) {
+					removeKeysFromOtherLicensePool.remove(otherStringPoolEntry.getKey());
+				} else {
+					return false;
 				}
 			}
 		}
-
-		if (!result) {
-			return false;
-		}
+		boolean result;
 
 		// cleanup assignments to other pools since an update would not change them
 		// (redmine #3282)

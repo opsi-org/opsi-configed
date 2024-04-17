@@ -131,7 +131,7 @@ public class PanelProductProperties extends JSplitPane {
 		@Override
 		public void reload() {
 			Logging.info(this, "reload()");
-			ConfigedMain.getMainFrame().activateLoadingCursor();;
+			ConfigedMain.getMainFrame().activateLoadingCursor();
 			if (!CacheIdentifier.ALL_DATA.toString().equals(persistenceController.getTriggeredEvent())) {
 				persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 			}
