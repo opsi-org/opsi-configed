@@ -370,6 +370,7 @@ public final class TerminalFrame implements MessagebusListener {
 		widget.setViewRestricted(true);
 	}
 
+	@SuppressWarnings({ "java:S2325" })
 	public void uploadFile(AbstractBackgroundFileUploader fileUploader) {
 		fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + 1);
 		fileUploader.execute();
