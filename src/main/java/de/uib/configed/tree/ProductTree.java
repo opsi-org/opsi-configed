@@ -16,13 +16,13 @@ import java.util.TreeSet;
 
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.productpage.PanelProductSettings;
+import de.uib.configed.type.Object2GroupEntry;
 
 public class ProductTree extends AbstractGroupTree {
 	private PanelProductSettings localbootPanel;
@@ -47,32 +47,11 @@ public class ProductTree extends AbstractGroupTree {
 		setSelectionPath(new TreePath(groupNodeFullList.getPath()));
 	}
 
-	public void reInitTree() {
-		String nodeToSelect;
-
-		if (getSelectionPath() == null) {
-			nodeToSelect = null;
-		} else if (((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getAllowsChildren()) {
-			nodeToSelect = getSelectionPath().getLastPathComponent().toString();
-		} else {
-			nodeToSelect = ((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getParent().toString();
-		}
-
-		groupNodes.clear();
-		groups.clear();
-		rootNode.removeAllChildren();
-		createTopNodes();
-		setModel(new DefaultTreeModel(rootNode));
-
-		if (nodeToSelect != null) {
-			TreePath pathToSelect = new TreePath(getModel().getPathToRoot(groupNodes.get(nodeToSelect)));
-			setSelectionPath(pathToSelect);
-			expandPath(pathToSelect);
-		}
-	}
-
 	@Override
 	protected void createTopNodes() {
+		Set<String> productIds = new TreeSet<>(persistenceController.getProductDataService()
+				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet());
+
 		Map<String, DefaultMutableTreeNode> nodeMap = new HashMap<>();
 
 		// Create groups
@@ -103,17 +82,26 @@ public class ProductTree extends AbstractGroupTree {
 			}
 		}
 
-		for (Entry<String, Set<String>> groupMembers : persistenceController.getGroupDataService()
-				.getFProductGroup2Members().entrySet()) {
+		Map<String, Set<String>> allowedGroups2Members = persistenceController.getGroupDataService()
+				.getFProductGroup2Members();
+		allowedGroups2Members.keySet().retainAll(nodeMap.keySet());
+
+		for (Entry<String, Set<String>> groupMembers : allowedGroups2Members.entrySet()) {
 			DefaultMutableTreeNode groupNode = nodeMap.get(groupMembers.getKey());
 
 			for (String productId : groupMembers.getValue()) {
-				groupNode.add(new DefaultMutableTreeNode(productId, false));
+				if (productIds.contains(productId)) {
+					groupNode.add(new DefaultMutableTreeNode(productId, false));
+				}
 			}
 		}
 
-		for (String productId : new TreeSet<>(persistenceController.getProductDataService()
-				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet())) {
+		Set<String> allPermittedProducts = new TreeSet<>(persistenceController.getProductDataService()
+				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet());
+
+		persistenceController.getProductDataService().filterPermittedProducts(allPermittedProducts);
+
+		for (String productId : allPermittedProducts) {
 			groupNodeFullList.add(new DefaultMutableTreeNode(productId, false));
 		}
 
@@ -143,7 +131,8 @@ public class ProductTree extends AbstractGroupTree {
 		if (getChildWithUserObjectString(objectID, newParentNode) == null) {
 			newParentNode.add(new DefaultMutableTreeNode(objectID, false));
 
-			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, false);
+			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID,
+					Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 
 			model.nodeStructureChanged(newParentNode);
 
@@ -155,7 +144,6 @@ public class ProductTree extends AbstractGroupTree {
 	public Set<String> getSelectedObjectsInTable() {
 		Set<String> selectedProducts = localbootPanel.getSelectedIDs();
 		selectedProducts.addAll(netbootPanel.getSelectedIDs());
-
 		return selectedProducts;
 	}
 
@@ -209,8 +197,8 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
-		localbootPanel.valueChanged(getSelectionPaths());
-		netbootPanel.valueChanged(getSelectionPaths());
+		localbootPanel.valueChanged(getSelectionPaths(), true);
+		netbootPanel.valueChanged(getSelectionPaths(), true);
 	}
 
 	@Override

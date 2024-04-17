@@ -45,9 +45,9 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PopupMenuTrait;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
 
 public class LogPane extends JPanel implements KeyListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 4;
@@ -82,8 +82,7 @@ public class LogPane extends JPanel implements KeyListener {
 	private final StyleContext styleContext;
 	private final Style[] logLevelStyles;
 
-	private Integer minLevel = MIN_LEVEL;
-	private Integer showLevel = minLevel;
+	private Integer showLevel = MIN_LEVEL;
 
 	private boolean showTypeRestricted;
 	private int typesListMaxShowCount = 25;
@@ -209,7 +208,6 @@ public class LogPane extends JPanel implements KeyListener {
 		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
 
 		buttonSearch.addActionListener(event -> search());
-		buttonSearch.addKeyListener(this);
 
 		jCheckBoxCaseSensitive = new JCheckBox(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive"));
 		jCheckBoxCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
@@ -247,36 +245,33 @@ public class LogPane extends JPanel implements KeyListener {
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
 		commandpane.setLayout(layoutCommandpane);
 
-		layoutCommandpane.setHorizontalGroup(
-				layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(buttonSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(jCheckBoxCaseSensitive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
-						.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
-						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(comboType, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
-						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
-
-		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
+		layoutCommandpane.setHorizontalGroup(layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(buttonSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jCheckBoxCaseSensitive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE * 2)
+				.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+				.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE * 2)
+				.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(comboType, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE * 2)
+				.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
+				.addGap(Globals.GAP_SIZE));
+
+		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
 						.addComponent(labelSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(jComboBoxSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -734,26 +729,16 @@ public class LogPane extends JPanel implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		Logging.debug(this, "KeyEvent " + e);
 
-		if (e.getSource() == buttonSearch) {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				search();
-			}
-		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
-			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
-				search();
-			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS
-					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-				Logging.info(this, "Ctrl-Plus");
-				increaseFontSize();
-			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS
-					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
-				Logging.info(this, "Ctrl-Minus");
-				reduceFontSize();
-			} else {
-				// Do nothing on other keys on jComboBoxSearch and jTextPane
-			}
+		if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
+			search();
+		} else if (e.getKeyCode() == KeyEvent.VK_PLUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+			Logging.info(this, "Ctrl-Plus");
+			increaseFontSize();
+		} else if (e.getKeyCode() == KeyEvent.VK_MINUS && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+			Logging.info(this, "Ctrl-Minus");
+			reduceFontSize();
 		} else {
-			Logging.warning(this, "unexpected keyevent on source " + e.getSource());
+			// Do nothing on other keys on jTextPane
 		}
 	}
 

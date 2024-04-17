@@ -10,7 +10,7 @@ import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.gui.HostsStatusPanel;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class ActivatedGroupModel {
 	private String groupName;

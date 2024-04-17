@@ -11,7 +11,6 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -36,9 +35,9 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.SavedStates;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.SavedStates;
 
 public final class Configed {
 	private static final String LOCALIZATION_FILENAME_REGEX = "configed_...*\\.properties";
@@ -62,12 +61,10 @@ public final class Configed {
 	private static String host;
 	private static String user;
 	private static String password;
+	private static String otp;
 
 	private static String sshKey;
 	private static String sshKeyPass;
-	private static String client;
-	private static String clientgroup;
-	private static Integer tab;
 	private static boolean optionCLIQuerySearch;
 	private static String savedSearch;
 	private static boolean optionCLIDefineGroupBySearch;
@@ -88,14 +85,11 @@ public final class Configed {
 	private static String paramHost;
 	private static String paramUser;
 	private static String paramPassword;
-	private static String paramClient;
-	private static String paramClientgroup;
-	private static Integer paramTab;
+	private static String paramOTP;
 
 	/** construct the application */
-	private Configed(String paramHost, String paramUser, String paramPassword, final String paramClient,
-			final String paramClientgroup, final Integer paramTab) {
-		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
+	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP) {
+		setParamValues(paramHost, paramUser, paramPassword, paramOTP);
 
 		Logging.debug("starting " + getClass().getName());
 		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
@@ -111,7 +105,7 @@ public final class Configed {
 	public static void startConfiged() {
 		Logging.notice("system information: ");
 
-		Logging.notice(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		Logging.notice(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ")");
 		Logging.notice(" running by java version " + JAVA_VERSION + " and java vendor " + JAVA_VENDOR);
 
 		// Try with resources so that it will be closed in implicit finally statement
@@ -123,46 +117,16 @@ public final class Configed {
 		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
+		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, sshKey, sshKeyPass);
 
 		SwingUtilities.invokeLater(configedMain::init);
-
-		try {
-			SwingUtilities.invokeAndWait(() -> setStartSettings(configedMain));
-		} catch (InvocationTargetException ex) {
-			Logging.info(" run " + ex);
-		} catch (InterruptedException ie) {
-			Logging.info(" run " + ie);
-			Thread.currentThread().interrupt();
-		}
 	}
 
-	private static void setStartSettings(ConfigedMain configedMain) {
-		if (paramClient != null || paramClientgroup != null) {
-			if (paramClientgroup != null) {
-				configedMain.setGroupAndSelect(paramClientgroup);
-			}
-
-			if (paramClient != null) {
-				configedMain.setClient(paramClient);
-			}
-
-			Logging.info("set client " + paramClient);
-
-			if (paramTab != null) {
-				configedMain.setVisualViewIndex(paramTab);
-			}
-		}
-	}
-
-	private static void setParamValues(String paramHost, String paramUser, String paramPassword, Integer paramTab,
-			String paramClient, String paramClientgroup) {
+	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP) {
 		Configed.paramHost = paramHost;
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
-		Configed.paramTab = paramTab;
-		Configed.paramClient = paramClient;
-		Configed.paramClientgroup = paramClientgroup;
+		Configed.paramOTP = paramOTP;
 	}
 
 	public static boolean isSSHConnectionOnStart() {
@@ -214,6 +178,9 @@ public final class Configed {
 		if (password == null) {
 			password = Utils.getCLIPasswordParam("Password: ");
 		}
+		if (otp == null) {
+			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
+		}
 	}
 
 	private static void processLoginOptions(CommandLine cmd) {
@@ -228,26 +195,9 @@ public final class Configed {
 		if (cmd.hasOption("p")) {
 			password = cmd.getOptionValue("p");
 		}
-	}
 
-	private static void processGuiOptions(CommandLine cmd) {
-		if (cmd.hasOption("c")) {
-			client = cmd.getOptionValue("c");
-		}
-
-		if (cmd.hasOption("g")) {
-			clientgroup = cmd.getOptionValue("g");
-		}
-
-		if (cmd.hasOption("t")) {
-			String tabString = cmd.getOptionValue("t");
-			try {
-				tab = Integer.parseInt(tabString);
-			} catch (NumberFormatException ex) {
-				Logging.debug("  \n\nArgument >" + tabString + "< has no integer format");
-				Main.showHelp();
-				Main.endApp(Main.ERROR_INVALID_OPTION);
-			}
+		if (cmd.hasOption("otp")) {
+			otp = cmd.getOptionValue("otp");
 		}
 	}
 
@@ -300,7 +250,7 @@ public final class Configed {
 
 		if (cmd.hasOption("swaudit-csv")) {
 			optionCLISwAuditCSV = true;
-			String[] values = cmd.getOptionValues("swaudit-pdf");
+			String[] values = cmd.getOptionValues("swaudit-csv");
 			clientsFile = values[0];
 			outDir = values[1];
 		}
@@ -323,8 +273,6 @@ public final class Configed {
 
 	private static void processArgs(CommandLine cmd) {
 		processLoginOptions(cmd);
-
-		processGuiOptions(cmd);
 
 		processSSHOptions(cmd);
 
@@ -416,10 +364,10 @@ public final class Configed {
 
 	private static void initLogging() {
 		Logging.setLogfileMarker(host);
-		Logging.init();
+		Logging.initLogFile();
 		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
-			Logging.setSuppressConsole();
+			Logging.setLogLevelConsole(0);
 		}
 	}
 
@@ -440,7 +388,7 @@ public final class Configed {
 			addMissingArgs();
 			initSavedStates();
 			Logging.debug("optionCLIQuerySearch");
-			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, savedSearch);
 
 			query.runSearch(true);
 			Main.endApp(Main.NO_ERROR);
@@ -449,7 +397,7 @@ public final class Configed {
 			initSavedStates();
 			Logging.debug("optionCLIDefineGroupBySearch");
 
-			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, savedSearch);
 
 			List<String> newGroupMembers = query.runSearch(false);
 
@@ -458,7 +406,7 @@ public final class Configed {
 		} else if (optionCLISwAuditPDF) {
 			Logging.debug("optionCLISwAuditPDF");
 			SwPdfExporter exporter = new SwPdfExporter();
-			exporter.setArgs(host, user, password, clientsFile, outDir);
+			exporter.setArgs(host, user, password, otp, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
 
@@ -466,7 +414,7 @@ public final class Configed {
 		} else if (optionCLISwAuditCSV) {
 			Logging.debug("optionCLISwAuditCSV");
 			SWcsvExporter exporter = new SWcsvExporter();
-			exporter.setArgs(host, user, password, clientsFile, outDir);
+			exporter.setArgs(host, user, password, otp, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
 
@@ -478,7 +426,7 @@ public final class Configed {
 			initSavedStates();
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getNewPersistenceController(host, user, password);
+					.getNewPersistenceController(host, user, password, otp);
 
 			UserConfigProducing up = new UserConfigProducing(false, host,
 					persistenceController.getHostInfoCollections().getDepotNamesList(),
@@ -495,7 +443,7 @@ public final class Configed {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
-		new Configed(host, user, password, client, clientgroup, tab);
+		new Configed(host, user, password, otp);
 	}
 
 	public static void initSavedStates() {

@@ -96,7 +96,7 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class OpsiDataBackend {
 	/*
@@ -411,9 +411,6 @@ public final class OpsiDataBackend {
 
 		hardwareOnClient = null;
 		clientToHardware = null;
-	}
-
-	public void reload() {
 		persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 	}
 

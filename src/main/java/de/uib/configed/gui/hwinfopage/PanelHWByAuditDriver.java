@@ -17,18 +17,17 @@ import javax.swing.JTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
 	private String byAuditPath;
 
-	private JRadioButton selectionBaseBoard;
+	private JRadioButton selectionBaseBoard = new JRadioButton();
 
-	private JTextField fieldComputerSystemVendor;
-	private JTextField fieldComputerSystemLabel;
+	private JTextField fieldComputerSystemVendor = new JTextField();
+	private JTextField fieldComputerSystemLabel = new JTextField();
 
-	private JTextField fieldBaseBoardVendor;
-	private JTextField fieldBaseBoardLabel;
+	private JTextField fieldBaseBoardVendor = new JTextField();
+	private JTextField fieldBaseBoardLabel = new JTextField();
 
 	private FDriverUpload fDriverUpload;
 	private ConfigedMain configedMain;
@@ -39,14 +38,6 @@ public class PanelHWByAuditDriver extends JPanel {
 	}
 
 	private void buildPanel() {
-		fieldComputerSystemVendor = new JTextShowField();
-
-		fieldComputerSystemLabel = new JTextShowField();
-
-		fieldBaseBoardVendor = new JTextShowField();
-
-		fieldBaseBoardLabel = new JTextShowField();
-
 		JLabel labelInfo = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
 		JLabel labelSeparator = new JLabel(" / ");
 		JLabel labelSeparator2 = new JLabel(" / ");
@@ -63,10 +54,14 @@ public class PanelHWByAuditDriver extends JPanel {
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
 		JRadioButton selectionComputerSystem = new JRadioButton("", true);
-		selectionBaseBoard = new JRadioButton();
 		ButtonGroup selectionGroup = new ButtonGroup();
 		selectionGroup.add(selectionComputerSystem);
 		selectionGroup.add(selectionBaseBoard);
+
+		fieldComputerSystemVendor.setEditable(false);
+		fieldComputerSystemLabel.setEditable(false);
+		fieldBaseBoardVendor.setEditable(false);
+		fieldBaseBoardLabel.setEditable(false);
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
@@ -74,18 +69,16 @@ public class PanelHWByAuditDriver extends JPanel {
 		layoutByAuditInfo
 				.setVerticalGroup(
 						layoutByAuditInfo.createSequentialGroup()
-								.addGroup(layoutByAuditInfo.createParallelGroup()
+								.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
 										.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(labelComputerSystemVendor, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(labelProductOrModel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layoutByAuditInfo.createParallelGroup()
-										.addGroup(layoutByAuditInfo.createSequentialGroup()
-												.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
-														Globals.MIN_GAP_SIZE)
-												.addComponent(selectionComputerSystem))
+								.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(selectionComputerSystem, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(fieldComputerSystemVendor, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(labelSeparator, GroupLayout.PREFERRED_SIZE,
@@ -93,21 +86,16 @@ public class PanelHWByAuditDriver extends JPanel {
 										.addComponent(fieldComputerSystemLabel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addGroup(layoutByAuditInfo.createParallelGroup()
-										.addComponent(labelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(
-												labelBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
+								.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(labelBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(labelProductOrModel2, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layoutByAuditInfo.createParallelGroup()
+								.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
 										.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGroup(layoutByAuditInfo.createSequentialGroup()
-												.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
-														Globals.MIN_GAP_SIZE)
-												.addComponent(selectionBaseBoard))
+										.addComponent(selectionBaseBoard, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(fieldBaseBoardVendor, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(labelSeparator2, GroupLayout.PREFERRED_SIZE,

@@ -27,7 +27,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandPackageUpdater;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();

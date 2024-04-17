@@ -16,8 +16,8 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.datastructure.StringValuedRelationElement;
+import de.uib.utils.logging.Logging;
 
 /**
  * This class is a little command line tool which can execute saved searches.
@@ -26,25 +26,27 @@ public class SavedSearchQuery {
 	private String host;
 	private String user;
 	private String password;
+	private String otp;
 	private String searchName;
 
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public SavedSearchQuery(String host, String user, String password, String searchName) {
-		setArgs(host, user, password, searchName);
+	public SavedSearchQuery(String host, String user, String password, String otp, String searchName) {
+		setArgs(host, user, password, otp, searchName);
 		initConnection();
 	}
 
-	private void setArgs(String host, String user, String password, String searchName) {
+	private void setArgs(String host, String user, String password, String otp, String searchName) {
 		Logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;
+		this.otp = otp;
 		this.searchName = searchName;
 	}
 
 	private void initConnection() {
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password, otp);
 
 		if (persistenceController == null
 				|| persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {

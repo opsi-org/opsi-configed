@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class SmbConnect {
 	public static final List<String> directoryProducts = List.of("var", "lib", "opsi", "depot");

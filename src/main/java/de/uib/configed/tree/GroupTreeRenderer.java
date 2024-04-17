@@ -16,8 +16,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 	private AbstractGroupTree abstractGroupTree;
@@ -55,7 +55,6 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		String text = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
-
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
 		if (node instanceof GroupNode) {
@@ -66,7 +65,7 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 
 		if (!node.getAllowsChildren()) {
 			// client
-			if (sel) {
+			if (abstractGroupTree.isSelectedInTable(text)) {
 				setIcon(objectSelectedIcon);
 			} else {
 				setIcon(objectIcon);

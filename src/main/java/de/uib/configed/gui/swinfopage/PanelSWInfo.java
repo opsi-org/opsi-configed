@@ -37,19 +37,19 @@ import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PopupMenuTrait;
-import de.uib.utilities.table.ExporterToCSV;
-import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.TableModelFilter;
-import de.uib.utilities.table.TableModelFilterCondition;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.gui.TableSearchPane;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.utils.table.ExporterToCSV;
+import de.uib.utils.table.ExporterToPDF;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.TableModelFilter;
+import de.uib.utils.table.TableModelFilterCondition;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.TableSearchPane;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
 
 public class PanelSWInfo extends JPanel {
 	private static final String FILTER_MS_UPDATES = "withMsUpdates";
@@ -63,7 +63,6 @@ public class PanelSWInfo extends JPanel {
 	private JLabel labelWithMSUpdates;
 	private JLabel labelWithMSUpdates2;
 
-	private final SWInfoTableModel voidTableModel = new SWInfoTableModel();
 	private GenTableModel modelSWInfo;
 
 	private JLabel labelSuperTitle;
@@ -151,10 +150,8 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setSearchSelectMode(true);
 		panelTable.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 
-		List<String> columnNames;
+		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
-		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
-		columnNames.remove(0);
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			finalColumns[i] = i;
@@ -180,11 +177,11 @@ public class PanelSWInfo extends JPanel {
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
 
-						if (tableData == null || tableData.keySet().isEmpty()) {
+						if (tableData == null || tableData.isEmpty()) {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 							title = scanInfo;
 						} else {
-							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
+							Logging.debug(this, "retrieved size  " + tableData.size());
 							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 							title = scanInfo;
@@ -271,7 +268,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void buildPanel() {
-		JTable jTable = new JTable(voidTableModel, null);
+		JTable jTable = new JTable(new SWInfoTableModel());
 
 		jTable.setAutoCreateRowSorter(true);
 		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
@@ -421,7 +418,7 @@ public class PanelSWInfo extends JPanel {
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", "software inventory");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable);
+		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable.getTheTable());
 		pdfExportTable.setClient(hostId);
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
@@ -484,31 +481,28 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private static class SWInfoTableModel extends AbstractTableModel {
-		private List<String[]> data;
-
 		public SWInfoTableModel() {
 			super();
-			data = new ArrayList<>();
 		}
 
 		@Override
 		public int getRowCount() {
-			return data.size();
+			return 0;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return SWAuditClientEntry.getDisplayKeys().size();
+			return SWAuditClientEntry.KEYS.size();
 		}
 
 		@Override
 		public String getColumnName(int column) {
-			return SWAuditClientEntry.KEYS.get(column + 1);
+			return SWAuditClientEntry.KEYS.get(column);
 		}
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			return data.get(row)[col + 1];
+			return null;
 		}
 	}
 }

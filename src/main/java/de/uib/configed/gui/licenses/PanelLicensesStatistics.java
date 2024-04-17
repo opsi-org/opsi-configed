@@ -11,8 +11,6 @@
 
 package de.uib.configed.gui.licenses;
 
-import java.util.Map;
-
 import javax.swing.GroupLayout;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -23,7 +21,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelLicensesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;
@@ -64,7 +62,7 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 
 	@Override
 	public void reset() {
-		if (CacheManager.getInstance().getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) == null) {
+		if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_STATISTICS)) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
 			ConfigedMain.getLicensesFrame().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {

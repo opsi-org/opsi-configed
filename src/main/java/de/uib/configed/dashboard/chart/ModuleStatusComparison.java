@@ -15,7 +15,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ModuleData;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;

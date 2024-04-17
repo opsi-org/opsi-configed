@@ -9,8 +9,8 @@ package de.uib.configed.type.licenses;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class LicenseUsableForEntry extends HashMap<String, String> {
 	public static final String ID_KEY = "id";

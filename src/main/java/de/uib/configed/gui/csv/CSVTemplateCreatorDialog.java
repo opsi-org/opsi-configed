@@ -50,8 +50,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.HeaderOptionsPanel;
 import de.uib.configed.type.HostInfo;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.opsicommand.ServerFacade;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
@@ -302,6 +303,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private void addHeaderCheckBox(String header, DefaultListModel<JCheckBox> model) {
 		JCheckBox headerCheckBox = new JCheckBox(header);
 		headerCheckBox.setActionCommand(header);
+
+		if (HostInfo.CLIENT_UEFI_BOOT_KEY.equals(header) && ServerFacade.isOpsi43()) {
+			return;
+		}
 
 		if (isImportantHeader(header)) {
 			headerCheckBox.setSelected(true);

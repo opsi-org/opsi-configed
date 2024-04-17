@@ -9,8 +9,8 @@ package de.uib.configed.type;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.utilities.logging.Logging;
-import utils.ProductPackageVersionSeparator;
+import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
+import de.uib.utils.logging.Logging;
 
 //data source table productOnDepot
 public class OpsiPackage implements Comparable<OpsiPackage> {
@@ -48,7 +48,7 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 		this.productId = productId;
 		this.productVersion = productVersion;
 		this.packageVersion = packageVersion;
-		this.versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+		this.versionInfo = productVersion + ProductDataService.FOR_KEY + packageVersion;
 
 		if (productType.equals(LOCALBOOT_PRODUCT_SERVER_STRING)) {
 			this.productType = 0;
@@ -98,7 +98,7 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	}
 
 	public static String produceVersionInfo(String productVersion, String packageVersion) {
-		return productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+		return productVersion + ProductDataService.FOR_KEY + packageVersion;
 	}
 
 	public int getProductType() {

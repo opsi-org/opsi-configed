@@ -27,7 +27,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
 import de.uib.opsicommand.POJOReMapper;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class LicensingInfoMap {
 	public static final String RESULT = "result";
@@ -113,7 +113,6 @@ public final class LicensingInfoMap {
 
 	private LicensingInfoMap(Map<String, Object> jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
 		Logging.info(getClass(), "generate with reducedView " + reduced + " at the moment ignored, we set false");
-		reducedView = reduced;
 
 		jOResult = POJOReMapper.remap(jsonObj.get(RESULT), new TypeReference<Map<String, Object>>() {
 		});
@@ -133,8 +132,6 @@ public final class LicensingInfoMap {
 		datesMap = produceDatesMap();
 		tableMap = produceTableMapFromDatesMap(datesMap);
 		customerNames = produceCustomerNameSet();
-
-		instance = this;
 	}
 
 	public static LicensingInfoMap getInstance(Map<String, Object> jsonObj, Map<String, List<Object>> configVals,
@@ -385,59 +382,17 @@ public final class LicensingInfoMap {
 				});
 
 		for (String key : datesKeys) {
-			Map<String, Object> moduleToDate;
 			Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
 			// iterate over date entries
-			moduleToDate = POJOReMapper.remap(dates.get(key).get(MODULES), new TypeReference<Map<String, Object>>() {
-			});
+			Map<String, Object> moduleToDate = POJOReMapper.remap(dates.get(key).get(MODULES),
+					new TypeReference<Map<String, Object>>() {
+					});
 			// iterate over module entries to every date entry
 
 			// also warning state should be none
 			for (String currentModule : shownModules) {
-				Map<String, Object> moduleInfo;
-				boolean available = availableModules.contains(currentModule);
-
-				if (moduleToDate.containsKey(currentModule)) {
-					moduleInfo = POJOReMapper.remap(moduleToDate.get(currentModule),
-							new TypeReference<Map<String, Object>>() {
-							});
-					if (disabledWarningModules != null && disabledWarningModules.contains(currentModule)) {
-						moduleInfo.put(STATE, STATE_IGNORE_WARNING);
-					}
-				} else {
-					moduleInfo = new HashMap<>();
-					moduleInfo.put(CLIENT_NUMBER, "0");
-					moduleInfo.put(LICENSE_IDS, "[]");
-					moduleInfo.put(STATE, "unlicensed");
-				}
-
-				moduleInfo.put(AVAILABLE, available);
-				if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
-					if (key.equals(latestDateString)) {
-						currentCloseToLimitModuleList.add(currentModule);
-					}
-				} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
-					if (key.equals(latestDateString)) {
-						currentOverLimitModuleList.add(currentModule);
-					}
-				} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_WARNING)) {
-					moduleInfo.put(STATE, STATE_DAYS_WARNING);
-					currentTimeWarningModuleList.add(currentModule);
-				} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
-					moduleInfo.put(STATE, STATE_DAYS_OVER);
-					currentTimeOverModuleList.add(currentModule);
-				} else {
-					// no warnings to add
-				}
-
-				String futureCheck = checkFuture(moduleInfo, currentModule, key);
-				if (futureCheck != null && moduleInfo.get(STATE) != null
-						&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
-					moduleInfo.put(FUTURE_STATE, futureCheck);
-				} else {
-					moduleInfo.put(FUTURE_STATE, "null");
-				}
+				Map<String, Object> moduleInfo = createModuleInfo(currentModule, moduleToDate, key);
 
 				modulesMapToDate.put(currentModule, moduleInfo);
 			}
@@ -445,6 +400,46 @@ public final class LicensingInfoMap {
 		}
 
 		return new TreeMap<>(checkTimeWarning(resultMap));
+	}
+
+	private Map<String, Object> createModuleInfo(String currentModule, Map<String, Object> moduleToDate, String key) {
+		Map<String, Object> moduleInfo;
+		boolean available = availableModules.contains(currentModule);
+
+		if (moduleToDate.containsKey(currentModule)) {
+			moduleInfo = POJOReMapper.remap(moduleToDate.get(currentModule), new TypeReference<Map<String, Object>>() {
+			});
+			if (disabledWarningModules != null && disabledWarningModules.contains(currentModule)) {
+				moduleInfo.put(STATE, STATE_IGNORE_WARNING);
+			}
+		} else {
+			moduleInfo = new HashMap<>();
+			moduleInfo.put(CLIENT_NUMBER, "0");
+			moduleInfo.put(LICENSE_IDS, "[]");
+			moduleInfo.put(STATE, "unlicensed");
+		}
+
+		moduleInfo.put(AVAILABLE, available);
+		if (key.equals(latestDateString)) {
+			if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
+				currentCloseToLimitModuleList.add(currentModule);
+			} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
+				currentOverLimitModuleList.add(currentModule);
+			} else if (checkTimeLeft(moduleInfo).equals(STATE_DAYS_WARNING)) {
+				moduleInfo.put(STATE, STATE_DAYS_WARNING);
+				currentTimeWarningModuleList.add(currentModule);
+			} else if (checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
+				moduleInfo.put(STATE, STATE_DAYS_OVER);
+				currentTimeOverModuleList.add(currentModule);
+			} else {
+				// no warnings to add
+			}
+		}
+
+		String futureCheck = checkFuture(moduleInfo, currentModule, key);
+		moduleInfo.put(FUTURE_STATE, futureCheck);
+
+		return moduleInfo;
 	}
 
 	/**
@@ -543,48 +538,47 @@ public final class LicensingInfoMap {
 		return null;
 	}
 
-	private Long getDaysLeftUntil(String d) {
-		try {
-			LocalDate now = LocalDate.now();
-			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	private static Long getDaysLeftUntil(Date date) {
+		LocalDate now = LocalDate.now();
+		Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-			Date date = sdf.parse(d);
+		long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
 
-			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
-
-			return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-		} catch (ParseException ex) {
-			Logging.error(getClass(), " getDaysLeftUntilNextChange ", ex);
-		}
-
-		return null;
+		return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	}
 
 	private String checkTimeLeft(Map<String, Object> moduleInfo) {
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
 				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 			List<?> lics = (List<?>) moduleInfo.get(LICENSE_IDS);
-			String validUntil;
-			LocalDate now = LocalDate.now();
-			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-			try {
-				for (int i = 0; i < lics.size(); i++) {
-					validUntil = licenses.get(lics.get(i)).get(VALID_UNTIL).toString();
+			return checkTimeLeft(lics);
 
-					if (dateNow.after(sdf.parse(validUntil))) {
-						return STATE_DAYS_OVER;
-					}
+		}
 
-					Long timeLeft = getDaysLeftUntil(validUntil);
+		return STATE_DAYS_OKAY;
+	}
 
-					if (timeLeft <= daysClientLimitWarning) {
-						return STATE_DAYS_WARNING;
-					}
+	private String checkTimeLeft(List<?> lics) {
+		LocalDate now = LocalDate.now();
+		Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+		try {
+			for (int i = 0; i < lics.size(); i++) {
+				Date validUntil = sdf.parse(licenses.get(lics.get(i)).get(VALID_UNTIL).toString());
+
+				if (dateNow.after(validUntil)) {
+					return STATE_DAYS_OVER;
 				}
-			} catch (ParseException ex) {
-				Logging.error(getClass(), " checkTimeLeft ", ex);
+
+				Long timeLeft = getDaysLeftUntil(validUntil);
+
+				if (timeLeft <= daysClientLimitWarning) {
+					return STATE_DAYS_WARNING;
+				}
 			}
+		} catch (ParseException ex) {
+			Logging.error(getClass(), " checkTimeLeft ", ex);
 		}
 
 		return STATE_DAYS_OKAY;
@@ -597,6 +591,7 @@ public final class LicensingInfoMap {
 	 */
 
 	private String checkFuture(Map<String, Object> moduleInfo, String module, String date) {
+		String futureCheck = null;
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER) && date.equals(findNextChangeDate())) {
 			String state = moduleInfo.get(STATE).toString();
 
@@ -617,11 +612,16 @@ public final class LicensingInfoMap {
 				Integer futureNum = Integer.parseInt(fNum);
 				Integer clientNum = Integer.parseInt(cNum);
 
-				return calculateStateForNumbers(clientNum, futureNum);
+				futureCheck = calculateStateForNumbers(clientNum, futureNum);
 			}
 		}
 
-		return null;
+		if (futureCheck != null && moduleInfo.get(STATE) != null
+				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
+			return futureCheck;
+		} else {
+			return "null";
+		}
 	}
 
 	private String calculateStateForNumbers(int clientNum, int futureNum) {

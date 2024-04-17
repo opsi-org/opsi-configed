@@ -1,14 +1,70 @@
 # Changelog
 ## [4.3.2.X] - XXXX-XX-XX
+## Changed
+- Include software entry's ident to "Missing software entry" dialog's message to make apparent which software entry is missing
+- Use insecure connection in Messagebus, when certificate verification is disabled
+- Maintain consistent log levels for unspecified lines
+- Save user preferences on table's display fields
+
+## Added
+- Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
+
 ## Fixed
+- `NullPointerException` on product reset
+- `MySQLdb.integrityError` when moving clients to NOT_ASSIGNED directory/group
+- Product filter disabled after a reload or switching client selection
+- "Failed actions" search and selection
+- The lower control panel in logviewer keeps disappearing on resize
+- For hardware devices with the same name in different hardware class, the information is shown incorrectly
+- Can't change table column visibility in product table after full reload
 - When group, that has subgroups, is permitted for a user, the subgroups aren't included in a group.
 
+
+## [4.3.2.11] - 2024-03-28
+## Fixed
+- Correctly init ClientTree when reloading and when user roles have been changed
+- User roles product group access
+
+## [4.3.2.10] - 2024-03-26
+## Fixed
+- Invalid Range error when updating product table (Manually or by messagebus)
+
+## Changed
+- Export whole table into PDF and not only selected rows
+- Add item to change size between product info and product description
+
+## [4.3.2.9] - 2024-03-21
+## Changed
+- Don't show server defaults for WAN, UEFI and Install on Shutdown in new client dialogue
+- Make it possible to edit WAN, UEFI and Install on Shutdown in new client dialogue even when enabled by server default
+
+## Added
+- Connectivity status of depots
+- OTP field to login dialog
+- OTP option to command line
+
+## Fixed
+- SWAudit command line options
+
+## [4.3.2.8] - 2024-03-15
+## Changed
+- Use better icons for Checkboxes and some other cases
+
+## Added
+- Add button to download diagnostic data in Health Check dialogue
+
+## Fixed
+- Updating Host Info Data
+
+## [4.3.2.7] - 2024-03-14
 ## Changed
 - Remove config states usage in `TableSearchPane`
 - Remove usage of icons in narrow layout of `TableSearchPane` (use checkboxes instead)
+- Make product/client icon filled when object is selected in table
 
 ## Added
 - New option for searching multiple words in `TableSearchPane`
+- Show product description in tooltip in tree
 
 ## [4.3.2.6] - 2024-03-06
 ## Fixed

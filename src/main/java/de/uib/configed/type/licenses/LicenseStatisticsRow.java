@@ -8,7 +8,7 @@ package de.uib.configed.type.licenses;
 
 import java.util.HashMap;
 
-import de.uib.utilities.ExtendedInteger;
+import de.uib.utils.ExtendedInteger;
 
 public class LicenseStatisticsRow extends HashMap<String, String> {
 	public static final String ID_KEY = "licensePoolId";

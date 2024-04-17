@@ -34,7 +34,7 @@ import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManagerParameterDialog {
 	private JPanel uninstallPanel = new JPanel();
@@ -67,7 +67,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		this.configedMain = configedMain;
 
-		fDepotList = new FDepotselectionList(this) {
+		fDepotList = new FDepotselectionList(this, configedMain) {
 			@Override
 			public void setListData(List<String> v) {
 				if (v == null || v.isEmpty()) {

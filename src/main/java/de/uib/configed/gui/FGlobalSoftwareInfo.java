@@ -21,10 +21,10 @@ import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class FGlobalSoftwareInfo extends FGeneralDialog {
 	private PanelGenEditTable panelGlobalSoftware;
@@ -91,7 +91,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public void doAction1() {
 		Logging.debug(this, "doAction1");
 		result = 1;
-		owner.setVisible(true);
+		getOwner().setVisible(true);
 		leave();
 	}
 

@@ -41,12 +41,12 @@ import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PopupMenuTrait;
-import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.tree.XTree;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.utils.table.ExporterToPDF;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.tree.XTree;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
@@ -279,7 +279,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		List<Map<String, Object>> devices = hwInfo.get(hwClass);
 
-		Map<String, Object> deviceInfo = devicesInfo.get(node.toString());
+		Map<String, Object> deviceInfo = devicesInfo.get(hwClass + "-" + node.toString());
 
 		return devices != null && deviceInfo != null;
 	}
@@ -311,7 +311,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		String hwClassUI = path[1].toString();
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-		Map<String, Object> deviceInfo = devicesInfo.get(node.toString());
+		Map<String, Object> deviceInfo = devicesInfo.get(hwClass + "-" + node.toString());
 
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
@@ -437,13 +437,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		initByAuditStrings();
 		panelByAuditInfo.emptyByAuditStrings();
 
+		tableModel.setData(new ArrayList<>());
+
 		this.hwInfo = hwInfo;
 
 		if (hwInfo == null || hwInfo.isEmpty()) {
 			treeRootTitle = Configed.getResourceValue("MainFrame.NoHardwareConfiguration");
 			createRoot(treeRootTitle);
-			tableModel.setData(new ArrayList<>());
-
 			return;
 		}
 
@@ -455,7 +455,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		createRoot(treeRootTitle);
-		tableModel.setData(new ArrayList<>());
 
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
@@ -481,8 +480,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			}
 
 			IconNode classNode = new IconNode(hwClassUI);
-			Icon classIcon;
-			classIcon = createImageIcon("hwinfo_images/" + hwClass + ".png");
+			Icon classIcon = createImageIcon("hwinfo_images/" + hwClass + ".png");
 			if (classIcon == null) {
 				classIcon = createImageIcon("hwinfo_images/DEVICE.png");
 			}
@@ -512,7 +510,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		treeModel.nodeChanged(root);
 		tree.expandRow(0);
-		tree.expandRow(1);
 	}
 
 	private static String[] createNamesArray(List<Map<String, Object>> devices,
@@ -549,7 +546,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				if (name.equals(device.get("displayName"))) {
 					IconNode iconNode = new IconNode(device.get("displayName"));
 					iconNode.setIcon(classIcon);
-					devicesInfo.put((String) device.get("displayName"), device);
+					devicesInfo.put(hwClassMapping.get(classNode.getUserObject()) + "-" + device.get("displayName"),
+							device);
 					classNode.add(iconNode);
 					scanNodes(iconNode);
 					break;

@@ -27,11 +27,11 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.utilities.IntComparatorForStrings;
-import de.uib.utilities.swing.list.StandardListCellRenderer;
-import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.table.gui.DynamicCellEditor;
+import de.uib.utils.IntComparatorForStrings;
+import de.uib.utils.swing.list.StandardListCellRenderer;
+import de.uib.utils.table.gui.AdaptingCellEditorValuesByIndex;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.table.gui.DynamicCellEditor;
 
 public class ProductSettingsTableModel {
 	private static final int WIDTH_COLUMN_PRODUCT_NAME = 170;

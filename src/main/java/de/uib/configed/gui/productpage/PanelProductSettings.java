@@ -53,15 +53,15 @@ import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ExporterToCSV;
-import de.uib.utilities.table.ExporterToPDF;
-import utils.PopupMouseListener;
-import utils.ProductPackageVersionSeparator;
-import utils.Utils;
+import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.utils.datapanel.EditMapPanelX;
+import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ExporterToCSV;
+import de.uib.utils.table.ExporterToPDF;
 
 public class PanelProductSettings extends JSplitPane {
 	public enum ProductSettingsType {
@@ -78,10 +78,9 @@ public class PanelProductSettings extends JSplitPane {
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
-	private Map<String, Boolean> productDisplayFields;
-
-	private JPopupMenu popup;
+	private PopupMouseListener popupMouseListener;
 	private JMenuItem itemOnDemand;
+	private JScrollPane paneProducts;
 
 	private String title;
 
@@ -95,16 +94,15 @@ public class PanelProductSettings extends JSplitPane {
 			.getPersistenceController();
 
 	public PanelProductSettings(String title, ConfigedMain configedMain, ProductTree productTree,
-			Map<String, Boolean> productDisplayFields, ProductSettingsType type) {
+			ProductSettingsType type) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
 		this.productTree = productTree;
 		this.configedMain = configedMain;
-		this.productDisplayFields = productDisplayFields;
 		this.type = type;
 		init();
 
-		super.setResizeWeight(1);
+		super.setResizeWeight(1.0);
 	}
 
 	private void initTopPane() {
@@ -138,7 +136,7 @@ public class PanelProductSettings extends JSplitPane {
 	private void init() {
 		initTopPane();
 
-		JScrollPane paneProducts = new JScrollPane();
+		paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -185,16 +183,13 @@ public class PanelProductSettings extends JSplitPane {
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(configedMain, propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
 
-		propertiesPanel.registerDataChangedObserver(infoPane);
-
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
 
-		producePopupMenu(productDisplayFields);
-
-		paneProducts.addMouseListener(new PopupMouseListener(popup));
-		tableProducts.addMouseListener(new PopupMouseListener(popup));
+		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		paneProducts.addMouseListener(popupMouseListener);
+		tableProducts.addMouseListener(popupMouseListener);
 
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
@@ -203,14 +198,16 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.updateSearchFields();
 	}
 
-	public void initAllProperties() {
-		propertiesPanel.init();
-		infoPane.setProductInfo("");
-		infoPane.setProductAdvice("");
+	public void reInitPopupMenu() {
+		paneProducts.removeMouseListener(popupMouseListener);
+		tableProducts.removeMouseListener(popupMouseListener);
+		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		paneProducts.addMouseListener(popupMouseListener);
+		tableProducts.addMouseListener(popupMouseListener);
 	}
 
-	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
-		popup = new JPopupMenu();
+	private JPopupMenu producePopupMenu() {
+		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
 		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
@@ -280,24 +277,31 @@ public class PanelProductSettings extends JSplitPane {
 		popup.addSeparator();
 		popup.add(sub);
 
-		for (Entry<String, Boolean> checkColumn : checkColumns.entrySet()) {
-			if ("productId".equals(checkColumn.getKey())) {
+		for (Entry<String, Boolean> productDisplayField : getProductDisplayFieldsBasedOnType(type).entrySet()) {
+			if ("productId".equals(productDisplayField.getKey())) {
 				// fixed column
 				continue;
 			}
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
-			item.setText(InstallationStateTableModel.getColumnTitle(checkColumn.getKey()));
-			item.setState(checkColumn.getValue());
+			item.setText(InstallationStateTableModel.getColumnTitle(productDisplayField.getKey()));
+			item.setState(productDisplayField.getValue());
 			item.addItemListener((ItemEvent e) -> {
-				boolean oldstate = checkColumn.getValue();
-				checkColumns.put(checkColumn.getKey(), !oldstate);
+				boolean oldstate = productDisplayField.getValue();
+				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
 				configedMain.requestReloadStatesAndActions();
 				configedMain.resetView(configedMain.getViewIndex());
 			});
 
 			sub.add(item);
 		}
+		return popup;
+	}
+
+	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
+		return type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+				? persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts()
+				: persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts();
 	}
 
 	private void createReport() {
@@ -310,12 +314,13 @@ public class PanelProductSettings extends JSplitPane {
 
 		metaData.put("header", title);
 		metaData.put("subject", title);
+
 		title = "";
 		if (ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots().length() != 0) {
-			title = title + "Depot : " + ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots();
+			title += "Depot : " + ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots();
 		}
 		if (ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames().length() != 0) {
-			title = title + "; Clients: " + ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames();
+			title += "; Clients: " + ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames();
 		}
 		metaData.put("title", title);
 		metaData.put("keywords", "product settings");
@@ -336,7 +341,7 @@ public class PanelProductSettings extends JSplitPane {
 		}
 
 		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
-		if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
+		if (lsm.getSelectedItemsCount() != 1) {
 			Logging.debug(this, "no or several rows selected");
 			clearEditing();
 		} else {
@@ -346,10 +351,13 @@ public class PanelProductSettings extends JSplitPane {
 			Logging.debug(this, "selected  value at "
 					+ tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
 			configedMain.setProductEdited(
-					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
+					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0),
+					this);
 		}
 
 		productTree.produceActiveParents();
+
+		productTree.updateSelectedObjectsInTable();
 	}
 
 	private JTable strippTable(JTable jTable) {
@@ -448,14 +456,12 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void setSelection(Set<String> selectedIDs) {
+		tableProducts.getSelectionModel().setValueIsAdjusting(true);
+
 		tableProducts.clearSelection();
 
-		if (selectedIDs == null) {
-			Logging.info("selectedIds is null");
-		} else if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
-			tableProducts.addRowSelectionInterval(0, 0);
-			// show first product if no product given
-			Logging.info(this, "setSelection 0");
+		if (selectedIDs == null || selectedIDs.isEmpty()) {
+			Logging.info("selectedIds is null or empty");
 		} else {
 			for (int row = 0; row < tableProducts.getRowCount(); row++) {
 				Object productId = tableProducts.getValueAt(row, 0);
@@ -464,6 +470,8 @@ public class PanelProductSettings extends JSplitPane {
 				}
 			}
 		}
+
+		tableProducts.getSelectionModel().setValueIsAdjusting(false);
 	}
 
 	public Set<String> getSelectedIDs() {
@@ -521,7 +529,7 @@ public class PanelProductSettings extends JSplitPane {
 		setSelection(selection);
 	}
 
-	public void valueChanged(TreePath[] selectionPaths) {
+	public void valueChanged(TreePath[] selectionPaths, boolean doSelection) {
 		if (selectionPaths == null) {
 			setFilter(null);
 		} else if (selectionPaths.length == 1) {
@@ -535,7 +543,10 @@ public class PanelProductSettings extends JSplitPane {
 				}
 			}
 			setFilter(productIds);
-			setSelection(productIds);
+
+			if (doSelection) {
+				setSelection(productIds);
+			}
 		}
 	}
 
@@ -552,11 +563,13 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void setTableModel(InstallationStateTableModel istm) {
 		// delete old row sorter before setting new model
-
 		tableProducts.setModel(istm);
 		productSettingsTableModel.setRenderer(istm);
 
-		valueChanged(productTree.getSelectionPaths());
+		// We don't want to call setSelection here, since it will be called after this method
+		if (!isFilteredMode()) {
+			valueChanged(productTree.getSelectionPaths(), false);
+		}
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
@@ -572,7 +585,7 @@ public class PanelProductSettings extends JSplitPane {
 		infoPane.setProductName(persistenceController.getProductDataService().getProductTitle(productID));
 		infoPane.setProductInfo(persistenceController.getProductDataService().getProductInfo(productID));
 		infoPane.setProductVersion(persistenceController.getProductDataService().getProductVersion(productID)
-				+ ProductPackageVersionSeparator.FOR_DISPLAY
+				+ ProductDataService.FOR_DISPLAY
 				+ persistenceController.getProductDataService().getProductPackageVersion(productID) + "   "
 				+ persistenceController.getProductDataService().getProductLockedInfo(productID));
 
@@ -588,7 +601,7 @@ public class PanelProductSettings extends JSplitPane {
 		propertiesPanel.cancelOldCellEditing();
 	}
 
-	private void clearEditing() {
+	public void clearEditing() {
 		propertiesPanel.setEditableMap(null, null);
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);

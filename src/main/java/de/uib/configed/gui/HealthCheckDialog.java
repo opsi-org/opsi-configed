@@ -53,8 +53,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class HealthCheckDialog extends FGeneralDialog {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
@@ -337,12 +337,19 @@ public class HealthCheckDialog extends FGeneralDialog {
 		JButton jButtonCopyHealthInformation = new JButton(
 				Configed.getResourceValue("HealthCheckDialog.copyHealthInformation"));
 
+		JButton jButtonDownloadDiagnosticData = new JButton(
+				Configed.getResourceValue("HealthCheckDialog.downloadDiagnosticData"));
+		jButtonDownloadDiagnosticData
+				.setToolTipText(Configed.getResourceValue("HealthCheckDialog.downloadDiagnosticData.tooltip"));
+
 		centerPanelLayout.setHorizontalGroup(centerPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonExpandAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonCollapseAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
-						jButtonCopyHealthInformation, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(jButtonCopyHealthInformation, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(jButtonDownloadDiagnosticData, 10, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 		centerPanelLayout.setVerticalGroup(centerPanelLayout.createSequentialGroup()
 				.addGap(0, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -351,6 +358,8 @@ public class HealthCheckDialog extends FGeneralDialog {
 						.addComponent(jButtonCollapseAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonCopyHealthInformation, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonDownloadDiagnosticData, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE));
 
@@ -370,6 +379,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		});
 		jButtonCopyHealthInformation.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(textPane.getText()), null));
+		jButtonDownloadDiagnosticData.addActionListener(event -> saveAsZip());
 
 		return centerPanel;
 	}
@@ -407,10 +417,9 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 				if (!((String) healthInfo.get("details")).isBlank()) {
 					Style iconStyle = styledDocument.addStyle("iconStyle", null);
-					String imagePath = (boolean) healthInfo.get("showDetails")
-							? "images/arrows/arrow_green_16x16-down.png"
-							: "images/arrows/arrow_green_16x16-right.png";
-					StyleConstants.setIcon(iconStyle, Utils.createImageIcon(imagePath, ""));
+					String imagePath = (boolean) healthInfo.get("showDetails") ? "bootstrap/caret_down_fill"
+							: "bootstrap/caret_right_fill";
+					StyleConstants.setIcon(iconStyle, Utils.getThemeIconPNG(imagePath, ""));
 					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), " ",
 							iconStyle);
 				} else {

@@ -6,18 +6,17 @@
 
 package de.uib.opsidatamodel.datachanges;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
 */
 public class HostUpdateCollection extends UpdateCollection {
 	public HostUpdateCollection() {
-		super(new ArrayList<>(0));
+		super();
 	}
 
 	@Override

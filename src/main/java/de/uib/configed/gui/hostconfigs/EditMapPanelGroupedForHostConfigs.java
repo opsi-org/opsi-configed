@@ -57,17 +57,17 @@ import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PopupMenuTrait;
-import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.table.ListCellOptions;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.tree.XTree;
-import utils.PopupMouseListener;
-import utils.Utils;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.utils.datapanel.EditMapPanelX;
+import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.utils.table.ExporterToPDF;
+import de.uib.utils.table.ListCellOptions;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.tree.XTree;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel implements TreeSelectionListener {
@@ -350,7 +350,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private JTable createJTableForPDF() {
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable jTable = new JTable(tableModel);
-		List<String> values;
 
 		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderName"));
 		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderValue"));
@@ -365,12 +364,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				property = listelem.get(0).toString();
 			}
 
-			values = new ArrayList<>();
-
 			if (!key.contains("saved_search")) {
-				values.add(key);
-				values.add(property);
-				tableModel.addRow(values.toArray());
+				tableModel.addRow(new Object[] { key, property });
 			}
 		}
 		return jTable;
@@ -824,13 +819,11 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private static boolean isUserRoot(TreePath path) {
-		return path != null && path.getPathCount() == 2
-				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER);
+		return path.getPathCount() == 2 && path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER);
 	}
 
 	private static boolean isUserPath(TreePath path) {
-		return path != null && path.getPathCount() == 3
-				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
+		return path.getPathCount() == 3 && path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
 				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE);
 	}
 

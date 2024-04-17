@@ -27,7 +27,7 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import utils.Utils;
+import de.uib.utils.Utils;
 
 public final class TerminalFrame implements MessagebusListener {
 	private JFrame frame;

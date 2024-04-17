@@ -24,12 +24,12 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
 
 /**
  * Abstract class to manage batch export of SWAudit data, subclasses implement
@@ -51,6 +51,7 @@ public abstract class AbstractSWExporter {
 	private String server;
 	private String user;
 	private String password;
+	private String otp;
 	private String clientsFile;
 	private String outDir;
 
@@ -58,10 +59,11 @@ public abstract class AbstractSWExporter {
 	protected AbstractSWExporter() {
 	}
 
-	public void setArgs(String server, String user, String password, String clientsFile, String outDir) {
+	public void setArgs(String server, String user, String password, String otp, String clientsFile, String outDir) {
 		this.server = server;
 		this.user = user;
 		this.password = password;
+		this.otp = otp;
 		this.clientsFile = clientsFile;
 		this.outDir = outDir;
 	}
@@ -85,6 +87,10 @@ public abstract class AbstractSWExporter {
 
 		if (password == null) {
 			password = Utils.getCLIPasswordParam("Password: ");
+		}
+
+		if (otp == null) {
+			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
 		}
 
 		if (clientsFile == null) {
@@ -115,7 +121,7 @@ public abstract class AbstractSWExporter {
 
 	public void run() {
 		Messages.setLocale("en");
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password, otp);
 		if (persistenceController == null) {
 			finish(ErrorCode.INITIALIZATION_ERROR);
 		} else if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
@@ -164,16 +170,14 @@ public abstract class AbstractSWExporter {
 			updateModel();
 		}
 
-		setWriteToFile(filepathStart + hostId + ".pdf");
+		setWriteToFile(filepathStart + hostId + getExtension());
 	}
 
 	private void initModel(String hostId) {
 		theHost = hostId;
 
-		List<String> columnNames;
+		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
-		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
-		columnNames.remove(0);
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			finalColumns[i] = i;
@@ -195,12 +199,12 @@ public abstract class AbstractSWExporter {
 						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
 								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
 
-						if (tableData == null || tableData.keySet().isEmpty()) {
+						if (tableData == null || tableData.isEmpty()) {
 							Logging.debug(this, "tableData is empty or null");
 
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
-							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
+							Logging.debug(this, "retrieved size  " + tableData.size());
 							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 									.getLastSoftwareAuditModification(swAuditClientEntries, theHost);
 						}

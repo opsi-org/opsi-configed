@@ -16,12 +16,12 @@ import java.util.Set;
 import javax.swing.JFrame;
 
 import de.uib.configed.Configed;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class FWakeClients extends FShowList {
 	private boolean cancelled;
@@ -41,7 +41,7 @@ public class FWakeClients extends FShowList {
 		Map<String, List<String>> hostSeparationByDepots = persistenceController.getHostDataService()
 				.getHostSeparationByDepots(selectedClients);
 		Map<String, Integer> counterByDepots = new HashMap<>();
-		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();
+		Map<String, AbstractPOJOExecutioner> executionerForDepots = new HashMap<>();
 
 		int maxSize = 0;
 
@@ -56,13 +56,11 @@ public class FWakeClients extends FShowList {
 
 			for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
 				Logging.info(this, "act on depot " + depotEntry.getKey() + ", executioner != NONE  "
-						+ (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner())
 						+ " counterByDepots.get(depot) " + counterByDepots.get(depotEntry.getKey()));
 
-				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
-						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
+				if (counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
 					// Get the executioner for the depot, and create new one if non-existant
-					AbstractExecutioner executioner = executionerForDepots.computeIfAbsent(depotEntry.getKey(),
+					AbstractPOJOExecutioner executioner = executionerForDepots.computeIfAbsent(depotEntry.getKey(),
 							this::computeExecutionerForDepot);
 
 					// Add executioner to list and update counter
@@ -83,18 +81,18 @@ public class FWakeClients extends FShowList {
 		jButton1.setText(Configed.getResourceValue("buttonClose"));
 	}
 
-	private AbstractExecutioner computeExecutionerForDepot(String depot) {
-		AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(depot);
+	private AbstractPOJOExecutioner computeExecutionerForDepot(String depot) {
+		AbstractPOJOExecutioner exec1 = persistenceController.retrieveWorkingExec(depot);
 		// we try to connect when the first client of a depot should be connected
-		if (exec1 == AbstractExecutioner.getNoneExecutioner()) {
+		if (exec1 == null) {
 			appendLine("!! giving up connecting to  " + depot);
 		}
 		return exec1;
 	}
 
-	private void addHostToWake(AbstractExecutioner executioner, Entry<String, List<String>> depotEntry, int turn,
+	private void addHostToWake(AbstractPOJOExecutioner executioner, Entry<String, List<String>> depotEntry, int turn,
 			Set<String> hostsToWakeOnThisTurn, Map<String, Integer> counterByDepots) {
-		if (executioner != AbstractExecutioner.getNoneExecutioner()) {
+		if (executioner != null) {
 			String host = depotEntry.getValue().get(turn);
 
 			String line = String.format("trying to start up   %s    from depot    %s  ", host, depotEntry.getKey());

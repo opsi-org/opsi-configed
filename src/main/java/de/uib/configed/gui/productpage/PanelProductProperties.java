@@ -22,14 +22,14 @@ import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.ExternalSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
+import de.uib.utils.datapanel.EditMapPanelX;
+import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.ExternalSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
 
 public class PanelProductProperties extends JSplitPane {
 	private PanelGenEditTable paneProducts;
@@ -84,10 +84,8 @@ public class PanelProductProperties extends JSplitPane {
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
-	}
 
-	private void updateModel() {
-		paneProducts.setTableModel(createTableModel());
+		setResizeWeight(1.0);
 	}
 
 	private GenTableModel createTableModel() {
@@ -109,7 +107,7 @@ public class PanelProductProperties extends JSplitPane {
 	}
 
 	public void setProductProperties() {
-		updateModel();
+		paneProducts.setTableModel(createTableModel());
 		int saveSelectedRow = paneProducts.getSelectedRow();
 		paneProducts.reset();
 
@@ -150,25 +148,15 @@ public class PanelProductProperties extends JSplitPane {
 			if (!e.getValueIsAdjusting()) {
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			}
-		}
 
-		@Override
-		public void selectedRowChanged() {
-			// if we got a new selection
-			Logging.debug(this, "selectedRowChanged in paneProducts ");
-
-			ListSelectionModel lsm = getListSelectionModel();
-
-			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
-				Logging.info(this, "selected not a unique row ");
-				infoPane.clearEditing();
-				propertiesPanel.init();
-				panelEditProperties.clearDepotListData();
-			} else {
-				int row = lsm.getMinSelectionIndex();
-
-				updateInfoPane(row);
+				if (lsm.getSelectedItemsCount() == 1) {
+					updateInfoPane(lsm.getMinSelectionIndex());
+				} else {
+					Logging.info(this, "selected not a unique row ");
+					infoPane.clearEditing();
+					propertiesPanel.init();
+					panelEditProperties.clearDepotListData();
+				}
 			}
 		}
 
@@ -180,9 +168,7 @@ public class PanelProductProperties extends JSplitPane {
 			} else {
 				String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
 
-				String depotId = "";
-
-				Logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
+				Logging.info(this, "selected  product: " + productEdited);
 
 				String versionInfo = OpsiPackage.produceVersionInfo(
 						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),

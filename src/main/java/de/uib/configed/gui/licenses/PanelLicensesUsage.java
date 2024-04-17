@@ -27,8 +27,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelLicensesUsage;
 import de.uib.configed.Globals;
-import de.uib.utilities.swing.AutoCompletionComboBox;
-import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utils.swing.AutoCompletionComboBox;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelLicensesUsage extends MultiTablePanel {
 	private JSplitPane splitPane;

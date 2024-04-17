@@ -15,9 +15,8 @@ import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
-// http://stackoverflow.com/questions/27075678/get-ssl-version-used-in-httpsurlconnection-java
 /**
  * {@code SecureSSLSocketFactory} extends {@code SSLSocketFactory} to retrieve
  * information about SSL version used in HTTPS connection.

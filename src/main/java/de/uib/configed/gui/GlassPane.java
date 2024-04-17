@@ -6,35 +6,39 @@
 
 package de.uib.configed.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.jdesktop.swingx.JXBusyLabel;
+import javax.swing.JComponent;
+import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.Globals;
+import de.uib.configed.dashboard.ComponentStyler;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.VBox;
 
-public class GlassPane extends JPanel implements KeyListener {
-	private JXBusyLabel wheel;
-	private JLabel jLabelInfo;
+public class GlassPane extends JComponent implements KeyListener {
+	private ProgressIndicator wheel;
+	private Label jLabelInfo;
 
 	public GlassPane() {
-		super.setLayout(new GridBagLayout());
 		super.setBackground(initBackground());
 		super.setOpaque(false);
 
-		initLayout();
+		initFX();
 		addEventCatchers();
 	}
 
@@ -59,26 +63,38 @@ public class GlassPane extends JPanel implements KeyListener {
 		return new Color(base.getRed(), base.getGreen(), base.getBlue(), 128);
 	}
 
-	private void initLayout() {
-		wheel = new JXBusyLabel();
+	private void initFX() {
+		JFXPanel jfxPanel = new JFXPanel();
+		jfxPanel.setOpaque(false);
+		jfxPanel.setBackground(initBackground());
+		setLayout(new BorderLayout());
+		add(jfxPanel, BorderLayout.CENTER);
 
-		jLabelInfo = new JLabel();
+		Platform.setImplicitExit(false);
+		Platform.runLater(() -> initFXComponents(jfxPanel));
+	}
 
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
+	private void initFXComponents(JFXPanel jfxPanel) {
+		wheel = new ProgressIndicator();
+		wheel.setScaleX(0.5);
+		wheel.setScaleY(0.5);
+		wheel.setStyle(
+				"-fx-progress-color: " + ComponentStyler.getHexColor(UIManager.getColor("ProgressBar.foreground")));
+		jLabelInfo = new Label();
+		ComponentStyler.styleLabelComponent(jLabelInfo);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(wheel)
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelInfo).addGap(0, 0, Short.MAX_VALUE));
+		VBox vbox = new VBox();
+		vbox.getChildren().add(wheel);
+		vbox.getChildren().add(jLabelInfo);
+		vbox.setAlignment(Pos.CENTER);
+		vbox.setStyle("-fx-background-color: transparent;");
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(wheel).addGap(0, 0,
-						Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(jLabelInfo)
-						.addGap(0, 0, Short.MAX_VALUE)));
+		Scene scene = new Scene(vbox, javafx.scene.paint.Color.TRANSPARENT);
+		jfxPanel.setScene(scene);
 	}
 
 	public void setInfoText(String s) {
-		jLabelInfo.setText(s);
+		Platform.runLater(() -> jLabelInfo.setText(s));
 	}
 
 	/*
@@ -92,17 +108,16 @@ public class GlassPane extends JPanel implements KeyListener {
 	}
 
 	/*
-	 *  Make the glass pane visible, start the wheel and change the cursor to the wait cursor
+	 *  Make the glass pane and wheel visible, and change the cursor to the wait cursor.
 	 */
 	public void activate(boolean toggle) {
-		wheel.setVisible(toggle);
-		wheel.setBusy(toggle);
+		Platform.runLater(() -> wheel.setVisible(toggle));
 		setVisible(toggle);
 		setCursor(getCursor());
 		if (isVisible()) {
 			requestFocusInWindow();
 		} else {
-			jLabelInfo.setText(null);
+			setInfoText(null);
 		}
 	}
 
@@ -119,9 +134,6 @@ public class GlassPane extends JPanel implements KeyListener {
 		return this.isVisible() ? Globals.WAIT_CURSOR : null;
 	}
 
-	/*
-	*  Implement the KeyListener to consume events
-	*/
 	@Override
 	public void keyPressed(KeyEvent e) {
 		e.consume();

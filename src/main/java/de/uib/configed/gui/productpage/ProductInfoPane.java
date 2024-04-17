@@ -7,7 +7,6 @@
 package de.uib.configed.gui.productpage;
 
 import java.awt.Font;
-import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -25,13 +24,10 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
-public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
-	private static final Font ACTIVATE_BUTTON_FONT = new Font("TimesRoman", Font.PLAIN, 14);
-
+public class ProductInfoPane extends JSplitPane {
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
 	private JLabel jLabelLabelProductVersion;
@@ -47,14 +43,10 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 	private JButton propertiesActivateButton;
 	private boolean isPanelEditPropertiesVisible = true;
 
-	private JScrollPane jScrollPaneProductInfo;
+	private JSplitPane productSplitPane;
 	private TextMarkdownPane jTextAreaProductAdvice;
 
-	private JScrollPane jScrollPaneProductAdvice;
 	private TextMarkdownPane jTextAreaProductInfo;
-
-	private String productName = "";
-	private Map<String, Boolean> specificPropertiesExisting;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -73,10 +65,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 		jLabelProductVersion = new JTextField();
 		jLabelLabelProductVersion = new JLabel();
 
-		jScrollPaneProductInfo = new JScrollPane();
 		jTextAreaProductInfo = new TextMarkdownPane();
 
-		jScrollPaneProductAdvice = new JScrollPane();
 		jTextAreaProductAdvice = new TextMarkdownPane();
 
 		dependenciesTextLabel = new JLabel(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
@@ -95,24 +85,28 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
 
+		JScrollPane jScrollPaneProductInfo = new JScrollPane();
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
+		JScrollPane jScrollPaneProductAdvice = new JScrollPane();
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		dependenciesActivateButton = new JButton("▶");
-		dependenciesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
-		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
+		productSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		productSplitPane.setTopComponent(jScrollPaneProductInfo);
+		productSplitPane.setBottomComponent(jScrollPaneProductAdvice);
+		productSplitPane.setDividerLocation(Globals.PREF_VSIZE);
+		productSplitPane.setResizeWeight(0.5);
 
+		dependenciesActivateButton = new JButton(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
+		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
-		propertiesActivateButton = new JButton("▼");
-		propertiesActivateButton.setFont(ACTIVATE_BUTTON_FONT);
+		propertiesActivateButton = new JButton(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
 		propertiesActivateButton.addActionListener(event -> togglePropertiesActive());
-
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
 	}
 
@@ -142,27 +136,20 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelProductVersion, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE))
 
-				.addComponent(jScrollPaneProductInfo, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
-
-				.addComponent(jScrollPaneProductAdvice, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE));
+				.addComponent(productSplitPane, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE));
 
 		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(jLabelProductName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jLabelProductID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(jLabelProductName, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addComponent(jScrollPaneProductInfo, 0, Globals.PREF_VSIZE, Short.MAX_VALUE)
-				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addComponent(jScrollPaneProductAdvice, 0, Globals.PREF_VSIZE, Short.MAX_VALUE));
+				.addComponent(productSplitPane, 0, Globals.PREF_VSIZE * 2, Short.MAX_VALUE));
 
 		setTopComponent(productDescriptionsPanel);
 	}
@@ -234,9 +221,9 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 
 	private static void setActivatedButton(JButton jButton, boolean isPropertiesVisible) {
 		if (isPropertiesVisible) {
-			jButton.setText("▼");
+			jButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
 		} else {
-			jButton.setText("▶");
+			jButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
 		}
 	}
 
@@ -262,7 +249,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 
 	public void setProductId(String s) {
 		jLabelProductID.setText(s);
-		productName = s;
 	}
 
 	public void setProductVersion(String s) {
@@ -296,15 +282,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver {
 
 		setProductName("");
 		setProductInfo("");
+		setProductAdvice("");
 		panelProductDependencies.setEditValues("", "");
-	}
-
-	//
-	// DataChangedObserver
-	@Override
-	public void dataHaveChanged(Object source) {
-		if (source instanceof EditMapPanelX) {
-			specificPropertiesExisting.put(productName, true);
-		}
 	}
 }

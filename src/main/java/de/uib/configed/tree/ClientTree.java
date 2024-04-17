@@ -34,8 +34,9 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditList;
+import de.uib.configed.type.Object2GroupEntry;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditList;
 
 public class ClientTree extends AbstractGroupTree {
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");
@@ -422,8 +423,9 @@ public class ClientTree extends AbstractGroupTree {
 			insertNodeInOrder(clientNode, dropParentNode);
 			model.nodeStructureChanged(sourceParentNode);
 
-			if (DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
-				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID, true);
+			if (!DIRECTORY_NOT_ASSIGNED_NAME.equals(dropParentID)) {
+				persistenceController.getGroupDataService().addObject2Group(importID, dropParentID,
+						Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 			}
 
 			// operations in DIRECTORY
@@ -462,7 +464,8 @@ public class ClientTree extends AbstractGroupTree {
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
 
 		if (success && !DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString())) {
-			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID, true);
+			persistenceController.getGroupDataService().addObject2Group(objectID, newParentID,
+					Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 		}
 
 		activeParents.addAll(Arrays.stream(newParentPath.getPath()).map(Object::toString).collect(Collectors.toSet()));

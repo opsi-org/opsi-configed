@@ -42,8 +42,8 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.ComboBoxModeller;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.ComboBoxModeller;
+import de.uib.utils.logging.Logging;
 
 /**
  * Defining the TableModel for the product table for a specific client. Since we
@@ -77,7 +77,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	private ConfigedMain configedMain;
 
-	protected List<String> productsV;
+	private List<String> productsV;
 
 	private int onGoingCollectiveChangeEventCount = -1;
 
@@ -90,14 +90,14 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	// for each product, we shall collect the clients that have a changed action
 	// request
 
-	protected int[] filter;
+	private int[] filter;
 	// filter is a function
 	// row --> somerow (from super.table)
 
 	// it holds
 	// product(row) = product(somerow)
 
-	protected int[] filterInverse;
+	private int[] filterInverse;
 
 	// for each product, we remember the visual action that is set
 	private NavigableSet<String> missingImplementationForAR;
@@ -125,7 +125,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private int[] indexPreparedColumns;
 	private boolean[] editablePreparedColumns;
 
-	public InstallationStateTableModel(List<String> selectedClients, ConfigedMain configedMain,
+	public InstallationStateTableModel(ConfigedMain configedMain,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
@@ -139,7 +139,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		this.configedMain = configedMain;
 
 		this.collectChangedStates = collectChangedStates;
-		this.selectedClients = selectedClients;
+		this.selectedClients = configedMain.getSelectedClients();
 
 		this.possibleActions = possibleActions;
 		this.globalProductInfos = productGlobalInfos;
@@ -236,10 +236,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		produceVisualStatesFromExistingEntries();
 		completeVisualStatesByDefaults();
 
-		int firstRow = getRowFromProductID(productIds.first());
-		int lastRow = getRowFromProductID(productIds.last());
-
-		fireTableRowsUpdated(firstRow, lastRow);
+		for (String productId : productIds) {
+			int row = getRowFromProductID(productId);
+			fireTableRowsUpdated(row, row);
+		}
 	}
 
 	public synchronized void updateTable(String clientId, List<String> attributes) {
@@ -949,8 +949,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		}
 	}
 
-	protected int getRowFromProductID(String id) {
+	private int getRowFromProductID(String id) {
 		int superRow = productsV.indexOf(id);
+
 		if (filterInverse == null) {
 			return superRow;
 		}
@@ -1160,36 +1161,15 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		case 1:
 			return globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 
-		case 2:
-			return combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).get(actualProduct);
-
 		case 3:
 			InstallationStatus is = InstallationStatus.produceFromLabel(
 					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
 			return InstallationStatus.getDisplayLabel(is.getVal());
 
-		case 4:
-			return combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).get(actualProduct);
-
-		case 5:
-			return combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).get(actualProduct);
-
-		case 6:
-			return combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
-
-		case 7:
-			return combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
-
 		case 8:
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 			return ActionRequest.getDisplayLabel(ar.getVal());
-
-		case 9:
-			return combinedVisualValues.get(ProductState.KEY_PRODUCT_PRIORITY).get(actualProduct);
-
-		case 10:
-			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
 			return getDisplayLabelForPosition();
@@ -1197,17 +1177,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		case 12:
 			return actualProductVersion();
 
-		case 13:
-			return combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
-
-		case 14:
-			return combinedVisualValues.get(ProductState.KEY_PACKAGE_VERSION).get(actualProduct);
-
-		case 15:
-			return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
-
 		default:
-			return null;
+			return combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
 		}
 	}
 
@@ -1257,7 +1228,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		fireTableCellUpdated(row, col);
 	}
 
-	protected void changeValueAt(Object value, int row, int col) {
+	private void changeValueAt(Object value, int row, int col) {
 		if (value == null) {
 			Logging.error(this, "value to set is null");
 			return;

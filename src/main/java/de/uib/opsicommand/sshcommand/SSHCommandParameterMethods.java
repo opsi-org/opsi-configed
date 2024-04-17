@@ -38,8 +38,8 @@ import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.ssh.SSHOutputCollector;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.ssh.SSHOutputCollector;
 
 /**
  * This Class handles SSHCommands.
@@ -454,8 +454,8 @@ public final class SSHCommandParameterMethods {
 		return depotIPs;
 	}
 
-	private static ValueSelectorList fillValueSelectorList(final List<String> values) {
-		final DepotsList valueList = new DepotsList();
+	private ValueSelectorList fillValueSelectorList(final List<String> values) {
+		final DepotsList valueList = new DepotsList(configedMain);
 		valueList.setVisible(true);
 		final Map<String, Object> extendedInfo = new TreeMap<>();
 		final Map<String, Map<String, Object>> info = new TreeMap<>();

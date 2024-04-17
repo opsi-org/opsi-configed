@@ -16,20 +16,20 @@ import java.util.TreeSet;
 import javax.swing.JMenuItem;
 import javax.swing.table.TableColumn;
 
+import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelEnterLicense;
 import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.swing.FEditPane;
-import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
-import de.uib.utilities.swing.timeedit.FEditDate;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.CellEditor4TableText;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.MapBasedUpdater;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.swing.FEditDate;
+import de.uib.utils.swing.FEditPane;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.CellEditor4TableText;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
+import de.uib.utils.table.updates.MapBasedUpdater;
+import de.uib.utils.table.updates.MapItemsUpdateController;
+import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	private PanelEnterLicense thePanel;
@@ -77,7 +77,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	}
 
 	@Override
-	public TabClientAdapter getTabClient() {
+	public MultiTablePanel getTabClient() {
 		return thePanel;
 	}
 
@@ -161,7 +161,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(2);
 
-		FEditDate fedConclusionDate = new FEditDate("", false);
+		FEditDate fedConclusionDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorConclusionDate = new CellEditor4TableText(fedConclusionDate,
 				FEditDate.AREA_DIMENSION);
@@ -170,7 +170,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		col.setCellEditor(cellEditorConclusionDate);
 
 		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(3);
-		FEditDate fedNotificationDate = new FEditDate("", false);
+		FEditDate fedNotificationDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorNotificationDate = new CellEditor4TableText(fedNotificationDate,
 				FEditDate.AREA_DIMENSION);
@@ -179,7 +179,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		col.setCellEditor(cellEditorNotificationDate);
 
 		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(4);
-		FEditDate fedExpirationDate = new FEditDate("", false);
+		FEditDate fedExpirationDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorExpirationDate = new CellEditor4TableText(fedExpirationDate,
 				FEditDate.AREA_DIMENSION);
@@ -242,8 +242,8 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		a[0] = "c_" + Utils.getSeconds();
 		a[1] = "";
 		a[2] = Utils.getDate();
-		a[3] = Globals.ZERODATE;
-		a[4] = Globals.ZERODATE;
+		a[3] = "";
+		a[4] = "";
 		a[5] = "";
 
 		modelLicensecontracts.addRow(a);

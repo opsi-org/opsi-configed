@@ -32,8 +32,8 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides a way to retrieve the current data (and update it) about hosts and
@@ -116,7 +116,7 @@ public class HostInfoCollections {
 		Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null "
 				+ (cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class) == null));
 
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_HOST_NAMES)) {
 			return;
 		}
 
@@ -353,7 +353,7 @@ public class HostInfoCollections {
 	}
 
 	public void retrieveFNode2TreeparentsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.FNODE_TO_TREE_PARENTS)) {
 			return;
 		}
 

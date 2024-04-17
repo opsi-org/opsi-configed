@@ -28,8 +28,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
 import de.uib.configed.Configed;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.UserPreferences;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
 
 public final class Messages {
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";

@@ -14,12 +14,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.DefaultCellEditor;
-import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
+import javax.swing.SwingConstants;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.Configed;
@@ -29,19 +29,18 @@ import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.IntComparatorForObjects;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.MapBasedUpdater;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import utils.Utils;
+import de.uib.utils.IntComparatorForObjects;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.CheckBoxTableCellRenderer;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
+import de.uib.utils.table.updates.MapBasedUpdater;
+import de.uib.utils.table.updates.MapItemsUpdateController;
+import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class ControllerHWinfoColumnConfiguration {
 	public static final String COL_LINE_NO = Configed.getResourceValue("HWinfoColumnConfiguration.colLineNo");
@@ -185,15 +184,12 @@ public class ControllerHWinfoColumnConfiguration {
 		col = panel.getColumnModel().getColumn(columnNames.indexOf(COL_USE_IN_QUERY));
 		col.setMaxWidth(80);
 
-		Icon iconChecked = Utils.createImageIcon("images/checked_box_blue_14.png", "");
-		Icon iconUnchecked = Utils.createImageIcon("images/checked_box_blue_empty_14.png", "");
-		Icon iconEmpty = Utils.createImageIcon("images/checked_void.png", "");
-
-		col.setCellRenderer(new BooleanIconTableCellRenderer(iconChecked, iconUnchecked, true));
-
-		JCheckBox useCheck = new JCheckBox(iconEmpty);
-
-		col.setCellEditor(new DefaultCellEditor(useCheck));
+		col.setCellRenderer(new CheckBoxTableCellRenderer());
+		JCheckBox editorBox = new JCheckBox();
+		editorBox.setVerticalAlignment(SwingConstants.CENTER);
+		DefaultCellEditor editor = new DefaultCellEditor(editorBox);
+		editor.setClickCountToStart(0);
+		col.setCellEditor(editor);
 		// checkbox is not visible, since any click
 		// ends editing and lets immediately resurface the cell renderer
 		// this is not correct for keys, therefore we set the void icon

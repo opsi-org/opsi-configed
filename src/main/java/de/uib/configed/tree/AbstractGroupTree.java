@@ -37,8 +37,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditRecord;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditRecord;
 
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");
@@ -64,6 +64,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	protected DefaultTreeModel model;
 
 	protected ConfigedMain configedMain;
+
+	private Collection<String> selectedObjectsInTable = new HashSet<>();
 
 	protected AbstractGroupTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -104,6 +106,32 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		setDropMode(DropMode.ON);
 	}
 
+	public void reInitTree() {
+		String nodeToSelect;
+
+		if (getSelectionPath() == null) {
+			nodeToSelect = null;
+		} else if (((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getAllowsChildren()) {
+			nodeToSelect = getSelectionPath().getLastPathComponent().toString();
+		} else {
+			nodeToSelect = ((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getParent().toString();
+		}
+
+		groupNodes.clear();
+		groups.clear();
+		rootNode.removeAllChildren();
+		createTopNodes();
+		removeTreeSelectionListener(this);
+		setModel(new DefaultTreeModel(rootNode));
+
+		if (groupNodes.get(nodeToSelect) != null) {
+			TreePath pathToSelect = new TreePath(getModel().getPathToRoot(groupNodes.get(nodeToSelect)));
+			setSelectionPath(pathToSelect);
+			expandPath(pathToSelect);
+		}
+		addTreeSelectionListener(this);
+	}
+
 	abstract void createTopNodes();
 
 	abstract void setGroupAndSelect(DefaultMutableTreeNode groupNode);
@@ -142,6 +170,14 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 			recursivelyCollectParentIDs(allNodes, child, nodeIds);
 		}
+	}
+
+	public void updateSelectedObjectsInTable() {
+		selectedObjectsInTable = getSelectedObjectsInTable();
+	}
+
+	public boolean isSelectedInTable(String objectId) {
+		return selectedObjectsInTable.contains(objectId);
 	}
 
 	public Set<String> getActiveParents() {
@@ -385,8 +421,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			groupEntries.add(new Object2GroupEntry(clientId, parent.toString()));
 		}
 
-		return persistenceController.getGroupDataService().removeHostGroupElements(groupEntries,
-				this instanceof ClientTree);
+		String groupType = this instanceof ClientTree ? Object2GroupEntry.GROUP_TYPE_HOSTGROUP
+				: Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP;
+
+		return persistenceController.getGroupDataService().removeHostGroupElements(groupEntries, groupType);
 	}
 
 	protected GroupNode produceGroupNode(String groupId, String description) {

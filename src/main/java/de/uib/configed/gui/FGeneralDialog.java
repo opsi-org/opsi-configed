@@ -11,10 +11,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Window;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 
@@ -29,11 +25,11 @@ import javax.swing.JScrollPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditObject;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditObject;
 
-public class FGeneralDialog extends JDialog implements KeyListener, MouseListener {
+public class FGeneralDialog extends JDialog {
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;
 	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
 
@@ -51,8 +47,6 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 	protected int preferredWidth;
 	protected int preferredHeight;
 
-	protected int additionalPaneMaxWidth = GroupLayout.PREFERRED_SIZE;
-
 	private String button1Text;
 	private String button2Text;
 	private String button3Text;
@@ -66,13 +60,9 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected JPanel additionalPane = new JPanel();
-	private GridLayout gridLayout1 = new GridLayout();
-
-	protected Window owner;
 
 	public FGeneralDialog(JFrame owner, String title) {
 		super(owner, false);
-		this.owner = owner;
 
 		Logging.info(this.getClass(), "created by constructor 1, owner " + owner);
 		registerWithRunningInstances();
@@ -85,7 +75,6 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal) {
 		super(owner, modal);
-		this.owner = owner;
 
 		Logging.info(this.getClass(), "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
@@ -119,7 +108,6 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, modal);
-		this.owner = owner;
 		Logging.info(this.getClass(), "created by constructor 3  owner " + owner);
 
 		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
@@ -149,6 +137,7 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 
 	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
 			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
+
 		registerWithRunningInstances();
 
 		setIconImage(Utils.getMainIcon());
@@ -176,7 +165,7 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 			// else we have to call setupLayout later explicitly
 			guiInit();
 		}
-		setLocationRelativeTo(owner);
+		setLocationRelativeTo(getOwner());
 	}
 
 	public int getResult() {
@@ -328,7 +317,7 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 		initComponents();
 		allLayout();
 
-		jPanelButtonGrid.setLayout(gridLayout1);
+		jPanelButtonGrid.setLayout(new GridLayout());
 
 		jButton1.setMinimumSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
@@ -363,10 +352,6 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 			jPanelButtonGrid.add(jButton3, null);
 		}
 
-		jButton1.addKeyListener(this);
-		jButton2.addKeyListener(this);
-		jButton3.addKeyListener(this);
-
 		jButton1.addActionListener(event -> doAction1());
 		jButton2.addActionListener(event -> doAction2());
 		jButton3.addActionListener(event -> doAction3());
@@ -376,7 +361,7 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 		getContentPane().add(allpane);
 
 		pack();
-		setLocationRelativeTo(owner);
+		setLocationRelativeTo(getOwner());
 	}
 
 	@Override
@@ -428,57 +413,5 @@ public class FGeneralDialog extends JDialog implements KeyListener, MouseListene
 		} else {
 			super.processWindowEvent(e);
 		}
-	}
-
-	// KeyListener
-	@Override
-	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, "key event " + e);
-		if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
-			if (e.getSource() == jButton1) {
-				// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/
-				// since otherwise doAction1 is called twice on Enter
-			} else if (e.getSource() == jButton2) {
-				doAction2();
-			} else if (e.getSource() == jButton3) {
-				doAction3();
-			} else {
-				Logging.warning(this, "unexpected action on source " + e.getSource());
-			}
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
-
-	// MouseListener
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		Logging.debug(this, "mouseClicked");
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		Logging.debug(this, "mouseEntered");
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		Logging.debug(this, "mouseExited");
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		Logging.debug(this, "mousePressed");
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		Logging.debug(this, "mouseReleased");
 	}
 }

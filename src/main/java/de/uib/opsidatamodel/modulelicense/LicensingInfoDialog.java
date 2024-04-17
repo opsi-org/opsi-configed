@@ -17,6 +17,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -28,21 +29,20 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.IconAsButton;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PanelLinedComponents;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.LicensingInfoPanelGenEditTable;
-import de.uib.utilities.table.gui.LicensingInfoTableCellRenderer;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapSource;
-import de.uib.utilities.table.provider.TableSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PanelLinedComponents;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.LicensingInfoPanelGenEditTable;
+import de.uib.utils.table.gui.LicensingInfoTableCellRenderer;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapSource;
+import de.uib.utils.table.provider.TableSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
 
 public class LicensingInfoDialog extends FGeneralDialog {
 	private static boolean extendedView;
@@ -65,8 +65,8 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		PanelGenEditTable centerPanel = new PanelGenEditTable();
 		JPanel bottomPanel = new JPanel();
 
-		bottomPanel = this.initClientInfo();
-		centerPanel = this.initMainPanel();
+		bottomPanel = initClientInfo();
+		centerPanel = initMainPanel();
 
 		super.setCenterPaneInScrollpane(centerPanel);
 		super.setAdditionalPane(bottomPanel);
@@ -228,25 +228,25 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		checksum.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
 
-		JLabel labelExtendedView = new JLabel(Configed.getResourceValue("LicensingInfo.buttonExtendedView"));
-		JCheckBox checkExtendedView = new JCheckBox("", extendedView);
+		JCheckBox checkExtendedView = new JCheckBox(Configed.getResourceValue("LicensingInfo.buttonExtendedView"),
+				extendedView);
 
 		checkExtendedView.addActionListener((ActionEvent actionEvent) -> {
 			setExtendedView(checkExtendedView.isSelected());
 			thePanel.reload();
 		});
 
-		JLabel labelShowOnlyAvailableModules = new JLabel(
-				Configed.getResourceValue("LicensingInfo.buttonShowOnlyAvailableModules"));
-		JCheckBox checkShowOnlyAvailableModules = new JCheckBox("", showOnlyAvailableModules);
+		JCheckBox checkShowOnlyAvailableModules = new JCheckBox(
+				Configed.getResourceValue("LicensingInfo.buttonShowOnlyAvailableModules"), showOnlyAvailableModules);
 
 		checkShowOnlyAvailableModules.addActionListener((ActionEvent actionEvent) -> {
 			showOnlyAvailableModules(checkShowOnlyAvailableModules.isSelected());
 			thePanel.reload();
 		});
 
-		IconAsButton buttonReload = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonReload"),
-				"images/reload16.png", "images/reload16.png", "images/reload16.png", "images/reload16.png");
+		JButton buttonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
+		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
+		buttonReload.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonReload.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
@@ -254,7 +254,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		});
 
 		JComponent[] linedComponents = new JComponent[] { buttonReload, new JLabel("   "), checkExtendedView,
-				labelExtendedView, checkShowOnlyAvailableModules, labelShowOnlyAvailableModules };
+				checkShowOnlyAvailableModules };
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
 
@@ -266,7 +266,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		gLayout.setAutoCreateContainerGaps(true);
 
 		gLayout.setHorizontalGroup(
-				gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(extraInfoPanel)
 						.addGroup(gLayout.createSequentialGroup().addComponent(redWarningLabel).addGap(20)
 								.addComponent(orangeWarningLabel))
 						.addGroup(gLayout
@@ -291,15 +291,13 @@ public class LicensingInfoDialog extends FGeneralDialog {
 										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 												.addComponent(customerNames)))));
 
-		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
-
+		gLayout.setVerticalGroup(gLayout.createSequentialGroup().addComponent(extraInfoPanel).addGap(Globals.GAP_SIZE)
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(redWarningLabel)
 						.addComponent(orangeWarningLabel))
 				.addGap(15)
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
 						.addComponent(warningLevelPercent).addComponent(warningLevelDays))
 				.addGap(25)
-
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(clientTitle)
 						.addGap(30).addComponent(customerTitle))
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(gLayout
@@ -313,27 +311,11 @@ public class LicensingInfoDialog extends FGeneralDialog {
 						.addGroup(
 								gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(checksumTitle))
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(gLayout.createSequentialGroup().addComponent(checksum))
-
-								.addGap(20)))
+								.addGroup(gLayout.createSequentialGroup().addComponent(checksum)).addGap(20)))
 						.addGap(30).addGroup(gLayout.createSequentialGroup()
-								.addGroup(gLayout.createSequentialGroup().addComponent(customerNames)
+								.addGroup(gLayout.createSequentialGroup().addComponent(customerNames)))));
 
-								))
-
-				));
-
-		JPanel xPanel = new JPanel();
-		GroupLayout xLayout = new GroupLayout(xPanel);
-		xPanel.setLayout(xLayout);
-
-		xLayout.setHorizontalGroup(xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(extraInfoPanel).addComponent(panel));
-
-		xLayout.setVerticalGroup(xLayout.createSequentialGroup().addComponent(extraInfoPanel).addGap(Globals.GAP_SIZE)
-				.addComponent(panel));
-
-		return xPanel;
+		return panel;
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {

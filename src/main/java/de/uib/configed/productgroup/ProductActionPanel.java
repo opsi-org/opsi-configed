@@ -30,10 +30,10 @@ import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.swing.list.StandardListCellRenderer;
-import de.uib.utilities.table.gui.TableSearchPane;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.swing.list.StandardListCellRenderer;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
 	private TableSearchPane searchPane;
@@ -87,14 +87,12 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
+		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"),
 				"images/reload16.png", "images/reload16.png", "", true);
-		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
 				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", "", true);
-		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		Map<String, String> values = new LinkedHashMap<>();
@@ -139,24 +137,22 @@ public class ProductActionPanel extends JPanel {
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
 
-		layoutMain
-				.setVerticalGroup(
-						layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-								.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
-										.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(
+						searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 
-										.addGroup(layoutMain.createSequentialGroup()
-												.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT)))
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+						.addGroup(layoutMain.createSequentialGroup()
+								.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT)))
+				.addGap(Globals.GAP_SIZE));
 
 		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
 

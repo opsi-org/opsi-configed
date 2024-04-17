@@ -57,16 +57,6 @@ public enum CacheIdentifier {
 	RELATIONS_AUDIT_HARDWARE_ON_HOST("relations_audit_hardware_on_host"),
 
 	/**
-	 * return type {@code List<String>}
-	 */
-	ALL_LOCALBOOT_PRODUCT_NAMES("all_localboot_product_names"),
-
-	/**
-	 * return type {@code List<String>}
-	 */
-	ALL_NETBOOT_PRODUCT_NAMES("all_netboot_product_names"),
-
-	/**
 	 * return type {@code Set<String>}
 	 */
 	PERMITTED_PRODUCTS("permitted_products"),
@@ -258,14 +248,9 @@ public enum CacheIdentifier {
 	DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS("depot_to_product_to_dependency_infos"),
 
 	/**
-	 * return type {@code List<String>}
+	 * return type {@code Set<String>}
 	 */
 	SOFTWARE_LIST("software_list"),
-
-	/**
-	 * return type {@code NavigableMap<String, Integer>}
-	 */
-	SOFTWARE_TO_NUMBER("software_to_number"),
 
 	/**
 	 * return type {@code NavigableMap<String, SWAuditEntry>}

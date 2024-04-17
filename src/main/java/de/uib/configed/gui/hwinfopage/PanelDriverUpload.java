@@ -17,12 +17,14 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
@@ -40,13 +42,11 @@ import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.NameProducer;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedLabel;
-import de.uib.utilities.swing.FLoadingWaiter;
-import de.uib.utilities.swing.JTextShowField;
-import de.uib.utilities.swing.SecondaryFrame;
-import utils.Utils;
+import de.uib.utils.NameProducer;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FLoadingWaiter;
+import de.uib.utils.swing.SecondaryFrame;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -58,8 +58,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	private String byAuditPath = "";
 
-	private JTextShowField fieldByAuditPath;
-	private JTextShowField fieldClientname;
+	private JTextField fieldByAuditPath;
+	private JTextField fieldClientname;
 
 	private JComboBox<String> comboChooseDepot;
 	private JComboBox<String> comboChooseWinProduct;
@@ -72,9 +72,9 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private String driverDirectory = "";
 
 	private boolean stateDriverPath;
-	private CheckedLabel driverPathChecked;
+	private JCheckBox driverPathChecked;
 	private boolean stateServerPath;
-	private CheckedLabel serverPathChecked;
+	private JCheckBox serverPathChecked;
 
 	private static class RadioButtonIntegrationType extends JRadioButton {
 		private String subdir;
@@ -148,11 +148,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	private RadioButtonIntegrationType buttonByAudit;
 
-	private JTextShowField fieldDriverPath;
+	private JTextField fieldDriverPath;
 	private JFileChooser chooserDriverPath;
 
 	// server path finding
-	private JTextShowField fieldServerPath;
+	private JTextField fieldServerPath;
 	private JFileChooser chooserServerpath;
 
 	private File driverPath;
@@ -283,9 +283,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void buildPanel() {
-		fieldByAuditPath = new JTextShowField();
+		fieldByAuditPath = new JTextField();
+		fieldByAuditPath.setEditable(false);
 
-		fieldClientname = new JTextShowField();
+		fieldClientname = new JTextField();
+		fieldClientname.setEditable(false);
 
 		JLabel jLabelDepotServer = new JLabel(Configed.getResourceValue("PanelDriverUpload.DepotServer"));
 		JLabel jLabelWinProduct = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
@@ -296,7 +298,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		buttonCallSelectDriverFiles
 				.setToolTipText(Configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
 
-		fieldServerPath = new JTextShowField(true);
+		fieldServerPath = new JTextField();
+		fieldServerPath.setEditable(true);
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
 		JButton buttonCallChooserServerpath = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
@@ -324,10 +327,12 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						true)));
 
 		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
-		fieldServerPath = new JTextShowField(true);
+		fieldServerPath = new JTextField();
+		fieldServerPath.setEditable(true);
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
-		fieldDriverPath = new JTextShowField(true);
+		fieldDriverPath = new JTextField();
+		fieldDriverPath.setEditable(true);
 		fieldDriverPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
 		final JPanel thisPanel = this;
@@ -428,13 +433,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 												.addGap(Globals.MIN_GAP_SIZE)))
 								.addGap(Globals.MIN_GAP_SIZE));
 
-		driverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
-				Utils.createImageIcon("images/checked_withoutbox.png", ""),
-				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), stateDriverPath);
+		driverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
+				stateDriverPath);
 
-		serverPathChecked = new CheckedLabel(Configed.getResourceValue("PanelDriverUpload.targetdirConnected"),
-				Utils.createImageIcon("images/checked_withoutbox.png", "Z"),
-				Utils.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
+		serverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.targetdirConnected"), true);
 
 		buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.upload"));
 		buttonUploadDrivers.setEnabled(false);

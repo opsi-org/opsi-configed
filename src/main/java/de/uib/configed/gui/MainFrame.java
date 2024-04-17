@@ -33,7 +33,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -64,9 +63,9 @@ import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.UserPreferences;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
 
 public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
@@ -88,6 +87,7 @@ public class MainFrame extends JFrame {
 
 	private JMenuItem jMenuFrameLicenses;
 	private JMenuItem jMenuFrameShowDialogs;
+	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter;
 
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
@@ -98,8 +98,6 @@ public class MainFrame extends JFrame {
 	private ClientTable clientTable;
 
 	private GlassPane glassPane;
-
-	private boolean multidepot;
 
 	private DepotListPresenter depotListPresenter;
 
@@ -116,14 +114,12 @@ public class MainFrame extends JFrame {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
-
 		this.clientTable = panelClientlist;
 
 		this.clientTree = clientTree;
 		this.productTree = productTree;
 
-		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
+		depotListPresenter = new DepotListPresenter(depotsList);
 
 		this.configedMain = configedMain;
 
@@ -139,10 +135,6 @@ public class MainFrame extends JFrame {
 
 	private void initData() {
 		statusPane.updateValues(0, null, null, null);
-	}
-
-	public boolean isMultiDepot() {
-		return multidepot;
 	}
 
 	public ClientTable getClientTable() {
@@ -363,8 +355,7 @@ public class MainFrame extends JFrame {
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		List<SSHCommand> commands = factory.getSSHCommandParameterList();
 		for (final SSHCommand command : commands) {
-			JMenuItem jMenuOpsiCommand = new JMenuItem();
-			jMenuOpsiCommand.setText(command.getMenuText());
+			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener((ActionEvent e) -> jMenuOptionCommandAction(factory, command));
 			menuOpsi.add(jMenuOpsiCommand);
@@ -408,8 +399,7 @@ public class MainFrame extends JFrame {
 			boolean commandsAreDeactivated) {
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		for (final SSHCommandTemplate com : listCom) {
-			JMenuItem jMenuItem = new JMenuItem();
-			jMenuItem.setText(com.getMenuText());
+			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
 			Logging.info(this, "ssh command menuitem text " + com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> jMenuItemAction(factory, com));
@@ -498,7 +488,7 @@ public class MainFrame extends JFrame {
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
 
-		JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
+		jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		jMenuClientselectionToggleClientFilter.setState(false);
 		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
@@ -667,16 +657,13 @@ public class MainFrame extends JFrame {
 
 		setJMenuBar(initMenuBar());
 
-		JPanel allPanel = new JPanel();
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
-		allPanel.setLayout(new BorderLayout());
-		allPanel.add(iconBarPanel, BorderLayout.NORTH);
-		allPanel.add(centralPane, BorderLayout.CENTER);
-		allPanel.add(statusPane, BorderLayout.SOUTH);
-
-		getContentPane().add(allPanel);
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(iconBarPanel, BorderLayout.NORTH);
+		getContentPane().add(centralPane, BorderLayout.CENTER);
+		getContentPane().add(statusPane, BorderLayout.SOUTH);
 
 		setTitle(configedMain.getAppTitle());
 
@@ -768,36 +755,35 @@ public class MainFrame extends JFrame {
 	}
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
-		configedMain.toggleFilterClientList(rebuildClientListTableModel);
+		configedMain.toggleFilterClientList(rebuildClientListTableModel, !configedMain.isFilterClientList());
+		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
 		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
 		clientTable.setFilterMark(configedMain.isFilterClientList());
 	}
 
 	private void groupByNotCurrentProductVersion() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsNotCurrentProductInstalled(products, false);
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsNotCurrentProductInstalled(products, true);
 	}
 
 	private void groupByFailedProduct() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsWithFailedProduct(products);
 	}
 
-	private String getProduct(List<String> completeList) {
+	private String getLocalbootProductsFromSelection() {
 		FSelectionList fProductSelectionList = new FSelectionList(this,
 				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
 						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
 				F_WIDTH / 2, 600);
-		fProductSelectionList.setListData(completeList);
+		fProductSelectionList.setListData(new ArrayList<>(
+				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		fProductSelectionList.setVisible(true);
 		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
 	}

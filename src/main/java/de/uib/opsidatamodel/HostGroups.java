@@ -15,7 +15,7 @@ import java.util.TreeMap;
 import de.uib.configed.tree.ClientTree;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class HostGroups extends TreeMap<String, Map<String, String>> {
 	OpsiServiceNOMPersistenceController persistenceController;

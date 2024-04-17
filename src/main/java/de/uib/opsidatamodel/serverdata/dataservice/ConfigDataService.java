@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +23,7 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -34,11 +35,11 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.datapanel.MapTableModel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.table.ListCellOptions;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.MapTableModel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.TimeCheck;
+import de.uib.utils.table.ListCellOptions;
 
 /**
  * Provides methods for working with configuration data on the server.
@@ -59,7 +60,7 @@ public class ConfigDataService {
 	protected static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private HardwareDataService hardwareDataService;
@@ -68,7 +69,7 @@ public class ConfigDataService {
 	private List<Map<String, Object>> configStateCollection;
 	private List<Map<String, Object>> deleteConfigStateItems;
 
-	public ConfigDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public ConfigDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
@@ -95,7 +96,7 @@ public class ConfigDataService {
 	 * retrieves default domain from service
 	 */
 	public void retrieveOpsiDefaultDomainPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_DEFAULT_DOMAIN, String.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_DEFAULT_DOMAIN)) {
 			return;
 		}
 		Object[] params = new Object[] {};
@@ -129,9 +130,8 @@ public class ConfigDataService {
 	}
 
 	public void retrieveConfigOptionsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS,
+				CacheIdentifier.CONFIG_OPTIONS, CacheIdentifier.CONFIG_DEFAULT_VALUES))) {
 			return;
 		}
 
@@ -288,7 +288,7 @@ public class ConfigDataService {
 	}
 
 	private void retrieveHostConfigsPDOpsi42Lower() {
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HOST_CONFIGS)) {
 			return;
 		}
 
@@ -331,7 +331,7 @@ public class ConfigDataService {
 	}
 
 	private void retrieveHostConfigsPDOpsi43() {
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_CONFIGS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HOST_CONFIGS)) {
 			return;
 		}
 
@@ -376,13 +376,11 @@ public class ConfigDataService {
 
 		Logging.debug(this,
 				"addWANConfigState  wanConfiguration " + wanConfiguration + "\n " + wanConfiguration.size());
-		Logging.debug(this, "addWANConfigState  wanConfiguration.keySet() " + wanConfiguration.keySet() + "\n "
-				+ wanConfiguration.keySet().size());
+		Logging.debug(this, "addWANConfigState  wanConfiguration.keySet() " + wanConfiguration.keySet());
 
 		Logging.debug(this,
 				"addWANConfigState  notWanConfiguration " + notWanConfiguration + "\n " + notWanConfiguration.size());
-		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet() + "\n "
-				+ notWanConfiguration.keySet().size());
+		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet());
 
 		setConfig(notWanConfiguration);
 		Logging.info(this, "set notWanConfiguration members where no entry exists");
@@ -715,7 +713,7 @@ public class ConfigDataService {
 	}
 
 	public List<String> getDisabledClientMenuEntries() {
-		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) == null) {
+		if (!cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			retrieveConfigOptionsPD();
 		}
 		Map<String, List<Object>> configDefaultValues = cacheManager
@@ -726,7 +724,7 @@ public class ConfigDataService {
 	public List<String> getOpsiclientdExtraEvents() {
 		Logging.debug(this, "getOpsiclientdExtraEvents");
 
-		if (cacheManager.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class) == null) {
+		if (!cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			retrieveConfigOptionsPD();
 		}
 
@@ -944,9 +942,29 @@ public class ConfigDataService {
 		}
 	}
 
-	public Boolean isInstallByShutdownConfigured(String host) {
-		return getHostBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, host,
-				true, false);
+	public Boolean isInstallByShutdownConfigured(String hostId) {
+		String key = OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN;
+		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId + "'");
+		Boolean value = null;
+
+		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
+		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
+			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
+			Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId + "', value: " + value);
+			if (value != null) {
+				return value;
+			}
+		}
+
+		value = getGlobalBooleanConfigValue(key, null);
+		if (value != null) {
+			Logging.debug(this,
+					"getHostBooleanConfigValue key '" + key + "', host '" + hostId + "', global value: " + value);
+			return value;
+		}
+		Logging.info(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId
+				+ "', returning default value: " + false);
+		return false;
 	}
 
 	public Boolean isWanConfigured(String host) {
@@ -1141,34 +1159,6 @@ public class ConfigDataService {
 				new Object[] { jsonObjects });
 
 		return exec.doCall(omc);
-	}
-
-	private Boolean getHostBooleanConfigValue(String key, String hostName, boolean useGlobalFallback,
-			Boolean defaultVal) {
-		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName + "'");
-		Boolean value = null;
-
-		Map<String, Object> hostConfig = getHostConfigsPD().get(hostName);
-		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
-			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
-			Logging.debug(this,
-					"getHostBooleanConfigValue key '" + key + "', host '" + hostName + "', value: " + value);
-			if (value != null) {
-				return value;
-			}
-		}
-
-		if (useGlobalFallback) {
-			value = getGlobalBooleanConfigValue(key, null);
-			if (value != null) {
-				Logging.debug(this,
-						"getHostBooleanConfigValue key '" + key + "', host '" + hostName + "', global value: " + value);
-				return value;
-			}
-		}
-		Logging.info(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName
-				+ "', returning default value: " + defaultVal);
-		return defaultVal;
 	}
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {

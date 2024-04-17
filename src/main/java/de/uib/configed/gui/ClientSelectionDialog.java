@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayDeque;
@@ -34,6 +35,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -75,15 +78,14 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.swing.AbstractValueChangeListener;
-import de.uib.utilities.swing.LowerCaseTextField;
-import de.uib.utilities.swing.TextInputField;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.LowerCaseTextField;
+import de.uib.utils.swing.TextInputField;
 
 /**
  * This dialog shows a number of options you can use to select specific clients.
  */
-public class ClientSelectionDialog extends FGeneralDialog {
+public class ClientSelectionDialog extends FGeneralDialog implements ActionListener, DocumentListener {
 	private static final Pattern searchNamePattern = Pattern.compile("[\\p{javaLowerCase}\\d_-]*");
 
 	private static final int FRAME_WIDTH = 750;
@@ -237,7 +239,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			SwingUtilities.invokeLater(() -> {
 				manager.getBackend().setReloadRequested();
-				manager.getBackend().reload();
 				configedMain.callNewClientSelectionDialog();
 				// we lose all components of this dialog, there is nothing to reset
 			});
@@ -338,7 +339,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.swauditName"));
 
 		// hardware
-		List<String> hardwareList = new LinkedList<>(manager.getLocalizedHardwareList().keySet());
+		List<String> hardwareList = new LinkedList<>(manager.getBackend().getLocalizedHardwareList().keySet());
 		Collections.sort(hardwareList);
 		for (String hardware : hardwareList) {
 			newElementBox.addItem(hardware);
@@ -363,7 +364,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			manager.getBackend().setReloadRequested();
-			manager.getBackend().reload();
 			buttonReload.setEnabled(true);
 			buttonRestart.setEnabled(true);
 			setCursor(null);
@@ -563,7 +563,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.type = GroupType.HARDWARE_GROUP;
 		result.topLabel.setText(hardware);
 
-		List<AbstractSelectElement> elements = manager.getLocalizedHardwareList().get(hardware);
+		List<AbstractSelectElement> elements = manager.getBackend().getLocalizedHardwareList().get(hardware);
 		if (elements == null) {
 			Logging.warning(this, hardware + " not found in localized hardware list");
 		} else {
@@ -673,40 +673,29 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		AbstractSelectOperation operation = group.element.supportedOperations().get(operationIndex);
 
 		Object data = null;
-		String text = null;
 		SelectData.DataType type = operation.getDataType();
 		switch (type) {
-		// Do the same for all three cases
+		// Do the same for all four cases
 		case DOUBLE_TYPE:
 		case TEXT_TYPE:
 		case DATE_TYPE:
-			text = ((TextInputField) (group.dataComponent)).getText();
-			if (text.isEmpty()) {
+		case ENUM_TYPE:
+			data = ((TextInputField) group.dataComponent).getText();
+			if (((String) data).isEmpty()) {
 				return null;
 			}
-			data = text;
 			break;
 		case INTEGER_TYPE:
-			Integer value = (Integer) ((JSpinner) group.dataComponent).getValue();
-			if (value == 0) {
+			data = ((JSpinner) group.dataComponent).getValue();
+			if (((Integer) data) == 0) {
 				return null;
 			}
-			data = value;
 			break;
 		case BIG_INTEGER_TYPE:
-			Long value2 = ((SpinnerWithExtension) group.dataComponent).getValue();
-			if (value2 == 0) {
+			data = ((SpinnerWithExtension) group.dataComponent).getValue();
+			if (((Long) data) == 0) {
 				return null;
 			}
-			data = value2;
-			break;
-		case ENUM_TYPE:
-
-			String textEnum = ((TextInputField) group.dataComponent).getText();
-			if (textEnum.isEmpty()) {
-				return null;
-			}
-			data = textEnum;
 			break;
 		case NONE_TYPE:
 		default:
@@ -884,12 +873,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldText.setToolTipText(
 				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-		fieldText.addValueChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		fieldText.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldText;
 	}
 
@@ -897,12 +881,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 		box.setEditable(true);
 		box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-		box.addValueChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		box.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = box;
 	}
 
@@ -910,34 +889,19 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		TextInputField fieldDate = new TextInputField(null);
 		fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldDate.setToolTipText("yyyy-mm-dd");
-		fieldDate.addValueChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		fieldDate.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDate;
 	}
 
 	private void addIntegerTypeComponent(SimpleGroup sourceGroup) {
 		JSpinner spinner = new JSpinner();
-		spinner.addChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		spinner.addChangeListener(event -> buildParentheses());
 		sourceGroup.dataComponent = spinner;
 	}
 
 	private void addBigIntegerTypeComponent(SimpleGroup sourceGroup) {
 		SpinnerWithExtension swx = new SpinnerWithExtension();
-		swx.addChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		swx.addChangeListener(event -> buildParentheses());
 
 		sourceGroup.dataComponent = swx;
 	}
@@ -947,12 +911,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldDouble.setToolTipText(
 				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-		fieldDouble.addValueChangeListener(new AbstractValueChangeListener() {
-			@Override
-			protected void actOnChange() {
-				buildParentheses();
-			}
-		});
+		fieldDouble.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDouble;
 	}
 
@@ -981,29 +940,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 
 			if (!childList.isEmpty()) {
-				switch (complex.type) {
-				case SOFTWARE_GROUP:
-					manager.addGroupOperation("Software", groupStatus, childList);
-					break;
-
-				case PROPERTIES_GROUP:
-					manager.addGroupOperation("Properties", groupStatus, childList);
-					break;
-
-				case SOFTWARE_WITH_PROPERTIES_GROUP:
-					manager.addGroupOperation("SoftwareWithProperties", groupStatus, childList);
-					break;
-
-				case SW_AUDIT_GROUP:
-					manager.addGroupOperation("SwAudit", groupStatus, childList);
-					break;
-				case HARDWARE_GROUP:
-					manager.addGroupOperation("Hardware", groupStatus, childList);
-					break;
-				case HOST_GROUP:
-					manager.addGroupOperation("Host", groupStatus, childList);
-					break;
-				}
+				manager.addGroupOperation(complex.type, groupStatus, childList);
 			}
 		}
 	}
@@ -1179,7 +1116,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		private IconAsButton closeParenthesis;
 	}
 
-	private enum GroupType {
+	public enum GroupType {
 		HOST_GROUP, SOFTWARE_GROUP, PROPERTIES_GROUP, SOFTWARE_WITH_PROPERTIES_GROUP, SW_AUDIT_GROUP, HARDWARE_GROUP
 	}
 
@@ -1329,5 +1266,25 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
 			toFront();
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		buildParentheses();
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		buildParentheses();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		buildParentheses();
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		buildParentheses();
 	}
 }

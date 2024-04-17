@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -52,13 +53,12 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedDocument;
-import de.uib.utilities.swing.LabelChecked;
-import de.uib.utilities.swing.SeparatedDocument;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.CheckedDocument;
+import de.uib.utils.swing.SeparatedDocument;
 
-public final class NewClientDialog extends FGeneralDialog {
+public final class NewClientDialog extends FGeneralDialog implements KeyListener {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
 
 	private ConfigedMain configedMain;
@@ -74,9 +74,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
 	private JTextArea jTextNotes;
-	private LabelChecked labelShutdownDefault;
-	private LabelChecked labelUefiDefault;
-	private LabelChecked labelWanDefault;
 	private JCheckBox jCheckUefi;
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
@@ -131,13 +128,9 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
-		labelUefiDefault.setValue(uefiIsDefault);
-		labelWanDefault.setValue(wanIsDefault);
-		labelShutdownDefault.setValue(shutdownINSTALLIsDefault);
-
-		jCheckUefi.setVisible(!uefiIsDefault);
-		jCheckWan.setVisible(!wanIsDefault);
-		jCheckShutdownInstall.setVisible(!shutdownINSTALLIsDefault);
+		jCheckUefi.setSelected(uefiIsDefault);
+		jCheckWan.setSelected(wanIsDefault);
+		jCheckShutdownInstall.setSelected(shutdownINSTALLIsDefault);
 	}
 
 	private void init() {
@@ -233,9 +226,6 @@ public final class NewClientDialog extends FGeneralDialog {
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
 				36);
 
-		systemUUIDField.addKeyListener(this);
-		systemUUIDField.addMouseListener(this);
-
 		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
 
 		macAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
@@ -247,41 +237,16 @@ public final class NewClientDialog extends FGeneralDialog {
 				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
 				"", 24);
 
-		labelShutdownDefault = new LabelChecked();
-		labelShutdownDefault.setText(Configed.getResourceValue("NewClientDialog.installByShutdown") + " "
-				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
-
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
-		labelUefiDefault = new LabelChecked();
-		labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
-				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
-
-		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
-			labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-			labelUefiDefault.setEnabled(false);
-		}
-
-		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
-
-		jCheckUefi = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype") + " "
-				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
+		jCheckUefi = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
 
 		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
 			jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			jCheckUefi.setEnabled(false);
 		}
 
-		labelWanDefault = new LabelChecked();
-		labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
-				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
-
-		if (!persistenceController.getModuleDataService().isWithWANPD()) {
-			labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
-		}
-
-		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
-				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
+		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		if (!persistenceController.getModuleDataService().isWithWANPD()) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
@@ -296,15 +261,9 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		if (!ServerFacade.isOpsi43()) {
 			uefiVerticalGroup.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-					.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addComponent(labelUefiDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-									Globals.LINE_HEIGHT)
-							.addComponent(jCheckUefi, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
+					.addComponent(jCheckUefi, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 
 			uefiHorizontalGroup.addGap(Globals.GAP_SIZE)
-					.addComponent(labelUefiDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
-							3 * Globals.BUTTON_WIDTH)
-					.addGap(Globals.GAP_SIZE)
 					.addComponent(jCheckUefi, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 					.addGap(Globals.MIN_GAP_SIZE);
 		}
@@ -377,23 +336,15 @@ public final class NewClientDialog extends FGeneralDialog {
 						.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.MIN_GAP_SIZE))
-				/////// InstallByShutdown
+				/////// InstallByShutdown and WAN
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelShutdownDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
-								3 * Globals.BUTTON_WIDTH)
-						.addGap(Globals.GAP_SIZE)
 						.addComponent(jCheckShutdownInstall, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				/////// UEFI
-				.addGroup(uefiHorizontalGroup)
-				/////// WAN
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelWanDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
-								3 * Globals.BUTTON_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(jCheckWan, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
+				/////// UEFI
+				.addGroup(uefiHorizontalGroup)
 				// depot
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelDepot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
@@ -447,20 +398,14 @@ public final class NewClientDialog extends FGeneralDialog {
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(gpl.createParallelGroup().addComponent(jLabelIpAddress).addComponent(labelInfoIP))
 				.addComponent(ipAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				/////// SHUTDOWN
+				/////// SHUTDOWN and WAN
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelShutdownDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
 						.addComponent(jCheckShutdownInstall, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT))
+								Globals.LINE_HEIGHT)
+						.addComponent(jCheckWan, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				/////// UEFI
 				.addGroup(uefiVerticalGroup)
-				/////// WAN
-				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWanDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(jCheckWan, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				/////// depot
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(
@@ -601,8 +546,21 @@ public final class NewClientDialog extends FGeneralDialog {
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
 			final boolean wanConfig, final String[] groups, final String netbootProduct) {
 		if (checkClientCorrectness(hostname, selectedDomain)) {
-			configedMain.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, groups, netbootProduct);
+			Logging.debug(this,
+					"createClient " + hostname + ", " + selectedDomain + ", " + depotID + ", " + description + ", "
+							+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiboot + ", " + wanConfig
+							+ ", " + Arrays.toString(groups) + ", " + netbootProduct);
+
+			String newClientID = hostname + "." + selectedDomain;
+
+			persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
+			if (persistenceController.getHostDataService().createClient(hostname, selectedDomain, depotID, description,
+					inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig,
+					groups, netbootProduct)) {
+				configedMain.createClient(newClientID, groups);
+			} else {
+				persistenceController.getHostInfoCollections().removeOpsiHostName(newClientID);
+			}
 
 			treatSelectedDomainForNewClient(selectedDomain);
 		}
@@ -830,7 +788,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		String systemUUID = systemUUIDField.getText();
 		String macaddress = macAddressField.getText();
 		String ipaddress = ipAddressField.getText();
-		String[] groups = null;
+		String[] groups;
 		if (!jTextGroupsSelection.getText().isEmpty()) {
 			groups = jTextGroupsSelection.getText().replace("; ", ";").split(";");
 		} else {
@@ -850,11 +808,17 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == jTextNotes && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
+		if (e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextInventoryNumber.requestFocusInWindow();
-		} else {
-			Logging.info(this, "keyPressed source " + e.getSource());
-			super.keyPressed(e);
 		}
 	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		/* Not needed */}
+
 }

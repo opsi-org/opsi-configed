@@ -24,7 +24,7 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
@@ -36,8 +36,8 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with user roles configuration data on the
@@ -68,10 +68,10 @@ public class UserRolesConfigDataService {
 	public static final String ITEM_FREE_LICENSES = "free licenses for client";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public UserRolesConfigDataService(AbstractExecutioner exec,
+	public UserRolesConfigDataService(AbstractPOJOExecutioner exec,
 			OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
@@ -841,8 +841,9 @@ public class UserRolesConfigDataService {
 			val.append(" \"element\" : null, ");
 			val.append(" \"elementPath\" : null,");
 			val.append(" \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, ");
-			val.append(
-					" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
+			val.append(" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : ");
+			val.append("[ \\\"Product\\\", \\\"Action Result\\\" ], \"operation\" : \"StringEqualsOperation\",");
+			val.append(" \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
 			val.append("} }");
 
 			String value = val.toString();
@@ -1053,17 +1054,8 @@ public class UserRolesConfigDataService {
 			return true;
 		}
 
-		boolean result = false;
+		Set<String> depotsPermitted = cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
 
-		Set<String> depotsPermitted = getDepotsPermittedPD();
-		if (depotsPermitted != null) {
-			result = depotsPermitted.contains(depotId);
-		}
-
-		return result;
-	}
-
-	private Set<String> getDepotsPermittedPD() {
-		return cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
+		return depotsPermitted != null && depotsPermitted.contains(depotId);
 	}
 }

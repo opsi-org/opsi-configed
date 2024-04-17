@@ -34,7 +34,7 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class OpsiDataSerializer {
 	public static final int DATA_VERSION = 2;
@@ -557,9 +557,11 @@ public class OpsiDataSerializer {
 			if (element != null) {
 				Logging.info(this, "getOperation element != null, element  " + element);
 				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
+			} else if (children.size() == 1) {
+				Class<?> list = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
+				Logging.info(this, "getOperation List name: " + list.toString());
+				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children.get(0));
 			} else {
-				// GroupOperation
-
 				Class<?> list = Class.forName("java.util.List");
 				Logging.info(this, "getOperation List name: " + list.toString());
 				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
@@ -639,15 +641,15 @@ public class OpsiDataSerializer {
 			throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
 		}
 		if ("Hardware".equals(name)) {
-			return new HardwareOperation(children);
+			return new HardwareOperation(children.get(0));
 		}
 
 		if ("Software".equals(name)) {
-			return new SoftwareOperation(children);
+			return new SoftwareOperation(children.get(0));
 		}
 
 		if ("SwAudit".equals(name)) {
-			return new SwAuditOperation(children);
+			return new SwAuditOperation(children.get(0));
 		}
 
 		if ("and".equals(name)) {
@@ -659,7 +661,7 @@ public class OpsiDataSerializer {
 		}
 
 		if ("not".equals(name)) {
-			return new NotOperation(children);
+			return new NotOperation(children.get(0));
 		}
 
 		throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);

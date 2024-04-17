@@ -6,13 +6,11 @@
 
 package de.uib.logviewer.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,7 +32,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import de.uib.Main;
@@ -46,11 +43,11 @@ import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
-import de.uib.utilities.logging.Logging;
-import utils.ExtractorUtil;
-import utils.Utils;
+import de.uib.utils.ExtractorUtil;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
-public class LogFrame extends JFrame implements WindowListener {
+public class LogFrame extends JFrame {
 	private static final Pattern IS_FILE_EXTENSION_NUMBER_PATTERN = Pattern.compile("\\d+");
 
 	private static String fileName = "";
@@ -61,11 +58,8 @@ public class LogFrame extends JFrame implements WindowListener {
 	private JButton iconButtonSave;
 	private JButton iconButtonCopy;
 
-	private Container baseContainer;
-
 	public LogFrame() {
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		baseContainer = super.getContentPane();
 		guiInit();
 	}
 
@@ -183,30 +177,39 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void guiInit() {
-		this.addWindowListener(this);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				Main.endApp(Main.NO_ERROR);
+			}
+		});
 
 		this.setIconImage(Utils.getMainIcon());
 
 		setupIcons();
 
-		JPanel iconPane = new JPanel();
-		GroupLayout layoutIconPane1 = new GroupLayout(iconPane);
-		iconPane.setLayout(layoutIconPane1);
+		logPane = new StandaloneLogPane();
+
+		GroupLayout layoutIconPane1 = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layoutIconPane1);
 
 		layoutIconPane1
 				.setHorizontalGroup(
-						layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE).addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE));
+						layoutIconPane1.createParallelGroup()
+								.addGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE,
+												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
+								.addComponent(logPane));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -218,23 +221,13 @@ public class LogFrame extends JFrame implements WindowListener {
 								Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(logPane));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());
 		jMenuBar.add(setupMenuView());
 		jMenuBar.add(setupMenuHelp());
 		this.setJMenuBar(jMenuBar);
-
-		logPane = new StandaloneLogPane();
-
-		JPanel allPane = new JPanel();
-		allPane.setLayout(new BorderLayout());
-
-		allPane.add(iconPane, BorderLayout.NORTH);
-		allPane.add(logPane, BorderLayout.CENTER);
-
-		baseContainer.add(allPane);
 	}
 
 	public void initLogPane() {
@@ -254,7 +247,7 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	private void setEmptyData() {
 		logPane.setText("");
-		logPane.setTitle("unknown");
+		logPane.setTitle("");
 		setTitle(null);
 	}
 
@@ -293,7 +286,8 @@ public class LogFrame extends JFrame implements WindowListener {
 				return readFile(fn);
 			} else {
 				Logging.error(this, "File does not exist: " + fn);
-				showDialog("No location: \n" + fn);
+				JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn,
+						null, JOptionPane.WARNING_MESSAGE);
 				return "";
 			}
 		}
@@ -314,44 +308,10 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 	}
 
-	/* WindowListener implementation */
-	@Override
-	public void windowClosing(WindowEvent e) {
-		Main.endApp(Main.NO_ERROR);
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		/* Not needed */}
-
 	/**********************************************************************************************/
 	// File operations
 	public static void setFileName(String fn) {
 		LogFrame.fileName = fn;
-	}
-
-	private void showDialog(String errorMsg) {
-		JOptionPane.showMessageDialog(this, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
 	}
 
 	private static String openFile() {
@@ -402,7 +362,9 @@ public class LogFrame extends JFrame implements WindowListener {
 		if (file.isDirectory()) {
 			Logging.error("This is not a file, it is a directory: " + fileName);
 			resetFileName();
-			showDialog("This is not a file, it is a directory: \n" + fileName);
+			JOptionPane.showMessageDialog(this,
+					Configed.getResourceValue("LogFrame.notFileButDirectory") + " " + fileName, null,
+					JOptionPane.WARNING_MESSAGE);
 		} else if (file.exists()) {
 			String fileExtension = getFileExtension(fileName);
 			if (!isFileExtensionSupported(fileExtension)) {
@@ -424,7 +386,8 @@ public class LogFrame extends JFrame implements WindowListener {
 		} else {
 			Logging.error("This file does not exist: " + fileName);
 			resetFileName();
-			showDialog("This file does not exist: \n" + fileName);
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fileName,
+					null, JOptionPane.WARNING_MESSAGE);
 		}
 
 		return result;
@@ -483,7 +446,8 @@ public class LogFrame extends JFrame implements WindowListener {
 			fis.close();
 		} catch (IOException ex) {
 			Logging.error("Error opening file: " + ex);
-			showDialog("Error opening file: " + ex);
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.errorOpeningFile") + "\n" + ex,
+					null, JOptionPane.WARNING_MESSAGE);
 		}
 
 		return result;
@@ -502,7 +466,8 @@ public class LogFrame extends JFrame implements WindowListener {
 			br.close();
 		} catch (IOException ex) {
 			Logging.error("Error reading file: " + ex);
-			showDialog("Error reading file: " + ex);
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.errorReadingFile") + "\n" + ex,
+					null, JOptionPane.WARNING_MESSAGE);
 		}
 		return sb.toString();
 	}

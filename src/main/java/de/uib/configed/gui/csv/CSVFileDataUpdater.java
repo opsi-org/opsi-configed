@@ -18,9 +18,9 @@ import java.util.Map;
 
 import org.apache.commons.csv.CSVPrinter;
 
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.updates.MapBasedUpdater;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.updates.MapBasedUpdater;
 
 public class CSVFileDataUpdater implements MapBasedUpdater {
 	private String csvFile;

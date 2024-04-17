@@ -6,6 +6,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,15 +21,15 @@ import de.uib.configed.type.licenses.LicensePoolXOpsiProduct;
 import de.uib.configed.type.licenses.LicenseUsableForEntry;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datastructure.StringValuedRelationElement;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with license data on the server.
@@ -46,13 +47,13 @@ import utils.Utils;
 @SuppressWarnings({ "unchecked" })
 public class LicenseDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private ModuleDataService moduleDataService;
 
 	private List<LicenseUsageEntry> itemsDeletionLicenseUsage;
 
-	public LicenseDataService(AbstractExecutioner exec) {
+	public LicenseDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}
@@ -76,8 +77,8 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicensePoolsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.LICENSE_POOLS, Map.class) != null || cacheManager
-				.getCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT, LicensePoolXOpsiProduct.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.LICENSE_POOLS)
+				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT)) {
 			return;
 		}
 
@@ -108,8 +109,8 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicenseContractsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.LICENSE_CONTRACTS, Map.class) != null || cacheManager
-				.getCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, NavigableMap.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.LICENSE_CONTRACTS)
+				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY)) {
 			return;
 		}
 
@@ -144,7 +145,7 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicensesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.LICENSES, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.LICENSES)) {
 			return;
 		}
 		Map<String, LicenseEntry> licenses = new HashMap<>();
@@ -171,8 +172,8 @@ public class LicenseDataService {
 
 	public void retrieveSoftwareLicense2LicensePoolPD() {
 		if (!moduleDataService.isWithLicenseManagementPD()
-				|| cacheManager.getCachedData(CacheIdentifier.LICENSE_USABILITIES, List.class) != null
-				|| cacheManager.getCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL, List.class) != null) {
+				|| cacheManager.isDataCached(CacheIdentifier.LICENSE_USABILITIES)
+				|| cacheManager.isDataCached(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL)) {
 			return;
 		}
 		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
@@ -343,8 +344,7 @@ public class LicenseDataService {
 	}
 
 	public void retrieveLicenseUsagesPD() {
-		if (moduleDataService.isWithLicenseManagementPD()
-				&& cacheManager.getCachedData(CacheIdentifier.LICENSE_USAGE, List.class) != null) {
+		if (moduleDataService.isWithLicenseManagementPD() && cacheManager.isDataCached(CacheIdentifier.LICENSE_USAGE)) {
 			return;
 		}
 		Logging.info(this, "retrieveLicenseUsages");
@@ -385,9 +385,8 @@ public class LicenseDataService {
 	}
 
 	private void retrieveLicensesUsagePD() {
-		if (moduleDataService.isWithLicenseManagementPD()
-				&& (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSE_USAGE, Map.class) != null && cacheManager
-						.getCachedData(CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST, Map.class) != null)) {
+		if (moduleDataService.isWithLicenseManagementPD() && cacheManager.isDataCached(
+				Arrays.asList(CacheIdentifier.ROWS_LICENSE_USAGE, CacheIdentifier.FCLIENT_TO_LICENSES_USAGE_LIST))) {
 			return;
 		}
 

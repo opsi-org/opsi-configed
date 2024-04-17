@@ -24,7 +24,7 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -36,9 +36,10 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.TimeCheck;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.TimeCheck;
+import de.uib.utils.savedstates.UserPreferences;
 
 /**
  * Provides methods for working with host data on the server.
@@ -58,7 +59,7 @@ public class HostDataService {
 	private static final String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
@@ -66,7 +67,7 @@ public class HostDataService {
 
 	private Map<String, Map<String, Object>> hostUpdates;
 
-	public HostDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public HostDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
@@ -604,7 +605,7 @@ public class HostDataService {
 	}
 
 	public void retrieveHostDisplayFields() {
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HOST_DISPLAY_FIELDS)) {
 			return;
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
@@ -617,8 +618,11 @@ public class HostDataService {
 		// always shown, we put it here because of ordering and repeat the statement
 		// after the loop if it has been set to false
 
+		List<String> userSavedDisplayFields = Arrays
+				.asList(UserPreferences.get(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS).split(","));
 		for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
-			hostDisplayFields.put(field, configuredByService.indexOf(field) > -1);
+			hostDisplayFields.put(field,
+					configuredByService.indexOf(field) > -1 || userSavedDisplayFields.contains(field));
 		}
 
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);

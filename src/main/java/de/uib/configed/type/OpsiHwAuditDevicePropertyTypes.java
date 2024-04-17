@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditDeviceClass> {
 	private Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
