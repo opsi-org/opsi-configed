@@ -20,6 +20,7 @@
 - The lower control panel in logviewer keeps disappearing on resize
 - For hardware devices with the same name in different hardware class, the information is shown incorrectly
 - Can't change table column visibility in product table after full reload
+- When group, that has subgroups, is permitted for a user, the subgroups aren't included in a group.
 - On reload in "default properties" tab no changes are made to the table (removed packages are shown and installed packages aren't shown)
 
 

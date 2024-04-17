@@ -251,7 +251,8 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	// we produce all partial pathes that are defined by the persistent groups
-	public void produceAndLinkGroups(final Map<String, Map<String, String>> importedGroups) {
+	public void produceAndLinkGroups(final Map<String, Map<String, String>> importedGroups,
+			Set<String> permittedGroups) {
 		Logging.debug(this, "produceAndLinkGroups " + importedGroups.keySet());
 		// we need a local copy since we add virtual groups
 		groups.putAll(importedGroups);
@@ -262,10 +263,10 @@ public class ClientTree extends AbstractGroupTree {
 
 		createDirectoryNotAssigned();
 
-		linkGroupNodes();
+		linkGroupNodes(permittedGroups);
 	}
 
-	private void linkGroupNodes() {
+	private void linkGroupNodes(Set<String> permittedGroups) {
 		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
 			if (topGroupNames.contains(group.getKey())) {
 				continue;
@@ -276,16 +277,24 @@ public class ClientTree extends AbstractGroupTree {
 				parentId = ALL_GROUPS_NAME;
 			}
 
-			DefaultMutableTreeNode parent = null;
-			if (groupNodes.get(parentId) == null) {
-				parent = groupNodes.get(ALL_GROUPS_NAME);
-			} else {
-				parent = groupNodes.get(parentId);
+			if (permittedGroups == null || permittedGroups.contains(group.getKey())
+					|| permittedGroups.contains(parentId)) {
+				DefaultMutableTreeNode parent = getParentNodeForParentId(parentId, permittedGroups);
+				DefaultMutableTreeNode node = groupNodes.get(group.getKey());
+				parent.add(node);
+				model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
+				if (permittedGroups != null && !permittedGroups.contains(group.getKey())) {
+					permittedGroups.add(group.getKey());
+				}
 			}
+		}
+	}
 
-			DefaultMutableTreeNode node = groupNodes.get(group.getKey());
-			parent.add(node);
-			model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
+	private DefaultMutableTreeNode getParentNodeForParentId(String parentId, Set<String> permittedGroups) {
+		if (groupNodes.get(parentId) == null || (permittedGroups != null && !permittedGroups.contains(parentId))) {
+			return groupNodeGroups;
+		} else {
+			return groupNodes.get(parentId);
 		}
 	}
 
@@ -333,7 +342,9 @@ public class ClientTree extends AbstractGroupTree {
 
 		Set<String> allowedClients = new HashSet<>();
 		for (String permittedGroup : permittedHostGroups) {
-			allowedClients.addAll(group2Members.get(permittedGroup));
+			if (group2Members.containsKey(permittedGroup)) {
+				allowedClients.addAll(group2Members.get(permittedGroup));
+			}
 		}
 
 		return allowedClients;
