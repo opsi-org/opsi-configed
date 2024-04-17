@@ -121,16 +121,20 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 			return null;
 		}
 
-		SingleCommandFileUpload com1 = new SingleCommandFileUpload("PackegeUpload");
+		SingleCommandFileUpload com1 = new SingleCommandFileUpload();
 		com1.setCommand(Configed.getResourceValue("PMInstallLocalPanel.uploadingPackage"));
-		com1.setSourceFilename(getFilename(jTextFieldPath.getText()));
-		com1.setFullSourcePath(jTextFieldPath.getText());
+		com1.setSourceFileName(getFilename(jTextFieldPath.getText()));
+		com1.setSourcePath(getPath(jTextFieldPath.getText()));
 		com1.setTargetPath((String) jComboBoxAutoCompletion.getSelectedItem());
-		com1.setTargetFilename(getFilename(com1.getFullSourcePath()));
+		com1.setTargetFileName(getFilename(com1.getFullSourcePath()));
 		return com1;
 	}
 
 	private static String getFilename(String fullpathname) {
 		return Paths.get(fullpathname).getFileName().toString();
+	}
+
+	private static String getPath(String fullpathname) {
+		return Paths.get(fullpathname).getParent().toString();
 	}
 }

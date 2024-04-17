@@ -105,7 +105,7 @@ public class CommandExecutor implements MessagebusListener {
 			fileUploader.setOnDone(() -> {
 				String message = fileUploader.isFileUploaded()
 						? String.format(Configed.getResourceValue("CommandExecutor.fileUploadSuccessfull"),
-								fileUploadCommand.getSourceFilename(), fileUploadCommand.getTargetPath())
+								fileUploadCommand.getSourceFileName(), fileUploadCommand.getTargetPath())
 						: Configed.getResourceValue("CommandExecutor.fileUploadUnsuccessfull");
 				terminalFrame.writeToWidget((message + "\r\n").getBytes());
 				terminalFrame.writeToWidget("\r\n".getBytes());

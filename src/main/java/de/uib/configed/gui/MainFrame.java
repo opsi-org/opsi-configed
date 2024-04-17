@@ -54,7 +54,7 @@ import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommand;
-import de.uib.configed.serverconsole.command.SingleCommandNeedParameter;
+import de.uib.configed.serverconsole.command.CommandWithParameters;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.messages.Messages;
@@ -479,7 +479,7 @@ public class MainFrame extends JFrame {
 			jMenuOpsiCommand.setText(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(
-					(ActionEvent e) -> ((SingleCommandNeedParameter) command).startParameterGui(configedMain));
+					(ActionEvent e) -> ((CommandWithParameters) command).startParameterGui(configedMain));
 			menuOpsi.add(jMenuOpsiCommand);
 			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);

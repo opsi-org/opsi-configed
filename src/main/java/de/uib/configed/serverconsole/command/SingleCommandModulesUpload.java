@@ -17,12 +17,10 @@ public class SingleCommandModulesUpload extends SingleCommandFileUpload {
 	private static final String DEFAULT_FILENAME = "modules";
 
 	public SingleCommandModulesUpload() {
-		super.setTitle("Modules Upload");
 		super.setBaseName("Modules Upload");
 		command = "Modules Upload (via sftp)";
-		super.setDescription("# write modules file to opsi-server");
 		super.setTargetPath("/etc/opsi/");
-		super.setTargetFilename(DEFAULT_FILENAME);
+		super.setTargetFileName(DEFAULT_FILENAME);
 	}
 
 	@Override
@@ -53,7 +51,7 @@ public class SingleCommandModulesUpload extends SingleCommandFileUpload {
 			protected String doAction1AdditionalSetPath() {
 				String modulesServerPath = ACTUAL_MODULES_DIRECTORY;
 				command.setTargetPath(ACTUAL_MODULES_DIRECTORY);
-				command.setTargetFilename(DEFAULT_FILENAME);
+				command.setTargetFileName(DEFAULT_FILENAME);
 				return modulesServerPath;
 			}
 

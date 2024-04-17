@@ -186,8 +186,8 @@ public class FileUploadDialog extends FGeneralDialog {
 			String modulesName = jFileChooserLocal.getSelectedFile().getName();
 			jTextFieldLocalPath.setText(modulesPath);
 
-			command.setSourceFilename(modulesName);
-			command.setFullSourcePath(modulesPath);
+			command.setSourceFileName(modulesName);
+			command.setSourcePath(modulesPath);
 			jTextFieldLocalPath.setCaretPosition(modulesPath.length());
 		} else {
 			jTextFieldLocalPath.setText("");
@@ -359,7 +359,6 @@ public class FileUploadDialog extends FGeneralDialog {
 
 			fullcommand.addCommand(curlCommand);
 		} else {
-			command.setOverwriteMode(jCheckBoxOverwriteExisting.isSelected());
 			fullcommand.addCommand(command);
 		}
 
@@ -377,8 +376,8 @@ public class FileUploadDialog extends FGeneralDialog {
 	}
 
 	protected String doAction1AdditionalSetPath() {
-		String modulesServerPath = command.getTargetPath() + command.getTargetFilename();
-		command.setTargetFilename(jFileChooserLocal.getSelectedFile().getName());
+		String modulesServerPath = command.getFullTargetPath();
+		command.setTargetFileName(jFileChooserLocal.getSelectedFile().getName());
 		return modulesServerPath;
 	}
 

@@ -13,7 +13,7 @@ import de.uib.configed.serverconsole.PackageManagerInstallParameterDialog;
 import de.uib.utilities.logging.Logging;
 
 public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPackageManager
-		implements SingleCommandNeedParameter {
+		implements CommandWithParameters {
 	private String command;
 	private int priority = 8;
 	private FGeneralDialog dialog;

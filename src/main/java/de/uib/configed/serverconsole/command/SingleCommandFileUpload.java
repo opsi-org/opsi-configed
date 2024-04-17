@@ -12,113 +12,66 @@ import java.util.List;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 
-public class SingleCommandFileUpload implements SingleCommand, SingleCommandNeedParameter {
+public class SingleCommandFileUpload implements SingleCommand, CommandWithParameters {
 	private static final int PRIORITY = 0;
 
 	protected FGeneralDialog dialog;
 	private boolean needParameter = true;
 
-	private String title = "File Upload";
 	private String baseName = "File Upload";
-	private String description = "# write file to opsi-server";
 	private String targetPath = "";
-	private String targetFilename = "";
+	private String targetFileName = "";
 	private String sourcePath = "";
-	private String fullSourcePath = "";
-	private String sourceFilename = "";
-	private boolean overwriteMode = true;
-
-	private boolean showOutputDialog = true;
+	private String sourceFileName = "";
 
 	protected String command = "";
 
-	public SingleCommandFileUpload(String title) {
-		this.title = title;
-		baseName = "File Upload";
+	public SingleCommandFileUpload() {
 		command = "File Upload (via webDAV)";
 	}
 
-	public SingleCommandFileUpload() {
-	}
-
-	public boolean isShowOutputDialog() {
-		return showOutputDialog;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String getDescription() {
-		if (description.isEmpty()) {
-			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
-					+ " on connected server";
-		}
-		return description;
-	}
-
 	public String getFullTargetPath() {
-		return getTargetPath() + getTargetFilename();
+		return getTargetPath() + getTargetFileName();
 	}
 
 	public String getTargetPath() {
 		return targetPath;
 	}
 
-	public String getTargetFilename() {
-		return targetFilename;
+	public String getTargetFileName() {
+		return targetFileName;
 	}
 
 	public String getFullSourcePath() {
-		return fullSourcePath;
+		return getTargetPath() + getSourceFileName();
 	}
 
 	public String getSourcePath() {
 		return sourcePath;
 	}
 
-	public String getSourceFilename() {
-		return sourceFilename;
-	}
-
-	public boolean isOverwriteMode() {
-		return overwriteMode;
-	}
-
-	public void setTitle(String t) {
-		title = t;
+	public String getSourceFileName() {
+		return sourceFileName;
 	}
 
 	public void setBaseName(String b) {
 		baseName = b;
 	}
 
-	public void setDescription(String d) {
-		description = d;
-	}
-
 	public void setTargetPath(String p) {
 		targetPath = p;
 	}
 
-	public void setTargetFilename(String f) {
-		targetFilename = f;
+	public void setTargetFileName(String f) {
+		targetFileName = f;
 	}
 
 	public void setSourcePath(String p) {
 		sourcePath = p;
 	}
 
-	public void setSourceFilename(String f) {
-		sourceFilename = f;
-	}
-
-	public void setFullSourcePath(String f) {
-		fullSourcePath = f;
-	}
-
-	public void setOverwriteMode(boolean o) {
-		overwriteMode = o;
+	public void setSourceFileName(String f) {
+		sourceFileName = f;
 	}
 
 	@Override
@@ -203,6 +156,6 @@ public class SingleCommandFileUpload implements SingleCommand, SingleCommandNeed
 
 	@Override
 	public String toString() {
-		return "cp " + getSourcePath() + getSourceFilename() + " " + getTargetPath() + getTargetFilename();
+		return "cp " + getFullSourcePath() + " " + getFullTargetPath();
 	}
 }

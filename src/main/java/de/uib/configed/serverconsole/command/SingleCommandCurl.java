@@ -15,7 +15,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.CurlParameterDialog;
 import de.uib.utilities.logging.Logging;
 
-public class SingleCommandCurl implements SingleCommand, SingleCommandNeedParameter {
+public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 	private static final String BASE_NAME = "curl";
 	private static final int PRIORITY = 110;
 

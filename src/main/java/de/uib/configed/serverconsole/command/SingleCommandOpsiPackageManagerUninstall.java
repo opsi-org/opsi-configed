@@ -13,7 +13,7 @@ import de.uib.configed.serverconsole.PackageManagerUninstallParameterDialog;
 import de.uib.utilities.logging.Logging;
 
 public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiPackageManager
-		implements SingleCommandNeedParameter {
+		implements CommandWithParameters {
 	private FGeneralDialog dialog;
 	private String command;
 	private int priority = 10;

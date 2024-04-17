@@ -58,7 +58,7 @@ public class SingleCommandHelp implements SingleCommand {
 
 	@Override
 	public String getCommand() {
-		return ((SingleCommandNeedParameter) this.basicCommand).getBasicName() + " --help";
+		return ((CommandWithParameters) this.basicCommand).getBasicName() + " --help";
 	}
 
 	@Override

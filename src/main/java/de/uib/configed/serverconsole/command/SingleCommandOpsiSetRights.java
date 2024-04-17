@@ -16,7 +16,7 @@ import de.uib.configed.serverconsole.OpsiSetRightsParameterDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.Logging;
 
-public class SingleCommandOpsiSetRights implements SingleCommand, SingleCommandNeedParameter {
+public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithParameters {
 	private static final int PRIORITY = 110;
 
 	private static final String BASE_NAME = "opsi-set-rights ";

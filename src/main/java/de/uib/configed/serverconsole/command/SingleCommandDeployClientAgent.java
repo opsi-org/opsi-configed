@@ -14,7 +14,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.DeployClientAgentParameterDialog;
 
-public class SingleCommandDeployClientAgent implements SingleCommand, SingleCommandNeedParameter {
+public class SingleCommandDeployClientAgent implements SingleCommand, CommandWithParameters {
 	private String command;
 	private String baseDir = "/var/lib/opsi/depot";
 	private String opsiClientAgentDir;

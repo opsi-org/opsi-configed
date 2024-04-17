@@ -18,7 +18,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageUpdaterDialog;
 
-public class SingleCommandPackageUpdater implements SingleCommand, SingleCommandNeedParameter {
+public class SingleCommandPackageUpdater implements SingleCommand, CommandWithParameters {
 	private static final int PRIORITY = 105;
 
 	private String command;

@@ -15,7 +15,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.MakeProductFileDialog;
 import de.uib.utilities.logging.Logging;
 
-public class SingleCommandOpsiMakeProductFile implements SingleCommand, SingleCommandNeedParameter {
+public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandWithParameters {
 	private static final int PRIORITY = 110;
 
 	private String baseName = "opsi-makepackage";

@@ -8,7 +8,7 @@ package de.uib.configed.serverconsole.command;
 
 import de.uib.configed.ConfigedMain;
 
-public interface SingleCommandNeedParameter {
+public interface CommandWithParameters {
 	void startParameterGui(ConfigedMain configedMain);
 
 	String getBasicName();
