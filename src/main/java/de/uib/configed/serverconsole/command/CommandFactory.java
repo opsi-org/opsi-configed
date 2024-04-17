@@ -109,7 +109,7 @@ public final class CommandFactory {
 		knownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 
 		for (Map<String, Object> map : commandlist) {
-			MultiCommandTemplate com = buildSSHCommand((String) map.get(COMMAND_MAP_ID),
+			MultiCommandTemplate com = buildCommand((String) map.get(COMMAND_MAP_ID),
 					(String) map.get(COMMAND_MAP_PARENT_MENU_TEXT), (String) map.get(COMMAND_MAP_MENU_TEXT),
 					(String) map.get(COMMAND_MAP_TOOLTIP_TEXT), (int) map.get(COMMAND_MAP_POSITION), null);
 			if (map.get(COMMAND_MAP_COMMANDS) != null) {
@@ -162,7 +162,7 @@ public final class CommandFactory {
 		return sortedCommands;
 	}
 
-	public static MultiCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p,
+	public static MultiCommandTemplate buildCommand(String id, String pmt, String mt, String ttt, int p,
 			List<String> c) {
 		return new MultiCommandTemplate(id, c, mt, pmt, ttt, p);
 	}

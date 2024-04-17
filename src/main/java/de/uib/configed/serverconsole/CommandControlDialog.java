@@ -530,7 +530,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 			}
 		}
 
-		MultiCommandTemplate tempCommand = CommandFactory.buildSSHCommand(
+		MultiCommandTemplate tempCommand = CommandFactory.buildCommand(
 				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
 				jTextFieldTooltipText.getText(), prio, coms);
 		Logging.debug(this, "getCommandNow command: " + tempCommand);
