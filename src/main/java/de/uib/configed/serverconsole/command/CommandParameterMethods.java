@@ -83,7 +83,7 @@ public final class CommandParameterMethods {
 		methods.put(METHOD_GET_SELECTED_DEPOT_NAMES, "getSelectedDepotNames");
 		methods.put(METHOD_GET_SELECTED_DEPOT_IPS, "getSelectedDepotIPs");
 		methods.put(METHOD_GET_CONFIG_SERVER_NAME, "getConfigServerName");
-		methods.put(METHOD_OPTION_SELECTION, "ssh://path/to/file");
+		methods.put(METHOD_OPTION_SELECTION, "script://path/to/file");
 
 		this.configedMain = configedMain;
 		init();
@@ -166,8 +166,8 @@ public final class CommandParameterMethods {
 			return Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
 		}
 
-		if (result.contains("ssh://")) {
-			return result.replace("ssh://", "");
+		if (result.contains("scrip://")) {
+			return result.replace("script://", "");
 		} else {
 			return result;
 		}
@@ -233,7 +233,7 @@ public final class CommandParameterMethods {
 			result = formatResult(getSelectedDepotIPs(), format);
 		} else if (method.equals(methods.get(METHOD_GET_CONFIG_SERVER_NAME))) {
 			result = formatResult(getConfigServerName(), format);
-		} else if (method.contains("ssh://")) {
+		} else if (method.contains("script://")) {
 			result = getSelectedValue(method);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
 		} else if (format.isEmpty()) {
@@ -510,7 +510,7 @@ public final class CommandParameterMethods {
 		}
 
 		SSHOutputCollector.removeAllValues();
-		final String scriptFile = method.replace("ssh://", "");
+		final String scriptFile = method.replace("script://", "");
 		final SingleCommand cmd = new SingleCommandTemplate("", scriptFile, "");
 		final ScriptExecutioner exe = new ScriptExecutioner(cmd);
 		exe.execute();
