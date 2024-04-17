@@ -6,9 +6,7 @@
 
 package de.uib.opsidatamodel.serverdata;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
@@ -76,13 +74,6 @@ import de.uib.utils.logging.Logging;
  * the used means and protocols.
  */
 public class OpsiServiceNOMPersistenceController {
-	public static final List<String> NONE_LIST = new ArrayList<>() {
-		@Override
-		public int size() {
-			return -1;
-		}
-	};
-
 	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = Set.of("type", "id");
 
 	public static final String CONFIG_KEY_SUPPLEMENTARY_QUERY = "configed.query_supplementary";
