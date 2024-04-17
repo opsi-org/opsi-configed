@@ -46,38 +46,19 @@ public final class CommandControlDialog extends FGeneralDialog {
 	private static final int FRAME_WIDTH = 850;
 	private static final int FRAME_HEIGHT = 600;
 
-	private JPanel buttonPanel = new JPanel();
-	private JPanel controlPanel = new JPanel();
-	private JPanel commandPanel = new JPanel();
-	private JPanel commandlistPanel = new JPanel();
 	private JPanel parameterPanel;
 
-	private GroupLayout controlPanelLayout;
-	private GroupLayout commandPanelLayout;
-
-	private GroupLayout commandlistPanelLayout;
-
-	private JButton buttonSave;
-
-	private JLabel labelMenuText;
-	private JLabel labelParentMenuText;
-	private JLabel labelTooltipText;
-	private JLabel labelPriority;
-	private JLabel labelCommands;
+	private JButton buttonSave = new JButton(Configed.getResourceValue("SSHConnection.CommandControl.ButtonSave"));
 
 	private JComboBox<String> jComboBoxMenuText;
-	private JButton buttonDelete;
 
 	private JComboBox<String> jComboBoxParentMenuText;
 	private JTextField jTextFieldTooltipText = new JTextField();
 	private JTextField jTextFieldPriority = new JTextField();
 	private JTextPane jTextPaneCommands = new JTextPane();
-	private JScrollPane jScrollPane;
 
 	private ConfigedMain configedMain;
 	private final CommandFactory factory;
-
-	private JButton buttonTestCommand;
 
 	public CommandControlDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
@@ -91,164 +72,19 @@ public final class CommandControlDialog extends FGeneralDialog {
 		this.setVisible(true);
 	}
 
-	private void setCenterLayout() {
-		Logging.debug(this, "setCenterLayout ");
-		commandPanelLayout.setAutoCreateGaps(true);
-
-		commandPanelLayout.setHorizontalGroup(
-				commandPanelLayout.createParallelGroup().addComponent(commandlistPanel).addComponent(parameterPanel));
-		commandPanelLayout.setVerticalGroup(
-				commandPanelLayout.createSequentialGroup().addComponent(commandlistPanel).addComponent(parameterPanel));
-
-		parameterPanel.setVisible(true);
-	}
-
 	private void init() {
 		Logging.debug(this, "init setting up components ");
 
-		commandPanelLayout = new GroupLayout(commandPanel);
-		controlPanelLayout = new GroupLayout(controlPanel);
-		commandlistPanelLayout = new GroupLayout(commandlistPanel);
+		parameterPanel.setVisible(true);
 
-		getContentPane().add(controlPanel, BorderLayout.NORTH);
-		getContentPane().add(commandPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-		commandlistPanel.setPreferredSize(new Dimension(FRAME_WIDTH - 30, 150));
-		commandlistPanel.setSize(new Dimension(FRAME_WIDTH - 30, 150));
-		controlPanel.setLayout(controlPanelLayout);
-		commandPanel.setLayout(commandPanelLayout);
-		commandlistPanel.setLayout(commandlistPanelLayout);
+		getContentPane().add(initControlPanel(), BorderLayout.NORTH);
+		getContentPane().add(initCommandPanel(), BorderLayout.CENTER);
+		getContentPane().add(initButtonPanel(), BorderLayout.SOUTH);
 
-		controlPanel.setBorder(BorderFactory.createTitledBorder(""));
-		commandPanel.setBorder(BorderFactory.createTitledBorder(""));
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-		setCenterLayout();
+		this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
 
-		Dimension dimensionJTextField = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_SIZE,
-				Globals.BUTTON_HEIGHT);
-		Dimension dimensionJTextFieldLong = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
-		Dimension dimensionButton = new Dimension(Globals.GRAPHIC_BUTTON_SIZE, Globals.BUTTON_HEIGHT);
-
-		jComboBoxParentMenuText = new JComboBox<>();
-		jComboBoxMenuText = new JComboBox<>();
-
-		jTextFieldPriority = new JTextField(new CheckedDocument(/* allowedChars */
-				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
-				String.valueOf(CommandFactory.DEFAULT_POSITION), 1);
-
-		jTextPaneCommands = new JTextPane();
-		jScrollPane = new JScrollPane(jTextPaneCommands);
-
-		buttonTestCommand = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
-				"images/executing_command_red_22.png", "images/executing_command_red_22.png",
-				"images/executing_command_red_22.png", true);
-		buttonDelete = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"),
-				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
-		buttonSave = new JButton(Configed.getResourceValue("SSHConnection.CommandControl.ButtonSave"));
-		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
-
-		labelMenuText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
-		labelParentMenuText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
-		labelTooltipText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
-		labelPriority = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.priority"));
-		labelCommands = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.commands"));
-
-		jComboBoxParentMenuText.addItem(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS);
-		jComboBoxMenuText.addItem(CommandFactory.MENU_NEW);
-
-		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
-		jTextFieldTooltipText
-				.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText.tooltip"));
-
-		jTextFieldPriority.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.priority.tooltip"));
-		labelCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
-		jTextPaneCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
-
-		labelMenuText.setPreferredSize(dimensionJTextField);
-		labelParentMenuText.setPreferredSize(dimensionJTextField);
-		jComboBoxParentMenuText.setPreferredSize(dimensionJTextField);
-		jComboBoxMenuText.setPreferredSize(dimensionJTextField);
-		labelTooltipText.setPreferredSize(dimensionJTextField);
-		jTextFieldTooltipText.setPreferredSize(dimensionJTextField);
-		labelPriority.setPreferredSize(dimensionJTextField);
-		jTextFieldPriority.setPreferredSize(dimensionButton);
-		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
-		jTextPaneCommands.setPreferredSize(dimensionJTextFieldLong);
-
-		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
-		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
-
-		jComboBoxMenuText.setEditable(true);
-		jComboBoxParentMenuText.setEditable(true);
-		jTextFieldPriority.setColumns(4);
-
-		final JTextComponent editor = (JTextComponent) jComboBoxMenuText.getEditor().getEditorComponent();
-		jComboBoxMenuText.addItemListener((ItemEvent itemEvent) -> {
-			if (editor.getText().trim().equals(CommandFactory.MENU_NEW)) {
-				editor.setSelectionStart(0);
-				editor.setSelectionEnd(editor.getText().length());
-			}
-			updateSelectedCommand(editor.getText());
-			checkAllTexts();
-		});
-		jComboBoxParentMenuText.addItemListener(itemEvent -> checkAllTexts());
-
-		jTextFieldTooltipText.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				checkAllTexts();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				checkAllTexts();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// Plain text components do not fire these events
-			}
-		});
-
-		jTextFieldPriority.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				checkAllTexts();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				checkAllTexts();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// Plain text components do not fire these events
-			}
-		});
-
-		jTextPaneCommands.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				checkAllTexts();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				checkAllTexts();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// Plain text components do not fire these events
-			}
-		});
-
-		showPanel();
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			buttonTestCommand.addActionListener(actionEvent -> doActionTestCommand());
-		}
+		repaint();
+		revalidate();
 
 		final CommandControlDialog caller = this;
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -267,80 +103,79 @@ public final class CommandControlDialog extends FGeneralDialog {
 		updateLists();
 		updateSelectedCommand();
 
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			buttonDelete.addActionListener((ActionEvent actionEvent) -> {
-				String menu = (String) jComboBoxMenuText.getSelectedItem();
-				factory.deleteCommandByMenu(menu);
+		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
+		buttonClose.addActionListener(actionEvent -> doAction1());
+	}
 
-				jComboBoxMenuText.setSelectedItem(CommandFactory.MENU_NEW);
-				updateLists(CommandFactory.MENU_NEW);
-				updateSelectedCommand(CommandFactory.MENU_NEW);
-				factory.reloadServerMenu();
-			});
-		}
+	private JPanel initControlPanel() {
+		JPanel controlPanel = new JPanel();
+		controlPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			buttonSave.addActionListener(actionEvent -> doAction2());
-			buttonClose.addActionListener(actionEvent -> doAction1());
-		}
+		GroupLayout controlPanelLayout = new GroupLayout(controlPanel);
+		controlPanel.setLayout(controlPanelLayout);
 
-		buttonPanel.add(buttonClose);
-		buttonPanel.add(buttonSave);
+		Dimension dimensionJTextField = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_SIZE,
+				Globals.BUTTON_HEIGHT);
+		Dimension dimensionButton = new Dimension(Globals.GRAPHIC_BUTTON_SIZE, Globals.BUTTON_HEIGHT);
 
-		initLayout();
+		jComboBoxMenuText = new JComboBox<>();
+		jComboBoxMenuText.setPreferredSize(dimensionJTextField);
+		jComboBoxMenuText.addItem(CommandFactory.MENU_NEW);
+		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
+		jComboBoxMenuText.setEditable(true);
+		final JTextComponent editor = (JTextComponent) jComboBoxMenuText.getEditor().getEditorComponent();
+		jComboBoxMenuText.addItemListener((ItemEvent itemEvent) -> {
+			if (editor.getText().trim().equals(CommandFactory.MENU_NEW)) {
+				editor.setSelectionStart(0);
+				editor.setSelectionEnd(editor.getText().length());
+			}
+			updateSelectedCommand(editor.getText());
+			canCommandBeSaved();
+		});
 
-		setComponentsEnabledRO(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		jComboBoxParentMenuText = new JComboBox<>();
+		jComboBoxParentMenuText.setPreferredSize(dimensionJTextField);
+		jComboBoxParentMenuText.addItemListener(itemEvent -> canCommandBeSaved());
+		jComboBoxParentMenuText.addItem(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS);
+		jComboBoxParentMenuText.setEditable(true);
+		jComboBoxParentMenuText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+
+		JButton buttonDelete = new IconButton(
+				Configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"), "images/list-remove.png",
+				"images/list-remove.png", "images/list-remove_disabled.png", true);
+		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
+		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
+		buttonDelete.addActionListener((ActionEvent actionEvent) -> deleteCommand());
+		buttonDelete.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
-	}
 
-	private void setComponentsEnabledRO(boolean value) {
-		Logging.info(this, "setComponentsEnabledRO value " + value);
-		jComboBoxParentMenuText.setEnabled(value);
-		jComboBoxParentMenuText.setEditable(value);
+		JLabel labelMenuText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
+		labelMenuText.setPreferredSize(dimensionJTextField);
+		JLabel labelParentMenuText = new JLabel(
+				Configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
+		labelParentMenuText.setPreferredSize(dimensionJTextField);
+		JLabel labelTooltipText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
+		labelTooltipText.setPreferredSize(dimensionJTextField);
+		JLabel labelPriority = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.priority"));
+		labelPriority.setPreferredSize(dimensionJTextField);
 
-		jTextFieldTooltipText.setEnabled(value);
-		jTextFieldTooltipText.setEditable(value);
+		jTextFieldTooltipText
+				.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText.tooltip"));
+		jTextFieldTooltipText.setPreferredSize(dimensionJTextField);
+		jTextFieldTooltipText.getDocument().addDocumentListener(new SaveButtonEnabler());
+		jTextFieldTooltipText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 
-		jTextFieldPriority.setEnabled(value);
-		jTextFieldPriority.setEditable(value);
-
-		jTextPaneCommands.setEnabled(value);
-		jTextPaneCommands.setEditable(value);
-
-		buttonDelete.setEnabled(value);
-		buttonTestCommand.setEnabled(value);
-	}
-
-	private void initLayout() {
-		Logging.debug(this, "initLayout ");
-		commandlistPanelLayout
-				.setHorizontalGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
-						.addGroup(commandlistPanelLayout.createParallelGroup()
-								.addGroup(commandlistPanelLayout.createSequentialGroup()
-										.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE).addComponent(buttonTestCommand,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-
-								).addGap(Globals.MIN_GAP_SIZE).addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(Globals.GAP_SIZE * 3));
-		commandlistPanelLayout.setVerticalGroup(commandlistPanelLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE * 2)
-				.addGroup(commandlistPanelLayout.createParallelGroup()
-						.addGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonTestCommand, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE)
-
-				).addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE * 1));
+		jTextFieldPriority = new JTextField(
+				new CheckedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
+				String.valueOf(CommandFactory.DEFAULT_POSITION), 1);
+		jTextFieldPriority.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.priority.tooltip"));
+		jTextFieldPriority.setPreferredSize(dimensionButton);
+		jTextFieldPriority.getDocument().addDocumentListener(new SaveButtonEnabler());
+		jTextFieldPriority.setColumns(4);
+		jTextFieldPriority.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
 				.addGroup(controlPanelLayout.createParallelGroup()
@@ -394,6 +229,101 @@ public final class CommandControlDialog extends FGeneralDialog {
 						.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE).addGap(Globals.GAP_SIZE * 2));
+
+		return controlPanel;
+	}
+
+	private JPanel initCommandPanel() {
+		JPanel commandPanel = new JPanel();
+		commandPanel.setBorder(BorderFactory.createTitledBorder(""));
+		commandPanel.setSize(commandPanel.getWidth(), commandPanel.getHeight() + parameterPanel.getHeight());
+
+		GroupLayout commandPanelLayout = new GroupLayout(commandPanel);
+		commandPanel.setLayout(commandPanelLayout);
+		commandPanelLayout.setAutoCreateGaps(true);
+
+		JPanel commandListPanel = initCommandListPanel();
+
+		commandPanelLayout.setHorizontalGroup(
+				commandPanelLayout.createParallelGroup().addComponent(commandListPanel).addComponent(parameterPanel));
+		commandPanelLayout.setVerticalGroup(
+				commandPanelLayout.createSequentialGroup().addComponent(commandListPanel).addComponent(parameterPanel));
+
+		return commandPanel;
+	}
+
+	private JPanel initCommandListPanel() {
+		JPanel commandListPanel = new JPanel();
+		commandListPanel.setPreferredSize(new Dimension(FRAME_WIDTH - 30, 150));
+		commandListPanel.setSize(new Dimension(FRAME_WIDTH - 30, 150));
+
+		GroupLayout commandlistPanelLayout = new GroupLayout(commandListPanel);
+		commandListPanel.setLayout(commandlistPanelLayout);
+
+		JLabel labelCommands = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.commands"));
+		labelCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+
+		JButton buttonTestCommand = new IconButton(
+				Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
+				"images/executing_command_red_22.png", "images/executing_command_red_22.png",
+				"images/executing_command_red_22.png", true);
+		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
+		buttonTestCommand.addActionListener(actionEvent -> doActionTestCommand());
+		buttonTestCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+
+		Dimension dimensionJTextFieldLong = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
+		jTextPaneCommands = new JTextPane();
+		jTextPaneCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+		jTextPaneCommands.setPreferredSize(dimensionJTextFieldLong);
+		jTextPaneCommands.getDocument().addDocumentListener(new SaveButtonEnabler());
+		jTextPaneCommands.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+		JScrollPane jScrollPane = new JScrollPane(jTextPaneCommands);
+
+		commandlistPanelLayout
+				.setHorizontalGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
+						.addGroup(commandlistPanelLayout.createParallelGroup()
+								.addGroup(commandlistPanelLayout.createSequentialGroup()
+										.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+										.addGap(Globals.GAP_SIZE).addComponent(buttonTestCommand,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+
+								).addGap(Globals.MIN_GAP_SIZE).addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGap(Globals.GAP_SIZE * 3));
+		commandlistPanelLayout.setVerticalGroup(commandlistPanelLayout.createSequentialGroup()
+				.addGap(Globals.GAP_SIZE * 2)
+				.addGroup(commandlistPanelLayout.createParallelGroup()
+						.addGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonTestCommand, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+
+				).addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE * 1));
+
+		return commandListPanel;
+	}
+
+	private JPanel initButtonPanel() {
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
+
+		buttonSave.addActionListener(actionEvent -> doAction2());
+
+		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
+		buttonClose.addActionListener(actionEvent -> doAction1());
+
+		buttonPanel.add(buttonClose);
+		buttonPanel.add(buttonSave);
+
+		return buttonPanel;
 	}
 
 	private void updateLists() {
@@ -405,25 +335,22 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jComboBoxMenuText.removeAllItems();
 		jComboBoxParentMenuText.removeAllItems();
 
-		List<String> commandMenus = factory.getCommandMenuNames();
-		List<String> commandParents = factory.getCommandMenuParents();
-		for (String menu : commandMenus) {
-			if (((DefaultComboBoxModel<String>) jComboBoxMenuText.getModel()).getIndexOf(menu) == -1) {
-				jComboBoxMenuText.addItem(menu);
-			}
-		}
-
-		for (String parent : commandParents) {
-			if (((DefaultComboBoxModel<String>) jComboBoxParentMenuText.getModel()).getIndexOf(parent) == -1) {
-				jComboBoxParentMenuText.addItem(parent);
-			}
-		}
+		addItemsToComboBox(jComboBoxMenuText, factory.getCommandMenuNames());
+		addItemsToComboBox(jComboBoxParentMenuText, factory.getCommandMenuParents());
 
 		if (selectedCommand == null || selectedCommand.isBlank()) {
 			selectedCommand = CommandFactory.MENU_NEW;
 		}
 
 		jComboBoxMenuText.setSelectedItem(selectedCommand);
+	}
+
+	private static void addItemsToComboBox(JComboBox<String> comboBox, List<String> items) {
+		for (String item : items) {
+			if (((DefaultComboBoxModel<String>) comboBox.getModel()).getIndexOf(item) == -1) {
+				comboBox.addItem(item);
+			}
+		}
 	}
 
 	private void updateSelectedCommand() {
@@ -467,8 +394,27 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jTextPaneCommands.setText(coms);
 	}
 
+	private void deleteCommand() {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			return;
+		}
+		String menu = (String) jComboBoxMenuText.getSelectedItem();
+		factory.deleteCommandByMenu(menu);
+
+		jComboBoxMenuText.setSelectedItem(CommandFactory.MENU_NEW);
+		updateLists(CommandFactory.MENU_NEW);
+		updateSelectedCommand(CommandFactory.MENU_NEW);
+		factory.reloadServerMenu();
+	}
+
 	@Override
 	public void doAction2() {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			return;
+		}
+
 		Logging.info(this, "doAction2 savecommand ");
 		MultiCommandTemplate command = getCommandNow();
 		if (command == null) {
@@ -495,8 +441,13 @@ public final class CommandControlDialog extends FGeneralDialog {
 	}
 
 	private void doActionTestCommand() {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			return;
+		}
+
 		Logging.info(this, "doActionTestCommand testCommand building command ...");
-		MultiCommandTemplate command = getCommandNow(true /* testing */);
+		MultiCommandTemplate command = getCommandNow(true);
 		if (command == null) {
 			return;
 		}
@@ -515,26 +466,44 @@ public final class CommandControlDialog extends FGeneralDialog {
 		}.start();
 	}
 
-	private void checkAllTexts() {
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			if (jComboBoxMenuText.getSelectedItem() != null
-					&& !((String) jComboBoxMenuText.getSelectedItem()).trim().equals(CommandFactory.MENU_NEW)) {
-				Logging.info(this, "checkAllTexts menuText " + jComboBoxMenuText.getSelectedItem());
-				MultiCommandTemplate tempCommand = getCommandNow();
-				Logging.debug(this, "checkAllTexts command " + tempCommand);
-				if (tempCommand == null) {
-					return;
-				}
-				boolean isNotSaved = !factory.isCommandEqualSavedCommand(tempCommand);
-				Logging.debug(this, "checkAllTexts factory.isSSHCommandEqualSavedCommand(tmp_com) "
-						+ factory.isCommandEqualSavedCommand(tempCommand));
-				Logging.debug(this, "checkAllTexts isNotSaved " + isNotSaved);
-				buttonSave.setEnabled(isNotSaved);
-			} else {
-				buttonSave.setEnabled(false);
-			}
+	private class SaveButtonEnabler implements DocumentListener {
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			buttonSave.setEnabled(canCommandBeSaved());
 		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			buttonSave.setEnabled(canCommandBeSaved());
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			// Plain text components do not fire these events
+		}
+	}
+
+	private boolean canCommandBeSaved() {
+		boolean commandCanBeSaved = false;
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			return commandCanBeSaved;
+		}
+
+		if (jComboBoxMenuText.getSelectedItem() != null
+				&& !((String) jComboBoxMenuText.getSelectedItem()).trim().equals(CommandFactory.MENU_NEW)) {
+			Logging.info(this, "canCommandBeSaved menuText " + jComboBoxMenuText.getSelectedItem());
+			MultiCommandTemplate tempCommand = getCommandNow();
+			Logging.debug(this, "canCommandBeSaved command " + tempCommand);
+			if (tempCommand == null) {
+				return commandCanBeSaved;
+			}
+			Logging.debug(this,
+					"canCommandBeSaved is command saved " + factory.isCommandEqualSavedCommand(tempCommand));
+			commandCanBeSaved = !factory.isCommandEqualSavedCommand(tempCommand);
+		}
+
+		return commandCanBeSaved;
 	}
 
 	private MultiCommandTemplate getCommandNow() {
@@ -567,16 +536,5 @@ public final class CommandControlDialog extends FGeneralDialog {
 		Logging.debug(this, "getCommandNow command: " + tempCommand);
 
 		return tempCommand;
-	}
-
-	private void showPanel() {
-		Logging.info(this, "showPanel helpPanelStatus always true");
-
-		setCenterLayout();
-		commandPanel.setSize(commandPanel.getWidth(), commandPanel.getHeight() + parameterPanel.getHeight());
-		this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
-
-		repaint();
-		revalidate();
 	}
 }
