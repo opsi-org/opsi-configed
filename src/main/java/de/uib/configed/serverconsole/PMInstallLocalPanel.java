@@ -135,6 +135,6 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	}
 
 	private static String getPath(String fullpathname) {
-		return Paths.get(fullpathname).getParent().toString();
+		return Paths.get(fullpathname).getParent().toString() + "/";
 	}
 }
