@@ -318,7 +318,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(authPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-
 						.addGroup(inputPanelLayout.createSequentialGroup()
 								.addGroup(inputPanelLayout.createParallelGroup()
 										.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE,
@@ -357,12 +356,10 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 						.addComponent(authPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE * 2)
-
 						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(jLabelFinalize, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
 								.addComponent(panelFinalAction))
-
 						.addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(jLabelIgnorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
