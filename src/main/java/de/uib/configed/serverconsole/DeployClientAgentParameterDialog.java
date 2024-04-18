@@ -67,7 +67,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 	private JLabel jLabelFinalize = new JLabel();
 	private JLabel jLabelOperatingSystem = new JLabel();
 
-	private JButton jButtonExecute;
 	private JButton jButtonCopySelectedClients;
 
 	private JTextField jTextFieldClient;
@@ -87,6 +86,8 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
+	private boolean isGlobalReadOnly = persistenceController.getUserRolesConfigDataService().isGlobalReadOnly();
+
 	public DeployClientAgentParameterDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.title"), false);
 		this.configedMain = configedMain;
@@ -100,21 +101,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		super.setVisible(true);
 
 		Logging.info(this.getClass(), "SSHDeployClientAgentParameterDialog build");
-
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
-	}
-
-	private void setComponentsEnabled(boolean value) {
-		jTextFieldClient.setEnabled(value);
-		jTextFieldClient.setEditable(value);
-
-		jCheckBoxVerbosity.setEnabled(value);
-		jCheckBoxVerbosity.setEditable(value);
-
-		jButtonExecute.setEnabled(value);
-
-		jCheckBoxIgnorePing.setEnabled(value);
 	}
 
 	private void init() {
@@ -125,14 +111,17 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setPreferredSize(new Dimension(376, 220));
 
-		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
 		jLabelIgnorePing
 				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.ignorePing"));
+		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
+		jCheckBoxIgnorePing.setEnabled(!isGlobalReadOnly);
 		jCheckBoxIgnorePing.addItemListener((ItemEvent itemEvent) -> commandDeployClientAgent.togglePingIsRequired());
 
 		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
 		jCheckBoxVerbosity = new JComboBox<>();
 		jCheckBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jCheckBoxVerbosity.setEnabled(!isGlobalReadOnly);
+		jCheckBoxVerbosity.setEditable(!isGlobalReadOnly);
 		for (int i = 0; i < 5; i++) {
 			jCheckBoxVerbosity.addItem(i);
 		}
@@ -145,6 +134,8 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		jTextFieldClient = new JTextField();
 		jTextFieldClient.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.tooltip.tf_client"));
+		jTextFieldClient.setEnabled(!isGlobalReadOnly);
+		jTextFieldClient.setEditable(!isGlobalReadOnly);
 		jTextFieldClient.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
@@ -192,7 +183,8 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		JButton jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute.setEnabled(!isGlobalReadOnly);
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
