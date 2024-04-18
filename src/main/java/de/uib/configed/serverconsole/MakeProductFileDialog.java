@@ -36,6 +36,7 @@ import de.uib.configed.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.configed.serverconsole.command.SingleCommandTemplate;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import utils.Utils;
 
 public class MakeProductFileDialog extends FGeneralDialog {
 	private static final Pattern tripleSemicolonMatcher = Pattern.compile(";;;");
@@ -391,7 +392,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private String doActionGetVersions() {
-		String dir = jComboBoxMainDir.getEditor().getItem() + "/OPSI/control";
+		String dir = Utils.getServerPathFromWebDAVPath((String) jComboBoxMainDir.getEditor().getItem())
+				+ "OPSI/control";
 		Logging.info(this, "doActionGetVersions, dir " + dir);
 		SingleCommandTemplate getVersions = new SingleCommandTemplate(
 				CommandFactory.STRING_COMMAND_GET_VERSIONS.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));

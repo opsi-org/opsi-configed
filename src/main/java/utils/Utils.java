@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.sql.Timestamp;
@@ -478,18 +477,18 @@ public final class Utils {
 			if (dir.charAt(dir.length() - 1) != '/') {
 				dir = dir + "/";
 			}
-			dir = dir + retrieveFileNameIfPresentFrom(webDAVPath);
+			dir = dir + retrieveEverythingAfterDir(webDAVPath, "workbench/");
 		} else if (webDAVPath.startsWith("repository")) {
-			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY + retrieveFileNameIfPresentFrom(webDAVPath);
+			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY + retrieveEverythingAfterDir(webDAVPath, "repository/");
 		} else if (webDAVPath.startsWith("depot")) {
-			dir = CommandFactory.OPSI_PATH_VAR_DEPOT + retrieveFileNameIfPresentFrom(webDAVPath);
+			dir = CommandFactory.OPSI_PATH_VAR_DEPOT + retrieveEverythingAfterDir(webDAVPath, "depot/");
 		} else {
 			Logging.warning("expected repository or workbench");
 		}
 		return dir;
 	}
 
-	private static String retrieveFileNameIfPresentFrom(String filePath) {
-		return (filePath.charAt(filePath.length() - 1) != '/') ? Paths.get(filePath).getFileName().toString() : "";
+	private static String retrieveEverythingAfterDir(String filePath, String dir) {
+		return filePath.substring(filePath.indexOf(dir) + dir.length());
 	}
 }
