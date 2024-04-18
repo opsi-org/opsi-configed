@@ -72,7 +72,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 	private JLabel jLabelPassword = new JLabel();
 	private JLabel jLabelUserData = new JLabel();
 	private JLabel jLabelVerbosity = new JLabel();
-	private JLabel jLabelFullCommand = new JLabel();
 	private JLabel jLabelIgnorePing = new JLabel();
 	private JLabel jLabelFinalize = new JLabel();
 	private JLabel jLabelOperatingSystem = new JLabel();
@@ -120,6 +119,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 				.isGlobalReadOnly());
 	}
 
+	@SuppressWarnings("unchecked")
 	private void getDefaultAuthData() {
 		Map<String, Object> configs = persistenceController.getConfigDataService()
 				.getHostConfig(persistenceController.getHostInfoCollections().getConfigServer());
@@ -182,10 +182,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
 		jLabelIgnorePing
 				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.ignorePing"));
-		jCheckBoxIgnorePing.addItemListener((ItemEvent itemEvent) -> {
-			commandDeployClientAgent.togglePingIsRequired();
-			updateCommand();
-		});
+		jCheckBoxIgnorePing.addItemListener((ItemEvent itemEvent) -> commandDeployClientAgent.togglePingIsRequired());
 
 		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
 		jCheckBoxVerbosity = new JComboBox<>();
@@ -312,9 +309,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonExecute);
 
-		jLabelFullCommand.setText("opsi-deploy-client-agent ");
-		updateCommand();
-
 		doCopySelectedClients();
 
 		changeClient();
@@ -326,17 +320,12 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		initLayout();
 	}
 
-	private void updateCommand() {
-		jLabelFullCommand.setText(commandDeployClientAgent.getCommand());
-	}
-
 	private void changeVerbosity() {
 		commandDeployClientAgent.setVerbosity((int) jCheckBoxVerbosity.getSelectedItem());
 	}
 
 	private void changeClient() {
 		commandDeployClientAgent.setClient(jTextFieldClient.getText().trim());
-		updateCommand();
 	}
 
 	private void changeUser() {
@@ -345,13 +334,10 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		} else {
 			commandDeployClientAgent.setUser("");
 		}
-
-		updateCommand();
 	}
 
 	private void changePassw() {
 		commandDeployClientAgent.setPassw(new String(jTextFieldPassword.getPassword()).trim());
-		updateCommand();
 	}
 
 	private void changeEchoChar() {
