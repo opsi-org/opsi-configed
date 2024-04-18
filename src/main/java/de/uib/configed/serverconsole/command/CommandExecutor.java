@@ -185,52 +185,68 @@ public class CommandExecutor implements MessagebusListener {
 		String type = (String) message.get("type");
 
 		if (WebSocketEvent.PROCESS_START_EVENT.toString().equals(type)) {
-			commandNumber++;
-			if (withGUI) {
-				String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(commandToExecute.getSecuredCommand())
-						.replaceAll(" ");
-				terminalFrame.writeToWidget("(" + commandNumber + ") " + commandRepresentation + "\r\n");
-			}
-			commandProcess.onStart(message);
+			onProcessStartEvent(message);
 		}
 
 		if (WebSocketEvent.PROCESS_STOP_EVENT.toString().equals(type)) {
-			if (withGUI) {
-				terminalFrame.writeToWidget("\r\n");
-			}
-			commandProcess.onStop(message);
-			if (commandProcess.hasFailed()) {
-				failedNumberOfCommands++;
-			} else {
-				succededNumberOfCommands++;
-			}
-			if (withGUI) {
-				outputEndResult();
-			}
+			onProcessStopEvent(message);
 		}
 
 		if (WebSocketEvent.PROCESS_DATA_READ.toString().equals(type)) {
-			String data = commandProcess.onDataRead(message);
-			if (withGUI) {
-				terminalFrame.writeToWidget(data.replace("\n", "\r\n"));
-			}
+			onProcessDataRead(message);
 		}
 
 		if (WebSocketEvent.PROCESS_ERROR_EVENT.toString().equals(type)) {
+			onProcessErrorEvent(message);
+		}
+	}
+
+	private void onProcessStartEvent(Map<String, Object> message) {
+		commandNumber++;
+		if (withGUI) {
+			String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(commandToExecute.getSecuredCommand())
+					.replaceAll(" ");
+			terminalFrame.writeToWidget("(" + commandNumber + ") " + commandRepresentation + "\r\n");
+		}
+		commandProcess.onStart(message);
+	}
+
+	private void onProcessStopEvent(Map<String, Object> message) {
+		if (withGUI) {
+			terminalFrame.writeToWidget("\r\n");
+		}
+		commandProcess.onStop(message);
+		if (commandProcess.hasFailed()) {
 			failedNumberOfCommands++;
-			String error = commandProcess.onError(message);
-			if (withGUI) {
-				commandNumber++;
-				String red = "\u001B[31m";
-				String reset = "\u001B[0m";
-				String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(commandToExecute.getSecuredCommand())
-						.replaceAll(" ");
-				String errorMessage = String.format(Configed.getResourceValue("CommandExecutor.processErrorMessage"),
-						commandRepresentation);
-				terminalFrame.writeToWidget(red + "(" + commandNumber + ") " + errorMessage + " " + error + reset);
-				terminalFrame.writeToWidget("\r\n");
-				outputEndResult();
-			}
+		} else {
+			succededNumberOfCommands++;
+		}
+		if (withGUI) {
+			outputEndResult();
+		}
+	}
+
+	private void onProcessDataRead(Map<String, Object> message) {
+		String data = commandProcess.onDataRead(message);
+		if (withGUI) {
+			terminalFrame.writeToWidget(data.replace("\n", "\r\n"));
+		}
+	}
+
+	private void onProcessErrorEvent(Map<String, Object> message) {
+		failedNumberOfCommands++;
+		String error = commandProcess.onError(message);
+		if (withGUI) {
+			commandNumber++;
+			String red = "\u001B[31m";
+			String reset = "\u001B[0m";
+			String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(commandToExecute.getSecuredCommand())
+					.replaceAll(" ");
+			String errorMessage = String.format(Configed.getResourceValue("CommandExecutor.processErrorMessage"),
+					commandRepresentation);
+			terminalFrame.writeToWidget(red + "(" + commandNumber + ") " + errorMessage + " " + error + reset);
+			terminalFrame.writeToWidget("\r\n");
+			outputEndResult();
 		}
 	}
 
