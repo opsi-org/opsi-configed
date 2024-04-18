@@ -289,7 +289,11 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private void changeKeepFiles() {
-		commandPMUninstall.setKeepFiles(checkBoxKeepFiles.isSelected());
+		if (checkBoxKeepFiles.isSelected()) {
+			commandPMUninstall.enableKeepingFiles();
+		} else {
+			commandPMUninstall.disableKeepingFiels();
+		}
 	}
 
 	private void changeDepot() {

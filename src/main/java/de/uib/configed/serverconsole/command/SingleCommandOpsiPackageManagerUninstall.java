@@ -79,12 +79,12 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 		return command;
 	}
 
-	public void setKeepFiles(boolean kF) {
-		if (kF) {
-			keepFiles = "  --keep-files";
-		} else {
-			keepFiles = "";
-		}
+	public void enableKeepingFiles() {
+		keepFiles = " --keep-files";
+	}
+
+	public void disableKeepingFiels() {
+		keepFiles = "";
 	}
 
 	public void setOpsiproduct(String prod) {

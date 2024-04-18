@@ -116,31 +116,31 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 		return !opsiproduct.isEmpty();
 	}
 
-	public void setProperty(boolean keepDepotDefaults) {
-		if (keepDepotDefaults) {
-			property = " -p keep ";
-		} else {
-			property = " -p package ";
-		}
+	public void keepDepotDefaults() {
+		property = " -p keep ";
+	}
+
+	public void usePackageDefaults() {
+		property = " -p package ";
 	}
 
 	public String getProperty() {
 		return property;
 	}
 
-	public void setUpdateInstalled(boolean u) {
-		if (u) {
-			updateInstalled = " --update ";
-		} else {
-			updateInstalled = "";
-		}
+	public void enableUpdateInstalled() {
+		updateInstalled = " --update ";
 	}
 
-	public void setSetupInstalled(boolean s) {
-		if (s) {
-			setupInstalled = " --setup ";
-		} else {
-			setupInstalled = "";
-		}
+	public void disableUpdateInstalled() {
+		updateInstalled = "";
+	}
+
+	public void enableSetupInstalled() {
+		setupInstalled = " --setup ";
+	}
+
+	public void disableSetupInstalled() {
+		setupInstalled = "";
 	}
 }

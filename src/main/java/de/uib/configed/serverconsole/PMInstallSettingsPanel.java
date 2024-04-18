@@ -246,16 +246,44 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 	public SingleCommandOpsiPackageManagerInstall updateCommand(SingleCommandOpsiPackageManagerInstall basicCommand) {
 		basicCommand.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
-		basicCommand.setProperty(jCheckBoxProperties.isSelected());
-		basicCommand.setUpdateInstalled(jCheckBoxUpdateInstalled.isSelected());
-		basicCommand.setSetupInstalled(jCheckBoxSetupInstalled.isSelected());
-		if (jTextFieldSelecteddepots.getText().contains(
+		applyPropertyDefaultsBasedOnCheckBox(basicCommand);
+		toggleUpdateBasedOnCheckBox(basicCommand);
+		toggleSetupBasedOnCheckBox(basicCommand);
+		setDepotBasedOnSelectedDepot(basicCommand, jTextFieldSelecteddepots.getText());
+		return basicCommand;
+	}
+
+	private void applyPropertyDefaultsBasedOnCheckBox(SingleCommandOpsiPackageManagerInstall basicCommand) {
+		if (jCheckBoxProperties.isSelected()) {
+			basicCommand.keepDepotDefaults();
+		} else {
+			basicCommand.usePackageDefaults();
+		}
+	}
+
+	private void toggleUpdateBasedOnCheckBox(SingleCommandOpsiPackageManagerInstall basicCommand) {
+		if (jCheckBoxUpdateInstalled.isSelected()) {
+			basicCommand.enableUpdateInstalled();
+		} else {
+			basicCommand.disableUpdateInstalled();
+		}
+	}
+
+	private void toggleSetupBasedOnCheckBox(SingleCommandOpsiPackageManagerInstall basicCommand) {
+		if (jCheckBoxSetupInstalled.isSelected()) {
+			basicCommand.enableSetupInstalled();
+		} else {
+			basicCommand.disableSetupInstalled();
+		}
+	}
+
+	private static void setDepotBasedOnSelectedDepot(SingleCommandOpsiPackageManagerInstall basicCommand,
+			String selectedDepot) {
+		if (selectedDepot.contains(
 				Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS"))) {
 			basicCommand.setDepotForPInstall("");
 		} else {
-			basicCommand.setDepotForPInstall(jTextFieldSelecteddepots.getText());
+			basicCommand.setDepotForPInstall(selectedDepot);
 		}
-
-		return basicCommand;
 	}
 }
