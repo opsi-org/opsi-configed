@@ -17,6 +17,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.terminal.AbstractBackgroundFileUploader;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.terminal.WebDAVBackgroundFileUploader;
 import de.uib.messagebus.MessagebusListener;
@@ -41,6 +42,11 @@ public class CommandExecutor implements MessagebusListener {
 
 	private SingleCommand singleCommand;
 	private MultiCommand multiCommand;
+
+	private int numberOfCommands = 1;
+	private int executeNumberOfCommands;
+	private int failedNumberOfCommands;
+	private int succededNumberOfCommands;
 
 	public CommandExecutor(ConfigedMain configedMain, SingleCommand singleCommand) {
 		initValues(configedMain);
@@ -87,6 +93,7 @@ public class CommandExecutor implements MessagebusListener {
 		} else {
 			startBackgroundThread(() -> {
 				List<SingleCommand> commands = multiCommand.getCommands();
+				numberOfCommands = commands.size();
 				for (SingleCommand command : commands) {
 					execute(command);
 				}
@@ -98,17 +105,13 @@ public class CommandExecutor implements MessagebusListener {
 	}
 
 	private void execute(SingleCommand command) {
+		executeNumberOfCommands++;
 		if (command instanceof SingleCommandFileUpload) {
 			SingleCommandFileUpload fileUploadCommand = (SingleCommandFileUpload) command;
 			WebDAVBackgroundFileUploader fileUploader = new WebDAVBackgroundFileUploader(terminalFrame,
 					new File(fileUploadCommand.getFullSourcePath()), fileUploadCommand.getTargetPath(), withGUI);
 			fileUploader.setOnDone(() -> {
-				String message = fileUploader.isFileUploaded()
-						? String.format(Configed.getResourceValue("CommandExecutor.fileUploadSuccessfull"),
-								fileUploadCommand.getSourceFileName(), fileUploadCommand.getTargetPath())
-						: Configed.getResourceValue("CommandExecutor.fileUploadUnsuccessfull");
-				terminalFrame.writeToWidget((message + "\r\n").getBytes());
-				terminalFrame.writeToWidget("\r\n".getBytes());
+				indicateFileUploadIsFinished(fileUploader, fileUploadCommand);
 				locker.unlock();
 			});
 			commandNumber++;
@@ -120,6 +123,21 @@ public class CommandExecutor implements MessagebusListener {
 			CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 			startCommandProcess(parameterParser.parseParameter(command, this));
 		}
+	}
+
+	private void indicateFileUploadIsFinished(AbstractBackgroundFileUploader fileUploader,
+			SingleCommandFileUpload fileUploadCommand) {
+		String message = fileUploader.isFileUploaded()
+				? String.format(Configed.getResourceValue("CommandExecutor.fileUploadSuccessfull"),
+						fileUploadCommand.getSourceFileName(), fileUploadCommand.getTargetPath())
+				: Configed.getResourceValue("CommandExecutor.fileUploadUnsuccessfull");
+		if (fileUploader.isFileUploaded()) {
+			succededNumberOfCommands++;
+		} else {
+			failedNumberOfCommands++;
+		}
+		terminalFrame.writeToWidget((message + "\r\n").getBytes());
+		terminalFrame.writeToWidget("\r\n".getBytes());
 	}
 
 	private void startCommandProcess(SingleCommand command) {
@@ -181,6 +199,14 @@ public class CommandExecutor implements MessagebusListener {
 				terminalFrame.writeToWidget("\r\n".getBytes());
 			}
 			commandProcess.onStop(message);
+			if (commandProcess.hasFailed()) {
+				failedNumberOfCommands++;
+			} else {
+				succededNumberOfCommands++;
+			}
+			if (withGUI) {
+				outputEndResult();
+			}
 		}
 
 		if (WebSocketEvent.PROCESS_DATA_READ.toString().equals(type)) {
@@ -191,6 +217,7 @@ public class CommandExecutor implements MessagebusListener {
 		}
 
 		if (WebSocketEvent.PROCESS_ERROR_EVENT.toString().equals(type)) {
+			failedNumberOfCommands++;
 			String error = commandProcess.onError(message);
 			if (withGUI) {
 				commandNumber++;
@@ -203,7 +230,20 @@ public class CommandExecutor implements MessagebusListener {
 				terminalFrame.writeToWidget(
 						(red + "(" + commandNumber + ") " + errorMessage + " " + error + reset).getBytes());
 				terminalFrame.writeToWidget("\r\n".getBytes());
+				outputEndResult();
 			}
+		}
+	}
+
+	private void outputEndResult() {
+		if (numberOfCommands == executeNumberOfCommands) {
+			terminalFrame.writeToWidget("----------------------------------------\r\n".getBytes());
+			terminalFrame.writeToWidget(
+					("Commands executed with failures: " + failedNumberOfCommands + "/" + numberOfCommands + "\r\n")
+							.getBytes());
+			terminalFrame.writeToWidget(
+					("Commands executed successfully: " + succededNumberOfCommands + "/" + numberOfCommands + "\r\n")
+							.getBytes());
 		}
 	}
 }

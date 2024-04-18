@@ -26,6 +26,8 @@ public class CommandProcess {
 	private ThreadLocker locker;
 	private ConfigedMain configedMain;
 	private String command;
+	private int exitCode;
+	private boolean errorEncounteredOnStart;
 
 	public CommandProcess(ConfigedMain configedMain, ThreadLocker locker, String command) {
 		this.configedMain = configedMain;
@@ -36,6 +38,12 @@ public class CommandProcess {
 
 	public String getResult() {
 		return result.toString();
+	}
+
+	public boolean hasFailed() {
+		boolean failed = exitCode > 1 || errorEncounteredOnStart;
+		Logging.info(this, "Has command failed? " + failed);
+		return failed;
 	}
 
 	public void sendProcessStartRequest() {
@@ -66,6 +74,8 @@ public class CommandProcess {
 
 	public void onStop(Map<String, Object> message) {
 		String stoppedProcessId = (String) message.get("process_id");
+		exitCode = (int) message.get("exit_code");
+		Logging.info(this, "Command has exited with exit code " + exitCode);
 		if (stoppedProcessId != null && stoppedProcessId.equals(id)) {
 			locker.unlock();
 		}
@@ -87,6 +97,7 @@ public class CommandProcess {
 	}
 
 	public String onError(Map<String, Object> message) {
+		errorEncounteredOnStart = true;
 		String stoppedProcessId = (String) message.get("process_id");
 		if (stoppedProcessId != null && stoppedProcessId.equals(id)) {
 			locker.unlock();
@@ -110,10 +121,12 @@ public class CommandProcess {
 
 		@Override
 		public void run() {
+			Logging.info(this, "Process stop thread initiated with timeout " + processTimeout);
 			Instant now = Instant.now();
 			Duration duration = Duration.between(processStartTime, now);
 			while (true) {
 				if (duration.getSeconds() >= processTimeout) {
+					Logging.info(this, "Timeout reached - stopping process");
 					Map<String, Object> data = new HashMap<>();
 					data.put("type", WebSocketEvent.PROCESS_STOP_REQUEST.toString());
 					data.put("id", UUID.randomUUID().toString());
