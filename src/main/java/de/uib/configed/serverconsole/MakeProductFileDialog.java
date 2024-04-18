@@ -45,14 +45,14 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	// ausgelagert werden sollen (noch nicht funktioniert)
 	private JLabel jLabelProductVersionControlFile;
 	private JLabel jLabelPackageVersionControlFile;
-	private JTextField jTextFieldPckageVersion;
+	private JTextField jTextFieldPackageVersion;
 	private JTextField jTextFieldProductVersion;
 	private JComboBox<String> jComboBoxMainDir;
 	private JCheckBox jCheckBoxmd5sum;
 	private JCheckBox jCheckBoxzsync;
 	private JCheckBox jCheckBoxOverwrite;
 	private JCheckBox jCheckBoxSetRights;
-	private JPanel mainpanel;
+	private JPanel mainPanel;
 
 	private JButton jButtonToPackageManager;
 	private JButton jButtonExec;
@@ -86,7 +86,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private void setComponentsEnabled(boolean value) {
 		jButtonExec.setEnabled(value);
 		if (!value) {
-			jTextFieldPckageVersion.setEnabled(value);
+			jTextFieldPackageVersion.setEnabled(value);
 			jTextFieldProductVersion.setEnabled(value);
 		}
 		jComboBoxMainDir.setEnabled(value);
@@ -105,25 +105,25 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 	private void initGUI() {
 		JPanel workbenchpanel = new JPanel();
-		mainpanel = new JPanel();
+		mainPanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
 
 		JPanel mainButtonPanel = new JPanel();
 
 		mainButtonPanel.setLayout(new BorderLayout());
-		mainButtonPanel.add(mainpanel, BorderLayout.NORTH);
+		mainButtonPanel.add(mainPanel, BorderLayout.NORTH);
 		mainButtonPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		getContentPane().add(workbenchpanel, BorderLayout.CENTER);
 		getContentPane().add(mainButtonPanel, BorderLayout.SOUTH);
 
-		GroupLayout mainpanelLayout = new GroupLayout(mainpanel);
+		GroupLayout mainpanelLayout = new GroupLayout(mainPanel);
 		GroupLayout workbenchpanelLayout = new GroupLayout(workbenchpanel);
 		workbenchpanel.setLayout(workbenchpanelLayout);
-		mainpanel.setLayout(mainpanelLayout);
+		mainPanel.setLayout(mainpanelLayout);
 
 		workbenchpanel.setBorder(BorderFactory.createTitledBorder(""));
-		mainpanel.setBorder(BorderFactory.createTitledBorder(""));
+		mainPanel.setBorder(BorderFactory.createTitledBorder(""));
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
 		JLabel jLabelDir = new JLabel(
@@ -173,7 +173,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 		jLabelProductVersionControlFile = new JLabel();
 		jLabelPackageVersionControlFile = new JLabel();
-		jTextFieldPckageVersion = new JTextField();
+		jTextFieldPackageVersion = new JTextField();
 
 		jTextFieldProductVersion = new JTextField();
 
@@ -204,7 +204,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 		jButtonAdvancedSettings.setPreferredSize(jButtonSearchDir.getPreferredSize());
 		jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
-		jTextFieldPckageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
+		jTextFieldPackageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 
 		JButton jButtonSetRights = new JButton(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
@@ -284,7 +284,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(jTextFieldProductVersion, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldPckageVersion, GroupLayout.PREFERRED_SIZE,
+								.addComponent(jTextFieldPackageVersion, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
@@ -325,7 +325,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelPackageVersionControlFile, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldPckageVersion, GroupLayout.Alignment.LEADING,
+						.addComponent(jTextFieldPackageVersion, GroupLayout.Alignment.LEADING,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
 				.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -380,12 +380,12 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private void showAdvancedSettings() {
 		if (isAdvancedOpen) {
 			isAdvancedOpen = false;
-			this.setSize(this.getWidth(), this.getHeight() - mainpanel.getHeight());
-			mainpanel.setVisible(isAdvancedOpen);
+			this.setSize(this.getWidth(), this.getHeight() - mainPanel.getHeight());
+			mainPanel.setVisible(isAdvancedOpen);
 		} else {
 			isAdvancedOpen = true;
-			this.setSize(this.getWidth(), this.getHeight() + mainpanel.getHeight());
-			mainpanel.setVisible(isAdvancedOpen);
+			this.setSize(this.getWidth(), this.getHeight() + mainPanel.getHeight());
+			mainPanel.setVisible(isAdvancedOpen);
 		}
 	}
 
@@ -425,7 +425,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
 
-			jTextFieldPckageVersion.setText(versionArray[0]);
+			jTextFieldPackageVersion.setText(versionArray[0]);
 			jLabelPackageVersionControlFile.setText(versionArray[0]);
 
 			jTextFieldProductVersion.setText(versionArray[1]);
@@ -434,7 +434,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 			jButtonExec.setEnabled(true);
 		} else {
 			enableTfVersions(false);
-			jTextFieldPckageVersion.setText("");
+			jTextFieldPackageVersion.setText("");
 			jLabelPackageVersionControlFile.setText("");
 			jTextFieldProductVersion.setText("");
 			jLabelProductVersionControlFile.setText("");
@@ -444,7 +444,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void enableTfVersions(boolean enable) {
-		jTextFieldPckageVersion.setEnabled(enable);
+		jTextFieldPackageVersion.setEnabled(enable);
 		jTextFieldProductVersion.setEnabled(enable);
 	}
 
@@ -469,7 +469,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		String dir = (String) jComboBoxMainDir.getEditor().getItem();
 
 		String prodVersion = jTextFieldProductVersion.getText();
-		String packVersion = jTextFieldPckageVersion.getText();
+		String packVersion = jTextFieldPackageVersion.getText();
 		prodVersion = checkVersion(prodVersion,
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
 		packVersion = checkVersion(packVersion,
