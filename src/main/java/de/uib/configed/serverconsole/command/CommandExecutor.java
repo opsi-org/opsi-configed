@@ -119,8 +119,7 @@ public class CommandExecutor implements MessagebusListener {
 			terminalFrame.uploadFile(fileUploader);
 			locker.lock();
 		} else {
-			CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
-			startCommandProcess(parameterParser.parseParameter(command, this));
+			startCommandProcess(command);
 		}
 	}
 
@@ -141,7 +140,9 @@ public class CommandExecutor implements MessagebusListener {
 
 	private void startCommandProcess(SingleCommand command) {
 		commandToExecute = command;
-		String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(command.getCommand()).replaceAll(" ");
+		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
+		String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN
+				.matcher(parameterParser.parseParameter(command, this).getCommand()).replaceAll(" ");
 		commandProcess = new CommandProcess(configedMain, locker, commandRepresentation);
 		commandProcess.sendProcessStartRequest();
 	}
