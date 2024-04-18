@@ -118,7 +118,11 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		getContentPane().add(mainButtonPanel, BorderLayout.SOUTH);
 
 		GroupLayout mainpanelLayout = new GroupLayout(mainPanel);
+		mainpanelLayout.setAutoCreateGaps(true);
+		mainpanelLayout.setAutoCreateContainerGaps(true);
 		GroupLayout workbenchpanelLayout = new GroupLayout(workbenchpanel);
+		workbenchpanelLayout.setAutoCreateGaps(true);
+		workbenchpanelLayout.setAutoCreateContainerGaps(true);
 		workbenchpanel.setLayout(workbenchpanelLayout);
 		mainPanel.setLayout(mainpanelLayout);
 

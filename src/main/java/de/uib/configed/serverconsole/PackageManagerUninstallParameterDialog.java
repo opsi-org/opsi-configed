@@ -376,59 +376,56 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private void initLayout() {
 		GroupLayout uninstallPanelLayout = new GroupLayout(uninstallPanel);
+		uninstallPanelLayout.setAutoCreateGaps(true);
+		uninstallPanelLayout.setAutoCreateContainerGaps(true);
 		uninstallPanel.setLayout(uninstallPanelLayout);
-		uninstallPanelLayout.setHorizontalGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(jLabelUninstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE * 2)
-				.addGroup(uninstallPanelLayout
-						.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
-
-								.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
-										.addComponent(jComboBoxOpsiProducts, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												2 * Globals.BUTTON_WIDTH)
-										.addGap(Globals.MIN_GAP_SIZE)
-
-										.addGap(5, 10, 20))
-								.addGroup(uninstallPanelLayout.createSequentialGroup()
-										.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(5, 10, 10).addComponent(jButtonDepotSelection,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(textFieldProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+		uninstallPanelLayout
+				.setHorizontalGroup(
+						uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(jLabelUninstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
-								.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH)
-
-								.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))));
+								.addGap(Globals.GAP_SIZE * 2)
+								.addGroup(uninstallPanelLayout
+										.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
+												.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
+														.addComponent(jComboBoxOpsiProducts, Globals.BUTTON_WIDTH,
+																Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH)
+														.addGap(Globals.MIN_GAP_SIZE).addGap(5, 10, 20))
+												.addGroup(uninstallPanelLayout.createSequentialGroup()
+														.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addGap(5, 10, 10).addComponent(jButtonDepotSelection,
+																GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.PREFERRED_SIZE))
+												.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(jLabelKeepFiles, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(Globals.GAP_SIZE)
+										.addGroup(uninstallPanelLayout
+												.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addComponent(textFieldProduct, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+												.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+												.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+												.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))));
 
 		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(jLabelUninstall)
 				.addGap(Globals.GAP_SIZE)
-
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-
 						.addComponent(textFieldProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-
 				.addGap(3 * Globals.GAP_SIZE)
-
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelOn, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(jButtonDepotSelection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 						.addComponent(textFieldSelectedDepots, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-
 				.addGap(3 * Globals.GAP_SIZE)
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
@@ -439,7 +436,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelKeepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-
 						.addComponent(checkBoxKeepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE));
