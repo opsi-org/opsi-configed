@@ -76,11 +76,10 @@ public class ValueSelectorList extends JPanel {
 	}
 
 	private void initComponents() {
-		labelValue = new JLabel();
 		if (multidepot) {
-			labelValue.setText(Configed.getResourceValue("ValueSelectorList.values"));
+			labelValue = new JLabel(Configed.getResourceValue("ValueSelectorList.values"));
 		} else {
-			labelValue.setText(Configed.getResourceValue("ValueSelectorList.value"));
+			labelValue = new JLabel(Configed.getResourceValue("ValueSelectorList.value"));
 		}
 
 		if (!multidepot) {

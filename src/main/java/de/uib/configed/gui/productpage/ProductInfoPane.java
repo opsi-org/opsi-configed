@@ -63,7 +63,7 @@ public class ProductInfoPane extends JSplitPane {
 		jLabelProductName = new JLabel();
 		jLabelProductID = new JTextField();
 		jLabelProductVersion = new JTextField();
-		jLabelLabelProductVersion = new JLabel();
+		jLabelLabelProductVersion = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductVersion"));
 
 		jTextAreaProductInfo = new TextMarkdownPane();
 
@@ -78,8 +78,6 @@ public class ProductInfoPane extends JSplitPane {
 
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
-
-		jLabelLabelProductVersion.setText(Configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
 
 		// do this so that you can mark and copy content of the label
 		jLabelProductVersion.setBorder(null);
