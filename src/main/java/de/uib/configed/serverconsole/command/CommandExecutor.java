@@ -115,8 +115,7 @@ public class CommandExecutor implements MessagebusListener {
 				locker.unlock();
 			});
 			commandNumber++;
-			terminalFrame.writeToWidget(
-					("(" + commandNumber + ") " + fileUploadCommand.getSecuredCommand() + "\r\n").getBytes());
+			terminalFrame.writeToWidget("(" + commandNumber + ") " + fileUploadCommand.getSecuredCommand() + "\r\n");
 			terminalFrame.uploadFile(fileUploader);
 			locker.lock();
 		} else {
@@ -136,8 +135,8 @@ public class CommandExecutor implements MessagebusListener {
 		} else {
 			failedNumberOfCommands++;
 		}
-		terminalFrame.writeToWidget((message + "\r\n").getBytes());
-		terminalFrame.writeToWidget("\r\n".getBytes());
+		terminalFrame.writeToWidget(message + "\r\n");
+		terminalFrame.writeToWidget("\r\n");
 	}
 
 	private void startCommandProcess(SingleCommand command) {
@@ -189,14 +188,14 @@ public class CommandExecutor implements MessagebusListener {
 			if (withGUI) {
 				String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN.matcher(commandToExecute.getSecuredCommand())
 						.replaceAll(" ");
-				terminalFrame.writeToWidget(("(" + commandNumber + ") " + commandRepresentation + "\r\n").getBytes());
+				terminalFrame.writeToWidget("(" + commandNumber + ") " + commandRepresentation + "\r\n");
 			}
 			commandProcess.onStart(message);
 		}
 
 		if (WebSocketEvent.PROCESS_STOP_EVENT.toString().equals(type)) {
 			if (withGUI) {
-				terminalFrame.writeToWidget("\r\n".getBytes());
+				terminalFrame.writeToWidget("\r\n");
 			}
 			commandProcess.onStop(message);
 			if (commandProcess.hasFailed()) {
@@ -212,7 +211,7 @@ public class CommandExecutor implements MessagebusListener {
 		if (WebSocketEvent.PROCESS_DATA_READ.toString().equals(type)) {
 			String data = commandProcess.onDataRead(message);
 			if (withGUI) {
-				terminalFrame.writeToWidget(data.replace("\n", "\r\n").getBytes());
+				terminalFrame.writeToWidget(data.replace("\n", "\r\n"));
 			}
 		}
 
@@ -227,9 +226,8 @@ public class CommandExecutor implements MessagebusListener {
 						.replaceAll(" ");
 				String errorMessage = String.format(Configed.getResourceValue("CommandExecutor.processErrorMessage"),
 						commandRepresentation);
-				terminalFrame.writeToWidget(
-						(red + "(" + commandNumber + ") " + errorMessage + " " + error + reset).getBytes());
-				terminalFrame.writeToWidget("\r\n".getBytes());
+				terminalFrame.writeToWidget(red + "(" + commandNumber + ") " + errorMessage + " " + error + reset);
+				terminalFrame.writeToWidget("\r\n");
 				outputEndResult();
 			}
 		}
@@ -237,13 +235,11 @@ public class CommandExecutor implements MessagebusListener {
 
 	private void outputEndResult() {
 		if (numberOfCommands == executeNumberOfCommands) {
-			terminalFrame.writeToWidget("----------------------------------------\r\n".getBytes());
+			terminalFrame.writeToWidget("----------------------------------------\r\n");
 			terminalFrame.writeToWidget(
-					("Commands executed with failures: " + failedNumberOfCommands + "/" + numberOfCommands + "\r\n")
-							.getBytes());
+					"Commands executed with failures: " + failedNumberOfCommands + "/" + numberOfCommands + "\r\n");
 			terminalFrame.writeToWidget(
-					("Commands executed successfully: " + succededNumberOfCommands + "/" + numberOfCommands + "\r\n")
-							.getBytes());
+					"Commands executed successfully: " + succededNumberOfCommands + "/" + numberOfCommands + "\r\n");
 		}
 	}
 }

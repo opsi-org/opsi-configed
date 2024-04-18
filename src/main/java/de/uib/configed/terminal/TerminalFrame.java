@@ -345,10 +345,10 @@ public final class TerminalFrame implements MessagebusListener {
 		southPanel.setVisible(show);
 	}
 
-	public void writeToWidget(byte[] message) {
+	public void writeToWidget(String message) {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
-			widget.write(message);
+			widget.write(message.getBytes());
 		}
 	}
 
