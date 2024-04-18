@@ -69,8 +69,6 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 		filename = "";
 
-		autocompletion.doButtonAction();
-		doSetActionGetVersions();
 		showAdvancedSettings();
 		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
