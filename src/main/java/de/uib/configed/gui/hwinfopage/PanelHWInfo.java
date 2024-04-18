@@ -18,7 +18,6 @@ import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -200,8 +199,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		copyOfMe = new PanelHWInfo(false, configedMain);
 		copyOfMe.setHardwareInfo(hwInfo);
 
-		copyOfMe.expandRows(tree.getToggledRows(rootPath));
-		copyOfMe.setSelectedRow(tree.getMinSelectionRow());
+		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
+		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());
 
 		externalView = new GeneralFrame(null, treeRootTitle, false);
 		externalView.addPanel(copyOfMe);
@@ -212,8 +211,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
-	private static ImageIcon createImageIcon(String path) {
-		return Utils.createImageIcon(path, "");
+	private static Icon createImageIcon(String hwClass) {
+		Icon classIcon = Utils.createImageIcon("hwinfo_images/" + hwClass + ".png", "");
+
+		if (classIcon == null) {
+			classIcon = Utils.createImageIcon("hwinfo_images/DEVICE.png", "");
+		}
+
+		return classIcon;
 	}
 
 	private void createRoot(String name) {
@@ -249,18 +254,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		return result;
-	}
-
-	private void expandRows(List<Integer> rows) {
-		tree.expandRows(rows);
-	}
-
-	private void setSelectedRow(int row) {
-		tree.setSelectionInterval(row, row);
-	}
-
-	private List<String[]> getDataForNode(IconNode node) {
-		return getDataForNode(node, false);
 	}
 
 	private boolean hasData(IconNode node, boolean reduceScanToByAuditClasses) {
@@ -397,7 +390,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		if (!node.isLeaf()) {
 			tree.expandPath(selectedPath);
 		} else {
-			tableModel.setData(getDataForNode(node));
+			tableModel.setData(getDataForNode(node, false));
 		}
 	}
 
@@ -480,10 +473,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			}
 
 			IconNode classNode = new IconNode(hwClassUI);
-			Icon classIcon = createImageIcon("hwinfo_images/" + hwClass + ".png");
-			if (classIcon == null) {
-				classIcon = createImageIcon("hwinfo_images/DEVICE.png");
-			}
+			Icon classIcon = createImageIcon(hwClass);
 
 			classNode.setIcon(classIcon);
 			root.add(classNode);
