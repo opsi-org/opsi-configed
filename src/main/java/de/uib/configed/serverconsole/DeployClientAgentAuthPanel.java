@@ -24,7 +24,6 @@ import javax.swing.event.DocumentListener;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -141,7 +140,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 				jTextFieldPassword.setEchoChar('*');
 			}
 			jTextFieldPassword.setText((String) resultConfigList.get(0));
-			Logging.info(this, "key_ssh_shell_active " + SSHCommandFactory.CONFIDENTIAL);
+			Logging.info(this, "key_ssh_shell_active ***confidential***");
 		}
 	}
 
