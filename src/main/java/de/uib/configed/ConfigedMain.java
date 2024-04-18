@@ -3200,13 +3200,16 @@ public class ConfigedMain implements MessagebusListener {
 	private void initialTreeActivation() {
 		Logging.info(this, "initialTreeActivation");
 
-		TreePath pathToSelect;
+		TreePath pathToSelect = null;
 		String oldGroupSelection = Configed.getSavedStates().getProperty("groupname");
 
 		if (oldGroupSelection != null && clientTree.getGroupNode(oldGroupSelection) != null) {
 			pathToSelect = clientTree.getPathToNode(clientTree.getGroupNode(oldGroupSelection));
 			Logging.info(this, "old group reset " + oldGroupSelection);
-		} else {
+		}
+
+		// the old path selection may not exist any more
+		if (pathToSelect == null || pathToSelect.getPathCount() <= 1) {
 			pathToSelect = clientTree.getPathToALL();
 		}
 

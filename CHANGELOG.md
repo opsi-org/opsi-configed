@@ -1,4 +1,9 @@
 # Changelog
+## [4.3.x.x] - 2024-xx-xx
+## Fixed
+- `NullPointerException` when trying to select group that does not exist any more 
+
+
 ## [4.3.2.12] - 2024-04-17
 ## Changed
 - Include software entry's ident to "Missing software entry" dialog's message to make apparent which software entry is missing
