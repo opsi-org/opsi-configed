@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -62,14 +61,8 @@ public class LicensingInfoDialog extends FGeneralDialog {
 			int preferredWidth, int preferredHeight, boolean lazyLayout) {
 		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, lazyLayout);
 
-		PanelGenEditTable centerPanel = new PanelGenEditTable();
-		JPanel bottomPanel = new JPanel();
-
-		bottomPanel = initClientInfo();
-		centerPanel = initMainPanel();
-
-		super.setCenterPaneInScrollpane(centerPanel);
-		super.setAdditionalPane(bottomPanel);
+		super.setCenterPaneInScrollpane(initMainPanel());
+		super.setAdditionalPane(initClientInfo());
 
 		super.setupLayout();
 		super.setVisible(true);
@@ -80,7 +73,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		// we could design an adapted layout and infuse it in guiInit
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null) {
 			centerPanel = new JPanel();

@@ -8,7 +8,6 @@ package de.uib.utils.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -123,17 +122,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		super.setEditable(b);
 		extraField.setVisible(b);
 		buttonAdd.setVisible(b);
-	}
-
-	private Object getValueAt(Point location) {
-		return visibleList.getModel().getElementAt(visibleList.locationToIndex(location));
-	}
-
-	private void setExtraFieldToListValueAt(Point location) {
-		String txt = "" + getValueAt(location);
-
-		extraField.setText(txt);
-		extraFieldChanged(false);
 	}
 
 	private void addSelectedValues(List<O> toSelect) {
@@ -269,7 +257,10 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() > 1) {
-			setExtraFieldToListValueAt(e.getPoint());
+			String txt = "" + visibleList.getModel().getElementAt(visibleList.locationToIndex(e.getPoint()));
+
+			extraField.setText(txt);
+			extraFieldChanged(false);
 		}
 	}
 

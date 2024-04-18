@@ -581,7 +581,7 @@ public class HardwareDataService {
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = cacheManager
 				.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class);
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass.getKey());
+			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClass.getValue();
 
 			// case hostAssignedTableType
 			String configKey = hwAuditDeviceClass.getHostConfigKey();
@@ -591,21 +591,15 @@ public class HardwareDataService {
 
 			Map<String, Boolean> tableConfigUpdates = updateItems.get(configIdent.toUpperCase(Locale.ROOT));
 
+			// we have got updates for this table configuration
 			if (tableConfigUpdates != null) {
 				Logging.info(this,
 						" saveHwColumnConfig tableConfigUpdates  for the host configIdent,  " + tableConfigUpdates);
-			}
 
-			// we have got updates for this table configuration
-			if (tableConfigUpdates != null) {
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHostProperties(), tableConfigUpdates);
 
 				readyObjects.add(configItem);
-
-				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
-
-				// save the data locally, we hope that the upload later will work as well
 
 				// now, we have got them in a view model
 
@@ -631,13 +625,11 @@ public class HardwareDataService {
 
 			tableConfigUpdates = updateItems.get(configIdent.toUpperCase(Locale.ROOT));
 
+			// we have got updates for this table configuration
 			if (tableConfigUpdates != null) {
 				Logging.info(this,
 						" saveHwColumnConfig tableConfigUpdates  for the hw configIdent,  " + tableConfigUpdates);
-			}
 
-			// we have got updates for this table configuration
-			if (tableConfigUpdates != null) {
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHwItemProperties(), tableConfigUpdates);
 

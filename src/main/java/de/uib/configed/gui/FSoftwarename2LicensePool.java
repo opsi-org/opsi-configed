@@ -8,8 +8,8 @@ package de.uib.configed.gui;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -465,10 +465,10 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	private Map<String, Map<String, Object>> produceModelSWxLicensepool(String swName) {
 		Logging.info(this, "produceModelSWxLicensepool for swName: " + swName);
 
-		TreeMap<String, Map<String, Object>> result = new TreeMap<>();
+		Map<String, Map<String, Object>> result = new TreeMap<>();
 
 		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			Map<String, Object> rowMap = new LinkedHashMap<>();
+			Map<String, Object> rowMap = new HashMap<>();
 			rowMap.put(AuditSoftwareXLicensePool.SW_ID, swID);
 			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
 
