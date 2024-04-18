@@ -37,18 +37,14 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
-	protected void setComponentsEnabled(boolean value) {
-		if (jButtonExecute != null) {
-			jButtonExecute.setEnabled(value);
-		}
-	}
-
 	protected void initLabels() {
 		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
 	}
 
 	protected void initButtons(final PackageManagerParameterDialog caller) {
 		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -81,9 +77,6 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonReload);
 		buttonPanel.add(jButtonExecute);
-
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
 	}
 
 	protected void reload() {

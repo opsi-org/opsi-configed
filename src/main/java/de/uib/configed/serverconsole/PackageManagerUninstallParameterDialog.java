@@ -88,32 +88,14 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 		init();
 
-		// requires valid depot selection
 		jButtonExecute.setEnabled(false);
 		textFieldSelectedDepots.setText("");
-
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
 
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setSize(800, 350);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		super.setVisible(true);
-	}
-
-	@Override
-	protected void setComponentsEnabled(boolean value) {
-		super.setComponentsEnabled(value);
-		jComboBoxOpsiProducts.setEnabled(true);
-		jComboBoxOpsiProducts.setEditable(false);
-		jComboBoxVerbosity.setEnabled(value);
-		jComboBoxVerbosity.setEditable(value);
-
-		checkBoxKeepFiles.setEnabled(value);
-
-		jButtonDepotSelection.setEnabled(value);
-		jButtonExecute.setEnabled(false);
 	}
 
 	private String produceDepotParameter() {
@@ -219,6 +201,10 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelUninstall"));
 
 		jComboBoxVerbosity = new JComboBox<>();
+		jComboBoxVerbosity.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
+		jComboBoxVerbosity.setEditable(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++) {
 			jComboBoxVerbosity.addItem(i);
@@ -231,6 +217,8 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
 		checkBoxKeepFiles = new JCheckBox();
 		checkBoxKeepFiles.addItemListener(itemEvent -> changeKeepFiles());
+		checkBoxKeepFiles.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		textFieldProduct = new JTextField();
 
@@ -239,6 +227,8 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		jComboBoxOpsiProducts = new JComboBox<>();
 		jComboBoxOpsiProducts.setRenderer(new DefaultListCellRenderer());
 		jComboBoxOpsiProducts.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
+		jComboBoxOpsiProducts.setEnabled(true);
+		jComboBoxOpsiProducts.setEditable(false);
 
 		jComboBoxOpsiProducts.addItemListener((ItemEvent itemEvent) -> {
 			textFieldSelectedDepots.setText("");
@@ -252,6 +242,8 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 		jButtonDepotSelection = new JButton(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
+		jButtonDepotSelection.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
 			fDepotList.setLocationRelativeTo(this);
