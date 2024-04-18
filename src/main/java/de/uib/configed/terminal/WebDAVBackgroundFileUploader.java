@@ -30,6 +30,7 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 	@Override
 	protected void upload() {
 		try (InputStream inputStream = new BufferedInputStream(new FileInputStream(currentFile))) {
+			uploadedFiles += 1;
 			if (visualizeProgress) {
 				updateTotalFilesToUpload();
 			}
