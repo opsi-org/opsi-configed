@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.2.X] - 2024-XX-XX
+## Added
+- Include JavaFX modules for macOS
+
 ## [4.3.2.12] - 2024-04-17
 ## Changed
 - Include software entry's ident to "Missing software entry" dialog's message to make apparent which software entry is missing
