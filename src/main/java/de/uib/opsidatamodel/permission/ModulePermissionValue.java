@@ -67,33 +67,33 @@ public class ModulePermissionValue {
 	}
 
 	private ExtendedInteger retrieveMaxClients(Object ob) {
+		if (ob == null) {
+			return ExtendedInteger.ZERO;
+		}
+
 		ExtendedInteger result = null;
 
-		if (ob == null) {
-			result = ExtendedInteger.ZERO;
-		} else {
-			Boolean b = checkBoolean(ob);
-			if (b != null) {
-				if (b) {
-					result = ExtendedInteger.INFINITE;
-				} else {
-					result = ExtendedInteger.ZERO;
-				}
-			} else if (ob instanceof Integer) {
-				result = new ExtendedInteger((Integer) ob);
-			} else if (ob instanceof String) {
-				Integer number = null;
-				try {
-					number = Integer.valueOf((String) ob);
-				} catch (NumberFormatException ex) {
-					Logging.debug(this, "not a number: " + ob);
-				}
-				if (number != null) {
-					result = new ExtendedInteger(number);
-				}
+		Boolean b = checkBoolean(ob);
+		if (b != null) {
+			if (Boolean.TRUE.equals(b)) {
+				result = ExtendedInteger.INFINITE;
 			} else {
-				Logging.warning(this, "ob has unexpected type " + ob.getClass() + " in retrieveMaxClients");
+				result = ExtendedInteger.ZERO;
 			}
+		} else if (ob instanceof Integer) {
+			result = new ExtendedInteger((Integer) ob);
+		} else if (ob instanceof String) {
+			Integer number = null;
+			try {
+				number = Integer.valueOf((String) ob);
+			} catch (NumberFormatException ex) {
+				Logging.debug(this, "not a number: " + ob);
+			}
+			if (number != null) {
+				result = new ExtendedInteger(number);
+			}
+		} else {
+			Logging.warning(this, "ob has unexpected type " + ob.getClass() + " in retrieveMaxClients");
 		}
 
 		return result;

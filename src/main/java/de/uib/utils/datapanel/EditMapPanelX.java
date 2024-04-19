@@ -65,7 +65,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private JMenuItem popupItemAddStringListEntry;
 	private JMenuItem popupItemAddBooleanListEntry;
 
-	private Map<String, Object> originalMap;
+	protected Map<String, Object> originalMap;
 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 		@Override

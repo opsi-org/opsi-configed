@@ -6,10 +6,7 @@
 
 package de.uib.configed.gui.hostconfigs;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -27,21 +24,14 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.GroupLayout;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
@@ -49,8 +39,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
-import de.uib.configed.guidata.ListMerger;
-import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
@@ -58,15 +46,12 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.PopupMouseListener;
-import de.uib.utils.Utils;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.ExporterToPDF;
 import de.uib.utils.table.ListCellOptions;
-import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.tree.XTree;
 
 // works on a map of pairs of type String - List
@@ -106,6 +91,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		buildPanel();
 		this.actor = actor;
 
+		setupPopups();
+		setupPopupTexts();
+		setupPopupMouseListeners();
+	}
+
+	private void setupPopups() {
 		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			@Override
 			public void action(int p) {
@@ -212,8 +203,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
-		// text for reload
+	private void setupPopupTexts() {
 		popupForUserpath.setText(PopupMenuTrait.POPUP_RELOAD,
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
@@ -261,16 +253,16 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
+	}
 
+	private void setupPopupMouseListeners() {
 		MouseListener popupListenerForUserpathes = new PopupMouseListener(popupForUserpathes) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 
-					if (selPath != null && isUserPath(selPath)) {
-						super.maybeShowPopup(e);
-					}
+				if (selPath != null && isUserPath(selPath)) {
+					super.maybeShowPopup(e);
 				}
 			}
 		};
@@ -279,12 +271,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		MouseListener popupListenerForUserpath = new PopupMouseListener(popupForUserpath) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					Logging.info(this, " sel path " + selPath);
-					if (selPath != null && isUserRoot(selPath)) {
-						super.maybeShowPopup(e);
-					}
+				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				Logging.info(this, " sel path " + selPath);
+				if (selPath != null && isUserRoot(selPath)) {
+					super.maybeShowPopup(e);
 				}
 			}
 		};
@@ -293,12 +283,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		MouseListener popupListenerForRolepathes = new PopupMouseListener(popupForRolepathes) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					Logging.info(this, " sel path " + selPath);
-					if (selPath != null && isRolePath(selPath, false)) {
-						super.maybeShowPopup(e);
-					}
+				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				Logging.info(this, " sel path " + selPath);
+				if (selPath != null && isRolePath(selPath, false)) {
+					super.maybeShowPopup(e);
 				}
 			}
 		};
@@ -307,12 +295,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		MouseListener popupListenerForRolepath = new PopupMouseListener(popupForRolepath) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					Logging.info(this, " sel path " + selPath);
-					if (selPath != null && isRolePath(selPath, true)) {
-						super.maybeShowPopup(e);
-					}
+				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				Logging.info(this, " sel path " + selPath);
+				if (selPath != null && isRolePath(selPath, true)) {
+					super.maybeShowPopup(e);
 				}
 			}
 		};
@@ -328,47 +314,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	protected void removeSubpanelClass(String key) {
 		Logging.info(this, "remove " + key + " from " + givenClasses);
 		givenClasses.remove(key);
-	}
-
-	private void createPDF() {
-		String client = tree.getSelectionPath().getPathComponent(0).toString().trim();
-
-		Logging.info(this, "create report");
-		Map<String, String> metaData = new HashMap<>();
-		metaData.put("header", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title"));
-		metaData.put("title", "Client: " + client);
-		metaData.put("subject", "report of table");
-		metaData.put("keywords", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title") + " " + client);
-
-		ExporterToPDF pdfExportTable = new ExporterToPDF(createJTableForPDF());
-		pdfExportTable.setClient(client);
-		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4();
-		pdfExportTable.execute(null, false);
-	}
-
-	private JTable createJTableForPDF() {
-		DefaultTableModel tableModel = new DefaultTableModel();
-		JTable jTable = new JTable(tableModel);
-
-		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderName"));
-		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderValue"));
-
-		List<String> keys = mapTableModel.getKeys();
-		Logging.info(this, "createJTableForPDF keys " + keys);
-		for (String key : keys) {
-			String property = "";
-
-			List<?> listelem = ListMerger.getMergedList((List<?>) mapTableModel.getData().get(key));
-			if (!listelem.isEmpty()) {
-				property = listelem.get(0).toString();
-			}
-
-			if (!key.contains("saved_search")) {
-				tableModel.addRow(new Object[] { key, property });
-			}
-		}
-		return jTable;
 	}
 
 	@Override
@@ -516,77 +461,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
-					reloadable) {
-				private void reload() {
-					ConfigedMain.getMainFrame().activateLoadingCursor();
-					TreePath p = tree.getSelectionPath();
-					int row = tree.getRowForPath(p);
-
-					actor.reloadData();
-					Logging.info(this, "reloaded, return to " + p);
-					if (p != null) {
-						tree.setExpandsSelectedPaths(true);
-						tree.setSelectionInterval(row, row);
-						tree.scrollRowToVisible(row);
-					}
-
-					ConfigedMain.getMainFrame().deactivateLoadingCursor();
-				}
-
-				@Override
-				protected JPopupMenu definePopup() {
-					Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
-					return new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
-							PopupMenuTrait.POPUP_PDF }) {
-						@Override
-						public void action(int p) {
-							switch (p) {
-							case PopupMenuTrait.POPUP_RELOAD:
-								reload();
-								break;
-
-							case PopupMenuTrait.POPUP_SAVE:
-								actor.saveData();
-								break;
-							case PopupMenuTrait.POPUP_PDF:
-								createPDF();
-								break;
-
-							default:
-								Logging.warning(this, "no case found for JPopupMenu in definePopup");
-								break;
-							}
-						}
-					};
-				}
-
-				@Override
-				protected void buildPanel() {
-					setLayout(new BorderLayout());
-
-					table = new JTable(mapTableModel) {
-						@Override
-						public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
-							Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-							if (c instanceof JComponent && showToolTip) {
-								addTooltip((JComponent) c, this, names.get(rowIndex), rowIndex);
-								setText((JComponent) c, this, vColIndex, rowIndex);
-							}
-							return c;
-						}
-					};
-
-					table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
-					table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-					table.addMouseWheelListener(
-							mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
-
-					jScrollPane = new JScrollPane(table);
-
-					add(jScrollPane, BorderLayout.CENTER);
-				}
-			};
+			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, keylistExtendible,
+					keylistEditable, reloadable, tree, includeAdditionalTooltipText);
 
 			editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 			editMapPanel.setActor(actor);
@@ -620,82 +496,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
 			entry.getValue().setEditableFunction(key -> isEditable(key, entry));
-		}
-	}
-
-	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
-		jc.setToolTipText("<html>" + createTooltipForPropertyName(propertyName) + "</html>");
-
-		// check equals with default
-
-		Object defaultValue;
-
-		if (defaultsMap == null) {
-			Logging.warning(this, "no default values available, defaultsMap is null");
-		} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
-			Logging.warning(this, "no default Value found");
-
-			jc.setForeground(Globals.OPSI_ERROR);
-
-			jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
-
-			jc.setFont(jc.getFont().deriveFont(Font.BOLD));
-		} else if (!defaultValue.equals(table.getValueAt(rowIndex, 1))
-				|| (originalMap != null && originalMap.containsKey(propertyName))) {
-			jc.setFont(jc.getFont().deriveFont(Font.BOLD));
-		} else {
-			// Do nothing, since it's defaultvalue
-		}
-	}
-
-	private static void setText(JComponent jc, JTable table, int vColIndex, int rowIndex) {
-		if (vColIndex == 1 && Utils.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))) {
-			if (jc instanceof JLabel) {
-				((JLabel) jc).setText(Globals.STARRED_STRING);
-			} else if (jc instanceof JTextComponent) {
-				((JTextComponent) jc).setText(Globals.STARRED_STRING);
-			} else {
-				// Do nothing
-			}
-		}
-	}
-
-	private String createTooltipForPropertyName(String propertyName) {
-		if (propertyName == null) {
-			return "";
-		}
-
-		StringBuilder tooltip = new StringBuilder();
-
-		if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-			if (includeAdditionalTooltipText) {
-				tooltip.append("default (" + getPropertyOrigin(propertyName) + "): ");
-			} else {
-				tooltip.append("default: ");
-			}
-
-			if (Utils.isKeyForSecretValue(propertyName)) {
-				tooltip.append(Globals.STARRED_STRING);
-			} else {
-				tooltip.append(defaultsMap.get(propertyName));
-			}
-		}
-
-		if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-			tooltip.append("<br/><br/>" + descriptionsMap.get(propertyName));
-		}
-
-		return tooltip.toString();
-	}
-
-	private String getPropertyOrigin(String propertyName) {
-		Map<String, ConfigOption> serverConfigs = persistenceController.getConfigDataService().getConfigOptionsPD();
-
-		if (serverConfigs != null && serverConfigs.containsKey(propertyName)
-				&& !serverConfigs.get(propertyName).getDefaultValues().equals(defaultsMap.get(propertyName))) {
-			return "depot";
-		} else {
-			return "server";
 		}
 	}
 
