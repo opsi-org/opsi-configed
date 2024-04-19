@@ -155,8 +155,6 @@ public class MakeProductFileDialog extends FGeneralDialog {
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
 		JLabel jLabelRemoveExistingPackage = new JLabel(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
-		JLabel jLabelRemoveExistingPackage2 = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
 
 		jLabelProductVersionControlFile = new JLabel();
 		jLabelPackageVersionControlFile = new JLabel();
@@ -216,12 +214,9 @@ public class MakeProductFileDialog extends FGeneralDialog {
 								.addComponent(jLabelPackageVersionControlFile, Globals.BUTTON_WIDTH,
 										Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
 
-								.addGroup(workbenchPanelLayout.createSequentialGroup()
-										.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(jLabelRemoveExistingPackage2, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(workbenchPanelLayout.createSequentialGroup().addComponent(jCheckBoxOverwrite,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(workbenchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -276,9 +271,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 						.addComponent(jLabelRemoveExistingPackage, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelRemoveExistingPackage2, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								GroupLayout.PREFERRED_SIZE))
 				.addGroup(workbenchPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
 						jButtonAdvancedSettings, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
