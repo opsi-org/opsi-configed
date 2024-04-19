@@ -40,9 +40,11 @@ import utils.Utils;
 
 public class MakeProductFileDialog extends FGeneralDialog {
 	private static final Pattern tripleSemicolonMatcher = Pattern.compile(";;;");
+	private static final String FILE_REPLACEMENT_PATTERN = "*.file.*";
+	private static final String REMOVE_EXISTING_FILE_COMMAND = "[ -f " + FILE_REPLACEMENT_PATTERN + " ] &&  rm "
+			+ FILE_REPLACEMENT_PATTERN + " && echo \"File " + FILE_REPLACEMENT_PATTERN + " removed\" || echo \"File "
+			+ FILE_REPLACEMENT_PATTERN + " does not exist\"";
 
-	// In dieser Klasse gibt es Linux-Befehle (folgend), die zu Konstanten
-	// ausgelagert werden sollen (noch nicht funktioniert)
 	private JLabel jLabelProductVersionControlFile;
 	private JLabel jLabelPackageVersionControlFile;
 	private JTextField jTextFieldPackageVersion;
@@ -392,7 +394,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 			return;
 		}
 		MultiCommandTemplate commands = new MultiCommandTemplate();
-		String dir = (String) jComboBoxMainDir.getEditor().getItem();
+		String dir = Utils.getServerPathFromWebDAVPath((String) jComboBoxMainDir.getEditor().getItem());
 
 		String prodVersion = jTextFieldProductVersion.getText();
 		String packVersion = jTextFieldPackageVersion.getText();
@@ -410,22 +412,20 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 			prodVersion = checkVersion(prodVersion, "", versionArray[1]);
 			packVersion = checkVersion(packVersion, "", versionArray[0]);
+			Logging.devel(this, "dir " + dir);
 			setOpsiPackageFilename(dir + "" + getPackageID(dir) + "_" + prodVersion + "-" + packVersion + ".opsi");
 
-			String command = "[ -f " + filename + " ] &&  rm " + filename + " && echo \"File " + filename
-					+ " removed\" || echo \"File did not exist\"";
+			String command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, filename);
 
 			SingleCommandTemplate removeExistingPackage = new SingleCommandTemplate(command);
 			commands.addCommand(removeExistingPackage);
 
-			command = "[ -f " + filename + ".zsync ] &&  rm " + filename + ".zsync && echo \"File " + filename
-					+ ".zsync removed\" || echo \"File  " + filename + ".zsync did not exist\"";
+			command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, filename + ".zsync");
 
 			removeExistingPackage = new SingleCommandTemplate(command);
 			commands.addCommand(removeExistingPackage);
 
-			command = "[ -f " + filename + ".md5 ] &&  rm " + filename + ".md5 && echo \"File " + filename
-					+ ".md5 removed\" || echo \"File  " + filename + ".md5 did not exist\"";
+			command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, filename + ".md5");
 			removeExistingPackage = new SingleCommandTemplate(command);
 
 			commands.addCommand(removeExistingPackage);

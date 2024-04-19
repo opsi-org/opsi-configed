@@ -36,7 +36,7 @@ public final class CommandFactory {
 	public static final String STRING_COMMAND_GET_DIRECTORIES = "ls --color=never -d *.dir.*/*/";
 	public static final String STRING_COMMAND_GET_OPSI_FILES = "ls --color=never *.dir.*/*.opsi";
 	public static final String STRING_COMMAND_GET_VERSIONS = "grep version: *.dir.* --max-count=2  ";
-	public static final String STRING_COMMAND_CAT_DIRECTORY = "cat *.dir.*OPSI/control | grep \"id: \"";
+	public static final String STRING_COMMAND_CAT_DIRECTORY = "grep id: *.dir.*OPSI/control --max-count=1";
 
 	public static final String OPSI_PATH_VAR_REPOSITORY = "/var/lib/opsi/repository/";
 	public static final String OPSI_PATH_VAR_DEPOT = "/var/lib/opsi/depot/";
