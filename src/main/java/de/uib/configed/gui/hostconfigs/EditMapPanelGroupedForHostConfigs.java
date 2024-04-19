@@ -119,7 +119,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -144,7 +143,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -165,7 +163,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -190,7 +187,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
