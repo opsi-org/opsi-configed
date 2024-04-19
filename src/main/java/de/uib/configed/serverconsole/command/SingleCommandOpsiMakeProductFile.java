@@ -19,7 +19,7 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 	private static final int PRIORITY = 110;
 
 	private String baseName = "opsi-makepackage";
-	private String commandName = "opsi-makepackage";
+	private String command = "opsi-makepackage";
 
 	private FGeneralDialog dialog;
 	private boolean needParameter = true;
@@ -119,19 +119,19 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 			keepVersions = "--keep-versions";
 		}
 
-		commandName = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
+		command = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
-		return commandName;
+		return command;
 	}
 
 	@Override
 	public void setCommand(String c) {
-		commandName = c;
+		command = c;
 	}
 
 	@Override
 	public String getCommandRaw() {
-		return commandName;
+		return command;
 	}
 
 	@Override
