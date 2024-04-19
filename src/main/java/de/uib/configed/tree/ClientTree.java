@@ -263,23 +263,21 @@ public class ClientTree extends AbstractGroupTree {
 
 		createDirectoryNotAssigned();
 
-		linkGroupNodes(permittedGroups);
+		linkGroupNodes(permittedGroups, importedGroups);
 	}
 
-	private void linkGroupNodes(Set<String> permittedGroups) {
+	private void linkGroupNodes(Set<String> permittedGroups, Map<String, Map<String, String>> importedGroups) {
 		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
 			if (topGroupNames.contains(group.getKey())) {
 				continue;
 			}
 
-			String parentId = group.getValue().get("parentGroupId");
-			if (parentId == null || "null".equalsIgnoreCase(parentId)) {
-				parentId = ALL_GROUPS_NAME;
-			}
+			String parentId = findParentIdForGroupName(group.getValue().get("parentGroupId"), permittedGroups,
+					importedGroups);
 
 			if (permittedGroups == null || permittedGroups.contains(group.getKey())
 					|| permittedGroups.contains(parentId)) {
-				DefaultMutableTreeNode parent = getParentNodeForParentId(parentId, permittedGroups);
+				DefaultMutableTreeNode parent = groupNodes.get(parentId);
 				DefaultMutableTreeNode node = groupNodes.get(group.getKey());
 				parent.add(node);
 				model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
@@ -290,12 +288,25 @@ public class ClientTree extends AbstractGroupTree {
 		}
 	}
 
-	private DefaultMutableTreeNode getParentNodeForParentId(String parentId, Set<String> permittedGroups) {
-		if (groupNodes.get(parentId) == null || (permittedGroups != null && !permittedGroups.contains(parentId))) {
-			return groupNodeGroups;
-		} else {
-			return groupNodes.get(parentId);
+	private String findParentIdForGroupName(String parentId, Set<String> permittedGroups,
+			Map<String, Map<String, String>> importedGroups) {
+		if (!isValidGroupName(parentId)) {
+			parentId = ALL_GROUPS_NAME;
 		}
+
+		while (permittedGroups != null && !permittedGroups.contains(parentId) && importedGroups.containsKey(parentId)) {
+			parentId = groups.get(parentId).get("parentGroupId");
+
+			if (!isValidGroupName(parentId)) {
+				parentId = ALL_GROUPS_NAME;
+			}
+		}
+
+		return parentId;
+	}
+
+	private boolean isValidGroupName(String productId) {
+		return productId != null && !"null".equalsIgnoreCase(productId) && groups.containsKey(productId);
 	}
 
 	// Return null means, all clients are allowed

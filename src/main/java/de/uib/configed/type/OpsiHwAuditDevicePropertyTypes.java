@@ -30,25 +30,23 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		String hwdevicePartOfKey = key.substring(OpsiHwAuditDeviceClass.CONFIG_KEY.length() + 1);
 
-		String tableType = null;
-
-		String hwClass = null;
+		String tableType;
 
 		if (hwdevicePartOfKey.endsWith(OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE_LOWER)) {
 			tableType = OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
 		} else if (hwdevicePartOfKey.endsWith(OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE_LOWER)) {
 			tableType = OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
 		} else {
-			Logging.warning(this, "unexpected tableType " + tableType);
+			Logging.warning(this, "unexpected tableType ");
+			return;
 		}
 
 		int i = hwdevicePartOfKey.lastIndexOf("_");
 
+		String hwClass;
 		if (i > 0) {
 			hwClass = hwdevicePartOfKey.substring(0, i);
-		}
-
-		if (tableType == null || hwClass == null) {
+		} else {
 			return;
 		}
 

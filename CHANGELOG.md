@@ -1,7 +1,11 @@
 # Changelog
-## [4.3.2.X] - 2024-XX-XX
+## [4.3.x.x] - 2024-xx-xx
 ## Added
 - Include JavaFX modules for macOS
+
+## Fixed
+- `NullPointerException` when trying to select group that does not exist any more 
+- Show groups in directory group in userroles if parent group is not allowed
 
 ## [4.3.2.12] - 2024-04-17
 ## Changed
@@ -12,10 +16,8 @@
 - On reload in "localboot products" and "netboot products" tabs, installed packages are shown in and deleted packages are removed from the table
 - New style for reload animation
 
-
 ## Added
 - Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
-
 
 ## Fixed
 - `NullPointerException` on product reset
@@ -27,7 +29,6 @@
 - Can't change table column visibility in product table after full reload
 - When group, that has subgroups, is permitted for a user, the subgroups aren't included in a group.
 - On reload in "default properties" tab no changes are made to the table (removed packages are shown and installed packages aren't shown)
-
 
 ## [4.3.2.11] - 2024-03-28
 ## Fixed

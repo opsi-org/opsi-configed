@@ -40,7 +40,7 @@ public class CheckedLabel extends JPanel {
 
 	private List<ActionListener> myListeners;
 
-	private static class GeneralMouseListener extends MouseAdapter {
+	private class GeneralMouseListener extends MouseAdapter {
 		private String source;
 
 		public GeneralMouseListener(String source) {
@@ -50,6 +50,24 @@ public class CheckedLabel extends JPanel {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			Logging.info(this, "CheckLabel mouseClicked on " + source);
+
+			if (!isEnabled()) {
+				return;
+			}
+
+			if (changeStateAutonomously) {
+				CheckedLabel.this.setSelected(e.getSource() == unselectedLabel);
+			}
+
+			super.mouseClicked(e);
+
+			if (e.getSource() == unselectedLabel) {
+				notifyActionListeners(
+						new ActionEvent(this, SET_CHECKED_ON, CMD_SET_CHECKED_ON, System.currentTimeMillis(), 0));
+			} else {
+				notifyActionListeners(
+						new ActionEvent(this, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, System.currentTimeMillis(), 0));
+			}
 		}
 	}
 
@@ -83,58 +101,9 @@ public class CheckedLabel extends JPanel {
 	}
 
 	private void addInternalListeners() {
-		final CheckedLabel me = this;
-		textLabel.addMouseListener(new GeneralMouseListener("textLabel"));
-		selectedLabel.addMouseListener(new GeneralMouseListener("selectedLabel") {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (!isEnabled()) {
-					return;
-				}
-
-				super.mouseClicked(e);
-				if (changeStateAutonomously) {
-					me.setSelected(false);
-				}
-
-				notifyActionListeners(
-						new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, System.currentTimeMillis(), 0));
-			}
-		});
-
-		unselectedLabel.addMouseListener(new GeneralMouseListener("unselectedLabel") {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (!isEnabled()) {
-					return;
-				}
-
-				super.mouseClicked(e);
-				if (changeStateAutonomously) {
-					me.setSelected(true);
-				}
-
-				notifyActionListeners(
-						new ActionEvent(me, SET_CHECKED_ON, CMD_SET_CHECKED_ON, System.currentTimeMillis(), 0));
-			}
-		});
-
-		nullLabel.addMouseListener(new GeneralMouseListener("nullLabel") {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (!isEnabled()) {
-					return;
-				}
-
-				super.mouseClicked(e);
-				if (changeStateAutonomously) {
-					me.setSelected(false);
-				}
-
-				notifyActionListeners(
-						new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, System.currentTimeMillis(), 0));
-			}
-		});
+		selectedLabel.addMouseListener(new GeneralMouseListener("selectedLabel"));
+		unselectedLabel.addMouseListener(new GeneralMouseListener("unselectedLabel"));
+		nullLabel.addMouseListener(new GeneralMouseListener("nullLabel"));
 
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -146,9 +115,9 @@ public class CheckedLabel extends JPanel {
 
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					me.setSelected(selected);
+					CheckedLabel.this.setSelected(selected);
 					notifyActionListeners(
-							new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, System.currentTimeMillis(), 0));
+							new ActionEvent(this, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, System.currentTimeMillis(), 0));
 				}
 			}
 		});

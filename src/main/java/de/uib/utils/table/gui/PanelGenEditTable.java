@@ -1149,7 +1149,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			// try to use pseudokey
 			int viewrow = 0;
 
-			while (!found && viewrow < tableModel.getRowCount()) {
+			while (viewrow < tableModel.getRowCount()) {
 				String[] partialkeys = new String[tableModel.getFinalCols().size()];
 
 				for (int j = 0; j < tableModel.getFinalCols().size(); j++) {
@@ -1160,6 +1160,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 				if (keyValue.equals(Utils.pseudokey(partialkeys))) {
 					found = true;
+					break;
 				} else {
 					viewrow++;
 				}

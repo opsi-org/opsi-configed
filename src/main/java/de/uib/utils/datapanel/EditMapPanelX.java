@@ -20,7 +20,6 @@ import java.util.Map.Entry;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -32,7 +31,6 @@ import javax.swing.ToolTipManager;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -67,7 +65,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private JMenuItem popupItemAddStringListEntry;
 	private JMenuItem popupItemAddBooleanListEntry;
 
-	private Map<String, Object> originalMap;
+	protected Map<String, Object> originalMap;
 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 		@Override
@@ -293,60 +291,63 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
 				Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-				if (c instanceof JComponent && showToolTip) {
-					JComponent jc = (JComponent) c;
+				if (!(c instanceof JLabel)) {
+					Logging.warning(this, "Component is not a JLabel, but " + c.getClass());
 
-					String propertyName = names.get(rowIndex);
+					return c;
+				} else if (!showToolTip) {
+					return c;
+				} else {
+					// Just continue
+				}
 
-					String tooltip = null;
+				JLabel jLabel = (JLabel) c;
 
-					if (propertyName != null && defaultsMap != null && defaultsMap.get(propertyName) != null) {
-						tooltip = "default: ";
+				String propertyName = names.get(rowIndex);
 
-						if (Utils.isKeyForSecretValue(propertyName)) {
-							tooltip = tooltip + Globals.STARRED_STRING;
-						} else {
-							tooltip = tooltip + defaultsMap.get(propertyName);
-						}
-					}
+				String tooltip = null;
 
-					if (propertyName != null && descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-						tooltip = tooltip + "<br/><br/>" + descriptionsMap.get(propertyName);
-					}
+				if (propertyName != null && defaultsMap != null && defaultsMap.get(propertyName) != null) {
+					tooltip = "default: ";
 
-					jc.setToolTipText("<html>" + tooltip + "</html>");
-
-					// check equals with default
-
-					Object defaultValue;
-
-					if (defaultsMap == null) {
-						Logging.warning(this, "no default values available, defaultsMap is null");
-					} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
-						Logging.warning(this, "no default Value found");
-
-						jc.setForeground(Globals.OPSI_ERROR);
-
-						jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
-
-						jc.setFont(jc.getFont().deriveFont(Font.BOLD));
+					if (Utils.isKeyForSecretValue(propertyName)) {
+						tooltip = tooltip + Globals.STARRED_STRING;
 					} else {
-						Object gotValue = table.getValueAt(rowIndex, 1);
-						if (!defaultValue.equals(gotValue)) {
-							jc.setFont(jc.getFont().deriveFont(Font.BOLD));
-						}
-					}
-
-					if (vColIndex == 1 && Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
-						if (jc instanceof JLabel) {
-							((JLabel) jc).setText(Globals.STARRED_STRING);
-						} else if (jc instanceof JTextComponent) {
-							((JTextComponent) jc).setText(Globals.STARRED_STRING);
-						} else {
-							// Do nothing
-						}
+						tooltip = tooltip + defaultsMap.get(propertyName);
 					}
 				}
+
+				if (propertyName != null && descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
+					tooltip = tooltip + "<br/><br/>" + descriptionsMap.get(propertyName);
+				}
+
+				jLabel.setToolTipText("<html>" + tooltip + "</html>");
+
+				// check equals with default
+
+				Object defaultValue;
+
+				if (defaultsMap == null) {
+					Logging.warning(this, "no default values available, defaultsMap is null");
+				} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
+					Logging.warning(this, "no default Value found");
+
+					jLabel.setForeground(Globals.OPSI_ERROR);
+
+					jLabel.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
+
+					jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
+				} else {
+					Object gotValue = table.getValueAt(rowIndex, 1);
+					if (!defaultValue.equals(gotValue)) {
+						jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
+					}
+				}
+
+				if (vColIndex == 1 && Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
+					jLabel.setText(Globals.STARRED_STRING);
+				}
+
 				return c;
 			}
 		};
