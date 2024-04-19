@@ -21,8 +21,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionErrorReporter;
 import de.uib.opsicommand.ConnectionErrorType;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * {@code CertificateDownloader} downloads certificate file from the specified

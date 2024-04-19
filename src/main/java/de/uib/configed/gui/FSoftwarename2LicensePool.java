@@ -8,8 +8,8 @@ package de.uib.configed.gui;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,19 +34,19 @@ import de.uib.configed.type.licenses.LicensepoolEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.DefaultTableModelFilterCondition;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.TableModelFilterCondition;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.MapBasedUpdater;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.DefaultTableModelFilterCondition;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.TableModelFilterCondition;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
+import de.uib.utils.table.updates.MapBasedUpdater;
+import de.uib.utils.table.updates.MapItemsUpdateController;
+import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class FSoftwarename2LicensePool extends FGeneralDialog {
 	public static final String VALUE_NO_LICENSE_POOL = "---";
@@ -465,10 +465,10 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	private Map<String, Map<String, Object>> produceModelSWxLicensepool(String swName) {
 		Logging.info(this, "produceModelSWxLicensepool for swName: " + swName);
 
-		TreeMap<String, Map<String, Object>> result = new TreeMap<>();
+		Map<String, Map<String, Object>> result = new TreeMap<>();
 
 		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			Map<String, Object> rowMap = new LinkedHashMap<>();
+			Map<String, Object> rowMap = new HashMap<>();
 			rowMap.put(AuditSoftwareXLicensePool.SW_ID, swID);
 			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
 

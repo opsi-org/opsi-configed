@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -32,17 +31,17 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PanelLinedComponents;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.LicensingInfoPanelGenEditTable;
-import de.uib.utilities.table.gui.LicensingInfoTableCellRenderer;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapSource;
-import de.uib.utilities.table.provider.TableSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PanelLinedComponents;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.LicensingInfoPanelGenEditTable;
+import de.uib.utils.table.gui.LicensingInfoTableCellRenderer;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapSource;
+import de.uib.utils.table.provider.TableSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
 
 public class LicensingInfoDialog extends FGeneralDialog {
 	private static boolean extendedView;
@@ -62,14 +61,8 @@ public class LicensingInfoDialog extends FGeneralDialog {
 			int preferredWidth, int preferredHeight, boolean lazyLayout) {
 		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, lazyLayout);
 
-		PanelGenEditTable centerPanel = new PanelGenEditTable();
-		JPanel bottomPanel = new JPanel();
-
-		bottomPanel = initClientInfo();
-		centerPanel = initMainPanel();
-
-		super.setCenterPaneInScrollpane(centerPanel);
-		super.setAdditionalPane(bottomPanel);
+		super.setCenterPaneInScrollpane(initMainPanel());
+		super.setAdditionalPane(initClientInfo());
 
 		super.setupLayout();
 		super.setVisible(true);
@@ -80,7 +73,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		// we could design an adapted layout and infuse it in guiInit
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null) {
 			centerPanel = new JPanel();

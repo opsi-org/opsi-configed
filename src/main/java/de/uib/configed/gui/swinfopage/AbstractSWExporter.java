@@ -24,12 +24,12 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
 
 /**
  * Abstract class to manage batch export of SWAudit data, subclasses implement
@@ -170,16 +170,14 @@ public abstract class AbstractSWExporter {
 			updateModel();
 		}
 
-		setWriteToFile(filepathStart + hostId + ".pdf");
+		setWriteToFile(filepathStart + hostId + getExtension());
 	}
 
 	private void initModel(String hostId) {
 		theHost = hostId;
 
-		List<String> columnNames;
+		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
-		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
-		columnNames.remove(0);
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			finalColumns[i] = i;

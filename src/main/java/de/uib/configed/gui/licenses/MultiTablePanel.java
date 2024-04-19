@@ -6,35 +6,29 @@
 
 package de.uib.configed.gui.licenses;
 
+import javax.swing.JPanel;
+
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 
-public class MultiTablePanel extends TabClientAdapter {
+public class MultiTablePanel extends JPanel {
 	protected AbstractControlMultiTablePanel controller;
 
 	public MultiTablePanel(AbstractControlMultiTablePanel controller) {
 		this.controller = controller;
 	}
 
-	@Override
 	public void reset() {
-		super.reset();
 		controller.refreshTables();
 		controller.initializeVisualSettings();
 	}
 
-	@Override
 	public boolean mayLeave() {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			return true;
 		}
 
-		boolean result = super.mayLeave();
-		if (result) {
-			result = controller.mayLeave();
-		}
-		return result;
+		return controller.mayLeave();
 	}
 }

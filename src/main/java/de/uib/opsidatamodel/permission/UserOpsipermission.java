@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class UserOpsipermission extends UserConfigModule {
 	// permit restrictable action

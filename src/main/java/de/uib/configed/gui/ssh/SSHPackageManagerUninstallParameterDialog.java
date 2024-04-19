@@ -34,7 +34,7 @@ import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManagerParameterDialog {
 	private JPanel uninstallPanel = new JPanel();

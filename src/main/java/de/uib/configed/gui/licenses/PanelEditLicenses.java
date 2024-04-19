@@ -21,7 +21,7 @@ import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelEditLicenses extends MultiTablePanel {
 	private PanelGenEditTable panelKeys;

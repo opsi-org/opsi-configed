@@ -30,10 +30,10 @@ import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.swing.list.StandardListCellRenderer;
-import de.uib.utilities.table.gui.TableSearchPane;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.swing.list.StandardListCellRenderer;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
 	private TableSearchPane searchPane;

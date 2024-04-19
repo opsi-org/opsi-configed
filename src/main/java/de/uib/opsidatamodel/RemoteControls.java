@@ -9,7 +9,7 @@ package de.uib.opsidatamodel;
 import java.util.HashMap;
 
 import de.uib.configed.type.RemoteControl;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class RemoteControls extends HashMap<String, RemoteControl> {
 	public void checkIn(String key, Object value) {

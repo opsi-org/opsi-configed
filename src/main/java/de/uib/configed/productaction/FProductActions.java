@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utilities.swing.SecondaryFrame;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.swing.SecondaryFrame;
 
 public class FProductActions extends SecondaryFrame {
 	private ConfigedMain configedMain;

@@ -13,7 +13,7 @@ import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class OpsiDataStringEqualsOperation extends StringEqualsOperation implements ExecutableOperation {
 	private String map;

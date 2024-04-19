@@ -9,8 +9,8 @@ package de.uib.configed.guidata;
 import javax.swing.JTable;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.SearchTargetModelFromTable;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.SearchTargetModelFromTable;
 
 public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
 	public SearchTargetModelFromClientTable(JTable table) {

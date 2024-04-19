@@ -16,7 +16,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.DependenciesModel.DependenciesModelListener;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModelListener {
 	// The label shown on top of the dependencies-panel

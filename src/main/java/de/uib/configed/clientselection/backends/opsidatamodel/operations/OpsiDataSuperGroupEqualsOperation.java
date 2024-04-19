@@ -8,7 +8,7 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOperation {
 	private boolean issuedTreeError;

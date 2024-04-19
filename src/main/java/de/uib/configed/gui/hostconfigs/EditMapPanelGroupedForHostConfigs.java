@@ -57,17 +57,17 @@ import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PopupMenuTrait;
-import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.table.ListCellOptions;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.tree.XTree;
-import utils.PopupMouseListener;
-import utils.Utils;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.utils.datapanel.EditMapPanelX;
+import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.utils.table.ExporterToPDF;
+import de.uib.utils.table.ListCellOptions;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.tree.XTree;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel implements TreeSelectionListener {

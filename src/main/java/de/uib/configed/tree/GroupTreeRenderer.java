@@ -16,8 +16,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 	private AbstractGroupTree abstractGroupTree;

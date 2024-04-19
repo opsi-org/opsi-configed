@@ -53,15 +53,16 @@ import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ExporterToCSV;
-import de.uib.utilities.table.ExporterToPDF;
-import utils.PopupMouseListener;
-import utils.ProductPackageVersionSeparator;
-import utils.Utils;
+import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.utils.datapanel.EditMapPanelX;
+import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ExporterToCSV;
+import de.uib.utils.table.ExporterToPDF;
 
 public class PanelProductSettings extends JSplitPane {
 	public enum ProductSettingsType {
@@ -415,6 +416,7 @@ public class PanelProductSettings extends JSplitPane {
 	protected void reloadAction() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
+		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 		configedMain.requestReloadStatesAndActions();
 		configedMain.resetView(configedMain.getViewIndex());
 		configedMain.setDataChanged(false);
@@ -585,7 +587,7 @@ public class PanelProductSettings extends JSplitPane {
 		infoPane.setProductName(persistenceController.getProductDataService().getProductTitle(productID));
 		infoPane.setProductInfo(persistenceController.getProductDataService().getProductInfo(productID));
 		infoPane.setProductVersion(persistenceController.getProductDataService().getProductVersion(productID)
-				+ ProductPackageVersionSeparator.FOR_DISPLAY
+				+ ProductDataService.FOR_DISPLAY
 				+ persistenceController.getProductDataService().getProductPackageVersion(productID) + "   "
 				+ persistenceController.getProductDataService().getProductLockedInfo(productID));
 

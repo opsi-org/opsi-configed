@@ -22,9 +22,9 @@ import com.jcraft.jsch.JSchException;
 
 import de.uib.configed.Configed;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.ssh.SSHOutputCollector;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.ssh.SSHOutputCollector;
 
 // first parameter class is return type of doInBackground
 // second is element type of the list which is used by process

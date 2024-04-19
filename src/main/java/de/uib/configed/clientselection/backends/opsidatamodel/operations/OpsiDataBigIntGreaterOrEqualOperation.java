@@ -12,7 +12,7 @@ import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.BigIntGreaterOrEqualOperation;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class OpsiDataBigIntGreaterOrEqualOperation extends BigIntGreaterOrEqualOperation
 		implements ExecutableOperation {

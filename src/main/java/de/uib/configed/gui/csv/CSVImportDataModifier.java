@@ -14,10 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -31,27 +29,27 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.HostInfo;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapSource;
-import de.uib.utilities.table.provider.TableSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapSource;
+import de.uib.utils.table.provider.TableSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
+import de.uib.utils.table.updates.MapItemsUpdateController;
+import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class CSVImportDataModifier {
 	private GenTableModel model;
 	private String csvFile;
 	private List<String> columnNames;
 	private List<String> hiddenColumns;
-	private Set<String> tmpHeaderNames;
+	private List<String> tmpHeaderNames;
 
 	public CSVImportDataModifier(String csvFile, List<String> columnNames) {
 		this.csvFile = csvFile;
 		this.columnNames = columnNames;
-		this.tmpHeaderNames = new LinkedHashSet<>(columnNames);
+		this.tmpHeaderNames = new ArrayList<>(columnNames);
 		this.hiddenColumns = new ArrayList<>();
 	}
 

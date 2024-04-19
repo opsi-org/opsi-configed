@@ -15,7 +15,7 @@ import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * {@code SecureSSLSocketFactory} extends {@code SSLSocketFactory} to retrieve

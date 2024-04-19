@@ -21,7 +21,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelLicensesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;

@@ -17,7 +17,6 @@ import java.util.TreeSet;
 import de.uib.configed.tree.AbstractGroupTree;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.Object2GroupEntry;
-import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostGroups;
@@ -25,8 +24,8 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with group data on the server.
@@ -44,11 +43,11 @@ import utils.Utils;
 @SuppressWarnings({ "unchecked" })
 public class GroupDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public GroupDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public GroupDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;

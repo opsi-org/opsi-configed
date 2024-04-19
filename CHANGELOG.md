@@ -1,12 +1,17 @@
 # Changelog
-## [4.3.2.X] - 2024-XX-XXs
+## [4.3.2.12] - 2024-04-17
 ## Changed
+- Include software entry's ident to "Missing software entry" dialog's message to make apparent which software entry is missing
 - Use insecure connection in Messagebus, when certificate verification is disabled
 - Maintain consistent log levels for unspecified lines
 - Save user preferences on table's display fields
+- On reload in "localboot products" and "netboot products" tabs, installed packages are shown in and deleted packages are removed from the table
+- New style for reload animation
+
 
 ## Added
 - Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
+
 
 ## Fixed
 - `NullPointerException` on product reset
@@ -14,9 +19,10 @@
 - Product filter disabled after a reload or switching client selection
 - "Failed actions" search and selection
 - The lower control panel in logviewer keeps disappearing on resize
-- The lower control panel in logviewer keeps disappearing on resize
 - For hardware devices with the same name in different hardware class, the information is shown incorrectly
 - Can't change table column visibility in product table after full reload
+- When group, that has subgroups, is permitted for a user, the subgroups aren't included in a group.
+- On reload in "default properties" tab no changes are made to the table (removed packages are shown and installed packages aren't shown)
 
 
 ## [4.3.2.11] - 2024-03-28

@@ -21,15 +21,15 @@ import de.uib.configed.type.licenses.LicensePoolXOpsiProduct;
 import de.uib.configed.type.licenses.LicenseUsableForEntry;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datastructure.StringValuedRelationElement;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with license data on the server.
@@ -47,13 +47,13 @@ import utils.Utils;
 @SuppressWarnings({ "unchecked" })
 public class LicenseDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private ModuleDataService moduleDataService;
 
 	private List<LicenseUsageEntry> itemsDeletionLicenseUsage;
 
-	public LicenseDataService(AbstractExecutioner exec) {
+	public LicenseDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}

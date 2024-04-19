@@ -11,6 +11,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.ClientHardwareDataReloadHa
 import de.uib.opsidatamodel.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.DepotProductPropertiesDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
@@ -108,7 +109,13 @@ public enum ReloadEvent {
 	/**
 	 * Triggers {@link HostDataReloadHandler}.
 	 */
-	HOST_DATA_RELOAD("host_data_reload");
+	HOST_DATA_RELOAD("host_data_reload"),
+
+	/**
+	 * Trigers {@link DepotProductPropertiesDataReloadHandler}
+	 */
+	DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD("depot_product_properties_data_reload");
+	;
 
 	private String displayName;
 

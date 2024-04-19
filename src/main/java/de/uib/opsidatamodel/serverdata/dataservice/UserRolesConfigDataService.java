@@ -24,7 +24,7 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
@@ -36,8 +36,8 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with user roles configuration data on the
@@ -68,10 +68,10 @@ public class UserRolesConfigDataService {
 	public static final String ITEM_FREE_LICENSES = "free licenses for client";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public UserRolesConfigDataService(AbstractExecutioner exec,
+	public UserRolesConfigDataService(AbstractPOJOExecutioner exec,
 			OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;

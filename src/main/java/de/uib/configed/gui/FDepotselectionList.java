@@ -14,7 +14,7 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class FDepotselectionList extends FGeneralDialog {
 	private DepotsList depotsList;

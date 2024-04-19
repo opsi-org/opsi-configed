@@ -63,9 +63,9 @@ import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.UserPreferences;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
 
 public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
@@ -87,6 +87,7 @@ public class MainFrame extends JFrame {
 
 	private JMenuItem jMenuFrameLicenses;
 	private JMenuItem jMenuFrameShowDialogs;
+	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter;
 
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
@@ -487,7 +488,7 @@ public class MainFrame extends JFrame {
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
 
-		JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
+		jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		jMenuClientselectionToggleClientFilter.setState(false);
 		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
@@ -754,7 +755,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
-		configedMain.toggleFilterClientList(rebuildClientListTableModel);
+		configedMain.toggleFilterClientList(rebuildClientListTableModel, !configedMain.isFilterClientList());
+		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
 		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
 		clientTable.setFilterMark(configedMain.isFilterClientList());

@@ -35,7 +35,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SSHConnectionOutputDialog extends FGeneralDialog {
 	private static final String ANSI_ESCAPE_1 = "\u001B";

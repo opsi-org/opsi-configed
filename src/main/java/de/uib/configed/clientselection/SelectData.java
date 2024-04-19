@@ -6,7 +6,7 @@
 
 package de.uib.configed.clientselection;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * Any kind of data needed for the operations.

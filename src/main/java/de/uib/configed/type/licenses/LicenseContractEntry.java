@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.utilities.datastructure.StringValuedRelationElement;
+import de.uib.utils.datastructure.StringValuedRelationElement;
 
 public class LicenseContractEntry extends StringValuedRelationElement {
 	public static final String ID_KEY = "id";

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -34,9 +34,9 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
  */
 public class UserDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 
-	public UserDataService(AbstractExecutioner exec) {
+	public UserDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}

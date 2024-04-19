@@ -20,22 +20,22 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
+import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelEditLicenses;
 import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditPane;
-import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
-import de.uib.utilities.swing.timeedit.FEditDate;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.AdaptingCellEditor;
-import de.uib.utilities.table.gui.CellEditor4TableText;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.MapBasedUpdater;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditDate;
+import de.uib.utils.swing.FEditPane;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.AdaptingCellEditor;
+import de.uib.utils.table.gui.CellEditor4TableText;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
+import de.uib.utils.table.updates.MapBasedUpdater;
+import de.uib.utils.table.updates.MapItemsUpdateController;
+import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	private PanelEditLicenses thePanel;
@@ -55,7 +55,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	}
 
 	@Override
-	public TabClientAdapter getTabClient() {
+	public MultiTablePanel getTabClient() {
 		return thePanel;
 	}
 

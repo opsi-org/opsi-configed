@@ -53,10 +53,10 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedDocument;
-import de.uib.utilities.swing.SeparatedDocument;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.CheckedDocument;
+import de.uib.utils.swing.SeparatedDocument;
 
 public final class NewClientDialog extends FGeneralDialog implements KeyListener {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;

@@ -29,8 +29,8 @@ import javax.swing.plaf.synth.SynthStyle;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.logpane.LogPane;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class TabbedLogPane extends JTabbedPane {
 	private LogPane[] textPanes;

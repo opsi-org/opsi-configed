@@ -75,7 +75,8 @@ public class ProductTree extends AbstractGroupTree {
 
 		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
 				.getProductGroupsPD().entrySet()) {
-			if ("null".equals(groupEntry.getValue().get("parentGroupId"))) {
+			if ("null".equals(groupEntry.getValue().get("parentGroupId"))
+					|| nodeMap.get(groupEntry.getValue().get("parentGroupId")) == null) {
 				groupNodeGroups.add(nodeMap.get(groupEntry.getKey()));
 			} else {
 				nodeMap.get(groupEntry.getValue().get("parentGroupId")).add(nodeMap.get(groupEntry.getKey()));

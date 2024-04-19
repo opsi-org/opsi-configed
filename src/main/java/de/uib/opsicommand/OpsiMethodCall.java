@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class OpsiMethodCall {
 	public static final boolean BACKGROUND_DEFAULT = true;

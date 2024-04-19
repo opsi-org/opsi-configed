@@ -7,7 +7,7 @@
     <groupId>configed</groupId>
     <artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>4.3.2.11</version>
+    <version>4.3.2.12</version>
 
     <properties>
         <!-- use java 11 for backwards compatibility-->
@@ -243,14 +243,16 @@
             <version>0.9.8</version>
         </dependency>
 
-        <!-- https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-core/ -->
+        <!--
+        https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-core/ -->
         <dependency>
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-core</artifactId>
             <version>3.40</version>
         </dependency>
 
-        <!-- https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-ui/ -->
+        <!--
+        https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-ui/ -->
         <dependency>
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-ui</artifactId>
@@ -285,7 +287,8 @@
             <version>2.0.7</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding-all-platforms -->
+        <!--
+        https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding-all-platforms -->
         <dependency>
             <groupId>net.sf.sevenzipjbinding</groupId>
             <artifactId>sevenzipjbinding-all-platforms</artifactId>

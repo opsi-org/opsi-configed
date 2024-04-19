@@ -29,13 +29,13 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditStringList;
-import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.table.gui.SearchTargetModel;
-import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TableSearchPane;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditStringList;
+import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.table.gui.SearchTargetModel;
+import de.uib.utils.table.gui.SearchTargetModelFromJList;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class SavedSearchesDialog extends FEditStringList {
 	private SelectionManager manager;

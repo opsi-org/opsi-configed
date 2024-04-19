@@ -17,7 +17,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
 
 public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private JLabel jLabelProductProperties;
