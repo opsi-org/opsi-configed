@@ -29,15 +29,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public final class CommandFactory {
-	public static final String STRING_REPLACEMENT_DIRECTORY = "*.dir.*";
-	public static final String STRING_COMMAND_GET_LINUX_COMMANDS = "COMMANDS=`echo -n $PATH "
-			+ "| xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ;"
-			+ " ALIASES=`alias | cut -d '=' -f 1`; echo \"$COMMANDS\"$'\\n'\"$ALIASES\" | sort -u ";
-	public static final String STRING_COMMAND_GET_DIRECTORIES = "ls --color=never -d *.dir.*/*/";
-	public static final String STRING_COMMAND_GET_OPSI_FILES = "ls --color=never *.dir.*/*.opsi";
-	public static final String STRING_COMMAND_GET_VERSIONS = "grep version: *.dir.* --max-count=2  ";
-	public static final String STRING_COMMAND_CAT_DIRECTORY = "grep id: *.dir.*OPSI/control --max-count=1";
-
 	public static final String OPSI_PATH_VAR_REPOSITORY = "/var/lib/opsi/repository/";
 	public static final String OPSI_PATH_VAR_DEPOT = "/var/lib/opsi/depot/";
 	public static final String WEBDAV_OPSI_PATH_VAR_DEPOT = "depot/";

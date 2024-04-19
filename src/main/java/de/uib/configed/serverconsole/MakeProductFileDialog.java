@@ -29,7 +29,6 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.CompletionComboBox;
 import de.uib.configed.gui.ssh.SSHPackageManagerInstallParameterDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
-import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiMakeProductFile;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiSetRights;
@@ -44,6 +43,11 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private static final String REMOVE_EXISTING_FILE_COMMAND = "[ -f " + FILE_REPLACEMENT_PATTERN + " ] &&  rm "
 			+ FILE_REPLACEMENT_PATTERN + " && echo \"File " + FILE_REPLACEMENT_PATTERN + " removed\" || echo \"File "
 			+ FILE_REPLACEMENT_PATTERN + " does not exist\"";
+	private static final String DIRECTORY_REPLACEMENT_PATTERN = "*.dir.*";
+	private static final String GET_VERSIONS_COMMAND = "grep version: " + DIRECTORY_REPLACEMENT_PATTERN
+			+ " --max-count=2  ";
+	private static final String GET_PACKAGE_ID_COMMAND = "grep id: " + DIRECTORY_REPLACEMENT_PATTERN
+			+ "OPSI/control --max-count=1";
 
 	private JLabel jLabelProductVersionControlFile;
 	private JLabel jLabelPackageVersionControlFile;
@@ -322,7 +326,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 				+ "OPSI/control";
 		Logging.info(this, "doActionGetVersions, dir " + dir);
 		SingleCommandTemplate getVersions = new SingleCommandTemplate(
-				CommandFactory.STRING_COMMAND_GET_VERSIONS.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
+				GET_VERSIONS_COMMAND.replace(DIRECTORY_REPLACEMENT_PATTERN, dir));
 		CommandExecutor executor = new CommandExecutor(configedMain, getVersions);
 		executor.setWithGUI(false);
 		Logging.info(this, "doActionGetVersions, command " + getVersions);
@@ -455,7 +459,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 	private String getPackageID(String dir) {
 		SingleCommandTemplate getPackageId = new SingleCommandTemplate(
-				CommandFactory.STRING_COMMAND_CAT_DIRECTORY.replace(CommandFactory.STRING_REPLACEMENT_DIRECTORY, dir));
+				GET_PACKAGE_ID_COMMAND.replace(DIRECTORY_REPLACEMENT_PATTERN, dir));
 		CommandExecutor executor = new CommandExecutor(configedMain, getPackageId);
 		executor.setWithGUI(false);
 		String result = executor.execute();
