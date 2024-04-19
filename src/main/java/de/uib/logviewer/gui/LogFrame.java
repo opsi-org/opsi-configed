@@ -274,7 +274,7 @@ public class LogFrame extends JFrame {
 
 		@Override
 		public void save() {
-			String fn = openFile();
+			String fn = openFile(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 			if (fn != null && !fn.isEmpty()) {
 				saveToFile(fn, logPane.lines);
 				super.setTitle(fn);
@@ -314,13 +314,13 @@ public class LogFrame extends JFrame {
 		LogFrame.fileName = fn;
 	}
 
-	private static String openFile() {
+	private static String openFile(String title) {
 		JFileChooser chooser = new JFileChooser(fileName);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
 				"logfiles: .log, .zip, .gz, .7z, .txt", "log", "zip", "gz", "7z", "txt"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		chooser.setDialogTitle(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+		chooser.setDialogTitle(title);
 
 		int returnVal = chooser.showOpenDialog(Main.getMainFrame());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -331,7 +331,7 @@ public class LogFrame extends JFrame {
 	}
 
 	private void openFileInLogFrame() {
-		openFile();
+		openFile(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 
 		if (fileName != null && !fileName.isEmpty()) {
 			Logging.info(this, "Used memory " + Utils.usedMemory());
