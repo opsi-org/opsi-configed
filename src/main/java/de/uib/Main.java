@@ -39,6 +39,7 @@ import de.uib.utilities.FeatureActivationChecker;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 import de.uib.utilities.savedstates.UserPreferences;
+import javafx.embed.swing.JFXPanel;
 
 public class Main {
 	// --------------------------------------------------------------------------------------------------------
@@ -253,6 +254,12 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		// We Initialize JavaFX toolkit by creating a JFXPanel instance.
+		// This line is necessary to ensure that JavaFX runtime is initialized at start of the application.
+		// Which hopefully resolves the issues encountered in MacOS, such as connection problems or issues
+		// with server selection.
+		new JFXPanel();
+
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
 
 		setGlobalValues();
