@@ -35,9 +35,6 @@ import de.uib.utils.logging.Logging;
 		if DEPOTACCESS_AS_SPECIFIED (default general access!)
 			access only to specified depots
 			(of course, the user could change this in case of server_readwrite)
-
-
-
 	*/
 
 public class UserConfig {

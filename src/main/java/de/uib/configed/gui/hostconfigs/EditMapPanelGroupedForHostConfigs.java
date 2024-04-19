@@ -126,7 +126,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 					break;
 
 				case PopupMenuTrait.POPUP_DELETE:
-
 					deleteUser();
 					break;
 
@@ -170,7 +169,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 					break;
 
 				case PopupMenuTrait.POPUP_DELETE:
-
 					deleteUser();
 					break;
 

@@ -3252,7 +3252,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void createClient(String newClientID, final String[] groups) {
-
 		checkErrorList();
 		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 

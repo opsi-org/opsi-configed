@@ -820,5 +820,4 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	@Override
 	public void keyTyped(KeyEvent e) {
 		/* Not needed */}
-
 }
