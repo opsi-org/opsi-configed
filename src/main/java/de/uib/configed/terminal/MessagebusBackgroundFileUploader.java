@@ -23,7 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUploader {
 	private static final int MAX_CHUNK_SIZE = 1_500_000;

@@ -23,8 +23,8 @@ import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class PackageManagerInstallParameterDialog extends PackageManagerParameterDialog {
 	private JPanel mainPanel = new JPanel();
@@ -70,7 +70,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		installLocalPanel = new PMInstallLocalPanel();
 		installServerPanel = new PMInstallServerPanel();
 		installCurlPanel = new PMInstallCurlPanel();
-		installSettingsPanel = new PMInstallSettingsPanel(this);
+		installSettingsPanel = new PMInstallSettingsPanel(this, configedMain);
 
 		jRadioButtonLocal.setSelected(true);
 

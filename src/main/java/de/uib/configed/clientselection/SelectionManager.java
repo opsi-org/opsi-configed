@@ -9,7 +9,6 @@ package de.uib.configed.clientselection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
 import de.uib.configed.clientselection.elements.SoftwareNameElement;
@@ -23,10 +22,10 @@ import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
-import de.uib.opsidatamodel.SavedSearches;
+import de.uib.configed.gui.ClientSelectionDialog.GroupType;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * The SelectionManager is used by the gui to create the tree of operations.
@@ -42,6 +41,9 @@ public class SelectionManager {
 	private OpsiDataBackend backend;
 	private OpsiDataSerializer serializer;
 
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	public SelectionManager(String backend) {
 		if (backend == null || backend.isEmpty()) {
 			backend = "opsidata";
@@ -56,12 +58,7 @@ public class SelectionManager {
 	 * data.
 	 */
 	public SoftwareNameElement getNewSoftwareNameElement() {
-		return new SoftwareNameElement(backend.getProductIDs());
-	}
-
-	/** Get the localized hardware list from the backend */
-	public Map<String, List<AbstractSelectElement>> getLocalizedHardwareList() {
-		return backend.getLocalizedHardwareList();
+		return new SoftwareNameElement(persistenceController.getProductDataService().getProductIdsPD());
 	}
 
 	public OpsiDataBackend getBackend() {
@@ -69,56 +66,43 @@ public class SelectionManager {
 	}
 
 	/** Save this group operation in the manager for a later build. */
-	public void addGroupOperation(String name, OperationWithStatus groupStatus,
+	public void addGroupOperation(GroupType groupType, OperationWithStatus groupStatus,
 			List<OperationWithStatus> operationsWithStatuses) {
-		Logging.debug(this, "Adding group operation " + name + " with " + operationsWithStatuses.toString());
+		Logging.debug(this, "Adding group operation " + groupType + " with " + operationsWithStatuses.toString());
 
-		List<AbstractSelectOperation> tmpList = new LinkedList<>();
-		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
-		Logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
+		AbstractSelectOperation operation = build(operationsWithStatuses, new int[] { 0 });
+		Logging.debug(this, "addGroupOperation: " + groupType + " " + operation + " " + operation);
 
-		switch (name) {
-		case "Software":
-			groupStatus.setOperation(new SoftwareOperation(tmpList));
+		switch (groupType) {
+		case SOFTWARE_GROUP:
+			groupStatus.setOperation(new SoftwareOperation(operation));
+			hasSoftware = true;
 			break;
 
-		case "Properties":
-			groupStatus.setOperation(new PropertiesOperation(tmpList));
+		case PROPERTIES_GROUP:
+			groupStatus.setOperation(new PropertiesOperation(operation));
 			break;
 
-		case "SoftwareWithProperties":
-			groupStatus.setOperation(new SoftwareWithPropertiesOperation(tmpList));
+		case SOFTWARE_WITH_PROPERTIES_GROUP:
+			groupStatus.setOperation(new SoftwareWithPropertiesOperation(operation));
 			break;
 
-		case "Hardware":
-			groupStatus.setOperation(new HardwareOperation(tmpList));
+		case HARDWARE_GROUP:
+			groupStatus.setOperation(new HardwareOperation(operation));
+			hasHardware = true;
 			break;
 
-		case "SwAudit":
-			groupStatus.setOperation(new SwAuditOperation(tmpList));
+		case SW_AUDIT_GROUP:
+			groupStatus.setOperation(new SwAuditOperation(operation));
+			hasSwAudit = true;
 			break;
 
-		case "Host":
-			groupStatus.setOperation(new HostOperation(tmpList));
+		case HOST_GROUP:
+			groupStatus.setOperation(new HostOperation(operation));
 			break;
-
-		default:
-			throw new IllegalArgumentException(name + " is no valid group operation.");
 		}
 
 		groupWithStatusList.add(groupStatus);
-
-		if ("Software".equals(name)) {
-			hasSoftware = true;
-		}
-
-		if ("Hardware".equals(name)) {
-			hasHardware = true;
-		}
-
-		if ("SwAudit".equals(name)) {
-			hasSwAudit = true;
-		}
 	}
 
 	/**
@@ -159,10 +143,9 @@ public class SelectionManager {
 			Logging.info("\n" + operation.printOperation(""));
 		}
 
-		OpsiServiceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-
-		boolean withMySQL = controller.getModuleDataService().canCallMySQLPD() && controller.getConfigDataService()
-				.getGlobalBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+		boolean withMySQL = persistenceController.getModuleDataService().canCallMySQLPD()
+				&& persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
+						OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
 						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		if (withMySQL) {
@@ -216,10 +199,6 @@ public class SelectionManager {
 
 	public List<String> getSavedSearchesNames() {
 		return serializer.getSaved();
-	}
-
-	public SavedSearches getSavedSearches() {
-		return serializer.getSavedSearches();
 	}
 
 	/**
@@ -377,7 +356,7 @@ public class SelectionManager {
 		List<AbstractSelectOperation> arg = new LinkedList<>();
 		arg.add(operation.getOperation());
 
-		return new NotOperation(arg);
+		return new NotOperation(arg.get(0));
 	}
 
 	/* See if there's a NotOperation and replace the status accordingly. */

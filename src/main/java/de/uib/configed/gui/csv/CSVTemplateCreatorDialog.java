@@ -50,8 +50,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.HeaderOptionsPanel;
 import de.uib.configed.type.HostInfo;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.opsicommand.ServerFacade;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
@@ -303,17 +304,13 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		JCheckBox headerCheckBox = new JCheckBox(header);
 		headerCheckBox.setActionCommand(header);
 
-		if (HostInfo.HOSTNAME_KEY.equals(header)) {
-			headerCheckBox.setSelected(true);
+		if (HostInfo.CLIENT_UEFI_BOOT_KEY.equals(header) && ServerFacade.isOpsi43()) {
+			return;
 		}
-		if ("domain".equals(header)) {
+
+		if (isImportantHeader(header)) {
 			headerCheckBox.setSelected(true);
-		}
-		if (HostInfo.DEPOT_OF_CLIENT_KEY.equals(header)) {
-			headerCheckBox.setSelected(true);
-		}
-		if (HostInfo.CLIENT_MAC_ADRESS_KEY.equals(header)) {
-			headerCheckBox.setSelected(true);
+			headerCheckBox.setEnabled(false);
 		}
 
 		if (HostInfo.HOST_KEY_KEY.equals(header)) {
@@ -324,6 +321,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		model.addElement(headerCheckBox);
 		headerCheckBoxes.add(headerCheckBox);
+	}
+
+	private static boolean isImportantHeader(String header) {
+		return HostInfo.HOSTNAME_KEY.equals(header) || "domain".equals(header)
+				|| HostInfo.DEPOT_OF_CLIENT_KEY.equals(header) || HostInfo.CLIENT_MAC_ADRESS_KEY.equals(header);
 	}
 
 	private static class InputListener implements DocumentListener {

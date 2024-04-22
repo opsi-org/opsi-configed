@@ -42,9 +42,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelEnterLicense;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licenses.LicenseEntry;
-import de.uib.utilities.swing.timeedit.FEditDate;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.swing.FEditDate;
+import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelEnterLicense extends MultiTablePanel {
 	private static final int MIN_HEIGHT = 50;
@@ -290,7 +290,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
 					if (fEditDate == null) {
-						fEditDate = new FEditDate(jTextFieldEndOfLicense.getText(), false);
+						fEditDate = new FEditDate(jTextFieldEndOfLicense.getText());
 					} else {
 						fEditDate.setStartText(jTextFieldEndOfLicense.getText());
 					}
@@ -459,13 +459,13 @@ public class PanelEnterLicense extends MultiTablePanel {
 				.addGroup(layoutTask.createSequentialGroup()
 						.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(18, 18, 18)
+						.addGap(18)
 						.addComponent(jButtonCreateVolume, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(18, 18, 18)
+						.addGap(18)
 						.addComponent(jButtonCreateOEM, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(18, 18, 18)
+						.addGap(18)
 						.addComponent(jButtonCreateConcurrent, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(1226, Short.MAX_VALUE))
@@ -484,7 +484,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		layoutTask.setVerticalGroup(layoutTask.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(jLabelTask).addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(panelLicenseContracts, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelConfigure).addGap(2, 2, 2)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelConfigure).addGap(2)
 				.addGroup(layoutTask.createParallelGroup(Alignment.BASELINE)
 						.addComponent(jButtonCreateStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -496,10 +496,10 @@ public class PanelEnterLicense extends MultiTablePanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(panelLicenseModel, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(2, 2, 2)
+				.addGap(2)
 				.addComponent(panelEnterKey, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(2, 2, 2).addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+				.addGap(2).addComponent(jButtonSend, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE));
 

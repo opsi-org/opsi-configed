@@ -9,7 +9,7 @@ package de.uib.configed.serverconsole.command;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class MultiCommandTemplate implements MultiCommand, Comparable<MultiCommandTemplate> {
 	private String id;

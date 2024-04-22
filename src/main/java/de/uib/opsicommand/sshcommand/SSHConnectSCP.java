@@ -23,8 +23,8 @@ import com.jcraft.jsch.SftpException;
 import de.uib.configed.Configed;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /***
 if more then one command have to be executed (e.g. also a set-rights) use SSHConnectExec. 

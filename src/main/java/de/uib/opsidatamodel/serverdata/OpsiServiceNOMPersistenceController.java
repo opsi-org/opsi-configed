@@ -6,9 +6,7 @@
 
 package de.uib.opsidatamodel.serverdata;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
@@ -19,7 +17,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
@@ -45,6 +43,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.ClientHardwareDataReloadHa
 import de.uib.opsidatamodel.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
+import de.uib.opsidatamodel.serverdata.reload.handler.DepotProductPropertiesDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HardwareConfDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.HostDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.InstalledSoftwareDataReloadHandler;
@@ -57,7 +56,7 @@ import de.uib.opsidatamodel.serverdata.reload.handler.ProductDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.RelationsASWToLPDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.SoftwareLicense2LicensePoolDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.StatisticsDataReloadHandler;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for accessing classes, that provides methods working with
@@ -70,19 +69,12 @@ import de.uib.utilities.logging.Logging;
  * which mediate access to remote objects (and buffer the data) The
  * {@link OpsiServiceNOMPersistenceController} retrieves its data from a server
  * that is compatible with the opsi data server resp. its stub (proxy) It has a
- * {@link AbstractExecutioner} component that transmits requests to the opsi
+ * {@link AbstractPOJOExecutioner} component that transmits requests to the opsi
  * server and receives the responses. There are several classes which implement
- * the {@link AbstractExecutioner} methods in different ways dependent on the
- * used means and protocols.
+ * the {@link AbstractPOJOExecutioner} methods in different ways dependent on
+ * the used means and protocols.
  */
 public class OpsiServiceNOMPersistenceController {
-	public static final List<String> NONE_LIST = new ArrayList<>() {
-		@Override
-		public int size() {
-			return -1;
-		}
-	};
-
 	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = Set.of("type", "id");
 
 	public static final String CONFIG_KEY_SUPPLEMENTARY_QUERY = "configed.query_supplementary";
@@ -172,9 +164,8 @@ public class OpsiServiceNOMPersistenceController {
 
 	private String user;
 
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 
-	private String connectionServer;
 	private HostInfoCollections hostInfoCollections;
 
 	private ConfigDataService configDataService;
@@ -194,16 +185,17 @@ public class OpsiServiceNOMPersistenceController {
 	private RPCMethodExecutor rpcMethodExecutor;
 	private ReloadDispatcher reloadDispatcher;
 
-	OpsiServiceNOMPersistenceController(String server, String user, String password) {
+	private String triggeredEvent;
+
+	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
-		this.connectionServer = server;
 		this.user = user;
 
 		Logging.debug(this.getClass(), "create");
 
 		init();
 
-		exec = new ServerFacade(server, user, password);
+		exec = new ServerFacade(server, user, password, otp);
 		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);
@@ -223,11 +215,6 @@ public class OpsiServiceNOMPersistenceController {
 
 		configDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		configDataService.setHardwareDataService(hardwareDataService);
-
-		userRolesConfigDataService.setConfigDataService(configDataService);
-		userRolesConfigDataService.setGroupDataService(groupDataService);
-		userRolesConfigDataService.setHostInfoCollections(hostInfoCollections);
-		userRolesConfigDataService.setModuleDataService(moduleDataService);
 
 		depotDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		depotDataService.setProductDataService(productDataService);
@@ -331,6 +318,7 @@ public class OpsiServiceNOMPersistenceController {
 		return rpcMethodExecutor;
 	}
 
+	@SuppressWarnings({ "java:S103", "java:S138" })
 	private void registerReloadHandlers() {
 		reloadDispatcher = new ReloadDispatcher();
 
@@ -407,6 +395,11 @@ public class OpsiServiceNOMPersistenceController {
 		statisticsDataReloadHandler.setSoftwareDataService(softwareDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.STATISTICS_DATA_RELOAD.toString(), statisticsDataReloadHandler);
 
+		DepotProductPropertiesDataReloadHandler depotProductPropertiesDataReloadHandler = new DepotProductPropertiesDataReloadHandler();
+		depotProductPropertiesDataReloadHandler.setProductDataService(productDataService);
+		reloadDispatcher.registerHandler(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString(),
+				depotProductPropertiesDataReloadHandler);
+
 		DefaultDataReloadHandler defaultDataReloadHandler = new DefaultDataReloadHandler();
 		defaultDataReloadHandler.setGroupDataService(groupDataService);
 		defaultDataReloadHandler.setHardwareDataService(hardwareDataService);
@@ -424,7 +417,12 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public void reloadData(String event) {
+		triggeredEvent = event;
 		reloadDispatcher.dispatch(event);
+	}
+
+	public String getTriggeredEvent() {
+		return triggeredEvent;
 	}
 
 	public void registerPanelCompleteWinProducts(PanelCompleteWinProducts panelCompleteWinProducts) {
@@ -471,9 +469,9 @@ public class OpsiServiceNOMPersistenceController {
 		configKeyStartersNotForClients.add("configed");
 	}
 
-	public AbstractExecutioner retrieveWorkingExec(String depot) {
+	public AbstractPOJOExecutioner retrieveWorkingExec(String depot) {
 		Logging.debug(this, "retrieveWorkingExec , compare depotname " + depot + " to config server "
-				+ hostInfoCollections.getConfigServer() + " ( named as " + connectionServer + ")");
+				+ hostInfoCollections.getConfigServer());
 
 		if (depot.equals(hostInfoCollections.getConfigServer())) {
 			Logging.debug(this, "retrieveWorkingExec for config server");
@@ -481,7 +479,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		String password = (String) hostInfoCollections.getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
-		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password);
+		AbstractPOJOExecutioner exec1 = new ServerFacade(depot, depot, password, "");
 
 		if (makeConnection(exec1)) {
 			Logging.info(this, "retrieveWorkingExec new for server " + depot);
@@ -490,14 +488,14 @@ public class OpsiServiceNOMPersistenceController {
 
 		Logging.info(this, "no connection to server " + depot);
 
-		return AbstractExecutioner.getNoneExecutioner();
+		return null;
 	}
 
 	public boolean makeConnection() {
 		return makeConnection(exec);
 	}
 
-	private boolean makeConnection(AbstractExecutioner exec1) {
+	private boolean makeConnection(AbstractPOJOExecutioner exec1) {
 		Logging.info(this, "trying to make connection");
 		boolean result = exec1.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new String[] {}));
 
@@ -514,7 +512,7 @@ public class OpsiServiceNOMPersistenceController {
 		return exec.getConnectionState();
 	}
 
-	public AbstractExecutioner getExecutioner() {
+	public AbstractPOJOExecutioner getExecutioner() {
 		return exec;
 	}
 

@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
@@ -39,8 +40,8 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedDocument;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.CheckedDocument;
 
 /**
  * @inheritDoc Graphical user interface for editing sshcommands.
@@ -311,7 +312,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 				jComboBoxMenuText.setSelectedItem(SSHCommandFactory.MENU_NEW);
 				updateLists(true, SSHCommandFactory.MENU_NEW);
 				updateSelectedCommand(SSHCommandFactory.MENU_NEW);
-				factory.reloadServerMenu();
+				SwingUtilities.invokeLater(ConfigedMain.getMainFrame()::setupMenuServer);
 			});
 		}
 
@@ -567,7 +568,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		if (factory.saveSSHCommand(command)) {
 			updateLists(true, menuText);
 			updateSelectedCommand(menuText);
-			factory.reloadServerMenu();
+			SwingUtilities.invokeLater(ConfigedMain.getMainFrame()::setupMenuServer);
 		} else {
 			JOptionPane.showInternalMessageDialog(this,
 					Configed.getResourceValue("SSHConnection.CommandControl.couldnotsave.title"),

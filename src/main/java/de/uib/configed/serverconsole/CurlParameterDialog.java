@@ -34,7 +34,7 @@ import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.serverconsole.command.SingleCommandHelp;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class CurlParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();

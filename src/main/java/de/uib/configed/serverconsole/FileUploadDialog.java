@@ -34,8 +34,8 @@ import de.uib.configed.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class FileUploadDialog extends FGeneralDialog {
 	private static final String WGET_DEFAULT_URL_TEXT = Configed

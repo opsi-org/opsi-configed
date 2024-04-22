@@ -14,7 +14,7 @@ import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
 */
@@ -25,7 +25,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			.getPersistenceController();
 
 	public ProductpropertiesUpdateCollection(List<String> clients, String productname) {
-		super(new ArrayList<>(0));
+		super();
 		if (clients == null) {
 			this.clients = new ArrayList<>();
 		} else {

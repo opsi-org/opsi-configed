@@ -50,11 +50,16 @@ public class LogFileParser {
 		parsedLogLines = new ArrayList<>();
 		typesList = new ArrayList<>();
 
+		int lastKnownLogLevel = 0;
 		for (int i = 0; i < lines.length; i++) {
-
-			int levelForLine = getLoglevelForLine(lines[i]);
-			parsedLogLines.add(new LogLine(i, levelForLine, getTypeIndexForLine(lines[i]),
-					getStyleByLevelNo(levelForLine), lines[i]));
+			int logLevel = getLoglevelForLine(lines[i]);
+			if (logLevel == 0) {
+				logLevel = lastKnownLogLevel;
+			} else {
+				lastKnownLogLevel = logLevel;
+			}
+			parsedLogLines.add(
+					new LogLine(i, logLevel, getTypeIndexForLine(lines[i]), getStyleByLevelNo(logLevel), lines[i]));
 		}
 
 		maxExistingLevel = IntStream.range(0, parsedLogLines.size()).map(i -> parsedLogLines.get(i).getLogLevel()).max()

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListMerger extends ArrayList<Object> {
-	public static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<>());
+	private static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<>());
 	static {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
 	}

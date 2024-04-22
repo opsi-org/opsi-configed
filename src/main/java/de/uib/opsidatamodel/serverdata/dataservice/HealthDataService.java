@@ -12,7 +12,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -35,9 +35,9 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 @SuppressWarnings({ "unchecked" })
 public class HealthDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 
-	public HealthDataService(AbstractExecutioner exec) {
+	public HealthDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}
@@ -48,7 +48,7 @@ public class HealthDataService {
 	}
 
 	public void retrieveHealthDataPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA)) {
 			return;
 		}
 
@@ -62,7 +62,7 @@ public class HealthDataService {
 	}
 
 	public void retrieveDiagnosticDataPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DIAGNOSTIC_DATA, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.DIAGNOSTIC_DATA)) {
 			return;
 		}
 
@@ -71,7 +71,7 @@ public class HealthDataService {
 	}
 
 	public boolean isHealthDataAlreadyLoaded() {
-		return cacheManager.getCachedData(CacheIdentifier.HEALTH_CHECK_DATA, List.class) != null;
+		return cacheManager.isDataCached(CacheIdentifier.HEALTH_CHECK_DATA);
 	}
 
 	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {

@@ -7,7 +7,7 @@
 package de.uib.opsicommand.sshcommand;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class SSHConnectionInfo {
 	private static SSHConnectionInfo instance;

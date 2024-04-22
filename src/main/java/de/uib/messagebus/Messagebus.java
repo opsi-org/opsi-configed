@@ -27,13 +27,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsicommand.CertificateValidator;
-import de.uib.opsicommand.CertificateValidatorFactory;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsicommand.certificate.CertificateValidator;
+import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 @SuppressWarnings("java:S1258")
 public class Messagebus implements MessagebusListener {
@@ -82,7 +82,7 @@ public class Messagebus implements MessagebusListener {
 			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 
-		CertificateValidator certValidator = CertificateValidatorFactory.createSecure();
+		CertificateValidator certValidator = CertificateValidatorFactory.createValidator();
 		messagebusWebSocket.setSocketFactory(certValidator.createSSLSocketFactory());
 		messagebusWebSocket.setReuseAddr(true);
 		messagebusWebSocket.setTcpNoDelay(true);

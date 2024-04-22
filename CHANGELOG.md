@@ -1,6 +1,131 @@
 # Changelog
+## [4.3.x.x] - 2024-xx-xx
+## Fixed
+- `NullPointerException` when trying to select group that does not exist any more 
+- Show groups in directory group in userroles if parent group is not allowed
 
-## [4.3.X.X] - XXXX-XX-XX
+
+## [4.3.2.12] - 2024-04-17
+## Changed
+- Include software entry's ident to "Missing software entry" dialog's message to make apparent which software entry is missing
+- Use insecure connection in Messagebus, when certificate verification is disabled
+- Maintain consistent log levels for unspecified lines
+- Save user preferences on table's display fields
+- On reload in "localboot products" and "netboot products" tabs, installed packages are shown in and deleted packages are removed from the table
+- New style for reload animation
+
+
+## Added
+- Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
+
+
+## Fixed
+- `NullPointerException` on product reset
+- `MySQLdb.integrityError` when moving clients to NOT_ASSIGNED directory/group
+- Product filter disabled after a reload or switching client selection
+- "Failed actions" search and selection
+- The lower control panel in logviewer keeps disappearing on resize
+- For hardware devices with the same name in different hardware class, the information is shown incorrectly
+- Can't change table column visibility in product table after full reload
+- When group, that has subgroups, is permitted for a user, the subgroups aren't included in a group.
+- On reload in "default properties" tab no changes are made to the table (removed packages are shown and installed packages aren't shown)
+
+
+## [4.3.2.11] - 2024-03-28
+## Fixed
+- Correctly init ClientTree when reloading and when user roles have been changed
+- User roles product group access
+
+## [4.3.2.10] - 2024-03-26
+## Fixed
+- Invalid Range error when updating product table (Manually or by messagebus)
+
+## Changed
+- Export whole table into PDF and not only selected rows
+- Add item to change size between product info and product description
+
+## [4.3.2.9] - 2024-03-21
+## Changed
+- Don't show server defaults for WAN, UEFI and Install on Shutdown in new client dialogue
+- Make it possible to edit WAN, UEFI and Install on Shutdown in new client dialogue even when enabled by server default
+
+## Added
+- Connectivity status of depots
+- OTP field to login dialog
+- OTP option to command line
+
+## Fixed
+- SWAudit command line options
+
+## [4.3.2.8] - 2024-03-15
+## Changed
+- Use better icons for Checkboxes and some other cases
+
+## Added
+- Add button to download diagnostic data in Health Check dialogue
+
+## Fixed
+- Updating Host Info Data
+
+## [4.3.2.7] - 2024-03-14
+## Changed
+- Remove config states usage in `TableSearchPane`
+- Remove usage of icons in narrow layout of `TableSearchPane` (use checkboxes instead)
+- Make product/client icon filled when object is selected in table
+
+## Added
+- New option for searching multiple words in `TableSearchPane`
+- Show product description in tooltip in tree
+
+## [4.3.2.6] - 2024-03-06
+## Fixed
+- `Nullpointerexception` on reload
+- `Nullpointerexception` on updating product table, when list is reduced
+
+## [4.3.2.5] - 2024-03-05
+## Fixed
+- Tooltip for changed states in Product id
+
+## Changed
+- Update group icons
+- Tooltip for products in product tree
+
+## [4.3.2.4] - 2024-02-28
+## Changed
+- Update Icons in client tree
+- Only show Clients in allowed group, but not in their subgroups
+
+## Fixed
+- Show every product only once in product tree
+
+## Added
+- Show icons for products and product groups in the product tree
+
+## [4.3.2.3] - 2024-02-27
+## Fixed
+- `NullpointerException` when messagebus update on products
+- Sort product tables on start
+
+## [4.3.2.2] - 2024-02-26
+## Fixed
+- `NullpointerException` on reload
+
+## [4.3.2.1] - 2024-02-26
+## Added
+- Add a product tree to show recursively all product groups and preselect the products for the tables
+- Tabs to switch between the depot selection and the product/client trees
+
+
+## [4.3.1.11] - 2024-02-28
+## Fixed
+- Sorting host groups alphabetically
+
+## [4.3.1.10] - 2024-02-26
+## Fixed
+- Remote control should start only on space when in client table
+
+
+## [4.3.1.9] - 2024-02-21
 ## Fixed
 - If `user.{<username>}.privilege.host.createclient` is disabled "Create new opsi-client" button disappears only when client menu or popup menu is opened
 - All products are included in PDF export, when exporting Localboot or Netboot products
@@ -10,6 +135,8 @@
 - Allow to select only depots, which are specified in `user.{<username>}.privilege.host.depotaccess.depots`
 - Show only groups, which are specified in `user.{<username>}.privilege.host.groupaccess.hostgroups`
 - Show only the total number of clients, that are visible for user, next to "Clients total:" label
+- Support TXT files in logviewer
+- Removed partial loading mechanism for logfiles
 
 ## [4.3.1.8] - 2024-02-08
 ## Fixed

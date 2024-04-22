@@ -28,8 +28,8 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class IconBarPanel extends JPanel {
 	private JButton jButtonServerConfiguration;
@@ -217,7 +217,7 @@ public class IconBarPanel extends JPanel {
 		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
 		jButtonWorkOnProducts.setFocusable(false);
 
-		jButtonWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
+		jButtonWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
 		JButton jButtonDashboard = new JButton(Utils.createImageIcon("images/dash_unselected.png", ""));
 		jButtonDashboard.setSelectedIcon(Utils.createImageIcon("images/dash_selected.png", ""));
@@ -398,7 +398,8 @@ public class IconBarPanel extends JPanel {
 
 		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
 				"images/new_networkconnection.png", "images/new_networkconnection.png",
-				"images/new_networkconnection.png", configedMain.getHostDisplayFields().get("clientConnected"));
+				"images/new_networkconnection.png",
+				persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"));
 		iconButtonReachableInfo.setFocusable(false);
 		iconButtonReachableInfo.addActionListener((ActionEvent e) -> {
 			iconButtonReachableInfo.setEnabled(false);
@@ -407,8 +408,8 @@ public class IconBarPanel extends JPanel {
 
 		iconButtonSessionInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
 				"images/system-users-query.png", "images/system-users-query_over.png",
-				"images/system-users-query_over.png",
-				configedMain.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
+				"images/system-users-query_over.png", persistenceController.getHostDataService().getHostDisplayFields()
+						.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		iconButtonSessionInfo.setFocusable(false);
 		iconButtonSessionInfo.setEnabled(true);
 		iconButtonSessionInfo.addActionListener((ActionEvent e) -> {

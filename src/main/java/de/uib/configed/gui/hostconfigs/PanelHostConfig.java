@@ -23,10 +23,10 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ListCellOptions;
+import de.uib.utils.DataChangedObserver;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ListCellOptions;
 
 public class PanelHostConfig extends JPanel {
 	public static final String PROPERTY_CLASS_USER = UserConfig.KEY_USER_ROOT;

@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.utilities.datastructure.Relation;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datastructure.Relation;
+import de.uib.utils.datastructure.StringValuedRelationElement;
+import de.uib.utils.logging.Logging;
 
 public class AuditSoftwareXLicensePool extends Relation {
 	public static final String SW_ID = "swId";

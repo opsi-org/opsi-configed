@@ -22,7 +22,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.serverconsole.command.SingleCommandTemplate;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class PMInstallCurlPanel extends PMInstallPanel {
 	private JLabel jLabelURL = new JLabel();

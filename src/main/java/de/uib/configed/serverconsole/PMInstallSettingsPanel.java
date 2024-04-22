@@ -19,12 +19,13 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class PMInstallSettingsPanel extends PMInstallPanel {
 	private JLabel jLabelOn = new JLabel();
@@ -46,9 +47,9 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PMInstallSettingsPanel(JDialog dia) {
+	public PMInstallSettingsPanel(JDialog dia, ConfigedMain configedMain) {
 		if (dia != null) {
-			setFDepotList(dia);
+			setFDepotList(dia, configedMain);
 		}
 
 		initComponents();
@@ -92,8 +93,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jCheckBoxSetupInstalled = new JCheckBox();
 	}
 
-	private void setFDepotList(JDialog dia) {
-		fDepotList = new FDepotselectionList(dia) {
+	private void setFDepotList(JDialog dia, ConfigedMain configedMain) {
+		fDepotList = new FDepotselectionList(dia, configedMain) {
 			@Override
 			public void setListData(List<String> v) {
 				if (v == null || v.isEmpty()) {

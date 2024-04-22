@@ -33,8 +33,8 @@ import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class SSHFileUploadDialog extends FGeneralDialog {
 	private static final String WGET_DEFAULT_URL_TEXT = Configed
@@ -103,22 +103,19 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		group.add(jRadioButtonLocal);
 		addListener(jRadioButtonLocal);
 
-		jLabelURL = new JLabel();
+		jLabelURL = new JLabel(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_url"));
 		wgetAuthPanel = new CurlAuthenticationPanel();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 90, Globals.BUTTON_HEIGHT);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
 
-		jLabelURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_url"));
-		jLabelOverwriteExisting = new JLabel();
-		jLabelOverwriteExisting
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_overwriteExisting"));
+		jLabelOverwriteExisting = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_overwriteExisting"));
 
-		jLabelSetRights = new JLabel();
-		jLabelSetRights.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_setRights"));
-		jLabelmodulesFrom = new JLabel();
-		jLabelmodulesFrom
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_modules_from"));
+		jLabelSetRights = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_setRights"));
+		jLabelmodulesFrom = new JLabel(
+				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_modules_from"));
 
 		jTextFieldURL = new JTextField();
 		jTextFieldURL.setText(WGET_DEFAULT_URL_TEXT);
@@ -135,9 +132,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jTextFieldLocalPath.setEditable(false);
 
 		jComboBoxSetRights = new JCheckBox("", true);
-		jComboBoxSetRights.setSelected(true);
-		jCheckBoxOverwriteExisting = new JCheckBox();
-		jCheckBoxOverwriteExisting.setSelected(true);
+		jCheckBoxOverwriteExisting = new JCheckBox("", true);
 
 		jFileChooserLocal = new JFileChooser();
 		jFileChooserLocal.setFileSelectionMode(JFileChooser.FILES_ONLY);

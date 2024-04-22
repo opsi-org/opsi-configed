@@ -9,7 +9,7 @@ package de.uib.configed.terminal;
 import java.io.File;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class FileUploadQueue {
 	private static final LinkedBlockingDeque<File> queue = new LinkedBlockingDeque<>();

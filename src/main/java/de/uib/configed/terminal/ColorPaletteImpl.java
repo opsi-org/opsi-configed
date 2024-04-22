@@ -6,6 +6,8 @@
 
 package de.uib.configed.terminal;
 
+import javax.swing.UIManager;
+
 import com.jediterm.core.Color;
 import com.jediterm.terminal.emulator.ColorPalette;
 
@@ -13,7 +15,7 @@ public class ColorPaletteImpl extends ColorPalette {
 	private static final Color[] DEFAULT_COLORS = new Color[16];
 	static {
 		// Black
-		DEFAULT_COLORS[0] = new Color(0x000000);
+		DEFAULT_COLORS[0] = new Color(UIManager.getColor("Terminal.foreground").getRGB());
 		// Red
 		DEFAULT_COLORS[1] = new Color(0xff0000);
 		// Green
@@ -46,15 +48,20 @@ public class ColorPaletteImpl extends ColorPalette {
 		// Cyan
 		DEFAULT_COLORS[14] = new Color(0x00ffff);
 		// White
-		DEFAULT_COLORS[15] = new Color(0xffffff);
+		DEFAULT_COLORS[15] = new Color(UIManager.getColor("Terminal.background").getRGB());
 	}
-
-	public static final ColorPalette DEFAULT_COLOR_PALETTE = new ColorPaletteImpl(DEFAULT_COLORS);
 
 	private Color[] colors;
 
 	public ColorPaletteImpl(Color[] colors) {
 		this.colors = colors;
+	}
+
+	public static ColorPalette getDefaultColorPalette() {
+		Color[] defaultColors = DEFAULT_COLORS.clone();
+		defaultColors[0] = new Color(UIManager.getColor("Terminal.foreground").getRGB());
+		defaultColors[15] = new Color(UIManager.getColor("Terminal.background").getRGB());
+		return new ColorPaletteImpl(defaultColors);
 	}
 
 	@Override
@@ -66,5 +73,4 @@ public class ColorPaletteImpl extends ColorPalette {
 	public Color getBackgroundByColorIndex(int colorIndex) {
 		return colors[colorIndex];
 	}
-
 }

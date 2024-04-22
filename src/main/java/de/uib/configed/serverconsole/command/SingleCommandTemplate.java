@@ -11,7 +11,7 @@ import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * This class represent a simple single command

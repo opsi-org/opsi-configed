@@ -6,7 +6,7 @@
 
 package de.uib.opsidatamodel.serverdata.reload.handler;
 
-import java.util.Map;
+import java.util.Arrays;
 
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -40,7 +40,6 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 	public void handle(String event) {
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
-		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
@@ -69,8 +68,8 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
 		hostInfoCollections.retrieveFNode2TreeparentsPD();
 
-		if (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
+				CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS);
 			softwareDataService.retrieveLicenseStatisticsPD();

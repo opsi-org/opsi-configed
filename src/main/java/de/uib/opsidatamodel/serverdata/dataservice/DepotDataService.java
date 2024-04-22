@@ -13,17 +13,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeSet;
 
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with depot data on the server.
@@ -40,12 +39,12 @@ import de.uib.utilities.logging.Logging;
  */
 public class DepotDataService {
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private ProductDataService productDataService;
 	private HostInfoCollections hostInfoCollections;
 
-	public DepotDataService(AbstractExecutioner exec) {
+	public DepotDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}
@@ -102,25 +101,6 @@ public class DepotDataService {
 		}
 
 		return depotPropertiesForPermittedDepots;
-	}
-
-	public void retrieveProductsPD() {
-		retrieveDepotProductsPD(cacheManager.getCachedData(CacheIdentifier.DEPOT, String.class));
-	}
-
-	private void retrieveDepotProductsPD(String depotId) {
-		Logging.debug(this, "retrieveDepotProducts for " + depotId);
-
-		// we don't have a productsgroupsFullPermission.
-		List<String> netbootProductNames = productDataService.getAllNetbootProductNames(depotId);
-		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
-		if (permittedProducts != null) {
-			netbootProductNames.retainAll(permittedProducts);
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.ALL_NETBOOT_PRODUCT_NAMES, netbootProductNames);
-		cacheManager.setCachedData(CacheIdentifier.ALL_LOCALBOOT_PRODUCT_NAMES,
-				productDataService.getAllLocalbootProductNames(depotId));
 	}
 
 	public List<String> getAllDepotsWithIdenticalProductStock(String depot) {

@@ -11,14 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class UserOpsipermission extends UserConfigModule {
 	// permit restrictable action
-
-	public enum ActionPrivilege {
-		READ_ONLY, READ_WRITE
-	}
 
 	private static final String CONFIG_KEY_STR_HOST = "host";
 	private static final String CONFIG_KEY_STR_PRODUCT = "product";

@@ -13,7 +13,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.CurlParameterDialog;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 	private static final String BASE_NAME = "curl";

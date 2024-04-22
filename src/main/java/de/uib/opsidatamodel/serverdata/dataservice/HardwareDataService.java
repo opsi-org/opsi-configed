@@ -9,6 +9,7 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,16 +24,16 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.TimeCheck;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.TimeCheck;
 
 /**
  * Provides methods for working with hardware data on the server.
@@ -59,12 +60,13 @@ public class HardwareDataService {
 	private static final String HOST_HARDWARE_ADDRESS = "HOST.hardwareAdress";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private HostInfoCollections hostInfoCollections;
 
-	public HardwareDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public HardwareDataService(AbstractPOJOExecutioner exec,
+			OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
@@ -84,7 +86,7 @@ public class HardwareDataService {
 	}
 
 	public void retrieveHardwareOnClientPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST)) {
 			return;
 		}
 		Map<String, String> filterMap = new HashMap<>();
@@ -100,7 +102,7 @@ public class HardwareDataService {
 	}
 
 	public void retrieveHwAuditDeviceClassesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES)) {
 			return;
 		}
 
@@ -201,7 +203,7 @@ public class HardwareDataService {
 
 	// partial version of produceHwAuditDeviceClasses()
 	public List<String> retrieveHwClassesPD(Iterable<Map<String, List<Map<String, Object>>>> hwAuditConf) {
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_HW_CLASS_NAMES)) {
 			return new ArrayList<>();
 		}
 
@@ -231,7 +233,7 @@ public class HardwareDataService {
 	}
 
 	public void retrieveOpsiHWAuditConfPD(String locale) {
-		if (cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class) != null
+		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_CONF)
 				&& cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class).get(locale) != null) {
 			return;
 		}
@@ -456,11 +458,10 @@ public class HardwareDataService {
 
 	public void retrieveClient2HwRowsColumnNamesPD() {
 		configDataService.retrieveConfigOptionsPD();
-		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null " + (CacheManager
-				.getInstance().getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) == null));
-		if (cacheManager.getCachedData(CacheIdentifier.HOST_COLUMN_NAMES, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class) != null) {
+		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null "
+				+ (!cacheManager.isDataCached(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES)));
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.HOST_COLUMN_NAMES,
+				CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, CacheIdentifier.HW_INFO_CLASS_NAMES))) {
 			return;
 		}
 
@@ -580,7 +581,7 @@ public class HardwareDataService {
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = cacheManager
 				.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class);
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass.getKey());
+			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClass.getValue();
 
 			// case hostAssignedTableType
 			String configKey = hwAuditDeviceClass.getHostConfigKey();
@@ -590,21 +591,15 @@ public class HardwareDataService {
 
 			Map<String, Boolean> tableConfigUpdates = updateItems.get(configIdent.toUpperCase(Locale.ROOT));
 
+			// we have got updates for this table configuration
 			if (tableConfigUpdates != null) {
 				Logging.info(this,
 						" saveHwColumnConfig tableConfigUpdates  for the host configIdent,  " + tableConfigUpdates);
-			}
 
-			// we have got updates for this table configuration
-			if (tableConfigUpdates != null) {
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHostProperties(), tableConfigUpdates);
 
 				readyObjects.add(configItem);
-
-				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
-
-				// save the data locally, we hope that the upload later will work as well
 
 				// now, we have got them in a view model
 
@@ -630,13 +625,11 @@ public class HardwareDataService {
 
 			tableConfigUpdates = updateItems.get(configIdent.toUpperCase(Locale.ROOT));
 
+			// we have got updates for this table configuration
 			if (tableConfigUpdates != null) {
 				Logging.info(this,
 						" saveHwColumnConfig tableConfigUpdates  for the hw configIdent,  " + tableConfigUpdates);
-			}
 
-			// we have got updates for this table configuration
-			if (tableConfigUpdates != null) {
 				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHwItemProperties(), tableConfigUpdates);
 

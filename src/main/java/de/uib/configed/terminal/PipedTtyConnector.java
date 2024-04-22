@@ -15,7 +15,7 @@ import com.jediterm.core.util.TermSize;
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class PipedTtyConnector implements TtyConnector {
 	private PipedReader reader;

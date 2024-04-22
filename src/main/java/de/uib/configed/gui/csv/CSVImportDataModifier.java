@@ -14,10 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -30,27 +28,28 @@ import org.apache.commons.csv.CSVRecord;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapSource;
-import de.uib.utilities.table.provider.TableSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
+import de.uib.configed.type.HostInfo;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapSource;
+import de.uib.utils.table.provider.TableSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
+import de.uib.utils.table.updates.MapItemsUpdateController;
+import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class CSVImportDataModifier {
 	private GenTableModel model;
 	private String csvFile;
 	private List<String> columnNames;
 	private List<String> hiddenColumns;
-	private Set<String> tmpHeaderNames;
+	private List<String> tmpHeaderNames;
 
 	public CSVImportDataModifier(String csvFile, List<String> columnNames) {
 		this.csvFile = csvFile;
 		this.columnNames = columnNames;
-		this.tmpHeaderNames = new LinkedHashSet<>(columnNames);
+		this.tmpHeaderNames = new ArrayList<>(columnNames);
 		this.hiddenColumns = new ArrayList<>();
 	}
 
@@ -89,15 +88,29 @@ public class CSVImportDataModifier {
 		return model;
 	}
 
-	@SuppressWarnings({ "java:S135" })
+	@SuppressWarnings({ "java:S135", "java:S1168" })
 	private List<Map<String, Object>> extractDataFromCSV(CSVFormat format, int startLine) {
 		format = format.builder().setCommentMarker('#').setHeader().build();
 		List<Map<String, Object>> csvData = new ArrayList<>();
 		try (BufferedReader reader = Files.newBufferedReader(new File(csvFile).toPath(), StandardCharsets.UTF_8);
 				CSVParser parser = new CSVParser(reader, format)) {
+			List<String> headerNames = parser.getHeaderNames();
+			List<String> importantHeaderNames = new ArrayList<>();
+			importantHeaderNames.add(HostInfo.HOSTNAME_KEY);
+			importantHeaderNames.add("domain");
+			importantHeaderNames.add(HostInfo.DEPOT_OF_CLIENT_KEY);
+			importantHeaderNames.add(HostInfo.CLIENT_MAC_ADRESS_KEY);
+			if (!headerNames.containsAll(importantHeaderNames)) {
+				StringBuilder message = new StringBuilder();
+				message.append(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.message"));
+				message.append(" " + importantHeaderNames.toString().replace("[", "").replace("]", ""));
+				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.title"),
+						message.toString());
+				return null;
+			}
 			tmpHeaderNames.clear();
 			tmpHeaderNames.addAll(columnNames);
-			tmpHeaderNames.addAll(parser.getHeaderNames());
+			tmpHeaderNames.addAll(headerNames);
 			for (CSVRecord csvRecord : parser.getRecords()) {
 				if (!csvRecord.isConsistent()) {
 					displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
@@ -129,7 +142,6 @@ public class CSVImportDataModifier {
 
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
 			List<String> columnNames, CSVFormat format) {
-
 		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 		populateSourceMap(theSourceMap, csvData);
 

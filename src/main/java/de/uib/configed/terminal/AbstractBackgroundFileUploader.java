@@ -14,7 +14,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public abstract class AbstractBackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private TerminalFrame terminal;
@@ -52,7 +52,8 @@ public abstract class AbstractBackgroundFileUploader extends SwingWorker<Void, I
 			}
 
 			try {
-				terminal.updateFileUploadProgressBar(chunkSize, (int) Files.size(currentFile.toPath()));
+				terminal.getTerminalFileUploadProgressIndicator().updateFileUploadProgressBar(chunkSize,
+						(int) Files.size(currentFile.toPath()));
 			} catch (IOException e) {
 				Logging.warning(this, "unable to retrieve file size: ", e);
 			}
@@ -70,7 +71,7 @@ public abstract class AbstractBackgroundFileUploader extends SwingWorker<Void, I
 	@Override
 	protected void done() {
 		if (visualizeProgress) {
-			terminal.showFileUploadProgress(false);
+			terminal.getTerminalFileUploadProgressIndicator().showFileUploadProgress(false);
 		}
 		totalFilesToUpload = 0;
 		uploadedFiles = 0;
@@ -88,7 +89,8 @@ public abstract class AbstractBackgroundFileUploader extends SwingWorker<Void, I
 	}
 
 	public void updateTotalFilesToUpload() {
-		SwingUtilities.invokeLater(() -> terminal.indicateFileUpload(currentFile, uploadedFiles, totalFilesToUpload));
+		SwingUtilities.invokeLater(() -> terminal.getTerminalFileUploadProgressIndicator()
+				.indicateFileUpload(currentFile, uploadedFiles, totalFilesToUpload));
 	}
 
 	public boolean isFileUploaded() {

@@ -12,8 +12,8 @@ import java.util.Map;
 
 import javax.swing.ListSelectionModel;
 
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ListCellOptions;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ListCellOptions;
 
 // has a problem with type of defaultValues
 public class ConfigOption extends RetrievedMap implements ListCellOptions {
@@ -71,6 +71,24 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 			put("description", retrieved.get("description"));
 		}
 
+		buildType();
+
+		buildSelectionMode();
+
+		if (retrieved == null) {
+			put("editable", true);
+		} else if (retrieved.get("editable") == null) {
+			put("editable", false);
+		} else {
+			put("editable", retrieved.get("editable"));
+		}
+
+		if (type != TYPE.BOOL_CONFIG) {
+			put("nullable", false);
+		}
+	}
+
+	private void buildType() {
 		if (retrieved == null || retrieved.get("type") == null) {
 			Logging.debug(this, "set default UnicodeConfig");
 			put("type", "UnicodeConfig");
@@ -88,7 +106,9 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 				type = TYPE.UNICODE_CONFIG;
 			}
 		}
+	}
 
+	private void buildSelectionMode() {
 		if (retrieved == null) {
 			put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		} else if (retrieved.get("multiValue") == null) {
@@ -99,18 +119,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 			} else {
 				put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
 			}
-		}
-
-		if (retrieved == null) {
-			put("editable", true);
-		} else if (retrieved.get("editable") == null) {
-			put("editable", false);
-		} else {
-			put("editable", retrieved.get("editable"));
-		}
-
-		if (type != TYPE.BOOL_CONFIG) {
-			put("nullable", false);
 		}
 	}
 

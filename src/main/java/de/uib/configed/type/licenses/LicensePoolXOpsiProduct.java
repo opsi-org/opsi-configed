@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.utilities.datastructure.Relation;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
+import de.uib.utils.datastructure.Relation;
+import de.uib.utils.datastructure.StringValuedRelationElement;
 
 public class LicensePoolXOpsiProduct extends Relation {
 	public static final String LICENSE_POOL_KEY = LicensepoolEntry.ID_SERVICE_KEY;

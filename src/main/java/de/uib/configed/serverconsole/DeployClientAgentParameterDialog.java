@@ -35,8 +35,8 @@ import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent.FinalActionType;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.PanelStateSwitch;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PanelStateSwitch;
 
 public class DeployClientAgentParameterDialog extends FGeneralDialog {
 	private static final int FRAME_WIDTH = 800;

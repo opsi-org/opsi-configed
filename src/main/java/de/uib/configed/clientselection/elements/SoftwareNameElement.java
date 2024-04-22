@@ -9,7 +9,7 @@ package de.uib.configed.clientselection.elements;
 import java.util.Set;
 
 import de.uib.configed.Configed;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SoftwareNameElement extends GenericTextElement {
 	public SoftwareNameElement() {

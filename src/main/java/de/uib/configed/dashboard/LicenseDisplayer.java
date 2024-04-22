@@ -28,12 +28,13 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -50,7 +51,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import utils.Utils;
 
 public class LicenseDisplayer {
 	@FXML
@@ -64,7 +64,8 @@ public class LicenseDisplayer {
 	@FXML
 	private ScrollPane scrollPane;
 
-	private OpsiServiceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private LicenseDisplayer controller;
 
 	private Stage stage;
@@ -142,9 +143,9 @@ public class LicenseDisplayer {
 
 	private String showLicenseContractWarnings() {
 		StringBuilder result = new StringBuilder();
-		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenseDataService()
+		NavigableMap<String, NavigableSet<String>> contractsExpired = persistenceController.getLicenseDataService()
 				.getLicenseContractsToNotifyPD();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenseDataService()
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persistenceController.getLicenseDataService()
 				.getLicenseContractsToNotifyPD();
 
 		Logging.info(this, "contractsExpired " + contractsExpired);
@@ -197,13 +198,13 @@ public class LicenseDisplayer {
 					@Override
 					public void reloadMap() {
 						if (configedMain != null && !configedMain.isAllLicenseDataReloaded()) {
-							persist.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 						}
 					}
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persist.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
+						return (Map) persistenceController.getSoftwareDataService().getInstalledSoftwareName2SWinfoPD();
 					}
 				})), 0, new int[] {}, (TableModelListener) null, updateCollection) {
 			@Override
@@ -251,8 +252,8 @@ public class LicenseDisplayer {
 		// nearly done in produceModelSWxLicensepool, but we collect the range of the
 		// model-map
 		Set<String> range = new HashSet<>();
-		for (String swID : persist.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
-			String licpool = persist.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
+		for (String swID : persistenceController.getSoftwareDataService().getName2SWIdentsPD().get(swName)) {
+			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
 				range.add(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL);

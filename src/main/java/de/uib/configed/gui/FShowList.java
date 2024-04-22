@@ -7,12 +7,11 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * This class is intended to show a list in text area
@@ -28,7 +27,6 @@ public class FShowList extends FTextArea {
 	public FShowList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
 		super(owner, title, modal, buttonList);
-		this.owner = owner;
 		initFShowList(preferredWidth, preferredHeight);
 	}
 
@@ -70,30 +68,14 @@ public class FShowList extends FTextArea {
 
 		scrollpane.getViewport().add(jTextArea1, null);
 
-		jTextArea1.addKeyListener(this);
-
 		pack();
 	}
 
 	@Override
 	public void doAction1() {
 		Logging.clearErrorList();
-		if (owner != null) {
-			owner.toFront();
-		}
+		getOwner().toFront();
 
 		super.doAction1();
-	}
-
-	// KeyListener
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !e.isShiftDown() && e.getSource() == jTextArea1) {
-			jButton1.requestFocus();
-		} else if (e.getKeyCode() == KeyEvent.VK_TAB && e.isShiftDown() && e.getSource() == jButton1) {
-			jTextArea1.requestFocus();
-		} else {
-			// Do nothing on other key events
-		}
 	}
 }

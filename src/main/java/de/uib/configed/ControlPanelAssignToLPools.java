@@ -34,22 +34,22 @@ import de.uib.configed.type.licenses.LicensepoolEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.DefaultTableModelFilterCondition;
-import de.uib.utilities.table.GenTableModel;
-import de.uib.utilities.table.TableModelFilter;
-import de.uib.utilities.table.TableModelFilterCondition;
-import de.uib.utilities.table.gui.AdaptingCellEditor;
-import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
-import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.MapBasedTableEditItem;
-import de.uib.utilities.table.updates.MapBasedUpdater;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.DefaultTableModelFilterCondition;
+import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.TableModelFilter;
+import de.uib.utils.table.TableModelFilterCondition;
+import de.uib.utils.table.gui.AdaptingCellEditor;
+import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
+import de.uib.utils.table.provider.DefaultTableProvider;
+import de.uib.utils.table.provider.MapRetriever;
+import de.uib.utils.table.provider.RetrieverMapSource;
+import de.uib.utils.table.updates.MapBasedTableEditItem;
+import de.uib.utils.table.updates.MapBasedUpdater;
+import de.uib.utils.table.updates.MapItemsUpdateController;
+import de.uib.utils.table.updates.MapTableUpdateItemFactory;
+import de.uib.utils.table.updates.SelectionMemorizerUpdateController;
 
 public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private static final int MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE = 300;
@@ -707,23 +707,20 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicensePool " + removeKeysFromOtherLicensePool);
 
-		boolean result = true;
-
 		if (removeKeysFromOtherLicensePool != null) {
 			for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicensePool.entrySet()) {
-				if (result && !otherStringPoolEntry.getValue().isEmpty()) {
-					result = persistenceController.getSoftwareDataService()
-							.removeAssociations(otherStringPoolEntry.getKey(), otherStringPoolEntry.getValue());
-					if (result) {
-						removeKeysFromOtherLicensePool.remove(otherStringPoolEntry.getKey());
-					}
+				if (otherStringPoolEntry.getValue().isEmpty()) {
+					Logging.info(this,
+							"we wont remove association since entry is empty: " + otherStringPoolEntry.getKey());
+				} else if (persistenceController.getSoftwareDataService()
+						.removeAssociations(otherStringPoolEntry.getKey(), otherStringPoolEntry.getValue())) {
+					removeKeysFromOtherLicensePool.remove(otherStringPoolEntry.getKey());
+				} else {
+					return false;
 				}
 			}
 		}
-
-		if (!result) {
-			return false;
-		}
+		boolean result;
 
 		// cleanup assignments to other pools since an update would not change them
 		// (redmine #3282)

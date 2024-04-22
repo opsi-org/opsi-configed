@@ -33,11 +33,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.TimeCheck;
+import de.uib.opsicommand.certificate.CertificateDownloader;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.TimeCheck;
 import net.jpountz.lz4.LZ4FrameInputStream;
 import net.jpountz.lz4.LZ4FrameOutputStream;
-import utils.Utils;
 
 /**
  * Provides communication layer with the server for the
@@ -63,6 +64,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String host;
 	private String username;
 	private String password;
+	private String otp;
 	private String sessionId;
 	private int portHTTPS = Globals.DEFAULT_PORT;
 
@@ -73,7 +75,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * @param username to use for the authentication.
 	 * @param password to use for the authentication.
 	 */
-	public ServerFacade(String host, String username, String password) {
+	public ServerFacade(String host, String username, String password, String otp) {
 		if (host == null || username == null || password == null) {
 			throw new IllegalArgumentException("All or some parameters are null");
 		}
@@ -92,6 +94,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 		this.username = username;
 		this.password = password;
+		this.otp = otp;
 		conStat = new ConnectionState();
 
 		CertificateDownloader.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
@@ -127,7 +130,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, String> requestProperties = new HashMap<>();
 
 		String authorization = Base64.getEncoder()
-				.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
+				.encodeToString((username + ":" + password + otp).getBytes(StandardCharsets.UTF_8));
 		requestProperties.put("Authorization", "Basic " + authorization);
 
 		// has to be value between 1 and 43300 [sec]

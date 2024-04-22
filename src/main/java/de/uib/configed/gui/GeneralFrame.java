@@ -12,10 +12,9 @@ import java.awt.event.WindowEvent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import utils.Utils;
+import de.uib.utils.Utils;
 
 public class GeneralFrame extends JDialog {
-
 	public GeneralFrame(Frame owner, String title, boolean modal) {
 		super(owner, modal);
 		super.setTitle(title);

@@ -20,9 +20,9 @@ import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utilities.table.gui.SearchTargetModel;
-import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TableSearchPane;
+import de.uib.utils.table.gui.SearchTargetModel;
+import de.uib.utils.table.gui.SearchTargetModelFromJList;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class ValueSelectorList extends JPanel {
 	private DepotsList valueList;
@@ -57,11 +57,9 @@ public class ValueSelectorList extends JPanel {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(valueList, values, descriptions);
 
-		searchPane = new TableSearchPane(searchTargetModel, "depotlist");
-		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		searchPane = new TableSearchPane(searchTargetModel);
+		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
-		searchPane.setToolTipTextCheckMarkAllColumns(
-				Configed.getResourceValue("ValueSelectorList.checkmarkAllColumns.tooltip"));
 
 		initComponents();
 		layouting();
@@ -78,11 +76,10 @@ public class ValueSelectorList extends JPanel {
 	}
 
 	private void initComponents() {
-		labelValue = new JLabel();
 		if (multidepot) {
-			labelValue.setText(Configed.getResourceValue("ValueSelectorList.values"));
+			labelValue = new JLabel(Configed.getResourceValue("ValueSelectorList.values"));
 		} else {
-			labelValue.setText(Configed.getResourceValue("ValueSelectorList.value"));
+			labelValue = new JLabel(Configed.getResourceValue("ValueSelectorList.value"));
 		}
 
 		if (!multidepot) {

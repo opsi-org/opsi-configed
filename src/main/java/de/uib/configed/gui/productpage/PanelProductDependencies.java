@@ -16,7 +16,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.DependenciesModel.DependenciesModelListener;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModelListener {
 	// The label shown on top of the dependencies-panel
@@ -69,10 +69,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 				.addComponent(dependenciesTreePanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(),
 						2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE));
-	}
-
-	public void clearEditing() {
-		dependenciesModel.setActualProduct("");
 	}
 
 	public void setDependenciesModel(DependenciesModel dependenciesModel) {

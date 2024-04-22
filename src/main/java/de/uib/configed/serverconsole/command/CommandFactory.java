@@ -26,7 +26,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class CommandFactory {
 	public static final String OPSI_PATH_VAR_REPOSITORY = "/var/lib/opsi/repository/";
@@ -62,18 +62,12 @@ public final class CommandFactory {
 	private Set<String> knownMenus;
 	private Set<String> knownParents;
 
-	private ConfigedMain configedMain;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public CommandFactory(ConfigedMain configedMain) {
-		this.configedMain = configedMain;
-	}
-
-	public static CommandFactory getInstance(ConfigedMain configedMain) {
+	public static CommandFactory getInstance() {
 		if (instance == null) {
-			instance = new CommandFactory(configedMain);
+			instance = new CommandFactory();
 		}
 		return instance;
 	}
@@ -255,6 +249,6 @@ public final class CommandFactory {
 	}
 
 	public void reloadServerMenu() {
-		SwingUtilities.invokeLater(configedMain::reloadServerMenu);
+		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().reloadServerMenu());
 	}
 }

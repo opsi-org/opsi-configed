@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.configed.type.RetrievedMap;
 import de.uib.connectx.SmbConnect;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -42,11 +43,11 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.Object2Product2VersionList;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.datapanel.MapTableModel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ListCellOptions;
-import utils.ProductPackageVersionSeparator;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.MapTableModel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.table.ListCellOptions;
 
 /**
  * Provides methods for working with proudct data on the server.
@@ -63,6 +64,9 @@ import utils.Utils;
  */
 @SuppressWarnings({ "unchecked" })
 public class ProductDataService {
+	public static final String FOR_DISPLAY = "-";
+	public static final String FOR_KEY = ";";
+
 	private static final String EMPTYFIELD = "-";
 	private static final String NAME_REQUIREMENT_TYPE_BEFORE = "before";
 	private static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
@@ -73,7 +77,7 @@ public class ProductDataService {
 	private static final String KEY_PRODUCT_ON_CLIENT_FIELD_NETBOOT = "configed.productonclient_displayfields_netboot";
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
@@ -84,7 +88,7 @@ public class ProductDataService {
 	private List<Map<String, Object>> productPropertyStateUpdateCollection;
 	private List<Map<String, Object>> productPropertyStateDeleteCollection;
 
-	public ProductDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public ProductDataService(AbstractPOJOExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
@@ -154,10 +158,10 @@ public class ProductDataService {
 		}
 		filterPermittedProducts(localbootProductNames);
 		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
-		return new ArrayList<>(localbootProductNames);
+		return localbootProductNames;
 	}
 
-	private void filterPermittedProducts(List<String> products) {
+	public void filterPermittedProducts(Collection<String> products) {
 		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
 		if (permittedProducts != null) {
 			products.retainAll(permittedProducts);
@@ -186,10 +190,9 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductsAllDepotsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PACKAGES, Map.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS,
+				CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS, CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS,
+				CacheIdentifier.DEPOT_TO_PACKAGES))) {
 			return;
 		}
 
@@ -298,7 +301,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductInfosPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS)) {
 			return;
 		}
 
@@ -358,7 +361,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveAllProductPropertyDefinitionsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS)) {
 			return;
 		}
 		retrieveProductsAllDepotsPD();
@@ -371,14 +374,13 @@ public class ProductDataService {
 		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
 
 		for (Map<String, Object> retrievedMap : retrieved) {
-
 			String propertyId = (String) retrievedMap.get("propertyId");
 			String productId = (String) retrievedMap.get("productId");
 
 			String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 			String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 
-			String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+			String versionInfo = productVersion + FOR_KEY + packageVersion;
 
 			Map<String, Map<String, List<String>>> product2VersionInfo2Depots = cacheManager
 					.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class);
@@ -388,7 +390,6 @@ public class ProductDataService {
 						"retrieveAllProductPropertyDefinitions: no depot for " + productId + " version " + versionInfo
 								+ "  product2VersionInfo2Depots.get(productId) "
 								+ product2VersionInfo2Depots.get(productId));
-
 			} else {
 				for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
 					Map<String, Map<String, ListCellOptions>> product2PropertyDefinitions = depot2Product2PropertyDefinitions
@@ -415,7 +416,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveAllProductDependenciesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS)) {
 			return;
 		}
 		retrieveProductsAllDepotsPD();
@@ -434,7 +435,7 @@ public class ProductDataService {
 
 			String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 			String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-			String versionInfo = productVersion + ProductPackageVersionSeparator.FOR_KEY + packageVersion;
+			String versionInfo = productVersion + FOR_KEY + packageVersion;
 
 			String action = "" + dependencyItem.get("productAction");
 			String requirementType = "";
@@ -536,8 +537,8 @@ public class ProductDataService {
 	}
 
 	public void checkProductGlobalInfosPD(String depotId) {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.POSSIBLE_ACTIONS, Map.class) != null
+		if (cacheManager
+				.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_GLOBAL_INFOS, CacheIdentifier.POSSIBLE_ACTIONS))
 				&& depotDataService.getDepot() != null && depotDataService.getDepot().equals(depotId)) {
 			return;
 		}
@@ -579,8 +580,7 @@ public class ProductDataService {
 
 					aProductInfo.put(ProductState.KEY_PRODUCT_ID, product.getKey());
 
-					aProductInfo.put(ProductState.KEY_VERSION_INFO,
-							ProductPackageVersionSeparator.formatKeyForDisplay(productInfo.getVersionInfo()));
+					aProductInfo.put(ProductState.KEY_VERSION_INFO, formatKeyForDisplay(productInfo.getVersionInfo()));
 
 					aProductInfo.put(ProductState.KEY_PRODUCT_PRIORITY, productInfo.getPriority());
 
@@ -608,6 +608,24 @@ public class ProductDataService {
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS, productGlobalInfos);
 		cacheManager.setCachedData(CacheIdentifier.POSSIBLE_ACTIONS, possibleActions);
 		Logging.info(this, "retrieveProductGlobalInfos  found number  " + productGlobalInfos.size());
+	}
+
+	private static String formatKeyForDisplay(String key) {
+		if (key == null) {
+			return null;
+		}
+
+		int i = key.indexOf(FOR_KEY);
+		if (i == -1) {
+			return key;
+		}
+
+		String result = key.substring(0, i);
+		if (i < key.length()) {
+			result = result + FOR_DISPLAY + key.substring(i + 1);
+		}
+
+		return result;
 	}
 
 	private String getVersionInfoForLocalbootProduct(String depotId, String productId) {
@@ -643,8 +661,8 @@ public class ProductDataService {
 	}
 
 	public void retrieveProductIdsAndDefaultStatesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.PRODUCT_IDS, NavigableSet.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES, Map.class) != null) {
+		if (cacheManager
+				.isDataCached(Arrays.asList(CacheIdentifier.PRODUCT_IDS, CacheIdentifier.PRODUCT_DEFAULT_STATES))) {
 			return;
 		}
 
@@ -843,7 +861,7 @@ public class ProductDataService {
 	}
 
 	public void retrieveDepotProductPropertiesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES)) {
 			return;
 		}
 
@@ -1005,7 +1023,7 @@ public class ProductDataService {
 		return exec.getListOfMaps(omc);
 	}
 
-	public List<String> getWinProducts(String depotId, String depotProductDirectory) {
+	public List<String> getWinProducts(String depotProductDirectory) {
 		List<String> winProducts = new ArrayList<>();
 		if (depotProductDirectory == null) {
 			return winProducts;
@@ -1013,7 +1031,8 @@ public class ProductDataService {
 
 		boolean smbMounted = new File(depotProductDirectory).exists();
 
-		for (String product : new TreeSet<>(getAllNetbootProductNames(depotId))) {
+		for (String product : new TreeSet<>(
+				getAllNetbootProductNames(persistenceController.getHostInfoCollections().getConfigServer()))) {
 			if (!smbMounted
 					|| new File(
 							depotProductDirectory + File.separator + product + File.separator + SmbConnect.DIRECTORY_PE)
@@ -1088,29 +1107,16 @@ public class ProductDataService {
 		return result;
 	}
 
-	public boolean resetLocalbootProducts(List<String> selectedClients, boolean withDependencies) {
+	public boolean resetProducts(List<String> selectedClients, boolean withDependencies, String productType) {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return false;
 		}
 
-		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients,
-				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-		Logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
+		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients, productType);
+		Logging.info(this,
+				"resetProducts deleteProductItems.size " + deleteProductItems.size() + " type" + productType);
 		boolean result = resetProducts(deleteProductItems, withDependencies);
-		Logging.debug(this, "resetLocalbootProducts result " + result);
-		return result;
-	}
-
-	public boolean resetNetbootProducts(List<String> selectedClients, boolean withDependencies) {
-		if (userRolesConfigDataService.isGlobalReadOnly()) {
-			return false;
-		}
-
-		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients,
-				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-		Logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
-		boolean result = resetProducts(deleteProductItems, withDependencies);
-		Logging.debug(this, "resetNetbootProducts result " + result);
+		Logging.debug(this, "resetProducts result " + result);
 		return result;
 	}
 
@@ -1200,29 +1206,6 @@ public class ProductDataService {
 		}
 
 		return result;
-	}
-
-	public Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot) {
-		Set<String> notHandled = new HashSet<>(startProductSet);
-		Set<String> endResultSet = new HashSet<>(startProductSet);
-		Set<String> startResultSet = null;
-
-		while (!notHandled.isEmpty()) {
-			startResultSet = new HashSet<>(endResultSet);
-
-			for (String prod : notHandled) {
-				Logging.info(this, " extendToDependentProducts prod " + prod);
-				for (Map<String, String> m : getProductDependencies(depot, prod)) {
-					Logging.info(this, " extendToDependentProducts m " + m.get("requiredProductId"));
-					endResultSet.add(m.get("requiredProductId"));
-				}
-			}
-
-			notHandled = new HashSet<>(endResultSet);
-			notHandled.removeAll(startResultSet);
-		}
-
-		return new TreeSet<>(endResultSet);
 	}
 
 	// collect productPropertyState updates and deletions
@@ -1482,15 +1465,7 @@ public class ProductDataService {
 			} else {
 				Logging.debug(this, " dependency map : ");
 
-				boolean hasRequirementType = requirementType.equals(NAME_REQUIREMENT_TYPE_NEUTRAL)
-						|| requirementType.equals(NAME_REQUIREMENT_TYPE_BEFORE)
-						|| requirementType.equals(NAME_REQUIREMENT_TYPE_AFTER);
-				boolean hasActionRequest = aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.SETUP))
-						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ONCE))
-						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
-						|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.CUSTOM));
-
-				if (hasRequirementType && hasActionRequest
+				if (hasRequirementType(requirementType) && hasActionRequest(aDependency)
 						&& aDependency.get("requirementType").equals(requirementType)) {
 					result.put(aDependency.get("requiredProductId"),
 							aDependency.get("requiredInstallationStatus") + ":" + aDependency.get("requiredAction"));
@@ -1503,6 +1478,19 @@ public class ProductDataService {
 		Logging.info(this, "getProductRequirements " + result);
 
 		return result;
+	}
+
+	private static boolean hasRequirementType(String requirementType) {
+		return requirementType.equals(NAME_REQUIREMENT_TYPE_NEUTRAL)
+				|| requirementType.equals(NAME_REQUIREMENT_TYPE_BEFORE)
+				|| requirementType.equals(NAME_REQUIREMENT_TYPE_AFTER);
+	}
+
+	private static boolean hasActionRequest(Map<String, String> aDependency) {
+		return aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.SETUP))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ONCE))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
+				|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.CUSTOM));
 	}
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts() {
@@ -1528,7 +1516,7 @@ public class ProductDataService {
 	}
 
 	private void retrieveProductOnClientsDisplayFields(CacheIdentifier cacheId, String key) {
-		if (cacheManager.getCachedData(cacheId, Map.class) != null) {
+		if (cacheManager.isDataCached(cacheId)) {
 			return;
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
@@ -1549,6 +1537,8 @@ public class ProductDataService {
 			// we did not initialize server property
 			configuredByService = produceProductOnClientDisplayfields(key);
 		}
+
+		// We have a LinkedHashMap here so that fields will appear in this order
 
 		Map<String, Boolean> productOnClientsDisplayFields = new LinkedHashMap<>();
 
@@ -1577,6 +1567,17 @@ public class ProductDataService {
 				configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
 
 		productOnClientsDisplayFields.put(ProductState.KEY_VERSION_INFO, true);
+
+		String[] userSavedDisplayFields = UserPreferences
+				.get(cacheId == CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS
+						? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
+						: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS)
+				.split(",");
+
+		for (String displayField : userSavedDisplayFields) {
+			productOnClientsDisplayFields.put(displayField, true);
+		}
+
 		cacheManager.setCachedData(cacheId, productOnClientsDisplayFields);
 	}
 

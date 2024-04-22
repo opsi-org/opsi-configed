@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +37,7 @@ import de.uib.configed.type.licenses.LicenseStatisticsRow;
 import de.uib.configed.type.licenses.LicenseUsableForEntry;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -44,10 +45,10 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.ExtendedInteger;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.ExtendedInteger;
+import de.uib.utils.Utils;
+import de.uib.utils.datastructure.StringValuedRelationElement;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with software data on the server.
@@ -64,29 +65,26 @@ import utils.Utils;
  */
 @SuppressWarnings({ "unchecked" })
 public class SoftwareDataService {
+	private static final String LINUX_SUBVERSION_MARKER = "lin:";
+
 	private static final Set<String> linuxSWnameMarkers = new HashSet<>();
 	static {
 		linuxSWnameMarkers.add("linux");
 		linuxSWnameMarkers.add("Linux");
 		linuxSWnameMarkers.add("lib");
 		linuxSWnameMarkers.add("ubuntu");
-		linuxSWnameMarkers.add("ubuntu");
-	}
-
-	private static final Set<String> linuxSubversionMarkers = new HashSet<>();
-	static {
-		linuxSubversionMarkers.add("lin:");
 	}
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private ModuleDataService moduleDataService;
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private LicenseDataService licenseDataService;
 	private HostInfoCollections hostInfoCollections;
 
-	public SoftwareDataService(AbstractExecutioner exec, OpsiServiceNOMPersistenceController persistenceController) {
+	public SoftwareDataService(AbstractPOJOExecutioner exec,
+			OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 		this.persistenceController = persistenceController;
@@ -142,11 +140,9 @@ public class SoftwareDataService {
 	}
 
 	public void retrieveRelationsAuditSoftwareToLicensePoolsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
-				NavigableSet.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class) != null) {
+		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
+				CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST,
+				CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL))) {
 			return;
 		}
 
@@ -211,8 +207,7 @@ public class SoftwareDataService {
 	}
 
 	public void retrieveAuditSoftwareXLicensePoolPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL,
-				AuditSoftwareXLicensePool.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL)) {
 			return;
 		}
 
@@ -249,60 +244,53 @@ public class SoftwareDataService {
 		return cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class);
 	}
 
-	public List<String> getSoftwareListPD() {
+	public Set<String> getSoftwareListPD() {
 		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class);
+		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, Set.class);
 	}
 
-	public NavigableMap<String, Integer> getSoftware2NumberPD() {
+	public boolean swEntryExists(SWAuditClientEntry swAuditClientEntry) {
+		Logging.info(this, "Check if software ident " + swAuditClientEntry.getSWIdent() + " entry exists");
 		retrieveInstalledSoftwareInformationPD();
-		return cacheManager.getCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, NavigableMap.class);
-	}
-
-	public String getSWident(Integer i) {
-		Logging.debug(this, "getSWident for " + i);
-		retrieveInstalledSoftwareInformationPD();
-		String swIdent = null;
-		List<String> softwareList = getSoftwareListPD();
-		if (softwareList == null || softwareList.size() < i + 1 || i == -1) {
+		boolean swIdent = false;
+		Set<String> softwareList = getSoftwareListPD();
+		if (softwareList == null || !softwareList.contains(swAuditClientEntry.getSWIdent())) {
 			if (softwareList != null) {
-				Logging.info(this, "getSWident " + " until now softwareList.size() " + softwareList.size());
+				Logging.info(this, "Until now existing installed software entries " + softwareList.size());
 			}
 
-			boolean infoFound = false;
-
-			// try reloading?
 			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
+					String.format(Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
+							swAuditClientEntry.getSWIdent(), swAuditClientEntry.getClientId()),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
+				Logging.info(this, "Reloading installed software information");
 				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-				if (i > -1 && softwareList != null && softwareList.size() >= i + 1) {
-					infoFound = true;
+				softwareList = getSoftwareListPD();
+				Logging.info(this, "Now existing installed software entries " + softwareList.size());
+				if (softwareList.contains(swAuditClientEntry.getSWIdent())) {
+					Logging.info(this, "Found software ident " + swAuditClientEntry.getSWIdent() + " after reload");
+					swIdent = true;
 				}
 			}
 
-			if (!infoFound) {
-				Logging.warning(this, "missing softwareList entry " + i + " " + softwareList);
+			if (!swIdent) {
+				Logging.warning(this, "Missing installed software entry " + swAuditClientEntry.getSWIdent());
 			}
 		} else {
-			swIdent = softwareList.get(i);
+			swIdent = true;
 		}
+
 		return swIdent;
 	}
 
 	public void retrieveInstalledSoftwareInformationPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.SOFTWARE_LIST, List.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
-						NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
-						NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, NavigableMap.class) != null
-				&& cacheManager.getCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO,
-						NavigableMap.class) != null) {
+		if (cacheManager.isDataCached(
+				Arrays.asList(CacheIdentifier.SOFTWARE_LIST, CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION,
+						CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING, CacheIdentifier.NAME_TO_SW_IDENTS,
+						CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO))) {
 			return;
 		}
 
@@ -333,26 +321,7 @@ public class SoftwareDataService {
 			String swIdent = entry.getIdent();
 			installedSoftwareInformation.put(swIdent, entry);
 
-			boolean showForLicensing = true;
-			for (String marker : linuxSWnameMarkers) {
-				String version = entry.get(SWAuditEntry.VERSION);
-				if (swName.indexOf(marker) > -1 || version.indexOf(marker) > -1) {
-					showForLicensing = false;
-					break;
-				}
-			}
-
-			if (showForLicensing && !linuxSubversionMarkers.isEmpty()) {
-				String subversion = entry.get(SWAuditEntry.SUB_VERSION);
-				for (String marker : linuxSubversionMarkers) {
-					if (subversion.startsWith(marker)) {
-						showForLicensing = false;
-						break;
-					}
-				}
-			}
-
-			if (showForLicensing) {
+			if (showForLicensing(entry, swName)) {
 				installedSoftwareInformationForLicensing.put(entry.getIdent(), entry);
 
 				Set<String> nameSWIdents = name2SWIdents.computeIfAbsent(swName, s -> new TreeSet<>());
@@ -382,25 +351,24 @@ public class SoftwareDataService {
 			}
 		}
 
-		List<String> softwareList = new ArrayList<>(installedSoftwareInformation.keySet());
-		NavigableMap<String, Integer> software2Number = new TreeMap<>();
-		int n = 0;
-		for (String sw : softwareList) {
-			if (sw.startsWith("NULL")) {
-				Logging.info(this, "retrieveInstalledSoftwareInformation, we get index " + n + " for " + sw);
-			}
-			software2Number.put(sw, n);
-			n++;
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, softwareList);
-		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_TO_NUMBER, software2Number);
+		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_LIST, installedSoftwareInformation.keySet());
 		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION, installedSoftwareInformation);
 		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING,
 				installedSoftwareInformationForLicensing);
 		cacheManager.setCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO, installedSoftwareName2SWinfo);
 		cacheManager.setCachedData(CacheIdentifier.NAME_TO_SW_IDENTS, name2SWIdents);
 		persistenceController.notifyPanelCompleteWinProducts();
+	}
+
+	private static boolean showForLicensing(SWAuditEntry entry, String swName) {
+		for (String marker : linuxSWnameMarkers) {
+			String version = entry.get(SWAuditEntry.VERSION);
+			if (swName.indexOf(marker) > -1 || version.indexOf(marker) > -1) {
+				return false;
+			}
+		}
+
+		return !entry.get(SWAuditEntry.SUB_VERSION).startsWith(LINUX_SUBVERSION_MARKER);
 	}
 
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(Collection<String> clients) {
@@ -478,9 +446,9 @@ public class SoftwareDataService {
 
 		List<SWAuditClientEntry> swAuditClientEntries = entries.get(clientId);
 		for (SWAuditClientEntry entry : swAuditClientEntries) {
-			if (entry.getSWid() != null && entry.getSWid() != -1) {
-				result.put("" + entry.getSWid(),
-						entry.getExpandedMap(getInstalledSoftwareInformationPD(), getSWident(entry.getSWid())));
+			if (swEntryExists(entry)) {
+				result.put(entry.getSWIdent(),
+						entry.getExpandedMap(getInstalledSoftwareInformationPD().get(entry.getSWIdent())));
 			}
 		}
 
@@ -490,57 +458,60 @@ public class SoftwareDataService {
 	// returns the ID of the edited data record
 	public String editSoftwareLicense(String softwareLicenseId, String licenseContractId, String licenseType,
 			String maxInstallations, String boundToHost, String expirationDate) {
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
+		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())
+				|| !Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
 			return "";
 		}
 
-		String result = "";
-
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
-			RPCMethodName methodName = null;
-			switch (licenseType) {
-			case LicenseEntry.VOLUME:
-				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_VOLUME;
-				break;
-			case LicenseEntry.OEM:
-				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_OEM;
-				break;
-			case LicenseEntry.CONCURRENT:
-				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_CONCURRENT;
-				break;
-			case LicenseEntry.RETAIL:
-				methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_RETAIL;
-				break;
-			default:
-				Logging.notice(this, "encountered UNKNOWN license type");
-				break;
-			}
-
-			// The jsonRPC-calls would fail sometimes if we use empty / blank Strings...
-			if (maxInstallations != null && maxInstallations.isBlank()) {
-				maxInstallations = null;
-			}
-
-			if (boundToHost != null && boundToHost.isBlank()) {
-				boundToHost = null;
-			}
-
-			if (expirationDate != null && expirationDate.isBlank()) {
-				expirationDate = null;
-			}
-
-			OpsiMethodCall omc = new OpsiMethodCall(methodName, new String[] { softwareLicenseId, licenseContractId,
-					maxInstallations, boundToHost, expirationDate });
-
-			if (exec.doCall(omc)) {
-				result = softwareLicenseId;
-			} else {
-				Logging.error(this, "could not execute " + methodName + "  with softwareLicenseId " + softwareLicenseId
-						+ " and licenseContractId " + licenseContractId);
-			}
+		// The jsonRPC-calls would fail sometimes if we use empty / blank Strings...
+		if (maxInstallations != null && maxInstallations.isBlank()) {
+			maxInstallations = null;
 		}
 
-		return result;
+		if (boundToHost != null && boundToHost.isBlank()) {
+			boundToHost = null;
+		}
+
+		if (expirationDate != null && expirationDate.isBlank()) {
+			expirationDate = null;
+		}
+
+		RPCMethodName methodName = getMethodNameForLicenseType(licenseType);
+
+		OpsiMethodCall omc = new OpsiMethodCall(methodName,
+				new String[] { softwareLicenseId, licenseContractId, maxInstallations, boundToHost, expirationDate });
+
+		if (exec.doCall(omc)) {
+			return softwareLicenseId;
+		} else {
+			Logging.error(this, "could not execute " + methodName + "  with softwareLicenseId " + softwareLicenseId
+					+ " and licenseContractId " + licenseContractId);
+
+			return "";
+		}
+	}
+
+	private RPCMethodName getMethodNameForLicenseType(String licenseType) {
+		RPCMethodName methodName = null;
+		switch (licenseType) {
+		case LicenseEntry.VOLUME:
+			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_VOLUME;
+			break;
+		case LicenseEntry.OEM:
+			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_OEM;
+			break;
+		case LicenseEntry.CONCURRENT:
+			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_CONCURRENT;
+			break;
+		case LicenseEntry.RETAIL:
+			methodName = RPCMethodName.SOFTWARE_LICENSE_CREATE_RETAIL;
+			break;
+		default:
+			Logging.notice(this, "encountered UNKNOWN license type");
+			break;
+		}
+
+		return methodName;
 	}
 
 	public boolean deleteSoftwareLicense(String softwareLicenseId) {
@@ -686,52 +657,8 @@ public class SoftwareDataService {
 			Logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely " + softwareToAssignTruely);
 			Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
 
-			if (!onlyAdding) {
-				List<Map<String, String>> deleteItems = new ArrayList<>();
-
-				for (String swIdent : oldEntriesTruely) {
-					// software exists in audit software
-					entriesToRemove.add(swIdent);
-					Map<String, String> item = new HashMap<>();
-					item.put("ident", swIdent + ";" + licensePoolId);
-					item.put("type", "AuditSoftwareToLicensePool");
-					deleteItems.add(item);
-
-					Logging.info(this, "" + instSwI.get(swIdent));
-				}
-				Logging.info(this, "entriesToRemove " + entriesToRemove);
-				Logging.info(this, "deleteItems " + deleteItems);
-
-				if (!deleteItems.isEmpty()) {
-					OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
-							new Object[] { deleteItems });
-					result = exec.doCall(omc);
-				}
-
-				if (!result) {
-					return false;
-				} else {
-					// do it locally
-					instSwI.keySet().removeAll(entriesToRemove);
-				}
-			}
-
-			List<Map<String, String>> createItems = new ArrayList<>();
-
-			for (String swIdent : softwareToAssignTruely) {
-				Map<String, String> item = new HashMap<>();
-				item.put("ident", swIdent + ";" + licensePoolId);
-				item.put("type", "AuditSoftwareToLicensePool");
-				createItems.add(item);
-			}
-
-			Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
-
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
-					new Object[] { createItems });
-
-			result = exec.doCall(omc);
-
+			result = updateLicensepoolsOnServer(onlyAdding, oldEntriesTruely, entriesToRemove, licensePoolId, instSwI,
+					softwareToAssignTruely);
 			// we build the correct data locally
 			if (result) {
 				Set<String> intermediateSet = new HashSet<>(fLicensePool2SoftwareList.get(licensePoolId));
@@ -767,14 +694,64 @@ public class SoftwareDataService {
 		return result;
 	}
 
+	private boolean updateLicensepoolsOnServer(boolean onlyAdding, List<String> oldEntriesTruely,
+			Set<String> entriesToRemove, String licensePoolId, Map<String, SWAuditEntry> instSwI,
+			List<String> softwareToAssignTruely) {
+		boolean result = true;
+
+		if (!onlyAdding) {
+			List<Map<String, String>> deleteItems = new ArrayList<>();
+
+			for (String swIdent : oldEntriesTruely) {
+				// software exists in audit software
+				entriesToRemove.add(swIdent);
+				Map<String, String> item = new HashMap<>();
+				item.put("ident", swIdent + ";" + licensePoolId);
+				item.put("type", "AuditSoftwareToLicensePool");
+				deleteItems.add(item);
+
+				Logging.info(this, "" + instSwI.get(swIdent));
+			}
+			Logging.info(this, "entriesToRemove " + entriesToRemove);
+			Logging.info(this, "deleteItems " + deleteItems);
+
+			if (!deleteItems.isEmpty()) {
+				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
+						new Object[] { deleteItems });
+				result = exec.doCall(omc);
+			}
+
+			if (!result) {
+				return false;
+			} else {
+				// do it locally
+				instSwI.keySet().removeAll(entriesToRemove);
+			}
+		}
+
+		List<Map<String, String>> createItems = new ArrayList<>();
+
+		for (String swIdent : softwareToAssignTruely) {
+			Map<String, String> item = new HashMap<>();
+			item.put("ident", swIdent + ";" + licensePoolId);
+			item.put("type", "AuditSoftwareToLicensePool");
+			createItems.add(item);
+		}
+
+		Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
+				new Object[] { createItems });
+
+		return exec.doCall(omc);
+	}
+
 	// we have got a SW from software table, therefore we do not serve the unknown
 	// software list
 	public String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licensePoolIDNew) {
 		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
 			return "";
 		}
-
-		String result = "";
 
 		boolean ok = false;
 		Logging.info(this, "editPool2AuditSoftware ");
@@ -842,7 +819,7 @@ public class SoftwareDataService {
 				cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicensePool2SoftwareList);
 			}
 
-			return result;
+			return "";
 		}
 
 		return "???";
@@ -860,9 +837,8 @@ public class SoftwareDataService {
 
 	// side effects of this method: rowsLicensesReconciliation
 	public void retrieveLicenseStatisticsPD() {
-		if (!moduleDataService.isWithLicenseManagementPD()
-				|| (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null
-						&& cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, Map.class) != null)) {
+		if (!moduleDataService.isWithLicenseManagementPD() || cacheManager.isDataCached(Arrays
+				.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			return;
 		}
 
@@ -910,19 +886,7 @@ public class SoftwareDataService {
 
 			Set<String> listOfUsingClients = pool2opsiUsages.get(licensePoolId);
 
-			Logging.debug(this, "pool  " + licensePoolId + " used_by_opsi on clients : " + listOfUsingClients);
-
-			if (listOfUsingClients != null) {
-				for (String client : listOfUsingClients) {
-					String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
-
-					if (rowsLicensesReconciliation.get(pseudokey) == null) {
-						Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
-					} else {
-						rowsLicensesReconciliation.get(pseudokey).put("used_by_opsi", true);
-					}
-				}
-			}
+			setUsedByOpsiToTrue(licensePoolId, listOfUsingClients, rowsLicensesReconciliation);
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, rowsLicensesReconciliation);
@@ -931,8 +895,25 @@ public class SoftwareDataService {
 		Logging.debug(this, "rowsLicenseStatistics " + rowsLicenseStatistics);
 	}
 
+	private void setUsedByOpsiToTrue(String licensePoolId, Set<String> listOfUsingClients,
+			Map<String, Map<String, Object>> rowsLicensesReconciliation) {
+		Logging.debug(this, "pool  " + licensePoolId + " used_by_opsi on clients : " + listOfUsingClients);
+
+		if (listOfUsingClients != null) {
+			for (String client : listOfUsingClients) {
+				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
+
+				if (rowsLicensesReconciliation.get(pseudokey) == null) {
+					Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
+				} else {
+					rowsLicensesReconciliation.get(pseudokey).put("used_by_opsi", true);
+				}
+			}
+		}
+	}
+
 	private Map<String, Map<String, Object>> getRowsLicenseReconciliation() {
-		if (cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 			return cacheManager.getCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, Map.class);
 		}
 
@@ -1076,7 +1057,7 @@ public class SoftwareDataService {
 
 			for (Map<String, Object> item : softwareAuditOnClients) {
 				SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
-				Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(clientEntry.getSWident(),
+				Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(clientEntry.getSWIdent(),
 						s -> new HashSet<>());
 				clientsWithThisSW.add(clientEntry.getClientId());
 			}

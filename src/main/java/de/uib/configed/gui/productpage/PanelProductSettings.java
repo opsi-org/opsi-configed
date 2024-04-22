@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
@@ -36,29 +35,34 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.productgroup.ProductgroupPanel;
+import de.uib.configed.productgroup.ProductActionPanel;
+import de.uib.configed.tree.ProductTree;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.datapanel.EditMapPanelX;
-import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ExporterToCSV;
-import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.table.ListCellOptions;
-import utils.PopupMouseListener;
-import utils.Utils;
+import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.utils.datapanel.EditMapPanelX;
+import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ExporterToCSV;
+import de.uib.utils.table.ExporterToPDF;
 
 public class PanelProductSettings extends JSplitPane {
 	public enum ProductSettingsType {
@@ -67,55 +71,56 @@ public class PanelProductSettings extends JSplitPane {
 
 	private static final int HEIGHT_MIN = 200;
 
-	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
-	private static final int FRAME_HEIGHT = 490;
-
 	private JTable tableProducts;
 	private ProductSettingsTableModel productSettingsTableModel;
 
-	private ProductgroupPanel groupPanel;
+	private ProductActionPanel groupPanel;
 
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
-	private Map<String, Boolean> productDisplayFields;
-
-	private JPopupMenu popup;
+	private PopupMouseListener popupMouseListener;
 	private JMenuItem itemOnDemand;
+	private JScrollPane paneProducts;
 
 	private String title;
 
+	private ProductTree productTree;
+
 	private ConfigedMain configedMain;
 
-	ProductSettingsType type;
+	private ProductSettingsType type;
 
-	public PanelProductSettings(String title, ConfigedMain configedMain, Map<String, Boolean> productDisplayFields,
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
+	public PanelProductSettings(String title, ConfigedMain configedMain, ProductTree productTree,
 			ProductSettingsType type) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
+		this.productTree = productTree;
 		this.configedMain = configedMain;
-		this.productDisplayFields = productDisplayFields;
 		this.type = type;
 		init();
 
-		super.setResizeWeight(1);
+		super.setResizeWeight(1.0);
 	}
 
 	private void initTopPane() {
 		tableProducts = new JTable() {
 			@Override
 			public void setValueAt(Object value, int row, int column) {
-				List<String> saveSelectedProducts = getSelectedProducts();
+				Set<String> saveSelectedProducts = getSelectedIDs();
 				// only in case of setting ActionRequest needed, since we there call
 				// fireTableDataChanged
 				super.setValueAt(value, row, column);
-				setSelection(new HashSet<>(saveSelectedProducts));
+				setSelection(saveSelectedProducts);
 			}
 		};
 
 		tableProducts.setDragEnabled(true);
 
-		groupPanel = new ProductgroupPanel(this, tableProducts, type);
+		groupPanel = new ProductActionPanel(this, tableProducts);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
 			Logging.info(this, " in top pane we got event reloadAction " + ae);
 			reloadAction();
@@ -130,13 +135,11 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	private void init() {
-
 		initTopPane();
 
-		JScrollPane paneProducts = new JScrollPane();
+		paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
-		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		tableProducts.getSelectionModel().addListSelectionListener(this::applyChangedValue);
@@ -181,51 +184,34 @@ public class PanelProductSettings extends JSplitPane {
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(configedMain, propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
 
-		propertiesPanel.registerDataChangedObserver(infoPane);
-
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
 
-		producePopupMenu(productDisplayFields);
+		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		paneProducts.addMouseListener(popupMouseListener);
+		tableProducts.addMouseListener(popupMouseListener);
 
-		paneProducts.addMouseListener(new PopupMouseListener(popup));
-		tableProducts.addMouseListener(new PopupMouseListener(popup));
-
-		activatePacketSelectionHandling(true);
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-	}
-
-	public void setGroupsData(final Map<String, Map<String, String>> data,
-			final Map<String, Set<String>> productGroupMembers) {
-		groupPanel.setGroupsData(data, productGroupMembers);
-		showAll();
-	}
-
-	protected void activatePacketSelectionHandling(boolean b) {
-		if (b) {
-			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
-		} else {
-			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
-		}
 	}
 
 	public void updateSearchFields() {
 		groupPanel.updateSearchFields();
 	}
 
-	public void initAllProperties() {
-		propertiesPanel.init();
-		infoPane.setProductInfo("");
-		infoPane.setProductAdvice("");
+	public void reInitPopupMenu() {
+		paneProducts.removeMouseListener(popupMouseListener);
+		tableProducts.removeMouseListener(popupMouseListener);
+		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		paneProducts.addMouseListener(popupMouseListener);
+		tableProducts.addMouseListener(popupMouseListener);
 	}
 
-	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
-		popup = new JPopupMenu();
+	private JPopupMenu producePopupMenu() {
+		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
-		save.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
+		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
 		save.addActionListener((ActionEvent e) -> {
@@ -238,8 +224,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
 				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
-		itemOnDemand.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
+		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
@@ -248,8 +233,8 @@ public class PanelProductSettings extends JSplitPane {
 		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"),
 				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
-		itemOnDemandForSelectedProducts.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		itemOnDemandForSelectedProducts
+				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts
 				.addActionListener((ActionEvent e) -> configedMain.processActionRequestsSelectedProducts());
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
@@ -293,24 +278,31 @@ public class PanelProductSettings extends JSplitPane {
 		popup.addSeparator();
 		popup.add(sub);
 
-		for (Entry<String, Boolean> checkColumn : checkColumns.entrySet()) {
-			if ("productId".equals(checkColumn.getKey())) {
+		for (Entry<String, Boolean> productDisplayField : getProductDisplayFieldsBasedOnType(type).entrySet()) {
+			if ("productId".equals(productDisplayField.getKey())) {
 				// fixed column
 				continue;
 			}
 
 			JCheckBoxMenuItem item = new JCheckBoxMenuItem();
-			item.setText(InstallationStateTableModel.getColumnTitle(checkColumn.getKey()));
-			item.setState(checkColumn.getValue());
+			item.setText(InstallationStateTableModel.getColumnTitle(productDisplayField.getKey()));
+			item.setState(productDisplayField.getValue());
 			item.addItemListener((ItemEvent e) -> {
-				boolean oldstate = checkColumn.getValue();
-				checkColumns.put(checkColumn.getKey(), !oldstate);
+				boolean oldstate = productDisplayField.getValue();
+				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
 				configedMain.requestReloadStatesAndActions();
 				configedMain.resetView(configedMain.getViewIndex());
 			});
 
 			sub.add(item);
 		}
+		return popup;
+	}
+
+	private Map<String, Boolean> getProductDisplayFieldsBasedOnType(ProductSettingsType type) {
+		return type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+				? persistenceController.getProductDataService().getProductOnClientsDisplayFieldsLocalbootProducts()
+				: persistenceController.getProductDataService().getProductOnClientsDisplayFieldsNetbootProducts();
 	}
 
 	private void createReport() {
@@ -323,12 +315,13 @@ public class PanelProductSettings extends JSplitPane {
 
 		metaData.put("header", title);
 		metaData.put("subject", title);
+
 		title = "";
-		if (configedMain.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-			title = title + "Depot : " + configedMain.getHostsStatusInfo().getInvolvedDepots();
+		if (ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots().length() != 0) {
+			title += "Depot : " + ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots();
 		}
-		if (configedMain.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-			title = title + "; Clients: " + configedMain.getHostsStatusInfo().getSelectedClientNames();
+		if (ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames().length() != 0) {
+			title += "; Clients: " + ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames();
 		}
 		metaData.put("title", title);
 		metaData.put("keywords", "product settings");
@@ -349,7 +342,7 @@ public class PanelProductSettings extends JSplitPane {
 		}
 
 		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
-		if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
+		if (lsm.getSelectedItemsCount() != 1) {
 			Logging.debug(this, "no or several rows selected");
 			clearEditing();
 		} else {
@@ -359,8 +352,13 @@ public class PanelProductSettings extends JSplitPane {
 			Logging.debug(this, "selected  value at "
 					+ tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
 			configedMain.setProductEdited(
-					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
+					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0),
+					this);
 		}
+
+		productTree.produceActiveParents();
+
+		productTree.updateSelectedObjectsInTable();
 	}
 
 	private JTable strippTable(JTable jTable) {
@@ -418,6 +416,7 @@ public class PanelProductSettings extends JSplitPane {
 	protected void reloadAction() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
+		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 		configedMain.requestReloadStatesAndActions();
 		configedMain.resetView(configedMain.getViewIndex());
 		configedMain.setDataChanged(false);
@@ -443,7 +442,7 @@ public class PanelProductSettings extends JSplitPane {
 		if (tableProducts.getRowSorter() != null) {
 			return tableProducts.getRowSorter().getSortKeys();
 		} else {
-			return Collections.emptyList();
+			return Collections.singletonList(new SortKey(0, SortOrder.ASCENDING));
 		}
 	}
 
@@ -458,20 +457,13 @@ public class PanelProductSettings extends JSplitPane {
 		itemOnDemand.setVisible(visible);
 	}
 
-	public void clearSelection() {
-		tableProducts.clearSelection();
-	}
-
 	public void setSelection(Set<String> selectedIDs) {
-		activatePacketSelectionHandling(false);
-		clearSelection();
+		tableProducts.getSelectionModel().setValueIsAdjusting(true);
 
-		if (selectedIDs == null) {
-			Logging.info("selectedIds is null");
-		} else if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
-			tableProducts.addRowSelectionInterval(0, 0);
-			// show first product if no product given
-			Logging.info(this, "setSelection 0");
+		tableProducts.clearSelection();
+
+		if (selectedIDs == null || selectedIDs.isEmpty()) {
+			Logging.info("selectedIds is null or empty");
 		} else {
 			for (int row = 0; row < tableProducts.getRowCount(); row++) {
 				Object productId = tableProducts.getValueAt(row, 0);
@@ -481,8 +473,7 @@ public class PanelProductSettings extends JSplitPane {
 			}
 		}
 
-		activatePacketSelectionHandling(true);
-		groupPanel.findGroup(selectedIDs);
+		tableProducts.getSelectionModel().setValueIsAdjusting(false);
 	}
 
 	public Set<String> getSelectedIDs() {
@@ -505,9 +496,11 @@ public class PanelProductSettings extends JSplitPane {
 		return selectionInModelTerms;
 	}
 
-	public void reduceToSet(Set<String> filter) {
-		activatePacketSelectionHandling(false);
+	public boolean isFilteredMode() {
+		return groupPanel.isFilteredMode();
+	}
 
+	public void reduceToSet(Set<String> filter) {
 		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 		tModel.setFilterFrom(filter);
 
@@ -516,7 +509,6 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.setFilteredMode(filter != null && !filter.isEmpty());
 
 		tableProducts.revalidate();
-		activatePacketSelectionHandling(true);
 	}
 
 	public void reduceToSelected() {
@@ -526,26 +518,60 @@ public class PanelProductSettings extends JSplitPane {
 		setSelection(selection);
 	}
 
-	public void noSelection() {
-		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
-
-		activatePacketSelectionHandling(false);
-		tModel.setFilterFrom((Set<String>) null);
-		tableProducts.revalidate();
-		activatePacketSelectionHandling(true);
+	public void setFilter(Set<String> filter) {
+		groupPanel.setFilteredMode(false);
+		if (tableProducts.getModel() instanceof InstallationStateTableModel) {
+			((InstallationStateTableModel) tableProducts.getModel()).setFilterFrom(filter);
+		}
 	}
 
 	public void showAll() {
 		Set<String> selection = getSelectedIDs();
-		noSelection();
+		setFilter(null);
 		setSelection(selection);
+	}
+
+	public void valueChanged(TreePath[] selectionPaths, boolean doSelection) {
+		if (selectionPaths == null) {
+			setFilter(null);
+		} else if (selectionPaths.length == 1) {
+			nodeSelection((DefaultMutableTreeNode) selectionPaths[0].getLastPathComponent());
+		} else {
+			Set<String> productIds = new HashSet<>();
+			for (TreePath path : selectionPaths) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+				if (!node.getAllowsChildren()) {
+					productIds.add(node.getUserObject().toString());
+				}
+			}
+			setFilter(productIds);
+
+			if (doSelection) {
+				setSelection(productIds);
+			}
+		}
+	}
+
+	private void nodeSelection(DefaultMutableTreeNode node) {
+		if (node.getAllowsChildren()) {
+			Set<String> productIds = ProductTree.getChildrenRecursively(node);
+			setFilter(productIds);
+		} else {
+			Set<String> productIds = Collections.singleton(node.toString());
+			setFilter(productIds);
+			setSelection(productIds);
+		}
 	}
 
 	public void setTableModel(InstallationStateTableModel istm) {
 		// delete old row sorter before setting new model
-
 		tableProducts.setModel(istm);
 		productSettingsTableModel.setRenderer(istm);
+
+		// We don't want to call setSelection here, since it will be called after this method
+		if (!isFilteredMode()) {
+			valueChanged(productTree.getSelectionPaths(), false);
+		}
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
@@ -555,21 +581,20 @@ public class PanelProductSettings extends JSplitPane {
 		}
 	}
 
-	public void initEditing(String productID, String productTitle, String productInfo, String productHint,
-			String productVersion, Collection<Map<String, Object>> storableProductProperties,
-			Map editableProductProperties,
-			// editmappanelx
-			Map<String, ListCellOptions> productpropertyOptionsMap,
-			ProductpropertiesUpdateCollection updateCollection) {
+	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,
+			Map editableProductProperties, ProductpropertiesUpdateCollection updateCollection) {
 		infoPane.setProductId(productID);
-		infoPane.setProductName(productTitle);
-		infoPane.setProductInfo(productInfo);
-		infoPane.setProductVersion(productVersion);
+		infoPane.setProductName(persistenceController.getProductDataService().getProductTitle(productID));
+		infoPane.setProductInfo(persistenceController.getProductDataService().getProductInfo(productID));
+		infoPane.setProductVersion(persistenceController.getProductDataService().getProductVersion(productID)
+				+ ProductDataService.FOR_DISPLAY
+				+ persistenceController.getProductDataService().getProductPackageVersion(productID) + "   "
+				+ persistenceController.getProductDataService().getProductLockedInfo(productID));
 
-		infoPane.setProductAdvice(productHint);
+		infoPane.setProductAdvice(persistenceController.getProductDataService().getProductHint(productID));
 
-		propertiesPanel.setEditableMap(editableProductProperties, productpropertyOptionsMap);
-
+		propertiesPanel.setEditableMap(editableProductProperties,
+				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));
 		propertiesPanel.setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(updateCollection);
 	}
@@ -578,25 +603,11 @@ public class PanelProductSettings extends JSplitPane {
 		propertiesPanel.cancelOldCellEditing();
 	}
 
-	private void clearEditing() {
-		initEditing("", "", "", "", "", null, null, null, null);
+	public void clearEditing() {
+		propertiesPanel.setEditableMap(null, null);
+		propertiesPanel.setStoreData(null);
+		propertiesPanel.setUpdateCollection(null);
 		infoPane.clearEditing();
-	}
-
-	public List<String> getSelectedProducts() {
-		// in model terms
-
-		List<Integer> selectedRows = getSelectedRowsInModelTerms();
-
-		List<String> selectedProductsList = new ArrayList<>();
-
-		for (int row : selectedRows) {
-			selectedProductsList.add((String) tableProducts.getModel().getValueAt(row, 0));
-		}
-
-		Logging.info(this, "selectedProducts " + selectedProductsList);
-
-		return selectedProductsList;
 	}
 
 	public JTable getTableProducts() {

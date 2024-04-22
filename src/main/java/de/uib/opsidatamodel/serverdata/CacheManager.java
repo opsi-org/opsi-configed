@@ -6,6 +6,7 @@
 
 package de.uib.opsidatamodel.serverdata;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -89,5 +90,19 @@ public final class CacheManager {
 	 */
 	public void clearAllCachedData() {
 		cache.clear();
+	}
+
+	public boolean isDataCached(Collection<CacheIdentifier> identifiers) {
+		for (CacheIdentifier identifier : identifiers) {
+			if (cache.get(identifier) == null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public boolean isDataCached(CacheIdentifier identifier) {
+		return cache.get(identifier) != null;
 	}
 }

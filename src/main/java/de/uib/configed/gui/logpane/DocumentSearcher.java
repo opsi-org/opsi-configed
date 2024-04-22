@@ -12,11 +12,10 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.Highlight;
+
+import de.uib.utils.logging.Logging;
+
 import javax.swing.text.JTextComponent;
-
-import org.apache.commons.lang.StringUtils;
-
-import de.uib.utilities.logging.Logging;
 
 /**
  * A simple class that searches for an expression in a document and highlights
@@ -27,12 +26,6 @@ public class DocumentSearcher {
 	private Highlighter.HighlightPainter painter;
 	private int lastReturnedOffset;
 	private boolean caseSensitive;
-	private String fullContent;
-	private int currentMatch;
-	private int totalMatches;
-	private boolean lastShownElement;
-	private boolean hasReachedEnd;
-	private String oldExpression;
 
 	public DocumentSearcher(JTextComponent comp) {
 		this.comp = comp;
@@ -46,26 +39,6 @@ public class DocumentSearcher {
 
 	public void setLastReturnedOffset(int lastReturnedOffset) {
 		this.lastReturnedOffset = lastReturnedOffset;
-	}
-
-	public void setHasReachedEnd(boolean hasReachedEnd) {
-		this.hasReachedEnd = hasReachedEnd;
-	}
-
-	public boolean isLastShownElement() {
-		return lastShownElement;
-	}
-
-	public void setFullContent(String fullContent) {
-		this.fullContent = fullContent;
-	}
-
-	public int getCurrentMatch() {
-		return currentMatch;
-	}
-
-	public int getTotalMatches() {
-		return totalMatches;
 	}
 
 	/**
@@ -119,21 +92,12 @@ public class DocumentSearcher {
 
 	private int getOffset(String content, String expression) {
 		int lastIndex = 0;
-		int wordSize = expression.length();
+		int expressionSize = expression.length();
 		int firstOffset = -1;
 		int returnOffset = lastReturnedOffset;
 
-		if (!expression.equals(oldExpression)) {
-			totalMatches = countMatches(expression);
-			oldExpression = expression;
-			lastShownElement = false;
-			lastReturnedOffset = -1;
-			returnOffset = -1;
-			currentMatch = 0;
-		}
-
 		while ((lastIndex = content.indexOf(expression, lastIndex)) != -1) {
-			int endIndex = lastIndex + wordSize;
+			int endIndex = lastIndex + expressionSize;
 			highlightMatch(lastIndex, endIndex);
 			if (firstOffset == -1) {
 				firstOffset = lastIndex;
@@ -142,20 +106,11 @@ public class DocumentSearcher {
 				returnOffset = lastIndex;
 			}
 			lastIndex = endIndex;
-			lastShownElement = false;
 		}
 
 		if (returnOffset == lastReturnedOffset) {
-			lastShownElement = true;
-		}
-
-		if (returnOffset == lastReturnedOffset && (currentMatch == totalMatches || hasReachedEnd)) {
-			currentMatch = 0;
-			lastShownElement = false;
 			returnOffset = firstOffset;
 		}
-
-		currentMatch++;
 
 		return returnOffset;
 	}
@@ -167,16 +122,4 @@ public class DocumentSearcher {
 			Logging.warning(this, "could not add highlight to comphighlighter", e);
 		}
 	}
-
-	private int countMatches(String word) {
-		int foundMatches = 0;
-		if (caseSensitive) {
-			foundMatches = StringUtils.countMatches(fullContent, word);
-		} else {
-			foundMatches = StringUtils.countMatches(fullContent.toLowerCase(Locale.ROOT),
-					word.toLowerCase(Locale.ROOT));
-		}
-		return foundMatches;
-	}
-
 }

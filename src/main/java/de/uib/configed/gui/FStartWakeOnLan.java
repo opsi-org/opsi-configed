@@ -35,10 +35,10 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.RunningInstances;
-import de.uib.utilities.thread.WaitingSleeper;
-import de.uib.utilities.thread.WaitingWorker;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.observer.RunningInstances;
+import de.uib.utils.thread.WaitingSleeper;
+import de.uib.utils.thread.WaitingWorker;
 
 public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
@@ -261,7 +261,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		setNowTimeAsTarget();
 
 		JLabel labelColon = new JLabel(":");
-
 		JLabel labelDelay = new JLabel(Configed.getResourceValue("FStartWakeOnLan.delay"));
 		JLabel labelStartdelay = new JLabel(Configed.getResourceValue("FStartWakeOnLan.setTime"));
 		JLabel labelStartAt = new JLabel(Configed.getResourceValue("FStartWakeOnLan.resultingStartTime"));
@@ -444,7 +443,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		remMinutesS = formatlNumberUpTo99(remminutes);
 		hoursS = formatlNumberUpTo99(hours);
 
-		return "" + hoursS + ":" + remMinutesS + ":" + remSecondsS;
+		return hoursS + ":" + remMinutesS + ":" + remSecondsS;
 	}
 
 	private static String formatlNumberUpTo99(long n) {

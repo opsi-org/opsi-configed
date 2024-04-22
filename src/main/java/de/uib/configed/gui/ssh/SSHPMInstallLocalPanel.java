@@ -20,10 +20,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
-import utils.Utils;
+import de.uib.utils.Utils;
 
 public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
-
 	private JLabel jLabelUploadFrom;
 	private JLabel jLabelUploadTo;
 	private JTextField jTextFieldPath;

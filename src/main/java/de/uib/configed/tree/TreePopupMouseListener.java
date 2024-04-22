@@ -18,12 +18,11 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.utilities.logging.Logging;
-import utils.PopupMouseListener;
+import de.uib.utils.PopupMouseListener;
+import de.uib.utils.logging.Logging;
 
 public class TreePopupMouseListener extends PopupMouseListener {
-	private ClientTree tree;
+	private AbstractGroupTree tree;
 
 	private TreePath mousePath;
 
@@ -34,7 +33,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	private JMenuItem menuItemActivateElements;
 	private JMenuItem menuItemRemoveElements;
 
-	public TreePopupMouseListener(JPopupMenu jPopupMenu, ClientTree tree, ConfigedMain configedMain) {
+	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
 		super(jPopupMenu);
 		this.tree = tree;
 
@@ -54,32 +53,36 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
 		jPopupMenu.add(menuItemDeleteGroupNode);
 
-		menuItemActivateElements = new JMenuItem(Configed.getResourceValue("ClientTree.selectAllElements"));
-		menuItemActivateElements.addActionListener(actionEvent -> activateElements(configedMain));
+		String selectAllKey = tree instanceof ClientTree ? "ClientTree.selectAllElements"
+				: "ProductTree.selectAllElements";
+		menuItemActivateElements = new JMenuItem(Configed.getResourceValue(selectAllKey));
+		menuItemActivateElements.addActionListener(actionEvent -> activateElements());
 		jPopupMenu.add(menuItemActivateElements);
 
-		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue("ClientTree.removeAllElements"));
-		menuItemRemoveElements.addActionListener(actionEvent -> removeElements(configedMain));
+		String removeAllKey = tree instanceof ClientTree ? "ClientTree.removeAllElements"
+				: "ProductTree.removeAllElements";
+		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue(removeAllKey));
+		menuItemRemoveElements.addActionListener(actionEvent -> removeElements());
 		jPopupMenu.add(menuItemRemoveElements);
 	}
 
 	private void makeSubGroup() {
 		DefaultMutableTreeNode resultNode = tree.makeSubgroupAt(mousePath);
 		if (resultNode != null) {
-			tree.makeVisible(tree.pathByAddingChild(mousePath, resultNode));
+			tree.makeVisible(mousePath.pathByAddingChild(resultNode));
 			tree.repaint();
 		}
 	}
 
-	private void activateElements(ConfigedMain configedMain) {
+	private void activateElements() {
 		TreePath sourcePath = mousePath;
 		if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
 			GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
-			configedMain.setGroup(node.toString());
+			tree.setGroupAndSelect(node);
 		}
 	}
 
-	private void removeElements(ConfigedMain configedMain) {
+	private void removeElements() {
 		if (mousePath != null && mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode) {
 			GroupNode node = (GroupNode) mousePath.getPathComponent(mousePath.getPathCount() - 1);
 
@@ -94,9 +97,9 @@ public class TreePopupMouseListener extends PopupMouseListener {
 				}
 			}
 
-			if (tree.removeClientNodes(clientNodesToRemove)) {
+			if (tree.removeNodes(clientNodesToRemove)) {
 				// refresh internal view
-				configedMain.setGroup(node.toString());
+				tree.setGroupAndSelect(node);
 			}
 		}
 	}
@@ -115,26 +118,14 @@ public class TreePopupMouseListener extends PopupMouseListener {
 			return false;
 		}
 
-		Logging.debug(this, "checkAccepted clickPath  " + mousePath);
+		Logging.debug(this, "shouldShow clickPath  " + mousePath);
 
 		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
 
-		String nodeName = clickNode.getUserObject().toString();
-
-		if (tree.getGroupNode(nodeName) != null && clickNode != tree.getGroupNode(nodeName)) {
-			Logging.warning(this, "checkAccepted clickNode != tree.getGroupNode(nodeName)");
-			clickNode = tree.getGroupNode(nodeName);
-		}
-
-		Logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
-
-		return !nodeName.equals(ClientTree.ALL_CLIENTS_NAME) && !((DefaultMutableTreeNode) clickNode.getParent())
-				.getUserObject().toString().equals(ClientTree.ALL_CLIENTS_NAME);
-		// dont show here any menu
+		return !tree.isGroupNodeFullList(clickNode);
 	}
 
 	private boolean checkAccepted(MouseEvent e) {
-
 		if (!shouldShow(e)) {
 			return false;
 		}

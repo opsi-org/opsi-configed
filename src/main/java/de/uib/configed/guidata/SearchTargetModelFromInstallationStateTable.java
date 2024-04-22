@@ -11,8 +11,8 @@ import java.util.Arrays;
 import javax.swing.JTable;
 
 import de.uib.configed.gui.productpage.PanelProductSettings;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.SearchTargetModelFromTable;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.SearchTargetModelFromTable;
 
 public class SearchTargetModelFromInstallationStateTable extends SearchTargetModelFromTable {
 	private PanelProductSettings panelProductSettings;
@@ -32,13 +32,13 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 	@Override
 	public void setFiltered(boolean b) {
 		if (!filtered) {
-			viewRowfilter = table.getSelectedRows();
+			selectedRows = table.getSelectedRows();
 		}
 
-		if (b && viewRowfilter.length > 0) {
-			int[] modelRowFilter = new int[viewRowfilter.length];
-			for (int i = 0; i < viewRowfilter.length; i++) {
-				modelRowFilter[i] = table.convertRowIndexToModel(viewRowfilter[i]);
+		if (b && selectedRows.length > 0) {
+			int[] modelRowFilter = new int[selectedRows.length];
+			for (int i = 0; i < selectedRows.length; i++) {
+				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
 			}
 
 			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));

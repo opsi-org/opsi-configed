@@ -29,29 +29,18 @@ public final class HealthInfo {
 	/**
 	 * retrieves processed data as String.
 	 * 
-	 * @param includeDetailedInformation whether to include detailed
-	 *                                   information, when processing health
-	 *                                   data
-	 * @return processed data with or without detailed information (depends on
-	 *         {@code includeDetailedInformation})
+	 * @return processed data with or without detailed information
 	 */
-	public static String getHealthData(boolean includeDetailedInformation) {
-		return processHealthData(includeDetailedInformation).toString();
-	}
-
-	private static StringBuilder processHealthData(boolean includeDetailedInformation) {
+	public static String getHealthData() {
 		List<Map<String, Object>> healthData = persistenceController.getHealthDataService().checkHealthPD();
 		StringBuilder healthDataBuilder = new StringBuilder();
 
 		for (Map<String, Object> data : healthData) {
 			healthDataBuilder.append(produceMessages(data));
-
-			if (includeDetailedInformation) {
-				healthDataBuilder.append(produceHealthDetails(data));
-			}
+			healthDataBuilder.append(produceHealthDetails(data));
 		}
 
-		return healthDataBuilder;
+		return healthDataBuilder.toString();
 	}
 
 	/**

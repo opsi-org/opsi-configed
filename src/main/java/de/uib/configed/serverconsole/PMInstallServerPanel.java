@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
-import utils.Utils;
+import de.uib.utils.Utils;
 
 public class PMInstallServerPanel extends PMInstallPanel {
 	private JLabel jLabelServerDir = new JLabel();

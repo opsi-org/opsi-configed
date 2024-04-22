@@ -20,7 +20,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class InstallationStateUpdateManager {
 	private Map<String, Map<String, TreeSet<String>>> productsToUpdate = new HashMap<>();
@@ -49,7 +49,8 @@ public class InstallationStateUpdateManager {
 				&& tableNetbootProducts.getModel() instanceof InstallationStateTableModel) {
 			updateTableForClient(clientId, attributes, tableNetbootProducts);
 		} else {
-			Logging.warning(this, "Cannot update table because we're not in Localboot or Netboot");
+			Logging.notice(this,
+					"Cannot update table because the Product table with the product to update is not open");
 		}
 	}
 
@@ -63,7 +64,6 @@ public class InstallationStateUpdateManager {
 		} else {
 			istmForSelectedClients.updateTable(clientId, attributes);
 		}
-
 	}
 
 	private boolean isProductsUpdatedForClient(String clientId, String productType) {
@@ -78,7 +78,6 @@ public class InstallationStateUpdateManager {
 		if (collectChangedProductStates != null && !collectChangedProductStates.isEmpty()) {
 			for (Entry<String, Map<String, Map<String, String>>> changedClientState : collectChangedProductStates
 					.entrySet()) {
-
 				Map<String, Map<String, String>> clientValues = changedClientState.getValue();
 
 				Logging.debug(this, "updateProductStates, collectChangedProductStates , client "

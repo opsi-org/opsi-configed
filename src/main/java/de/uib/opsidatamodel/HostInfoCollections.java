@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -31,8 +32,8 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides a way to retrieve the current data (and update it) about hosts and
@@ -44,13 +45,13 @@ import utils.Utils;
 @SuppressWarnings({ "unchecked" })
 public class HostInfoCollections {
 	private CacheManager cacheManager;
-	private ClientTree connectedTree;
+	private ClientTree clientTree;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
 	// We need the argument here since the controller is not loaded yet
-	public HostInfoCollections(OpsiServiceNOMPersistenceController pc) {
+	public HostInfoCollections(OpsiServiceNOMPersistenceController persistenceController) {
 		this.cacheManager = CacheManager.getInstance();
-		this.persistenceController = pc;
+		this.persistenceController = persistenceController;
 	}
 
 	// deliver data
@@ -61,8 +62,8 @@ public class HostInfoCollections {
 		return result;
 	}
 
-	public void setTree(ClientTree tree) {
-		connectedTree = tree;
+	public void setTree(ClientTree clientTree) {
+		this.clientTree = clientTree;
 	}
 
 	public String getConfigServer() {
@@ -115,7 +116,7 @@ public class HostInfoCollections {
 		Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null "
 				+ (cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class) == null));
 
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_HOST_NAMES)) {
 			return;
 		}
 
@@ -352,16 +353,16 @@ public class HostInfoCollections {
 	}
 
 	public void retrieveFNode2TreeparentsPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.FNODE_TO_TREE_PARENTS)) {
 			return;
 		}
 
 		retrieveOpsiHostsPD();
 		Map<String, Set<String>> fNode2Treeparents = new HashMap<>();
-		if (connectedTree != null) {
+		if (clientTree != null) {
 			List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
 			for (String host : opsiHostNames) {
-				fNode2Treeparents.put(host, connectedTree.collectParentIDs(host));
+				fNode2Treeparents.put(host, clientTree.collectParentIDs(Collections.singleton(host)));
 			}
 		}
 		cacheManager.setCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, fNode2Treeparents);

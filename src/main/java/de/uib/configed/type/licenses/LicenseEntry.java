@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.uib.utilities.ExtendedInteger;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.ExtendedInteger;
+import de.uib.utils.logging.Logging;
 
 // software license in opsi data base
 public class LicenseEntry extends TreeMap<String, Object> {

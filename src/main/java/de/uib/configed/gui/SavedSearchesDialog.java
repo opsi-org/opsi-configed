@@ -29,13 +29,13 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditStringList;
-import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.table.gui.SearchTargetModel;
-import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TableSearchPane;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.FEditStringList;
+import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.table.gui.SearchTargetModel;
+import de.uib.utils.table.gui.SearchTargetModelFromJList;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class SavedSearchesDialog extends FEditStringList {
 	private SelectionManager manager;
@@ -87,8 +87,8 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
 				new ArrayList<>());
-		searchPane = new TableSearchPane(searchTargetModel, "savedsearches");
-		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		searchPane = new TableSearchPane(searchTargetModel);
+		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 		editingArea.add(searchPane, BorderLayout.NORTH);
 
@@ -252,7 +252,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		Logging.info(this, "resetModel");
 		model.removeAllElements();
 
-		SavedSearches savedSearches = manager.getSavedSearches();
+		SavedSearches savedSearches = persistenceController.getConfigDataService().getSavedSearchesPD();
 		TreeSet<String> nameSet = new TreeSet<>(manager.getSavedSearchesNames());
 		Map<String, String> descMap = new TreeMap<>();
 

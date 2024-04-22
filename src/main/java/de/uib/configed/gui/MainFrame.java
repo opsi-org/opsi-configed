@@ -9,8 +9,6 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -29,21 +27,21 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -52,11 +50,12 @@ import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
+import de.uib.configed.serverconsole.command.CommandWithParameters;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommand;
-import de.uib.configed.serverconsole.command.CommandWithParameters;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
+import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -69,20 +68,14 @@ import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.UserPreferences;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.savedstates.UserPreferences;
 
 public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
-	private static final int MIN_WIDTH_TREE_PANEL = 150;
 
 	public static final int F_WIDTH = 800;
-
-	private static final int F_WIDTH_RIGHTHANDED = 200;
-
-	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
-	private static final int DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT = 50;
 
 	private ConfigedMain configedMain;
 
@@ -100,6 +93,7 @@ public class MainFrame extends JFrame {
 
 	private JMenuItem jMenuFrameLicenses;
 	private JMenuItem jMenuFrameShowDialogs;
+	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter;
 
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
@@ -111,30 +105,29 @@ public class MainFrame extends JFrame {
 
 	private GlassPane glassPane;
 
-	private boolean multidepot;
-
 	private DepotListPresenter depotListPresenter;
 
-	private ClientTree treeClients;
+	private ClientTree clientTree;
+	private ProductTree productTree;
 
 	private IconBarPanel iconBarPanel;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public MainFrame(ConfigedMain main, ClientTable panelClientlist, DepotsList depotsList, ClientTree treeClients) {
+	public MainFrame(ConfigedMain configedMain, ClientTable panelClientlist, DepotsList depotsList,
+			ClientTree clientTree, ProductTree productTree) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
-
 		this.clientTable = panelClientlist;
 
-		this.treeClients = treeClients;
+		this.clientTree = clientTree;
+		this.productTree = productTree;
 
-		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
+		depotListPresenter = new DepotListPresenter(depotsList);
 
-		this.configedMain = main;
+		this.configedMain = configedMain;
 
 		guiInit();
 		initData();
@@ -148,10 +141,6 @@ public class MainFrame extends JFrame {
 
 	private void initData() {
 		statusPane.updateValues(0, null, null, null);
-	}
-
-	public boolean isMultiDepot() {
-		return multidepot;
 	}
 
 	public ClientTable getClientTable() {
@@ -299,7 +288,7 @@ public class MainFrame extends JFrame {
 	 * (include config, control and terminal dialog) also check the depot
 	 * configs for setting the field editable (or not)
 	 **/
-	private void setupMenuServer() {
+	public void setupMenuServer() {
 		Logging.info(this, "setupMenuServer ");
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		SSHConnectionInfo connectionInfo = SSHConnectionInfo.getInstance();
@@ -311,7 +300,7 @@ public class MainFrame extends JFrame {
 
 		Logging.info(this, "setupMenuServer add configpage");
 		JMenuItem jMenuSSHConfig = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHConfig"));
-		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
+		jMenuSSHConfig.addActionListener((ActionEvent e) -> configedMain.startSSHConfigDialog());
 
 		jMenuSSHConnection.setEnabled(false);
 
@@ -327,7 +316,7 @@ public class MainFrame extends JFrame {
 
 		Logging.info(this, "setupMenuServer add commandcontrol");
 		JMenuItem jMenuSSHCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
-		jMenuSSHCommandControl.addActionListener((ActionEvent e) -> startSSHControlAction());
+		jMenuSSHCommandControl.addActionListener((ActionEvent e) -> configedMain.startSSHControlDialog());
 		// SSHCommandControlDialog
 
 		jMenuServer.add(jMenuSSHConnection);
@@ -376,8 +365,7 @@ public class MainFrame extends JFrame {
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		List<SSHCommand> commands = factory.getSSHCommandParameterList();
 		for (final SSHCommand command : commands) {
-			JMenuItem jMenuOpsiCommand = new JMenuItem();
-			jMenuOpsiCommand.setText(command.getMenuText());
+			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener((ActionEvent e) -> jMenuOptionCommandAction(factory, command));
 			menuOpsi.add(jMenuOpsiCommand);
@@ -421,8 +409,7 @@ public class MainFrame extends JFrame {
 			boolean commandsAreDeactivated) {
 		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 		for (final SSHCommandTemplate com : listCom) {
-			JMenuItem jMenuItem = new JMenuItem();
-			jMenuItem.setText(com.getMenuText());
+			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
 			Logging.info(this, "ssh command menuitem text " + com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> jMenuItemAction(factory, com));
@@ -457,7 +444,7 @@ public class MainFrame extends JFrame {
 				|| UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE) == null
 				|| !UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE);
 		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
-		CommandFactory factory = CommandFactory.getInstance(configedMain);
+		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
 		addCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
 		if (menuOpsi.getSubElements().length != 0) {
@@ -487,7 +474,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addCommandsToMenuServer(JMenu menuOpsi, boolean commandsAreDeactivated) {
-		final CommandFactory factory = CommandFactory.getInstance(configedMain);
+		final CommandFactory factory = CommandFactory.getInstance();
 		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
 
 		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
@@ -557,8 +544,8 @@ public class MainFrame extends JFrame {
 		} else {
 			// Create new instance of the same command, so that further
 			// modifications would not affect the original command.
-			final SSHCommandTemplate c = new SSHCommandTemplate(com);
-			remoteSSHExecAction(c);
+			final SSHCommandTemplate command = new SSHCommandTemplate(com);
+			configedMain.startSSHOpsiServerExec(command);
 		}
 	}
 
@@ -572,7 +559,7 @@ public class MainFrame extends JFrame {
 			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
 					+ factory.getConnectionState());
 		} else {
-			remoteSSHExecAction(command);
+			configedMain.startSSHOpsiServerExec(command);
 		}
 	}
 
@@ -613,7 +600,7 @@ public class MainFrame extends JFrame {
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
 
-		JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
+		jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		jMenuClientselectionToggleClientFilter.setState(false);
 		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
@@ -643,7 +630,7 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuFrameWorkOnProducts = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
-		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.handleProductActionRequest());
+		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
 		JMenuItem jMenuFrameDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
@@ -782,25 +769,13 @@ public class MainFrame extends JFrame {
 
 		setJMenuBar(initMenuBar());
 
-		JPanel allPanel = new JPanel();
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
-		allPanel.setLayout(new BorderLayout());
-		allPanel.add(iconBarPanel, BorderLayout.NORTH);
-		allPanel.add(centralPane, BorderLayout.CENTER);
-		allPanel.add(statusPane, BorderLayout.SOUTH);
-		allPanel.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				Logging.debug(this, "componentResized");
-				moveDivider1(jTabbedPaneConfigPanes.getPanelClientSelection(),
-						jTabbedPaneConfigPanes.getClientInfoPanel(), (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
-						(int) (F_WIDTH_RIGHTHANDED * 1.5));
-				Logging.debug(this, "componentResized ready");
-			}
-		});
-		getContentPane().add(allPanel);
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(iconBarPanel, BorderLayout.NORTH);
+		getContentPane().add(centralPane, BorderLayout.CENTER);
+		getContentPane().add(statusPane, BorderLayout.SOUTH);
 
 		setTitle(configedMain.getAppTitle());
 
@@ -829,11 +804,10 @@ public class MainFrame extends JFrame {
 
 	private JSplitPane initCentralPane() {
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
-
-		scrollpaneTreeClients.getViewport().add(treeClients);
+		scrollpaneTreeClients.getViewport().add(clientTree);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setPreferredSize(treeClients.getMaximumSize());
+		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
 
 		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() "
 				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
@@ -844,44 +818,30 @@ public class MainFrame extends JFrame {
 		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
 				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
-		JSplitPane splitpaneClientSelection = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false,
-				depotListPresenter.getScrollpaneDepotslist(), scrollpaneTreeClients);
+		JScrollPane scrollpaneTreeProducts = new JScrollPane();
+		scrollpaneTreeProducts.getViewport().add(productTree);
+		scrollpaneTreeProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollpaneTreeProducts.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollpaneTreeProducts.setPreferredSize(productTree.getMaximumSize());
 
-		Logging.info(this, "multidepot " + multidepot);
-		if (multidepot) {
-			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT);
-		} else {
-			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SINGLE_DEPOT);
-		}
+		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"),
+				scrollpaneTreeClients);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ProductTree"),
+				scrollpaneTreeProducts);
 
-		JPanel panelTreeClientSelection = new JPanel();
-		GroupLayout layoutPanelTreeClientSelection = new GroupLayout(panelTreeClientSelection);
-		panelTreeClientSelection.setLayout(layoutPanelTreeClientSelection);
+		jTabbedPaneClientSelection.setSelectedIndex(1);
+		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
 
-		layoutPanelTreeClientSelection
-				.setHorizontalGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addGroup(layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(depotListPresenter, MIN_WIDTH_TREE_PANEL, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(splitpaneClientSelection, MIN_WIDTH_TREE_PANEL,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
-
-		layoutPanelTreeClientSelection
-				.setVerticalGroup(layoutPanelTreeClientSelection.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(depotListPresenter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE));
-
-		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this);
-		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
+		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
+		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
 				jTabbedPaneConfigPanes);
 		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
 		return centralPane;
 	}
 
-	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
 				&& b) {
@@ -892,35 +852,6 @@ public class MainFrame extends JFrame {
 
 		jMenuFileSaveConfigurations.setEnabled(b);
 		iconBarPanel.getIconButtonSaveConfiguration().setEnabled(b);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// action methods for visual interactions
-
-	/**
-	 * Calls method from configedMain to start the execution of given command
-	 *
-	 * @param SSHCommand command
-	 */
-	private void remoteSSHExecAction(SSHCommand command) {
-		Logging.debug(this, "jMenuRemoteSSHExecAction");
-		configedMain.startSSHOpsiServerExec(command);
-	}
-
-	/**
-	 * Calls method from configedMain to start the config dialog
-	 */
-	private void startSSHConfigAction() {
-		Logging.debug(this, "jMenuSSHConfigAction");
-		configedMain.startSSHConfigDialog();
-	}
-
-	/**
-	 * Calls method from configedMain to start the command control dialog
-	 */
-	private void startSSHControlAction() {
-		Logging.debug(this, "jMenuSSHControlAction");
-		configedMain.startSSHControlDialog();
 	}
 
 	private void startControlAction() {
@@ -939,36 +870,35 @@ public class MainFrame extends JFrame {
 	}
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
-		configedMain.toggleFilterClientList(rebuildClientListTableModel);
+		configedMain.toggleFilterClientList(rebuildClientListTableModel, !configedMain.isFilterClientList());
+		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
 		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
 		clientTable.setFilterMark(configedMain.isFilterClientList());
 	}
 
 	private void groupByNotCurrentProductVersion() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsNotCurrentProductInstalled(products, false);
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsNotCurrentProductInstalled(products, true);
 	}
 
 	private void groupByFailedProduct() {
-		String products = getProduct(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsWithFailedProduct(products);
 	}
 
-	private String getProduct(List<String> completeList) {
+	private String getLocalbootProductsFromSelection() {
 		FSelectionList fProductSelectionList = new FSelectionList(this,
 				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
 						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
-				F_WIDTH / 2, 600, "productselection");
-		fProductSelectionList.setListData(completeList);
+				F_WIDTH / 2, 600);
+		fProductSelectionList.setListData(new ArrayList<>(
+				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		fProductSelectionList.setVisible(true);
 		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
 	}
@@ -1025,7 +955,7 @@ public class MainFrame extends JFrame {
 		FEditorPane backendInfoDialog = new FEditorPane(this,
 				Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 800, 600);
-		backendInfoDialog.insertHTMLTable(configedMain.getBackendInfos(), "");
+		backendInfoDialog.insertHTMLTable(persistenceController.getConfigDataService().getBackendInfos(), "");
 
 		backendInfoDialog.setVisible(true);
 	}
@@ -1106,25 +1036,6 @@ public class MainFrame extends JFrame {
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
-		}
-	}
-
-	private static void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
-			int maxRightWidth) {
-		if (splitpane == null || rightpane == null) {
-			return;
-		}
-
-		int dividerLocation = splitpane.getDividerLocation();
-
-		int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
-		int missingSpace = minRightWidth - sizeOfRightPanel;
-		if (missingSpace > 0 && dividerLocation > minLeftWidth) {
-			splitpane.setDividerLocation(dividerLocation - missingSpace);
-		}
-
-		if (sizeOfRightPanel > maxRightWidth) {
-			splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
 		}
 	}
 

@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 
 import javax.swing.Icon;
 import javax.swing.JFrame;
@@ -45,9 +44,9 @@ public class FTextArea extends FGeneralDialog {
 		initFTextArea(preferredWidth, preferredHeight);
 	}
 
-	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons, int preferredWidth,
+	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight, JPanel addPane) {
-		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false,
+		super(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight, false,
 				addPane);
 		super.checkAdditionalPane();
 		initFTextArea(preferredWidth, preferredHeight);
@@ -79,21 +78,5 @@ public class FTextArea extends FGeneralDialog {
 		jTextPane.setEditable(false);
 
 		scrollpane.getViewport().add(jTextPane, null);
-
-		jTextPane.addKeyListener(this);
-	}
-
-	// KeyListener
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
-		if (!e.isShiftDown() && e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_TAB) {
-			jButton1.requestFocus();
-		}
-
-		if (e.isShiftDown() && e.getSource() == jButton1 && e.getKeyCode() == KeyEvent.VK_TAB) {
-			jTextPane.requestFocus();
-		}
 	}
 }

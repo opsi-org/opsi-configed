@@ -7,6 +7,7 @@
 package de.uib.opsidatamodel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,8 +15,7 @@ import java.util.TreeMap;
 import de.uib.configed.tree.ClientTree;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class HostGroups extends TreeMap<String, Map<String, String>> {
 	OpsiServiceNOMPersistenceController persistenceController;
@@ -27,18 +27,18 @@ public class HostGroups extends TreeMap<String, Map<String, String>> {
 
 	public HostGroups addSpecialGroups() {
 		Logging.debug(this, "addSpecialGroups check");
-		List<StringValuedRelationElement> groups = new ArrayList<>();
+		List<Map<String, String>> groups = new ArrayList<>();
 
 		// create
 		if (get(ClientTree.DIRECTORY_PERSISTENT_NAME) == null) {
 			Logging.debug(this, "addSpecialGroups");
-			StringValuedRelationElement directoryGroup = new StringValuedRelationElement();
+			Map<String, String> directoryGroup = new HashMap<>();
 
 			directoryGroup.put("groupId", ClientTree.DIRECTORY_PERSISTENT_NAME);
 			directoryGroup.put("parentGroupId", null);
 			directoryGroup.put("description", "root of directory");
 
-			persistenceController.getGroupDataService().addGroup(directoryGroup, false);
+			persistenceController.getGroupDataService().addGroup(directoryGroup, true);
 
 			groups.add(directoryGroup);
 

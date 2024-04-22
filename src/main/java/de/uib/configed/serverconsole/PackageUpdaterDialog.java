@@ -27,7 +27,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandPackageUpdater;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class PackageUpdaterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();

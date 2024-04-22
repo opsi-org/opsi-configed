@@ -34,8 +34,8 @@ import de.uib.configed.serverconsole.command.SingleCommandOpsiMakeProductFile;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.configed.serverconsole.command.SingleCommandTemplate;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class MakeProductFileDialog extends FGeneralDialog {
 	private static final Pattern tripleSemicolonMatcher = Pattern.compile(";;;");

@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.SwingUtilities;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +28,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
  * This Class handles SSHCommands.
@@ -484,13 +482,6 @@ public final class SSHCommandFactory {
 			sshCommandList.remove(getSSHCommandByMenu(menu));
 			knownMenus.remove(menu);
 		}
-	}
-
-	/**
-	 * Reload configed menu server-console
-	 */
-	public void reloadServerMenu() {
-		SwingUtilities.invokeLater(configedMain::reloadServerMenu);
 	}
 
 	public SSHConnect getConnection() {

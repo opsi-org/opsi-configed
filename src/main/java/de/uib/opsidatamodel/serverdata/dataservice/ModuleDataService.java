@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsicommand.ServerFacade;
@@ -31,12 +31,11 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.ModulePermissionValue;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utilities.ExtendedDate;
-import de.uib.utilities.ExtendedInteger;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.ExtendedDate;
+import de.uib.utils.ExtendedInteger;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with module data on the server.
@@ -58,12 +57,12 @@ public class ModuleDataService {
 	private static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
 	private CacheManager cacheManager;
-	private AbstractExecutioner exec;
+	private AbstractPOJOExecutioner exec;
 
 	private UserRolesConfigDataService userRolesConfigDataService;
 	private HostInfoCollections hostInfoCollections;
 
-	public ModuleDataService(AbstractExecutioner exec) {
+	public ModuleDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
 	}
@@ -102,7 +101,7 @@ public class ModuleDataService {
 	}
 
 	public final void retrieveOpsiLicensingInfoOpsiAdminPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)) {
 			return;
 		}
 
@@ -121,10 +120,7 @@ public class ModuleDataService {
 	}
 
 	public void retrieveOpsiLicensingInfoNoOpsiAdminPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_NO_OPSI_ADMIN, Map.class) != null) {
-			return;
-		}
-		if (cacheManager.getCachedData(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN, Map.class) == null
+		if (!cacheManager.isDataCached(CacheIdentifier.OPSI_LICENSING_INFO_OPSI_ADMIN)
 				&& isOpsiLicensingAvailablePD()) {
 			Object[] callParameters = {};
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.BACKEND_GET_LICENSING_INFO, callParameters,
@@ -750,8 +746,7 @@ public class ModuleDataService {
 					+ getMethodSignaturePD(RPCMethodName.BACKEND_GET_LICENSING_INFO));
 
 			boolean isOpsiLicencingAvailable;
-			if (getMethodSignaturePD(
-					RPCMethodName.BACKEND_GET_LICENSING_INFO) == OpsiServiceNOMPersistenceController.NONE_LIST) {
+			if (getMethodSignaturePD(RPCMethodName.BACKEND_GET_LICENSING_INFO) == null) {
 				Logging.info(this,
 						"method " + RPCMethodName.BACKEND_GET_LICENSING_INFO + " not existing in this opsi service");
 				isOpsiLicencingAvailable = false;
@@ -770,14 +765,12 @@ public class ModuleDataService {
 		Map<String, List<String>> mapOfMethodSignatures = cacheManager
 				.getCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, Map.class);
 		Logging.debug(this, "mapOfMethodSignatures " + mapOfMethodSignatures);
-		if (mapOfMethodSignatures.get(methodname.toString()) == null) {
-			return OpsiServiceNOMPersistenceController.NONE_LIST;
-		}
+
 		return mapOfMethodSignatures.get(methodname.toString());
 	}
 
 	public void retrieveMethodSignaturesPD() {
-		if (cacheManager.getCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, Map.class) != null) {
+		if (cacheManager.isDataCached(CacheIdentifier.MAP_OF_METHOD_SIGNATURES)) {
 			return;
 		}
 
@@ -827,7 +820,7 @@ public class ModuleDataService {
 		opsiInformation = new HashMap<>();
 
 		// method does not exist before opsi 3.4
-		if (getMethodSignaturePD(methodName) != OpsiServiceNOMPersistenceController.NONE_LIST) {
+		if (getMethodSignaturePD(methodName) != null) {
 			opsiInformation = exec.getMapResult(omc);
 		}
 

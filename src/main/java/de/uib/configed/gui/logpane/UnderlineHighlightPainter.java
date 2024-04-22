@@ -14,10 +14,11 @@ import java.awt.Shape;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.LayeredHighlighter.LayerPainter;
+
+import de.uib.utils.logging.Logging;
+
 import javax.swing.text.Position;
 import javax.swing.text.View;
-
-import de.uib.utilities.logging.Logging;
 
 // Painter for underlined highlights
 public class UnderlineHighlightPainter extends LayerPainter {

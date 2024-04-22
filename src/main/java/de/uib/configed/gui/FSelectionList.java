@@ -21,32 +21,23 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.SearchTargetModel;
-import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TableSearchPane;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.SearchTargetModel;
+import de.uib.utils.table.gui.SearchTargetModelFromJList;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
 	private TableSearchPane searchPane;
-	private String savedStatesObjectTag;
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
-			int preferredHeight, String savedStatesObjectTag) {
-		this(owner, title, modal, buttonList, null, preferredWidth, preferredHeight, savedStatesObjectTag);
+			int preferredHeight) {
+		this(owner, title, modal, buttonList, null, preferredWidth, preferredHeight);
 	}
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int preferredWidth, int preferredHeight, String savedStatesObjectTag) {
-		this(owner, title, modal, buttonList, icons, preferredWidth, preferredHeight, null, savedStatesObjectTag);
-	}
-
-	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int preferredWidth, int preferredHeight, JPanel additionalPane, String savedStatesObjectTag) {
-		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false,
-				additionalPane);
-		this.savedStatesObjectTag = savedStatesObjectTag;
-		this.owner = owner;
+			int preferredWidth, int preferredHeight) {
+		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false, null);
 	}
 
 	@Override
@@ -91,16 +82,17 @@ public class FSelectionList extends FGeneralDialog {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, new ArrayList<>(),
 				new ArrayList<>());
-		searchPane = new TableSearchPane(searchTargetModel, savedStatesObjectTag);
-		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		searchPane = new TableSearchPane(searchTargetModel);
+		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 
 		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()
 				.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
 				.addComponent(scrollpane));
 
-		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup()
-				.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+		centerLayout.setVerticalGroup(centerLayout
+				.createSequentialGroup().addComponent(searchPane, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(scrollpane));
 		return centerPanel;
 	}

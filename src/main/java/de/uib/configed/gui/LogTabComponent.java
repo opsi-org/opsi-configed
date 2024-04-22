@@ -23,8 +23,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public class LogTabComponent extends LogPane {
 	private static final String ALL_LOGFILES_SUFFIX = "all";
@@ -113,7 +113,7 @@ public class LogTabComponent extends LogPane {
 		String fileName = null;
 
 		if (chooser == null) {
-			setFileChooser("");
+			setFileChooser();
 		}
 
 		File f = new File(chooser.getCurrentDirectory(), typeName);
@@ -127,8 +127,8 @@ public class LogTabComponent extends LogPane {
 		return fileName;
 	}
 
-	private void setFileChooser(String fileName) {
-		chooser = new JFileChooser(fileName);
+	private void setFileChooser() {
+		chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);

@@ -16,8 +16,8 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.datastructure.StringValuedRelationElement;
+import de.uib.utils.logging.Logging;
 
 /**
  * This class is a little command line tool which can execute saved searches.
@@ -26,27 +26,30 @@ public class SavedSearchQuery {
 	private String host;
 	private String user;
 	private String password;
+	private String otp;
 	private String searchName;
 
-	private OpsiServiceNOMPersistenceController controller;
+	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public SavedSearchQuery(String host, String user, String password, String searchName) {
-		setArgs(host, user, password, searchName);
+	public SavedSearchQuery(String host, String user, String password, String otp, String searchName) {
+		setArgs(host, user, password, otp, searchName);
 		initConnection();
 	}
 
-	private void setArgs(String host, String user, String password, String searchName) {
+	private void setArgs(String host, String user, String password, String otp, String searchName) {
 		Logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;
+		this.otp = otp;
 		this.searchName = searchName;
 	}
 
 	private void initConnection() {
-		controller = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password, otp);
 
-		if (controller == null || controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
+		if (persistenceController == null
+				|| persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			Logging.error("Authentication error.");
 			Main.endApp(1);
 		}
@@ -55,10 +58,10 @@ public class SavedSearchQuery {
 	}
 
 	public List<String> runSearch(boolean printing) {
-		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
+		Map<String, Map<String, Object>> depots = persistenceController.getHostInfoCollections().getAllDepots();
 
 		// Load data that we need to find clients for selection
-		controller.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
+		persistenceController.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
 
 		SelectionManager manager = new SelectionManager(null);
 		List<String> searches = manager.getSavedSearchesNames();
@@ -87,7 +90,7 @@ public class SavedSearchQuery {
 			Main.endApp(4);
 		}
 
-		Map<String, Map<String, String>> hostGroups = controller.getGroupDataService().getHostGroupsPD();
+		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
 
 		if (!hostGroups.keySet().contains(groupName)) {
 			Logging.error("group not found");
@@ -98,17 +101,17 @@ public class SavedSearchQuery {
 		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
 				hostGroups.get(groupName));
 
-		if (!controller.getGroupDataService().deleteGroup(groupName)) {
+		if (!persistenceController.getGroupDataService().deleteGroup(groupName)) {
 			Logging.error("delete group error, groupName " + groupName);
 			Main.endApp(6);
 		}
 
-		if (!controller.getGroupDataService().addGroup(saveGroupRelation)) {
+		if (!persistenceController.getGroupDataService().addGroup(saveGroupRelation, true)) {
 			Logging.error("add group error, group " + saveGroupRelation);
 			Main.endApp(7);
 		}
 
-		if (!controller.getGroupDataService().addHosts2Group(hosts, groupName)) {
+		if (!persistenceController.getGroupDataService().addHosts2Group(hosts, groupName)) {
 			Logging.error("addHosts2Group error, group " + groupName);
 			Main.endApp(8);
 		}

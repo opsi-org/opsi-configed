@@ -33,6 +33,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -44,14 +46,13 @@ import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.configed.type.RemoteControl;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.list.ListCellRendererByIndex;
-import de.uib.utilities.table.gui.ColorTableCellRenderer;
-import de.uib.utilities.table.gui.TableSearchPane;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.table.gui.TableSearchPane;
 
-public class ClientTable extends JPanel implements KeyListener {
-
+public class ClientTable extends JPanel implements ListSelectionListener, KeyListener {
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -101,7 +102,8 @@ public class ClientTable extends JPanel implements KeyListener {
 
 		activateListSelectionListener();
 
-		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(table), true, null);
+		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(table), true);
+		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_WITH_ALTERNATIVES_SEARCH);
 		searchPane.setFiltering(true);
 
 		// filter icon inside searchpane
@@ -126,13 +128,13 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public void activateListSelectionListener() {
 		// We want to prevent, that the listSelectionListener is added more than once
-		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(configedMain)) {
-			selectionModel.addListSelectionListener(configedMain);
+		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(this)) {
+			selectionModel.addListSelectionListener(this);
 		}
 	}
 
 	public void deactivateListSelectionListener() {
-		selectionModel.removeListSelectionListener(configedMain);
+		selectionModel.removeListSelectionListener(this);
 	}
 
 	public void setFilterMark(boolean b) {
@@ -143,12 +145,20 @@ public class ClientTable extends JPanel implements KeyListener {
 		return table;
 	}
 
+	// ListSelectionListener for client list
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+			configedMain.actOnListSelection();
+		}
+	}
+
 	public void setDataPanel() {
 		scrollpane.getViewport().setView(table);
 	}
 
 	public void setMissingDataPanel() {
-		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_OPSI, ""));
+		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_CONFIGED, ""));
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 		JPanel mdPanel = new JPanel();
@@ -185,18 +195,6 @@ public class ClientTable extends JPanel implements KeyListener {
 
 	public boolean isSelectionEmpty() {
 		return table.getSelectedRowCount() == 0;
-	}
-
-	private Map<Integer, Integer> getSelectionMap() {
-		Map<Integer, Integer> selectionMap = new HashMap<>();
-		int selectedKeysCount = 0;
-
-		for (int i : table.getSelectedRows()) {
-			selectionMap.put(selectedKeysCount, i);
-			selectedKeysCount++;
-		}
-
-		return selectionMap;
 	}
 
 	public Set<String> getSelectedSet() {
@@ -246,7 +244,6 @@ public class ClientTable extends JPanel implements KeyListener {
 			// so we do it manually
 			configedMain.actOnListSelection();
 		} else {
-
 			// because of ordering , we create a TreeSet view of the list
 			selectionModel.setValueIsAdjusting(true);
 			selectionModel.clearSelection();
@@ -308,27 +305,6 @@ public class ClientTable extends JPanel implements KeyListener {
 		tm.addTableModelListener(table);
 
 		table.setModel(tm);
-	}
-
-	public DefaultTableModel getSelectedRowsModel() {
-		final Map<Integer, Integer> selectionMap = getSelectionMap();
-
-		return new DefaultTableModel() {
-			@Override
-			public Object getValueAt(int row, int col) {
-				return table.getValueAt(selectionMap.get(row), col);
-			}
-
-			@Override
-			public int getRowCount() {
-				return selectionMap.size();
-			}
-
-			@Override
-			public int getColumnCount() {
-				return table.getColumnCount();
-			}
-		};
 	}
 
 	public DefaultTableModel getTableModel() {
@@ -420,6 +396,7 @@ public class ClientTable extends JPanel implements KeyListener {
 		dialogRemoteControl.setDividerLocation(0.8);
 	}
 
+	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -432,7 +409,6 @@ public class ClientTable extends JPanel implements KeyListener {
 		}
 	}
 
-	// KeyListener interface
 	@Override
 	public void keyReleased(KeyEvent e) {
 		/* Not needed */}

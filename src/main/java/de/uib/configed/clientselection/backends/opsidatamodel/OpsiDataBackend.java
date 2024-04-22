@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableSet;
 import java.util.Set;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
@@ -97,7 +96,7 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class OpsiDataBackend {
 	/*
@@ -412,9 +411,6 @@ public final class OpsiDataBackend {
 
 		hardwareOnClient = null;
 		clientToHardware = null;
-	}
-
-	public void reload() {
 		persistenceController.reloadData(ReloadEvent.DEPOT_CHANGE_RELOAD.toString());
 	}
 
@@ -495,14 +491,6 @@ public final class OpsiDataBackend {
 			clients.add(client);
 		}
 		return clients;
-	}
-
-	public List<String> getGroups() {
-		return persistenceController.getGroupDataService().getHostGroupIds();
-	}
-
-	public NavigableSet<String> getProductIDs() {
-		return persistenceController.getProductDataService().getProductIdsPD();
 	}
 
 	public Map<String, List<AbstractSelectElement>> getHardwareList() {

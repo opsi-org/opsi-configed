@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.productpage.TextMarkdownPane;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class FCreditsDialog extends FGeneralDialog {
 	private FCreditsDialog(JFrame owner) {
@@ -58,5 +58,4 @@ public final class FCreditsDialog extends FGeneralDialog {
 	protected boolean wantToBeRegisteredWithRunningInstances() {
 		return false;
 	}
-
 }

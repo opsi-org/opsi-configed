@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.utilities.datastructure.AbstractTableEntry;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.datastructure.AbstractTableEntry;
+import de.uib.utils.logging.Logging;
 
 public class LicensepoolEntry extends AbstractTableEntry {
 	public static final String ID_SERVICE_KEY = "licensePoolId";

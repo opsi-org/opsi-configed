@@ -6,8 +6,6 @@
 
 package de.uib.configed.clientselection.operations;
 
-import java.util.List;
-
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.ExecutableOperation;
@@ -16,10 +14,6 @@ import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 public class HostOperation extends AbstractSelectGroupOperation implements ExecutableOperation {
 	public HostOperation(AbstractSelectOperation operation) {
 		registerChildOperation(operation);
-	}
-
-	public HostOperation(List<AbstractSelectOperation> operations) {
-		registerChildOperation(operations.get(0));
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
-import utils.Utils;
+import de.uib.utils.Utils;
 
 public class PMInstallLocalPanel extends PMInstallPanel {
 

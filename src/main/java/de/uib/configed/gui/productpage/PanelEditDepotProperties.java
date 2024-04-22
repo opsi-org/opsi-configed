@@ -42,9 +42,9 @@ import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.datapanel.DefaultEditMapPanel;
-import de.uib.utilities.logging.Logging;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.utils.logging.Logging;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, MouseListener, KeyListener {
@@ -75,11 +75,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		listDepots.addMouseListener(this);
 		listDepots.addKeyListener(this);
 
-		DepotListCellRenderer myListCellRenderer = new DepotListCellRenderer();
+		DepotListCellRenderer myListCellRenderer = new DepotListCellRenderer(configedMain);
 		myListCellRenderer.setInfo(persistenceController.getHostInfoCollections().getDepots());
 		listDepots.setCellRenderer(myListCellRenderer);
-
-		listSelectedDepots = new ArrayList<>();
 
 		JScrollPane scrollpaneDepots = new JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
@@ -246,7 +244,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private Map<String, Object> mergeProperties(
 			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, List<String> depots,
 			String productId) {
-
 		if (depots.isEmpty()) {
 			// Do nothing
 		} else if (depots.size() == 1) {

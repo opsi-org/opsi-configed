@@ -22,7 +22,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	private static final int INFO_LENGTH = 40;

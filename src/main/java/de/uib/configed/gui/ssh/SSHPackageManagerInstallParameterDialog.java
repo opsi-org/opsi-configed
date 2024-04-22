@@ -23,7 +23,7 @@ import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerParameterDialog {
 	private JPanel mainPanel = new JPanel();
@@ -75,7 +75,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		installLocalPanel = new SSHPMInstallLocalPanel();
 		installServerPanel = new SSHPMInstallServerPanel(fromMakeProductfile);
 		installWgetPanel = new SSHPMInstallWgetPanel();
-		installSettingsPanel = new SSHPMInstallSettingsPanel(this);
+		installSettingsPanel = new SSHPMInstallSettingsPanel(this, configedMain);
 
 		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {
 			jRadioButtonServer.setSelected(true);

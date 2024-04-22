@@ -6,21 +6,17 @@
 
 package de.uib.opsidatamodel.datachanges;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 /**
 */
 
 public class UpdateCollection implements UpdateCommand, CountedCollection {
-	protected Collection<UpdateCommand> implementor;
-
-	// we delegate all Collection methods to this object extending only add()
-	public UpdateCollection(Collection<UpdateCommand> implementor) {
-		this.implementor = implementor;
-	}
+	protected Collection<UpdateCommand> implementor = new ArrayList<>();
 
 	@Override
 	public boolean addAll(Collection<? extends UpdateCommand> c) {

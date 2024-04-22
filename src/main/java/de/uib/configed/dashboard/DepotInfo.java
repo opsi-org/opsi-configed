@@ -14,7 +14,7 @@ import de.uib.configed.dashboard.collector.DepotData;
 import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.type.HostInfo;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class DepotInfo implements DataChangeListener {
 	private MainView controller;

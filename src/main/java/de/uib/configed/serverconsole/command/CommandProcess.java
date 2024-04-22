@@ -17,8 +17,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import de.uib.configed.ConfigedMain;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
-import de.uib.utilities.ThreadLocker;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.ThreadLocker;
+import de.uib.utils.logging.Logging;
 
 public class CommandProcess {
 	private String id;

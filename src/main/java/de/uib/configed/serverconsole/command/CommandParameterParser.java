@@ -36,8 +36,8 @@ import de.uib.configed.gui.ValueSelectorList;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.ssh.SSHOutputCollector;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.ssh.SSHOutputCollector;
 
 public final class CommandParameterParser {
 	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
@@ -437,8 +437,8 @@ public final class CommandParameterParser {
 		return depotIPs;
 	}
 
-	private static ValueSelectorList fillValueSelectorList(final List<String> values) {
-		final DepotsList valueList = new DepotsList();
+	private ValueSelectorList fillValueSelectorList(final List<String> values) {
+		final DepotsList valueList = new DepotsList(configedMain);
 		valueList.setVisible(true);
 		final Map<String, Object> extendedInfo = new TreeMap<>();
 		final Map<String, Map<String, Object>> info = new TreeMap<>();

@@ -8,7 +8,7 @@ package de.uib.configed;
 
 import javax.swing.SwingWorker;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class InitialDataLoader extends SwingWorker<Void, Void> {
 	private ConfigedMain configedMain;

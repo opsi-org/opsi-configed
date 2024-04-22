@@ -39,8 +39,8 @@ import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommand;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.CheckedDocument;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.CheckedDocument;
 
 public final class CommandControlDialog extends FGeneralDialog {
 	private static final int FRAME_WIDTH = 850;
@@ -63,7 +63,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 	public CommandControlDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
 		this.configedMain = configedMain;
-		factory = CommandFactory.getInstance(configedMain);
+		factory = CommandFactory.getInstance();
 		parameterPanel = new CommandControlParameterMethodsPanel(this);
 		init();
 

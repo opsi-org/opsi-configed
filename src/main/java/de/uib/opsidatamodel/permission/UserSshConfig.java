@@ -8,7 +8,7 @@ package de.uib.opsidatamodel.permission;
 
 import java.util.Set;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class UserSshConfig extends UserConfigModule {
 	// not create new user specific ssh configs (use defaults)

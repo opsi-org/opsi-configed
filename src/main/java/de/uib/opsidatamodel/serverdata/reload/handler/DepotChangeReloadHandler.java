@@ -38,9 +38,5 @@ public class DepotChangeReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
 		productDataService.retrieveProductIdsAndDefaultStatesPD();
-
-		cacheManager.clearCachedData(CacheIdentifier.ALL_NETBOOT_PRODUCT_NAMES);
-		cacheManager.clearCachedData(CacheIdentifier.ALL_LOCALBOOT_PRODUCT_NAMES);
-		depotDataService.retrieveProductsPD();
 	}
 }

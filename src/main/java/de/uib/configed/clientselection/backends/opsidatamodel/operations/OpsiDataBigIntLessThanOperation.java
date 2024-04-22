@@ -12,7 +12,7 @@ import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.BigIntLessThanOperation;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class OpsiDataBigIntLessThanOperation extends BigIntLessThanOperation implements ExecutableOperation {
 	private String map;

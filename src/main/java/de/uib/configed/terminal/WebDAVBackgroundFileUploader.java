@@ -12,8 +12,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import de.uib.utilities.WebDAVClient;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.WebDAVClient;
+import de.uib.utils.logging.Logging;
 
 public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader {
 	private String destinationDir;

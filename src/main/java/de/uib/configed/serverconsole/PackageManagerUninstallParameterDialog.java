@@ -34,7 +34,7 @@ import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class PackageManagerUninstallParameterDialog extends PackageManagerParameterDialog {
 	private JPanel uninstallPanel = new JPanel();
@@ -67,7 +67,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 		this.configedMain = configedMain;
 
-		fDepotList = new FDepotselectionList(this) {
+		fDepotList = new FDepotselectionList(this, configedMain) {
 			@Override
 			public void setListData(List<String> v) {
 				if (v == null || v.isEmpty()) {

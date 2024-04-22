@@ -13,19 +13,19 @@ import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
-import de.uib.utilities.logging.Logging;
+import de.uib.configed.ConfigedMain;
+import de.uib.utils.logging.Logging;
 
 public class FDepotselectionList extends FGeneralDialog {
 	private DepotsList depotsList;
-
 	private Window masterWindow;
 
-	public FDepotselectionList(JDialog masterWindow) {
+	public FDepotselectionList(JDialog masterWindow, ConfigedMain configedMain) {
 		super(masterWindow, Configed.getResourceValue("FDepotselectionList.title"),
 				new String[] { Configed.getResourceValue("buttonCancel"),
 						Configed.getResourceValue("FDepotselectionList.buttontake") },
 				500, 300);
-		depotsList = new DepotsList();
+		depotsList = new DepotsList(configedMain);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		scrollpane.getViewport().add(depotsList);
 		this.masterWindow = masterWindow;

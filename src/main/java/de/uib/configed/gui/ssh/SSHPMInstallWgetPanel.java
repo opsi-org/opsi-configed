@@ -19,10 +19,10 @@ import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
-import de.uib.opsicommand.sshcommand.CommandWget;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	private JLabel jLabelURL = new JLabel();

@@ -20,6 +20,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -34,9 +35,10 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
-import de.uib.utilities.savedstates.UserPreferences;
+import de.uib.utils.FeatureActivationChecker;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
+import de.uib.utils.savedstates.UserPreferences;
 
 public class Main {
 	// --------------------------------------------------------------------------------------------------------
@@ -66,28 +68,26 @@ public class Main {
 		options.addOption("l", "locale", true, "Set locale LOC (format: <language>_<country>). DEFAULT: System.locale");
 		options.addOption("d", "directory", true, "Directory for log files. DEFAULT: an opsi log directory "
 				+ "dependent on system and user privileges, see /help/logfile");
-		options.addOption(null, "loglevel", true, "Set logging level L, L is a number >= " + Logging.LEVEL_NONE
+		options.addOption(null, "loglevel", true, "Set logging level N, N is a number >= " + Logging.LEVEL_NONE
 				+ ", <= " + Logging.LEVEL_SECRET + " . DEFAULT: " + Logging.getLogLevelConsole());
 		options.addOption(null, "help", false, "Give this help");
 		options.addOption("v", "version", false, "Tell configed version");
 
 		// Configed specific options
 		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
-		options.addOption("u", "user", true, "user for authentication. DEFAULT: give interactive");
-		options.addOption("p", "password", true, "password for authentication. DEFAULT: give interactive");
-		options.addOption("c", "client", true, "CLIENT to preselect.  DEFAULT: no client selected");
-		options.addOption("g", "clientgroup", true,
-				"clientgroup to preselect. DEFAULT: last selected group reselected");
-		options.addOption("t", "tab", true,
-				"Start with tab number <arg>, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0");
+		options.addOption("u", "user", true, "User for authentication. DEFAULT: give interactive");
+		options.addOption("p", "password", true, "Password for authentication. DEFAULT: give interactive");
+		options.addOption("otp", "one-time-password", true,
+				"One time password for authentication. DEFAULT: give interactive\n"
+						+ "OTP is a paid feature. Should be used when license is available and OTP is enabled for a user");
 		options.addOption("s", "savedstates", true,
 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
 		options.addOption("r", "refreshminutes", true,
-				"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never).DEFAULT: 0");
+				"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never). DEFAULT: 0");
 		options.addOption("qs", "querysavedsearch", true,
 				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
 		options.addOption("qg", "definegroupbysearch", true,
-				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
+				"On command line: populate existing group GROUP_NAME with clients resulting from search SAVEDSEARCH_NAME");
 		options.getOption("qg").setArgs(2);
 		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
@@ -102,12 +102,18 @@ public class Main {
 				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
 		options.addOption(null, "localizationstrings", false,
 				"For translation work, show internal labels together with the strings of selected localization");
-		options.addOption(null, "swaudit-pdf", true,
-				"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
-		options.addOption(null, "swaudit-csv", true,
-				"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
+		options.addOption(null, "swaudit-pdf", true, "export pdf swaudit reports for given clients");
+		options.getOption("swaudit-pdf").setArgs(2);
+		options.addOption(null, "swaudit-csv", true, "export csv swaudit reports for given clients");
+		options.getOption("swaudit-csv").setArgs(2);
 		options.addOption(null, "disable-certificate-verification", false,
 				"Disable opsi-certificate verification with server, by DEFAULT enabled");
+		options.addOption("ff", "feature-flags", true,
+				"A list of features to activate on start. Available features are: "
+						+ (FeatureActivationChecker.hasAvailableFeatures()
+								? FeatureActivationChecker.getAvailableFeaturesAsString()
+								: "NONE"));
+		options.getOption("ff").setArgs(Option.UNLIMITED_VALUES);
 
 		// Logviewer specific options
 		options.addOption("f", "filename", true, "filename for the log file");
@@ -122,7 +128,7 @@ public class Main {
 	}
 
 	public static void showHelp() {
-		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ")");
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setWidth(Integer.MAX_VALUE);
@@ -151,16 +157,14 @@ public class Main {
 				loglevelString = cmd.getOptionValue("loglevel");
 				Integer loglevel = Integer.valueOf(loglevelString);
 
-				Logging.setLogLevelConsole(loglevel);
-				Logging.setLogLevelFile(loglevel);
+				Logging.setLogLevel(loglevel);
 			} catch (NumberFormatException ex) {
 				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
 			}
 		}
 
 		if (cmd.hasOption("version")) {
-			Logging.essential(
-					"configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+			Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ")");
 			endApp(0);
 		}
 
@@ -176,6 +180,11 @@ public class Main {
 		if (cmd.hasOption("l")) {
 			String locale = cmd.getOptionValue("l");
 			Messages.setLocale(locale);
+		}
+
+		if (cmd.hasOption("ff")) {
+			String[] activatedFeatures = cmd.getOptionValues("ff");
+			FeatureActivationChecker.setActivatedFeatures(activatedFeatures);
 		}
 
 		// After setting locale then we can use localization values

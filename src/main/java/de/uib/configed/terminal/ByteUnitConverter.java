@@ -8,7 +8,7 @@ package de.uib.configed.terminal;
 
 import java.util.Locale;
 
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.logging.Logging;
 
 public class ByteUnitConverter {
 	private static final int ONE_MB_IN_BYTES = 1_000_000;

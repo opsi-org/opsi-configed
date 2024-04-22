@@ -22,8 +22,8 @@ import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.terminal.WebDAVBackgroundFileUploader;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.utilities.ThreadLocker;
-import de.uib.utilities.logging.Logging;
+import de.uib.utils.ThreadLocker;
+import de.uib.utils.logging.Logging;
 
 public class CommandExecutor implements MessagebusListener {
 	private static final Pattern MORE_THAN_ONE_SPACE_PATTERN = Pattern.compile("\\s{2,}",

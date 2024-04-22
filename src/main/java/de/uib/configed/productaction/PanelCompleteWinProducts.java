@@ -37,16 +37,15 @@ import de.uib.configed.Globals;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.NameProducer;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.SecondaryFrame;
-import utils.Utils;
+import de.uib.utils.NameProducer;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.SecondaryFrame;
 
 public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	// file name conventions
 
 	private String winProduct = "";
-	private String server = "";
 	private String selectedDepot;
 	private Set<String> depots = new HashSet<>();
 
@@ -80,7 +79,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	public PanelCompleteWinProducts(ConfigedMain configedMain, SecondaryFrame rootFrame) {
 		this.configedMain = configedMain;
 		this.rootFrame = rootFrame;
-		server = configedMain.getConfigserver();
 
 		defineChoosers();
 		initComponentsForNameProducer();
@@ -127,8 +125,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 
 		smbMounted = new File(depotProductDirectory).exists();
 
-		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(server,
-				depotProductDirectory);
+		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(depotProductDirectory);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
@@ -321,8 +318,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			values.add(productKey);
 
 			// check if product key is new and should be changed
-			Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(server,
-					winProduct);
+			Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(
+					persistenceController.getHostInfoCollections().getConfigServer(), winProduct);
 			Logging.debug(this, " getProductproperties " + propsMap);
 
 			String oldProductKey = null;

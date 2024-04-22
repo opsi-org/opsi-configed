@@ -23,11 +23,11 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.gui.SearchTargetModel;
-import de.uib.utilities.table.gui.SearchTargetModelFromJList;
-import de.uib.utilities.table.gui.TableSearchPane;
-import utils.Utils;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.SearchTargetModel;
+import de.uib.utils.table.gui.SearchTargetModelFromJList;
+import de.uib.utils.table.gui.TableSearchPane;
 
 public class DepotListPresenter extends JPanel {
 	private DepotsList depotslist;
@@ -48,9 +48,9 @@ public class DepotListPresenter extends JPanel {
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public DepotListPresenter(DepotsList depotsList, boolean multidepot) {
+	public DepotListPresenter(DepotsList depotsList) {
 		this.depotslist = depotsList;
-		this.multidepot = multidepot;
+		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
 		List<String> values = new ArrayList<>();
 		List<String> descriptions = new ArrayList<>();
@@ -67,11 +67,9 @@ public class DepotListPresenter extends JPanel {
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
 
-		searchPane = new TableSearchPane(searchTargetModel, "depotlist");
-		searchPane.setSearchMode(TableSearchPane.FULL_TEXT_SEARCH);
+		searchPane = new TableSearchPane(searchTargetModel);
+		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
-		searchPane.setToolTipTextCheckMarkAllColumns(
-				Configed.getResourceValue("DepotListPresenter.checkmarkAllColumns.tooltip"));
 
 		initComponents();
 		layouting();
@@ -136,9 +134,11 @@ public class DepotListPresenter extends JPanel {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonSelectDepotsAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(searchPane,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(scrollpaneDepotslist, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -151,7 +151,8 @@ public class DepotListPresenter extends JPanel {
 						.addGap(Globals.GAP_SIZE))
 				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE)));
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addComponent(scrollpaneDepotslist, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	private void selectDepotsWithEqualProperties() {
