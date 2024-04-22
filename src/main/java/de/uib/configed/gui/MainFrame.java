@@ -339,7 +339,6 @@ public class MainFrame extends JFrame {
 		factory.retrieveSSHCommandListRequestRefresh();
 		factory.retrieveSSHCommandList();
 
-		jMenuServer.add(menuOpsi);
 		addSSHCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
 		if (menuOpsi.getSubElements().length != 0) {
 			menuOpsi.addSeparator();
@@ -373,9 +372,9 @@ public class MainFrame extends JFrame {
 			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener((ActionEvent e) -> jMenuOptionCommandAction(factory, command));
-			menuOpsi.add(jMenuOpsiCommand);
 			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
+			menuOpsi.add(jMenuOpsiCommand);
 		}
 	}
 
@@ -384,7 +383,6 @@ public class MainFrame extends JFrame {
 		Map<String, List<SSHCommandTemplate>> sortedComs = factory.getSSHCommandMapSortedByParent();
 
 		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
-		boolean firstParentGroup = true;
 		for (Entry<String, List<SSHCommandTemplate>> entry : sortedComs.entrySet()) {
 			String parentMenuName = entry.getKey();
 			List<SSHCommandTemplate> listCom = new LinkedList<>(entry.getValue());
@@ -395,18 +393,14 @@ public class MainFrame extends JFrame {
 			if (parentMenuName.equals(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parentMenu.setText("");
 				parentMenu.setIcon(Utils.createImageIcon("images/burger_menu_09.png", "..."));
-			} else if ((parentMenuName.equals(SSHCommandFactory.PARENT_NULL))) {
-				// Do nothing in that case
+			} else if ((parentMenuName.equals(SSHCommandFactory.PARENT_OPSI))) {
+				jMenuServer.add(menuOpsi);
+				jMenuServer.addSeparator();
 			} else {
-				firstParentGroup = false;
+				// Do nothing in that case
 			}
 
 			addSSHSubCommands(menuOpsi, parentMenu, listCom, commandsAreDeactivated);
-			if (firstParentGroup && !listCom.isEmpty()) {
-				jMenuServer.addSeparator();
-			}
-
-			firstParentGroup = false;
 		}
 	}
 
@@ -455,8 +449,7 @@ public class MainFrame extends JFrame {
 		if (menuOpsi.getSubElements().length != 0) {
 			menuOpsi.addSeparator();
 		}
-		addCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
-		jMenuTerminal.add(menuOpsi);
+		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 
 		boolean userConfigExists = UserConfig.getCurrentUserConfig() != null;
 		jMenuTerminal.setEnabled(userConfigExists
@@ -465,16 +458,16 @@ public class MainFrame extends JFrame {
 				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_MENU_ACTIVE));
 	}
 
-	private void addCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
+	private void addDefaultOpsiCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
 		for (final SingleCommand command : CommandFactory.getDefaultOpsiCommands()) {
 			JMenuItem jMenuOpsiCommand = new JMenuItem();
 			jMenuOpsiCommand.setText(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(
 					(ActionEvent e) -> ((CommandWithParameters) command).startParameterGui(configedMain));
-			menuOpsi.add(jMenuOpsiCommand);
 			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
+			menuOpsi.add(jMenuOpsiCommand);
 		}
 	}
 
@@ -483,7 +476,6 @@ public class MainFrame extends JFrame {
 		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
 
 		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
-		boolean firstParentGroup = true;
 		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
 			String parentMenuName = entry.getKey();
 			List<MultiCommandTemplate> listCom = new LinkedList<>(entry.getValue());
@@ -494,18 +486,14 @@ public class MainFrame extends JFrame {
 			if (parentMenuName.equals(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parentMenu.setText("");
 				parentMenu.setIcon(Utils.createImageIcon("images/burger_menu_09.png", "..."));
-			} else if ((parentMenuName.equals(CommandFactory.PARENT_NULL))) {
-				// Do nothing in that case
+			} else if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
+				jMenuTerminal.add(menuOpsi);
+				jMenuTerminal.addSeparator();
 			} else {
-				firstParentGroup = false;
+				// Do nothing in that case
 			}
 
 			addSubCommands(menuOpsi, parentMenu, listCom, commandsAreDeactivated);
-			if (firstParentGroup && !listCom.isEmpty()) {
-				jMenuTerminal.addSeparator();
-			}
-
-			firstParentGroup = false;
 		}
 	}
 
