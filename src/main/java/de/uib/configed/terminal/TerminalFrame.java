@@ -142,7 +142,7 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
-		tabbedPane.openSessionOnSelectedTab("Configserver");
+		displaySessionsDialog();
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
 		northLayout
