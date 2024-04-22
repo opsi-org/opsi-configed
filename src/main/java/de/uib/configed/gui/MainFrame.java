@@ -66,6 +66,7 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -629,7 +630,8 @@ public class MainFrame extends JFrame {
 		JMenu jMenuFrames = new JMenu(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		JMenuItem jMenuFrameWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
+		jMenuFrameWorkOnGroups
+				.setEnabled(persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
 		jMenuFrameWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		JMenuItem jMenuFrameWorkOnProducts = new JMenuItem(

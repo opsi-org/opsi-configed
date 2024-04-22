@@ -34,6 +34,7 @@ import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.permission.UserOpsipermission;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
@@ -219,7 +220,7 @@ public class UserRolesConfigDataService {
 		boolean keyUserRegisterValue = cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE,
 				Boolean.class);
 		if (Boolean.TRUE.equals(keyUserRegisterValue)
-				&& !persistenceController.getModuleDataService().isWithUserRolesPD()) {
+				&& !persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			keyUserRegisterValue = false;
 			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
 			SwingUtilities.invokeLater(this::callOpsiLicenseMissingText);
@@ -251,7 +252,7 @@ public class UserRolesConfigDataService {
 
 	// final in order to avoid deactiviating by override
 	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs) {
-		boolean withUserRoles = persistenceController.getModuleDataService().isWithUserRolesPD();
+		boolean withUserRoles = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES);
 		Logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
 
 		boolean resultVal = userRegisterValueFromConfigs;
@@ -359,7 +360,7 @@ public class UserRolesConfigDataService {
 		Logging.info(this, " checkPermissions key " + configKey);
 
 		if (serverPropertyMap.get(configKey) != null
-				&& persistenceController.getModuleDataService().isWithUserRolesPD()) {
+				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
 			boolean createClientPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
@@ -452,8 +453,8 @@ public class UserRolesConfigDataService {
 			return applyUserSpecializedConfig;
 		}
 
-		applyUserSpecializedConfig = persistenceController.getModuleDataService().isWithUserRolesPD()
-				&& hasKeyUserRegisterValuePD();
+		applyUserSpecializedConfig = persistenceController.getModuleDataService()
+				.isOpsiModuleActive(OpsiModule.USER_ROLES) && hasKeyUserRegisterValuePD();
 		cacheManager.setCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG, applyUserSpecializedConfig);
 		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
 

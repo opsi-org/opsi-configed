@@ -26,6 +26,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -346,14 +347,14 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	}
 
 	public void updateClientCheckboxText() {
-		if (persistenceController.getModuleDataService().isWithUEFIPD()) {
+		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI)) {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
 		} else {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			cbUefiBoot.setEnabled(false);
 		}
 
-		if (persistenceController.getModuleDataService().isWithWANPD()) {
+		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN)) {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -471,12 +472,12 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		ipAddressField.setEditable(b1);
 
 		// multi host editing allowed
-		cbUefiBoot.setEnabled(gb && persistenceController.getModuleDataService().isWithUEFIPD());
+		cbUefiBoot.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI));
 		if (ServerFacade.isOpsi43()) {
 			cbUefiBoot.disableSelection();
 		}
 
-		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isWithWANPD());
+		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN));
 		cbInstallByShutdown.setEnabled(gb);
 
 		jTextFieldHostKey.setMultiValue(!singleClient);

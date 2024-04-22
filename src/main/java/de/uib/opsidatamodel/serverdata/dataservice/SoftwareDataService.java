@@ -42,6 +42,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -159,7 +160,7 @@ public class SoftwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
 				softwareWithoutAssociatedLicensePool);
 
-		if (!moduleDataService.isWithLicenseManagementPD()) {
+		if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return;
 		}
 
@@ -459,7 +460,7 @@ public class SoftwareDataService {
 	public String editSoftwareLicense(String softwareLicenseId, String licenseContractId, String licenseType,
 			String maxInstallations, String boundToHost, String expirationDate) {
 		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())
-				|| !Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+				|| !Boolean.TRUE.equals(moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT))) {
 			return "";
 		}
 
@@ -519,7 +520,7 @@ public class SoftwareDataService {
 			return false;
 		}
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+		if (Boolean.TRUE.equals(moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT))) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_DELETE,
 					new Object[] { softwareLicenseId });
 			return exec.doCall(omc);
@@ -533,7 +534,7 @@ public class SoftwareDataService {
 			return "";
 		}
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+		if (Boolean.TRUE.equals(moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT))) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE,
 					new String[] { softwareLicenseId, licensePoolId, licenseKey });
 
@@ -551,7 +552,7 @@ public class SoftwareDataService {
 			return false;
 		}
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+		if (Boolean.TRUE.equals(moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT))) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE,
 					new String[] { softwareLicenseId, licensePoolId });
 			return exec.doCall(omc);
@@ -580,7 +581,7 @@ public class SoftwareDataService {
 			return result;
 		}
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+		if (Boolean.TRUE.equals(moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT))) {
 			List<Map<String, String>> deleteItems = new ArrayList<>();
 
 			for (String swIdent : softwareIds) {
@@ -636,7 +637,7 @@ public class SoftwareDataService {
 
 		boolean result = true;
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+		if (Boolean.TRUE.equals(moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT))) {
 			Map<String, SWAuditEntry> instSwI = getInstalledSoftwareInformationForLicensingPD();
 
 			Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
@@ -756,7 +757,7 @@ public class SoftwareDataService {
 		boolean ok = false;
 		Logging.info(this, "editPool2AuditSoftware ");
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+		if (Boolean.TRUE.equals(moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT))) {
 			if (licensePoolIDOld != null && !licensePoolIDOld.equals(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL)) {
 				// there was an association, we delete it)
 
@@ -837,7 +838,7 @@ public class SoftwareDataService {
 
 	// side effects of this method: rowsLicensesReconciliation
 	public void retrieveLicenseStatisticsPD() {
-		if (!moduleDataService.isWithLicenseManagementPD() || cacheManager.isDataCached(Arrays
+		if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT) || cacheManager.isDataCached(Arrays
 				.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			return;
 		}

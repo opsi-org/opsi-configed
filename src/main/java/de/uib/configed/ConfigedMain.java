@@ -113,6 +113,7 @@ import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.DataChangedKeeper;
@@ -666,7 +667,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void handleGroupActionRequest() {
-		if (persistenceController.getModuleDataService().isWithLocalImagingPD()) {
+		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING)) {
 			startGroupActionFrame();
 		} else {
 			Logging.error(this,
@@ -714,7 +715,8 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void handleLicensesManagementRequest() {
 		// show Loading pane only when something needs to be loaded from server
-		if (persistenceController.getModuleDataService().isWithLicenseManagementPD() && licensesFrame == null) {
+		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				&& licensesFrame == null) {
 			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
 		}
 		new Thread() {
@@ -723,7 +725,7 @@ public class ConfigedMain implements MessagebusListener {
 				Logging.info(this, "handleLicensesManagementRequest called");
 				persistenceController.getModuleDataService().retrieveOpsiModules();
 
-				if (persistenceController.getModuleDataService().isWithLicenseManagementPD()) {
+				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 					toggleLicensesFrame();
 				} else {
 					FOpsiLicenseMissingText

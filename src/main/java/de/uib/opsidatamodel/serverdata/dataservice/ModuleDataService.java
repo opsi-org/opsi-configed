@@ -31,6 +31,7 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.ModulePermissionValue;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.ExtendedDate;
 import de.uib.utils.ExtendedInteger;
@@ -92,7 +93,7 @@ public class ModuleDataService {
 		}
 
 		Logging.info(this, " withMySQL " + isWithMySQLPD());
-		Logging.info(this, " withUserRoles " + isWithUserRolesPD());
+		Logging.info(this, " withUserRoles " + isOpsiModuleActive(OpsiModule.USER_ROLES));
 	}
 
 	public final Map<String, Object> getOpsiLicensingInfoOpsiAdminPD() {
@@ -154,23 +155,17 @@ public class ModuleDataService {
 			opsiModules.put(mod, availableModules.indexOf(mod) != -1);
 		}
 
+		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
+
 		Logging.info(this, "opsiModules result " + opsiModules);
 
-		cacheManager.setCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT,
-				opsiModules.get("license_management") != null && opsiModules.get("license_management"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_LOCAL_IMAGING,
-				opsiModules.get("local_imaging") != null && opsiModules.get("local_imaging"));
 		cacheManager.setCachedData(CacheIdentifier.WITH_MY_SQL, canCallMySQLPD());
-		cacheManager.setCachedData(CacheIdentifier.WITH_UEFI,
-				opsiModules.get("uefi") != null && opsiModules.get("uefi"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_WAN, opsiModules.get("vpn") != null && opsiModules.get("vpn"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_USER_ROLES,
-				opsiModules.get("userroles") != null && opsiModules.get("userroles"));
 
-		Logging.info(this, "produceOpsiModulesInfo withUserRoles " + isWithUserRolesPD());
-		Logging.info(this, "produceOpsiModulesInfo withUEFI " + isWithUEFIPD());
-		Logging.info(this, "produceOpsiModulesInfo withWAN " + isWithWANPD());
-		Logging.info(this, "produceOpsiModulesInfo withLicenseManagement " + isWithLicenseManagementPD());
+		Logging.info(this, "produceOpsiModulesInfo withUserRoles " + isOpsiModuleActive(OpsiModule.USER_ROLES));
+		Logging.info(this, "produceOpsiModulesInfo withUEFI " + isOpsiModuleActive(OpsiModule.UEFI));
+		Logging.info(this, "produceOpsiModulesInfo withWAN " + isOpsiModuleActive(OpsiModule.WAN));
+		Logging.info(this,
+				"produceOpsiModulesInfo withLicenseManagement " + isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT));
 		Logging.info(this, "produceOpsiModulesInfo withMySQL " + isWithMySQLPD());
 
 		// sets value to true if we use the mysql backend and informs that we are
@@ -420,16 +415,7 @@ public class ModuleDataService {
 		// Will be called only, when info empty
 		callOpsiLicenseMissingModules(missingModulesPermissionInfo);
 
-		cacheManager.setCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT,
-				opsiModules.get("license_management") != null && opsiModules.get("license_management"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_LOCAL_IMAGING,
-				opsiModules.get("local_imaging") != null && opsiModules.get("local_imaging"));
 		cacheManager.setCachedData(CacheIdentifier.WITH_MY_SQL, canCallMySQLPD());
-		cacheManager.setCachedData(CacheIdentifier.WITH_UEFI,
-				opsiModules.get("uefi") != null && opsiModules.get("uefi"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_WAN, opsiModules.get("vpn") != null && opsiModules.get("vpn"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_USER_ROLES,
-				opsiModules.get("userroles") != null && opsiModules.get("userroles"));
 
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
@@ -663,17 +649,7 @@ public class ModuleDataService {
 		// Will be called only when info empty
 		callOpsiLicenseMissingModules(missingModulesPermissionInfo);
 
-		cacheManager.setCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT,
-				(opsiModules.get("license_management") != null) && opsiModules.get("license_management"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_LOCAL_IMAGING,
-				(opsiModules.get("local_imaging") != null) && opsiModules.get("local_imaging"));
 		cacheManager.setCachedData(CacheIdentifier.WITH_MY_SQL, canCallMySQLPD());
-		cacheManager.setCachedData(CacheIdentifier.WITH_UEFI,
-				(opsiModules.get("uefi") != null) && opsiModules.get("uefi"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_WAN,
-				(opsiModules.get("vpn") != null) && opsiModules.get("vpn"));
-		cacheManager.setCachedData(CacheIdentifier.WITH_USER_ROLES,
-				(opsiModules.get("userroles") != null) && opsiModules.get("userroles"));
 
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
@@ -847,25 +823,15 @@ public class ModuleDataService {
 		return acceptMySQL;
 	}
 
-	public boolean isWithLocalImagingPD() {
+	public boolean isOpsiModuleActive(OpsiModule opsiModule) {
 		retrieveOpsiModules();
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.WITH_LOCAL_IMAGING, Boolean.class));
+		Map<String, Boolean> opsiModules = getOpsiModules();
+		return opsiModules.get(opsiModule.toString()) != null && opsiModules.get(opsiModule.toString());
 	}
 
-	public boolean isWithUEFIPD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.WITH_UEFI, Boolean.class));
-	}
-
-	public boolean isWithWANPD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.WITH_WAN, Boolean.class));
-	}
-
-	public boolean isWithLicenseManagementPD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.WITH_LICENSE_MANAGEMENT, Boolean.class));
-	}
-
-	public boolean isWithUserRolesPD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.WITH_USER_ROLES, Boolean.class));
+	private Map<String, Boolean> getOpsiModules() {
+		retrieveOpsiModules();
+		return cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES, Map.class);
 	}
 
 	public boolean isWithMySQLPD() {

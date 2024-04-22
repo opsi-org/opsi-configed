@@ -51,6 +51,7 @@ import de.uib.configed.gui.csv.CSVImportDataModifier;
 import de.uib.configed.gui.csv.CSVTemplateCreatorDialog;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -241,13 +242,13 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 		jCheckUefi = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
 
-		if (!persistenceController.getModuleDataService().isWithUEFIPD()) {
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI)) {
 			jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			jCheckUefi.setEnabled(false);
 		}
 
 		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig"));
-		if (!persistenceController.getModuleDataService().isWithWANPD()) {
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN)) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
 		}
@@ -796,9 +797,9 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		}
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 
-		boolean uefiboot = persistenceController.getModuleDataService().isWithUEFIPD()
+		boolean uefiboot = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI)
 				&& jCheckUefi.getSelectedObjects() != null;
-		boolean wanConfig = persistenceController.getModuleDataService().isWithWANPD()
+		boolean wanConfig = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN)
 				&& jCheckWan.getSelectedObjects() != null;
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
