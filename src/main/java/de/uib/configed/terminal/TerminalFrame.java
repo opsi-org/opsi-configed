@@ -126,6 +126,7 @@ public final class TerminalFrame implements MessagebusListener {
 		clientsConnectedByMessagebus.add("Configserver");
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
+		sessionsDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		sessionsDialog.setVisible(true);
 
 		if (sessionsDialog.getResult() == 2) {
@@ -149,7 +150,10 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
 		tabbedPane.openSessionOnSelectedTab(session != null && !session.isEmpty() ? session : "Configserver");
-		displaySessionsDialog();
+		if (session == null) {
+			displaySessionsDialog();
+		}
+
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
 		northLayout
@@ -172,6 +176,7 @@ public final class TerminalFrame implements MessagebusListener {
 		if (frame == null) {
 			createAndShowGUI();
 		} else {
+			frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			frame.setVisible(true);
 		}
 
