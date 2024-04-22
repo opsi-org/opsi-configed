@@ -124,11 +124,6 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Boolean}
 	 */
-	WITH_MY_SQL("with_my_sql"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
 	ACCEPT_MY_SQL("accept_my_sql"),
 
 	/**

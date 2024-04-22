@@ -92,7 +92,7 @@ public class ModuleDataService {
 			produceOpsiModulesInfoPD();
 		}
 
-		Logging.info(this, " withMySQL " + isWithMySQLPD());
+		Logging.info(this, " withMySQL " + canCallMySQLPD());
 		Logging.info(this, " withUserRoles " + isOpsiModuleActive(OpsiModule.USER_ROLES));
 	}
 
@@ -159,14 +159,12 @@ public class ModuleDataService {
 
 		Logging.info(this, "opsiModules result " + opsiModules);
 
-		cacheManager.setCachedData(CacheIdentifier.WITH_MY_SQL, canCallMySQLPD());
-
 		Logging.info(this, "produceOpsiModulesInfo withUserRoles " + isOpsiModuleActive(OpsiModule.USER_ROLES));
 		Logging.info(this, "produceOpsiModulesInfo withUEFI " + isOpsiModuleActive(OpsiModule.UEFI));
 		Logging.info(this, "produceOpsiModulesInfo withWAN " + isOpsiModuleActive(OpsiModule.WAN));
 		Logging.info(this,
 				"produceOpsiModulesInfo withLicenseManagement " + isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT));
-		Logging.info(this, "produceOpsiModulesInfo withMySQL " + isWithMySQLPD());
+		Logging.info(this, "produceOpsiModulesInfo withMySQL " + canCallMySQLPD());
 
 		// sets value to true if we use the mysql backend and informs that we are
 		// underlicensed
@@ -415,8 +413,6 @@ public class ModuleDataService {
 		// Will be called only, when info empty
 		callOpsiLicenseMissingModules(missingModulesPermissionInfo);
 
-		cacheManager.setCachedData(CacheIdentifier.WITH_MY_SQL, canCallMySQLPD());
-
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
 		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
@@ -649,8 +645,6 @@ public class ModuleDataService {
 		// Will be called only when info empty
 		callOpsiLicenseMissingModules(missingModulesPermissionInfo);
 
-		cacheManager.setCachedData(CacheIdentifier.WITH_MY_SQL, canCallMySQLPD());
-
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
 		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
@@ -832,10 +826,6 @@ public class ModuleDataService {
 	private Map<String, Boolean> getOpsiModulesPD() {
 		retrieveOpsiModules();
 		return cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES, Map.class);
-	}
-
-	public boolean isWithMySQLPD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.WITH_MY_SQL, Boolean.class));
 	}
 
 	public List<Map<String, Object>> getModules() {
