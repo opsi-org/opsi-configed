@@ -107,22 +107,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 		jLabelURL.setText(Configed.getResourceValue("CurlParameterDialog.jLabelUrl"));
 		jTextFieldURL = new JTextField();
 		jTextFieldURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
-		jTextFieldURL.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent documentEvent) {
-				changeUrl();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent documentEvent) {
-				changeUrl();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent documentEvent) {
-				changeUrl();
-			}
-		});
+		jTextFieldURL.getDocument().addDocumentListener(new DocumentListenerAdapter(this::changeUrl));
 		jTextFieldURL.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -154,22 +139,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 		jLabelFreeInput.setText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput"));
 		jTextFieldFreeInput = new JTextField();
 		jTextFieldFreeInput.setToolTipText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput.tooltip"));
-		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent documentEvent) {
-				changeFreeInput();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent documentEvent) {
-				changeFreeInput();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent documentEvent) {
-				changeFreeInput();
-			}
-		});
+		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListenerAdapter(this::changeFreeInput));
 
 		curlAuthPanel = new CurlAuthenticationPanel();
 		((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
@@ -330,5 +300,28 @@ public class CurlParameterDialog extends FGeneralDialog {
 						.addComponent(jLabelFreeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE).addContainerGap(70, 70));
+	}
+
+	private static class DocumentListenerAdapter implements DocumentListener {
+		private Runnable method;
+
+		public DocumentListenerAdapter(Runnable method) {
+			this.method = method;
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent arg0) {
+			method.run();
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent arg0) {
+			method.run();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent arg0) {
+			method.run();
+		}
 	}
 }
