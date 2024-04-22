@@ -60,6 +60,8 @@ public final class ClientMenuManager implements MenuListener {
 			Configed.getResourceValue("MainFrame.jMenuRequestSessionInfo"));
 	private JMenuItem jMenuShutdownClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuShutdownClient"));
 	private JMenuItem jMenuRebootClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuRebootClient"));
+	private JMenuItem jMenuOpenTerminalOnClient = new JMenuItem(
+			Configed.getResourceValue("MainFrame.jMenuOpenTerminal"));
 	private JMenuItem jMenuChangeDepot = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuChangeDepot"));
 	private JMenuItem jMenuChangeClientID = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
 	private JMenuItem jMenuAddClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuAddClient"));
@@ -168,6 +170,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		jMenuRemoteControl
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
+		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
 		jMenu.add(initWakeOnLANMenu());
 		jMenu.add(jMenuOpsiClientdEvent);
@@ -179,6 +182,9 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenu.add(jMenuShutdownClient);
 		jMenu.add(jMenuRebootClient);
+		if (ServerFacade.isOpsi43()) {
+			jMenu.add(jMenuOpenTerminalOnClient);
+		}
 		jMenu.add(jMenuRemoteControl);
 
 		jMenu.addSeparator();
@@ -505,6 +511,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
 		jMenuCopyClient.setEnabled(countSelectedClients == 1);
+		jMenuOpenTerminalOnClient.setEnabled(countSelectedClients == 1);
 
 		checkMenuItemsDisabling();
 	}
