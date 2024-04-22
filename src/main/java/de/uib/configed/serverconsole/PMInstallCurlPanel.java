@@ -118,7 +118,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		SingleCommandCurl curl = getCurlCommand();
 		if (curl != null) {
 			if (((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
-				curl.setAuthentication("--insecure -u " + curlAuthPanel.getUser() + ":" + curlAuthPanel.getPw());
+				curl.setAuthentication("--insecure -u " + curlAuthPanel.getUser() + ":" + curlAuthPanel.getPassword());
 			} else {
 				curl.setAuthentication("");
 			}

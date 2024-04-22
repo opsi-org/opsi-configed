@@ -200,7 +200,8 @@ public class CurlParameterDialog extends FGeneralDialog {
 
 		commandCurl.setDir((String) jComboBoxDir.getSelectedItem());
 		if (((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
-			commandCurl.setAuthentication("--insecure -u " + curlAuthPanel.getUser() + ":" + curlAuthPanel.getPw());
+			commandCurl
+					.setAuthentication("--insecure -u " + curlAuthPanel.getUser() + ":" + curlAuthPanel.getPassword());
 		} else {
 			commandCurl.setAuthentication("");
 		}

@@ -83,7 +83,7 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 		return jTextFieldUser.getText();
 	}
 
-	public String getPw() {
+	public String getPassword() {
 		return new String(((JPasswordField) jTextFieldPassword).getPassword());
 	}
 
