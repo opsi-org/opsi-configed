@@ -1291,10 +1291,11 @@ public class ConfigDataService {
 			for (Object entry : configDefaultValues
 					.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY)) {
 				int p = ((String) entry).indexOf(":");
-
 				result.add(((String) entry).substring(p + 1));
 			}
 		}
+
+		result.add(getOpsiDefaultDomainPD());
 
 		Logging.info(this, "getDomains " + result);
 		return new ArrayList<>(result);
