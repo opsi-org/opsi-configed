@@ -13,9 +13,6 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utils.logging.Logging;
 
-/**
- * This class represent a simple single command
- **/
 public class SingleCommandTemplate implements SingleCommand {
 	public static final String TESTCOMMAND = "pwd";
 	private boolean needParameter;
