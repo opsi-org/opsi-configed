@@ -3,10 +3,14 @@
 ## Added
 - Ability to open messagebus terminal on a client directly
 
+
+## Changed
+- Don't define default session for terminal connection, to allow for user to select session.
+
+
 ## Fixed
 - `NullPointerException` when trying to select group that does not exist any more 
 - Show groups in directory group in userroles if parent group is not allowed
-
 
 ## [4.3.2.12] - 2024-04-17
 ## Changed
