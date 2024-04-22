@@ -37,7 +37,6 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.ssh.SSHOutputCollector;
 
 public final class CommandParameterParser {
 	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
@@ -508,7 +507,6 @@ public final class CommandParameterParser {
 			return "";
 		}
 
-		SSHOutputCollector.removeAllValues();
 		final String scriptFile = method.replace("script://", "");
 		final SingleCommand cmd = new SingleCommandTemplate("", scriptFile, "");
 		final ScriptExecutioner exe = new ScriptExecutioner(cmd);
