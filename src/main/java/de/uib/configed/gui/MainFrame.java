@@ -802,6 +802,10 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(clientMenu.getJMenu());
 		if (ServerFacade.isOpsi43()) {
 			jMenuBar.add(jMenuTerminal);
+			if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+				jMenuTerminal.setEnabled(false);
+				jMenuTerminal.setToolTipText(Configed.getResourceValue("MainFrame.vpnModuleShouldBeActive"));
+			}
 		} else {
 			jMenuBar.add(jMenuServer);
 		}
