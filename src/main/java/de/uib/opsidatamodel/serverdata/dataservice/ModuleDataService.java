@@ -825,11 +825,11 @@ public class ModuleDataService {
 
 	public boolean isOpsiModuleActive(OpsiModule opsiModule) {
 		retrieveOpsiModules();
-		Map<String, Boolean> opsiModules = getOpsiModules();
+		Map<String, Boolean> opsiModules = getOpsiModulesPD();
 		return opsiModules.get(opsiModule.toString()) != null && opsiModules.get(opsiModule.toString());
 	}
 
-	private Map<String, Boolean> getOpsiModules() {
+	private Map<String, Boolean> getOpsiModulesPD() {
 		retrieveOpsiModules();
 		return cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES, Map.class);
 	}
