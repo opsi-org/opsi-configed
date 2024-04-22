@@ -87,6 +87,7 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateUpdateManager;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
+import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
@@ -3602,6 +3603,20 @@ public class ConfigedMain implements MessagebusListener {
 		fAskOverwriteExsitingHost.setVisible(true);
 
 		return fAskOverwriteExsitingHost.getResult() == 2;
+	}
+
+	public void openTerminalOnClient() {
+		if (!getConnectedClientsByMessagebus().contains(getSelectedClients().get(0))) {
+			Logging.info(this, "Client shell access feature is only supported for clients connected with messagebus");
+			JOptionPane.showMessageDialog(mainFrame,
+					Configed.getResourceValue("ConfigedMain.openTerminalOnClientFeature.message"));
+			return;
+		}
+
+		TerminalFrame terminalFrame = new TerminalFrame();
+		terminalFrame.setMessagebus(messagebus);
+		terminalFrame.setSession(getSelectedClients().get(0));
+		terminalFrame.display();
 	}
 
 	public void callNewClientSelectionDialog() {

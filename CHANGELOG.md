@@ -1,7 +1,12 @@
 # Changelog
 ## [4.3.x.x] - 2024-xx-xx
+## Added
+- Ability to open messagebus terminal on a client directly
+
+
 ## Changed
 - Don't define default session for terminal connection, to allow for user to select session.
+
 
 ## Fixed
 - `NullPointerException` when trying to select group that does not exist any more 

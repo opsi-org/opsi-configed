@@ -37,8 +37,14 @@ public final class TerminalFrame implements MessagebusListener {
 	private TerminalTabbedPane tabbedPane;
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
 
+	private String session;
+
 	public void setMessagebus(Messagebus messagebus) {
 		this.messagebus = messagebus;
+	}
+
+	public void setSession(String session) {
+		this.session = session;
 	}
 
 	public TerminalTabbedPane getTabbedPane() {
@@ -120,6 +126,7 @@ public final class TerminalFrame implements MessagebusListener {
 		clientsConnectedByMessagebus.add("Configserver");
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
+		sessionsDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		sessionsDialog.setVisible(true);
 
 		if (sessionsDialog.getResult() == 2) {
@@ -142,7 +149,11 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
-		displaySessionsDialog();
+		tabbedPane.openSessionOnSelectedTab(session != null && !session.isEmpty() ? session : "Configserver");
+		if (session == null) {
+			displaySessionsDialog();
+		}
+
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
 		northLayout
@@ -165,6 +176,7 @@ public final class TerminalFrame implements MessagebusListener {
 		if (frame == null) {
 			createAndShowGUI();
 		} else {
+			frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			frame.setVisible(true);
 		}
 
