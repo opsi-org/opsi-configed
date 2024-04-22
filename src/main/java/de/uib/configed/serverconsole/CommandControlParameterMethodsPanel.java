@@ -49,7 +49,6 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 		initLayout();
 	}
 
-	/** Init components **/
 	private void init() {
 		Logging.debug(this, "init setting up components ");
 		Dimension jComboBoxDim = new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.BUTTON_HEIGHT);
