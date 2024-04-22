@@ -30,7 +30,6 @@ public class PMInstallPanel extends JPanel {
 
 	public void open() {
 		if (!isOpen) {
-			this.setSize(this.getWidth(), this.getHeight() + this.getHeight());
 			isOpen = true;
 			this.setVisible(isOpen);
 		}
@@ -38,7 +37,6 @@ public class PMInstallPanel extends JPanel {
 
 	public void close() {
 		if (isOpen) {
-			this.setSize(this.getWidth(), 0);
 			isOpen = false;
 			this.setVisible(isOpen);
 		}
