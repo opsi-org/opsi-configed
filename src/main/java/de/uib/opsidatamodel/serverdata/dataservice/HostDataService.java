@@ -142,8 +142,7 @@ public class HostDataService {
 			}
 
 			if (wanConfig) {
-				configStatesJsonObject = configDataService.addWANConfigStates(newClientId, true,
-						configStatesJsonObject);
+				configStatesJsonObject = configDataService.addWANConfigStates(newClientId, configStatesJsonObject);
 			}
 
 			if (shutdownInstall) {
@@ -269,7 +268,7 @@ public class HostDataService {
 			}
 
 			if (wanConfig) {
-				jsonObjects = configDataService.addWANConfigStates(newClientId, true, jsonObjects);
+				jsonObjects = configDataService.addWANConfigStates(newClientId, jsonObjects);
 			}
 
 			if (shutdownInstall) {
