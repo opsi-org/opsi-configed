@@ -810,7 +810,8 @@ public class ModuleDataService {
 				acceptMySQL = exec.doCall(new OpsiMethodCall(RPCMethodName.GET_RAW_DATA, new Object[] { query }));
 				Logging.info(this, "test result " + acceptMySQL);
 			}
-			cacheManager.setCachedData(CacheIdentifier.ACCEPT_MY_SQL, acceptMySQL);
+			cacheManager.setCachedData(CacheIdentifier.ACCEPT_MY_SQL,
+					acceptMySQL && isOpsiModuleActive(OpsiModule.MYSQL_BACKEND));
 		}
 
 		// we cannot call MySQL if version before 4.3
