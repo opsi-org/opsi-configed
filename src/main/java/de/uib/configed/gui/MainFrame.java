@@ -280,7 +280,11 @@ public class MainFrame extends JFrame {
 	}
 
 	public void reloadServerMenu() {
-		setupMenuTerminal();
+		if (ServerFacade.isOpsi43()) {
+			setupMenuTerminal();
+		} else {
+			setupMenuServer();
+		}
 	}
 
 	/**
@@ -432,7 +436,7 @@ public class MainFrame extends JFrame {
 
 	private void setupMenuTerminal() {
 		jMenuTerminal.removeAll();
-		jMenuTerminal.setText("Terminal");
+		jMenuTerminal.setText(Configed.getResourceValue("MainFrame.jMenuServer"));
 
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
 		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
@@ -794,8 +798,11 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(createJMenuFile());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
-		jMenuBar.add(jMenuServer);
-		jMenuBar.add(jMenuTerminal);
+		if (ServerFacade.isOpsi43()) {
+			jMenuBar.add(jMenuTerminal);
+		} else {
+			jMenuBar.add(jMenuServer);
+		}
 		jMenuBar.add(createJMenuFrames());
 		jMenuBar.add(createJMenuHelp());
 
