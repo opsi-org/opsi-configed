@@ -23,6 +23,17 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	private JRadioButton selectionBaseBoard = new JRadioButton();
 
+	private JLabel labelInfo;
+	private JLabel labelSeparator;
+	private JLabel labelSeparator2;
+	private JLabel labelComputerSystemVendor;
+	private JLabel labelBaseBoardVendor;
+	private JLabel labelProductOrModel;
+	private JLabel labelProductOrModel2;
+
+	private JButton buttonUploadDrivers;
+	private JRadioButton selectionComputerSystem;
+
 	private JTextField fieldComputerSystemVendor = new JTextField();
 	private JTextField fieldComputerSystemLabel = new JTextField();
 
@@ -34,26 +45,28 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	public PanelHWByAuditDriver(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
-		buildPanel();
+
+		initComponents();
+		setupLayout();
 	}
 
-	private void buildPanel() {
-		JLabel labelInfo = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
-		JLabel labelSeparator = new JLabel(" / ");
-		JLabel labelSeparator2 = new JLabel(" / ");
-		JLabel labelComputerSystemVendor = new JLabel(
+	private void initComponents() {
+		labelInfo = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
+		labelSeparator = new JLabel(" / ");
+		labelSeparator2 = new JLabel(" / ");
+		labelComputerSystemVendor = new JLabel(
 				Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsComputerSystemVendor"));
-		JLabel labelBaseBoardVendor = new JLabel(
+		labelBaseBoardVendor = new JLabel(
 				Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsBaseBoardVendor"));
-		JLabel labelProductOrModel = new JLabel(
+		labelProductOrModel = new JLabel(
 				Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProductOrModel"));
-		JLabel labelProductOrModel2 = new JLabel(
+		labelProductOrModel2 = new JLabel(
 				Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProductOrModel"));
 
-		JButton buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.title"));
+		buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.title"));
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
-		JRadioButton selectionComputerSystem = new JRadioButton("", true);
+		selectionComputerSystem = new JRadioButton("", true);
 		ButtonGroup selectionGroup = new ButtonGroup();
 		selectionGroup.add(selectionComputerSystem);
 		selectionGroup.add(selectionBaseBoard);
@@ -62,7 +75,9 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldComputerSystemLabel.setEditable(false);
 		fieldBaseBoardVendor.setEditable(false);
 		fieldBaseBoardLabel.setEditable(false);
+	}
 
+	private void setupLayout() {
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
 
