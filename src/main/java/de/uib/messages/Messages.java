@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -35,15 +33,10 @@ public final class Messages {
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
-	public static final String THEME_LIGHT = "Light";
-	public static final String THEME_DARK = "Dark";
-
 	private static Set<String> existingLocalesNames;
 	private static String localeString;
 	private static Locale myLocale;
 	private static ResourceBundle messagesBundle;
-	private static final List<String> availableThemes = Arrays.asList(THEME_LIGHT, THEME_DARK);
-	private static String selectedTheme = availableThemes.get(0);
 
 	// private constructor to hide the implicit public one
 	private Messages() {
@@ -145,36 +138,6 @@ public final class Messages {
 		produceLocaleRepresentations();
 
 		return existingLocalesNames;
-	}
-
-	public static String getSelectedTheme() {
-		return selectedTheme;
-	}
-
-	public static String getThemeTranslation(String theme) {
-		switch (theme) {
-		case Messages.THEME_LIGHT:
-			return Configed.getResourceValue("theme.light");
-
-		case Messages.THEME_DARK:
-			return Configed.getResourceValue("theme.dark");
-
-		default:
-			Logging.warning("Cannot find translation for theme " + theme);
-			return null;
-		}
-	}
-
-	public static List<String> getAvailableThemes() {
-		return availableThemes;
-	}
-
-	public static void setTheme(String newTheme) {
-		if (availableThemes.contains(newTheme)) {
-			selectedTheme = newTheme;
-		} else {
-			Logging.warning("Failing to set theme that does not exist: " + newTheme);
-		}
 	}
 
 	private static void produceLocaleRepresentations() {
