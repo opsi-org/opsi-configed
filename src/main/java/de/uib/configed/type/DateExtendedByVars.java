@@ -20,10 +20,6 @@ public final class DateExtendedByVars extends Date {
 	}
 
 	private static String stripTimeFromDay(String datetime) {
-		if (datetime == null) {
-			return null;
-		}
-
 		int idx = datetime.indexOf(" ");
 		if (idx < 0) {
 			return datetime;

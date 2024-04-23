@@ -188,23 +188,21 @@ public class UserConfig {
 			return false;
 		}
 
-		if (booleanMap.get(key) != null) {
-			return booleanMap.get(key);
-		}
-
-		if (!getArcheoConfig().hasBooleanConfig(key)) {
-			Logging.warning(this, "UserConfig : no default value for key " + key + " for user " + username);
-			return false;
-		} else {
-			boolean val = false;
-			if (username.equals(getArcheoConfig().getUserName())) {
-				Logging.warning(this, "UserConfig : setting value for key " + key + " for default user ");
+		if (booleanMap.get(key) == null) {
+			if (!getArcheoConfig().hasBooleanConfig(key)) {
+				Logging.warning(this, "UserConfig : no default value for key " + key + " for user " + username);
+				return false;
 			} else {
-				Logging.warning(this, "UserConfig : setting value for key " + key + " for user " + username
-						+ " to default value " + getArcheoConfig().getBooleanValue(key));
-				val = getArcheoConfig().getBooleanValue(key);
+				boolean val = false;
+				if (username.equals(getArcheoConfig().getUserName())) {
+					Logging.warning(this, "UserConfig : setting value for key " + key + " for default user ");
+				} else {
+					Logging.warning(this, "UserConfig : setting value for key " + key + " for user " + username
+							+ " to default value " + getArcheoConfig().getBooleanValue(key));
+					val = getArcheoConfig().getBooleanValue(key);
+				}
+				booleanMap.put(key, val);
 			}
-			booleanMap.put(key, val);
 		}
 
 		return booleanMap.get(key);
