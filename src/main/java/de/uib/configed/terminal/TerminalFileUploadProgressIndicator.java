@@ -90,5 +90,4 @@ public class TerminalFileUploadProgressIndicator extends JPanel {
 	public void showFileUploadProgress(boolean show) {
 		setVisible(show);
 	}
-
 }

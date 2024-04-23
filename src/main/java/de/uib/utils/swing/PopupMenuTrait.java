@@ -64,12 +64,10 @@ public class PopupMenuTrait extends JPopupMenu {
 			// not work
 
 			addItem(p);
-
 			break;
 
 		case POPUP_FLOATINGCOPY:
 			addPopupFloatingCopy();
-
 			break;
 
 		case POPUP_SAVE:
@@ -80,7 +78,6 @@ public class PopupMenuTrait extends JPopupMenu {
 			// not work
 
 			addItem(p);
-
 			break;
 
 		case POPUP_SAVE_AS_ZIP:
@@ -89,7 +86,6 @@ public class PopupMenuTrait extends JPopupMenu {
 					Utils.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
-
 			break;
 
 		case POPUP_SAVE_ALL_AS_ZIP:
@@ -98,7 +94,6 @@ public class PopupMenuTrait extends JPopupMenu {
 					Utils.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
-
 			break;
 
 		case POPUP_PDF:
@@ -107,7 +102,6 @@ public class PopupMenuTrait extends JPopupMenu {
 					Utils.createImageIcon("images/acrobat_reader16.png", ""));
 
 			addItem(p);
-
 			break;
 
 		case POPUP_EXPORT_CSV:
@@ -115,7 +109,6 @@ public class PopupMenuTrait extends JPopupMenu {
 			menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
 
 			addItem(p);
-
 			break;
 
 		case POPUP_EXPORT_SELECTED_CSV:
@@ -123,7 +116,6 @@ public class PopupMenuTrait extends JPopupMenu {
 			menuItems[i] = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
 
 			addItem(p);
-
 			break;
 
 		case POPUP_DELETE:
@@ -131,7 +123,6 @@ public class PopupMenuTrait extends JPopupMenu {
 			menuItems[i] = new JMenuItem("delete", Utils.createImageIcon("images/edit-delete.png", ""));
 
 			addItem(p);
-
 			break;
 
 		case POPUP_ADD:
@@ -139,7 +130,6 @@ public class PopupMenuTrait extends JPopupMenu {
 			menuItems[i] = new JMenuItem("add", Utils.createImageIcon("images/list-add.png", ""));
 
 			addItem(p);
-
 			break;
 
 		default:

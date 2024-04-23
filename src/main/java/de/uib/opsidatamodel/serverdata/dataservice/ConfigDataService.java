@@ -367,7 +367,11 @@ public class ConfigDataService {
 		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	public List<Map<String, Object>> addWANConfigStates(String clientId, boolean wan,
+	public List<Map<String, Object>> addWANConfigStates(String clientId, List<Map<String, Object>> jsonObjects) {
+		return addWANConfigStates(clientId, true, jsonObjects);
+	}
+
+	private List<Map<String, Object>> addWANConfigStates(String clientId, boolean wan,
 			List<Map<String, Object>> jsonObjects) {
 		retrieveWANConfigOptionsPD();
 
@@ -450,88 +454,92 @@ public class ConfigDataService {
 	// send config updates, possibly not updating existing
 
 	private void setConfig(boolean restrictToMissing) {
-		Logging.info(this, "setConfig(),  configCollection null " + (configCollection == null));
-		if (configCollection != null) {
-			Logging.info(this, "setConfig(),  configCollection size  " + configCollection.size());
-		}
-
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
 
-		if (configCollection != null && !configCollection.isEmpty()) {
-			// add configId where necessary
-			List<String> usedConfigIds = new ArrayList<>();
-			Map<String, String> typesOfUsedConfigIds = new HashMap<>();
-			for (Map<String, Object> config : configCollection) {
-				String ident = (String) config.get("ident");
-				usedConfigIds.add(ident);
-				typesOfUsedConfigIds.put(ident, (String) config.get("type"));
+		Logging.info(this, "setConfig(),  configCollection null " + (configCollection == null));
+
+		if (configCollection == null || configCollection.isEmpty()) {
+			return;
+		}
+
+		Logging.info(this, "setConfig(),  configCollection size  " + configCollection.size());
+		// add configId where necessary
+		List<String> usedConfigIds = new ArrayList<>();
+		Map<String, String> typesOfUsedConfigIds = new HashMap<>();
+		for (Map<String, Object> config : configCollection) {
+			String ident = (String) config.get("ident");
+			usedConfigIds.add(ident);
+			typesOfUsedConfigIds.put(ident, (String) config.get("type"));
+		}
+
+		Logging.debug(this, "setConfig(), usedConfigIds: " + usedConfigIds);
+
+		List<Object> existingConfigIds = exec
+				.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
+
+		Logging.info(this, "setConfig(), existingConfigIds: " + existingConfigIds.size());
+
+		usedConfigIds.removeAll(existingConfigIds);
+
+		Logging.info(this, "setConfig(), usedConfigIds: " + usedConfigIds);
+		List<Map<String, Object>> createItems = new ArrayList<>();
+		for (String missingId : usedConfigIds) {
+			Map<String, Object> item = Utils.createNOMitem(typesOfUsedConfigIds.get(missingId));
+			item.put("ident", missingId);
+			createItems.add(item);
+		}
+
+		// remap to JSON types
+		List<Map<String, Object>> callsConfigUpdateCollection = new ArrayList<>();
+		List<Map<String, Object>> callsConfigDeleteCollection = new ArrayList<>();
+
+		for (Map<String, Object> callConfig : configCollection) {
+			if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
+				callsConfigDeleteCollection.add(callConfig);
+			} else if (!restrictToMissing || usedConfigIds.contains(callConfig.get("ident"))) {
+				callConfig.put("defaultValues", callConfig.get("defaultValues"));
+				callConfig.put("possibleValues", callConfig.get("possibleValues"));
+				callsConfigUpdateCollection.add(callConfig);
+			} else {
+				// Do nothing, config does not need to be deleted or updated
 			}
+		}
 
-			Logging.debug(this, "setConfig(), usedConfigIds: " + usedConfigIds);
+		updateConfigsOnServer(createItems, callsConfigDeleteCollection, callsConfigUpdateCollection);
 
-			List<Object> existingConfigIds = exec
-					.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
+		retrieveConfigOptionsPD();
+		configCollection.clear();
 
-			Logging.info(this, "setConfig(), existingConfigIds: " + existingConfigIds.size());
+		Logging.info(this, "setConfig(),  configCollection result: " + configCollection);
+	}
 
-			List<String> missingConfigIds = new ArrayList<>(usedConfigIds);
+	private void updateConfigsOnServer(List<Map<String, Object>> createItems,
+			List<Map<String, Object>> callsConfigDeleteCollection,
+			List<Map<String, Object>> callsConfigUpdateCollection) {
+		Logging.debug(this, "setConfig() createItems " + createItems);
+		if (!createItems.isEmpty()) {
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS, new Object[] { createItems });
+			exec.doCall(omc);
+		}
 
-			missingConfigIds.removeAll(existingConfigIds);
+		Logging.debug(this, "setConfig() callsConfigDeleteCollection " + callsConfigDeleteCollection);
 
-			Logging.info(this, "setConfig(), missingConfigIds: " + missingConfigIds);
-			List<Map<String, Object>> createItems = new ArrayList<>();
-			for (String missingId : missingConfigIds) {
-				Map<String, Object> item = Utils.createNOMitem(typesOfUsedConfigIds.get(missingId));
-				item.put("ident", missingId);
-				createItems.add(item);
-			}
+		if (!callsConfigDeleteCollection.isEmpty()) {
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
+					new Object[] { callsConfigDeleteCollection }));
+			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+			// because of referential integrity
+			persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
+		}
 
-			if (!createItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS,
-						new Object[] { createItems });
-				exec.doCall(omc);
-			}
+		Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
-			// remap to JSON types
-			List<Map<String, Object>> callsConfigUpdateCollection = new ArrayList<>();
-			List<Map<String, Object>> callsConfigDeleteCollection = new ArrayList<>();
-
-			for (Map<String, Object> callConfig : configCollection) {
-				if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
-					callsConfigDeleteCollection.add(callConfig);
-				} else if (!restrictToMissing || missingConfigIds.contains(callConfig.get("ident"))) {
-					callConfig.put("defaultValues", callConfig.get("defaultValues"));
-					callConfig.put("possibleValues", callConfig.get("possibleValues"));
-					callsConfigUpdateCollection.add(callConfig);
-				} else {
-					// Do nothing, config does not need to be deleted or updated
-				}
-			}
-
-			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
-
-			if (!callsConfigDeleteCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
-						new Object[] { callsConfigDeleteCollection }));
-				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
-				// because of referential integrity
-				persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
-			}
-
-			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
-
-			if (!callsConfigUpdateCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
-						new Object[] { callsConfigUpdateCollection }));
-				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
-			}
-
-			retrieveConfigOptionsPD();
-			configCollection.clear();
-
-			Logging.info(this, "setConfig(),  configCollection result: " + configCollection);
+		if (!callsConfigUpdateCollection.isEmpty()) {
+			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
+					new Object[] { callsConfigUpdateCollection }));
+			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		}
 	}
 
@@ -806,30 +814,23 @@ public class ConfigDataService {
 		}
 
 		for (Entry<String, Object> entry : settings.entrySet()) {
-			String key = entry.getKey();
-			Object value = entry.getValue();
-
 			Map<String, Object> state = new HashMap<>();
-
 			state.put("type", "ConfigState");
 			state.put("objectId", objectId);
-			state.put("configId", key);
-			state.put("values", value);
+			state.put("configId", entry.getKey());
+			state.put("values", entry.getValue());
 
 			Map<String, Object> retrievedConfig = settings.getRetrieved();
-			Object oldValue = null;
 
-			if (retrievedConfig != null) {
-				oldValue = retrievedConfig.get(key);
-			}
-
-			if (value != oldValue) {
+			if (retrievedConfig == null) {
+				configStateCollection.add(state);
+			} else if (entry.getValue() != retrievedConfig.get(entry.getKey())) {
 				configStateCollection.add(state);
 
 				// we hope that the update works and directly update the retrievedConfig
-				if (retrievedConfig != null) {
-					retrievedConfig.put(key, value);
-				}
+				retrievedConfig.put(entry.getKey(), entry.getValue());
+			} else {
+				// Do nothing when retrieved config is not null and equals entry value
 			}
 		}
 	}
@@ -840,105 +841,96 @@ public class ConfigDataService {
 			return;
 		}
 
-		if (configStateCollection != null && !configStateCollection.isEmpty()) {
-			boolean configsChanged = false;
+		if (configStateCollection == null || configStateCollection.isEmpty()) {
+			return;
+		}
 
-			if (deleteConfigStateItems == null) {
-				deleteConfigStateItems = new ArrayList<>();
+		if (deleteConfigStateItems == null) {
+			deleteConfigStateItems = new ArrayList<>();
+		}
+
+		// add configId where necessary
+		Set<String> usedConfigIds = new HashSet<>();
+		Map<String, String> typesOfUsedConfigIds = new HashMap<>();
+
+		List<Object> doneList = new ArrayList<>();
+
+		for (Map<String, Object> configState : configStateCollection) {
+			String ident = (String) configState.get("configId");
+			usedConfigIds.add(ident);
+
+			List<?> valueList = (List<?>) configState.get("values");
+
+			if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
+				typesOfUsedConfigIds.put(ident, "BoolConfig");
+			} else {
+				typesOfUsedConfigIds.put(ident, "UnicodeConfig");
 			}
 
-			// add configId where necessary
-			Set<String> usedConfigIds = new HashSet<>();
-			Map<String, String> typesOfUsedConfigIds = new HashMap<>();
+			if (valueList.equals(MapTableModel.nullLIST)) {
+				Map<String, Object> item = Utils.createNOMitem("ConfigState");
+				item.put("objectId", configState.get("objectId"));
+				item.put("configId", configState.get("configId"));
 
-			List<Object> doneList = new ArrayList<>();
-
-			for (Map<String, Object> configState : configStateCollection) {
-				String ident = (String) configState.get("configId");
-				usedConfigIds.add(ident);
-
-				List<?> valueList = (List<?>) configState.get("values");
-
-				if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
-					typesOfUsedConfigIds.put(ident, "BoolConfig");
-				} else {
-					typesOfUsedConfigIds.put(ident, "UnicodeConfig");
-				}
-
-				if (valueList.equals(MapTableModel.nullLIST)) {
-					Map<String, Object> item = Utils.createNOMitem("ConfigState");
-					item.put("objectId", configState.get("objectId"));
-					item.put("configId", configState.get("configId"));
-
-					deleteConfigStateItems.add(item);
-
-					doneList.add(configState);
-				}
+				deleteConfigStateItems.add(item);
+				doneList.add(configState);
 			}
-			Logging.debug(this, "setAdditionalConfiguration(), usedConfigIds: " + usedConfigIds);
+		}
 
-			Logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  " + deleteConfigStateItems);
-			// not used
-			if (!deleteConfigStateItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS,
-						new Object[] { deleteConfigStateItems });
+		updateAdditionalConfigsOnServer(doneList, usedConfigIds, typesOfUsedConfigIds);
 
-				if (exec.doCall(omc)) {
-					deleteConfigStateItems.clear();
-					configStateCollection.removeAll(doneList);
-				}
+		// at any rate:
+		configStateCollection.clear();
+	}
+
+	private void updateAdditionalConfigsOnServer(List<Object> doneList, Set<String> usedConfigIds,
+			Map<String, String> typesOfUsedConfigIds) {
+		Logging.debug(this, "setAdditionalConfiguration(), usedConfigIds: " + usedConfigIds);
+		Logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  " + deleteConfigStateItems);
+		// not used
+		if (!deleteConfigStateItems.isEmpty()) {
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS,
+					new Object[] { deleteConfigStateItems });
+
+			if (exec.doCall(omc)) {
+				deleteConfigStateItems.clear();
+				configStateCollection.removeAll(doneList);
 			}
+		}
 
-			List<Object> existingConfigIds = exec
-					.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
-			Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: " + existingConfigIds.size());
+		List<Object> existingConfigIds = exec
+				.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
+		Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: " + existingConfigIds.size());
 
-			Set<String> missingConfigIds = new HashSet<>(usedConfigIds);
-			missingConfigIds.removeAll(existingConfigIds);
+		Set<String> missingConfigIds = new HashSet<>(usedConfigIds);
+		missingConfigIds.removeAll(existingConfigIds);
+		Logging.debug(this, "setAdditionalConfiguration(), missingConfigIds: " + missingConfigIds);
+		List<Map<String, Object>> createItems = new ArrayList<>();
+		for (String missingId : missingConfigIds) {
+			Map<String, Object> item = Utils.createNOMitem(typesOfUsedConfigIds.get(missingId));
+			item.put("ident", missingId);
+			createItems.add(item);
+		}
 
-			Logging.debug(this, "setAdditionalConfiguration(), missingConfigIds: " + missingConfigIds);
-			List<Map<String, Object>> createItems = new ArrayList<>();
-			for (String missingId : missingConfigIds) {
-				Map<String, Object> item = Utils.createNOMitem(typesOfUsedConfigIds.get(missingId));
-				item.put("ident", missingId);
-				createItems.add(item);
-			}
+		if (!createItems.isEmpty()) {
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS, new Object[] { createItems });
+			exec.doCall(omc);
+			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
+		}
 
-			if (!createItems.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS,
-						new Object[] { createItems });
-				exec.doCall(omc);
-				configsChanged = true;
-			}
+		// build calls
+		List<Map<String, Object>> callsConfigName2ConfigValueCollection = new ArrayList<>();
 
-			if (configsChanged) {
-				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
-			}
+		for (Map<String, Object> state : configStateCollection) {
+			state.put("values", state.get("values"));
+			callsConfigName2ConfigValueCollection.add(state);
+		}
 
-			// build calls
-
-			List<Map<String, Object>> callsConfigName2ConfigValueCollection = new ArrayList<>();
-			List<Map<String, Object>> callsConfigCollection = new ArrayList<>();
-
-			for (Map<String, Object> state : configStateCollection) {
-				state.put("values", state.get("values"));
-				callsConfigName2ConfigValueCollection.add(state);
-			}
-
-			Logging.debug(this, "callsConfigCollection " + callsConfigCollection);
-			if (!callsConfigCollection.isEmpty()) {
-				exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
-						new Object[] { callsConfigCollection }));
-			}
-
-			// do call
-
+		// do call
+		if (!callsConfigName2ConfigValueCollection.isEmpty()) {
 			// now we can set the values and clear the collected update items
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
 					new Object[] { callsConfigName2ConfigValueCollection }));
-
-			// at any rate:
-			configStateCollection.clear();
 		}
 	}
 
@@ -1286,7 +1278,7 @@ public class ConfigDataService {
 	}
 
 	public List<String> getDomains() {
-		List<String> result = new ArrayList<>();
+		Set<String> result = new TreeSet<>();
 
 		Map<String, List<Object>> configDefaultValues = getConfigDefaultValuesPD();
 		if (configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY) == null) {
@@ -1296,58 +1288,17 @@ public class ConfigDataService {
 			Logging.info(this, "getDomains "
 					+ configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY));
 
-			Map<String, Integer> numberedValues = new HashMap<>();
-			Set<String> orderedValues = new TreeSet<>();
-			Set<String> unorderedValues = new TreeSet<>();
-
-			sortValues(numberedValues, orderedValues, unorderedValues,
-					configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY));
-
-			for (String entry : orderedValues) {
-				int p = entry.indexOf(":");
-				result.add(entry.substring(p + 1));
-			}
-
-			unorderedValues.removeAll(result);
-
-			for (String entry : unorderedValues) {
-				result.add(entry);
+			for (Object entry : configDefaultValues
+					.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY)) {
+				int p = ((String) entry).indexOf(":");
+				result.add(((String) entry).substring(p + 1));
 			}
 		}
+
+		result.add(getOpsiDefaultDomainPD());
 
 		Logging.info(this, "getDomains " + result);
-		return result;
-	}
-
-	private void sortValues(Map<String, Integer> numberedValues, Set<String> orderedValues, Set<String> unorderedValues,
-			List<Object> domainsGiven) {
-		for (Object item : domainsGiven) {
-			String entry = (String) item;
-			int p = entry.indexOf(":");
-			if (p == -1 || p == 0) {
-				unorderedValues.add(entry);
-			} else if (p > 0) {
-				// the only regular case
-				sortRegularValue(entry, p, numberedValues, orderedValues, unorderedValues);
-			} else {
-				Logging.warning(this, "p has unexpected value " + p);
-			}
-		}
-	}
-
-	private void sortRegularValue(String entry, int p, Map<String, Integer> numberedValues, Set<String> orderedValues,
-			Set<String> unorderedValues) {
-		try {
-			int orderNumber = Integer.parseInt(entry.substring(0, p));
-			String value = entry.substring(p + 1);
-			if (numberedValues.get(value) == null || orderNumber < numberedValues.get(value)) {
-				orderedValues.add(entry);
-				numberedValues.put(value, orderNumber);
-			}
-		} catch (NumberFormatException x) {
-			Logging.warning(this, "illegal order format for domain entry: " + entry);
-			unorderedValues.add(entry);
-		}
+		return new ArrayList<>(result);
 	}
 
 	public void writeDomains(List<Object> domains) {

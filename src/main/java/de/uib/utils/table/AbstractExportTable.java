@@ -104,7 +104,6 @@ public abstract class AbstractExportTable {
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
 								Configed.getResourceValue(
 										"ExportTable.caseNoSelectedRows.option.exportCompleteTable") },
-
 						500, 200);
 				fChoice.setDefaultResult(3);
 				fChoice.setMessage(Configed.getResourceValue("ExportTable.caseNoSelectedRows.info") + "\n\n\n"
