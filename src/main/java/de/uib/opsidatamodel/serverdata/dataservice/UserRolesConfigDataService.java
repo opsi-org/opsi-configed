@@ -79,23 +79,23 @@ public class UserRolesConfigDataService {
 	}
 
 	public boolean isGlobalReadOnly() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.GLOBAL_READ_ONLY, Boolean.class));
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.GLOBAL_READ_ONLY, Boolean.class));
 	}
 
 	public boolean hasServerFullPermissionPD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.SERVER_FULL_PERMISION, Boolean.class));
 	}
 
 	public boolean hasCreateClientPermissionPD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class));
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, Boolean.class));
 	}
 
 	public boolean hasDepotsFullPermissionPD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, Boolean.class));
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, Boolean.class));
 	}
 
 	public boolean hasKeyUserRegisterValuePD() {
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, Boolean.class));
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, Boolean.class));
 	}
 
 	public Set<String> getPermittedProductsPD() {
@@ -122,7 +122,7 @@ public class UserRolesConfigDataService {
 	}
 
 	public boolean isAccessToHostgroupsOnlyIfExplicitlyStatedPD() {
-		return Utils.toBoolean(
+		return Boolean.TRUE.equals(
 				cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, Boolean.class));
 	}
 

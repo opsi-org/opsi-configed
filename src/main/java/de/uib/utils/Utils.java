@@ -391,10 +391,6 @@ public final class Utils {
 		return result;
 	}
 
-	public static boolean toBoolean(Boolean bool) {
-		return bool != null && bool.booleanValue();
-	}
-
 	public static String getSavedStatesDefaultLocation() {
 		String result = "";
 
