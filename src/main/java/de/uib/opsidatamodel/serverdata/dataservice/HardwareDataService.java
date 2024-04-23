@@ -464,22 +464,9 @@ public class HardwareDataService {
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = getHwAuditDeviceClassesPD();
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClass.getValue();
-
-			for (OpsiHwAuditDevicePropertyType deviceProperty : hwAuditDeviceClass.getDeviceHostProperties()) {
-				if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-					String col = HW_INFO_CONFIG + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
-					client2HwRowsColumnNames.add(col);
-				}
-			}
-
-			for (OpsiHwAuditDevicePropertyType deviceProperty : hwAuditDeviceClass.getDeviceHwItemProperties()) {
-				if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-					String col = HW_INFO_DEVICE + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
-					client2HwRowsColumnNames.add(col);
-				}
-			}
+			addHardwareToClientColumns(hwClass, client2HwRowsColumnNames);
 		}
+
 		Set<String> hwInfoClasses = new HashSet<>();
 
 		for (String columnName : client2HwRowsColumnNames) {
@@ -496,6 +483,23 @@ public class HardwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.HOST_COLUMN_NAMES, hostColumnNames);
 		cacheManager.setCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, hwInfoClassNames);
 		cacheManager.setCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, client2HwRowsColumnNames);
+	}
+
+	private static void addHardwareToClientColumns(Entry<String, OpsiHwAuditDeviceClass> hwClass,
+			List<String> client2HwRowsColumnNames) {
+		for (OpsiHwAuditDevicePropertyType deviceProperty : hwClass.getValue().getDeviceHostProperties()) {
+			if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
+				String col = HW_INFO_CONFIG + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
+				client2HwRowsColumnNames.add(col);
+			}
+		}
+
+		for (OpsiHwAuditDevicePropertyType deviceProperty : hwClass.getValue().getDeviceHwItemProperties()) {
+			if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
+				String col = HW_INFO_DEVICE + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
+				client2HwRowsColumnNames.add(col);
+			}
+		}
 	}
 
 	private String cutClassName(String columnName) {

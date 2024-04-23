@@ -101,12 +101,7 @@ public class HostDataService {
 			String systemUUID = ((String) client.get(6)).trim();
 			String macaddress = ((String) client.get(7)).trim();
 			String ipaddress = ((String) client.get(8)).trim();
-			String[] groups = null;
-			if (!((String) client.get(9)).isEmpty()) {
-				groups = ((String) client.get(9)).replace("\\s,\\s", ",").trim().split(",");
-			} else {
-				groups = new String[] {};
-			}
+
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
 			boolean uefiBoot = Boolean.parseBoolean((String) client.get(11));
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(12));
@@ -161,16 +156,7 @@ public class HostDataService {
 				configStatesJsonObject.add(itemShI);
 			}
 
-			if (groups != null && groups.length != 0) {
-				Logging.info(this, "createClient" + " group " + Arrays.toString(groups));
-				for (String group : groups) {
-					Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
-					itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-					itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
-					itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-					groupsJsonObject.add(itemGroup);
-				}
-			}
+			addGroupsToList(((String) client.get(9)), newClientId, groupsJsonObject);
 
 			HostInfo hostInfo = new HostInfo(hostItem);
 			if (depotId == null || depotId.isEmpty()) {
@@ -184,6 +170,32 @@ public class HostDataService {
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 		}
 
+		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject,
+				configStatesJsonObject);
+	}
+
+	private void addGroupsToList(String groupsAsString, String newClientId,
+			List<Map<String, Object>> groupsJsonObject) {
+		String[] groups;
+		if (!groupsAsString.isEmpty()) {
+			groups = groupsAsString.replace("\\s,\\s", ",").trim().split(",");
+		} else {
+			groups = new String[] {};
+		}
+
+		Logging.info(this, "createClient" + " group " + Arrays.toString(groups));
+		for (String group : groups) {
+			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
+			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+			itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
+			itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
+			groupsJsonObject.add(itemGroup);
+		}
+	}
+
+	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
+			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject,
+			List<Map<String, Object>> configStatesJsonObject) {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { clientsJsonObject });
 		boolean result = exec.doCall(omc);
 
@@ -197,13 +209,13 @@ public class HostDataService {
 			if (!groupsJsonObject.isEmpty()) {
 				omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
 						new Object[] { groupsJsonObject });
-				result = exec.doCall(omc);
+				result = result && exec.doCall(omc);
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
 				omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_CREATE_OBJECTS,
 						new Object[] { productsNetbootJsonObject });
-				result = exec.doCall(omc);
+				result = result && exec.doCall(omc);
 			}
 		}
 

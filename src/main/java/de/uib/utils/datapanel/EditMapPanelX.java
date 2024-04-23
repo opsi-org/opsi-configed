@@ -291,21 +291,14 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
 				Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-				if (!(c instanceof JLabel)) {
-					Logging.warning(this, "Component is not a JLabel, but " + c.getClass());
-
+				if (!showToolTip) {
 					return c;
-				} else if (!showToolTip) {
-					return c;
-				} else {
-					// Just continue
 				}
-
 				JLabel jLabel = (JLabel) c;
 
 				String propertyName = names.get(rowIndex);
 
-				String tooltip = null;
+				String tooltip = "";
 
 				if (propertyName != null && defaultsMap != null && defaultsMap.get(propertyName) != null) {
 					tooltip = "default: ";
@@ -337,11 +330,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					jLabel.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 					jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
+				} else if (!defaultValue.equals(table.getValueAt(rowIndex, 1))) {
+					jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
 				} else {
-					Object gotValue = table.getValueAt(rowIndex, 1);
-					if (!defaultValue.equals(gotValue)) {
-						jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
-					}
+					// Do nothing when default equals real value
 				}
 
 				if (vColIndex == 1 && Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
