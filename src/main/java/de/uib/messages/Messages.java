@@ -27,7 +27,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 import de.uib.configed.Configed;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.userprefs.UserPreferences;
 
 public final class Messages {
 	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";

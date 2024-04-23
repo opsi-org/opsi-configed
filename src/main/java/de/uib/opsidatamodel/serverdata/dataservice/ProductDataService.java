@@ -46,8 +46,8 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
 import de.uib.utils.datapanel.MapTableModel;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.savedstates.UserPreferences;
 import de.uib.utils.table.ListCellOptions;
+import de.uib.utils.userprefs.UserPreferences;
 
 /**
  * Provides methods for working with proudct data on the server.

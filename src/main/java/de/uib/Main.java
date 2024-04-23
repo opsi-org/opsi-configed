@@ -30,8 +30,8 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utils.FeatureActivationChecker;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
-import de.uib.utils.savedstates.ThemeManager;
-import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.userprefs.ThemeManager;
+import de.uib.utils.userprefs.UserPreferences;
 import javafx.embed.swing.JFXPanel;
 
 public class Main {

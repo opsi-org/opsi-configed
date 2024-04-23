@@ -64,8 +64,8 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.savedstates.ThemeManager;
-import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.userprefs.ThemeManager;
+import de.uib.utils.userprefs.UserPreferences;
 
 public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;

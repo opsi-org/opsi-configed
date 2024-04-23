@@ -39,7 +39,7 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
-import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.userprefs.UserPreferences;
 
 /**
  * Provides methods for working with host data on the server.

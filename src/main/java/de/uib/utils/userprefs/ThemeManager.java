@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utils.savedstates;
+package de.uib.utils.userprefs;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
