@@ -52,11 +52,14 @@ public final class CommandFactory {
 
 	private static CommandFactory instance;
 
+	// TODO: Implement modules upload command when there is a way to upload modules file (requires backend work)
+	// Current two implementations of the file upload (WebDAV and Messagebus) don't work. WebDAV due to not having
+	// required directory enabled/activated (and not having a way to enable/activate the directory) and Messagebus
+	// due to the `file_upload` events needing terminal to be opened on the server.
 	private static final SingleCommand[] DEFAULT_OPSI_COMMANDS = new SingleCommand[] {
 			new SingleCommandPackageUpdater(), new SingleCommandOpsiPackageManagerInstall(),
 			new SingleCommandOpsiPackageManagerUninstall(), new SingleCommandOpsiMakeProductFile(),
-			new SingleCommandCurl(), new SingleCommandModulesUpload(), new SingleCommandOpsiSetRights(),
-			new SingleCommandDeployClientAgent() };
+			new SingleCommandCurl(), new SingleCommandOpsiSetRights(), new SingleCommandDeployClientAgent() };
 
 	private List<MultiCommandTemplate> commandList;
 	private Set<String> knownMenus;
