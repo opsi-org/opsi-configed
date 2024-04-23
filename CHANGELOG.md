@@ -1,12 +1,11 @@
 # Changelog
 ## [4.3.x.x] - 2024-xx-xx
 ## Added
+- Include JavaFX modules for macOS
 - Ability to open messagebus terminal on a client directly
-
 
 ## Changed
 - Don't define default session for terminal connection, to allow for user to select session.
-
 
 ## Fixed
 - `NullPointerException` when trying to select group that does not exist any more 
@@ -21,10 +20,8 @@
 - On reload in "localboot products" and "netboot products" tabs, installed packages are shown in and deleted packages are removed from the table
 - New style for reload animation
 
-
 ## Added
 - Flags `-ff` and `--feature-flags` to enable currently in development features, for testing purposes
-
 
 ## Fixed
 - `NullPointerException` on product reset
@@ -36,7 +33,6 @@
 - Can't change table column visibility in product table after full reload
 - When group, that has subgroups, is permitted for a user, the subgroups aren't included in a group.
 - On reload in "default properties" tab no changes are made to the table (removed packages are shown and installed packages aren't shown)
-
 
 ## [4.3.2.11] - 2024-03-28
 ## Fixed
