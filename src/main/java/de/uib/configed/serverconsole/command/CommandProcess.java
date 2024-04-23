@@ -28,6 +28,7 @@ public class CommandProcess {
 	private String command;
 	private int exitCode;
 	private boolean errorEncounteredOnStart;
+	private boolean finished;
 
 	public CommandProcess(ConfigedMain configedMain, ThreadLocker locker, String command) {
 		this.configedMain = configedMain;
@@ -46,7 +47,12 @@ public class CommandProcess {
 		return failed;
 	}
 
+	public boolean hasFinished() {
+		return finished;
+	}
+
 	public void sendProcessStartRequest() {
+		Logging.info(this, "Sending process start request");
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", WebSocketEvent.PROCESS_START_REQUEST.toString());
 		data.put("id", UUID.randomUUID().toString());
@@ -56,8 +62,25 @@ public class CommandProcess {
 		data.put("expires", System.currentTimeMillis() + 10000);
 		data.put("command", command.split(" "));
 		data.put("shell", true);
+		Logging.debug(this, "Request data " + data);
 		configedMain.getMessagebus().sendMessage(data);
+		Logging.info(this, "Request sent");
 		locker.lock();
+	}
+
+	public void sendProcessStopRequest() {
+		Logging.info(this, "Sending process stop request");
+		Map<String, Object> data = new HashMap<>();
+		data.put("type", WebSocketEvent.PROCESS_STOP_REQUEST.toString());
+		data.put("id", UUID.randomUUID().toString());
+		data.put("process_id", id);
+		data.put("sender", "@");
+		data.put("channel", "service:config:process");
+		data.put("created", System.currentTimeMillis());
+		data.put("expires", System.currentTimeMillis() + 10000);
+		Logging.debug(this, "Request data " + data);
+		configedMain.getMessagebus().sendMessage(data);
+		Logging.info(this, "Request sent");
 	}
 
 	public void onStart(Map<String, Object> message) {
@@ -77,6 +100,7 @@ public class CommandProcess {
 		exitCode = (int) message.get("exit_code");
 		Logging.info(this, "Command has exited with exit code " + exitCode);
 		if (stoppedProcessId != null && stoppedProcessId.equals(id)) {
+			finished = true;
 			locker.unlock();
 		}
 	}
@@ -100,6 +124,7 @@ public class CommandProcess {
 		errorEncounteredOnStart = true;
 		String stoppedProcessId = (String) message.get("process_id");
 		if (stoppedProcessId != null && stoppedProcessId.equals(id)) {
+			finished = true;
 			locker.unlock();
 		}
 		Map<String, Object> error = POJOReMapper.remap(message.get("error"), new TypeReference<Map<String, Object>>() {
@@ -127,15 +152,7 @@ public class CommandProcess {
 			while (true) {
 				if (duration.getSeconds() >= processTimeout) {
 					Logging.info(this, "Timeout reached - stopping process");
-					Map<String, Object> data = new HashMap<>();
-					data.put("type", WebSocketEvent.PROCESS_STOP_REQUEST.toString());
-					data.put("id", UUID.randomUUID().toString());
-					data.put("process_id", id);
-					data.put("sender", "@");
-					data.put("channel", "service:config:process");
-					data.put("created", System.currentTimeMillis());
-					data.put("expires", System.currentTimeMillis() + 10000);
-					configedMain.getMessagebus().sendMessage(data);
+					sendProcessStopRequest();
 					break;
 				}
 			}

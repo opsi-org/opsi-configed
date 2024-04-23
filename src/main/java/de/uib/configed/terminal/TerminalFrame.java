@@ -41,6 +41,8 @@ public final class TerminalFrame implements MessagebusListener {
 
 	private boolean restrictView;
 
+	private Runnable callback;
+
 	public TerminalFrame() {
 		this(false);
 	}
@@ -63,6 +65,10 @@ public final class TerminalFrame implements MessagebusListener {
 
 	public TerminalFileUploadProgressIndicator getTerminalFileUploadProgressIndicator() {
 		return fileUploadProgressIndicator;
+	}
+
+	public void setOnClose(Runnable callback) {
+		this.callback = callback;
 	}
 
 	private void createAndShowGUI() {
@@ -244,6 +250,7 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	public void close() {
+		callback.run();
 		frame.dispose();
 		messagebus.getWebSocket().unregisterListener(this);
 	}

@@ -36,7 +36,9 @@ public class CommandExecutor implements MessagebusListener {
 	private SingleCommand commandToExecute;
 
 	private boolean withGUI = true;
+	private boolean stopCommandExecution;
 	private CommandProcess commandProcess;
+	private WebDAVBackgroundFileUploader fileUploader;
 
 	private int commandNumber;
 
@@ -65,7 +67,22 @@ public class CommandExecutor implements MessagebusListener {
 	private void initValues(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		this.terminalFrame = new TerminalFrame(true);
+		terminalFrame.setOnClose(this::onClose);
 		this.locker = new ThreadLocker();
+	}
+
+	private void onClose() {
+		Logging.info(this, "Terminal frame was closed - stopping command execution");
+		stopCommandExecution = true;
+		if (commandProcess != null && !commandProcess.hasFinished()) {
+			Logging.info(this, "Stopping command");
+			commandProcess.sendProcessStopRequest();
+		}
+		if (fileUploader != null) {
+			Logging.devel(this, "Stopping file upload");
+			fileUploader.cancel(true);
+		}
+		configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
 	}
 
 	public JFrame getDialog() {
@@ -91,24 +108,30 @@ public class CommandExecutor implements MessagebusListener {
 				configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
 			});
 		} else {
-			startBackgroundThread(() -> {
-				List<SingleCommand> commands = multiCommand.getCommands();
-				numberOfCommands = commands.size();
-				for (SingleCommand command : commands) {
-					execute(command);
-				}
-				configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
-			});
+			startBackgroundThread(this::handleMultiCommand);
 		}
 
 		return commandProcess != null ? commandProcess.getResult() : "";
+	}
+
+	private void handleMultiCommand() {
+		List<SingleCommand> commands = multiCommand.getCommands();
+		numberOfCommands = commands.size();
+		for (SingleCommand command : commands) {
+			if (stopCommandExecution) {
+				Logging.info(this, "Cancel further commands execution, since terminal frame window was closed");
+				break;
+			}
+			execute(command);
+		}
+		configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
 	}
 
 	private void execute(SingleCommand command) {
 		executeNumberOfCommands++;
 		if (command instanceof SingleCommandFileUpload) {
 			SingleCommandFileUpload fileUploadCommand = (SingleCommandFileUpload) command;
-			WebDAVBackgroundFileUploader fileUploader = new WebDAVBackgroundFileUploader(terminalFrame,
+			fileUploader = new WebDAVBackgroundFileUploader(terminalFrame,
 					new File(fileUploadCommand.getFullSourcePath()), fileUploadCommand.getTargetPath(), withGUI);
 			fileUploader.setOnDone(() -> {
 				indicateFileUploadIsFinished(fileUploader, fileUploadCommand);

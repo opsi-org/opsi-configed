@@ -55,6 +55,10 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 
 		@Override
 		public int read() throws IOException {
+			if (isCancelled()) {
+				Logging.info(this, "File upload stopped");
+				return -1;
+			}
 			int bytesRead = inputStream.read();
 			if (bytesRead != -1) {
 				totalBytesRead++;
@@ -65,6 +69,10 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 
 		@Override
 		public int read(byte[] b, int off, int len) throws IOException {
+			if (isCancelled()) {
+				Logging.info(this, "File upload stopped");
+				return -1;
+			}
 			int bytesRead = inputStream.read(b, off, len);
 			if (bytesRead != -1) {
 				totalBytesRead += bytesRead;
