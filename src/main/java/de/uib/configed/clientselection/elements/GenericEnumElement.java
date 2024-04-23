@@ -34,8 +34,4 @@ public class GenericEnumElement extends AbstractSelectElement {
 	public List<String> getEnumData() {
 		return enumData;
 	}
-
-	protected static String[] removeFirst(int n, String[] data) {
-		return Arrays.copyOfRange(data, n, data.length);
-	}
 }

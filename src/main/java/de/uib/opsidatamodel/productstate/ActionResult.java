@@ -9,6 +9,7 @@ package de.uib.opsidatamodel.productstate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +37,7 @@ public final class ActionResult {
 	private static Map<String, Integer> label2state;
 
 	private static Set<Integer> states;
-	private static List<String> labels;
+	private static Set<String> labels;
 
 	// instance variable
 	private int state = INVALID;
@@ -62,7 +63,7 @@ public final class ActionResult {
 		states.add(FAILED);
 		states.add(SUCCESSFUL);
 
-		labels = new ArrayList<>();
+		labels = new LinkedHashSet<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("not_available");
@@ -112,7 +113,7 @@ public final class ActionResult {
 	public static List<String> getLabels() {
 		checkCollections();
 
-		return labels;
+		return new ArrayList<>(labels).subList(2, labels.size());
 	}
 
 	private static Integer getVal(String label) {
