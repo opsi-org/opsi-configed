@@ -253,10 +253,10 @@ public class CommandExecutor implements MessagebusListener {
 	private void outputEndResult() {
 		if (numberOfCommands == executeNumberOfCommands) {
 			terminalFrame.writeToWidget("----------------------------------------\r\n");
-			terminalFrame.writeToWidget(
-					"Commands executed with failures: " + failedNumberOfCommands + "/" + numberOfCommands + "\r\n");
-			terminalFrame.writeToWidget(
-					"Commands executed successfully: " + succededNumberOfCommands + "/" + numberOfCommands + "\r\n");
+			terminalFrame.writeToWidget(Configed.getResourceValue("CommandExecutor.endResult.failedCommands") + " "
+					+ failedNumberOfCommands + "/" + numberOfCommands + "\r\n");
+			terminalFrame.writeToWidget(Configed.getResourceValue("CommandExecutor.endResult.succeededCommands") + " "
+					+ succededNumberOfCommands + "/" + numberOfCommands + "\r\n");
 		}
 	}
 }
