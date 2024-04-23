@@ -149,8 +149,9 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
-		tabbedPane.openSessionOnSelectedTab(session != null && !session.isEmpty() ? session : "Configserver");
-		if (session == null) {
+		if (session != null) {
+			tabbedPane.openSessionOnSelectedTab(session);
+		} else {
 			displaySessionsDialog();
 		}
 
