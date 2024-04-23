@@ -37,7 +37,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.userprefs.SavedStates;
+import de.uib.utils.savedstates.SavedStates;
 
 public final class Configed {
 	private static final String LOCALIZATION_FILENAME_REGEX = "configed_...*\\.properties";

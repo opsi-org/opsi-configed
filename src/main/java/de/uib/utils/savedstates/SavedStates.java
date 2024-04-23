@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.utils.userprefs;
+package de.uib.utils.savedstates;
 
 import java.io.File;
 import java.io.FileInputStream;
