@@ -6,8 +6,6 @@
 
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
-import java.util.Map;
-
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
@@ -28,26 +26,19 @@ public class OpsiDataBigIntEqualsOperation extends BigIntEqualsOperation impleme
 
 	@Override
 	public boolean doesMatch(OpsiDataClient client) {
-		Map<String, Object> realMap = client.getMap(map);
-		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			Logging.debug(this, "key " + key + " not found!");
-			return false;
-		}
-
-		Object realData = realMap.get(key);
+		Object realData = client.getMap(map).get(key);
 		if (realData instanceof Long) {
 			if ((Long) realData == data) {
 				return true;
 			}
-		} else {
-			if (realData instanceof Integer) {
-				if ((Integer) realData == data) {
-					return true;
-				}
-			} else {
-				Logging.error(this, "data is no BigInteger!" + realData);
+		} else if (realData instanceof Integer) {
+			if ((Integer) realData == data) {
+				return true;
 			}
+		} else {
+			Logging.error(this, "data is no BigInteger!" + realData);
 		}
+
 		return false;
 	}
 }
