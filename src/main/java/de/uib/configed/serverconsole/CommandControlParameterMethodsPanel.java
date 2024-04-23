@@ -21,16 +21,15 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
+import de.uib.configed.serverconsole.command.CommandParameterParser;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class CommandControlParameterMethodsPanel extends JPanel {
 	private JDialog main;
-	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
 	private JLabel jLabelParamMethods = new JLabel();
 	private JLabel jLabelParamFormats = new JLabel();
@@ -40,10 +39,13 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 	private JButton jButtonAddParam;
 	private JButton jButtonTestParam;
 
-	public CommandControlParameterMethodsPanel(JDialog owner) {
+	private ConfigedMain configedMain;
+
+	public CommandControlParameterMethodsPanel(JDialog owner, ConfigedMain configedMain) {
 		super();
 		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
+		this.configedMain = configedMain;
 		init();
 
 		initLayout();
@@ -59,7 +61,8 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		jLabelParamFormats.setText(Configed.getResourceValue("SSHConnection.CommandControl.parameterFormats"));
 
-		jComboBoxParameterFormats = new JComboBox<>(factory.getParameterHandler().getParameterFormats());
+		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
+		jComboBoxParameterFormats = new JComboBox<>(parameterParser.getParameterFormats());
 		Logging.info(this, "cb_parameter_formats lightweight " + jComboBoxParameterFormats.isLightWeightPopupEnabled());
 
 		jComboBoxParameterFormats.setPreferredSize(jComboBoxDim);
@@ -67,8 +70,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 		// we have to delimit it so that is constrained to the component (in Windows)
 		jComboBoxParameterFormats.setMaximumRowCount(5);
 
-		factory.getParameterHandler();
-		jComboBoxParameterMethods = new JComboBox<>(SSHCommandParameterMethods.getParameterMethodLocalNames());
+		jComboBoxParameterMethods = new JComboBox<>(CommandParameterParser.getParameterMethodLocalNames());
 		jComboBoxParameterMethods
 				.setSelectedItem(Configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
 		jComboBoxParameterMethods.setPreferredSize(jComboBoxDim);
@@ -168,27 +170,26 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.METHOD_INTERACTIVE_ELEMENT)
+				.equals(CommandParameterParser.METHOD_INTERACTIVE_ELEMENT)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(SSHCommandParameterMethods.METHOD_OPTION_SELECTION)) {
+						.equals(CommandParameterParser.METHOD_OPTION_SELECTION)) {
 			Logging.debug("CREATING PARAM TEXT... ");
-			factory.getParameterHandler();
-			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
-					+ SSHCommandParameterMethods.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
+					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;
 			Logging.debug("CREATED PARAM TEXT: " + paramText);
 		} else {
-			factory.getParameterHandler();
-			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
-					+ SSHCommandParameterMethods.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
-					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
+					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ CommandParameterParser.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
+					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;
 		}
 
 		Logging.debug("PARAM TEXT: " + paramText);
 		try {
 			Logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
-			String result = "echo \"{0}\"".replace("{0}", factory.getParameterHandler().testParameter(paramText));
+			CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
+			String result = "echo \"{0}\"".replace("{0}", parameterParser.testParameter(paramText));
 			Logging.info(this, "actionPerformed(testParamMethod) result " + result);
 			String showThisText = "echo \"{0}\"".replace("{0}", paramText) + ":\n" + result;
 			if (result.equals(Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed"))) {
@@ -209,19 +210,17 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 	public void doActionParamAdd(JTextComponent component) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.METHOD_INTERACTIVE_ELEMENT)
+				.equals(CommandParameterParser.METHOD_INTERACTIVE_ELEMENT)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(SSHCommandParameterMethods.METHOD_OPTION_SELECTION)) {
-			factory.getParameterHandler();
-			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
-					+ SSHCommandParameterMethods.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+						.equals(CommandParameterParser.METHOD_OPTION_SELECTION)) {
+			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
+					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;
 		} else {
-			factory.getParameterHandler();
-			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
-					+ SSHCommandParameterMethods.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
-					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
+					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ CommandParameterParser.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
+					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;
 		}
 
 		try {

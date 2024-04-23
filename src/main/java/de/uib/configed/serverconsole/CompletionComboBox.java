@@ -4,15 +4,15 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.ssh;
+package de.uib.configed.serverconsole;
 
 import javax.swing.ComboBoxEditor;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-public class SSHCompletionComboBox<E> extends JComboBox<E> {
-	public SSHCompletionComboBox(ComboBoxModel<E> cbm) {
+public class CompletionComboBox<E> extends JComboBox<E> {
+	public CompletionComboBox(ComboBoxModel<E> cbm) {
 		super(cbm);
 	}
 

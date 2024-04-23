@@ -80,8 +80,6 @@ import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.configed.gui.licenses.LicensesFrame;
 import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.productpage.PanelProductSettings;
-import de.uib.configed.gui.ssh.SSHCommandControlDialog;
-import de.uib.configed.gui.ssh.SSHConfigDialog;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateUpdateManager;
@@ -100,11 +98,6 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsicommand.sshcommand.SSHCommand;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
-import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
@@ -284,8 +277,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Set<String> connectedHostsByMessagebus;
 
-	private SSHConfigDialog sshConfigDialog;
-	private SSHCommandControlDialog sshCommandControlDialog;
 	private CommandControlDialog commandControlDialog;
 	private NewClientDialog newClientDialog;
 
@@ -307,15 +298,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 		if (ConfigedMain.otp == null) {
 			setOTP(otp);
-		}
-
-		SSHConnectionInfo.getInstance().setHost(host);
-		SSHConnectionInfo.getInstance().setUser(user);
-		SSHConnectionInfo.getInstance().setPassw(password);
-		if (sshKey == null) {
-			SSHConnectionInfo.getInstance().useKeyfile(false, "", "");
-		} else {
-			SSHConnectionInfo.getInstance().useKeyfile(true, sshKey, sshKeyPass);
 		}
 
 		Logging.registerConfigedMain(this);
@@ -451,22 +433,6 @@ public class ConfigedMain implements MessagebusListener {
 		return result;
 	}
 
-	private void setSSHallowedHosts() {
-		Set<String> sshAllowedHosts = new HashSet<>();
-
-		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
-			Logging.info(this, "set ssh allowed hosts " + host);
-			sshAllowedHosts.add(host);
-			sshAllowedHosts.addAll(persistenceController.getHostInfoCollections().getDepots().keySet());
-		} else {
-			sshAllowedHosts.addAll(
-					persistenceController.getDepotDataService().getDepotPropertiesForPermittedDepots().keySet());
-		}
-
-		SSHCommandFactory.getInstance(this).setAllowedHosts(sshAllowedHosts);
-		Logging.info(this, "ssh allowed hosts" + sshAllowedHosts);
-	}
-
 	public void initDashInfo() {
 		if (!ServerFacade.isOpsi43()) {
 			Logging.info(this, "initDashInfo not enabled");
@@ -568,9 +534,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		// errors are already handled in login
 		Logging.info(this, " we got persist " + persistenceController);
-
-		setSSHallowedHosts();
-
 		Logging.info(this, "call initData");
 		initData();
 
@@ -2656,7 +2619,7 @@ public class ConfigedMain implements MessagebusListener {
 			clientTable.setSelectedValues(clientsLeft);
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
-			mainFrame.setupMenuServer();
+			mainFrame.reloadServerConsoleMenu();
 			mainFrame.getClientMenu().reInitJMenu();
 			mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().reInitPopupMenu();
 			mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().reInitPopupMenu();
@@ -3403,45 +3366,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		savedSearchesDialog.setLocationRelativeTo(mainFrame);
 		savedSearchesDialog.setVisible(true);
-	}
-
-	/**
-	 * Starts the execution of command
-	 *
-	 * @param command
-	 */
-	public void startSSHOpsiServerExec(final SSHCommand command) {
-		Logging.info(this, "startSSHOpsiServerExec isReadOnly false");
-		final ConfigedMain configedMain = this;
-		new Thread() {
-			@Override
-			public void run() {
-				if (command.needParameter()) {
-					((SSHCommandNeedParameter) command).startParameterGui(configedMain);
-				} else {
-					new SSHConnectExec(configedMain, command);
-				}
-			}
-		}.start();
-	}
-
-	/**
-	 * Starts the config dialog
-	 */
-	public void startSSHConfigDialog() {
-		if (sshConfigDialog == null) {
-			sshConfigDialog = new SSHConfigDialog(this);
-		}
-		sshConfigDialog.setVisible(true);
-		sshConfigDialog.checkComponents();
-	}
-
-	/** Starts the control dialog */
-	public void startSSHControlDialog() {
-		if (sshCommandControlDialog == null) {
-			sshCommandControlDialog = new SSHCommandControlDialog(this);
-		}
-		sshCommandControlDialog.setVisible(true);
 	}
 
 	public void startControlDialog() {

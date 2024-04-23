@@ -37,9 +37,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.productaction.PanelMountShare;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.SingleCommandTemplate;
 import de.uib.connectx.SmbConnect;
-import de.uib.opsicommand.sshcommand.EmptyCommand;
-import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.NameProducer;
@@ -317,14 +317,14 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		JButton btnCreateDrivers = new JButton(Utils.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
-		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(configedMain,
-				// id not needed
-				new EmptyCommand("create_driver_links.py",
-						"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
-						// menutext - not needed
-						"create_driver_links.py",
-						// need sudo ?
-						true)));
+		btnCreateDrivers.addActionListener((ActionEvent actionEvent) -> {
+			CommandExecutor executor = new CommandExecutor(configedMain,
+					new SingleCommandTemplate("create_driver_links.py", "/var/lib/opsi/depot/"
+							+ comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
+							"create_driver_links.py"));
+			executor.execute();
+
+		});
 
 		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
 		fieldServerPath = new JTextField();
@@ -594,11 +594,12 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		new Thread() {
 			@Override
 			public void run() {
-				new SSHConnectExec(configedMain,
-						new EmptyCommand("show_drivers.py",
+				CommandExecutor executor = new CommandExecutor(configedMain,
+						new SingleCommandTemplate("show_drivers.py",
 								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/show_drivers.py "
 										+ fieldClientname.getText(),
-								"show_drivers.py", false));
+								"show_drivers.py"));
+				executor.execute();
 			}
 		}.start();
 	}

@@ -26,8 +26,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.ssh.CompletionComboBox;
-import de.uib.configed.gui.ssh.SSHPackageManagerInstallParameterDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiMakeProductFile;
@@ -291,7 +289,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 				.isGlobalReadOnly()) {
 			jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
 				if (configedMain != null) {
-					new SSHPackageManagerInstallParameterDialog(configedMain, filename);
+					new PackageManagerInstallParameterDialog(configedMain);
 				}
 			});
 		}

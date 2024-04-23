@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.ssh.CompletionComboBox;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.utils.WebDAVClient;
 import de.uib.utils.logging.Logging;

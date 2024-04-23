@@ -41,7 +41,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -478,10 +477,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				waitingWorker.setReady();
 			}
 		}.start();
-
-		SSHConnectionInfo.getInstance().setUser(user);
-		SSHConnectionInfo.getInstance().setPassw(String.valueOf(passwordField.getPassword()));
-		SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
 	private void endProgram() {

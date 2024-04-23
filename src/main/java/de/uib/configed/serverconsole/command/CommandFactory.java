@@ -252,6 +252,6 @@ public final class CommandFactory {
 	}
 
 	public void reloadServerMenu() {
-		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().reloadServerMenu());
+		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().reloadServerConsoleMenu());
 	}
 }
