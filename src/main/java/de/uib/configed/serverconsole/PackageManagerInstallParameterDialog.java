@@ -61,8 +61,8 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelFromLocal"));
 		jRadioButtonServer = new JRadioButton(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelFromServer"));
-		jRadioButtonCurl = new JRadioButton(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetFrom"));
+		jRadioButtonCurl = new JRadioButton(Configed
+				.getResourceValue("PackageManagerInstallParameterDialog.opsipackagemanager_install.jLabelCurlFrom"));
 		group.add(jRadioButtonLocal);
 		group.add(jRadioButtonServer);
 		group.add(jRadioButtonCurl);

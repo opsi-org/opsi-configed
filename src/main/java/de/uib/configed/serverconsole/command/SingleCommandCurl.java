@@ -95,7 +95,7 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.command.wget.tooltip");
+		return Configed.getResourceValue("SingleCommandCurl.tooltip");
 	}
 
 	@Override
