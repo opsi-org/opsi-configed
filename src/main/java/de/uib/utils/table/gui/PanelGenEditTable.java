@@ -786,20 +786,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	/**
-	 * set if filter mode is reset on new search (this is default but may be
-	 * disabled for special implementations of selection
-	 *
-	 * @parameter boolean
-	 */
-	public void setResetFilterModeOnNewSearch(boolean b) {
-		if (!withTablesearchPane) {
-			Logging.debug(this, "setResetFilterModeOnNewSearch: no search panel");
-			return;
-		}
-		searchPane.setResetFilterModeOnNewSearch(b);
-	}
-
-	/**
 	 * set search mode possible values TablesearchPane.FULL_TEXT_SEARCH
 	 * TablesearchPane.START_TEXT_SEARCH = 1; TablesearchPane.REGEX_SEARCH
 	 */
