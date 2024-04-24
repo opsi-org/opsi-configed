@@ -107,28 +107,31 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	public void reInitTree() {
-		String nodeToSelect;
-
+		String nodeSelection;
 		if (getSelectionPath() == null) {
-			nodeToSelect = null;
+			nodeSelection = null;
 		} else if (((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getAllowsChildren()) {
-			nodeToSelect = getSelectionPath().getLastPathComponent().toString();
+			nodeSelection = getSelectionPath().getLastPathComponent().toString();
 		} else {
-			nodeToSelect = ((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getParent().toString();
+			nodeSelection = ((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getParent().toString();
 		}
 
 		groupNodes.clear();
 		groups.clear();
 		rootNode.removeAllChildren();
 		createTopNodes();
-		removeTreeSelectionListener(this);
-		setModel(new DefaultTreeModel(rootNode));
 
-		if (groupNodes.get(nodeToSelect) != null) {
-			TreePath pathToSelect = new TreePath(getModel().getPathToRoot(groupNodes.get(nodeToSelect)));
-			setSelectionPath(pathToSelect);
-			expandPath(pathToSelect);
-		}
+		removeTreeSelectionListener(this);
+		model = new DefaultTreeModel(rootNode);
+		setModel(model);
+
+		// Select old node
+		DefaultMutableTreeNode nodeToSelect = groupNodes.get(nodeSelection) != null ? groupNodes.get(nodeSelection)
+				: groupNodeFullList;
+		TreePath pathToSelect = new TreePath(getModel().getPathToRoot(nodeToSelect));
+		setSelectionPath(pathToSelect);
+		expandPath(pathToSelect);
+
 		addTreeSelectionListener(this);
 	}
 
