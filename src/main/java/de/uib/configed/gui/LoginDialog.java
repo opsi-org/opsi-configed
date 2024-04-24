@@ -208,12 +208,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
-		JCheckBox checkTrySSH = new JCheckBox(Configed.getResourceValue("LoginDialog.checkTrySSH"),
-				Configed.isSSHConnectionOnStart());
-		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
-
-		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"),
-				Configed.isSSHConnectionOnStart());
+		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
 		checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
 		checkUseOTP.addItemListener((ItemEvent event) -> {
 			boolean selected = event.getStateChange() == ItemEvent.SELECTED;
@@ -222,7 +217,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		});
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
-		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH, checkUseOTP });
+		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkUseOTP });
 
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
