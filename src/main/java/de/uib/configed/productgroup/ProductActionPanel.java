@@ -58,7 +58,6 @@ public class ProductActionPanel extends JPanel {
 		searchPane.setSearchFieldsAll();
 	}
 
-	// TODO can this be removed and replaced with the method "setFiltered" ?
 	public void setFilteredMode(boolean b) {
 		Logging.debug(this, "setGuiIsFiltered " + b);
 		searchPane.setFilteredMode(b);

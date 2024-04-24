@@ -427,11 +427,7 @@ public class GroupDataService {
 	}
 
 	public boolean updateGroup(String groupId, Map<String, String> updateInfo, boolean isHostGroup) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
-			return false;
-		}
-
-		if (groupId == null) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD() || groupId == null) {
 			return false;
 		}
 

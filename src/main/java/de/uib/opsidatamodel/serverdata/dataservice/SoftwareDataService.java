@@ -458,8 +458,7 @@ public class SoftwareDataService {
 	// returns the ID of the edited data record
 	public String editSoftwareLicense(String softwareLicenseId, String licenseContractId, String licenseType,
 			String maxInstallations, String boundToHost, String expirationDate) {
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())
-				|| !Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
 			return "";
 		}
 
@@ -515,17 +514,13 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteSoftwareLicense(String softwareLicenseId) {
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
 			return false;
 		}
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_DELETE,
-					new Object[] { softwareLicenseId });
-			return exec.doCall(omc);
-		}
-
-		return false;
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_DELETE,
+				new Object[] { softwareLicenseId });
+		return exec.doCall(omc);
 	}
 
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
@@ -533,7 +528,7 @@ public class SoftwareDataService {
 			return "";
 		}
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
+		if (moduleDataService.isWithLicenseManagementPD()) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE,
 					new String[] { softwareLicenseId, licensePoolId, licenseKey });
 
@@ -547,17 +542,13 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId) {
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
 			return false;
 		}
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE,
-					new String[] { softwareLicenseId, licensePoolId });
-			return exec.doCall(omc);
-		}
-
-		return false;
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_DELETE,
+				new String[] { softwareLicenseId, licensePoolId });
+		return exec.doCall(omc);
 	}
 
 	public void setFSoftware2LicensePool(String softwareIdent, String licensePoolId) {
@@ -570,47 +561,40 @@ public class SoftwareDataService {
 	public boolean removeAssociations(String licensePoolId, List<String> softwareIds) {
 		Logging.info(this, "removeAssociations licensePoolId, softwareIds " + licensePoolId + ", " + softwareIds);
 
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
+		if (licensePoolId == null || softwareIds == null || !userRolesConfigDataService.hasServerFullPermissionPD()
+				|| !moduleDataService.isWithLicenseManagementPD()) {
 			return false;
 		}
 
-		boolean result = false;
+		List<Map<String, String>> deleteItems = new ArrayList<>();
 
-		if (licensePoolId == null || softwareIds == null) {
-			return result;
+		for (String swIdent : softwareIds) {
+			Map<String, String> item = new HashMap<>();
+			item.put("ident", swIdent + ";" + licensePoolId);
+			item.put("type", "AuditSoftwareToLicensePool");
+			deleteItems.add(item);
 		}
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
-			List<Map<String, String>> deleteItems = new ArrayList<>();
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
+				new Object[] { deleteItems });
+		boolean result = exec.doCall(omc);
 
-			for (String swIdent : softwareIds) {
-				Map<String, String> item = new HashMap<>();
-				item.put("ident", swIdent + ";" + licensePoolId);
-				item.put("type", "AuditSoftwareToLicensePool");
-				deleteItems.add(item);
+		Map<String, String> fSoftware2LicensePool = cacheManager
+				.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
+		Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
+				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
+		Map<String, List<String>> fLicensePool2UnknownSoftwareList = cacheManager
+				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class);
+
+		if (result) {
+			fSoftware2LicensePool.keySet().removeAll(softwareIds);
+
+			if (fLicensePool2SoftwareList.get(licensePoolId) != null) {
+				fLicensePool2SoftwareList.get(licensePoolId).removeAll(softwareIds);
 			}
 
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
-					new Object[] { deleteItems });
-			result = exec.doCall(omc);
-
-			Map<String, String> fSoftware2LicensePool = cacheManager
-					.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
-			Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
-					.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
-			Map<String, List<String>> fLicensePool2UnknownSoftwareList = cacheManager
-					.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST, Map.class);
-
-			if (result) {
-				fSoftware2LicensePool.keySet().removeAll(softwareIds);
-
-				if (fLicensePool2SoftwareList.get(licensePoolId) != null) {
-					fLicensePool2SoftwareList.get(licensePoolId).removeAll(softwareIds);
-				}
-
-				if (fLicensePool2UnknownSoftwareList.get(licensePoolId) != null) {
-					fLicensePool2UnknownSoftwareList.get(licensePoolId).removeAll(softwareIds);
-				}
+			if (fLicensePool2UnknownSoftwareList.get(licensePoolId) != null) {
+				fLicensePool2UnknownSoftwareList.get(licensePoolId).removeAll(softwareIds);
 			}
 		}
 
@@ -630,64 +614,59 @@ public class SoftwareDataService {
 		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:" + licensePoolId + " , "
 				+ softwareToAssign);
 
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
 			return false;
 		}
 
-		boolean result = true;
+		Map<String, SWAuditEntry> instSwI = getInstalledSoftwareInformationForLicensingPD();
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
-			Map<String, SWAuditEntry> instSwI = getInstalledSoftwareInformationForLicensingPD();
+		Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
+				.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
+		List<String> oldEntries = fLicensePool2SoftwareList.computeIfAbsent(licensePoolId, arg -> new ArrayList<>());
 
-			Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
-					.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
-			List<String> oldEntries = fLicensePool2SoftwareList.computeIfAbsent(licensePoolId,
-					arg -> new ArrayList<>());
+		List<String> oldEntriesTruely = new ArrayList<>(oldEntries);
+		List<String> softwareToAssignTruely = new ArrayList<>(softwareToAssign);
 
-			List<String> oldEntriesTruely = new ArrayList<>(oldEntries);
-			List<String> softwareToAssignTruely = new ArrayList<>(softwareToAssign);
+		Set<String> entriesToRemove = new HashSet<>();
 
-			Set<String> entriesToRemove = new HashSet<>();
+		// we work only with real changes
+		softwareToAssignTruely.removeAll(oldEntries);
+		oldEntriesTruely.removeAll(softwareToAssign);
+		oldEntriesTruely.retainAll(instSwI.keySet());
 
-			// we work only with real changes
-			softwareToAssignTruely.removeAll(oldEntries);
-			oldEntriesTruely.removeAll(softwareToAssign);
-			oldEntriesTruely.retainAll(instSwI.keySet());
+		Logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely " + softwareToAssignTruely);
+		Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
 
-			Logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely " + softwareToAssignTruely);
-			Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
+		boolean result = updateLicensepoolsOnServer(onlyAdding, oldEntriesTruely, entriesToRemove, licensePoolId,
+				instSwI, softwareToAssignTruely);
+		// we build the correct data locally
+		if (result) {
+			Set<String> intermediateSet = new HashSet<>(fLicensePool2SoftwareList.get(licensePoolId));
+			intermediateSet.removeAll(entriesToRemove);
+			intermediateSet.addAll(softwareToAssign);
+			// dont delete old entries but avoid double entries
+			List<String> newList = new ArrayList<>(intermediateSet);
+			fLicensePool2SoftwareList.put(licensePoolId, newList);
 
-			result = updateLicensepoolsOnServer(onlyAdding, oldEntriesTruely, entriesToRemove, licensePoolId, instSwI,
-					softwareToAssignTruely);
-			// we build the correct data locally
-			if (result) {
-				Set<String> intermediateSet = new HashSet<>(fLicensePool2SoftwareList.get(licensePoolId));
-				intermediateSet.removeAll(entriesToRemove);
-				intermediateSet.addAll(softwareToAssign);
-				// dont delete old entries but avoid double entries
-				List<String> newList = new ArrayList<>(intermediateSet);
-				fLicensePool2SoftwareList.put(licensePoolId, newList);
+			NavigableSet<Object> softwareWithoutAssociatedLicensePool = cacheManager
+					.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL, NavigableSet.class);
+			softwareWithoutAssociatedLicensePool.addAll(entriesToRemove);
+			softwareWithoutAssociatedLicensePool.removeAll(softwareToAssign);
 
-				NavigableSet<Object> softwareWithoutAssociatedLicensePool = cacheManager
-						.getCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL, NavigableSet.class);
-				softwareWithoutAssociatedLicensePool.addAll(entriesToRemove);
-				softwareWithoutAssociatedLicensePool.removeAll(softwareToAssign);
+			Logging.info(this, "setWindowsSoftwareIds2LPool licensePool, fLicensePool2SoftwareList " + licensePoolId
+					+ " : " + fLicensePool2SoftwareList.get(licensePoolId));
 
-				Logging.info(this, "setWindowsSoftwareIds2LPool licensePool, fLicensePool2SoftwareList " + licensePoolId
-						+ " : " + fLicensePool2SoftwareList.get(licensePoolId));
+			for (String ident : newList) {
+				// give zero length parts as ""
+				String[] parts = ident.split(";", -1);
+				String swName = parts[1];
 
-				for (String ident : newList) {
-					// give zero length parts as ""
-					String[] parts = ident.split(";", -1);
-					String swName = parts[1];
+				Set<String> swIdents = getName2SWIdentsPD().computeIfAbsent(swName, key -> new TreeSet<>());
+				swIdents.add(ident);
 
-					Set<String> swIdents = getName2SWIdentsPD().computeIfAbsent(swName, key -> new TreeSet<>());
-					swIdents.add(ident);
-
-					Logging.info(this,
-							"setWindowsSoftwareIds2LPool, collecting all idents for a name (even if not belonging to the pool), add ident "
-									+ ident + " to set for name " + swName);
-				}
+				Logging.info(this,
+						"setWindowsSoftwareIds2LPool, collecting all idents for a name (even if not belonging to the pool), add ident "
+								+ ident + " to set for name " + swName);
 			}
 		}
 
@@ -749,80 +728,75 @@ public class SoftwareDataService {
 	// we have got a SW from software table, therefore we do not serve the unknown
 	// software list
 	public String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licensePoolIDNew) {
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
 			return "";
 		}
 
 		boolean ok = false;
 		Logging.info(this, "editPool2AuditSoftware ");
 
-		if (Boolean.TRUE.equals(moduleDataService.isWithLicenseManagementPD())) {
-			if (licensePoolIDOld != null && !licensePoolIDOld.equals(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL)) {
-				// there was an association, we delete it)
+		if (licensePoolIDOld != null && !licensePoolIDOld.equals(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL)) {
+			// there was an association, we delete it)
 
-				List<String> swIds = new ArrayList<>();
-				swIds.add(softwareID);
-				ok = removeAssociations(licensePoolIDOld, swIds);
+			List<String> swIds = new ArrayList<>();
+			swIds.add(softwareID);
+			ok = removeAssociations(licensePoolIDOld, swIds);
 
-				if (!ok) {
-					Logging.warning(this, "editPool2AuditSoftware " + " failed");
-				}
+			if (!ok) {
+				Logging.warning(this, "editPool2AuditSoftware " + " failed");
 			}
-
-			if (FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL.equals(licensePoolIDNew)) {
-				// nothing to do, we deleted the entry
-				ok = true;
-			} else {
-				List<Map<String, Object>> readyObjects = new ArrayList<>();
-				Map<String, Object> item;
-
-				Map<String, String> swMap = AuditSoftwareXLicensePool.produceMapFromSWident(softwareID);
-				swMap.put(LicensepoolEntry.ID_SERVICE_KEY, licensePoolIDNew);
-
-				item = Utils.createNOMitem("AuditSoftwareToLicensePool");
-				item.putAll(swMap);
-				// create the edited entry
-
-				readyObjects.add(item);
-
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
-						new Object[] { readyObjects });
-
-				Logging.info(this, "editPool2AuditSoftware call " + omc);
-				if (exec.doCall(omc)) {
-					ok = true;
-				} else {
-					Logging.warning(this, "editPool2AuditSoftware " + omc + " failed");
-				}
-			}
-
-			Logging.info(this, "editPool2AuditSoftware ok " + ok);
-
-			if (ok) {
-				Map<String, String> fSoftware2LicensePool = cacheManager
-						.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
-				Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
-						.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
-				Logging.info(this, "fSoftware2LicensePool == null " + (fSoftware2LicensePool == null));
-
-				if (fSoftware2LicensePool != null) {
-					Logging.info(this,
-							"fSoftware2LicensePool.get( softwareID ) " + fSoftware2LicensePool.get(softwareID));
-					fSoftware2LicensePool.put(softwareID, licensePoolIDNew);
-				}
-				List<String> fLicensePoolSoftwareList = fLicensePool2SoftwareList.computeIfAbsent(licensePoolIDNew,
-						arg -> new ArrayList<>());
-
-				Logging.info(this, "fLicensePool2SoftwareList.get( licensePoolIDNew ) " + fLicensePoolSoftwareList);
-
-				fLicensePoolSoftwareList.add(softwareID);
-				cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicensePool2SoftwareList);
-			}
-
-			return "";
 		}
 
-		return "???";
+		if (FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL.equals(licensePoolIDNew)) {
+			// nothing to do, we deleted the entry
+			ok = true;
+		} else {
+			List<Map<String, Object>> readyObjects = new ArrayList<>();
+			Map<String, Object> item;
+
+			Map<String, String> swMap = AuditSoftwareXLicensePool.produceMapFromSWident(softwareID);
+			swMap.put(LicensepoolEntry.ID_SERVICE_KEY, licensePoolIDNew);
+
+			item = Utils.createNOMitem("AuditSoftwareToLicensePool");
+			item.putAll(swMap);
+			// create the edited entry
+
+			readyObjects.add(item);
+
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
+					new Object[] { readyObjects });
+
+			Logging.info(this, "editPool2AuditSoftware call " + omc);
+			if (exec.doCall(omc)) {
+				ok = true;
+			} else {
+				Logging.warning(this, "editPool2AuditSoftware " + omc + " failed");
+			}
+		}
+
+		Logging.info(this, "editPool2AuditSoftware ok " + ok);
+
+		if (ok) {
+			Map<String, String> fSoftware2LicensePool = cacheManager
+					.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
+			Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
+					.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
+			Logging.info(this, "fSoftware2LicensePool == null " + (fSoftware2LicensePool == null));
+
+			if (fSoftware2LicensePool != null) {
+				Logging.info(this, "fSoftware2LicensePool.get( softwareID ) " + fSoftware2LicensePool.get(softwareID));
+				fSoftware2LicensePool.put(softwareID, licensePoolIDNew);
+			}
+			List<String> fLicensePoolSoftwareList = fLicensePool2SoftwareList.computeIfAbsent(licensePoolIDNew,
+					arg -> new ArrayList<>());
+
+			Logging.info(this, "fLicensePool2SoftwareList.get( licensePoolIDNew ) " + fLicensePoolSoftwareList);
+
+			fLicensePoolSoftwareList.add(softwareID);
+			cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicensePool2SoftwareList);
+		}
+
+		return "";
 	}
 
 	public Map<String, Map<String, Object>> getLicensesReconciliationPD() {
