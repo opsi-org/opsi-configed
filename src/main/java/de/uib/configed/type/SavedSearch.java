@@ -19,25 +19,21 @@ public class SavedSearch {
 	}
 
 	public SavedSearch(String name, String serialization, String description) {
-		setName(name);
-		setSerialization(serialization);
-		setDescription(description);
+		this.name = name;
+		this.serialization = serialization;
+		this.description = description;
 	}
 
-	public void setName(Object s) {
-		name = "" + s;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setSerialization(Object s) {
-		serialization = "" + s;
+	public void setSerialization(String serialization) {
+		this.serialization = serialization;
 	}
 
-	public void setDescription(Object s) {
-		if (s != null) {
-			description = "" + s;
-		} else {
-			description = name;
-		}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getName() {
