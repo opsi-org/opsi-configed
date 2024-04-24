@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.2.X] - 2024-XX-XX
+## Changed
+- Replace SSH server console with messagebus server console
+
 ## [4.3.2.13] - 2024-04-24
 ## Added
 - Include JavaFX modules for macOS
