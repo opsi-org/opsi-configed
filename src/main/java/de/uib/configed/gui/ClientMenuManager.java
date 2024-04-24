@@ -117,6 +117,9 @@ public final class ClientMenuManager implements MenuListener {
 
 	public void reInitJMenu() {
 		jMenu.removeAll();
+		jMenuResetProducts.removeAll();
+
+		// Remove so that it will not be added twices
 		jMenu.removeMenuListener(this);
 		initJMenu();
 	}

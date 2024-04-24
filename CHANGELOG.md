@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.x.x] - 2024-xx-xx
+## Fixed
+- Don't add options twice to reset products after full reload
+
 ## [4.3.2.13] - 2024-04-24
 ## Added
 - Include JavaFX modules for macOS
