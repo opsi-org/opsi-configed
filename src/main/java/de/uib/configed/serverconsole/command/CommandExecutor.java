@@ -79,7 +79,7 @@ public class CommandExecutor implements MessagebusListener {
 			commandProcess.sendProcessStopRequest();
 		}
 		if (fileUploader != null) {
-			Logging.devel(this, "Stopping file upload");
+			Logging.info(this, "Stopping file upload");
 			fileUploader.cancel(true);
 		}
 		configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);

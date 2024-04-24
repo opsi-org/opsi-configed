@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -71,8 +72,8 @@ public class WebDAVClient {
 		sardine.put(getBaseURL() + location, dataSource);
 	}
 
-	public List<String> getDirectoriesIn(String currentDirectory) {
-		List<String> directories = new ArrayList<>();
+	public Set<String> getDirectoriesIn(String currentDirectory) {
+		Set<String> directories = new HashSet<>();
 		try {
 			List<DavResource> resources = sardine.list(getBaseURL() + currentDirectory);
 			for (DavResource resource : resources) {
@@ -86,8 +87,8 @@ public class WebDAVClient {
 		return directories;
 	}
 
-	public List<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension) {
-		List<String> directoriesAndFiles = new ArrayList<>();
+	public Set<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension) {
+		Set<String> directoriesAndFiles = new HashSet<>();
 		try {
 			List<DavResource> resources = sardine.list(getBaseURL() + currentDirectory);
 			for (DavResource resource : resources) {

@@ -184,7 +184,7 @@ public class CompletionComboButton {
 			@Override
 			public void run() {
 				WebDAVClient webDAVClient = new WebDAVClient();
-				List<String> result = webDAVClient.getDirectoriesIn(curdir);
+				Set<String> result = webDAVClient.getDirectoriesIn(curdir);
 				setItems(result, curdir);
 				enableComponents(true);
 			}
@@ -196,7 +196,7 @@ public class CompletionComboButton {
 			@Override
 			public void run() {
 				WebDAVClient webDAVClient = new WebDAVClient();
-				List<String> result = webDAVClient.getDirectoriesAndFilesIn(curdir, fileExtension);
+				Set<String> result = webDAVClient.getDirectoriesAndFilesIn(curdir, fileExtension);
 				setItems(result, curdir);
 				enableComponents(true);
 			}
@@ -209,7 +209,7 @@ public class CompletionComboButton {
 		return contains;
 	}
 
-	private final void setItems(List<String> items, final String curdir) {
+	private final void setItems(Set<String> items, final String curdir) {
 		if (items == null) {
 			Logging.warning("getDirectoriesIn could not find directories in " + curdir);
 		} else {
@@ -226,11 +226,11 @@ public class CompletionComboButton {
 			Logging.debug(this, "setItems add " + curDirLocated);
 			for (String item : items) {
 				Logging.debug(this, "setItems add " + item);
-				if (item.contains("//")) {
-					combobox.addItem(item.replace("//", "/"));
-				} else {
-					combobox.addItem(item);
+				int itemIndex = ((DefaultComboBoxModel<String>) combobox.getModel()).getIndexOf(item);
+				if (itemIndex != -1) {
+					continue;
 				}
+				combobox.addItem(item.replace("//", "/"));
 			}
 			combobox.setSelectedItem(curdir);
 		}
