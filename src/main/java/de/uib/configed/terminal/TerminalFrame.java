@@ -89,18 +89,14 @@ public final class TerminalFrame implements MessagebusListener {
 		fileUploadProgressIndicator.init();
 		fileUploadProgressIndicator.setVisible(false);
 
-		allLayout
-				.setVerticalGroup(allLayout.createSequentialGroup()
-						.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(fileUploadProgressIndicator, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
+				.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(fileUploadProgressIndicator));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(allLayout.createSequentialGroup().addComponent(northPanel, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(allLayout.createSequentialGroup().addComponent(fileUploadProgressIndicator,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+				.addGroup(allLayout.createSequentialGroup().addComponent(fileUploadProgressIndicator)));
 
 		frame.add(allPane);
 
