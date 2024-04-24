@@ -289,7 +289,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 				.isGlobalReadOnly()) {
 			jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
 				if (configedMain != null) {
-					new PackageManagerInstallParameterDialog(configedMain);
+					new PackageManagerInstallParameterDialog(configedMain, filename);
 				}
 			});
 		}
@@ -389,7 +389,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 			return;
 		}
 		MultiCommandTemplate commands = new MultiCommandTemplate();
-		String dir = Utils.getServerPathFromWebDAVPath((String) jComboBoxMainDir.getEditor().getItem());
+		String dir = (String) jComboBoxMainDir.getEditor().getItem();
+		String dirLocationInServer = Utils.getServerPathFromWebDAVPath(dir);
 
 		String prodVersion = jTextFieldProductVersion.getText();
 		String packVersion = jTextFieldPackageVersion.getText();
@@ -397,8 +398,9 @@ public class MakeProductFileDialog extends FGeneralDialog {
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
 		packVersion = checkVersion(packVersion,
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
-		SingleCommandOpsiMakeProductFile opsiMakeProductFileCommand = new SingleCommandOpsiMakeProductFile(dir,
-				packVersion, prodVersion, advancedOptionsPanel.useMD5Sum(), advancedOptionsPanel.useZsync());
+		SingleCommandOpsiMakeProductFile opsiMakeProductFileCommand = new SingleCommandOpsiMakeProductFile(
+				dirLocationInServer, packVersion, prodVersion, advancedOptionsPanel.useMD5Sum(),
+				advancedOptionsPanel.useZsync());
 		commands.setMainName(opsiMakeProductFileCommand.getMenuText());
 		if (jCheckBoxOverwrite.isSelected()) {
 			String versions = doActionGetVersions();
@@ -407,26 +409,27 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 			prodVersion = checkVersion(prodVersion, "", versionArray[1]);
 			packVersion = checkVersion(packVersion, "", versionArray[0]);
-			Logging.devel(this, "dir " + dir);
-			setOpsiPackageFilename(dir + "" + getPackageID(dir) + "_" + prodVersion + "-" + packVersion + ".opsi");
+			String packageID = getPackageID(dirLocationInServer);
+			setOpsiPackageFilename(dir + "" + packageID + "_" + prodVersion + "-" + packVersion + ".opsi");
+			String serverPath = dirLocationInServer + "" + packageID + "_" + prodVersion + "-" + packVersion + ".opsi";
 
-			String command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, filename);
+			String command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, serverPath);
 
 			SingleCommandTemplate removeExistingPackage = new SingleCommandTemplate(command);
 			commands.addCommand(removeExistingPackage);
 
-			command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, filename + ".zsync");
+			command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, serverPath + ".zsync");
 
 			removeExistingPackage = new SingleCommandTemplate(command);
 			commands.addCommand(removeExistingPackage);
 
-			command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, filename + ".md5");
+			command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, serverPath + ".md5");
 			removeExistingPackage = new SingleCommandTemplate(command);
 
 			commands.addCommand(removeExistingPackage);
 		}
 		if (advancedOptionsPanel.setRights()) {
-			commands.addCommand(new SingleCommandOpsiSetRights(dir));
+			commands.addCommand(new SingleCommandOpsiSetRights(dirLocationInServer));
 		}
 		commands.addCommand(opsiMakeProductFileCommand);
 

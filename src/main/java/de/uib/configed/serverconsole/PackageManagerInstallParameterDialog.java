@@ -97,6 +97,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 			installServerPanel.isOpen(true);
 			installServerPanel.close();
 		}
+
 		installCurlPanel.isOpen(true);
 		installCurlPanel.close();
 
