@@ -58,18 +58,13 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelOn.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOn"));
-		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
-		jLabelProperties.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.lbl_properties"));
-		jLabelSetupInstalled.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.setupInstalled"));
-		jLabelUpdateInstalled.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.updateInstalled"));
+		jLabelOn.setText(Configed.getResourceValue("PMInstallSettingsPanel.jLabelOn"));
+		jLabelVerbosity.setText(Configed.getResourceValue("verbosity"));
+		jLabelProperties.setText(Configed.getResourceValue("PMInstallSettingsPanel.lbl_properties"));
+		jLabelSetupInstalled.setText(Configed.getResourceValue("PMInstallSettingsPanel.setupInstalled"));
+		jLabelUpdateInstalled.setText(Configed.getResourceValue("PMInstallSettingsPanel.updateInstalled"));
 
-		jButtonDepotselection = new JButton(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
+		jButtonDepotselection = new JButton(Configed.getResourceValue("depotSelection"));
 		jButtonDepotselection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
 			fDepotList.setLocationRelativeTo(this);
@@ -80,7 +75,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jTextFieldSelecteddepots.setEditable(false);
 
 		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("verbosity.tooltip"));
 		for (int i = 0; i < 5; i++) {
 			jComboBoxVerbosity.addItem(i);
 		}
@@ -280,8 +275,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 	private static void setDepotBasedOnSelectedDepot(SingleCommandOpsiPackageManagerInstall basicCommand,
 			String selectedDepot) {
-		if (selectedDepot.contains(
-				Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS"))) {
+		if (selectedDepot
+				.contains(Configed.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_NODEPOTS"))) {
 			basicCommand.setDepotForPInstall("");
 		} else {
 			basicCommand.setDepotForPInstall(selectedDepot);

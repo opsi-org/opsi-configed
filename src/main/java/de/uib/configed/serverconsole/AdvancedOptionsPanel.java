@@ -44,21 +44,18 @@ public class AdvancedOptionsPanel extends JPanel {
 
 	private void initGUI() {
 		setBorder(BorderFactory.createTitledBorder(""));
-		JLabel jLabelmd5sum = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
+		JLabel jLabelmd5sum = new JLabel(Configed.getResourceValue("AdvancedOptionsPanel.lbl_createMd5sum"));
 
 		jCheckBoxMD5Sum = new JCheckBox();
 		jCheckBoxMD5Sum.setSelected(true);
 		jCheckBoxMD5Sum.setEnabled(!isGlobalReadOnly);
-		JLabel jLabelzsync = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
+		JLabel jLabelzsync = new JLabel(Configed.getResourceValue("AdvancedOptionsPanel.lbl_createZsync"));
 
 		jCheckBoxZsync = new JCheckBox();
 		jCheckBoxZsync.setSelected(true);
 		jCheckBoxZsync.setEnabled(!isGlobalReadOnly);
 
-		JLabel jLabelSetRights = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
+		JLabel jLabelSetRights = new JLabel(Configed.getResourceValue("AdvancedOptionsPanel.setRights"));
 
 		jCheckBoxSetRights = new JCheckBox();
 		jCheckBoxSetRights.setSelected(true);

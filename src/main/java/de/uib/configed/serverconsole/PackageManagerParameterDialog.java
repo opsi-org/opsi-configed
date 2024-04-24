@@ -38,11 +38,11 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 	}
 
 	protected void initLabels() {
-		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jLabelVerbosity.setText(Configed.getResourceValue("verbosity"));
 	}
 
 	protected void initButtons(final PackageManagerParameterDialog caller) {
-		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
 		jButtonExecute.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
@@ -59,8 +59,8 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 			});
 		}
 
-		JButton jButtonReload = new JButton(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
-		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
+		JButton jButtonReload = new JButton(Configed.getResourceValue("PackageManagerParameterDialog.title"));
+		jButtonReload.setToolTipText(Configed.getResourceValue("PackageManagerParameterDialog.tooltip"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {

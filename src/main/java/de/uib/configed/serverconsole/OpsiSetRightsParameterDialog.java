@@ -46,7 +46,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 	private ConfigedMain configedMain;
 
 	public OpsiSetRightsParameterDialog(ConfigedMain configedMain, SingleCommandOpsiSetRights command) {
-		super(null, Configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
+		super(null, Configed.getResourceValue("SingleCommandOpsiSetRights.title"), false);
 		this.configedMain = configedMain;
 		commandOpsiSetRights = command;
 		init();
@@ -62,9 +62,9 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		jLabelInfo = new JLabel(Configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath"));
+		jLabelInfo = new JLabel(Configed.getResourceValue("SingleCommandOpsiSetRights.additionalPath"));
 		inputPanel.add(jLabelInfo);
-		jButtonDoAction = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonDoAction = new JButton(Configed.getResourceValue("buttonExecute"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 

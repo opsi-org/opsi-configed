@@ -55,10 +55,9 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	private void init() {
 		getDefaultAuthData();
 		setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 2, true));
-		jLabelUser.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelUser"));
+		jLabelUser.setText(Configed.getResourceValue("DeployClientAgentAuthPanel.jLabelUser"));
 		jTextFieldUser = new JTextField(defaultUser);
-		jTextFieldUser.setToolTipText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.tooltip.tf_user"));
+		jTextFieldUser.setToolTipText(Configed.getResourceValue("DeployClientAgentAuthPanel.tooltip.tf_user"));
 		jTextFieldUser.setEnabled(!isGlobalReadOnly);
 		jTextFieldUser.setEditable(!isGlobalReadOnly);
 		jTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
@@ -78,8 +77,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
-		jLabelPassword
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelPassword"));
+		jLabelPassword.setText(Configed.getResourceValue("DeployClientAgentAuthPanel.jLabelPassword"));
 		jTextFieldPassword = new JPasswordField("nt123", 15);
 		jTextFieldPassword.setEnabled(!isGlobalReadOnly);
 		jTextFieldPassword.setEditable(!isGlobalReadOnly);
@@ -88,8 +86,8 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		jButtonShowPassword = new JButton(Utils.createImageIcon("images/eye_blue_open.png", ""));
 
 		jButtonShowPassword.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
-		jButtonShowPassword.setToolTipText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.showPassword.tooltip"));
+		jButtonShowPassword
+				.setToolTipText(Configed.getResourceValue("DeployClientAgentAuthPanel.showPassword.tooltip"));
 		jButtonShowPassword.setEnabled(!isGlobalReadOnly);
 		jButtonShowPassword.addActionListener(actionEvent -> changeEchoChar());
 

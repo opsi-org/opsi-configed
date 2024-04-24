@@ -43,7 +43,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 	private ConfigedMain configedMain;
 
 	public PackageUpdaterDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.title"), false);
+		super(null, Configed.getResourceValue("PackageUpdaterDialog.title"), false);
 		this.configedMain = configedMain;
 		command = new SingleCommandPackageUpdater();
 		Logging.info(this.getClass(), "with command");
@@ -85,11 +85,11 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-		jLabelInfo = new JLabel(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.info"));
-		jLabelRepos = new JLabel(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.repos"));
+		jLabelInfo = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.info"));
+		jLabelRepos = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.repos"));
 		inputPanel.add(jLabelInfo);
 		inputPanel.add(jLabelRepos);
-		jButtonDoAction = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonDoAction = new JButton(Configed.getResourceValue("buttonExecute"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -111,7 +111,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
 		jComboBoxActions.addItemListener((ItemEvent itemEvent) -> {
 			if (((String) itemEvent.getItem())
-					.equals(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"))) {
+					.equals(Configed.getResourceValue("SingleCommandPackageUpdater.action.list"))) {
 				jComboBoxRepos.setEnabled(itemEvent.getStateChange() != ItemEvent.SELECTED);
 			}
 		});
@@ -122,10 +122,8 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 			jComboBoxRepos = new JComboBox<>();
 		}
 
-		jComboBoxRepos
-				.addItem(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
-		jComboBoxRepos.setSelectedItem(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
+		jComboBoxRepos.addItem(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"));
+		jComboBoxRepos.setSelectedItem(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"));
 		jComboBoxActions.setEnabled(true);
 		inputPanel.add(jComboBoxActions);
 		inputPanel.add(jComboBoxRepos);
@@ -139,8 +137,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 	public void doAction2() {
 		command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
 		String repo = (String) jComboBoxRepos.getSelectedItem();
-		if (repo.equals(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))) {
+		if (repo.equals(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"))) {
 			command.setRepo(null);
 		} else {
 			command.setRepo(repo);

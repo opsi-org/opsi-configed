@@ -43,19 +43,18 @@ public class PMInstallServerPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelServerDir.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
+		jLabelServerDir.setText(Configed.getResourceValue("PMInstallServerPanel.jLabelOtherPath"));
 
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
-		jComboBoxAutoCompletion.setToolTipText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.combo.tooltip"));
+		jComboBoxAutoCompletion.setToolTipText(
+				Configed.getResourceValue("PMInstallServerPanel.autocompletion.button_andopsipackage.combo.tooltip"));
 		jComboBoxAutoCompletion.setEnabled(true);
 
 		jButtonAutoCompletion = autocompletion.getButton();
-		jButtonAutoCompletion.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage"));
-		jButtonAutoCompletion.setToolTipText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.tooltip"));
+		jButtonAutoCompletion
+				.setText(Configed.getResourceValue("PMInstallServerPanel.autocompletion.button_andopsipackage"));
+		jButtonAutoCompletion.setToolTipText(
+				Configed.getResourceValue("PMInstallServerPanel.autocompletion.button_andopsipackage.tooltip"));
 	}
 
 	private void initLayout() {

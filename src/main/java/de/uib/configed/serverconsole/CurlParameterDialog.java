@@ -106,28 +106,27 @@ public class CurlParameterDialog extends FGeneralDialog {
 
 		jLabelURL.setText(Configed.getResourceValue("CurlParameterDialog.jLabelUrl"));
 		jTextFieldURL = new JTextField();
-		jTextFieldURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
+		jTextFieldURL.setText(Configed.getResourceValue("CurlParameterDialog.downloadLink"));
 		jTextFieldURL.getDocument().addDocumentListener(new DocumentListenerAdapter(this::changeUrl));
 		jTextFieldURL.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (jTextFieldURL.getText()
-						.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
+				if (jTextFieldURL.getText().equals(Configed.getResourceValue("CurlParameterDialog.downloadLink"))) {
 					jTextFieldURL.setSelectionStart(0);
 					jTextFieldURL.setSelectionEnd(jTextFieldURL.getText().length());
 				}
 			}
 		});
 
-		jLabelDir.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
+		jLabelDir.setText(Configed.getResourceValue("CurlParameterDialog.jLabelDirectory"));
 		jTextFieldDir = new JTextField();
 
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
 
-		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jLabelVerbosity.setText(Configed.getResourceValue("verbosity"));
 		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("verbosity.tooltip"));
 		for (int i = 0; i < 5; i++) {
 			jComboBoxVerbosity.addItem(i);
 		}
@@ -151,7 +150,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 		jButtonHelp.setToolTipText(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo.tooltip"));
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
-		jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
 
 		jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 			if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -191,8 +190,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 	@Override
 	public void doAction3() {
 		Logging.warning(this, "execute");
-		if (jTextFieldURL.getText()
-				.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))
+		if (jTextFieldURL.getText().equals(Configed.getResourceValue("CurlParameterDialog.downloadLink"))
 				|| jTextFieldURL.getText().isEmpty()) {
 			Logging.warning(this, "Please enter url.");
 			return;

@@ -98,7 +98,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.command.deploy-clientagent");
+		return Configed.getResourceValue("SingleCommandDeployClientAgent.title");
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.command.deploy-clientagent.tooltip");
+		return Configed.getResourceValue("SingleCommandDeployClientAgent.tooltip");
 	}
 
 	@Override

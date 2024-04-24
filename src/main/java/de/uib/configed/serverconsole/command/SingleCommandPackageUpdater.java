@@ -36,11 +36,11 @@ public class SingleCommandPackageUpdater implements SingleCommand, CommandWithPa
 	public SingleCommandPackageUpdater() {
 		command = baseName;
 		actionSet.add("list");
-		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"), "list");
+		actionhash.put(Configed.getResourceValue("SingleCommandPackageUpdater.action.list"), "list");
 		actionSet.add("install");
-		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.install"), "install");
+		actionhash.put(Configed.getResourceValue("SingleCommandPackageUpdater.action.install"), "install");
 		actionSet.add("update");
-		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"), "update");
+		actionhash.put(Configed.getResourceValue("SingleCommandPackageUpdater.action.update"), "update");
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class SingleCommandPackageUpdater implements SingleCommand, CommandWithPa
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackageupdater");
+		return Configed.getResourceValue("SingleCommandPackageUpdater.title");
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class SingleCommandPackageUpdater implements SingleCommand, CommandWithPa
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackageupdater.tooltip");
+		return Configed.getResourceValue("SingleCommandPackageUpdater.tooltip");
 	}
 
 	@Override

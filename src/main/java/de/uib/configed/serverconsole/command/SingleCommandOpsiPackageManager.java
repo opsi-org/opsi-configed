@@ -38,7 +38,7 @@ public class SingleCommandOpsiPackageManager implements SingleCommand {
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager");
+		return Configed.getResourceValue("SingleCommandOpsiPackageUpdater.title");
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class SingleCommandOpsiPackageManager implements SingleCommand {
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager.tooltip");
+		return Configed.getResourceValue("SingleCommandOpsiPackageUpdater.tooltip");
 	}
 
 	@Override

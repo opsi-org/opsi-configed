@@ -62,7 +62,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private CompletionComboButton autocompletion;
 
 	public MakeProductFileDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.title"), false);
+		super(null, Configed.getResourceValue("MakeProductFileDialog.title"), false);
 		this.configedMain = configedMain;
 		autocompletion = new CompletionComboButton();
 		advancedOptionsPanel = new AdvancedOptionsPanel();
@@ -97,8 +97,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private String setOpsiPackageFilename(String path) {
 		filename = path;
 		jButtonToPackageManager.setEnabled(true);
-		jButtonToPackageManager.setToolTipText(Configed.getResourceValue(
-				"SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip") + " " + filename);
+		jButtonToPackageManager.setToolTipText(
+				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager.tooltip") + " " + filename);
 		return filename;
 	}
 
@@ -120,8 +120,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 		workbenchPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-		JLabel jLabelDir = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.serverDir"));
+		JLabel jLabelDir = new JLabel(Configed.getResourceValue("MakeProductFileDialog.serverDir"));
 
 		autocompletion.setCombobox(new CompletionComboBox<>(
 				new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
@@ -142,17 +141,15 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		});
 
 		JLabel jLabelPackageVersion = new JLabel(
-				"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
+				"    " + Configed.getResourceValue("MakeProductFileDialog.packageVersion"));
 		JLabel jLabelProductVersion = new JLabel(
-				"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
+				"    " + Configed.getResourceValue("MakeProductFileDialog.productVersion"));
 		JLabel jLabelVersionsControlFile = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
-		JLabel jLabelVersions = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
-		JLabel jLabelSetRightsNow = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
+				Configed.getResourceValue("MakeProductFileDialog.versions_controlfile"));
+		JLabel jLabelVersions = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions"));
+		JLabel jLabelSetRightsNow = new JLabel(Configed.getResourceValue("MakeProductFileDialog.setRights_now"));
 		JLabel jLabelRemoveExistingPackage = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
+				Configed.getResourceValue("MakeProductFileDialog.removeExisting"));
 
 		jLabelProductVersionControlFile = new JLabel();
 		jLabelPackageVersionControlFile = new JLabel();
@@ -166,7 +163,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		jCheckBoxOverwrite.setSelected(true);
 
 		JButton jButtonAdvancedSettings = new JButton(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
+				Configed.getResourceValue("MakeProductFileDialog.btn_advancedSettings"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -176,10 +173,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 		jTextFieldPackageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 
-		JButton jButtonSetRights = new JButton(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
-		jButtonSetRights.setToolTipText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
+		JButton jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
+		jButtonSetRights.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.btn_setRights.tooltip"));
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
@@ -280,10 +275,10 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
 		jButtonToPackageManager = new JButton(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager"));
+				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"));
 		jButtonToPackageManager.setEnabled(false);
-		jButtonToPackageManager.setToolTipText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
+		jButtonToPackageManager
+				.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager.tooltip"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -294,7 +289,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 			});
 		}
 
-		jButtonExec = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExec = new JButton(Configed.getResourceValue("buttonExecute"));
 
 		jButtonExec.setEnabled(false);
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -394,10 +389,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 		String prodVersion = jTextFieldProductVersion.getText();
 		String packVersion = jTextFieldPackageVersion.getText();
-		prodVersion = checkVersion(prodVersion,
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
-		packVersion = checkVersion(packVersion,
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
+		prodVersion = checkVersion(prodVersion, Configed.getResourceValue("MakeProductFileDialog.keepVersions"), "");
+		packVersion = checkVersion(packVersion, Configed.getResourceValue("MakeProductFileDialog.keepVersions"), "");
 		SingleCommandOpsiMakeProductFile opsiMakeProductFileCommand = new SingleCommandOpsiMakeProductFile(
 				dirLocationInServer, packVersion, prodVersion, advancedOptionsPanel.useMD5Sum(),
 				advancedOptionsPanel.useZsync());

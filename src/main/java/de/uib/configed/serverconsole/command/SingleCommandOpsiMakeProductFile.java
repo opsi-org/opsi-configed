@@ -100,7 +100,7 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile");
+		return Configed.getResourceValue("SingleCommandOpsiMakeProductFile.title");
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.tooltip");
+		return Configed.getResourceValue("SingleCommandOpsiMakeProductFile.tooltip");
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall");
+		return Configed.getResourceValue("SingleCommandOpsiPackageManagerUninstall.title");
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall.tooltip");
+		return Configed.getResourceValue("SingleCommandOpsiPackageManagerUninstall.tooltip");
 	}
 
 	@Override

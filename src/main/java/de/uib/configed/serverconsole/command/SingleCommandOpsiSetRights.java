@@ -28,8 +28,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 	private String myTmpCommand;
 
 	public SingleCommandOpsiSetRights() {
-		command = "opsi-set-rights " + Configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath")
-				+ " ";
+		command = "opsi-set-rights " + Configed.getResourceValue("SingleCommandOpsiSetRights.additionalPath") + " ";
 	}
 
 	public SingleCommandOpsiSetRights(String d) {
@@ -49,7 +48,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.command.opsisetrights");
+		return Configed.getResourceValue("SingleCommandOpsiSetRights.title");
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.command.opsisetrights.tooltip");
+		return Configed.getResourceValue("SingleCommandOpsiSetRights.tooltip");
 	}
 
 	@Override

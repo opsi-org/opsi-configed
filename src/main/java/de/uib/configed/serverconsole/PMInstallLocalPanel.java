@@ -41,10 +41,8 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelUploadFrom = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelLocalFrom"));
-		jLabelUploadTo = new JLabel(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelLocalTo"));
+		jLabelUploadFrom = new JLabel(Configed.getResourceValue("PMInstallLocalPanel.jLabelLocalFrom"));
+		jLabelUploadTo = new JLabel(Configed.getResourceValue("PMInstallLocalPanel.jLabelLocalTo"));
 		jTextFieldPath = new JTextField();
 		jTextFieldPath.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
@@ -64,8 +62,7 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		jButtonFileChooser = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
 		jButtonFileChooser.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
 		jButtonFileChooser.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-		jButtonFileChooser.setToolTipText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
+		jButtonFileChooser.setToolTipText(Configed.getResourceValue("PMInstallLocalPanel.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = jFileChooser.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {

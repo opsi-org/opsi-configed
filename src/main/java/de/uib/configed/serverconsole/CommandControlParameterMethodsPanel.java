@@ -57,9 +57,9 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 		Dimension jButtonDim = new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT);
 
 		jLabelEmpty.setPreferredSize(jComboBoxDim);
-		jLabelParamMethods.setText(Configed.getResourceValue("SSHConnection.CommandControl.parameterMethods"));
+		jLabelParamMethods.setText(Configed.getResourceValue("CommandControlDialog.parameterMethods"));
 
-		jLabelParamFormats.setText(Configed.getResourceValue("SSHConnection.CommandControl.parameterFormats"));
+		jLabelParamFormats.setText(Configed.getResourceValue("CommandControlDialog.parameterFormats"));
 
 		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 		jComboBoxParameterFormats = new JComboBox<>(parameterParser.getParameterFormats());
@@ -72,7 +72,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		jComboBoxParameterMethods = new JComboBox<>(CommandParameterParser.getParameterMethodLocalNames());
 		jComboBoxParameterMethods
-				.setSelectedItem(Configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
+				.setSelectedItem(Configed.getResourceValue("CommandControlDialog.cbElementInteractiv"));
 		jComboBoxParameterMethods.setPreferredSize(jComboBoxDim);
 		jComboBoxParameterMethods.setMaximumRowCount(5);
 
@@ -80,18 +80,18 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		jComboBoxParameterMethods.addItemListener((ItemEvent itemEvent) -> {
 			boolean enabled = ((String) jComboBoxParameterMethods.getSelectedItem())
-					.equals(Configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
+					.equals(Configed.getResourceValue("CommandControlDialog.cbElementInteractiv"))
 					|| ((String) jComboBoxParameterMethods.getSelectedItem())
-							.equals(Configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"));
+							.equals(Configed.getResourceValue("CommandControlParameterMethodsPanel.optionSelection"));
 
 			jComboBoxParameterFormats.setEnabled(enabled);
 		});
 
-		jButtonTestParam = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
+		jButtonTestParam = new IconButton(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"),
 				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
 		jButtonTestParam.setPreferredSize(jButtonDim);
 
-		jButtonAddParam = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"),
+		jButtonAddParam = new IconButton(Configed.getResourceValue("CommandControlDialog.btnAddParamMethod"),
 				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
 		jButtonAddParam.setSize(jButtonDim);
 		jButtonAddParam.setPreferredSize(jButtonDim);
@@ -192,12 +192,12 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 			String result = "echo \"{0}\"".replace("{0}", parameterParser.testParameter(paramText));
 			Logging.info(this, "actionPerformed(testParamMethod) result " + result);
 			String showThisText = "echo \"{0}\"".replace("{0}", paramText) + ":\n" + result;
-			if (result.equals(Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed"))) {
-				showThisText = Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
+			if (result.equals(Configed.getResourceValue("CommandControlDialog.parameterTest.failed"))) {
+				showThisText = Configed.getResourceValue("CommandControlDialog.parameterTest.failed");
 			}
 
 			JOptionPane.showMessageDialog(main, showThisText,
-					Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.title"),
+					Configed.getResourceValue("CommandControlDialog.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (HeadlessException ble) {
 			Logging.warning(this, "Testing parameter-method failed.", ble);

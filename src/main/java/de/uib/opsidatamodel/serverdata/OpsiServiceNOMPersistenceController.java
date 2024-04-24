@@ -137,11 +137,11 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
 
 	public static final String DEPOT_SELECTION_NODEPOTS = Configed
-			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS");
+			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_NODEPOTS");
 	public static final String DEPOT_SELECTION_ALL = Configed
-			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL");
+			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL");
 	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
-			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
+			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
 	public static final String HOST_KEY = "hostId";
 

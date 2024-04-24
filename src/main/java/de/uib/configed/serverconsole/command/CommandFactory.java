@@ -35,7 +35,7 @@ public final class CommandFactory {
 	public static final String PARENT_NULL = Configed.getResourceValue("MainFrame.jMenuServer");
 	public static final String PARENT_DEFAULT_FOR_OWN_COMMANDS = "...";
 	public static final String PARENT_OPSI = Configed.getResourceValue("MainFrame.jMenuOpsi");
-	public static final String MENU_NEW = Configed.getResourceValue("SSHConnection.CommandControl.menuText_newCommand");
+	public static final String MENU_NEW = Configed.getResourceValue("CommandControlDialog.menuText_newCommand");
 	public static final int DEFAULT_POSITION = 0;
 
 	public static final String COMMAND_MAP_ID = "id";

@@ -89,7 +89,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 	private boolean isGlobalReadOnly = persistenceController.getUserRolesConfigDataService().isGlobalReadOnly();
 
 	public DeployClientAgentParameterDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.title"), false);
+		super(null, Configed.getResourceValue("DeployClientAgentParameterDialog.title"), false);
 		this.configedMain = configedMain;
 		authPanel = new DeployClientAgentAuthPanel(commandDeployClientAgent);
 
@@ -100,7 +100,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
 
-		Logging.info(this.getClass(), "SSHDeployClientAgentParameterDialog build");
+		Logging.info(this.getClass(), "DeployClientAgentParameterDialog build");
 	}
 
 	private void init() {
@@ -111,15 +111,14 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setPreferredSize(new Dimension(376, 220));
 
-		jLabelIgnorePing
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.ignorePing"));
+		jLabelIgnorePing.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.ignorePing"));
 		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
 		jCheckBoxIgnorePing.setEnabled(!isGlobalReadOnly);
 		jCheckBoxIgnorePing.addItemListener((ItemEvent itemEvent) -> commandDeployClientAgent.togglePingIsRequired());
 
-		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jLabelVerbosity.setText(Configed.getResourceValue("verbosity"));
 		jCheckBoxVerbosity = new JComboBox<>();
-		jCheckBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jCheckBoxVerbosity.setToolTipText(Configed.getResourceValue("verbosity.tooltip"));
 		jCheckBoxVerbosity.setEnabled(!isGlobalReadOnly);
 		jCheckBoxVerbosity.setEditable(!isGlobalReadOnly);
 		for (int i = 0; i < 5; i++) {
@@ -129,11 +128,10 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		jCheckBoxVerbosity.setSelectedItem(1);
 		jCheckBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
 
-		jLabelClient
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelClient"));
+		jLabelClient.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.jLabelClient"));
 		jTextFieldClient = new JTextField();
-		jTextFieldClient.setToolTipText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.tooltip.tf_client"));
+		jTextFieldClient
+				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.tooltip.tf_client"));
 		jTextFieldClient.setEnabled(!isGlobalReadOnly);
 		jTextFieldClient.setEditable(!isGlobalReadOnly);
 		jTextFieldClient.getDocument().addDocumentListener(new DocumentListener() {
@@ -153,37 +151,32 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 			}
 		});
 
-		jLabelUserData.setText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.targetclient_authentication"));
-		jLabelFinalize
-				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize"));
+		jLabelUserData
+				.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.targetclient_authentication"));
+		jLabelFinalize.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize"));
 
 		panelFinalAction = new PanelStateSwitch<>(null, FinalActionType.START_OCD, FinalActionType.values(),
-				new String[] {
-						Configed.getResourceValue(
-								"SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize.START_OCD"),
-						Configed.getResourceValue(
-								"SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize.REBOOT"),
-						Configed.getResourceValue(
-								"SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize.SHUTDOWN") },
+				new String[] { Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize.START_OCD"),
+						Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize.REBOOT"),
+						Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize.SHUTDOWN") },
 				FinalActionType.class, ((Enum<FinalActionType> val) -> {
 					Logging.info(this, "change to " + val);
 					finalAction = (FinalActionType) val;
 				}));
 
 		jLabelOperatingSystem
-				.setText(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.label"));
+				.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.opsiClientAgent.label"));
 		jComboBoxOperatingSystem = new JComboBox<>(
 				new String[] { OS.WINDOWS.toString(), OS.LINUX.toString(), OS.MACOS.toString() });
-		jComboBoxOperatingSystem.setToolTipText(
-				Configed.getResourceValue("SSHDeployClientAgentParameterDialog.opsiClientAgent.toolTip"));
+		jComboBoxOperatingSystem
+				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.opsiClientAgent.toolTip"));
 
-		jButtonCopySelectedClients = new JButton(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.btn_copy_selected_clients"));
+		jButtonCopySelectedClients = new JButton(
+				Configed.getResourceValue("DeployClientAgentParameterDialog.btn_copy_selected_clients"));
 
 		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		JButton jButtonExecute = new JButton(Configed.getResourceValue("SSHConnection.buttonExec"));
+		JButton jButtonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
 		jButtonExecute.setEnabled(!isGlobalReadOnly);
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -232,17 +225,15 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		Set<String> nonExistingHostNames = getNonExistingHostNames(clients);
 		if (!nonExistingHostNames.isEmpty()) {
 			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.title"), true,
-					new String[] { Configed.getResourceValue("buttonCancel"), Configed
-							.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.proceed") });
+					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"), true,
+					new String[] { Configed.getResourceValue("buttonCancel"),
+							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed") });
 			StringBuilder message = new StringBuilder();
-			message.append(
-					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.message1"));
+			message.append(Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.message1"));
 			message.append("\n\n");
 			message.append(nonExistingHostNames.toString().replace("[", "").replace("]", "").replace(",", "\n"));
 			message.append("\n\n");
-			message.append(
-					Configed.getResourceValue("SSHDeployClientAgentParameterDialog.clientDoesNotExist.message2"));
+			message.append(Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.message2"));
 			fQuestion.setMessage(message.toString());
 			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
@@ -281,10 +272,10 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private static void displayNoClientSpecified() {
 		FTextArea fNoClientSpecifiedDialog = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("SSHDeployClientAgentParameterDialog.noClientSpecified.title"), true,
+				Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.title"), true,
 				new String[] { Configed.getResourceValue("buttonClose") });
 		fNoClientSpecifiedDialog
-				.setMessage(Configed.getResourceValue("SSHDeployClientAgentParameterDialog.noClientSpecified.message"));
+				.setMessage(Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.message"));
 		fNoClientSpecifiedDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		fNoClientSpecifiedDialog.setAlwaysOnTop(true);
 		fNoClientSpecifiedDialog.setVisible(true);

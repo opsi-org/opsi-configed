@@ -100,8 +100,8 @@ public class CompletionComboButton {
 	}
 
 	private void createInstances() {
-		button = new JButton(Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button"));
-		button.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button.tooltip"));
+		button = new JButton(Configed.getResourceValue("CompletionComboButton.findSubfolders"));
+		button.setToolTipText(Configed.getResourceValue("CompletionComboButton.findSubfolders.tooltip"));
 		button.addActionListener(actionEvent -> doButtonAction());
 		combobox = new CompletionComboBox<>(new DefaultComboBoxModel<>(defaultvalues.toArray(new String[0])));
 	}
@@ -109,8 +109,7 @@ public class CompletionComboButton {
 	public final void initCombobox() {
 		combobox.setEnabled(false);
 		combobox.setRenderer(new ItemElementListener(this));
-		combobox.setToolTipText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.cb_serverDir.tooltip"));
+		combobox.setToolTipText(Configed.getResourceValue("CompletionComboButton.cb_serverDir.tooltip"));
 		combobox.setEditable(true);
 
 		if (comboboxDefaultPath != null) {

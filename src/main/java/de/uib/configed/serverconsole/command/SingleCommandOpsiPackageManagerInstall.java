@@ -43,7 +43,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_install");
+		return Configed.getResourceValue("SingleCommandOpsiPackageManagerInstall.title");
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getToolTipText() {
-		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_install.tooltip");
+		return Configed.getResourceValue("SingleCommandOpsiPackageManagerInstall.tooltip");
 	}
 
 	@Override

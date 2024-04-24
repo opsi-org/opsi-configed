@@ -63,7 +63,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	private SingleCommandOpsiPackageManagerUninstall commandPMUninstall = new SingleCommandOpsiPackageManagerUninstall();
 
 	public PackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
-		super(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
+		super(Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"));
 
 		this.configedMain = configedMain;
 
@@ -197,15 +197,14 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		uninstallPanel.setBorder(BorderFactory.createTitledBorder(""));
 		uninstallPanel.setPreferredSize(new Dimension(376, 220));
 
-		jLabelUninstall.setText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelUninstall"));
+		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
 
 		jComboBoxVerbosity = new JComboBox<>();
 		jComboBoxVerbosity.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 		jComboBoxVerbosity.setEditable(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
-		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("verbosity.tooltip"));
 		for (int i = 0; i < 5; i++) {
 			jComboBoxVerbosity.addItem(i);
 		}
@@ -213,8 +212,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		jComboBoxVerbosity.setSelectedItem(1);
 		jComboBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
 
-		jLabelKeepFiles.setText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
+		jLabelKeepFiles.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelKeepFiles"));
 		checkBoxKeepFiles = new JCheckBox();
 		checkBoxKeepFiles.addItemListener(itemEvent -> changeKeepFiles());
 		checkBoxKeepFiles.setEnabled(!PersistenceControllerFactory.getPersistenceController()
@@ -237,11 +235,9 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 			textFieldProduct.setText((String) jComboBoxOpsiProducts.getSelectedItem());
 		});
 
-		jLabelOn.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn"));
+		jLabelOn.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn"));
 
-		jButtonDepotSelection = new JButton(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
+		jButtonDepotSelection = new JButton(Configed.getResourceValue("depotSelection"));
 		jButtonDepotSelection.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
@@ -289,11 +285,11 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private void changeDepot() {
-		if (textFieldSelectedDepots.getText().equals(
-				Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS"))) {
+		if (textFieldSelectedDepots.getText()
+				.equals(Configed.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_NODEPOTS"))) {
 			commandPMUninstall.setDepot(null);
-		} else if (textFieldSelectedDepots.getText().equals(Configed
-				.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED"))) {
+		} else if (textFieldSelectedDepots.getText().equals(
+				Configed.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL_WHERE_INSTALLED"))) {
 			commandPMUninstall.setDepot("all");
 		} else {
 			commandPMUninstall.setDepot(textFieldSelectedDepots.getText());
@@ -311,16 +307,14 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private boolean confirmAction() {
 		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"), true,
+				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"), true,
 				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 400,
 				200);
 
-		fConfirmAction.setMessage(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm") + "\n"
-						+ textFieldProduct.getText() + "\n\n"
-						+ Configed
-								.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn")
-						+ "\n\n" + textFieldSelectedDepots.getText());
+		fConfirmAction.setMessage(Configed.getResourceValue("PackageManagerUninstallParameterDialog.confirm") + "\n"
+				+ textFieldProduct.getText() + "\n\n"
+				+ Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn") + "\n\n"
+				+ textFieldSelectedDepots.getText());
 
 		fConfirmAction.setLocationRelativeTo(this);
 		fConfirmAction.setAlwaysOnTop(true);

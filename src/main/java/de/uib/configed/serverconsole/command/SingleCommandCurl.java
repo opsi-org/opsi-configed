@@ -85,7 +85,7 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SSHConnection.command.wget");
+		return Configed.getResourceValue("SingleCommandCurl.title");
 	}
 
 	@Override

@@ -47,22 +47,17 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 
 	public PMInstallCurlPanel() {
 		super();
-		urlDefText = Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
+		urlDefText = Configed.getResourceValue("CurlParameterDialog.downloadLink");
 		initComponents();
 		initLayout();
 	}
 
 	private void initComponents() {
-		jLabelDir.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetDir"));
-		jLabelURL.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetUrl"));
-		jLabelIncludeZsync.setText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetIncludeZsync"));
-		jLabelIncludeZSync2.setText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetIncludeZsync2"));
-		jLabelCompareMD5Sum.setText(Configed
-				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetCompareMD5Sum"));
+		jLabelDir.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlDir"));
+		jLabelURL.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlUrl"));
+		jLabelIncludeZsync.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlIncludeZsync"));
+		jLabelIncludeZSync2.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlIncludeZsync2"));
+		jLabelCompareMD5Sum.setText(Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlCompareMD5Sum"));
 
 		CompletionComboButton autocompletion = new CompletionComboButton(additionalDefaultPaths);
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
@@ -91,8 +86,8 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 
 		jCheckBoxIncludeZSync = new JCheckBox();
 		jCheckBoxIncludeZSync.setSelected(true);
-		jCheckBoxIncludeZSync.setToolTipText(Configed.getResourceValue(
-				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxIncludeZsync.tooltip"));
+		jCheckBoxIncludeZSync
+				.setToolTipText(Configed.getResourceValue("PMInstallCurlPanel.jCheckBoxIncludeZsync.tooltip"));
 		jCheckBoxIncludeZSync.addItemListener((ItemEvent itemEvent) -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				jCheckBoxCompareMD5.setSelected(true);
@@ -105,8 +100,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 
 		jCheckBoxCompareMD5 = new JCheckBox();
 		jCheckBoxCompareMD5.setSelected(true);
-		jCheckBoxCompareMD5.setToolTipText(Configed.getResourceValue(
-				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxCompareMD5.tooltip"));
+		jCheckBoxCompareMD5.setToolTipText(Configed.getResourceValue("PMInstallCurlPanel.jCheckBoxCompareMD5.tooltip"));
 	}
 
 	public MultiCommandTemplate getCommand(MultiCommandTemplate commands) {
@@ -129,14 +123,12 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		if (jCheckBoxCompareMD5.isSelected()) {
 			String product = mainDir + "/" + getFilenameFromUrl(mainProduct);
 
-			commands.addCommand(new SingleCommandTemplate("md5_vergleich", " if [ -z $((cat " + product + ".md5"
-					+ ") | " + "grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
-					+ Configed.getResourceValue(
-							"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreNotEqual")
-					+ "\"; else echo \""
-					+ Configed.getResourceValue(
-							"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreEqual")
-					+ "\"; fi", ""));
+			commands.addCommand(new SingleCommandTemplate("md5_vergleich",
+					" if [ -z $((cat " + product + ".md5" + ") | " + "grep $(md5sum " + product
+							+ "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
+							+ Configed.getResourceValue("PMInstallCurlPanel.md5sumsAreNotEqual") + "\"; else echo \""
+							+ Configed.getResourceValue("PMInstallCurlPanel.md5sumsAreEqual") + "\"; fi",
+					""));
 		}
 		return commands;
 	}
@@ -145,17 +137,14 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		String d;
 		String wgetDir = (String) jComboBoxAutoCompletion.getSelectedItem();
 
-		String tempTextFieldDir = "<" + Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory")
-				+ ">";
+		String tempTextFieldDir = "<" + Configed.getResourceValue("CurlParameterDialog.jLabelDirectory") + ">";
 		if (!wgetDir.isEmpty() || !wgetDir.equals(tempTextFieldDir)) {
 			d = wgetDir;
 		} else {
 			return null;
 		}
 
-		String tempTextFieldURL = "<"
-				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetUrl")
-						.replace(":", "")
+		String tempTextFieldURL = "<" + Configed.getResourceValue("PMInstallCurlPanel.jLabelCurlUrl").replace(":", "")
 				+ ">";
 
 		String u = "";

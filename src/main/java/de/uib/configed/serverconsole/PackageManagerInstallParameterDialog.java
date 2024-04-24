@@ -45,7 +45,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 	}
 
 	public PackageManagerInstallParameterDialog(ConfigedMain configedMain, String fullPathToPackage) {
-		super(Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.title"));
+		super(Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
 
 		this.configedMain = configedMain;
 		fromMakeProductfile = fullPathToPackage;
@@ -64,9 +64,9 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		ButtonGroup group = new ButtonGroup();
 
 		jRadioButtonLocal = new JRadioButton(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelFromLocal"));
+				Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromLocal"));
 		jRadioButtonServer = new JRadioButton(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelFromServer"));
+				Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromServer"));
 		jRadioButtonCurl = new JRadioButton(Configed
 				.getResourceValue("PackageManagerInstallParameterDialog.opsipackagemanager_install.jLabelCurlFrom"));
 		group.add(jRadioButtonLocal);
@@ -179,8 +179,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		radioPanel.setBorder(BorderFactory.createTitledBorder(""));
-		jLabelInstall.setText(
-				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelInstall"));
+		jLabelInstall.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstall"));
 	}
 
 	@Override

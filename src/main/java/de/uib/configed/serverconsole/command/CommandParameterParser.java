@@ -46,19 +46,19 @@ public final class CommandParameterParser {
 	public static final Pattern paramSplitterDefaultPattern = Pattern.compile(PARAM_SPLITTER_DEFAULT);
 
 	public static final String METHOD_INTERACTIVE_ELEMENT = Configed
-			.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv");
+			.getResourceValue("CommandControlDialog.cbElementInteractiv");
 	public static final String METHOD_GET_SELECTED_CLIENT_NAMES = Configed
-			.getResourceValue("SSHConnection.CommandControl.method.getSelectedClientNames");
+			.getResourceValue("CommandParameterParser.method.getSelectedClientNames");
 	public static final String METHOD_GET_SELECTED_CLIENT_IPS = Configed
-			.getResourceValue("SSHConnection.CommandControl.method.getSelectedClientIPs");
+			.getResourceValue("CommandParameterParser.method.getSelectedClientIPs");
 	public static final String METHOD_GET_SELECTED_DEPOT_NAMES = Configed
-			.getResourceValue("SSHConnection.CommandControl.method.getSelectedDepotNames");
+			.getResourceValue("CommandParameterParser.method.getSelectedDepotNames");
 	public static final String METHOD_GET_SELECTED_DEPOT_IPS = Configed
-			.getResourceValue("SSHConnection.CommandControl.method.getSelectedDepotIPs");
+			.getResourceValue("CommandParameterParser.method.getSelectedDepotIPs");
 	public static final String METHOD_GET_CONFIG_SERVER_NAME = Configed
-			.getResourceValue("SSHConnection.CommandControl.method.getConfigServerName");
+			.getResourceValue("CommandParameterParser.method.getConfigServerName");
 	public static final String METHOD_OPTION_SELECTION = Configed
-			.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
+			.getResourceValue("CommandParameterParser.method.optionSelection");
 
 	private static final String BRACKETS_NONE = " x ";
 	private static final String BRACKETS_SQUARE = "[x]";
@@ -162,7 +162,7 @@ public final class CommandParameterParser {
 		String[] splittedParameter = splitParameter(param);
 		String result = callMethod(splittedParameter[0], splittedParameter[1]);
 		if (result == null) {
-			return Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
+			return Configed.getResourceValue("CommandControlDialog.parameterTest.failed");
 		}
 
 		if (result.contains("script://")) {
@@ -367,7 +367,7 @@ public final class CommandParameterParser {
 			}
 		};
 		final JDialog jdialog = opPane.createDialog(dialog,
-				Globals.APPNAME + " " + Configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
+				Globals.APPNAME + " " + Configed.getResourceValue("CommandParameterParser.Input"));
 		jdialog.setSize(400, 150);
 		jdialog.setVisible(true);
 

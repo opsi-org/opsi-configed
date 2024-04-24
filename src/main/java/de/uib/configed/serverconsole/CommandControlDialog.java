@@ -48,7 +48,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 
 	private JPanel parameterPanel;
 
-	private JButton buttonSave = new JButton(Configed.getResourceValue("SSHConnection.CommandControl.ButtonSave"));
+	private JButton buttonSave = new JButton(Configed.getResourceValue("CommandControlDialog.ButtonSave"));
 
 	private JComboBox<String> jComboBoxMenuText;
 
@@ -121,7 +121,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jComboBoxMenuText = new JComboBox<>();
 		jComboBoxMenuText.setPreferredSize(dimensionJTextField);
 		jComboBoxMenuText.addItem(CommandFactory.MENU_NEW);
-		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
+		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("CommandControlDialog.menuText.tooltip"));
 		jComboBoxMenuText.setEditable(true);
 		final JTextComponent editor = (JTextComponent) jComboBoxMenuText.getEditor().getEditorComponent();
 		jComboBoxMenuText.addItemListener((ItemEvent itemEvent) -> {
@@ -141,27 +141,24 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jComboBoxParentMenuText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
-		JButton buttonDelete = new IconButton(
-				Configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"), "images/list-remove.png",
-				"images/list-remove.png", "images/list-remove_disabled.png", true);
+		JButton buttonDelete = new IconButton(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"),
+				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.addActionListener((ActionEvent actionEvent) -> deleteCommand());
 		buttonDelete.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
 
-		JLabel labelMenuText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
+		JLabel labelMenuText = new JLabel(Configed.getResourceValue("CommandControlDialog.menuText"));
 		labelMenuText.setPreferredSize(dimensionJTextField);
-		JLabel labelParentMenuText = new JLabel(
-				Configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
+		JLabel labelParentMenuText = new JLabel(Configed.getResourceValue("CommandControlDialog.parentMenuText"));
 		labelParentMenuText.setPreferredSize(dimensionJTextField);
-		JLabel labelTooltipText = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
+		JLabel labelTooltipText = new JLabel(Configed.getResourceValue("CommandControlDialog.tooltipText"));
 		labelTooltipText.setPreferredSize(dimensionJTextField);
-		JLabel labelPriority = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.priority"));
+		JLabel labelPriority = new JLabel(Configed.getResourceValue("CommandControlDialog.priority"));
 		labelPriority.setPreferredSize(dimensionJTextField);
 
-		jTextFieldTooltipText
-				.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText.tooltip"));
+		jTextFieldTooltipText.setToolTipText(Configed.getResourceValue("CommandControlDialog.tooltipText.tooltip"));
 		jTextFieldTooltipText.setPreferredSize(dimensionJTextField);
 		jTextFieldTooltipText.getDocument().addDocumentListener(new SaveButtonEnabler());
 		jTextFieldTooltipText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
@@ -170,7 +167,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jTextFieldPriority = new JTextField(
 				new CheckedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
 				String.valueOf(CommandFactory.DEFAULT_POSITION), 1);
-		jTextFieldPriority.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.priority.tooltip"));
+		jTextFieldPriority.setToolTipText(Configed.getResourceValue("CommandControlDialog.priority.tooltip"));
 		jTextFieldPriority.setPreferredSize(dimensionButton);
 		jTextFieldPriority.getDocument().addDocumentListener(new SaveButtonEnabler());
 		jTextFieldPriority.setColumns(4);
@@ -260,11 +257,10 @@ public final class CommandControlDialog extends FGeneralDialog {
 		GroupLayout commandlistPanelLayout = new GroupLayout(commandListPanel);
 		commandListPanel.setLayout(commandlistPanelLayout);
 
-		JLabel labelCommands = new JLabel(Configed.getResourceValue("SSHConnection.CommandControl.commands"));
-		labelCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+		JLabel labelCommands = new JLabel(Configed.getResourceValue("CommandControlDialog.commands"));
+		labelCommands.setToolTipText(Configed.getResourceValue("CommandControlDialog.commands.tooltip"));
 
-		JButton buttonTestCommand = new IconButton(
-				Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
+		JButton buttonTestCommand = new IconButton(Configed.getResourceValue("CommandControlDialog.btnTestCommand"),
 				"images/executing_command_red_22.png", "images/executing_command_red_22.png",
 				"images/executing_command_red_22.png", true);
 		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
@@ -274,7 +270,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 
 		Dimension dimensionJTextFieldLong = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
 		jTextPaneCommands = new JTextPane();
-		jTextPaneCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+		jTextPaneCommands.setToolTipText(Configed.getResourceValue("CommandControlDialog.commands.tooltip"));
 		jTextPaneCommands.setPreferredSize(dimensionJTextFieldLong);
 		jTextPaneCommands.getDocument().addDocumentListener(new SaveButtonEnabler());
 		jTextPaneCommands.setEnabled(!PersistenceControllerFactory.getPersistenceController()
@@ -430,9 +426,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 			ConfigedMain.getMainFrame().reloadServerConsoleMenu();
 		} else {
 			JOptionPane.showInternalMessageDialog(this,
-					Configed.getResourceValue("SSHConnection.CommandControl.couldnotsave.title"),
-					Configed.getResourceValue("SSHConnection.CommandControl.couldnotsave"),
-					JOptionPane.INFORMATION_MESSAGE);
+					Configed.getResourceValue("CommandControlDialog.couldnotsave.title"),
+					Configed.getResourceValue("CommandControlDialog.couldnotsave"), JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
