@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.2.13] - 2024-04-24
 ## Added
 - Include JavaFX modules for macOS
 - Ability to open messagebus terminal on a client directly
