@@ -37,6 +37,8 @@ import de.uib.utils.logging.Logging;
 
 @SuppressWarnings("java:S1258")
 public class Messagebus implements MessagebusListener {
+	public static final String CONNECTION_USER_CHANNEL = "@";
+
 	private WebSocketClientEndpoint messagebusWebSocket;
 	private int reconnectWaitMillis = 15000;
 	private boolean connected;
@@ -172,7 +174,7 @@ public class Messagebus implements MessagebusListener {
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.CHANNEL_SUBSCRIPTION_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
-		message.put("sender", "@");
+		message.put("sender", CONNECTION_USER_CHANNEL);
 		message.put("channel", "service:messagebus");
 		message.put("created", System.currentTimeMillis());
 		message.put("expires", System.currentTimeMillis() + 10000);
@@ -190,7 +192,7 @@ public class Messagebus implements MessagebusListener {
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.TERMINAL_OPEN_REQUEST.toString());
 		message.put("id", UUID.randomUUID().toString());
-		message.put("sender", "@");
+		message.put("sender", CONNECTION_USER_CHANNEL);
 		message.put("channel", channel != null ? channel : "service:config:terminal");
 		message.put("back_channel", String.format("session:%s", terminalId));
 		message.put("created", System.currentTimeMillis());

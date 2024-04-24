@@ -323,7 +323,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 			Map<String, Object> data = new HashMap<>();
 			data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", "@");
+			data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
 			data.put("channel", terminalChannel);
 			data.put("created", System.currentTimeMillis());
 			data.put("expires", System.currentTimeMillis() + 10000);

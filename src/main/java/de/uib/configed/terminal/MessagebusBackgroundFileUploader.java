@@ -22,6 +22,7 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.utils.logging.Logging;
 
@@ -102,7 +103,7 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			Map<String, Object> data = new HashMap<>();
 			data.put("type", WebSocketEvent.FILE_CHUNK.toString());
 			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", "@");
+			data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
 			data.put("channel", terminalWidget.getTerminalChannel());
 			data.put("created", System.currentTimeMillis());
 			data.put("expires", System.currentTimeMillis() + 10000);
@@ -158,7 +159,7 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			Map<String, Object> data = new HashMap<>();
 			data.put("type", WebSocketEvent.FILE_UPLOAD_REQUEST.toString());
 			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", "@");
+			data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
 			data.put("channel", terminalWidget.getTerminalChannel());
 			data.put("created", System.currentTimeMillis());
 			data.put("expires", System.currentTimeMillis() + 10000);

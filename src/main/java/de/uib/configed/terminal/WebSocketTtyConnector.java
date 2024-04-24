@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jediterm.core.util.TermSize;
 import com.jediterm.terminal.TtyConnector;
 
+import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.utils.logging.Logging;
 
@@ -63,7 +64,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", WebSocketEvent.TERMINAL_RESIZE_REQUEST.toString());
 		data.put("id", UUID.randomUUID().toString());
-		data.put("sender", "@");
+		data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
 		data.put("channel", terminalWidget.getTerminalChannel());
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
@@ -95,7 +96,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 		data.put("id", UUID.randomUUID().toString());
-		data.put("sender", "@");
+		data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
 		data.put("channel", terminalWidget.getTerminalChannel());
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);

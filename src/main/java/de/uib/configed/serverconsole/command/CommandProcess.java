@@ -15,6 +15,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.utils.ThreadLocker;
@@ -56,7 +57,7 @@ public class CommandProcess {
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", WebSocketEvent.PROCESS_START_REQUEST.toString());
 		data.put("id", UUID.randomUUID().toString());
-		data.put("sender", "@");
+		data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
 		data.put("channel", "service:config:process");
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
@@ -74,7 +75,7 @@ public class CommandProcess {
 		data.put("type", WebSocketEvent.PROCESS_STOP_REQUEST.toString());
 		data.put("id", UUID.randomUUID().toString());
 		data.put("process_id", id);
-		data.put("sender", "@");
+		data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
 		data.put("channel", "service:config:process");
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
