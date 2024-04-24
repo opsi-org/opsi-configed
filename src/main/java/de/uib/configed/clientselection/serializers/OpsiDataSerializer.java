@@ -89,10 +89,7 @@ public class OpsiDataSerializer {
 	 * Remove a saved search from the server
 	 */
 	public void remove(String name) {
-		if (searches.containsKey(name)) {
-			searches.remove(name);
-		}
-		// do something with the controller
+		searches.remove(name);
 	}
 
 	public String getJson(AbstractSelectOperation topOperation) {
