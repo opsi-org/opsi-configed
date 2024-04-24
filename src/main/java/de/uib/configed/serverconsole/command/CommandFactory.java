@@ -17,12 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.SwingUtilities;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -249,9 +246,5 @@ public final class CommandFactory {
 			}
 			knownMenus.remove(menu);
 		}
-	}
-
-	public void reloadServerMenu() {
-		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().reloadServerConsoleMenu());
 	}
 }

@@ -405,7 +405,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jComboBoxMenuText.setSelectedItem(CommandFactory.MENU_NEW);
 		updateLists(CommandFactory.MENU_NEW);
 		updateSelectedCommand(CommandFactory.MENU_NEW);
-		factory.reloadServerMenu();
+		ConfigedMain.getMainFrame().reloadServerConsoleMenu();
 	}
 
 	@Override
@@ -427,7 +427,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		if (factory.saveCommand(command)) {
 			updateLists(menuText);
 			updateSelectedCommand(menuText);
-			factory.reloadServerMenu();
+			ConfigedMain.getMainFrame().reloadServerConsoleMenu();
 		} else {
 			JOptionPane.showInternalMessageDialog(this,
 					Configed.getResourceValue("SSHConnection.CommandControl.couldnotsave.title"),
