@@ -84,7 +84,8 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	private void initPanel() {
-		panel = new PanelGenEditTable("", false, 0, PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
+		panel = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD,
+				PanelGenEditTable.POPUP_PDF, PanelGenEditTable.POPUP_SORT_AGAIN }, true) {
 			@Override
 			public void reload() {
 				persistenceController.reloadData(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString());

@@ -137,7 +137,6 @@ public class FGeneralDialog extends JDialog {
 
 	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
 			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
-
 		registerWithRunningInstances();
 
 		setIconImage(Utils.getMainIcon());

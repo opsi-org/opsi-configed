@@ -40,13 +40,8 @@ public abstract class AbstractOpsiDataDateMatcher {
 	}
 
 	private boolean checkData(final String realdata) {
-		if (realdata == null) {
-			Logging.debug(this, "OpsiDataDateMatcher no data found");
-			return false;
-		}
-
 		if (!(realdata instanceof String)) {
-			Logging.debug(this, "OpsiDataDateMatcher data not a string " + realdata);
+			Logging.debug(this, "OpsiDataDateMatcher data not a string: " + realdata);
 			return false;
 		}
 

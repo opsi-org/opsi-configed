@@ -45,11 +45,11 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.savedstates.UserPreferences;
 import de.uib.utils.swing.PanelLinedComponents;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.thread.WaitingSleeper;
 import de.uib.utils.thread.WaitingWorker;
+import de.uib.utils.userprefs.UserPreferences;
 
 public class LoginDialog extends JFrame implements WaitingSleeper {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;

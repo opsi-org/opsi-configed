@@ -37,6 +37,17 @@ import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.swing.ToggleableTextField;
 
 public class ClientInfoPanel extends JPanel implements KeyListener {
+	private JLabel labelClientDescription;
+	private JLabel labelClientInventoryNumber;
+	private JLabel labelClientNotes;
+	private JLabel labelClientSystemUUID;
+	private JLabel labelClientMacAddress;
+	private JLabel labelClientIPAddress;
+	private JLabel labelOneTimePassword;
+	private JLabel labelOpsiHostKey;
+
+	private JScrollPane scrollpaneNotes;
+
 	private JLabel labelClientID;
 	private CheckedLabel cbInstallByShutdown;
 	private CheckedLabel cbUefiBoot;
@@ -61,25 +72,27 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 	public ClientInfoPanel(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
-		init();
+
+		initComponents();
+		setupLayout();
 	}
 
-	private void init() {
+	private void initComponents() {
 		labelClientID = new JLabel();
 
 		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD));
 
-		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
+		labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
 		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);
-		JLabel labelClientInventoryNumber = new JLabel(Configed.getResourceValue("MainFrame.jLabelInventoryNumber"));
+		labelClientInventoryNumber = new JLabel(Configed.getResourceValue("MainFrame.jLabelInventoryNumber"));
 		labelClientInventoryNumber.setPreferredSize(Globals.BUTTON_DIMENSION);
-		JLabel labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
-		JLabel labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
+		labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
+		labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
 		labelClientSystemUUID.setVisible(ServerFacade.isOpsi43());
-		JLabel labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
-		JLabel labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
-		JLabel labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
-		JLabel labelOpsiHostKey = new JLabel("opsiHostKey");
+		labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
+		labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
+		labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
+		labelOpsiHostKey = new JLabel("opsiHostKey");
 
 		jTextFieldDescription = new RevertibleTextField("");
 		jTextFieldDescription.setEditable(true);
@@ -99,7 +112,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		jTextAreaNotes.addKeyListener(this);
 
-		JScrollPane scrollpaneNotes = new JScrollPane(jTextAreaNotes);
+		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
 		scrollpaneNotes.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -149,11 +162,12 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		jTextFieldOneTimePassword.addKeyListener(this);
 
 		jTextFieldHostKey = new ToggleableTextField();
+	}
 
+	private void setupLayout() {
 		GroupLayout layoutClientPane = new GroupLayout(this);
 		setLayout(layoutClientPane);
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
-
 				/////// HOST
 				.addGroup(layoutClientPane.createSequentialGroup()
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
@@ -233,9 +247,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 				.addComponent(jTextFieldInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// SYSTEM UUID
-				.addGap(ServerFacade.isOpsi43() ? Globals.MIN_GAP_SIZE : 0,
-						ServerFacade.isOpsi43() ? Globals.MIN_GAP_SIZE : 0,
-						ServerFacade.isOpsi43() ? Globals.MIN_GAP_SIZE : 0)
+				.addGap(ServerFacade.isOpsi43() ? Globals.MIN_GAP_SIZE : 0)
 				.addComponent(labelClientSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -393,7 +405,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	}
 
 	private void reactToClientDataChange(InputEvent e) {
-		if (configedMain.getSelectedClients().size() > 1) {
+		if (configedMain.getSelectedClients().size() != 1) {
 			return;
 		}
 

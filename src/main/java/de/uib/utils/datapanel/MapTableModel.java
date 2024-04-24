@@ -27,10 +27,7 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ListCellOptions;
 
 public class MapTableModel extends AbstractTableModel {
-	public static final List<?> nullLIST = new ArrayList<>();
-	static {
-		nullLIST.add(null);
-	}
+	public static final List<?> nullLIST = Collections.singletonList(null);
 
 	private List<DataChangedObserver> observers;
 

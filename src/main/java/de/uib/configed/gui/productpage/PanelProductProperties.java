@@ -121,7 +121,7 @@ public class PanelProductProperties extends JSplitPane {
 
 		public PaneProducts(List<String> columnNames, PanelEditDepotProperties panelEditDepotProperties,
 				EditMapPanelX propertiesPanel) {
-			super("", false, 0, PanelGenEditTable.POPUPS_MINIMAL, true);
+			super("", false, 0, new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN }, true);
 			this.columnNames = columnNames;
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;

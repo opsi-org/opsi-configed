@@ -40,8 +40,8 @@ public final class TerminalFrame implements MessagebusListener {
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
 
 	private boolean restrictView;
-
 	private Runnable callback;
+	private String session;
 
 	public TerminalFrame() {
 		this(false);
@@ -57,6 +57,10 @@ public final class TerminalFrame implements MessagebusListener {
 
 	public JFrame getFrame() {
 		return frame;
+	}
+
+	public void setSession(String session) {
+		this.session = session;
 	}
 
 	public TerminalTabbedPane getTabbedPane() {
@@ -150,6 +154,7 @@ public final class TerminalFrame implements MessagebusListener {
 		clientsConnectedByMessagebus.add("Configserver");
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
+		sessionsDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		sessionsDialog.setVisible(true);
 
 		if (sessionsDialog.getResult() == 2) {
@@ -173,10 +178,15 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
 		if (!restrictView) {
-			tabbedPane.openSessionOnSelectedTab("Configserver");
+			if (session != null) {
+				tabbedPane.openSessionOnSelectedTab(session);
+			} else {
+				displaySessionsDialog();
+			}
 		} else {
 			tabbedPane.getSelectedTerminalWidget().connectPipedTty();
 		}
+
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
 
 		northLayout
@@ -230,6 +240,7 @@ public final class TerminalFrame implements MessagebusListener {
 		if (frame == null) {
 			createAndShowGUI();
 		} else {
+			frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			frame.setVisible(true);
 		}
 
@@ -246,7 +257,9 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	public void close() {
-		callback.run();
+		if (callback != null) {
+			callback.run();
+		}
 		frame.dispose();
 		messagebus.getWebSocket().unregisterListener(this);
 	}

@@ -216,34 +216,25 @@ public class OpsiDataSerializer {
 	private static String objectToString(Object object) {
 		if (object == null) {
 			return "null";
-		}
-
-		if (object instanceof String) {
+		} else if (object instanceof String || object instanceof Integer || object instanceof Long) {
 			return "\"" + object + "\"";
-		}
-
-		if (object instanceof Integer) {
-			return "\"" + object + "\"";
-		}
-
-		if (object instanceof Long) {
-			return "\"" + object + "\"";
-		}
-
-		if (object instanceof SelectData.DataType) {
+		} else if (object instanceof SelectData.DataType) {
 			return object.toString();
+		} else if (object instanceof String[]) {
+			return stringArrayToString((String[]) object);
+		} else {
+			throw new IllegalArgumentException("Unknown type");
 		}
+	}
 
-		if (object instanceof String[]) {
-			StringBuilder result = new StringBuilder("[ ");
-			String[] data = (String[]) object;
-			for (int i = 0; i < data.length - 1; i++) {
-				result.append(objectToString(data[i]));
-				result.append(", ");
-			}
-			return result + objectToString(data[data.length - 1]) + " ]";
+	private static String stringArrayToString(String[] data) {
+		StringBuilder result = new StringBuilder("[ ");
+
+		for (int i = 0; i < data.length - 1; i++) {
+			result.append(objectToString(data[i]));
+			result.append(", ");
 		}
-		throw new IllegalArgumentException("Unknown type");
+		return result + objectToString(data[data.length - 1]) + " ]";
 	}
 
 	public static String createJsonRecursive(Map<?, ?> objects) {
@@ -276,25 +267,29 @@ public class OpsiDataSerializer {
 		if (children == null) {
 			builder.append("null");
 		} else {
-			builder.append("[ ");
-			Iterator<?> childIterator = children.iterator();
-			while (childIterator.hasNext()) {
-				Object child = childIterator.next();
-				if (child instanceof Map) {
-					builder.append(createJsonRecursive((Map<?, ?>) child));
-
-					if (childIterator.hasNext()) {
-						builder.append(", ");
-					}
-				} else {
-					Logging.warning("child is not a map, but " + child.getClass());
-				}
-			}
-			builder.append(" ]");
+			appendChildrenToBuilder(children, builder);
 		}
 		builder.append(" }");
 
 		return builder.toString();
+	}
+
+	private static void appendChildrenToBuilder(List<?> children, StringBuilder builder) {
+		builder.append("[ ");
+		Iterator<?> childIterator = children.iterator();
+		while (childIterator.hasNext()) {
+			Object child = childIterator.next();
+			if (child instanceof Map) {
+				builder.append(createJsonRecursive((Map<?, ?>) child));
+
+				if (childIterator.hasNext()) {
+					builder.append(", ");
+				}
+			} else {
+				Logging.warning("child is not a map, but " + child.getClass());
+			}
+		}
+		builder.append(" ]");
 	}
 
 	private Map<String, Object> parseObject() {

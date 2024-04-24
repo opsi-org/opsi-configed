@@ -118,21 +118,14 @@ public class HardwareDataService {
 				Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry())) {
 			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
 					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null) {
-				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
-						+ hwAuditClass.get("Class"));
-				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {
-					Logging.warning(this,
-							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is of class "
-									+ hwAuditClass.get("Class").getClass());
-				}
-				if (hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) != null) {
-					Logging.warning(this,
-							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Values is of class "
-									+ hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY).getClass());
-				}
+				Logging.info(this, "getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is "
+						+ hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY));
+				Logging.info(this, "getAllHwClassNames illegal hw config item,  hwAuditClass.get Values is "
+						+ hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY));
 
 				continue;
 			}
+
 			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
 					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
 
@@ -153,14 +146,7 @@ public class HardwareDataService {
 
 			Logging.info(this, "hw audit class " + hwClass);
 
-			for (Object m : (List<?>) hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY)) {
-				if (!(m instanceof Map)) {
-					Logging.warning(this, "getAllHwClassNames illegal VALUES item, m " + m);
-					continue;
-				}
-
-				Map<?, ?> ma = (Map<?, ?>) m;
-
+			for (Map<?, ?> ma : hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY)) {
 				if ("i".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
@@ -478,22 +464,9 @@ public class HardwareDataService {
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = getHwAuditDeviceClassesPD();
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClass.getValue();
-
-			for (OpsiHwAuditDevicePropertyType deviceProperty : hwAuditDeviceClass.getDeviceHostProperties()) {
-				if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-					String col = HW_INFO_CONFIG + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
-					client2HwRowsColumnNames.add(col);
-				}
-			}
-
-			for (OpsiHwAuditDevicePropertyType deviceProperty : hwAuditDeviceClass.getDeviceHwItemProperties()) {
-				if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-					String col = HW_INFO_DEVICE + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
-					client2HwRowsColumnNames.add(col);
-				}
-			}
+			addHardwareToClientColumns(hwClass, client2HwRowsColumnNames);
 		}
+
 		Set<String> hwInfoClasses = new HashSet<>();
 
 		for (String columnName : client2HwRowsColumnNames) {
@@ -510,6 +483,23 @@ public class HardwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.HOST_COLUMN_NAMES, hostColumnNames);
 		cacheManager.setCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, hwInfoClassNames);
 		cacheManager.setCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, client2HwRowsColumnNames);
+	}
+
+	private static void addHardwareToClientColumns(Entry<String, OpsiHwAuditDeviceClass> hwClass,
+			List<String> client2HwRowsColumnNames) {
+		for (OpsiHwAuditDevicePropertyType deviceProperty : hwClass.getValue().getDeviceHostProperties()) {
+			if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
+				String col = HW_INFO_CONFIG + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
+				client2HwRowsColumnNames.add(col);
+			}
+		}
+
+		for (OpsiHwAuditDevicePropertyType deviceProperty : hwClass.getValue().getDeviceHwItemProperties()) {
+			if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
+				String col = HW_INFO_DEVICE + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
+				client2HwRowsColumnNames.add(col);
+			}
+		}
 	}
 
 	private String cutClassName(String columnName) {

@@ -86,6 +86,7 @@ import de.uib.configed.guidata.InstallationStateUpdateManager;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
 import de.uib.configed.serverconsole.CommandControlDialog;
+import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
@@ -112,7 +113,6 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.DataChangedKeeper;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.savedstates.UserPreferences;
 import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.ListCellOptions;
@@ -122,6 +122,7 @@ import de.uib.utils.table.gui.PanelGenEditTable;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
+import de.uib.utils.userprefs.UserPreferences;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
@@ -3219,7 +3220,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void createClient(String newClientID, final String[] groups) {
-
 		checkErrorList();
 		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
@@ -3538,6 +3538,20 @@ public class ConfigedMain implements MessagebusListener {
 		fAskOverwriteExsitingHost.setVisible(true);
 
 		return fAskOverwriteExsitingHost.getResult() == 2;
+	}
+
+	public void openTerminalOnClient() {
+		if (!getConnectedClientsByMessagebus().contains(getSelectedClients().get(0))) {
+			Logging.info(this, "Client shell access feature is only supported for clients connected with messagebus");
+			JOptionPane.showMessageDialog(mainFrame,
+					Configed.getResourceValue("ConfigedMain.openTerminalOnClientFeature.message"));
+			return;
+		}
+
+		TerminalFrame terminalFrame = new TerminalFrame();
+		terminalFrame.setMessagebus(messagebus);
+		terminalFrame.setSession(getSelectedClients().get(0));
+		terminalFrame.display();
 	}
 
 	public void callNewClientSelectionDialog() {

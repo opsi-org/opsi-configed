@@ -94,9 +94,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 			File opsiPackageOnWorkbench = new File(opsiPackageOnWorkbenchS);
 
-			if (opsiPackageNameS == null || opsiPackageNameS.isBlank()) {
-				return false;
-			} else {
+			if (opsiPackageNameS != null && !opsiPackageNameS.isBlank()) {
 				if (opsiPackageOnWorkbench.exists()) {
 					int returnedOption = JOptionPane.showOptionDialog(rootFrame,
 							Configed.getResourceValue("InstallOpsiPackage.packageReinstall") + " "
@@ -298,37 +296,33 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 4)
-						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE * 2)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(infoLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-								.addComponent(buttonCallChooserPackage, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT)
-								.addComponent(fieldOpsiPackageName, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT))
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(serverLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT)
-								.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT))
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(panelMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(serverPathLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT)
-								.addComponent(buttonCallChooserServerpath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT)
-								.addComponent(fieldServerPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT))
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 4)
+				.addComponent(
+						topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(infoLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(buttonCallChooserPackage, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(fieldOpsiPackageName, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT))
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(serverLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(panelMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(serverPathLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(buttonCallChooserServerpath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(fieldServerPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(buttonCallExecute, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE * 2));
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(buttonCallExecute, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE * 2));
 
 		layout.setHorizontalGroup(
 				layout.createParallelGroup()
@@ -353,7 +347,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addGap(80)
 								.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 										Globals.BUTTON_WIDTH * 2)
-
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 
 						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -369,7 +362,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 										.addGap(Globals.HFIRST_GAP)
 										.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2,
 												Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-										.addGap(Globals.MIN_GAP_SIZE)
 										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 
 						.addGroup(layout.createSequentialGroup().addGap(0, 600, Short.MAX_VALUE)

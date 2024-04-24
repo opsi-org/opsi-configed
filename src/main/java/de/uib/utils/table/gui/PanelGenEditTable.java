@@ -93,9 +93,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	public static final int POPUP_PRINT = PopupMenuTrait.POPUP_PRINT; // 30
 
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF = new int[] { POPUP_RELOAD, POPUP_PDF, POPUP_SORT_AGAIN };
-	protected static final int[] POPUPS_MINIMAL = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN };
-
 	private static final int[] POPUPS_EXPORT = new int[] { POPUP_SEPARATOR, POPUP_EXPORT_CSV,
 			POPUP_EXPORT_SELECTED_CSV, };
 
@@ -520,7 +517,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				menuItemSave.setEnabled(false);
 				menuItemSave.addActionListener(actionEvent -> commit());
 				addPopupItem(menuItemSave);
-
 				break;
 
 			case POPUP_CANCEL:
@@ -528,7 +524,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				menuItemCancel.setEnabled(false);
 				menuItemCancel.addActionListener(actionEvent -> cancel());
 				addPopupItem(menuItemCancel);
-
 				break;
 
 			case POPUP_RELOAD:
@@ -541,12 +536,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
 
 				addPopupItem(menuItemSortAgain);
-
 				break;
 
 			case POPUP_DELETE_ROW:
 				addPopupMenuDeleteRow();
-
 				break;
 
 			case POPUP_PRINT:
@@ -554,24 +547,20 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				menuItemPrint.addActionListener((ActionEvent actionEvent) -> print());
 
 				addPopupItem(menuItemPrint);
-
 				break;
 
 			case POPUP_FLOATINGCOPY:
-
 				addPopupMenuFloatingCopy();
 				break;
 
 			case POPUP_EXPORT_CSV:
 				JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
 				addPopupItem(menuItemExportCSV);
-
 				break;
 
 			case POPUP_EXPORT_SELECTED_CSV:
 				JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
 				addPopupItem(menuItemExportSelectedCSV);
-
 				break;
 
 			case POPUP_PDF:
@@ -580,7 +569,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
 
 				addPopupItem(menuItemPDF);
-
 				break;
 
 			default:

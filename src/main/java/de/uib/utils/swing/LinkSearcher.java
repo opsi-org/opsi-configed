@@ -36,10 +36,6 @@ public class LinkSearcher {
 	}
 
 	private static boolean isLink(String s0) {
-		if (s0 == null) {
-			return false;
-		}
-
 		if (s0.length() > 2 && s0.startsWith("\\\\")) {
 			return true;
 		}
@@ -57,21 +53,12 @@ public class LinkSearcher {
 	// return first pos in line of recognized string
 	// returns -1 if nothing is recognized
 	private static int startOfMarkedString(String s) {
-		if (s == null) {
-			return -1;
-		}
-
 		int pos = 0;
 		while (pos < s.length() && s.charAt(pos) == ' ') {
 			pos++;
 		}
-		if (pos == s.length()) {
-			return -1;
-		}
 
-		String s0 = s.substring(pos).trim();
-
-		if (isLink(s0)) {
+		if (pos != s.length() && isLink(s.substring(pos).trim())) {
 			return pos;
 		}
 

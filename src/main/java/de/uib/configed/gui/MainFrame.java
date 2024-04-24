@@ -43,7 +43,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
@@ -67,7 +66,8 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.userprefs.ThemeManager;
+import de.uib.utils.userprefs.UserPreferences;
 
 public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
@@ -199,10 +199,10 @@ public class MainFrame extends JFrame {
 	public static JMenu createJMenuTheme(Runnable runnable) {
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
 		ButtonGroup groupThemes = new ButtonGroup();
-		String selectedTheme = Messages.getSelectedTheme();
+		String selectedTheme = ThemeManager.getSelectedTheme();
 
-		for (final String theme : Messages.getAvailableThemes()) {
-			JMenuItem themeItem = new JRadioButtonMenuItem(Messages.getThemeTranslation(theme));
+		for (final String theme : ThemeManager.getAvailableThemes()) {
+			JMenuItem themeItem = new JRadioButtonMenuItem(ThemeManager.getThemeTranslation(theme));
 			Logging.debug("selectedTheme " + theme);
 			themeItem.setSelected(selectedTheme.equals(theme));
 			jMenuTheme.add(themeItem);
@@ -210,8 +210,8 @@ public class MainFrame extends JFrame {
 
 			themeItem.addActionListener((ActionEvent e) -> {
 				UserPreferences.set(UserPreferences.THEME, theme);
-				Messages.setTheme(theme);
-				Main.setOpsiLaf();
+				ThemeManager.setTheme(theme);
+				ThemeManager.setOpsiLaf();
 
 				runnable.run();
 			});

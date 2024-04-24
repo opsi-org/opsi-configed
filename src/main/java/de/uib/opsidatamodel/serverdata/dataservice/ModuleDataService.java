@@ -35,7 +35,6 @@ import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.ExtendedDate;
 import de.uib.utils.ExtendedInteger;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 /**
@@ -679,12 +678,12 @@ public class ModuleDataService {
 	}
 
 	public boolean isOpsiUserAdminPD() {
-		boolean hasIsOpisUserAdminBeenChecked = Utils.toBoolean(
-				cacheManager.getCachedData(CacheIdentifier.HAS_IS_OPSI_USER_ADMIN_BEEN_CHECKED, Boolean.class));
+		boolean hasIsOpisUserAdminBeenChecked = Boolean.TRUE
+				.equals(cacheManager.getCachedData(CacheIdentifier.HAS_IS_OPSI_USER_ADMIN_BEEN_CHECKED, Boolean.class));
 		if (!hasIsOpisUserAdminBeenChecked) {
 			retrieveIsOpsiUserAdminPD();
 		}
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, Boolean.class));
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, Boolean.class));
 	}
 
 	private void retrieveIsOpsiUserAdminPD() {
@@ -705,12 +704,13 @@ public class ModuleDataService {
 
 	public boolean isOpsiLicensingAvailablePD() {
 		retrieveOpsiLicensingInfoVersion();
-		return Utils.toBoolean(cacheManager.getCachedData(CacheIdentifier.IS_OPSI_LICENSING_AVAILABLE, Boolean.class));
+		return Boolean.TRUE
+				.equals(cacheManager.getCachedData(CacheIdentifier.IS_OPSI_LICENSING_AVAILABLE, Boolean.class));
 	}
 
 	private void retrieveOpsiLicensingInfoVersion() {
-		boolean hasOpsiLicencingBeenChecked = Utils
-				.toBoolean(cacheManager.getCachedData(CacheIdentifier.HAS_OPSI_LICENSING_BEEN_CHECKED, Boolean.class));
+		boolean hasOpsiLicencingBeenChecked = Boolean.TRUE
+				.equals(cacheManager.getCachedData(CacheIdentifier.HAS_OPSI_LICENSING_BEEN_CHECKED, Boolean.class));
 		if (!hasOpsiLicencingBeenChecked) {
 			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
 					+ getMethodSignaturePD(RPCMethodName.BACKEND_GET_LICENSING_INFO));
@@ -799,8 +799,8 @@ public class ModuleDataService {
 	}
 
 	public boolean canCallMySQLPD() {
-		Boolean acceptMySQL = cacheManager.getCachedData(CacheIdentifier.ACCEPT_MY_SQL, Boolean.class);
-		if (acceptMySQL == null) {
+		if (!cacheManager.isDataCached(CacheIdentifier.ACCEPT_MY_SQL)) {
+			Boolean acceptMySQL;
 			if (ServerFacade.isOpsi43()) {
 				acceptMySQL = false;
 			} else {
@@ -815,7 +815,7 @@ public class ModuleDataService {
 		}
 
 		// we cannot call MySQL if version before 4.3
-		return acceptMySQL;
+		return cacheManager.getCachedData(CacheIdentifier.ACCEPT_MY_SQL, Boolean.class);
 	}
 
 	public boolean isOpsiModuleActive(OpsiModule opsiModule) {

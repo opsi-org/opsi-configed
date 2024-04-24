@@ -6,15 +6,11 @@
 
 package de.uib;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.Set;
 
 import javax.swing.JFrame;
-import javax.swing.UIManager;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -23,10 +19,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -38,7 +30,9 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utils.FeatureActivationChecker;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
-import de.uib.utils.savedstates.UserPreferences;
+import de.uib.utils.userprefs.ThemeManager;
+import de.uib.utils.userprefs.UserPreferences;
+import javafx.embed.swing.JFXPanel;
 
 public class Main {
 	// --------------------------------------------------------------------------------------------------------
@@ -136,8 +130,8 @@ public class Main {
 		}
 
 		if (UserPreferences.get(UserPreferences.THEME) != null) {
-			Messages.setTheme(UserPreferences.get(UserPreferences.THEME));
-			Main.setOpsiLaf();
+			ThemeManager.setTheme(UserPreferences.get(UserPreferences.THEME));
+			ThemeManager.setOpsiLaf();
 		}
 	}
 
@@ -210,44 +204,11 @@ public class Main {
 		return isLogviewer;
 	}
 
-	public static void setOpsiLaf() {
-		Logging.info("set look and feel " + Messages.getSelectedTheme());
-
-		// Location of the theme property files - register them
-		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");
-
-		registerOpenSansFont();
-
-		switch (Messages.getSelectedTheme()) {
-		case Messages.THEME_LIGHT:
-			FlatLightLaf.setup();
-			break;
-
-		case Messages.THEME_DARK:
-			FlatDarkLaf.setup();
-			break;
-
-		default:
-			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
-			break;
-		}
-
-		Globals.setTableColors();
-	}
-
-	private static void registerOpenSansFont() {
-		try (InputStream fontStream = Main.class.getResourceAsStream("/fonts/OpenSans.ttf")) {
-			Font openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
-			openSansFont = openSansFont.deriveFont(13F);
-			UIManager.put("defaultFont", openSansFont);
-		} catch (IOException e) {
-			Logging.error("Failed to retrieve font from resources (using font chosen by the system)", e);
-		} catch (FontFormatException e) {
-			Logging.error("Font is faulty", e);
-		}
-	}
-
 	public static void main(String[] args) {
+		// We Initialize JavaFX toolkit by creating a JFXPanel instance.
+		// This line is necessary to ensure that JavaFX runtime is initialized at start of the application.
+		new JFXPanel();
+
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
 
 		setGlobalValues();
@@ -267,7 +228,7 @@ public class Main {
 
 		Locale.setDefault(Messages.getLocale());
 
-		setOpsiLaf();
+		ThemeManager.setOpsiLaf();
 
 		if (isLogviewer) {
 			Logviewer.main(cmd);

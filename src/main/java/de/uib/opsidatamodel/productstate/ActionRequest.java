@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,7 +45,7 @@ public class ActionRequest {
 	private static Map<String, Color> label2textColor;
 
 	private static Set<Integer> states;
-	private static List<String> labels;
+	private static Set<String> labels;
 	private static String[] choiceLabels;
 	private static List<String> scriptKeys;
 
@@ -78,7 +79,7 @@ public class ActionRequest {
 		states.add(ONCE);
 		states.add(CUSTOM);
 
-		labels = new ArrayList<>();
+		labels = new LinkedHashSet<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("not_available");
@@ -190,7 +191,7 @@ public class ActionRequest {
 	public static List<String> getLabels() {
 		checkCollections();
 
-		return labels;
+		return new ArrayList<>(labels).subList(2, labels.size());
 	}
 
 	public static Integer getVal(String label) {

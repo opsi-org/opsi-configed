@@ -457,11 +457,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	}
 
 	private void initComboDomain() {
-		String opsiDefaultDomain = persistenceController.getConfigDataService().getOpsiDefaultDomainPD();
 		newDomainsList = persistenceController.getConfigDataService().getDomains();
-		if (!newDomainsList.contains(opsiDefaultDomain)) {
-			newDomainsList.add(opsiDefaultDomain);
-		}
 
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
@@ -821,5 +817,4 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	@Override
 	public void keyTyped(KeyEvent e) {
 		/* Not needed */}
-
 }
