@@ -15,7 +15,7 @@ import de.uib.utils.logging.Logging;
 /**
 */
 
-public class UpdateCollection implements UpdateCommand, CountedCollection {
+public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand> {
 	protected Collection<UpdateCommand> implementor = new ArrayList<>();
 
 	@Override
@@ -158,31 +158,6 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	@Override
 	public String toString() {
 		return implementor.toString();
-	}
-
-	@Override
-	public int accumulatedSize() {
-		if (isEmpty()) {
-			return 0;
-		}
-
-		int result = 0;
-
-		Iterator<UpdateCommand> it = implementor.iterator();
-		while (it.hasNext()) {
-			UpdateCommand updateCommand = it.next();
-			if (updateCommand != null) {
-				// a element of the collection is a collection, we retrieve the size recursively
-				if (updateCommand instanceof CountedCollection) {
-					result = result + ((CountedCollection) updateCommand).accumulatedSize();
-				} else {
-					// we found an 'ordinary' element and add 1
-					result++;
-				}
-			}
-		}
-
-		return result;
 	}
 
 	/**
