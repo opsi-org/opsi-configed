@@ -91,11 +91,6 @@ public class Main {
 		options.getOption("qg").setArgs(2);
 		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
-		options.addOption(null, "ssh-immediate-connect", true, "Try to create a SSH connection on start. DEFAULT: N");
-		options.addOption(null, "ssh-key", true,
-				"Full path with filename from sshkey used for authentication on ssh server");
-		options.addOption(null, "ssh-passphrase", true,
-				"Passphrase for given sshkey used for authentication on ssh server");
 		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
 				+ OpsiMethodCall.getMaxCollecSize() + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
 		options.addOption(null, "localizationfile", true,
