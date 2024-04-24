@@ -164,7 +164,7 @@ public class ProductState extends HashMap<String, String> {
 		put(KEY_PRODUCT_ID, "");
 		put(KEY_PRODUCT_NAME, "");
 
-		put(KEY_TARGET_CONFIGURATION, TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED));
+		put(KEY_TARGET_CONFIGURATION, "undefined");
 		put(KEY_INSTALLATION_STATUS, InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED));
 
 		put(KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));

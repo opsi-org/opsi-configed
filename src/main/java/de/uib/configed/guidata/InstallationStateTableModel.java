@@ -295,8 +295,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private void produceVisualStatesFromExistingEntries() {
 		combinedVisualValues = new HashMap<>();
 		for (String key : ProductState.KEYS) {
-			Map<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
-			combinedVisualValues.put(key, combinedVisualValuesForOneColumn);
+			combinedVisualValues.put(key, new HashMap<>());
 		}
 
 		for (Entry<String, Map<String, Map<String, String>>> client : allClientsProductStates.entrySet()) {
@@ -323,7 +322,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private void changeValuesForVisualOutput(Map<String, String> stateAndAction, String productId) {
 		String targetConfiguration = stateAndAction.get(ProductState.KEY_TARGET_CONFIGURATION);
 		if (targetConfiguration == null || targetConfiguration.isEmpty()) {
-			targetConfiguration = TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED);
+			targetConfiguration = "undefined";
 		}
 
 		stateAndAction.put(ProductState.KEY_TARGET_CONFIGURATION, targetConfiguration);
