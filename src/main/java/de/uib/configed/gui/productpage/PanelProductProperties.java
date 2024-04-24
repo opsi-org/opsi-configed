@@ -190,7 +190,7 @@ public class PanelProductProperties extends JSplitPane {
 
 				Logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
 
-				if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {
+				if (!depotsOfPackage.isEmpty()) {
 					infoPane.setEditValues(productEdited,
 							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
