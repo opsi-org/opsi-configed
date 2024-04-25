@@ -18,7 +18,7 @@ public class UserServerConsoleConfig extends UserConfigModule {
 			KEY_SERVER_CONSOLE_COMMANDCONTROL_ACTIVE, KEY_SERVER_CONSOLE_COMMANDS_ACTIVE);
 	public static final UserServerConsoleConfig DEFAULT;
 	static {
-		Logging.info("init ARCHEO_ for UserSshConfig");
+		Logging.info("init ARCHEO_ for UserServerConsoleConfig");
 		DEFAULT = new UserServerConsoleConfig(UserConfig.ARCHEO_ROLE_NAME);
 		DEFAULT.setBooleanValue(KEY_SERVER_CONSOLE_MENU_ACTIVE, true);
 		DEFAULT.setBooleanValue(KEY_SERVER_CONSOLE_COMMANDCONTROL_ACTIVE, false);
