@@ -79,7 +79,7 @@ public final class TerminalFrame implements MessagebusListener {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
 		frame.setIconImage(Utils.getMainIcon());
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		TerminalMenuBar menuBar = new TerminalMenuBar(this);
+		TerminalMenuBar menuBar = new TerminalMenuBar(this, restrictView);
 		menuBar.init();
 		frame.setJMenuBar(menuBar);
 

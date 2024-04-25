@@ -19,9 +19,11 @@ import de.uib.configed.Configed;
 
 public class TerminalMenuBar extends JMenuBar {
 	private TerminalFrame frame;
+	private boolean restrictView;
 
-	public TerminalMenuBar(TerminalFrame frame) {
+	public TerminalMenuBar(TerminalFrame frame, boolean restrictView) {
 		this.frame = frame;
+		this.restrictView = restrictView;
 	}
 
 	public void init() {
@@ -49,6 +51,7 @@ public class TerminalMenuBar extends JMenuBar {
 		jMenuItemChangeSession.addActionListener((ActionEvent e) -> frame.displaySessionsDialog());
 
 		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
+		menuFile.setEnabled(!restrictView);
 		menuFile.add(jMenuItemNewWindow);
 		menuFile.add(jMenuItemNewSession);
 		menuFile.add(jMenuItemChangeSession);
