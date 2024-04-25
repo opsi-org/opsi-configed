@@ -26,6 +26,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -117,7 +118,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 				.getHostConfig(persistenceController.getHostInfoCollections().getConfigServer());
 
 		List<Object> resultConfigList = (List<Object>) configs
-				.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
+				.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 			Logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
 
@@ -127,7 +128,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			Logging.info(this, "KEY_SSH_DEFAULTWINUSER " + ((String) resultConfigList.get(0)));
 		}
 
-		resultConfigList = (List<Object>) configs.get(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
+		resultConfigList = (List<Object>) configs.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 			Logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");
 

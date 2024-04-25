@@ -68,6 +68,11 @@ public class UserRolesConfigDataService {
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENSES = "free licenses for client";
 
+	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER = "configed.ssh.deploy-client-agent.default.user";
+	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER_DEFAULT_VALUE = "Administrator";
+	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW = "configed.ssh.deploy-client-agent.default.password";
+	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE = "";
+
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
@@ -861,21 +866,19 @@ public class UserRolesConfigDataService {
 
 	private void checkSSHCommands(Map<String, List<Object>> configDefaultValues,
 			List<Map<String, Object>> readyObjects) {
-		if (!configDefaultValues.containsKey(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER)) {
+		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
-					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER,
-					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE,
+					+ KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER,
+					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER_DEFAULT_VALUE,
 					"default windows username for deploy-client-agent-script"));
 		}
 
-		if (!configDefaultValues.containsKey(OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW)) {
+		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
-					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW,
-					OpsiServiceNOMPersistenceController.KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE,
+					+ KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
+			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW,
+					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE,
 					"default windows password for deploy-client-agent-script"));
 		}
 	}

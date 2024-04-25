@@ -106,11 +106,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String CONFIG_DEPOT_ID = "clientconfig.depot.id";
 	public static final String KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = "opsiclientd.event_on_shutdown.active";
 
-	public static final String KEY_SSH_DEFAULTWINUSER = "configed.ssh.deploy-client-agent.default.user";
-	public static final String KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE = "Administrator";
-	public static final String KEY_SSH_DEFAULTWINPW = "configed.ssh.deploy-client-agent.default.password";
-	public static final String KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE = "";
-
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
 	// keys for default wan configuration
