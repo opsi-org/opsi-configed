@@ -242,8 +242,7 @@ public class ProductDataService {
 			List<Object> productRow = new ArrayList<>();
 			productRow.add(p.getProductId());
 
-			Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = cacheManager
-					.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, Map.class);
+			Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos = getProduct2VersionInfo2InfosPD();
 
 			Map<String, OpsiProductInfo> versionInfo2Infos = product2versionInfo2infos.get(p.getProductId());
 
