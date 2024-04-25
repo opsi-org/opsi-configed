@@ -56,7 +56,6 @@ public abstract class AbstractControlMultiTablePanel {
 
 	public boolean mayLeave() {
 		boolean change = false;
-		boolean result = false;
 
 		Iterator<PanelGenEditTable> iterP = tablePanes.iterator();
 
@@ -72,14 +71,14 @@ public abstract class AbstractControlMultiTablePanel {
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
-				result = true;
+				return true;
 			}
 
 			Utils.getMasterFrame().setVisible(true);
 		} else {
-			result = true;
+			return true;
 		}
 
-		return result;
+		return false;
 	}
 }

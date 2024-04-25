@@ -3775,27 +3775,21 @@ public class ConfigedMain implements MessagebusListener {
 	public boolean closeInstance(boolean checkdirty) {
 		Logging.info(this, "start closing instance, checkdirty " + checkdirty);
 
-		boolean result = true;
-
-		if (!FStartWakeOnLan.runningInstances.isEmpty()) {
-			result = FStartWakeOnLan.runningInstances.askStop();
-		}
-
-		if (!result) {
+		if (!FStartWakeOnLan.runningInstances.isEmpty() && !FStartWakeOnLan.runningInstances.askStop()) {
 			return false;
 		}
 
 		if (checkdirty) {
 			int closeCheckResult = checkClose();
-			result = closeCheckResult == JOptionPane.YES_OPTION || closeCheckResult == JOptionPane.NO_OPTION;
-
-			if (!result) {
-				return result;
-			}
 
 			if (closeCheckResult == JOptionPane.YES_OPTION) {
 				checkSaveAll(false);
+			} else if (closeCheckResult != JOptionPane.NO_OPTION) {
+				return false;
+			} else {
+				// Do when closing without option
 			}
+
 		}
 
 		if (mainFrame != null) {
@@ -3809,14 +3803,15 @@ public class ConfigedMain implements MessagebusListener {
 			loginDialog.dispose();
 		}
 
-		if (!checkSavedLicensesFrame()) {
+		boolean checkSavedLicensesFrame = checkSavedLicensesFrame();
+
+		if (!checkSavedLicensesFrame) {
 			licensesFrame.setVisible(true);
-			result = false;
 		}
 
-		Logging.info(this, "close instance result " + result);
+		Logging.info(this, "close instance result " + checkSavedLicensesFrame);
 
-		return result;
+		return checkSavedLicensesFrame;
 	}
 
 	public void finishApp(boolean checkdirty, int exitcode) {

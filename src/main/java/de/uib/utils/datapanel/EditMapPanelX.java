@@ -264,10 +264,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	protected JPopupMenu definePopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
 
-		JPopupMenu result = new JPopupMenu();
-
 		if (reloadable) {
-			result = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD }) {
+			return new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD }) {
 				@Override
 				public void action(int p) {
 					super.action(p);
@@ -278,9 +276,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					}
 				}
 			};
+		} else {
+			return new JPopupMenu();
 		}
-
-		return result;
 	}
 
 	@Override

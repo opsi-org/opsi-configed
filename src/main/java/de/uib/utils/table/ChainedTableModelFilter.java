@@ -33,16 +33,13 @@ public class ChainedTableModelFilter extends TableModelFilter {
 
 	@Override
 	public boolean isInUse() {
-		boolean result = false;
-
 		for (TableModelFilter filter : chain.values()) {
 			if (filter.isInUse()) {
-				result = true;
-				break;
+				return true;
 			}
 		}
 
-		return result;
+		return false;
 	}
 
 	@Override
