@@ -61,7 +61,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 	private final CommandFactory factory;
 
 	public CommandControlDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
+		super(null, Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		this.configedMain = configedMain;
 		factory = CommandFactory.getInstance();
 		parameterPanel = new CommandControlParameterMethodsPanel(this, configedMain);

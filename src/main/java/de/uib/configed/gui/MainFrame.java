@@ -275,7 +275,7 @@ public class MainFrame extends JFrame {
 		jMenuServerConsole.removeAll();
 		jMenuServerConsole.setText(CommandFactory.PARENT_NULL);
 
-		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
+		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
