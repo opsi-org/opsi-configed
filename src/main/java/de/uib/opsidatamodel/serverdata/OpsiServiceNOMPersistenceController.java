@@ -23,6 +23,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsidatamodel.serverdata.dataservice.CommandDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.DepotDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
@@ -33,7 +34,6 @@ import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.LogDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ModuleDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
-import de.uib.opsidatamodel.serverdata.dataservice.SSHCommandDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.UserDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -180,7 +180,7 @@ public class OpsiServiceNOMPersistenceController {
 	private ModuleDataService moduleDataService;
 	private ProductDataService productDataService;
 	private SoftwareDataService softwareDataService;
-	private SSHCommandDataService sshCommandDataService;
+	private CommandDataService sshCommandDataService;
 	private UserDataService userDataService;
 	private RPCMethodExecutor rpcMethodExecutor;
 	private ReloadDispatcher reloadDispatcher;
@@ -208,7 +208,7 @@ public class OpsiServiceNOMPersistenceController {
 		moduleDataService = new ModuleDataService(exec);
 		productDataService = new ProductDataService(exec, this);
 		softwareDataService = new SoftwareDataService(exec, this);
-		sshCommandDataService = new SSHCommandDataService(exec);
+		sshCommandDataService = new CommandDataService(exec);
 		userDataService = new UserDataService(exec);
 		rpcMethodExecutor = new RPCMethodExecutor(exec, this);
 		hostInfoCollections = new HostInfoCollections(this);
@@ -302,7 +302,7 @@ public class OpsiServiceNOMPersistenceController {
 		return softwareDataService;
 	}
 
-	public SSHCommandDataService getSSHCommandDataService() {
+	public CommandDataService getSSHCommandDataService() {
 		return sshCommandDataService;
 	}
 

@@ -180,13 +180,13 @@ public final class CommandFactory {
 
 		if (knownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "saveCommand command already exists - updating command");
-			if (persistenceController.getSSHCommandDataService().updateSSHCommand(jsonObjects)) {
+			if (persistenceController.getSSHCommandDataService().updateCommand(jsonObjects)) {
 				commandList.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))).update(command);
 				return true;
 			}
 		} else {
 			Logging.info(this, "saveCommand command doesn't exist - creating new command");
-			if (persistenceController.getSSHCommandDataService().createSSHCommand(jsonObjects)) {
+			if (persistenceController.getSSHCommandDataService().createCommand(jsonObjects)) {
 				commandList.add(command);
 				knownMenus.add(command.getMenuText());
 				return true;
@@ -237,7 +237,7 @@ public final class CommandFactory {
 		Logging.info(this, "deleting command menu " + menu);
 		List<String> jsonObjects = new ArrayList<>();
 		jsonObjects.add(menu);
-		if (persistenceController.getSSHCommandDataService().deleteSSHCommand(jsonObjects)) {
+		if (persistenceController.getSSHCommandDataService().deleteCommand(jsonObjects)) {
 			Iterator<MultiCommandTemplate> iterator = commandList.iterator();
 			while (iterator.hasNext()) {
 				if (iterator.next().equals(getCommandByMenu(menu))) {

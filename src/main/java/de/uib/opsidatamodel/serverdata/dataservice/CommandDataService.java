@@ -15,7 +15,7 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.logging.Logging;
 
 /**
- * Provides methods for working with SSH command data on the server.
+ * Provides methods for working with command's data on the server.
  * <p>
  * Classes ending in {@code DataService} represent somewhat of a layer between
  * server and the client. It enables to work with specific data, that is saved
@@ -27,11 +27,11 @@ import de.uib.utils.logging.Logging;
  * retrieves or it updates internally cached data. {@code PD} stands for
  * {@code Persistent Data}.
  */
-public class SSHCommandDataService {
+public class CommandDataService {
 	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
 
-	public SSHCommandDataService(AbstractPOJOExecutioner exec) {
+	public CommandDataService(AbstractPOJOExecutioner exec) {
 		this.exec = exec;
 	}
 
@@ -59,7 +59,7 @@ public class SSHCommandDataService {
 	 * @param jsonObjects to do sth
 	 * @return result true if everything is ok
 	 */
-	private boolean doActionSSHCommand(RPCMethodName method, List<Object> jsonObjects) {
+	private boolean doActionCommand(RPCMethodName method, List<Object> jsonObjects) {
 		Logging.info(this, "doActionSSHCommand method " + method);
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
@@ -76,7 +76,7 @@ public class SSHCommandDataService {
 	 * @param jsonObjects to remove
 	 * @return result true if successfull
 	 */
-	public boolean deleteSSHCommand(List<String> jsonObjects) {
+	public boolean deleteCommand(List<String> jsonObjects) {
 		Logging.info(this, "deleteSSHCommand ");
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
@@ -93,8 +93,8 @@ public class SSHCommandDataService {
 	 * @param jsonObjects to create
 	 * @return result true if successfull
 	 */
-	public boolean createSSHCommand(List<Object> jsonObjects) {
-		return doActionSSHCommand(RPCMethodName.SSH_COMMAND_CREATE_OBJECTS, jsonObjects);
+	public boolean createCommand(List<Object> jsonObjects) {
+		return doActionCommand(RPCMethodName.SSH_COMMAND_CREATE_OBJECTS, jsonObjects);
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class SSHCommandDataService {
 	 * @param jsonObjects to update
 	 * @return result true if successfull
 	 */
-	public boolean updateSSHCommand(List<Object> jsonObjects) {
-		return doActionSSHCommand(RPCMethodName.SSH_COMMAND_UPDATE_OBJECTS, jsonObjects);
+	public boolean updateCommand(List<Object> jsonObjects) {
+		return doActionCommand(RPCMethodName.SSH_COMMAND_UPDATE_OBJECTS, jsonObjects);
 	}
 }
