@@ -100,7 +100,7 @@ public class UserConfig {
 			userBoolKeys = new LinkedHashSet<>();
 
 			Logging.info("addAll bool keys");
-			userBoolKeys.addAll(UserSshConfig.BOOL_KEYS);
+			userBoolKeys.addAll(UserServerConsoleConfig.BOOL_KEYS);
 			Logging.info("addAll opsipermission bool keys");
 			userBoolKeys.addAll(UserOpsipermission.BOOL_KEYS);
 		}
@@ -146,7 +146,7 @@ public class UserConfig {
 		getUserBoolKeys();
 		getUserListKeys();
 
-		archeoPrototypeConfig.booleanMap.putAll(UserSshConfig.DEFAULT.getBooleanMap());
+		archeoPrototypeConfig.booleanMap.putAll(UserServerConsoleConfig.DEFAULT.getBooleanMap());
 		archeoPrototypeConfig.booleanMap.putAll(UserOpsipermission.DEFAULT.getBooleanMap());
 
 		archeoPrototypeConfig.valuesMap.putAll(UserOpsipermission.DEFAULT.getValuesMap());
