@@ -4,6 +4,7 @@
 - Don't add options twice to reset products after full reload
 - Problems in Client Tree after full reload
 - `NullPointerException` on reloading localboot or netboot table (occuring when new product versions in database exist)
+- Now also show subgroups of permitted product groups
 
 ## [4.3.2.13] - 2024-04-24
 ## Added

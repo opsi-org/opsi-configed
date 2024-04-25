@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.swing.SwingUtilities;
 
@@ -318,13 +317,19 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkPermissions() {
-		boolean serverActionPermission = true;
+		checkServerAccessPermissions();
+		checkCreateClientPermission();
+		checkDepotPermissions();
+		checkHostGroupPermissions();
+		checkProductPermissions();
+	}
 
+	private void checkServerAccessPermissions() {
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
 
 		// variable for simplifying the use of the map
-		String configKey = null;
+		String configKey;
 		boolean globalReadOnly = isGlobalReadOnly();
 
 		// already specified via systemuser group
@@ -339,6 +344,8 @@ public class UserRolesConfigDataService {
 
 		Logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
 
+		boolean serverActionPermission = true;
+
 		if (globalReadOnly) {
 			serverActionPermission = false;
 		} else {
@@ -352,8 +359,12 @@ public class UserRolesConfigDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverActionPermission);
+	}
 
-		configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
+	private void checkCreateClientPermission() {
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
+		String configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
 		Logging.info(this, " checkPermissions key " + configKey);
 
 		if (serverPropertyMap.get(configKey) != null
@@ -362,7 +373,27 @@ public class UserRolesConfigDataService {
 			boolean createClientPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
 		}
+	}
 
+	private void setProductsPermitted(Set<String> productGroupsPermitted) {
+		Set<String> permittedProducts = new HashSet<>();
+
+		for (String group : productGroupsPermitted) {
+			Map<String, Set<String>> fProductGroup2Members = cacheManager
+					.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
+			Set<String> products = fProductGroup2Members.get(group);
+			if (products != null) {
+				permittedProducts.addAll(products);
+			}
+		}
+		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
+
+		Logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
+	}
+
+	private void checkDepotPermissions() {
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
 		String configKeyUseList = userPartPD()
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
 		String configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
@@ -376,9 +407,15 @@ public class UserRolesConfigDataService {
 		Logging.info(this, "checkPermissions depotsFullPermission (false means, depots must be specified) "
 				+ depotsFullPermission);
 		Logging.info(this, "checkPermissions depotsPermitted " + depotsPermitted);
+	}
 
-		configKeyUseList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
-		configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
+	private void checkHostGroupPermissions() {
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
+
+		String configKeyUseList = userPartPD()
+				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
+		String configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
 		Set<String> hostgroupsPermitted = new HashSet<>();
 
 		boolean hostgroupsOnlyIfExplicitlyStated = checkFullPermission(hostgroupsPermitted, configKeyUseList,
@@ -392,14 +429,32 @@ public class UserRolesConfigDataService {
 				hostgroupsOnlyIfExplicitlyStated);
 
 		Logging.info(this, "checkPermissions hostgroupsPermitted " + hostgroupsPermitted);
+	}
 
-		configKeyUseList = userPartPD()
+	private void checkProductPermissions() {
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
+
+		String configKeyUseList = userPartPD()
 				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
-		configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
+		String configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
 		Set<String> productGroupsPermitted = new HashSet<>();
 
 		boolean productgroupsFullPermission = checkFullPermission(productGroupsPermitted, configKeyUseList,
 				configKeyList, serverPropertyMap);
+
+		// Add subgroups of permitted groups to permitted groups
+		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
+				.getProductGroupsPD();
+		Logging.devel(productGroups.toString());
+		for (Entry<String, Map<String, String>> groupEntry : productGroups.entrySet()) {
+			Logging.devel(groupEntry.getKey() + " " + groupEntry.getValue().get("parentGroupId"));
+			if (!productGroupsPermitted.contains(groupEntry.getKey())
+					&& hasPermittedParentGroup(productGroups, productGroupsPermitted, groupEntry.getKey())) {
+				productGroupsPermitted.add(groupEntry.getKey());
+			}
+		}
+
 		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
 
@@ -408,20 +463,23 @@ public class UserRolesConfigDataService {
 		}
 	}
 
-	private void setProductsPermitted(Set<String> productGroupsPermitted) {
-		Set<String> permittedProducts = new TreeSet<>();
+	/**
+	 * This Method will check recursively if a parent group of the given
+	 * productGroup is a permitted product group
+	 */
+	private static boolean hasPermittedParentGroup(Map<String, Map<String, String>> productGroups,
+			Set<String> productGroupsPermitted, String productGroup) {
+		String parentGroupId = productGroups.get(productGroup).get("parentGroupId");
 
-		for (String group : productGroupsPermitted) {
-			Map<String, Set<String>> fProductGroup2Members = cacheManager
-					.getCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, Map.class);
-			Set<String> products = fProductGroup2Members.get(group);
-			if (products != null) {
-				permittedProducts.addAll(products);
+		while (productGroups.containsKey(parentGroupId)) {
+			if (productGroupsPermitted.contains(parentGroupId)) {
+				return true;
+			} else {
+				parentGroupId = productGroups.get(parentGroupId).get("parentGroupId");
 			}
 		}
-		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
 
-		Logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
+		return false;
 	}
 
 	private String userPartPD() {
