@@ -324,7 +324,7 @@ public class MainFrame extends JFrame {
 			Collections.sort(listCom);
 			JMenu parentMenu = new JMenu(parentMenuName);
 
-			Logging.info(this, "ssh parent menu text " + parentMenuName);
+			Logging.info(this, "parent menu text " + parentMenuName);
 			if (parentMenuName.equals(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parentMenu.setText("");
 				parentMenu.setIcon(Utils.createImageIcon("images/burger_menu_09.png", "..."));
@@ -344,7 +344,7 @@ public class MainFrame extends JFrame {
 		for (final MultiCommandTemplate com : listCom) {
 			JMenuItem jMenuItem = new JMenuItem();
 			jMenuItem.setText(com.getMenuText());
-			Logging.info(this, "ssh command menuitem text " + com.getMenuText());
+			Logging.info(this, "command menuitem text " + com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> {
 				CommandExecutor executor = new CommandExecutor(configedMain, com);

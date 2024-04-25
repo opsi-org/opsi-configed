@@ -99,7 +99,7 @@ public class UserConfig {
 		if (userBoolKeys == null) {
 			userBoolKeys = new LinkedHashSet<>();
 
-			Logging.info("addAll ssh bool keys");
+			Logging.info("addAll bool keys");
 			userBoolKeys.addAll(UserSshConfig.BOOL_KEYS);
 			Logging.info("addAll opsipermission bool keys");
 			userBoolKeys.addAll(UserOpsipermission.BOOL_KEYS);
