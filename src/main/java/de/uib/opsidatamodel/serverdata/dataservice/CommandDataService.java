@@ -39,11 +39,6 @@ public class CommandDataService {
 		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
-	/**
-	 * Execute the python-opsi command {@code SSHCommand_getObjects}.
-	 *
-	 * @return list of commands available for executing with SSH
-	 */
 	public List<Map<String, Object>> retrieveCommandList() {
 		Logging.info(this, "retrieveCommandList ");
 		List<Map<String, Object>> sshCommands = exec
@@ -52,13 +47,6 @@ public class CommandDataService {
 		return sshCommands;
 	}
 
-	/**
-	 * Exec a python-opsi command
-	 *
-	 * @param method      name
-	 * @param jsonObjects to do sth
-	 * @return result true if everything is ok
-	 */
 	private boolean doActionCommand(RPCMethodName method, List<Object> jsonObjects) {
 		Logging.info(this, "doActionSSHCommand method " + method);
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
@@ -70,12 +58,6 @@ public class CommandDataService {
 		return result;
 	}
 
-	/**
-	 * Exec the python-opsi command "SSHCommand_deleteObjects"
-	 *
-	 * @param jsonObjects to remove
-	 * @return result true if successfull
-	 */
 	public boolean deleteCommand(List<String> jsonObjects) {
 		Logging.info(this, "deleteSSHCommand ");
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
@@ -87,22 +69,10 @@ public class CommandDataService {
 		return result;
 	}
 
-	/**
-	 * Exec the python-opsi command "SSHCommand_createObjects"
-	 *
-	 * @param jsonObjects to create
-	 * @return result true if successfull
-	 */
 	public boolean createCommand(List<Object> jsonObjects) {
 		return doActionCommand(RPCMethodName.SSH_COMMAND_CREATE_OBJECTS, jsonObjects);
 	}
 
-	/**
-	 * Exec the python-opsi command "SSHCommand_updateObjects"
-	 *
-	 * @param jsonObjects to update
-	 * @return result true if successfull
-	 */
 	public boolean updateCommand(List<Object> jsonObjects) {
 		return doActionCommand(RPCMethodName.SSH_COMMAND_UPDATE_OBJECTS, jsonObjects);
 	}
