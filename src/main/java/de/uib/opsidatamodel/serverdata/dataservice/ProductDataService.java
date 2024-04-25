@@ -1292,7 +1292,7 @@ public class ProductDataService {
 	private void setProductProperties(List<Map<String, Object>> updateCollection, List<?> deleteCollection) {
 		Logging.debug(this, "setProductproperties() ");
 
-		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
+		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
 

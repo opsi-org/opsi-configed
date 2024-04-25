@@ -231,8 +231,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 					}));
 		}
 
-		// TODO refactoring needed in these methods...
-		// It seems to me that too many unnecessary operations are made in these methods
 		produceVisualStatesFromExistingEntries();
 		completeVisualStatesByDefaults();
 
@@ -295,8 +293,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private void produceVisualStatesFromExistingEntries() {
 		combinedVisualValues = new HashMap<>();
 		for (String key : ProductState.KEYS) {
-			Map<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
-			combinedVisualValues.put(key, combinedVisualValuesForOneColumn);
+			combinedVisualValues.put(key, new HashMap<>());
 		}
 
 		for (Entry<String, Map<String, Map<String, String>>> client : allClientsProductStates.entrySet()) {
@@ -323,7 +320,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private void changeValuesForVisualOutput(Map<String, String> stateAndAction, String productId) {
 		String targetConfiguration = stateAndAction.get(ProductState.KEY_TARGET_CONFIGURATION);
 		if (targetConfiguration == null || targetConfiguration.isEmpty()) {
-			targetConfiguration = TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED);
+			targetConfiguration = "undefined";
 		}
 
 		stateAndAction.put(ProductState.KEY_TARGET_CONFIGURATION, targetConfiguration);
@@ -355,7 +352,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	private void completeProductWithDefaults(String productId) {
 		// build visual states
-
 		String priority = "";
 
 		if (globalProductInfos != null && globalProductInfos.get(productId) != null) {
@@ -372,20 +368,16 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		}
 	}
 
-	private static String mixToVisualState(Map<String, String> visualStates, final String productId,
+	private static void mixToVisualState(Map<String, String> visualStates, final String productId,
 			final String mixinValue) {
 		String oldValue = visualStates.get(productId);
-		String resultValue = oldValue;
 		if (oldValue == null) {
-			resultValue = mixinValue;
-			visualStates.put(productId, resultValue);
+			visualStates.put(productId, mixinValue);
+		} else if (!oldValue.equalsIgnoreCase(mixinValue)) {
+			visualStates.put(productId, Globals.CONFLICT_STATE_STRING);
 		} else {
-			if (!oldValue.equalsIgnoreCase(mixinValue)) {
-				resultValue = Globals.CONFLICT_STATE_STRING;
-				visualStates.put(productId, resultValue);
-			}
+			// Do nothing if old value equals value to mix in
 		}
-		return resultValue;
 	}
 
 	private boolean preparedColumnIsEditable(int j) {

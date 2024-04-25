@@ -2210,17 +2210,9 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private static void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
-		Set<String> keysForDeleting = new HashSet<>();
-
 		for (String start : keystartersStrNotWanted) {
-			for (String key : m.keySet()) {
-				if (key.startsWith(start)) {
-					keysForDeleting.add(key);
-				}
-			}
+			m.keySet().removeIf(key -> key.startsWith(start));
 		}
-
-		m.keySet().removeAll(keysForDeleting);
 	}
 
 	@SuppressWarnings({ "unchecked" })

@@ -87,7 +87,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private boolean withRegEx = true;
 	private boolean selectMode = true;
-	private boolean resetFilterModeOnNewSearch = true;
 
 	private int foundrow = -1;
 
@@ -287,11 +286,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
 		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
-			targetModel.setFiltered(false);
-			if (resetFilterModeOnNewSearch) {
-				setFilteredMode(false);
-			}
-
+			setFiltered(false);
 			searchTheRow(0, selectMode);
 		});
 
@@ -788,10 +783,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			}
 		}
 		return false;
-	}
-
-	public void setResetFilterModeOnNewSearch(boolean b) {
-		resetFilterModeOnNewSearch = b;
 	}
 
 	/**

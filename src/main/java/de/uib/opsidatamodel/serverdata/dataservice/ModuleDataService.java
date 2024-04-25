@@ -345,8 +345,8 @@ public class ModuleDataService {
 				problemToIndicate = false;
 			}
 
-			if (problemToIndicate && ("linux_agent".equals(key) || ("userroles".equals(key)
-					&& Boolean.FALSE.equals(userRolesConfigDataService.hasKeyUserRegisterValuePD())))) {
+			if (problemToIndicate && ("linux_agent".equals(key)
+					|| ("userroles".equals(key) && !userRolesConfigDataService.hasKeyUserRegisterValuePD()))) {
 				problemToIndicate = false;
 			}
 
@@ -581,8 +581,8 @@ public class ModuleDataService {
 				problemToIndicate = false;
 			}
 
-			if (problemToIndicate && ("linux_agent".equals(key) || ("userroles".equals(key)
-					&& Boolean.FALSE.equals(userRolesConfigDataService.hasKeyUserRegisterValuePD())))) {
+			if (problemToIndicate && ("linux_agent".equals(key)
+					|| ("userroles".equals(key) && !userRolesConfigDataService.hasKeyUserRegisterValuePD()))) {
 				problemToIndicate = false;
 			}
 

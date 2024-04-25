@@ -38,6 +38,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -305,6 +306,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		tm.addTableModelListener(table);
 
 		table.setModel(tm);
+		((TableRowSorter<?>) table.getRowSorter()).setComparator(0, Comparator.comparing(String::toString));
 	}
 
 	public DefaultTableModel getTableModel() {

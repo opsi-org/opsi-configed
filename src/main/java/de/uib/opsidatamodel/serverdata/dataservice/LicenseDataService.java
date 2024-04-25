@@ -250,15 +250,8 @@ public class LicenseDataService {
 
 	private void addDeletionLicenseUsage(String hostId, String softwareLicenseId, String licensePoolId,
 			List<LicenseUsageEntry> deletionItems) {
-		if (deletionItems == null) {
-			return;
-		}
-
-		if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			return;
-		}
-
-		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
+		if (deletionItems == null || !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				|| !userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return;
 		}
 

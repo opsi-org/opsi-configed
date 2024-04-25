@@ -96,8 +96,6 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	private void initClientTree() {
-		Logging.debug(this, "UI " + getUI());
-
 		setToggleClickCount(0);
 
 		MouseListener ml = new MouseAdapter() {

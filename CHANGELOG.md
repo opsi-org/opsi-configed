@@ -1,7 +1,11 @@
 # Changelog
-## [4.3.2.X] - 2024-XX-XX
+## [4.3.x.x] - 2024-xx-xx
 ## Changed
 - Replace SSH server console with messagebus server console
+
+## Fixed
+- Don't add options twice to reset products after full reload
+- Problems in Client Tree after full reload
 
 ## [4.3.2.13] - 2024-04-24
 ## Added
