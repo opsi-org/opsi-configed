@@ -524,7 +524,7 @@ public class SoftwareDataService {
 	}
 
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
-		if (Boolean.FALSE.equals(userRolesConfigDataService.hasServerFullPermissionPD())) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return "";
 		}
 

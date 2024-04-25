@@ -153,7 +153,7 @@ public class UserRolesConfigDataService {
 			keyUserRegisterValue = true;
 		}
 
-		if (Boolean.TRUE.equals(keyUserRegisterValue)) {
+		if (keyUserRegisterValue) {
 			cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, keyUserRegisterValue);
 			keyUserRegisterValue = checkUserRolesModulePD();
 		}
