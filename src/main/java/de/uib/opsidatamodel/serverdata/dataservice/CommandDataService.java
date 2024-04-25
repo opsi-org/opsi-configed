@@ -47,17 +47,6 @@ public class CommandDataService {
 		return sshCommands;
 	}
 
-	private boolean doActionCommand(RPCMethodName method, List<Object> jsonObjects) {
-		Logging.info(this, "doActionSSHCommand method " + method);
-		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
-			return false;
-		}
-		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { jsonObjects });
-		boolean result = exec.doCall(omc);
-		Logging.info(this, "doActionSSHCommand method " + method + " result " + result);
-		return result;
-	}
-
 	public boolean deleteCommand(List<String> jsonObjects) {
 		Logging.info(this, "deleteSSHCommand ");
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
@@ -75,5 +64,16 @@ public class CommandDataService {
 
 	public boolean updateCommand(List<Object> jsonObjects) {
 		return doActionCommand(RPCMethodName.SSH_COMMAND_UPDATE_OBJECTS, jsonObjects);
+	}
+
+	private boolean doActionCommand(RPCMethodName method, List<Object> jsonObjects) {
+		Logging.info(this, "doActionSSHCommand method " + method);
+		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
+			return false;
+		}
+		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { jsonObjects });
+		boolean result = exec.doCall(omc);
+		Logging.info(this, "doActionSSHCommand method " + method + " result " + result);
+		return result;
 	}
 }
