@@ -2,6 +2,7 @@
 ## [4.3.x.x] - 2024-xx-xx
 ## Changed
 - Replace SSH server console with messagebus server console
+- Remove SSH config key `ssh.serverconfiguration.active`
 
 ## Fixed
 - Don't add options twice to reset products after full reload
