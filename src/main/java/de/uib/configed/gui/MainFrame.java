@@ -838,7 +838,7 @@ public class MainFrame extends JFrame {
 
 	private void showBackendConfigurationAction() {
 		FEditorPane backendInfoDialog = new FEditorPane(this,
-				Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
+				Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 800, 600);
 		backendInfoDialog.insertHTMLTable(persistenceController.getConfigDataService().getBackendInfos(), "");
 

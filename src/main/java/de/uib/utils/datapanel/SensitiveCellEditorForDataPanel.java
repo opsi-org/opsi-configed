@@ -31,13 +31,10 @@ public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
 					return null;
 				}
 
-				int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
+				int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
 						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-						new Object[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO"),
-								Configed.getResourceValue("buttonCancel") },
-						JOptionPane.YES_OPTION);
+						JOptionPane.YES_NO_OPTION);
 
 				Logging.info(this,
 						" getTableCellEditorComponent, celleditor working, returned option " + returnedOption);

@@ -96,12 +96,12 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 			if (opsiPackageNameS != null && !opsiPackageNameS.isBlank()) {
 				if (opsiPackageOnWorkbench.exists()) {
-					int returnedOption = JOptionPane.showOptionDialog(rootFrame,
+					int returnedOption = JOptionPane.showConfirmDialog(rootFrame,
 							Configed.getResourceValue("InstallOpsiPackage.packageReinstall") + " "
 									+ opsiWorkBenchDirectoryS + " "
 									+ Configed.getResourceValue("InstallOpsiPackage.packageReinstall2"),
 							Configed.getResourceValue("InstallOpsiPackage.packageReinstallTitle"),
-							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 					return returnedOption == JOptionPane.YES_OPTION;
 				} else {

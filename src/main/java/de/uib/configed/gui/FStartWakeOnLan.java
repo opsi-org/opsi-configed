@@ -531,10 +531,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		Logging.info(this, "leave  waitingMode  " + waitingMode);
 
 		if (waitingMode) {
-			int returnedOption = JOptionPane.showOptionDialog(this,
+			int returnedOption = JOptionPane.showConfirmDialog(this,
 					Configed.getResourceValue("FStartWakeOnLan.allowClose"),
 					Configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+					JOptionPane.QUESTION_MESSAGE);
 
 			reallyLeave = returnedOption == JOptionPane.YES_OPTION;
 		}
