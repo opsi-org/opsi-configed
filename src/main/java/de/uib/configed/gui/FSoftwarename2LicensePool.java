@@ -159,6 +159,12 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		}
 
 		@Override
+		public void commit() {
+			super.commit();
+			myController.setSoftwareIdsFromLicensePool();
+		}
+
+		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			Logging.info(this, "panelSWxLicensepool ListSelectionEvent " + e);
 			super.valueChanged(e);
