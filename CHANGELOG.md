@@ -1,5 +1,8 @@
 # Changelog
 ## [4.3.x.x] - 2024-xx-xx
+## Changed
+- Select software (with proper license pool) in license management after applying change in "Software name -> License pool" dialog
+
 ## Fixed
 - Don't add options twice to reset products after full reload
 - Problems in Client Tree after full reload
