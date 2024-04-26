@@ -5,6 +5,7 @@
 - Problems in Client Tree after full reload
 - `NullPointerException` on reloading localboot or netboot table (occuring when new product versions in database exist)
 - Now also show subgroups of permitted product groups
+- `ArrayIndexOutOfBoundsException` on selecting alternative view in license management dialog
 
 ## [4.3.2.13] - 2024-04-24
 ## Added
