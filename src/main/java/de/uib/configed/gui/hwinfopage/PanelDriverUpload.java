@@ -577,10 +577,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		Logging.info(this, "makePath for " + path);
 
 		if (path != null && !path.exists()) {
-			int returnedOption = JOptionPane.showOptionDialog(rootFrame,
+			int returnedOption = JOptionPane.showConfirmDialog(rootFrame,
 					Configed.getResourceValue("PanelDriverUpload.makeFilePath.text"),
 					Configed.getResourceValue("PanelDriverUpload.makeFilePath.title"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+					JOptionPane.QUESTION_MESSAGE);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				path.mkdirs();

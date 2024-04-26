@@ -199,9 +199,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private boolean disabledSinceWeAreInFilteredMode() {
 		if (filteredMode) {
 			Logging.info(this, "disabledSinceWeAreInFilteredMode masterFrame " + masterFrame);
-			JOptionPane.showOptionDialog(masterFrame, Configed.getResourceValue("SearchPane.filterIsSet.message"),
+			JOptionPane.showConfirmDialog(masterFrame, Configed.getResourceValue("SearchPane.filterIsSet.message"),
 					Configed.getResourceValue("SearchPane.filterIsSet.title"), JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, null, null, null);
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 
 		return filteredMode;

@@ -259,11 +259,11 @@ public class SoftwareDataService {
 				Logging.info(this, "Until now existing installed software entries " + softwareList.size());
 			}
 
-			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
+			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					String.format(Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
 							swAuditClientEntry.getSWIdent(), swAuditClientEntry.getClientId()),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+					JOptionPane.QUESTION_MESSAGE);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				Logging.info(this, "Reloading installed software information");

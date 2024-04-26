@@ -446,9 +446,7 @@ public class UserRolesConfigDataService {
 		// Add subgroups of permitted groups to permitted groups
 		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
 				.getProductGroupsPD();
-		Logging.devel(productGroups.toString());
 		for (Entry<String, Map<String, String>> groupEntry : productGroups.entrySet()) {
-			Logging.devel(groupEntry.getKey() + " " + groupEntry.getValue().get("parentGroupId"));
 			if (!productGroupsPermitted.contains(groupEntry.getKey())
 					&& hasPermittedParentGroup(productGroups, productGroupsPermitted, groupEntry.getKey())) {
 				productGroupsPermitted.add(groupEntry.getKey());

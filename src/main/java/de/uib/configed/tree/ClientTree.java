@@ -553,14 +553,12 @@ public class ClientTree extends AbstractGroupTree {
 			fList.setVisible(true);
 
 			if (fList.getSelectedList().isEmpty()) {
-				int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
+				int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("ClientTree.abandonUniqueLocation"),
-						Configed.getResourceValue("ClientTree.requestInformation"), -1, JOptionPane.WARNING_MESSAGE,
-						null,
-						new String[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO") },
-						Configed.getResourceValue("buttonNO"));
+						Configed.getResourceValue("ClientTree.requestInformation"), JOptionPane.YES_NO_CANCEL_OPTION,
+						JOptionPane.WARNING_MESSAGE);
 
-				if (returnedOption == 1 || returnedOption == JOptionPane.CLOSED_OPTION) {
+				if (returnedOption == JOptionPane.NO_OPTION || returnedOption == JOptionPane.CLOSED_OPTION) {
 					result = selectOneNode(groupSet, clientID, preSelected);
 				}
 			} else {

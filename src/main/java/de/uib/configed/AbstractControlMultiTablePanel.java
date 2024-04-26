@@ -65,10 +65,10 @@ public abstract class AbstractControlMultiTablePanel {
 		}
 
 		if (change) {
-			int returnedOption = JOptionPane.showOptionDialog(Utils.getMasterFrame(),
+			int returnedOption = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
 					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.text"),
 					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
-					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				return true;

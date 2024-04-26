@@ -2858,10 +2858,10 @@ public class ConfigedMain implements MessagebusListener {
 		int result = 0;
 
 		if (anyDataChanged) {
-			result = JOptionPane.showOptionDialog(mainFrame,
+			result = JOptionPane.showConfirmDialog(mainFrame,
 					Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
-					Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+					Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"), JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
 		}
 
 		Logging.debug(this, "checkClose result " + result);
@@ -3746,10 +3746,10 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		if (change) {
-			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
+			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp"),
 					Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+					JOptionPane.QUESTION_MESSAGE);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				result = true;
