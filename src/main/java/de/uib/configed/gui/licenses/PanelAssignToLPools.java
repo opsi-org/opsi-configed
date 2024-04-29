@@ -480,8 +480,13 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		Logging.info(this, " stateChanged " + e);
 		Logging.info(this,
 				" stateChanged modelSWnames filterinfo " + fSoftwarename2LicensePool.getModelSWnames().getFilterInfo());
-		String resetToSWname = (String) panelRegisteredSoftware.getValueAt(panelRegisteredSoftware.getSelectedRow(),
-				panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
+		int selectedRow = panelRegisteredSoftware.getSelectedRow();
+		int columnNameIndex = panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME);
+		if (selectedRow == -1 || columnNameIndex == -1) {
+			Logging.warning(this, selectedRow == -1 ? "No software is selected" : "SWAuditEntry name column not found");
+			return;
+		}
+		String resetToSWname = (String) panelRegisteredSoftware.getValueAt(selectedRow, columnNameIndex);
 		Logging.info(this, " stateChanged modelSWnames swname  >>" + resetToSWname + "<<");
 		fSoftwarename2LicensePool.getModelSWnames().requestReload();
 		fSoftwarename2LicensePool.getModelSWnames().reset();

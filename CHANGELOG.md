@@ -1,10 +1,15 @@
 # Changelog
 ## [4.3.x.x] - 2024-xx-xx
+## Changed
+- Select software (with proper license pool) in license management after applying change in "Software name -> License pool" dialog
+
 ## Fixed
 - Don't add options twice to reset products after full reload
 - Problems in Client Tree after full reload
 - `NullPointerException` on reloading localboot or netboot table (occuring when new product versions in database exist)
 - Now also show subgroups of permitted product groups
+- `ArrayIndexOutOfBoundsException` on selecting alternative view in license management dialog
+- In "Software name -> License pool" lower table is not updated on selection of new software name
 
 ## [4.3.2.13] - 2024-04-24
 ## Added
