@@ -679,7 +679,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		case DOUBLE_TYPE:
 		case TEXT_TYPE:
 		case DATE_TYPE:
-		case ENUM_TYPE:
 			data = ((TextInputField) group.dataComponent).getText();
 			if (((String) data).isEmpty()) {
 				return null;
@@ -840,10 +839,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			addDoubleTypeComponent(sourceGroup);
 			break;
 
-		case ENUM_TYPE:
-			addEnumTypeComponent(sourceGroup);
-			break;
-
 		case DATE_TYPE:
 			addDateTypeComponent(sourceGroup);
 			break;
@@ -871,18 +866,9 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
 		fieldText.setEditable(true);
 		fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-		fieldText.setToolTipText(
-				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldText.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldText;
-	}
-
-	private void addEnumTypeComponent(SimpleGroup sourceGroup) {
-		TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
-		box.setEditable(true);
-		box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-		box.setClientSelectionDialog(this);
-		sourceGroup.dataComponent = box;
 	}
 
 	private void addDateTypeComponent(SimpleGroup sourceGroup) {

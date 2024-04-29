@@ -17,7 +17,7 @@ public class SelectData {
 
 	public enum DataType {
 		TEXT_TYPE("TextType"), INTEGER_TYPE("IntegerType"), BIG_INTEGER_TYPE("BigIntegerType"),
-		DOUBLE_TYPE("DoubleType"), ENUM_TYPE("EnumType"), DATE_TYPE("DataType"), NONE_TYPE("NoneType");
+		DOUBLE_TYPE("DoubleType"), DATE_TYPE("DataType"), NONE_TYPE("NoneType");
 
 		private final String displayName;
 
@@ -39,6 +39,7 @@ public class SelectData {
 
 		switch (type) {
 		case TEXT_TYPE:
+		case DATE_TYPE:
 			if (!(data instanceof String)) {
 				Logging.error(this.getClass(), "Data is no String");
 				throw new IllegalArgumentException("Data is no String");
@@ -56,22 +57,10 @@ public class SelectData {
 				throw new IllegalArgumentException("Data is no Long");
 			}
 			break;
-		case DATE_TYPE:
-			if (!(data instanceof String)) {
-				Logging.error(this.getClass(), "Data is not a (date) string");
-				throw new IllegalArgumentException("Data is not a (date) string");
-			}
-			break;
 		case DOUBLE_TYPE:
 			if (!(data instanceof Double)) {
 				Logging.error(this.getClass(), "Data is no Double");
 				throw new IllegalArgumentException("Data is no Double");
-			}
-			break;
-		case ENUM_TYPE:
-			if (!(data instanceof String)) {
-				Logging.error(this.getClass(), "Data is no String");
-				throw new IllegalArgumentException("Data is no String");
 			}
 			break;
 		case NONE_TYPE:

@@ -396,7 +396,6 @@ public class OpsiDataSerializer {
 			case NONE_TYPE:
 				return null;
 			case TEXT_TYPE:
-			case ENUM_TYPE:
 				return value;
 			case DOUBLE_TYPE:
 				return Double.valueOf(value);
@@ -418,6 +417,7 @@ public class OpsiDataSerializer {
 		if ("dataType".equals(name)) {
 			switch (value) {
 			case "TextType":
+			case "EnumType":
 				lastDataType = DataType.TEXT_TYPE;
 				break;
 
@@ -431,10 +431,6 @@ public class OpsiDataSerializer {
 
 			case "DoubleType":
 				lastDataType = DataType.DOUBLE_TYPE;
-				break;
-
-			case "EnumType":
-				lastDataType = DataType.ENUM_TYPE;
 				break;
 
 			case "DateType":
