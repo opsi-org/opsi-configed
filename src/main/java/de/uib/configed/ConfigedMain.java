@@ -660,7 +660,7 @@ public class ConfigedMain implements MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		clientTable.initSortKeys();
 
-		// Todo this is called before in "setRebuiltClientListTableModel". Maybe make it unnecessary
+		// We need to make first selected visible again after resetting sortKeys
 		clientTable.moveToFirstSelected();
 	}
 

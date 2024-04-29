@@ -123,7 +123,7 @@ public class ProductTree extends AbstractGroupTree {
 	@Override
 	public void moveObjectTo(String importID, TreePath sourcePath, String sourceParentID, GroupNode sourceParentNode,
 			DefaultMutableTreeNode dropParentNode, TreePath dropPath, String dropParentID) {
-		//TODO
+		// This method is never invoked in the product tree
 	}
 
 	@Override
