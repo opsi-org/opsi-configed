@@ -274,9 +274,9 @@ public class PanelProductSettings extends JSplitPane {
 		ExporterToCSV exportTable = new ExporterToCSV(tableProducts);
 		exportTable.addMenuItemsTo(popup);
 
-		JMenu sub = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
+		JMenu jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		popup.addSeparator();
-		popup.add(sub);
+		popup.add(jMenuVisibleColumns);
 
 		for (Entry<String, Boolean> productDisplayField : getProductDisplayFieldsBasedOnType(type).entrySet()) {
 			if ("productId".equals(productDisplayField.getKey())) {
@@ -294,7 +294,7 @@ public class PanelProductSettings extends JSplitPane {
 				configedMain.resetView(configedMain.getViewIndex());
 			});
 
-			sub.add(item);
+			jMenuVisibleColumns.add(item);
 		}
 		return popup;
 	}

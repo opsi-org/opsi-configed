@@ -1567,11 +1567,15 @@ public class ProductDataService {
 
 		productOnClientsDisplayFields.put(ProductState.KEY_VERSION_INFO, true);
 
-		String[] userSavedDisplayFields = UserPreferences
+		String userSavedDisplayFieldsString = UserPreferences
 				.get(cacheId == CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS
 						? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
-						: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS)
-				.split(",");
+						: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS);
+
+		// We want an empty Array of options if userSavedDisplayFieldsString is empty
+		// instead of an Array with one empty String
+		String[] userSavedDisplayFields = userSavedDisplayFieldsString.isEmpty() ? new String[0]
+				: userSavedDisplayFieldsString.split(",");
 
 		for (String displayField : userSavedDisplayFields) {
 			productOnClientsDisplayFields.put(displayField, true);
