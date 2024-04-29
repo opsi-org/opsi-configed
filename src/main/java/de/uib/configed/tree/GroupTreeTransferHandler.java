@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -302,8 +303,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		// the other possible source are lines from the JTable, as well arranged to
 		// lines
 
-		// Perform the actual import.
-		for (String selectedObject : selectedObjects) {
+		// Perform the actual import, but in sorted order
+		for (String selectedObject : new TreeSet<>(selectedObjects)) {
 			String sourceParentID = null;
 
 			Logging.debug(this, "importData " + selectedObject);
