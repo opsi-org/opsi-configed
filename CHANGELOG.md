@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.2.14] - 2024-04-29
 ## Changed
 - Select software (with proper license pool) in license management after applying change in "Software name -> License pool" dialog
 
