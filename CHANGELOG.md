@@ -10,6 +10,7 @@
 - Now also show subgroups of permitted product groups
 - `ArrayIndexOutOfBoundsException` on selecting alternative view in license management dialog
 - In "Software name -> License pool" lower table is not updated on selection of new software name
+- Don't add option of empty String for visible columns in product table on first start
 
 ## [4.3.2.13] - 2024-04-24
 ## Added
