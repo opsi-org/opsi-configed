@@ -80,9 +80,7 @@ public class MainFrame extends JFrame {
 
 	private ClientMenuManager clientMenu;
 
-	private JMenu jMenuServerConsole = new JMenu();
-
-	private JMenuItem jMenuSSHConnection = new JMenuItem();
+	private JMenu jMenuServerConsole;
 
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
@@ -272,8 +270,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setupMenuServerConsole() {
-		jMenuServerConsole.removeAll();
-		jMenuServerConsole.setText(CommandFactory.PARENT_NULL);
+		jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
 
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
@@ -305,8 +302,7 @@ public class MainFrame extends JFrame {
 
 	private void addDefaultOpsiCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
 		for (final SingleCommand command : CommandFactory.getDefaultOpsiCommands()) {
-			JMenuItem jMenuOpsiCommand = new JMenuItem();
-			jMenuOpsiCommand.setText(command.getMenuText());
+			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(
 					(ActionEvent e) -> ((CommandWithParameters) command).startParameterGui(configedMain));
@@ -331,8 +327,6 @@ public class MainFrame extends JFrame {
 			if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
 				jMenuServerConsole.add(menuOpsi);
 				jMenuServerConsole.addSeparator();
-			} else {
-				// Do nothing in that case
 			}
 
 			addSubCommands(menuOpsi, parentMenu, listCom, commandsAreDeactivated);
@@ -342,8 +336,7 @@ public class MainFrame extends JFrame {
 	private void addSubCommands(JMenu menuOpsi, JMenu parentMenu, List<MultiCommandTemplate> listCom,
 			boolean commandsAreDeactivated) {
 		for (final MultiCommandTemplate com : listCom) {
-			JMenuItem jMenuItem = new JMenuItem();
-			jMenuItem.setText(com.getMenuText());
+			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
 			Logging.info(this, "command menuitem text " + com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> {
@@ -354,13 +347,11 @@ public class MainFrame extends JFrame {
 			String parentMenuName = parentMenu.getText();
 			if (parentMenuName.equals(CommandFactory.PARENT_NULL)) {
 				jMenuServerConsole.add(jMenuItem);
+			} else if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
+				menuOpsi.add(jMenuItem);
 			} else {
-				if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
-					menuOpsi.add(jMenuItem);
-				} else {
-					parentMenu.add(jMenuItem);
-					jMenuServerConsole.add(parentMenu);
-				}
+				parentMenu.add(jMenuItem);
+				jMenuServerConsole.add(parentMenu);
 			}
 			jMenuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
