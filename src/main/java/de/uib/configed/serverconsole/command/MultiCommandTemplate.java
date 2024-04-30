@@ -16,7 +16,7 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 	private String menuText;
 	private List<SingleCommand> commands = new LinkedList<>();
 	private List<SingleCommand> sshCommandOriginal = new LinkedList<>();
-	private String parentMenuText;
+	private String parentMenuText = CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS;
 	private String tooltipText = "";
 	private int priority;
 
@@ -81,7 +81,9 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 	}
 
 	public void setParentMenuText(String pmt) {
-		parentMenuText = pmt;
+		if (pmt != null && !pmt.isBlank()) {
+			parentMenuText = pmt;
+		}
 	}
 
 	public void setTooltipText(String ttt) {

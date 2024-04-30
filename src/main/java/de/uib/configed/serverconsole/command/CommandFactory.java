@@ -34,7 +34,7 @@ public final class CommandFactory {
 
 	public static final String PARENT_NULL = Configed.getResourceValue("MainFrame.jMenuServer");
 	public static final String PARENT_DEFAULT_FOR_OWN_COMMANDS = "...";
-	public static final String PARENT_OPSI = Configed.getResourceValue("MainFrame.jMenuOpsi");
+	public static final String PARENT_OPSI = "opsi";
 	public static final String MENU_NEW = Configed.getResourceValue("CommandControlDialog.menuText_newCommand");
 	public static final int DEFAULT_POSITION = 0;
 
@@ -108,9 +108,6 @@ public final class CommandFactory {
 
 			String parent = com.getParentMenuText();
 
-			if (parent == null || "null".equalsIgnoreCase(parent) || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
-				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
-			}
 			if (!knownParents.contains(parent)) {
 				knownParents.add(parent);
 			}
@@ -130,9 +127,6 @@ public final class CommandFactory {
 
 		for (MultiCommandTemplate command : commandList) {
 			String parent = command.getParentMenuText();
-			if (parent == null || parent.isBlank()) {
-				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
-			}
 			List<MultiCommandTemplate> parentList = new LinkedList<>();
 			if (sortedCommands.containsKey(parent)) {
 				parentList = sortedCommands.get(parent);

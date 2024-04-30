@@ -381,9 +381,6 @@ public final class CommandControlDialog extends FGeneralDialog {
 	}
 
 	private void updateComponents(String parent, String tooltip, int prio, String coms) {
-		if (parent == null || parent.isBlank()) {
-			parent = CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS;
-		}
 		jComboBoxParentMenuText.setSelectedItem(parent);
 		jTextFieldTooltipText.setText(tooltip);
 		jTextFieldPriority.setText(String.valueOf(prio));

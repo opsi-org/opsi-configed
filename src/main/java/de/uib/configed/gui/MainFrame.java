@@ -328,10 +328,7 @@ public class MainFrame extends JFrame {
 			JMenu parentMenu = new JMenu(parentMenuName);
 
 			Logging.info(this, "parent menu text " + parentMenuName);
-			if (parentMenuName.equals(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
-				parentMenu.setText("");
-				parentMenu.setIcon(Utils.createImageIcon("images/burger_menu_09.png", "..."));
-			} else if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
+			if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
 				jMenuServerConsole.add(menuOpsi);
 				jMenuServerConsole.addSeparator();
 			} else {
