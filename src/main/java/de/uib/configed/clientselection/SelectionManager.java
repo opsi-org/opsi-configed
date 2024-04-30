@@ -9,6 +9,7 @@ package de.uib.configed.clientselection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
 import de.uib.configed.clientselection.elements.SoftwareNameElement;
@@ -197,7 +198,7 @@ public class SelectionManager {
 		}
 	}
 
-	public List<String> getSavedSearchesNames() {
+	public Set<String> getSavedSearchesNames() {
 		return serializer.getSaved();
 	}
 

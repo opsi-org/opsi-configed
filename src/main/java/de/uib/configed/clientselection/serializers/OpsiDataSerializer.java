@@ -9,12 +9,12 @@ package de.uib.configed.clientselection.serializers;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
@@ -78,11 +78,11 @@ public class OpsiDataSerializer {
 	/**
 	 * Get a list of the names of all saved searches.
 	 */
-	public List<String> getSaved() {
-		Set<String> set = new HashSet<>();
+	public Set<String> getSaved() {
+		Set<String> set = new TreeSet<>();
 		set.addAll(searches.keySet());
 		set.addAll(persistenceController.getConfigDataService().getSavedSearchesPD().keySet());
-		return new LinkedList<>(set);
+		return set;
 	}
 
 	/**

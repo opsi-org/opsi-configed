@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
@@ -253,7 +253,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		model.removeAllElements();
 
 		SavedSearches savedSearches = persistenceController.getConfigDataService().getSavedSearchesPD();
-		TreeSet<String> nameSet = new TreeSet<>(manager.getSavedSearchesNames());
+		Set<String> nameSet = manager.getSavedSearchesNames();
 		Map<String, String> descMap = new TreeMap<>();
 
 		for (String ele : nameSet) {

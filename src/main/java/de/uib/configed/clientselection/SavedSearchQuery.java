@@ -7,8 +7,10 @@
 package de.uib.configed.clientselection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.Main;
 import de.uib.configed.type.HostGroupRelation;
@@ -64,7 +66,7 @@ public class SavedSearchQuery {
 		persistenceController.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
 
 		SelectionManager manager = new SelectionManager(null);
-		List<String> searches = manager.getSavedSearchesNames();
+		Set<String> searches = manager.getSavedSearchesNames();
 		if (searchName == null && printing) {
 			printResult(searches);
 			return new ArrayList<>();
@@ -118,7 +120,7 @@ public class SavedSearchQuery {
 	}
 
 	@SuppressWarnings("java:S106")
-	private static void printResult(List<String> result) {
+	private static void printResult(Collection<String> result) {
 		for (String line : result) {
 			System.out.println(line);
 		}

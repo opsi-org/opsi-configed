@@ -3381,8 +3381,9 @@ public class ConfigedMain implements MessagebusListener {
 			savedSearchesDialog = new SavedSearchesDialog(clientTable, this);
 			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
 			savedSearchesDialog.init();
+		} else {
+			savedSearchesDialog.start();
 		}
-		savedSearchesDialog.start();
 	}
 
 	public void clientSelectionGetSavedSearch() {
