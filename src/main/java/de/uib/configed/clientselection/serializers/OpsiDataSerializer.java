@@ -391,23 +391,7 @@ public class OpsiDataSerializer {
 		}
 
 		if ("data".equals(name)) {
-			value = value.substring(1, value.length() - 1);
-			switch (lastDataType) {
-			case NONE_TYPE:
-				return null;
-			case TEXT_TYPE:
-				return value;
-			case DOUBLE_TYPE:
-				return Double.valueOf(value);
-			case INTEGER_TYPE:
-				return Integer.valueOf(value);
-			case BIG_INTEGER_TYPE:
-				return Long.valueOf(value);
-			case DATE_TYPE:
-				return value;
-			default:
-				throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
-			}
+			return getStringForData(value);
 		}
 
 		if (value.startsWith("\"")) {
@@ -415,36 +399,7 @@ public class OpsiDataSerializer {
 		}
 
 		if ("dataType".equals(name)) {
-			switch (value) {
-			case "TextType":
-			case "EnumType":
-				lastDataType = DataType.TEXT_TYPE;
-				break;
-
-			case "IntegerType":
-				lastDataType = DataType.INTEGER_TYPE;
-				break;
-
-			case "BigIntegerType":
-				lastDataType = DataType.BIG_INTEGER_TYPE;
-				break;
-
-			case "DoubleType":
-				lastDataType = DataType.DOUBLE_TYPE;
-				break;
-
-			case "DateType":
-				lastDataType = DataType.DATE_TYPE;
-				break;
-
-			case "NoneType":
-				lastDataType = DataType.NONE_TYPE;
-				break;
-
-			default:
-				Logging.error(this, "dataType for " + value + " cannot be found...)");
-				break;
-			}
+			checkLastDataType(value);
 
 			Logging.info(this, "lastDataType is now " + lastDataType);
 
@@ -452,6 +407,61 @@ public class OpsiDataSerializer {
 		}
 
 		throw new IllegalArgumentException(value + " was not expected here");
+	}
+
+	private Object getStringForData(String value) {
+		value = value.substring(1, value.length() - 1);
+		switch (lastDataType) {
+		case NONE_TYPE:
+			return null;
+		case TEXT_TYPE:
+			return value;
+		case DOUBLE_TYPE:
+			return Double.valueOf(value);
+		case INTEGER_TYPE:
+			return Integer.valueOf(value);
+		case BIG_INTEGER_TYPE:
+			return Long.valueOf(value);
+		case DATE_TYPE:
+			return value;
+		default:
+			throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
+		}
+	}
+
+	private void checkLastDataType(String value) {
+		switch (value) {
+		// In old searches, we still have "EnumType", but this will now
+		// due to refactoring be replaced by "TextType"
+		case "TextType":
+		case "EnumType":
+			lastDataType = DataType.TEXT_TYPE;
+			break;
+
+		case "IntegerType":
+			lastDataType = DataType.INTEGER_TYPE;
+			break;
+
+		case "BigIntegerType":
+			lastDataType = DataType.BIG_INTEGER_TYPE;
+			break;
+
+		case "DoubleType":
+			lastDataType = DataType.DOUBLE_TYPE;
+			break;
+
+		case "DateType":
+			lastDataType = DataType.DATE_TYPE;
+			break;
+
+		case "NoneType":
+			lastDataType = DataType.NONE_TYPE;
+			break;
+
+		default:
+			Logging.error(this, "dataType for " + value + " cannot be found...)");
+			break;
+		}
 	}
 
 	/*
