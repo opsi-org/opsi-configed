@@ -334,10 +334,10 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
 			if (!oldProductKey.equals(productKey)) {
-				int returnedOption = JOptionPane.showOptionDialog(rootFrame,
+				int returnedOption = JOptionPane.showConfirmDialog(rootFrame,
 						Configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
 						Configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					rootFrame.activateLoadingCursor();

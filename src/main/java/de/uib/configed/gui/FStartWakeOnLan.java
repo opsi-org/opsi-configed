@@ -41,10 +41,11 @@ import de.uib.utils.thread.WaitingSleeper;
 import de.uib.utils.thread.WaitingWorker;
 
 public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
+	private static final String SCHEDULE_TITLE_STARTER = Configed.getResourceValue("FStartWakeOnLan.creation");
+
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
 			FStartWakeOnLan.class, Configed.getResourceValue("RunningInstances.askStop.text"));
 
-	private String scheduleTitleStarter;
 	private Map<String, Integer> labelledDelays;
 	private JSpinner spinnerDelay;
 	private JSpinner spinnerHour;
@@ -170,11 +171,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	private void setNowTimeAsTarget() {
 		setCalToNow();
 
-		if (scheduleTitleStarter == null) {
-			scheduleTitleStarter = Configed.getResourceValue("FStartWakeOnLan.creation");
-		}
-
-		fieldTaskname.setText(scheduleTitleStarter + " " + readTime(cal));
+		fieldTaskname.setText(SCHEDULE_TITLE_STARTER + " " + readTime(cal));
 
 		spinnerHour.setValue(cal.get(Calendar.HOUR_OF_DAY));
 		spinnerMinute.setValue(cal.get(Calendar.MINUTE));
@@ -504,8 +501,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		disableSettingOfTimes();
 
 		scheduleTitle = fieldTaskname.getText();
-		if (scheduleTitle.startsWith(scheduleTitleStarter)) {
-			scheduleTitle = scheduleTitle.substring(scheduleTitleStarter.length());
+		if (scheduleTitle.startsWith(SCHEDULE_TITLE_STARTER)) {
+			scheduleTitle = scheduleTitle.substring(SCHEDULE_TITLE_STARTER.length());
 		}
 
 		scheduleTitle = "  scheduler" + scheduleTitle;
@@ -531,10 +528,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		Logging.info(this, "leave  waitingMode  " + waitingMode);
 
 		if (waitingMode) {
-			int returnedOption = JOptionPane.showOptionDialog(this,
+			int returnedOption = JOptionPane.showConfirmDialog(this,
 					Configed.getResourceValue("FStartWakeOnLan.allowClose"),
 					Configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+					JOptionPane.QUESTION_MESSAGE);
 
 			reallyLeave = returnedOption == JOptionPane.YES_OPTION;
 		}

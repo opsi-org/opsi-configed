@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.Globals;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.observer.RunningInstances;
@@ -64,10 +63,10 @@ public class FPanel extends SecondaryFrame {
 			PanelGenEditTable editPanel = (PanelGenEditTable) innerPanel;
 
 			if (editPanel.isDataChanged()) {
-				int returnedOption = JOptionPane.showOptionDialog(masterFrame,
+				int returnedOption = JOptionPane.showConfirmDialog(masterFrame,
 						Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
-						Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+						Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 				switch (returnedOption) {
 				case JOptionPane.YES_OPTION:

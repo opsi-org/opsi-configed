@@ -6,6 +6,7 @@
 
 package de.uib.utils.table;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,8 +31,6 @@ public class GenTableModel extends AbstractTableModel {
 
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
-	private int rowsLength;
-	private int colsLength;
 	private List<String> columnNames;
 	private List<List<Object>> rows;
 
@@ -99,12 +98,6 @@ public class GenTableModel extends AbstractTableModel {
 
 		modelDataValid = false;
 
-		if (rows == null) {
-			rowsLength = 0;
-		} else {
-			rowsLength = rows.size();
-		}
-
 		if (l != null) {
 			super.addTableModelListener(l);
 		}
@@ -126,18 +119,11 @@ public class GenTableModel extends AbstractTableModel {
 		columnNames = tableProvider.getColumnNames();
 		Logging.info(this, "initColumns " + columnNames);
 
-		if (columnNames == null) {
-			colsLength = 0;
-		} else {
-			colsLength = columnNames.size();
-		}
-
-		colEditable = new boolean[colsLength];
+		colEditable = new boolean[getColumnCount()];
 	}
 
 	public List<String> getColumnNames() {
 		columnNames = tableProvider.getColumnNames();
-		colsLength = columnNames.size();
 		return columnNames;
 	}
 
@@ -222,8 +208,6 @@ public class GenTableModel extends AbstractTableModel {
 
 		Logging.info(this, "produceRows(): count  " + rows.size());
 
-		rowsLength = rows.size();
-
 		// update columns and class names from tableProvider
 		getColumnNames();
 
@@ -241,7 +225,6 @@ public class GenTableModel extends AbstractTableModel {
 				}
 			}
 			setRows(filteredRows);
-			rowsLength = rows.size();
 		}
 
 		Logging.info(this, "produceRows  filtered size " + rows.size());
@@ -272,21 +255,20 @@ public class GenTableModel extends AbstractTableModel {
 		if (!sorting) {
 			rows = givenRows;
 		} else {
-			java.text.Collator myCollator = java.text.Collator.getInstance();
+			Collator myCollator = Collator.getInstance();
 
 			// as capitalization
-			myCollator.setStrength(java.text.Collator.SECONDARY);
+			myCollator.setStrength(Collator.SECONDARY);
 
-			TreeMap<String, List<Object>> mapRows = new TreeMap<>(myCollator);
-
-			int col = sortCol;
+			Map<String, List<Object>> mapRows = new TreeMap<>(myCollator);
 
 			// we use the index to get unique values in any col
 			int i = 0;
 			for (List<Object> row : givenRows) {
-				mapRows.put(row.get(col).toString() + ":" + i, row);
+				mapRows.put(row.get(sortCol).toString() + ":" + i, row);
 				i++;
 			}
+
 			rows = new ArrayList<>();
 			for (List<Object> value : mapRows.values()) {
 				rows.add(value);
@@ -364,7 +346,7 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public void setEditableColumns(int[] editable) {
-		for (int i = 0; i < colsLength; i++) {
+		for (int i = 0; i < getColumnCount(); i++) {
 			colEditable[i] = false;
 		}
 
@@ -384,12 +366,12 @@ public class GenTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return colsLength;
+		return columnNames == null ? 0 : columnNames.size();
 	}
 
 	@Override
 	public int getRowCount() {
-		return rowsLength;
+		return rows == null ? 0 : rows.size();
 	}
 
 	@Override
@@ -440,7 +422,7 @@ public class GenTableModel extends AbstractTableModel {
 	public void setCursorRow(int modelrow) {
 		if (markCursorRow) {
 			Logging.info(this, "setCursorRow modelrow " + modelrow + " markCursorRow " + markCursorRow);
-			if (modelrow > 0 && colsLength > 2) {
+			if (modelrow > 0 && getColumnCount() > 2) {
 				Logging.info(this, "setCursorRow val at (modelrow,2) ) " + getValueAt(modelrow, 2));
 			}
 		}
@@ -556,7 +538,7 @@ public class GenTableModel extends AbstractTableModel {
 
 	public void addRow(Object[] a) {
 		List<Object> rowV = new ArrayList<>();
-		for (int i = 0; i < colsLength; i++) {
+		for (int i = 0; i < getColumnCount(); i++) {
 			rowV.add(null);
 		}
 		for (int j = 0; j < a.length; j++) {
@@ -566,16 +548,14 @@ public class GenTableModel extends AbstractTableModel {
 		Logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
 
 		rows.add(rowV);
-		addedRows.add(rowsLength);
+		addedRows.add(rows.size() - 1);
 
 		updates.add(itemFactory.produceUpdateItem(rowV));
 
 		// we shall have to reload the data if keys are newly generated
 		requestReload();
 
-		rowsLength++;
-
-		fireTableRowsInserted(rowsLength - 1, rowsLength - 1);
+		fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 	}
 
 	private boolean checkDeletionOfAddedRow(int rowNum) {
@@ -644,7 +624,6 @@ public class GenTableModel extends AbstractTableModel {
 		}
 
 		rows.remove(rowNum);
-		rowsLength--;
 		fireTableRowsDeleted(rowNum, rowNum);
 	}
 

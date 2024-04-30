@@ -159,6 +159,12 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		}
 
 		@Override
+		public void commit() {
+			super.commit();
+			myController.setSoftwareIdsFromLicensePool();
+		}
+
+		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			Logging.info(this, "panelSWxLicensepool ListSelectionEvent " + e);
 			super.valueChanged(e);
@@ -323,7 +329,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		panelSWnames.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
-			if (!e.getValueIsAdjusting()) {
+			if (!e.getValueIsAdjusting() && isVisible()) {
 				Logging.info(this, "selectedRow " + panelSWnames.getSelectedRow());
 
 				if (panelSWnames.getSelectedRow() >= 0) {
@@ -492,23 +498,21 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		MapTableUpdateItemFactory updateItemFactoySWxLicensepool = new MapTableUpdateItemFactory(
 				columnNamesSWxLicensepool);
 
-		if (modelSWxLicensepool == null) {
-			modelSWxLicensepool = new GenTableModel(updateItemFactoySWxLicensepool,
-					new DefaultTableProvider(new RetrieverMapSource(columnNamesSWxLicensepool, new MapRetriever() {
-						@Override
-						public void reloadMap() {
-							Logging.info(this, "retrieveMap for swName " + swName);
-							if (!configedMain.isAllLicenseDataReloaded()) {
-								persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-							}
+		modelSWxLicensepool = new GenTableModel(updateItemFactoySWxLicensepool,
+				new DefaultTableProvider(new RetrieverMapSource(columnNamesSWxLicensepool, new MapRetriever() {
+					@Override
+					public void reloadMap() {
+						Logging.info(this, "retrieveMap for swName " + swName);
+						if (!configedMain.isAllLicenseDataReloaded()) {
+							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 						}
+					}
 
-						@Override
-						public Map<String, Map<String, Object>> retrieveMap() {
-							return produceModelSWxLicensepool(swName);
-						}
-					})), 0, new int[] {}, panelSWnames, updateCollection);
-		}
+					@Override
+					public Map<String, Map<String, Object>> retrieveMap() {
+						return produceModelSWxLicensepool(swName);
+					}
+				})), 0, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicensepool.setSource(modelSWxLicensepool);
 		Logging.info(this, "setTableModelSWxLicensepool, we reset the model");
 		modelSWxLicensepool.reset();

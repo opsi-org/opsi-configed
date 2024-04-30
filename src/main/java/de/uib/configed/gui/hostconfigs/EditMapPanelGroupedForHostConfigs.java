@@ -497,15 +497,15 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
 		Logging.info(this, "entry " + partialPanelEntry + " key " + key);
 
-		Boolean result = true;
+		boolean result;
 
 		if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
 			result = false;
-		} else {
+		} else if (UserConfig.getUserFromKey(key) != null) {
 			// we really are in a user branch
-			if (UserConfig.getUserFromKey(key) != null) {
-				result = isUserKeyEditable(key, partialPanelEntry.getKey());
-			}
+			result = isUserKeyEditable(key, partialPanelEntry.getKey());
+		} else {
+			result = true;
 		}
 
 		Logging.info(this, "key denied ? " + key + " : " + result);

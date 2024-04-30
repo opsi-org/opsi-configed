@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -225,7 +226,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Logging.info(this,
 				"chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS " + stayInsideDIRECTORY + ", " + stayInsideGROUPS);
 
-		if (stayInsideDIRECTORY || (stayInsideGROUPS && !isLeaf)) {
+		if (stayInsideDIRECTORY || (stayInsideGROUPS && isLeaf)) {
 			result = true;
 		}
 
@@ -253,12 +254,12 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname "
 						+ firstDIRECTORYgroupname);
 				sourceParentID = firstDIRECTORYgroupname;
-				moving = chooseMove(firstDIRECTORYgroupname, dropPath, true);
+				moving = chooseMove(firstDIRECTORYgroupname, dropPath, false);
 
 				sourceParentNode = tree.getGroupNode(sourceParentID);
 			}
 		} else {
-			moving = chooseMove(sourceParentID, dropPath, true);
+			moving = chooseMove(sourceParentID, dropPath, false);
 		}
 
 		if (moving) {
@@ -302,8 +303,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		// the other possible source are lines from the JTable, as well arranged to
 		// lines
 
-		// Perform the actual import.
-		for (String selectedObject : selectedObjects) {
+		// Perform the actual import, but in sorted order
+		for (String selectedObject : new TreeSet<>(selectedObjects)) {
 			String sourceParentID = null;
 
 			Logging.debug(this, "importData " + selectedObject);
@@ -329,7 +330,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			if (groupNode != null) {
 				// it is a group and it could be moved
 				// it is a group, and it will be moved, but only inside one partial tree
-				if (chooseMove(sourceParentID, dropPath, false)) {
+				if (chooseMove(sourceParentID, dropPath, true)) {
 					tree.moveGroupTo(selectedObject, groupNode, sourceParentNode, dropParentNode, dropPath,
 							dropParentID);
 				} else {

@@ -626,7 +626,7 @@ public class ConfigedMain implements MessagebusListener {
 		setRebuiltClientListTableModel(false);
 		clientTable.initSortKeys();
 
-		// Todo this is called before in "setRebuiltClientListTableModel". Maybe make it unnecessary
+		// We need to make first selected visible again after resetting sortKeys
 		clientTable.moveToFirstSelected();
 	}
 
@@ -2825,10 +2825,10 @@ public class ConfigedMain implements MessagebusListener {
 		int result = 0;
 
 		if (anyDataChanged) {
-			result = JOptionPane.showOptionDialog(mainFrame,
+			result = JOptionPane.showConfirmDialog(mainFrame,
 					Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
-					Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+					Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"), JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
 		}
 
 		Logging.debug(this, "checkClose result " + result);
@@ -3348,8 +3348,9 @@ public class ConfigedMain implements MessagebusListener {
 			savedSearchesDialog = new SavedSearchesDialog(clientTable, this);
 			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
 			savedSearchesDialog.init();
+		} else {
+			savedSearchesDialog.start();
 		}
-		savedSearchesDialog.start();
 	}
 
 	public void clientSelectionGetSavedSearch() {
@@ -3681,10 +3682,10 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		if (change) {
-			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
+			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp"),
 					Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+					JOptionPane.QUESTION_MESSAGE);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				result = true;
@@ -3710,27 +3711,21 @@ public class ConfigedMain implements MessagebusListener {
 	public boolean closeInstance(boolean checkdirty) {
 		Logging.info(this, "start closing instance, checkdirty " + checkdirty);
 
-		boolean result = true;
-
-		if (!FStartWakeOnLan.runningInstances.isEmpty()) {
-			result = FStartWakeOnLan.runningInstances.askStop();
-		}
-
-		if (!result) {
+		if (!FStartWakeOnLan.runningInstances.isEmpty() && !FStartWakeOnLan.runningInstances.askStop()) {
 			return false;
 		}
 
 		if (checkdirty) {
 			int closeCheckResult = checkClose();
-			result = closeCheckResult == JOptionPane.YES_OPTION || closeCheckResult == JOptionPane.NO_OPTION;
-
-			if (!result) {
-				return result;
-			}
 
 			if (closeCheckResult == JOptionPane.YES_OPTION) {
 				checkSaveAll(false);
+			} else if (closeCheckResult != JOptionPane.NO_OPTION) {
+				return false;
+			} else {
+				// Do when closing without option
 			}
+
 		}
 
 		if (mainFrame != null) {
@@ -3744,14 +3739,15 @@ public class ConfigedMain implements MessagebusListener {
 			loginDialog.dispose();
 		}
 
-		if (!checkSavedLicensesFrame()) {
+		boolean checkSavedLicensesFrame = checkSavedLicensesFrame();
+
+		if (!checkSavedLicensesFrame) {
 			licensesFrame.setVisible(true);
-			result = false;
 		}
 
-		Logging.info(this, "close instance result " + result);
+		Logging.info(this, "close instance result " + checkSavedLicensesFrame);
 
-		return result;
+		return checkSavedLicensesFrame;
 	}
 
 	public void finishApp(boolean checkdirty, int exitcode) {

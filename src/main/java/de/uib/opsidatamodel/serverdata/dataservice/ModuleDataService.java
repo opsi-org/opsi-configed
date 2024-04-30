@@ -404,8 +404,6 @@ public class ModuleDataService {
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
-
 		Logging.info(this, "modules resulting  " + opsiModules);
 		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
 
@@ -635,8 +633,6 @@ public class ModuleDataService {
 				}
 			}
 		}
-
-		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
 
 		Logging.info(this, "modules resulting  " + opsiModules);
 		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);

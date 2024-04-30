@@ -592,14 +592,11 @@ public final class OpsiDataBackend {
 	}
 
 	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients(Set<String> clientNames) {
-		Map<String, List<SWAuditClientEntry>> result = new HashMap<>();
 		if (!hasSwAudit) {
-			return result;
+			return new HashMap<>();
+		} else {
+			return persistenceController.getSoftwareDataService().getSoftwareAuditOnClients(clientNames);
 		}
-
-		result = persistenceController.getSoftwareDataService().getSoftwareAuditOnClients(clientNames);
-
-		return result;
 	}
 
 	private void getHardwareConfig() {

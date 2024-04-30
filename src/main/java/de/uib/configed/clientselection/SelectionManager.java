@@ -9,6 +9,7 @@ package de.uib.configed.clientselection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
 import de.uib.configed.clientselection.elements.SoftwareNameElement;
@@ -197,7 +198,7 @@ public class SelectionManager {
 		}
 	}
 
-	public List<String> getSavedSearchesNames() {
+	public Set<String> getSavedSearchesNames() {
 		return serializer.getSaved();
 	}
 
@@ -285,8 +286,13 @@ public class SelectionManager {
 				break;
 			}
 		}
-
 		Logging.debug(this, "After break: " + currentPos[0]);
+
+		return getOperationFromConnections(orConnections, andConnections);
+	}
+
+	private static AbstractSelectOperation getOperationFromConnections(List<AbstractSelectOperation> orConnections,
+			List<AbstractSelectOperation> andConnections) {
 
 		if (andConnections.size() == 1) {
 			orConnections.add(andConnections.get(0));
@@ -301,6 +307,7 @@ public class SelectionManager {
 		}
 
 		return new OrOperation(orConnections);
+
 	}
 
 	/*
@@ -311,39 +318,55 @@ public class SelectionManager {
 	private static List<OperationWithStatus> reverseBuild(AbstractSelectOperation operation, boolean isTopOperation) {
 		LinkedList<OperationWithStatus> result = new LinkedList<>();
 		if (operation instanceof AndOperation) {
-			for (AbstractSelectOperation op : ((AndOperation) operation).getChildOperations()) {
-				result.addAll(reverseBuild(op, false));
-			}
-
-			if (!isTopOperation) {
-				result.getFirst().setParenthesisOpen(true);
-				result.getLast().setParenthesisClose(true);
-			}
+			return reverseBuildAndOperation((AndOperation) operation, isTopOperation);
 		} else if (operation instanceof OrOperation && !((OrOperation) operation).getChildOperations().isEmpty()) {
-			for (AbstractSelectOperation op : ((OrOperation) operation).getChildOperations()) {
-				result.addAll(reverseBuild(op, false));
-				if (result.getLast().getStatus() == ConnectionStatus.AND) {
-					result.getLast().setStatus(ConnectionStatus.OR);
-				} else {
-					result.getLast().setStatus(ConnectionStatus.OR_NOT);
-				}
-			}
-
-			if (result.getLast().getStatus() == ConnectionStatus.OR) {
-				result.getLast().setStatus(ConnectionStatus.AND);
-			} else {
-				result.getLast().setStatus(ConnectionStatus.AND_NOT);
-			}
-
-			if (!isTopOperation) {
-				result.getFirst().setParenthesisOpen(true);
-				result.getLast().setParenthesisClose(true);
-			}
+			return reverseBuildOrOperation((OrOperation) operation, isTopOperation);
 		} else {
 			result.add(reverseParseNot(operation, ConnectionStatus.AND));
 			result.getLast().setParenthesisOpen(false);
 			result.getLast().setParenthesisClose(false);
 		}
+		return result;
+	}
+
+	private static List<OperationWithStatus> reverseBuildAndOperation(AndOperation operation, boolean isTopOperation) {
+		LinkedList<OperationWithStatus> result = new LinkedList<>();
+
+		for (AbstractSelectOperation op : operation.getChildOperations()) {
+			result.addAll(reverseBuild(op, false));
+		}
+
+		if (!isTopOperation) {
+			result.getFirst().setParenthesisOpen(true);
+			result.getLast().setParenthesisClose(true);
+		}
+
+		return result;
+	}
+
+	private static List<OperationWithStatus> reverseBuildOrOperation(OrOperation operation, boolean isTopOperation) {
+		LinkedList<OperationWithStatus> result = new LinkedList<>();
+
+		for (AbstractSelectOperation op : operation.getChildOperations()) {
+			result.addAll(reverseBuild(op, false));
+			if (result.getLast().getStatus() == ConnectionStatus.AND) {
+				result.getLast().setStatus(ConnectionStatus.OR);
+			} else {
+				result.getLast().setStatus(ConnectionStatus.OR_NOT);
+			}
+		}
+
+		if (result.getLast().getStatus() == ConnectionStatus.OR) {
+			result.getLast().setStatus(ConnectionStatus.AND);
+		} else {
+			result.getLast().setStatus(ConnectionStatus.AND_NOT);
+		}
+
+		if (!isTopOperation) {
+			result.getFirst().setParenthesisOpen(true);
+			result.getLast().setParenthesisClose(true);
+		}
+
 		return result;
 	}
 
