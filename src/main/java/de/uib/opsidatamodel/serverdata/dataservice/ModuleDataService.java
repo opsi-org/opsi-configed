@@ -816,7 +816,7 @@ public class ModuleDataService {
 
 	public boolean isOpsiModuleActive(OpsiModule opsiModule) {
 		Map<String, Boolean> opsiModules = getOpsiModulesPD();
-		return opsiModules.get(opsiModule.toString()) != null && opsiModules.get(opsiModule.toString());
+		return Boolean.TRUE.equals(opsiModules.get(opsiModule.toString()));
 	}
 
 	private Map<String, Boolean> getOpsiModulesPD() {

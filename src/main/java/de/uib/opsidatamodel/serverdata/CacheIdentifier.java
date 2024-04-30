@@ -137,6 +137,11 @@ public enum CacheIdentifier {
 	IS_OPSI_ADMIN_USER("is_opsi_admin_user"),
 
 	/**
+	 * return type {@code Map<String, Boolean>}
+	 */
+	OPSI_MODULES("opsi_modules"),
+
+	/**
 	 * return type {@code Map<String, Object>}
 	 */
 	OPSI_INFORMATION("opsi_information"),
