@@ -601,7 +601,9 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(createJMenuFile());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
-		jMenuBar.add(jMenuServerConsole);
+		if (ServerFacade.isOpsi43()) {
+			jMenuBar.add(jMenuServerConsole);
+		}
 		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
 			jMenuServerConsole.setEnabled(false);
 			jMenuServerConsole.setToolTipText(Configed.getResourceValue("MainFrame.vpnModuleShouldBeActive"));
