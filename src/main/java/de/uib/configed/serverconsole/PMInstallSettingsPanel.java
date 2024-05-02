@@ -28,6 +28,11 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class PMInstallSettingsPanel extends PMInstallPanel {
+	public static final String DEPOT_SELECTION_NODEPOTS = Configed
+			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_NODEPOTS");
+	private static final String DEPOT_SELECTION_ALL = Configed
+			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL");
+
 	private JLabel jLabelOn = new JLabel();
 	private JLabel jLabelUpdateInstalled = new JLabel();
 	private JLabel jLabelSetupInstalled = new JLabel();
@@ -181,8 +186,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
 			jTextFieldSelecteddepots.setEditable(true);
-			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
-			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL);
+			result.add(DEPOT_SELECTION_NODEPOTS);
+			result.add(DEPOT_SELECTION_ALL);
 		} else {
 			jTextFieldSelecteddepots.setEditable(false);
 		}
@@ -204,16 +209,16 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 		if (selectedDepots.isEmpty()) {
 			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
-				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = DEPOT_SELECTION_NODEPOTS;
 			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);
 			} else {
 				Logging.warning(this, "cannot find depot to set depotParameter");
 			}
 		} else {
-			if (selectedDepots.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
+			if (selectedDepots.contains(DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = "";
-			} else if (selectedDepots.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL)) {
+			} else if (selectedDepots.contains(DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";
 			} else {
 				StringBuilder sb = new StringBuilder();

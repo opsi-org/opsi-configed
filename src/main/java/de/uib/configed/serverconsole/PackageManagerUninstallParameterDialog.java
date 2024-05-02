@@ -37,6 +37,9 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class PackageManagerUninstallParameterDialog extends PackageManagerParameterDialog {
+	private static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
+			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
+
 	private JPanel uninstallPanel = new JPanel();
 
 	private JLabel jLabelUninstall = new JLabel();
@@ -106,7 +109,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 		if (selectedDepots.isEmpty()) {
 			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
-				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
 			} else {
@@ -115,12 +118,10 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		} else {
 			jButtonExecute.setEnabled(true);
 
-			if (selectedDepots.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
-				depotParameter = OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
-			} else if (selectedDepots
-					.contains(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
-				int startIndex = possibleDepots
-						.indexOf(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED) + 1;
+			if (selectedDepots.contains(PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS)) {
+				depotParameter = PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS;
+			} else if (selectedDepots.contains(DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
+				int startIndex = possibleDepots.indexOf(DEPOT_SELECTION_ALL_WHERE_INSTALLED) + 1;
 				int endIndex = possibleDepots.size();
 
 				depotParameter = possibleDepots.subList(startIndex, Math.max(startIndex, endIndex)).toString();
@@ -143,8 +144,8 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 		if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
 			textFieldSelectedDepots.setEditable(true);
-			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
-			result.add(OpsiServiceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+			result.add(PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS);
+			result.add(DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 		} else {
 			textFieldSelectedDepots.setEditable(false);
 		}
@@ -288,8 +289,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		if (textFieldSelectedDepots.getText()
 				.equals(Configed.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_NODEPOTS"))) {
 			commandPMUninstall.setDepot(null);
-		} else if (textFieldSelectedDepots.getText().equals(
-				Configed.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL_WHERE_INSTALLED"))) {
+		} else if (textFieldSelectedDepots.getText().equals(DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
 			commandPMUninstall.setDepot("all");
 		} else {
 			commandPMUninstall.setDepot(textFieldSelectedDepots.getText());

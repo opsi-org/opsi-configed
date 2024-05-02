@@ -11,7 +11,6 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.uib.configed.Configed;
 import de.uib.configed.productaction.PanelCompleteWinProducts;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
@@ -130,13 +129,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.
 
 	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
-
-	public static final String DEPOT_SELECTION_NODEPOTS = Configed
-			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_NODEPOTS");
-	public static final String DEPOT_SELECTION_ALL = Configed
-			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL");
-	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
-			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
 	public static final String HOST_KEY = "hostId";
 
