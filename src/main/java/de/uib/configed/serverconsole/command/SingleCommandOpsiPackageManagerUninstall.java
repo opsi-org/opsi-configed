@@ -99,17 +99,12 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 		if (depotlist != null && !depotlist.isEmpty()) {
 			depots = " -d " + depotlist.replace(" ", "");
 		} else {
-			depots = " ";
+			depots = "";
 		}
 	}
 
 	public void setVerbosity(int vSum) {
-		StringBuilder v = new StringBuilder("v");
-		for (int i = 0; i < vSum; i++) {
-			v.append("v");
-		}
-
-		verbosity = " -" + v + " ";
+		verbosity = " -" + "v".repeat(vSum + 1);
 	}
 
 	public void setFreeInput(String fI) {
