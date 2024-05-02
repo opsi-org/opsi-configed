@@ -280,8 +280,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 	private static void setDepotBasedOnSelectedDepot(SingleCommandOpsiPackageManagerInstall basicCommand,
 			String selectedDepot) {
-		if (selectedDepot
-				.contains(Configed.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_NODEPOTS"))) {
+		if (selectedDepot.contains(DEPOT_SELECTION_NODEPOTS)) {
 			basicCommand.setDepotForPInstall("");
 		} else {
 			basicCommand.setDepotForPInstall(selectedDepot);

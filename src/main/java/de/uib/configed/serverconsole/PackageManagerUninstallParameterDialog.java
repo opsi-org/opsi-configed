@@ -286,8 +286,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private void changeDepot() {
-		if (textFieldSelectedDepots.getText()
-				.equals(Configed.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_NODEPOTS"))) {
+		if (textFieldSelectedDepots.getText().equals(PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS)) {
 			commandPMUninstall.setDepot(null);
 		} else if (textFieldSelectedDepots.getText().equals(DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
 			commandPMUninstall.setDepot("all");
