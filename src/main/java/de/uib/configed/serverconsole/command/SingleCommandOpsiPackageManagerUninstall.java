@@ -97,7 +97,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	public void setDepot(String depotlist) {
 		if (depotlist != null && !depotlist.isEmpty()) {
-			depots = " -d " + depotlist;
+			depots = " -d " + depotlist.replace(" ", "");
 		} else {
 			depots = " ";
 		}
