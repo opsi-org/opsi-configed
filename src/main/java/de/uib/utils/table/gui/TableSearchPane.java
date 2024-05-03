@@ -906,12 +906,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 			if (foundrow > -1) {
 				setRow(foundrow, addSelection, select);
+			} else if (startrow > 0) {
+				searchTheRow(0, addSelection, select);
 			} else {
-				if (startrow > 0) {
-					searchTheRow(0, addSelection, select);
-				} else {
-					setRow(0, false, select);
-				}
+				setRow(0, false, select);
 			}
 		}
 

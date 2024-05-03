@@ -840,11 +840,9 @@ public class ProductDataService {
 		if (depot2product2properties == null) {
 			Logging.error("no product properties ");
 			return new HashMap<>();
+		} else if (depot2product2properties.get(depotId) == null) {
+			return new HashMap<>();
 		} else {
-			if (depot2product2properties.get(depotId) == null) {
-				return new HashMap<>();
-			}
-
 			if (!depot2product2properties.get(depotId).isEmpty()) {
 				Logging.info(this, "getDefaultProductProperties for depotId " + depotId + " starts with "
 						+ new ArrayList<>(depot2product2properties.get(depotId).keySet()).get(0));

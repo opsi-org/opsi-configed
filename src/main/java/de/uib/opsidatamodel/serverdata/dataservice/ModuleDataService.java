@@ -307,14 +307,14 @@ public class ModuleDataService {
 
 					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
 						opsiModules.put(key, false);
-					} else {
-						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-							LocalDateTime expiresDate = expiresForThisModule.getDate();
+					} else if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+						LocalDateTime expiresDate = expiresForThisModule.getDate();
 
-							if (today.isAfter(expiresDate)) {
-								opsiModules.put(key, false);
-							}
+						if (today.isAfter(expiresDate)) {
+							opsiModules.put(key, false);
 						}
+					} else {
+						// Do nothing since nothing expired
 					}
 				}
 			}
@@ -545,14 +545,14 @@ public class ModuleDataService {
 
 					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
 						opsiModules.put(key, false);
-					} else {
-						if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-							LocalDateTime expiresDate = expiresForThisModule.getDate();
+					} else if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+						LocalDateTime expiresDate = expiresForThisModule.getDate();
 
-							if (today.isAfter(expiresDate)) {
-								opsiModules.put(key, false);
-							}
+						if (today.isAfter(expiresDate)) {
+							opsiModules.put(key, false);
 						}
+					} else {
+						// Do nothing since nothing expired
 					}
 				}
 			}

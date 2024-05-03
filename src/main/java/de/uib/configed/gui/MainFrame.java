@@ -353,6 +353,7 @@ public class MainFrame extends JFrame {
 				parentMenu.add(jMenuItem);
 				jMenuServerConsole.add(parentMenu);
 			}
+
 			jMenuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
 		}

@@ -511,10 +511,10 @@ public class HardwareDataService {
 		} else if (columnName.startsWith(HW_INFO_DEVICE)) {
 			result = columnName.substring(HW_INFO_DEVICE.length());
 			result = result.substring(0, result.indexOf('.'));
+		} else if (!columnName.startsWith("HOST")) {
+			Logging.warning(this, "cutClassName unexpected columnName " + columnName);
 		} else {
-			if (!columnName.startsWith("HOST")) {
-				Logging.warning(this, "cutClassName unexpected columnName " + columnName);
-			}
+			// Column Name starts with "HOST", do nothing
 		}
 
 		return result;

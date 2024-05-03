@@ -193,12 +193,10 @@ public abstract class AbstractPOJOExecutioner {
 
 			if (sourceVars == null) {
 				detailMap.putAll(originalMap);
+			} else if (targetVars == null) {
+				detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars);
 			} else {
-				if (targetVars == null) {
-					detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars);
-				} else {
-					detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, targetVars);
-				}
+				detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, targetVars);
 			}
 
 			result.put(keyOfItem, detailMap);

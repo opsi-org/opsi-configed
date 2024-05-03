@@ -1261,15 +1261,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			setDataChanged(true);
 		}
 
-		if (lsm.isSelectionEmpty()) {
-			Logging.info(this, "no rows selected");
-			if (menuItemDeleteRelation != null) {
-				menuItemDeleteRelation.setEnabled(false);
-			}
-		} else {
-			if (menuItemDeleteRelation != null) {
-				menuItemDeleteRelation.setEnabled(true);
-			}
+		Logging.info(this, "rows selected: " + lsm.getSelectedItemsCount());
+
+		if (menuItemDeleteRelation != null) {
+			menuItemDeleteRelation.setEnabled(!lsm.isSelectionEmpty());
 		}
 	}
 

@@ -115,22 +115,21 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		if (mouseInColumnOfMarkCursor(mousePoint)) {
 			tableModel.setCursorRow(theTable.convertRowIndexToModel(mouseRow));
-		} else {
-			if (isAwareOfSelectionListener()) {
-				Logging.info(this, "mouse click in table. outside colMarkCursorRow, aware of selectionlistener");
+		} else if (isAwareOfSelectionListener()) {
+			Logging.info(this, "mouse click in table. outside colMarkCursorRow, aware of selectionlistener");
 
-				controller.validateWindowsSoftwareKeys();
+			controller.validateWindowsSoftwareKeys();
 
-				if (controller.getTabClient().getFSoftwarename2LicensePool().isVisible()) {
-					Logging.info(this, "selectionListener valueChanged,fSoftwarename2LicensePool.isVisible ");
+			if (controller.getTabClient().getFSoftwarename2LicensePool().isVisible()) {
+				Logging.info(this, "selectionListener valueChanged,fSoftwarename2LicensePool.isVisible ");
 
-					// the data is not refreshed
-				}
-
-				setDataChanged(true);
+				// the data is not refreshed
 			}
+
+			setDataChanged(true);
+		} else {
+			// Do nothing here on mouse click
 		}
-		super.mouseClicked(e);
 	}
 
 	@Override

@@ -113,12 +113,10 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 			put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		} else if (retrieved.get("multiValue") == null) {
 			put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
+		} else if (Boolean.TRUE.equals(retrieved.get("multiValue"))) {
+			put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		} else {
-			if (Boolean.TRUE.equals(retrieved.get("multiValue"))) {
-				put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			} else {
-				put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
-			}
+			put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
 		}
 	}
 
