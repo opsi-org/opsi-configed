@@ -87,14 +87,12 @@ public class SSHConnectExec extends SSHConnect {
 			if (sshcommand instanceof SSHCommandTemplate) {
 				Logging.info(this, "exec_template " + sshcommand + ": " + sshcommand.getSecuredCommand());
 				execTemplate((SSHCommandTemplate) sshcommand);
+			} else if (sshcommand.isMultiCommand()) {
+				Logging.info(this, "exec_list " + sshcommand + ": " + sshcommand.getSecuredCommand());
+				execList((SSHMultiCommand) sshcommand);
 			} else {
-				if (sshcommand.isMultiCommand()) {
-					Logging.info(this, "exec_list " + sshcommand + ": " + sshcommand.getSecuredCommand());
-					execList((SSHMultiCommand) sshcommand);
-				} else {
-					Logging.info(this, "exec " + sshcommand + ": " + sshcommand.getSecuredCommand());
-					exec(sshcommand);
-				}
+				Logging.info(this, "exec " + sshcommand + ": " + sshcommand.getSecuredCommand());
+				exec(sshcommand);
 			}
 		} else {
 			Logging.warning(this, Configed.getResourceValue("SSHConnection.Exec.cannotAsReadonly"));

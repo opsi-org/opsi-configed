@@ -596,11 +596,7 @@ public final class ClientMenuManager implements MenuListener {
 			clonedItem.addItemListener(event -> sourceItem.setSelected(clonedItem.isSelected()));
 			sourceItem.addItemListener(event -> clonedItem.setSelected(sourceItem.isSelected()));
 		} else {
-			if (sourceItem.getIcon() != null) {
-				clonedItem = new JMenuItem(sourceItem.getText(), sourceItem.getIcon());
-			} else {
-				clonedItem = new JMenuItem(sourceItem.getText());
-			}
+			clonedItem = new JMenuItem(sourceItem.getText(), sourceItem.getIcon());
 			clonedItem.setAccelerator(sourceItem.getAccelerator());
 			clonedItem.setEnabled(sourceItem.isEnabled());
 		}

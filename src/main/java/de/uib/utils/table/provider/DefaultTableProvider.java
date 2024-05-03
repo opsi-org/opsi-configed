@@ -73,15 +73,11 @@ public class DefaultTableProvider {
 
 	// should set the working copy as new original values
 	public void setWorkingCopyAsNewOriginalRows() {
-		if (rows == null) {
-			// in the following reset, we request a reload
-		} else {
-			if (rowsCopy != null) {
-				rows.clear();
+		if (rows != null && rowsCopy != null) {
+			rows.clear();
 
-				for (List<Object> rowCopy : rowsCopy) {
-					rows.add(rowCopy);
-				}
+			for (List<Object> rowCopy : rowsCopy) {
+				rows.add(rowCopy);
 			}
 		}
 

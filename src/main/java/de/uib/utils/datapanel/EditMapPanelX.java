@@ -470,12 +470,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					setVisible(false);
 					if ("java.lang.Boolean".equals(classname)) {
 						addBooleanProperty(s);
+					} else if (multiselection) {
+						addEmptyPropertyMultiSelection(s);
 					} else {
-						if (multiselection) {
-							addEmptyPropertyMultiSelection(s);
-						} else {
-							addEmptyProperty(s);
-						}
+						addEmptyProperty(s);
 					}
 				}
 			}

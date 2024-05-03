@@ -407,14 +407,13 @@ public class MainFrame extends JFrame {
 			String parentMenuName = parentMenu.getText();
 			if (parentMenuName.equals(SSHCommandFactory.PARENT_NULL)) {
 				jMenuServer.add(jMenuItem);
+			} else if (parentMenuName.equals(SSHCommandFactory.PARENT_OPSI)) {
+				menuOpsi.add(jMenuItem);
 			} else {
-				if (parentMenuName.equals(SSHCommandFactory.PARENT_OPSI)) {
-					menuOpsi.add(jMenuItem);
-				} else {
-					parentMenu.add(jMenuItem);
-					jMenuServer.add(parentMenu);
-				}
+				parentMenu.add(jMenuItem);
+				jMenuServer.add(parentMenu);
 			}
+
 			jMenuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
 		}
