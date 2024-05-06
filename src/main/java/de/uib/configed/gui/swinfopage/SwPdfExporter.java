@@ -25,7 +25,7 @@ public class SwPdfExporter extends AbstractSWExporter {
 
 	@Override
 	public void export() {
-		String clientName = theHost;
+		String clientName = hostId;
 		Logging.info(this, "create pdf report swaudit for " + clientName);
 
 		Logging.debug(this, "create pdf report swaudit for " + clientName);
