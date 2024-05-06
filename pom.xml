@@ -376,7 +376,5 @@
             <artifactId>sardine</artifactId>
             <version>5.12</version>
         </dependency>
-
-
     </dependencies>
 </project>
