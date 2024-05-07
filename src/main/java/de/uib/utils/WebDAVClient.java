@@ -74,23 +74,31 @@ public class WebDAVClient {
 
 	public Set<String> getDirectoriesIn(String currentDirectory) {
 		Set<String> directories = new HashSet<>();
+
+		String url = getBaseURL() + currentDirectory;
+		Logging.info("use webdav to get directories and files in " + url);
+
 		try {
-			List<DavResource> resources = sardine.list(getBaseURL() + currentDirectory);
+			List<DavResource> resources = sardine.list(url);
 			for (DavResource resource : resources) {
 				if (resource.isDirectory()) {
 					directories.add(resource.getPath().replace("/dav/", ""));
 				}
 			}
 		} catch (IOException e) {
-			Logging.error(this, "Failed to retrieve directories from " + getBaseURL() + currentDirectory, e);
+			Logging.error(this, "Failed to retrieve directories from " + url, e);
 		}
 		return directories;
 	}
 
 	public Set<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension) {
 		Set<String> directoriesAndFiles = new HashSet<>();
+
+		String url = getBaseURL() + currentDirectory;
+		Logging.info("use webdav to get directories and files in " + url);
+
 		try {
-			List<DavResource> resources = sardine.list(getBaseURL() + currentDirectory);
+			List<DavResource> resources = sardine.list(url);
 			for (DavResource resource : resources) {
 				if ((!resource.getDisplayName().equals(currentDirectory.substring(0, currentDirectory.length() - 1))
 						&& resource.isDirectory()) || resource.getDisplayName().endsWith(fileExtension)) {
@@ -98,7 +106,7 @@ public class WebDAVClient {
 				}
 			}
 		} catch (IOException e) {
-			Logging.error(this, "Failed to retrieve directories and files from " + getBaseURL() + currentDirectory, e);
+			Logging.error(this, "Failed to retrieve directories and files from " + url, e);
 		}
 		return directoriesAndFiles;
 	}
