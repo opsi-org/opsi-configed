@@ -46,6 +46,8 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	private JLabel jLabelOn = new JLabel();
 	private JLabel jLabelKeepFiles = new JLabel();
 
+	protected JLabel jLabelVerbosity = new JLabel(Configed.getResourceValue("verbosity"));
+
 	private JComboBox<String> jComboBoxOpsiProducts;
 	private JComboBox<Integer> jComboBoxVerbosity;
 
@@ -250,18 +252,11 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		textFieldSelectedDepots = new JTextField();
 		textFieldSelectedDepots.setEditable(false);
 
-		initLabels();
 		initButtons(this);
 		initLayout();
 		resetProducts();
 		changeProduct("");
 		changeVerbosity();
-	}
-
-	@Override
-	protected void reload() {
-		super.reload();
-		resetProducts();
 	}
 
 	private void resetProducts() {

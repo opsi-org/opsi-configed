@@ -9,7 +9,6 @@ package de.uib.configed.serverconsole;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -22,7 +21,6 @@ import de.uib.utils.logging.Logging;
 
 public class PackageManagerParameterDialog extends FGeneralDialog {
 	protected JPanel buttonPanel = new JPanel();
-	protected JLabel jLabelVerbosity = new JLabel();
 
 	protected JButton jButtonExecute;
 
@@ -35,10 +33,6 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 		super.setIconImage(Utils.getMainIcon());
 
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	}
-
-	protected void initLabels() {
-		jLabelVerbosity.setText(Configed.getResourceValue("verbosity"));
 	}
 
 	protected void initButtons(final PackageManagerParameterDialog caller) {
@@ -59,23 +53,11 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 			});
 		}
 
-		JButton jButtonReload = new JButton(Configed.getResourceValue("PackageManagerParameterDialog.title"));
-		jButtonReload.setToolTipText(Configed.getResourceValue("PackageManagerParameterDialog.tooltip"));
-
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
-				Logging.debug(this, "ActionEvent on btn_reload");
-				reload();
-			});
-		}
-
 		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
 
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
 		buttonPanel.add(jButtonClose);
-		buttonPanel.add(jButtonReload);
 		buttonPanel.add(jButtonExecute);
 	}
 
