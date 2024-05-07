@@ -66,7 +66,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String password;
 	private String otp;
 	private String sessionId;
-	private int portHTTPS = 4447;
+	private int portHTTPS = Globals.DEFAULT_PORT;
 
 	/**
 	 * Constructs {@code ServerFacade} object with provided information.

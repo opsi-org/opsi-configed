@@ -124,36 +124,6 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Boolean}
 	 */
-	WITH_LICENSE_MANAGEMENT("with_license_management"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
-	WITH_LOCAL_IMAGING("with_local_imaging"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
-	WITH_MY_SQL("with_my_sql"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
-	WITH_UEFI("with_uefi"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
-	WITH_WAN("with_wan"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
-	WITH_USER_ROLES("with_user_roles"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
 	ACCEPT_MY_SQL("accept_my_sql"),
 
 	/**
@@ -165,6 +135,11 @@ public enum CacheIdentifier {
 	 * return type {@code Boolean}
 	 */
 	IS_OPSI_ADMIN_USER("is_opsi_admin_user"),
+
+	/**
+	 * return type {@code Map<String, Boolean>}
+	 */
+	OPSI_MODULES("opsi_modules"),
 
 	/**
 	 * return type {@code Map<String, Object>}

@@ -6,8 +6,6 @@
 
 package de.uib.configed;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,13 +40,6 @@ import de.uib.utils.savedstates.SavedStates;
 public final class Configed {
 	private static final String LOCALIZATION_FILENAME_REGEX = "configed_...*\\.properties";
 	private static final Pattern localizationFilenameRegex = Pattern.compile(LOCALIZATION_FILENAME_REGEX);
-
-	private static boolean sshConnectOnStart;
-
-	public static final ItemListener sshConnectOnStartListener = (ItemEvent e) -> {
-		Configed.sshConnectOnStart = e.getStateChange() == ItemEvent.SELECTED;
-		Logging.info("state changed of sshconnectionOnStart in itemListener");
-	};
 
 	public static final Charset serverCharset = StandardCharsets.UTF_8;
 	public static final String JAVA_VERSION = System.getProperty("java.version");
@@ -87,7 +78,6 @@ public final class Configed {
 	private static String paramPassword;
 	private static String paramOTP;
 
-	/** construct the application */
 	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP) {
 		setParamValues(paramHost, paramUser, paramPassword, paramOTP);
 
@@ -127,10 +117,6 @@ public final class Configed {
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
 		Configed.paramOTP = paramOTP;
-	}
-
-	public static boolean isSSHConnectionOnStart() {
-		return sshConnectOnStart;
 	}
 
 	public static Integer getRefreshMinutes() {
@@ -201,29 +187,6 @@ public final class Configed {
 		}
 	}
 
-	private static void processSSHOptions(CommandLine cmd) {
-		if (cmd.hasOption("ssh-immediate-connect")) {
-			String sshImmediateConnectString = cmd.getOptionValue("ssh-immediate-connect");
-
-			if ("Y".equalsIgnoreCase(sshImmediateConnectString)) {
-				sshConnectOnStart = true;
-			} else if ("N".equalsIgnoreCase(sshImmediateConnectString)) {
-				sshConnectOnStart = false;
-			} else {
-				Main.showHelp();
-				Main.endApp(Main.ERROR_INVALID_OPTION);
-			}
-		}
-
-		if (cmd.hasOption("ssh-key")) {
-			sshKey = cmd.getOptionValue("ssh-key");
-		}
-
-		if (cmd.hasOption("ssh-passphrase")) {
-			sshKeyPass = cmd.getOptionValue("ssh-passphrase");
-		}
-	}
-
 	private static void processNonGUIOptions(CommandLine cmd) {
 		if (cmd.hasOption("qs")) {
 			optionCLIQuerySearch = true;
@@ -273,8 +236,6 @@ public final class Configed {
 
 	private static void processArgs(CommandLine cmd) {
 		processLoginOptions(cmd);
-
-		processSSHOptions(cmd);
 
 		processNonGUIOptions(cmd);
 

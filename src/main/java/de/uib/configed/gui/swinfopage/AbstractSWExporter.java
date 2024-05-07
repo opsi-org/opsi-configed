@@ -45,7 +45,7 @@ public abstract class AbstractSWExporter {
 
 	protected GenTableModel modelSWInfo;
 	protected String scanInfo = "";
-	protected String theHost;
+	protected String hostId;
 	protected String exportFilename;
 
 	private String server;
@@ -69,6 +69,11 @@ public abstract class AbstractSWExporter {
 	}
 
 	public void addMissingArgs() {
+		addMissingLoginData();
+		addMissingExporterArgs();
+	}
+
+	private void addMissingLoginData() {
 		if (server == null) {
 			server = Utils.getCLIParam("Host (default: localhost): ");
 		}
@@ -92,7 +97,9 @@ public abstract class AbstractSWExporter {
 		if (otp == null) {
 			otp = Utils.getCLIParam("One Time Password (not required if you don't have license or OTP enabled): ");
 		}
+	}
 
+	private void addMissingExporterArgs() {
 		if (clientsFile == null) {
 			clientsFile = Utils.getCLIParam("File with client names: ");
 		}
@@ -166,7 +173,7 @@ public abstract class AbstractSWExporter {
 		if (modelSWInfo == null) {
 			initModel(hostId);
 		} else {
-			theHost = hostId;
+			this.hostId = hostId;
 			updateModel();
 		}
 
@@ -174,7 +181,7 @@ public abstract class AbstractSWExporter {
 	}
 
 	private void initModel(String hostId) {
-		theHost = hostId;
+		this.hostId = hostId;
 
 		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
@@ -193,25 +200,29 @@ public abstract class AbstractSWExporter {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						Logging.info(this, "retrieving data for " + theHost);
-						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-								.getSoftwareDataService().getSoftwareAuditOnClients(Collections.singletonList(hostId));
-						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
-								.retrieveSoftwareAuditData(swAuditClientEntries, theHost);
-
-						if (tableData == null || tableData.isEmpty()) {
-							Logging.debug(this, "tableData is empty or null");
-
-							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
-						} else {
-							Logging.debug(this, "retrieved size  " + tableData.size());
-							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
-									.getLastSoftwareAuditModification(swAuditClientEntries, theHost);
-						}
-
-						return tableData;
+						return retrieveSoftwareMap();
 					}
 				})), -1, finalColumns, null, null);
+	}
+
+	private Map<String, Map<String, Object>> retrieveSoftwareMap() {
+		Logging.info(this, "retrieving data for " + hostId);
+		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
+				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
+		Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
+				.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
+
+		if (tableData == null || tableData.isEmpty()) {
+			Logging.debug(this, "tableData is empty or null");
+
+			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
+		} else {
+			Logging.debug(this, "retrieved size  " + tableData.size());
+			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
+					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
+		}
+
+		return tableData;
 	}
 
 	public abstract void export();

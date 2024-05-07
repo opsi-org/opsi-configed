@@ -34,8 +34,10 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -440,5 +442,42 @@ public final class Utils {
 		f.setMessage(message.toString());
 		f.setVisible(true);
 		return f.getResult() == 2;
+	}
+
+	public static boolean hasPort(String host) {
+		boolean result = false;
+
+		if (host.contains("[") && host.contains("]")) {
+			Logging.info("Host is IPv6: " + host);
+			result = host.indexOf(":", host.indexOf("]")) != -1;
+		} else {
+			Logging.info("Host is either IPv4 or FQDN: " + host);
+			result = host.contains(":");
+		}
+
+		return result;
+	}
+
+	public static String getServerPathFromWebDAVPath(String webDAVPath) {
+		String dir = "";
+		if (webDAVPath.startsWith("workbench")) {
+			dir = PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+					.getConfigedWorkbenchDefaultValuePD();
+			if (dir.charAt(dir.length() - 1) != '/') {
+				dir = dir + "/";
+			}
+			dir = dir + retrieveEverythingAfterDir(webDAVPath, "workbench/");
+		} else if (webDAVPath.startsWith("repository")) {
+			dir = CommandFactory.OPSI_PATH_VAR_REPOSITORY + retrieveEverythingAfterDir(webDAVPath, "repository/");
+		} else if (webDAVPath.startsWith("depot")) {
+			dir = CommandFactory.OPSI_PATH_VAR_DEPOT + retrieveEverythingAfterDir(webDAVPath, "depot/");
+		} else {
+			Logging.warning("expected repository or workbench");
+		}
+		return dir;
+	}
+
+	private static String retrieveEverythingAfterDir(String filePath, String dir) {
+		return filePath.substring(filePath.indexOf(dir) + dir.length());
 	}
 }

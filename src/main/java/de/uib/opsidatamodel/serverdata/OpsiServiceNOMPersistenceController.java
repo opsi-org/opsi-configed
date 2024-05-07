@@ -11,7 +11,6 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.uib.configed.Configed;
 import de.uib.configed.productaction.PanelCompleteWinProducts;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
@@ -23,6 +22,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsidatamodel.serverdata.dataservice.CommandDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.DepotDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
@@ -33,7 +33,6 @@ import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.LogDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ModuleDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
-import de.uib.opsidatamodel.serverdata.dataservice.SSHCommandDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.UserDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -106,11 +105,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String CONFIG_DEPOT_ID = "clientconfig.depot.id";
 	public static final String KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = "opsiclientd.event_on_shutdown.active";
 
-	public static final String KEY_SSH_DEFAULTWINUSER = "configed.ssh.deploy-client-agent.default.user";
-	public static final String KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE = "Administrator";
-	public static final String KEY_SSH_DEFAULTWINPW = "configed.ssh.deploy-client-agent.default.password";
-	public static final String KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE = "";
-
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
 	// keys for default wan configuration
@@ -135,13 +129,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.
 
 	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
-
-	public static final String DEPOT_SELECTION_NODEPOTS = Configed
-			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS");
-	public static final String DEPOT_SELECTION_ALL = Configed
-			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL");
-	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
-			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
 	public static final String HOST_KEY = "hostId";
 
@@ -180,7 +167,7 @@ public class OpsiServiceNOMPersistenceController {
 	private ModuleDataService moduleDataService;
 	private ProductDataService productDataService;
 	private SoftwareDataService softwareDataService;
-	private SSHCommandDataService sshCommandDataService;
+	private CommandDataService sshCommandDataService;
 	private UserDataService userDataService;
 	private RPCMethodExecutor rpcMethodExecutor;
 	private ReloadDispatcher reloadDispatcher;
@@ -208,7 +195,7 @@ public class OpsiServiceNOMPersistenceController {
 		moduleDataService = new ModuleDataService(exec);
 		productDataService = new ProductDataService(exec, this);
 		softwareDataService = new SoftwareDataService(exec, this);
-		sshCommandDataService = new SSHCommandDataService(exec);
+		sshCommandDataService = new CommandDataService(exec);
 		userDataService = new UserDataService(exec);
 		rpcMethodExecutor = new RPCMethodExecutor(exec, this);
 		hostInfoCollections = new HostInfoCollections(this);
@@ -302,7 +289,7 @@ public class OpsiServiceNOMPersistenceController {
 		return softwareDataService;
 	}
 
-	public SSHCommandDataService getSSHCommandDataService() {
+	public CommandDataService getSSHCommandDataService() {
 		return sshCommandDataService;
 	}
 

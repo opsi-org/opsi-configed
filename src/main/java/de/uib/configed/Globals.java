@@ -190,6 +190,8 @@ public final class Globals {
 
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
 
+	public static final int DEFAULT_PORT = 4447;
+
 	// Colors for table cells
 	private static Color magentaCell1;
 	private static Color magentaCell2;

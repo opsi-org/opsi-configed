@@ -17,7 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -654,9 +653,9 @@ public class ProductDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES, Map.class);
 	}
 
-	public NavigableSet<String> getProductIdsPD() {
+	public Set<String> getProductIdsPD() {
 		retrieveProductIdsAndDefaultStatesPD();
-		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_IDS, NavigableSet.class);
+		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_IDS, Set.class);
 	}
 
 	public void retrieveProductIdsAndDefaultStatesPD() {
@@ -667,7 +666,7 @@ public class ProductDataService {
 
 		retrieveProductInfosPD();
 
-		NavigableSet<String> productIds = new TreeSet<>();
+		Set<String> productIds = new TreeSet<>();
 		Map<String, Map<String, String>> productDefaultStates = new TreeMap<>();
 
 		for (String productId : getProduct2VersionInfo2InfosPD().keySet()) {

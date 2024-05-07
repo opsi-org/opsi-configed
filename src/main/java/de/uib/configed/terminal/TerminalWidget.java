@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JScrollBar;
 
@@ -24,25 +22,29 @@ import org.java_websocket.handshake.ServerHandshake;
 import com.jediterm.core.util.TermSize;
 import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
+import com.jediterm.terminal.model.StyleState;
+import com.jediterm.terminal.model.TerminalTextBuffer;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jediterm.terminal.ui.TerminalAction;
+import com.jediterm.terminal.ui.TerminalPanel;
 import com.jediterm.terminal.ui.settings.SettingsProvider;
 
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.ThreadLocker;
 import de.uib.utils.logging.Logging;
 
 public class TerminalWidget extends JediTermWidget implements MessagebusListener {
 	public static final int DEFAULT_TERMINAL_COLUMNS = 80;
 	public static final int DEFAULT_TERMINAL_ROWS = 24;
 	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
-	public static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
+	private static final String CONFIG_SERVER_SESSION_CHANNEL = "service:config:terminal";
 
 	private JScrollBar scrollBar;
 
-	private CountDownLatch locker;
+	private ThreadLocker locker;
 
 	private Messagebus messagebus;
 	private String terminalChannel;
@@ -55,6 +57,8 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 	private WebSocketInputStream webSocketInputStream;
 
 	private boolean ignoreKeyEvent;
+	private boolean disableUserInput;
+	private boolean isViewRestricted;
 
 	public TerminalWidget(TerminalFrame terminal, SettingsProvider settingsProvider) {
 		this(terminal, DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
@@ -64,6 +68,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		super(columns, lines, settingsProvider);
 		this.settingsProvider = settingsProvider;
 		this.terminalFrame = terminal;
+		this.locker = new ThreadLocker();
 	}
 
 	public void setMessagebus(Messagebus messagebus) {
@@ -108,6 +113,22 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		this.ignoreKeyEvent = ignoreKeyEvent;
 	}
 
+	public boolean disableUserInput() {
+		return disableUserInput;
+	}
+
+	public void setDisableUserInput(boolean disableUserInput) {
+		this.disableUserInput = disableUserInput;
+	}
+
+	public boolean isViewRestricted() {
+		return isViewRestricted;
+	}
+
+	public void setViewRestricted(boolean isViewRestricted) {
+		this.isViewRestricted = isViewRestricted;
+	}
+
 	public void init() {
 		if (settingsProvider == null) {
 			settingsProvider = new TerminalSettingsProvider();
@@ -132,24 +153,6 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 				}
 			}
 		});
-	}
-
-	private void lock() {
-		try {
-			locker = new CountDownLatch(1);
-			if (locker.await(DEFAULT_TIME_TO_BLOCK_IN_MS, TimeUnit.MILLISECONDS)) {
-				Logging.info(this, "thread was unblocked");
-			} else {
-				Logging.info(this, "time ellapsed");
-			}
-		} catch (InterruptedException ie) {
-			Logging.warning(this, "thread was interrupted");
-			Thread.currentThread().interrupt();
-		}
-	}
-
-	private void unlock() {
-		locker.countDown();
 	}
 
 	private void setFontSize(int fontSize) {
@@ -197,7 +200,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		}
 		this.sessionChannel = produceSessionChannel(session);
 		messagebus.sendTerminalOpenRequest(sessionChannel, DEFAULT_TERMINAL_ROWS, DEFAULT_TERMINAL_COLUMNS);
-		lock();
+		locker.lock(DEFAULT_TIME_TO_BLOCK_IN_MS);
 		connectWebSocketTty();
 	}
 
@@ -217,6 +220,39 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		start();
 	}
 
+	public void connectPipedTty() {
+		TtyConnector connector = new PipedTtyConnector(this);
+		setTtyConnector(connector);
+		start();
+	}
+
+	public void write(byte[] message) {
+		try {
+			if (getTtyConnector() != null) {
+				getTtyConnector().write(message);
+			}
+		} catch (IOException e) {
+			Logging.error("failed to write message: ", e);
+		}
+	}
+
+	@Override
+	protected TerminalPanel createTerminalPanel(SettingsProvider settingsProvider, StyleState styleState,
+			TerminalTextBuffer terminalTextBuffer) {
+		return new TerminalPanel(settingsProvider, terminalTextBuffer, styleState) {
+			@Override
+			public List<TerminalAction> getActions() {
+				List<TerminalAction> actions = super.getActions();
+				for (TerminalAction action : actions) {
+					if (action.getName().equals(settingsProvider.getPasteActionPresentation().getName())) {
+						action.withEnabledSupplier(() -> !isViewRestricted);
+					}
+				}
+				return actions;
+			}
+		};
+	}
+
 	@Override
 	public List<TerminalAction> getActions() {
 		return List
@@ -224,19 +260,19 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 						(KeyEvent input) -> {
 							terminalFrame.openNewWindow();
 							return true;
-						}).withMnemonicKey(KeyEvent.VK_N),
+						}).withEnabledSupplier(() -> !isViewRestricted).withMnemonicKey(KeyEvent.VK_N),
 						new TerminalAction(
 								((TerminalSettingsProvider) settingsProvider).getNewSessionActionPresentation(),
 								(KeyEvent input) -> {
 									terminalFrame.openNewSession();
 									return true;
-								}).withMnemonicKey(KeyEvent.VK_T),
+								}).withEnabledSupplier(() -> !isViewRestricted).withMnemonicKey(KeyEvent.VK_T),
 						new TerminalAction(
 								((TerminalSettingsProvider) settingsProvider).getChangeSessionActionPresentation(),
 								(KeyEvent input) -> {
 									terminalFrame.displaySessionsDialog();
 									return true;
-								}).withMnemonicKey(KeyEvent.VK_S));
+								}).withEnabledSupplier(() -> !isViewRestricted).withMnemonicKey(KeyEvent.VK_S));
 	}
 
 	@Override
@@ -272,7 +308,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 			terminalId = (String) message.get("terminal_id");
 			terminalChannel = (String) message.get("back_channel");
 			terminalFrame.changeTitle();
-			unlock();
+			locker.unlock();
 		} else if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type)) {
 			close();
 		} else if (WebSocketEvent.TERMINAL_DATA_READ.toString().equals(type)) {
@@ -287,7 +323,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 			Map<String, Object> data = new HashMap<>();
 			data.put("type", WebSocketEvent.TERMINAL_DATA_WRITE.toString());
 			data.put("id", UUID.randomUUID().toString());
-			data.put("sender", "@");
+			data.put("sender", Messagebus.CONNECTION_USER_CHANNEL);
 			data.put("channel", terminalChannel);
 			data.put("created", System.currentTimeMillis());
 			data.put("expires", System.currentTimeMillis() + 10000);

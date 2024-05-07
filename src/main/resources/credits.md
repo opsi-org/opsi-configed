@@ -58,11 +58,6 @@ Author(s): Dmitry Trofimov and Clément Poulain
 Website: https://github.com/JetBrains/jediterm
 License: [GNU Lesser General Public License 3.0 (GNU LGPL-3.0)](https://github.com/JetBrains/jediterm?tab=LGPL-3.0-1-ov-file#readme)
 
-**jSch SSH library**
-Author(s): Matthias Wiedmann
-Website: https://github.com/mwiede/jsch
-License: [BSD-style](https://github.com/mwiede/jsch?tab=License-1-ov-file#readme)
-
 **JSON for Java**
 Author(s): Sean Leary
 Website: https://github.com/stleary/JSON-java

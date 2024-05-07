@@ -166,31 +166,7 @@ public class PanelSWInfo extends JPanel {
 
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
-						if (hostId == null) {
-							return new HashMap<>();
-						}
-
-						Logging.info(this, "retrieving data for " + hostId);
-						Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController
-								.getSoftwareDataService().getSoftwareAuditOnClients(Collections.singletonList(hostId));
-
-						Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
-								.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
-
-						if (tableData == null || tableData.isEmpty()) {
-							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
-							title = scanInfo;
-						} else {
-							Logging.debug(this, "retrieved size  " + tableData.size());
-							scanInfo = "Scan " + persistenceController.getSoftwareDataService()
-									.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
-							title = scanInfo;
-						}
-
-						setSuperTitle(scanInfo);
-
-						Logging.debug(this, " got scanInfo " + scanInfo);
-						return tableData;
+						return retrieveSWInfoMap();
 					}
 				})), -1, finalColumns, null, null);
 
@@ -311,6 +287,34 @@ public class PanelSWInfo extends JPanel {
 			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getTheTable(),
 					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
 		}
+	}
+
+	private Map<String, Map<String, Object>> retrieveSWInfoMap() {
+		if (hostId == null) {
+			return new HashMap<>();
+		}
+
+		Logging.info(this, "retrieving data for " + hostId);
+		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
+				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
+
+		Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
+				.retrieveSoftwareAuditData(swAuditClientEntries, hostId);
+
+		if (tableData == null || tableData.isEmpty()) {
+			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
+			title = scanInfo;
+		} else {
+			Logging.debug(this, "retrieved size  " + tableData.size());
+			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
+					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
+			title = scanInfo;
+		}
+
+		setSuperTitle(scanInfo);
+
+		Logging.debug(this, " got scanInfo " + scanInfo);
+		return tableData;
 	}
 
 	private void actionOnPopupMenu(int p) {

@@ -26,6 +26,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -208,7 +209,8 @@ public class IconBarPanel extends JPanel {
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jButtonWorkOnGroups.setFocusable(false);
 
-		jButtonWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
+		jButtonWorkOnGroups
+				.setEnabled(persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
 		jButtonWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		JButton jButtonWorkOnProducts = new JButton(Utils.createImageIcon("images/packagebutton.png", ""));

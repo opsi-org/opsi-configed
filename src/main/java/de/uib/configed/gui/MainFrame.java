@@ -47,19 +47,21 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
+import de.uib.configed.serverconsole.command.CommandExecutor;
+import de.uib.configed.serverconsole.command.CommandFactory;
+import de.uib.configed.serverconsole.command.CommandWithParameters;
+import de.uib.configed.serverconsole.command.MultiCommandTemplate;
+import de.uib.configed.serverconsole.command.SingleCommand;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsicommand.sshcommand.SSHCommand;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
-import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
-import de.uib.opsidatamodel.permission.UserSshConfig;
+import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -78,9 +80,7 @@ public class MainFrame extends JFrame {
 
 	private ClientMenuManager clientMenu;
 
-	private JMenu jMenuServer = new JMenu();
-
-	private JMenuItem jMenuSSHConnection = new JMenuItem();
+	private JMenu jMenuServerConsole;
 
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
@@ -223,7 +223,6 @@ public class MainFrame extends JFrame {
 		ConfigedMain.setUser(null);
 		ConfigedMain.setPassword(null);
 		CacheManager.getInstance().clearAllCachedData();
-		SSHCommandFactory.destroyInstance();
 		Configed.getSavedStates().removeAll();
 		ConfigedMain.requestLicensesFrameReload();
 		restartConfiged();
@@ -266,187 +265,97 @@ public class MainFrame extends JFrame {
 		searchedTimeSpansText.put(ANY_TIME, Configed.getResourceValue("MainFrame.ANY_TIME"));
 	}
 
-	public void updateSSHConnectedInfoMenu(String status) {
-		String connectiondata = SSHConnectionInfo.getInstance().getUser() + "@"
-				+ SSHConnectionInfo.getInstance().getHost();
-
-		jMenuSSHConnection.setText(connectiondata.trim() + " " + status);
+	public void reloadServerConsoleMenu() {
+		setupMenuServerConsole();
 	}
 
-	/**
-	 * Get existing (sorted) sshcommands and build the menu "server-konsole"
-	 * (include config, control and terminal dialog) also check the depot
-	 * configs for setting the field editable (or not)
-	 **/
-	public void setupMenuServer() {
-		Logging.info(this, "setupMenuServer ");
-		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
-		SSHConnectionInfo connectionInfo = SSHConnectionInfo.getInstance();
+	private void setupMenuServerConsole() {
+		jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
 
-		JMenu menuOpsi = new JMenu(SSHCommandFactory.PARENT_OPSI);
+		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
+		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
+		jMenuServerConsole.add(jMenuCommandControl);
+		jMenuServerConsole.addSeparator();
 
-		jMenuServer.removeAll();
-		jMenuServer.setText(SSHCommandFactory.PARENT_NULL);
-
-		Logging.info(this, "setupMenuServer add configpage");
-		JMenuItem jMenuSSHConfig = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHConfig"));
-		jMenuSSHConfig.addActionListener((ActionEvent e) -> configedMain.startSSHConfigDialog());
-
-		jMenuSSHConnection.setEnabled(false);
-
-		String connectionState;
-
-		if (Configed.isSSHConnectionOnStart()) {
-			connectionState = factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
-		} else {
-			connectionState = factory.getConnectionState();
-		}
-
-		updateSSHConnectedInfoMenu(connectionState);
-
-		Logging.info(this, "setupMenuServer add commandcontrol");
-		JMenuItem jMenuSSHCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
-		jMenuSSHCommandControl.addActionListener((ActionEvent e) -> configedMain.startSSHControlDialog());
-		// SSHCommandControlDialog
-
-		jMenuServer.add(jMenuSSHConnection);
-		jMenuServer.add(jMenuSSHConfig);
-		jMenuServer.add(jMenuSSHCommandControl);
-		jMenuServer.addSeparator();
-
-		Logging.info(this, "setupMenuServer getCurrentUserConfig " + UserConfig.getCurrentUserConfig());
-
+		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
 		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
-				|| UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE) == null
-				|| !UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE);
-		Logging.info(this, "setupMenuServer commandsAreDeactivated " + commandsAreDeactivated);
-
-		factory.retrieveSSHCommandListRequestRefresh();
-		factory.retrieveSSHCommandList();
-
-		jMenuServer.add(menuOpsi);
-		addSSHCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
+				|| UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE) == null
+				|| !UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE);
+		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
+		CommandFactory factory = CommandFactory.getInstance();
+		factory.retrieveCommandList();
+		addCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
 		if (menuOpsi.getSubElements().length != 0) {
 			menuOpsi.addSeparator();
 		}
-		addSSHCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
-
-		Logging.info(this, "setupMenuServer create/read command menu configs");
+		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 
 		boolean userConfigExists = UserConfig.getCurrentUserConfig() != null;
-
-		jMenuSSHConfig.setEnabled(userConfigExists
-				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_CONFIG_ACTIVE));
-
-		Logging.info(this, "setupMenuServer create/read command menu configs current user config "
-				+ UserConfig.getCurrentUserConfig());
-		jMenuSSHCommandControl.setEnabled(userConfigExists
-				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDCONTROL_ACTIVE));
-
-		jMenuSSHCommandControl.setEnabled(true);
-
-		jMenuServer.setEnabled(userConfigExists
+		jMenuServerConsole.setEnabled(userConfigExists
 				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 						.isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_MENU_ACTIVE));
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 	}
 
-	private void addSSHCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
-		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
-		List<SSHCommand> commands = factory.getSSHCommandParameterList();
-		for (final SSHCommand command : commands) {
+	private void addDefaultOpsiCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
+		for (final SingleCommand command : CommandFactory.getDefaultOpsiCommands()) {
 			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
-			jMenuOpsiCommand.addActionListener((ActionEvent e) -> jMenuOptionCommandAction(factory, command));
-			menuOpsi.add(jMenuOpsiCommand);
+			jMenuOpsiCommand.addActionListener(
+					(ActionEvent e) -> ((CommandWithParameters) command).startParameterGui(configedMain));
 			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
+			menuOpsi.add(jMenuOpsiCommand);
 		}
 	}
 
-	private void addSSHCommandsToMenuServer(JMenu menuOpsi, boolean commandsAreDeactivated) {
-		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
-		Map<String, List<SSHCommandTemplate>> sortedComs = factory.getSSHCommandMapSortedByParent();
+	private void addCommandsToMenuServer(JMenu menuOpsi, boolean commandsAreDeactivated) {
+		final CommandFactory factory = CommandFactory.getInstance();
+		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
 
 		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
-		boolean firstParentGroup = true;
-		for (Entry<String, List<SSHCommandTemplate>> entry : sortedComs.entrySet()) {
+		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
 			String parentMenuName = entry.getKey();
-			List<SSHCommandTemplate> listCom = new LinkedList<>(entry.getValue());
+			List<MultiCommandTemplate> listCom = new LinkedList<>(entry.getValue());
 			Collections.sort(listCom);
 			JMenu parentMenu = new JMenu(parentMenuName);
 
-			Logging.info(this, "ssh parent menu text " + parentMenuName);
-			if (parentMenuName.equals(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
-				parentMenu.setText("");
-				parentMenu.setIcon(Utils.createImageIcon("images/burger_menu_09.png", "..."));
-			} else if ((parentMenuName.equals(SSHCommandFactory.PARENT_NULL))) {
-				// Do nothing in that case
-			} else {
-				firstParentGroup = false;
+			Logging.info(this, "parent menu text " + parentMenuName);
+			if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
+				jMenuServerConsole.add(menuOpsi);
+				jMenuServerConsole.addSeparator();
 			}
 
-			addSSHSubCommands(menuOpsi, parentMenu, listCom, commandsAreDeactivated);
-			if (firstParentGroup && !listCom.isEmpty()) {
-				jMenuServer.addSeparator();
-			}
-
-			firstParentGroup = false;
+			addSubCommands(menuOpsi, parentMenu, listCom, commandsAreDeactivated);
 		}
 	}
 
-	private void addSSHSubCommands(JMenu menuOpsi, JMenu parentMenu, List<SSHCommandTemplate> listCom,
+	private void addSubCommands(JMenu menuOpsi, JMenu parentMenu, List<MultiCommandTemplate> listCom,
 			boolean commandsAreDeactivated) {
-		final SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
-		for (final SSHCommandTemplate com : listCom) {
+		for (final MultiCommandTemplate com : listCom) {
 			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
-			Logging.info(this, "ssh command menuitem text " + com.getMenuText());
+			Logging.info(this, "command menuitem text " + com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
-			jMenuItem.addActionListener((ActionEvent e) -> jMenuItemAction(factory, com));
+			jMenuItem.addActionListener((ActionEvent e) -> {
+				CommandExecutor executor = new CommandExecutor(configedMain, com);
+				executor.execute();
+			});
 
 			String parentMenuName = parentMenu.getText();
-			if (parentMenuName.equals(SSHCommandFactory.PARENT_NULL)) {
-				jMenuServer.add(jMenuItem);
-			} else if (parentMenuName.equals(SSHCommandFactory.PARENT_OPSI)) {
+			if (parentMenuName.equals(CommandFactory.PARENT_NULL)) {
+				jMenuServerConsole.add(jMenuItem);
+			} else if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
 				menuOpsi.add(jMenuItem);
 			} else {
 				parentMenu.add(jMenuItem);
-				jMenuServer.add(parentMenu);
+				jMenuServerConsole.add(parentMenu);
 			}
 
 			jMenuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
-		}
-	}
-
-	private void jMenuItemAction(SSHCommandFactory factory, SSHCommandTemplate com) {
-		if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
-			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
-					+ factory.getConnectionState());
-		} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-			Logging.error(this, Configed.getResourceValue("SSHConnection.connected_not_allowed.message"));
-		} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
-			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
-					+ factory.getConnectionState());
-		} else {
-			// Create new instance of the same command, so that further
-			// modifications would not affect the original command.
-			final SSHCommandTemplate command = new SSHCommandTemplate(com);
-			configedMain.startSSHOpsiServerExec(command);
-		}
-	}
-
-	private void jMenuOptionCommandAction(SSHCommandFactory factory, SSHCommand command) {
-		if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
-			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
-					+ factory.getConnectionState());
-		} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-			Logging.error(this, Configed.getResourceValue("SSHConnection.connected_not_allowed.message"));
-		} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
-			Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
-					+ factory.getConnectionState());
-		} else {
-			configedMain.startSSHOpsiServerExec(command);
 		}
 	}
 
@@ -512,7 +421,8 @@ public class MainFrame extends JFrame {
 		JMenu jMenuFrames = new JMenu(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		JMenuItem jMenuFrameWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setEnabled(persistenceController.getModuleDataService().isWithLocalImagingPD());
+		jMenuFrameWorkOnGroups
+				.setEnabled(persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
 		jMenuFrameWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		JMenuItem jMenuFrameWorkOnProducts = new JMenuItem(
@@ -674,13 +584,19 @@ public class MainFrame extends JFrame {
 		initMenuData();
 
 		clientMenu = ClientMenuManager.getNewInstance(configedMain, this);
-		setupMenuServer();
+		setupMenuServerConsole();
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(createJMenuFile());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
-		jMenuBar.add(jMenuServer);
+		if (ServerFacade.isOpsi43()) {
+			jMenuBar.add(jMenuServerConsole);
+		}
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+			jMenuServerConsole.setEnabled(false);
+			jMenuServerConsole.setToolTipText(Configed.getResourceValue("MainFrame.vpnModuleShouldBeActive"));
+		}
 		jMenuBar.add(createJMenuFrames());
 		jMenuBar.add(createJMenuHelp());
 
@@ -727,7 +643,6 @@ public class MainFrame extends JFrame {
 		return centralPane;
 	}
 
-	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
 				&& b) {
@@ -740,8 +655,10 @@ public class MainFrame extends JFrame {
 		iconBarPanel.getIconButtonSaveConfiguration().setEnabled(b);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// action methods for visual interactions
+	private void startControlAction() {
+		Logging.debug(this, "jMenuControlAction");
+		configedMain.startControlDialog();
+	}
 
 	public void setClientFilterAction(boolean b) {
 		if (configedMain.isFilterClientList() != b) {

@@ -42,6 +42,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -159,7 +160,7 @@ public class SoftwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL,
 				softwareWithoutAssociatedLicensePool);
 
-		if (!moduleDataService.isWithLicenseManagementPD()) {
+		if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return;
 		}
 
@@ -458,7 +459,8 @@ public class SoftwareDataService {
 	// returns the ID of the edited data record
 	public String editSoftwareLicense(String softwareLicenseId, String licenseContractId, String licenseType,
 			String maxInstallations, String boundToHost, String expirationDate) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()
+				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return "";
 		}
 
@@ -514,7 +516,8 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteSoftwareLicense(String softwareLicenseId) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()
+				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return false;
 		}
 
@@ -528,7 +531,7 @@ public class SoftwareDataService {
 			return "";
 		}
 
-		if (moduleDataService.isWithLicenseManagementPD()) {
+		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SOFTWARE_LICENSE_TO_LICENSE_POOL_CREATE,
 					new String[] { softwareLicenseId, licensePoolId, licenseKey });
 
@@ -542,7 +545,8 @@ public class SoftwareDataService {
 	}
 
 	public boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()
+				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return false;
 		}
 
@@ -562,7 +566,7 @@ public class SoftwareDataService {
 		Logging.info(this, "removeAssociations licensePoolId, softwareIds " + licensePoolId + ", " + softwareIds);
 
 		if (licensePoolId == null || softwareIds == null || !userRolesConfigDataService.hasServerFullPermissionPD()
-				|| !moduleDataService.isWithLicenseManagementPD()) {
+				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return false;
 		}
 
@@ -614,7 +618,8 @@ public class SoftwareDataService {
 		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:" + licensePoolId + " , "
 				+ softwareToAssign);
 
-		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()
+				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return false;
 		}
 
@@ -728,7 +733,8 @@ public class SoftwareDataService {
 	// we have got a SW from software table, therefore we do not serve the unknown
 	// software list
 	public String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licensePoolIDNew) {
-		if (!userRolesConfigDataService.hasServerFullPermissionPD() || !moduleDataService.isWithLicenseManagementPD()) {
+		if (!userRolesConfigDataService.hasServerFullPermissionPD()
+				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			return "";
 		}
 
@@ -811,7 +817,7 @@ public class SoftwareDataService {
 
 	// side effects of this method: rowsLicensesReconciliation
 	public void retrieveLicenseStatisticsPD() {
-		if (!moduleDataService.isWithLicenseManagementPD() || cacheManager.isDataCached(Arrays
+		if (!moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT) || cacheManager.isDataCached(Arrays
 				.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			return;
 		}

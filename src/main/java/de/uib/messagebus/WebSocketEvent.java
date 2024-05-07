@@ -22,7 +22,11 @@ public enum WebSocketEvent {
 	HOST_DELETED("host_deleted"),
 
 	PRODUCT_ON_CLIENT_CREATED("productOnClient_created"), PRODUCT_ON_CLIENT_UPDATED("productOnClient_updated"),
-	PRODUCT_ON_CLIENT_DELETED("productOnClient_deleted");
+	PRODUCT_ON_CLIENT_DELETED("productOnClient_deleted"),
+
+	PROCESS_START_REQUEST("process_start_request"), PROCESS_START_EVENT("process_start_event"),
+	PROCESS_STOP_REQUEST("process_stop_request"), PROCESS_STOP_EVENT("process_stop_event"),
+	PROCESS_DATA_READ("process_data_read"), PROCESS_ERROR_EVENT("process_error");
 
 	private final String displayName;
 

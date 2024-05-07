@@ -6,6 +6,8 @@
 
 package de.uib.configed.terminal;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -37,10 +39,24 @@ public final class TerminalFrame implements MessagebusListener {
 	private TerminalTabbedPane tabbedPane;
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
 
+	private boolean restrictView;
+	private Runnable callback;
 	private String session;
+
+	public TerminalFrame() {
+		this(false);
+	}
+
+	public TerminalFrame(boolean restrictView) {
+		this.restrictView = restrictView;
+	}
 
 	public void setMessagebus(Messagebus messagebus) {
 		this.messagebus = messagebus;
+	}
+
+	public JFrame getFrame() {
+		return frame;
 	}
 
 	public void setSession(String session) {
@@ -55,11 +71,15 @@ public final class TerminalFrame implements MessagebusListener {
 		return fileUploadProgressIndicator;
 	}
 
+	public void setOnClose(Runnable callback) {
+		this.callback = callback;
+	}
+
 	private void createAndShowGUI() {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
 		frame.setIconImage(Utils.getMainIcon());
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		TerminalMenuBar menuBar = new TerminalMenuBar(this);
+		TerminalMenuBar menuBar = new TerminalMenuBar(this, restrictView);
 		menuBar.init();
 		frame.setJMenuBar(menuBar);
 
@@ -73,18 +93,14 @@ public final class TerminalFrame implements MessagebusListener {
 		fileUploadProgressIndicator.init();
 		fileUploadProgressIndicator.setVisible(false);
 
-		allLayout
-				.setVerticalGroup(allLayout.createSequentialGroup()
-						.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(fileUploadProgressIndicator, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
+				.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(fileUploadProgressIndicator));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(allLayout.createSequentialGroup().addComponent(northPanel, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(allLayout.createSequentialGroup().addComponent(fileUploadProgressIndicator,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+				.addGroup(allLayout.createSequentialGroup().addComponent(fileUploadProgressIndicator)));
 
 		frame.add(allPane);
 
@@ -107,17 +123,29 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	public void openNewWindow() {
+		if (restrictView) {
+			return;
+		}
+
 		TerminalFrame terminalFrame = new TerminalFrame();
 		terminalFrame.setMessagebus(messagebus);
 		terminalFrame.display();
 	}
 
 	public void openNewSession() {
+		if (restrictView) {
+			return;
+		}
+
 		tabbedPane.addTerminalTab();
 		displaySessionsDialog();
 	}
 
 	public void displaySessionsDialog() {
+		if (restrictView) {
+			return;
+		}
+
 		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
 				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
 				500, 300);
@@ -149,10 +177,14 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
-		if (session != null) {
-			tabbedPane.openSessionOnSelectedTab(session);
+		if (!restrictView) {
+			if (session != null) {
+				tabbedPane.openSessionOnSelectedTab(session);
+			} else {
+				displaySessionsDialog();
+			}
 		} else {
-			displaySessionsDialog();
+			tabbedPane.getSelectedTerminalWidget().connectPipedTty();
 		}
 
 		tabbedPane.getSelectedTerminalWidget().requestFocus();
@@ -171,6 +203,37 @@ public final class TerminalFrame implements MessagebusListener {
 		if (widget != null) {
 			widget.requestFocusInWindow();
 		}
+	}
+
+	public void writeToWidget(String message) {
+		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+		if (widget != null) {
+			widget.write(message.getBytes());
+		}
+	}
+
+	public void disableUserInputForSelectedWidget() {
+		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+		widget.getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				widget.setDisableUserInput(true);
+				event.consume();
+			}
+
+			@Override
+			public void keyReleased(KeyEvent event) {
+				widget.setDisableUserInput(false);
+				event.consume();
+			}
+		});
+		widget.setViewRestricted(true);
+	}
+
+	@SuppressWarnings({ "java:S2325" })
+	public void uploadFile(AbstractBackgroundFileUploader fileUploader) {
+		fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + 1);
+		fileUploader.execute();
 	}
 
 	public void display() {
@@ -194,6 +257,9 @@ public final class TerminalFrame implements MessagebusListener {
 	}
 
 	public void close() {
+		if (callback != null) {
+			callback.run();
+		}
 		frame.dispose();
 		messagebus.getWebSocket().unregisterListener(this);
 	}

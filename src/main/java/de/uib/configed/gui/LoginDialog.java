@@ -41,7 +41,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -209,12 +208,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
-		JCheckBox checkTrySSH = new JCheckBox(Configed.getResourceValue("LoginDialog.checkTrySSH"),
-				Configed.isSSHConnectionOnStart());
-		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
-
-		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"),
-				Configed.isSSHConnectionOnStart());
+		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
 		checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
 		checkUseOTP.addItemListener((ItemEvent event) -> {
 			boolean selected = event.getStateChange() == ItemEvent.SELECTED;
@@ -223,7 +217,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		});
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
-		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH, checkUseOTP });
+		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkUseOTP });
 
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
@@ -478,10 +472,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				waitingWorker.setReady();
 			}
 		}.start();
-
-		SSHConnectionInfo.getInstance().setUser(user);
-		SSHConnectionInfo.getInstance().setPassw(String.valueOf(passwordField.getPassword()));
-		SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
 	private void endProgram() {
