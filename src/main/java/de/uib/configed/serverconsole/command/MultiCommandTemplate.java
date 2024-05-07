@@ -15,7 +15,7 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 	private String id;
 	private String menuText;
 	private List<SingleCommand> commands = new LinkedList<>();
-	private List<SingleCommand> sshCommandOriginal = new LinkedList<>();
+	private List<SingleCommand> originalCommand = new LinkedList<>();
 	private String parentMenuText = CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS;
 	private String tooltipText = "";
 	private int priority;
@@ -40,8 +40,8 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 		setTooltipText(ttt);
 		setPriority(p);
 		setCommands(c);
-		Logging.debug(this, "SSHCommand_Template this " + this.toString());
-		Logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
+		Logging.debug(this, "MultiCommandTemplate this " + this.toString());
+		Logging.debug(this, "MultiCommandTemplate commandlist" + this.commandlistToString());
 	}
 
 	@Override
@@ -61,19 +61,19 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 		if (cList != null) {
 			commands.clear();
 			for (String c : cList) {
-				SingleCommand sshc = new SingleCommandTemplate(getId(), c, getMenuText());
-				commands.add(sshc);
+				SingleCommand singleCommand = new SingleCommandTemplate(getId(), c, getMenuText());
+				commands.add(singleCommand);
 				if (firstInitCommands) {
-					sshCommandOriginal.add(sshc);
+					originalCommand.add(singleCommand);
 				}
 			}
 			firstInitCommands = false;
 		}
 	}
 
-	public void addCommand(SingleCommand sshc) {
-		commands.add(sshc);
-		sshCommandOriginal.add(sshc);
+	public void addCommand(SingleCommand singleCommand) {
+		commands.add(singleCommand);
+		originalCommand.add(singleCommand);
 	}
 
 	public void setMenuText(String mt) {
@@ -124,7 +124,7 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 	}
 
 	public List<SingleCommand> getOriginalCommands() {
-		return sshCommandOriginal;
+		return originalCommand;
 	}
 
 	@Override

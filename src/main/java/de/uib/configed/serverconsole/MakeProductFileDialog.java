@@ -426,7 +426,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		}
 		commands.addCommand(opsiMakeProductFileCommand);
 
-		Logging.info(this, "SSHConnectExec " + commands);
+		Logging.info(this, "Start Commands " + commands);
 		new Thread() {
 			@Override
 			public void run() {

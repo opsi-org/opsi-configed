@@ -287,7 +287,7 @@ public class ConfigedMain implements MessagebusListener {
 	private InitialDataLoader initialDataLoader;
 	private LicenseDisplayer licenseDisplayer;
 
-	public ConfigedMain(String host, String user, String password, String otp, String sshKey, String sshKeyPass) {
+	public ConfigedMain(String host, String user, String password, String otp) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
 		}

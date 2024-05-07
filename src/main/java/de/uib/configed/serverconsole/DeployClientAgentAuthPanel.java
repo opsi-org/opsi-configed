@@ -120,17 +120,17 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		List<Object> resultConfigList = (List<Object>) configs
 				.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
-			Logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
+			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER not existing");
 
 			// the config will be created in this run of configed
 		} else {
 			defaultUser = (String) resultConfigList.get(0);
-			Logging.info(this, "KEY_SSH_DEFAULTWINUSER " + ((String) resultConfigList.get(0)));
+			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER " + ((String) resultConfigList.get(0)));
 		}
 
 		resultConfigList = (List<Object>) configs.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
-			Logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");
+			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW not existing");
 
 			// the config will be created in this run of configed
 		} else {

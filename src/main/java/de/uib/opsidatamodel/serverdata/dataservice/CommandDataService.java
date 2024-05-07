@@ -41,10 +41,10 @@ public class CommandDataService {
 
 	public List<Map<String, Object>> retrieveCommandList() {
 		Logging.info(this, "retrieveCommandList ");
-		List<Map<String, Object>> sshCommands = exec
+		List<Map<String, Object>> commands = exec
 				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_GET_OBJECTS, new Object[] {}));
-		Logging.debug(this, "retrieveCommandList commands " + sshCommands);
-		return sshCommands;
+		Logging.debug(this, "retrieveCommandList commands " + commands);
+		return commands;
 	}
 
 	public boolean deleteCommand(List<String> jsonObjects) {

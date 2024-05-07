@@ -54,8 +54,6 @@ public final class Configed {
 	private static String password;
 	private static String otp;
 
-	private static String sshKey;
-	private static String sshKeyPass;
 	private static boolean optionCLIQuerySearch;
 	private static String savedSearch;
 	private static boolean optionCLIDefineGroupBySearch;
@@ -107,7 +105,7 @@ public final class Configed {
 		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, sshKey, sshKeyPass);
+		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP);
 
 		SwingUtilities.invokeLater(configedMain::init);
 	}
