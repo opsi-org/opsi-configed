@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NavigableSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -260,15 +259,11 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private void resetProducts() {
-		Logging.info(this, "resetProducts in cb_opsiproducts");
+		Logging.info(this, "resetProducts in combobox opsi products");
 		jComboBoxOpsiProducts.removeAllItems();
-		if (persistenceController == null) {
-			Logging.error(this, "resetProducts PersistenceController null");
-		} else {
-			NavigableSet<String> productnames = persistenceController.getProductDataService().getProductIdsPD();
-			for (String item : productnames) {
-				jComboBoxOpsiProducts.addItem(item);
-			}
+
+		for (String item : persistenceController.getProductDataService().getProductIdsPD()) {
+			jComboBoxOpsiProducts.addItem(item);
 		}
 	}
 
