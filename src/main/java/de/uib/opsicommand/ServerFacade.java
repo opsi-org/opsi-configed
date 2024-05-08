@@ -20,7 +20,6 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 import java.util.zip.InflaterInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -140,23 +139,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		requestProperties.put("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION);
 
-		if (versionRetriever.isServerVersionAtLeast("4.2")) {
-			requestProperties.put("Accept", "application/msgpack");
-			requestProperties.put("Content-Type", "application/msgpack");
-		} else {
-			requestProperties.put("Accept", "application/json");
-			requestProperties.put("Content-Type", "application/json");
-		}
+		requestProperties.put("Accept", "application/msgpack");
+		requestProperties.put("Content-Type", "application/msgpack");
 
-		int messageSize = versionRetriever.isServerVersionAtLeast("4.2") ? produceMessagePack(omc).length
-				: produceJSONString(omc).getBytes(StandardCharsets.UTF_8).length;
+		int messageSize = produceMessagePack(omc).length;
 
 		if (messageSize > COMPRESS_MIN_SIZE) {
-			if (versionRetriever.isServerVersionAtLeast("4.2")) {
-				requestProperties.put("Content-Encoding", "lz4");
-			} else {
-				requestProperties.put("Content-Encoding", "gzip");
-			}
+			requestProperties.put("Content-Encoding", "lz4");
 		}
 
 		if (sessionId != null) {
@@ -195,17 +184,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	private String produceJSONString(OpsiMethodCall omc) {
-		String result = "";
-		try {
-			result = new ObjectMapper().writeValueAsString(omc.getOMCMap());
-		} catch (JsonProcessingException e) {
-			Logging.error(this, "unable to process JSON", e);
-		}
-
-		return result;
-	}
-
 	/**
 	 * Retrieves response from the server.
 	 * <p>
@@ -225,8 +203,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
-
-		enableFeaturesBasedOnServerVersion();
 
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(omc));
 		HttpsURLConnection connection = handler.establishConnection(true);
@@ -273,8 +249,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			return;
 		}
 
-		byte[] message = versionRetriever.isServerVersionAtLeast("4.2") ? produceMessagePack(omc)
-				: produceJSONString(omc).getBytes(StandardCharsets.UTF_8);
+		byte[] message = produceMessagePack(omc);
 
 		try (OutputStream writer = getOutputStreamWriterForConnection(connection, message.length)) {
 			writer.write(message);
@@ -291,17 +266,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			throws IOException {
 		if (messageSize <= COMPRESS_MIN_SIZE) {
 			return connection.getOutputStream();
-		} else if (versionRetriever.isServerVersionAtLeast("4.2")) {
-			return new LZ4FrameOutputStream(connection.getOutputStream());
 		} else {
-			return new GZIPOutputStream(connection.getOutputStream());
-		}
-	}
-
-	private static void enableFeaturesBasedOnServerVersion() {
-		if (!versionRetriever.isServerVersionAtLeast("4.2")) {
-			// The way we check the certificate does not work before opsi server version 4.2
-			Utils.setDisableCertificateVerification(true);
+			return new LZ4FrameOutputStream(connection.getOutputStream());
 		}
 	}
 
