@@ -326,15 +326,9 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		ipAddressField.setText(s);
 	}
 
-	public void setUefiBoot(Boolean b) {
-		Logging.info(this, "setUefiBoot " + b);
-
-		if (ServerFacade.isOpsi43()) {
-			cbUefiBoot.setSelected(
-					persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients()));
-		} else {
-			cbUefiBoot.setSelected(b);
-		}
+	public void setUefiBoot() {
+		cbUefiBoot
+				.setSelected(persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients()));
 	}
 
 	public void setWANConfig(Boolean b) {

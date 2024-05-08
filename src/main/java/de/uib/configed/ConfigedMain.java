@@ -2244,7 +2244,7 @@ public class ConfigedMain implements MessagebusListener {
 					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
-			if (ServerFacade.isOpsi43() && !selectedClients.isEmpty()) {
+			if (!selectedClients.isEmpty()) {
 				List<String> depotIds = new ArrayList<>();
 				depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
 						.get(selectedClients.get(0)).getInDepot());

@@ -33,7 +33,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -385,13 +384,6 @@ public final class ClientMenuManager implements MenuListener {
 		jCheckBoxMenuItemShowInventoryNumberColumn.addActionListener(
 				event -> configedMain.toggleColumn(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
 
-		JCheckBoxMenuItem jCheckBoxMenuItemShowUefiBoot = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
-		jCheckBoxMenuItemShowUefiBoot.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
-		jCheckBoxMenuItemShowUefiBoot
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
-
 		JCheckBoxMenuItem jCheckBoxMenuItemShowInstallByShutdown = new JCheckBoxMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
 		jCheckBoxMenuItemShowInstallByShutdown.setSelected(persistenceController.getHostDataService()
@@ -414,11 +406,6 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShowColumns.add(jCheckBoxMenuItemShowSessionInfoColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowInventoryNumberColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowCreatedColumn);
-
-		if (!ServerFacade.isOpsi43()) {
-			jMenuShowColumns.add(jCheckBoxMenuItemShowUefiBoot);
-		}
-
 		jMenuShowColumns.add(jCheckBoxMenuItemShowInstallByShutdown);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
 

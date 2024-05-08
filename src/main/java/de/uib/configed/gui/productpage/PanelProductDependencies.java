@@ -17,6 +17,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.DependenciesModel.DependenciesModelListener;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.ColorTableCellRenderer;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModelListener {
 	// The label shown on top of the dependencies-panel
@@ -77,8 +78,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 		dependenciesModel.addListener(this);
 
 		dependenciesTable.setModel(dependenciesModel.getRequirementsModel());
-		dependenciesTable.setDefaultRenderer(Object.class,
-				dependenciesModel.getRequirementsModel().getTableCellRenderer());
+		dependenciesTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 
 		dependenciesTreePanel.setDependenciesTreeModel(dependenciesModel.getDependenciesTreeModel());
 	}

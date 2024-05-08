@@ -6,23 +6,16 @@
 
 package de.uib.configed.guidata;
 
-import java.awt.Component;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
-import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.ColorTableCellRenderer;
 
 public class RequirementsTableModel extends AbstractTableModel {
 	private static final int NO_OF_ROW_TYPES = 3;
@@ -196,39 +189,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 			return requDeinstallMap.get(myKey);
 		} else {
 			return null;
-		}
-	}
-
-	public MyTableCellRenderer getTableCellRenderer() {
-		return new MyTableCellRenderer();
-	}
-
-	private static final class MyTableCellRenderer extends ColorTableCellRenderer {
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-			setToolTipText("" + value);
-
-			// Don't warn in opsi 4.3, since now not only "setup" is allowed for dependencies
-			if (!ServerFacade.isOpsi43()) {
-				if (shouldWarn(column, String.valueOf(value))) {
-					setIcon(Utils.createImageIcon("images/warning.png", "warning"));
-
-					setToolTipText(Configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
-				} else {
-					setIcon(null);
-				}
-			}
-
-			return this;
-		}
-
-		private static boolean shouldWarn(int column, String cellValue) {
-			return (column == 2 || column == 3)
-					&& (cellValue.equals("(" + InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED) + ":)")
-							|| cellValue.equals("(:" + ActionRequest.getLabel(ActionRequest.UNINSTALL) + ")"));
 		}
 	}
 }

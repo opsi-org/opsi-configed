@@ -940,8 +940,7 @@ public class ProductDataService {
 			callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productIds);
 		}
 		callFilter.put("clientId", clientId);
-		RPCMethodName methodName = ServerFacade.isOpsi43() && !attributes.isEmpty()
-				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
+		RPCMethodName methodName = !attributes.isEmpty() ? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
 				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
 		OpsiMethodCall omc = new OpsiMethodCall(methodName, new Object[] { attributes, callFilter });
 
@@ -967,8 +966,7 @@ public class ProductDataService {
 		callFilter.put("clientId", clientIds);
 		callFilter.put("productType", productServerString);
 
-		RPCMethodName methodName = ServerFacade.isOpsi43() && !attributes.isEmpty()
-				? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
+		RPCMethodName methodName = !attributes.isEmpty() ? RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS_WITH_SEQUENCE
 				: RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS;
 		List<Map<String, Object>> productOnClients = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { attributes, callFilter }));

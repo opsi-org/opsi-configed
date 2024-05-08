@@ -403,7 +403,7 @@ public class HostInfo {
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientMacAddress(clientMacAddress);
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientIpAddress(clientIpAddress);
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setUefiBoot(clientUefiBoot);
+		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setUefiBoot();
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setWANConfig(clientWanConfig);
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setShutdownInstall(clientShutdownInstall);
 
