@@ -2304,7 +2304,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (selectedClients.size() == 1) {
 			mainFrame.getTabbedConfigPanes().setHardwareInfo(
-					persistenceController.getHardwareDataService().getHardwareInfo(selectedClients.get(1)));
+					persistenceController.getHardwareDataService().getHardwareInfo(selectedClients.get(0)));
 		} else {
 			mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
 		}
@@ -2316,7 +2316,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setSoftwareInfoPage(), number selected clients " + selectedClients.size());
 
 		if (selectedClients.size() == 1) {
-			mainFrame.getTabbedConfigPanes().setSoftwareAudit(selectedClients.get(1));
+			mainFrame.getTabbedConfigPanes().setSoftwareAudit(selectedClients.get(0));
 		} else {
 			mainFrame.getTabbedConfigPanes().setSoftwareAudit();
 		}
@@ -2333,7 +2333,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "getLogfilesUpdating " + logtypeToUpdate);
 
 		if (selectedClients.size() == 1) {
-			logfiles = persistenceController.getLogDataService().getLogfile(selectedClients.get(1), logtypeToUpdate);
+			logfiles = persistenceController.getLogDataService().getLogfile(selectedClients.get(0), logtypeToUpdate);
 			Logging.debug(this, "log pages set");
 		} else {
 			for (String logType : Utils.getLogTypes()) {
