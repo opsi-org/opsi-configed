@@ -3,6 +3,10 @@
 ## Changed
 - Replace SSH server console with messagebus server console
 - Remove user roles config key `ssh.serverconfiguration.active`
+- Remove MySQL client search (was available only before 4.3 with MySQL)
+- Remove multi client hardware info (was available only before 4.3 with MySQL)
+- Update to Java 22
+- Update to JavaFX 22
 
 
 ## [4.3.2.14] - 2024-04-29
