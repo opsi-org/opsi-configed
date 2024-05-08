@@ -26,7 +26,6 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.RemoteControls;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -280,57 +279,6 @@ public class ConfigDataService {
 	}
 
 	public void retrieveHostConfigsPD() {
-		if (ServerFacade.isOpsi43()) {
-			retrieveHostConfigsPDOpsi43();
-		} else {
-			retrieveHostConfigsPDOpsi42Lower();
-		}
-	}
-
-	private void retrieveHostConfigsPDOpsi42Lower() {
-		if (cacheManager.isDataCached(CacheIdentifier.HOST_CONFIGS)) {
-			return;
-		}
-
-		TimeCheck timeCheck = new TimeCheck(this, " retrieveHostConfigs");
-		timeCheck.start();
-
-		String[] callAttributes = new String[] {};
-		Map<String, Object> callFilter = new HashMap<>();
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_OBJECTS,
-				new Object[] { callAttributes, callFilter });
-		List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
-		Map<String, Map<String, Object>> hostConfigs = new HashMap<>();
-
-		for (Map<String, Object> listElement : retrieved) {
-			Object id = listElement.get("objectId");
-
-			if (id instanceof String && !"".equals(id)) {
-				String hostId = (String) id;
-				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
-
-				Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + listElement);
-
-				String configId = (String) listElement.get("configId");
-
-				if (listElement.get("values") == null) {
-					configs1Host.put(configId, new ArrayList<>());
-					// is a data error but can occur
-				} else {
-					configs1Host.put(configId, listElement.get("values"));
-				}
-			}
-		}
-
-		timeCheck.stop();
-		Logging.info(this, "retrieveHostConfigs retrieved " + hostConfigs.keySet());
-
-		cacheManager.setCachedData(CacheIdentifier.HOST_CONFIGS, hostConfigs);
-		persistenceController.notifyPanelCompleteWinProducts();
-	}
-
-	private void retrieveHostConfigsPDOpsi43() {
 		if (cacheManager.isDataCached(CacheIdentifier.HOST_CONFIGS)) {
 			return;
 		}

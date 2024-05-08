@@ -25,7 +25,6 @@ import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -587,32 +586,6 @@ public class UserRolesConfigDataService {
 		return Collections.singletonList(DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 	}
 
-	private List<Object> computeProductSortAlgorithm(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM);
-
-		List<Object> defaultValues = new ArrayList<>();
-		defaultValues.add("algorithm1");
-
-		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add("algorithm1");
-		possibleValues.add("algorithm2");
-
-		// create config for service
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-		item.put("ident", OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM);
-		item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
-		item.put("defaultValues", defaultValues);
-
-		item.put("possibleValues", possibleValues);
-		item.put("editable", false);
-		item.put("multiValue", false);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
 	private List<Object> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(
 			List<Map<String, Object>> readyObjects) {
 		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
@@ -946,13 +919,6 @@ public class UserRolesConfigDataService {
 		// global value for install_by_shutdown
 		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
 				arg -> computeClientConfigInstallByShutdown(readyObjects));
-
-		// product_sort_algorithm
-		// will not be used in opsi 4.3
-		if (!ServerFacade.isOpsi43()) {
-			configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_PRODUCT_SORT_ALGORITHM,
-					arg -> computeProductSortAlgorithm(readyObjects));
-		}
 
 		// extra display fields in licencing
 		configDefaultValues.computeIfAbsent(

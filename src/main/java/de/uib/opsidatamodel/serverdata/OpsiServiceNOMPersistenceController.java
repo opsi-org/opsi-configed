@@ -90,8 +90,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	public static final String OPSI_CLIENTD_EVENT_ON_DEMAND = "on_demand";
 
-	public static final String KEY_PRODUCT_SORT_ALGORITHM = "product_sort_algorithm";
-
 	public static final String LOCAL_IMAGE_RESTORE_PRODUCT_KEY = "opsi-local-image-restore";
 	public static final String LOCAL_IMAGE_LIST_PROPERTY_KEY = "imagefiles_list";
 	public static final String LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY = "imagefile";
@@ -440,7 +438,6 @@ public class OpsiServiceNOMPersistenceController {
 
 		configKeyStartersNotForClients = new HashSet<>(propertyClassesServer.keySet());
 		configKeyStartersNotForClients.removeAll(propertyClassesClient.keySet());
-		configKeyStartersNotForClients.add(KEY_PRODUCT_SORT_ALGORITHM);
 		configKeyStartersNotForClients.add("configed");
 	}
 

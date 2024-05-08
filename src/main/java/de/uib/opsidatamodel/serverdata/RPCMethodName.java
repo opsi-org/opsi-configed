@@ -15,8 +15,8 @@ public enum RPCMethodName {
 	CONFIG_CREATE_OBJECTS("config_createObjects"), CONFIG_UPDATE_OBJECTS("config_updateObjects"),
 	CONFIG_DELETE_OBJECTS("config_deleteObjects"),
 
-	CONFIG_STATE_GET_OBJECTS("configState_getObjects"), CONFIG_STATE_GET_VALUES("configState_getValues"),
-	CONFIG_STATE_UPDATE_OBJECTS("configState_updateObjects"), CONFIG_STATE_DELETE_OBJECTS("configState_deleteObjects"),
+	CONFIG_STATE_GET_VALUES("configState_getValues"), CONFIG_STATE_UPDATE_OBJECTS("configState_updateObjects"),
+	CONFIG_STATE_DELETE_OBJECTS("configState_deleteObjects"),
 
 	ACCESS_CONTROL_AUTHENTICATED("accessControl_authenticated"),
 	ACCESS_CONTROL_USER_IS_ADMIN("accessControl_userIsAdmin"),
