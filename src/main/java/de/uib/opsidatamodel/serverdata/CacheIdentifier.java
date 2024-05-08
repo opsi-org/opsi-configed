@@ -137,11 +137,6 @@ public enum CacheIdentifier {
 	OPSI_MODULES_DISPLAY_INFO("opsi_modules_display_info"),
 
 	/**
-	 * return type {@code Boolean}
-	 */
-	IS_OPSI_LICENSING_AVAILABLE("is_opsi_licensing_available"),
-
-	/**
 	 * retrung type {@code Map<String, TreeSet<OpsiPackage>}
 	 */
 	DEPOT_TO_PACKAGES("depot_to_packages"),

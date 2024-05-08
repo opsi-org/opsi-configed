@@ -278,8 +278,7 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private void initOpsiLicenseButtonBasedOnWarningLevel() {
-		if (persistenceController.getModuleDataService().isOpsiLicensingAvailablePD()
-				&& persistenceController.getModuleDataService().isOpsiUserAdminPD() && licensingInfoMap == null) {
+		if (persistenceController.getModuleDataService().isOpsiUserAdminPD() && licensingInfoMap == null) {
 			licensingInfoMap = LicensingInfoMap.getInstance(
 					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),

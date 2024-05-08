@@ -808,8 +808,7 @@ public class MainFrame extends JFrame {
 	}
 
 	protected void showOpsiModules() {
-		if (!persistenceController.getModuleDataService().isOpsiLicensingAvailablePD()
-				|| !persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
+		if (!persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
 			StringBuilder message = new StringBuilder();
 			Map<String, Object> modulesInfo = persistenceController.getModuleDataService().getOpsiModulesInfosPD();
 
