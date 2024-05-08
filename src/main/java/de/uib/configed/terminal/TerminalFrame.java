@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -208,7 +209,7 @@ public final class TerminalFrame implements MessagebusListener {
 	public void writeToWidget(String message) {
 		TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 		if (widget != null) {
-			widget.write(message.getBytes());
+			widget.write(message.getBytes(StandardCharsets.UTF_8));
 		}
 	}
 

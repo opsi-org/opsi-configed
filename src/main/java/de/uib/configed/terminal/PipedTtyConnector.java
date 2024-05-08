@@ -70,7 +70,7 @@ public class PipedTtyConnector implements TtyConnector {
 		}
 
 		try {
-			writer.write(new String(bytes));
+			writer.write(new String(bytes, StandardCharsets.UTF_8));
 			writer.flush();
 		} catch (IOException e) {
 			Logging.error(this, "failed to write bytes", e);

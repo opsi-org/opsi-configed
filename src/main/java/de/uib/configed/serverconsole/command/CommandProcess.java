@@ -6,6 +6,7 @@
 
 package de.uib.configed.serverconsole.command;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -111,14 +112,15 @@ public class CommandProcess {
 		byte[] data = (byte[]) message.get(streamToReadFrom);
 		String currentProcessId = (String) message.get("process_id");
 		if (currentProcessId.equals(id) && !"stderr".equals(streamToReadFrom)) {
-			result.append(new String(data));
+			result.append(new String(data, StandardCharsets.UTF_8));
 		}
-		return new String(data);
+		return new String(data, StandardCharsets.UTF_8);
 	}
 
 	private static String determineStreamFromWhichToRead(Map<String, Object> message) {
-		return message.get("stderr") != null && !(new String((byte[]) message.get("stderr"))).isEmpty() ? "stderr"
-				: "stdout";
+		return message.get("stderr") != null
+				&& !(new String((byte[]) message.get("stderr"), StandardCharsets.UTF_8)).isEmpty() ? "stderr"
+						: "stdout";
 	}
 
 	public String onError(Map<String, Object> message) {
