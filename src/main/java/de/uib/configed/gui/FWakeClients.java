@@ -17,7 +17,6 @@ import javax.swing.JFrame;
 
 import de.uib.configed.Configed;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -35,6 +34,7 @@ public class FWakeClients extends FShowList {
 		super.setButtonsEnabled(true);
 	}
 
+	// TODO still some things to remove now
 	public void act(List<String> selectedClients, int delaySecs) {
 		setVisible(true);
 
@@ -68,12 +68,7 @@ public class FWakeClients extends FShowList {
 				}
 			}
 
-			if (ServerFacade.isOpsi43()) {
-				persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(hostsToWakeOnThisTurn);
-			} else {
-				persistenceController.getRPCMethodExecutor().wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots,
-						executionerForDepots);
-			}
+			persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(hostsToWakeOnThisTurn);
 
 			Utils.threadSleep(this, 1000L * delaySecs);
 		}

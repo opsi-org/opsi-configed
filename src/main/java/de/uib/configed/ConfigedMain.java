@@ -3201,15 +3201,7 @@ public class ConfigedMain implements MessagebusListener {
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
 			@Override
 			protected List<String> getErrors() {
-				List<String> errors;
-
-				if (ServerFacade.isOpsi43()) {
-					errors = persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(clients);
-				} else {
-					errors = persistenceController.getRPCMethodExecutor().wakeOnLan(clients);
-				}
-
-				return errors;
+				return persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(clients);
 			}
 		}.start();
 	}

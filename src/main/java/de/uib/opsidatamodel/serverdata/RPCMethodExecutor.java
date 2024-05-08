@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.serverdata;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -62,56 +61,6 @@ public class RPCMethodExecutor {
 			args = new String[] {};
 		}
 		return exec.doCall(new OpsiMethodCall(RPCMethodName.SET_RIGHTS, args));
-	}
-
-	public List<String> wakeOnLan(List<String> hostIds) {
-		return wakeOnLan(hostDataService.getHostSeparationByDepots(hostIds));
-	}
-
-	private List<String> wakeOnLan(Map<String, List<String>> hostSeparationByDepot) {
-		Map<String, Object> responses = new HashMap<>();
-
-		for (Entry<String, List<String>> hostSeparationEntry : hostSeparationByDepot.entrySet()) {
-			Logging.info(this,
-					"from depot " + hostSeparationEntry.getKey() + " we have hosts " + hostSeparationEntry.getValue());
-
-			Logging.info(this, "working exec for depot " + hostSeparationEntry.getKey());
-
-			AbstractPOJOExecutioner exec1 = persistenceController.retrieveWorkingExec(hostSeparationEntry.getKey());
-
-			if (exec1 != null) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
-						new Object[] { hostSeparationEntry.getValue() });
-
-				Map<String, Object> responses1 = exec1.getMapResult(omc);
-				responses.putAll(responses1);
-			}
-		}
-
-		return collectErrorsFromResponsesByHost(responses, "wakeOnLan");
-	}
-
-	public List<String> wakeOnLan(Set<String> hostIds, Map<String, List<String>> hostSeparationByDepot,
-			Map<String, AbstractPOJOExecutioner> execsByDepot) {
-		Map<String, Object> responses = new HashMap<>();
-
-		for (Entry<String, List<String>> hostSeparationEntry : hostSeparationByDepot.entrySet()) {
-			if (hostSeparationEntry.getValue() != null && !hostSeparationEntry.getValue().isEmpty()) {
-				Set<String> hostsToWake = new HashSet<>(hostIds);
-				hostsToWake.retainAll(hostSeparationEntry.getValue());
-
-				if (execsByDepot.get(hostSeparationEntry.getKey()) != null && !hostsToWake.isEmpty()) {
-					Logging.debug(this, "wakeOnLan execute for " + hostsToWake);
-					OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START,
-							new Object[] { hostsToWake });
-
-					Map<String, Object> responses1 = execsByDepot.get(hostSeparationEntry.getKey()).getMapResult(omc);
-					responses.putAll(responses1);
-				}
-			}
-		}
-
-		return collectErrorsFromResponsesByHost(responses, "wakeOnLan");
 	}
 
 	public List<String> wakeOnLanOpsi43(Collection<String> hostIds) {
