@@ -3013,7 +3013,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		newClientDialog.useConfigDefaults(
 				persistenceController.getConfigDataService().isInstallByShutdownConfigured(myServer),
-				persistenceController.getConfigDataService().isUefiConfigured(myServer),
 				persistenceController.getConfigDataService().isWanConfigured(myServer));
 		newClientDialog.setHostNames(persistenceController.getHostInfoCollections().getOpsiHostNames());
 		newClientDialog.setLocationRelativeTo(getMainFrame());

@@ -50,7 +50,6 @@ import de.uib.configed.gui.csv.CSVImportDataDialog;
 import de.uib.configed.gui.csv.CSVImportDataModifier;
 import de.uib.configed.gui.csv.CSVTemplateCreatorDialog;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -75,7 +74,6 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
 	private JTextArea jTextNotes;
-	private JCheckBox jCheckUefi;
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
 
@@ -127,8 +125,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		comboBox.setSelectedIndex(0);
 	}
 
-	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
-		jCheckUefi.setSelected(uefiIsDefault);
+	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, boolean wanIsDefault) {
 		jCheckWan.setSelected(wanIsDefault);
 		jCheckShutdownInstall.setSelected(shutdownINSTALLIsDefault);
 	}
@@ -239,13 +236,6 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
-		jCheckUefi = new JCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
-
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI)) {
-			jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-			jCheckUefi.setEnabled(false);
-		}
-
 		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -255,18 +245,6 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		JPanel panel = new JPanel();
 		GroupLayout gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
-
-		GroupLayout.Group uefiVerticalGroup = gpl.createSequentialGroup();
-		GroupLayout.Group uefiHorizontalGroup = gpl.createSequentialGroup();
-
-		if (!ServerFacade.isOpsi43()) {
-			uefiVerticalGroup.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-					.addComponent(jCheckUefi, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-
-			uefiHorizontalGroup.addGap(Globals.GAP_SIZE)
-					.addComponent(jCheckUefi, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-					.addGap(Globals.MIN_GAP_SIZE);
-		}
 
 		gpl.setHorizontalGroup(gpl.createParallelGroup()
 				/////// HOSTNAME
@@ -343,8 +321,6 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(jCheckWan, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
-				/////// UEFI
-				.addGroup(uefiHorizontalGroup)
 				// depot
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelDepot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
@@ -404,8 +380,6 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 						.addComponent(jCheckShutdownInstall, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(jCheckWan, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				/////// UEFI
-				.addGroup(uefiVerticalGroup)
 				/////// depot
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(
@@ -792,8 +766,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		}
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 
-		boolean uefiboot = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI)
-				&& jCheckUefi.getSelectedObjects() != null;
+		boolean uefiboot = false;
 		boolean wanConfig = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)
 				&& jCheckWan.getSelectedObjects() != null;
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
