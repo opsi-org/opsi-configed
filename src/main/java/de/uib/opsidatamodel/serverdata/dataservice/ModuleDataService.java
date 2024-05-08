@@ -670,11 +670,10 @@ public class ModuleDataService {
 	}
 
 	public boolean isOpsiUserAdminPD() {
-		boolean hasIsOpisUserAdminBeenChecked = Boolean.TRUE
-				.equals(cacheManager.getCachedData(CacheIdentifier.HAS_IS_OPSI_USER_ADMIN_BEEN_CHECKED, Boolean.class));
-		if (!hasIsOpisUserAdminBeenChecked) {
+		if (!cacheManager.isDataCached(CacheIdentifier.IS_OPSI_ADMIN_USER)) {
 			retrieveIsOpsiUserAdminPD();
 		}
+
 		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, Boolean.class));
 	}
 
@@ -690,8 +689,8 @@ public class ModuleDataService {
 
 			isOpsiUserAdmin = false;
 		}
+
 		cacheManager.setCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, isOpsiUserAdmin);
-		cacheManager.setCachedData(CacheIdentifier.HAS_IS_OPSI_USER_ADMIN_BEEN_CHECKED, true);
 	}
 
 	public boolean isOpsiLicensingAvailablePD() {

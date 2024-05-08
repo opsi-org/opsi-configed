@@ -119,11 +119,6 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Boolean}
 	 */
-	HAS_IS_OPSI_USER_ADMIN_BEEN_CHECKED("has_is_opsi_user_admin_been_checked"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
 	IS_OPSI_ADMIN_USER("is_opsi_admin_user"),
 
 	/**
