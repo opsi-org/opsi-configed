@@ -17,7 +17,6 @@ import javax.swing.UIManager;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -62,9 +61,7 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 			tooltipText = "" + extendedInfo.get(value).get("description");
 		}
 
-		if (ServerFacade.isOpsi43()) {
-			setConnectionIcon(value);
-		}
+		setConnectionIcon(value);
 
 		String depot = (String) value;
 		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {

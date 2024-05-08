@@ -88,10 +88,9 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			.getPersistenceController();
 
 	public NewClientDialog(ConfigedMain configedMain, List<String> depots) {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.title"), false,
-				new String[] { Configed.getResourceValue("buttonClose"),
-						Configed.getResourceValue("NewClientDialog.buttonCreate") },
-				730, 670 + (ServerFacade.isOpsi43() ? 0 : 30));
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.title"), false, new String[] {
+				Configed.getResourceValue("buttonClose"), Configed.getResourceValue("NewClientDialog.buttonCreate") },
+				730, 670);
 
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 

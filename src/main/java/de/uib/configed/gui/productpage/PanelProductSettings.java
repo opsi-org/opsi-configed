@@ -239,9 +239,7 @@ public class PanelProductSettings extends JSplitPane {
 				.addActionListener((ActionEvent e) -> configedMain.processActionRequestsSelectedProducts());
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
-		if (ServerFacade.isOpsi43()) {
-			popup.add(itemOnDemandForSelectedProducts);
-		}
+		popup.add(itemOnDemandForSelectedProducts);
 
 		popup.addSeparator();
 

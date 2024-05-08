@@ -578,10 +578,6 @@ public class HostDataService {
 	 * @return a set of clients, that are connected to messagebus
 	 */
 	public Set<String> getMessagebusConnectedClients() {
-		if (!ServerFacade.isOpsi43()) {
-			return new HashSet<>();
-		}
-
 		Logging.info(this, "get clients connected with messagebus");
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_GET_MESSAGEBUS_CONNECTED_IDS, new Object[] {});
 		return new HashSet<>(exec.getStringListResult(omc));

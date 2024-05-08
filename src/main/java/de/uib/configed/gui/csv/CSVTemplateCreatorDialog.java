@@ -50,7 +50,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.HeaderOptionsPanel;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -304,7 +303,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		JCheckBox headerCheckBox = new JCheckBox(header);
 		headerCheckBox.setActionCommand(header);
 
-		if (HostInfo.CLIENT_UEFI_BOOT_KEY.equals(header) && ServerFacade.isOpsi43()) {
+		if (HostInfo.CLIENT_UEFI_BOOT_KEY.equals(header)) {
 			return;
 		}
 

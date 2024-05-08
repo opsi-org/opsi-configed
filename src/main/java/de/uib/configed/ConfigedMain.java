@@ -791,7 +791,7 @@ public class ConfigedMain implements MessagebusListener {
 		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
 				.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
 		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
-				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), ServerFacade.isOpsi43());
+				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
 
 		Logging.info(this,
 				"setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "

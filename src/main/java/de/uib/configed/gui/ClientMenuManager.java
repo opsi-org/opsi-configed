@@ -185,17 +185,13 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenu.add(jMenuShutdownClient);
 		jMenu.add(jMenuRebootClient);
-		if (ServerFacade.isOpsi43()) {
-			jMenu.add(jMenuOpenTerminalOnClient);
-		}
+		jMenu.add(jMenuOpenTerminalOnClient);
 		jMenu.add(jMenuRemoteControl);
 
 		jMenu.addSeparator();
 
 		jMenu.add(jMenuAddClient);
-		if (ServerFacade.isOpsi43()) {
-			jMenu.add(jMenuCopyClient);
-		}
+		jMenu.add(jMenuCopyClient);
 		jMenu.add(jMenuDeleteClient);
 
 		jMenu.add(initResetProductsMenu());
@@ -413,11 +409,7 @@ public final class ClientMenuManager implements MenuListener {
 		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
-
-		if (ServerFacade.isOpsi43()) {
-			jMenuShowColumns.add(jCheckBoxMenuItemShowSystemUUIDColumn);
-		}
-
+		jMenuShowColumns.add(jCheckBoxMenuItemShowSystemUUIDColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowHardwareAddressColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowSessionInfoColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowInventoryNumberColumn);

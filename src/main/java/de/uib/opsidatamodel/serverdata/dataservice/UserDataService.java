@@ -14,7 +14,6 @@ import java.util.Map;
 import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
@@ -46,8 +45,7 @@ public class UserDataService {
 	}
 
 	public void checkMultiFactorAuthenticationPD() {
-		cacheManager.setCachedData(CacheIdentifier.MFA_ENABLED,
-				ServerFacade.isOpsi43() && getOTPSecret(ConfigedMain.getUser()) != null);
+		cacheManager.setCachedData(CacheIdentifier.MFA_ENABLED, getOTPSecret(ConfigedMain.getUser()) != null);
 	}
 
 	private String getOTPSecret(String userId) {
