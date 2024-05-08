@@ -575,18 +575,6 @@ public class UserRolesConfigDataService {
 		return defaultValues;
 	}
 
-	private List<Object> computeSearchBySQL(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL);
-
-		Map<String, Object> item = Utils.createNOMBoolConfig(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
-				OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL,
-				"Use SQL calls for search if SQL backend is active");
-		readyObjects.add(item);
-
-		return Collections.singletonList(OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
-	}
-
 	private List<Object> computeClientConfigInstallByShutdown(List<Map<String, Object>> readyObjects) {
 		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
 				+ OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
@@ -946,8 +934,7 @@ public class UserRolesConfigDataService {
 			return false;
 		}
 
-		// Must be final for the lambdas
-		final List<Map<String, Object>> readyObjects = new ArrayList<>();
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
 
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
@@ -955,10 +942,6 @@ public class UserRolesConfigDataService {
 		// list of domains for new clients		
 		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY,
 				arg -> computeConfigedGivenDomains(readyObjects));
-
-		// search by sql if possible
-		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
-				arg -> computeSearchBySQL(readyObjects));
 
 		// global value for install_by_shutdown
 		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,

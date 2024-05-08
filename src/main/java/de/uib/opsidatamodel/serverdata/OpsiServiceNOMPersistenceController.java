@@ -88,11 +88,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	public static final Boolean DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT = false;
 
-	public static final String KEY_SEARCH_BY_SQL = "configed.search_by_sql";
-
-	// combines with question if mysql backend is working
-	public static final Boolean DEFAULTVALUE_SEARCH_BY_SQL = true;
-
 	public static final String OPSI_CLIENTD_EVENT_ON_DEMAND = "on_demand";
 
 	public static final String KEY_PRODUCT_SORT_ALGORITHM = "product_sort_algorithm";

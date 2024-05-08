@@ -136,7 +136,7 @@ public class SelectionManager {
 
 		long startTime = System.nanoTime();
 		List<String> l = selectClientsLocal(operation);
-		Logging.notice(this, "select Clients without MySQL " + ((System.nanoTime() - startTime) / 1_000_000));
+		Logging.notice(this, "select Clients " + ((System.nanoTime() - startTime) / 1_000_000));
 		return l;
 	}
 
