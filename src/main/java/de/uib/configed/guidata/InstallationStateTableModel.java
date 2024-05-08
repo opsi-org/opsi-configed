@@ -32,7 +32,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.opsicommand.POJOReMapper;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -111,7 +110,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 	private Map<String, Map<String, Object>> globalProductInfos;
 	private NavigableSet<String> productNames;
-	private List<String> productNamesInDeliveryOrder;
 
 	private Set<String> missingProducts = new HashSet<>();
 
@@ -148,8 +146,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		missingImplementationForAR = new TreeSet<>();
 		product2setOfClientsWithNewAction = new HashMap<>();
-
-		this.productNamesInDeliveryOrder = productNamesInDeliveryOrder;
 
 		productNames = new TreeSet<>(productNamesInDeliveryOrder);
 		sortedProductsList = new ArrayList<>(productNames);
@@ -1163,12 +1159,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private Object getDisplayLabelForPosition() {
-		if (ServerFacade.isOpsi43()) {
-			String position = combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
-			return "-1".equals(position) ? "" : position;
-		} else {
-			return productNamesInDeliveryOrder.indexOf(actualProduct);
-		}
+		String position = combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
+		return "-1".equals(position) ? "" : position;
 	}
 
 	private String actualProductVersion() {
