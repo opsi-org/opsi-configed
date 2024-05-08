@@ -92,18 +92,6 @@ public class OpsiDataSerializer {
 		searches.remove(name);
 	}
 
-	public String getJson(AbstractSelectOperation topOperation) {
-		Map<String, Object> data = produceData(topOperation);
-
-		String jsonString;
-
-		jsonString = "{ \"version\" : \"" + OpsiDataSerializer.DATA_VERSION + "\", \"data\" : ";
-		jsonString += OpsiDataSerializer.createJsonRecursive(data);
-		jsonString += " }";
-
-		return jsonString;
-	}
-
 	/**
 	 * reproduce a search
 	 */

@@ -53,8 +53,6 @@ import de.uib.configed.clientselection.elements.GroupElement;
 import de.uib.configed.clientselection.elements.GroupWithSubgroupsElement;
 import de.uib.configed.clientselection.elements.IPElement;
 import de.uib.configed.clientselection.elements.NameElement;
-import de.uib.configed.clientselection.elements.PropertyIdElement;
-import de.uib.configed.clientselection.elements.PropertyValueElement;
 import de.uib.configed.clientselection.elements.SoftwareActionProgressElement;
 import de.uib.configed.clientselection.elements.SoftwareActionResultElement;
 import de.uib.configed.clientselection.elements.SoftwareInstallationStatusElement;
@@ -71,9 +69,7 @@ import de.uib.configed.clientselection.elements.SwAuditSubversionElement;
 import de.uib.configed.clientselection.elements.SwAuditVersionElement;
 import de.uib.configed.clientselection.operations.HardwareOperation;
 import de.uib.configed.clientselection.operations.HostOperation;
-import de.uib.configed.clientselection.operations.PropertiesOperation;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
-import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -115,8 +111,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private ClientTable selectionPanel;
 	private SavedSearchesDialog savedSearchesDialog;
 
-	private final boolean withMySQL;
-
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -129,13 +123,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
 				FRAME_WIDTH, FRAME_HEIGHT);
-
-		this.withMySQL = persistenceController.getModuleDataService().canCallMySQLPD()
-				&& persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
-						OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
-						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
-
-		Logging.info(this.getClass(), "use mysql " + withMySQL);
 
 		this.configedMain = configedMain;
 		this.selectionPanel = selectionPanel;
@@ -329,13 +316,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.hostName"));
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwareName"));
-
-		// Add properties-Boxes if mysql available
-		if (withMySQL) {
-			newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwarepropertiesonlyName"));
-			newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwarewithpropertiesName"));
-		}
-
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.swauditName"));
 
 		// hardware
@@ -496,65 +476,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		createComplexBottom(result);
-		return result;
-	}
-
-	private ComplexGroup createPropertiesGroup() {
-		ComplexGroup result = createComplexGroup();
-		result.type = GroupType.PROPERTIES_GROUP;
-		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.softwarepropertiesonlyGroup"));
-
-		result.groupList.add(createSimpleGroup(manager.getNewSoftwareNameElement()));
-		result.groupList.getLast().connectionType.setVisible(false);
-
-		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
-		propertyIdGroup.negateButton.setVisible(false);
-		result.groupList.add(propertyIdGroup);
-		result.groupList.getLast().connectionType.setVisible(false);
-
-		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
-		propertyValueGroup.negateButton.setVisible(false);
-		result.groupList.add(propertyValueGroup);
-		result.groupList.getLast().connectionType.setVisible(false);
-
-		createComplexBottom(result);
-
-		return result;
-	}
-
-	// Group with properties
-	private ComplexGroup createSoftwareWithPropertiesGroup() {
-		ComplexGroup result = createComplexGroup();
-		result.type = GroupType.SOFTWARE_WITH_PROPERTIES_GROUP;
-		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.softwarewithpropertiesGroup"));
-
-		result.groupList.add(createSimpleGroup(manager.getNewSoftwareNameElement()));
-		result.groupList.getLast().connectionType.setVisible(false);
-
-		result.groupList.add(createSimpleGroup(new SoftwareInstallationStatusElement()));
-
-		result.groupList.add(createSimpleGroup(new SoftwareActionResultElement()));
-		result.groupList.add(createSimpleGroup(new SoftwareRequestElement()));
-		result.groupList.add(createSimpleGroup(new SoftwareActionProgressElement()));
-		result.groupList.add(createSimpleGroup(new SoftwareLastActionElement()));
-		result.groupList.add(createSimpleGroup(new SoftwareVersionElement()));
-		result.groupList.add(createSimpleGroup(new SoftwarePackageVersionElement()));
-		result.groupList.add(createSimpleGroup(new SoftwareModificationTimeElement()));
-
-		result.groupList.getLast().connectionType.setVisible(false);
-
-		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
-		propertyIdGroup.negateButton.setVisible(false);
-		result.groupList.add(propertyIdGroup);
-		result.groupList.getLast().connectionType.setVisible(false);
-
-		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
-		propertyValueGroup.negateButton.setVisible(false);
-		result.groupList.add(propertyValueGroup);
-		result.groupList.getLast().connectionType.setVisible(false);
-
-		createComplexBottom(result);
-
 		return result;
 	}
 
@@ -991,10 +912,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				element = createHostGroup();
 			} else if (op instanceof SoftwareOperation) {
 				element = createSoftwareGroup();
-			} else if (op instanceof PropertiesOperation) {
-				element = createPropertiesGroup();
-			} else if (op instanceof SoftwareWithPropertiesOperation) {
-				element = createSoftwareWithPropertiesGroup();
 			} else if (op instanceof SwAuditOperation) {
 				element = createSwAuditGroup();
 			} else if (op instanceof HardwareOperation) {
@@ -1103,7 +1020,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	public enum GroupType {
-		HOST_GROUP, SOFTWARE_GROUP, PROPERTIES_GROUP, SOFTWARE_WITH_PROPERTIES_GROUP, SW_AUDIT_GROUP, HARDWARE_GROUP
+		HOST_GROUP, SOFTWARE_GROUP, SW_AUDIT_GROUP, HARDWARE_GROUP
 	}
 
 	private static class ComplexGroup {
@@ -1165,11 +1082,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			complexElements.add(createHostGroup());
 		} else if (index == 2) {
 			complexElements.add(createSoftwareGroup());
-		} else if (index == 3 && withMySQL) {
-			complexElements.add(createPropertiesGroup());
-		} else if (index == 4 && withMySQL) {
-			complexElements.add(createSoftwareWithPropertiesGroup());
-		} else if ((index == 5 && withMySQL) || (index == 3 && !withMySQL)) {
+		} else if (index == 3) {
 			complexElements.add(createSwAuditGroup());
 		} else {
 			complexElements.add(createHardwareGroup(newElementBox.getSelectedItem().toString()));

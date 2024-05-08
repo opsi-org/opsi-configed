@@ -18,9 +18,7 @@ import de.uib.configed.clientselection.operations.HardwareOperation;
 import de.uib.configed.clientselection.operations.HostOperation;
 import de.uib.configed.clientselection.operations.NotOperation;
 import de.uib.configed.clientselection.operations.OrOperation;
-import de.uib.configed.clientselection.operations.PropertiesOperation;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
-import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
 import de.uib.configed.gui.ClientSelectionDialog.GroupType;
@@ -80,14 +78,6 @@ public class SelectionManager {
 			hasSoftware = true;
 			break;
 
-		case PROPERTIES_GROUP:
-			groupStatus.setOperation(new PropertiesOperation(operation));
-			break;
-
-		case SOFTWARE_WITH_PROPERTIES_GROUP:
-			groupStatus.setOperation(new SoftwareWithPropertiesOperation(operation));
-			break;
-
 		case HARDWARE_GROUP:
 			groupStatus.setOperation(new HardwareOperation(operation));
 			hasHardware = true;
@@ -144,38 +134,10 @@ public class SelectionManager {
 			Logging.info("\n" + operation.printOperation(""));
 		}
 
-		boolean withMySQL = persistenceController.getModuleDataService().canCallMySQLPD()
-				&& persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
-						OpsiServiceNOMPersistenceController.KEY_SEARCH_BY_SQL,
-						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
-
-		if (withMySQL) {
-			long startTime = System.nanoTime();
-			List<String> l = selectClientsSQL(operation);
-			Logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1_000_000));
-			return l;
-		} else {
-			long startTime = System.nanoTime();
-			List<String> l = selectClientsLocal(operation);
-			Logging.notice(this, "select Clients without MySQL " + ((System.nanoTime() - startTime) / 1_000_000));
-			return l;
-		}
-	}
-
-	// Filter the clients and get the matching clients back with MySQL backend
-	private List<String> selectClientsSQL(AbstractSelectOperation operation) {
-		String json = serializer.getJson(operation);
-		Logging.info(this, "in selectClientsSQL gotten json-string: " + json);
-		List<String> clientsSelected = new ArrayList<>();
-
-		BackendMySQL backendMySQL = new BackendMySQL();
-		List<String> list = backendMySQL.getClientListFromJSONString(json);
-
-		for (int i = 0; i < list.size(); i++) {
-			clientsSelected.add(list.get(i));
-		}
-
-		return clientsSelected;
+		long startTime = System.nanoTime();
+		List<String> l = selectClientsLocal(operation);
+		Logging.notice(this, "select Clients without MySQL " + ((System.nanoTime() - startTime) / 1_000_000));
+		return l;
 	}
 
 	// Filter the clients and get the matching clients back with old backend,
