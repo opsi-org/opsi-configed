@@ -25,7 +25,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -140,9 +139,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		cbUefiBoot = new CheckedLabel(Configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);
-		if (!ServerFacade.isOpsi43()) {
-			cbUefiBoot.addActionListener(event -> uefiBootAction());
-		}
 
 		cbWANConfig = new CheckedLabel(Configed.getResourceValue("NewClientDialog.wan_not_activated"), selectedIcon,
 				unselectedIcon, nullIcon, false);
@@ -363,16 +359,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		} else {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			cbWANConfig.setEnabled(false);
-		}
-	}
-
-	private void uefiBootAction() {
-		Logging.info(this, "actionPerformed on cbUefiBoot");
-
-		for (String client : configedMain.getSelectedClients()) {
-			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-			changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, cbUefiBoot.isSelected().toString());
-			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 		}
 	}
 

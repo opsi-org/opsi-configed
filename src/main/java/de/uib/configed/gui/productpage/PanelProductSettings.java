@@ -48,7 +48,6 @@ import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductActionPanel;
 import de.uib.configed.tree.ProductTree;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -426,13 +425,7 @@ public class PanelProductSettings extends JSplitPane {
 		Logging.info(this, "saveAndExecuteAction");
 		configedMain.checkSaveAll(false);
 		configedMain.requestReloadStatesAndActions();
-
-		if (ServerFacade.isOpsi43()) {
-			configedMain.processActionRequestsAllProducts();
-		} else {
-			configedMain.fireOpsiclientdEventOnSelectedClients(
-					OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
-		}
+		configedMain.processActionRequestsAllProducts();
 	}
 
 	@SuppressWarnings("java:S1452")
