@@ -490,14 +490,6 @@ public class MainFrame extends JFrame {
 
 		jMenuHelp.add(jMenuHelpOpsiModuleInformation);
 
-		JMenuItem jMenuHelpInternalConfiguration = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuHelpInternalConfiguration"));
-		jMenuHelpInternalConfiguration.addActionListener((ActionEvent e) -> showBackendConfigurationAction());
-
-		if (!ServerFacade.isOpsi43()) {
-			jMenuHelp.add(jMenuHelpInternalConfiguration);
-		}
-
 		addLogfileMenus(jMenuHelp, this);
 
 		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
@@ -742,15 +734,6 @@ public class MainFrame extends JFrame {
 				deactivateLoadingPane();
 			}
 		}.start();
-	}
-
-	private void showBackendConfigurationAction() {
-		FEditorPane backendInfoDialog = new FEditorPane(this,
-				Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 800, 600);
-		backendInfoDialog.insertHTMLTable(persistenceController.getConfigDataService().getBackendInfos(), "");
-
-		backendInfoDialog.setVisible(true);
 	}
 
 	private static void showLogfileLocationAction(JFrame centerFrame) {
