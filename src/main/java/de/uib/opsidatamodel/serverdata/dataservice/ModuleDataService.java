@@ -700,9 +700,7 @@ public class ModuleDataService {
 	}
 
 	private void retrieveOpsiLicensingInfoVersion() {
-		boolean hasOpsiLicencingBeenChecked = Boolean.TRUE
-				.equals(cacheManager.getCachedData(CacheIdentifier.HAS_OPSI_LICENSING_BEEN_CHECKED, Boolean.class));
-		if (!hasOpsiLicencingBeenChecked) {
+		if (!cacheManager.isDataCached(CacheIdentifier.IS_OPSI_LICENSING_AVAILABLE)) {
 			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
 					+ getMethodSignaturePD(RPCMethodName.BACKEND_GET_LICENSING_INFO));
 
@@ -715,9 +713,7 @@ public class ModuleDataService {
 				isOpsiLicencingAvailable = true;
 			}
 
-			hasOpsiLicencingBeenChecked = true;
 			cacheManager.setCachedData(CacheIdentifier.IS_OPSI_LICENSING_AVAILABLE, isOpsiLicencingAvailable);
-			cacheManager.setCachedData(CacheIdentifier.HAS_OPSI_LICENSING_BEEN_CHECKED, hasOpsiLicencingBeenChecked);
 		}
 	}
 

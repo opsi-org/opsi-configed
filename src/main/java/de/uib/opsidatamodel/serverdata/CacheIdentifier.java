@@ -139,11 +139,6 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Boolean}
 	 */
-	HAS_OPSI_LICENSING_BEEN_CHECKED("has_opsi_licensing_been_checked"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
 	IS_OPSI_LICENSING_AVAILABLE("is_opsi_licensing_available"),
 
 	/**
