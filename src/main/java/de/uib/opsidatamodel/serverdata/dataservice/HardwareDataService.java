@@ -9,9 +9,7 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,14 +24,11 @@ import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.logging.TimeCheck;
 
 /**
  * Provides methods for working with hardware data on the server.
@@ -53,31 +48,18 @@ public class HardwareDataService {
 	// constants for building hw queries
 	public static final String HW_INFO_CONFIG = "HARDWARE_CONFIG_";
 	public static final String HW_INFO_DEVICE = "HARDWARE_DEVICE_";
-	public static final String LAST_SEEN_VISIBLE_COL_NAME = "HOST.last_scan_time";
-
-	private static final String HOST_ID = "HOST.hostId";
-	private static final String HOST_DESCRIPTION = "HOST.description";
-	private static final String HOST_HARDWARE_ADDRESS = "HOST.hardwareAdress";
 
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;
-	private OpsiServiceNOMPersistenceController persistenceController;
 	private ConfigDataService configDataService;
-	private HostInfoCollections hostInfoCollections;
 
-	public HardwareDataService(AbstractPOJOExecutioner exec,
-			OpsiServiceNOMPersistenceController persistenceController) {
+	public HardwareDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
-		this.persistenceController = persistenceController;
 	}
 
 	public void setConfigDataService(ConfigDataService configDataService) {
 		this.configDataService = configDataService;
-	}
-
-	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
-		this.hostInfoCollections = hostInfoCollections;
 	}
 
 	public List<Map<String, Object>> getHardwareOnClientPD() {
@@ -179,34 +161,6 @@ public class HardwareDataService {
 		Logging.info(this, "produceHwAuditDeviceClasses hwAuditDeviceClasses size " + hwAuditDeviceClasses.size());
 	}
 
-	public List<String> getAllHwClassNamesPD() {
-		retrieveHwClassesPD(
-				getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry()));
-		List<String> opsiHwClassNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES, List.class);
-		Logging.info(this, "getAllHwClassNames, hw classes " + opsiHwClassNames);
-		return opsiHwClassNames;
-	}
-
-	// partial version of produceHwAuditDeviceClasses()
-	public List<String> retrieveHwClassesPD(Iterable<Map<String, List<Map<String, Object>>>> hwAuditConf) {
-		if (cacheManager.isDataCached(CacheIdentifier.OPSI_HW_CLASS_NAMES)) {
-			return new ArrayList<>();
-		}
-
-		List<String> result = new ArrayList<>();
-		for (Map<String, List<Map<String, Object>>> hwAuditClass : hwAuditConf) {
-			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
-					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
-			result.add(hwClass);
-		}
-		cacheManager.setCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES, result);
-		return result;
-	}
-
-	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD() {
-		return getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
-	}
-
 	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD(String locale) {
 		retrieveOpsiHWAuditConfPD(locale);
 		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = cacheManager
@@ -228,296 +182,6 @@ public class HardwareDataService {
 		hwAuditConf.computeIfAbsent(locale, s -> exec.getListOfMapsOfListsOfMaps(
 				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
 		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
-	}
-
-	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
-		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
-		Map<String, Map<String, Object>> client2HwRows = new HashMap<>();
-
-		// set default rows
-		for (String host : hostInfoCollections.getOpsiHostNames()) {
-			Map<String, Object> nearlyEmptyHwRow = new HashMap<>();
-			nearlyEmptyHwRow.put("HOST.hostId", host);
-
-			String hostDescription = "";
-			String macAddress = "";
-			if (hostInfoCollections.getMapOfPCInfoMaps().get(host) != null) {
-				hostDescription = hostInfoCollections.getMapOfPCInfoMaps().get(host).getDescription();
-				macAddress = hostInfoCollections.getMapOfPCInfoMaps().get(host).getMacAddress();
-			}
-			nearlyEmptyHwRow.put("HOST.description", hostDescription);
-			nearlyEmptyHwRow.put("HOST.hardwareAdress", macAddress);
-
-			client2HwRows.put(host, nearlyEmptyHwRow);
-		}
-
-		TimeCheck timeCheck = new TimeCheck(this, " retrieveClient2HwRows all ");
-		timeCheck.start();
-
-		for (String hwClass : getHwInfoClassNamesPD()) {
-			Logging.info(this, "retrieveClient2HwRows hwClass " + hwClass);
-
-			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
-
-			for (Entry<String, Map<String, Object>> client2ClassInfo : client2ClassInfos.entrySet()) {
-				Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
-				// find max lastseen time as last scan time
-
-				String lastseen1 = (String) allInfosForAClient.get(LAST_SEEN_VISIBLE_COL_NAME);
-				String lastseen2 = (String) client2ClassInfo.getValue().get(LAST_SEEN_VISIBLE_COL_NAME);
-				if (lastseen1 != null && lastseen2 != null) {
-					client2ClassInfo.getValue().put(LAST_SEEN_VISIBLE_COL_NAME, maxTime(lastseen1, lastseen2));
-				}
-
-				allInfosForAClient.putAll(client2ClassInfo.getValue());
-			}
-		}
-
-		Logging.info(this, "retrieveClient2HwRows result size " + client2HwRows.size());
-
-		timeCheck.stop();
-		Logging.info(this, "retrieveClient2HwRows finished  ");
-		persistenceController.notifyPanelCompleteWinProducts();
-		return client2HwRows;
-	}
-
-	private Map<String, Map<String, Object>> client2HwRowsForHwClass(String hwClass) {
-		Logging.info(this, "client2HwRowsForHwClass " + hwClass);
-
-		List<String> specificColumns = new ArrayList<>();
-		specificColumns.add("HOST.hostId");
-
-		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
-		StringBuilder cols = new StringBuilder();
-
-		String configTable = HW_INFO_CONFIG + hwClass;
-
-		String lastseenCol = configTable + "." + "lastseen";
-		specificColumns.add(lastseenCol);
-		buf.append(lastseenCol);
-		buf.append(", ");
-
-		boolean foundAnEntry = false;
-
-		// build and collect database columnnames
-		for (String hwInfoCol : getClient2HwRowsColumnNamesPD()) {
-			if (hwInfoCol.startsWith("HOST.") || hwInfoCol.equals(LAST_SEEN_VISIBLE_COL_NAME)) {
-				continue;
-			}
-
-			Logging.info(this,
-					"hwInfoCol " + hwInfoCol + " look for " + HW_INFO_DEVICE + " as well as " + HW_INFO_CONFIG);
-			String part0 = hwInfoCol.substring(0, HW_INFO_DEVICE.length());
-
-			boolean colFound = false;
-			// check if colname is from a CONFIG or a DEVICE table
-			if (hwInfoCol.startsWith(hwClass, part0.length())) {
-				colFound = true;
-				// we found a DEVICE column name
-			} else {
-				part0 = hwInfoCol.substring(0, HW_INFO_CONFIG.length());
-
-				if (hwInfoCol.startsWith(hwClass, part0.length())) {
-					colFound = true;
-					// we found a CONFIG column name
-				}
-			}
-
-			if (colFound) {
-				cols.append(" ");
-				cols.append(hwInfoCol);
-				cols.append(",");
-				specificColumns.add(hwInfoCol);
-				foundAnEntry = true;
-			}
-		}
-
-		if (!foundAnEntry) {
-			Logging.info(this, "no columns found for hwClass " + hwClass);
-			return new HashMap<>();
-		}
-
-		String deviceTable = HW_INFO_DEVICE + hwClass;
-
-		String colsS = cols.toString();
-		buf.append(colsS.substring(0, colsS.length() - 1));
-
-		buf.append(" \nfrom HOST ");
-
-		buf.append(", ");
-		buf.append(deviceTable);
-		buf.append(", ");
-		buf.append(configTable);
-
-		buf.append("\n where ");
-
-		buf.append("HOST.hostId");
-		buf.append(" = ");
-		buf.append(configTable);
-		buf.append(".hostId");
-
-		buf.append("\nAND ");
-		buf.append(configTable);
-		buf.append(".hardware_id");
-		buf.append(" = ");
-		buf.append(deviceTable);
-		buf.append(".hardware_id");
-
-		buf.append("\nAND ");
-		buf.append(configTable);
-		buf.append(".state = 1 ");
-
-		String query = buf.toString();
-
-		Logging.info(this, "retrieveClient2HwRows, query " + query);
-
-		List<List<String>> rows = exec
-				.getListOfStringLists(new OpsiMethodCall(RPCMethodName.GET_RAW_DATA, new Object[] { query }));
-		Logging.info(this, "retrieveClient2HwRows, finished a request");
-		Logging.info(this, "retrieveClient2HwRows, got rows for class " + hwClass);
-		Logging.info(this, "retrieveClient2HwRows, got rows,  size  " + rows.size());
-
-		// shrink to one line per client
-
-		Map<String, Map<String, Object>> clientInfo = new HashMap<>();
-
-		for (List<String> row : rows) {
-			Map<String, Object> rowMap = clientInfo.computeIfAbsent(row.get(0), s -> new HashMap<>());
-
-			for (int i = 1; i < specificColumns.size(); i++) {
-				Object value = rowMap.get(specificColumns.get(i));
-				String valInRow = row.get(i);
-				if (valInRow == null || "null".equals(valInRow)) {
-					valInRow = "";
-				}
-
-				if (value == null) {
-					value = valInRow;
-				} else {
-					value = value + "|" + valInRow;
-				}
-
-				if (specificColumns.get(i).equals(lastseenCol)) {
-					String timeS = maxTime((String) value, row.get(i));
-					rowMap.put(LAST_SEEN_VISIBLE_COL_NAME, timeS);
-				} else {
-					rowMap.put(specificColumns.get(i), value);
-				}
-			}
-		}
-
-		Logging.info(this, "retrieveClient2HwRows, got clientInfo, with size " + clientInfo.size());
-		return clientInfo;
-	}
-
-	private static String maxTime(String time0, String time1) {
-		String result = null;
-		if (time0 == null && time1 == null) {
-			result = null;
-		} else if (time0 == null || "".equals(time0)) {
-			result = time1;
-		} else if (time1 == null || "".equals(time1)) {
-			result = time0;
-		} else if (time0.compareTo(time1) < 0) {
-			result = time1;
-		} else {
-			result = time0;
-		}
-
-		return result;
-	}
-
-	public List<String> getHostColumnNamesPD() {
-		retrieveClient2HwRowsColumnNamesPD();
-		return cacheManager.getCachedData(CacheIdentifier.HOST_COLUMN_NAMES, List.class);
-	}
-
-	public List<String> getClient2HwRowsColumnNamesPD() {
-		retrieveClient2HwRowsColumnNamesPD();
-		return cacheManager.getCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, List.class);
-	}
-
-	public List<String> getHwInfoClassNamesPD() {
-		retrieveClient2HwRowsColumnNamesPD();
-		return cacheManager.getCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, List.class);
-	}
-
-	public void retrieveClient2HwRowsColumnNamesPD() {
-		configDataService.retrieveConfigOptionsPD();
-		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null "
-				+ (!cacheManager.isDataCached(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES)));
-		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.HOST_COLUMN_NAMES,
-				CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, CacheIdentifier.HW_INFO_CLASS_NAMES))) {
-			return;
-		}
-
-		List<String> hostColumnNames = new ArrayList<>();
-
-		hostColumnNames.add(HOST_ID);
-		hostColumnNames.add(HOST_DESCRIPTION);
-		hostColumnNames.add(HOST_HARDWARE_ADDRESS);
-		hostColumnNames.add(LAST_SEEN_VISIBLE_COL_NAME);
-
-		// there is produced client2HwRowsColumnNames
-
-		List<String> client2HwRowsColumnNames = new ArrayList<>(hostColumnNames);
-
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = getHwAuditDeviceClassesPD();
-		for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
-			addHardwareToClientColumns(hwClass, client2HwRowsColumnNames);
-		}
-
-		Set<String> hwInfoClasses = new HashSet<>();
-
-		for (String columnName : client2HwRowsColumnNames) {
-			Logging.info(this, "retrieveClient2HwRowsColumnNames col " + columnName);
-			String className = cutClassName(columnName);
-			if (className != null) {
-				hwInfoClasses.add(className);
-			}
-		}
-
-		List<String> hwInfoClassNames = new ArrayList<>(hwInfoClasses);
-
-		Logging.info(this, "retrieveClient2HwRowsColumnNames hwInfoClassNames " + hwInfoClassNames);
-		cacheManager.setCachedData(CacheIdentifier.HOST_COLUMN_NAMES, hostColumnNames);
-		cacheManager.setCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES, hwInfoClassNames);
-		cacheManager.setCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES, client2HwRowsColumnNames);
-	}
-
-	private static void addHardwareToClientColumns(Entry<String, OpsiHwAuditDeviceClass> hwClass,
-			List<String> client2HwRowsColumnNames) {
-		for (OpsiHwAuditDevicePropertyType deviceProperty : hwClass.getValue().getDeviceHostProperties()) {
-			if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-				String col = HW_INFO_CONFIG + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
-				client2HwRowsColumnNames.add(col);
-			}
-		}
-
-		for (OpsiHwAuditDevicePropertyType deviceProperty : hwClass.getValue().getDeviceHwItemProperties()) {
-			if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-				String col = HW_INFO_DEVICE + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
-				client2HwRowsColumnNames.add(col);
-			}
-		}
-	}
-
-	private String cutClassName(String columnName) {
-		String result = null;
-
-		if (columnName.startsWith(HW_INFO_CONFIG)) {
-			result = columnName.substring(HW_INFO_CONFIG.length());
-			result = result.substring(0, result.indexOf('.'));
-		} else if (columnName.startsWith(HW_INFO_DEVICE)) {
-			result = columnName.substring(HW_INFO_DEVICE.length());
-			result = result.substring(0, result.indexOf('.'));
-		} else if (!columnName.startsWith("HOST")) {
-			Logging.warning(this, "cutClassName unexpected columnName " + columnName);
-		} else {
-			// Column Name starts with "HOST", do nothing
-		}
-
-		return result;
 	}
 
 	private Map<String, Object> produceHwAuditColumnConfig(String configKey,

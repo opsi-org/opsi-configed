@@ -107,11 +107,6 @@ public enum CacheIdentifier {
 	MAP_OF_METHOD_SIGNATURES("map_of_method_signatures"),
 
 	/**
-	 * return type {@code List<String>}
-	 */
-	OPSI_HW_CLASS_NAMES("opsi_hw_class_names"),
-
-	/**
 	 * return type {@code Map<String, RemoteControl>} or {@code: RemoteControls}
 	 */
 	REMOTE_CONTROLS("remote_controls"),
@@ -120,11 +115,6 @@ public enum CacheIdentifier {
 	 * return type {@code: SavedSearches}
 	 */
 	SAVED_SEARCHES("saved_searches"),
-
-	/**
-	 * return type {@code Boolean}
-	 */
-	ACCEPT_MY_SQL("accept_my_sql"),
 
 	/**
 	 * return type {@code Boolean}
@@ -185,21 +175,6 @@ public enum CacheIdentifier {
 	 * return type {@code Map<String, Map<String, OpsiProductInfo>>}
 	 */
 	PRODUCT_TO_VERSION_INFO_TO_INFOS("product_to_version_info_to_infos"),
-
-	/**
-	 * return type {@code List<String>}
-	 */
-	CLIENT_TO_HW_ROWS_COLUMN_NAMES("client_to_hw_rows_column_names"),
-
-	/**
-	 * return type {@code List<String>}
-	 */
-	HW_INFO_CLASS_NAMES("hw_info_class_names"),
-
-	/**
-	 * return type {@code List<String>}
-	 */
-	HOST_COLUMN_NAMES("host_column_names"),
 
 	/**
 	 * return type

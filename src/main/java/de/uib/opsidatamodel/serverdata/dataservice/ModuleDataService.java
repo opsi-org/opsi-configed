@@ -19,7 +19,6 @@ import javax.swing.SwingUtilities;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
-import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
@@ -91,7 +90,6 @@ public class ModuleDataService {
 			produceOpsiModulesInfoPD();
 		}
 
-		Logging.info(this, " withMySQL " + canCallMySQLPD());
 		Logging.info(this, " withUserRoles " + isOpsiModuleActive(OpsiModule.USER_ROLES));
 	}
 
@@ -163,8 +161,6 @@ public class ModuleDataService {
 		Logging.info(this, "produceOpsiModulesInfo withWAN " + isOpsiModuleActive(OpsiModule.WAN));
 		Logging.info(this,
 				"produceOpsiModulesInfo withLicenseManagement " + isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT));
-		Logging.info(this, "produceOpsiModulesInfo withMySQL " + canCallMySQLPD());
-
 		// sets value to true if we use the mysql backend and informs that we are
 		// underlicensed
 	}
@@ -792,26 +788,6 @@ public class ModuleDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.OPSI_INFORMATION, opsiInformation);
 		return opsiInformation;
-	}
-
-	public boolean canCallMySQLPD() {
-		if (!cacheManager.isDataCached(CacheIdentifier.ACCEPT_MY_SQL)) {
-			Boolean acceptMySQL;
-			if (ServerFacade.isOpsi43()) {
-				acceptMySQL = false;
-			} else {
-				// test if we can access any table
-				String query = "select  *  from " + SWAuditClientEntry.DB_TABLE_NAME + " LIMIT 1 ";
-				Logging.info(this, "test, query " + query);
-				acceptMySQL = exec.doCall(new OpsiMethodCall(RPCMethodName.GET_RAW_DATA, new Object[] { query }));
-				Logging.info(this, "test result " + acceptMySQL);
-			}
-			cacheManager.setCachedData(CacheIdentifier.ACCEPT_MY_SQL,
-					acceptMySQL && isOpsiModuleActive(OpsiModule.MYSQL_BACKEND));
-		}
-
-		// we cannot call MySQL if version before 4.3
-		return cacheManager.getCachedData(CacheIdentifier.ACCEPT_MY_SQL, Boolean.class);
 	}
 
 	public boolean isOpsiModuleActive(OpsiModule opsiModule) {

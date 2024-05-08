@@ -24,7 +24,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
-import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.productpage.PanelProductSettings;
@@ -55,7 +54,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private JLabel labelNoSoftware;
 
 	private PanelHWInfo panelHWInfo;
-	private ControllerHWinfoMultiClients controllerHWinfoMultiClients;
 	private JPanel showHardwareLogNotFoundPanel;
 
 	private TabbedLogPane showLogfiles;
@@ -93,10 +91,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	public PanelProductProperties getPanelProductProperties() {
 		return panelProductProperties;
-	}
-
-	public ControllerHWinfoMultiClients getControllerHWinfoMultiClients() {
-		return controllerHWinfoMultiClients;
 	}
 
 	public ClientInfoPanel getClientInfoPanel() {
@@ -285,18 +279,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		}
 
 		showHardwareInfo(showHardwareLogNotFoundPanel);
-	}
-
-	public void setHardwareInfoMultiClients() {
-		if (controllerHWinfoMultiClients == null) {
-			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(configedMain);
-		}
-
-		Logging.info(this, "setHardwareInfoMultiClients ");
-
-		controllerHWinfoMultiClients.setFilter();
-
-		showHardwareInfo(controllerHWinfoMultiClients.getPanel());
 	}
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {

@@ -36,14 +36,6 @@ public class HardwareConfDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES);
 		hardwareDataService.retrieveHwAuditDeviceClassesPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.HOST_COLUMN_NAMES);
-		cacheManager.clearCachedData(CacheIdentifier.HW_INFO_CLASS_NAMES);
-		cacheManager.clearCachedData(CacheIdentifier.CLIENT_TO_HW_ROWS_COLUMN_NAMES);
-		hardwareDataService.retrieveClient2HwRowsColumnNamesPD();
-
-		cacheManager.clearCachedData(CacheIdentifier.OPSI_HW_CLASS_NAMES);
-		hardwareDataService.retrieveHwClassesPD(hardwareDataService.getOpsiHWAuditConfPD());
-
 		cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
 		cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS);

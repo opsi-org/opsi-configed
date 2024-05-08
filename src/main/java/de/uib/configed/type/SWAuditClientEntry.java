@@ -19,8 +19,6 @@ public class SWAuditClientEntry {
 	public static final List<String> KEYS = List.of(SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
 			SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENSE_KEY, SWAuditEntry.WINDOWS_SOFTWARE_ID);
 
-	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
-
 	private String swIdent;
 	private String lastModificationS;
 

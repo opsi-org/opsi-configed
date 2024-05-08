@@ -107,8 +107,6 @@ public enum RPCMethodName {
 
 	LOG_READ("log_read"),
 
-	GET_RAW_DATA("getRawData"),
-
 	GET_OPSI_CA_CERT("getOpsiCACert"),
 
 	GET_PRODUCT_ORDERING("getProductOrdering"),

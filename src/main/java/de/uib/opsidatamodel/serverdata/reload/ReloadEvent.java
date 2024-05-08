@@ -7,7 +7,6 @@
 package de.uib.opsidatamodel.serverdata.reload;
 
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
-import de.uib.opsidatamodel.serverdata.reload.handler.ClientHardwareDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
@@ -65,11 +64,6 @@ public enum ReloadEvent {
 	 * Triggers {@link ConfigOptionsDataReloadHandler}.
 	 */
 	CONFIG_OPTIONS_RELOAD("config_options_reload"),
-
-	/**
-	 * Triggers {@link ClientHardwareDataReloadHandler}.
-	 */
-	CLIENT_HARDWARE_RELOAD("client_hardware_reload"),
 
 	/**
 	 * Triggers {@link HardwareConfDataReloadHandler}.

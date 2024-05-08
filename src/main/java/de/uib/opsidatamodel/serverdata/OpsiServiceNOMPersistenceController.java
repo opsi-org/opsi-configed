@@ -38,7 +38,6 @@ import de.uib.opsidatamodel.serverdata.dataservice.UserDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.opsidatamodel.serverdata.reload.ReloadDispatcher;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.opsidatamodel.serverdata.reload.handler.ClientHardwareDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.ConfigOptionsDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DefaultDataReloadHandler;
 import de.uib.opsidatamodel.serverdata.reload.handler.DepotChangeReloadHandler;
@@ -187,7 +186,7 @@ public class OpsiServiceNOMPersistenceController {
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);
 		groupDataService = new GroupDataService(exec, this);
-		hardwareDataService = new HardwareDataService(exec, this);
+		hardwareDataService = new HardwareDataService(exec);
 		healthDataService = new HealthDataService(exec);
 		hostDataService = new HostDataService(exec, this);
 		licenseDataService = new LicenseDataService(exec);
@@ -210,7 +209,6 @@ public class OpsiServiceNOMPersistenceController {
 		groupDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 
 		hardwareDataService.setConfigDataService(configDataService);
-		hardwareDataService.setHostInfoCollections(hostInfoCollections);
 
 		hostDataService.setConfigDataService(configDataService);
 		hostDataService.setHostInfoCollections(hostInfoCollections);
@@ -314,11 +312,6 @@ public class OpsiServiceNOMPersistenceController {
 		hostDataReloadHandler.setGroupDataService(groupDataService);
 		hostDataReloadHandler.setHostInfoCollections(hostInfoCollections);
 		reloadDispatcher.registerHandler(ReloadEvent.HOST_DATA_RELOAD.toString(), hostDataReloadHandler);
-
-		ClientHardwareDataReloadHandler clientHardwareDataReloadHandler = new ClientHardwareDataReloadHandler();
-		clientHardwareDataReloadHandler.setHardwareDataService(hardwareDataService);
-		reloadDispatcher.registerHandler(ReloadEvent.CLIENT_HARDWARE_RELOAD.toString(),
-				clientHardwareDataReloadHandler);
 
 		ConfigOptionsDataReloadHandler configOptionsDataReloadHandler = new ConfigOptionsDataReloadHandler();
 		configOptionsDataReloadHandler.setConfigDataService(configDataService);

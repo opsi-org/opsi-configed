@@ -1400,9 +1400,6 @@ public class ConfigedMain implements MessagebusListener {
 	private void requestRefreshDataForClientSelection() {
 		Logging.info(this, "requestRefreshDataForClientSelection");
 		requestReloadStatesAndActions();
-		if (mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients() != null) {
-			mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients().requestResetFilter();
-		}
 	}
 
 	public void requestReloadStatesAndActions() {
@@ -2321,17 +2318,11 @@ public class ConfigedMain implements MessagebusListener {
 	private boolean setHardwareInfoPage() {
 		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().size());
 
-		if (firstSelectedClient == null || getSelectedClients().isEmpty()) {
-			mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
-		} else if (getSelectedClients().size() > 1) {
-			if (persistenceController.getModuleDataService().canCallMySQLPD()) {
-				mainFrame.getTabbedConfigPanes().setHardwareInfoMultiClients();
-			} else {
-				mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
-			}
-		} else {
+		if (firstSelectedClient != null || getSelectedClients().size() == 1) {
 			mainFrame.getTabbedConfigPanes().setHardwareInfo(
 					persistenceController.getHardwareDataService().getHardwareInfo(firstSelectedClient));
+		} else {
+			mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
 		}
 
 		return true;
@@ -2584,10 +2575,6 @@ public class ConfigedMain implements MessagebusListener {
 			mainFrame.enableAfterLoading();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
-
-			if (mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients() != null) {
-				mainFrame.getTabbedConfigPanes().getControllerHWinfoMultiClients().rebuildModel();
-			}
 
 			productTree.reInitTree();
 			clientTree.reInitTree();
