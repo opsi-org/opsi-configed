@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.serverdata;
 import java.util.regex.Pattern;
 
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -47,10 +46,6 @@ public final class PersistenceControllerFactory {
 		while (persistenceController.getConnectionState().getState() == ConnectionState.UNDEFINED
 				|| persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
 			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD();
-
-			if (!ServerFacade.isOpsi43()) {
-				persistenceController.makeConnection();
-			}
 		}
 
 		staticPersistControl = persistenceController;

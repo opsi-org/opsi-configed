@@ -88,7 +88,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		labelClientInventoryNumber.setPreferredSize(Globals.BUTTON_DIMENSION);
 		labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
 		labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
-		labelClientSystemUUID.setVisible(ServerFacade.isOpsi43());
 		labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
@@ -123,7 +122,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 				"", 36);
 
 		systemUUIDField.addKeyListener(this);
-		systemUUIDField.setVisible(ServerFacade.isOpsi43());
 
 		macAddressField = new RevertibleTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2',
 				'3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
@@ -247,7 +245,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 				.addComponent(jTextFieldInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// SYSTEM UUID
-				.addGap(ServerFacade.isOpsi43() ? Globals.MIN_GAP_SIZE : 0)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelClientSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -485,9 +483,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		// multi host editing allowed
 		cbUefiBoot.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI));
-		if (ServerFacade.isOpsi43()) {
-			cbUefiBoot.disableSelection();
-		}
+		cbUefiBoot.disableSelection();
 
 		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN));
 		cbInstallByShutdown.setEnabled(gb);

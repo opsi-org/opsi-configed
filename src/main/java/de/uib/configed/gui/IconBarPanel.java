@@ -23,7 +23,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -226,8 +225,6 @@ public class IconBarPanel extends JPanel {
 		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.setFocusable(false);
-		jButtonDashboard.setEnabled(ServerFacade.isOpsi43());
-		jButtonDashboard.setVisible(ServerFacade.isOpsi43());
 		jButtonDashboard.addActionListener(event -> configedMain.initDashInfo());
 
 		initOpsiLicenseButtonBasedOnWarningLevel();
@@ -251,8 +248,7 @@ public class IconBarPanel extends JPanel {
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(ServerFacade.isOpsi43() ? Globals.GAP_SIZE : 0, ServerFacade.isOpsi43() ? Globals.GAP_SIZE : 0,
-						ServerFacade.isOpsi43() ? Globals.GAP_SIZE : 0)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(jButtonLicenses, GroupLayout.PREFERRED_SIZE,

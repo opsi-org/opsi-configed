@@ -434,11 +434,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void initDashInfo() {
-		if (!ServerFacade.isOpsi43()) {
-			Logging.info(this, "initDashInfo not enabled");
-			return;
-		}
-
 		Logging.info(this, "initDashboard " + dashboard);
 		if (dashboard == null) {
 			dashboard = new Dashboard(this);
@@ -560,9 +555,7 @@ public class ConfigedMain implements MessagebusListener {
 		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
 		allControlMultiTablePanels = new ArrayList<>();
 
-		if (ServerFacade.isOpsi43()) {
-			initMessagebus();
-		}
+		initMessagebus();
 	}
 
 	protected void preloadData() {

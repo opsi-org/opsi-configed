@@ -448,13 +448,9 @@ public class MainFrame extends JFrame {
 
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
-		if (ServerFacade.isOpsi43()) {
-			jMenuFrames.add(jMenuFrameDashboard);
-		}
+		jMenuFrames.add(jMenuFrameDashboard);
 		jMenuFrames.add(jMenuFrameLicenses);
-		if (ServerFacade.isOpsi43()) {
-			jMenuFrames.add(jMenuFrameTerminal);
-		}
+		jMenuFrames.add(jMenuFrameTerminal);
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
 
@@ -506,10 +502,7 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
-
-		if (ServerFacade.isOpsi43()) {
-			jMenuHelp.add(jMenuHelpCheckHealth);
-		}
+		jMenuHelp.add(jMenuHelpCheckHealth);
 
 		jMenuHelp.addSeparator();
 
@@ -590,9 +583,8 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(createJMenuFile());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
-		if (ServerFacade.isOpsi43()) {
-			jMenuBar.add(jMenuServerConsole);
-		}
+		jMenuBar.add(jMenuServerConsole);
+
 		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
 			jMenuServerConsole.setEnabled(false);
 			jMenuServerConsole.setToolTipText(Configed.getResourceValue("MainFrame.vpnModuleShouldBeActive"));
