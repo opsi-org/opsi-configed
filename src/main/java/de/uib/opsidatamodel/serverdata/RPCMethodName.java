@@ -77,7 +77,7 @@ public enum RPCMethodName {
 	AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS("auditSoftwareToLicensePool_createObjects"),
 	AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS("auditSoftwareToLicensePool_deleteObjects"),
 
-	BACKEND_GET_INTERFACE("backend_getInterface"), GET_BACKEND_INFOS_LIST_OF_HASHES("getBackendInfos_listOfHashes"),
+	GET_BACKEND_INFOS_LIST_OF_HASHES("getBackendInfos_listOfHashes"),
 	BACKEND_GET_LICENSING_INFO("backend_getLicensingInfo"),
 
 	LICENSE_CONTRACT_CREATE("licenseContract_create"), LICENSE_CONTRACT_DELETE("licenseContract_delete"),

@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -469,50 +468,6 @@ public class ModuleDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.IS_OPSI_ADMIN_USER, isOpsiUserAdmin);
-	}
-
-	public List<String> getMethodSignaturePD(RPCMethodName methodname) {
-		retrieveMethodSignaturesPD();
-		Map<String, List<String>> mapOfMethodSignatures = cacheManager
-				.getCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, Map.class);
-		Logging.debug(this, "mapOfMethodSignatures " + mapOfMethodSignatures);
-
-		return mapOfMethodSignatures.get(methodname.toString());
-	}
-
-	public void retrieveMethodSignaturesPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.MAP_OF_METHOD_SIGNATURES)) {
-			return;
-		}
-
-		Map<String, List<String>> mapOfMethodSignatures = new HashMap<>();
-		List<Object> methodsList = exec
-				.getListResult(new OpsiMethodCall(RPCMethodName.BACKEND_GET_INTERFACE, new Object[] {}));
-		Iterator<Object> iter = methodsList.iterator();
-		while (iter.hasNext()) {
-			Map<String, Object> listEntry = exec.getMapFromItem(iter.next());
-
-			String name = (String) listEntry.get("name");
-			List<String> signature = new ArrayList<>();
-
-			// should never result
-			List<Object> signature1 = exec.getListFromItem(listEntry.get("params").toString());
-
-			// to null
-			for (Object elementObject : signature1) {
-				String element = (String) elementObject;
-
-				if (element != null && element.length() > 0 && element.charAt(0) == '*') {
-					signature.add(element.substring(1));
-				} else {
-					signature.add(element);
-				}
-
-				Logging.debug(this, "mapOfMethodSignatures :: " + name + ": " + signature);
-			}
-			mapOfMethodSignatures.put(name, signature);
-		}
-		cacheManager.setCachedData(CacheIdentifier.MAP_OF_METHOD_SIGNATURES, mapOfMethodSignatures);
 	}
 
 	private Map<String, Object> produceOpsiInformationPD() {

@@ -102,11 +102,6 @@ public enum CacheIdentifier {
 	OPSI_LICENSING_INFO_OPSI_ADMIN("opsi_licensing_info_opsi_admin"),
 
 	/**
-	 * return type {@code Map<String, List<String>>}
-	 */
-	MAP_OF_METHOD_SIGNATURES("map_of_method_signatures"),
-
-	/**
 	 * return type {@code Map<String, RemoteControl>} or {@code: RemoteControls}
 	 */
 	REMOTE_CONTROLS("remote_controls"),
