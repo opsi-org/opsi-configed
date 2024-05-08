@@ -247,7 +247,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		}
 
 		jCheckWan = new JCheckBox(Configed.getResourceValue("NewClientDialog.wanConfig"));
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN)) {
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
 		}
@@ -794,7 +794,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 		boolean uefiboot = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI)
 				&& jCheckUefi.getSelectedObjects() != null;
-		boolean wanConfig = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN)
+		boolean wanConfig = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)
 				&& jCheckWan.getSelectedObjects() != null;
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 

@@ -364,7 +364,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 			cbUefiBoot.setEnabled(false);
 		}
 
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN)) {
+		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -485,7 +485,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		cbUefiBoot.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI));
 		cbUefiBoot.disableSelection();
 
-		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.WAN));
+		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN));
 		cbInstallByShutdown.setEnabled(gb);
 
 		jTextFieldHostKey.setMultiValue(!singleClient);

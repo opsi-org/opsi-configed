@@ -152,7 +152,7 @@ public class ModuleDataService {
 
 		Logging.info(this, "produceOpsiModulesInfo withUserRoles " + isOpsiModuleActive(OpsiModule.USER_ROLES));
 		Logging.info(this, "produceOpsiModulesInfo withUEFI " + isOpsiModuleActive(OpsiModule.UEFI));
-		Logging.info(this, "produceOpsiModulesInfo withWAN " + isOpsiModuleActive(OpsiModule.WAN));
+		Logging.info(this, "produceOpsiModulesInfo wan " + isOpsiModuleActive(OpsiModule.VPN));
 		Logging.info(this,
 				"produceOpsiModulesInfo withLicenseManagement " + isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT));
 		// sets value to true if we use the mysql backend and informs that we are
