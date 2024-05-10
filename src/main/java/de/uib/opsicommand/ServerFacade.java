@@ -115,16 +115,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return versionRetriever.getServerVersion();
 	}
 
-	/**
-	 * Check whether or not opsi server uses opsi 4.3 version. This method is
-	 * used for enabling features that are only available for opsi 4.3 version.
-	 * 
-	 * @return whether or not opsi server uses opsi 4.3 version.
-	 */
-	public static boolean isOpsi43() {
-		return versionRetriever.isServerVersionAtLeast("4.3");
-	}
-
 	private Map<String, String> produceGeneralRequestProperties(OpsiMethodCall omc) {
 		Map<String, String> requestProperties = new HashMap<>();
 
