@@ -6,21 +6,15 @@
 
 package de.uib.configed.gui;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.swing.JFrame;
 
 import de.uib.configed.Configed;
-import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
 
 public class FWakeClients extends FShowList {
 	private boolean cancelled;
@@ -34,69 +28,19 @@ public class FWakeClients extends FShowList {
 		super.setButtonsEnabled(true);
 	}
 
-	// TODO still some things to remove now
 	public void act(List<String> selectedClients, int delaySecs) {
 		setVisible(true);
 
-		Map<String, List<String>> hostSeparationByDepots = persistenceController.getHostDataService()
-				.getHostSeparationByDepots(selectedClients);
-		Map<String, Integer> counterByDepots = new HashMap<>();
-		Map<String, AbstractPOJOExecutioner> executionerForDepots = new HashMap<>();
+		for (int i = 0; i < selectedClients.size() && !cancelled; i++) {
+			String client = selectedClients.get(i);
 
-		int maxSize = 0;
+			appendLine("trying to start up client: " + client);
 
-		for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
-			counterByDepots.put(depotEntry.getKey(), 0);
-
-			maxSize = Math.max(maxSize, depotEntry.getValue().size());
-		}
-
-		for (int turn = 0; turn < maxSize && !cancelled; turn++) {
-			Set<String> hostsToWakeOnThisTurn = new HashSet<>();
-
-			for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
-				Logging.info(this, "act on depot " + depotEntry.getKey() + ", executioner != NONE  "
-						+ " counterByDepots.get(depot) " + counterByDepots.get(depotEntry.getKey()));
-
-				if (counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
-					// Get the executioner for the depot, and create new one if non-existant
-					AbstractPOJOExecutioner executioner = executionerForDepots.computeIfAbsent(depotEntry.getKey(),
-							this::computeExecutionerForDepot);
-
-					// Add executioner to list and update counter
-					addHostToWake(executioner, depotEntry, turn, hostsToWakeOnThisTurn, counterByDepots);
-				}
-			}
-
-			persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(hostsToWakeOnThisTurn);
-
+			persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(Collections.singleton(client));
 			Utils.threadSleep(this, 1000L * delaySecs);
 		}
 
 		jButton1.setText(Configed.getResourceValue("buttonClose"));
-	}
-
-	private AbstractPOJOExecutioner computeExecutionerForDepot(String depot) {
-		AbstractPOJOExecutioner exec1 = persistenceController.retrieveWorkingExec(depot);
-		// we try to connect when the first client of a depot should be connected
-		if (exec1 == null) {
-			appendLine("!! giving up connecting to  " + depot);
-		}
-		return exec1;
-	}
-
-	private void addHostToWake(AbstractPOJOExecutioner executioner, Entry<String, List<String>> depotEntry, int turn,
-			Set<String> hostsToWakeOnThisTurn, Map<String, Integer> counterByDepots) {
-		if (executioner != null) {
-			String host = depotEntry.getValue().get(turn);
-
-			String line = String.format("trying to start up   %s    from depot    %s  ", host, depotEntry.getKey());
-			appendLine(line);
-			Logging.info(this, "act: " + line);
-			hostsToWakeOnThisTurn.add(host);
-			Logging.info(this, "act: hostsToWakeOnThisTurn " + hostsToWakeOnThisTurn);
-			counterByDepots.put(depotEntry.getKey(), counterByDepots.get(depotEntry.getKey()) + 1);
-		}
 	}
 
 	@Override

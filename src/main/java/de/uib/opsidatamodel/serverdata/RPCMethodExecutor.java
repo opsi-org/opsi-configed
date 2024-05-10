@@ -8,7 +8,6 @@ package de.uib.opsidatamodel.serverdata;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -64,19 +63,10 @@ public class RPCMethodExecutor {
 	}
 
 	public List<String> wakeOnLanOpsi43(Collection<String> hostIds) {
-		Map<String, Object> response = new HashMap<>();
 
-		AbstractPOJOExecutioner exec1 = persistenceController
-				.retrieveWorkingExec(hostInfoCollections.getConfigServer());
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });
 
-		Logging.info(this,
-				"working exec for config server " + hostInfoCollections.getConfigServer() + " " + (exec1 != null));
-
-		if (exec1 != null) {
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });
-
-			response = exec1.getMapResult(omc);
-		}
+		Map<String, Object> response = persistenceController.getExecutioner().getMapResult(omc);
 
 		return collectErrorsFromResponsesByHost(response, "wakeOnLan");
 	}

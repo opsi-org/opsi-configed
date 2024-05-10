@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import de.uib.configed.productaction.PanelCompleteWinProducts;
-import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
@@ -439,28 +438,6 @@ public class OpsiServiceNOMPersistenceController {
 		configKeyStartersNotForClients = new HashSet<>(propertyClassesServer.keySet());
 		configKeyStartersNotForClients.removeAll(propertyClassesClient.keySet());
 		configKeyStartersNotForClients.add("configed");
-	}
-
-	public AbstractPOJOExecutioner retrieveWorkingExec(String depot) {
-		Logging.debug(this, "retrieveWorkingExec , compare depotname " + depot + " to config server "
-				+ hostInfoCollections.getConfigServer());
-
-		if (depot.equals(hostInfoCollections.getConfigServer())) {
-			Logging.debug(this, "retrieveWorkingExec for config server");
-			return exec;
-		}
-
-		String password = (String) hostInfoCollections.getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
-		AbstractPOJOExecutioner exec1 = new ServerFacade(depot, depot, password, "");
-
-		if (makeConnection(exec1)) {
-			Logging.info(this, "retrieveWorkingExec new for server " + depot);
-			return exec1;
-		}
-
-		Logging.info(this, "no connection to server " + depot);
-
-		return null;
 	}
 
 	public boolean makeConnection() {
