@@ -449,21 +449,6 @@ public class HostDataService {
 		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
 	}
 
-	public Map<String, List<String>> getHostSeparationByDepots(Iterable<String> hostIds) {
-		Map<String, Set<String>> hostSeparationByDepots = new HashMap<>();
-		for (String hostId : hostIds) {
-			String depotId = hostInfoCollections.getMapPcBelongsToDepot().get(hostId);
-			hostSeparationByDepots.computeIfAbsent(depotId, arg -> new HashSet<>()).add(hostId);
-		}
-
-		Map<String, List<String>> result = new HashMap<>();
-		for (Entry<String, Set<String>> hostSeparationEntry : hostSeparationByDepots.entrySet()) {
-			result.put(hostSeparationEntry.getKey(), new ArrayList<>(hostSeparationEntry.getValue()));
-		}
-
-		return result;
-	}
-
 	public List<Map<String, Object>> getOpsiHosts() {
 		String[] callAttributes = new String[] {};
 		Map<?, ?> callFilter = new HashMap<>();

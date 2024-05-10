@@ -13,7 +13,6 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.JFormattedTextField;
@@ -25,16 +24,12 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.InternationalFormatter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.observer.RunningInstances;
 import de.uib.utils.thread.WaitingSleeper;
@@ -50,11 +45,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	private JSpinner spinnerDelay;
 	private JSpinner spinnerHour;
 	private JSpinner spinnerMinute;
-	private JLabel labelStarttime;
+	private JLabel jLabelStarttime;
 	private JTextField fieldTaskname;
-	private JTextField fieldClientCount;
-	private JTextField fieldInvolvedDepotsCount;
-	private JLabel labelTimeYetToWait;
+	private JLabel jLabelClientCount;
+	private JLabel jLabelTimeYetToWait;
 	private JProgressBar waitingProgressBar;
 
 	private IconButton buttonRefreshTime;
@@ -78,7 +72,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	public FStartWakeOnLan(String title, ConfigedMain configedMain) {
 		super(null, title, false, new String[] { Configed.getResourceValue("buttonClose"),
-				Configed.getResourceValue("FStartWakeOnLan.start") }, 750, 310);
+				Configed.getResourceValue("FStartWakeOnLan.start") }, 750, 350);
 		this.configedMain = configedMain;
 
 		setCalToNow();
@@ -95,23 +89,16 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	}
 
 	public void setClients() {
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-
-		Map<String, List<String>> hostSeparationByDepots = persistenceController.getHostDataService()
-				.getHostSeparationByDepots(configedMain.getSelectedClients());
-		Set<String> usedDepots = hostSeparationByDepots.keySet();
 		currentlySelectedClients = configedMain.getSelectedClients();
 
 		int clientCount;
-		if (configedMain.getSelectedClients() != null) {
-			clientCount = configedMain.getSelectedClients().size();
+		if (currentlySelectedClients != null) {
+			clientCount = currentlySelectedClients.size();
 		} else {
 			clientCount = 0;
 		}
-		Logging.info(this, "clients count " + clientCount + ", used depots " + usedDepots.size());
-		fieldClientCount.setText("" + clientCount);
-		fieldInvolvedDepotsCount.setText("" + usedDepots.size());
+		Logging.info(this, "clientcount " + clientCount);
+		jLabelClientCount.setText("" + clientCount);
 	}
 
 	private void disableSettingOfTimes() {
@@ -165,7 +152,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 			spinnerHour.setValue(cal.get(Calendar.HOUR_OF_DAY));
 		}
 
-		labelStarttime.setText(readTime(cal));
+		jLabelStarttime.setText(readTime(cal));
 	}
 
 	private void setNowTimeAsTarget() {
@@ -185,8 +172,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 		scrollpane.setViewportView(contentPane);
 
-		labelTimeYetToWait = new JLabel(giveTimeSpan(0), SwingConstants.RIGHT);
-		labelTimeYetToWait.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.timeLeft.toolTip"));
+		jLabelTimeYetToWait = new JLabel(giveTimeSpan(0), SwingConstants.RIGHT);
+		jLabelTimeYetToWait.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.timeLeft.toolTip"));
 
 		waitingProgressBar = new JProgressBar();
 		waitingProgressBar.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip"));
@@ -194,31 +181,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		waitingProgressBar.setEnabled(true);
 
 		fieldTaskname = new JTextField();
-		fieldTaskname.getDocument().addDocumentListener(new DocumentListener() {
-			private void actOnChange() {
-				Logging.info(this, "changed text");
-			}
 
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				actOnChange();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				actOnChange();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				actOnChange();
-			}
-		});
-
-		fieldClientCount = new JTextField();
-		fieldClientCount.setEditable(false);
-		fieldInvolvedDepotsCount = new JTextField();
-		fieldInvolvedDepotsCount.setEditable(false);
+		jLabelClientCount = new JLabel();
 
 		int clientCountWidth = 100;
 
@@ -262,9 +226,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		JLabel labelStartdelay = new JLabel(Configed.getResourceValue("FStartWakeOnLan.setTime"));
 		JLabel labelStartAt = new JLabel(Configed.getResourceValue("FStartWakeOnLan.resultingStartTime"));
 		JLabel labelClientCount = new JLabel(Configed.getResourceValue("FStartWakeOnLan.countOfClients"));
-		JLabel labelDepotCount = new JLabel(Configed.getResourceValue("FStartWakeOnLan.countOfDepots"));
 
-		labelStarttime = new JLabel(readTime(cal));
+		jLabelStarttime = new JLabel(readTime(cal));
 
 		spinnerDelay = new JSpinner();
 
@@ -292,15 +255,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		spinnerMinute.addChangeListener(changeEvent -> produceTargetTime(Calendar.MINUTE,
 				Integer.valueOf(spinnerMinute.getValue().toString())));
 
-		JPanel panelSpinnerDelay = new JPanel();
-		GroupLayout lPanelSpinnerDelay = new GroupLayout(panelSpinnerDelay);
-		panelSpinnerDelay.setLayout(lPanelSpinnerDelay);
-
-		lPanelSpinnerDelay.setVerticalGroup(lPanelSpinnerDelay.createParallelGroup().addComponent(spinnerDelay,
-				Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT));
-		lPanelSpinnerDelay.setHorizontalGroup(lPanelSpinnerDelay.createSequentialGroup().addComponent(spinnerDelay,
-				2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH));
-
 		GroupLayout lPanel = new GroupLayout(contentPane);
 		contentPane.setLayout(lPanel);
 
@@ -315,27 +269,24 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelDelay, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(panelSpinnerDelay, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addComponent(spinnerDelay, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(panelTimeSelection, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(labelStartdelay, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelStartAt, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(labelStarttime, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addComponent(jLabelStarttime, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelClientCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(fieldClientCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(labelDepotCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(fieldInvolvedDepotsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT))
+						.addComponent(jLabelClientCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(waitingProgressBar, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT,
 								Globals.PROGRESS_BAR_HEIGHT)
-						.addComponent(labelTimeYetToWait, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+						.addComponent(jLabelTimeYetToWait, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)));
 
 		lPanel.setHorizontalGroup(lPanel.createParallelGroup()
@@ -351,8 +302,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 								Globals.BUTTON_WIDTH / 2)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
 				.addGroup(lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(panelSpinnerDelay, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH)
+						.addComponent(spinnerDelay, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(labelDelay, 2 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
 								3 * Globals.BUTTON_WIDTH)
@@ -368,7 +318,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 						.addComponent(labelStartAt, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelStarttime, 1 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+						.addComponent(jLabelStarttime, 1 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
 								2 * Globals.BUTTON_WIDTH)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
 				.addGroup(lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE).addGap(Globals.BUTTON_WIDTH)
@@ -376,18 +326,13 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 						.addComponent(labelClientCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(fieldClientCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelDepotCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(fieldInvolvedDepotsCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
+						.addComponent(jLabelClientCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE))
 
 				.addGroup(lPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(waitingProgressBar, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(labelTimeYetToWait, Globals.BUTTON_WIDTH,
+						.addGap(Globals.GAP_SIZE).addComponent(jLabelTimeYetToWait, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
 						.addGap(Globals.GAP_SIZE)));
 	}
@@ -464,7 +409,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 
 	@Override
 	public JLabel getLabel() {
-		return labelTimeYetToWait;
+		return jLabelTimeYetToWait;
 	}
 
 	@Override
