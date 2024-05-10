@@ -15,7 +15,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -98,7 +97,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private int[] filterInverse;
 
 	// for each product, we remember the visual action that is set
-	private NavigableSet<String> missingImplementationForAR;
+	private Set<String> missingImplementationForAR;
 
 	// (clientId -> (productId -> (product state key -> product state value)))
 	private Map<String, Map<String, Map<String, String>>> allClientsProductStates;
@@ -109,7 +108,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private final List<String> selectedClients;
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 	private Map<String, Map<String, Object>> globalProductInfos;
-	private NavigableSet<String> productNames;
+	private Set<String> productNames;
 
 	private Set<String> missingProducts = new HashSet<>();
 
@@ -150,7 +149,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		productNames = new TreeSet<>(productNamesInDeliveryOrder);
 		sortedProductsList = new ArrayList<>(productNames);
 
-		Logging.debug(this.getClass(), "tsProductNames " + productNames);
+		Logging.debug(this.getClass(), "productNames " + productNames);
 
 		initalizeProductStates(statesAndActions);
 	}
