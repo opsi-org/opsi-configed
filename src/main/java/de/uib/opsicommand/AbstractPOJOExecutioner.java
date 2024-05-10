@@ -84,18 +84,6 @@ public abstract class AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc) {
-		Map<String, List<String>> result = new HashMap<>();
-		Map<String, Object> response = retrieveResponse(omc);
-
-		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<HashMap<String, List<String>>>() {
-			});
-		}
-
-		return result;
-	}
-
 	public String getErrorFromResponse(Map<String, Object> retrieved) {
 		String errorMessage = null;
 

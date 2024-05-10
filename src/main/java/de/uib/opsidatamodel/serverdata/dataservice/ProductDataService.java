@@ -33,7 +33,6 @@ import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ProductState;
@@ -128,33 +127,10 @@ public class ProductDataService {
 
 	public List<String> getAllLocalbootProductNames(String depotId) {
 		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
-		List<String> localbootProductNames;
-		if (ServerFacade.isOpsi43()) {
-			localbootProductNames = getDepot2LocalbootProductsPD().get(depotId) != null
-					? new ArrayList<>(getDepot2LocalbootProductsPD().get(depotId).keySet())
-					: new ArrayList<>();
-		} else {
-			Map<String, List<String>> productOrderingResult = exec.getMapOfStringLists(
-					new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, new String[] { depotId }));
+		List<String> localbootProductNames = getDepot2LocalbootProductsPD().get(depotId) != null
+				? new ArrayList<>(getDepot2LocalbootProductsPD().get(depotId).keySet())
+				: new ArrayList<>();
 
-			List<String> sortedProducts = productOrderingResult.get("sorted");
-			if (sortedProducts == null) {
-				sortedProducts = new ArrayList<>();
-			}
-
-			List<String> notSortedProducts = productOrderingResult.get("not_sorted");
-			if (notSortedProducts == null) {
-				notSortedProducts = new ArrayList<>();
-			}
-
-			Logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");
-
-			notSortedProducts.removeAll(sortedProducts);
-			Logging.info(this, "missing: " + notSortedProducts);
-
-			localbootProductNames = sortedProducts;
-			localbootProductNames.addAll(notSortedProducts);
-		}
 		filterPermittedProducts(localbootProductNames);
 		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
 		return localbootProductNames;

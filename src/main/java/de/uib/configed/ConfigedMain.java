@@ -2276,20 +2276,13 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
-		List<Map<String, Object>> additionalConfigs = new ArrayList<>(list.size());
-		if (list.isEmpty()) {
-			return additionalConfigs;
-		}
 		Logging.info(this, "additionalConfig fetch for " + list);
-		if (ServerFacade.isOpsi43()) {
-			additionalConfigs = persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
+
+		if (list.isEmpty()) {
+			return new ArrayList<>();
 		} else {
-			for (String item : list) {
-				additionalConfigs.add(persistenceController.getConfigDataService().getHostConfig(item));
-				// with server defaults
-			}
+			return persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
 		}
-		return additionalConfigs;
 	}
 
 	private boolean setHardwareInfoPage() {

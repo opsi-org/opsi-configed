@@ -108,8 +108,6 @@ public enum RPCMethodName {
 
 	GET_OPSI_CA_CERT("getOpsiCACert"),
 
-	GET_PRODUCT_ORDERING("getProductOrdering"),
-
 	GET_DOMAIN("getDomain"),
 
 	DEPOT_INSTALL_PACKAGE("depot_installPackage"),
