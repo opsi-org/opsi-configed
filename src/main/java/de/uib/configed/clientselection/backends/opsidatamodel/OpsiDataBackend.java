@@ -270,14 +270,6 @@ public final class OpsiDataBackend {
 			throw new IllegalArgumentException("Wrong operation for this element.");
 		}
 
-		// this would need the package version to be an integer
-
-		// return new OpsiDataIntEqualsOperation( OpsiDataClient.SOFTWARE_MAP,
-
-		// return new OpsiDataIntLessThanOperation( OpsiDataClient.SOFTWARE_MAP,
-
-		// return new OpsiDataIntGreaterThanOperation( OpsiDataClient.SOFTWARE_MAP,
-
 		// SwAudit
 		String swauditAttributeText = null;
 		if (element instanceof SwAuditArchitectureElement) {
