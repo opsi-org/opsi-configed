@@ -255,7 +255,6 @@ public class SelectionManager {
 
 	private static AbstractSelectOperation getOperationFromConnections(List<AbstractSelectOperation> orConnections,
 			List<AbstractSelectOperation> andConnections) {
-
 		if (andConnections.size() == 1) {
 			orConnections.add(andConnections.get(0));
 		} else if (!andConnections.isEmpty()) {
@@ -269,7 +268,6 @@ public class SelectionManager {
 		}
 
 		return new OrOperation(orConnections);
-
 	}
 
 	/*

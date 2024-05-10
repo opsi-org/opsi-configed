@@ -553,7 +553,6 @@ public final class LicensingInfoMap {
 			List<?> lics = (List<?>) moduleInfo.get(LICENSE_IDS);
 
 			return checkTimeLeft(lics);
-
 		}
 
 		return STATE_DAYS_OKAY;

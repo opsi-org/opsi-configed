@@ -177,9 +177,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 					Configed.getResourceValue("InstallationStateTableModel.actionRequest"));
 			columnDict.put(ProductState.KEY_PRODUCT_PRIORITY,
 					Configed.getResourceValue("InstallationStateTableModel.priority"));
-			columnDict.put(ProductState.KEY_ACTION_SEQUENCE, "actionSequence");
-
-			columnDict.put(ProductState.KEY_POSITION,
+			columnDict.put(ProductState.KEY_ACTION_SEQUENCE,
 					Configed.getResourceValue("InstallationStateTableModel.position"));
 
 			columnDict.put(ProductState.KEY_VERSION_INFO,
@@ -385,7 +383,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	// columns (indexPreparedColumns)
 	private void initColumnNames(List<String> columnsToDisplay) {
 		preparedColumns = new ArrayList<>();
-		editablePreparedColumns = new boolean[16];
+		editablePreparedColumns = new boolean[15];
 
 		preparedColumns.add(0, ProductState.KEY_PRODUCT_ID);
 		editablePreparedColumns[0] = false;
@@ -420,20 +418,17 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		preparedColumns.add(10, ProductState.KEY_ACTION_SEQUENCE);
 		editablePreparedColumns[10] = false;
 
-		preparedColumns.add(11, ProductState.KEY_POSITION);
+		preparedColumns.add(11, ProductState.KEY_VERSION_INFO);
 		editablePreparedColumns[11] = false;
 
-		preparedColumns.add(12, ProductState.KEY_VERSION_INFO);
+		preparedColumns.add(12, ProductState.KEY_PRODUCT_VERSION);
 		editablePreparedColumns[12] = false;
 
-		preparedColumns.add(13, ProductState.KEY_PRODUCT_VERSION);
+		preparedColumns.add(13, ProductState.KEY_PACKAGE_VERSION);
 		editablePreparedColumns[13] = false;
 
-		preparedColumns.add(14, ProductState.KEY_PACKAGE_VERSION);
+		preparedColumns.add(14, ProductState.KEY_LAST_STATE_CHANGE);
 		editablePreparedColumns[14] = false;
-
-		preparedColumns.add(15, ProductState.KEY_LAST_STATE_CHANGE);
-		editablePreparedColumns[15] = false;
 
 		if (columnsToDisplay == null) {
 			Logging.error(this, "columnsToDisplay are null");
@@ -1146,10 +1141,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 			return ActionRequest.getDisplayLabel(ar.getVal());
 
-		case 11:
+		case 10:
 			return getDisplayLabelForPosition();
 
-		case 12:
+		case 11:
 			return actualProductVersion();
 
 		default:

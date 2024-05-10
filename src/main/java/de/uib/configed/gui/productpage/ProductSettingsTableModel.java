@@ -176,7 +176,7 @@ public class ProductSettingsTableModel {
 			rowSorter.setComparator(colIndex, new IntComparatorForStrings());
 		}
 
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_POSITION)) > -1) {
+		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_SEQUENCE)) > -1) {
 			TableColumn productsequenceColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			productsequenceColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
 

@@ -98,7 +98,6 @@ import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
@@ -2041,15 +2040,6 @@ public class ConfigedMain implements MessagebusListener {
 	private List<String> getLocalbootStateAndActionsAttributes() {
 		List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
 
-		// Position is something different in opsi 4.3 than before...
-		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_POSITION)) {
-			attributes.remove(ProductState.KEY_POSITION);
-
-			if (ServerFacade.isOpsi43()) {
-				attributes.add(ProductState.KEY_ACTION_SEQUENCE);
-			}
-		}
-
 		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_INSTALLATION_INFO)) {
 			attributes.add(ProductState.KEY_ACTION_PROGRESS);
 			attributes.add(ProductState.KEY_LAST_ACTION);
@@ -3671,7 +3661,6 @@ public class ConfigedMain implements MessagebusListener {
 			} else {
 				// Do when closing without option
 			}
-
 		}
 
 		if (mainFrame != null) {

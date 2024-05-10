@@ -212,6 +212,5 @@ public class DeployClientAgentAuthPanel extends JPanel {
 								.addComponent(jButtonShowPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE));
-
 	}
 }

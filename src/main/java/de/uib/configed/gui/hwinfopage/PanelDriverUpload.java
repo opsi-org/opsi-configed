@@ -323,7 +323,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 							+ comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
 							"create_driver_links.py"));
 			executor.execute();
-
 		});
 
 		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));

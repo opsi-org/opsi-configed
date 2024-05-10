@@ -23,7 +23,6 @@ import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import de.uib.utils.Utils;
 
 public class PMInstallLocalPanel extends PMInstallPanel {
-
 	private JLabel jLabelUploadFrom;
 	private JLabel jLabelUploadTo;
 	private JTextField jTextFieldPath;
