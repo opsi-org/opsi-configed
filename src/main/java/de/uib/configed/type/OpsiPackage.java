@@ -122,16 +122,11 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	}
 
 	public static String giveProductType(int type) {
-		switch (type) {
-		case TYPE_LOCALBOOT:
-			return LOCALBOOT_PRODUCT_SERVER_STRING;
-
-		case TYPE_NETBOOT:
-			return NETBOOT_PRODUCT_SERVER_STRING;
-
-		default:
-			return "error";
-		}
+		return switch (type) {
+		case TYPE_LOCALBOOT -> LOCALBOOT_PRODUCT_SERVER_STRING;
+		case TYPE_NETBOOT -> NETBOOT_PRODUCT_SERVER_STRING;
+		default -> "error";
+		};
 	}
 
 	private String buildRepresentation() {

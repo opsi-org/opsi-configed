@@ -399,22 +399,15 @@ public class OpsiDataSerializer {
 
 	private Object getStringForData(String value) {
 		value = value.substring(1, value.length() - 1);
-		switch (lastDataType) {
-		case NONE_TYPE:
-			return null;
-		case TEXT_TYPE:
-			return value;
-		case DOUBLE_TYPE:
-			return Double.valueOf(value);
-		case INTEGER_TYPE:
-			return Integer.valueOf(value);
-		case BIG_INTEGER_TYPE:
-			return Long.valueOf(value);
-		case DATE_TYPE:
-			return value;
-		default:
-			throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
-		}
+
+		return switch (lastDataType) {
+		case NONE_TYPE -> null;
+		case TEXT_TYPE, DATE_TYPE -> value;
+		case DOUBLE_TYPE -> Double.valueOf(value);
+		case INTEGER_TYPE -> Integer.valueOf(value);
+		case BIG_INTEGER_TYPE -> Long.valueOf(value);
+		default -> throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
+		};
 	}
 
 	private void checkLastDataType(String value) {

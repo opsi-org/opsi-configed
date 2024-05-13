@@ -202,16 +202,11 @@ public class MapTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int col) {
-		switch (col) {
-		case 0:
-			return Configed.getResourceValue("EditMapPanel.ColumnHeaderName");
-
-		case 1:
-			return Configed.getResourceValue("EditMapPanel.ColumnHeaderValue");
-
-		default:
-			return "";
-		}
+		return switch (col) {
+		case 0 -> Configed.getResourceValue("EditMapPanel.ColumnHeaderName");
+		case 1 -> Configed.getResourceValue("EditMapPanel.ColumnHeaderValue");
+		default -> "";
+		};
 	}
 
 	@Override
@@ -255,17 +250,11 @@ public class MapTableModel extends AbstractTableModel {
 	 */
 	@Override
 	public Class<?> getColumnClass(int c) {
-		switch (c) {
-		case 0:
-			return String.class;
-
-		case 1:
-			return List.class;
-
-		default:
-
-			return Object.class;
-		}
+		return switch (c) {
+		case 0 -> String.class;
+		case 1 -> List.class;
+		default -> Object.class;
+		};
 	}
 
 	/*

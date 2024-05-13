@@ -21,24 +21,12 @@ public final class ErrorCode {
 			result = "problem type " + n + ": ";
 		}
 
-		switch (n) {
-		case NO_ERROR:
-			result = result + "no error occured";
-			break;
-		case INITIALIZATION_ERROR:
-			result = result + "inititalization error";
-			break;
-		case CONNECTION_ERROR:
-			result = result + "connection error";
-			break;
-		case CLIENTNAMES_FILENAME_MISSING:
-			result = result + "REQUIRED: name of file with clientnames";
-			break;
-		default:
-			result = result + "_";
-			break;
-		}
-
-		return result;
+		return switch (n) {
+		case NO_ERROR -> result + "no error occured";
+		case INITIALIZATION_ERROR -> result + "inititalization error";
+		case CONNECTION_ERROR -> result + "connection error";
+		case CLIENTNAMES_FILENAME_MISSING -> result + "REQUIRED: name of file with clientnames";
+		default -> result + "_";
+		};
 	}
 }

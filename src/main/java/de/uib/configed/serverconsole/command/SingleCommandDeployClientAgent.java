@@ -63,37 +63,12 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 	}
 
 	public void finish(FinalActionType actionType) {
-		switch (actionType) {
-		case START_OCD:
-			finishAction = " --start-opsiclientd ";
-			break;
-		case REBOOT:
-			finishAction = " --reboot";
-			break;
-		case SHUTDOWN:
-			finishAction = " --shutdown";
-			break;
-		default:
-			finishAction = "";
-			break;
-		}
-	}
-
-	public void finish(String action) {
-		switch (action) {
-		case "startocd":
-			finishAction = " --start-opsiclientd ";
-			break;
-		case "reboot":
-			finishAction = " --reboot";
-			break;
-		case "shutdown":
-			finishAction = " --shutdown";
-			break;
-		default:
-			finishAction = "";
-			break;
-		}
+		finishAction = switch (actionType) {
+		case START_OCD -> " --start-opsiclientd ";
+		case REBOOT -> " --reboot";
+		case SHUTDOWN -> " --shutdown";
+		default -> "";
+		};
 	}
 
 	@Override

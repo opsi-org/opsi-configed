@@ -79,41 +79,17 @@ public class ConnectionState {
 	 */
 	@Override
 	public String toString() {
-		String state = null;
-
-		switch (myState) {
-		case UNDEFINED:
-			state = "Undefined state";
-			break;
-		case INTERRUPTED:
-			state = "Interrupted ";
-			break;
-		case NOT_CONNECTED:
-			state = "Not connected";
-			break;
-		case STARTED_CONNECTING:
-			state = "Started connecting";
-			break;
-		case CONNECTED:
-			state = "Connected";
-			break;
-		case RETRY_CONNECTION:
-			state = "Reconnecting";
-			break;
-		case UNAUTHORIZED:
-			state = "Unauthorized";
-			break;
-		case CLOSING:
-			state = "Closing";
-			break;
-		case ERROR:
-			state = "Error";
-			break;
-		default:
-			state = "UNKNOWN State";
-			break;
-		}
-
-		return state;
+		return switch (myState) {
+		case UNDEFINED -> "Undefined state";
+		case INTERRUPTED -> "Interrupted ";
+		case NOT_CONNECTED -> "Not connected";
+		case STARTED_CONNECTING -> "Started connecting";
+		case CONNECTED -> "Connected";
+		case RETRY_CONNECTION -> "Reconnecting";
+		case UNAUTHORIZED -> "Unauthorized";
+		case CLOSING -> "Closing";
+		case ERROR -> "Error";
+		default -> "UNKNOWN State";
+		};
 	}
 }
