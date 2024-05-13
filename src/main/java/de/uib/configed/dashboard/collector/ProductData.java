@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
@@ -77,21 +76,19 @@ public final class ProductData {
 		List<Map<String, Object>> allProductsInDepot = persistenceController.getProductDataService().getAllProducts();
 
 		for (String depot : depots) {
-			Helper.fillMapOfListsForDepots(products,
-					allProductsInDepot.stream().filter(v -> depot.equals(v.get("depotId")))
-							.map(v -> (String) v.get("productId")).collect(Collectors.toList()),
-					depot);
+			Helper.fillMapOfListsForDepots(products, allProductsInDepot.stream()
+					.filter(v -> depot.equals(v.get("depotId"))).map(v -> (String) v.get("productId")).toList(), depot);
 			Helper.fillMapOfListsForDepots(netbootProducts,
 					allProductsInDepot.stream()
 							.filter(v -> v.get("productType").equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
 									&& depot.equals(v.get("depotId")))
-							.map(v -> (String) v.get("productId")).collect(Collectors.toList()),
+							.map(v -> (String) v.get("productId")).toList(),
 					depot);
 			Helper.fillMapOfListsForDepots(localbootProducts,
 					allProductsInDepot.stream()
 							.filter(v -> v.get("productType").equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
 									&& depot.equals(v.get("depotId")))
-							.map(v -> (String) v.get("productId")).collect(Collectors.toList()),
+							.map(v -> (String) v.get("productId")).toList(),
 					depot);
 		}
 	}
@@ -136,8 +133,7 @@ public final class ProductData {
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 
 			List<String> clientsMap = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
-					.collect(Collectors.toList());
+					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).toList();
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
 					.getProductDataService().getMapOfProductStatesAndActions(clientsMap);
 
@@ -199,7 +195,7 @@ public final class ProductData {
 	private static Map<Product, Product> createUnusedProductList(String depot) {
 		Map<Product, Product> unusedProductsList = new HashMap<>();
 		List<String> hostnames = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
-				.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
+				.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).toList();
 		for (String productId : tmpUnusedProductsList.get(depot)) {
 			addUnusedProductToList(depot, productId, hostnames, unusedProductsList);
 		}

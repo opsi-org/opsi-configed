@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.HostInfo;
@@ -99,8 +98,7 @@ public class CopyClient {
 	private void copyGroups() {
 		Map<String, Set<String>> fGroup2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
 		List<String> clientGroups = fGroup2Members.keySet().stream()
-				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getName()))
-				.collect(Collectors.toList());
+				.filter(group -> fGroup2Members.get(group).contains(clientToCopy.getName())).toList();
 
 		if (clientGroups.isEmpty()) {
 			return;

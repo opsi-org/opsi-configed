@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
@@ -3139,8 +3138,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void createClients(List<List<Object>> clients) {
-		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
-				.collect(Collectors.toList());
+		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList();
 		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 		if (persistenceController.getHostDataService().createClients(clients)) {
 			Logging.debug(this, "createClients" + clients);

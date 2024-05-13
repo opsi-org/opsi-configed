@@ -20,7 +20,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -1096,8 +1095,7 @@ public class ProductDataService {
 
 		for (final String clientId : selectedClients) {
 			List<String> modifiedProductsOnClient = modifiedProductsOnClients.stream()
-					.filter(m -> clientId.equals(m.get("clientId"))).map(m -> (String) m.get("productId"))
-					.collect(Collectors.toList());
+					.filter(m -> clientId.equals(m.get("clientId"))).map(m -> (String) m.get("productId")).toList();
 			for (final String product : modifiedProductsOnClient) {
 				Map<String, Object> productOnClientItem = Utils.createNOMitem("ProductOnClient");
 				productOnClientItem.put("productType", productType);

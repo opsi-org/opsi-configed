@@ -18,7 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
@@ -168,7 +167,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
 
 			if (nodeIds.contains(child.toString())) {
-				allNodes.addAll(Arrays.stream(node.getPath()).map(Object::toString).collect(Collectors.toList()));
+				allNodes.addAll(Arrays.stream(node.getPath()).map(Object::toString).toList());
 			}
 
 			recursivelyCollectParentIDs(allNodes, child, nodeIds);

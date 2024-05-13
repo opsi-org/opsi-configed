@@ -106,7 +106,7 @@ public final class ClientData {
 					.getMapOfAllPCInfoMaps().values().stream().filter(v -> depot.equals(v.getInDepot()))
 					.map(HostInfo::getName).collect(Collectors.toList());
 			List<String> allConnectedClientsByMessagebusInDepot = allConnectedClientsByMessagebus.stream()
-					.filter(notConnectedClientsByMessagebusInDepot::contains).collect(Collectors.toList());
+					.filter(notConnectedClientsByMessagebusInDepot::contains).toList();
 			notConnectedClientsByMessagebusInDepot.removeAll(allConnectedClientsByMessagebus);
 			notConnectedClientsByMessagebus.put(depot, notConnectedClientsByMessagebusInDepot);
 			connectedClientsByMessagebus.put(depot, allConnectedClientsByMessagebusInDepot);

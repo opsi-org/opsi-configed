@@ -20,7 +20,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
@@ -148,7 +147,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 
 			try {
 				subjectAlternativeNames = certificate.getSubjectAlternativeNames().stream()
-						.map(peerHostname -> (String) peerHostname.get(1)).collect(Collectors.toList());
+						.map(peerHostname -> (String) peerHostname.get(1)).toList();
 			} catch (CertificateParsingException e) {
 				Logging.warning(this, "problem in parsing certificate", e);
 			}
