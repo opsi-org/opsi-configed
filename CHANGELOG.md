@@ -7,6 +7,7 @@
 - Remove multi client hardware info (was available only before 4.3 with MySQL)
 - Update to Java 22
 - Update to JavaFX 22
+- Add support for MacOS ARM64
 
 
 ## [4.3.2.14] - 2024-04-29
