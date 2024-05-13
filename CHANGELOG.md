@@ -5,8 +5,8 @@
 - Remove user roles config key `ssh.serverconfiguration.active`
 - Remove MySQL client search (was available only before 4.3 with MySQL)
 - Remove multi client hardware info (was available only before 4.3 with MySQL)
-- Update to Java 22
-- Update to JavaFX 22
+- Update to Java 21
+- Update to JavaFX 21
 - Add support for MacOS ARM64
 
 
