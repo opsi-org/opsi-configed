@@ -188,8 +188,8 @@ public final class Messages {
 			menuItem.addActionListener((ActionEvent e) -> {
 				UserPreferences.set(UserPreferences.LANGUAGE, locale);
 				Messages.setLocale(locale);
-				Locale.setDefault(new Locale(locale));
-				JComponent.setDefaultLocale(new Locale(locale));
+				Locale.setDefault(Locale.of(locale));
+				JComponent.setDefaultLocale(Locale.of(locale));
 				runnable.run();
 			});
 		}

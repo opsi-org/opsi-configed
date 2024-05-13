@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -151,9 +153,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		String baseURL = produceBaseURL("/rpc");
 
 		try {
-			serviceURL = new URL(baseURL);
-		} catch (MalformedURLException ex) {
-			Logging.error(this, "Malformed URL: " + baseURL, ex);
+			serviceURL = new URI(baseURL).toURL();
+		} catch (MalformedURLException | URISyntaxException ex) {
+			Logging.error(this, "URI Syntax error: " + baseURL, ex);
 		}
 
 		return serviceURL;

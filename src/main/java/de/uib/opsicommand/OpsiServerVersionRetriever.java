@@ -7,7 +7,8 @@
 package de.uib.opsicommand;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.regex.Matcher;
@@ -77,7 +78,7 @@ public class OpsiServerVersionRetriever {
 		HttpsURLConnection connection;
 
 		try {
-			connection = (HttpsURLConnection) new URL(serviceURL).openConnection();
+			connection = (HttpsURLConnection) new URI(serviceURL).toURL().openConnection();
 			String authorization = Base64.getEncoder()
 					.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
 			connection.setRequestProperty("Authorization", "Basic " + authorization);
@@ -86,6 +87,9 @@ public class OpsiServerVersionRetriever {
 			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
 			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 			connection.setRequestMethod("HEAD");
+		} catch (URISyntaxException e) {
+			Logging.warning(this, "cannot create URI from " + serviceURL, e);
+			return;
 		} catch (IOException e) {
 			Logging.warning(this, "error in testing connection to server for getting server opsi version", e);
 			return;

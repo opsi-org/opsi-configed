@@ -6,8 +6,8 @@
 
 package de.uib.opsidatamodel;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -240,10 +240,10 @@ public class HostInfoCollections {
 
 		if (val != null && !"".equals(val)) {
 			try {
-				filepath = new URL((String) val).getPath();
+				filepath = new URI((String) val).getPath();
 				Logging.info(this, "retrieveOpsiHosts workbenchpath " + filepath);
-			} catch (MalformedURLException netex) {
-				Logging.error("not a correctly formed file URL: " + val, netex);
+			} catch (URISyntaxException netex) {
+				Logging.error("not a correctly formed file URI: " + val, netex);
 			}
 		}
 

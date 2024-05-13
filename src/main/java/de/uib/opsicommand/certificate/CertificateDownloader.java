@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -61,9 +63,9 @@ public final class CertificateDownloader {
 		URL url = null;
 
 		try {
-			url = new URL(urlPath);
-		} catch (MalformedURLException e) {
-			Logging.error("url is malformed: " + url);
+			url = new URI(urlPath).toURL();
+		} catch (URISyntaxException | MalformedURLException e) {
+			Logging.error("url is malformed: " + url, e);
 		}
 
 		if (url == null) {
