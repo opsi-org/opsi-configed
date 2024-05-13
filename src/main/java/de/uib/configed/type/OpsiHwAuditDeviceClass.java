@@ -45,30 +45,11 @@ public class OpsiHwAuditDeviceClass {
 	private List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
 	private List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
 
-	private String hostConfigKey;
-	private String hwItemConfigKey;
-
 	public OpsiHwAuditDeviceClass(String hwClassName) {
 		this.hwClassName = hwClassName;
 
 		deviceHostProperties = new ArrayList<>();
 		deviceHwItemProperties = new ArrayList<>();
-	}
-
-	public void setHostConfigKey(String key) {
-		hostConfigKey = key;
-	}
-
-	public String getHostConfigKey() {
-		return hostConfigKey;
-	}
-
-	public void setHwItemConfigKey(String key) {
-		hwItemConfigKey = key;
-	}
-
-	public String getHwItemConfigKey() {
-		return hwItemConfigKey;
 	}
 
 	public void setLinuxQuery(String s) {

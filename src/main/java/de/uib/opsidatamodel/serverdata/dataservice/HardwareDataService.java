@@ -11,14 +11,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.messages.Messages;
@@ -27,7 +24,6 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 /**
@@ -51,15 +47,10 @@ public class HardwareDataService {
 
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;
-	private ConfigDataService configDataService;
 
 	public HardwareDataService(AbstractPOJOExecutioner exec) {
 		this.cacheManager = CacheManager.getInstance();
 		this.exec = exec;
-	}
-
-	public void setConfigDataService(ConfigDataService configDataService) {
-		this.configDataService = configDataService;
 	}
 
 	public List<Map<String, Object>> getHardwareOnClientPD() {
@@ -135,16 +126,12 @@ public class HardwareDataService {
 					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
 
 					hwAuditDeviceClass.addHostRelatedProperty(devProperty);
-					hwAuditDeviceClass.setHostConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
-							+ OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE).toLowerCase(Locale.ROOT));
 				} else if ("g".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
 					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
 
 					hwAuditDeviceClass.addHwItemRelatedProperty(devProperty);
-					hwAuditDeviceClass.setHwItemConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
-							+ OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE).toLowerCase(Locale.ROOT));
 				} else {
 					Logging.warning(this, "getAllHwClassNames illegal value for key " + OpsiHwAuditDeviceClass.SCOPE_KEY
 							+ " " + ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY));
@@ -182,138 +169,6 @@ public class HardwareDataService {
 		hwAuditConf.computeIfAbsent(locale, s -> exec.getListOfMapsOfListsOfMaps(
 				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
 		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
-	}
-
-	private Map<String, Object> produceHwAuditColumnConfig(String configKey,
-			List<OpsiHwAuditDevicePropertyType> deviceProperties, Map<String, Boolean> tableConfigUpdates) {
-		List<Object> oldDefaultValues = new ArrayList<>();
-
-		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
-		if (configOptions.get(configKey) != null) {
-			oldDefaultValues = configOptions.get(configKey).getDefaultValues();
-		}
-
-		Logging.info(this, "produceHwAuditColumnConfig " + oldDefaultValues);
-
-		List<Object> possibleValues = new ArrayList<>();
-		for (OpsiHwAuditDevicePropertyType deviceProperty : deviceProperties) {
-			possibleValues.add(deviceProperty.getOpsiDbColumnName());
-		}
-
-		Logging.info(this, "produceConfig, possibleValues " + possibleValues);
-
-		List<Object> newDefaultValues = new ArrayList<>();
-		for (Object value : possibleValues) {
-			if (oldDefaultValues.contains(value)) {
-				// was in default values and no change, or value is in (old) default values and
-				// set again
-				if (tableConfigUpdates.get(value) == null || Boolean.TRUE.equals(tableConfigUpdates.get(value))) {
-					newDefaultValues.add(value);
-				}
-			} else if (tableConfigUpdates.get(value) != null && tableConfigUpdates.get(value)) {
-				// change, value is now configured
-				newDefaultValues.add(value);
-			} else {
-				// value is contained nowhere
-			}
-		}
-
-		Map<String, Object> configItem = Utils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey, "", false,
-				true, newDefaultValues, possibleValues);
-
-		Logging.info(this, "produceConfig, created an item " + configItem);
-
-		return configItem;
-	}
-
-	public boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems) {
-		configDataService.retrieveConfigOptionsPD();
-
-		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
-		List<Object> readyObjects = new ArrayList<>();
-
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = cacheManager
-				.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class);
-		for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClass.getValue();
-
-			// case hostAssignedTableType
-			String configKey = hwAuditDeviceClass.getHostConfigKey();
-			String configIdent = hwClass.getKey() + "_" + OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
-
-			Logging.debug(this, " saveHwColumnConfig for HOST configIdent " + configIdent);
-
-			Map<String, Boolean> tableConfigUpdates = updateItems.get(configIdent.toUpperCase(Locale.ROOT));
-
-			// we have got updates for this table configuration
-			if (tableConfigUpdates != null) {
-				Logging.info(this,
-						" saveHwColumnConfig tableConfigUpdates  for the host configIdent,  " + tableConfigUpdates);
-
-				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
-						hwAuditDeviceClass.getDeviceHostProperties(), tableConfigUpdates);
-
-				readyObjects.add(configItem);
-
-				// now, we have got them in a view model
-
-				Logging.info(this,
-						"saveHwColumnConfig, locally saving " + " key " + hwAuditDeviceClass.getHwItemConfigKey());
-
-				Logging.info(this,
-						"saveHwColumnConfig, old configOption for key" + " " + hwAuditDeviceClass.getHostConfigKey()
-								+ " " + configOptions.get(hwAuditDeviceClass.getHostConfigKey()));
-
-				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
-
-				ConfigOption configOption = new ConfigOption(configItem);
-
-				configOptions.put(hwAuditDeviceClass.getHostConfigKey(), configOption);
-			}
-
-			// case hwItemAssignedTableType
-			configKey = hwAuditDeviceClass.getHwItemConfigKey();
-			configIdent = hwClass.getKey() + "_" + OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
-
-			Logging.debug(this, " saveHwColumnConfig for HW configIdent " + configIdent);
-
-			tableConfigUpdates = updateItems.get(configIdent.toUpperCase(Locale.ROOT));
-
-			// we have got updates for this table configuration
-			if (tableConfigUpdates != null) {
-				Logging.info(this,
-						" saveHwColumnConfig tableConfigUpdates  for the hw configIdent,  " + tableConfigUpdates);
-
-				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
-						hwAuditDeviceClass.getDeviceHwItemProperties(), tableConfigUpdates);
-
-				readyObjects.add(configItem);
-
-				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
-
-				// save the data locally, we hope that the upload later will work as well
-				// now, we have got them in a view model
-
-				Logging.info(this, "saveHwColumnConfig, produce a ConfigOption from configItem " + configItem);
-
-				Logging.info(this,
-						"saveHwColumnConfig, locally saving " + " key " + hwAuditDeviceClass.getHwItemConfigKey());
-
-				Logging.info(this,
-						"saveHwColumnConfig, we had configOption for key" + " "
-								+ hwAuditDeviceClass.getHwItemConfigKey() + " "
-								+ configOptions.get(hwAuditDeviceClass.getHwItemConfigKey()));
-
-				ConfigOption configOption = new ConfigOption(configItem);
-
-				configOptions.put(hwAuditDeviceClass.getHostConfigKey(), configOption);
-			}
-		}
-
-		Logging.info(this, "saveHwColumnConfig readyObjects " + readyObjects.size());
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
-
-		return exec.doCall(omc);
 	}
 
 	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId) {
