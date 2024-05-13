@@ -22,7 +22,7 @@ set_variables:
     expire_in: 2 day
 
 compile_and_package:
-  image: maven:3.8.6-openjdk-18
+  image: gaianmobius/openjdk-21-mvn-3.9.6
   stage: build_and_analyze
   script:
     - TRANSIFEX_MIN_TRANSLATION_RATE=0.0
