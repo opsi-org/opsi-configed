@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
-import de.uib.configed.type.OpsiHwAuditDevicePropertyTypes;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -62,7 +61,6 @@ public class ConfigDataService {
 	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
 	private UserRolesConfigDataService userRolesConfigDataService;
-	private HardwareDataService hardwareDataService;
 
 	private List<Map<String, Object>> configCollection;
 	private List<Map<String, Object>> configStateCollection;
@@ -76,10 +74,6 @@ public class ConfigDataService {
 
 	public void setUserRolesConfigDataService(UserRolesConfigDataService userRolesConfigDataService) {
 		this.userRolesConfigDataService = userRolesConfigDataService;
-	}
-
-	public void setHardwareDataService(HardwareDataService hardwareDataService) {
-		this.hardwareDataService = hardwareDataService;
 	}
 
 	/**
@@ -144,8 +138,6 @@ public class ConfigDataService {
 
 		RemoteControls remoteControls = new RemoteControls();
 		SavedSearches savedSearches = new SavedSearches();
-		OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
-				hardwareDataService.getHwAuditDeviceClassesPD());
 
 		// metaConfig for wan configuration is rebuilt in
 		// getWANConfigOptions
@@ -184,7 +176,6 @@ public class ConfigDataService {
 				remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
 				savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
 			}
-			hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);

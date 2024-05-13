@@ -33,9 +33,6 @@ public class HardwareConfDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_CONF);
 		hardwareDataService.retrieveOpsiHWAuditConfPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES);
-		hardwareDataService.retrieveHwAuditDeviceClassesPD();
-
 		cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
 		cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS);

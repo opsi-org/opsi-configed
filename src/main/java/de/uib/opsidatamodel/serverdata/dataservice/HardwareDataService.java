@@ -14,17 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeMap;
 
-import de.uib.configed.type.OpsiHwAuditDeviceClass;
-import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with hardware data on the server.
@@ -67,85 +63,6 @@ public class HardwareDataService {
 		List<Map<String, Object>> relationsAuditHardwareOnHost = exec.getListOfMaps(new OpsiMethodCall(
 				RPCMethodName.AUDIT_HARDWARE_ON_HOST_GET_OBJECTS, new Object[] { new String[0], filterMap }));
 		cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, relationsAuditHardwareOnHost);
-	}
-
-	public Map<String, OpsiHwAuditDeviceClass> getHwAuditDeviceClassesPD() {
-		retrieveHwAuditDeviceClassesPD();
-		return cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, Map.class);
-	}
-
-	public void retrieveHwAuditDeviceClassesPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES)) {
-			return;
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, new TreeMap<>());
-		if (getOpsiHWAuditConfPD(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry())
-				.isEmpty()) {
-			Logging.error(this, "no hwaudit config found ");
-			return;
-		}
-
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = new TreeMap<>();
-		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConfPD(
-				Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry())) {
-			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
-					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null) {
-				Logging.info(this, "getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is "
-						+ hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY));
-				Logging.info(this, "getAllHwClassNames illegal hw config item,  hwAuditClass.get Values is "
-						+ hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY));
-
-				continue;
-			}
-
-			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
-					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
-
-			OpsiHwAuditDevicePropertyType firstSeen = new OpsiHwAuditDevicePropertyType(hwClass);
-			firstSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.FIRST_SEEN_COL_NAME);
-			firstSeen.setOpsiDbColumnType("timestamp");
-			OpsiHwAuditDevicePropertyType lastSeen = new OpsiHwAuditDevicePropertyType(hwClass);
-			lastSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.LAST_SEEN_COL_NAME);
-			lastSeen.setOpsiDbColumnType("timestamp");
-
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = new OpsiHwAuditDeviceClass(hwClass);
-			hwAuditDeviceClasses.put(hwClass, hwAuditDeviceClass);
-
-			hwAuditDeviceClass.setLinuxQuery((String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
-					.get(OpsiHwAuditDeviceClass.LINUX_KEY));
-			hwAuditDeviceClass.setWmiQuery((String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
-					.get(OpsiHwAuditDeviceClass.WMI_KEY));
-
-			Logging.info(this, "hw audit class " + hwClass);
-
-			for (Map<?, ?> ma : hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY)) {
-				if ("i".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
-					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
-					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
-					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
-
-					hwAuditDeviceClass.addHostRelatedProperty(devProperty);
-				} else if ("g".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
-					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
-					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
-					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
-
-					hwAuditDeviceClass.addHwItemRelatedProperty(devProperty);
-				} else {
-					Logging.warning(this, "getAllHwClassNames illegal value for key " + OpsiHwAuditDeviceClass.SCOPE_KEY
-							+ " " + ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY));
-				}
-			}
-
-			hwAuditDeviceClass.addHostRelatedProperty(firstSeen);
-			hwAuditDeviceClass.addHostRelatedProperty(lastSeen);
-
-			Logging.info(this, "hw audit class " + hwAuditDeviceClass);
-		}
-
-		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_DEVICE_CLASSES, hwAuditDeviceClasses);
-		Logging.info(this, "produceHwAuditDeviceClasses hwAuditDeviceClasses size " + hwAuditDeviceClasses.size());
 	}
 
 	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD(String locale) {

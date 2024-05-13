@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import de.uib.configed.productaction.PanelCompleteWinProducts;
-import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -192,7 +191,6 @@ public class OpsiServiceNOMPersistenceController {
 		hostInfoCollections = new HostInfoCollections(this);
 
 		configDataService.setUserRolesConfigDataService(userRolesConfigDataService);
-		configDataService.setHardwareDataService(hardwareDataService);
 
 		depotDataService.setUserRolesConfigDataService(userRolesConfigDataService);
 		depotDataService.setProductDataService(productDataService);
@@ -416,8 +414,6 @@ public class OpsiServiceNOMPersistenceController {
 		propertyClassesServer.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
 		propertyClassesServer.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
 		propertyClassesServer.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
-		propertyClassesServer.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
-				"HostConfigNodeRenderer.configed.usecolumns_hwaudit");
 		propertyClassesServer.put("opsiclientd", "HostConfigNodeRenderer.opsiclientd.Tooltip");
 
 		propertyClassesServer.put("opsi-script", "HostConfigNodeRenderer.opsi_script.Tooltip");

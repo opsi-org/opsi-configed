@@ -62,11 +62,6 @@ public enum CacheIdentifier {
 	PERMITTED_PRODUCTS("permitted_products"),
 
 	/**
-	 * return type {@code Map<String, OpsiHwAuditDeviceClass>}
-	 */
-	HW_AUDIT_DEVICE_CLASSES("hw_audit_device_classes"),
-
-	/**
 	 * return type {@code Map<String, ListCellOptions>}
 	 */
 	CONFIG_LIST_CELL_OPTIONS("config_list_cell_options"),
