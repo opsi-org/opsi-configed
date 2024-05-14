@@ -38,8 +38,7 @@ public class SelectData {
 		Logging.debug(this.getClass(), "got data, type " + data + ", " + type);
 
 		switch (type) {
-		case TEXT_TYPE:
-		case DATE_TYPE:
+		case TEXT_TYPE, DATE_TYPE:
 			if (!(data instanceof String)) {
 				Logging.error(this.getClass(), "Data is no String");
 				throw new IllegalArgumentException("Data is no String");

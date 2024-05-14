@@ -67,18 +67,13 @@ public class TabbedLogPane extends JTabbedPane {
 		int tabCount = getTabCount();
 		int tabWidth = 0;
 		int gap = 0;
-		switch (getTabPlacement()) {
-		case LEFT:
-		case RIGHT:
+
+		if (getTabPlacement() == LEFT || getTabPlacement() == RIGHT) {
 			tabWidth = areaWidth / 4;
 			gap = 0;
-			break;
-		case BOTTOM:
-		case TOP:
-		default:
+		} else {
 			tabWidth = areaWidth / tabCount;
 			gap = areaWidth - (tabWidth * tabCount);
-			break;
 		}
 
 		tabWidth = tabWidth - tabInsets.left - tabInsets.right - 3;

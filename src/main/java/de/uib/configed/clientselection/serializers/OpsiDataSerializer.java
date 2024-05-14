@@ -414,8 +414,7 @@ public class OpsiDataSerializer {
 		switch (value) {
 		// In old searches, we still have "EnumType", but this will now
 		// due to refactoring be replaced by "TextType"
-		case "TextType":
-		case "EnumType":
+		case "TextType", "EnumType":
 			lastDataType = DataType.TEXT_TYPE;
 			break;
 

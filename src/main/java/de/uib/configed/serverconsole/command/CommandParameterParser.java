@@ -256,47 +256,38 @@ public final class CommandParameterParser {
 		String f = format.replace(" ", "");
 		Logging.info(this, "callMethod format f " + f);
 		switch (f) {
-		case "xyz":
-		case "xyz...":
+		case "xyz", "xyz...":
 			formatedResult = Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
 			break;
-		case "x,y,z":
-		case "x,y,z,...":
+		case "x,y,z", "x,y,z,...":
 			formatedResult = Arrays.toString(result).replace("[", "").replace("]", "");
 			break;
-		case "[x,y,z]":
-		case "[x,y,z,...]":
+		case "[x,y,z]", "[x,y,z,...]":
 			formatedResult = Arrays.toString(result);
 			break;
 
-		case "'x''y''z'":
-		case "'x''y''z''...'":
+		case "'x''y''z'", "'x''y''z''...'":
 			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
 			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, " ");
 			break;
-		case "'x','y','z'":
-		case "'x','y','z','...'":
+		case "'x','y','z'", "'x','y','z','...'":
 			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
 			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, ",");
 			break;
-		case "\"x\"\"y\"\"z\"":
-		case "\"x\"\"y\"\"z\"\"...\"":
+		case "\"x\"\"y\"\"z\"", "\"x\"\"y\"\"z\"\"...\"":
 			Logging.info(this, "formatResult switch case [4] " + "\"x\"\"y\"\"z\"\"...\"" + " || " + "\"x\"\"y\"\"z\"");
 			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, " ");
 			break;
-		case "\"x\",\"y\",\"z\"":
-		case "\"x\",\"y\",\"z\",\"...\"":
+		case "\"x\",\"y\",\"z\"", "\"x\",\"y\",\"z\",\"...\"":
 			Logging.info(this,
 					"formatResult switch case [5] " + "\"x\",\"y\",\"z\",\"...\"" + " || " + "\"x\",\"y\",\"z\"");
 			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, ",");
 			break;
-		case "['x','y','z']":
-		case "['x','y','z','...']":
+		case "['x','y','z']", "['x','y','z','...']":
 			Logging.info(this, "formatResult switch case [5] " + "['x','y','z']" + " || " + "['x','y','z','...']");
 			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_SQUARE, ",");
 			break;
-		case "[\"x\",\"y\",\"z\"]":
-		case "[\"x\",\"y\",\"z\",\"...\"]":
+		case "[\"x\",\"y\",\"z\"]", "[\"x\",\"y\",\"z\",\"...\"]":
 			Logging.info(this,
 					"formatResult switch case [5] " + "[\"x\",\"y\",\"z\"]" + " || " + "[\"x\",\"y\",\"z\",\"...\"]");
 			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_SQUARE, ",");

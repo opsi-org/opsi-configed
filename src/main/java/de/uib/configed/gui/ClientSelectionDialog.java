@@ -597,9 +597,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		SelectData.DataType type = operation.getDataType();
 		switch (type) {
 		// Do the same for all four cases
-		case DOUBLE_TYPE:
-		case TEXT_TYPE:
-		case DATE_TYPE:
+		case DOUBLE_TYPE, TEXT_TYPE, DATE_TYPE:
 			data = ((TextInputField) group.dataComponent).getText();
 			if (((String) data).isEmpty()) {
 				return null;
