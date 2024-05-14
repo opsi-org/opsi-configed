@@ -205,8 +205,8 @@ public class OpsiDataSerializer {
 			return "\"" + object + "\"";
 		} else if (object instanceof SelectData.DataType) {
 			return object.toString();
-		} else if (object instanceof String[]) {
-			return stringArrayToString((String[]) object);
+		} else if (object instanceof String[] stringArrayObject) {
+			return stringArrayToString(stringArrayObject);
 		} else {
 			throw new IllegalArgumentException("Unknown type");
 		}
@@ -591,9 +591,9 @@ public class OpsiDataSerializer {
 			map.put(KEY_DATA_TYPE, operation.getSelectData().getType());
 			map.put("data", operation.getSelectData().getData());
 		}
-		if (operation instanceof AbstractSelectGroupOperation) {
+		if (operation instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
 			List<Map<String, Object>> childData = new LinkedList<>();
-			for (AbstractSelectOperation child : ((AbstractSelectGroupOperation) operation).getChildOperations()) {
+			for (AbstractSelectOperation child : abstractSelectGroupOperation.getChildOperations()) {
 				childData.add(produceData(child));
 			}
 
@@ -670,13 +670,13 @@ public class OpsiDataSerializer {
 
 		AndOperation andOperation = (AndOperation) operation;
 		AbstractSelectOperation notGroup = operation;
-		while (notGroup instanceof AbstractSelectGroupOperation) {
-			notGroup = ((AbstractSelectGroupOperation) notGroup).getChildOperations().get(0);
+		while (notGroup instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
+			notGroup = abstractSelectGroupOperation.getChildOperations().get(0);
 		}
 
 		AbstractSelectOperation leftNotGroup = andOperation.getChildOperations().get(1);
-		while (leftNotGroup instanceof AbstractSelectGroupOperation) {
-			leftNotGroup = ((AbstractSelectGroupOperation) leftNotGroup).getChildOperations().get(0);
+		while (leftNotGroup instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
+			leftNotGroup = abstractSelectGroupOperation.getChildOperations().get(0);
 		}
 
 		if (notGroup.getElement().getPathArray().length != 1) {

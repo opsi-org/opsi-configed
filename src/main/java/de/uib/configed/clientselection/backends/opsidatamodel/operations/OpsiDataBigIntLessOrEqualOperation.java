@@ -27,12 +27,12 @@ public class OpsiDataBigIntLessOrEqualOperation extends BigIntLessOrEqualOperati
 	@Override
 	public boolean doesMatch(OpsiDataClient client) {
 		Object realData = client.getMap(map).get(key);
-		if (realData instanceof Long) {
-			if ((Long) realData <= data) {
+		if (realData instanceof Long longData) {
+			if (longData <= data) {
 				return true;
 			}
-		} else if (realData instanceof Integer) {
-			if ((Integer) realData <= data) {
+		} else if (realData instanceof Integer integerData) {
+			if (integerData <= data) {
 				return true;
 			}
 		} else {

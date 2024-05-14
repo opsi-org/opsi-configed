@@ -75,8 +75,8 @@ public final class Helper {
 	}
 
 	public static BufferedImage toBufferedImage(Image img) {
-		if (img instanceof BufferedImage) {
-			return (BufferedImage) img;
+		if (img instanceof BufferedImage bufferedImage) {
+			return bufferedImage;
 		}
 
 		BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null),

@@ -546,19 +546,16 @@ public final class ClientMenuManager implements MenuListener {
 				popupMenu.addSeparator();
 			}
 
-			if (component instanceof JMenuItem) {
-				JMenuItem sourceItem = (JMenuItem) component;
-				JMenuItem clonedItem = cloneMenuItem(sourceItem);
-				popupMenu.add(clonedItem);
+			if (component instanceof JMenuItem jMenuItem) {
+				popupMenu.add(cloneMenuItem(jMenuItem));
 			}
 		}
 	}
 
 	private static JMenuItem cloneMenuItem(JMenuItem sourceItem) {
 		JMenuItem clonedItem;
-		if (sourceItem instanceof JMenu) {
-			clonedItem = new JMenu(sourceItem.getText());
-			JMenu sourceSubMenu = (JMenu) sourceItem;
+		if (sourceItem instanceof JMenu sourceSubMenu) {
+			clonedItem = new JMenu(sourceSubMenu.getText());
 			JMenu targetSubMenu = (JMenu) clonedItem;
 			for (int i = 0; i < sourceSubMenu.getItemCount(); i++) {
 				JMenuItem sourceSubItem = sourceSubMenu.getItem(i);

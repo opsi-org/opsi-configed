@@ -164,8 +164,7 @@ public final class OpsiDataBackend {
 	public ExecutableOperation createExecutableOperation(AbstractSelectOperation operation) {
 		Logging.debug(this, "createFromOperationData " + operation.getClassName());
 
-		if (operation instanceof AbstractSelectGroupOperation) {
-			AbstractSelectGroupOperation groupOperation = (AbstractSelectGroupOperation) operation;
+		if (operation instanceof AbstractSelectGroupOperation groupOperation) {
 			List<AbstractSelectOperation> children = new LinkedList<>();
 			for (AbstractSelectOperation child : groupOperation.getChildOperations()) {
 				children.add((AbstractSelectOperation) createExecutableOperation(child));

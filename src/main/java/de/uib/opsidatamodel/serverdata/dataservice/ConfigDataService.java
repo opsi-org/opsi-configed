@@ -1014,12 +1014,12 @@ public class ConfigDataService {
 
 			Object value = ((List<?>) configs.get(configKey)).get(0);
 
-			if (value instanceof Boolean) {
-				if (((Boolean) value).equals(expectValue)) {
+			if (value instanceof Boolean b) {
+				if (b.equals(expectValue)) {
 					result = true;
 				}
-			} else if (value instanceof String) {
-				if (((String) value).equalsIgnoreCase("" + expectValue)) {
+			} else if (value instanceof String s) {
+				if (s.equalsIgnoreCase("" + expectValue)) {
 					result = true;
 				}
 			} else {

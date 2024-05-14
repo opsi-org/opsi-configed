@@ -419,17 +419,17 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
 
-		if (theCellEditor instanceof SensitiveCellEditor) {
-			((SensitiveCellEditor) theCellEditor).setModelProducer(modelProducer);
-			((SensitiveCellEditor) theCellEditor).reInit();
+		if (theCellEditor instanceof SensitiveCellEditor sensitiveCellEditor) {
+			sensitiveCellEditor.setModelProducer(modelProducer);
+			sensitiveCellEditor.reInit();
 		}
 
 		editableColumn.setCellEditor(theCellEditor);
 	}
 
 	public void cancelOldCellEditing() {
-		if (theCellEditor instanceof SensitiveCellEditor) {
-			((SensitiveCellEditor) theCellEditor).hideListEditor();
+		if (theCellEditor instanceof SensitiveCellEditor sensitiveCellEditor) {
+			sensitiveCellEditor.hideListEditor();
 		}
 	}
 

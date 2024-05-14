@@ -912,9 +912,9 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				element = createSoftwareGroup();
 			} else if (op instanceof SwAuditOperation) {
 				element = createSwAuditGroup();
-			} else if (op instanceof HardwareOperation) {
+			} else if (op instanceof HardwareOperation hardwareOperation) {
 				element = createHardwareGroup(
-						getNonGroupOperation((HardwareOperation) op).getElement().getLocalizedPathArray()[0]);
+						getNonGroupOperation(hardwareOperation).getElement().getLocalizedPathArray()[0]);
 			} else {
 				Logging.error("Not a group operation: " + op.getClassName());
 				reset();
@@ -938,8 +938,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static AbstractSelectOperation getNonGroupOperation(AbstractSelectGroupOperation operation) {
 		AbstractSelectOperation child = operation.getChildOperations().get(0);
-		while (child instanceof AbstractSelectGroupOperation) {
-			child = ((AbstractSelectGroupOperation) child).getChildOperations().get(0);
+		while (child instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
+			child = abstractSelectGroupOperation.getChildOperations().get(0);
 		}
 		return child;
 	}
@@ -974,11 +974,11 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		if (component instanceof TextInputField) {
 			((TextInputField) component).setText(data.getData().toString());
-		} else if (component instanceof SpinnerWithExtension
+		} else if (component instanceof SpinnerWithExtension spinnerWithExtension
 				&& data.getType() == SelectData.DataType.BIG_INTEGER_TYPE) {
-			((SpinnerWithExtension) component).setValue((Long) data.getData());
-		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
-			((JSpinner) component).setValue(data.getData());
+			spinnerWithExtension.setValue((Long) data.getData());
+		} else if (component instanceof JSpinner jSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
+			jSpinner.setValue(data.getData());
 		} else {
 			Logging.warning("component " + component + " with datatype " + data.getType() + " not treated");
 		}

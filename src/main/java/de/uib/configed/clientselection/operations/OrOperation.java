@@ -23,7 +23,7 @@ public class OrOperation extends AbstractSelectGroupOperation implements Executa
 	@Override
 	public boolean doesMatch(OpsiDataClient client) {
 		for (AbstractSelectOperation operation : getChildOperations()) {
-			if (operation instanceof ExecutableOperation && ((ExecutableOperation) operation).doesMatch(client)) {
+			if (operation instanceof ExecutableOperation executableOperation && executableOperation.doesMatch(client)) {
 				return true;
 			}
 		}

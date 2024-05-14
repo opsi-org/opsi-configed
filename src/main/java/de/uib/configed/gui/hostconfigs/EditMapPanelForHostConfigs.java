@@ -101,9 +101,9 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
 				Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-				if (c instanceof JComponent && showToolTip) {
-					addTooltip((JComponent) c, this, names.get(rowIndex), rowIndex);
-					setText((JComponent) c, this, vColIndex, rowIndex);
+				if (c instanceof JComponent jComponent && showToolTip) {
+					addTooltip(jComponent, this, names.get(rowIndex), rowIndex);
+					setText(jComponent, this, vColIndex, rowIndex);
 				}
 				return c;
 			}
@@ -143,12 +143,12 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		}
 	}
 
-	private static void setText(JComponent jc, JTable table, int vColIndex, int rowIndex) {
+	private static void setText(JComponent jComponent, JTable table, int vColIndex, int rowIndex) {
 		if (vColIndex == 1 && Utils.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))) {
-			if (jc instanceof JLabel) {
-				((JLabel) jc).setText(Globals.STARRED_STRING);
-			} else if (jc instanceof JTextComponent) {
-				((JTextComponent) jc).setText(Globals.STARRED_STRING);
+			if (jComponent instanceof JLabel jLabel) {
+				jLabel.setText(Globals.STARRED_STRING);
+			} else if (jComponent instanceof JTextComponent jTextComponent) {
+				jTextComponent.setText(Globals.STARRED_STRING);
 			} else {
 				// Do nothing
 			}

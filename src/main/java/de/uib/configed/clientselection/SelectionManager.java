@@ -277,10 +277,10 @@ public class SelectionManager {
 	 */
 	private static List<OperationWithStatus> reverseBuild(AbstractSelectOperation operation, boolean isTopOperation) {
 		LinkedList<OperationWithStatus> result = new LinkedList<>();
-		if (operation instanceof AndOperation) {
-			return reverseBuildAndOperation((AndOperation) operation, isTopOperation);
-		} else if (operation instanceof OrOperation && !((OrOperation) operation).getChildOperations().isEmpty()) {
-			return reverseBuildOrOperation((OrOperation) operation, isTopOperation);
+		if (operation instanceof AndOperation andOperation) {
+			return reverseBuildAndOperation(andOperation, isTopOperation);
+		} else if (operation instanceof OrOperation orOperation && !orOperation.getChildOperations().isEmpty()) {
+			return reverseBuildOrOperation(orOperation, isTopOperation);
 		} else {
 			result.add(reverseParseNot(operation, ConnectionStatus.AND));
 			result.getLast().setParenthesisOpen(false);
@@ -345,8 +345,8 @@ public class SelectionManager {
 	/* See if there's a NotOperation and replace the status accordingly. */
 	private static OperationWithStatus reverseParseNot(AbstractSelectOperation operation, ConnectionStatus status) {
 		OperationWithStatus ows = new OperationWithStatus();
-		if (operation instanceof NotOperation) {
-			ows.setOperation(((NotOperation) operation).getChildOperations().get(0));
+		if (operation instanceof NotOperation notOperation) {
+			ows.setOperation(notOperation.getChildOperations().get(0));
 			if (status == ConnectionStatus.AND) {
 				ows.setStatus(ConnectionStatus.AND_NOT);
 			} else {
@@ -375,8 +375,8 @@ public class SelectionManager {
 			// nothing to do for other operations
 		}
 
-		if (operation instanceof AbstractSelectGroupOperation) {
-			for (AbstractSelectOperation child : ((AbstractSelectGroupOperation) operation).getChildOperations()) {
+		if (operation instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
+			for (AbstractSelectOperation child : abstractSelectGroupOperation.getChildOperations()) {
 				checkForGroupSearches(child);
 			}
 		}

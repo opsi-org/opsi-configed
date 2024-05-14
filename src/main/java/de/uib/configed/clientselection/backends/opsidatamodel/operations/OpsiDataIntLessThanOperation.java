@@ -35,8 +35,8 @@ public class OpsiDataIntLessThanOperation extends IntLessThanOperation implement
 		}
 
 		Object realData = realMap.get(key);
-		if (realData instanceof Integer) {
-			if ((Integer) realData < data) {
+		if (realData instanceof Integer integerData) {
+			if (integerData < data) {
 				return true;
 			}
 		} else {
