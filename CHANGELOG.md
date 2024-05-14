@@ -8,6 +8,9 @@
 - Update to Java 21
 - Update to JavaFX 21
 
+## Fixed
+- Actions done several times in Client menu after full reload
+
 
 ## [4.3.2.14] - 2024-04-29
 ## Changed

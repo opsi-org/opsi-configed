@@ -78,7 +78,6 @@ public class PanelProductSettings extends JSplitPane {
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
-	private PopupMouseListener popupMouseListener;
 	private JMenuItem itemOnDemand;
 	private JScrollPane paneProducts;
 
@@ -187,7 +186,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		setRightComponent(infoPane);
 
-		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		PopupMouseListener popupMouseListener = new PopupMouseListener(producePopupMenu());
 		paneProducts.addMouseListener(popupMouseListener);
 		tableProducts.addMouseListener(popupMouseListener);
 
@@ -196,14 +195,6 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void updateSearchFields() {
 		groupPanel.updateSearchFields();
-	}
-
-	public void reInitPopupMenu() {
-		paneProducts.removeMouseListener(popupMouseListener);
-		tableProducts.removeMouseListener(popupMouseListener);
-		popupMouseListener = new PopupMouseListener(producePopupMenu());
-		paneProducts.addMouseListener(popupMouseListener);
-		tableProducts.addMouseListener(popupMouseListener);
 	}
 
 	private JPopupMenu producePopupMenu() {
