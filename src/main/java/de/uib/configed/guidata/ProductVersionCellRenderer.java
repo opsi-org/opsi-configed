@@ -25,15 +25,13 @@ public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		// Safe since instanceof returns false if null
-		if (value instanceof String) {
-			String val = (String) value;
-
-			if (val.isEmpty()) {
+		if (value instanceof String stringValue) {
+			if (stringValue.isEmpty()) {
 				return this;
 			}
 
-			if (val.equals(Globals.CONFLICT_STATE_STRING)
-					|| val.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING + Globals.CONFLICT_STATE_STRING)) {
+			if (stringValue.equals(Globals.CONFLICT_STATE_STRING) || stringValue
+					.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING + Globals.CONFLICT_STATE_STRING)) {
 				setForeground(Globals.PRODUCT_STATUS_MIXED_COLOR);
 			} else {
 				String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
@@ -49,7 +47,7 @@ public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
 							+ istm.getGlobalProductInfos().get(productId).get(ProductState.KEY_VERSION_INFO);
 				}
 
-				if (!val.equals(serverProductVersion)) {
+				if (!stringValue.equals(serverProductVersion)) {
 					setForeground(Globals.FAILED_COLOR);
 				}
 			}

@@ -64,12 +64,12 @@ public class ListMerger extends ArrayList<Object> {
 	}
 
 	@SuppressWarnings("java:S1452")
-	public static List<?> getMergedList(List<?> li) {
-		if (li instanceof ListMerger) {
-			return ((ListMerger) li).getValue();
+	public static List<?> getMergedList(List<?> list) {
+		if (list instanceof ListMerger listMerger) {
+			return listMerger.getValue();
 		} else {
 			// li is ArrayList
-			return li;
+			return list;
 		}
 	}
 }

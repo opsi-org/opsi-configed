@@ -972,8 +972,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			return;
 		}
 
-		if (component instanceof TextInputField) {
-			((TextInputField) component).setText(data.getData().toString());
+		if (component instanceof TextInputField textInputField) {
+			textInputField.setText(data.getData().toString());
 		} else if (component instanceof SpinnerWithExtension spinnerWithExtension
 				&& data.getType() == SelectData.DataType.BIG_INTEGER_TYPE) {
 			spinnerWithExtension.setValue((Long) data.getData());

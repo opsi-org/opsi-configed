@@ -14,11 +14,10 @@ import java.awt.Shape;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.LayeredHighlighter.LayerPainter;
-
-import de.uib.utils.logging.Logging;
-
 import javax.swing.text.Position;
 import javax.swing.text.View;
+
+import de.uib.utils.logging.Logging;
 
 // Painter for underlined highlights
 public class UnderlineHighlightPainter extends LayerPainter {
@@ -31,8 +30,8 @@ public class UnderlineHighlightPainter extends LayerPainter {
 	public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
 		Rectangle alloc = null;
 		if (offs0 == view.getStartOffset() && offs1 == view.getEndOffset()) {
-			if (bounds instanceof Rectangle) {
-				alloc = (Rectangle) bounds;
+			if (bounds instanceof Rectangle rectangle) {
+				alloc = rectangle;
 			} else {
 				alloc = bounds.getBounds();
 			}
@@ -40,8 +39,8 @@ public class UnderlineHighlightPainter extends LayerPainter {
 			try {
 				Shape shape = view.modelToView(offs0, Position.Bias.Forward, offs1, Position.Bias.Backward, bounds);
 
-				if (shape instanceof Rectangle) {
-					alloc = (Rectangle) shape;
+				if (shape instanceof Rectangle rectangle) {
+					alloc = rectangle;
 				} else {
 					alloc = shape.getBounds();
 				}
