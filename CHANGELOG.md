@@ -1,5 +1,10 @@
 # Changelog
 ## [4.3.3.0] - 2024-05-14
+## Fixec
+- Create all 4 WAN configs (before only 3 of them were created)
+
+
+## [4.3.3.0] - 2024-05-14
 ## Changed
 - Replace SSH server console with messagebus server console
 - Remove user roles config key `ssh.serverconfiguration.active`

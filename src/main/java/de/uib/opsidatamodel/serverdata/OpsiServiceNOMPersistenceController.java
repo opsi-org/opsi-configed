@@ -97,12 +97,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
-	// keys for default wan configuration
-	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP = "opsiclientd.event_gui_startup.active";
-	@SuppressWarnings({ "java:S103" })
-	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN = "opsiclientd.event_gui_startup{user_logged_in}.active";
-	public static final String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";
-
 	public static final String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";
 	public static final String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
 	// the current real value, but it is not necessary to configure it:
@@ -129,9 +123,6 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String VALUES_ID = "values";
 
 	// opsi module information
-	// wan meta configuration
-	public static final String WAN_PARTKEY = "wan_";
-	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
 
 	private static NavigableMap<String, String> propertyClassesServer;
 	private static NavigableMap<String, String> propertyClassesClient;

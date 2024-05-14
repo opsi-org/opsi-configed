@@ -71,6 +71,12 @@ public class UserRolesConfigDataService {
 	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW = "configed.ssh.deploy-client-agent.default.password";
 	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE = "";
 
+	// keys for default wan configuration
+	public static final String CONFIG_CLIENTD_EVENT_STARTUP = "opsiclientd.event_gui_startup.active";
+	public static final String CONFIG_CLIENTD_EVENT_STARTUP_USER = "opsiclientd.event_gui_startup{user_logged_in}.active";
+	public static final String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";
+	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "event_net_connection.active";
+
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;
 	private OpsiServiceNOMPersistenceController persistenceController;
@@ -1031,27 +1037,33 @@ public class UserRolesConfigDataService {
 
 	private static void buildWANConfigOptions(List<Map<String, Object>> readyObjects) {
 		// NOT_WAN meta configs
-		Map<String, Object> item = Utils.createNOMBoolConfig(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
-						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
-						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_GUISTARTUP,
+		Map<String, Object> item = Utils
+				.createNOMBoolConfig(
+						OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
+								+ ConfigDataService.NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_STARTUP,
+						true, "meta configuration for default not wan behaviour");
+
+		readyObjects.add(item);
+
+		item = Utils.createNOMBoolConfig(
+				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + ConfigDataService.NOT_WAN_CONFIGURED_PARTKEY
+						+ "." + CONFIG_CLIENTD_EVENT_STARTUP_USER,
 				true, "meta configuration for default not wan behaviour");
 
 		readyObjects.add(item);
 
 		item = Utils.createNOMBoolConfig(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
-						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
-						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN,
-				true, "meta configuration for default not wan behaviour");
-
-		readyObjects.add(item);
-
-		item = Utils.createNOMBoolConfig(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
-						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + "."
-						+ OpsiServiceNOMPersistenceController.CONFIG_CLIENTD_EVENT_TIMER,
+				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + ConfigDataService.NOT_WAN_CONFIGURED_PARTKEY
+						+ "." + CONFIG_CLIENTD_EVENT_NET_CONNECTION,
 				false, "meta configuration for default not wan behaviour");
+
+		readyObjects.add(item);
+
+		item = Utils
+				.createNOMBoolConfig(
+						OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
+								+ ConfigDataService.NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_TIMER,
+						false, "meta configuration for default not wan behaviour");
 
 		readyObjects.add(item);
 	}
