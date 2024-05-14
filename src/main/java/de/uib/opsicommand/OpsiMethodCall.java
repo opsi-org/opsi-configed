@@ -128,8 +128,8 @@ public class OpsiMethodCall {
 		List<Object> params = new ArrayList<>();
 
 		for (Object parameter : parameters) {
-			if (parameter instanceof Object[]) {
-				List<Object> list = Arrays.asList((Object[]) parameter);
+			if (parameter instanceof Object[] arrayParameter) {
+				List<Object> list = Arrays.asList(arrayParameter);
 
 				params.add(list);
 			} else if (parameter instanceof Map) {

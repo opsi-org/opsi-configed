@@ -64,8 +64,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 					row.add(clientName.substring(clientName.indexOf(".") + 1, clientName.length()));
 				} else if ("groups".equals(columnName)) {
 					row.add(String.join(",", fObject2Groups.get(clientName)));
-				} else if (clientInfoMap.get(columnName) instanceof Boolean) {
-					row.add(Boolean.toString((Boolean) clientInfoMap.get(columnName)));
+				} else if (clientInfoMap.get(columnName) instanceof Boolean b) {
+					row.add(Boolean.toString(b));
 				} else {
 					row.add((String) clientInfoMap.get(columnName));
 				}

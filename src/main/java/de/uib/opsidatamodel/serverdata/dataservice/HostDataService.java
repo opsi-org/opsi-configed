@@ -562,7 +562,7 @@ public class HostDataService {
 
 		Map<String, Object> corrected = new HashMap<>();
 		for (Entry<String, Object> setting : settings.entrySet()) {
-			if (setting.getValue() instanceof String && "".equals(((String) setting.getValue()).trim())) {
+			if (setting.getValue() instanceof String value && value.isBlank()) {
 				corrected.put(setting.getKey(), null);
 			} else {
 				corrected.put(setting.getKey(), setting.getValue());

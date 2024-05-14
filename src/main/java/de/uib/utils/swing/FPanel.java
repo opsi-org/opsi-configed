@@ -59,9 +59,7 @@ public class FPanel extends SecondaryFrame {
 
 		boolean result = false;
 
-		if (innerPanel instanceof PanelGenEditTable) {
-			PanelGenEditTable editPanel = (PanelGenEditTable) innerPanel;
-
+		if (innerPanel instanceof PanelGenEditTable editPanel) {
 			if (editPanel.isDataChanged()) {
 				int returnedOption = JOptionPane.showConfirmDialog(masterFrame,
 						Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),

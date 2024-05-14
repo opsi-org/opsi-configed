@@ -70,11 +70,10 @@ public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand
 		Iterator<UpdateCommand> it = implementor.iterator();
 		while (it.hasNext()) {
 			UpdateCommand updateCommand = it.next();
-			if (updateCommand instanceof UpdateCollection) {
+			if (updateCommand instanceof UpdateCollection updateCollection) {
 				// a element of the collection is a collection, we do our best to clear
 				// recursively
-
-				((UpdateCollection) updateCommand).revert();
+				updateCollection.revert();
 			}
 		}
 	}
