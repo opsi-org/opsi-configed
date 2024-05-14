@@ -98,8 +98,8 @@ public class SecureCertificateValidator implements CertificateValidator {
 			throw new IllegalStateException("Unexpected default trust ma gers: " + Arrays.toString(trustManagers));
 		}
 		TrustManager trustManager = trustManagers[0];
-		if (trustManager instanceof X509TrustManager) {
-			return (X509TrustManager) trustManager;
+		if (trustManager instanceof X509TrustManager x509TrustManager) {
+			return x509TrustManager;
 		}
 		throw new IllegalStateException("'" + trustManager + "' is not a X509TrustManager");
 	}
@@ -125,13 +125,11 @@ public class SecureCertificateValidator implements CertificateValidator {
 	@SuppressWarnings("java:S2972")
 	private static class MyHostnameVerifier implements HostnameVerifier {
 		private X509Certificate retrievePeerCertificate(SSLSession session) {
-			X509Certificate peerCertificate = null;
-
 			try {
 				Certificate[] peerCertificates = session.getPeerCertificates();
 
-				if (peerCertificates.length > 0 && peerCertificates[0] instanceof X509Certificate) {
-					peerCertificate = (X509Certificate) peerCertificates[0];
+				if (peerCertificates.length > 0 && peerCertificates[0] instanceof X509Certificate x509Certificate) {
+					return x509Certificate;
 				} else {
 					throw new IllegalStateException("Peer does not have any certificates or they aren't X.509");
 				}
@@ -139,7 +137,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 				Logging.error(this, "peer's identity wasn't verified", ex);
 			}
 
-			return peerCertificate;
+			return null;
 		}
 
 		private List<String> getSubjectAlternativeNames(X509Certificate certificate) {

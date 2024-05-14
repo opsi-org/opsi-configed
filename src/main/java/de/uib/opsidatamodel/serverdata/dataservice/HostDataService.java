@@ -504,11 +504,9 @@ public class HostDataService {
 		for (Entry<String, Object> resultEntry : sessionInfos.entrySet()) {
 			String value;
 
-			if (resultEntry.getValue() instanceof String) {
-				String errorStr = (String) resultEntry.getValue();
-				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + errorStr;
-			} else if (resultEntry.getValue() instanceof List) {
-				List<?> sessionlist = (List<?>) resultEntry.getValue();
+			if (resultEntry.getValue() instanceof String errorString) {
+				value = Configed.getResourceValue("sessionInfo.noResponse") + ": " + errorString;
+			} else if (resultEntry.getValue() instanceof List<?> sessionlist) {
 				value = createSessionInfoForList(sessionlist);
 			} else {
 				Logging.warning(this, "resultEntry's value is neither a String nor a List");

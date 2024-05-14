@@ -91,8 +91,8 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	@Override
 	public void revert() {
 		for (UpdateCommand updateCommand : implementor) {
-			if (updateCommand instanceof ProductpropertiesUpdate) {
-				((ProductpropertiesUpdate) updateCommand).revert();
+			if (updateCommand instanceof ProductpropertiesUpdate productpropertiesUpdate) {
+				productpropertiesUpdate.revert();
 			} else {
 				Logging.info(this, "revert: not a ProductpropertiesUpdate : " + updateCommand);
 			}

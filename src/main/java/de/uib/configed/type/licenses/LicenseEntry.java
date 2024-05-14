@@ -47,18 +47,19 @@ public class LicenseEntry extends TreeMap<String, Object> {
 			Logging.warning(this.getClass(), "missing primary key in " + importedEntry);
 		}
 
-		if (importedEntry.get(MAX_INSTALLATIONS_KEY) == null) {
+		Object maxInstallations = importedEntry.get(MAX_INSTALLATIONS_KEY);
+
+		if (maxInstallations == null) {
 			importedEntry.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.ZERO);
-		} else if (!(importedEntry.get(MAX_INSTALLATIONS_KEY) instanceof Integer)) {
-			Logging.warning(this.getClass(), " " + importedEntry.get(ID_KEY) + " has not an integer for "
-					+ importedEntry.get(MAX_INSTALLATIONS_KEY));
-		} else {
-			int val = (Integer) importedEntry.get(MAX_INSTALLATIONS_KEY);
-			if (val == 0) {
+		} else if (maxInstallations instanceof Integer integer) {
+			if (integer == 0) {
 				super.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.INFINITE);
 			} else {
-				super.put(MAX_INSTALLATIONS_KEY, new ExtendedInteger(val));
+				super.put(MAX_INSTALLATIONS_KEY, new ExtendedInteger(integer));
 			}
+		} else {
+			Logging.warning(this.getClass(),
+					" " + importedEntry.get(ID_KEY) + " has not an integer for " + maxInstallations);
 		}
 
 		if (importedEntry.get(TYPE_SERVICE_KEY) != null) {

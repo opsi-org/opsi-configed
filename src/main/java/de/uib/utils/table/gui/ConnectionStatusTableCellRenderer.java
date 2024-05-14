@@ -40,8 +40,8 @@ public class ConnectionStatusTableCellRenderer extends ColorTableCellRenderer {
 
 		setText(null);
 
-		if (value instanceof String) {
-			switch ((String) value) {
+		if (value instanceof String string) {
+			switch (string) {
 			case CONNECTED_BY_MESSAGEBUS:
 				setIcon(messagebusIcon);
 				setToolTipText(Configed.getResourceValue("ConnectionStatusTableCellRenderer.connected.tooltip"));

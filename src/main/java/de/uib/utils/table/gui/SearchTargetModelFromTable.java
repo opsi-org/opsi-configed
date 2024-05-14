@@ -114,8 +114,8 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		Logging.info(this, "setCursorRow row, produced modelrow " + modelrow);
 
-		if (table.getModel() instanceof GenTableModel) {
-			((GenTableModel) table.getModel()).setCursorRow(modelrow);
+		if (table.getModel() instanceof GenTableModel genTableModel) {
+			genTableModel.setCursorRow(modelrow);
 		}
 	}
 

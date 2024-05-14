@@ -76,17 +76,16 @@ public class TreePopupMouseListener extends PopupMouseListener {
 
 	private void activateElements() {
 		TreePath sourcePath = mousePath;
-		if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
-			GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
-			tree.setGroupAndSelect(node);
+		if (sourcePath != null
+				&& sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode groupNode) {
+			tree.setGroupAndSelect(groupNode);
 		}
 	}
 
 	private void removeElements() {
-		if (mousePath != null && mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode) {
-			GroupNode node = (GroupNode) mousePath.getPathComponent(mousePath.getPathCount() - 1);
-
-			Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
+		if (mousePath != null
+				&& mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode groupNode) {
+			Enumeration<TreeNode> enumer = groupNode.breadthFirstEnumeration();
 
 			List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<>();
 
@@ -99,7 +98,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 
 			if (tree.removeNodes(clientNodesToRemove)) {
 				// refresh internal view
-				tree.setGroupAndSelect(node);
+				tree.setGroupAndSelect(groupNode);
 			}
 		}
 	}

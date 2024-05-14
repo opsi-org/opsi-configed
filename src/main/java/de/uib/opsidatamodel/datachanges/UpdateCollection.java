@@ -39,9 +39,9 @@ public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand
 		while (it.hasNext()) {
 			UpdateCommand updateCommand = it.next();
 			// a element of the collection is a collection, we do our best to clear recursively
-			if (updateCommand instanceof Collection) {
+			if (updateCommand instanceof Collection<?> updateCollection) {
 				Logging.debug(this, "by recursion, we will clear " + updateCommand);
-				((Collection<?>) updateCommand).clear();
+				updateCollection.clear();
 			}
 		}
 		Logging.debug(this, "to clear elements of implementor " + implementor);
@@ -58,8 +58,8 @@ public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand
 			UpdateCommand updateCommand = it.next();
 
 			// a element of the collection is a collection, we do our best to clear recursively
-			if (updateCommand instanceof UpdateCollection) {
-				((UpdateCollection) updateCommand).clearElements();
+			if (updateCommand instanceof UpdateCollection updateCollection) {
+				updateCollection.clearElements();
 			}
 		}
 	}

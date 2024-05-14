@@ -467,11 +467,8 @@ public final class CommandParameterParser {
 
 		opPane.addHierarchyListener((HierarchyEvent hierarchyEvent) -> {
 			Window window = SwingUtilities.getWindowAncestor(opPane);
-			if (window instanceof Dialog) {
-				Dialog dialog = (Dialog) window;
-				if (!dialog.isResizable()) {
-					dialog.setResizable(true);
-				}
+			if (window instanceof Dialog dialog) {
+				dialog.setResizable(true);
 			}
 		});
 

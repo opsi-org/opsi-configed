@@ -129,8 +129,7 @@ public class CommandExecutor implements MessagebusListener {
 
 	private void execute(SingleCommand command) {
 		executeNumberOfCommands++;
-		if (command instanceof SingleCommandFileUpload) {
-			SingleCommandFileUpload fileUploadCommand = (SingleCommandFileUpload) command;
+		if (command instanceof SingleCommandFileUpload fileUploadCommand) {
 			fileUploader = new WebDAVBackgroundFileUploader(terminalFrame,
 					new File(fileUploadCommand.getFullSourcePath()), fileUploadCommand.getTargetPath(), withGUI);
 			fileUploader.setOnDone(() -> {
