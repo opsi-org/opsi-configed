@@ -79,7 +79,6 @@ public class PanelProductSettings extends JSplitPane {
 	private EditMapPanelX propertiesPanel;
 
 	private JMenuItem itemOnDemand;
-	private JScrollPane paneProducts;
 
 	private String title;
 
@@ -135,7 +134,7 @@ public class PanelProductSettings extends JSplitPane {
 	private void init() {
 		initTopPane();
 
-		paneProducts = new JScrollPane();
+		JScrollPane paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
