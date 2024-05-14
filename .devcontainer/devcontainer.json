@@ -20,7 +20,7 @@
         "vscode": {
             "settings": {
                 "terminal.integrated.defaultProfile.linux": "bash",
-                "java.jdt.ls.java.home": "/usr/lib/jvm/java-19-openjdk-amd64"
+                "java.jdt.ls.java.home": "/usr/lib/jvm/java-21-openjdk-amd64"
             },
             "extensions": [
                 // Java specific tooling
@@ -45,7 +45,7 @@
         "DISPLAY": ":0", // Linux
         // "DISPLAY": "docker.for.mac.host.internal:0", // Mac
         // "DISPLAY": "host.docker.internal:0", // Windows // install MobaXterm (see readme)
-        "JAVA_HOME": "/usr/lib/jvm/java-19-openjdk-amd64"
+        "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
     },
     // disable "mounts" on windows:
     "mounts": [
