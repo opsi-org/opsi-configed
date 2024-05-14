@@ -47,6 +47,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
+import de.uib.configed.messageoftheday.FMessageOfTheDay;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.CommandWithParameters;
@@ -64,6 +65,7 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.FeatureActivationChecker;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.userprefs.ThemeManager;
@@ -446,11 +448,21 @@ public class MainFrame extends JFrame {
 			terminal.display();
 		});
 
+		JMenuItem jMenuFrameMsgOfTheDay = null;
+		if (FeatureActivationChecker.isFeatureActivated(FeatureActivationChecker.Feature.MESSAGE_OF_THE_DAY)) {
+			// TODO: check opsiconfd version. have to be > 4.3.15.2 
+			jMenuFrameMsgOfTheDay = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"));
+			jMenuFrameMsgOfTheDay.addActionListener((ActionEvent e) -> showMsgOfTheDay());
+		}
+
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameDashboard);
 		jMenuFrames.add(jMenuFrameLicenses);
 		jMenuFrames.add(jMenuFrameTerminal);
+		if (jMenuFrameMsgOfTheDay != null) {
+			jMenuFrames.add(jMenuFrameMsgOfTheDay);
+		}
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
 
@@ -771,6 +783,12 @@ public class MainFrame extends JFrame {
 				.setSelectionStart(message.toString().length() - Logging.getCurrentLogfilePath().length());
 
 		info.setVisible(true);
+	}
+
+	private void showMsgOfTheDay() {
+		FMessageOfTheDay dialog = new FMessageOfTheDay();
+		dialog.setupLayout();
+		dialog.setVisible(true);
 	}
 
 	private void showHealthDataAction() {

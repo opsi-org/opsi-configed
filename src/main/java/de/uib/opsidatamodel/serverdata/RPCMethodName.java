@@ -13,7 +13,7 @@ package de.uib.opsidatamodel.serverdata;
 public enum RPCMethodName {
 	CONFIG_GET_IDENTS("config_getIdents"), CONFIG_GET_OBJECTS("config_getObjects"),
 	CONFIG_CREATE_OBJECTS("config_createObjects"), CONFIG_UPDATE_OBJECTS("config_updateObjects"),
-	CONFIG_DELETE_OBJECTS("config_deleteObjects"),
+	CONFIG_DELETE_OBJECTS("config_deleteObjects"), CONFIG_UPDATE_MESSAGE_OF_THE_DAY("config_updateMessageOfTheDay"),
 
 	CONFIG_STATE_GET_VALUES("configState_getValues"), CONFIG_STATE_UPDATE_OBJECTS("configState_updateObjects"),
 	CONFIG_STATE_DELETE_OBJECTS("configState_deleteObjects"),
