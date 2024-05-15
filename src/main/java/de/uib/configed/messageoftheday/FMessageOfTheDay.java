@@ -22,12 +22,11 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class FMessageOfTheDay extends FGeneralDialog {
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	PanelMessageInfos pMsgInfoGeneral;
-	PanelMessageInfos pMsgInfoUser;
-	Map<String, String> motdData = new HashMap<>();
+	private PanelMessageInfos pMsgInfoGeneral;
+	private PanelMessageInfos pMsgInfoUser;
+	private Map<String, String> motdData = new HashMap<>();
 
 	public FMessageOfTheDay() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"), true,
@@ -63,11 +62,6 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		scrollpane.setBorder(null);
 	}
 
-	@Override
-	public void doAction1() {
-		result = 1;
-		setVisible(false);
-	}
 
 	@Override
 	public void doAction2() {

@@ -785,7 +785,7 @@ public class MainFrame extends JFrame {
 		info.setVisible(true);
 	}
 
-	private void showMsgOfTheDay() {
+	private static void showMsgOfTheDay() {
 		FMessageOfTheDay dialog = new FMessageOfTheDay();
 		dialog.setupLayout();
 		dialog.setVisible(true);
