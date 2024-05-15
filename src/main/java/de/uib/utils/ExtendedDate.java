@@ -32,42 +32,42 @@ public class ExtendedDate {
 		sDate = sDate.substring(0, sDate.indexOf('T'));
 	}
 
-	private void interpretAsTimestamp(Object ob) {
+	private void interpretAsTimestamp(Object object) {
 		date = null;
 		sDate = null;
 
-		if (ob == null) {
+		if (object == null) {
 			return;
 		}
 
-		if (ob instanceof String) {
-			String value = ((String) ob).trim();
-			if (value.equalsIgnoreCase(INFINITE_IMPORT) || value.equalsIgnoreCase(STRING_INFINITE)) {
+		if (object instanceof String string) {
+			string = string.trim();
+			if (string.equalsIgnoreCase(INFINITE_IMPORT) || string.equalsIgnoreCase(STRING_INFINITE)) {
 				sDate = STRING_INFINITE;
 			} else {
 				// extend
 
-				if (!value.contains(" ")) {
+				if (!string.contains(" ")) {
 					// append time for reading timestamp
-					value = value + "T00:00:0";
+					string = string + "T00:00:0";
 				} else {
-					value = value.replace(' ', 'T');
+					string = string.replace(' ', 'T');
 				}
 
-				value = value + '0';
+				string = string + '0';
 
 				try {
-					setFromDate(LocalDateTime.parse(value));
+					setFromDate(LocalDateTime.parse(string));
 				} catch (DateTimeParseException e) {
-					Logging.warning(this, "Cannot parse value to get Timestamp of " + value, e);
+					Logging.warning(this, "Cannot parse value to get Timestamp of " + string, e);
 				}
 			}
 
 			return;
 		}
 
-		if (ob instanceof LocalDateTime) {
-			setFromDate((LocalDateTime) ob);
+		if (object instanceof LocalDateTime localDateTime) {
+			setFromDate(localDateTime);
 		}
 	}
 

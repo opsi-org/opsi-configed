@@ -378,12 +378,12 @@ public final class Utils {
 
 		if (ob == null) {
 			result = defaultValue;
-		} else if (ob instanceof Boolean) {
-			result = (Boolean) ob;
-		} else if (ob instanceof Integer) {
-			result = ((Integer) ob) == 1;
-		} else if (ob instanceof String) {
-			result = "1".equals(ob);
+		} else if (ob instanceof Boolean b) {
+			result = b;
+		} else if (ob instanceof Integer integer) {
+			result = integer == 1;
+		} else if (ob instanceof String string) {
+			result = "1".equals(string);
 		} else {
 			/* Not foreseen value. */
 			Logging.warning("could not find boolean in interpretAsBoolean, returning false");
@@ -394,7 +394,7 @@ public final class Utils {
 	}
 
 	public static String getSavedStatesDefaultLocation() {
-		String result = "";
+		String result;
 
 		if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
 			result = System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator + "opsi.org"

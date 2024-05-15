@@ -59,13 +59,13 @@ public class BooleanIconTableCellRenderer extends ColorTableCellRenderer {
 		return this;
 	}
 
-	private Boolean objAsBoolean(Object obj) {
-		if (obj instanceof Boolean) {
-			return (Boolean) obj;
-		} else if (obj instanceof String) {
-			return Boolean.valueOf((String) obj);
+	private Boolean objAsBoolean(Object object) {
+		if (object instanceof Boolean b) {
+			return b;
+		} else if (object instanceof String string) {
+			return Boolean.valueOf(string);
 		} else {
-			Logging.warning(this, "Unexpected obj type " + obj);
+			Logging.warning(this, "Unexpected obj type " + object);
 			return Boolean.FALSE;
 		}
 	}

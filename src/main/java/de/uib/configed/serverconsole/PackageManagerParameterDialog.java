@@ -43,10 +43,10 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
-				if (caller instanceof PackageManagerUninstallParameterDialog) {
-					((PackageManagerUninstallParameterDialog) caller).doAction3();
-				} else if (caller instanceof PackageManagerInstallParameterDialog) {
-					((PackageManagerInstallParameterDialog) caller).doAction3();
+				if (caller instanceof PackageManagerUninstallParameterDialog packageManagerUninstallParameterDialog) {
+					packageManagerUninstallParameterDialog.doAction3();
+				} else if (caller instanceof PackageManagerInstallParameterDialog packageManagerInstallParameterDialog) {
+					packageManagerInstallParameterDialog.doAction3();
 				} else {
 					Logging.warning(this, "caller has unexpected class " + caller.getClass());
 				}

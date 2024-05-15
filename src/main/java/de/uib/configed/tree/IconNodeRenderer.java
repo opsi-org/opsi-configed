@@ -25,12 +25,10 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			int row, boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-		if (value instanceof IconNode) {
+		if (value instanceof IconNode node) {
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 			setText(stringValue);
-
-			IconNode node = (IconNode) value;
 			setIcon(node.getIcon());
 		}
 

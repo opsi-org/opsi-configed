@@ -107,14 +107,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		versionRetriever.checkServerVersion();
 	}
 
-	/**
-	 * Retrieve opsi server version. The server's version is retrieved before
-	 * the connection with the server is established.
-	 * 
-	 * @return opsi server version.
-	 */
-	public static String getServerVersion() {
-		return versionRetriever.getServerVersion();
+	public static OpsiServerVersionRetriever getOpsiServerVersionRetriever() {
+		return versionRetriever;
 	}
 
 	private Map<String, String> produceGeneralRequestProperties(OpsiMethodCall omc) {

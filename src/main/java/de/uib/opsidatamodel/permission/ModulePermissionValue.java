@@ -51,13 +51,13 @@ public class ModulePermissionValue {
 	private static Boolean checkBoolean(Object ob) {
 		Boolean result = null;
 
-		if (ob instanceof Boolean) {
-			result = (Boolean) ob;
-		} else if (ob instanceof String) {
-			String sValue = ((String) ob).trim();
-			boolean checked = "yes".equalsIgnoreCase(sValue) || "true".equalsIgnoreCase(sValue);
+		if (ob instanceof Boolean b) {
+			result = b;
+		} else if (ob instanceof String stringValue) {
+			stringValue = stringValue.trim();
+			boolean checked = "yes".equalsIgnoreCase(stringValue) || "true".equalsIgnoreCase(stringValue);
 			if (checked) {
-				result = "yes".equalsIgnoreCase(sValue);
+				result = "yes".equalsIgnoreCase(stringValue);
 			}
 		} else {
 			Logging.info("ob cannot be interpreted as boolean, it is " + ob.toString());
@@ -66,34 +66,34 @@ public class ModulePermissionValue {
 		return result;
 	}
 
-	private ExtendedInteger retrieveMaxClients(Object ob) {
-		if (ob == null) {
+	private ExtendedInteger retrieveMaxClients(Object object) {
+		if (object == null) {
 			return ExtendedInteger.ZERO;
 		}
 
 		ExtendedInteger result = null;
 
-		Boolean b = checkBoolean(ob);
+		Boolean b = checkBoolean(object);
 		if (b != null) {
 			if (Boolean.TRUE.equals(b)) {
 				result = ExtendedInteger.INFINITE;
 			} else {
 				result = ExtendedInteger.ZERO;
 			}
-		} else if (ob instanceof Integer) {
-			result = new ExtendedInteger((Integer) ob);
-		} else if (ob instanceof String) {
+		} else if (object instanceof Integer integer) {
+			result = new ExtendedInteger(integer);
+		} else if (object instanceof String string) {
 			Integer number = null;
 			try {
-				number = Integer.valueOf((String) ob);
+				number = Integer.valueOf(string);
 			} catch (NumberFormatException ex) {
-				Logging.debug(this, "not a number: " + ob);
+				Logging.debug(this, "not a number: " + object);
 			}
 			if (number != null) {
 				result = new ExtendedInteger(number);
 			}
 		} else {
-			Logging.warning(this, "ob has unexpected type " + ob.getClass() + " in retrieveMaxClients");
+			Logging.warning(this, "ob has unexpected type " + object.getClass() + " in retrieveMaxClients");
 		}
 
 		return result;

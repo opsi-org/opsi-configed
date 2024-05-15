@@ -103,14 +103,14 @@ public class InstallationStateUpdateManager {
 	}
 
 	private void clearCollectChangedStates(int productType) {
-		if (OpsiPackage.TYPE_LOCALBOOT == productType
-				&& tableLocalbootProducts.getModel() instanceof InstallationStateTableModel) {
-			((InstallationStateTableModel) tableLocalbootProducts.getModel()).clearCollectChangedStates();
+		if (OpsiPackage.TYPE_LOCALBOOT == productType && tableLocalbootProducts
+				.getModel() instanceof InstallationStateTableModel installationStateTableModel) {
+			installationStateTableModel.clearCollectChangedStates();
 		}
 
 		if (OpsiPackage.TYPE_NETBOOT == productType
-				&& tableNetbootProducts.getModel() instanceof InstallationStateTableModel) {
-			((InstallationStateTableModel) tableNetbootProducts.getModel()).clearCollectChangedStates();
+				&& tableNetbootProducts.getModel() instanceof InstallationStateTableModel installationStateTableModel) {
+			installationStateTableModel.clearCollectChangedStates();
 		}
 	}
 

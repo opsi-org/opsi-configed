@@ -1,5 +1,10 @@
 # Changelog
 ## [4.3.x.x] - 2024-xx-xx
+## Fixec
+- Create all 4 WAN configs (before only 3 of them were created)
+
+
+## [4.3.3.0] - 2024-05-14
 ## Changed
 - Replace SSH server console with messagebus server console
 - Remove user roles config key `ssh.serverconfiguration.active`
@@ -7,7 +12,9 @@
 - Remove multi client hardware info (was available only before 4.3 with MySQL)
 - Update to Java 21
 - Update to JavaFX 21
-- Add support for MacOS ARM64
+
+## Fixed
+- Actions done several times in Client menu after full reload
 
 
 ## [4.3.2.14] - 2024-04-29

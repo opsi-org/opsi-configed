@@ -2558,10 +2558,9 @@ public class ConfigedMain implements MessagebusListener {
 
 			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
 			mainFrame.reloadServerConsoleMenu();
-			mainFrame.getClientMenu().reInitJMenu();
-			mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().reInitPopupMenu();
-			mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().reInitPopupMenu();
+
 			updateHostInfo();
+
 			hostInfo.resetGui();
 		}
 

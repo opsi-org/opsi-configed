@@ -54,6 +54,10 @@ import de.uib.utils.table.ListCellOptions;
  */
 @SuppressWarnings({ "unchecked" })
 public class ConfigDataService {
+	// wan meta configuration
+	public static final String WAN_PARTKEY = "wan_";
+	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
+
 	protected static final String KEY_DISABLED_CLIENT_ACTIONS = "configed.host_actions_disabled";
 	protected static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
 
@@ -211,13 +215,12 @@ public class ConfigDataService {
 
 	public Map<String, ConfigOption> retrieveWANConfigOptionsPD() {
 		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + OpsiServiceNOMPersistenceController.WAN_PARTKEY);
+				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + WAN_PARTKEY);
 
 		Logging.info(this, " getWANConfigOptions   " + allWanConfigOptions);
 
 		Map<String, ConfigOption> notWanConfigOptions = extractSubConfigOptionsByInitial(
-				OpsiServiceNOMPersistenceController.CONFIG_KEY + "."
-						+ OpsiServiceNOMPersistenceController.NOT_WAN_CONFIGURED_PARTKEY + ".");
+				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + ".");
 
 		Map<String, List<Object>> notWanConfiguration = new HashMap<>();
 		Map<String, List<Object>> wanConfiguration = new HashMap<>();

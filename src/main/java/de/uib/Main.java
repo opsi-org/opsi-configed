@@ -60,8 +60,9 @@ public class Main {
 		// General options
 		options.addOption("lv", "logviewer", false, "Use this option to start logviewer instead of configed");
 		options.addOption("l", "locale", true, "Set locale LOC (format: <language>_<country>). DEFAULT: System.locale");
-		options.addOption("d", "directory", true, "Directory for log files. DEFAULT: an opsi log directory "
-				+ "dependent on system and user privileges, see /help/logfile");
+		options.addOption("d", "directory", true, """
+				Directory for log files. DEFAULT: an opsi log directory
+				dependent on system and user privileges, see /help/logfile""");
 		options.addOption(null, "loglevel", true, "Set logging level N, N is a number >= " + Logging.LEVEL_NONE
 				+ ", <= " + Logging.LEVEL_SECRET + " . DEFAULT: " + Logging.getLogLevelConsole());
 		options.addOption(null, "help", false, "Give this help");
@@ -71,9 +72,9 @@ public class Main {
 		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
 		options.addOption("u", "user", true, "User for authentication. DEFAULT: give interactive");
 		options.addOption("p", "password", true, "Password for authentication. DEFAULT: give interactive");
-		options.addOption("otp", "one-time-password", true,
-				"One time password for authentication. DEFAULT: give interactive\n"
-						+ "OTP is a paid feature. Should be used when license is available and OTP is enabled for a user");
+		options.addOption("otp", "one-time-password", true, """
+				One time password for authentication. DEFAULT: give interactive
+				OTP is a paid feature. Should be used when license is available and OTP is enabled for a user""");
 		options.addOption("s", "savedstates", true,
 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
 		options.addOption("r", "refreshminutes", true,

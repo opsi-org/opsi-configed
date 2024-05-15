@@ -45,11 +45,11 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 		}
 
-		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-		if (c instanceof JComponent) {
-			((JComponent) c).setToolTipText("" + value);
+		Component component = super.getTableCellEditorComponent(table, value, isSelected, row, column);
+		if (component instanceof JComponent jComponent) {
+			jComponent.setToolTipText("" + value);
 		}
 
-		return c;
+		return component;
 	}
 }

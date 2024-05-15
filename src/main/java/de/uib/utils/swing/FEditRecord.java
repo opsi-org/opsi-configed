@@ -178,8 +178,8 @@ public class FEditRecord extends FEdit implements DocumentListener {
 
 	public Map<String, String> getData() {
 		for (String key : data.keySet()) {
-			if (datafields.get(key) instanceof JPasswordField) {
-				data.put(key, new String(((JPasswordField) datafields.get(key)).getPassword()));
+			if (datafields.get(key) instanceof JPasswordField jPasswordField) {
+				data.put(key, new String(jPasswordField.getPassword()));
 			} else {
 				data.put(key, datafields.get(key).getText());
 			}

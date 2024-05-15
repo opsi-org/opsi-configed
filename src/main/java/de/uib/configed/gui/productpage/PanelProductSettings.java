@@ -78,9 +78,7 @@ public class PanelProductSettings extends JSplitPane {
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
-	private PopupMouseListener popupMouseListener;
 	private JMenuItem itemOnDemand;
-	private JScrollPane paneProducts;
 
 	private String title;
 
@@ -136,7 +134,7 @@ public class PanelProductSettings extends JSplitPane {
 	private void init() {
 		initTopPane();
 
-		paneProducts = new JScrollPane();
+		JScrollPane paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -187,7 +185,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		setRightComponent(infoPane);
 
-		popupMouseListener = new PopupMouseListener(producePopupMenu());
+		PopupMouseListener popupMouseListener = new PopupMouseListener(producePopupMenu());
 		paneProducts.addMouseListener(popupMouseListener);
 		tableProducts.addMouseListener(popupMouseListener);
 
@@ -196,14 +194,6 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void updateSearchFields() {
 		groupPanel.updateSearchFields();
-	}
-
-	public void reInitPopupMenu() {
-		paneProducts.removeMouseListener(popupMouseListener);
-		tableProducts.removeMouseListener(popupMouseListener);
-		popupMouseListener = new PopupMouseListener(producePopupMenu());
-		paneProducts.addMouseListener(popupMouseListener);
-		tableProducts.addMouseListener(popupMouseListener);
 	}
 
 	private JPopupMenu producePopupMenu() {
@@ -511,8 +501,8 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void setFilter(Set<String> filter) {
 		groupPanel.setFilteredMode(false);
-		if (tableProducts.getModel() instanceof InstallationStateTableModel) {
-			((InstallationStateTableModel) tableProducts.getModel()).setFilterFrom(filter);
+		if (tableProducts.getModel() instanceof InstallationStateTableModel installationStateTableModel) {
+			installationStateTableModel.setFilterFrom(filter);
 		}
 	}
 

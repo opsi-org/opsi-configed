@@ -34,8 +34,8 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 	}
 
 	public void revert() {
-		if (newdata instanceof ConfigName2ConfigValue) {
-			((ConfigName2ConfigValue) newdata).rebuild();
+		if (newdata instanceof ConfigName2ConfigValue configNameData) {
+			configNameData.rebuild();
 		}
 	}
 }
