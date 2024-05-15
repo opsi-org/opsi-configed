@@ -449,8 +449,8 @@ public class MainFrame extends JFrame {
 		});
 
 		JMenuItem jMenuFrameMsgOfTheDay = null;
-		if (FeatureActivationChecker.isFeatureActivated(FeatureActivationChecker.Feature.MESSAGE_OF_THE_DAY)) {
-			// TODO: check opsiconfd version. have to be > 4.3.15.2 
+		if (ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3.15.2")
+				&& FeatureActivationChecker.isFeatureActivated(FeatureActivationChecker.Feature.MESSAGE_OF_THE_DAY)) {
 			jMenuFrameMsgOfTheDay = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"));
 			jMenuFrameMsgOfTheDay.addActionListener((ActionEvent e) -> showMsgOfTheDay());
 		}
