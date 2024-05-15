@@ -478,8 +478,8 @@ public class MainFrame extends JFrame {
 
 		jMenuHelp.addSeparator();
 
-		JMenuItem jMenuHelpOpsiVersion = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": " + ServerFacade.getServerVersion());
+		JMenuItem jMenuHelpOpsiVersion = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService")
+				+ ": " + ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
