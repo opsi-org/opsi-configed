@@ -354,8 +354,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
-		Icon selectedIconFilter = Utils.createImageIcon("images/filter_14x14_closed.png", "");
+		Icon unselectedIconFilter = Utils.getThemeIconPNG("bootstrap/funnel", "");
+		Icon selectedIconFilter = Utils.getThemeIconPNG("bootstrap/funnel_fill", "");
 
 		filtermark = new CheckedLabel(selectedIconFilter, unselectedIconFilter, false);
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
@@ -440,7 +440,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
 		setLayout(layoutTablesearchPane);
 
-		int checkedLabelWidth = 18;
 		layoutTablesearchPane
 				.setHorizontalGroup(layoutTablesearchPane
 						.createParallelGroup(
@@ -454,7 +453,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(fieldSearch, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+								.addComponent(filtermark, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 								.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 										Globals.MIN_GAP_SIZE)
 								.addComponent(buttonShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
@@ -502,7 +502,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(fieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(filtermark, 18, 18, 18)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(filtermark, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addComponent(buttonShowHideExtraOptions, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 						Globals.MIN_GAP_SIZE)
