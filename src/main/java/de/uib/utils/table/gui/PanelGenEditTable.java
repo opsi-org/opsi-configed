@@ -821,21 +821,12 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	 *
 	 * @parameter boolean
 	 */
-	public void setFiltering(boolean b, boolean withFilterPopup) {
-		if (b) {
-			setFilteringActive(b);
+	public void setFiltering(boolean filtering) {
+		if (filtering) {
+			setFilteringActive(filtering);
 			// lazy activation
 		}
-		searchPane.setFiltering(b, withFilterPopup);
-	}
-
-	/**
-	 * activates popupMark and popupMarkAndFilter in context menu
-	 *
-	 * @parameter boolean
-	 */
-	public void setFiltering(boolean b) {
-		setFiltering(b, true);
+		searchPane.setFiltering(filtering);
 	}
 
 	/**

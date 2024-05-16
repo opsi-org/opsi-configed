@@ -400,7 +400,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelProductId2LPool.setMasterFrame(ConfigedMain.getLicensesFrame());
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
-		panelRegisteredSoftware.setFiltering(true, false);
+		panelRegisteredSoftware.setFiltering(true);
 		panelRegisteredSoftware.setMasterFrame(ConfigedMain.getLicensesFrame());
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);

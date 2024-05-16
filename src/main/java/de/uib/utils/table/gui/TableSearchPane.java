@@ -166,19 +166,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		navPane.setVisible(b);
 	}
 
-	public void setFiltering(boolean b, boolean withFilterPopup) {
+	public void setFiltering(boolean filtering) {
 		searchMenuEntries.put(popupMarkHits, true);
-		if (withFilterPopup) {
-			searchMenuEntries.put(popupMarkAndFilter, true);
-		}
+		searchMenuEntries.put(popupMarkAndFilter, true);
 
 		buildMenuSearchfield();
 
-		filtering = b;
-	}
-
-	public void setFiltering(boolean b) {
-		setFiltering(b, true);
+		this.filtering = filtering;
 	}
 
 	public void showFilterIcon(boolean b) {
@@ -186,14 +180,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		labelFilterMarkGap.setVisible(b);
 	}
 
-	public void setSelectMode(boolean select) {
-		this.selectMode = select;
+	public void setSelectMode(boolean selectMode) {
+		this.selectMode = selectMode;
 	}
 
 	@Override
-	public void setEnabled(boolean b) {
-		super.setEnabled(b);
-		fieldSearch.setEnabled(b);
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		fieldSearch.setEnabled(enabled);
 	}
 
 	private boolean disabledSinceWeAreInFilteredMode() {
@@ -210,8 +204,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	/**
 	 * serve graphical filtermark
 	 */
-	public void setFilterMark(boolean b) {
-		filtermark.setSelected(b);
+	public void setFilterMark(boolean selected) {
+		filtermark.setSelected(selected);
 	}
 
 	private void setFiltered(boolean filtered) {
@@ -222,31 +216,31 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	/**
 	 * express filter status in graphical components
 	 */
-	public void setFilteredMode(boolean b) {
-		filteredMode = b;
-		popupSearch.setEnabled(!b);
-		popupSearchNext.setEnabled(!b);
+	public void setFilteredMode(boolean filteredMode) {
+		this.filteredMode = filteredMode;
+		popupSearch.setEnabled(!filteredMode);
+		popupSearchNext.setEnabled(!filteredMode);
 
-		popupMarkHits.setEnabled(!b);
-		popupMarkAndFilter.setEnabled(!b);
-		popupEmptySearchfield.setEnabled(!b);
-		setFilterMark(b);
+		popupMarkHits.setEnabled(!filteredMode);
+		popupMarkAndFilter.setEnabled(!filteredMode);
+		popupEmptySearchfield.setEnabled(!filteredMode);
+		setFilterMark(filteredMode);
 	}
 
 	public boolean isFilteredMode() {
 		return filteredMode;
 	}
 
-	public void setNarrow(boolean b) {
-		if (b) {
+	public void setNarrow(boolean narrow) {
+		if (narrow) {
 			setupNarrowLayout();
 		}
-		showFilterIcon(b);
-		buttonShowHideExtraOptions.setVisible(b);
-		comboSearchFields.setVisible(!b);
-		comboSearchFieldsMode.setVisible(!b);
-		labelSearch.setVisible(!b);
-		labelSearchMode.setVisible(!b);
+		showFilterIcon(narrow);
+		buttonShowHideExtraOptions.setVisible(narrow);
+		comboSearchFields.setVisible(!narrow);
+		comboSearchFieldsMode.setVisible(!narrow);
+		labelSearch.setVisible(!narrow);
+		labelSearchMode.setVisible(!narrow);
 	}
 
 	public void setTargetModel(SearchTargetModel searchTargetModel) {
@@ -309,8 +303,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		searchMenuEntries.put(popupNewSearch, true);
 		searchMenuEntries.put(popupMarkHits, false);
 		searchMenuEntries.put(popupMarkAndFilter, false);
-
 		searchMenuEntries.put(popupEmptySearchfield, true);
+
 		buildMenuSearchfield();
 
 		fieldSearch.addActionListener((ActionEvent actionEvent) -> searchNextRow(selectMode));
@@ -959,22 +953,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
-			switchFilterOff();
-			searchTheRow(selectMode);
-		}
+		documentChanged(e);
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
-			switchFilterOff();
-			searchTheRow(selectMode);
-		}
+		documentChanged(e);
 	}
 
 	@Override
@@ -986,6 +970,15 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 			setRow(0, false, selectMode);
 			// go back to start when editing is restarted
+		}
+	}
+
+	private void documentChanged(DocumentEvent e) {
+		if (e.getDocument() == fieldSearch.getDocument()) {
+			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
+
+			switchFilterOff();
+			searchTheRow(selectMode);
 		}
 	}
 
