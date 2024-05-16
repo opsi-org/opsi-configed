@@ -4,6 +4,11 @@
 - Create all 4 WAN configs (before only 3 of them were created)
 
 
+## Changed
+- Rework design of Search in tables
+- Rework design of login dialog
+
+
 ## [4.3.3.0] - 2024-05-14
 ## Changed
 - Replace SSH server console with messagebus server console
