@@ -254,15 +254,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 
-		JButton resetSearchButton = new JButton(Utils.getThemeIconPNG("bootstrap/x_circle", ""));
-		resetSearchButton.setFocusable(false);
-		resetSearchButton.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
-		resetSearchButton.addActionListener(event -> fieldSearch.setText(""));
-
 		fieldSearch = new JTextField();
 		fieldSearch.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
 				Utils.getThemeIconPNG("bootstrap/search", ""));
-		fieldSearch.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_COMPONENT, resetSearchButton);
+		fieldSearch.putClientProperty(FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true);
 
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
