@@ -24,7 +24,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -46,7 +45,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PanelLinedComponents;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.thread.WaitingSleeper;
 import de.uib.utils.thread.WaitingWorker;
@@ -80,7 +78,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private JComboBox<String> fieldHost = new JComboBox<>();
 
-	private JPanel jPanelParameters;
 	private JCheckBox checkUseOTP;
 
 	private JButton jButtonCancel;
@@ -213,8 +210,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		});
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
-		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkUseOTP });
-
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
@@ -242,8 +237,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 
-		// With this, the jProgressBar will take up the vertical
-		// space even when it's invisible
 		groupLayout.setHonorsVisibility(false);
 		panel.setLayout(groupLayout);
 
@@ -266,7 +259,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addComponent(jPanelParameters, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
+				.addComponent(checkUseOTP, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
 
 				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
@@ -300,7 +293,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addComponent(jPanelParameters, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
