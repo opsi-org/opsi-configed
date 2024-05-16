@@ -29,7 +29,6 @@ public class CheckedLabel extends JPanel {
 	private static final int SET_CHECKED_OFF = 0;
 	private static final String CMD_SET_CHECKED_ON = "cmdSetOn";
 	private static final String CMD_SET_CHECKED_OFF = "cmdSetOff";
-	private boolean changeStateAutonomously = true;
 
 	private JLabel selectedLabel;
 	private JLabel unselectedLabel;
@@ -55,9 +54,7 @@ public class CheckedLabel extends JPanel {
 				return;
 			}
 
-			if (changeStateAutonomously) {
-				CheckedLabel.this.setSelected(e.getSource() == unselectedLabel);
-			}
+			CheckedLabel.this.setSelected(e.getSource() == unselectedLabel);
 
 			super.mouseClicked(e);
 
@@ -94,10 +91,6 @@ public class CheckedLabel extends JPanel {
 		setLayout();
 
 		addInternalListeners();
-	}
-
-	public void setChangeStateAutonomously(boolean b) {
-		changeStateAutonomously = b;
 	}
 
 	private void addInternalListeners() {

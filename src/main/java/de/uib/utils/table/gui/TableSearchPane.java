@@ -41,6 +41,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -67,7 +69,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JComboBox<String> comboSearchFieldsMode;
 
 	private JLabel labelSearch;
-	private CheckedLabel checkmarkSearch;
 	private JLabel labelSearchMode;
 	private CheckedLabel filtermark;
 
@@ -253,16 +254,16 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 
-		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
-
-		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
-		checkmarkSearch.setVisible(true);
-		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
-		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
-		checkmarkSearch.setChangeStateAutonomously(false);
+		JButton resetSearchButton = new JButton(Utils.getThemeIconPNG("bootstrap/x_circle", ""));
+		resetSearchButton.setFocusable(false);
+		resetSearchButton.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
+		resetSearchButton.addActionListener(event -> fieldSearch.setText(""));
 
 		fieldSearch = new JTextField();
+		fieldSearch.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+				Utils.getThemeIconPNG("bootstrap/search", ""));
+		fieldSearch.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_COMPONENT, resetSearchButton);
+
 		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
 		fieldSearch.getCaret().setBlinkRate(BLINK_RATE);
@@ -434,43 +435,37 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
 		setLayout(layoutTablesearchPane);
 
-		layoutTablesearchPane
-				.setHorizontalGroup(layoutTablesearchPane
-						.createParallelGroup(
-								GroupLayout.Alignment.LEADING)
-						.addGroup(layoutTablesearchPane.createSequentialGroup()
-								.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldSearch, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(filtermark, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
-										Globals.MIN_GAP_SIZE)
-								.addComponent(buttonShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE))
-						.addGroup(layoutTablesearchPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE)
-								.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(comboSearchFieldsMode, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(Globals.GAP_SIZE));
+		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane
+				.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTablesearchPane.createSequentialGroup()
+						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(fieldSearch, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(filtermark, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+								Globals.MIN_GAP_SIZE)
+						.addComponent(buttonShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE))
+				.addGroup(layoutTablesearchPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(comboSearchFieldsMode, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGap(Globals.GAP_SIZE));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
 				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelFilterMarkGap, 10, 10, 10)
@@ -490,9 +485,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(fieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
@@ -522,7 +514,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelFilterMarkGap, 10, 10, 10)
 				.addComponent(buttonShowHideExtraOptions, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -964,8 +955,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
 			switchFilterOff();
 
 			setRow(0, false, selectMode);
@@ -975,8 +964,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void documentChanged(DocumentEvent e) {
 		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
 			switchFilterOff();
 			searchTheRow(selectMode);
 		}
