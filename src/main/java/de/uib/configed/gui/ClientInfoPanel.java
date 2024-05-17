@@ -17,6 +17,7 @@ import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
@@ -33,7 +34,6 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedLabel;
 import de.uib.utils.swing.RevertibleTextField;
 import de.uib.utils.swing.SeparatedDocument;
-import de.uib.utils.swing.ToggleableTextField;
 
 public class ClientInfoPanel extends JPanel implements KeyListener {
 	private JLabel labelClientDescription;
@@ -59,7 +59,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	private RevertibleTextField macAddressField;
 	private RevertibleTextField ipAddressField;
 	private RevertibleTextField jTextFieldOneTimePassword;
-	private ToggleableTextField jTextFieldHostKey;
+	private JPasswordField jTextFieldHostKey;
 
 	private Map<String, Map<String, String>> changedClientInfos;
 	private String oldNotes;
@@ -155,7 +155,8 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		jTextFieldOneTimePassword = new RevertibleTextField("");
 		jTextFieldOneTimePassword.addKeyListener(this);
 
-		jTextFieldHostKey = new ToggleableTextField();
+		jTextFieldHostKey = new JPasswordField();
+		jTextFieldHostKey.setEditable(false);
 	}
 
 	private void setupLayout() {
@@ -468,7 +469,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN));
 		cbInstallByShutdown.setEnabled(gb);
 
-		jTextFieldHostKey.setMultiValue(!singleClient);
 		jTextFieldHostKey.setEnabled(singleClient);
 
 		if (singleClient) {
