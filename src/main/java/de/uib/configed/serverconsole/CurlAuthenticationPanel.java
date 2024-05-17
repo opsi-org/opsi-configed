@@ -53,7 +53,6 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 		jLabelPassword = new JLabel(Configed.getResourceValue("CurlAuthenticationPanel.password"));
 		jTextFieldUser = new JTextField();
 		jPasswordField = new JPasswordField();
-		jPasswordField.setEchoChar('*');
 	}
 
 	public void setLabelSizes(int width, int height) {

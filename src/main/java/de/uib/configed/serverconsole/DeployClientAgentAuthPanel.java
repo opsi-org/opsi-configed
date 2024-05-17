@@ -76,7 +76,6 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		jPasswordField = new JPasswordField(15);
 		jPasswordField.setEnabled(!isGlobalReadOnly);
 		jPasswordField.setEditable(!isGlobalReadOnly);
-		jPasswordField.setEchoChar('*');
 
 		jPasswordField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -122,7 +121,6 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		} else {
 			if (jPasswordField == null) {
 				jPasswordField = new JPasswordField(15);
-				jPasswordField.setEchoChar('*');
 			}
 			jPasswordField.setText((String) resultConfigList.get(0));
 			Logging.info(this, "key_ssh_shell_active ***confidential***");
