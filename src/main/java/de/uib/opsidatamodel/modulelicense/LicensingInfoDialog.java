@@ -283,13 +283,14 @@ public class LicensingInfoDialog extends FGeneralDialog {
 								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 										.addComponent(customerNames)))));
 
-		gLayout.setVerticalGroup(gLayout.createSequentialGroup().addGroup(gLayout.createParallelGroup()
-				.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE))
+		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
+				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(redWarningLabel)
 						.addComponent(orangeWarningLabel))
