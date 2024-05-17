@@ -47,7 +47,7 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 	}
 
 	public SingleCommandCurl(String d, String u) {
-		setVerbosity(1);
+		setLoglevel(4);
 		setDir(d);
 		setUrl(u);
 
@@ -165,15 +165,15 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 		}
 	}
 
-	public final void setVerbosity(int vSum) {
-		StringBuilder v = new StringBuilder();
-		for (int i = 0; i < vSum; i++) {
-			v.append("v");
-		}
-
-		verbosity = "-" + v;
-		if (vSum == 0) {
+	public final void setLoglevel(int vSum) {
+		if (vSum <= 3) {
 			verbosity = "";
+		} else {
+			StringBuilder v = new StringBuilder("-");
+			for (int i = 4; i < vSum; i++) {
+				v.append("v");
+			}
+			verbosity = v.toString();
 		}
 	}
 

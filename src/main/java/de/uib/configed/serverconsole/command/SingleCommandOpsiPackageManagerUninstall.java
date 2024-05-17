@@ -103,8 +103,16 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 		}
 	}
 
-	public void setVerbosity(int vSum) {
-		verbosity = " -" + "v".repeat(vSum + 1);
+	public void setLoglevel(int vSum) {
+		if (vSum <= 3) {
+			verbosity = "";
+		} else {
+			StringBuilder v = new StringBuilder("-");
+			for (int i = 4; i < vSum; i++) {
+				v.append("v");
+			}
+			verbosity = v.toString();
+		}
 	}
 
 	public void setFreeInput(String fI) {

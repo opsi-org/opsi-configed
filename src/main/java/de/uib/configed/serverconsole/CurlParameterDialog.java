@@ -42,7 +42,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 
 	private JLabel jLabelURL = new JLabel();
 	private JLabel jLabelDir = new JLabel();
-	private JLabel jLabelVerbosity = new JLabel();
+	private JLabel jLabelLoglevel = new JLabel();
 	private JLabel jLabelFreeInput = new JLabel();
 
 	private JButton jButtonHelp;
@@ -52,7 +52,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 	private JTextField jTextFieldURL;
 	private JTextField jTextFieldDir;
 	private JComboBox<String> jComboBoxDir;
-	private JComboBox<Integer> jComboBoxVerbosity;
+	private JComboBox<Integer> jComboBoxLoglevel;
 	private JTextField jTextFieldFreeInput;
 
 	private SingleCommandCurl commandCurl = new SingleCommandCurl();
@@ -87,7 +87,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 		jTextFieldDir.setEditable(value);
 		jComboBoxDir.setEnabled(value);
 		jComboBoxDir.setEditable(value);
-		jComboBoxVerbosity.setEnabled(value);
+		jComboBoxLoglevel.setEnabled(value);
 
 		jTextFieldFreeInput.setEnabled(value);
 		jTextFieldFreeInput.setEditable(value);
@@ -124,16 +124,15 @@ public class CurlParameterDialog extends FGeneralDialog {
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
 
-		jLabelVerbosity.setText(Configed.getResourceValue("verbosity"));
-		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("verbosity.tooltip"));
-		for (int i = 0; i < 5; i++) {
-			jComboBoxVerbosity.addItem(i);
+		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
+		jComboBoxLoglevel = new JComboBox<>();
+		for (int i = 3; i <= 9; i++) {
+			jComboBoxLoglevel.addItem(i);
 		}
 
-		jComboBoxVerbosity.setSelectedItem(1);
-		jComboBoxVerbosity.addItemListener(
-				(ItemEvent itemEvent) -> commandCurl.setVerbosity((int) jComboBoxVerbosity.getSelectedItem()));
+		jComboBoxLoglevel.setSelectedItem(4);
+		jComboBoxLoglevel.addItemListener(
+				(ItemEvent itemEvent) -> commandCurl.setLoglevel((int) jComboBoxLoglevel.getSelectedItem()));
 
 		jLabelFreeInput.setText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput"));
 		jTextFieldFreeInput = new JTextField();
@@ -235,7 +234,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
+										.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(
 												curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
@@ -253,7 +252,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 														Short.MAX_VALUE)
 												.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING,
+										.addComponent(jComboBoxLoglevel, GroupLayout.Alignment.LEADING,
 												Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 										.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
 												GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
@@ -277,9 +276,9 @@ public class CurlParameterDialog extends FGeneralDialog {
 						.addComponent(jLabelDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
+						.addComponent(jComboBoxLoglevel, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)

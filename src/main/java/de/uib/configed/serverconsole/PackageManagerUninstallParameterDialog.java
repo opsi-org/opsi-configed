@@ -45,10 +45,10 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	private JLabel jLabelOn = new JLabel();
 	private JLabel jLabelKeepFiles = new JLabel();
 
-	protected JLabel jLabelVerbosity = new JLabel(Configed.getResourceValue("verbosity"));
+	protected JLabel jLabelLoglevel = new JLabel(Configed.getResourceValue("loglevel"));
 
 	private JComboBox<String> jComboBoxOpsiProducts;
-	private JComboBox<Integer> jComboBoxVerbosity;
+	private JComboBox<Integer> jComboboxLoglevel;
 
 	private JCheckBox checkBoxKeepFiles;
 
@@ -201,18 +201,17 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
 
-		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+		jComboboxLoglevel = new JComboBox<>();
+		jComboboxLoglevel.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
-		jComboBoxVerbosity.setEditable(!PersistenceControllerFactory.getPersistenceController()
+		jComboboxLoglevel.setEditable(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
-		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("verbosity.tooltip"));
-		for (int i = 0; i < 5; i++) {
-			jComboBoxVerbosity.addItem(i);
+		for (int i = 3; i <= 9; i++) {
+			jComboboxLoglevel.addItem(i);
 		}
 
-		jComboBoxVerbosity.setSelectedItem(1);
-		jComboBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
+		jComboboxLoglevel.setSelectedItem(4);
+		jComboboxLoglevel.addItemListener(itemEvent -> updateLoglevel());
 
 		jLabelKeepFiles.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelKeepFiles"));
 		checkBoxKeepFiles = new JCheckBox();
@@ -255,7 +254,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		initLayout();
 		resetProducts();
 		changeProduct("");
-		changeVerbosity();
+		updateLoglevel();
 	}
 
 	private void resetProducts() {
@@ -285,9 +284,9 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		}
 	}
 
-	private void changeVerbosity() {
-		Logging.info(this, "changeVerbosity , selected " + jComboBoxVerbosity.getSelectedItem());
-		commandPMUninstall.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
+	private void updateLoglevel() {
+		Logging.info(this, "change loglevel , selected " + jComboboxLoglevel.getSelectedItem());
+		commandPMUninstall.setLoglevel((int) jComboboxLoglevel.getSelectedItem());
 	}
 
 	private void changeProduct(String prod) {
@@ -372,7 +371,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 														.addGap(5, 10, 10).addComponent(jButtonDepotSelection,
 																GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 																GroupLayout.PREFERRED_SIZE))
-												.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
+												.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addComponent(jLabelKeepFiles, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -383,8 +382,8 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 												.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-												.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+												.addComponent(jComboboxLoglevel, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH)
 												.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))));
 
@@ -403,9 +402,9 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 								Globals.BUTTON_HEIGHT))
 				.addGap(3 * Globals.GAP_SIZE)
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(jComboBoxVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jComboboxLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)

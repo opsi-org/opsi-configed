@@ -62,7 +62,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private JLabel jLabelClient = new JLabel();
 	private JLabel jLabelUserData = new JLabel();
-	private JLabel jLabelVerbosity = new JLabel();
+	private JLabel jLabelLoglevel = new JLabel();
 	private JLabel jLabelIgnorePing = new JLabel();
 	private JLabel jLabelFinalize = new JLabel();
 	private JLabel jLabelOperatingSystem = new JLabel();
@@ -75,7 +75,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 	private PanelStateSwitch<FinalActionType> panelFinalAction;
 
 	private JCheckBox jCheckBoxIgnorePing;
-	private JComboBox<Integer> jCheckBoxVerbosity;
+	private JComboBox<Integer> jCheckBoxLoglevel;
 	private JComboBox<String> jComboBoxOperatingSystem;
 
 	private SingleCommandDeployClientAgent commandDeployClientAgent = new SingleCommandDeployClientAgent();
@@ -118,17 +118,16 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		jCheckBoxIgnorePing.setEnabled(!isGlobalReadOnly);
 		jCheckBoxIgnorePing.addItemListener((ItemEvent itemEvent) -> commandDeployClientAgent.togglePingIsRequired());
 
-		jLabelVerbosity.setText(Configed.getResourceValue("verbosity"));
-		jCheckBoxVerbosity = new JComboBox<>();
-		jCheckBoxVerbosity.setToolTipText(Configed.getResourceValue("verbosity.tooltip"));
-		jCheckBoxVerbosity.setEnabled(!isGlobalReadOnly);
-		jCheckBoxVerbosity.setEditable(!isGlobalReadOnly);
-		for (int i = 0; i < 5; i++) {
-			jCheckBoxVerbosity.addItem(i);
+		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
+		jCheckBoxLoglevel = new JComboBox<>();
+		jCheckBoxLoglevel.setEnabled(!isGlobalReadOnly);
+		jCheckBoxLoglevel.setEditable(!isGlobalReadOnly);
+		for (int i = 3; i <= 9; i++) {
+			jCheckBoxLoglevel.addItem(i);
 		}
 
-		jCheckBoxVerbosity.setSelectedItem(1);
-		jCheckBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
+		jCheckBoxLoglevel.setSelectedItem(4);
+		jCheckBoxLoglevel.addItemListener(itemEvent -> updateLoglevel());
 
 		jLabelClient.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.jLabelClient"));
 		jTextFieldClient = new JTextField();
@@ -198,11 +197,11 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		authPanel.changeUser();
 		authPanel.changePassw();
 
-		changeVerbosity();
+		updateLoglevel();
 	}
 
-	private void changeVerbosity() {
-		commandDeployClientAgent.setVerbosity((int) jCheckBoxVerbosity.getSelectedItem());
+	private void updateLoglevel() {
+		commandDeployClientAgent.setLoglevel((int) jCheckBoxLoglevel.getSelectedItem());
 	}
 
 	private void changeClient() {
@@ -313,7 +312,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 								.addGroup(inputPanelLayout.createParallelGroup()
 										.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
+										.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -323,7 +322,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 								.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
 										.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 												Globals.ICON_WIDTH)
-										.addComponent(jCheckBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										.addComponent(jCheckBoxLoglevel, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 												Globals.ICON_WIDTH)
 										.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_WIDTH,
 												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH))))
@@ -359,9 +358,9 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 										Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								.addComponent(jLabelLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
-								.addComponent(jCheckBoxVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								.addComponent(jCheckBoxLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)

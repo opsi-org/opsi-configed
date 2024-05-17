@@ -37,9 +37,9 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private JLabel jLabelUpdateInstalled = new JLabel();
 	private JLabel jLabelSetupInstalled = new JLabel();
 	private JLabel jLabelProperties = new JLabel();
-	private JLabel jLabelVerbosity = new JLabel();
+	private JLabel jLabelLoglevel = new JLabel();
 
-	private JComboBox<Integer> jComboBoxVerbosity;
+	private JComboBox<Integer> jComboBoxLoglevel;
 	private JTextField jTextFieldSelecteddepots;
 	private JButton jButtonDepotselection;
 	private JCheckBox jCheckBoxProperties;
@@ -64,7 +64,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 	private void initComponents() {
 		jLabelOn.setText(Configed.getResourceValue("PMInstallSettingsPanel.jLabelOn"));
-		jLabelVerbosity.setText(Configed.getResourceValue("verbosity"));
+		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
 		jLabelProperties.setText(Configed.getResourceValue("PMInstallSettingsPanel.lbl_properties"));
 		jLabelSetupInstalled.setText(Configed.getResourceValue("PMInstallSettingsPanel.setupInstalled"));
 		jLabelUpdateInstalled.setText(Configed.getResourceValue("PMInstallSettingsPanel.updateInstalled"));
@@ -79,13 +79,12 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jTextFieldSelecteddepots = new JTextField();
 		jTextFieldSelecteddepots.setEditable(false);
 
-		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("verbosity.tooltip"));
-		for (int i = 0; i < 5; i++) {
-			jComboBoxVerbosity.addItem(i);
+		jComboBoxLoglevel = new JComboBox<>();
+		for (int i = 3; i <= 9; i++) {
+			jComboBoxLoglevel.addItem(i);
 		}
 
-		jComboBoxVerbosity.setSelectedItem(1);
+		jComboBoxLoglevel.setSelectedItem(4);
 
 		jCheckBoxProperties = new JCheckBox();
 		jCheckBoxProperties.setSelected(true);
@@ -127,7 +126,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 										.addGap(Globals.GAP_SIZE)
 										.addComponent(jTextFieldSelecteddepots, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-								.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelProperties, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
@@ -140,7 +139,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 										.addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-										.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										.addComponent(jComboBoxLoglevel, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 												Globals.ICON_WIDTH)
 										.addComponent(jCheckBoxProperties, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -159,9 +158,9 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 						.addComponent(jButtonDepotselection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
+						.addComponent(jComboBoxLoglevel, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelProperties, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
@@ -246,7 +245,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	}
 
 	public SingleCommandOpsiPackageManagerInstall updateCommand(SingleCommandOpsiPackageManagerInstall basicCommand) {
-		basicCommand.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
+		basicCommand.setLoglevel((int) jComboBoxLoglevel.getSelectedItem());
 		applyPropertyDefaultsBasedOnCheckBox(basicCommand);
 		toggleUpdateBasedOnCheckBox(basicCommand);
 		toggleSetupBasedOnCheckBox(basicCommand);
