@@ -18,7 +18,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,7 +32,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PanelLinedComponents;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.LicensingInfoPanelGenEditTable;
 import de.uib.utils.table.gui.LicensingInfoTableCellRenderer;
@@ -245,11 +243,6 @@ public class LicensingInfoDialog extends FGeneralDialog {
 			thePanel.reload();
 		});
 
-		JComponent[] linedComponents = new JComponent[] { buttonReload, new JLabel("   "), checkExtendedView,
-				checkShowOnlyAvailableModules };
-
-		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
-
 		JPanel panel = new JPanel();
 		GroupLayout gLayout = new GroupLayout(panel);
 		panel.setLayout(gLayout);
@@ -257,33 +250,47 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		gLayout.setAutoCreateGaps(true);
 		gLayout.setAutoCreateContainerGaps(true);
 
-		gLayout.setHorizontalGroup(
-				gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(extraInfoPanel)
-						.addGroup(gLayout.createSequentialGroup().addComponent(redWarningLabel).addGap(20)
+		gLayout.setHorizontalGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(gLayout.createSequentialGroup()
+						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(50)
+						.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(
+						gLayout.createSequentialGroup().addComponent(redWarningLabel).addGap(20)
 								.addComponent(orangeWarningLabel))
-						.addGroup(gLayout
-								.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15).addComponent(
-										warningLevelPercent)
-								.addGap(15).addComponent(warningLevelDays))
-						.addGroup(gLayout.createSequentialGroup()
-								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(
+						gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15).addComponent(
+								warningLevelPercent).addGap(15).addComponent(
+										warningLevelDays))
+				.addGroup(gLayout
+						.createSequentialGroup().addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 
-										.addComponent(clientTitle)
-										.addGroup(gLayout.createSequentialGroup()
-												.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-														.addComponent(allClient).addComponent(macos).addComponent(linux)
-														.addComponent(windows))
-												.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-														.addComponent(allClientNum).addComponent(macosNum)
-														.addComponent(linuxNum).addComponent(windowsNum)))
-										.addComponent(checksumTitle).addComponent(checksum))
-								.addGap(60)
-								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										.addComponent(customerTitle)
+								.addComponent(clientTitle)
+								.addGroup(gLayout.createSequentialGroup()
 										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addComponent(customerNames)))));
+												.addComponent(allClient).addComponent(macos).addComponent(linux)
+												.addComponent(windows))
+										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addComponent(allClientNum).addComponent(macosNum)
+												.addComponent(linuxNum).addComponent(windowsNum)))
+								.addComponent(checksumTitle).addComponent(checksum))
+						.addGap(60)
+						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(customerTitle)
+								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+										.addComponent(customerNames)))));
 
-		gLayout.setVerticalGroup(gLayout.createSequentialGroup().addComponent(extraInfoPanel).addGap(Globals.GAP_SIZE)
+		gLayout.setVerticalGroup(gLayout.createSequentialGroup().addGroup(gLayout.createParallelGroup()
+				.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(redWarningLabel)
 						.addComponent(orangeWarningLabel))
 				.addGap(15)
