@@ -28,7 +28,7 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 	private JLabel jLabeluser;
 	private JLabel jLabelNeedAuthentication;
 	private JTextField jTextFieldUser;
-	private JTextField jTextFieldPassword;
+	private JPasswordField jPasswordField;
 	private JLabel jLabelPassword;
 
 	public CurlAuthenticationPanel() {
@@ -52,8 +52,8 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 		jLabeluser = new JLabel(Configed.getResourceValue("CurlAuthenticationPanel.username"));
 		jLabelPassword = new JLabel(Configed.getResourceValue("CurlAuthenticationPanel.password"));
 		jTextFieldUser = new JTextField();
-		jTextFieldPassword = new JPasswordField();
-		((JPasswordField) jTextFieldPassword).setEchoChar('*');
+		jPasswordField = new JPasswordField();
+		jPasswordField.setEchoChar('*');
 	}
 
 	public void setLabelSizes(int width, int height) {
@@ -84,7 +84,7 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 	}
 
 	public String getPassword() {
-		return new String(((JPasswordField) jTextFieldPassword).getPassword());
+		return new String(jPasswordField.getPassword());
 	}
 
 	private void initLayout() {
@@ -106,7 +106,7 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 				.addGroup(layout.createParallelGroup()
 						.addComponent(jTextFieldUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)
-						.addComponent(jTextFieldPassword, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+						.addComponent(jPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -119,7 +119,7 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 				.addGroup(layout.createParallelGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addGap(Globals.GAP_SIZE).addComponent(jTextFieldPassword, Globals.BUTTON_HEIGHT,
+						.addGap(Globals.GAP_SIZE).addComponent(jPasswordField, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addGap(Globals.GAP_SIZE)));
 	}

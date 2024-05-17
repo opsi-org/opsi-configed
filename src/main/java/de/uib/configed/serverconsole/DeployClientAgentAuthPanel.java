@@ -6,12 +6,10 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.Dimension;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -27,19 +25,15 @@ import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class DeployClientAgentAuthPanel extends JPanel {
 	private JLabel jLabelUser = new JLabel();
 	private JLabel jLabelPassword = new JLabel();
 	private JTextField jTextFieldUser;
-	private JPasswordField jTextFieldPassword;
-	private JButton jButtonShowPassword;
+	private JPasswordField jPasswordField;
 
 	private String defaultUser;
-
-	private boolean showingPassowrd;
 
 	private SingleCommandDeployClientAgent commandDeployClientAgent;
 
@@ -79,20 +73,12 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		});
 
 		jLabelPassword.setText(Configed.getResourceValue("DeployClientAgentAuthPanel.jLabelPassword"));
-		jTextFieldPassword = new JPasswordField("nt123", 15);
-		jTextFieldPassword.setEnabled(!isGlobalReadOnly);
-		jTextFieldPassword.setEditable(!isGlobalReadOnly);
-		jTextFieldPassword.setEchoChar('*');
+		jPasswordField = new JPasswordField(15);
+		jPasswordField.setEnabled(!isGlobalReadOnly);
+		jPasswordField.setEditable(!isGlobalReadOnly);
+		jPasswordField.setEchoChar('*');
 
-		jButtonShowPassword = new JButton(Utils.createImageIcon("images/eye_blue_open.png", ""));
-
-		jButtonShowPassword.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
-		jButtonShowPassword
-				.setToolTipText(Configed.getResourceValue("DeployClientAgentAuthPanel.showPassword.tooltip"));
-		jButtonShowPassword.setEnabled(!isGlobalReadOnly);
-		jButtonShowPassword.addActionListener(actionEvent -> changeEchoChar());
-
-		jTextFieldPassword.getDocument().addDocumentListener(new DocumentListener() {
+		jPasswordField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changePassw();
@@ -134,11 +120,11 @@ public class DeployClientAgentAuthPanel extends JPanel {
 
 			// the config will be created in this run of configed
 		} else {
-			if (jTextFieldPassword == null) {
-				jTextFieldPassword = new JPasswordField("", 15);
-				jTextFieldPassword.setEchoChar('*');
+			if (jPasswordField == null) {
+				jPasswordField = new JPasswordField(15);
+				jPasswordField.setEchoChar('*');
 			}
-			jTextFieldPassword.setText((String) resultConfigList.get(0));
+			jPasswordField.setText((String) resultConfigList.get(0));
 			Logging.info(this, "key_ssh_shell_active ***confidential***");
 		}
 	}
@@ -152,17 +138,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	}
 
 	public void changePassw() {
-		commandDeployClientAgent.setPassw(new String(jTextFieldPassword.getPassword()).trim());
-	}
-
-	private void changeEchoChar() {
-		if (showingPassowrd) {
-			showingPassowrd = false;
-			jTextFieldPassword.setEchoChar('*');
-		} else {
-			showingPassowrd = true;
-			jTextFieldPassword.setEchoChar((char) 0);
-		}
+		commandDeployClientAgent.setPassw(new String(jPasswordField.getPassword()).trim());
 	}
 
 	private void initLayout() {
@@ -170,31 +146,26 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		setLayout(winAuthPanelLayout);
 
 		winAuthPanelLayout
-				.setHorizontalGroup(
-						winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGroup(winAuthPanelLayout
+								.createParallelGroup(
+										GroupLayout.Alignment.LEADING)
+								.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(jLabelUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+										.addGap(Globals.GAP_SIZE).addGap(Globals.ICON_WIDTH).addGap(Globals.GAP_SIZE))
 								.addGroup(
-										winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addGroup(winAuthPanelLayout.createSequentialGroup()
-														.addGap(Globals.GAP_SIZE)
-														.addComponent(jLabelUser, Globals.BUTTON_WIDTH,
-																Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-														.addGap(Globals.GAP_SIZE)
-														.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-														.addGap(Globals.GAP_SIZE).addGap(Globals.ICON_WIDTH)
-														.addGap(Globals.GAP_SIZE))
-												.addGroup(winAuthPanelLayout.createSequentialGroup()
-														.addGap(Globals.GAP_SIZE)
-														.addComponent(jLabelPassword, Globals.BUTTON_WIDTH,
-																Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-														.addGap(Globals.GAP_SIZE)
-														.addComponent(jTextFieldPassword, Globals.BUTTON_WIDTH,
-																Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-														.addGap(Globals.GAP_SIZE)
-														.addComponent(jButtonShowPassword, Globals.ICON_WIDTH,
-																Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-														.addGap(Globals.GAP_SIZE)))
-								.addGap(Globals.GAP_SIZE));
+										winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+												.addComponent(jLabelPassword, Globals.BUTTON_WIDTH,
+														Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(jPasswordField, Globals.BUTTON_WIDTH,
+														Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+												.addGap(Globals.GAP_SIZE)))
+						.addGap(Globals.GAP_SIZE));
 
 		winAuthPanelLayout
 				.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -207,9 +178,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 						.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(jLabelPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
-								.addComponent(jTextFieldPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jButtonShowPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								.addComponent(jPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE));
 	}
