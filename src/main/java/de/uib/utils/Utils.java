@@ -133,10 +133,10 @@ public final class Utils {
 		} else {
 			abstractButton.putClientProperty("JButton.selectedState", null);
 			abstractButton.setSelected(value);
-
-			// We need to repaint since the component is not updated automatically when we put a client property
-			abstractButton.repaint();
 		}
+
+		// We need to repaint since the component is not updated automatically when we put a client property
+		abstractButton.repaint();
 	}
 
 	public static ImageIcon createImageIcon(String path, String description, int width, int height) {

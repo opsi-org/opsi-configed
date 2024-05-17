@@ -28,6 +28,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,7 +49,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.CheckedLabel;
 
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
 	private static final Pattern S_PLUS_PATTERN = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
@@ -70,7 +70,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JLabel labelSearch;
 	private JLabel labelSearchMode;
-	private CheckedLabel filtermark;
+	private JCheckBox filtermark;
 
 	private JButton buttonShowHideExtraOptions;
 	private JLabel labelFilterMarkGap;
@@ -347,7 +347,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		Icon unselectedIconFilter = Utils.getThemeIconPNG("bootstrap/funnel", "");
 		Icon selectedIconFilter = Utils.getThemeIconPNG("bootstrap/funnel_fill", "");
 
-		filtermark = new CheckedLabel(selectedIconFilter, unselectedIconFilter, false);
+		filtermark = new JCheckBox();
+		filtermark.setIcon(unselectedIconFilter);
+		filtermark.setSelectedIcon(selectedIconFilter);
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addActionListener(event -> filtermarkEvent());
 
@@ -809,7 +811,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * @parameter ActionListener
 	 */
 	public void setFiltermarkActionListener(ActionListener li) {
-		filtermark.removeAllActionListeners();
 		filtermark.addActionListener(li);
 	}
 
