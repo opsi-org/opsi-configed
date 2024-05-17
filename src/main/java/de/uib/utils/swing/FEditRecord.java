@@ -43,22 +43,6 @@ public class FEditRecord extends FEdit implements DocumentListener {
 		super("", hint);
 	}
 
-	public void setData(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
-			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
-		init(data, labels, hints, editable, secrets);
-	}
-
-	private void init(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
-			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
-		this.data = data;
-		this.labels = labels;
-		this.editable = editable;
-		this.hints = hints;
-		this.secrets = secrets;
-
-		initRecordPane();
-	}
-
 	private void initRecordPane() {
 		recordPane = new JPanel();
 		recordPane.addKeyListener(new KeyAdapter() {
@@ -171,7 +155,13 @@ public class FEditRecord extends FEdit implements DocumentListener {
 
 	public void setRecord(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
-		setData(data, labels, hints, editable, secrets);
+		this.data = data;
+		this.labels = labels;
+		this.editable = editable;
+		this.hints = hints;
+		this.secrets = secrets;
+
+		initRecordPane();
 
 		editingArea.add(recordPane, BorderLayout.CENTER);
 	}
