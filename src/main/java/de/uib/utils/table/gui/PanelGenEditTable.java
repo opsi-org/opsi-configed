@@ -31,7 +31,6 @@ import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -60,7 +59,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PanelLinedComponents;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.AbstractExportTable;
 import de.uib.utils.table.CursorrowObserver;
@@ -120,9 +118,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private IconButton buttonCommit;
 	private IconButton buttonCancel;
-	private JLabel label;
-
-	private JPanel titlePane;
+	private JLabel jLabelTitle;
 
 	private JPopupMenu popupMenu;
 
@@ -264,14 +260,11 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	private void initComponents() {
 		addComponentListener(this);
 
-		label = new JLabel(title);
+		jLabelTitle = new JLabel(title);
 
 		if (title == null || title.isEmpty()) {
-			label.setVisible(false);
+			jLabelTitle.setVisible(false);
 		}
-
-		titlePane = new PanelLinedComponents();
-		titlePane.setVisible(false);
 
 		theTable = new JTable();
 
@@ -314,22 +307,15 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		this.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(label, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-						.addComponent(titlePane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelTitle,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE).addComponent(controlPanel,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(Alignment.CENTER)
-						.addComponent(label, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(titlePane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+				.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -341,7 +327,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		if (generalPopupPosition == 0) {
 			// if -1 dont use a standard popup
 			// if > 0 the popup is added later after installing another popup
-
 			addPopupmenuStandardpart();
 		}
 	}
@@ -451,12 +436,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	public void setTitle(String title) {
 		Logging.info(this, "setTitle " + title);
 		this.title = title;
-		label.setText(title);
-	}
-
-	public void setTitlePane(JComponent[] components, int height) {
-		titlePane.setVisible(true);
-		((PanelLinedComponents) titlePane).setComponents(components, height);
+		jLabelTitle.setText(title);
 	}
 
 	private static List<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
