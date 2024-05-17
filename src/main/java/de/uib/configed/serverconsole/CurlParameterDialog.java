@@ -144,7 +144,6 @@ public class CurlParameterDialog extends FGeneralDialog {
 		((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
 		curlAuthPanel.isOpen(true);
 		curlAuthPanel.close();
-		curlAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 
 		jButtonHelp = new JButton(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo"));
 		jButtonHelp.setToolTipText(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo.tooltip"));

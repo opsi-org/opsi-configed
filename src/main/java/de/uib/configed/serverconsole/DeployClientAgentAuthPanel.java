@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -18,6 +17,8 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.formdev.flatlaf.FlatClientProperties;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -28,8 +29,6 @@ import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utils.logging.Logging;
 
 public class DeployClientAgentAuthPanel extends JPanel {
-	private JLabel jLabelUser = new JLabel();
-	private JLabel jLabelPassword = new JLabel();
 	private JTextField jTextFieldUser;
 	private JPasswordField jPasswordField;
 
@@ -50,9 +49,8 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	private void init() {
 		getDefaultAuthData();
 		setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 2, true));
-		jLabelUser.setText(Configed.getResourceValue("username"));
 		jTextFieldUser = new JTextField(defaultUser);
-		jTextFieldUser.setToolTipText(Configed.getResourceValue("DeployClientAgentAuthPanel.tooltip.tf_user"));
+		jTextFieldUser.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("username"));
 		jTextFieldUser.setEnabled(!isGlobalReadOnly);
 		jTextFieldUser.setEditable(!isGlobalReadOnly);
 		jTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
@@ -72,8 +70,8 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
-		jLabelPassword.setText(Configed.getResourceValue("password"));
 		jPasswordField = new JPasswordField();
+		jPasswordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("password"));
 		jPasswordField.setEnabled(!isGlobalReadOnly);
 		jPasswordField.setEditable(!isGlobalReadOnly);
 
