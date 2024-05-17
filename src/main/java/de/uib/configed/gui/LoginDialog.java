@@ -186,13 +186,11 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldHost.setSelectedItem("");
 		fieldHost.addKeyListener(newKeyListener);
 
-		fieldUser.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT,
-				Configed.getResourceValue("LoginDialog.placeholderUser"));
+		fieldUser.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(newKeyListener);
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
-		passwordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT,
-				Configed.getResourceValue("LoginDialog.placeholderPassword"));
+		passwordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("password"));
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 

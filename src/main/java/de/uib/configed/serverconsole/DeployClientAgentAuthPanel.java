@@ -50,7 +50,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	private void init() {
 		getDefaultAuthData();
 		setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 2, true));
-		jLabelUser.setText(Configed.getResourceValue("DeployClientAgentAuthPanel.jLabelUser"));
+		jLabelUser.setText(Configed.getResourceValue("username"));
 		jTextFieldUser = new JTextField(defaultUser);
 		jTextFieldUser.setToolTipText(Configed.getResourceValue("DeployClientAgentAuthPanel.tooltip.tf_user"));
 		jTextFieldUser.setEnabled(!isGlobalReadOnly);
@@ -72,8 +72,8 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
-		jLabelPassword.setText(Configed.getResourceValue("DeployClientAgentAuthPanel.jLabelPassword"));
-		jPasswordField = new JPasswordField(15);
+		jLabelPassword.setText(Configed.getResourceValue("password"));
+		jPasswordField = new JPasswordField();
 		jPasswordField.setEnabled(!isGlobalReadOnly);
 		jPasswordField.setEditable(!isGlobalReadOnly);
 
@@ -143,41 +143,19 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		GroupLayout winAuthPanelLayout = new GroupLayout(this);
 		setLayout(winAuthPanelLayout);
 
-		winAuthPanelLayout
-				.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addGroup(winAuthPanelLayout
-								.createParallelGroup(
-										GroupLayout.Alignment.LEADING)
-								.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(jLabelUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE).addGap(Globals.ICON_WIDTH).addGap(Globals.GAP_SIZE))
-								.addGroup(
-										winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-												.addComponent(jLabelPassword, Globals.BUTTON_WIDTH,
-														Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(jPasswordField, Globals.BUTTON_WIDTH,
-														Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-												.addGap(Globals.GAP_SIZE)))
-						.addGap(Globals.GAP_SIZE));
+		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
+								jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
+								jPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
+				.addGap(Globals.GAP_SIZE));
 
-		winAuthPanelLayout
-				.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
-						.addGap(Globals.GAP_SIZE));
+		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(jTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addGap(Globals.GAP_SIZE));
 	}
 }

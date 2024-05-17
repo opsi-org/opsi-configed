@@ -94,6 +94,8 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		authPanel = new DeployClientAgentAuthPanel(commandDeployClientAgent);
 
 		init();
+		initLayout();
+
 		super.setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
@@ -197,8 +199,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		authPanel.changePassw();
 
 		changeVerbosity();
-
-		initLayout();
 	}
 
 	private void changeVerbosity() {

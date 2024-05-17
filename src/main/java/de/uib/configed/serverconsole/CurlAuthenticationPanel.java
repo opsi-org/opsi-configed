@@ -49,8 +49,8 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 				close();
 			}
 		});
-		jLabeluser = new JLabel(Configed.getResourceValue("CurlAuthenticationPanel.username"));
-		jLabelPassword = new JLabel(Configed.getResourceValue("CurlAuthenticationPanel.password"));
+		jLabeluser = new JLabel(Configed.getResourceValue("username"));
+		jLabelPassword = new JLabel(Configed.getResourceValue("password"));
 		jTextFieldUser = new JTextField();
 		jPasswordField = new JPasswordField();
 	}
