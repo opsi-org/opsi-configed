@@ -42,6 +42,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -252,12 +253,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 
 		flatTextFieldSearch = new FlatTextField();
-		flatTextFieldSearch.setLeadingIcon(Utils.getThemeIconPNG("bootstrap/search", ""));
+		flatTextFieldSearch.setLeadingIcon(new FlatSearchIcon());
 		flatTextFieldSearch.setShowClearButton(true);
 
 		flatTextFieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-
-		flatTextFieldSearch.setToolTipText(Configed.getResourceValue("SearchPane.searchField.toolTip"));
 
 		flatTextFieldSearch.getDocument().addDocumentListener(this);
 
@@ -812,15 +811,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 */
 	public void setFiltermarkActionListener(ActionListener li) {
 		filtermark.addActionListener(li);
-	}
-
-	/**
-	 * sets an alternative tooltip for the filtermark
-	 * 
-	 * @parameter String
-	 */
-	public void setFiltermarkToolTipText(String s) {
-		filtermark.setToolTipText(s);
 	}
 
 	private void searchNextRow(boolean select) {

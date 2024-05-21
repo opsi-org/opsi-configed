@@ -819,15 +819,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	/**
-	 * sets an alternative tooltip for the filtermark
-	 *
-	 * @parameter String
-	 */
-	public void setFiltermarkToolTipText(String s) {
-		searchPane.setFiltermarkToolTipText(s);
-	}
-
-	/**
 	 * sets the filter symbol to filtered/not filtered @ parameter boolean
 	 */
 	public void showFiltered(boolean b) {

@@ -597,8 +597,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				new TableModelFilter(windowsSoftwareFilterConditonShowOnlySelected));
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, false);
 		thePanel.getPanelRegisteredSoftware().showFilterIcon(true);
-		thePanel.getPanelRegisteredSoftware().setFiltermarkToolTipText(
-				Configed.getResourceValue("PanelAssignToLPools.searchPane.filtermark.tooltip"));
 
 		windowsSoftwareFilterConditionDontShowAssociatedToOtherPool = new DefaultTableModelFilterCondition(
 				WINDOWS_SOFTWARE_ID_KEY_COL);
