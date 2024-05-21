@@ -6,10 +6,12 @@
 
 package de.uib.configed.messageoftheday;
 
+import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -26,48 +28,68 @@ public class FMessageOfTheDay extends FGeneralDialog {
 			.getPersistenceController();
 	private PanelMessageInfos pMsgInfoGeneral;
 	private PanelMessageInfos pMsgInfoUser;
+	private JButton resetButton = new JButton(Configed.getResourceValue("MessageOfTheDay.resetButton"));
 	private Map<String, String> motdData = new HashMap<>();
 
 	public FMessageOfTheDay() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"), true,
 				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 700,
 				500);
-		// TODO: why is the second button only showed when hovered ? Disable if data not changed
 		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
 		define();
-	}
-
-	// public void toogleSaveButtonVisibility() {
-	// 	setSaveButtonVisibility(!jButton2.isEnabled());
-	// }
-
-	public void setSaveButtonVisibility(boolean visible) {
-		jButton2.setEnabled(visible);
 	}
 
 	private void define() {
 		pMsgInfoGeneral = new PanelMessageInfos(this, PanelMessageInfos.InfoType.DEVICE, motdData);
 		pMsgInfoUser = new PanelMessageInfos(this, PanelMessageInfos.InfoType.USER, motdData);
+		setSaveButtonEnable(false);
 
 		JPanel panel = new JPanel();
 		GroupLayout gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
 
+		resetButton.addActionListener(e -> resetData());
+
 		JLabel frameTitleLabel = new JLabel(Configed.getResourceValue("MessageOfTheDay.title"));
 		gpl.setVerticalGroup(gpl.createSequentialGroup()
-				.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(pMsgInfoGeneral, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(pMsgInfoUser, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		gpl.setHorizontalGroup(gpl.createParallelGroup()
-				.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGroup(gpl.createSequentialGroup()
+						.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(pMsgInfoGeneral, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(pMsgInfoUser, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		scrollpane.getViewport().add(panel);
 		scrollpane.setBorder(null);
+	}
+
+	private void resetData() {
+		pMsgInfoGeneral.resetData();
+		pMsgInfoUser.resetData();
+		setSaveButtonEnable(false);
+	}
+
+	public void setSaveButtonEnable(boolean enable) {
+		jButton2.setEnabled(enable);
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		// to ensure that the buttons are visible
+		jButton1.repaint();
+		jButton2.repaint();
+		pMsgInfoGeneral.requestFocus();
 	}
 
 	@Override

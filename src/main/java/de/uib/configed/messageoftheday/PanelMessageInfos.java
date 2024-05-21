@@ -37,7 +37,7 @@ public class PanelMessageInfos extends JPanel {
 
 	private JTextArea textArea;
 	private JScrollPane areaScrollPane;
-	private JTextField dateChooser;
+	private JTextField dateChooserText;
 	protected JButton dateChooserButton;
 	protected JButton dateForeverButton;
 	private Map<String, String> motdData;
@@ -60,36 +60,13 @@ public class PanelMessageInfos extends JPanel {
 		return 0;
 	}
 
-	private void initComponents() {
-		textArea = new JTextArea();
-		textArea.setRows(5);
-
-		areaScrollPane = new JScrollPane(textArea);
-		areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-		textArea.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				updateTextArea();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateTextArea();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-				// Plain text components do not fire these events
-			}
-		});
+	public void resetData() {
 		String text = "";
 		if (type == InfoType.USER) {
 			text = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER);
 		} else {
 			text = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE);
 		}
-		textArea.setText(text);
 
 		String date = "";
 		if (type == InfoType.USER) {
@@ -97,49 +74,67 @@ public class PanelMessageInfos extends JPanel {
 		} else {
 			date = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL);
 		}
+		textArea.setText(text);
+		dateChooserText.setText(date);
+	}
 
-		dateChooser = new JTextField(date);
-		dateChooser.setEditable(false);
+	private void initComponents() {
+
+		textArea = new JTextArea();
+		textArea.setRows(5);
+		areaScrollPane = new JScrollPane(textArea);
+		areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		dateChooserText = new JTextField();
+		dateChooserText.setEditable(false);
+		resetData();
+
 		dateChooserButton = new JButton(Configed.getResourceValue("MessageOfTheDay.dateButton"));
-		dateChooserButton.addActionListener(e -> buttonDateChooserPressed());
+		dateChooserButton.addActionListener(e -> btnChooserClicked());
 		dateForeverButton = new JButton(Configed.getResourceValue("MessageOfTheDay.foreverButton"));
-		dateForeverButton.addActionListener(e -> buttonDateForeverPressed());
+		dateForeverButton.addActionListener(e -> btnForeverActionListener());
+		textArea.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				enableSaveOnDataChange();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				enableSaveOnDataChange();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				// Plain text components do not fire these events
+			}
+		});
 	}
 
-	private void updateTextArea() {
-		if (type == InfoType.USER && textArea.getText()
-				.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER))) {
-			caller.setSaveButtonVisibility(false);
-			return;
-		}
-		if (type == InfoType.DEVICE && textArea.getText()
-				.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE))) {
-			caller.setSaveButtonVisibility(false);
-			return;
-		}
-		caller.setSaveButtonVisibility(true);
+	private void btnForeverActionListener() {
+		dateChooserText.setText("0");
+		enableSaveOnDataChange();
 	}
 
-	private void buttonDateChooserPressed() {
-		updateDateText();
+	private void btnChooserClicked() {
+		dateChooserText.setText("12345");
+		enableSaveOnDataChange();
 	}
 
-	private void buttonDateForeverPressed() {
-		updateDateText();
-	}
-
-	private void updateDateText() {
-		if (type == InfoType.USER && dateChooser.getText()
-				.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL))) {
-			caller.setSaveButtonVisibility(false);
-			return;
+	private void enableSaveOnDataChange() {
+		Boolean dataChanged = false;
+		if (InfoType.USER == type) {
+			dataChanged = !textArea.getText()
+					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER))
+					|| !dateChooserText.getText().equals(
+							motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
+		} else {
+			dataChanged = !textArea.getText()
+					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE))
+					|| !dateChooserText.getText().equals(
+							motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL));
 		}
-		if (type == InfoType.DEVICE && dateChooser.getText()
-				.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL))) {
-			caller.setSaveButtonVisibility(false);
-			return;
-		}
-		caller.setSaveButtonVisibility(true);
+		caller.setSaveButtonEnable(dataChanged);
 	}
 
 	private void defineLayout() {
@@ -164,7 +159,7 @@ public class PanelMessageInfos extends JPanel {
 						.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(dateChooserText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(dateChooserButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -188,7 +183,7 @@ public class PanelMessageInfos extends JPanel {
 												.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addGap(Globals.GAP_SIZE)
-												.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE,
+												.addComponent(dateChooserText, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addGap(Globals.GAP_SIZE)
 												.addComponent(dateChooserButton, GroupLayout.PREFERRED_SIZE,
@@ -203,5 +198,10 @@ public class PanelMessageInfos extends JPanel {
 										).addGap(Globals.GAP_SIZE)).addGap(Globals.GAP_SIZE));
 
 		this.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+	}
+
+	@Override
+	public void requestFocus() {
+		textArea.requestFocus();
 	}
 }
