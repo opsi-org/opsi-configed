@@ -134,8 +134,6 @@ public class FEditRecord extends FEdit implements DocumentListener {
 			jTextField.setText("");
 		}
 
-		jTextField.getCaret().setBlinkRate(0);
-
 		if (hints != null) {
 			jTextField.setToolTipText(hints.get(dataEntry.getKey()));
 		}

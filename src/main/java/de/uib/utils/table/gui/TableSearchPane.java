@@ -52,8 +52,6 @@ import de.uib.utils.logging.Logging;
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
 	private static final Pattern S_PLUS_PATTERN = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
-	private static final int BLINK_RATE = 0;
-
 	public enum SearchMode {
 		FULL_TEXT_SEARCH, FULL_TEXT_WITH_ALTERNATIVES_SEARCH, START_TEXT_SEARCH, REGEX_SEARCH
 	}
@@ -259,7 +257,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		flatTextFieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		flatTextFieldSearch.getCaret().setBlinkRate(BLINK_RATE);
 		flatTextFieldSearch.setToolTipText(Configed.getResourceValue("SearchPane.searchField.toolTip"));
 
 		flatTextFieldSearch.getDocument().addDocumentListener(this);

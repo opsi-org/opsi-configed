@@ -175,7 +175,6 @@ public class LogPane extends JPanel implements KeyListener {
 			}
 		};
 		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
-		jTextPane.getCaret().setBlinkRate(0);
 
 		searcher = new DocumentSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
