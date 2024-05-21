@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -124,19 +123,6 @@ public final class Utils {
 			Logging.info("Couldn't find file: " + path);
 			return null;
 		}
-	}
-
-	public static void setSelectedValueForButton(AbstractButton abstractButton, Boolean value) {
-		// We need to set a property if the state is indeterminate
-		if (value == null) {
-			abstractButton.putClientProperty("JButton.selectedState", "indeterminate");
-		} else {
-			abstractButton.putClientProperty("JButton.selectedState", null);
-			abstractButton.setSelected(value);
-		}
-
-		// We need to repaint since the component is not updated automatically when we put a client property
-		abstractButton.repaint();
 	}
 
 	public static ImageIcon createImageIcon(String path, String description, int width, int height) {

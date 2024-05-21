@@ -830,7 +830,8 @@ public class ConfigedMain implements MessagebusListener {
 
 			updateHostInfo();
 
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1);
+			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
+					selectedClients.isEmpty());
 
 			// initialize the following method
 			depotsOfSelectedClients = null;
