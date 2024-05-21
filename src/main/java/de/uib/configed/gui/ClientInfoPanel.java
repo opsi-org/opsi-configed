@@ -289,22 +289,18 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 	public void setClientDescriptionText(String s) {
 		jTextFieldDescription.setText(s);
-		jTextFieldDescription.setCaretPosition(0);
 	}
 
 	public void setClientInventoryNumberText(String s) {
 		jTextFieldInventoryNumber.setText(s);
-		jTextFieldInventoryNumber.setCaretPosition(0);
 	}
 
 	public void setClientOneTimePasswordText(String s) {
 		jTextFieldOneTimePassword.setText(s);
-		jTextFieldOneTimePassword.setCaretPosition(0);
 	}
 
 	public void setClientNotesText(String s) {
 		jTextAreaNotes.setText(s);
-		jTextAreaNotes.setCaretPosition(0);
 		oldNotes = s;
 	}
 
@@ -370,10 +366,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 			changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(checkBoxWANConfig.isSelected()));
 			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 		}
-
-		// When we change the state, we need to remove this property, otherwise state might remain indeterminate
-		checkBoxWANConfig.putClientProperty("JButton.selectedState", null);
-		checkBoxWANConfig.repaint();
 	}
 
 	private void installByShutdownAction() {
