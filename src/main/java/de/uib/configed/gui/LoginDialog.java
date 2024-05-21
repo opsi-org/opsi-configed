@@ -23,19 +23,18 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.components.FlatComboBox;
+import com.formdev.flatlaf.extras.components.FlatPasswordField;
+import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -69,14 +68,12 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private JLabel jLabelVersion;
 	private JLabel jLabelLogo;
 
-	private JTextField fieldUser = new JTextField();
+	private FlatTextField fieldUser = new FlatTextField();
 
-	private JPasswordField passwordField = new JPasswordField();
+	private FlatPasswordField passwordField = new FlatPasswordField();
+	private FlatPasswordField fieldOTP = new FlatPasswordField();
 
-	private JPasswordField fieldOTP = new JPasswordField(new SeparatedDocument(
-			new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6, Character.MIN_VALUE, 6, true), "", 6);
-
-	private JComboBox<String> fieldHost = new JComboBox<>();
+	private FlatComboBox<String> fieldHost = new FlatComboBox<>();
 
 	private JCheckBox checkUseOTP;
 
@@ -122,8 +119,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	public void setServers(List<String> hosts) {
 		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray(new String[0])));
-		((JTextField) fieldHost.getEditor().getEditorComponent())
-				.setCaretPosition(((String) fieldHost.getSelectedItem()).length());
 	}
 
 	public void setUser(String user) {
@@ -180,22 +175,22 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
 
-		fieldHost.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT,
-				Configed.getResourceValue("LoginDialog.placeholderHost"));
+		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.addKeyListener(newKeyListener);
 
-		fieldUser.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("username"));
+		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(newKeyListener);
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
-		passwordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("password"));
+		passwordField.setPlaceholderText(Configed.getResourceValue("password"));
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
-		fieldOTP.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT,
-				Configed.getResourceValue("LoginDialog.placeholderOTP"));
+		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
+				Character.MIN_VALUE, 6, true));
+		fieldOTP.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderOTP"));
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
@@ -306,8 +301,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		setHost("localhost");
 		fieldHost.requestFocus();
-		((JTextField) fieldHost.getEditor().getEditorComponent())
-				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 
 		// Sets the window on the main screen
 		pack();

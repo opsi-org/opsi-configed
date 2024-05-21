@@ -12,10 +12,9 @@ import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
-import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.components.FlatPasswordField;
+import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -26,8 +25,8 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 
 	private JCheckBox jCheckBoxNeedAuthentication;
 	private JLabel jLabelNeedAuthentication;
-	private JTextField jTextFieldUser;
-	private JPasswordField jPasswordField;
+	private FlatTextField flatTextFieldUser;
+	private FlatPasswordField flatPasswordField;
 
 	public CurlAuthenticationPanel() {
 		super();
@@ -48,10 +47,10 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 			}
 		});
 
-		jTextFieldUser = new JTextField();
-		jTextFieldUser.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("username"));
-		jPasswordField = new JPasswordField();
-		jPasswordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("password"));
+		flatTextFieldUser = new FlatTextField();
+		flatTextFieldUser.setPlaceholderText(Configed.getResourceValue("username"));
+		flatPasswordField = new FlatPasswordField();
+		flatPasswordField.setPlaceholderText(Configed.getResourceValue("password"));
 	}
 
 	public JComponent get(String comp) {
@@ -67,11 +66,11 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 	}
 
 	public String getUser() {
-		return jTextFieldUser.getText();
+		return flatTextFieldUser.getText();
 	}
 
 	public String getPassword() {
-		return new String(jPasswordField.getPassword());
+		return new String(flatPasswordField.getPassword());
 	}
 
 	private void initLayout() {
@@ -79,12 +78,12 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(jTextFieldUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
-				.addComponent(jPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2));
+				.addComponent(flatTextFieldUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
+				.addComponent(flatPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(jTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(flatTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(jPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT));
+				.addComponent(flatPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT));
 	}
 }

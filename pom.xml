@@ -301,6 +301,14 @@
             <version>2.16.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf-extras -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-extras</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.msgpack/msgpack-core -->
         <dependency>
             <groupId>org.msgpack</groupId>

@@ -166,7 +166,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 		}
 	}
 
-	public void setPassw(String pw) {
+	public void setPassword(String pw) {
 		if (!pw.isEmpty()) {
 			passw = " -p " + "\"" + pw + "\"";
 		} else {

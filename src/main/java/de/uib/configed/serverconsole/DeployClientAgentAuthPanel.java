@@ -11,14 +11,13 @@ import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.components.FlatPasswordField;
+import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -29,8 +28,8 @@ import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utils.logging.Logging;
 
 public class DeployClientAgentAuthPanel extends JPanel {
-	private JTextField jTextFieldUser;
-	private JPasswordField jPasswordField;
+	private FlatTextField flatTextFieldUser;
+	private FlatPasswordField flatPasswordField;
 
 	private String defaultUser;
 
@@ -49,11 +48,12 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	private void init() {
 		getDefaultAuthData();
 		setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 2, true));
-		jTextFieldUser = new JTextField(defaultUser);
-		jTextFieldUser.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("username"));
-		jTextFieldUser.setEnabled(!isGlobalReadOnly);
-		jTextFieldUser.setEditable(!isGlobalReadOnly);
-		jTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
+		flatTextFieldUser = new FlatTextField();
+		flatTextFieldUser.setText(defaultUser);
+		flatTextFieldUser.setPlaceholderText(Configed.getResourceValue("username"));
+		flatTextFieldUser.setEnabled(!isGlobalReadOnly);
+		flatTextFieldUser.setEditable(!isGlobalReadOnly);
+		flatTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changeUser();
@@ -70,12 +70,12 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
-		jPasswordField = new JPasswordField();
-		jPasswordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, Configed.getResourceValue("password"));
-		jPasswordField.setEnabled(!isGlobalReadOnly);
-		jPasswordField.setEditable(!isGlobalReadOnly);
+		flatPasswordField = new FlatPasswordField();
+		flatPasswordField.setPlaceholderText(Configed.getResourceValue("password"));
+		flatPasswordField.setEnabled(!isGlobalReadOnly);
+		flatPasswordField.setEditable(!isGlobalReadOnly);
 
-		jPasswordField.getDocument().addDocumentListener(new DocumentListener() {
+		flatPasswordField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changePassw();
@@ -117,24 +117,24 @@ public class DeployClientAgentAuthPanel extends JPanel {
 
 			// the config will be created in this run of configed
 		} else {
-			if (jPasswordField == null) {
-				jPasswordField = new JPasswordField(15);
+			if (flatPasswordField == null) {
+				flatPasswordField = new FlatPasswordField();
 			}
-			jPasswordField.setText((String) resultConfigList.get(0));
+			flatPasswordField.setText((String) resultConfigList.get(0));
 			Logging.info(this, "key_ssh_shell_active ***confidential***");
 		}
 	}
 
 	public void changeUser() {
-		if (!(jTextFieldUser.getText().equals(defaultUser))) {
-			commandDeployClientAgent.setUser(jTextFieldUser.getText().trim());
+		if (!(flatTextFieldUser.getText().equals(defaultUser))) {
+			commandDeployClientAgent.setUser(flatTextFieldUser.getText().trim());
 		} else {
 			commandDeployClientAgent.setUser("");
 		}
 	}
 
 	public void changePassw() {
-		commandDeployClientAgent.setPassw(new String(jPasswordField.getPassword()).trim());
+		commandDeployClientAgent.setPassword(new String(flatPasswordField.getPassword()).trim());
 	}
 
 	private void initLayout() {
@@ -144,16 +144,16 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-								jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								flatTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE))
 						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-								jPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
+								flatPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
 				.addGap(Globals.GAP_SIZE));
 
 		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(jTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(flatTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(jPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(flatPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addGap(Globals.GAP_SIZE));
 	}
 }
