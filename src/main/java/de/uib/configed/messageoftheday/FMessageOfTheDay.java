@@ -37,9 +37,17 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		define();
 	}
 
+	// public void toogleSaveButtonVisibility() {
+	// 	setSaveButtonVisibility(!jButton2.isEnabled());
+	// }
+
+	public void setSaveButtonVisibility(boolean visible) {
+		jButton2.setEnabled(visible);
+	}
+
 	private void define() {
-		pMsgInfoGeneral = new PanelMessageInfos(PanelMessageInfos.InfoType.DEVICE, motdData);
-		pMsgInfoUser = new PanelMessageInfos(PanelMessageInfos.InfoType.USER, motdData);
+		pMsgInfoGeneral = new PanelMessageInfos(this, PanelMessageInfos.InfoType.DEVICE, motdData);
+		pMsgInfoUser = new PanelMessageInfos(this, PanelMessageInfos.InfoType.USER, motdData);
 
 		JPanel panel = new JPanel();
 		GroupLayout gpl = new GroupLayout(panel);
@@ -61,7 +69,6 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		scrollpane.getViewport().add(panel);
 		scrollpane.setBorder(null);
 	}
-
 
 	@Override
 	public void doAction2() {
