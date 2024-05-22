@@ -343,13 +343,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	}
 
 	public void updateClientCheckboxText() {
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI)) {
-			checkBoxUEFIBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
-		} else {
-			checkBoxUEFIBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-			checkBoxUEFIBoot.setEnabled(false);
-		}
-
 		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
 			checkBoxWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
