@@ -214,11 +214,11 @@ public class LogPane extends JPanel implements KeyListener {
 		jCheckBoxCaseSensitive
 				.addActionListener(event -> searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected()));
 
-		buttonFontPlus = new JButton(Utils.getThemeIconPNG("bootstrap/zoom_in", ""));
+		buttonFontPlus = new JButton(Utils.getIntellijIcon("zoomIn"));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(event -> increaseFontSize());
 
-		buttonFontMinus = new JButton(Utils.getThemeIconPNG("bootstrap/zoom_out", ""));
+		buttonFontMinus = new JButton(Utils.getIntellijIcon("zoomOut"));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(event -> reduceFontSize());
 

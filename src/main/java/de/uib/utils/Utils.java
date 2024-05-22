@@ -6,6 +6,7 @@
 
 package de.uib.utils;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.Console;
@@ -28,6 +29,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -103,6 +106,21 @@ public final class Utils {
 
 	public static ImageIcon getSaveIcon() {
 		return getThemeIconPNG("images/save", "");
+	}
+
+	public static ImageIcon getIntellijIcon(String iconName) {
+		String path = Globals.IMAGE_BASE + "intellij/" + iconName;
+
+		path = path + ".svg";
+
+		ColorFilter filter = new ColorFilter();
+
+		filter.add(new Color(108, 112, 126),
+				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+		FlatSVGIcon icon = new FlatSVGIcon(path);
+		icon.setColorFilter(filter);
+
+		return icon;
 	}
 
 	public static ImageIcon getThemeIconPNG(String pathName, String description) {
