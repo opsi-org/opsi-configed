@@ -560,7 +560,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private void addPopupItemReload() {
 		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"),
-				Utils.createImageIcon("images/reload16.png", ""));
+				Utils.getIntellijIcon("refresh"));
 
 		// does not work
 		menuItemReload.addActionListener(actionEvent -> reload());

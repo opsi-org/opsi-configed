@@ -234,7 +234,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 			thePanel.reload();
 		});
 
-		JButton buttonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
+		JButton buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
 		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
 		buttonReload.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 

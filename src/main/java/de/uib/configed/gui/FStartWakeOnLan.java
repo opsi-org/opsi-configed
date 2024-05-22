@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -30,6 +31,7 @@ import javax.swing.text.InternationalFormatter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.observer.RunningInstances;
 import de.uib.utils.thread.WaitingSleeper;
@@ -52,7 +54,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 	private JProgressBar waitingProgressBar;
 
 	private IconButton buttonRefreshTime;
-	private IconButton buttonSetNew;
+	private JButton buttonSetNew;
 
 	private Calendar cal;
 	private long startActionMillis;
@@ -199,9 +201,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements WaitingSleeper {
 		((DefaultFormatterFactory) textFieldHour.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
 		((DefaultFormatterFactory) textFieldMinute.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
 
-		buttonSetNew = new IconButton(Configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
-				"images/reload16_over.png", "images/reload16_disabled.png");
-
+		buttonSetNew = new JButton(Utils.getIntellijIcon("refresh"));
 		buttonSetNew.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
 		buttonSetNew.addActionListener((ActionEvent e) -> {

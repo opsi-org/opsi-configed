@@ -59,7 +59,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		case POPUP_RELOAD:
 			i = listPopups.indexOf(POPUP_RELOAD);
 			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
-					Utils.createImageIcon("images/reload16.png", ""));
+					Utils.getIntellijIcon("refresh"));
 
 			// not work
 

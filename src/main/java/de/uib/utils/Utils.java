@@ -109,9 +109,7 @@ public final class Utils {
 	}
 
 	public static ImageIcon getIntellijIcon(String iconName) {
-		String path = Globals.IMAGE_BASE + "intellij/" + iconName;
-
-		path = path + ".svg";
+		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
 
 		ColorFilter filter = new ColorFilter();
 

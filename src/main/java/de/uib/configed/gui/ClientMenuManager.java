@@ -129,7 +129,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuSelectionGetSavedSearch.addActionListener(event -> configedMain.clientSelectionGetSavedSearch());
 
 		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
-				Utils.createImageIcon("images/reload16.png", ""));
+				Utils.getIntellijIcon("refresh"));
 		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
 		jMenuClientSelectionToggleFilter.setState(false);
 		jMenuClientSelectionToggleFilter.addActionListener(event -> mainFrame.toggleClientFilterAction());

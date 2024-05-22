@@ -16,6 +16,7 @@ import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -30,6 +31,7 @@ import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
 import de.uib.utils.swing.list.StandardListCellRenderer;
@@ -39,7 +41,7 @@ public class ProductActionPanel extends JPanel {
 	private TableSearchPane searchPane;
 	private JTable tableProducts;
 
-	private IconButton buttonReloadProductStates;
+	private JButton buttonReloadProductStates;
 
 	private IconButton buttonExecuteNow;
 
@@ -86,8 +88,8 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"),
-				"images/reload16.png", "images/reload16.png", "", true);
+		buttonReloadProductStates = new JButton(Utils.getIntellijIcon("refresh"));
+		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),

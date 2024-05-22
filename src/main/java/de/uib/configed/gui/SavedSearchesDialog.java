@@ -119,8 +119,8 @@ public class SavedSearchesDialog extends FEditStringList {
 			addElement();
 		});
 
-		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
-		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"),
+				Utils.getIntellijIcon("refresh"));
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "reload action");
 			reloadAction();

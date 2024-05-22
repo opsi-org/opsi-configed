@@ -156,7 +156,7 @@ public class LogFrame extends JFrame {
 		iconButtonOpen.setFocusable(false);
 		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
-		iconButtonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
+		iconButtonReload = new JButton(Utils.getIntellijIcon("refresh"));
 		iconButtonReload.setToolTipText(Configed.getResourceValue("LogFrame.buttonReload"));
 		iconButtonReload.setFocusable(false);
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());

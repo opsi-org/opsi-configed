@@ -74,6 +74,7 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.LowerCaseTextField;
 import de.uib.utils.swing.TextInputField;
@@ -99,8 +100,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private GroupLayout.ParallelGroup hGroupData;
 	private JPanel contentPane;
 	private JComboBox<String> newElementBox;
-	private IconAsButton buttonReload;
-	private IconAsButton buttonRestart;
+	private JButton buttonReload;
+	private JButton buttonRestart;
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
 	private JButton saveButton;
@@ -209,27 +210,14 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		saveButton = new JButton(Configed.getResourceValue("save"));
 		saveButton.addActionListener(actionEvent -> save());
 
-		buttonReload = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonReload"),
-				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
-				"images/reload16_disabled.png");
-
+		buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
 		buttonReload.addActionListener((ActionEvent e) -> reload());
 
-		buttonRestart = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"),
-				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
-				"images/reload16_disabled.png");
+		buttonRestart = new JButton(Utils.getIntellijIcon("reset"));
+		buttonRestart.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"));
 
-		buttonRestart.addActionListener((ActionEvent e) -> {
-			Logging.info(this, "actionPerformed");
-			buttonRestart.setEnabled(false);
-			buttonReload.setEnabled(false);
-
-			SwingUtilities.invokeLater(() -> {
-				manager.getBackend().setReloadRequested();
-				configedMain.callNewClientSelectionDialog();
-				// we lose all components of this dialog, there is nothing to reset
-			});
-		});
+		buttonRestart.addActionListener((ActionEvent e) -> restart());
 
 		additionalLayout.setHorizontalGroup(additionalLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -240,8 +228,11 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-				.addGap(Globals.GAP_SIZE).addComponent(buttonReload, 20, 20, 20).addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(buttonRestart, 20, 20, 20).addGap(Globals.GAP_SIZE));
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE));
 
 		additionalLayout.setVerticalGroup(additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(saveNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -347,6 +338,19 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			buttonReload.setEnabled(true);
 			buttonRestart.setEnabled(true);
 			setCursor(null);
+		});
+	}
+
+	private void restart() {
+		Logging.info(this, "actionPerformed");
+		buttonRestart.setEnabled(false);
+		buttonReload.setEnabled(false);
+		setCursor(Globals.WAIT_CURSOR);
+		SwingUtilities.invokeLater(() -> {
+			manager.getBackend().setReloadRequested();
+			configedMain.callNewClientSelectionDialog();
+			setCursor(null);
+			// we lose all components of this dialog, there is nothing to reset
 		});
 	}
 
