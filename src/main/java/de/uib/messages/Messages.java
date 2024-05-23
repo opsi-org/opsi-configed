@@ -26,6 +26,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
 import de.uib.configed.Configed;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.userprefs.UserPreferences;
 
@@ -172,6 +173,8 @@ public final class Messages {
 
 	public static JMenu createJMenuLanguages(Runnable runnable) {
 		JMenu jMenuLanguage = new JMenu(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage"));
+		jMenuLanguage.setIcon(Utils.getIntellijIcon("webService"));
+
 		ButtonGroup groupLanguages = new ButtonGroup();
 
 		String selectedLocale = Messages.getSelectedLocale();
