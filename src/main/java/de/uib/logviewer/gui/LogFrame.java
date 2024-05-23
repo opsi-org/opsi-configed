@@ -153,7 +153,7 @@ public class LogFrame extends JFrame {
 	}
 
 	private void setupIcons() {
-		iconButtonOpen = new JButton(Utils.createImageIcon("images/openfile.gif", ""));
+		iconButtonOpen = new JButton(Utils.getIntellijIcon("open"));
 		iconButtonOpen.setToolTipText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		iconButtonOpen.setFocusable(false);
 		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
@@ -172,7 +172,7 @@ public class LogFrame extends JFrame {
 			}
 		});
 
-		iconButtonCopy = new JButton(Utils.createImageIcon("images/edit-copy.png", ""));
+		iconButtonCopy = new JButton(Utils.getIntellijIcon("copy"));
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
 		iconButtonCopy.setFocusable(false);
 		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());

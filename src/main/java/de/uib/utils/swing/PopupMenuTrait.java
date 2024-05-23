@@ -148,7 +148,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	private void addPopupFloatingCopy() {
 		int i = listPopups.indexOf(POPUP_FLOATINGCOPY);
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.floatingInstance"),
-				Utils.createImageIcon("images/edit-copy.png", ""));
+				Utils.getIntellijIcon("copy"));
 
 		// not work
 
