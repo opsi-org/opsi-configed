@@ -112,10 +112,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
 	private final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
-	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable) {
-		this(tableCellRenderer, keylistExtendible, entryRemovable, false);
-	}
-
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
 			boolean reloadable) {
 		super(tableCellRenderer, keylistExtendible, entryRemovable, reloadable);
