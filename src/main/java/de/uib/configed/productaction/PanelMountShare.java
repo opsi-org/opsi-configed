@@ -18,6 +18,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.formdev.flatlaf.util.SystemInfo;
+
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utils.NameProducer;
@@ -33,8 +35,6 @@ public class PanelMountShare extends JPanel {
 
 	private JButton buttonMountShare;
 	private JLabel mountShareDescriptionLabel;
-
-	private final boolean isWindows;
 
 	private boolean smbMounted;
 
@@ -52,7 +52,6 @@ public class PanelMountShare extends JPanel {
 		this.np = np;
 		this.leftBound = leftBound;
 
-		isWindows = Utils.isWindows();
 		smbMounted = false;
 
 		initComponents();
@@ -63,12 +62,12 @@ public class PanelMountShare extends JPanel {
 		buttonMountShare = new JButton(Utils.createImageIcon("images/windows16.png", ""));
 		buttonMountShare.setSelectedIcon(Utils.createImageIcon("images/windows16.png", ""));
 		buttonMountShare.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
-		if (isWindows) {
+		if (SystemInfo.isWindows) {
 			buttonMountShare.setToolTipText(
 					Configed.getResourceValue("PanelMountShare.mountShareDescription") + " " + np.produceName());
 		}
 
-		buttonMountShare.setEnabled(isWindows);
+		buttonMountShare.setEnabled(SystemInfo.isWindows);
 
 		buttonMountShare.addActionListener((ActionEvent e) -> callMountShare());
 	}
@@ -121,7 +120,7 @@ public class PanelMountShare extends JPanel {
 	}
 
 	private void callMountShare() {
-		if (!isWindows) {
+		if (!SystemInfo.isWindows) {
 			return;
 		}
 

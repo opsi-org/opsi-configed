@@ -99,11 +99,6 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	public static boolean isWindows() {
-		String osName = System.getProperty("os.name");
-		return osName.toLowerCase(Locale.ROOT).startsWith("windows");
-	}
-
 	public static ImageIcon getSaveIcon() {
 		return getThemeIconPNG("images/save", "");
 	}

@@ -25,6 +25,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FileUtils;
 
+import com.formdev.flatlaf.util.SystemInfo;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -52,8 +54,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	private PanelMountShare panelMountShare;
 
-	private final boolean isWindows;
-
 	// server path finding
 	private JTextField fieldServerPath;
 	private JButton buttonCallChooserServerpath;
@@ -67,8 +67,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	public PanelInstallOpsiPackage(ConfigedMain configedMain, SecondaryFrame rootFrame) {
 		this.configedMain = configedMain;
 		this.rootFrame = rootFrame;
-
-		isWindows = Utils.isWindows();
 
 		initComponents();
 
@@ -268,7 +266,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
-		if (isWindows) {
+		if (SystemInfo.isWindows) {
 			buttonCallChooserServerpath.setEnabled(false);
 		}
 
