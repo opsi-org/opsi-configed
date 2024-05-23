@@ -23,9 +23,10 @@ public class PopupMenuTrait extends JPopupMenu {
 	public static final int POPUP_RELOAD = 4;
 
 	public static final int POPUP_SAVE = 8;
-	public static final int POPUP_SAVE_AS_ZIP = 9;
+	public static final int POPUP_DOWNLOAD = 9;
+	public static final int POPUP_DOWNLOAD_AS_ZIP = 10;
 
-	public static final int POPUP_SAVE_ALL_AS_ZIP = 11;
+	public static final int POPUP_DOWNLOAD_ALL_AS_ZIP = 11;
 
 	public static final int POPUP_DELETE = 13;
 	public static final int POPUP_ADD = 14;
@@ -75,22 +76,28 @@ public class PopupMenuTrait extends JPopupMenu {
 
 			menuItems[i] = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
 
-			// not work
+			addItem(p);
+			break;
+
+		case POPUP_DOWNLOAD:
+			i = listPopups.indexOf(POPUP_DOWNLOAD);
+
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("download"), Utils.getIntellijIcon("download"));
 
 			addItem(p);
 			break;
 
-		case POPUP_SAVE_AS_ZIP:
-			i = listPopups.indexOf(POPUP_SAVE_AS_ZIP);
-			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.saveAsZip"),
+		case POPUP_DOWNLOAD_AS_ZIP:
+			i = listPopups.indexOf(POPUP_DOWNLOAD_AS_ZIP);
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAsZip"),
 					Utils.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
 			break;
 
-		case POPUP_SAVE_ALL_AS_ZIP:
-			i = listPopups.indexOf(POPUP_SAVE_ALL_AS_ZIP);
-			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.saveAllAsZip"),
+		case POPUP_DOWNLOAD_ALL_AS_ZIP:
+			i = listPopups.indexOf(POPUP_DOWNLOAD_ALL_AS_ZIP);
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAllAsZip"),
 					Utils.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);

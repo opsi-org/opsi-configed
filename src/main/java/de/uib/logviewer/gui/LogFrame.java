@@ -88,7 +88,7 @@ public class LogFrame extends JFrame {
 
 		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.save());
+		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.download());
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jMenuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
@@ -161,12 +161,12 @@ public class LogFrame extends JFrame {
 		iconButtonReload.setFocusable(false);
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		iconButtonSave = new JButton(Utils.getSaveIcon());
-		iconButtonSave.setToolTipText(Configed.getResourceValue("save"));
+		iconButtonSave = new JButton(Utils.getIntellijIcon("download"));
+		iconButtonSave.setToolTipText(Configed.getResourceValue("download"));
 		iconButtonSave.setFocusable(false);
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
-				logPane.save();
+				logPane.download();
 			}
 		});
 
@@ -273,7 +273,7 @@ public class LogFrame extends JFrame {
 		}
 
 		@Override
-		public void save() {
+		public void download() {
 			String fn = openFile(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 			if (fn != null && !fn.isEmpty()) {
 				saveToFile(fn, logPane.lines);

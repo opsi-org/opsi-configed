@@ -56,7 +56,7 @@ public class LogTabComponent extends LogPane {
 	}
 
 	@Override
-	public void save() {
+	public void download() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		String fileName = retrieveFileName(getInfo(), logFileType);
 		String filePath = retrieveFilePath(fileName + ".log");
@@ -67,7 +67,7 @@ public class LogTabComponent extends LogPane {
 	}
 
 	@Override
-	protected void saveAsZip() {
+	protected void downloadAsZip() {
 		Logging.info(this, "saveAsZip");
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		String fileName = retrieveFileName(getInfo(), logFileType);
@@ -79,7 +79,7 @@ public class LogTabComponent extends LogPane {
 	}
 
 	@Override
-	protected void saveAllAsZip() {
+	protected void downloadAllAsZip() {
 		if (configedMain.getSelectedClients() == null || configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}

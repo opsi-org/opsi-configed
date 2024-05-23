@@ -205,7 +205,8 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
+		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("download"),
+				Utils.getIntellijIcon("download"));
 
 		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
 		popupMenu.add(popupSaveAsZip);

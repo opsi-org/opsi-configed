@@ -311,11 +311,11 @@ public class LogPane extends JPanel implements KeyListener {
 		Integer[] popups;
 
 		if (Main.isLogviewer()) {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
 					PopupMenuTrait.POPUP_FLOATINGCOPY };
 		} else {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
-					PopupMenuTrait.POPUP_SAVE_AS_ZIP, PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP,
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
+					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
 					PopupMenuTrait.POPUP_FLOATINGCOPY };
 		}
 
@@ -335,14 +335,14 @@ public class LogPane extends JPanel implements KeyListener {
 			reload();
 			break;
 
-		case PopupMenuTrait.POPUP_SAVE:
-			save();
+		case PopupMenuTrait.POPUP_DOWNLOAD:
+			download();
 			break;
-		case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
-			saveAsZip();
+		case PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP:
+			downloadAsZip();
 			break;
-		case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
-			saveAllAsZip();
+		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP:
+			downloadAllAsZip();
 			break;
 		case PopupMenuTrait.POPUP_FLOATINGCOPY:
 			floatExternal();
@@ -420,15 +420,15 @@ public class LogPane extends JPanel implements KeyListener {
 		setLevelWithoutAction(produceInitialMaxShowLevel());
 	}
 
-	public void save() {
+	public void download() {
 		Logging.debug(this, "save action");
 	}
 
-	protected void saveAsZip() {
+	protected void downloadAsZip() {
 		Logging.debug(this, "save as zip action");
 	}
 
-	protected void saveAllAsZip() {
+	protected void downloadAllAsZip() {
 		Logging.debug(this, "save all as zip action");
 	}
 

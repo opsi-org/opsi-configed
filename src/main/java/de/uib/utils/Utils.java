@@ -100,7 +100,7 @@ public final class Utils {
 	}
 
 	public static ImageIcon getSaveIcon() {
-		return getThemeIconPNG("images/save", "");
+		return getIntellijIcon("save");
 	}
 
 	public static ImageIcon getIntellijIcon(String iconName) {
