@@ -78,7 +78,8 @@ public class LogFrame extends JFrame {
 	//menus
 
 	private JMenu setupMenuFile() {
-		JMenuItem jMenuFileOpen = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+		JMenuItem jMenuFileOpen = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileOpen"),
+				Utils.getIntellijIcon("open"));
 		jMenuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
@@ -86,11 +87,13 @@ public class LogFrame extends JFrame {
 		jMenuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileClose.addActionListener((ActionEvent e) -> closeFile());
 
-		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"));
+		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"),
+				Utils.getIntellijIcon("save"));
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.download());
 
-		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"),
+				Utils.getIntellijIcon("refresh"));
 		jMenuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileReload.addActionListener((ActionEvent e) -> reloadFile());
 
