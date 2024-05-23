@@ -184,7 +184,8 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
+		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"),
+				Utils.getIntellijIcon("exit"));
 		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
