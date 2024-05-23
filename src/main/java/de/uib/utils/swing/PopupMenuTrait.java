@@ -90,7 +90,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		case POPUP_DOWNLOAD_AS_ZIP:
 			i = listPopups.indexOf(POPUP_DOWNLOAD_AS_ZIP);
 			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAsZip"),
-					Utils.createImageIcon("images/zip-icon.png", ""));
+					Utils.getIntellijIcon("download"));
 
 			addItem(p);
 			break;
@@ -98,7 +98,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		case POPUP_DOWNLOAD_ALL_AS_ZIP:
 			i = listPopups.indexOf(POPUP_DOWNLOAD_ALL_AS_ZIP);
 			menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.downloadAllAsZip"),
-					Utils.createImageIcon("images/zip-icon.png", ""));
+					Utils.getIntellijIcon("download"));
 
 			addItem(p);
 			break;
