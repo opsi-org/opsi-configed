@@ -115,11 +115,13 @@ public class LogFrame extends JFrame {
 	}
 
 	private JMenu setupMenuView() {
-		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
+		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.zoomIn"),
+				Utils.getIntellijIcon("zoomIn"));
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> logPane.increaseFontSize());
 
-		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
+		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.zoomOut"),
+				Utils.getIntellijIcon("zoomOut"));
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> logPane.reduceFontSize());
 
