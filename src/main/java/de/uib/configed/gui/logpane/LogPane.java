@@ -312,11 +312,11 @@ public class LogPane extends JPanel implements KeyListener {
 
 		if (Main.isLogviewer()) {
 			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
-					PopupMenuTrait.POPUP_FLOATINGCOPY };
+					PopupMenuTrait.POPUP_FLOATING_COPY };
 		} else {
 			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
 					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATINGCOPY };
+					PopupMenuTrait.POPUP_FLOATING_COPY };
 		}
 
 		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
@@ -344,7 +344,7 @@ public class LogPane extends JPanel implements KeyListener {
 		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP:
 			downloadAllAsZip();
 			break;
-		case PopupMenuTrait.POPUP_FLOATINGCOPY:
+		case PopupMenuTrait.POPUP_FLOATING_COPY:
 			floatExternal();
 			break;
 

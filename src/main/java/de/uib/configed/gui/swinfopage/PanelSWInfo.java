@@ -277,7 +277,7 @@ public class PanelSWInfo extends JPanel {
 		if (withPopup) {
 			PopupMenuTrait popupTrait = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV,
 					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
+					PopupMenuTrait.POPUP_FLOATING_COPY }) {
 				@Override
 				public void action(int p) {
 					actionOnPopupMenu(p);
@@ -323,7 +323,7 @@ public class PanelSWInfo extends JPanel {
 			reload();
 			break;
 
-		case PopupMenuTrait.POPUP_FLOATINGCOPY:
+		case PopupMenuTrait.POPUP_FLOATING_COPY:
 			floatExternalX();
 			break;
 

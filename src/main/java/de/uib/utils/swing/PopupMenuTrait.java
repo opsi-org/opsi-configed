@@ -31,7 +31,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	public static final int POPUP_DELETE = 13;
 	public static final int POPUP_ADD = 14;
 
-	public static final int POPUP_FLOATINGCOPY = 20;
+	public static final int POPUP_FLOATING_COPY = 20;
 
 	public static final int POPUP_PDF = 21;
 
@@ -67,7 +67,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			addItem(p);
 			break;
 
-		case POPUP_FLOATINGCOPY:
+		case POPUP_FLOATING_COPY:
 			addPopupFloatingCopy();
 			break;
 
@@ -146,14 +146,12 @@ public class PopupMenuTrait extends JPopupMenu {
 	}
 
 	private void addPopupFloatingCopy() {
-		int i = listPopups.indexOf(POPUP_FLOATINGCOPY);
+		int i = listPopups.indexOf(POPUP_FLOATING_COPY);
 		menuItems[i] = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.floatingInstance"),
 				Utils.getIntellijIcon("copy"));
 
-		// not work
-
 		addSeparator();
-		addItem(POPUP_FLOATINGCOPY);
+		addItem(POPUP_FLOATING_COPY);
 	}
 
 	public void setText(int popup, String s) {

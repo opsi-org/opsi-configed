@@ -82,7 +82,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	public static final int POPUP_SAVE = PopupMenuTrait.POPUP_SAVE; // 8
 
-	public static final int POPUP_FLOATINGCOPY = PopupMenuTrait.POPUP_FLOATINGCOPY; // 14
+	public static final int POPUP_FLOATING_COPY = PopupMenuTrait.POPUP_FLOATING_COPY; // 14
 
 	public static final int POPUP_PDF = PopupMenuTrait.POPUP_PDF; // 21
 
@@ -529,7 +529,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				addPopupItem(menuItemPrint);
 				break;
 
-			case POPUP_FLOATINGCOPY:
+			case POPUP_FLOATING_COPY:
 				addPopupMenuFloatingCopy();
 				break;
 
