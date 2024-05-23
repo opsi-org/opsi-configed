@@ -103,6 +103,17 @@ public final class Utils {
 		return getIntellijIcon("save");
 	}
 
+	public static ImageIcon getThemeIcon() {
+		String iconName;
+		if (FlatLaf.isLafDark()) {
+			iconName = "systemTheme";
+		} else {
+			iconName = "systemTheme_dark";
+		}
+
+		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg");
+	}
+
 	public static ImageIcon getIntellijIcon(String iconName) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
 

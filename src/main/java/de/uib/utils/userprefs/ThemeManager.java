@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -25,6 +26,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public final class ThemeManager {
@@ -48,6 +50,20 @@ public final class ThemeManager {
 
 		case THEME_DARK:
 			return Configed.getResourceValue("theme.dark");
+
+		default:
+			Logging.warning("Cannot find translation for theme " + theme);
+			return null;
+		}
+	}
+
+	public static ImageIcon getThemeIcon(String theme) {
+		switch (theme) {
+		case THEME_LIGHT:
+			return Utils.getIntellijIcon("lightTheme");
+
+		case THEME_DARK:
+			return Utils.getIntellijIcon("darkTheme");
 
 		default:
 			Logging.warning("Cannot find translation for theme " + theme);

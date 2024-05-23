@@ -165,14 +165,17 @@ public class MainFrame extends JFrame {
 	private JMenu createJMenuFile() {
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 
-		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
+		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"),
+				Utils.getIntellijIcon("exit"));
 		jMenuFileExit.addActionListener((ActionEvent e) -> configedMain.finishApp(true, 0));
 
-		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
+		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"),
+				Utils.getIntellijIcon("save"));
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
-		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"),
+				Utils.getIntellijIcon("refresh"));
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			configedMain.reload();
@@ -196,11 +199,13 @@ public class MainFrame extends JFrame {
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
+		jMenuTheme.setIcon(Utils.getThemeIcon());
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = ThemeManager.getSelectedTheme();
 
 		for (final String theme : ThemeManager.getAvailableThemes()) {
-			JMenuItem themeItem = new JRadioButtonMenuItem(ThemeManager.getThemeTranslation(theme));
+			JMenuItem themeItem = new JRadioButtonMenuItem(ThemeManager.getThemeTranslation(theme),
+					ThemeManager.getThemeIcon(theme));
 			Logging.debug("selectedTheme " + theme);
 			themeItem.setSelected(selectedTheme.equals(theme));
 			jMenuTheme.add(themeItem);
