@@ -584,7 +584,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		group.closeParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_close_disabled.png", ""));
 		group.closeParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
 		group.closeParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
-		group.closeParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
+		group.closeParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_close.png", ""));
 		group.closeParenthesis.setSelected(false);
 
 		group.connectionType = new AndOrSelectButtonByIcon();
