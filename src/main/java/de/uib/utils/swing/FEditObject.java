@@ -130,8 +130,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		buttonRemove.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 
-		buttonAdd = new IconButton(Configed.getResourceValue("FEditObject.AddButtonTooltip"), "images/list-add.png",
-				"images/list-add.png", "images/list-add_disabled.png", true);
+		buttonAdd = new JButton(Utils.getIntellijIcon("add"));
+		buttonAdd.setToolTipText(Configed.getResourceValue("FEditObject.AddButtonTooltip"));
 		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonAdd.setVisible(false);
 

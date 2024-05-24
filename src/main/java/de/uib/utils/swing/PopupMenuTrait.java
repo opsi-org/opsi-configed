@@ -134,7 +134,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_ADD:
 			i = listPopups.indexOf(POPUP_ADD);
-			menuItems[i] = new JMenuItem("add", Utils.createImageIcon("images/list-add.png", ""));
+			menuItems[i] = new JMenuItem(Utils.getIntellijIcon("add"));
 
 			addItem(p);
 			break;
