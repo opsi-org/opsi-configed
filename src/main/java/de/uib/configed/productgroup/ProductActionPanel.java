@@ -26,7 +26,6 @@ import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
@@ -43,7 +42,7 @@ public class ProductActionPanel extends JPanel {
 
 	private JButton buttonReloadProductStates;
 
-	private IconButton buttonExecuteNow;
+	private JButton buttonExecuteNow;
 
 	private PanelProductSettings associate;
 
@@ -92,8 +91,8 @@ public class ProductActionPanel extends JPanel {
 		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
-		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
-				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", "", true);
+		buttonExecuteNow = new JButton(Utils.getIntellijIcon("run"));
+		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		Map<String, String> values = new LinkedHashMap<>();

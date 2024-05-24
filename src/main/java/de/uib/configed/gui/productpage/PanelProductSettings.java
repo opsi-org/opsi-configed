@@ -198,7 +198,7 @@ public class PanelProductSettings extends JSplitPane {
 		popup.add(save);
 
 		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
-				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
+				Utils.getIntellijIcon("run"));
 		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
@@ -206,8 +206,7 @@ public class PanelProductSettings extends JSplitPane {
 		popup.add(itemOnDemand);
 
 		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem(
-				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"),
-				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
+				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"), Utils.getIntellijIcon("run"));
 		itemOnDemandForSelectedProducts
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts
