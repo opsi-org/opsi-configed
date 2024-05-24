@@ -209,7 +209,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
 
-		saveButton = new JButton(Configed.getResourceValue("save"));
+		saveButton = new JButton(Utils.getIntellijIcon("save"));
+		saveButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.saveSearchTooltip"));
 		saveButton.addActionListener(actionEvent -> save());
 
 		buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
@@ -229,7 +230,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+				.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.MIN_GAP_SIZE)
