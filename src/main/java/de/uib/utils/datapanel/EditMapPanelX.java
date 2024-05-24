@@ -83,7 +83,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		@Override
 		public String getRemovalMenuText() {
-			super.getRemovalMenuText();
 			return Configed.getResourceValue("EditMapPanelX.PopupMenu.RemoveSpecificValue");
 		}
 	}
@@ -104,7 +103,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		@Override
 		public String getRemovalMenuText() {
-			super.getRemovalMenuText();
 			return Configed.getResourceValue("EditMapPanelX.PopupMenu.SetSpecificValueToDefault");
 		}
 	}
