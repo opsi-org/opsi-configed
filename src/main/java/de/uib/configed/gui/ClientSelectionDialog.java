@@ -375,7 +375,10 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
 
-		result.connectionType = new AndOrSelectButtonByIcon();
+		result.connectionType = new JCheckBox(Utils.createImageIcon("images/boolean_and_or_disabled.png", ""));
+		result.connectionType.setRolloverIcon(Utils.createImageIcon("images/boolean_and_or_over.png", ""));
+		result.connectionType.setRolloverSelectedIcon(Utils.createImageIcon("images/boolean_and_or_over.png", ""));
+		result.connectionType.setSelectedIcon(Utils.createImageIcon("images/boolean_and_or.png", ""));
 		result.connectionType.addActionListener(actionEvent -> buildParentheses());
 		result.connectionType.setMaximumSize(new Dimension(result.connectionType.getMaximumSize().width,
 				result.connectionType.getPreferredSize().height));
@@ -587,7 +590,10 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		group.closeParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_close.png", ""));
 		group.closeParenthesis.setSelected(false);
 
-		group.connectionType = new AndOrSelectButtonByIcon();
+		group.connectionType = new JCheckBox(Utils.createImageIcon("images/boolean_and_or_disabled.png", ""));
+		group.connectionType.setRolloverIcon(Utils.createImageIcon("images/boolean_and_or_over.png", ""));
+		group.connectionType.setRolloverSelectedIcon(Utils.createImageIcon("images/boolean_and_or_over.png", ""));
+		group.connectionType.setSelectedIcon(Utils.createImageIcon("images/boolean_and_or.png", ""));
 		group.connectionType.addActionListener(actionEvent -> buildParentheses());
 		group.connectionType.setMaximumSize(new Dimension(group.connectionType.getMaximumSize().width,
 				group.connectionType.getPreferredSize().height));
@@ -650,7 +656,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		info.setOperation(null);
 		info.setParenthesisOpen(group.openParenthesis.isVisible());
 		info.setParenthesisClose(group.closeParenthesis.isVisible());
-		boolean andSelected = group.connectionType.isAndSelected();
+		boolean andSelected = group.connectionType.isSelected();
 		Logging.debug(this, group.element.getPath() + ": AND selected: " + andSelected);
 		boolean notSelected = group.negateButton.isSelected();
 		info.setStatus(getStatus(andSelected, notSelected));
@@ -662,7 +668,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		info.setOperation(null);
 		info.setParenthesisOpen(group.openParenthesis.isSelected());
 		info.setParenthesisClose(group.closeParenthesis.isSelected());
-		boolean andSelected = group.connectionType.isAndSelected();
+		boolean andSelected = group.connectionType.isSelected();
 		boolean notSelected = group.negateButton.isSelected();
 		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
@@ -710,12 +716,12 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				continue;
 			}
 
-			if (group.connectionType.isAndSelected() && inOr) {
+			if (group.connectionType.isSelected() && inOr) {
 				inOr = false;
 				group.closeParenthesis.setVisible(true);
 			}
 
-			if (group.connectionType.isOrSelected() && !inOr) {
+			if (!group.connectionType.isSelected() && !inOr) {
 				inOr = true;
 				group.openParenthesis.setVisible(true);
 			}
@@ -1002,20 +1008,20 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 	}
 
-	private static void setConnectionTypes(AndOrSelectButtonByIcon andOr, AbstractButton not, ConnectionStatus status) {
+	private static void setConnectionTypes(JCheckBox andOr, AbstractButton not, ConnectionStatus status) {
 		switch (status) {
 		case AND:
-			andOr.selectAnd();
+			andOr.setSelected(true);
 			break;
 		case OR:
-			andOr.selectOr();
+			andOr.setSelected(false);
 			break;
 		case AND_NOT:
-			andOr.selectAnd();
+			andOr.setSelected(true);
 			not.setSelected(true);
 			break;
 		case OR_NOT:
-			andOr.selectOr();
+			andOr.setSelected(false);
 			not.setSelected(true);
 			break;
 		}
@@ -1024,7 +1030,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static class SimpleGroup {
 		private AbstractSelectElement element;
 		private JCheckBox negateButton;
-		private AndOrSelectButtonByIcon connectionType;
+		private JCheckBox connectionType;
 		private JLabel elementLabel;
 
 		// may be JLabel or JComboBox
@@ -1044,7 +1050,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		private JButton removeButton;
 		private JCheckBox negateButton;
 		private JLabel topLabel;
-		private AndOrSelectButtonByIcon connectionType;
+		private JCheckBox connectionType;
 		private Deque<SimpleGroup> groupList;
 		private JCheckBox openParenthesis;
 		private JCheckBox closeParenthesis;
