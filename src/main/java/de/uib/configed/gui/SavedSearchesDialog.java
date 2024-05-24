@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -94,10 +95,10 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		// redefine buttonCommit
 		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
-		buttonCommit.setIcon(Utils.createImageIcon("images/executing_command_red_22.png", ""));
-		buttonCommit.setSelectedIcon(Utils.createImageIcon("images/executing_command_red_22.png", ""));
-		buttonCommit.setDisabledIcon(Utils.createImageIcon("images/execute_disabled.png", ""));
-		buttonCommit.setPreferredSize(new java.awt.Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
+		buttonCommit.setIcon(Utils.getIntellijIcon("run"));
+		buttonCommit.setSelectedIcon(null);
+		buttonCommit.setDisabledIcon(null);
+		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));
 	}

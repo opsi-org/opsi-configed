@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditStringList;
 
@@ -48,12 +49,13 @@ public class FDialogRemoteControl extends FEditStringList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonCommit.createIconButton(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
-				"images/executing_command_red_22.png", "images/executing_command_red_22_over.png",
-				"images/executing_command_22_disabled.png", true);
+		buttonCommit.setToolTipText(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"));
+		buttonCommit.setDisabledIcon(null);
+		buttonCommit.setSelectedIcon(null);
+		buttonCommit.setIcon(Utils.getIntellijIcon("run"));
 
-		buttonCancel.createIconButton(Configed.getResourceValue("buttonCancel"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel.setIcon(Utils.createImageIcon("images/cancel.png", ""));
+		buttonCancel.setToolTipText("buttonCancel");
 
 		extraField.getDocument().addDocumentListener(this);
 	}

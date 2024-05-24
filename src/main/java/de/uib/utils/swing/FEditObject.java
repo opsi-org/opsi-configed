@@ -22,6 +22,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -58,9 +59,9 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	private JSplitPane splitPane;
 
 	protected IconButton buttonCommit;
-	protected IconButton buttonCancel;
-	protected IconButton buttonAdd;
-	protected IconButton buttonRemove;
+	protected JButton buttonCancel;
+	protected JButton buttonAdd;
+	protected JButton buttonRemove;
 
 	protected boolean editable = true;
 
