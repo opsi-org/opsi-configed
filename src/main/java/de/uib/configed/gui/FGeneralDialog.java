@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,9 +39,9 @@ public class FGeneralDialog extends JDialog {
 	protected JPanel northPanel;
 	protected JPanel centerPanel;
 	protected JPanel southPanel;
-	protected IconButton jButton1 = new IconButton();
-	protected IconButton jButton2 = new IconButton();
-	private IconButton jButton3 = new IconButton();
+	protected JButton jButton1 = new JButton();
+	protected JButton jButton2 = new JButton();
+	private JButton jButton3 = new JButton();
 	private int defaultResult = 1;
 
 	protected int preferredWidth;
