@@ -57,7 +57,6 @@ public class DefaultEditMapPanel extends JPanel {
 
 		@Override
 		public String getRemovalMenuText() {
-			super.getRemovalMenuText();
 			return Configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry");
 		}
 	}
@@ -81,11 +80,7 @@ public class DefaultEditMapPanel extends JPanel {
 
 		public abstract void removeValue(String key);
 
-		public String getRemovalMenuText() {
-			String s = "";
-			Logging.debug(this, "getRemovalMenuText " + s);
-			return s;
-		}
+		public abstract String getRemovalMenuText();
 	}
 
 	protected AbstractPropertyHandler propertyHandler;
