@@ -23,8 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.swing.AbstractButton;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -364,12 +366,15 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			return result;
 		}
 
-		result.negateButton = new IconAsButton("", "images/boolean_not_disabled.png", "images/boolean_not_over.png",
-				"images/boolean_not.png", null);
-		result.negateButton.setActivated(false);
+		result.negateButton = new JCheckBox(Utils.createImageIcon("images/boolean_not_disabled.png", ""));
+		result.negateButton.setRolloverIcon(Utils.createImageIcon("images/boolean_not_over.png", ""));
+		result.negateButton.setRolloverSelectedIcon(Utils.createImageIcon("images/boolean_not_over.png", ""));
+		result.negateButton.setSelectedIcon(Utils.createImageIcon("images/boolean_not.png", ""));
+		result.negateButton.setSelected(false);
+
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
-		result.negateButton.addActionListener(this::notButtonAction);
+
 		result.connectionType = new AndOrSelectButtonByIcon();
 		result.connectionType.addActionListener(actionEvent -> buildParentheses());
 		result.connectionType.setMaximumSize(new Dimension(result.connectionType.getMaximumSize().width,
@@ -393,13 +398,19 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.dataComponent = new JLabel();
 		result.dataComponent.setMaximumSize(new Dimension(result.dataComponent.getMaximumSize().width,
 				result.dataComponent.getPreferredSize().height));
-		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
-				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);
-		result.openParenthesis.setActivated(true);
+
+		result.openParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_open_disabled.png", ""));
+		result.openParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_open_over.png", ""));
+		result.openParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_open_over.png", ""));
+		result.openParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_open.png", ""));
+		result.openParenthesis.setSelected(true);
 		result.openParenthesis.setVisible(false);
-		result.closeParenthesis = new IconAsButton("", "images/parenthesis_close_disabled.png",
-				"images/parenthesis_close_over.png", "images/parenthesis_close.png", null);
-		result.closeParenthesis.setActivated(true);
+
+		result.closeParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_close_disabled.png", ""));
+		result.closeParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
+		result.closeParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
+		result.closeParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_close.png", ""));
+		result.closeParenthesis.setSelected(true);
 		result.closeParenthesis.setVisible(false);
 
 		result.vRow = layout.createParallelGroup();
@@ -529,27 +540,28 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private ComplexGroup createComplexGroup() {
 		ComplexGroup result = new ComplexGroup();
 
-		result.removeButton = new IconAsButton("", "images/user-trash.png", "images/user-trash_over.png",
-				"images/user-trash.png", "images/user-trash_disabled.png");
-		result.removeButton.setMaximumSize(new Dimension(result.removeButton.getPreferredSize().width,
-				result.removeButton.getPreferredSize().height));
+		result.removeButton = new JButton(Utils.getIntellijIcon("delete"));
 		result.removeButton.addActionListener(this::removeButton);
-		result.negateButton = new IconAsButton("", "images/boolean_not_disabled.png", "images/boolean_not_over.png",
-				"images/boolean_not.png", null);
-		result.negateButton.setActivated(false);
+
+		result.negateButton = new JCheckBox(Utils.createImageIcon("images/boolean_not_disabled.png", ""));
+		result.negateButton.setRolloverIcon(Utils.createImageIcon("images/boolean_not_over.png", ""));
+		result.negateButton.setRolloverSelectedIcon(Utils.createImageIcon("images/boolean_not_over.png", ""));
+		result.negateButton.setSelectedIcon(Utils.createImageIcon("images/boolean_not.png", ""));
+		result.negateButton.setSelected(false);
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
-		result.negateButton.addActionListener(this::notButtonAction);
+
 		result.topLabel = new JLabel();
 		result.topLabel.setMaximumSize(
 				new Dimension(result.topLabel.getMaximumSize().width, result.removeButton.getPreferredSize().height));
 
 		result.topLabel.setFont(result.topLabel.getFont().deriveFont(Font.BOLD));
 
-		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
-				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);
-		result.openParenthesis.setActivated(false);
-		result.openParenthesis.addActionListener(ClientSelectionDialog::parenthesisAction);
+		result.openParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_open_disabled.png", ""));
+		result.openParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_open_over.png", ""));
+		result.openParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_open_over.png", ""));
+		result.openParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_open.png", ""));
+		result.openParenthesis.setSelected(false);
 
 		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
 		vRow.addComponent(result.topLabel, GroupLayout.Alignment.CENTER, 20, 20, 20);
@@ -569,10 +581,12 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	/* This creates the bottom line of a complex group */
 	private void createComplexBottom(ComplexGroup group) {
-		group.closeParenthesis = new IconAsButton("", "images/parenthesis_close_disabled.png",
-				"images/parenthesis_close_over.png", "images/parenthesis_close.png", null);
-		group.closeParenthesis.setActivated(false);
-		group.closeParenthesis.addActionListener(ClientSelectionDialog::parenthesisAction);
+		group.closeParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_close_disabled.png", ""));
+		group.closeParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
+		group.closeParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
+		group.closeParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
+		group.closeParenthesis.setSelected(false);
+
 		group.connectionType = new AndOrSelectButtonByIcon();
 		group.connectionType.addActionListener(actionEvent -> buildParentheses());
 		group.connectionType.setMaximumSize(new Dimension(group.connectionType.getMaximumSize().width,
@@ -638,7 +652,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		info.setParenthesisClose(group.closeParenthesis.isVisible());
 		boolean andSelected = group.connectionType.isAndSelected();
 		Logging.debug(this, group.element.getPath() + ": AND selected: " + andSelected);
-		boolean notSelected = group.negateButton.isActivated();
+		boolean notSelected = group.negateButton.isSelected();
 		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
 	}
@@ -646,10 +660,10 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static OperationWithStatus getInformation(ComplexGroup group) {
 		OperationWithStatus info = new OperationWithStatus();
 		info.setOperation(null);
-		info.setParenthesisOpen(group.openParenthesis.isActivated());
-		info.setParenthesisClose(group.closeParenthesis.isActivated());
+		info.setParenthesisOpen(group.openParenthesis.isSelected());
+		info.setParenthesisClose(group.closeParenthesis.isSelected());
 		boolean andSelected = group.connectionType.isAndSelected();
-		boolean notSelected = group.negateButton.isActivated();
+		boolean notSelected = group.negateButton.isSelected();
 		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
 	}
@@ -724,16 +738,16 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private void repairParentheses() {
 		Deque<ComplexGroup> stack = new ArrayDeque<>();
 		for (ComplexGroup complex : complexElements) {
-			if (complex.openParenthesis.isActivated() && complex.closeParenthesis.isActivated()) {
-				complex.openParenthesis.setActivated(false);
-				complex.closeParenthesis.setActivated(false);
-			} else if (complex.openParenthesis.isActivated()) {
+			if (complex.openParenthesis.isSelected() && complex.closeParenthesis.isSelected()) {
+				complex.openParenthesis.setSelected(false);
+				complex.closeParenthesis.setSelected(false);
+			} else if (complex.openParenthesis.isSelected()) {
 				stack.push(complex);
-			} else if (complex.closeParenthesis.isActivated()) {
+			} else if (complex.closeParenthesis.isSelected()) {
 				if (!stack.isEmpty()) {
 					stack.pop();
 				} else {
-					complex.closeParenthesis.setActivated(false);
+					complex.closeParenthesis.setSelected(false);
 				}
 			} else {
 				// Do nothing when no parenthesis is activated
@@ -741,7 +755,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 
 		for (ComplexGroup stackElement : stack) {
-			stackElement.openParenthesis.setActivated(false);
+			stackElement.openParenthesis.setSelected(false);
 		}
 	}
 
@@ -988,7 +1002,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 	}
 
-	private static void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not, ConnectionStatus status) {
+	private static void setConnectionTypes(AndOrSelectButtonByIcon andOr, AbstractButton not, ConnectionStatus status) {
 		switch (status) {
 		case AND:
 			andOr.selectAnd();
@@ -998,18 +1012,18 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			break;
 		case AND_NOT:
 			andOr.selectAnd();
-			not.setActivated(true);
+			not.setSelected(true);
 			break;
 		case OR_NOT:
 			andOr.selectOr();
-			not.setActivated(true);
+			not.setSelected(true);
 			break;
 		}
 	}
 
 	private static class SimpleGroup {
 		private AbstractSelectElement element;
-		private IconAsButton negateButton;
+		private JCheckBox negateButton;
 		private AndOrSelectButtonByIcon connectionType;
 		private JLabel elementLabel;
 
@@ -1017,8 +1031,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		private JComponent operationComponent;
 		private JComponent dataComponent;
 		private GroupLayout.ParallelGroup vRow;
-		private IconAsButton openParenthesis;
-		private IconAsButton closeParenthesis;
+		private JCheckBox openParenthesis;
+		private JCheckBox closeParenthesis;
 	}
 
 	public enum GroupType {
@@ -1027,13 +1041,13 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static class ComplexGroup {
 		private GroupType type;
-		private IconAsButton removeButton;
-		private IconAsButton negateButton;
+		private JButton removeButton;
+		private JCheckBox negateButton;
 		private JLabel topLabel;
 		private AndOrSelectButtonByIcon connectionType;
 		private Deque<SimpleGroup> groupList;
-		private IconAsButton openParenthesis;
-		private IconAsButton closeParenthesis;
+		private JCheckBox openParenthesis;
+		private JCheckBox closeParenthesis;
 
 		@Override
 		public String toString() {
@@ -1134,23 +1148,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		contentPane.revalidate();
 		contentPane.repaint();
-	}
-
-	private void notButtonAction(ActionEvent event) {
-		if (!(event.getSource() instanceof IconAsButton)) {
-			return;
-		}
-		IconAsButton button = (IconAsButton) event.getSource();
-		button.setActivated(!button.isActivated());
-		Logging.debug(this, "Negate button is activated: " + button.isActivated());
-	}
-
-	private static void parenthesisAction(ActionEvent event) {
-		if (!(event.getSource() instanceof IconAsButton)) {
-			return;
-		}
-		IconAsButton button = (IconAsButton) event.getSource();
-		button.setActivated(!button.isActivated());
 	}
 
 	private void save() {
