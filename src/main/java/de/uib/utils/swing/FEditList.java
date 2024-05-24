@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -28,7 +29,7 @@ import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.StandardListCellRenderer;
 import de.uib.utils.table.gui.SensitiveCellEditor;
@@ -82,8 +83,8 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		// we define buttonRemove in a different way since it is used only to clear
 		// selection
 
-		buttonRemove = new IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
-				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
+		buttonRemove = new JButton(Utils.getIntellijIcon("clearCash"));
+		buttonRemove.setToolTipText(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"));
 		buttonRemove.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 	}
