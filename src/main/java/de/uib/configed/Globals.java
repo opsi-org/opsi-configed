@@ -137,7 +137,6 @@ public final class Globals {
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
 	public static final int LABEL_WIDTH = 80;
-	public static final int TIME_SPINNER_WIDTH = 50;
 	public static final int SQUARE_BUTTON_WIDTH = 24;
 
 	public static final Dimension BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);

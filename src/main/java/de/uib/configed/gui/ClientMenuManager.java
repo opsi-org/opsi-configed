@@ -77,8 +77,6 @@ public final class ClientMenuManager implements MenuListener {
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
 			jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
 
-	private JMenuItem jMenuShowScheduledWOL;
-
 	private JMenu jMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
 
 	private Map<String, JMenuItem> menuItemsHost;
@@ -142,6 +140,9 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuDeletePackageCaches.addActionListener(event -> configedMain.deletePackageCachesOfSelectedClients());
 
+		JMenuItem jMenuWakeOnLan = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
+		jMenuWakeOnLan.addActionListener(event -> configedMain.wakeSelectedClients());
+
 		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
@@ -165,7 +166,7 @@ public final class ClientMenuManager implements MenuListener {
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
-		jMenu.add(initWakeOnLANMenu());
+		jMenu.add(jMenuWakeOnLan);
 		jMenu.add(jMenuOpsiClientdEvent);
 		jMenu.add(jMenuShowPopupMessage);
 		jMenu.add(jMenuRequestSessionInfo);
@@ -217,41 +218,6 @@ public final class ClientMenuManager implements MenuListener {
 		jMenu.add(initShowColumnsMenu());
 	}
 
-	private JMenu initWakeOnLANMenu() {
-		JMenu jMenuWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-		JMenuItem jMenuDirectWOL = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.direct"));
-		jMenuDirectWOL.addActionListener(event -> configedMain.wakeSelectedClients());
-		jMenuWakeOnLan.add(jMenuDirectWOL);
-
-		Map<String, Integer> labelledDelays = new LinkedHashMap<>();
-		labelledDelays.put("0 sec", 0);
-		labelledDelays.put("5 sec", 5);
-		labelledDelays.put("20 sec", 20);
-		labelledDelays.put("1 min", 60);
-		labelledDelays.put("2 min", 120);
-		labelledDelays.put("10 min", 600);
-		labelledDelays.put("20 min", 1200);
-		labelledDelays.put("1 h", 3600);
-
-		JMenuItem jMenuNewScheduledWOL = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
-		jMenuNewScheduledWOL.addActionListener((ActionEvent event) -> {
-			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(Configed.getResourceValue("FStartWakeOnLan.title"),
-					configedMain);
-			fStartWakeOnLan.setLocationRelativeTo(mainFrame);
-			fStartWakeOnLan.setVisible(true);
-			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
-			fStartWakeOnLan.setClients();
-		});
-
-		jMenuShowScheduledWOL = createArrangeWindowsMenuItem();
-
-		jMenuWakeOnLan.add(jMenuNewScheduledWOL);
-		jMenuWakeOnLan.addSeparator();
-		jMenuWakeOnLan.add(jMenuShowScheduledWOL);
-
-		return jMenuWakeOnLan;
-	}
-
 	private JMenu initResetProductsMenu() {
 		addResetProductsMenuItemsTo(jMenuResetProducts);
 		return jMenuResetProducts;
@@ -276,10 +242,6 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShowScheduledWOL.addActionListener(event -> arrangeWs(FEditObject.runningInstances.getAll()));
 
 		return jMenuShowScheduledWOL;
-	}
-
-	public void instancesChanged(boolean existJDialogInstances) {
-		jMenuShowScheduledWOL.setEnabled(existJDialogInstances);
 	}
 
 	private void addResetProductsMenuItemsTo(JMenu jMenu, boolean includeResetOptionForLocalbootProducts,

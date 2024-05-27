@@ -823,8 +823,6 @@ public class MainFrame extends JFrame {
 	public void instancesChanged(Set<?> instances) {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
-		clientMenu.instancesChanged(existJDialogInstances);
-
 		jMenuFrameShowDialogs.setEnabled(existJDialogInstances);
 	}
 
