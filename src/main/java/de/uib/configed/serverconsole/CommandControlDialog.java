@@ -33,7 +33,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
@@ -142,8 +141,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jComboBoxParentMenuText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
-		JButton buttonDelete = new IconButton(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"),
-				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
+		JButton buttonDelete = new JButton(Utils.getIntellijIcon("remove"));
+		buttonDelete.setToolTipText(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"));
 		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.addActionListener((ActionEvent actionEvent) -> deleteCommand());
@@ -175,8 +174,10 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jTextFieldPriority.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
-		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
-				.addGroup(controlPanelLayout.createParallelGroup()
+		controlPanelLayout.setHorizontalGroup(controlPanelLayout
+				.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
+				.addGroup(controlPanelLayout
+						.createParallelGroup()
 						.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -189,15 +190,14 @@ public final class CommandControlDialog extends FGeneralDialog {
 						.addGroup(controlPanelLayout.createSequentialGroup()
 								.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
-								.addGroup(controlPanelLayout.createParallelGroup()
-										.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 						.addComponent(jTextFieldTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
+						.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE * 3));
 		controlPanelLayout.setVerticalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
 				.addGroup(controlPanelLayout.createParallelGroup()

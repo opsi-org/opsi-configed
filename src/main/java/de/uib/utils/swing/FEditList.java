@@ -35,6 +35,7 @@ import de.uib.utils.swing.list.StandardListCellRenderer;
 import de.uib.utils.table.gui.SensitiveCellEditor;
 
 public class FEditList<O> extends FEditObject implements ListSelectionListener, MouseListener {
+	protected JButton buttonRemove;
 	private JScrollPane scrollpane;
 
 	protected JList<O> visibleList;
