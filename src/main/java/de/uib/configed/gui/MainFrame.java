@@ -685,8 +685,8 @@ public class MainFrame extends JFrame {
 
 	private String getLocalbootProductsFromSelection() {
 		FSelectionList fProductSelectionList = new FSelectionList(this,
-				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
-						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
+				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" },
+				new Icon[] { Utils.createImageIcon("images/cancel.png", ""), Utils.getIntellijIcon("checkmark") },
 				F_WIDTH / 2, 600);
 		fProductSelectionList.setListData(new ArrayList<>(
 				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));

@@ -24,6 +24,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.AbstractCellEditor;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -46,7 +47,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected JComponent editingArea;
 	private JLabel labelHint;
 
-	protected IconButton buttonCommit;
+	protected JButton buttonCommit;
 	private IconButton buttonCancel;
 
 	private boolean cancelled;
@@ -87,15 +88,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		labelHint = new JLabel();
 
-		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
-				"images/apply_disabled.png", true) {
-			@Override
-			public void setEnabled(boolean b) {
-				super.setEnabled(b);
-				Logging.debug(this, "setEnabled " + b);
-			}
-		};
-
+		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),

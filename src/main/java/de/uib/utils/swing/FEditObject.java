@@ -58,7 +58,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected JPanel loggingPanel;
 	private JSplitPane splitPane;
 
-	protected IconButton buttonCommit;
+	protected JButton buttonCommit;
 	protected JButton buttonCancel;
 	protected JButton buttonAdd;
 
@@ -112,8 +112,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
-				"images/apply_disabled.png", true);
+		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new IconButton(Configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",

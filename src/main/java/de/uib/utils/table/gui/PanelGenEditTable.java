@@ -31,6 +31,7 @@ import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -116,7 +117,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	protected JTable theTable;
 	protected GenTableModel tableModel;
 
-	private IconButton buttonCommit;
+	private JButton buttonCommit;
 	private IconButton buttonCancel;
 	private JLabel jLabelTitle;
 
@@ -339,9 +340,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return controlPanel;
 		}
 
-		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
-				"images/apply_disabled.png");
-
+		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 
 		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
