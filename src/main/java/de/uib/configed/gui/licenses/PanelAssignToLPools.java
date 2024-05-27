@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -57,7 +58,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private FSoftwarename2LicensePool fSoftwarename2LicensePool;
 
 	private PanelStateSwitch<Softwarename2LicensepoolRestriction> panelRadiobuttonsPreselectionForName2Pool;
-	private JLabel labelSimilarEntriesExist;
+	private JCheckBox jCheckBoxSimilarEntriesExist;
 
 	public PanelAssignToLPools(AbstractControlMultiTablePanel controller) {
 		super(controller);
@@ -143,8 +144,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		buttonSupplementSimilar.addActionListener((ActionEvent e) -> buttonSupplementSimilarAction());
 
-		labelSimilarEntriesExist = new JLabel();
-		labelSimilarEntriesExist.setVisible(true);
+		jCheckBoxSimilarEntriesExist = new JCheckBox();
+		jCheckBoxSimilarEntriesExist.setEnabled(false);
 
 		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(null,
 				FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction.SHOW_ALL_NAMES,
@@ -179,7 +180,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								Globals.SMALL_HEIGHT)
 						.addComponent(buttonSupplementSimilar, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
 								Globals.SMALL_HEIGHT)
-						.addComponent(labelSimilarEntriesExist, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
+						.addComponent(jCheckBoxSimilarEntriesExist, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
 								Globals.SMALL_HEIGHT))
 				.addComponent(panelRadiobuttonsPreselectionForName2Pool, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -194,7 +195,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								.addComponent(buttonSupplementSimilar, Globals.BUTTON_WIDTH / 2,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-								.addComponent(labelSimilarEntriesExist, GroupLayout.PREFERRED_SIZE,
+								.addComponent(jCheckBoxSimilarEntriesExist, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE))
 						.addGroup(
@@ -464,13 +465,12 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	public void setDisplaySimilarExist(boolean b) {
 		Logging.info(this, "setDisplaySimilarExist " + b);
+		jCheckBoxSimilarEntriesExist.setSelected(b);
 		if (b) {
-			labelSimilarEntriesExist.setIcon(Utils.createImageIcon("images/checked_box_filled_i_14.png", ""));
-			labelSimilarEntriesExist
+			jCheckBoxSimilarEntriesExist
 					.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.Licenses.similarSWEntriesExist"));
 		} else {
-			labelSimilarEntriesExist.setIcon(Utils.createImageIcon("images/checked_box_blue_empty_14.png", ""));
-			labelSimilarEntriesExist.setToolTipText(
+			jCheckBoxSimilarEntriesExist.setToolTipText(
 					Configed.getResourceValue("PanelAssignToLPools.Licenses.similarSWEntriesDontExist"));
 		}
 	}
