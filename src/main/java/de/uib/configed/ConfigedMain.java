@@ -2833,7 +2833,7 @@ public class ConfigedMain implements MessagebusListener {
 
 				fShowReachableInfo.setVisible(false);
 
-				mainFrame.getIconBarPanel().getIconButtonReachableInfo().setEnabled(true);
+				mainFrame.getIconBarPanel().getjButtonReachableInfo().setEnabled(true);
 			}
 		}.start();
 	}
@@ -2913,7 +2913,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void getSessionInfo() {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
-		mainFrame.getIconBarPanel().getIconButtonSessionInfo().setEnabled(false);
+		mainFrame.getIconBarPanel().getjButtonSessionInfo().setEnabled(false);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
 		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());
 		infoRetriever.execute();

@@ -179,7 +179,7 @@ public class MainFrame extends JFrame {
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			configedMain.reload();
-			if (iconBarPanel.getIconButtonReloadLicenses().isEnabled()) {
+			if (iconBarPanel.getjButtonReloadLicenses().isEnabled()) {
 				reloadLicensesAction();
 			}
 		});
@@ -642,7 +642,7 @@ public class MainFrame extends JFrame {
 		Logging.debug(this, "saveConfigurationsSetEnabled " + b);
 
 		jMenuFileSaveConfigurations.setEnabled(b);
-		iconBarPanel.getIconButtonSaveConfiguration().setEnabled(b);
+		iconBarPanel.getjButtonSaveConfiguration().setEnabled(b);
 	}
 
 	private void startControlAction() {
@@ -664,7 +664,7 @@ public class MainFrame extends JFrame {
 		configedMain.toggleFilterClientList(rebuildClientListTableModel, !configedMain.isFilterClientList());
 		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
-		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
+		iconBarPanel.getjButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
 		clientTable.setFilterMark(configedMain.isFilterClientList());
 	}
 

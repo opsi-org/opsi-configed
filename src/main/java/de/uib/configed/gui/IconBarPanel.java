@@ -39,15 +39,15 @@ public class IconBarPanel extends JPanel {
 	private JButton jButtonLicenses;
 	private JButton jButtonOpsiLicenses;
 
-	private IconButton iconButtonReload;
-	private IconButton iconButtonReloadLicenses;
-	private IconButton iconButtonNewClient;
-	private IconButton iconButtonSetGroup;
-	private IconButton iconButtonSaveConfiguration;
-	private IconButton iconButtonToggleClientFilter;
+	private JButton jButtonReload;
+	private JButton jButtonReloadLicenses;
+	private JButton jButtonNewClient;
+	private JButton jButtonSetGroup;
+	private JButton jButtonSaveConfiguration;
+	private JButton jButtonToggleClientFilter;
 
-	private IconButton iconButtonReachableInfo;
-	private IconButton iconButtonSessionInfo;
+	private JButton jButtonReachableInfo;
+	private JButton jButtonSessionInfo;
 
 	private LicensingInfoMap licensingInfoMap;
 
@@ -63,24 +63,24 @@ public class IconBarPanel extends JPanel {
 		init();
 	}
 
-	public IconButton getIconButtonReloadLicenses() {
-		return iconButtonReloadLicenses;
+	public JButton getjButtonReloadLicenses() {
+		return jButtonReloadLicenses;
 	}
 
-	public IconButton getIconButtonSaveConfiguration() {
-		return iconButtonSaveConfiguration;
+	public JButton getjButtonSaveConfiguration() {
+		return jButtonSaveConfiguration;
 	}
 
-	public IconButton getIconButtonToggleClientFilter() {
-		return iconButtonToggleClientFilter;
+	public JButton getjButtonToggleClientFilter() {
+		return jButtonToggleClientFilter;
 	}
 
-	public IconButton getIconButtonReachableInfo() {
-		return iconButtonReachableInfo;
+	public JButton getjButtonReachableInfo() {
+		return jButtonReachableInfo;
 	}
 
-	public IconButton getIconButtonSessionInfo() {
-		return iconButtonSessionInfo;
+	public JButton getjButtonSessionInfo() {
+		return jButtonSessionInfo;
 	}
 
 	private void init() {
@@ -308,105 +308,105 @@ public class IconBarPanel extends JPanel {
 		layoutIconPane1
 				.setHorizontalGroup(
 						layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonReloadLicenses, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonReloadLicenses, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonNewClient, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonNewClient, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonSetGroup, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonSetGroup, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonSaveConfiguration, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonSaveConfiguration, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonToggleClientFilter, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonReachableInfo, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE).addComponent(iconButtonSessionInfo,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE));
+								.addComponent(jButtonReachableInfo, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE).addComponent(jButtonSessionInfo,
+										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+										Globals.GRAPHIC_BUTTON_SIZE));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonReloadLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonNewClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonSetGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonSaveConfiguration, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonReachableInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonSessionInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+						.addComponent(jButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(jButtonReloadLicenses, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(jButtonNewClient, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(jButtonSetGroup, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(jButtonSaveConfiguration, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(jButtonToggleClientFilter, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(jButtonReachableInfo, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)
+						.addComponent(jButtonSessionInfo, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
+								Globals.GRAPHIC_BUTTON_SIZE)));
 
 		return iconsTopLeft;
 	}
 
 	private void setupIcons() {
-		iconButtonReload = new IconButton(Configed.getResourceValue("MainFrame.jMenuFileReload"), "images/reload.gif",
-				"images/reload_over.gif", "");
-		iconButtonReload.setFocusable(false);
-		iconButtonReload.addActionListener((ActionEvent e) -> configedMain.reload());
+		jButtonReload = new JButton(Utils.createImageIcon("images/reload.gif", ""));
+		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		jButtonReload.setFocusable(false);
+		jButtonReload.addActionListener((ActionEvent e) -> configedMain.reload());
 
-		iconButtonReloadLicenses = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"),
-				"images/reload_licenses.png", "images/reload_licenses_over.png", "", true);
-		iconButtonReloadLicenses.setFocusable(false);
-		iconButtonReloadLicenses.setVisible(false);
-		iconButtonReloadLicenses.addActionListener((ActionEvent e) -> mainFrame.reloadLicensesAction());
+		jButtonReloadLicenses = new JButton(Utils.createImageIcon("images/reload_licenses.png", ""));
+		jButtonReloadLicenses.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
+		jButtonReloadLicenses.setFocusable(false);
+		jButtonReloadLicenses.setVisible(false);
+		jButtonReloadLicenses.addActionListener((ActionEvent e) -> mainFrame.reloadLicensesAction());
 
-		iconButtonNewClient = new IconButton(Configed.getResourceValue("MainFrame.iconButtonNewClient"),
-				"images/newClient.gif", "images/newClient_over.gif", "");
-		iconButtonNewClient.setFocusable(false);
-		iconButtonNewClient
+		jButtonNewClient = new JButton(Utils.createImageIcon("images/newClient.gif", ""));
+		jButtonNewClient.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonNewClient"));
+		jButtonNewClient.setFocusable(false);
+		jButtonNewClient
 				.setVisible(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
-		iconButtonNewClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
+		jButtonNewClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
-		iconButtonSetGroup = new IconButton(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"),
-				"images/setGroup.gif", "images/setGroup_over.gif", "");
-		iconButtonSetGroup.setFocusable(false);
-		iconButtonSetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
+		jButtonSetGroup = new JButton(Utils.createImageIcon("images/setGroup.gif", ""));
+		jButtonSetGroup.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
+		jButtonSetGroup.setFocusable(false);
+		jButtonSetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
 
-		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
-				"images/apply.png", "", "images/apply_disabled.png", false);
-		iconButtonSaveConfiguration.setFocusable(false);
-		iconButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
+		jButtonSaveConfiguration = new JButton(Utils.createImageIcon("images/apply.png", ""));
+		jButtonSaveConfiguration.setDisabledIcon(Utils.createImageIcon("images/apply_disabled.png", ""));
+		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
+		jButtonSaveConfiguration.setFocusable(false);
+		jButtonSaveConfiguration.setEnabled(false);
+		jButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
-		iconButtonToggleClientFilter = new IconButton(
-				Configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"),
-				"images/view-filter_disabled-32.png", "images/view-filter_over-32.png", "images/view-filter-32.png",
-				true);
-		iconButtonToggleClientFilter.setFocusable(false);
-		iconButtonToggleClientFilter.addActionListener((ActionEvent e) -> mainFrame.toggleClientFilterAction());
+		jButtonToggleClientFilter = new JButton(Utils.createImageIcon("images/view-filter_disabled-32.png", ""));
+		jButtonToggleClientFilter.setSelectedIcon(Utils.createImageIcon("images/view-filter-32.png", ""));
+		jButtonToggleClientFilter.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"));
+		jButtonToggleClientFilter.setFocusable(false);
+		jButtonToggleClientFilter.addActionListener((ActionEvent e) -> mainFrame.toggleClientFilterAction());
 
-		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
-				"images/new_networkconnection.png", "images/new_networkconnection.png",
-				"images/new_networkconnection.png",
-				persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"));
-		iconButtonReachableInfo.setFocusable(false);
-		iconButtonReachableInfo.addActionListener((ActionEvent e) -> {
-			iconButtonReachableInfo.setEnabled(false);
+		jButtonReachableInfo = new JButton(Utils.createImageIcon("images/new_networkconnection.png", ""));
+		jButtonReachableInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"));
+		jButtonReachableInfo.setFocusable(false);
+		jButtonReachableInfo
+				.setEnabled(persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"));
+		jButtonReachableInfo.addActionListener((ActionEvent e) -> {
+			jButtonReachableInfo.setEnabled(false);
 			SwingUtilities.invokeLater(configedMain::getReachableInfo);
 		});
 
-		iconButtonSessionInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
-				"images/system-users-query.png", "images/system-users-query_over.png",
-				"images/system-users-query_over.png", persistenceController.getHostDataService().getHostDisplayFields()
-						.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
-		iconButtonSessionInfo.setFocusable(false);
-		iconButtonSessionInfo.setEnabled(true);
-		iconButtonSessionInfo.addActionListener((ActionEvent e) -> {
+		jButtonSessionInfo = new JButton(Utils.createImageIcon("images/system-users-query.png", ""));
+		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
+		jButtonSessionInfo.setEnabled(persistenceController.getHostDataService().getHostDisplayFields()
+				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
+		jButtonSessionInfo.setFocusable(false);
+		jButtonSessionInfo.addActionListener((ActionEvent e) -> {
 			configedMain.setColumnSessionInfo(true);
 			configedMain.getSessionInfo();
 		});
@@ -439,8 +439,8 @@ public class IconBarPanel extends JPanel {
 
 	public void visualizeLicensesFramesActive(boolean b) {
 		jButtonLicenses.setSelected(b);
-		iconButtonReloadLicenses.setVisible(true);
-		iconButtonReloadLicenses.setEnabled(true);
+		jButtonReloadLicenses.setVisible(true);
+		jButtonReloadLicenses.setEnabled(true);
 	}
 
 	public void enableAfterLoading() {
