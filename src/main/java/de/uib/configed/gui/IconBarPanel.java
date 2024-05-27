@@ -202,8 +202,7 @@ public class IconBarPanel extends JPanel {
 		jButtonLicenses.setFocusable(false);
 		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
-		JButton jButtonWorkOnGroups = new JButton(Utils.createImageIcon("images/group_all_unselected_40.png", ""));
-		jButtonWorkOnGroups.setSelectedIcon(Utils.createImageIcon("images/group_all_selected_40.png", ""));
+		JButton jButtonWorkOnGroups = new JButton(Utils.createImageIcon("images/group_all_selected_40.png", ""));
 		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
 		jButtonWorkOnGroups.setFocusable(false);
@@ -213,15 +212,13 @@ public class IconBarPanel extends JPanel {
 		jButtonWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		JButton jButtonWorkOnProducts = new JButton(Utils.createImageIcon("images/packagebutton.png", ""));
-		jButtonWorkOnProducts.setSelectedIcon(Utils.createImageIcon("images/packagebutton.png", ""));
 		jButtonWorkOnProducts.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
 		jButtonWorkOnProducts.setFocusable(false);
 
 		jButtonWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
-		JButton jButtonDashboard = new JButton(Utils.createImageIcon("images/dash_unselected.png", ""));
-		jButtonDashboard.setSelectedIcon(Utils.createImageIcon("images/dash_selected.png", ""));
+		JButton jButtonDashboard = new JButton(Utils.createImageIcon("images/dash_selected.png", ""));
 		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.setFocusable(false);
