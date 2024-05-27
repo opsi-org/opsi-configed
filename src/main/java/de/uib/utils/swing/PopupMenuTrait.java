@@ -127,7 +127,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_DELETE:
 			i = listPopups.indexOf(POPUP_DELETE);
-			menuItems[i] = new JMenuItem("delete", Utils.createImageIcon("images/edit-delete.png", ""));
+			menuItems[i] = new JMenuItem(Utils.getIntellijIcon("remove"));
 
 			addItem(p);
 			break;
