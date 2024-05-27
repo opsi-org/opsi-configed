@@ -184,13 +184,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				// the menu item seems to work only for one menu
 
 				popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText(),
-						Utils.createImageIcon("images/no-value.png", ""));
+						Utils.getIntellijIcon("remove"));
 				popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
 				popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
-						Utils.createImageIcon("images/fixed-value.png", ""));
+						Utils.getIntellijIcon("locked"));
 				popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry2);
