@@ -9,6 +9,7 @@
 - Rework design of login dialog
 - Rework design of checkboxes in client info panel
 - Rework design of all user/password input fields
+- Remove Wake on LAN timer, only directly wake up clients
 
 
 ## [4.3.3.0] - 2024-05-14

@@ -35,7 +35,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setText(message);
 	}
 
-	public void appendLine(String line) {
+	private void appendLine(String line) {
 		if (!jTextArea1.getText().isEmpty()) {
 			jTextArea1.setText(jTextArea1.getText() + "\n");
 		}

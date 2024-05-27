@@ -68,9 +68,7 @@ import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.FShowListWithComboSelect;
-import de.uib.configed.gui.FStartWakeOnLan;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.gui.FWakeClients;
 import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
@@ -3168,46 +3166,20 @@ public class ConfigedMain implements MessagebusListener {
 		setClient(newClientID);
 	}
 
-	public void wakeUp(final List<String> clients, String startInfo) {
-		if (clients == null) {
+	public void wakeSelectedClients() {
+		if (selectedClients == null) {
 			return;
 		}
 
-		Logging.info(this, "wakeUp " + clients.size() + " clients: " + startInfo);
-		if (clients.isEmpty()) {
+		Logging.info(this, "wakeUp " + selectedClients.size());
+		if (selectedClients.isEmpty()) {
 			return;
 		}
 
-		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
+		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients")) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(clients);
-			}
-		}.start();
-	}
-
-	public void wakeSelectedClients() {
-		wakeUp(selectedClients, "");
-	}
-
-	public void wakeUpWithDelay(final int delaySecs, final List<String> clients, String startInfo) {
-		if (clients == null) {
-			return;
-		}
-
-		Logging.info(this, "wakeUpWithDelay " + clients.size() + " clients: " + startInfo + " delay secs " + delaySecs);
-
-		if (clients.isEmpty()) {
-			return;
-		}
-
-		final FWakeClients result = new FWakeClients(mainFrame,
-				Configed.getResourceValue("FWakeClients.title") + " " + startInfo);
-
-		new Thread() {
-			@Override
-			public void run() {
-				result.act(clients, delaySecs);
+				return persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(selectedClients);
 			}
 		}.start();
 	}
@@ -3644,10 +3616,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public boolean closeInstance(boolean checkdirty) {
 		Logging.info(this, "start closing instance, checkdirty " + checkdirty);
-
-		if (!FStartWakeOnLan.runningInstances.isEmpty() && !FStartWakeOnLan.runningInstances.askStop()) {
-			return false;
-		}
 
 		if (checkdirty) {
 			int closeCheckResult = checkClose();
