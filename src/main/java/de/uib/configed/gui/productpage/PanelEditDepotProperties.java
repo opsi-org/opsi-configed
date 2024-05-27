@@ -36,7 +36,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.DepotListCellRenderer;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
@@ -116,9 +115,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
 
-		IconButton buttonSetValuesFromPackage = new IconButton(
-				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),
-				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", "", true);
+		JButton buttonSetValuesFromPackage = new JButton(Utils.getIntellijIcon("remove"));
+		buttonSetValuesFromPackage
+				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"));
 
 		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
 

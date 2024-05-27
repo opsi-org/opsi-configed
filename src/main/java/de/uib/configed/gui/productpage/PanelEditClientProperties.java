@@ -10,19 +10,20 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
+import de.uib.utils.Utils;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 
 public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private JLabel jLabelProductProperties;
-	private IconButton buttonSetValuesFromServerDefaults;
-	private IconButton buttonRemoveSpecificValues;
+	private JButton buttonSetValuesFromServerDefaults;
+	private JButton buttonRemoveSpecificValues;
 
 	private JPanel titlePanel;
 
@@ -35,18 +36,15 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 
-		buttonSetValuesFromServerDefaults = new IconButton(
-				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"),
-				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", "", true);
+		buttonSetValuesFromServerDefaults = new JButton(Utils.getIntellijIcon("locked"));
 
 		buttonSetValuesFromServerDefaults.setPreferredSize(new Dimension(15, 30));
 
 		buttonSetValuesFromServerDefaults.addActionListener((ActionEvent e) -> productPropertiesPanel.resetDefaults());
 
-		buttonRemoveSpecificValues = new IconButton(
-				Configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"),
-				"images/reset_network_eliminate.png", "images/reset_network_eliminate_over.png",
-				"images/reset_network_eliminate_disabled.png", true);
+		buttonRemoveSpecificValues = new JButton(Utils.getIntellijIcon("remove"));
+		buttonRemoveSpecificValues
+				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"));
 
 		buttonRemoveSpecificValues.setPreferredSize(new Dimension(15, 30));
 
