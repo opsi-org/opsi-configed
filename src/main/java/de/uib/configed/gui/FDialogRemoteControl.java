@@ -49,12 +49,10 @@ public class FDialogRemoteControl extends FEditStringList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonCommit.setToolTipText(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"));
-		buttonCommit.setDisabledIcon(null);
-		buttonCommit.setSelectedIcon(null);
 		buttonCommit.setIcon(Utils.getIntellijIcon("run"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"));
 
-		buttonCancel.setIcon(Utils.createImageIcon("images/cancel.png", ""));
+		buttonCancel.setIcon(Utils.getIntellijIcon("close"));
 		buttonCancel.setToolTipText("buttonCancel");
 
 		extraField.getDocument().addDocumentListener(this);

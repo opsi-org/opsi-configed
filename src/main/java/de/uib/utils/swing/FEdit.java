@@ -33,7 +33,6 @@ import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -48,7 +47,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	private JLabel labelHint;
 
 	protected JButton buttonCommit;
-	private IconButton buttonCancel;
+	private JButton buttonCancel;
 
 	private boolean cancelled;
 	private boolean starting = true;
@@ -92,8 +91,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel.setToolTipText(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"));
 		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 	}
 

@@ -110,8 +110,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		FSelectionList fColumSelectionList = new FSelectionList(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"), true,
 				new String[] { "", "" },
-				new Icon[] { Utils.createImageIcon("images/cancel.png", ""), Utils.getIntellijIcon("checkmark") }, 400,
-				410);
+				new Icon[] { Utils.getIntellijIcon("close"), Utils.getIntellijIcon("checkmark") }, 400, 410);
 		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
 		fColumSelectionList.setListData(defaultValues);
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);

@@ -55,7 +55,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
-import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
@@ -118,7 +117,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	protected GenTableModel tableModel;
 
 	private JButton buttonCommit;
-	private IconButton buttonCancel;
+	private JButton buttonCancel;
 	private JLabel jLabelTitle;
 
 	private JPopupMenu popupMenu;
@@ -343,13 +342,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
 		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-
-		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png");
-
-		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-
 		buttonCommit.addActionListener(action -> commit());
+
+		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCancel.addActionListener(action -> cancel());
 
 		GroupLayout layout = new GroupLayout(controlPanel);

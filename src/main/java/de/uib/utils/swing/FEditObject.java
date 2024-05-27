@@ -38,7 +38,6 @@ import javax.swing.event.DocumentListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -116,8 +115,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new IconButton(Configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel.setToolTipText(Configed.getResourceValue("FEditObject.CancelButtonTooltip"));
 		buttonCancel.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
