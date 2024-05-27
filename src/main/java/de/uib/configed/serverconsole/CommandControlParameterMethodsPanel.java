@@ -23,7 +23,6 @@ import javax.swing.text.JTextComponent;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.serverconsole.command.CommandParameterParser;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -88,8 +87,8 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 			jComboBoxParameterFormats.setEnabled(enabled);
 		});
 
-		jButtonTestParam = new IconButton(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"),
-				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
+		jButtonTestParam = new JButton(Utils.getIntellijIcon("run"));
+		jButtonTestParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"));
 		jButtonTestParam.setPreferredSize(jButtonDim);
 
 		jButtonAddParam = new JButton(Utils.getIntellijIcon("add"));
