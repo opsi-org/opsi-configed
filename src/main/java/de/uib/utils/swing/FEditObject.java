@@ -24,7 +24,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -65,7 +64,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected boolean editable = true;
 
 	protected FlatTextField extraField;
-	private JLabel extraLabel;
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
@@ -129,10 +127,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		extraField.setTrailingComponent(buttonAdd);
 		extraField.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraField.setVisible(false);
-
-		extraLabel = new JLabel();
-		extraLabel.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-		extraLabel.setVisible(false);
 	}
 
 	public void setDividerLocation(double loc) {
@@ -153,8 +147,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 								.addComponent(buttonCancel, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCommit, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE * 2, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(extraLabel, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
+								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addGap(Globals.MIN_GAP_SIZE));
 
 		layout1.setVerticalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1.createSequentialGroup()
@@ -167,8 +160,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(extraField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(extraLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)));
 
@@ -248,11 +239,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		Logging.debug(this, "FEditObject.initEditing");
 		setDataChanged(false);
 		extraField.setText("");
-	}
-
-	public void setExtraLabel(String s) {
-		extraLabel.setVisible(true);
-		extraLabel.setText(s);
 	}
 
 	public void enter() {

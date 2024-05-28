@@ -535,10 +535,8 @@ public class ClientTree extends AbstractGroupTree {
 		if (groupSet.size() > 1 && ConfigedMain.getMainFrame() != null) {
 			FEditList<GroupNode> fList = new FEditList<>();
 			fList.setListModel(new DefaultComboBoxModel<>(groupSet.toArray(new GroupNode[0])));
-			fList.setTitle(Configed.getResourceValue("ClientTree.DIRECTORYname") + " "
-					+ Configed.getResourceValue("ClientTree.checkDIRECTORYAssignments"));
-			fList.setExtraLabel(Configed.getResourceValue("ClientTree.severalLocationsAssigned") + " >> " + clientID
-					+ " <<, " + Configed.getResourceValue("ClientTree.selectCorrectLocation"));
+			fList.setTitle(Configed.getResourceValue("ClientTree.severalLocationsAssigned") + " " + clientID + ". "
+					+ Configed.getResourceValue("ClientTree.selectCorrectLocation"));
 			fList.setPreferredScrollPaneSize(new Dimension(640, 60));
 			fList.init();
 
