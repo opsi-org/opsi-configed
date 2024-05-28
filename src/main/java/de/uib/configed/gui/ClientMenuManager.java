@@ -66,7 +66,7 @@ public final class ClientMenuManager implements MenuListener {
 	private JMenuItem jMenuAddClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuAddClient"));
 	private JMenuItem jMenuDeleteClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDeleteClient"));
 	private JMenuItem jMenuCopyClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCopyClient"));
-	private JMenu jMenuResetProducts = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
+	private JMenu jMenuResetProducts = initResetProductsMenu();
 	private JMenuItem jMenuFreeLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
 	private JMenuItem jMenuDeletePackageCaches = new JMenuItem(
 			Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
@@ -77,7 +77,7 @@ public final class ClientMenuManager implements MenuListener {
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
 			jMenuRebootClient, jMenuShutdownClient, jMenuChangeDepot, jMenuRemoteControl };
 
-	private JMenu jMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
+	private JMenu jMenuClients = new JMenu(Configed.getResourceValue("MainFrame.jMenuClients"));
 
 	private Map<String, JMenuItem> menuItemsHost;
 	private ConfigedMain configedMain;
@@ -109,11 +109,11 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	public JMenu getJMenu() {
-		return jMenu;
+		return jMenuClients;
 	}
 
 	private void initJMenu() {
-		jMenu.addMenuListener(this);
+		jMenuClients.addMenuListener(this);
 
 		jMenuChangeDepot.addActionListener(event -> configedMain.callChangeDepotDialog());
 		jMenuChangeClientID.addActionListener(event -> configedMain.callChangeClientIDDialog());
@@ -166,73 +166,72 @@ public final class ClientMenuManager implements MenuListener {
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
-		jMenu.add(jMenuWakeOnLan);
-		jMenu.add(jMenuOpsiClientdEvent);
-		jMenu.add(jMenuShowPopupMessage);
-		jMenu.add(jMenuRequestSessionInfo);
-		jMenu.add(jMenuDeletePackageCaches);
+		jMenuClients.add(jMenuWakeOnLan);
+		jMenuClients.add(jMenuOpsiClientdEvent);
+		jMenuClients.add(jMenuShowPopupMessage);
+		jMenuClients.add(jMenuRequestSessionInfo);
+		jMenuClients.add(jMenuDeletePackageCaches);
 
-		jMenu.addSeparator();
+		jMenuClients.addSeparator();
 
-		jMenu.add(jMenuShutdownClient);
-		jMenu.add(jMenuRebootClient);
-		jMenu.add(jMenuOpenTerminalOnClient);
-		jMenu.add(jMenuRemoteControl);
+		jMenuClients.add(jMenuShutdownClient);
+		jMenuClients.add(jMenuRebootClient);
+		jMenuClients.add(jMenuOpenTerminalOnClient);
+		jMenuClients.add(jMenuRemoteControl);
 
-		jMenu.addSeparator();
+		jMenuClients.addSeparator();
 
-		jMenu.add(jMenuAddClient);
-		jMenu.add(jMenuCopyClient);
-		jMenu.add(jMenuDeleteClient);
+		jMenuClients.add(jMenuAddClient);
+		jMenuClients.add(jMenuCopyClient);
+		jMenuClients.add(jMenuDeleteClient);
 
-		jMenu.add(initResetProductsMenu());
+		jMenuClients.add(initResetProductsMenu());
 
-		jMenu.add(jMenuFreeLicenses);
-		jMenu.add(jMenuChangeClientID);
+		jMenuClients.add(jMenuFreeLicenses);
+		jMenuClients.add(jMenuChangeClientID);
 
 		// is multiDepot
 		if (persistenceController.getHostInfoCollections().getDepots().size() != 1) {
-			jMenu.add(jMenuChangeDepot);
+			jMenuClients.add(jMenuChangeDepot);
 		}
-		jMenu.addSeparator();
+		jMenuClients.addSeparator();
 
-		jMenu.add(jMenuSelectionGetGroup);
-		jMenu.add(jMenuSelectionGetSavedSearch);
+		jMenuClients.add(jMenuSelectionGetGroup);
+		jMenuClients.add(jMenuSelectionGetSavedSearch);
 
-		jMenu.addSeparator();
+		jMenuClients.addSeparator();
 
-		jMenu.add(jMenuClientSelectionToggleFilter);
+		jMenuClients.add(jMenuClientSelectionToggleFilter);
 
-		jMenu.add(jMenuRebuildClientList);
-		jMenu.add(jMenuCreatePdf);
+		jMenuClients.add(jMenuRebuildClientList);
+		jMenuClients.add(jMenuCreatePdf);
 
 		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTable().getTable());
-		exportTable.addMenuItemsTo(jMenu);
+		exportTable.addMenuItemsTo(jMenuClients);
 
 		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
 				mainFrame.getClientTable().getTable());
-		clientTableExporter.addMenuItemsTo(jMenu);
+		clientTableExporter.addMenuItemsTo(jMenuClients);
 
-		jMenu.addSeparator();
+		jMenuClients.addSeparator();
 
-		jMenu.add(initShowColumnsMenu());
+		jMenuClients.add(initShowColumnsMenu());
 	}
 
 	private JMenu initResetProductsMenu() {
-		addResetProductsMenuItemsTo(jMenuResetProducts);
-		return jMenuResetProducts;
+		return createResetProductsMenuItemsTo();
 	}
 
-	public void addResetProductsMenuItemsTo(JMenu jMenu) {
-		addResetProductsMenuItemsTo(jMenu, true, true, true);
+	public JMenu createResetProductsMenuItemsTo() {
+		return createResetProductsMenuItemsTo(true, true, true);
 	}
 
-	public void addResetLocalbootProductsMenuItemsTo(JMenu jMenu) {
-		addResetProductsMenuItemsTo(jMenu, true, false, false);
+	public JMenu createResetLocalbootProductsMenuItemsTo() {
+		return createResetProductsMenuItemsTo(true, false, false);
 	}
 
-	public void addResetNetbootProductsMenuItemsTo(JMenu jMenu) {
-		addResetProductsMenuItemsTo(jMenu, false, true, false);
+	public JMenu createResetNetbootProductsMenuItemsTo() {
+		return createResetProductsMenuItemsTo(false, true, false);
 	}
 
 	public static JMenuItem createArrangeWindowsMenuItem() {
@@ -244,46 +243,52 @@ public final class ClientMenuManager implements MenuListener {
 		return jMenuShowScheduledWOL;
 	}
 
-	private void addResetProductsMenuItemsTo(JMenu jMenu, boolean includeResetOptionForLocalbootProducts,
+	private JMenu createResetProductsMenuItemsTo(boolean includeResetOptionForLocalbootProducts,
 			boolean includeResetOptionForNetbootProducts, boolean includeResetOptionForBothProducts) {
-		JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
-		jMenuResetProductOnClientWithStates.addActionListener(event -> resetProductOnClientAction(true, true, true));
-
-		JMenuItem jMenuResetProductOnClient = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
-		jMenuResetProductOnClient.addActionListener(event -> resetProductOnClientAction(false, true, true));
-
-		JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
-		jMenuResetLocalbootProductOnClientWithStates
-				.addActionListener(event -> resetProductOnClientAction(true, true, false));
-
-		JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithoutStates"));
-		jMenuResetLocalbootProductOnClient.addActionListener(event -> resetProductOnClientAction(false, true, false));
-
-		JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
-		jMenuResetNetbootProductOnClientWithStates
-				.addActionListener(event -> resetProductOnClientAction(true, false, true));
-
-		JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithoutStates"));
-		jMenuResetNetbootProductOnClient.addActionListener(event -> resetProductOnClientAction(false, false, true));
+		JMenu jMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
 
 		if (includeResetOptionForLocalbootProducts) {
+			JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
+			jMenuResetLocalbootProductOnClientWithStates
+					.addActionListener(event -> resetProductOnClientAction(true, true, false));
+
+			JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithoutStates"));
+			jMenuResetLocalbootProductOnClient
+					.addActionListener(event -> resetProductOnClientAction(false, true, false));
+
 			jMenu.add(jMenuResetLocalbootProductOnClientWithStates);
 			jMenu.add(jMenuResetLocalbootProductOnClient);
 		}
 		if (includeResetOptionForNetbootProducts) {
+			JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
+			jMenuResetNetbootProductOnClientWithStates
+					.addActionListener(event -> resetProductOnClientAction(true, false, true));
+
+			JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithoutStates"));
+			jMenuResetNetbootProductOnClient.addActionListener(event -> resetProductOnClientAction(false, false, true));
+
 			jMenu.add(jMenuResetNetbootProductOnClientWithStates);
 			jMenu.add(jMenuResetNetbootProductOnClient);
 		}
 		if (includeResetOptionForBothProducts) {
+			JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
+			jMenuResetProductOnClientWithStates
+					.addActionListener(event -> resetProductOnClientAction(true, true, true));
+
+			JMenuItem jMenuResetProductOnClient = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
+			jMenuResetProductOnClient.addActionListener(event -> resetProductOnClientAction(false, true, true));
+
 			jMenu.add(jMenuResetProductOnClientWithStates);
 			jMenu.add(jMenuResetProductOnClient);
 		}
+
+		return jMenu;
 	}
 
 	@SuppressWarnings({ "java:S138" })
@@ -495,8 +500,8 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void cloneMenuItems(JPopupMenu popupMenu) {
-		for (int i = 0; i < jMenu.getItemCount(); i++) {
-			Component component = jMenu.getMenuComponent(i);
+		for (int i = 0; i < jMenuClients.getItemCount(); i++) {
+			Component component = jMenuClients.getMenuComponent(i);
 			if (component instanceof JSeparator) {
 				popupMenu.addSeparator();
 			}
