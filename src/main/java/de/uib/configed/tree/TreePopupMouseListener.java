@@ -19,6 +19,7 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.utils.PopupMouseListener;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class TreePopupMouseListener extends PopupMouseListener {
@@ -30,38 +31,36 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	private JMenuItem menuItemEditNode;
 	private JMenuItem menuItemDeleteNode;
 	private JMenuItem menuItemDeleteGroupNode;
-	private JMenuItem menuItemActivateElements;
 	private JMenuItem menuItemRemoveElements;
 
 	public TreePopupMouseListener(JPopupMenu jPopupMenu, AbstractGroupTree tree) {
 		super(jPopupMenu);
 		this.tree = tree;
 
-		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));
+		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"),
+				Utils.getIntellijIcon("add"));
 		menuItemCreateNode.addActionListener(actionEvent -> makeSubGroup());
 		jPopupMenu.add(menuItemCreateNode);
 
-		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editNode"));
+		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editNode"),
+				Utils.getIntellijIcon("edit"));
 		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(mousePath));
 		jPopupMenu.add(menuItemEditNode);
 
-		menuItemDeleteNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteNode"));
+		menuItemDeleteNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteNode"),
+				Utils.getIntellijIcon("remove"));
 		menuItemDeleteNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
 		jPopupMenu.add(menuItemDeleteNode);
 
-		menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"));
+		menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"),
+				Utils.getIntellijIcon("delete"));
 		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
 		jPopupMenu.add(menuItemDeleteGroupNode);
 
-		String selectAllKey = tree instanceof ClientTree ? "ClientTree.selectAllElements"
-				: "ProductTree.selectAllElements";
-		menuItemActivateElements = new JMenuItem(Configed.getResourceValue(selectAllKey));
-		menuItemActivateElements.addActionListener(actionEvent -> activateElements());
-		jPopupMenu.add(menuItemActivateElements);
-
 		String removeAllKey = tree instanceof ClientTree ? "ClientTree.removeAllElements"
 				: "ProductTree.removeAllElements";
-		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue(removeAllKey));
+		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue(removeAllKey),
+				Utils.getIntellijIcon("remove"));
 		menuItemRemoveElements.addActionListener(actionEvent -> removeElements());
 		jPopupMenu.add(menuItemRemoveElements);
 	}
@@ -71,14 +70,6 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		if (resultNode != null) {
 			tree.makeVisible(mousePath.pathByAddingChild(resultNode));
 			tree.repaint();
-		}
-	}
-
-	private void activateElements() {
-		TreePath sourcePath = mousePath;
-		if (sourcePath != null
-				&& sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode groupNode) {
-			tree.setGroupAndSelect(groupNode);
 		}
 	}
 
@@ -133,7 +124,6 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		menuItemEditNode.setVisible(false);
 		menuItemDeleteNode.setVisible(false);
 		menuItemDeleteGroupNode.setVisible(false);
-		menuItemActivateElements.setVisible(false);
 		menuItemRemoveElements.setVisible(false);
 
 		int numberVisibleItems = 0;
@@ -157,9 +147,6 @@ public class TreePopupMouseListener extends PopupMouseListener {
 				menuItemDeleteGroupNode.setVisible(true);
 				numberVisibleItems++;
 			}
-
-			menuItemActivateElements.setVisible(true);
-			numberVisibleItems++;
 
 			if (!(((GroupNode) clickNode).isFixed())) {
 				menuItemRemoveElements.setVisible(true);
