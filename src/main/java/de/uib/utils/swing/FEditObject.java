@@ -86,11 +86,10 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
+		buttonAdd.addActionListener(this);
 
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
-
-		buttonAdd.addActionListener(this);
 		buttonAdd.addKeyListener(this);
 	}
 
@@ -124,6 +123,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		buttonAdd = new JButton(Utils.getIntellijIcon("add"));
 		buttonAdd.setToolTipText(Configed.getResourceValue("FEditObject.AddButtonTooltip"));
 		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
+		buttonAdd.setEnabled(false);
 
 		extraField = new FlatTextField();
 		extraField.setTrailingComponent(buttonAdd);
