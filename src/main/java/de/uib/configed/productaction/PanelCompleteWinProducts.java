@@ -226,8 +226,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		fieldProductKey = new JTextField();
 		fieldProductKey.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallSelectFolderWinPE = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectFolderWinPE.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderWinPE = new JButton(Utils.getIntellijIcon("open"));
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
@@ -243,8 +242,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			}
 		});
 
-		buttonCallSelectFolderInstallFiles = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectFolderInstallFiles.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderInstallFiles = new JButton(Utils.getIntellijIcon("open"));
 		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderInstallFiles
 				.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));

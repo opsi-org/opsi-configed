@@ -250,8 +250,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		fieldOpsiPackageName.setEditable(true);
 		fieldOpsiPackageName.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallChooserPackage = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserPackage.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserPackage = new JButton(Utils.getIntellijIcon("open"));
 		buttonCallChooserPackage.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallChooserPackage.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserPackage"));
 
@@ -260,8 +259,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		fieldServerPath = new JTextField(opsiWorkBenchDirectoryS);
 		fieldServerPath.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallChooserServerpath = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserServerpath.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserServerpath = new JButton(Utils.getIntellijIcon("open"));
 		buttonCallChooserServerpath.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());

@@ -158,8 +158,7 @@ public class PanelSWMultiClientReport extends JPanel {
 				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 		exportDirectoryS = "";
 
-		JButton buttonCallSelectExportDirectory = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectExportDirectory.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		JButton buttonCallSelectExportDirectory = new JButton(Utils.getIntellijIcon("open"));
 		buttonCallSelectExportDirectory.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectExportDirectory
 				.setToolTipText(Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));

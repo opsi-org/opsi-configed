@@ -58,8 +58,7 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
 		jFileChooser.setFileFilter(filter);
 
-		jButtonFileChooser = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
-		jButtonFileChooser.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		jButtonFileChooser = new JButton(Utils.getIntellijIcon("open"));
 		jButtonFileChooser.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		jButtonFileChooser.setToolTipText(Configed.getResourceValue("PMInstallLocalPanel.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
