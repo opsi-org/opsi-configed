@@ -59,6 +59,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	protected JButton buttonCommit;
 	protected JButton buttonCancel;
+	protected JButton buttonClear;
 	protected JButton buttonAdd;
 
 	protected boolean editable = true;
@@ -84,10 +85,12 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
+		buttonClear.addActionListener(this);
 		buttonAdd.addActionListener(this);
 
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
+		buttonClear.addKeyListener(this);
 		buttonAdd.addKeyListener(this);
 	}
 
@@ -118,6 +121,12 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		buttonCancel.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
+		buttonClear = new JButton();
+		buttonClear.setIcon(Utils.getIntellijIcon("clearCash"));
+		buttonClear.setToolTipText(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"));
+		buttonClear.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
+		buttonClear.setVisible(false);
+
 		buttonAdd = new JButton(Utils.getIntellijIcon("add"));
 		buttonAdd.setToolTipText(Configed.getResourceValue("FEditObject.AddButtonTooltip"));
 		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
@@ -146,7 +155,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 						.addGroup(layout1.createSequentialGroup()
 								.addComponent(buttonCancel, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCommit, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE * 2, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+								.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
+								.addComponent(buttonClear, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addGap(Globals.MIN_GAP_SIZE));
 
@@ -158,6 +168,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonClear, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(extraField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
@@ -314,7 +326,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			commit();
 		} else if (e.getSource() == buttonCancel) {
 			cancel();
-		} else if (e.getSource() == buttonAdd) {
+		} else if (e.getSource() == buttonAdd || e.getSource() == buttonClear) {
 			// These buttons will be used only in subclasses
 		} else {
 			Logging.warning(this, "unexpected action on source " + e.getSource());

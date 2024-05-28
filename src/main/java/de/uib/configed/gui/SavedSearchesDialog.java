@@ -71,7 +71,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		setListModel(model);
 		resetModel();
 
-		buttonRemove.setVisible(false);
+		buttonClear.setVisible(false);
 		extraField.setVisible(false);
 	}
 
