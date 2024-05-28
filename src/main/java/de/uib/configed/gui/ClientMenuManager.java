@@ -247,41 +247,43 @@ public final class ClientMenuManager implements MenuListener {
 			boolean includeResetOptionForNetbootProducts, boolean includeResetOptionForBothProducts) {
 		JMenu jMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
 
-		JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
-		jMenuResetProductOnClientWithStates.addActionListener(event -> resetProductOnClientAction(true, true, true));
-
-		JMenuItem jMenuResetProductOnClient = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
-		jMenuResetProductOnClient.addActionListener(event -> resetProductOnClientAction(false, true, true));
-
-		JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
-		jMenuResetLocalbootProductOnClientWithStates
-				.addActionListener(event -> resetProductOnClientAction(true, true, false));
-
-		JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithoutStates"));
-		jMenuResetLocalbootProductOnClient.addActionListener(event -> resetProductOnClientAction(false, true, false));
-
-		JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
-		jMenuResetNetbootProductOnClientWithStates
-				.addActionListener(event -> resetProductOnClientAction(true, false, true));
-
-		JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithoutStates"));
-		jMenuResetNetbootProductOnClient.addActionListener(event -> resetProductOnClientAction(false, false, true));
-
 		if (includeResetOptionForLocalbootProducts) {
+			JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
+			jMenuResetLocalbootProductOnClientWithStates
+					.addActionListener(event -> resetProductOnClientAction(true, true, false));
+
+			JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithoutStates"));
+			jMenuResetLocalbootProductOnClient
+					.addActionListener(event -> resetProductOnClientAction(false, true, false));
+
 			jMenu.add(jMenuResetLocalbootProductOnClientWithStates);
 			jMenu.add(jMenuResetLocalbootProductOnClient);
 		}
 		if (includeResetOptionForNetbootProducts) {
+			JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
+			jMenuResetNetbootProductOnClientWithStates
+					.addActionListener(event -> resetProductOnClientAction(true, false, true));
+
+			JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithoutStates"));
+			jMenuResetNetbootProductOnClient.addActionListener(event -> resetProductOnClientAction(false, false, true));
+
 			jMenu.add(jMenuResetNetbootProductOnClientWithStates);
 			jMenu.add(jMenuResetNetbootProductOnClient);
 		}
 		if (includeResetOptionForBothProducts) {
+			JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
+			jMenuResetProductOnClientWithStates
+					.addActionListener(event -> resetProductOnClientAction(true, true, true));
+
+			JMenuItem jMenuResetProductOnClient = new JMenuItem(
+					Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
+			jMenuResetProductOnClient.addActionListener(event -> resetProductOnClientAction(false, true, true));
+
 			jMenu.add(jMenuResetProductOnClientWithStates);
 			jMenu.add(jMenuResetProductOnClient);
 		}
