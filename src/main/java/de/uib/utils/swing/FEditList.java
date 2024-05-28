@@ -123,7 +123,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	public void setEditable(boolean b) {
 		super.setEditable(b);
 		extraField.setVisible(b);
-		buttonAdd.setVisible(b);
 	}
 
 	private void addSelectedValues(List<O> toSelect) {
@@ -258,7 +257,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() > 1) {
+		if (e.getClickCount() == 2) {
 			String txt = "" + visibleList.getModel().getElementAt(visibleList.locationToIndex(e.getPoint()));
 
 			extraField.setText(txt);

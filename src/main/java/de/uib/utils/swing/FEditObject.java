@@ -29,11 +29,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -63,7 +64,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	protected boolean editable = true;
 
-	protected JTextField extraField;
+	protected FlatTextField extraField;
 	private JLabel extraLabel;
 	protected JTextArea loggingArea;
 
@@ -123,9 +124,9 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		buttonAdd = new JButton(Utils.getIntellijIcon("add"));
 		buttonAdd.setToolTipText(Configed.getResourceValue("FEditObject.AddButtonTooltip"));
 		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
-		buttonAdd.setVisible(false);
 
-		extraField = new JTextField();
+		extraField = new FlatTextField();
+		extraField.setTrailingComponent(buttonAdd);
 		extraField.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraField.setVisible(false);
 
@@ -152,7 +153,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 								.addComponent(buttonCancel, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCommit, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE * 2, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-								.addComponent(buttonAdd, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addComponent(extraLabel, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addGap(Globals.MIN_GAP_SIZE));
@@ -161,12 +161,10 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(editingArea, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout1.createParallelGroup(Alignment.BASELINE)
+				.addGroup(layout1.createParallelGroup(Alignment.CENTER)
 						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonAdd, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(extraField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

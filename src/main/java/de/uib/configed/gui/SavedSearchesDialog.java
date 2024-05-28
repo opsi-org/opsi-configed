@@ -71,15 +71,8 @@ public class SavedSearchesDialog extends FEditStringList {
 		setListModel(model);
 		resetModel();
 
-		buttonAdd.setVisible(true);
 		buttonRemove.setVisible(false);
 		extraField.setVisible(false);
-	}
-
-	public void start() {
-		buttonAdd.setEnabled(true);
-
-		resetModel();
 	}
 
 	@Override
@@ -107,37 +100,32 @@ public class SavedSearchesDialog extends FEditStringList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonRemove.addActionListener((ActionEvent e) -> {
-			Logging.debug(this, "actionPerformed");
-			removeSelectedEntry();
-		});
-
-		buttonRemove.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
-
-		buttonAdd.setEnabled(true);
-		buttonAdd.addActionListener((ActionEvent e) -> {
-			Logging.debug(this, "actionPerformed on buttonAdd ");
-			addElement();
-		});
-
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"),
 				Utils.getIntellijIcon("refresh"));
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "reload action");
 			reloadAction();
 		});
-		popup.add(reload);
 
-		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
+		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveSearch"),
+				Utils.getIntellijIcon("remove"));
 		remove.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "remove action");
 			removeSelectedEntry();
 		});
-		popup.add(remove);
 
-		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
+		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"),
+				Utils.getIntellijIcon("edit"));
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
+
+		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"),
+				Utils.getIntellijIcon("add"));
+		add.addActionListener(event -> addElement());
+
+		popup.add(reload);
+		popup.add(remove);
 		popup.add(edit);
+		popup.add(add);
 	}
 
 	@Override

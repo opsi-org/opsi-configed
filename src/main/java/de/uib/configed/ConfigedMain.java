@@ -3255,7 +3255,7 @@ public class ConfigedMain implements MessagebusListener {
 			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
 			savedSearchesDialog.init();
 		} else {
-			savedSearchesDialog.start();
+			savedSearchesDialog.resetModel();
 		}
 	}
 
