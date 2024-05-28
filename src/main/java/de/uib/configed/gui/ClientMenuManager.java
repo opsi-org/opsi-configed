@@ -219,19 +219,19 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private JMenu initResetProductsMenu() {
-		return addResetProductsMenuItemsTo();
+		return createResetProductsMenuItemsTo();
 	}
 
-	public JMenu addResetProductsMenuItemsTo() {
-		return addResetProductsMenuItemsTo(true, true, true);
+	public JMenu createResetProductsMenuItemsTo() {
+		return createResetProductsMenuItemsTo(true, true, true);
 	}
 
-	public JMenu addResetLocalbootProductsMenuItemsTo() {
-		return addResetProductsMenuItemsTo(true, false, false);
+	public JMenu createResetLocalbootProductsMenuItemsTo() {
+		return createResetProductsMenuItemsTo(true, false, false);
 	}
 
-	public JMenu addResetNetbootProductsMenuItemsTo() {
-		return addResetProductsMenuItemsTo(false, true, false);
+	public JMenu createResetNetbootProductsMenuItemsTo() {
+		return createResetProductsMenuItemsTo(false, true, false);
 	}
 
 	public static JMenuItem createArrangeWindowsMenuItem() {
@@ -243,7 +243,7 @@ public final class ClientMenuManager implements MenuListener {
 		return jMenuShowScheduledWOL;
 	}
 
-	private JMenu addResetProductsMenuItemsTo(boolean includeResetOptionForLocalbootProducts,
+	private JMenu createResetProductsMenuItemsTo(boolean includeResetOptionForLocalbootProducts,
 			boolean includeResetOptionForNetbootProducts, boolean includeResetOptionForBothProducts) {
 		JMenu jMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
 
