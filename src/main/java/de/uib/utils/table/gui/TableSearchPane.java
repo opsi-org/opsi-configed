@@ -362,22 +362,22 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		navPane = new JPanel();
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 
-		JButton nextButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
+		JButton nextButton = new JButton(Utils.getIntellijIcon("playForward"));
 		nextButton.setToolTipText(Configed.getResourceValue("NavigationPanel.nextEntryTooltip"));
 		nextButton.setPreferredSize(navButtonDimension);
 		nextButton.addActionListener(event -> associatedPanel.advanceCursor(+1));
 
-		JButton previousButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-left.png", ""));
+		JButton previousButton = new JButton(Utils.getIntellijIcon("playBack"));
 		previousButton.setToolTipText(Configed.getResourceValue("NavigationPanel.previousEntryTooltip"));
 		previousButton.setPreferredSize(navButtonDimension);
 		previousButton.addActionListener(event -> associatedPanel.advanceCursor(-1));
 
-		JButton firstButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleleft.png", ""));
+		JButton firstButton = new JButton(Utils.getIntellijIcon("playFirst"));
 		firstButton.setToolTipText(Configed.getResourceValue("NavigationPanel.firstEntryTooltip"));
 		firstButton.setPreferredSize(navButtonDimension);
 		firstButton.addActionListener(event -> associatedPanel.setCursorToFirstRow());
 
-		JButton lastButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-doubleright.png", ""));
+		JButton lastButton = new JButton(Utils.getIntellijIcon("playLast"));
 		lastButton.setToolTipText(Configed.getResourceValue("NavigationPanel.lastEntryTooltip"));
 		lastButton.setPreferredSize(navButtonDimension);
 		lastButton.addActionListener(event -> associatedPanel.setCursorToLastRow());
