@@ -357,8 +357,6 @@ public final class ClientMenuManager implements MenuListener {
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
 
 		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
-		jMenuShowColumns.setIcon(Utils.getIntellijIcon("inspectionsEye"));
-
 		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowSystemUUIDColumn);
@@ -516,7 +514,6 @@ public final class ClientMenuManager implements MenuListener {
 		JMenuItem clonedItem;
 		if (sourceItem instanceof JMenu sourceSubMenu) {
 			clonedItem = new JMenu(sourceSubMenu.getText());
-			clonedItem.setIcon(sourceItem.getIcon());
 			JMenu targetSubMenu = (JMenu) clonedItem;
 			for (int i = 0; i < sourceSubMenu.getItemCount(); i++) {
 				JMenuItem sourceSubItem = sourceSubMenu.getItem(i);
@@ -537,7 +534,6 @@ public final class ClientMenuManager implements MenuListener {
 			clonedItem.setAccelerator(sourceItem.getAccelerator());
 			clonedItem.setEnabled(sourceItem.isEnabled());
 		}
-
 		for (ActionListener listener : sourceItem.getActionListeners()) {
 			clonedItem.addActionListener(listener);
 		}
