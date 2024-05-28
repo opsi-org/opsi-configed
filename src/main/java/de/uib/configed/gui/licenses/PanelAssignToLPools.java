@@ -31,7 +31,6 @@ import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicensePool;
 import de.uib.configed.gui.FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PanelStateSwitch;
 import de.uib.utils.table.gui.PanelGenEditTable;
@@ -119,8 +118,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountAssignedInEditing.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		buttonShowAssignedNotExisting = new JButton(
-				Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing"),
-				Utils.createImageIcon("images/edit-table-delete-row-16x16.png", ""));
+				Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing"));
 
 		buttonShowAssignedNotExisting
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
@@ -136,8 +134,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		labelSupplementSimilar.setVisible(true);
 
 		JButton buttonSupplementSimilar = new JButton(
-				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.button"),
-				Utils.createImageIcon("images/edit-table-insert-row-under.png", ""));
+				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.button"));
 
 		buttonSupplementSimilar.setToolTipText(
 				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.tooltip"));
@@ -192,7 +189,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								.addComponent(labelSupplementSimilar, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(buttonSupplementSimilar, Globals.BUTTON_WIDTH / 2,
+								.addComponent(buttonSupplementSimilar, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 								.addComponent(jCheckBoxSimilarEntriesExist, GroupLayout.PREFERRED_SIZE,
@@ -320,8 +317,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 										.addComponent(fieldCountAssignedInEditing, Globals.BUTTON_WIDTH / 3,
 												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
 										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(buttonShowAssignedNotExisting, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+										.addComponent(buttonShowAssignedNotExisting, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
 
 						.addGroup(
