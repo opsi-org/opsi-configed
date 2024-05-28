@@ -19,6 +19,7 @@ import java.util.TreeMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
@@ -122,10 +123,13 @@ public class SavedSearchesDialog extends FEditStringList {
 				Utils.getIntellijIcon("add"));
 		add.addActionListener(event -> addElement());
 
-		popup.add(reload);
-		popup.add(remove);
-		popup.add(edit);
-		popup.add(add);
+		JPopupMenu jPopupMenu = new JPopupMenu();
+		jPopupMenu.add(reload);
+		jPopupMenu.add(remove);
+		jPopupMenu.add(edit);
+		jPopupMenu.add(add);
+
+		visibleList.setComponentPopupMenu(jPopupMenu);
 	}
 
 	@Override

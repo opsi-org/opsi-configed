@@ -17,7 +17,6 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
@@ -40,8 +39,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	private List<O> initiallySelected;
 
 	protected Object selValue = "";
-
-	protected JPopupMenu popup;
 
 	private SensitiveCellEditor celleditor;
 
@@ -67,9 +64,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		scrollpane.setViewportView(visibleList);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 		editable = false;
-
-		popup = new JPopupMenu();
-		visibleList.setComponentPopupMenu(popup);
 	}
 
 	@Override
