@@ -161,23 +161,27 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			if (keylistExtendible) {
 				popupItemAddStringListEntry = new JMenuItem(
-						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
+						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"),
+						Utils.getIntellijIcon("add"));
 				popupEditOptions.add(popupItemAddStringListEntry);
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
 
 				popupItemAddStringListEntry = new JMenuItem(
-						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
+						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"),
+						Utils.getIntellijIcon("add"));
 				popupEditOptions.add(popupItemAddStringListEntry);
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
 
 				popupItemAddBooleanListEntry = new JMenuItem(
-						Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
+						Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"),
+						Utils.getIntellijIcon("add"));
 				popupEditOptions.add(popupItemAddBooleanListEntry);
 				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean"));
 			}
 
 			if (entryRemovable) {
-				popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
+				popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText(),
+						Utils.getIntellijIcon("remove"));
 				popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
 
 				popupEditOptions.add(popupItemDeleteEntry0);
