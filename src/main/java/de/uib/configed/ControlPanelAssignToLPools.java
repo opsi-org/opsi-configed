@@ -629,8 +629,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		col = thePanel.getPanelRegisteredSoftware().getColumnModel().getColumn(COLUMN_MARK_CURSOR_ROW);
 		col.setMaxWidth(12);
-		col.setCellRenderer(new BooleanIconTableCellRenderer(Utils.createImageIcon("images/minibarpointerred.png", ""),
-				Utils.createImageIcon("images/minibarpointervoid.png", "")));
+		col.setCellRenderer(new BooleanIconTableCellRenderer(Utils.getIntellijIcon("localChanges"), null));
 
 		col = thePanel.getPanelRegisteredSoftware().getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);
 		col.setMaxWidth(MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE);
