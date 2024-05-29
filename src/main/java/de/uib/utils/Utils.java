@@ -99,17 +99,6 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	public static ImageIcon getFunnelIcon() {
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + "funnelRegular" + ".svg");
-		ColorFilter filter = new ColorFilter();
-
-		filter.add(new Color(108, 112, 126),
-				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
-
-		icon.setColorFilter(filter);
-		return icon;
-	}
-
 	public static ImageIcon getThemeIcon() {
 		String iconName;
 		if (FlatLaf.isLafDark()) {
