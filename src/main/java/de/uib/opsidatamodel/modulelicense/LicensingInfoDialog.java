@@ -268,10 +268,8 @@ public class LicensingInfoDialog extends FGeneralDialog {
 												.addComponent(allClientNum).addComponent(macosNum)
 												.addComponent(linuxNum).addComponent(windowsNum)))
 								.addComponent(checksumTitle).addComponent(checksum))
-						.addGap(60)
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(customerTitle)
-								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										.addComponent(customerNames)))));
+						.addGap(60).addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(customerTitle).addComponent(customerNames))));
 
 		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -298,13 +296,8 @@ public class LicensingInfoDialog extends FGeneralDialog {
 										.addComponent(linux).addComponent(windows))
 								.addGroup(gLayout.createSequentialGroup().addComponent(allClientNum)
 										.addComponent(macosNum).addComponent(linuxNum).addComponent(windowsNum)))
-						.addGap(30)
-						.addGroup(
-								gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(checksumTitle))
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(gLayout.createSequentialGroup().addComponent(checksum)).addGap(20)))
-						.addGap(30).addGroup(gLayout.createSequentialGroup()
-								.addGroup(gLayout.createSequentialGroup().addComponent(customerNames)))));
+						.addGap(30).addComponent(checksumTitle).addComponent(checksum)).addGap(30)
+						.addComponent(customerNames)));
 
 		return panel;
 	}
