@@ -149,17 +149,9 @@ public class LicensingInfoDialog extends FGeneralDialog {
 			}
 		};
 
-		thePanel.setMarkBoldHeaderCellRenderer();
-
 		tableSource = new MapSource(columnNames, theSourceMap, false);
 
 		buildModel();
-
-		thePanel.setSize(500, 200);
-
-		thePanel.setUpdateController(null);
-
-		thePanel.getTheTable().setRowSorter(null);
 
 		thePanel.getColumnModel().getColumn(0).setPreferredWidth(150);
 		thePanel.getColumnModel().getColumn(1).setPreferredWidth(60);
