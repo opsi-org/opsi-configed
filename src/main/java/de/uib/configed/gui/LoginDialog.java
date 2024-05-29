@@ -157,8 +157,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void initGuiElements() {
-		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("LoginDialog.title"));
-
+		setTitle(Configed.getResourceValue("LoginDialog.title"));
 		setIconImage(Utils.getMainIcon());
 
 		// Opsilogo
