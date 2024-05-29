@@ -137,6 +137,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void init() {
 		initComponents();
+		initPopup();
 		setupLayout();
 
 		setSearchFieldsAll();
@@ -158,8 +159,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		this.masterFrame = masterFrame;
 	}
 
-	public void setWithNavPane(boolean b) {
-		navPane.setVisible(b);
+	public void showNavPane() {
+		initNavigationPanel();
+		navPane.setVisible(true);
 	}
 
 	public void setFiltering(boolean filtering) {
@@ -242,7 +244,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initComponents() {
-		initNavigationPanel();
+		navPane = new JPanel();
 		navPane.setVisible(false);
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
@@ -256,45 +258,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.getDocument().addDocumentListener(this);
 
 		flatTextFieldSearch.addKeyListener(this);
-
-		popupSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.search"));
-		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
-
-		popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
-		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
-
-		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
-		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
-			setFiltered(false);
-			searchTheRow(0, selectMode);
-		});
-
-		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
-		popupMarkHits.addActionListener((ActionEvent actionEvent) -> markAll());
-
-		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
-		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
-			switchFilterOff();
-			markAllAndFilter();
-			switchFilterOn();
-		});
-
-		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
-		popupEmptySearchfield.addActionListener(actionEvent -> flatTextFieldSearch.setText(""));
-
-		popupMarkHits.setVisible(false);
-		popupMarkAndFilter.setVisible(false);
-
-		Logging.info(this, "buildMenuSearchfield");
-		JPopupMenu searchMenu = new JPopupMenu();
-		searchMenu.add(popupSearch);
-		searchMenu.add(popupSearchNext);
-		searchMenu.add(popupNewSearch);
-		searchMenu.add(popupMarkHits);
-		searchMenu.add(popupMarkAndFilter);
-		searchMenu.add(popupEmptySearchfield);
-
-		flatTextFieldSearch.setComponentPopupMenu(searchMenu);
 
 		flatTextFieldSearch.addActionListener((ActionEvent actionEvent) -> searchNextRow(selectMode));
 
@@ -357,8 +320,48 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		buttonShowHideExtraOptions.addActionListener(event -> showExtraOptions());
 	}
 
+	private void initPopup() {
+		popupSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.search"));
+		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
+
+		popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
+		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
+
+		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
+		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
+			setFiltered(false);
+			searchTheRow(0, selectMode);
+		});
+
+		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
+		popupMarkHits.addActionListener((ActionEvent actionEvent) -> markAll());
+
+		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
+		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
+			switchFilterOff();
+			markAllAndFilter();
+			switchFilterOn();
+		});
+
+		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
+		popupEmptySearchfield.addActionListener(actionEvent -> flatTextFieldSearch.setText(""));
+
+		popupMarkHits.setVisible(false);
+		popupMarkAndFilter.setVisible(false);
+
+		Logging.info(this, "buildMenuSearchfield");
+		JPopupMenu searchMenu = new JPopupMenu();
+		searchMenu.add(popupSearch);
+		searchMenu.add(popupSearchNext);
+		searchMenu.add(popupNewSearch);
+		searchMenu.add(popupMarkHits);
+		searchMenu.add(popupMarkAndFilter);
+		searchMenu.add(popupEmptySearchfield);
+
+		flatTextFieldSearch.setComponentPopupMenu(searchMenu);
+	}
+
 	private void initNavigationPanel() {
-		navPane = new JPanel();
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 
 		JButton nextButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
