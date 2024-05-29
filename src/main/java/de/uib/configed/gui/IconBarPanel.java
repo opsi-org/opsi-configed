@@ -385,8 +385,8 @@ public class IconBarPanel extends JPanel {
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
-		jButtonToggleClientFilter = new JButton(Utils.createImageIcon("images/view-filter_disabled-32.png", ""));
-		jButtonToggleClientFilter.setSelectedIcon(Utils.createImageIcon("images/view-filter-32.png", ""));
+		jButtonToggleClientFilter = new JButton(Utils.getIntellijIcon("funnelRegular"));
+		jButtonToggleClientFilter.setSelectedIcon(Utils.getSelectedIntellijIcon("funnelRegular"));
 		jButtonToggleClientFilter.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"));
 		jButtonToggleClientFilter.setFocusable(false);
 		jButtonToggleClientFilter.addActionListener((ActionEvent e) -> mainFrame.toggleClientFilterAction());

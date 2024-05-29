@@ -69,7 +69,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JCheckBox filtermark;
 
 	private JButton buttonShowHideExtraOptions;
-	private JLabel labelFilterMarkGap;
 
 	private JPanel navPane;
 	private PanelGenEditTable associatedPanel;
@@ -172,7 +171,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void showFilterIcon(boolean b) {
 		filtermark.setVisible(b);
-		labelFilterMarkGap.setVisible(b);
 	}
 
 	public void setSelectMode(boolean selectMode) {
@@ -299,13 +297,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		filtermark = new JCheckBox();
-		filtermark.setIcon(Utils.getIntellijIcon("funnelRegular"));
+		filtermark = new JCheckBox(Utils.getIntellijIcon("funnelRegular"));
 		filtermark.setSelectedIcon(Utils.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addActionListener(event -> filtermarkEvent());
 
-		labelFilterMarkGap = new JLabel();
+		flatTextFieldSearch.setTrailingComponent(filtermark);
 
 		showFilterIcon(filtering);
 
@@ -424,45 +421,34 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
 		setLayout(layoutTablesearchPane);
 
-		layoutTablesearchPane
-				.setHorizontalGroup(
-						layoutTablesearchPane
-								.createParallelGroup(
-										GroupLayout.Alignment.LEADING)
-								.addGroup(
-										layoutTablesearchPane.createSequentialGroup()
-												.addComponent(navPane, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.MIN_GAP_SIZE)
-												.addComponent(flatTextFieldSearch, 0, GroupLayout.PREFERRED_SIZE,
-														Short.MAX_VALUE)
-												.addGap(Globals.MIN_GAP_SIZE)
-												.addComponent(filtermark, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE,
-														Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-												.addComponent(buttonShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE))
-								.addGroup(layoutTablesearchPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchFieldsMode, 0,
-												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-								.addGap(Globals.GAP_SIZE));
+		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane
+				.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTablesearchPane.createSequentialGroup()
+						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(flatTextFieldSearch, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(buttonShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE))
+				.addGroup(layoutTablesearchPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(comboSearchFieldsMode, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGap(Globals.GAP_SIZE));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
 				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelFilterMarkGap, 10, 10, 10)
 						.addComponent(buttonShowHideExtraOptions, 10, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -483,9 +469,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(flatTextFieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(filtermark, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addComponent(buttonShowHideExtraOptions, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 						Globals.MIN_GAP_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -505,8 +488,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelFilterMarkGap, 10, 10, 10)
 				.addComponent(buttonShowHideExtraOptions, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)

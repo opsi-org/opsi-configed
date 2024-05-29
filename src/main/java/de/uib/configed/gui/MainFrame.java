@@ -650,12 +650,6 @@ public class MainFrame extends JFrame {
 		configedMain.startControlDialog();
 	}
 
-	public void setClientFilterAction(boolean b) {
-		if (configedMain.isFilterClientList() != b) {
-			toggleClientFilterAction();
-		}
-	}
-
 	public void toggleClientFilterAction() {
 		toggleClientFilterAction(true);
 	}
