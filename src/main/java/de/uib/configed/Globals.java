@@ -143,7 +143,6 @@ public final class Globals {
 	public static final Dimension SMALL_BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
 	public static final Dimension SHORT_BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH / 4, BUTTON_HEIGHT);
 	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
-	public static final Dimension LABEL_DIMENSION = new Dimension(LABEL_WIDTH, LINE_HEIGHT);
 	public static final Dimension SHORT_LABEL_DIMENSION = new Dimension(60, LINE_HEIGHT);
 	public static final int COUNTERFIELD_WIDTH = 160;
 	public static final Dimension COUTNER_FIELD_DIMENSION = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
