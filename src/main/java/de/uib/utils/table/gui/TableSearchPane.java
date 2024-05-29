@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -300,12 +299,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		Icon unselectedIconFilter = Utils.getThemeIconPNG("bootstrap/funnel", "");
-		Icon selectedIconFilter = Utils.getThemeIconPNG("bootstrap/funnel_fill", "");
-
 		filtermark = new JCheckBox();
-		filtermark.setIcon(unselectedIconFilter);
-		filtermark.setSelectedIcon(selectedIconFilter);
+		filtermark.setIcon(Utils.getIntellijIcon("funnelRegular"));
+		filtermark.setSelectedIcon(Utils.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addActionListener(event -> filtermarkEvent());
 

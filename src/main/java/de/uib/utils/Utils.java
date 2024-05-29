@@ -99,6 +99,17 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
+	public static ImageIcon getFunnelIcon() {
+		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + "funnelRegular" + ".svg");
+		ColorFilter filter = new ColorFilter();
+
+		filter.add(new Color(108, 112, 126),
+				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+
+		icon.setColorFilter(filter);
+		return icon;
+	}
+
 	public static ImageIcon getThemeIcon() {
 		String iconName;
 		if (FlatLaf.isLafDark()) {
@@ -110,17 +121,26 @@ public final class Utils {
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg");
 	}
 
-	public static ImageIcon getIntellijIcon(String iconName) {
+	private static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
 
 		ColorFilter filter = new ColorFilter();
 
-		filter.add(new Color(108, 112, 126),
-				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+		filter.add(new Color(108, 112, 126), color);
 		FlatSVGIcon icon = new FlatSVGIcon(path);
 		icon.setColorFilter(filter);
 
 		return icon;
+
+	}
+
+	public static ImageIcon getSelectedIntellijIcon(String iconName) {
+		return getIntellijIcon(iconName, Globals.ACTION_COLOR);
+	}
+
+	public static ImageIcon getIntellijIcon(String iconName) {
+		return getIntellijIcon(iconName,
+				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
 	}
 
 	public static ImageIcon getThemeIconPNG(String pathName, String description) {
