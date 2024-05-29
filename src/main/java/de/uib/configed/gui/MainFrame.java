@@ -70,7 +70,7 @@ import de.uib.utils.userprefs.ThemeManager;
 import de.uib.utils.userprefs.UserPreferences;
 
 public class MainFrame extends JFrame {
-	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
+	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
 
 	public static final int F_WIDTH = 800;
 
@@ -611,8 +611,7 @@ public class MainFrame extends JFrame {
 
 		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
-		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"),
-				scrollpaneTreeClients);
+		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ClientTree"), scrollpaneTreeClients);
 		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ProductTree"),
 				scrollpaneTreeProducts);
 
@@ -681,7 +680,7 @@ public class MainFrame extends JFrame {
 		FSelectionList fProductSelectionList = new FSelectionList(this,
 				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
 						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
-				F_WIDTH / 2, 600);
+				400, 600);
 		fProductSelectionList.setListData(new ArrayList<>(
 				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		fProductSelectionList.setVisible(true);
