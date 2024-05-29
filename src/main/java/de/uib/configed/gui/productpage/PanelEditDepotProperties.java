@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -98,9 +97,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JButton buttonSetValuesFromPackage = new JButton(Utils.getIntellijIcon("remove"));
 		buttonSetValuesFromPackage
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"));
-
-		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
-
 		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
 
 		JPanel panelTop = new JPanel();

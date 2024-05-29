@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.GroupLayout;
@@ -37,17 +36,13 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 
 		buttonSetValuesFromServerDefaults = new JButton(Utils.getIntellijIcon("locked"));
-
-		buttonSetValuesFromServerDefaults.setPreferredSize(new Dimension(15, 30));
-
+		buttonSetValuesFromServerDefaults
+				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"));
 		buttonSetValuesFromServerDefaults.addActionListener((ActionEvent e) -> productPropertiesPanel.resetDefaults());
 
 		buttonRemoveSpecificValues = new JButton(Utils.getIntellijIcon("remove"));
 		buttonRemoveSpecificValues
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"));
-
-		buttonRemoveSpecificValues.setPreferredSize(new Dimension(15, 30));
-
 		buttonRemoveSpecificValues.addActionListener((ActionEvent e) -> productPropertiesPanel.setVoid());
 
 		GroupLayout layoutEditProperties = new GroupLayout(this);
