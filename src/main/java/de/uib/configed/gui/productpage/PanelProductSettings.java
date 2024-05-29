@@ -185,7 +185,7 @@ public class PanelProductSettings extends JSplitPane {
 	private JPopupMenu producePopupMenu() {
 		JPopupMenu popup = new JPopupMenu();
 
-		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
+		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getIntellijIcon("save"));
 		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 

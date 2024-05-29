@@ -74,7 +74,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		case POPUP_SAVE:
 			i = listPopups.indexOf(POPUP_SAVE);
 
-			menuItems[i] = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("save"), Utils.getIntellijIcon("save"));
 
 			addItem(p);
 			break;

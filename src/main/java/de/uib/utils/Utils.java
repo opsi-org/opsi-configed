@@ -99,10 +99,6 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	public static ImageIcon getSaveIcon() {
-		return getIntellijIcon("save");
-	}
-
 	public static ImageIcon getThemeIcon() {
 		String iconName;
 		if (FlatLaf.isLafDark()) {
