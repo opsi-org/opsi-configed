@@ -70,8 +70,6 @@ public final class ClientMenuManager implements MenuListener {
 	private JMenuItem jMenuFreeLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
 	private JMenuItem jMenuDeletePackageCaches = new JMenuItem(
 			Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
-	private JCheckBoxMenuItem jMenuClientSelectionToggleFilter = new JCheckBoxMenuItem(
-			Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
@@ -104,10 +102,6 @@ public final class ClientMenuManager implements MenuListener {
 		return instance;
 	}
 
-	public JCheckBoxMenuItem getClientSelectionToggleFilterMenu() {
-		return jMenuClientSelectionToggleFilter;
-	}
-
 	public JMenu getJMenu() {
 		return jMenuClients;
 	}
@@ -129,8 +123,6 @@ public final class ClientMenuManager implements MenuListener {
 		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
 				Utils.getIntellijIcon("refresh"));
 		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
-		jMenuClientSelectionToggleFilter.setState(false);
-		jMenuClientSelectionToggleFilter.addActionListener(event -> mainFrame.toggleClientFilterAction());
 
 		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
 				Utils.createImageIcon("images/acrobat_reader16.png", ""));
@@ -200,8 +192,6 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(jMenuSelectionGetSavedSearch);
 
 		jMenuClients.addSeparator();
-
-		jMenuClients.add(jMenuClientSelectionToggleFilter);
 
 		jMenuClients.add(jMenuRebuildClientList);
 		jMenuClients.add(jMenuCreatePdf);
