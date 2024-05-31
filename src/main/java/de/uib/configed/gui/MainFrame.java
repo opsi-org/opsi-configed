@@ -658,7 +658,6 @@ public class MainFrame extends JFrame {
 		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
 		iconBarPanel.getjButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
-		clientTable.setFilterMark(configedMain.isFilterClientList());
 	}
 
 	private void groupByNotCurrentProductVersion() {

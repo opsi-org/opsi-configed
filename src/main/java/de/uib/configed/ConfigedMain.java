@@ -258,8 +258,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
 
-	private boolean filterClientList;
-
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER
 	}
@@ -1239,9 +1237,9 @@ public class ConfigedMain implements MessagebusListener {
 
 		clientsForTableModel.retainAll(clientsFilteredByTree);
 
-		Logging.info(this, " filterClientList " + filterClientList);
+		Logging.info(this, " filterClientList " + isFilterClientList());
 
-		if (filterClientList) {
+		if (isFilterClientList()) {
 			Logging.info(this,
 					"buildPclistTableModel with filterCLientList, number of selected pcs " + selectedClients.size());
 
@@ -1446,14 +1444,13 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public boolean isFilterClientList() {
-		return filterClientList;
+		return clientTable.isFilteredMode();
 	}
 
 	public void toggleFilterClientList(boolean rebuildClientListTableModel, boolean filterClientList) {
 		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
 				+ rebuildClientListTableModel);
 
-		this.filterClientList = filterClientList;
 		if (rebuildClientListTableModel) {
 			setRebuiltClientListTableModel(true, false, clientTable.getSelectedSet());
 		}
@@ -1786,7 +1783,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "activateClientByTree, pathToNode: " + pathToNode);
 
 		// since we select based on the tree view we disable the filter
-		if (filterClientList) {
+		if (isFilterClientList()) {
 			mainFrame.toggleClientFilterAction(false);
 		}
 	}
@@ -1830,7 +1827,7 @@ public class ConfigedMain implements MessagebusListener {
 		activatedGroupModel.setActive(true);
 
 		// since we select based on the tree view we disable the filter
-		if (filterClientList) {
+		if (isFilterClientList()) {
 			mainFrame.toggleClientFilterAction();
 		}
 	}

@@ -26,8 +26,6 @@ public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable
 
 	@Override
 	public void setFiltered(boolean b) {
-		ConfigedMain.getMainFrame().toggleClientFilterAction();;
-
-		filtered = b;
+		ConfigedMain.getMainFrame().toggleClientFilterAction();
 	}
 }

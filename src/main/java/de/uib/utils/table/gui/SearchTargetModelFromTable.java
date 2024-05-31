@@ -25,8 +25,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	protected int[] selectedRows = new int[0];
 
-	protected boolean filtered;
-
 	public SearchTargetModelFromTable() {
 		this((JTable) null);
 	}
@@ -176,7 +174,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	}
 
 	@Override
-	public void setFiltered(boolean b) {
+	public void setFiltered(boolean filtered) {
 		boolean wasChanged = false;
 
 		if (thePanel != null) {
@@ -185,11 +183,11 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		GenTableModel model = (GenTableModel) table.getModel();
 
-		if (!filtered) {
+		if (filtered) {
 			selectedRows = table.getSelectedRows();
 		}
 
-		if (b && selectedRows.length > 0) {
+		if (filtered && selectedRows.length > 0) {
 			int[] modelRowFilter = new int[selectedRows.length];
 			for (int i = 0; i < selectedRows.length; i++) {
 				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
@@ -210,7 +208,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			// restore the original selection
 			setSelection(selectedRows);
 		}
-		filtered = b;
 
 		returnToNotChanged(wasChanged);
 	}

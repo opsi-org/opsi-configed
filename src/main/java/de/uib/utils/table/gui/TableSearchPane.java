@@ -88,8 +88,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private final Comparator<Object> comparator;
 
-	private boolean filteredMode;
-
 	private boolean isExtraOptionsHidden = true;
 
 	/**
@@ -184,14 +182,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean disabledSinceWeAreInFilteredMode() {
-		if (filteredMode) {
+		if (filtermark.isSelected()) {
 			Logging.info(this, "disabledSinceWeAreInFilteredMode masterFrame " + masterFrame);
 			JOptionPane.showConfirmDialog(masterFrame, Configed.getResourceValue("SearchPane.filterIsSet.message"),
 					Configed.getResourceValue("SearchPane.filterIsSet.title"), JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 
-		return filteredMode;
+		return filtermark.isSelected();
 	}
 
 	/**
@@ -210,18 +208,16 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * express filter status in graphical components
 	 */
 	public void setFilteredMode(boolean filteredMode) {
-		this.filteredMode = filteredMode;
 		popupSearch.setEnabled(!filteredMode);
 		popupSearchNext.setEnabled(!filteredMode);
 
 		popupMarkHits.setEnabled(!filteredMode);
 		popupMarkAndFilter.setEnabled(!filteredMode);
 		popupEmptySearchfield.setEnabled(!filteredMode);
-		setFilterMark(filteredMode);
 	}
 
 	public boolean isFilteredMode() {
-		return filteredMode;
+		return filtermark.isSelected();
 	}
 
 	public void setNarrow(boolean narrow) {
@@ -867,21 +863,23 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	// ----------------------------------
 
 	private void switchFilterOff() {
-		if (filteredMode) {
+		if (filtermark.isSelected()) {
 			setFiltered(false);
 		}
 	}
 
 	private void switchFilterOn() {
-		if (!filteredMode) {
+		if (!filtermark.isSelected()) {
 			setFiltered(true);
 		}
 	}
 
 	private void filtermarkEvent() {
-		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + filteredMode);
+		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + filtermark.isSelected());
 
-		if (filteredMode) {
+		if (filtermark.isSelected()) {
+			setFiltered(true);
+		} else {
 			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
 
 			setFiltered(false);
@@ -889,8 +887,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			if (unfilteredSelection.length != 0) {
 				targetModel.setSelection(unfilteredSelection);
 			}
-		} else {
-			switchFilterOn();
 		}
 	}
 

@@ -142,6 +142,10 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		searchPane.setFilterMark(b);
 	}
 
+	public boolean isFilteredMode() {
+		return searchPane.isFilteredMode();
+	}
+
 	public JTable getTable() {
 		return table;
 	}

@@ -187,14 +187,10 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	}
 
 	@Override
-	public void setFiltered(boolean b) {
-		Logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
+	public void setFiltered(boolean filtered) {
+		Logging.info(this, "setFiltered " + filtered);
 
-		if (b == filtered) {
-			return;
-		}
-
-		if (b) {
+		if (filtered) {
 			unfilteredSelection = jList.getSelectedIndices();
 			theValues = new ArrayList<>();
 			theDescriptions = new ArrayList<>();
@@ -202,11 +198,9 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 				theValues.add(unfilteredV.get(i));
 				theDescriptions.add(unfilteredD.get(i));
 			}
-			filtered = true;
 		} else {
 			theValues = unfilteredV;
 			theDescriptions = unfilteredD;
-			filtered = false;
 		}
 
 		tableModel = setupTableModel(theValues, theDescriptions);
