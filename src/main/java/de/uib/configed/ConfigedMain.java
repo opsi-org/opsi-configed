@@ -1447,9 +1447,8 @@ public class ConfigedMain implements MessagebusListener {
 		return clientTable.isFilteredMode();
 	}
 
-	public void toggleFilterClientList(boolean rebuildClientListTableModel, boolean filterClientList) {
-		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
-				+ rebuildClientListTableModel);
+	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
+		Logging.info(this, "toggleFilterClientList, rebuild client list table model " + rebuildClientListTableModel);
 
 		if (rebuildClientListTableModel) {
 			setRebuiltClientListTableModel(true, false, clientTable.getSelectedSet());

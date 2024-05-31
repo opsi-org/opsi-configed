@@ -138,10 +138,6 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		selectionModel.removeListSelectionListener(this);
 	}
 
-	public void setFilterMark(boolean b) {
-		searchPane.setFilterMark(b);
-	}
-
 	public boolean isFilteredMode() {
 		return searchPane.isFilteredMode();
 	}
