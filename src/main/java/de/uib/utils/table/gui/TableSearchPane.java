@@ -296,7 +296,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		filtermark = new JCheckBox(Utils.getIntellijIcon("funnelRegular"));
 		filtermark.setSelectedIcon(Utils.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filtermark.addActionListener(event -> filtermarkEvent());
+		filtermark.addItemListener(event -> filtermarkEvent());
 
 		flatTextFieldSearch.setTrailingComponent(filtermark);
 
@@ -327,9 +327,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
 		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
-			switchFilterOff();
+			filtermark.setSelected(false);
 			markAllAndFilter();
-			switchFilterOn();
+			filtermark.setSelected(true);
 		});
 
 		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
@@ -862,18 +862,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	// ----------------------------------
 
-	private void switchFilterOff() {
-		if (filtermark.isSelected()) {
-			setFiltered(false);
-		}
-	}
-
-	private void switchFilterOn() {
-		if (!filtermark.isSelected()) {
-			setFiltered(true);
-		}
-	}
-
 	private void filtermarkEvent() {
 		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + filtermark.isSelected());
 
@@ -904,7 +892,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			switchFilterOff();
+			filtermark.setSelected(false);
 
 			setRow(0, false, selectMode);
 			// go back to start when editing is restarted
@@ -913,7 +901,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void documentChanged(DocumentEvent e) {
 		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			switchFilterOff();
+			filtermark.setSelected(false);
 			searchTheRow(selectMode);
 		}
 	}
@@ -924,9 +912,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			markAll();
 		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
-			switchFilterOff();
+			filtermark.setSelected(false);
 			markAllAndFilter();
-			switchFilterOn();
+			filtermark.setSelected(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 			if (allowSearchAction()) {
 				searchNextRow(selectMode);
