@@ -168,6 +168,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		this.filtering = filtering;
 	}
 
+	public boolean isFiltering() {
+		return filtering;
+	}
+
 	public void showFilterIcon(boolean b) {
 		filtermark.setVisible(b);
 	}

@@ -137,8 +137,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	protected TableSearchPane searchPane;
 
-	private boolean filteringActive;
-
 	private String title = "";
 
 	private int generalPopupPosition;
@@ -778,12 +776,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		searchPane.showFilterIcon(b);
 	}
 
-	private void setFilteringActive(boolean b) {
-		filteringActive = b;
-	}
-
 	private void setModelFilteringBySelection() {
-		if (filteringActive && tableModel != null
+		if (searchPane.isFiltering() && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
 			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
@@ -798,10 +792,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	 * @parameter boolean
 	 */
 	public void setFiltering(boolean filtering) {
-		if (filtering) {
-			setFilteringActive(filtering);
-			// lazy activation
-		}
 		searchPane.setFiltering(filtering);
 	}
 
