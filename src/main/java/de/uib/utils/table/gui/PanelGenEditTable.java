@@ -770,8 +770,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	 *
 	 * @parameter boolean
 	 */
-	public void setFiltering(boolean filtering) {
-		searchPane.setFiltering(filtering);
+	public void setFiltering() {
+		searchPane.setFiltering();
 	}
 
 	/**

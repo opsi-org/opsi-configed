@@ -897,9 +897,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		if (oldDirection != direction) {
 			if (direction == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
-				thePanel.getPanelRegisteredSoftware().getTheSearchpane().showFilterIcon(true);
+				thePanel.getPanelRegisteredSoftware().getTheSearchpane().setFiltering();
 			} else if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
-				thePanel.getPanelRegisteredSoftware().getTheSearchpane().showFilterIcon(false);
 				resetCounters(null);
 				thePanel.getFieldCountAssignedInEditing().setText("");
 			} else {

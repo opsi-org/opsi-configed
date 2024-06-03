@@ -105,7 +105,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 
 		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(table), true);
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_WITH_ALTERNATIVES_SEARCH);
-		searchPane.setFiltering(true);
+		searchPane.setFiltering();
 
 		table.addKeyListener(searchPane);
 		table.addKeyListener(this);

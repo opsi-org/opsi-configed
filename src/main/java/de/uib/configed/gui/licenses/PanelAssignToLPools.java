@@ -395,7 +395,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				true);
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
-		panelRegisteredSoftware.setFiltering(true);
+		panelRegisteredSoftware.setFiltering();
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);

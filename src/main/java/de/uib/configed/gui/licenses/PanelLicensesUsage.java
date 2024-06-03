@@ -106,7 +106,7 @@ public class PanelLicensesUsage extends MultiTablePanel {
 
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panelUsage.setFiltering(true);
+		panelUsage.setFiltering();
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 

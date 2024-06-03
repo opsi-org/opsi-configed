@@ -56,8 +56,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private FlatTextField flatTextFieldSearch;
 
-	private boolean filtering;
-
 	private JComboBox<String> comboSearchFields;
 	private JComboBox<String> comboSearchFieldsMode;
 
@@ -121,7 +119,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		associatedPanel = thePanel;
 		this.targetModel = targetModel;
 		this.withRegEx = withRegEx;
-		filtering = true;
 
 		comparator = getCollator();
 
@@ -148,19 +145,15 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		navPane.setVisible(true);
 	}
 
-	public void setFiltering(boolean filtering) {
+	public void setFiltering() {
 		popupMarkHits.setVisible(true);
 		popupMarkAndFilter.setVisible(true);
 
-		this.filtering = filtering;
+		filtermark.setVisible(true);
 	}
 
 	public boolean isFiltering() {
-		return filtering;
-	}
-
-	public void showFilterIcon(boolean b) {
-		filtermark.setVisible(b);
+		return filtermark.isVisible();
 	}
 
 	public void setSelectMode(boolean selectMode) {
@@ -277,6 +270,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		filtermark.setSelectedIcon(Utils.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addItemListener(event -> filtermarkEvent());
+		filtermark.setVisible(false);
 
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(filtermark);
@@ -471,7 +465,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean allowSearchAction() {
-		return filtering && !filtermark.isSelected() && !flatTextFieldSearch.getText().isEmpty();
+		return isFiltering() && !filtermark.isSelected() && !flatTextFieldSearch.getText().isEmpty();
 	}
 
 	private void retainOnlyAllFieldsItem() {
@@ -714,10 +708,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * select all rows with value from searchfield
 	 */
 	private void markAll() {
-		if (!allowSearchAction()) {
-			return;
-		}
-
 		Logging.info(this, "markAll");
 		targetModel.setValueIsAdjusting(true);
 		targetModel.clearSelection();
@@ -738,7 +728,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * select all rows with value form searchfield, checks the filter
 	 */
 	private void markAllAndFilter() {
-		Logging.info(this, " markAllAndFilter filtering, disabledSinceWeAreInFilteredModel " + filtering);
+		Logging.info(this, " markAllAndFilter filtering active" + isFiltering());
 
 		filtermark.setSelected(false);
 		markAll();
