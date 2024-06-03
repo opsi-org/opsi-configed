@@ -26,13 +26,14 @@ import java.util.regex.Pattern;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -62,7 +63,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JLabel labelSearch;
 	private JLabel labelSearchMode;
-	private JCheckBox filtermark;
+	private JToggleButton filtermark;
 
 	private JButton buttonShowHideExtraOptions;
 
@@ -272,12 +273,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		filtermark = new JCheckBox(Utils.getIntellijIcon("funnelRegular"));
+		filtermark = new JToggleButton(Utils.getIntellijIcon("funnelRegular"));
 		filtermark.setSelectedIcon(Utils.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addItemListener(event -> filtermarkEvent());
 
-		flatTextFieldSearch.setTrailingComponent(filtermark);
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(filtermark);
+		flatTextFieldSearch.setTrailingComponent(jToolBar);
 
 		buttonShowHideExtraOptions = new JButton(Utils.getThemeIconPNG("bootstrap/caret_left_fill", ""));
 		buttonShowHideExtraOptions
