@@ -777,9 +777,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private void setRow(int row, boolean addSelection, boolean select) {
 		if (select) {
 			if (addSelection) {
-				addSelectedRow(row);
+				targetModel.addSelectedRow(row);
 			} else {
-				setSelectedRow(row);
+				targetModel.setSelectedRow(row);
 			}
 		} else {
 			// make only visible
@@ -818,14 +818,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		flatTextFieldSearch.getCaret().setVisible(true);
-	}
-
-	private void addSelectedRow(int row) {
-		targetModel.addSelectedRow(row);
-	}
-
-	private void setSelectedRow(int row) {
-		targetModel.setSelectedRow(row);
 	}
 
 	// ----------------------------------
