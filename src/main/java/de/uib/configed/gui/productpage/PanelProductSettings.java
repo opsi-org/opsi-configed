@@ -472,8 +472,6 @@ public class PanelProductSettings extends JSplitPane {
 
 		Logging.info(this, "reduceToSet  " + filter);
 
-		groupPanel.setFilteredMode(filter != null && !filter.isEmpty());
-
 		tableProducts.revalidate();
 	}
 
@@ -485,7 +483,6 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void setFilter(Set<String> filter) {
-		groupPanel.setFilteredMode(false);
 		if (tableProducts.getModel() instanceof InstallationStateTableModel installationStateTableModel) {
 			installationStateTableModel.setFilterFrom(filter);
 		}

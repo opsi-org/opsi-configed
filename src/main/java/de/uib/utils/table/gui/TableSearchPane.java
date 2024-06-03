@@ -175,17 +175,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void setFiltered(boolean filtered) {
 		targetModel.setFiltered(filtered);
-		setFilteredMode(filtered);
-	}
 
-	/**
-	 * express filter status in graphical components
-	 */
-	public void setFilteredMode(boolean filteredMode) {
-		popupSearch.setEnabled(!filteredMode);
-		popupMarkHits.setEnabled(!filteredMode);
-		popupMarkAndFilter.setEnabled(!filteredMode);
-		popupEmptySearchfield.setEnabled(!filteredMode);
+		popupSearch.setEnabled(!filtered);
+		popupMarkHits.setEnabled(!filtered);
+		popupMarkAndFilter.setEnabled(!filtered);
+		popupEmptySearchfield.setEnabled(!filtered);
 	}
 
 	public boolean isFilteredMode() {

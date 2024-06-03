@@ -59,11 +59,6 @@ public class ProductActionPanel extends JPanel {
 		searchPane.setSearchFieldsAll();
 	}
 
-	public void setFilteredMode(boolean b) {
-		Logging.debug(this, "setGuiIsFiltered " + b);
-		searchPane.setFilteredMode(b);
-	}
-
 	public boolean isFilteredMode() {
 		return searchPane.isFilteredMode();
 	}
