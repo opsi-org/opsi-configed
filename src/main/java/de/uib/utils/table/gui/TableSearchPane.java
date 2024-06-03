@@ -463,7 +463,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean allowSearchAction() {
-		return isFiltering() && !filtermark.isSelected() && !flatTextFieldSearch.getText().isEmpty();
+		return isFiltering() && !filtermark.isSelected();
 	}
 
 	private void retainOnlyAllFieldsItem() {
@@ -863,6 +863,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (flatTextFieldSearch.getText().isBlank()) {
+			return;
+		}
+
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			if (allowSearchAction()) {
 				markAll();
@@ -872,9 +876,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				markAllAndFilter();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			if (allowSearchAction()) {
-				searchNextRow(selectMode);
-			}
+			searchNextRow(selectMode);
 		} else {
 			// We want to do nothing on other keys
 		}
