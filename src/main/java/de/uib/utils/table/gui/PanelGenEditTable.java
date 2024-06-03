@@ -32,7 +32,6 @@ import javax.swing.DropMode;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -219,17 +218,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		}
 
 		return result;
-	}
-
-	/**
-	 * sets frame to return to e.g. from option dialogs
-	 *
-	 * @param javax.swing.JFrame
-	 */
-	public void setMasterFrame(JFrame masterFrame) {
-		if (searchPane != null) {
-			searchPane.setMasterFrame(masterFrame);
-		}
 	}
 
 	@Override

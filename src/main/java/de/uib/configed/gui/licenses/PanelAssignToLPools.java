@@ -387,7 +387,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelLicensepools.setMasterFrame(ConfigedMain.getLicensesFrame());
 
 		panelProductId2LPool = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
@@ -395,11 +394,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelProductId2LPool.setMasterFrame(ConfigedMain.getLicensesFrame());
-
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
 		panelRegisteredSoftware.setFiltering(true);
-		panelRegisteredSoftware.setMasterFrame(ConfigedMain.getLicensesFrame());
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);

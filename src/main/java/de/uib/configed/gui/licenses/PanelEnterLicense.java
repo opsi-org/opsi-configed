@@ -258,21 +258,15 @@ public class PanelEnterLicense extends MultiTablePanel {
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"), true, 0,
 				new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
 
-		panelKeys.setMasterFrame(ConfigedMain.getLicensesFrame());
-
 		panelLicensePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensepool"), false, 0,
 				new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
-
-		panelLicensePools.setMasterFrame(ConfigedMain.getLicensesFrame());
 
 		panelLicenseContracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 1,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-
-		panelLicenseContracts.setMasterFrame(ConfigedMain.getLicensesFrame());
 
 		jTextFieldLicenseID = new JTextField();
 		jTextFieldLicenseType = new JTextField();

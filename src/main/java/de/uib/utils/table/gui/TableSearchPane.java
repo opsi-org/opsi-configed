@@ -28,11 +28,9 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
@@ -44,7 +42,6 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -55,8 +52,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	public enum SearchMode {
 		FULL_TEXT_SEARCH, FULL_TEXT_WITH_ALTERNATIVES_SEARCH, START_TEXT_SEARCH, REGEX_SEARCH
 	}
-
-	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	private FlatTextField flatTextFieldSearch;
 
@@ -147,15 +142,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return alphaCollator;
 	}
 
-	/**
-	 * sets frame to return to e.g. from option dialogs
-	 * 
-	 * @param javax.swing.JFrame
-	 */
-	public void setMasterFrame(JFrame masterFrame) {
-		this.masterFrame = masterFrame;
-	}
-
 	public void showNavPane() {
 		initNavigationPanel();
 		navPane.setVisible(true);
@@ -184,17 +170,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		flatTextFieldSearch.setEnabled(enabled);
-	}
-
-	private boolean disabledSinceWeAreInFilteredMode() {
-		if (filtermark.isSelected()) {
-			Logging.info(this, "disabledSinceWeAreInFilteredMode masterFrame " + masterFrame);
-			JOptionPane.showConfirmDialog(masterFrame, Configed.getResourceValue("SearchPane.filterIsSet.message"),
-					Configed.getResourceValue("SearchPane.filterIsSet.title"), JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.INFORMATION_MESSAGE);
-		}
-
-		return filtermark.isSelected();
 	}
 
 	/**
@@ -493,7 +468,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean allowSearchAction() {
-		return !disabledSinceWeAreInFilteredMode() && !flatTextFieldSearch.getText().isEmpty();
+		return filtering && !filtermark.isSelected() && !flatTextFieldSearch.getText().isEmpty();
 	}
 
 	private void retainOnlyAllFieldsItem() {
@@ -910,11 +885,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (filtering) {
+			if (allowSearchAction()) {
 				markAll();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
-			if (filtering) {
+			if (allowSearchAction()) {
 				markAllAndFilter();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
