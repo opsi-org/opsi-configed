@@ -293,7 +293,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
 		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
-			setFiltered(false);
+			setFilterMark(false);
 			searchTheRow(0, selectMode);
 		});
 
@@ -596,13 +596,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return comparator.compare(s.substring(0, part.length()), part) == 0;
 	}
 
-	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices) {
-		// Search only for value longer than one digit
-		if (value == null || value.toString().length() < 2) {
-			return -1;
-		}
-
-		String valueLower = value.toString().toLowerCase(Locale.ROOT);
+	private int findViewRowFromValue(int startviewrow, String value, Set<Integer> colIndices) {
+		String valueLower = value.toLowerCase(Locale.ROOT);
 		Pattern regexPattern = null;
 		SearchMode mode = getSearchMode(comboSearchFieldsMode.getSelectedIndex());
 		if (mode == SearchMode.REGEX_SEARCH) {
@@ -803,6 +798,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		flatTextFieldSearch.getCaret().setVisible(false);
 
+		// Search only for value longer than one digit
 		if (value.length() < 2) {
 			setRow(0, false, select);
 		} else {
