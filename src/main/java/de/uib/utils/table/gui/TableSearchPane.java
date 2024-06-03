@@ -35,6 +35,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
@@ -252,7 +253,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		flatTextFieldSearch.addKeyListener(this);
 
-		flatTextFieldSearch.addActionListener((ActionEvent actionEvent) -> searchNextRow(selectMode));
+		flatTextFieldSearch.addActionListener(actionEvent -> searchNextRow(selectMode));
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.BUTTON_DIMENSION);
@@ -315,6 +316,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
 		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
+		popupSearchNext.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 
 		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
 		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
@@ -323,14 +325,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		});
 
 		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
-		popupMarkHits.addActionListener((ActionEvent actionEvent) -> markAll());
+		popupMarkHits.addActionListener(actionEvent -> markAll());
+		popupMarkHits.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 
 		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
-		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
-			filtermark.setSelected(false);
-			markAllAndFilter();
-			filtermark.setSelected(true);
-		});
+		popupMarkAndFilter.addActionListener(actionEvent -> markAllAndFilter());
+		popupMarkAndFilter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
 
 		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
 		popupEmptySearchfield.addActionListener(actionEvent -> flatTextFieldSearch.setText(""));
@@ -760,11 +760,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 */
 	private void markAllAndFilter() {
 		Logging.info(this, " markAllAndFilter filtering, disabledSinceWeAreInFilteredModel " + filtering);
-		if (!filtering) {
-			return;
-		}
 
+		filtermark.setSelected(false);
 		markAll();
+		filtermark.setSelected(true);
 	}
 
 	/**
@@ -910,11 +909,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			markAll();
+			if (filtering) {
+				markAll();
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
-			filtermark.setSelected(false);
-			markAllAndFilter();
-			filtermark.setSelected(true);
+			if (filtering) {
+				markAllAndFilter();
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 			if (allowSearchAction()) {
 				searchNextRow(selectMode);
