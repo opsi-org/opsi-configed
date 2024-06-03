@@ -81,9 +81,6 @@ public class ProductActionPanel extends JPanel {
 				true);
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setFiltering(true);
-
-		// filter icon inside searchpane
-		searchPane.showFilterIcon(true);
 	}
 
 	private void initComponents() {

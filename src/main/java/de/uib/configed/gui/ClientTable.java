@@ -107,8 +107,6 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_WITH_ALTERNATIVES_SEARCH);
 		searchPane.setFiltering(true);
 
-		// filter icon inside searchpane
-		searchPane.showFilterIcon(true);
 		table.addKeyListener(searchPane);
 		table.addKeyListener(this);
 

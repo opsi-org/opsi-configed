@@ -229,7 +229,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		if (narrow) {
 			setupNarrowLayout();
 		}
-		showFilterIcon(narrow);
 		buttonShowHideExtraOptions.setVisible(narrow);
 		comboSearchFields.setVisible(!narrow);
 		comboSearchFieldsMode.setVisible(!narrow);
@@ -304,8 +303,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		filtermark.addItemListener(event -> filtermarkEvent());
 
 		flatTextFieldSearch.setTrailingComponent(filtermark);
-
-		showFilterIcon(filtering);
 
 		buttonShowHideExtraOptions = new JButton(Utils.getThemeIconPNG("bootstrap/caret_left_fill", ""));
 		buttonShowHideExtraOptions

@@ -40,7 +40,6 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 		panelStatistics.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelStatistics.showFilterIcon(true);
 		panelStatistics.setFiltering(true);
 
 		GroupLayout layout = new GroupLayout(this);

@@ -44,7 +44,6 @@ public class PanelEditLicenses extends MultiTablePanel {
 		panelKeys.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panelKeys.showFilterIcon(true);
 		panelKeys.setFiltering(true);
 
 		panelSoftwarelicenses = new PanelGenEditTable(
@@ -55,7 +54,6 @@ public class PanelEditLicenses extends MultiTablePanel {
 		panelSoftwarelicenses.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelSoftwarelicenses.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelSoftwarelicenses.setFiltering(true);
-		panelSoftwarelicenses.showFilterIcon(true);
 
 		panelLicensecontracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2,
@@ -66,7 +64,6 @@ public class PanelEditLicenses extends MultiTablePanel {
 		panelLicensecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelLicensecontracts.showFilterIcon(true);
 		panelLicensecontracts.setFiltering(true);
 		panelLicensecontracts.setAwareOfTableChangedListener(true);
 

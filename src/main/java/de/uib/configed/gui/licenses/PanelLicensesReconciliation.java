@@ -38,7 +38,6 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelReconciliation.showFilterIcon(true);
 		panelReconciliation.setFiltering(true);
 
 		GroupLayout layout = new GroupLayout(this);
