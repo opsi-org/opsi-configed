@@ -488,13 +488,9 @@ public class PanelProductSettings extends JSplitPane {
 		}
 	}
 
-	public void showAll() {
-		Set<String> selection = getSelectedIDs();
-		setFilter(null);
-		setSelection(selection);
-	}
+	public void valueChanged(boolean doSelection) {
+		TreePath[] selectionPaths = productTree.getSelectionPaths();
 
-	public void valueChanged(TreePath[] selectionPaths, boolean doSelection) {
 		if (selectionPaths == null) {
 			setFilter(null);
 		} else if (selectionPaths.length == 1) {
@@ -533,7 +529,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		// We don't want to call setSelection here, since it will be called after this method
 		if (!isFilteredMode()) {
-			valueChanged(productTree.getSelectionPaths(), false);
+			valueChanged(false);
 		}
 
 		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());

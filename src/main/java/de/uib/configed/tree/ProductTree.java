@@ -198,8 +198,8 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
-		localbootPanel.valueChanged(getSelectionPaths(), true);
-		netbootPanel.valueChanged(getSelectionPaths(), true);
+		localbootPanel.valueChanged(true);
+		netbootPanel.valueChanged(true);
 	}
 
 	@Override
