@@ -81,7 +81,6 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	private List<String> depots;
 	private List<String> domains;
 	private List<String> newDomainsList;
-	private List<String> existingHostNames;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -112,10 +111,6 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		jComboDomain.setModel(new DefaultComboBoxModel<>(domains.toArray(new String[0])));
 	}
 
-	public void setHostNames(List<String> existingHostNames) {
-		this.existingHostNames = existingHostNames;
-	}
-
 	private static void setJComboBoxModel(JComboBox<String> comboBox, Iterable<String> list) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) comboBox.getModel();
 		model.removeAllElements();
@@ -127,10 +122,13 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		comboBox.setSelectedIndex(0);
 	}
 
-	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
-		jCheckUefi.setSelected(uefiIsDefault);
-		jCheckWan.setSelected(wanIsDefault);
-		jCheckShutdownInstall.setSelected(shutdownINSTALLIsDefault);
+	public void setDefaultValues() {
+		jCheckUefi.setSelected(persistenceController.getConfigDataService()
+				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
+		jCheckWan.setSelected(persistenceController.getConfigDataService()
+				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
+		jCheckShutdownInstall.setSelected(persistenceController.getConfigDataService()
+				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
 	}
 
 	private void init() {
@@ -614,6 +612,8 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	}
 
 	private boolean checkOpsiHostKey(String opsiHostKey) {
+		List<String> existingHostNames = persistenceController.getHostInfoCollections().getOpsiHostNames();
+
 		if (existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
 			if (depots.contains(opsiHostKey)) {
 				JOptionPane.showMessageDialog(this,
