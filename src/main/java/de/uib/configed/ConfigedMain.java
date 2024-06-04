@@ -602,7 +602,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getModuleDataService().retrieveOpsiModules();
 
 		if (depotRepresentative == null) {
-			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();;
+			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
 		}
 
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
@@ -1932,9 +1932,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.debug(this, "setDepotRepresentative");
 
 		if (getSelectedClients().isEmpty()) {
-			if (depotRepresentative == null) {
-				depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
-			}
+			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
 
 			return true;
 		}
@@ -1953,8 +1951,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
 				+ depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
-
-		depotRepresentative = null;
 
 		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + depotsOfSelectedClients);
 
