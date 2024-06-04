@@ -31,13 +31,7 @@ public class ProductTree extends AbstractGroupTree {
 	public ProductTree(ConfigedMain configedMain) {
 		super(configedMain);
 
-		setModel();
-	}
-
-	private void setModel() {
-		setCellRenderer(new GroupTreeRenderer(this));
-
-		expandPath(new TreePath(groupNodeFullList.getPath()));
+		super.expandPath(new TreePath(groupNodeFullList.getPath()));
 	}
 
 	public void setPanels(PanelProductSettings localbootPanel, PanelProductSettings netbootPanel) {

@@ -7,9 +7,6 @@
 package de.uib.configed.tree;
 
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,7 +68,8 @@ public class ClientTree extends AbstractGroupTree {
 	public ClientTree(ConfigedMain configedMain) {
 		super(configedMain);
 
-		initClientTree();
+		locationsInDirectory = new HashMap<>();
+		clientNodesInDirectory = new HashMap<>();
 	}
 
 	public static String translateToPersistentName(String name) {
@@ -93,30 +91,6 @@ public class ClientTree extends AbstractGroupTree {
 		public int compare(DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) {
 			return myCollator.compare("" + o1.getUserObject(), "" + o2.getUserObject());
 		}
-	}
-
-	private void initClientTree() {
-		setToggleClickCount(0);
-
-		MouseListener ml = new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				int selRow = getRowForLocation(e.getX(), e.getY());
-				TreePath selPath = getPathForRow(selRow);
-				if (selRow != -1 && e.getClickCount() == 2
-						&& groups.containsKey(selPath.getLastPathComponent().toString())) {
-					expandPath(selPath);
-					configedMain.setGroupAndSelect(selPath.getLastPathComponent().toString());
-				}
-			}
-		};
-
-		addMouseListener(ml);
-
-		setCellRenderer(new GroupTreeRenderer(this));
-
-		locationsInDirectory = new HashMap<>();
-		clientNodesInDirectory = new HashMap<>();
 	}
 
 	// publishing the private method

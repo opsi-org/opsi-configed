@@ -6,6 +6,9 @@
 
 package de.uib.configed.tree;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -73,6 +76,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		model = new DefaultTreeModel(rootNode);
 		super.setModel(model);
+		super.setCellRenderer(new GroupTreeRenderer(this));
 	}
 
 	public boolean isGroupNodeFullList(DefaultMutableTreeNode compareNode) {
@@ -104,6 +108,23 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		setTransferHandler(handler);
 		setDragEnabled(true);
 		setDropMode(DropMode.ON);
+
+		setToggleClickCount(0);
+
+		MouseListener ml = new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int selRow = getRowForLocation(e.getX(), e.getY());
+				TreePath selPath = getPathForRow(selRow);
+				if (selRow != -1 && e.getClickCount() == 2
+						&& groups.containsKey(selPath.getLastPathComponent().toString())) {
+					expandPath(selPath);
+					setGroupAndSelect((DefaultMutableTreeNode) selPath.getLastPathComponent());
+				}
+			}
+		};
+
+		addMouseListener(ml);
 	}
 
 	public void reInitTree() {
