@@ -661,7 +661,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "startProductActionFrame ");
 
 		if (productActionFrame == null) {
-			productActionFrame = new FCompleteWinProducts(this);
+			productActionFrame = new FCompleteWinProducts();
 			productActionFrame.centerOnParent();
 			allFrames.add(productActionFrame);
 		}
