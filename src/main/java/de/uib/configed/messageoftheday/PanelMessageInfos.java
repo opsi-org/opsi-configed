@@ -4,15 +4,25 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
+/**
+ * Represents the panel for the message of the day configuration. This panel
+ * contains a text area for the message and a date chooser for the "valid
+ * until" date as well as a button to set the valid date to "forever". This
+ * panel is used in the {@link FMessageOfTheDay} dialog.
+ */
 package de.uib.configed.messageoftheday;
 
+import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -26,21 +36,21 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utils.logging.Logging;
 
-public class PanelMessageInfos extends JPanel {
+public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 	public enum InfoType {
 		DEVICE, USER
 	}
 
 	private FMessageOfTheDay caller;
-
 	private InfoType type;
-
+	private String date;
+	private JTextField dateChooserText = new JTextField();
 	private JTextArea textArea;
 	private JScrollPane areaScrollPane;
-	private JTextField dateChooserText;
-	protected JButton dateChooserButton;
-	protected JButton dateForeverButton;
+	private DateTimePickerWrapper dateTimePicker;
 	private Map<String, String> motdData;
+	private JRadioButton dateChooserButton;
+	private JRadioButton infiniteDateChooserButton;
 
 	public PanelMessageInfos(FMessageOfTheDay caller, InfoType type, Map<String, String> msgdata) {
 		Logging.debug("PanelMessageInfos type: " + type);
@@ -52,56 +62,106 @@ public class PanelMessageInfos extends JPanel {
 		defineLayout();
 	}
 
+	public void setDataMap(Map<String, String> data) {
+		Logging.debug("PanelMessageInfos setDataMap");
+		this.motdData = data;
+	}
+
 	public String getText() {
+		Logging.debug("PanelMessageInfos " + this.type + " getText " + textArea.getText());
 		return textArea.getText();
 	}
 
-	public Integer getValidUntil() {
-		return 0;
+	public String getValidUntil() {
+		Logging.debug("PanelMessageInfos " + this.type + " getValidUntil " + date);
+		return date;
+
 	}
 
 	public void resetData() {
-		String text = "";
+		Logging.debug("PanelMessageInfos resetData");
+		String text;
 		if (type == InfoType.USER) {
 			text = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER);
 		} else {
 			text = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE);
 		}
 
-		String date = "";
 		if (type == InfoType.USER) {
 			date = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL);
 		} else {
 			date = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL);
 		}
 		textArea.setText(text);
-		dateChooserText.setText(date);
+		if (date != null && !date.isEmpty() && !"0".equals(date)) {
+			dateChooserText.setText(date);
+			dateTimePicker.getDateTimePicker().setDateTimeValue(Long.parseLong(date), false);
+			selectDateOption();
+		} else {
+			dateTimePicker.getDateTimePicker().setDateTimeValue(null, false);
+			dateChooserText.setText("0");
+			selectInfiniteDateOption();
+		}
+	}
+
+	private void selectDateOption() {
+		Logging.debug("PanelMessageInfos selectDateOption: get date from dateTimePicker");
+		dateChooserButton.setSelected(true);
+		dateTimePicker.setEnabled(true);
+		infiniteDateChooserButton.setSelected(false);
+		// get date from datetimepicker
+		long unixTime = dateTimePicker.getDateTimePicker().getDateTimeValueUnix();
+		dateTimePicker.getDateTimePicker().setDateTimeValue(unixTime);
+	}
+
+	private void selectInfiniteDateOption() {
+		Logging.debug("PanelMessageInfos selectInfiniteDateOption");
+		dateChooserButton.setSelected(false);
+		dateTimePicker.setEnabled(false);
+		infiniteDateChooserButton.setSelected(true);
+		dateTimePicker.getDateTimePicker().setDateTimeValue(0);
+		date = "0";
+		dateChooserText.setText("0");
 	}
 
 	private void initComponents() {
-
+		Logging.debug("PanelMessageInfos initComponents");
+		Dimension minWidthTxtDate = new Dimension(200, 20);
+		this.dateChooserText.setMinimumSize(minWidthTxtDate);
 		textArea = new JTextArea();
 		textArea.setRows(5);
 		areaScrollPane = new JScrollPane(textArea);
 		areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		dateChooserText = new JTextField();
-		dateChooserText.setEditable(false);
+		dateTimePicker = new DateTimePickerWrapper(this);
+		dateChooserButton = new JRadioButton();
+		infiniteDateChooserButton = new JRadioButton();
+
+		dateChooserButton.setText(Configed.getResourceValue("MessageOfTheDay.specificDateOption"));
+		infiniteDateChooserButton.setText(Configed.getResourceValue("MessageOfTheDay.infiniteDateOption"));
+
+		ButtonGroup group = new ButtonGroup();
+		group.add(dateChooserButton);
+		group.add(infiniteDateChooserButton);
+
 		resetData();
 
-		dateChooserButton = new JButton(Configed.getResourceValue("MessageOfTheDay.dateButton"));
-		dateChooserButton.addActionListener(e -> btnChooserClicked());
-		dateForeverButton = new JButton(Configed.getResourceValue("MessageOfTheDay.foreverButton"));
-		dateForeverButton.addActionListener(e -> btnForeverActionListener());
+		dateChooserButton.addItemListener((ItemEvent e) -> {
+			if (dateChooserButton.isSelected()) {
+				selectDateOption();
+			} else {
+				selectInfiniteDateOption();
+			}
+		});
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				enableSaveOnDataChange();
+				caller.checkDefaultValues();
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				enableSaveOnDataChange();
+				caller.checkDefaultValues();
 			}
 
 			@Override
@@ -111,33 +171,8 @@ public class PanelMessageInfos extends JPanel {
 		});
 	}
 
-	private void btnForeverActionListener() {
-		dateChooserText.setText("0");
-		enableSaveOnDataChange();
-	}
-
-	private void btnChooserClicked() {
-		dateChooserText.setText("12345");
-		enableSaveOnDataChange();
-	}
-
-	private void enableSaveOnDataChange() {
-		Boolean dataChanged = false;
-		if (InfoType.USER == type) {
-			dataChanged = !textArea.getText()
-					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER))
-					|| !dateChooserText.getText().equals(
-							motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
-		} else {
-			dataChanged = !textArea.getText()
-					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE))
-					|| !dateChooserText.getText().equals(
-							motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL));
-		}
-		caller.setSaveButtonEnable(dataChanged);
-	}
-
 	private void defineLayout() {
+		Logging.debug("PanelMessageInfos defineLayout");
 		String keyTextAreaLabel = "MessageOfTheDay.device.textAreaLabel";
 		if (type == InfoType.USER) {
 			keyTextAreaLabel = "MessageOfTheDay.user.textAreaLabel";
@@ -149,59 +184,97 @@ public class PanelMessageInfos extends JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(areaScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
+						.addComponent(areaScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(dateChooserText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(dateChooserButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(dateForeverLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(dateForeverButton, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE));
+						.addGroup(
+								layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+										.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										// .addComponent(dateChooserText, GroupLayout.PREFERRED_SIZE,
+										// 		GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(dateChooserButton, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(dateTimePicker, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(dateForeverLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(infiniteDateChooserButton, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE))
+						.addGap(Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(
 				layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addGroup(
-								layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
-										.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE,
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
+								.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(areaScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE)
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										// .addComponent(dateChooserText, 100, 150, 200)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(dateChooserButton, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(areaScrollPane, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGroup(layout.createSequentialGroup()
-												.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(dateChooserText, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(dateChooserButton, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE)
-												.addComponent(dateForeverLabel, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.GAP_SIZE).addComponent(dateForeverButton,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-
-										).addGap(Globals.GAP_SIZE)).addGap(Globals.GAP_SIZE));
+										.addComponent(dateTimePicker, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(dateForeverLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(infiniteDateChooserButton, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE))
+								.addGap(Globals.GAP_SIZE))
+						.addGap(Globals.GAP_SIZE));
 
 		this.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 	}
 
+	private void setDateText(String date, long unix) {
+		setDateText(date, Long.toString(unix));
+	}
+
+	private void setDateText(String date, String unix) {
+		Logging.debug("PanelMessageInfos setDateText: " + date + " (" + unix + ")");
+		String datetextfield = "";
+		if (date != null && !date.isEmpty()) {
+			datetextfield = date;
+		}
+		if (unix != null && !unix.isEmpty()) {
+			datetextfield += " (" + unix + ")";
+		}
+		dateChooserText.setText(datetextfield);
+
+	}
+
+	public void dataChanged(LocalDateTime datetime) {
+		if (datetime == null) {
+			Logging.debug("PanelMessageInfos dataChanged: null");
+			date = "0";
+			setDateText(date, null);
+			caller.checkDefaultValues();
+			return;
+		}
+		Logging.debug("PanelMessageInfos dataChanged: " + datetime);
+		long unixTime = datetime.atZone(DateTimePicker.ZONEID).toEpochSecond();
+		setDateText(datetime.toString(), unixTime);
+		date = Long.toString(unixTime);
+		caller.checkDefaultValues();
+	}
+
 	@Override
 	public void requestFocus() {
+		Logging.debug("PanelMessageInfos requestFocus");
 		textArea.requestFocus();
 	}
 }

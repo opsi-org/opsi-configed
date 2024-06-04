@@ -1,0 +1,209 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.configed.messageoftheday;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+import de.uib.utils.logging.Logging;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.DatePicker;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.util.StringConverter;
+
+/**
+ * A DateTimePicker with configurable datetime format where both date and time
+ * can be changed via the text field and the date can additionally be changed
+ * via the JavaFX default date picker. Updated version of:
+ * https://stackoverflow.com/questions/28493097/is-there-any-date-and-time-picker-available-for-javafx
+ */
+public class DateTimePicker extends DatePicker {
+	public static final String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm";
+	public static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_FORMAT);
+	public static final ZoneId ZONEID = ZoneId.systemDefault();
+
+	private IDateTimePickerCaller caller;
+	private DateTimeFormatter formatter;
+	private ObjectProperty<LocalDateTime> dateTimeValue = new SimpleObjectProperty<>(LocalDateTime.now());
+
+	@java.lang.SuppressWarnings("squid:S110")
+	private ObjectProperty<String> format = new SimpleObjectProperty<String>() {
+		@Override
+		public void set(String newValue) {
+			super.set(newValue);
+			formatter = DateTimeFormatter.ofPattern(newValue);
+		}
+	};
+
+	public DateTimePicker(IDateTimePickerCaller caller) {
+		Logging.debug("DateTimePicker constructor");
+		Logging.debug("DateTimePicker zoneid: " + ZONEID);
+		Logging.debug("DateTimePicker datetimeNow: " + datetimeNow());
+		this.caller = caller;
+	}
+
+	public void init() {
+		getStyleClass().add("datetime-picker");
+		setFormat(DEFAULT_FORMAT);
+		setConverter(new InternalConverter());
+	}
+
+	@java.lang.SuppressWarnings("squid:S4968")
+	public void initData() {
+		// Syncronize changes to the underlying date value back to the dateTimeValue
+		valueProperty().addListener(
+				(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) -> {
+					if (newValue == null) {
+						setDateTimeValue(null);
+					} else if (dateTimeValue.get() == null) {
+						setDateTimeValue(LocalDateTime.of(newValue, timeNow()));
+					} else {
+						LocalTime time = dateTimeValue.get().toLocalTime();
+						setDateTimeValue(LocalDateTime.of(newValue, time));
+					}
+				});
+
+		// Syncronize changes to dateTimeValue back to the underlying date value
+		dateTimeValue.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue,
+				LocalDateTime newValue) -> {
+			Logging.debug("DateTimePicker dateTimeValue listener newValue: " + newValue + " oldValue: " + oldValue);
+			setValue(newValue == null ? null : newValue.toLocalDate());
+		});
+
+		// Persist changes onblur
+		getEditor().focusedProperty()
+				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+					Logging.debug(
+							"DateTimePicker focusedProperty listener newValue: " + newValue + " oldValue: " + oldValue);
+					if (!newValue.booleanValue()) {
+						simulateEnterPressed();
+					}
+				});
+	}
+
+	private static LocalTime timeNow() {
+		Instant time = Instant.now();
+		return time.atZone(DateTimePicker.ZONEID).toLocalTime();
+	}
+
+	private static LocalDateTime datetimeNow() {
+		Instant time = Instant.now();
+		return time.atZone(DateTimePicker.ZONEID).toLocalDateTime();
+	}
+
+	private void simulateEnterPressed() {
+		Logging.debug("DateTimePicker simulateEnterPressed");
+		getEditor().fireEvent(new KeyEvent(getEditor(), getEditor(), KeyEvent.KEY_PRESSED, null, null, KeyCode.ENTER,
+				false, false, false, false));
+	}
+
+	public long getDateTimeValueUnix() {
+		LocalDateTime ldt = dateTimeValue.get();
+		long unixTime = ldt.atZone(DateTimePicker.ZONEID).toEpochSecond();
+		Logging.debug("DateTimePicker getDateTimeValueUnix: " + unixTime);
+		return unixTime;
+	}
+
+	public LocalDateTime getDateTimeValue() {
+		Logging.debug("DateTimePicker getDateTimeValueLDT: " + dateTimeValue.get());
+		return dateTimeValue.get();
+	}
+
+	public void setDateTimeValue(long unixTime) {
+		setDateTimeValue(unixTime, true);
+	}
+
+	public void setDateTimeValue(long unixTime, boolean notify) {
+		Logging.debug("DateTimePicker setDateTimeValueUnix: " + unixTime);
+		if (unixTime <= 0) {
+			setDateTimeValue(null);
+			return;
+		}
+
+		LocalDateTime value = LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTime), DateTimePicker.ZONEID);
+		setDateTimeValue(value, notify);
+	}
+
+	public void setDateTimeValue(LocalDateTime dateTime) {
+		setDateTimeValue(dateTime, true);
+	}
+
+	public void setDateTimeValue(LocalDateTime dateTime, boolean notify) {
+		boolean isEnabled = false;
+		if (dateTime == null) {
+			Logging.debug("DateTimePicker setDateTimeValueLDT: null");
+		} else {
+			Logging.debug("DateTimePicker setDateTimeValue: " + dateTime);
+			isEnabled = true;
+			this.dateTimeValue.set(dateTime);
+		}
+
+		if (caller != null && notify) {
+			getEditor().setText(dateTime == null ? "" : dateTime.format(formatter));
+			if (isEnabled) {
+				caller.dataChanged(getDateTimeValue());
+			} else {
+				caller.dataChanged(null);
+			}
+		}
+	}
+
+	public ObjectProperty<LocalDateTime> dateTimeValueProperty() {
+		Logging.debug("DateTimePicker dateTimeValueProperty");
+		return dateTimeValue;
+	}
+
+	public String getFormat() {
+		Logging.debug("DateTimePicker getFormat: " + format.get());
+		return format.get();
+	}
+
+	public ObjectProperty<String> formatProperty() {
+		Logging.debug("DateTimePicker formatProperty");
+		return format;
+	}
+
+	public void setFormat(String format) {
+		Logging.debug("DateTimePicker setFormat: " + format);
+		this.format.set(format);
+	}
+
+	class InternalConverter extends StringConverter<LocalDate> {
+		public String toString(LocalDate object) {
+			Logging.debug("DateTimePicker InternalConverter toString was: " + object);
+			LocalDateTime value = getDateTimeValue();
+			String s = (value != null) ? value.format(formatter) : "";
+			Logging.debug("DateTimePicker InternalConverter toString is: " + s);
+			setDateTimeValue(value);
+			return s;
+		}
+
+		public LocalDate fromString(String value) {
+			Logging.debug("DateTimePicker InternalConverter fromString: " + value);
+			if (value == null || "0".equals(value) || "".equals(value)) {
+				setDateTimeValue(null);
+				return null;
+			}
+			LocalDateTime currValue = getDateTimeValue();
+			try {
+				currValue = LocalDateTime.parse(value, formatter);
+			} catch (DateTimeParseException e) {
+				Logging.error("DateTime InternalConverter Error: " + e + ". Set previous value.");
+			}
+			setDateTimeValue(currValue);
+			return currValue.toLocalDate();
+		}
+	}
+}
