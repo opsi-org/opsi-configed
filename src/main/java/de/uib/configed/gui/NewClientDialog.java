@@ -16,9 +16,9 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -167,8 +167,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboNetboot.setMaximumRowCount(10);
-		List<String> netbootProductNames = persistenceController.getProductDataService().getAllNetbootProductNames();
-		Collections.sort(netbootProductNames);
+		Set<String> netbootProductNames = persistenceController.getProductDataService().getAllNetbootProductNames();
 		setJComboBoxModel(jComboNetboot, netbootProductNames);
 
 		JLabel jLabelNotes = new JLabel(Configed.getResourceValue("NewClientDialog.notes"));

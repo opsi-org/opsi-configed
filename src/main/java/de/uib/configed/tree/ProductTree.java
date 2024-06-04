@@ -9,6 +9,7 @@ package de.uib.configed.tree;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -43,8 +44,10 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	protected void createTopNodes() {
-		Set<String> productIds = new TreeSet<>(persistenceController.getProductDataService()
-				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet());
+		List<String> depotIds = configedMain.getSelectedDepots();
+		Set<String> productIds = new TreeSet<>(
+				persistenceController.getProductDataService().getAllLocalbootProductNames(depotIds));
+		productIds.addAll(persistenceController.getProductDataService().getAllNetbootProductNames(depotIds));
 
 		Map<String, DefaultMutableTreeNode> nodeMap = new HashMap<>();
 
@@ -91,12 +94,7 @@ public class ProductTree extends AbstractGroupTree {
 			}
 		}
 
-		Set<String> allPermittedProducts = new TreeSet<>(persistenceController.getProductDataService()
-				.getProductGlobalInfosPD(persistenceController.getDepotDataService().getDepot()).keySet());
-
-		persistenceController.getProductDataService().filterPermittedProducts(allPermittedProducts);
-
-		for (String productId : allPermittedProducts) {
+		for (String productId : productIds) {
 			groupNodeFullList.add(new DefaultMutableTreeNode(productId, false));
 		}
 

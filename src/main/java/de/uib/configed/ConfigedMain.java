@@ -1905,6 +1905,8 @@ public class ConfigedMain implements MessagebusListener {
 		if (initialDataLoader.isDataLoaded()) {
 			initialTreeActivation();
 			clientTable.clearSelection();
+
+			productTree.reInitTree();
 		}
 
 		setViewIndex(getViewIndex());
@@ -2058,10 +2060,11 @@ public class ConfigedMain implements MessagebusListener {
 
 		List<String> productNames;
 		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
-			productNames = persistenceController.getProductDataService()
-					.getAllLocalbootProductNames(depotRepresentative);
+			productNames = new ArrayList<>(
+					persistenceController.getProductDataService().getAllLocalbootProductNames(depotRepresentative));
 		} else {
-			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
+			productNames = new ArrayList<>(
+					persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative));
 		}
 
 		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)

@@ -110,33 +110,48 @@ public class ProductDataService {
 		this.hostInfoCollections = hostInfoCollections;
 	}
 
-	public List<String> getAllNetbootProductNames() {
+	public Set<String> getAllNetbootProductNames() {
 		return getAllNetbootProductNames(depotDataService.getDepot());
 	}
 
-	public List<String> getAllNetbootProductNames(String depotId) {
-		Object2Product2VersionList netbootProducts = getDepot2NetbootProductsPD();
-		List<String> netbootProductNames = netbootProducts.get(depotId) != null
-				? new ArrayList<>(netbootProducts.get(depotId).keySet())
-				: new ArrayList<>();
-		filterPermittedProducts(netbootProductNames);
-		return netbootProductNames;
+	public Set<String> getAllNetbootProductNames(String depotId) {
+		return getAllNetbootProductNames(Collections.singleton(depotId));
 	}
 
-	public List<String> getAllLocalbootProductNames() {
+	public Set<String> getAllNetbootProductNames(Collection<String> depotIds) {
+		Object2Product2VersionList netbootProducts = getDepot2NetbootProductsPD();
+
+		Set<String> productIds = new TreeSet<>();
+		for (String depotId : depotIds) {
+			if (netbootProducts.containsKey(depotId)) {
+				productIds.addAll(netbootProducts.get(depotId).keySet());
+			}
+		}
+
+		filterPermittedProducts(productIds);
+		return productIds;
+	}
+
+	public Set<String> getAllLocalbootProductNames() {
 		return getAllLocalbootProductNames(depotDataService.getDepot());
 	}
 
-	public List<String> getAllLocalbootProductNames(String depotId) {
-		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
-		List<String> localbootProductNames;
+	public Set<String> getAllLocalbootProductNames(String depotId) {
+		return getAllLocalbootProductNames(Collections.singleton(depotId));
+	}
+
+	public Set<String> getAllLocalbootProductNames(Collection<String> depotIds) {
+		Logging.debug(this, "getAllLocalbootProductNames for depots " + depotIds);
+		Set<String> localbootProductNames = new TreeSet<>();
 		if (ServerFacade.isOpsi43()) {
-			localbootProductNames = getDepot2LocalbootProductsPD().get(depotId) != null
-					? new ArrayList<>(getDepot2LocalbootProductsPD().get(depotId).keySet())
-					: new ArrayList<>();
+			for (String depotId : depotIds) {
+				if (getDepot2LocalbootProductsPD().containsKey(depotId)) {
+					localbootProductNames.addAll(getDepot2LocalbootProductsPD().get(depotId).keySet());
+				}
+			}
 		} else {
-			Map<String, List<String>> productOrderingResult = exec.getMapOfStringLists(
-					new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, new String[] { depotId }));
+			Map<String, List<String>> productOrderingResult = exec
+					.getMapOfStringLists(new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, depotIds.toArray()));
 
 			List<String> sortedProducts = productOrderingResult.get("sorted");
 			if (sortedProducts == null) {
@@ -153,7 +168,7 @@ public class ProductDataService {
 			notSortedProducts.removeAll(sortedProducts);
 			Logging.info(this, "missing: " + notSortedProducts);
 
-			localbootProductNames = sortedProducts;
+			localbootProductNames.addAll(sortedProducts);
 			localbootProductNames.addAll(notSortedProducts);
 		}
 		filterPermittedProducts(localbootProductNames);
@@ -161,7 +176,7 @@ public class ProductDataService {
 		return localbootProductNames;
 	}
 
-	public void filterPermittedProducts(Collection<String> products) {
+	private void filterPermittedProducts(Collection<String> products) {
 		Set<String> permittedProducts = userRolesConfigDataService.getPermittedProductsPD();
 		if (permittedProducts != null) {
 			products.retainAll(permittedProducts);
