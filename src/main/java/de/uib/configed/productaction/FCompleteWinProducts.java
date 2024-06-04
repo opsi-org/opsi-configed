@@ -51,8 +51,6 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 	private String depotProductDirectory;
 	private boolean smbMounted;
 
-	private int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
-
 	private JComboBox<String> comboChooseDepot;
 	private JComboBox<String> comboChooseWinProduct;
 	private JTextField fieldTargetPath;
@@ -434,7 +432,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 2, Short.MAX_VALUE))
 
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelServer, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+						.addComponent(labelServer, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
@@ -443,7 +442,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelWinProduct, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+						.addComponent(labelWinProduct, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
@@ -452,7 +452,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelFolderWinPE, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+						.addComponent(labelFolderWinPE, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(buttonCallSelectFolderWinPE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
@@ -461,7 +462,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelFolderInstallFiles, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+						.addComponent(labelFolderInstallFiles, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(buttonCallSelectFolderInstallFiles, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
@@ -472,7 +474,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 				.addGroup(layout.createSequentialGroup().addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelTargetPath, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+						.addComponent(labelTargetPath, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
@@ -480,7 +483,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelProductKey, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+						.addComponent(labelProductKey, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.GAP_SIZE)
 						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
@@ -488,7 +492,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 								Globals.BUTTON_WIDTH * 2)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE))
 				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addGap(0, firstLabelWidth, firstLabelWidth).addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(0, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH)
+						.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addGap(0, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addGap(0, hFirstGap, hFirstGap).addGap(0, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
