@@ -80,7 +80,8 @@ public class MainFrame extends JFrame {
 
 	private ClientMenuManager clientMenu;
 
-	private JMenu jMenuServerConsole;
+	// Inititalize it here so that we keep the reference throughout a full reload
+	private JMenu jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
 
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
@@ -125,12 +126,6 @@ public class MainFrame extends JFrame {
 
 		guiInit();
 		initData();
-	}
-
-	@Override
-	public void setVisible(boolean b) {
-		Logging.info(this, "setVisible from MainFrame " + b);
-		super.setVisible(b);
 	}
 
 	private void initData() {
@@ -266,12 +261,11 @@ public class MainFrame extends JFrame {
 	}
 
 	public void reloadServerConsoleMenu() {
+		jMenuServerConsole.removeAll();
 		setupMenuServerConsole();
 	}
 
 	private void setupMenuServerConsole() {
-		jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
-
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
 		jMenuServerConsole.add(jMenuCommandControl);
