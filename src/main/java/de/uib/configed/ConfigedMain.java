@@ -657,7 +657,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (productActionFrame == null) {
 			productActionFrame = new FCompleteWinProducts(this);
-			productActionFrame.setSize(LICENSES_DIMENSION);
 			productActionFrame.centerOnParent();
 			allFrames.add(productActionFrame);
 		}
