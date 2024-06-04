@@ -121,10 +121,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private boolean[] editablePreparedColumns;
 
 	public InstallationStateTableModel(ConfigedMain configedMain,
-			Map<String, Map<String, Map<String, String>>> collectChangedStates,
-			List<String> productNamesInDeliveryOrder, Map<String, List<Map<String, String>>> statesAndActions,
-			Map<String, List<String>> possibleActions, Map<String, Map<String, Object>> productGlobalInfos,
-			List<String> displayColumns) {
+			Map<String, Map<String, Map<String, String>>> collectChangedStates, Set<String> productNames,
+			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
 		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
 			Logging.info(this.getClass(), " statesAndActions null ");
@@ -146,7 +145,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		missingImplementationForAR = new TreeSet<>();
 		product2setOfClientsWithNewAction = new HashMap<>();
 
-		productNames = new TreeSet<>(productNamesInDeliveryOrder);
+		this.productNames = productNames;
 		sortedProductsList = new ArrayList<>(productNames);
 
 		Logging.debug(this.getClass(), "productNames " + productNames);

@@ -1995,13 +1995,12 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setProductsPage: oldProductSelection " + oldProductSelection);
 		Logging.debug(this, "setProductsPage: changedProductStates " + changedProductStates);
 
-		List<String> productNames;
+		Set<String> productNames;
 		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
-			productNames = new ArrayList<>(
-					persistenceController.getProductDataService().getAllLocalbootProductNames(depotRepresentative));
+			productNames = persistenceController.getProductDataService()
+					.getAllLocalbootProductNames(depotRepresentative);
 		} else {
-			productNames = new ArrayList<>(
-					persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative));
+			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
 		}
 
 		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
