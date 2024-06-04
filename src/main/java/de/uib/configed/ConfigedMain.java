@@ -81,7 +81,7 @@ import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateUpdateManager;
 import de.uib.configed.guidata.ListMerger;
-import de.uib.configed.productaction.FProductActions;
+import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.serverconsole.CommandControlDialog;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
@@ -231,7 +231,7 @@ public class ConfigedMain implements MessagebusListener {
 	private List<JFrame> allFrames;
 
 	private FGroupActions groupActionFrame;
-	private FProductActions productActionFrame;
+	private FCompleteWinProducts productActionFrame;
 
 	private List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
 
@@ -656,7 +656,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "startProductActionFrame ");
 
 		if (productActionFrame == null) {
-			productActionFrame = new FProductActions(this);
+			productActionFrame = new FCompleteWinProducts(this);
 			productActionFrame.setSize(LICENSES_DIMENSION);
 			productActionFrame.centerOnParent();
 			allFrames.add(productActionFrame);

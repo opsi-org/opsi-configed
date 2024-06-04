@@ -30,24 +30,19 @@ public class FProductActions extends SecondaryFrame {
 	}
 
 	private void define() {
-		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(configedMain, this);
-
 		JPanel imageActionPanel = new JPanel();
 
-		PanelCompleteWinProducts panelCompleteWinProducts = new PanelCompleteWinProducts(configedMain, this);
+		FCompleteWinProducts panelCompleteWinProducts = new FCompleteWinProducts(configedMain);
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(panelInstallOpsiPackage, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
 				.addComponent(panelCompleteWinProducts, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(panelInstallOpsiPackage, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(panelCompleteWinProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}

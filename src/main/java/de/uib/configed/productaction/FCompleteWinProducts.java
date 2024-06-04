@@ -23,7 +23,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -42,7 +41,7 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SecondaryFrame;
 
-public class PanelCompleteWinProducts extends JPanel implements NameProducer {
+public class FCompleteWinProducts extends SecondaryFrame implements NameProducer {
 	// file name conventions
 
 	private String winProduct = "";
@@ -74,11 +73,12 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
-	private SecondaryFrame rootFrame;
 
-	public PanelCompleteWinProducts(ConfigedMain configedMain, SecondaryFrame rootFrame) {
+	public FCompleteWinProducts(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
-		this.rootFrame = rootFrame;
+
+		super.setIconImage(Utils.getMainIcon());
+		super.setTitle(Configed.getResourceValue("FProductAction.title"));
 
 		defineChoosers();
 		initComponentsForNameProducer();
@@ -86,7 +86,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		selectedDepot = "" + comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 
-		panelMountShare = new PanelMountShare(this, rootFrame) {
+		panelMountShare = new PanelMountShare(this, this) {
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();
@@ -221,8 +221,6 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	}
 
 	private void initComponents() {
-		final JPanel panel = this;
-
 		fieldProductKey = new JTextField();
 		fieldProductKey.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
@@ -232,7 +230,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
 		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = chooserFolder.showOpenDialog(panel);
+			int returnVal = chooserFolder.showOpenDialog(getContentPane());
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String pathWinPE = chooserFolder.getSelectedFile().getPath();
@@ -252,7 +250,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		fieldPathInstallFiles = new JTextField();
 
 		buttonCallSelectFolderInstallFiles.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = chooserFolder.showOpenDialog(panel);
+			int returnVal = chooserFolder.showOpenDialog(getContentPane());
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
@@ -280,7 +278,7 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 	}
 
 	private void execute() {
-		rootFrame.activateLoadingCursor();
+		activateLoadingCursor();
 
 		try {
 			File targetDirectory = null;
@@ -307,10 +305,10 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			persistenceController.getRPCMethodExecutor()
 					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
 							+ winProduct + "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
-			rootFrame.deactivateLoadingCursor();
+			deactivateLoadingCursor();
 
-			JOptionPane.showMessageDialog(rootFrame, "Ready",
-					Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Ready", Configed.getResourceValue("CompleteWinProduct.reportTitle"),
+					JOptionPane.INFORMATION_MESSAGE);
 
 			List<String> values = new ArrayList<>();
 
@@ -329,30 +327,32 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 			} else {
 				oldProductKey = "";
 			}
+			long start = System.nanoTime();
+			Logging.devel("" + (System.nanoTime() - start));
 
 			depots.clear();
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
 			if (!oldProductKey.equals(productKey)) {
-				int returnedOption = JOptionPane.showConfirmDialog(rootFrame,
+				int returnedOption = JOptionPane.showConfirmDialog(this,
 						Configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
 						Configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
-					rootFrame.activateLoadingCursor();
+					activateLoadingCursor();
 					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
 					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
 							"productkey", values);
 
-					rootFrame.deactivateLoadingCursor();
+					deactivateLoadingCursor();
 				}
 			}
 		} catch (IOException ex) {
-			rootFrame.deactivateLoadingCursor();
+			deactivateLoadingCursor();
 			Logging.error("copy error:\n" + ex, ex);
 		} catch (HeadlessException ex) {
-			rootFrame.deactivateLoadingCursor();
+			deactivateLoadingCursor();
 			Logging.error("Headless exception when invoking showOptionDialog", ex);
 		}
 	}
@@ -377,9 +377,8 @@ public class PanelCompleteWinProducts extends JPanel implements NameProducer {
 		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
 		JLabel labelProductKey = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelProductKey"));
 
-		JPanel panel = this;
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
 
 		int hFirstGap = Globals.HFIRST_GAP;
 
