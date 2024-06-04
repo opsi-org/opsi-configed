@@ -80,7 +80,6 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		});
 
 		curlAuthPanel = new CurlAuthenticationPanel();
-		curlAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH * 2, Globals.BUTTON_HEIGHT);
 		curlAuthPanel.isOpen(true);
 		curlAuthPanel.close();
 

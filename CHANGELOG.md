@@ -1,7 +1,16 @@
 # Changelog
 ## [4.3.x.x] - 2024-xx-xx
-## Fixec
+## Fixed
 - Create all 4 WAN configs (before only 3 of them were created)
+
+
+## Changed
+- Rework design of Search in tables
+- Rework design of login dialog
+- Rework design of checkboxes in client info panel
+- Rework design of all user/password input fields
+- Remove Wake on LAN timer, only directly wake up clients
+- Remove Product installation in Product Actions panel (already exists in server console)
 
 
 ## [4.3.3.0] - 2024-05-14

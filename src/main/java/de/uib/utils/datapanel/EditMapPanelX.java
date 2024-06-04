@@ -83,7 +83,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		@Override
 		public String getRemovalMenuText() {
-			super.getRemovalMenuText();
 			return Configed.getResourceValue("EditMapPanelX.PopupMenu.RemoveSpecificValue");
 		}
 	}
@@ -104,17 +103,12 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		@Override
 		public String getRemovalMenuText() {
-			super.getRemovalMenuText();
 			return Configed.getResourceValue("EditMapPanelX.PopupMenu.SetSpecificValueToDefault");
 		}
 	}
 
 	private final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
 	private final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
-
-	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable) {
-		this(tableCellRenderer, keylistExtendible, entryRemovable, false);
-	}
 
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
 			boolean reloadable) {

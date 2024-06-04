@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,9 +39,9 @@ public class FGeneralDialog extends JDialog {
 	protected JPanel northPanel;
 	protected JPanel centerPanel;
 	protected JPanel southPanel;
-	protected IconButton jButton1 = new IconButton();
-	protected IconButton jButton2 = new IconButton();
-	private IconButton jButton3 = new IconButton();
+	protected JButton jButton1 = new JButton();
+	protected JButton jButton2 = new JButton();
+	private JButton jButton3 = new JButton();
 	private int defaultResult = 1;
 
 	protected int preferredWidth;
@@ -228,7 +228,6 @@ public class FGeneralDialog extends JDialog {
 		button1Text = buttonNames[0];
 		if (buttonIcons[0] != null) {
 			jButton1.setIcon(buttonIcons[0]);
-			((ImageIcon) buttonIcons[0]).setDescription(buttonNames[0]);
 		}
 
 		if (noOfButtons > 1) {
@@ -236,7 +235,6 @@ public class FGeneralDialog extends JDialog {
 			button2Text = buttonNames[1];
 			if (buttonIcons[1] != null) {
 				jButton2.setIcon(buttonIcons[1]);
-				((ImageIcon) buttonIcons[1]).setDescription(buttonNames[1]);
 			}
 		}
 
@@ -245,21 +243,10 @@ public class FGeneralDialog extends JDialog {
 			button3Text = buttonNames[2];
 			if (buttonIcons[2] != null) {
 				jButton3.setIcon(buttonIcons[2]);
-				((ImageIcon) buttonIcons[2]).setDescription(buttonNames[2]);
 			}
 		}
 
-		StringBuilder iconsLog = new StringBuilder();
-
-		for (Icon icon : buttonIcons) {
-			if (icon == null) {
-				iconsLog.append(icon + "  ");
-			} else {
-				iconsLog.append(((ImageIcon) icon).getDescription() + "    ");
-			}
-		}
-
-		Logging.info(this, "with icons " + iconsLog);
+		Logging.info(this, "with icons " + Arrays.toString(buttonNames));
 	}
 
 	public void setTooltipButtons(String tooltip1, String tooltip2, String tooltip3) {

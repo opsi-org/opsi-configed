@@ -20,7 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -28,6 +27,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,22 +36,21 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
+
+import com.formdev.flatlaf.extras.components.FlatTextField;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.CheckedLabel;
 
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
 	private static final Pattern S_PLUS_PATTERN = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
-
-	private static final int BLINK_RATE = 0;
 
 	public enum SearchMode {
 		FULL_TEXT_SEARCH, FULL_TEXT_WITH_ALTERNATIVES_SEARCH, START_TEXT_SEARCH, REGEX_SEARCH
@@ -59,7 +58,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
-	private JTextField fieldSearch;
+	private FlatTextField flatTextFieldSearch;
 
 	private boolean filtering;
 
@@ -67,17 +66,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JComboBox<String> comboSearchFieldsMode;
 
 	private JLabel labelSearch;
-	private CheckedLabel checkmarkSearch;
 	private JLabel labelSearchMode;
-	private CheckedLabel filtermark;
+	private JCheckBox filtermark;
 
 	private JButton buttonShowHideExtraOptions;
 	private JLabel labelFilterMarkGap;
 
 	private JPanel navPane;
 	private PanelGenEditTable associatedPanel;
-
-	private Map<JMenuItem, Boolean> searchMenuEntries;
 
 	private JMenuItem popupSearch;
 	private JMenuItem popupSearchNext;
@@ -141,6 +137,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void init() {
 		initComponents();
+		initPopup();
 		setupLayout();
 
 		setSearchFieldsAll();
@@ -162,23 +159,16 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		this.masterFrame = masterFrame;
 	}
 
-	public void setWithNavPane(boolean b) {
-		navPane.setVisible(b);
+	public void showNavPane() {
+		initNavigationPanel();
+		navPane.setVisible(true);
 	}
 
-	public void setFiltering(boolean b, boolean withFilterPopup) {
-		searchMenuEntries.put(popupMarkHits, true);
-		if (withFilterPopup) {
-			searchMenuEntries.put(popupMarkAndFilter, true);
-		}
+	public void setFiltering(boolean filtering) {
+		popupMarkHits.setVisible(true);
+		popupMarkAndFilter.setVisible(true);
 
-		buildMenuSearchfield();
-
-		filtering = b;
-	}
-
-	public void setFiltering(boolean b) {
-		setFiltering(b, true);
+		this.filtering = filtering;
 	}
 
 	public void showFilterIcon(boolean b) {
@@ -186,14 +176,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		labelFilterMarkGap.setVisible(b);
 	}
 
-	public void setSelectMode(boolean select) {
-		this.selectMode = select;
+	public void setSelectMode(boolean selectMode) {
+		this.selectMode = selectMode;
 	}
 
 	@Override
-	public void setEnabled(boolean b) {
-		super.setEnabled(b);
-		fieldSearch.setEnabled(b);
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		flatTextFieldSearch.setEnabled(enabled);
 	}
 
 	private boolean disabledSinceWeAreInFilteredMode() {
@@ -210,8 +200,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	/**
 	 * serve graphical filtermark
 	 */
-	public void setFilterMark(boolean b) {
-		filtermark.setSelected(b);
+	public void setFilterMark(boolean selected) {
+		filtermark.setSelected(selected);
 	}
 
 	private void setFiltered(boolean filtered) {
@@ -222,31 +212,31 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	/**
 	 * express filter status in graphical components
 	 */
-	public void setFilteredMode(boolean b) {
-		filteredMode = b;
-		popupSearch.setEnabled(!b);
-		popupSearchNext.setEnabled(!b);
+	public void setFilteredMode(boolean filteredMode) {
+		this.filteredMode = filteredMode;
+		popupSearch.setEnabled(!filteredMode);
+		popupSearchNext.setEnabled(!filteredMode);
 
-		popupMarkHits.setEnabled(!b);
-		popupMarkAndFilter.setEnabled(!b);
-		popupEmptySearchfield.setEnabled(!b);
-		setFilterMark(b);
+		popupMarkHits.setEnabled(!filteredMode);
+		popupMarkAndFilter.setEnabled(!filteredMode);
+		popupEmptySearchfield.setEnabled(!filteredMode);
+		setFilterMark(filteredMode);
 	}
 
 	public boolean isFilteredMode() {
 		return filteredMode;
 	}
 
-	public void setNarrow(boolean b) {
-		if (b) {
+	public void setNarrow(boolean narrow) {
+		if (narrow) {
 			setupNarrowLayout();
 		}
-		showFilterIcon(b);
-		buttonShowHideExtraOptions.setVisible(b);
-		comboSearchFields.setVisible(!b);
-		comboSearchFieldsMode.setVisible(!b);
-		labelSearch.setVisible(!b);
-		labelSearchMode.setVisible(!b);
+		showFilterIcon(narrow);
+		buttonShowHideExtraOptions.setVisible(narrow);
+		comboSearchFields.setVisible(!narrow);
+		comboSearchFieldsMode.setVisible(!narrow);
+		labelSearch.setVisible(!narrow);
+		labelSearchMode.setVisible(!narrow);
 	}
 
 	public void setTargetModel(SearchTargetModel searchTargetModel) {
@@ -254,66 +244,22 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initComponents() {
-		initNavigationPanel();
+		navPane = new JPanel();
 		navPane.setVisible(false);
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 
-		Icon unselectedIconSearch = Utils.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = Utils.createImageIcon("images/loupe_light_16_x.png", "");
+		flatTextFieldSearch = new FlatTextField();
+		flatTextFieldSearch.setLeadingIcon(new FlatSearchIcon());
+		flatTextFieldSearch.setShowClearButton(true);
 
-		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
-		checkmarkSearch.setVisible(true);
-		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
-		checkmarkSearch.addActionListener(event -> fieldSearch.setText(""));
-		checkmarkSearch.setChangeStateAutonomously(false);
+		flatTextFieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		fieldSearch = new JTextField();
-		fieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
+		flatTextFieldSearch.getDocument().addDocumentListener(this);
 
-		fieldSearch.getCaret().setBlinkRate(BLINK_RATE);
-		fieldSearch.setToolTipText(Configed.getResourceValue("SearchPane.searchField.toolTip"));
+		flatTextFieldSearch.addKeyListener(this);
 
-		fieldSearch.getDocument().addDocumentListener(this);
-
-		fieldSearch.addKeyListener(this);
-
-		popupSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.search"));
-		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
-
-		popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
-		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
-
-		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
-		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
-			setFiltered(false);
-			searchTheRow(0, selectMode);
-		});
-
-		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
-		popupMarkHits.addActionListener((ActionEvent actionEvent) -> markAll());
-
-		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
-		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
-			switchFilterOff();
-			markAllAndFilter();
-			switchFilterOn();
-		});
-
-		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
-		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
-
-		searchMenuEntries = new LinkedHashMap<>();
-		searchMenuEntries.put(popupSearch, true);
-		searchMenuEntries.put(popupSearchNext, true);
-		searchMenuEntries.put(popupNewSearch, true);
-		searchMenuEntries.put(popupMarkHits, false);
-		searchMenuEntries.put(popupMarkAndFilter, false);
-
-		searchMenuEntries.put(popupEmptySearchfield, true);
-		buildMenuSearchfield();
-
-		fieldSearch.addActionListener((ActionEvent actionEvent) -> searchNextRow(selectMode));
+		flatTextFieldSearch.addActionListener((ActionEvent actionEvent) -> searchNextRow(selectMode));
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.BUTTON_DIMENSION);
@@ -354,10 +300,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		Icon unselectedIconFilter = Utils.createImageIcon("images/filter_14x14_open.png", "");
-		Icon selectedIconFilter = Utils.createImageIcon("images/filter_14x14_closed.png", "");
+		Icon unselectedIconFilter = Utils.getThemeIconPNG("bootstrap/funnel", "");
+		Icon selectedIconFilter = Utils.getThemeIconPNG("bootstrap/funnel_fill", "");
 
-		filtermark = new CheckedLabel(selectedIconFilter, unselectedIconFilter, false);
+		filtermark = new JCheckBox();
+		filtermark.setIcon(unselectedIconFilter);
+		filtermark.setSelectedIcon(selectedIconFilter);
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addActionListener(event -> filtermarkEvent());
 
@@ -372,8 +320,48 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		buttonShowHideExtraOptions.addActionListener(event -> showExtraOptions());
 	}
 
+	private void initPopup() {
+		popupSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.search"));
+		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
+
+		popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
+		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
+
+		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
+		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
+			setFiltered(false);
+			searchTheRow(0, selectMode);
+		});
+
+		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
+		popupMarkHits.addActionListener((ActionEvent actionEvent) -> markAll());
+
+		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
+		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
+			switchFilterOff();
+			markAllAndFilter();
+			switchFilterOn();
+		});
+
+		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
+		popupEmptySearchfield.addActionListener(actionEvent -> flatTextFieldSearch.setText(""));
+
+		popupMarkHits.setVisible(false);
+		popupMarkAndFilter.setVisible(false);
+
+		Logging.info(this, "buildMenuSearchfield");
+		JPopupMenu searchMenu = new JPopupMenu();
+		searchMenu.add(popupSearch);
+		searchMenu.add(popupSearchNext);
+		searchMenu.add(popupNewSearch);
+		searchMenu.add(popupMarkHits);
+		searchMenu.add(popupMarkAndFilter);
+		searchMenu.add(popupEmptySearchfield);
+
+		flatTextFieldSearch.setComponentPopupMenu(searchMenu);
+	}
+
 	private void initNavigationPanel() {
-		navPane = new JPanel();
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 
 		JButton nextButton = new JButton(Utils.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
@@ -440,44 +428,43 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
 		setLayout(layoutTablesearchPane);
 
-		int checkedLabelWidth = 18;
 		layoutTablesearchPane
-				.setHorizontalGroup(layoutTablesearchPane
-						.createParallelGroup(
-								GroupLayout.Alignment.LEADING)
-						.addGroup(layoutTablesearchPane.createSequentialGroup()
-								.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldSearch, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-								.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
-										Globals.MIN_GAP_SIZE)
-								.addComponent(buttonShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE))
-						.addGroup(layoutTablesearchPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE)
-								.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(comboSearchFieldsMode, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(Globals.GAP_SIZE));
+				.setHorizontalGroup(
+						layoutTablesearchPane
+								.createParallelGroup(
+										GroupLayout.Alignment.LEADING)
+								.addGroup(
+										layoutTablesearchPane.createSequentialGroup()
+												.addComponent(navPane, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.MIN_GAP_SIZE)
+												.addComponent(flatTextFieldSearch, 0, GroupLayout.PREFERRED_SIZE,
+														Short.MAX_VALUE)
+												.addGap(Globals.MIN_GAP_SIZE)
+												.addComponent(filtermark, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE,
+														Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+												.addComponent(buttonShowHideExtraOptions, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE))
+								.addGroup(layoutTablesearchPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchFieldsMode, 0,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+								.addGap(Globals.GAP_SIZE));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
 				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelFilterMarkGap, 10, 10, 10)
 						.addComponent(buttonShowHideExtraOptions, 10, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
@@ -498,11 +485,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(flatTextFieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(fieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(filtermark, 18, 18, 18)
+				.addComponent(filtermark, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelFilterMarkGap, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addComponent(buttonShowHideExtraOptions, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 						Globals.MIN_GAP_SIZE)
@@ -526,27 +512,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelFilterMarkGap, 10, 10, 10)
 				.addComponent(buttonShowHideExtraOptions, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 
-	private void buildMenuSearchfield() {
-		Logging.info(this, "buildMenuSearchfield");
-		JPopupMenu searchMenu = new JPopupMenu();
-		for (Entry<JMenuItem, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
-			if (Boolean.TRUE.equals(searchMenuEntry.getValue())) {
-				searchMenu.add(searchMenuEntry.getKey());
-			}
-		}
-		fieldSearch.setComponentPopupMenu(searchMenu);
-		Logging.info(this, "buildMenuSearchfield " + searchMenu);
-	}
-
 	private boolean allowSearchAction() {
-		return !disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty();
+		return !disabledSinceWeAreInFilteredMode() && !flatTextFieldSearch.getText().isEmpty();
 	}
 
 	private void retainOnlyAllFieldsItem() {
@@ -586,7 +559,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void requestFocus() {
-		fieldSearch.requestFocusInWindow();
+		flatTextFieldSearch.requestFocusInWindow();
 	}
 
 	private static class Finding {
@@ -827,17 +800,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * @parameter ActionListener
 	 */
 	public void setFiltermarkActionListener(ActionListener li) {
-		filtermark.removeAllActionListeners();
 		filtermark.addActionListener(li);
-	}
-
-	/**
-	 * sets an alternative tooltip for the filtermark
-	 * 
-	 * @parameter String
-	 */
-	public void setFiltermarkToolTipText(String s) {
-		filtermark.setToolTipText(s);
 	}
 
 	private void searchNextRow(boolean select) {
@@ -886,7 +849,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
-		final String value = fieldSearch.getText();
+		final String value = flatTextFieldSearch.getText();
 
 		Set<Integer> selectedCols0 = null;
 
@@ -897,7 +860,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		final Set<Integer> selectedCols = selectedCols0;
 
-		fieldSearch.getCaret().setVisible(false);
+		flatTextFieldSearch.getCaret().setVisible(false);
 
 		if (value.length() < 2) {
 			setRow(0, false, select);
@@ -913,7 +876,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			}
 		}
 
-		fieldSearch.getCaret().setVisible(true);
+		flatTextFieldSearch.getCaret().setVisible(true);
 	}
 
 	private void addSelectedRow(int row) {
@@ -957,33 +920,28 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
-			switchFilterOff();
-			searchTheRow(selectMode);
-		}
+		documentChanged(e);
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
-			switchFilterOff();
-			searchTheRow(selectMode);
-		}
+		documentChanged(e);
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		if (e.getDocument() == fieldSearch.getDocument()) {
-			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
-
+		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
 			switchFilterOff();
 
 			setRow(0, false, selectMode);
 			// go back to start when editing is restarted
+		}
+	}
+
+	private void documentChanged(DocumentEvent e) {
+		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
+			switchFilterOff();
+			searchTheRow(selectMode);
 		}
 	}
 

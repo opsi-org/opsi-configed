@@ -23,9 +23,6 @@ public class SecondaryFrame extends JFrame {
 
 	public SecondaryFrame() {
 		this.masterFrame = ConfigedMain.getMainFrame();
-		if (masterFrame == null) {
-			Logging.warning(this.getClass(), "masterFrame yet null");
-		}
 
 		glassPane = new GlassPane();
 		super.setGlassPane(glassPane);

@@ -18,9 +18,10 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 	public LicensingInfoPanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
 			boolean withTablesearchPane) {
 		super(title, editing, generalPopupPosition, popupsWanted, withTablesearchPane);
+		setMarkBoldHeaderCellRenderer();
 	}
 
-	public void setMarkBoldHeaderCellRenderer() {
+	private void setMarkBoldHeaderCellRenderer() {
 		theTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -35,6 +36,6 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 			}
 		});
 
-		theTable.getTableHeader().setReorderingAllowed(false);
+		theTable.getTableHeader().setReorderingAllowed(true);
 	}
 }

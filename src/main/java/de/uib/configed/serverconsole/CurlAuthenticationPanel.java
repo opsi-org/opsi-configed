@@ -6,30 +6,27 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+
+import com.formdev.flatlaf.extras.components.FlatPasswordField;
+import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 
 public class CurlAuthenticationPanel extends PMInstallPanel {
-	public static final String LBLUSER = "lbl_user";
 	public static final String LBLNEEDAUTH = "lbl_needAuthentication";
 	public static final String CBNEEDAUTH = "cb_needAuthentication";
 
 	private JCheckBox jCheckBoxNeedAuthentication;
-	private JLabel jLabeluser;
 	private JLabel jLabelNeedAuthentication;
-	private JTextField jTextFieldUser;
-	private JTextField jTextFieldPassword;
-	private JLabel jLabelPassword;
+	private FlatTextField flatTextFieldUser;
+	private FlatPasswordField flatPasswordField;
 
 	public CurlAuthenticationPanel() {
 		super();
@@ -49,20 +46,11 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 				close();
 			}
 		});
-		jLabeluser = new JLabel(Configed.getResourceValue("CurlAuthenticationPanel.username"));
-		jLabelPassword = new JLabel(Configed.getResourceValue("CurlAuthenticationPanel.password"));
-		jTextFieldUser = new JTextField();
-		jTextFieldPassword = new JPasswordField();
-		((JPasswordField) jTextFieldPassword).setEchoChar('*');
-	}
 
-	public void setLabelSizes(int width, int height) {
-		setLabelSizes(new Dimension(width, height));
-	}
-
-	private void setLabelSizes(Dimension size) {
-		jLabeluser.setPreferredSize(size);
-		jLabelPassword.setPreferredSize(size);
+		flatTextFieldUser = new FlatTextField();
+		flatTextFieldUser.setPlaceholderText(Configed.getResourceValue("username"));
+		flatPasswordField = new FlatPasswordField();
+		flatPasswordField.setPlaceholderText(Configed.getResourceValue("password"));
 	}
 
 	public JComponent get(String comp) {
@@ -71,8 +59,6 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 			result = jLabelNeedAuthentication;
 		} else if (comp.equals(CBNEEDAUTH)) {
 			result = jCheckBoxNeedAuthentication;
-		} else if (comp.equals(LBLUSER)) {
-			result = jLabeluser;
 		} else {
 			result = null;
 		}
@@ -80,47 +66,24 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 	}
 
 	public String getUser() {
-		return jTextFieldUser.getText();
+		return flatTextFieldUser.getText();
 	}
 
 	public String getPassword() {
-		return new String(((JPasswordField) jTextFieldPassword).getPassword());
+		return new String(flatPasswordField.getPassword());
 	}
 
 	private void initLayout() {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-								.addComponent(jLabeluser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE))
-						.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-								.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE)))
-				.addGroup(layout.createParallelGroup()
-						.addComponent(jTextFieldUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2)
-						.addComponent(jTextFieldPassword, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2)));
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addComponent(flatTextFieldUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
+				.addComponent(flatPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabeluser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(layout.createParallelGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addGap(Globals.GAP_SIZE).addComponent(jTextFieldPassword, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addGap(Globals.GAP_SIZE)));
+				.addComponent(flatTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(flatPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT));
 	}
 }

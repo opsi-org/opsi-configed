@@ -37,7 +37,7 @@ public class PanelHostProperties extends JPanel {
 
 	private void buildPanel() {
 		Logging.info(this, "buildPanel, produce editMapPanel");
-		editMapPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false);
+		editMapPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 		editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 		editMapPanel.setShowToolTip(false);
 

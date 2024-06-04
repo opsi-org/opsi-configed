@@ -23,7 +23,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
-import de.uib.utils.Utils;
+import com.formdev.flatlaf.util.SystemInfo;
+
 import de.uib.utils.logging.Logging;
 import de.uib.utils.script.CmdLauncher;
 
@@ -75,7 +76,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		setDataChanged(false);
 
 		cmdLauncher = new CmdLauncher();
-		if (Utils.isWindows()) {
+		if (SystemInfo.isWindows) {
 			cmdLauncher.setPrefix(WINDOWS_LINK_INTERPRETER);
 		} else {
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);

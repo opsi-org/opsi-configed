@@ -68,9 +68,7 @@ import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.FShowListWithComboSelect;
-import de.uib.configed.gui.FStartWakeOnLan;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.gui.FWakeClients;
 import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
@@ -83,7 +81,7 @@ import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateUpdateManager;
 import de.uib.configed.guidata.ListMerger;
-import de.uib.configed.productaction.FProductActions;
+import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.serverconsole.CommandControlDialog;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
@@ -233,7 +231,7 @@ public class ConfigedMain implements MessagebusListener {
 	private List<JFrame> allFrames;
 
 	private FGroupActions groupActionFrame;
-	private FProductActions productActionFrame;
+	private FCompleteWinProducts productActionFrame;
 
 	private List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
 
@@ -658,8 +656,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "startProductActionFrame ");
 
 		if (productActionFrame == null) {
-			productActionFrame = new FProductActions(this);
-			productActionFrame.setSize(LICENSES_DIMENSION);
+			productActionFrame = new FCompleteWinProducts(this);
 			productActionFrame.centerOnParent();
 			allFrames.add(productActionFrame);
 		}
@@ -830,7 +827,8 @@ public class ConfigedMain implements MessagebusListener {
 
 			updateHostInfo();
 
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1);
+			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
+					selectedClients.isEmpty());
 
 			// initialize the following method
 			depotsOfSelectedClients = null;
@@ -2594,9 +2592,8 @@ public class ConfigedMain implements MessagebusListener {
 			boolean result = false;
 			if (this.dataChanged) {
 				if (fAskSaveProductConfiguration == null) {
-					fAskSaveProductConfiguration = new FTextArea(mainFrame, Globals.APPNAME, true,
-							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.NO"),
-									Configed.getResourceValue("buttonYES") });
+					fAskSaveProductConfiguration = new FTextArea(mainFrame, Globals.APPNAME, true, new String[] {
+							Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 					fAskSaveProductConfiguration
 							.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
 
@@ -2707,9 +2704,8 @@ public class ConfigedMain implements MessagebusListener {
 			boolean result = false;
 			if (this.dataChanged) {
 				if (fAskSaveChangedText == null) {
-					fAskSaveChangedText = new FTextArea(mainFrame, Globals.APPNAME, true,
-							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.NO"),
-									Configed.getResourceValue("buttonYES") });
+					fAskSaveChangedText = new FTextArea(mainFrame, Globals.APPNAME, true, new String[] {
+							Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 					fAskSaveChangedText.setMessage(Configed.getResourceValue("MainFrame.SaveChangedValue"));
 					fAskSaveChangedText.setSize(new Dimension(300, 220));
 				}
@@ -3167,46 +3163,20 @@ public class ConfigedMain implements MessagebusListener {
 		setClient(newClientID);
 	}
 
-	public void wakeUp(final List<String> clients, String startInfo) {
-		if (clients == null) {
+	public void wakeSelectedClients() {
+		if (selectedClients == null) {
 			return;
 		}
 
-		Logging.info(this, "wakeUp " + clients.size() + " clients: " + startInfo);
-		if (clients.isEmpty()) {
+		Logging.info(this, "wakeUp " + selectedClients.size());
+		if (selectedClients.isEmpty()) {
 			return;
 		}
 
-		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
+		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients")) {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(clients);
-			}
-		}.start();
-	}
-
-	public void wakeSelectedClients() {
-		wakeUp(selectedClients, "");
-	}
-
-	public void wakeUpWithDelay(final int delaySecs, final List<String> clients, String startInfo) {
-		if (clients == null) {
-			return;
-		}
-
-		Logging.info(this, "wakeUpWithDelay " + clients.size() + " clients: " + startInfo + " delay secs " + delaySecs);
-
-		if (clients.isEmpty()) {
-			return;
-		}
-
-		final FWakeClients result = new FWakeClients(mainFrame,
-				Configed.getResourceValue("FWakeClients.title") + " " + startInfo);
-
-		new Thread() {
-			@Override
-			public void run() {
-				result.act(clients, delaySecs);
+				return persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(selectedClients);
 			}
 		}.start();
 	}
@@ -3643,10 +3613,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public boolean closeInstance(boolean checkdirty) {
 		Logging.info(this, "start closing instance, checkdirty " + checkdirty);
-
-		if (!FStartWakeOnLan.runningInstances.isEmpty() && !FStartWakeOnLan.runningInstances.askStop()) {
-			return false;
-		}
 
 		if (checkdirty) {
 			int closeCheckResult = checkClose();

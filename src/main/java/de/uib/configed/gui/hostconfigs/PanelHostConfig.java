@@ -37,7 +37,6 @@ public class PanelHostConfig extends JPanel {
 
 	private boolean keylistExtendible = true;
 	private boolean entryRemovable = true;
-	private boolean reloadable = true;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -108,7 +107,7 @@ public class PanelHostConfig extends JPanel {
 		putUsersToPropertyclassesTreeMap();
 
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(), keylistExtendible,
-				entryRemovable, reloadable, new DefaultEditMapPanel.Actor() {
+				entryRemovable, new DefaultEditMapPanel.Actor() {
 					@Override
 					public void reloadData() {
 						reloadHostConfig();

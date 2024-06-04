@@ -27,7 +27,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
 		super("", true, 2, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 		this.controller = controller;
-		searchPane.setWithNavPane(true);
+		searchPane.showNavPane();
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.uib.configed.productaction.PanelCompleteWinProducts;
+import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -133,7 +133,7 @@ public class OpsiServiceNOMPersistenceController {
 	private static NavigableMap<String, String> propertyClassesClient;
 	private static Set<String> configKeyStartersNotForClients;
 
-	private PanelCompleteWinProducts panelCompleteWinProducts;
+	private FCompleteWinProducts panelCompleteWinProducts;
 
 	private String user;
 
@@ -389,7 +389,7 @@ public class OpsiServiceNOMPersistenceController {
 		return triggeredEvent;
 	}
 
-	public void registerPanelCompleteWinProducts(PanelCompleteWinProducts panelCompleteWinProducts) {
+	public void registerPanelCompleteWinProducts(FCompleteWinProducts panelCompleteWinProducts) {
 		this.panelCompleteWinProducts = panelCompleteWinProducts;
 	}
 
@@ -431,12 +431,8 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public boolean makeConnection() {
-		return makeConnection(exec);
-	}
-
-	private boolean makeConnection(AbstractPOJOExecutioner exec1) {
 		Logging.info(this, "trying to make connection");
-		boolean result = exec1.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new String[] {}));
+		boolean result = exec.doCall(new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_AUTHENTICATED, new String[] {}));
 
 		if (!result) {
 			Logging.info(this, "connection does not work");

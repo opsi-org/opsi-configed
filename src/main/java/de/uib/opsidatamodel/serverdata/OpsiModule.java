@@ -7,8 +7,7 @@
 package de.uib.opsidatamodel.serverdata;
 
 public enum OpsiModule {
-	LICENSE_MANAGEMENT("license_management"), UEFI("uefi"), USER_ROLES("userroles"), LOCAL_IMAGING("local_imaging"),
-	VPN("vpn");
+	LICENSE_MANAGEMENT("license_management"), USER_ROLES("userroles"), LOCAL_IMAGING("local_imaging"), VPN("vpn");
 
 	private final String displayName;
 

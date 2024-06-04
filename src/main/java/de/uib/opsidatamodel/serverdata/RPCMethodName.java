@@ -109,8 +109,6 @@ public enum RPCMethodName {
 
 	GET_DOMAIN("getDomain"),
 
-	DEPOT_INSTALL_PACKAGE("depot_installPackage"),
-
 	SET_RIGHTS("setRights"),
 
 	SERVICE_HEALTH_CHECK("service_healthCheck"), SERVICE_GET_DIAGNOSTIC_DATA("service_getDiagnosticData"),

@@ -154,7 +154,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 		}
 	}
 
-	public void setVerbosity(int vSum) {
+	public void setLoglevel(int vSum) {
 		StringBuilder v = new StringBuilder();
 		for (int i = 0; i < vSum; i++) {
 			v.append("v");
@@ -166,7 +166,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 		}
 	}
 
-	public void setPassw(String pw) {
+	public void setPassword(String pw) {
 		if (!pw.isEmpty()) {
 			passw = " -p " + "\"" + pw + "\"";
 		} else {

@@ -57,7 +57,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	public void setGroupName(String s) {
 		Logging.info(this, "setGroupName " + s);
-		resetReportedClients();
 		fieldGroupActivated.setText(s);
 	}
 
@@ -71,21 +70,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	public String getGroupName() {
 		return fieldGroupActivated.getText();
-	}
-
-	private void resetReportedClients() {
-		fieldActivatedClientsCount.setText("");
-		fieldSelectedClientsNames.setText("");
-		fieldSelectedClientsNames.setToolTipText("");
-
-		fieldInvolvedDepots.setText("");
-	}
-
-	private void initializeValues() {
-		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + " ");
-		resetReportedClients();
-		fieldInvolvedDepots.setText("");
-		fieldInvolvedDepots.setToolTipText("");
 	}
 
 	public void updateValues(Integer clientsCount, Integer selectedClientsCount, String selectedClientNames,
@@ -130,9 +114,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	}
 
 	private void setFieldClientsCount(Integer n) {
-		String newS = null;
+		String newS = "";
 		if (n != null) {
-			newS = "" + n + " ";
+			newS = n + " ";
 		}
 
 		int bracketIndex = fieldActivatedClientsCount.getText().indexOf("(");
@@ -150,12 +134,10 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelGroupActivated = new JLabel(Configed.getResourceValue("MainFrame.groupActivated"));
 
 		fieldGroupActivated = new JTextField();
-
 		fieldGroupActivated.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldGroupActivated.setEditable(false);
 
 		labelAllClientsCount = new JLabel();
-		labelAllClientsCount.setPreferredSize(Globals.LABEL_DIMENSION);
 
 		labelSelectedClientsCount = new JLabel(Configed.getResourceValue("MainFrame.labelSelected"));
 
@@ -168,7 +150,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldActivatedClientsCount.setEditable(false);
 
 		fieldSelectedClientsNames = new JTextField();
-
 		fieldSelectedClientsNames.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldSelectedClientsNames.setEditable(false);
 		fieldSelectedClientsNames.setDragEnabled(true);
@@ -181,8 +162,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		disconnectedIcon = Utils.createImageIcon("bootstrap/circle_blue_large.png", "");
 
 		connectionStateLabel = new JLabel();
-
-		initializeValues();
 	}
 
 	private void setupLayout() {

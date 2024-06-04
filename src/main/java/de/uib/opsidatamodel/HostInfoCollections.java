@@ -223,7 +223,6 @@ public class HostInfoCollections {
 
 				if (!workbenchPath.isEmpty()) {
 					persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(workbenchPath);
-					persistenceController.getConfigDataService().setPackageServerDirectoryPD(workbenchPath);
 				}
 			}
 		}

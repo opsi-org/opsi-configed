@@ -14,12 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
-import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
+
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -28,12 +30,9 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.CheckedLabel;
 import de.uib.utils.swing.RevertibleTextField;
 import de.uib.utils.swing.SeparatedDocument;
-import de.uib.utils.swing.ToggleableTextField;
 
 public class ClientInfoPanel extends JPanel implements KeyListener {
 	private JLabel labelClientDescription;
@@ -48,9 +47,9 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	private JScrollPane scrollpaneNotes;
 
 	private JLabel labelClientID;
-	private CheckedLabel cbInstallByShutdown;
-	private CheckedLabel cbUefiBoot;
-	private CheckedLabel cbWANConfig;
+	private FlatTriStateCheckBox checkBoxInstallByShutdown;
+	private FlatTriStateCheckBox checkBoxUEFIBoot;
+	private FlatTriStateCheckBox checkBoxWANConfig;
 
 	private RevertibleTextField jTextFieldDescription;
 	private RevertibleTextField jTextFieldInventoryNumber;
@@ -59,7 +58,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	private RevertibleTextField macAddressField;
 	private RevertibleTextField ipAddressField;
 	private RevertibleTextField jTextFieldOneTimePassword;
-	private ToggleableTextField jTextFieldHostKey;
+	private JPasswordField jTextFieldHostKey;
 
 	private Map<String, Map<String, String>> changedClientInfos;
 	private String oldNotes;
@@ -133,29 +132,28 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 				"", 24);
 		ipAddressField.addKeyListener(this);
 
-		final Icon unselectedIcon = Utils.getThemeIconPNG("bootstrap/square", "");
-		final Icon selectedIcon = Utils.getThemeIconPNG("bootstrap/check-square", "");
-		final Icon nullIcon = Utils.getThemeIconPNG("bootstrap/slash-square", "");
+		checkBoxUEFIBoot = new FlatTriStateCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
+		checkBoxUEFIBoot.setAllowIndeterminate(false);
+		checkBoxUEFIBoot.setEnabled(false);
 
-		cbUefiBoot = new CheckedLabel(Configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
-				unselectedIcon, nullIcon, false);
+		checkBoxWANConfig = new FlatTriStateCheckBox(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
+		checkBoxWANConfig.setAllowIndeterminate(false);
+		checkBoxWANConfig.addActionListener(event -> wanConfigAction());
+		checkBoxWANConfig.setFocusable(false);
 
-		cbWANConfig = new CheckedLabel(Configed.getResourceValue("NewClientDialog.wan_not_activated"), selectedIcon,
-				unselectedIcon, nullIcon, false);
-		cbWANConfig.setEnabled(true);
-		cbWANConfig.addActionListener(event -> wanConfigAction());
-
-		cbInstallByShutdown = new CheckedLabel(Configed.getResourceValue("NewClientDialog.installByShutdown"),
-				selectedIcon, unselectedIcon, nullIcon, false);
-		cbInstallByShutdown.setEnabled(true);
-		cbInstallByShutdown.addActionListener(event -> installByShutdownAction());
+		checkBoxInstallByShutdown = new FlatTriStateCheckBox(
+				Configed.getResourceValue("NewClientDialog.installByShutdown"));
+		checkBoxInstallByShutdown.setAllowIndeterminate(false);
+		checkBoxInstallByShutdown.addActionListener(event -> installByShutdownAction());
+		checkBoxInstallByShutdown.setFocusable(false);
 
 		updateClientCheckboxText();
 
 		jTextFieldOneTimePassword = new RevertibleTextField("");
 		jTextFieldOneTimePassword.addKeyListener(this);
 
-		jTextFieldHostKey = new ToggleableTextField();
+		jTextFieldHostKey = new JPasswordField();
+		jTextFieldHostKey.setEditable(false);
 	}
 
 	private void setupLayout() {
@@ -197,16 +195,16 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 						Globals.FIRST_LABEL_WIDTH)
 
 				/////// INSTALL BY SHUTDOWN
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(cbInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
+						checkBoxInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// UEFI BOOT
-				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(cbUefiBoot,
-						0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(checkBoxUEFIBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// WAN CONFIG
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(cbWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(checkBoxWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// ONE TIME PASSWORD
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
@@ -260,14 +258,14 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 				////// INSTALL BY SHUTDOWN
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(cbInstallByShutdown, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(checkBoxInstallByShutdown, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// UEFI BOOT & WAN Config
-				.addComponent(cbUefiBoot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(checkBoxUEFIBoot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addComponent(cbWANConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(checkBoxWANConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// ONE TIME PASSWORD
@@ -291,22 +289,18 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 	public void setClientDescriptionText(String s) {
 		jTextFieldDescription.setText(s);
-		jTextFieldDescription.setCaretPosition(0);
 	}
 
 	public void setClientInventoryNumberText(String s) {
 		jTextFieldInventoryNumber.setText(s);
-		jTextFieldInventoryNumber.setCaretPosition(0);
 	}
 
 	public void setClientOneTimePasswordText(String s) {
 		jTextFieldOneTimePassword.setText(s);
-		jTextFieldOneTimePassword.setCaretPosition(0);
 	}
 
 	public void setClientNotesText(String s) {
 		jTextAreaNotes.setText(s);
-		jTextAreaNotes.setCaretPosition(0);
 		oldNotes = s;
 	}
 
@@ -323,13 +317,20 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	}
 
 	public void setUefiBoot() {
-		cbUefiBoot
-				.setSelected(persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients()));
+		Boolean value = persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients());
+
+		Logging.info(this, "setUefiBoot " + value);
+		checkBoxUEFIBoot.setChecked(value);
 	}
 
-	public void setWANConfig(Boolean b) {
-		Logging.info(this, "setWANConfig " + b);
-		cbWANConfig.setSelected(b);
+	public void setWANConfig(Boolean value) {
+		Logging.info(this, "setWANConfig " + value);
+		checkBoxWANConfig.setChecked(value);
+	}
+
+	public void setShutdownInstall(Boolean value) {
+		Logging.info(this, "setShutdownInstall " + value);
+		checkBoxInstallByShutdown.setChecked(value);
 	}
 
 	public void setOpsiHostKey(String s) {
@@ -337,28 +338,16 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		jTextFieldHostKey.setText(s);
 	}
 
-	public void setShutdownInstall(Boolean b) {
-		Logging.info(this, "setShutdownInstall " + b);
-		cbInstallByShutdown.setSelected(b);
-	}
-
 	public void setClientID(String s) {
 		labelClientID.setText(s);
 	}
 
 	public void updateClientCheckboxText() {
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI)) {
-			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
-		} else {
-			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
-			cbUefiBoot.setEnabled(false);
-		}
-
 		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
-			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
+			checkBoxWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
-			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
-			cbWANConfig.setEnabled(false);
+			checkBoxWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
+			checkBoxWANConfig.setEnabled(false);
 		}
 	}
 
@@ -367,7 +356,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		for (String client : configedMain.getSelectedClients()) {
 			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-			changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, cbWANConfig.isSelected().toString());
+			changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(checkBoxWANConfig.isSelected()));
 			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 		}
 	}
@@ -377,7 +366,8 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		for (String client : configedMain.getSelectedClients()) {
 			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-			changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, cbInstallByShutdown.isSelected().toString());
+			changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
+					Boolean.toString(checkBoxInstallByShutdown.isSelected()));
 			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 		}
 	}
@@ -432,43 +422,33 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		return changedClientInfos.computeIfAbsent(client, arg -> new HashMap<>());
 	}
 
-	public void setClientInfoEditing(boolean singleClient) {
+	public void setClientInfoEditing(boolean singleClient, boolean clientSelectionEmpty) {
 		// singleClient is primarily conceived as toggle: true for single host, false
 		// for multi hosts editing
 
 		// mix with global read only flag
-		boolean gb = !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly();
-
-		// resulting toggle for multi hosts editing
-		boolean b1 = false;
-		if (singleClient && gb) {
-			b1 = true;
-		}
+		boolean writingAllowed = !PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly();
 
 		jTextFieldDescription.setEnabled(singleClient);
-		jTextFieldDescription.setEditable(b1);
+		jTextFieldDescription.setEditable(writingAllowed);
 		jTextFieldInventoryNumber.setEnabled(singleClient);
-		jTextFieldInventoryNumber.setEditable(b1);
+		jTextFieldInventoryNumber.setEditable(writingAllowed);
 		jTextFieldOneTimePassword.setEnabled(singleClient);
-		jTextFieldOneTimePassword.setEditable(b1);
+		jTextFieldOneTimePassword.setEditable(writingAllowed);
 		jTextAreaNotes.setEnabled(singleClient);
-		jTextAreaNotes.setEditable(b1);
+		jTextAreaNotes.setEditable(writingAllowed);
 		systemUUIDField.setEnabled(singleClient);
-		systemUUIDField.setEditable(b1);
+		systemUUIDField.setEditable(writingAllowed);
 		macAddressField.setEnabled(singleClient);
-		macAddressField.setEditable(b1);
+		macAddressField.setEditable(writingAllowed);
 		ipAddressField.setEnabled(singleClient);
-		ipAddressField.setEditable(b1);
+		ipAddressField.setEditable(writingAllowed);
 
-		// multi host editing allowed
-		cbUefiBoot.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.UEFI));
-		cbUefiBoot.disableSelection();
+		checkBoxWANConfig.setEnabled(writingAllowed && !clientSelectionEmpty
+				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN));
+		checkBoxInstallByShutdown.setEnabled(writingAllowed && !clientSelectionEmpty);
 
-		cbWANConfig.setEnabled(gb && persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN));
-		cbInstallByShutdown.setEnabled(gb);
-
-		jTextFieldHostKey.setMultiValue(!singleClient);
 		jTextFieldHostKey.setEnabled(singleClient);
 
 		if (singleClient) {

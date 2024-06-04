@@ -85,8 +85,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private Map<String, Object> originalMap;
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable, boolean reloadable, final DefaultEditMapPanel.Actor actor) {
-		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable);
+			boolean keylistEditable, final DefaultEditMapPanel.Actor actor) {
+		super(tableCellRenderer, keylistExtendible, keylistEditable, true);
 
 		buildPanel();
 		this.actor = actor;

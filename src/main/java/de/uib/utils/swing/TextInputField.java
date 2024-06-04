@@ -74,11 +74,9 @@ public class TextInputField extends JPanel {
 		}
 
 		textfield = new JTextField(initValue);
-		textfield.getCaret().setBlinkRate(0);
 
 		combo = new AutoCompletionComboBox<>();
 		combo.setModel(new DefaultComboBoxModel<>(this.proposedValues.toArray(new String[0])));
-		((JTextField) combo.getEditor().getEditorComponent()).getCaret().setBlinkRate(0);
 
 		if (inputType == InputType.VALUELIST) {
 			super.add(combo);

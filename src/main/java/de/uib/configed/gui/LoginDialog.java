@@ -23,19 +23,18 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.components.FlatComboBox;
+import com.formdev.flatlaf.extras.components.FlatPasswordField;
+import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -45,7 +44,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PanelLinedComponents;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.thread.WaitingSleeper;
 import de.uib.utils.thread.WaitingWorker;
@@ -70,20 +68,13 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private JLabel jLabelVersion;
 	private JLabel jLabelLogo;
 
-	private JLabel jLabelUser;
-	private JTextField fieldUser = new JTextField();
+	private FlatTextField fieldUser = new FlatTextField();
 
-	private JPasswordField passwordField = new JPasswordField();
-	private JLabel jLabelPassword;
+	private FlatPasswordField passwordField = new FlatPasswordField();
+	private FlatPasswordField fieldOTP = new FlatPasswordField();
 
-	private JLabel jLabelOTP;
-	private JTextField fieldOTP = new JTextField(new SeparatedDocument(
-			new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6, Character.MIN_VALUE, 6, true), "", 6);
+	private FlatComboBox<String> fieldHost = new FlatComboBox<>();
 
-	private JLabel jLabelHost;
-	private JComboBox<String> fieldHost = new JComboBox<>();
-
-	private JPanel jPanelParameters;
 	private JCheckBox checkUseOTP;
 
 	private JButton jButtonCancel;
@@ -128,8 +119,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	public void setServers(List<String> hosts) {
 		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray(new String[0])));
-		((JTextField) fieldHost.getEditor().getEditorComponent())
-				.setCaretPosition(((String) fieldHost.getSelectedItem()).length());
 	}
 
 	public void setUser(String user) {
@@ -168,8 +157,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void initGuiElements() {
-		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("LoginDialog.title"));
-
+		setTitle(Configed.getResourceValue("LoginDialog.title"));
 		setIconImage(Utils.getMainIcon());
 
 		// Opsilogo
@@ -186,25 +174,22 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
 
-		jLabelHost = new JLabel(Configed.getResourceValue("LoginDialog.jLabelHost"));
-
+		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.addKeyListener(newKeyListener);
 
-		jLabelUser = new JLabel(Configed.getResourceValue("LoginDialog.jLabelUser"));
-
+		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(newKeyListener);
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
-		jLabelPassword = new JLabel(Configed.getResourceValue("LoginDialog.jLabelPassword"));
-
+		passwordField.setPlaceholderText(Configed.getResourceValue("password"));
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
-		jLabelOTP = new JLabel(Configed.getResourceValue("LoginDialog.jLabelOTP"));
-		jLabelOTP.setVisible(false);
-		jLabelOTP.setPreferredSize(new Dimension(0, 0));
+		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
+				Character.MIN_VALUE, 6, true));
+		fieldOTP.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderOTP"));
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
@@ -217,8 +202,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		});
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
-		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkUseOTP });
-
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
@@ -228,17 +211,13 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private void showOTPField(boolean show) {
 		if (show) {
-			jLabelOTP.setVisible(true);
 			fieldOTP.setVisible(true);
-			jLabelOTP.setPreferredSize(new Dimension(200, 20));
 			fieldOTP.setPreferredSize(new Dimension(Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
-			setSize(new Dimension(getWidth(), 467));
+			setSize(getPreferredSize());
 		} else {
-			jLabelOTP.setVisible(false);
 			fieldOTP.setVisible(false);
-			jLabelOTP.setPreferredSize(new Dimension(0, 0));
 			fieldOTP.setPreferredSize(new Dimension(0, 0));
-			setSize(new Dimension(getWidth(), 420));
+			setSize(getPreferredSize());
 		}
 	}
 
@@ -250,8 +229,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 
-		// With this, the jProgressBar will take up the vertical
-		// space even when it's invisible
 		groupLayout.setHonorsVisibility(false);
 		panel.setLayout(groupLayout);
 
@@ -265,26 +242,16 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 				.addGap(Globals.LINE_HEIGHT)
 
-				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
 				.addGap(2).addComponent(fieldHost, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.LINE_HEIGHT)
-				.addComponent(jLabelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(2).addComponent(fieldUser, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(2)
-				.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(2).addComponent(passwordField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(2)
-				.addComponent(jLabelOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(2)
+				.addComponent(fieldUser, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(passwordField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addComponent(jPanelParameters, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
-						(int) (1.2 * Globals.LINE_HEIGHT))
+				.addComponent(checkUseOTP, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
 
@@ -309,23 +276,15 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE))
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelHost,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelUser,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelPassword,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelOTP,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addComponent(jPanelParameters, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
@@ -341,8 +300,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		setHost("localhost");
 		fieldHost.requestFocus();
-		((JTextField) fieldHost.getEditor().getEditorComponent())
-				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 
 		// Sets the window on the main screen
 		pack();
@@ -464,7 +421,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				Logging.info(this, "get persis");
 				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
 						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()),
-						fieldOTP.getText());
+						String.valueOf(fieldOTP.getPassword()));
 
 				Logging.info(this, "got persis, == null " + (persistenceController == null));
 

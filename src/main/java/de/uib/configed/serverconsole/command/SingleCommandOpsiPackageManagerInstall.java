@@ -100,12 +100,16 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 		}
 	}
 
-	public void setVerbosity(int vSum) {
-		StringBuilder v = new StringBuilder("v");
-		for (int i = 0; i < vSum; i++) {
-			v.append("v");
+	public void setLoglevel(int vSum) {
+		if (vSum <= 3) {
+			verbosity = "";
+		} else {
+			StringBuilder v = new StringBuilder("-");
+			for (int i = 4; i < vSum; i++) {
+				v.append("v");
+			}
+			verbosity = v.toString();
 		}
-		verbosity = " -" + v + " ";
 	}
 
 	public void setFreeInput(String fI) {
