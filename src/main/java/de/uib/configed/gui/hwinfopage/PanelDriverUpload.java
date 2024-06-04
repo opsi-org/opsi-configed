@@ -219,7 +219,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(configedMain.getLinkedDepots().toArray(new String[0])));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(
+				persistenceController.getHostInfoCollections().getDepotNamesList().toArray(new String[0])));
 
 		comboChooseDepot.setEnabled(false);
 

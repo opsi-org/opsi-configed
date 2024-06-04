@@ -11,6 +11,8 @@
 - Rework design of all user/password input fields
 - Remove Wake on LAN timer, only directly wake up clients
 - Remove Product installation in Product Actions panel (already exists in server console)
+- Select all products in a group in table on double click
+- Show the products from depots selected in depotslist in product tree
 
 
 ## [4.3.3.0] - 2024-05-14

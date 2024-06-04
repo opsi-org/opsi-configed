@@ -216,8 +216,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	// collection of retrieved software audit and hardware maps
 
-	private String myServer;
-
 	private ClientTable clientTable;
 
 	private ClientTree clientTree;
@@ -225,7 +223,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private DepotsList depotsList;
 	private Map<String, Map<String, Object>> depots;
-	private List<String> depotNamesLinked;
 	private String depotRepresentative;
 
 	private List<JFrame> allFrames;
@@ -333,11 +330,20 @@ public class ConfigedMain implements MessagebusListener {
 	protected void initGui() {
 		Logging.info(this, "initGui");
 
+		initDepots();
 		initTree();
 
 		allFrames = new ArrayList<>();
 
-		initMainFrame();
+		// create client selection panel
+		clientTable = new ClientTable(this);
+
+		clientTable.setModel(buildClientListTableModel(true));
+		setSelectionPanelCols();
+
+		clientTable.initSortKeys();
+
+		startMainFrame(this, clientTable, depotsList, clientTree, productTree);
 
 		updateManager = new InstallationStateUpdateManager(this,
 				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getTableProducts(),
@@ -556,10 +562,9 @@ public class ConfigedMain implements MessagebusListener {
 
 	protected void preloadData() {
 		persistenceController.getModuleDataService().retrieveOpsiModules();
-		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
 		if (depotRepresentative == null) {
-			depotRepresentative = myServer;
+			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
 		}
 
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
@@ -896,21 +901,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	// we call this after we have a PersistenceController
-	private void initMainFrame() {
-		initDepots();
-
-		// create client selection panel
-		clientTable = new ClientTable(this);
-
-		clientTable.setModel(buildClientListTableModel(true));
-		setSelectionPanelCols();
-
-		clientTable.initSortKeys();
-
-		startMainFrame(this, clientTable, depotsList, clientTree, productTree);
-	}
-
 	private void initDepots() {
 		// create depotsList
 		depotsList = new DepotsList(this);
@@ -935,8 +925,11 @@ public class ConfigedMain implements MessagebusListener {
 		fetchDepots();
 
 		depotsList.setInfo(depots);
-		List<String> oldSelectedDepots = Arrays.asList(backslashPattern
-				.matcher(Configed.getSavedStates().getProperty("selectedDepots", myServer)).replaceAll("").split(","));
+		List<String> oldSelectedDepots = Arrays
+				.asList(backslashPattern
+						.matcher(Configed.getSavedStates().getProperty("selectedDepots",
+								persistenceController.getHostInfoCollections().getConfigServer()))
+						.replaceAll("").split(","));
 		depotsList.setSelectedValues(oldSelectedDepots);
 	}
 
@@ -1070,7 +1063,8 @@ public class ConfigedMain implements MessagebusListener {
 		licensesFrame = new LicensesFrame(this);
 		Utils.setMasterFrame(licensesFrame);
 		licensesFrame.setIconImage(Utils.getMainIcon());
-		licensesFrame.setTitle(myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licenses"));
+		licensesFrame.setTitle(persistenceController.getHostInfoCollections().getConfigServer() + ":  "
+				+ Configed.getResourceValue("ConfigedMain.Licenses"));
 
 		// panelAssignToLPools
 		licensesPanelsTabNames.put(LicensesTabStatus.LICENSEPOOL,
@@ -1854,6 +1848,8 @@ public class ConfigedMain implements MessagebusListener {
 		if (initialDataLoader.isDataLoaded()) {
 			initialTreeActivation();
 			clientTable.clearSelection();
+
+			productTree.reInitTree();
 		}
 
 		setViewIndex(getViewIndex());
@@ -1873,10 +1869,8 @@ public class ConfigedMain implements MessagebusListener {
 	private boolean setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
-		if (selectedClients.isEmpty()) {
-			if (depotRepresentative == null) {
-				depotRepresentative = myServer;
-			}
+		if (getSelectedClients().isEmpty()) {
+			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
 
 			return true;
 		}
@@ -1896,14 +1890,12 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
 				+ depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
 
-		depotRepresentative = null;
-
 		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + depotsOfSelectedClients);
 
 		Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
 
 		if (!depotsIterator.hasNext()) {
-			depotRepresentative = myServer;
+			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
 			Logging.debug(this,
 					"setDepotRepresentative  without next change depotRepresentative " + " up to now "
 							+ oldRepresentative + " new " + depotRepresentative + " equal "
@@ -1911,10 +1903,11 @@ public class ConfigedMain implements MessagebusListener {
 		} else {
 			depotRepresentative = depotsIterator.next();
 
-			while (!depotRepresentative.equals(myServer) && depotsIterator.hasNext()) {
+			while (depotsIterator.hasNext()) {
 				String depot = depotsIterator.next();
-				if (depot.equals(myServer)) {
-					depotRepresentative = myServer;
+				if (depot.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
+					depotRepresentative = depot;
+					break;
 				}
 			}
 		}
@@ -2004,10 +1997,11 @@ public class ConfigedMain implements MessagebusListener {
 
 		List<String> productNames;
 		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
-			productNames = persistenceController.getProductDataService()
-					.getAllLocalbootProductNames(depotRepresentative);
+			productNames = new ArrayList<>(
+					persistenceController.getProductDataService().getAllLocalbootProductNames(depotRepresentative));
 		} else {
-			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
+			productNames = new ArrayList<>(
+					persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative));
 		}
 
 		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
@@ -2183,7 +2177,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		List<String> objectIds = new ArrayList<>();
 		if (editingTarget == EditingTarget.SERVER) {
-			objectIds.add(myServer);
+			objectIds.add(persistenceController.getHostInfoCollections().getConfigServer());
 		} else if (editingTarget == EditingTarget.DEPOTS) {
 			objectIds.addAll(depotsList.getSelectedValuesList());
 		} else {
@@ -2205,9 +2199,9 @@ public class ConfigedMain implements MessagebusListener {
 			additionalConfigs.add(defaultValuesMap);
 			additionalconfigurationUpdateCollection.setMasterConfig(true);
 			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(
-					"  " + myServer + " (configuration server)", additionalConfigs.get(0),
-					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
-					additionalconfigurationUpdateCollection, true,
+					"  " + persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
+					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
+					additionalConfigs, additionalconfigurationUpdateCollection, true,
 					OpsiServiceNOMPersistenceController.getPropertyClassesServer());
 		} else if (editingTarget == EditingTarget.DEPOTS) {
 			depotsList.setEnabled(true);
@@ -2445,8 +2439,8 @@ public class ConfigedMain implements MessagebusListener {
 	private void fetchDepots() {
 		Logging.info(this, "fetchDepots");
 
-		depotNamesLinked = persistenceController.getHostInfoCollections().getDepotNamesList();
-		Logging.debug(this, "fetchDepots sorted depots " + depotNamesLinked);
+		Logging.debug(this,
+				"fetchDepots sorted depots " + persistenceController.getHostInfoCollections().getDepotNamesList());
 
 		depots = persistenceController.getHostInfoCollections().getDepots();
 		List<String> oldSelection = depotsList.getSelectedValuesList();
@@ -2455,15 +2449,11 @@ public class ConfigedMain implements MessagebusListener {
 		// we set the flag that value is adjusting, because we will set the selected values again.
 		// Both actions will then be united into one event only
 		depotsList.setValueIsAdjusting(true);
-		depotsList.setListData(depotNamesLinked);
+		depotsList.setListData(persistenceController.getHostInfoCollections().getDepotNamesList());
 		depotsList.setSelectedValues(oldSelection);
 		depotsList.setValueIsAdjusting(false);
 
 		Logging.debug(this, "selected after fetch " + getSelectedDepots().size());
-	}
-
-	public List<String> getLinkedDepots() {
-		return depotNamesLinked;
 	}
 
 	public void reloadLicensesData() {
@@ -2985,13 +2975,10 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void callNewClientDialog() {
 		if (newClientDialog == null) {
-			newClientDialog = new NewClientDialog(this, depotNamesLinked);
+			newClientDialog = new NewClientDialog(this);
 		}
 
-		newClientDialog.useConfigDefaults(
-				persistenceController.getConfigDataService().isInstallByShutdownConfigured(myServer),
-				persistenceController.getConfigDataService().isWanConfigured(myServer));
-		newClientDialog.setHostNames(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		newClientDialog.setDefaultValues();
 		newClientDialog.setLocationRelativeTo(getMainFrame());
 		newClientDialog.setVisible(true);
 	}
