@@ -78,14 +78,13 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
 
-	private List<String> depots;
 	private List<String> domains;
 	private List<String> newDomainsList;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public NewClientDialog(ConfigedMain configedMain, List<String> depots) {
+	public NewClientDialog(ConfigedMain configedMain) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
@@ -94,7 +93,6 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
 		this.configedMain = configedMain;
-		this.depots = depots;
 
 		init();
 	}
@@ -152,7 +150,8 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 		JLabel jLabelDepot = new JLabel(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
 
-		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
+		jComboDepots = new JComboBox<>(
+				persistenceController.getHostInfoCollections().getDepotNamesList().toArray(new String[0]));
 
 		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		jTextGroupsSelection = new JTextField();
@@ -615,7 +614,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		List<String> existingHostNames = persistenceController.getHostInfoCollections().getOpsiHostNames();
 
 		if (existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
-			if (depots.contains(opsiHostKey)) {
+			if (persistenceController.getHostInfoCollections().getDepotNamesList().contains(opsiHostKey)) {
 				JOptionPane.showMessageDialog(this,
 						opsiHostKey + "\n" + Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
 						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title"), JOptionPane.WARNING_MESSAGE);

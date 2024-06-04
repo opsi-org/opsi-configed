@@ -233,7 +233,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private DepotsList depotsList;
 	private Map<String, Map<String, Object>> depots;
-	private List<String> depotNamesLinked;
 	private String depotRepresentative;
 
 	private List<JFrame> allFrames;
@@ -2529,8 +2528,8 @@ public class ConfigedMain implements MessagebusListener {
 	private void fetchDepots() {
 		Logging.info(this, "fetchDepots");
 
-		depotNamesLinked = persistenceController.getHostInfoCollections().getDepotNamesList();
-		Logging.debug(this, "fetchDepots sorted depots " + depotNamesLinked);
+		Logging.debug(this,
+				"fetchDepots sorted depots " + persistenceController.getHostInfoCollections().getDepotNamesList());
 
 		depots = persistenceController.getHostInfoCollections().getDepots();
 		List<String> oldSelection = depotsList.getSelectedValuesList();
@@ -2539,15 +2538,11 @@ public class ConfigedMain implements MessagebusListener {
 		// we set the flag that value is adjusting, because we will set the selected values again.
 		// Both actions will then be united into one event only
 		depotsList.setValueIsAdjusting(true);
-		depotsList.setListData(depotNamesLinked);
+		depotsList.setListData(persistenceController.getHostInfoCollections().getDepotNamesList());
 		depotsList.setSelectedValues(oldSelection);
 		depotsList.setValueIsAdjusting(false);
 
 		Logging.debug(this, "selected after fetch " + getSelectedDepots().size());
-	}
-
-	public List<String> getLinkedDepots() {
-		return depotNamesLinked;
 	}
 
 	public void reloadLicensesData() {
@@ -3076,7 +3071,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void callNewClientDialog() {
 		if (newClientDialog == null) {
-			newClientDialog = new NewClientDialog(this, depotNamesLinked);
+			newClientDialog = new NewClientDialog(this);
 		}
 
 		newClientDialog.setDefaultValues();

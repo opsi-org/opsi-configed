@@ -207,7 +207,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		Logging.debug(this, "defineChoosers, depots: " + persistenceController.getHostInfoCollections().getDepots());
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(configedMain.getLinkedDepots().toArray(new String[0])));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(
+				persistenceController.getHostInfoCollections().getDepotNamesList().toArray(new String[0])));
 
 		// as long as we did not implement contacting a different depot
 		comboChooseDepot.setEnabled(false);
