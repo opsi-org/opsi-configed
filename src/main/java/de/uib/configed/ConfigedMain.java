@@ -350,11 +350,20 @@ public class ConfigedMain implements MessagebusListener {
 	protected void initGui() {
 		Logging.info(this, "initGui");
 
+		initDepots();
 		initTree();
 
 		allFrames = new ArrayList<>();
 
-		initMainFrame();
+		// create client selection panel
+		clientTable = new ClientTable(this);
+
+		clientTable.setModel(buildClientListTableModel(true));
+		setSelectionPanelCols();
+
+		clientTable.initSortKeys();
+
+		startMainFrame(this, clientTable, depotsList, clientTree, productTree);
 
 		updateManager = new InstallationStateUpdateManager(this,
 				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getTableProducts(),
@@ -937,21 +946,6 @@ public class ConfigedMain implements MessagebusListener {
 				hostInfo.combineWith(secondInfo);
 			}
 		}
-	}
-
-	// we call this after we have a PersistenceController
-	private void initMainFrame() {
-		initDepots();
-
-		// create client selection panel
-		clientTable = new ClientTable(this);
-
-		clientTable.setModel(buildClientListTableModel(true));
-		setSelectionPanelCols();
-
-		clientTable.initSortKeys();
-
-		startMainFrame(this, clientTable, depotsList, clientTree, productTree);
 	}
 
 	private void initDepots() {
