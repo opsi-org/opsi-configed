@@ -18,6 +18,7 @@ import de.uib.utils.logging.Logging;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -58,9 +59,16 @@ public class DateTimePicker extends DatePicker {
 		getStyleClass().add("datetime-picker");
 		setFormat(DEFAULT_FORMAT);
 		setConverter(new InternalConverter());
+		setDayCellFactory(param -> new DateCell() {
+			@Override
+			public void updateItem(LocalDate date, boolean empty) {
+				super.updateItem(date, empty);
+				setDisable(empty || date.compareTo(LocalDate.now()) < 0);
+			}
+		});
 	}
 
-	@java.lang.SuppressWarnings("squid:S4968")
+	// @java.lang.SuppressWarnings("squid:S4968")
 	public void initData() {
 		// Syncronize changes to the underlying date value back to the dateTimeValue
 		valueProperty().addListener(
@@ -198,10 +206,17 @@ public class DateTimePicker extends DatePicker {
 			}
 			LocalDateTime currValue = getDateTimeValue();
 			try {
-				currValue = LocalDateTime.parse(value, formatter);
+				LocalDateTime currValue2 = LocalDateTime.parse(value, formatter);
+				if (currValue2.compareTo(datetimeNow()) <= 0) {
+					Logging.error("DateTime Error: Date is in the past. Set previous value.");
+					setDateTimeValue(currValue);
+					return currValue.toLocalDate();
+				}
+				currValue = currValue2;
 			} catch (DateTimeParseException e) {
 				Logging.error("DateTime InternalConverter Error: " + e + ". Set previous value.");
 			}
+
 			setDateTimeValue(currValue);
 			return currValue.toLocalDate();
 		}

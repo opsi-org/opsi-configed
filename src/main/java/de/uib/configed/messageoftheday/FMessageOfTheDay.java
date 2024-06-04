@@ -44,6 +44,14 @@ public class FMessageOfTheDay extends FGeneralDialog {
 				700, 500, true);
 		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
 		define();
+		init();
+	}
+
+	private void init() {
+
+		pMsgInfoGeneral.resetData();
+		pMsgInfoUser.resetData();
+		setSaveButtonEnable(false);
 	}
 
 	private void define() {
@@ -81,7 +89,7 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	}
 
 	public void checkDefaultValues() {
-		Logging.info("FMessageOfTheDay checkDefaultValues");
+		Logging.debug("FMessageOfTheDay checkDefaultValues");
 		if (pMsgInfoGeneral == null || pMsgInfoUser == null) {
 			return;
 		}
@@ -99,7 +107,7 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	}
 
 	private void resetData() {
-		Logging.info("FMessageOfTheDay resetData");
+		Logging.debug("FMessageOfTheDay resetData");
 		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
 		pMsgInfoGeneral.setDataMap(motdData);
 		pMsgInfoGeneral.resetData();
@@ -109,13 +117,13 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	}
 
 	public void setSaveButtonEnable(boolean enable) {
-		Logging.info("FMessageOfTheDay setSaveButtonEnable " + enable);
+		Logging.debug("FMessageOfTheDay setSaveButtonEnable " + enable);
 		jButton2.setEnabled(enable);
 	}
 
 	@Override
 	public void doAction2() {
-		Logging.info("FMessageOfTheDay doAction2 store");
+		Logging.debug("FMessageOfTheDay doAction2 store");
 		Map<String, String> data = new HashMap<>();
 		data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE, pMsgInfoGeneral.getText());
 		data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL,
