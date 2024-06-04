@@ -46,13 +46,6 @@ public class RPCMethodExecutor {
 		this.hostInfoCollections = hostInfoCollections;
 	}
 
-	public boolean installPackage(String filename) {
-		boolean result = exec
-				.doCall(new OpsiMethodCall(RPCMethodName.DEPOT_INSTALL_PACKAGE, new Object[] { filename, true }));
-		Logging.info(this, "installPackage result " + result);
-		return result;
-	}
-
 	public boolean setRights(String path) {
 		Logging.info(this, "setRights for path " + path);
 		String[] args = new String[] { path };

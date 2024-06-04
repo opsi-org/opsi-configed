@@ -10,6 +10,7 @@
 - Rework design of checkboxes in client info panel
 - Rework design of all user/password input fields
 - Remove Wake on LAN timer, only directly wake up clients
+- Remove Product installation in Product Actions panel (already exists in server console)
 
 
 ## [4.3.3.0] - 2024-05-14

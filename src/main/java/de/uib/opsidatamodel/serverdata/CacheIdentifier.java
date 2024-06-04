@@ -425,11 +425,6 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code String}
 	 */
-	PACKAGE_SERVER_DIRECTORY("package_server_directory"),
-
-	/**
-	 * return type {@code String}
-	 */
 	CONFIG_SERVER("config_server"),
 
 	/**

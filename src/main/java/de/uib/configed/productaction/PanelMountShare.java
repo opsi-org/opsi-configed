@@ -29,8 +29,6 @@ import de.uib.utils.logging.Logging;
 public class PanelMountShare extends JPanel {
 	private static List<PanelMountShare> instances = new ArrayList<>();
 
-	private static final int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
-
 	private JFrame rootFrame;
 
 	private JButton buttonMountShare;
@@ -99,7 +97,8 @@ public class PanelMountShare extends JPanel {
 		} else {
 			layout.setHorizontalGroup(
 					layout.createSequentialGroup().addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
-							.addGap(FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH).addGap(Globals.GAP_SIZE)
+							.addGap(Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH)
+							.addGap(Globals.GAP_SIZE)
 							.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
 							.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
