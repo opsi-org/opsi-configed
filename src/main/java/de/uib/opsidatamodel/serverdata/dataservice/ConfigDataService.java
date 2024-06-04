@@ -1181,12 +1181,4 @@ public class ConfigDataService {
 	public void setConfigedWorkbenchDefaultValuePD(String defaultWorkbenchValue) {
 		cacheManager.setCachedData(CacheIdentifier.CONFIGED_WORKBENCH_DEFAULT_VALUE, defaultWorkbenchValue);
 	}
-
-	public String getPackageServerDirectoryPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PACKAGE_SERVER_DIRECTORY, String.class);
-	}
-
-	public void setPackageServerDirectoryPD(String packageServerDirectory) {
-		cacheManager.setCachedData(CacheIdentifier.PACKAGE_SERVER_DIRECTORY, packageServerDirectory);
-	}
 }
