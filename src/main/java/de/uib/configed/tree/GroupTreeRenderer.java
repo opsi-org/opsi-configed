@@ -16,10 +16,15 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class GroupTreeRenderer extends DefaultTreeCellRenderer {
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	private AbstractGroupTree abstractGroupTree;
 
 	private ImageIcon objectIcon;
@@ -59,8 +64,13 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 
 		if (node instanceof GroupNode) {
 			setToolTipText(abstractGroupTree.getGroupDescription(text));
+		} else if (abstractGroupTree instanceof ClientTree) {
+			setToolTipText(
+					persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(text).getDescription());
 		} else {
-			setToolTipText(abstractGroupTree.getObjectDescription(text));
+			// We don't want to show the description for a Product since we only know the productId
+			// so the description is not clear
+			setToolTipText(null);
 		}
 
 		if (!node.getAllowsChildren()) {
