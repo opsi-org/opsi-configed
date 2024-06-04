@@ -576,9 +576,4 @@ public class ClientTree extends AbstractGroupTree {
 	public Set<String> getSelectedObjectsInTable() {
 		return configedMain.getClientTable().getSelectedSet();
 	}
-
-	@Override
-	public String getObjectDescription(String objectId) {
-		return persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(objectId).getDescription();
-	}
 }

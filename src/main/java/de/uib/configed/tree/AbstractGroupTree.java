@@ -553,6 +553,4 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
 
 	abstract Set<String> getSelectedObjectsInTable();
-
-	abstract String getObjectDescription(String objectId);
 }

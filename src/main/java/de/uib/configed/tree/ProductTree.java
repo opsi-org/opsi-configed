@@ -195,9 +195,4 @@ public class ProductTree extends AbstractGroupTree {
 		localbootPanel.valueChanged(getSelectionPaths(), true);
 		netbootPanel.valueChanged(getSelectionPaths(), true);
 	}
-
-	@Override
-	public String getObjectDescription(String productId) {
-		return persistenceController.getProductDataService().getProductInfo(productId);
-	}
 }
