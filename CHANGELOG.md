@@ -2,6 +2,7 @@
 ## [4.3.x.x] - 2024-xx-xx
 ## Fixed
 - Create all 4 WAN configs (before only 3 of them were created)
+- Make it impossible to delete all clients and depots by accident
 
 
 ## Changed
