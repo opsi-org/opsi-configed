@@ -645,7 +645,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (groupActionFrame == null) {
 			groupActionFrame = new FGroupActions(this);
-			groupActionFrame.setSize(LICENSES_DIMENSION);
+			groupActionFrame.setSize(1000, 300);
 			groupActionFrame.centerOnParent();
 
 			allFrames.add(groupActionFrame);
