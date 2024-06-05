@@ -84,7 +84,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				okAction();
+				tryConnecting();
 			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				endProgram();
 			} else {
@@ -206,7 +206,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
-		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
+		jButtonCommit.addActionListener((ActionEvent e) -> tryConnecting());
 	}
 
 	private void showOTPField(boolean show) {
@@ -380,13 +380,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
 		return "";
-	}
-
-	private void okAction() {
-		Logging.info(this, "ok_action");
-
-		// correctly
-		tryConnecting();
 	}
 
 	public void tryConnecting() {
