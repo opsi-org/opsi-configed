@@ -196,9 +196,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
 		checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
 		checkUseOTP.addItemListener((ItemEvent event) -> {
-			boolean selected = event.getStateChange() == ItemEvent.SELECTED;
-			showOTPField(selected);
-			UserPreferences.setBoolean(UserPreferences.OTP, selected);
+			showOTPField(checkUseOTP.isSelected());
+			UserPreferences.setBoolean(UserPreferences.OTP, checkUseOTP.isSelected());
 		});
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 

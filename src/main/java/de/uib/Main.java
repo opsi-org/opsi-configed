@@ -40,10 +40,7 @@ public class Main {
 
 	public static final int NO_ERROR = 0;
 	public static final int ERROR_INVALID_OPTION = 1;
-	public static final int ERROR_MISSING_VALUE_FOR_OPTION = 2;
-
 	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
-
 	public static final int ERROR_OUT_OF_MEMORY = 21;
 
 	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
