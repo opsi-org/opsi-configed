@@ -176,8 +176,6 @@ public class ConfigedMain implements MessagebusListener {
 	private String clientInDepot;
 	private HostInfo hostInfo = new HostInfo();
 
-	private String appTitle = Globals.APPNAME;
-
 	private FTextArea fAskSaveChangedText;
 	private FTextArea fAskSaveProductConfiguration;
 
@@ -1156,14 +1154,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void setPersistenceController(OpsiServiceNOMPersistenceController persistenceController) {
 		this.persistenceController = persistenceController;
-	}
-
-	public void setAppTitle(String s) {
-		appTitle = s;
-	}
-
-	public String getAppTitle() {
-		return appTitle;
 	}
 
 	public DependenciesModel getDependenciesModel() {
