@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.JTextComponent;
 
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
@@ -61,7 +62,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	private JPasswordField jTextFieldHostKey;
 
 	private Map<String, Map<String, String>> changedClientInfos;
-	private String oldNotes;
 
 	private ConfigedMain configedMain;
 
@@ -299,7 +299,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 	public void setClientNotesText(String s) {
 		jTextAreaNotes.setText(s);
-		oldNotes = s;
 	}
 
 	public void setClientMacAddress(String s) {
@@ -382,14 +381,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		} else if (e.getSource() == jTextFieldOneTimePassword) {
 			applyChanges(jTextFieldOneTimePassword, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY);
 		} else if (e.getSource() == jTextAreaNotes) {
-			String client = configedMain.getSelectedClients().get(0);
-			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-			if (!jTextAreaNotes.getText().equals(oldNotes)) {
-				changedClientInfo.put(HostInfo.CLIENT_NOTES_KEY, jTextAreaNotes.getText());
-				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
-			} else {
-				changedClientInfo.remove(HostInfo.CLIENT_NOTES_KEY);
-			}
+			applyChanges(jTextAreaNotes, HostInfo.CLIENT_NOTES_KEY);
 		} else if (e.getSource() == systemUUIDField) {
 			applyChanges(systemUUIDField, HostInfo.CLIENT_SYSTEM_UUID_KEY);
 		} else if (e.getSource() == macAddressField) {
@@ -401,7 +393,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		}
 	}
 
-	private void applyChanges(JTextField editorField, String key) {
+	private void applyChanges(JTextComponent editorField, String key) {
 		String client = configedMain.getSelectedClients().get(0);
 		Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 		changedClientInfo.put(key, editorField.getText());
