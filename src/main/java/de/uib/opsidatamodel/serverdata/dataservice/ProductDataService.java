@@ -150,8 +150,8 @@ public class ProductDataService {
 				}
 			}
 		} else {
-			Map<String, List<String>> productOrderingResult = exec
-					.getMapOfStringLists(new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, depotIds.toArray()));
+			Map<String, List<String>> productOrderingResult = exec.getMapOfStringLists(
+					new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, new Object[] { depotIds }));
 
 			List<String> sortedProducts = productOrderingResult.get("sorted");
 			if (sortedProducts == null) {

@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.2.17] - 2024-06-05
+## Fixed
+- Getting products when more than one depot is selected
+
 ## [4.3.2.16] - 2024-06-05
 ## Fixed
 - Make it impossible to delete all clients and depots by accident
