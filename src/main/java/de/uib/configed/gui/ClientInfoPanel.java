@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
@@ -31,7 +32,6 @@ import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.RevertibleTextField;
 import de.uib.utils.swing.SeparatedDocument;
 
 public class ClientInfoPanel extends JPanel implements KeyListener {
@@ -51,13 +51,13 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	private FlatTriStateCheckBox checkBoxUEFIBoot;
 	private FlatTriStateCheckBox checkBoxWANConfig;
 
-	private RevertibleTextField jTextFieldDescription;
-	private RevertibleTextField jTextFieldInventoryNumber;
+	private JTextField jTextFieldDescription;
+	private JTextField jTextFieldInventoryNumber;
 	private JTextArea jTextAreaNotes;
-	private RevertibleTextField systemUUIDField;
-	private RevertibleTextField macAddressField;
-	private RevertibleTextField ipAddressField;
-	private RevertibleTextField jTextFieldOneTimePassword;
+	private JTextField systemUUIDField;
+	private JTextField macAddressField;
+	private JTextField ipAddressField;
+	private JTextField jTextFieldOneTimePassword;
 	private JPasswordField jTextFieldHostKey;
 
 	private Map<String, Map<String, String>> changedClientInfos;
@@ -91,12 +91,12 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsiHostKey");
 
-		jTextFieldDescription = new RevertibleTextField("");
+		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
 		jTextFieldDescription.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		jTextFieldDescription.addKeyListener(this);
 
-		jTextFieldInventoryNumber = new RevertibleTextField("");
+		jTextFieldInventoryNumber = new JTextField();
 		jTextFieldInventoryNumber.setEditable(true);
 		jTextFieldInventoryNumber.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		jTextFieldInventoryNumber.addKeyListener(this);
@@ -114,22 +114,20 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		systemUUIDField = new RevertibleTextField(
-				new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-						'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true),
-				"", 36);
-
+		systemUUIDField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
+				Character.MIN_VALUE, 36, true), "", 36);
 		systemUUIDField.addKeyListener(this);
 
-		macAddressField = new RevertibleTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2',
-				'3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
+		macAddressField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
+				2, true), "", 17);
 
 		macAddressField.addKeyListener(this);
 
-		ipAddressField = new RevertibleTextField(
-				new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-						'.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
-				"", 24);
+		ipAddressField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
+				28, Character.MIN_VALUE, 4, false), "", 24);
 		ipAddressField.addKeyListener(this);
 
 		checkBoxUEFIBoot = new FlatTriStateCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
@@ -149,7 +147,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		updateClientCheckboxText();
 
-		jTextFieldOneTimePassword = new RevertibleTextField("");
+		jTextFieldOneTimePassword = new JTextField();
 		jTextFieldOneTimePassword.addKeyListener(this);
 
 		jTextFieldHostKey = new JPasswordField();
@@ -403,15 +401,12 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		}
 	}
 
-	private void applyChanges(RevertibleTextField editorField, String key) {
+	private void applyChanges(JTextField editorField, String key) {
 		String client = configedMain.getSelectedClients().get(0);
 		Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-		if (editorField.isTextChanged()) {
-			changedClientInfo.put(key, editorField.getText());
-			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
-		} else {
-			changedClientInfo.remove(key);
-		}
+		changedClientInfo.put(key, editorField.getText());
+		configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+
 	}
 
 	private Map<String, String> getChangedClientInfoFor(String client) {
