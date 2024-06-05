@@ -559,7 +559,7 @@ public class MainFrame extends JFrame {
 		getContentPane().add(centralPane, BorderLayout.CENTER);
 		getContentPane().add(statusPane, BorderLayout.SOUTH);
 
-		setTitle(configedMain.getAppTitle());
+		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);

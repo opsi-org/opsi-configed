@@ -176,8 +176,6 @@ public class ConfigedMain implements MessagebusListener {
 	private String clientInDepot;
 	private HostInfo hostInfo = new HostInfo();
 
-	private String appTitle = Globals.APPNAME;
-
 	private FTextArea fAskSaveChangedText;
 	private FTextArea fAskSaveProductConfiguration;
 
@@ -211,7 +209,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Map<String, ListMerger> mergedProductProperties;
 
-	private Set<String> depotsOfSelectedClients;
 	private Set<String> allowedClients;
 
 	// collection of retrieved software audit and hardware maps
@@ -646,7 +643,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (groupActionFrame == null) {
 			groupActionFrame = new FGroupActions(this);
-			groupActionFrame.setSize(LICENSES_DIMENSION);
+			groupActionFrame.setSize(1000, 300);
 			groupActionFrame.centerOnParent();
 
 			allFrames.add(groupActionFrame);
@@ -834,9 +831,7 @@ public class ConfigedMain implements MessagebusListener {
 					selectedClients.isEmpty());
 
 			// initialize the following method
-			depotsOfSelectedClients = null;
-			depotsOfSelectedClients = getDepotsOfSelectedClients();
-			Iterator<String> selectedDepotsIterator = depotsOfSelectedClients.iterator();
+			Iterator<String> selectedDepotsIterator = getDepotsOfSelectedClients().iterator();
 			StringBuilder depotsAdded = new StringBuilder();
 
 			String singleDepot = "";
@@ -1157,14 +1152,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void setPersistenceController(OpsiServiceNOMPersistenceController persistenceController) {
 		this.persistenceController = persistenceController;
-	}
-
-	public void setAppTitle(String s) {
-		appTitle = s;
-	}
-
-	public String getAppTitle() {
-		return appTitle;
 	}
 
 	public DependenciesModel getDependenciesModel() {
@@ -1583,9 +1570,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private Set<String> getDepotsOfSelectedClients() {
-		if (depotsOfSelectedClients == null) {
-			depotsOfSelectedClients = new TreeSet<>();
-		}
+		Set<String> depotsOfSelectedClients = new TreeSet<>();
 
 		for (String selectedClient : selectedClients) {
 			if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient) != null) {
@@ -1833,7 +1818,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		// when running after the first run, we deactivate buttons
 
-		depotsOfSelectedClients = null;
 		if (initialDataLoader.isDataLoaded()) {
 			refreshClientListKeepingGroup();
 		}
@@ -1871,7 +1855,7 @@ public class ConfigedMain implements MessagebusListener {
 			return true;
 		}
 
-		depotsOfSelectedClients = getDepotsOfSelectedClients();
+		Set<String> depotsOfSelectedClients = getDepotsOfSelectedClients();
 
 		Logging.info(this, "depots of selected clients:" + depotsOfSelectedClients);
 

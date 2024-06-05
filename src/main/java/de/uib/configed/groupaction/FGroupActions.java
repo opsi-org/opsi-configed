@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
@@ -75,12 +76,10 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	private void setImages() {
-		List<String> imagesCollection = new ArrayList<>();
-
-		imagesCollection
-				.addAll(new TreeSet<>(persistenceController.getProductDataService().getCommonProductPropertyValues(
-						associatedClients, OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
-						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
+		Set<String> imagesCollection = new TreeSet<>(
+				persistenceController.getProductDataService().getCommonProductPropertyValues(associatedClients,
+						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+						OpsiServiceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY));
 
 		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}
@@ -198,9 +197,7 @@ public class FGroupActions extends SecondaryFrame {
 						.addComponent(buttonSetup, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
 						.addGap(Globals.GAP_SIZE * 2)
 						.addComponent(buttonReload, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-						.addGap(Globals.GAP_SIZE, Globals.HFIRST_GAP, Short.MAX_VALUE))
-		//////////////////////////////////////////////////////////////////////
-		);
+						.addGap(Globals.GAP_SIZE, Globals.HFIRST_GAP, Short.MAX_VALUE)));
 	}
 
 	private void defineTopPanel(JPanel panel) {
