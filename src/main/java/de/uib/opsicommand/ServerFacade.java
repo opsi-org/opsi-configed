@@ -182,8 +182,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		Logging.info(this, "retrieveResponse started");
 
-		Logging.devel("" + omc);
-
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);

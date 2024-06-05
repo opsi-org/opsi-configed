@@ -323,8 +323,6 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			} else {
 				oldProductKey = "";
 			}
-			long start = System.nanoTime();
-			Logging.devel("" + (System.nanoTime() - start));
 
 			depots.clear();
 			depots.add((String) comboChooseDepot.getSelectedItem());
