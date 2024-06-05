@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.2.16] - 2024-06-05
+## Fixed
+- Make it impossible to delete all clients and depots by accident
+
 ## [4.3.2.15] - 2024-06-04
 ## Changed
 - Select all products in a group in table on double click

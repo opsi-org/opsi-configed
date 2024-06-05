@@ -359,7 +359,7 @@ public class HostDataService {
 	}
 
 	public void deleteClients(Collection<String> hostIds) {
-		if (userRolesConfigDataService.isGlobalReadOnly()) {
+		if (userRolesConfigDataService.isGlobalReadOnly() || hostIds.isEmpty()) {
 			return;
 		}
 
