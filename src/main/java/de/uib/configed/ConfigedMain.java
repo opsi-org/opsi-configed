@@ -2673,9 +2673,8 @@ public class ConfigedMain implements MessagebusListener {
 			boolean result = false;
 			if (this.dataChanged) {
 				if (fAskSaveProductConfiguration == null) {
-					fAskSaveProductConfiguration = new FTextArea(mainFrame, Globals.APPNAME, true,
-							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.NO"),
-									Configed.getResourceValue("buttonYES") });
+					fAskSaveProductConfiguration = new FTextArea(mainFrame, Globals.APPNAME, true, new String[] {
+							Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 					fAskSaveProductConfiguration
 							.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
 
@@ -2786,9 +2785,8 @@ public class ConfigedMain implements MessagebusListener {
 			boolean result = false;
 			if (this.dataChanged) {
 				if (fAskSaveChangedText == null) {
-					fAskSaveChangedText = new FTextArea(mainFrame, Globals.APPNAME, true,
-							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.NO"),
-									Configed.getResourceValue("buttonYES") });
+					fAskSaveChangedText = new FTextArea(mainFrame, Globals.APPNAME, true, new String[] {
+							Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 					fAskSaveChangedText.setMessage(Configed.getResourceValue("MainFrame.SaveChangedValue"));
 					fAskSaveChangedText.setSize(new Dimension(300, 220));
 				}
