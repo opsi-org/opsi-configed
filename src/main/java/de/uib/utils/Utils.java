@@ -75,6 +75,7 @@ public final class Utils {
 		message.append(Globals.COPYRIGHT2 + "\n");
 		message.append("\n");
 		message.append("running on java version " + COMPLETE_VERSION_INFO + "\n");
+		message.append("on architecture " + System.getProperty("os.arch"));
 
 		info.setMessage(message.toString());
 		info.setVisible(true);
