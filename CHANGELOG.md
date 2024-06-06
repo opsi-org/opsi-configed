@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.3.1] - 2024-06-06
 ## Fixed
 - Create all 4 WAN configs (before only 3 of them were created)
 - Make it impossible to delete all clients and depots by accident

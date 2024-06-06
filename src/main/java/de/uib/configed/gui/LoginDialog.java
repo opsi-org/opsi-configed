@@ -40,6 +40,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.ServerFacade;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -84,7 +86,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				okAction();
+				tryConnecting();
 			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				endProgram();
 			} else {
@@ -196,9 +198,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
 		checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
 		checkUseOTP.addItemListener((ItemEvent event) -> {
-			boolean selected = event.getStateChange() == ItemEvent.SELECTED;
-			showOTPField(selected);
-			UserPreferences.setBoolean(UserPreferences.OTP, selected);
+			showOTPField(checkUseOTP.isSelected());
+			UserPreferences.setBoolean(UserPreferences.OTP, checkUseOTP.isSelected());
 		});
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
@@ -206,7 +207,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
-		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
+		jButtonCommit.addActionListener((ActionEvent e) -> tryConnecting());
 	}
 
 	private void showOTPField(boolean show) {
@@ -309,7 +310,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	@Override
 	public void actAfterWaiting() {
-		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
+		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
+				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
 
 			// we can finish
@@ -317,26 +319,30 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			configedMain.setPersistenceController(persistenceController);
 			configedMain.loadDataAndGo();
 		} else {
+			// Clear cache
+			CacheManager.getInstance().clearAllCachedData();
 			// return to Passwordfield
-
 			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				// return to password dialog
 				Logging.info(this, "interrupted");
 			} else {
 				Logging.info(this, "not connected, timeout or not authorized");
 
-				MessageFormat messageFormatDialogContent = new MessageFormat(
-						Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"));
+				String message;
 
 				if (waitingWorker != null && waitingWorker.isTimeoutReached()) {
-					messageFormatDialogContent = new MessageFormat("Timeout in connecting");
+					message = Configed.getResourceValue("LoginDialog.timeoutReached");
+				} else if (!ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
+					message = Configed.getResourceValue("LoginDialog.oldServerVersion");
+				} else {
+					message = new MessageFormat(
+							Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")).format(
+									new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() });
 				}
 
-				JOptionPane.showMessageDialog(this,
-						messageFormatDialogContent.format(
-								new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() }),
+				JOptionPane.showMessageDialog(this, message,
 						Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.title"),
-						JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.ERROR_MESSAGE);
 			}
 
 			if (PersistenceControllerFactory.getConnectionState().getMessage().indexOf("authorized") > -1) {
@@ -380,13 +386,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
 		return "";
-	}
-
-	private void okAction() {
-		Logging.info(this, "ok_action");
-
-		// correctly
-		tryConnecting();
 	}
 
 	public void tryConnecting() {
