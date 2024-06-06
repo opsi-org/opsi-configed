@@ -102,13 +102,16 @@ public final class Utils {
 
 	public static ImageIcon getThemeIcon() {
 		String iconName;
+		ColorFilter filter = new ColorFilter();
 		if (FlatLaf.isLafDark()) {
 			iconName = "systemTheme";
+			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
 		} else {
 			iconName = "systemTheme_dark";
+			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_LIGHT);
 		}
 
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg");
+		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
 	private static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
