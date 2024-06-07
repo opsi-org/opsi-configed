@@ -127,7 +127,7 @@ public final class CommandFactory {
 
 		for (MultiCommandTemplate command : commandList) {
 			String parent = command.getParentMenuText();
-			List<MultiCommandTemplate> parentList = sortedCommands.putIfAbsent(parent, new ArrayList<>());
+			List<MultiCommandTemplate> parentList = sortedCommands.computeIfAbsent(parent, arg -> new ArrayList<>());
 
 			if (!(parentList.contains(command))) {
 				parentList.add(command);
