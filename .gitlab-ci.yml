@@ -74,6 +74,7 @@ signandupload:
     - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
     - mkdir opsi-configed
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps opsi-configed/
+    - mkdir opsi-configed/mac_x64/
     - mv mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS opsi-configed/mac_x64/
     - cp CHANGELOG.md opsi-configed/
     - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
