@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.2.18] - 2024-06-07
+## Fixed
+- Remove unnecessary RPC method call when changing depot in 4.2
+
 ## [4.3.2.17] - 2024-06-05
 ## Fixed
 - Getting products when more than one depot is selected

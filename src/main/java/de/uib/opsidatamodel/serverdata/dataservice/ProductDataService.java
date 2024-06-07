@@ -143,34 +143,12 @@ public class ProductDataService {
 	public Set<String> getAllLocalbootProductNames(Collection<String> depotIds) {
 		Logging.debug(this, "getAllLocalbootProductNames for depots " + depotIds);
 		Set<String> localbootProductNames = new TreeSet<>();
-		if (ServerFacade.isOpsi43()) {
-			for (String depotId : depotIds) {
-				if (getDepot2LocalbootProductsPD().containsKey(depotId)) {
-					localbootProductNames.addAll(getDepot2LocalbootProductsPD().get(depotId).keySet());
-				}
+		for (String depotId : depotIds) {
+			if (getDepot2LocalbootProductsPD().containsKey(depotId)) {
+				localbootProductNames.addAll(getDepot2LocalbootProductsPD().get(depotId).keySet());
 			}
-		} else {
-			Map<String, List<String>> productOrderingResult = exec.getMapOfStringLists(
-					new OpsiMethodCall(RPCMethodName.GET_PRODUCT_ORDERING, new Object[] { depotIds }));
-
-			List<String> sortedProducts = productOrderingResult.get("sorted");
-			if (sortedProducts == null) {
-				sortedProducts = new ArrayList<>();
-			}
-
-			List<String> notSortedProducts = productOrderingResult.get("not_sorted");
-			if (notSortedProducts == null) {
-				notSortedProducts = new ArrayList<>();
-			}
-
-			Logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");
-
-			notSortedProducts.removeAll(sortedProducts);
-			Logging.info(this, "missing: " + notSortedProducts);
-
-			localbootProductNames.addAll(sortedProducts);
-			localbootProductNames.addAll(notSortedProducts);
 		}
+
 		filterPermittedProducts(localbootProductNames);
 		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
 		return localbootProductNames;
