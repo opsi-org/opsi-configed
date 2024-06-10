@@ -1,4 +1,6 @@
 # Changelog
+## [4.3.3.2] - 2024-06-10
+
 ## [4.3.3.1] - 2024-06-06
 ## Fixed
 - Create all 4 WAN configs (before only 3 of them were created)
