@@ -358,15 +358,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	}
 
 	protected void reactToMouseWheelEvent(int wheelRotation) {
-		int selRow = -1;
-
-		if (table.getSelectedRows() == null || table.getSelectedRows().length == 0) {
-			selRow = -1;
-		} else {
-			selRow = table.getSelectedRows()[0];
-		}
-
-		selRow = selRow + wheelRotation;
+		int selRow = table.getSelectedRow() + wheelRotation;
 
 		if (selRow >= table.getRowCount()) {
 			selRow = table.getRowCount() - 1;

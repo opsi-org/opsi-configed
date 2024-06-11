@@ -99,8 +99,8 @@ public abstract class AbstractExportTable {
 		Boolean result = onlySelectedRows;
 
 		if (onlySelectedRows) {
-			Logging.debug("selectedRows: " + theTable.getSelectedRows().length);
-			if (theTable.getRowCount() > 0 && theTable.getSelectedRows().length == 0) {
+			Logging.debug("selectedRows: " + theTable.getSelectedRowCount());
+			if (theTable.getRowCount() > 0 && theTable.getSelectedRowCount() == 0) {
 				FTextArea fChoice = new FTextArea(null, Configed.getResourceValue("ExportTable.title"), true,
 						new String[] { Configed.getResourceValue("buttonCancel"),
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
