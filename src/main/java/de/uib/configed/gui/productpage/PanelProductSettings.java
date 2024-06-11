@@ -489,6 +489,9 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void valueChanged(boolean doSelection) {
+		// We want to deactivate filter before changing something
+		groupPanel.setFilterMark(false);
+
 		TreePath[] selectionPaths = productTree.getSelectionPaths();
 
 		if (selectionPaths == null) {

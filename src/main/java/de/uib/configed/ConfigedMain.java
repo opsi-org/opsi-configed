@@ -1706,6 +1706,8 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
+		clientTable.setFilterMark(false);
+
 		clientsFilteredByTree.clear();
 		if (selTreePaths != null) {
 			for (TreePath selectionPath : selTreePaths) {

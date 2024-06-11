@@ -203,4 +203,8 @@ public class ProductActionPanel extends JPanel {
 
 		associate.setSelection(new HashSet<>(saveSelectedProducts));
 	}
+
+	public void setFilterMark(boolean selected) {
+		searchPane.setFilterMark(selected);
+	}
 }

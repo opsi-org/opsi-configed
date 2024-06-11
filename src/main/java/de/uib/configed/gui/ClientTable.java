@@ -192,6 +192,10 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		table.addMouseListener(l);
 	}
 
+	public void setFilterMark(boolean selected) {
+		searchPane.setFilterMark(selected);
+	}
+
 	public boolean isSelectionEmpty() {
 		return table.getSelectedRowCount() == 0;
 	}
