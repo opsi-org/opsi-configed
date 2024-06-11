@@ -33,9 +33,7 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 	public void setFiltered(boolean filtered) {
 		if (filtered) {
 			selectedRows = table.getSelectedRows();
-		}
 
-		if (filtered) {
 			int[] modelRowFilter = new int[selectedRows.length];
 			for (int i = 0; i < selectedRows.length; i++) {
 				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
