@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,19 +23,13 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPageEventHelper;
-import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import de.uib.configed.Configed;
@@ -54,16 +46,15 @@ public class ExporterToPDF extends AbstractExportTable {
 	private static final float M_TOP = 74;
 	private static final float M_BOTTOM = 54;
 
-	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
-	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
-	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+	private static final Font CAT_FONT = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
+	private static final Font SMALL_BOLD = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+	private static final Font SMALL = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 
 	private final Document document = new Document(PageSize.A4, M_LEFT, M_RIGHT, M_TOP, M_BOTTOM);
 
 	private String defaultFilename = "report.pdf";
 
-	private float xHeaderTop = 803;
-	private float headerWidth = 527;
+	private boolean isLandscape;
 
 	public ExporterToPDF(JTable table) {
 		super(table);
@@ -141,7 +132,7 @@ public class ExporterToPDF extends AbstractExportTable {
 				writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 			}
 
-			TableHeader event = new TableHeader();
+			TableHeader event = new TableHeader(isLandscape);
 			if (metaData.containsKey("header")) {
 				event.setHeader(metaData.get("header"));
 			} else if (metaData.containsKey("title")) {
@@ -200,14 +191,12 @@ public class ExporterToPDF extends AbstractExportTable {
 
 	public void setPageSizeA4() {
 		document.setPageSize(PageSize.A4);
-		headerWidth = 527;
-		xHeaderTop = 803;
+		isLandscape = false;
 	}
 
 	public void setPageSizeA4Landscape() {
 		document.setPageSize(PageSize.A4.rotate());
-		headerWidth = 770;
-		xHeaderTop = 555;
+		isLandscape = true;
 	}
 
 	private static Paragraph addEmptyLines(int number) {
@@ -223,11 +212,11 @@ public class ExporterToPDF extends AbstractExportTable {
 		Paragraph content = new Paragraph();
 
 		if (metaData.containsKey("title")) {
-			content.add(new Paragraph(metaData.get("title"), catFont));
+			content.add(new Paragraph(metaData.get("title"), CAT_FONT));
 		}
 
 		if (metaData.containsKey("subtitle")) {
-			content.add(new Paragraph(metaData.get("subtitle"), smallBold));
+			content.add(new Paragraph(metaData.get("subtitle"), SMALL_BOLD));
 		}
 
 		String userInitial = "";
@@ -263,7 +252,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			symbolFont = new Font(bf, 11);
 		} catch (DocumentException | IOException e) {
 			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :", e);
-			symbolFont = small;
+			symbolFont = SMALL;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
 
@@ -293,7 +282,7 @@ public class ExporterToPDF extends AbstractExportTable {
 				case "false":
 					break;
 				default:
-					value = new PdfPCell(new Phrase(s, small));
+					value = new PdfPCell(new Phrase(s, SMALL));
 					break;
 				}
 
@@ -310,109 +299,5 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 
 		return table;
-	}
-
-	/**
-	 * Inner class to add a table as header.
-	 */
-	private class TableHeader extends PdfPageEventHelper {
-		/** The header text. */
-		String header = "";
-		/** The template with the total number of pages. */
-		PdfTemplate total;
-
-		/**
-		 * Allows us to change the content of the header.
-		 * 
-		 * @param header The new header String
-		 */
-		public void setHeader(String header) {
-			this.header = header;
-		}
-
-		/**
-		 * Creates the PdfTemplate that will hold the total number of pages.
-		 * 
-		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onOpenDocument(
-		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
-		 */
-		@Override
-		public void onOpenDocument(PdfWriter writer, Document document) {
-			total = writer.getDirectContent().createTemplate(30, 16);
-		}
-
-		/**
-		 * Adds a header to every page
-		 * 
-		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onEndPage(
-		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
-		 */
-		@Override
-		public void onEndPage(PdfWriter writer, Document document) {
-			PdfPTable table = new PdfPTable(3);
-
-			URL opsiImageURL = getImageResourceURL("opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png");
-			try {
-				// add header table with page number
-				table.setWidths(new int[] { 24, 24, 2 });
-				table.setTotalWidth(headerWidth); // 527
-				table.setLockedWidth(true);
-				table.getDefaultCell().setFixedHeight(20);
-				table.getDefaultCell().setBorder(Rectangle.BOTTOM);
-				table.addCell(header);
-				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
-				table.addCell(String.format(" %d / ", writer.getPageNumber()));
-				PdfPCell cell = new PdfPCell(Image.getInstance(total));
-				cell.setBorder(Rectangle.BOTTOM);
-				table.addCell(cell);
-				table.writeSelectedRows(0, -1, 34, xHeaderTop, writer.getDirectContent());
-				// add footer image
-				document.add(createElement(opsiImageURL, 100, 100));
-			} catch (DocumentException de) {
-				throw new ExceptionConverter(de);
-			}
-		}
-
-		private URL getImageResourceURL(String relPath) {
-			String resourceS = Globals.IMAGE_BASE + relPath;
-
-			ClassLoader cl = Thread.currentThread().getContextClassLoader();
-			URL imgURL = cl.getResource(resourceS);
-			if (imgURL != null) {
-				return imgURL;
-			} else {
-				Logging.warning("Couldn't find file  " + relPath);
-				return null;
-			}
-		}
-
-		/**
-		 * Fills out the total number of pages before the document is closed.
-		 * 
-		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onCloseDocument(
-		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
-		 */
-		@Override
-		public void onCloseDocument(PdfWriter writer, Document document) {
-			ColumnText.showTextAligned(total, Element.ALIGN_LEFT, new Phrase(String.valueOf(writer.getPageNumber())), 2,
-					2, 0);
-		}
-	}
-
-	// http://kievan.hubpages.com/hub/How-to-Create-a-Basic-iText-PDF-Document
-	private static Image createElement(URL imageSource, float width, float height) throws DocumentException {
-		Image img = null;
-
-		try {
-			img = Image.getInstance(imageSource);
-			img.scaleToFit(width, height);
-			img.setAbsolutePosition(20, 20);
-		} catch (MalformedURLException ex) {
-			Logging.error("malformed URL --- " + ex);
-		} catch (IOException e) { // getInstannce
-			Logging.error("Error document add footer image --- " + e);
-		}
-
-		return img;
 	}
 }
