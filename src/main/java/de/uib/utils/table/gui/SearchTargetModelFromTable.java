@@ -159,10 +159,12 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	@Override
 	public void setSelection(int[] selection) {
 		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
+		table.getSelectionModel().setValueIsAdjusting(true);
 		table.getSelectionModel().clearSelection();
 		for (int selectionElement : selection) {
 			table.getSelectionModel().addSelectionInterval(selectionElement, selectionElement);
 		}
+		table.getSelectionModel().setValueIsAdjusting(false);
 	}
 
 	private void returnToNotChanged(boolean wasChanged) {
