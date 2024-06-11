@@ -8,6 +8,7 @@ package de.uib.utils.table.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JList;
@@ -108,7 +109,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public int[] getSelectedRows() {
-		TreeSet<Integer> selection = new TreeSet<>();
+		Set<Integer> selection = new TreeSet<>();
 		for (int j = 0; j < theValues.size(); j++) {
 			if (jList.isSelectedIndex(j)) {
 				selection.add(j);
