@@ -277,6 +277,7 @@ public class MainFrame extends JFrame {
 		jMenuServerConsole.addSeparator();
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
+		Utils.addOpsiIconToMenuItem(menuOpsi);
 		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
 				|| UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE) == null
