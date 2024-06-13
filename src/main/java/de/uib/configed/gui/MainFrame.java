@@ -270,7 +270,8 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setupMenuServerConsole() {
-		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
+		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"),
+				Utils.getIntellijIcon("edit"));
 		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
@@ -434,7 +435,8 @@ public class MainFrame extends JFrame {
 
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
-		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
+		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"),
+				Utils.getIntellijIcon("terminal"));
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 			TerminalFrame terminal = new TerminalFrame();
@@ -488,7 +490,8 @@ public class MainFrame extends JFrame {
 
 		addLogfileMenus(jMenuHelp, this);
 
-		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"),
+				Utils.getIntellijIcon("springBootHealth"));
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
 		jMenuHelp.add(jMenuHelpCheckHealth);
 
