@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -125,6 +126,20 @@ public final class Utils {
 
 		return icon;
 
+	}
+
+	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
+		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
+
+		// set normal icon
+		abstractButton.setIcon(icon.derive(16, 16));
+
+		// Create filter for selected icon
+		ColorFilter filter = new ColorFilter();
+		filter.add(Globals.OPSI_MAGENTA, Globals.OPSI_FOREGROUND_DARK);
+		icon = icon.derive(16, 16);
+		icon.setColorFilter(filter);
+		abstractButton.setSelectedIcon(icon);
 	}
 
 	public static ImageIcon getSelectedIntellijIcon(String iconName) {

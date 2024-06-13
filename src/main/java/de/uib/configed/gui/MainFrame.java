@@ -457,14 +457,17 @@ public class MainFrame extends JFrame {
 
 	public static void addHelpLinks(JMenu jMenuHelp) {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
+		Utils.addOpsiIconToMenuItem(jMenuHelpDoc);
 		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
 		jMenuHelp.add(jMenuHelpDoc);
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
+		Utils.addOpsiIconToMenuItem(jMenuHelpForum);
 		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
+		Utils.addOpsiIconToMenuItem(jMenuHelpSupport);
 		jMenuHelpSupport.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 		jMenuHelp.add(jMenuHelpSupport);
 	}
@@ -484,6 +487,7 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
+		Utils.addOpsiIconToMenuItem(jMenuHelpOpsiModuleInformation);
 		jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
 
 		jMenuHelp.add(jMenuHelpOpsiModuleInformation);
@@ -502,6 +506,7 @@ public class MainFrame extends JFrame {
 		jMenuHelp.add(jMenuHelpCredits);
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
+		Utils.addOpsiIconToMenuItem(jMenuHelpAbout);
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 		jMenuHelp.add(jMenuHelpAbout);
 
