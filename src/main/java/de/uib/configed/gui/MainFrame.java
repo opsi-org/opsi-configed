@@ -507,7 +507,7 @@ public class MainFrame extends JFrame {
 		jMenuHelp.add(jMenuHelpCredits);
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		Utils.addOpsiIconToMenuItem(jMenuHelpAbout);
+		jMenuHelpAbout.setIcon(Utils.getIntellijIcon("info"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
 		jMenuHelp.add(jMenuHelpAbout);
 
