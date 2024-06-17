@@ -191,9 +191,8 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private JPanel initIconPaneExtraFrames() {
-		jButtonLicenses = new JButton(Utils.createImageIcon("images/licenses_deselected.png", ""));
+		jButtonLicenses = new JButton(Utils.getLargeIntellijIcon("scriptingScript"));
 		jButtonLicenses.setEnabled(false);
-		jButtonLicenses.setSelectedIcon(Utils.createImageIcon("images/licenses.png", ""));
 		jButtonLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jButtonLicenses.setFocusable(false);
@@ -357,7 +356,7 @@ public class IconBarPanel extends JPanel {
 		jButtonReload.setFocusable(false);
 		jButtonReload.addActionListener((ActionEvent e) -> configedMain.reload());
 
-		jButtonReloadLicenses = new JButton(Utils.createImageIcon("images/reload_licenses.png", ""));
+		jButtonReloadLicenses = new JButton(Utils.getReloadLicensingIcon());
 		jButtonReloadLicenses.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		jButtonReloadLicenses.setFocusable(false);
 		jButtonReloadLicenses.setVisible(false);

@@ -7,8 +7,10 @@
 package de.uib.utils;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
@@ -126,6 +128,22 @@ public final class Utils {
 		icon.setColorFilter(new ColorFilter(arg -> color));
 
 		return icon;
+	}
+
+	public static ImageIcon getReloadLicensingIcon() {
+		ImageIcon icon = getLargeIntellijIcon("refresh");
+		ImageIcon icon1 = getIntellijIcon("scriptingScript");
+
+		Image image1 = icon.getImage();
+		Image image2 = icon1.getImage();
+		int w = Math.max(image1.getWidth(null), image2.getWidth(null));
+		int h = Math.max(image1.getHeight(null), image2.getHeight(null));
+		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics g2 = image.getGraphics();
+		g2.drawImage(image1, 0, 0, null);
+		g2.drawImage(image2, 8, 8, null);
+		g2.dispose();
+		return new ImageIcon(image);
 	}
 
 	private static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
