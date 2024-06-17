@@ -147,7 +147,7 @@ public class IconBarPanel extends JPanel {
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.setFocusable(false);
 
-		jButtonDepotsConfiguration = new JButton(Utils.getLargeIntellijIcon("foreignServer"));
+		jButtonDepotsConfiguration = new JButton(Utils.getLargeIntellijIcon("dbms"));
 		jButtonDepotsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.setFocusable(false);
@@ -276,14 +276,14 @@ public class IconBarPanel extends JPanel {
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
-				jButtonOpsiLicenses = new JButton(Utils.createImageIcon("images/opsi-licenses-error-small.png", ""));
+				jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(Globals.OPSI_ERROR));
 				break;
 			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				jButtonOpsiLicenses = new JButton(Utils.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+				jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(Globals.OPSI_WARNING));
 				break;
 
 			case LicensingInfoMap.STATE_OKAY:
-				jButtonOpsiLicenses = new JButton(Utils.createImageIcon("images/opsi-licenses.png", ""));
+				jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(Globals.OPSI_OK));
 				break;
 
 			default:
@@ -291,7 +291,7 @@ public class IconBarPanel extends JPanel {
 				break;
 			}
 		} else {
-			jButtonOpsiLicenses = new JButton(Utils.createImageIcon("images/opsi-licenses.png", ""));
+			jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(Globals.OPSI_OK));
 		}
 	}
 

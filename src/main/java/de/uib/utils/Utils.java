@@ -120,6 +120,14 @@ public final class Utils {
 				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT).derive(32, 32);
 	}
 
+	public static ImageIcon getOpsiModulesIcon(Color color) {
+		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
+		icon = icon.derive(32, 32);
+		icon.setColorFilter(new ColorFilter(arg -> color));
+
+		return icon;
+	}
+
 	private static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
 
