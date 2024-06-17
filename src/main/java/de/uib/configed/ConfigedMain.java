@@ -363,8 +363,6 @@ public class ConfigedMain implements MessagebusListener {
 			}
 		}
 
-		setEditingTarget(EditingTarget.CLIENTS);
-
 		anyDataChanged = false;
 
 		Logging.debug(this, "initialTreeActivation");
@@ -727,8 +725,12 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void setEditingTarget(EditingTarget t) {
 		Logging.info(this, "setEditingTarget " + t);
+		if (t == editingTarget) {
+			Logging.info(this, "stop setting editingTarget, it remains the same");
+			return;
+		}
+
 		editingTarget = t;
-		mainFrame.getIconBarPanel().visualizeEditingTarget(t);
 		int previousViewIndex = getViewIndex();
 		// what else to do:
 		switch (t) {
@@ -2504,7 +2506,6 @@ public class ConfigedMain implements MessagebusListener {
 			productTree.reInitTree();
 			clientTree.reInitTree();
 			fetchDepots();
-			setEditingTarget(editingTarget);
 
 			// if depot selection changed, we adapt the clients
 			NavigableSet<String> clientsLeft = new TreeSet<>();

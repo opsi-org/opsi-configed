@@ -10,10 +10,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.FlatLaf;
@@ -31,10 +34,6 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class IconBarPanel extends JPanel {
-	private JButton jButtonServerConfiguration;
-	private JButton jButtonDepotsConfiguration;
-	private JButton jButtonClientsConfiguration;
-
 	private JButton jButtonOpsiLicenses;
 
 	private JButton jButtonReload;
@@ -119,7 +118,7 @@ public class IconBarPanel extends JPanel {
 		GroupLayout layoutIconPane0 = new GroupLayout(iconsTopRight);
 		iconsTopRight.setLayout(layoutIconPane0);
 
-		JPanel iconPaneTargets = initIconPaneTargets();
+		JToolBar iconPaneTargets = initIconPaneTargets();
 		JPanel iconPaneExtraFrames = initIconPaneExtraFrames();
 
 		layoutIconPane0.setHorizontalGroup(
@@ -139,53 +138,38 @@ public class IconBarPanel extends JPanel {
 		return iconsTopRight;
 	}
 
-	private JPanel initIconPaneTargets() {
-		jButtonServerConfiguration = new JButton(Utils.getLargeIntellijIcon("editorConfig"));
-		jButtonServerConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
+	private JToolBar initIconPaneTargets() {
+		JToggleButton jButtonServerConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("editorConfig"));
+		jButtonServerConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.setFocusable(false);
 
-		jButtonDepotsConfiguration = new JButton(Utils.getLargeIntellijIcon("dbms"));
-		jButtonDepotsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
+		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("dbms"));
+		jButtonDepotsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.setFocusable(false);
 
-		jButtonClientsConfiguration = new JButton(Utils.getLargeIntellijIcon("desktop"));
-		jButtonClientsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
+		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("desktop"));
+		jButtonClientsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setFocusable(false);
+		jButtonClientsConfiguration.setSelected(true);
 
 		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
 		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
 		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
 
-		JPanel iconPaneTargets = new JPanel();
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add(jButtonClientsConfiguration);
+		buttonGroup.add(jButtonDepotsConfiguration);
+		buttonGroup.add(jButtonServerConfiguration);
 
-		GroupLayout layoutIconPaneTargets = new GroupLayout(iconPaneTargets);
-		iconPaneTargets.setLayout(layoutIconPaneTargets);
+		JToolBar jToolBarSwitch = new JToolBar();
+		jToolBarSwitch.add(jButtonClientsConfiguration);
+		jToolBarSwitch.add(jButtonDepotsConfiguration);
+		jToolBarSwitch.add(jButtonServerConfiguration);
 
-		layoutIconPaneTargets.setHorizontalGroup(layoutIconPaneTargets.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonClientsConfiguration, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonDepotsConfiguration, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(jButtonServerConfiguration, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
-
-		layoutIconPaneTargets.setVerticalGroup(layoutIconPaneTargets.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(jButtonClientsConfiguration, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonDepotsConfiguration, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonServerConfiguration, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		return iconPaneTargets;
+		return jToolBarSwitch;
 	}
 
 	private JPanel initIconPaneExtraFrames() {
@@ -400,31 +384,6 @@ public class IconBarPanel extends JPanel {
 			configedMain.setColumnSessionInfo(true);
 			configedMain.getSessionInfo();
 		});
-	}
-
-	public void visualizeEditingTarget(EditingTarget t) {
-		switch (t) {
-		case CLIENTS:
-			jButtonClientsConfiguration.setSelected(true);
-			jButtonDepotsConfiguration.setSelected(false);
-			jButtonServerConfiguration.setSelected(false);
-			break;
-
-		case DEPOTS:
-			jButtonDepotsConfiguration.setSelected(true);
-			jButtonServerConfiguration.setSelected(false);
-			jButtonClientsConfiguration.setSelected(false);
-			break;
-
-		case SERVER:
-			jButtonServerConfiguration.setSelected(true);
-			jButtonDepotsConfiguration.setSelected(false);
-			jButtonClientsConfiguration.setSelected(false);
-			break;
-
-		default:
-			break;
-		}
 	}
 
 	public void showReloadLicensingButton() {
