@@ -56,7 +56,7 @@ public class GlassPane extends JComponent implements KeyListener {
 	}
 
 	private void initLayout() {
-		JProgressBar jLabelAnimation = new JProgressBar()
+		JProgressBar jLabelAnimation = new JProgressBar();
 		jLabelAnimation.setIndeterminate(true);
 		jLabelInfo = new JLabel();
 
@@ -64,14 +64,12 @@ public class GlassPane extends JComponent implements KeyListener {
 		setLayout(grouplayout);
 
 		grouplayout.setVerticalGroup(grouplayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-				.addComponent(jLabelAnimation,10,10,10).addComponent(jLabelInfo).addGap(0, 0, Short.MAX_VALUE));
+				.addComponent(jLabelAnimation, 10, 10, 10).addComponent(jLabelInfo).addGap(0, 0, Short.MAX_VALUE));
 
-		grouplayout
-				.setHorizontalGroup(
-						grouplayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-								.addGroup(grouplayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-										.addComponent(jLabelAnimation,150,150,150).addComponent(jLabelInfo))
-								.addGap(0, 0, Short.MAX_VALUE));
+		grouplayout.setHorizontalGroup(grouplayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+				.addGroup(grouplayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelAnimation, 150, 150, 150).addComponent(jLabelInfo))
+				.addGap(0, 0, Short.MAX_VALUE));
 	}
 
 	public void setInfoText(String s) {
