@@ -372,7 +372,6 @@ public class ConfigedMain implements MessagebusListener {
 		ReachableUpdater.startUpdater(Configed.getRefreshMinutes(), this);
 
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
-		mainFrame.enableAfterLoading();
 	}
 
 	private List<String> readLocallySavedServerNames() {
@@ -723,7 +722,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "toggleLicensesFrame is visible" + licensesFrame.isVisible());
 		licensesFrame.setLocationRelativeTo(mainFrame);
 		licensesFrame.setVisible(true);
-		mainFrame.getIconBarPanel().visualizeLicensesFramesActive(true);
+		mainFrame.getIconBarPanel().showReloadLicensingButton();
 	}
 
 	public void setEditingTarget(EditingTarget t) {
@@ -2499,7 +2498,6 @@ public class ConfigedMain implements MessagebusListener {
 			requestRefreshDataForClientSelection();
 
 			mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
-			mainFrame.enableAfterLoading();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
 

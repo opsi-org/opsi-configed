@@ -84,7 +84,6 @@ public class MainFrame extends JFrame {
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
-	private JMenuItem jMenuFrameLicenses;
 	private JMenuItem jMenuFrameShowDialogs;
 	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter;
 
@@ -430,8 +429,7 @@ public class MainFrame extends JFrame {
 		JMenuItem jMenuFrameDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
 
-		jMenuFrameLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
-		jMenuFrameLicenses.setEnabled(false);
+		JMenuItem jMenuFrameLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
 		jMenuFrameLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
@@ -813,11 +811,6 @@ public class MainFrame extends JFrame {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
 		jMenuFrameShowDialogs.setEnabled(existJDialogInstances);
-	}
-
-	public void enableAfterLoading() {
-		iconBarPanel.enableAfterLoading();
-		jMenuFrameLicenses.setEnabled(true);
 	}
 
 	public LicensingInfoDialog getFDialogOpsiLicensingInfo() {

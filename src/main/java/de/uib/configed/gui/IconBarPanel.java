@@ -22,7 +22,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
-import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -36,7 +35,6 @@ public class IconBarPanel extends JPanel {
 	private JButton jButtonDepotsConfiguration;
 	private JButton jButtonClientsConfiguration;
 
-	private JButton jButtonLicenses;
 	private JButton jButtonOpsiLicenses;
 
 	private JButton jButtonReload;
@@ -191,8 +189,7 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private JPanel initIconPaneExtraFrames() {
-		jButtonLicenses = new JButton(Utils.getLargeIntellijIcon("scriptingScript"));
-		jButtonLicenses.setEnabled(false);
+		JButton jButtonLicenses = new JButton(Utils.getLargeIntellijIcon("scriptingScript"));
 		jButtonLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jButtonLicenses.setFocusable(false);
@@ -398,8 +395,6 @@ public class IconBarPanel extends JPanel {
 
 		jButtonSessionInfo = new JButton(Utils.getLargeIntellijIcon("infoOutline"));
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
-		jButtonSessionInfo.setEnabled(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		jButtonSessionInfo.setFocusable(false);
 		jButtonSessionInfo.addActionListener((ActionEvent e) -> {
 			configedMain.setColumnSessionInfo(true);
@@ -432,13 +427,7 @@ public class IconBarPanel extends JPanel {
 		}
 	}
 
-	public void visualizeLicensesFramesActive(boolean b) {
-		jButtonLicenses.setSelected(b);
+	public void showReloadLicensingButton() {
 		jButtonReloadLicenses.setVisible(true);
-		jButtonReloadLicenses.setEnabled(true);
-	}
-
-	public void enableAfterLoading() {
-		jButtonLicenses.setEnabled(true);
 	}
 }
