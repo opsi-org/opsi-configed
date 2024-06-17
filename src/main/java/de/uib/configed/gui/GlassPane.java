@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -15,30 +14,23 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 
+import javax.swing.GroupLayout;
 import javax.swing.JComponent;
-import javax.swing.UIManager;
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.Globals;
-import de.uib.configed.dashboard.ComponentStyler;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.VBox;
 
 public class GlassPane extends JComponent implements KeyListener {
-	private ProgressIndicator wheel;
-	private Label jLabelInfo;
+	private JLabel jLabelInfo;
 
 	public GlassPane() {
 		super.setBackground(initBackground());
 		super.setOpaque(false);
 
-		initFX();
+		initLayout();
 		addEventCatchers();
 	}
 
@@ -63,38 +55,27 @@ public class GlassPane extends JComponent implements KeyListener {
 		return new Color(base.getRed(), base.getGreen(), base.getBlue(), 128);
 	}
 
-	private void initFX() {
-		JFXPanel jfxPanel = new JFXPanel();
-		jfxPanel.setOpaque(false);
-		jfxPanel.setBackground(initBackground());
-		setLayout(new BorderLayout());
-		add(jfxPanel, BorderLayout.CENTER);
+	private void initLayout() {
+		JProgressBar jLabelAnimation = new JProgressBar()
+		jLabelAnimation.setIndeterminate(true);
+		jLabelInfo = new JLabel();
 
-		Platform.setImplicitExit(false);
-		Platform.runLater(() -> initFXComponents(jfxPanel));
-	}
+		GroupLayout grouplayout = new GroupLayout(this);
+		setLayout(grouplayout);
 
-	private void initFXComponents(JFXPanel jfxPanel) {
-		wheel = new ProgressIndicator();
-		wheel.setScaleX(0.5);
-		wheel.setScaleY(0.5);
-		wheel.setStyle(
-				"-fx-progress-color: " + ComponentStyler.getHexColor(UIManager.getColor("ProgressBar.foreground")));
-		jLabelInfo = new Label();
-		ComponentStyler.styleLabelComponent(jLabelInfo);
+		grouplayout.setVerticalGroup(grouplayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+				.addComponent(jLabelAnimation,10,10,10).addComponent(jLabelInfo).addGap(0, 0, Short.MAX_VALUE));
 
-		VBox vbox = new VBox();
-		vbox.getChildren().add(wheel);
-		vbox.getChildren().add(jLabelInfo);
-		vbox.setAlignment(Pos.CENTER);
-		vbox.setStyle("-fx-background-color: transparent;");
-
-		Scene scene = new Scene(vbox, javafx.scene.paint.Color.TRANSPARENT);
-		jfxPanel.setScene(scene);
+		grouplayout
+				.setHorizontalGroup(
+						grouplayout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+								.addGroup(grouplayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+										.addComponent(jLabelAnimation,150,150,150).addComponent(jLabelInfo))
+								.addGap(0, 0, Short.MAX_VALUE));
 	}
 
 	public void setInfoText(String s) {
-		Platform.runLater(() -> jLabelInfo.setText(s));
+		jLabelInfo.setText(s);
 	}
 
 	/*
@@ -111,7 +92,6 @@ public class GlassPane extends JComponent implements KeyListener {
 	 *  Make the glass pane and wheel visible, and change the cursor to the wait cursor.
 	 */
 	public void activate(boolean toggle) {
-		Platform.runLater(() -> wheel.setVisible(toggle));
 		setVisible(toggle);
 		setCursor(getCursor());
 		if (isVisible()) {
