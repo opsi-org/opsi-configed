@@ -594,7 +594,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	public void setColumnSessionInfo(boolean b) {
+	private void setColumnSessionInfo(boolean b) {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 		if (visible != b) {
@@ -2878,6 +2878,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void getSessionInfo() {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
+		setColumnSessionInfo(true);
 		mainFrame.getIconBarPanel().getjButtonSessionInfo().setEnabled(false);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
 		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());

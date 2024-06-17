@@ -380,10 +380,7 @@ public class IconBarPanel extends JPanel {
 		jButtonSessionInfo = new JButton(Utils.getLargeIntellijIcon("infoOutline"));
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
 		jButtonSessionInfo.setFocusable(false);
-		jButtonSessionInfo.addActionListener((ActionEvent e) -> {
-			configedMain.setColumnSessionInfo(true);
-			configedMain.getSessionInfo();
-		});
+		jButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 	}
 
 	public void showReloadLicensingButton() {

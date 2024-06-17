@@ -147,10 +147,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuShowPopupMessage.addActionListener(event -> showPopupOnClientsAction());
 		jMenuShutdownClient.addActionListener(event -> configedMain.shutdownSelectedClients());
-		jMenuRequestSessionInfo.addActionListener((ActionEvent e) -> {
-			configedMain.setColumnSessionInfo(true);
-			configedMain.getSessionInfo();
-		});
+		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
 		jMenuDeleteClient.addActionListener(event -> configedMain.deleteSelectedClients());
 		jMenuCopyClient.addActionListener(event -> configedMain.copySelectedClient());
