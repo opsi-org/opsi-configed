@@ -105,8 +105,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		loggingArea = new JTextArea();
 		loggingArea.setEditable(false);
 
-		JScrollPane scrollpaneL = new JScrollPane();
-		scrollpaneL.setViewportView(loggingArea);
+		JScrollPane scrollpaneL = new JScrollPane(loggingArea);
 		scrollpaneL.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		loggingPanel.add(scrollpaneL, BorderLayout.CENTER);
 
