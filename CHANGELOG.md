@@ -1,4 +1,9 @@
 # Changelog
+## [4.3.3.3] - 2024-06-10
+## Changed
+- Use Swing component instead of JavaFX for loading mechanism because of performance issues in JavaFX
+
+
 ## [4.3.3.2] - 2024-06-10
 
 ## [4.3.3.1] - 2024-06-06
