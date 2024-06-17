@@ -115,6 +115,11 @@ public final class Utils {
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
+	public static ImageIcon getLargeIntellijIcon(String iconName) {
+		return getIntellijIcon(iconName,
+				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT).derive(32, 32);
+	}
+
 	private static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
 

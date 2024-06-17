@@ -142,20 +142,17 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private JPanel initIconPaneTargets() {
-		jButtonServerConfiguration = new JButton(Utils.createImageIcon("images/opsiconsole_deselected.png", ""));
-		jButtonServerConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiconsole.png", ""));
+		jButtonServerConfiguration = new JButton(Utils.getLargeIntellijIcon("editorConfig"));
 		jButtonServerConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.setFocusable(false);
 
-		jButtonDepotsConfiguration = new JButton(Utils.createImageIcon("images/opsidepots_deselected.png", ""));
-		jButtonDepotsConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsidepots.png", ""));
+		jButtonDepotsConfiguration = new JButton(Utils.getLargeIntellijIcon("foreignServer"));
 		jButtonDepotsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.setFocusable(false);
 
-		jButtonClientsConfiguration = new JButton(Utils.createImageIcon("images/opsiclients_deselected.png", ""));
-		jButtonClientsConfiguration.setSelectedIcon(Utils.createImageIcon("images/opsiclients.png", ""));
+		jButtonClientsConfiguration = new JButton(Utils.getLargeIntellijIcon("desktop"));
 		jButtonClientsConfiguration.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setFocusable(false);
@@ -218,7 +215,7 @@ public class IconBarPanel extends JPanel {
 
 		jButtonWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
-		JButton jButtonDashboard = new JButton(Utils.createImageIcon("images/dash_selected.png", ""));
+		JButton jButtonDashboard = new JButton(Utils.getLargeIntellijIcon("dataSchema"));
 		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.setFocusable(false);
@@ -355,7 +352,7 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private void setupIcons() {
-		jButtonReload = new JButton(Utils.createImageIcon("images/reload.gif", ""));
+		jButtonReload = new JButton(Utils.getLargeIntellijIcon("refresh"));
 		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jButtonReload.setFocusable(false);
 		jButtonReload.addActionListener((ActionEvent e) -> configedMain.reload());
@@ -366,20 +363,19 @@ public class IconBarPanel extends JPanel {
 		jButtonReloadLicenses.setVisible(false);
 		jButtonReloadLicenses.addActionListener((ActionEvent e) -> mainFrame.reloadLicensesAction());
 
-		jButtonNewClient = new JButton(Utils.createImageIcon("images/newClient.gif", ""));
+		jButtonNewClient = new JButton(Utils.getLargeIntellijIcon("add"));
 		jButtonNewClient.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonNewClient"));
 		jButtonNewClient.setFocusable(false);
 		jButtonNewClient
 				.setVisible(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
 		jButtonNewClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
-		jButtonSetGroup = new JButton(Utils.createImageIcon("images/setGroup.gif", ""));
+		jButtonSetGroup = new JButton(Utils.getLargeIntellijIcon("search"));
 		jButtonSetGroup.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		jButtonSetGroup.setFocusable(false);
 		jButtonSetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
 
-		jButtonSaveConfiguration = new JButton(Utils.createImageIcon("images/apply.png", ""));
-		jButtonSaveConfiguration.setDisabledIcon(Utils.createImageIcon("images/apply_disabled.png", ""));
+		jButtonSaveConfiguration = new JButton(Utils.getLargeIntellijIcon("save"));
 		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
 		jButtonSaveConfiguration.setFocusable(false);
 		jButtonSaveConfiguration.setEnabled(false);
@@ -401,7 +397,7 @@ public class IconBarPanel extends JPanel {
 			SwingUtilities.invokeLater(configedMain::getReachableInfo);
 		});
 
-		jButtonSessionInfo = new JButton(Utils.createImageIcon("images/system-users-query.png", ""));
+		jButtonSessionInfo = new JButton(Utils.getLargeIntellijIcon("infoOutline"));
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
 		jButtonSessionInfo.setEnabled(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
