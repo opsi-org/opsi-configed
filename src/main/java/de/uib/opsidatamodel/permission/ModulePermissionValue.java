@@ -6,18 +6,11 @@
 
 package de.uib.opsidatamodel.permission;
 
-import java.util.Arrays;
-import java.util.List;
-
 import de.uib.utils.ExtendedDate;
 import de.uib.utils.ExtendedInteger;
 import de.uib.utils.logging.Logging;
 
 public class ModulePermissionValue {
-	public static final List<String> MODULE_CHECKED = Arrays.asList("license_management", "local_imaging", "monitoring",
-			"wim-capture", "scalability1", "linux_agent", "vpn", "mysql_backend", "uefi", "userroles",
-			"directory-connector", "macos_agent", "secureboot", "win-vhd", "os_install_by_wlan");
-
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;
 	private Boolean booleanValue;

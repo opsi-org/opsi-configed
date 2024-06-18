@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,10 @@ public class ModuleDataService {
 	// opsi module information
 	private static final int CLIENT_COUNT_WARNING_LIMIT = 10;
 	private static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
+
+	private static final List<String> MODULE_CHECKED = Arrays.asList("license_management", "local_imaging",
+			"monitoring", "wim-capture", "scalability1", "linux_agent", "vpn", "mysql_backend", "uefi", "userroles",
+			"directory-connector", "macos_agent", "secureboot", "win-vhd", "os_install_by_wlan");
 
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;
@@ -246,7 +251,7 @@ public class ModuleDataService {
 		Logging.info(this, "countModules is  " + opsiCountModules);
 
 		// set values for modules checked by configed
-		for (String key : ModulePermissionValue.MODULE_CHECKED) {
+		for (String key : MODULE_CHECKED) {
 			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
 
 			if (modulePermission == null) {
@@ -311,7 +316,7 @@ public class ModuleDataService {
 		Logging.info(this, "modules resulting step 2  " + opsiModules);
 		Logging.info(this, "count Modules is  " + opsiCountModules);
 
-		for (String key : ModulePermissionValue.MODULE_CHECKED) {
+		for (String key : MODULE_CHECKED) {
 			int countClientsInThisBlock = countClients;
 
 			// tests
