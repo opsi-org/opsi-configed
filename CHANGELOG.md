@@ -3,6 +3,8 @@
 ## Changed
 - Use Swing component instead of JavaFX for loading mechanism because of performance issues in JavaFX
 
+## Added
+- Button to copy HostKey into Clipboard
 
 ## [4.3.3.2] - 2024-06-10
 

@@ -7,6 +7,8 @@
 package de.uib.configed.gui;
 
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -14,15 +16,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.text.JTextComponent;
 
+import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.Configed;
@@ -32,6 +35,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 
@@ -59,7 +63,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
 	private JTextField jTextFieldOneTimePassword;
-	private JPasswordField jTextFieldHostKey;
+	private FlatPasswordField hostKeyField;
 
 	private Map<String, Map<String, String>> changedClientInfos;
 
@@ -150,8 +154,15 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		jTextFieldOneTimePassword = new JTextField();
 		jTextFieldOneTimePassword.addKeyListener(this);
 
-		jTextFieldHostKey = new JPasswordField();
-		jTextFieldHostKey.setEditable(false);
+		hostKeyField = new FlatPasswordField();
+		hostKeyField.setEditable(false);
+
+		// This button copies the hostKey into the clipboard
+		JButton jButtonCopyHostKey = new JButton(Utils.createImageIcon("images/edit-copy.png", ""));
+		jButtonCopyHostKey.setVisible(false);
+		jButtonCopyHostKey.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
+				.setContents(new StringSelection(new String(hostKeyField.getPassword())), null));
+		hostKeyField.setTrailingComponent(jButtonCopyHostKey);
 	}
 
 	private void setupLayout() {
@@ -212,7 +223,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 				////// opsiHostKey
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(jTextFieldHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(hostKeyField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// NOTES
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
@@ -276,7 +287,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelOpsiHostKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldHostKey, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(hostKeyField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// NOTES
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -332,7 +343,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 	public void setOpsiHostKey(String s) {
 		Logging.info(this, "setOpsiHostKey " + s);
-		jTextFieldHostKey.setText(s);
+		hostKeyField.setText(s);
 	}
 
 	public void setClientID(String s) {
@@ -436,7 +447,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN));
 		checkBoxInstallByShutdown.setEnabled(writingAllowed && !clientSelectionEmpty);
 
-		jTextFieldHostKey.setEnabled(singleClient);
+		hostKeyField.setEnabled(singleClient);
 
 		if (singleClient) {
 			jTextFieldDescription.setToolTipText(null);
