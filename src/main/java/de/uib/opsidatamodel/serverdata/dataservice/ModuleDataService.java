@@ -246,7 +246,7 @@ public class ModuleDataService {
 		Logging.info(this, "countModules is  " + opsiCountModules);
 
 		// set values for modules checked by configed
-		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
+		for (String key : ModulePermissionValue.MODULE_CHECKED) {
 			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
 
 			if (modulePermission == null) {
@@ -311,7 +311,7 @@ public class ModuleDataService {
 		Logging.info(this, "modules resulting step 2  " + opsiModules);
 		Logging.info(this, "count Modules is  " + opsiCountModules);
 
-		for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
+		for (String key : ModulePermissionValue.MODULE_CHECKED) {
 			int countClientsInThisBlock = countClients;
 
 			// tests

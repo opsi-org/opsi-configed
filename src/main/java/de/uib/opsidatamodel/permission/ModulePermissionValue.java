@@ -6,19 +6,17 @@
 
 package de.uib.opsidatamodel.permission;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 import de.uib.utils.ExtendedDate;
 import de.uib.utils.ExtendedInteger;
 import de.uib.utils.logging.Logging;
 
 public class ModulePermissionValue {
-	public static final Map<String, Boolean> MODULE_CHECKED = Map.ofEntries(Map.entry("license_management", true),
-			Map.entry("local_imaging", true), Map.entry("monitoring", true), Map.entry("wim-capture", true),
-			Map.entry("scalability1", true), Map.entry("linux_agent", true), Map.entry("vpn", true),
-			Map.entry("mysql_backend", true), Map.entry("uefi", true), Map.entry("userroles", true),
-			Map.entry("directory-connector", true), Map.entry("macos_agent", true), Map.entry("secureboot", true),
-			Map.entry("win-vhd", true), Map.entry("os_install_by_wlan", true));
+	public static final List<String> MODULE_CHECKED = Arrays.asList("license_management", "local_imaging", "monitoring",
+			"wim-capture", "scalability1", "linux_agent", "vpn", "mysql_backend", "uefi", "userroles",
+			"directory-connector", "macos_agent", "secureboot", "win-vhd", "os_install_by_wlan");
 
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;

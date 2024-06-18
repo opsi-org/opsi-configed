@@ -295,12 +295,8 @@ public class SoftwareDataService {
 			return;
 		}
 
-		String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME),
-				SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION),
-				SWAuditEntry.key2serverKey.get(SWAuditEntry.SUB_VERSION),
-				SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE),
-				SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE),
-				SWAuditEntry.key2serverKey.get(SWAuditEntry.WINDOWS_SOFTWARE_ID) };
+		String[] callAttributes = new String[] { SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
+				SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE, SWAuditEntry.WINDOWS_SOFTWARE_ID };
 		Map<String, Object> callFilter = new HashMap<>();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS,
 				new Object[] { callAttributes, callFilter });
