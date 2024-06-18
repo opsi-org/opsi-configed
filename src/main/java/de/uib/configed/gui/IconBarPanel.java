@@ -377,7 +377,7 @@ public class IconBarPanel extends JPanel {
 			SwingUtilities.invokeLater(configedMain::getReachableInfo);
 		});
 
-		jButtonSessionInfo = new JButton(Utils.getLargeIntellijIcon("infoOutline"));
+		jButtonSessionInfo = new JButton(Utils.getLargeIntellijIcon("user"));
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
 		jButtonSessionInfo.setFocusable(false);
 		jButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
