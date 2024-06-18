@@ -159,7 +159,6 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		// This button copies the hostKey into the clipboard
 		JButton jButtonCopyHostKey = new JButton(Utils.createImageIcon("images/edit-copy.png", ""));
-		jButtonCopyHostKey.setVisible(false);
 		jButtonCopyHostKey.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(new String(hostKeyField.getPassword())), null));
 		hostKeyField.setTrailingComponent(jButtonCopyHostKey);
