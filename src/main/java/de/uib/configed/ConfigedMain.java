@@ -867,10 +867,6 @@ public class ConfigedMain implements MessagebusListener {
 					clientInDepot);
 
 			activatedGroupModel.setActive(selectedClients.isEmpty());
-
-			// request reloading of client list depending data
-
-			requestRefreshDataForClientSelection();
 		}
 
 		clientTree.updateSelectedObjectsInTable();
@@ -1364,11 +1360,6 @@ public class ConfigedMain implements MessagebusListener {
 		clientTable.setSelectedValues(clientsFilteredByTree);
 	}
 
-	private void requestRefreshDataForClientSelection() {
-		Logging.info(this, "requestRefreshDataForClientSelection");
-		requestReloadStatesAndActions();
-	}
-
 	public void requestReloadStatesAndActions() {
 		Logging.info(this, "requestReloadStatesAndActions");
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
@@ -1409,7 +1400,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		saveSelectedClients = clientNames;
 
-		requestRefreshDataForClientSelection();
+		requestReloadStatesAndActions();
 
 		setSelectedClientsArray(clientNames);
 
@@ -1724,11 +1715,7 @@ public class ConfigedMain implements MessagebusListener {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
 			Logging.info(this, "treeClientsSelectAction selTreePaths: " + selTreePaths.length);
-
-			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selTreePaths[selTreePaths.length - 1]
-					.getLastPathComponent();
-
-			setClientByTree(selectedNode, selTreePaths[selTreePaths.length - 1]);
+			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 		}
 	}
 
@@ -2496,7 +2483,7 @@ public class ConfigedMain implements MessagebusListener {
 				mainFrame.getFDialogOpsiLicensingInfo().reload();
 			}
 
-			requestRefreshDataForClientSelection();
+			requestReloadStatesAndActions();
 
 			mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
 			mainFrame.enableAfterLoading();

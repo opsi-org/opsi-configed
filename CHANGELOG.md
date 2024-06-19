@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.3.4] - 2024-06-19
+## Fixed
+- Performance problem when selecting clients in client tree and then show product info
+
 ## [4.3.3.3] - 2024-06-18
 ## Changed
 - Use Swing component instead of JavaFX for loading mechanism because of performance issues in JavaFX
