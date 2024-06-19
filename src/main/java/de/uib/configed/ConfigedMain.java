@@ -1693,7 +1693,7 @@ public class ConfigedMain implements MessagebusListener {
 		return viewIndex;
 	}
 
-	private boolean treeClientsSelectAction(TreePath newSelectedPath) {
+	private void treeClientsSelectAction(TreePath newSelectedPath) {
 		Logging.info(this, "treeClientsSelectAction");
 
 		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) newSelectedPath.getLastPathComponent();
@@ -1705,8 +1705,6 @@ public class ConfigedMain implements MessagebusListener {
 		} else {
 			setClientByTree(selectedNode, newSelectedPath);
 		}
-
-		return true;
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
