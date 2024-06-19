@@ -93,7 +93,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
-		labelOpsiHostKey = new JLabel("opsiHostKey");
+		labelOpsiHostKey = new JLabel("opsi-host-key");
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
@@ -159,6 +159,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		// This button copies the hostKey into the clipboard
 		JButton jButtonCopyHostKey = new JButton(Utils.createImageIcon("images/edit-copy.png", ""));
+		jButtonCopyHostKey.setToolTipText(Configed.getResourceValue("MainFrame.copyHostKey"));
 		jButtonCopyHostKey.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(new String(hostKeyField.getPassword())), null));
 		hostKeyField.setTrailingComponent(jButtonCopyHostKey);
