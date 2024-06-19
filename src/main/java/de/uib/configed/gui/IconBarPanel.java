@@ -25,13 +25,10 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
 
 public class IconBarPanel extends JPanel {
 	private JButton jButtonOpsiLicenses;
@@ -45,8 +42,6 @@ public class IconBarPanel extends JPanel {
 
 	private JButton jButtonReachableInfo;
 	private JButton jButtonSessionInfo;
-
-	private LicensingInfoMap licensingInfoMap;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -192,7 +187,6 @@ public class IconBarPanel extends JPanel {
 		jButtonWorkOnProducts.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
 		jButtonWorkOnProducts.setFocusable(false);
-
 		jButtonWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
 		JButton jButtonDashboard = new JButton(Utils.getLargeIntellijIcon("dataSchema"));
@@ -201,7 +195,7 @@ public class IconBarPanel extends JPanel {
 		jButtonDashboard.setFocusable(false);
 		jButtonDashboard.addActionListener(event -> configedMain.initDashInfo());
 
-		initOpsiLicenseButtonBasedOnWarningLevel();
+		jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(32));
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(e -> mainFrame.showOpsiModules());
@@ -245,34 +239,6 @@ public class IconBarPanel extends JPanel {
 				.addGap(Globals.MIN_GAP_SIZE));
 
 		return iconPaneExtraFrames;
-	}
-
-	private void initOpsiLicenseButtonBasedOnWarningLevel() {
-		if (persistenceController.getModuleDataService().isOpsiUserAdminPD() && licensingInfoMap == null) {
-			licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!LicensingInfoDialog.isExtendedView());
-
-			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(Globals.OPSI_ERROR));
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(Globals.OPSI_WARNING));
-				break;
-
-			case LicensingInfoMap.STATE_OKAY:
-				jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(Globals.OPSI_OK));
-				break;
-
-			default:
-				Logging.warning(this, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
-				break;
-			}
-		} else {
-			jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(Globals.OPSI_OK));
-		}
 	}
 
 	private JPanel initIconsLeft() {

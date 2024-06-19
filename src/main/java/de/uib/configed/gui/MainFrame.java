@@ -485,8 +485,7 @@ public class MainFrame extends JFrame {
 		jMenuHelp.add(jMenuHelpOpsiVersion);
 
 		JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		Utils.addOpsiIconToMenuItem(jMenuHelpOpsiModuleInformation);
+				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), Utils.getOpsiModulesIcon(16));
 		jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
 
 		jMenuHelp.add(jMenuHelpOpsiModuleInformation);

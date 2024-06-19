@@ -42,6 +42,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
@@ -122,12 +124,44 @@ public final class Utils {
 				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT).derive(32, 32);
 	}
 
-	public static ImageIcon getOpsiModulesIcon(Color color) {
+	private static FlatSVGIcon getOpsiModulesIcon() {
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+
+		Color iconColor = null;
+		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
+			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
+					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
+					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+					!LicensingInfoDialog.isExtendedView());
+
+			switch (licensingInfoMap.getWarningLevel()) {
+			case LicensingInfoMap.STATE_OVER_LIMIT:
+				iconColor = Globals.OPSI_ERROR;
+				break;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
+				iconColor = Globals.OPSI_WARNING;
+				break;
+
+			case LicensingInfoMap.STATE_OKAY:
+				iconColor = Globals.OPSI_OK;
+				break;
+
+			default:
+				Logging.warning(Utils.class, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
+				break;
+			}
+		}
+
 		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-		icon = icon.derive(32, 32);
+		final Color color = iconColor;
 		icon.setColorFilter(new ColorFilter(arg -> color));
 
 		return icon;
+	}
+
+	public static ImageIcon getOpsiModulesIcon(int size) {
+		return getOpsiModulesIcon().derive(size, size);
 	}
 
 	public static ImageIcon getReloadLicensingIcon() {
