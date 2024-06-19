@@ -79,6 +79,8 @@ public final class Globals {
 	public static final Color OPSI_FOREGROUND_LIGHT = new Color(30, 30, 30);
 	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
 
+	public static final Color ICON_ACTIVE = new Color(64, 182, 224);
+
 	// End new colors
 
 	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;

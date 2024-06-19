@@ -208,7 +208,11 @@ public final class Utils {
 	}
 
 	public static ImageIcon getSelectedIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName, Globals.ACTION_COLOR);
+		return getIntellijIcon(iconName, Globals.ICON_ACTIVE);
+	}
+
+	public static ImageIcon getLargeSelectedIntellijIcon(String iconName) {
+		return getIntellijIcon(iconName, Globals.ICON_ACTIVE).derive(32, 32);
 	}
 
 	public static ImageIcon getIntellijIcon(String iconName) {
