@@ -6,8 +6,6 @@
 
 package de.uib.configed.type;
 
-import static java.util.Map.entry;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -45,18 +43,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 	public static final String EXISTING_IDS = "(variants)";
 
-	private static final List<String> KEYS = new LinkedList<>();
-	static {
-		KEYS.add(ID);
-		KEYS.add(NAME);
-		KEYS.add(VERSION);
-		KEYS.add("subversion");
-		KEYS.add(ARCHITECTURE);
-		KEYS.add(LANGUAGE);
-
-		KEYS.add(WINDOWS_SOFTWARE_ID);
-	}
-
 	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();
 	static {
 		KEYS_FOR_GUI_TABLES.add(ID);
@@ -71,10 +57,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 	public static final List<String> KEYS_FOR_IDENT = List.of(NAME, VERSION, "subversion", LANGUAGE, ARCHITECTURE);
 	public static final List<String> ID_VARIANTS_COLS = List.of(NAME, EXISTING_IDS);
-
-	public static final Map<String, String> key2serverKey = Map.ofEntries(entry(NAME, "name"),
-			entry(VERSION, "version"), entry(SUB_VERSION, "subVersion"), entry(ARCHITECTURE, "architecture"),
-			entry(LANGUAGE, "language"), entry(WINDOWS_SOFTWARE_ID, "windowsSoftwareId"));
 
 	private String ident;
 	private String identReduced;
@@ -91,22 +73,22 @@ public class SWAuditEntry extends AbstractTableEntry {
 	public SWAuditEntry(Map<String, Object> entry) {
 		super(entry);
 
-		super.remap(NAME, key2serverKey.get(NAME));
-		super.remap(VERSION, key2serverKey.get(VERSION));
+		super.remap(NAME, NAME);
+		super.remap(VERSION, VERSION);
 
-		super.remap(ARCHITECTURE, key2serverKey.get(ARCHITECTURE));
-		super.remap(LANGUAGE, key2serverKey.get(LANGUAGE));
+		super.remap(ARCHITECTURE, ARCHITECTURE);
+		super.remap(LANGUAGE, LANGUAGE);
 
 		super.remap(WINDOWS_SOFTWARE_ID, "windowsSoftwareId");
 
 		// not included in key-values
-		String subversion = entryRetrieved.get(key2serverKey.get(SUB_VERSION));
+		String subversion = entryRetrieved.get(SUB_VERSION);
 
 		if (subversion == null) {
 			subversion = "";
 		}
 
-		super.put(key2serverKey.get(SUB_VERSION), subversion);
+		super.put(SUB_VERSION, subversion);
 
 		ident = Utils.pseudokey(new String[] { super.get(NAME), super.get(VERSION), subversion, super.get(LANGUAGE),
 				super.get(ARCHITECTURE) });

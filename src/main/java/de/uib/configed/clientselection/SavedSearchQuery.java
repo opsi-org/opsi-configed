@@ -13,12 +13,10 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uib.Main;
-import de.uib.configed.type.HostGroupRelation;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.datastructure.StringValuedRelationElement;
 import de.uib.utils.logging.Logging;
 
 /**
@@ -99,17 +97,13 @@ public class SavedSearchQuery {
 			Main.endApp(5);
 		}
 
-		List<String> groupAttributes = new HostGroupRelation().getAttributes();
-		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
-				hostGroups.get(groupName));
-
 		if (!persistenceController.getGroupDataService().deleteGroup(groupName)) {
 			Logging.error("delete group error, groupName " + groupName);
 			Main.endApp(6);
 		}
 
-		if (!persistenceController.getGroupDataService().addGroup(saveGroupRelation, true)) {
-			Logging.error("add group error, group " + saveGroupRelation);
+		if (!persistenceController.getGroupDataService().addGroup(hostGroups.get(groupName), true)) {
+			Logging.error("add group error, group " + hostGroups.get(groupName));
 			Main.endApp(7);
 		}
 
