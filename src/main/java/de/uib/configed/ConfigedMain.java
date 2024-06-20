@@ -1749,7 +1749,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		// since we select based on the tree view we disable the filter
 		if (isFilterClientList()) {
-			mainFrame.toggleClientFilterAction(false);
+			toggleFilterClientList(false);
 		}
 	}
 
@@ -1793,7 +1793,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		// since we select based on the tree view we disable the filter
 		if (isFilterClientList()) {
-			mainFrame.toggleClientFilterAction();
+			toggleFilterClientList(true);
 		}
 	}
 
@@ -3282,7 +3282,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getHostDataService().deleteClients(selectedClients);
 
 		if (isFilterClientList()) {
-			mainFrame.toggleClientFilterAction();
+			toggleFilterClientList(true);;
 		}
 
 		refreshClientListKeepingGroup();

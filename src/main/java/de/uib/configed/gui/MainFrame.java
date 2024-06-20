@@ -635,14 +635,6 @@ public class MainFrame extends JFrame {
 		configedMain.startControlDialog();
 	}
 
-	public void toggleClientFilterAction() {
-		toggleClientFilterAction(true);
-	}
-
-	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
-		configedMain.toggleFilterClientList(rebuildClientListTableModel);
-	}
-
 	private void groupByNotCurrentProductVersion() {
 		String products = getLocalbootProductsFromSelection();
 		configedMain.selectClientsNotCurrentProductInstalled(products, false);
