@@ -154,15 +154,15 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 		}
 	}
 
-	public void setLoglevel(int vSum) {
-		StringBuilder v = new StringBuilder();
-		for (int i = 0; i < vSum; i++) {
-			v.append("v");
-		}
-
-		verbosity = " -" + v + " ";
-		if (vSum == 0) {
+	public final void setLoglevel(int vSum) {
+		if (vSum <= 3) {
 			verbosity = "";
+		} else {
+			StringBuilder v = new StringBuilder("-");
+			for (int i = 3; i < vSum; i++) {
+				v.append("v");
+			}
+			verbosity = v.toString();
 		}
 	}
 
