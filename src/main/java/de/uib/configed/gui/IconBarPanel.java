@@ -31,14 +31,11 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 
 public class IconBarPanel extends JPanel {
-	private JButton jButtonOpsiLicenses;
-
 	private JButton jButtonReload;
 	private JButton jButtonReloadLicenses;
 	private JButton jButtonNewClient;
 	private JButton jButtonSetGroup;
 	private JButton jButtonSaveConfiguration;
-	private JButton jButtonToggleClientFilter;
 
 	private JButton jButtonReachableInfo;
 	private JButton jButtonSessionInfo;
@@ -61,10 +58,6 @@ public class IconBarPanel extends JPanel {
 
 	public JButton getjButtonSaveConfiguration() {
 		return jButtonSaveConfiguration;
-	}
-
-	public JButton getjButtonToggleClientFilter() {
-		return jButtonToggleClientFilter;
 	}
 
 	public JButton getjButtonReachableInfo() {
@@ -195,7 +188,7 @@ public class IconBarPanel extends JPanel {
 		jButtonDashboard.setFocusable(false);
 		jButtonDashboard.addActionListener(event -> configedMain.initDashInfo());
 
-		jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(32));
+		JButton jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(32));
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(e -> mainFrame.showOpsiModules());
@@ -266,9 +259,6 @@ public class IconBarPanel extends JPanel {
 								.addComponent(jButtonSaveConfiguration, Globals.GRAPHIC_BUTTON_SIZE,
 										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jButtonToggleClientFilter, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(jButtonReachableInfo, Globals.GRAPHIC_BUTTON_SIZE,
 										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE).addComponent(jButtonSessionInfo,
@@ -286,8 +276,6 @@ public class IconBarPanel extends JPanel {
 						.addComponent(jButtonSetGroup, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(jButtonSaveConfiguration, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(jButtonToggleClientFilter, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(jButtonReachableInfo, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE)
@@ -326,12 +314,6 @@ public class IconBarPanel extends JPanel {
 		jButtonSaveConfiguration.setFocusable(false);
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
-
-		jButtonToggleClientFilter = new JButton(Utils.getLargeIntellijIcon("funnelRegular"));
-		jButtonToggleClientFilter.setSelectedIcon(Utils.getLargeSelectedIntellijIcon("funnelRegular"));
-		jButtonToggleClientFilter.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"));
-		jButtonToggleClientFilter.setFocusable(false);
-		jButtonToggleClientFilter.addActionListener((ActionEvent e) -> mainFrame.toggleClientFilterAction());
 
 		jButtonReachableInfo = new JButton(Utils.createImageIcon("images/new_networkconnection.png", ""));
 		jButtonReachableInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"));

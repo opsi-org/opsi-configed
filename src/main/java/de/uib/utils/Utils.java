@@ -211,10 +211,6 @@ public final class Utils {
 		return getIntellijIcon(iconName, Globals.ICON_ACTIVE);
 	}
 
-	public static ImageIcon getLargeSelectedIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName, Globals.ICON_ACTIVE).derive(32, 32);
-	}
-
 	public static ImageIcon getIntellijIcon(String iconName) {
 		return getIntellijIcon(iconName,
 				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
