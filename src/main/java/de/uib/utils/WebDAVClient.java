@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -73,7 +73,7 @@ public class WebDAVClient {
 	}
 
 	public Set<String> getDirectoriesIn(String currentDirectory) {
-		Set<String> directories = new HashSet<>();
+		Set<String> directories = new TreeSet<>();
 
 		String url = getBaseURL() + currentDirectory;
 		Logging.info("use webdav to get directories and files in " + url);
@@ -92,7 +92,7 @@ public class WebDAVClient {
 	}
 
 	public Set<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension) {
-		Set<String> directoriesAndFiles = new HashSet<>();
+		Set<String> directoriesAndFiles = new TreeSet<>();
 
 		String url = getBaseURL() + currentDirectory;
 		Logging.info("use webdav to get directories and files in " + url);

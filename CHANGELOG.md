@@ -1,4 +1,9 @@
 # Changelog
+## [4.3.x.x] - 2024-xx-xx
+## Changed
+- Sort results when searching for directories on server
+
+
 ## [4.3.3.4] - 2024-06-19
 ## Fixed
 - Performance problem when selecting clients in client tree and then show product info
