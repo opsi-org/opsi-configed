@@ -488,15 +488,19 @@ public class MainFrame extends JFrame {
 
 		jMenuHelp.addSeparator();
 
+		addCreditsMenus(jMenuHelp, this);
+
+		return jMenuHelp;
+	}
+
+	public static void addCreditsMenus(JMenu jMenuHelp, JFrame owner) {
 		JMenuItem jMenuHelpCredits = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
-		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(this));
+		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(owner));
 		jMenuHelp.add(jMenuHelpCredits);
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(owner));
 		jMenuHelp.add(jMenuHelpAbout);
-
-		return jMenuHelp;
 	}
 
 	public static void addLogfileMenus(JMenu jMenuHelp, JFrame centerFrame) {
