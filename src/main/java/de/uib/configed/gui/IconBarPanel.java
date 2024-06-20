@@ -25,7 +25,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -167,21 +166,6 @@ public class IconBarPanel extends JPanel {
 		jButtonLicenses.setFocusable(false);
 		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
-		JButton jButtonWorkOnGroups = new JButton(Utils.createImageIcon("images/group_all_selected_40.png", ""));
-		jButtonWorkOnGroups.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
-		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jButtonWorkOnGroups.setFocusable(false);
-
-		jButtonWorkOnGroups
-				.setEnabled(persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
-		jButtonWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
-
-		JButton jButtonWorkOnProducts = new JButton(Utils.createImageIcon("images/packagebutton.png", ""));
-		jButtonWorkOnProducts.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
-		jButtonWorkOnProducts.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnProducts"));
-		jButtonWorkOnProducts.setFocusable(false);
-		jButtonWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
-
 		JButton jButtonDashboard = new JButton(Utils.getLargeIntellijIcon("dataSchema"));
 		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
@@ -199,30 +183,20 @@ public class IconBarPanel extends JPanel {
 		GroupLayout layoutIconPaneExtraFrames = new GroupLayout(iconPaneExtraFrames);
 		iconPaneExtraFrames.setLayout(layoutIconPaneExtraFrames);
 
-		layoutIconPaneExtraFrames.setHorizontalGroup(layoutIconPaneExtraFrames.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonWorkOnProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(jButtonLicenses, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
+		layoutIconPaneExtraFrames
+				.setHorizontalGroup(layoutIconPaneExtraFrames.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(jButtonLicenses, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE));
 
 		layoutIconPaneExtraFrames.setVerticalGroup(layoutIconPaneExtraFrames.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonWorkOnProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
