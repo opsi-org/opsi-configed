@@ -84,15 +84,18 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 
 		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD));
 
-		labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
+		labelClientDescription = new JLabel(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
 		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);
-		labelClientInventoryNumber = new JLabel(Configed.getResourceValue("MainFrame.jLabelInventoryNumber"));
+		labelClientInventoryNumber = new JLabel(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
 		labelClientInventoryNumber.setPreferredSize(Globals.BUTTON_DIMENSION);
-		labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
-		labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
-		labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
-		labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
-		labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
+		labelClientNotes = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.notes"));
+		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
+		labelClientMacAddress = new JLabel(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
+		labelClientIPAddress = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));
+		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsi-host-key");
 
 		jTextFieldDescription = new JTextField();

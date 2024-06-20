@@ -8,9 +8,9 @@ package de.uib.configed.serverconsole;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -73,7 +73,7 @@ public class CompletionComboButton {
 
 	private void init(List<String> defvalues) {
 		String opsiRepo = CommandFactory.WEBDAV_OPSI_PATH_VAR_WORKBENCH;
-		defaultvalues = new HashSet<>();
+		defaultvalues = new TreeSet<>();
 
 		if (comboboxDefaultPath != null) {
 			defaultvalues.add(comboboxDefaultPath);
