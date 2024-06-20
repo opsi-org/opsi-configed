@@ -26,7 +26,6 @@ import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -85,7 +84,6 @@ public class MainFrame extends JFrame {
 	private Map<String, String> searchedTimeSpansText;
 
 	private JMenuItem jMenuFrameShowDialogs;
-	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter;
 
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
@@ -393,11 +391,6 @@ public class MainFrame extends JFrame {
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
 
-		jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
-		jMenuClientselectionToggleClientFilter.setState(false);
-		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
-
 		jMenuClientselection.add(jMenuClientselectionGetGroup);
 		jMenuClientselection.add(jMenuClientselectionGetSavedSearch);
 
@@ -407,9 +400,6 @@ public class MainFrame extends JFrame {
 		jMenuClientselection.add(jMenuClientselectionProductNotUptodateOrBroken);
 		jMenuClientselection.add(jMenuClientselectionFailedProduct);
 		jMenuClientselection.add(jMenuClientselectionFailedInPeriod);
-
-		jMenuClientselection.addSeparator();
-		jMenuClientselection.add(jMenuClientselectionToggleClientFilter);
 
 		return jMenuClientselection;
 	}
@@ -651,7 +641,6 @@ public class MainFrame extends JFrame {
 
 	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
 		configedMain.toggleFilterClientList(rebuildClientListTableModel);
-		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
 	}
 
 	private void groupByNotCurrentProductVersion() {
