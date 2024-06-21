@@ -224,6 +224,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	public synchronized void updateTable(String clientId, List<String> attributes) {
+		// Don't update if client not selected / part of this table
+		if (!allClientsProductStates.containsKey(clientId)) {
+			return;
+		}
+
 		List<Map<String, String>> productInfos = persistenceController.getProductDataService().getProductInfos(clientId,
 				attributes);
 		if (!productInfos.isEmpty()) {
