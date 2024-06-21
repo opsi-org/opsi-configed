@@ -5,6 +5,7 @@
 
 ## Fixed
 - Nullpointer Exception when updating table with messagebus
+- ClientTable not refreshed correctly when adding another depot to the selection while some clients are selected
 
 ## [4.3.3.4] - 2024-06-19
 ## Fixed
