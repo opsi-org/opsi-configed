@@ -1807,19 +1807,16 @@ public class ConfigedMain implements MessagebusListener {
 	private void depotsListValueChanged() {
 		Logging.info(this, "depotsList selection changed");
 
-		// when running after the first run, we deactivate buttons
-
-		if (initialDataLoader.isDataLoaded()) {
-			refreshClientListKeepingGroup();
-		}
 		Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
 
 		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
+		// when running after the first run, we deactivate buttons
 		if (initialDataLoader.isDataLoaded()) {
+			refreshClientListKeepingGroup();
 			initialTreeActivation();
-			clientTable.clearSelection();
 
+			clientTable.clearSelection();
 			productTree.reInitTree();
 		}
 
