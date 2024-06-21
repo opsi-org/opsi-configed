@@ -492,11 +492,13 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
-		int selectedView = getViewIndex();
-		if (selectedView == VIEW_LOCALBOOT_PRODUCTS) {
+		Logging.devel(productType);
+		if (getViewIndex() == VIEW_LOCALBOOT_PRODUCTS
+				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
 			updateManager.updateProductTableForClient(clientId, attributes);
-		} else if (selectedView == VIEW_NETBOOT_PRODUCTS) {
+		} else if (getViewIndex() == VIEW_NETBOOT_PRODUCTS
+				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
 			// Remove uneeded attributes
 			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
