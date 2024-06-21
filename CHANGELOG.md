@@ -3,6 +3,8 @@
 ## Changed
 - Sort results when searching for directories on server
 
+## Fixed
+- Nullpointer Exception when updating table with messagebus
 
 ## [4.3.3.4] - 2024-06-19
 ## Fixed
