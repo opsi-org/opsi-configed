@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.3.6] - 2024-06-24
 ## Fixed
 - Don't fire updateTable event when row is -1 (causes wrong rendering of cells)
 - Nullpointerexception when product is updates that is not in product list (e.g. user roles)
