@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -367,10 +370,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			return result;
 		}
 
-		result.negateButton = new JCheckBox(Utils.createImageIcon("images/boolean_not_disabled.png", ""));
-		result.negateButton.setRolloverIcon(Utils.createImageIcon("images/boolean_not_over.png", ""));
-		result.negateButton.setRolloverSelectedIcon(Utils.createImageIcon("images/boolean_not_over.png", ""));
-		result.negateButton.setSelectedIcon(Utils.createImageIcon("images/boolean_not.png", ""));
+		result.negateButton = createNOTCheckBox();
 		result.negateButton.setSelected(false);
 
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
@@ -454,6 +454,32 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 
 		return result;
+	}
+
+	private static JCheckBox createNOTCheckBox() {
+		JCheckBox jCheckBox = new JCheckBox(Utils.getIntellijIcon("dropdown"));
+		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
+		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+		jCheckBox.setForeground(Globals.OPSI_WARNING);
+
+		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "not" : ""));
+
+		jCheckBox.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				jCheckBox.setText("not");
+				jCheckBox.setForeground(new Color(Globals.OPSI_WARNING.getRed(), Globals.OPSI_WARNING.getGreen(),
+						Globals.OPSI_WARNING.getBlue(), 128));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				jCheckBox.setText(jCheckBox.isSelected() ? "not" : "");
+				jCheckBox.setForeground(Globals.OPSI_WARNING);
+			}
+		});
+
+		return jCheckBox;
 	}
 
 	private ComplexGroup createHostGroup() {
@@ -547,10 +573,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.removeButton = new JButton(Utils.getIntellijIcon("delete"));
 		result.removeButton.addActionListener(this::removeButton);
 
-		result.negateButton = new JCheckBox(Utils.createImageIcon("images/boolean_not_disabled.png", ""));
-		result.negateButton.setRolloverIcon(Utils.createImageIcon("images/boolean_not_over.png", ""));
-		result.negateButton.setRolloverSelectedIcon(Utils.createImageIcon("images/boolean_not_over.png", ""));
-		result.negateButton.setSelectedIcon(Utils.createImageIcon("images/boolean_not.png", ""));
+		result.negateButton = createNOTCheckBox();
 		result.negateButton.setSelected(false);
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
