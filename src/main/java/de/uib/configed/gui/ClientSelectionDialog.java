@@ -454,6 +454,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static JCheckBox createNOTCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox(Utils.getIntellijIcon("dropdown"));
+		jCheckBox.setIconTextGap(0);
 		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
@@ -480,6 +481,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static JCheckBox createANDORCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox("and", Utils.getIntellijIcon("dropdown"), true);
+		jCheckBox.setIconTextGap(0);
 		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
