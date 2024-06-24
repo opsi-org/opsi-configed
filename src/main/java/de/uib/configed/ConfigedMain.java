@@ -492,7 +492,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
-		Logging.devel(productType);
 		if (getViewIndex() == VIEW_LOCALBOOT_PRODUCTS
 				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();

@@ -95,11 +95,10 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 				Configed.getResourceValue("ClientTableExporterToCSV.exportSelectedRowsAsCSV"));
 
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
-			boolean onlySelected = true;
-			Logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
+			Logging.debug(this, "menuItemExportSelectedCSV , only selected");
 			columnNames = getColumnsToInclude();
 			if (!columnNames.isEmpty()) {
-				execute(null, onlySelected);
+				execute(null, true);
 			}
 		});
 
