@@ -1779,13 +1779,13 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "activateGroupByTree, node: " + node);
 
 		setGroupByTree(node);
-
+		Set<String> selectValues = null;
 		// intended for reload, we cancel activating group
 		if (preferringOldSelection && !clientTable.getSelectedSet().isEmpty()) {
-			return;
+			selectValues = clientTable.getSelectedSet();
 		}
 
-		setRebuiltClientListTableModel(true, false, null);
+		setRebuiltClientListTableModel(true, false, selectValues);
 		// with this, a selected client remains selected (but in bottom line, the group
 		// seems activated, not the client)
 
@@ -1813,10 +1813,11 @@ public class ConfigedMain implements MessagebusListener {
 
 		// when running after the first run, we deactivate buttons
 		if (initialDataLoader.isDataLoaded()) {
-			refreshClientListKeepingGroup();
 			initialTreeActivation();
 
 			productTree.reInitTree();
+			setRebuiltClientListTableModel(true, true, clientTable.getSelectedSet());
+			refreshClientListKeepingGroup();
 		}
 
 		setViewIndex(getViewIndex());
@@ -2450,7 +2451,7 @@ public class ConfigedMain implements MessagebusListener {
 		String oldGroupSelection = activatedGroupModel.getGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
-		activateGroup(false, oldGroupSelection);
+		activateGroup(true, oldGroupSelection);
 	}
 
 	public void reload() {
