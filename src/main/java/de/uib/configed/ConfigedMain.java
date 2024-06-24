@@ -928,6 +928,7 @@ public class ConfigedMain implements MessagebusListener {
 	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
 			ClientTree clientTree, ProductTree productTree) {
 		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, clientTree, productTree);
+		Utils.setMasterFrame(mainFrame);
 
 		// rearranging visual components
 		mainFrame.validate();
