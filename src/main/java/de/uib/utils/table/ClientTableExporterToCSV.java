@@ -9,6 +9,7 @@ package de.uib.utils.table;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +64,9 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 				} else if ("domain".equals(columnName)) {
 					row.add(clientName.substring(clientName.indexOf(".") + 1, clientName.length()));
 				} else if ("groups".equals(columnName)) {
-					row.add(String.join(",", fObject2Groups.get(clientName)));
+					// We need to add an empty set if there are no groups
+					row.add(String.join(",",
+							fObject2Groups.containsKey(clientName) ? fObject2Groups.get(clientName) : new HashSet<>()));
 				} else if (clientInfoMap.get(columnName) instanceof Boolean b) {
 					row.add(Boolean.toString(b));
 				} else {
