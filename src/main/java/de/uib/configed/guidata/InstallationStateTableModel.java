@@ -930,13 +930,15 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private int getRowFromProductID(String id) {
-		int superRow = sortedProductsList.indexOf(id);
+		int row = sortedProductsList.indexOf(id);
 
-		if (filterInverse == null) {
-			return superRow;
+		// Sometimes (e.g. in user roles) the productlist is not complete
+		// so we won't find the row - and return -1 directly
+		if (row == -1 || filterInverse == null) {
+			return row;
 		}
 
-		return filterInverse[superRow];
+		return filterInverse[row];
 	}
 
 	public Map<String, Map<String, Object>> getGlobalProductInfos() {
