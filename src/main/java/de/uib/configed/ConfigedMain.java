@@ -1816,7 +1816,6 @@ public class ConfigedMain implements MessagebusListener {
 			initialTreeActivation();
 
 			productTree.reInitTree();
-			setRebuiltClientListTableModel(true, true, clientTable.getSelectedSet());
 			refreshClientListKeepingGroup();
 		}
 
@@ -2451,6 +2450,7 @@ public class ConfigedMain implements MessagebusListener {
 		String oldGroupSelection = activatedGroupModel.getGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
+		setRebuiltClientListTableModel(true, true, clientTable.getSelectedSet());
 		activateGroup(true, oldGroupSelection);
 	}
 
