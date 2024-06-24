@@ -375,10 +375,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
 
-		result.connectionType = new JCheckBox(Utils.createImageIcon("images/boolean_and_or_disabled.png", ""));
-		result.connectionType.setRolloverIcon(Utils.createImageIcon("images/boolean_and_or_over.png", ""));
-		result.connectionType.setRolloverSelectedIcon(Utils.createImageIcon("images/boolean_and_or_over.png", ""));
-		result.connectionType.setSelectedIcon(Utils.createImageIcon("images/boolean_and_or.png", ""));
+		result.connectionType = createANDORCheckBox();
 		result.connectionType.addActionListener(actionEvent -> buildParentheses());
 		result.connectionType.setMaximumSize(new Dimension(result.connectionType.getMaximumSize().width,
 				result.connectionType.getPreferredSize().height));
@@ -457,7 +454,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static JCheckBox createNOTCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox(Utils.getIntellijIcon("dropdown"));
-		jCheckBox.setSelected(false);
 		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
@@ -475,6 +471,32 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			@Override
 			public void mouseExited(MouseEvent e) {
 				jCheckBox.setText(jCheckBox.isSelected() ? "not" : "");
+				jCheckBox.setForeground(Globals.OPSI_WARNING);
+			}
+		});
+
+		return jCheckBox;
+	}
+
+	private static JCheckBox createANDORCheckBox() {
+		JCheckBox jCheckBox = new JCheckBox("and", Utils.getIntellijIcon("dropdown"), true);
+		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
+		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
+		jCheckBox.setForeground(Globals.OPSI_WARNING);
+
+		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
+
+		jCheckBox.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				jCheckBox.setText(jCheckBox.isSelected() ? "or" : "and");
+				jCheckBox.setForeground(new Color(Globals.OPSI_WARNING.getRed(), Globals.OPSI_WARNING.getGreen(),
+						Globals.OPSI_WARNING.getBlue(), 128));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or");
 				jCheckBox.setForeground(Globals.OPSI_WARNING);
 			}
 		});
@@ -613,10 +635,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		group.closeParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_close.png", ""));
 		group.closeParenthesis.setSelected(false);
 
-		group.connectionType = new JCheckBox(Utils.createImageIcon("images/boolean_and_or_disabled.png", ""));
-		group.connectionType.setRolloverIcon(Utils.createImageIcon("images/boolean_and_or_over.png", ""));
-		group.connectionType.setRolloverSelectedIcon(Utils.createImageIcon("images/boolean_and_or_over.png", ""));
-		group.connectionType.setSelectedIcon(Utils.createImageIcon("images/boolean_and_or.png", ""));
+		group.connectionType = createANDORCheckBox();
 		group.connectionType.addActionListener(actionEvent -> buildParentheses());
 		group.connectionType.setMaximumSize(new Dimension(group.connectionType.getMaximumSize().width,
 				group.connectionType.getPreferredSize().height));
