@@ -371,7 +371,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 
 		result.negateButton = createNOTCheckBox();
-		result.negateButton.setSelected(false);
 
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
@@ -458,6 +457,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static JCheckBox createNOTCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox(Utils.getIntellijIcon("dropdown"));
+		jCheckBox.setSelected(false);
 		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
@@ -574,7 +574,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.removeButton.addActionListener(this::removeButton);
 
 		result.negateButton = createNOTCheckBox();
-		result.negateButton.setSelected(false);
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
 
