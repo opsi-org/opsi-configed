@@ -47,33 +47,41 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	@Override
 	protected void writeRows(CSVPrinter printer, boolean selectedOnly) throws IOException {
 		Map<String, HostInfo> clientInfos = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps();
-		Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 			if (!theTable.isRowSelected(rowI) && selectedOnly) {
 				continue;
 			}
 
 			HostInfo clientInfo = clientInfos.get(theTable.getValueAt(rowI, 0));
-			Map<String, Object> clientInfoMap = clientInfo.getMap();
 			List<String> row = new ArrayList<>();
 			for (String columnName : columnNames) {
-				String clientName = clientInfo.getName();
-				if ("id".equals(columnName)) {
-					row.add(clientName.substring(0, clientName.indexOf(".")));
-				} else if ("domain".equals(columnName)) {
-					row.add(clientName.substring(clientName.indexOf(".") + 1, clientName.length()));
-				} else if ("groups".equals(columnName)) {
-					row.add(String.join(",", fObject2Groups.get(clientName)));
-				} else if (clientInfoMap.get(columnName) instanceof Boolean b) {
-					row.add(Boolean.toString(b));
-				} else {
-					row.add((String) clientInfoMap.get(columnName));
-				}
+				row.add(getRowValue(columnName, clientInfo));
 			}
 
-			if (!row.isEmpty()) {
-				printer.printRecord(row);
+			printer.printRecord(row);
+		}
+	}
+
+	private String getRowValue(String columnName, HostInfo clientInfo) {
+		String clientName = clientInfo.getName();
+
+		if ("id".equals(columnName)) {
+			return clientName.substring(0, clientName.indexOf("."));
+		} else if ("domain".equals(columnName)) {
+			return clientName.substring(clientName.indexOf(".") + 1, clientName.length());
+		} else if ("groups".equals(columnName)) {
+			Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
+
+			// We need to add an empty set if there are no groups
+			if (fObject2Groups.containsKey(clientName)) {
+				return String.join(",", fObject2Groups.get(clientName));
+			} else {
+				return "";
 			}
+		} else if (clientInfo.getMap().get(columnName) instanceof Boolean b) {
+			return Boolean.toString(b);
+		} else {
+			return (String) clientInfo.getMap().get(columnName);
 		}
 	}
 
@@ -97,11 +105,10 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 				Utils.getIntellijIcon("export"));
 
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
-			boolean onlySelected = true;
-			Logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
+			Logging.debug(this, "menuItemExportSelectedCSV , only selected");
 			columnNames = getColumnsToInclude();
 			if (!columnNames.isEmpty()) {
-				execute(null, onlySelected);
+				execute(null, true);
 			}
 		});
 

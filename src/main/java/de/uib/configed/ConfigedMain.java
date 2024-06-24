@@ -487,11 +487,12 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
-		int selectedView = getViewIndex();
-		if (selectedView == VIEW_LOCALBOOT_PRODUCTS) {
+		if (getViewIndex() == VIEW_LOCALBOOT_PRODUCTS
+				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
 			updateManager.updateProductTableForClient(clientId, attributes);
-		} else if (selectedView == VIEW_NETBOOT_PRODUCTS) {
+		} else if (getViewIndex() == VIEW_NETBOOT_PRODUCTS
+				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
 			// Remove uneeded attributes
 			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
@@ -926,6 +927,7 @@ public class ConfigedMain implements MessagebusListener {
 	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
 			ClientTree clientTree, ProductTree productTree) {
 		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, clientTree, productTree);
+		Utils.setMasterFrame(mainFrame);
 
 		// rearranging visual components
 		mainFrame.validate();
@@ -1776,13 +1778,13 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "activateGroupByTree, node: " + node);
 
 		setGroupByTree(node);
-
+		Set<String> selectValues = null;
 		// intended for reload, we cancel activating group
 		if (preferringOldSelection && !clientTable.getSelectedSet().isEmpty()) {
-			return;
+			selectValues = clientTable.getSelectedSet();
 		}
 
-		setRebuiltClientListTableModel(true, false, null);
+		setRebuiltClientListTableModel(true, false, selectValues);
 		// with this, a selected client remains selected (but in bottom line, the group
 		// seems activated, not the client)
 
@@ -1804,20 +1806,16 @@ public class ConfigedMain implements MessagebusListener {
 	private void depotsListValueChanged() {
 		Logging.info(this, "depotsList selection changed");
 
-		// when running after the first run, we deactivate buttons
-
-		if (initialDataLoader.isDataLoaded()) {
-			refreshClientListKeepingGroup();
-		}
 		Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
 
 		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
+		// when running after the first run, we deactivate buttons
 		if (initialDataLoader.isDataLoaded()) {
 			initialTreeActivation();
-			clientTable.clearSelection();
 
 			productTree.reInitTree();
+			refreshClientListKeepingGroup();
 		}
 
 		setViewIndex(getViewIndex());
@@ -2451,7 +2449,7 @@ public class ConfigedMain implements MessagebusListener {
 		String oldGroupSelection = activatedGroupModel.getGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
-		setRebuiltClientListTableModel(true);
+		setRebuiltClientListTableModel(true, true, clientTable.getSelectedSet());
 		activateGroup(true, oldGroupSelection);
 	}
 
@@ -3286,7 +3284,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		refreshClientListKeepingGroup();
-		clientTable.clearSelection();
 	}
 
 	public void copySelectedClient() {

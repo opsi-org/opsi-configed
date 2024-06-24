@@ -219,11 +219,19 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		for (String productId : productIds) {
 			int row = getRowFromProductID(productId);
-			fireTableRowsUpdated(row, row);
+
+			if (row > -1) {
+				fireTableRowsUpdated(row, row);
+			}
 		}
 	}
 
 	public synchronized void updateTable(String clientId, List<String> attributes) {
+		// Don't update if client not selected / part of this table
+		if (!allClientsProductStates.containsKey(clientId)) {
+			return;
+		}
+
 		List<Map<String, String>> productInfos = persistenceController.getProductDataService().getProductInfos(clientId,
 				attributes);
 		if (!productInfos.isEmpty()) {
@@ -790,6 +798,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.debug(this, "recursivelyChangeActionRequest fire update for row  " + modelRow);
 
 			// tell the table model listeners where a change occurred
+			Logging.devel("fireupdate " + modelRow);
 			fireTableRowsUpdated(modelRow, modelRow);
 
 			// where a change occurred
@@ -921,13 +930,15 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private int getRowFromProductID(String id) {
-		int superRow = sortedProductsList.indexOf(id);
+		int row = sortedProductsList.indexOf(id);
 
-		if (filterInverse == null) {
-			return superRow;
+		// Sometimes (e.g. in user roles) the productlist is not complete
+		// so we won't find the row - and return -1 directly
+		if (row == -1 || filterInverse == null) {
+			return row;
 		}
 
-		return filterInverse[superRow];
+		return filterInverse[row];
 	}
 
 	public Map<String, Map<String, Object>> getGlobalProductInfos() {

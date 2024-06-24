@@ -1,8 +1,24 @@
 # Changelog
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.3.7] - 2024-06-24
+## Fixed
+- Nullpointer Exception when deleting client
+
+
+## [4.3.3.6] - 2024-06-24
+## Fixed
+- Don't fire updateTable event when row is -1 (causes wrong rendering of cells)
+- Nullpointer Exception when product is updates that is not in product list (e.g. user roles)
+
+
+## [4.3.3.5] - 2024-06-24
 ## Changed
 - Sort results when searching for directories on server
 
+## Fixed
+- Nullpointer Exception when updating table with messagebus
+- ClientTable not refreshed correctly when adding another depot to the selection while some clients are selected
+- Nullpointer Exception when exporting groups of clients to CSV (for reimport)
+- Center frames in export options on main frame
 
 ## [4.3.3.4] - 2024-06-19
 ## Fixed
