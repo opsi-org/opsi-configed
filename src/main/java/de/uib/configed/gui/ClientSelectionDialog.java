@@ -448,10 +448,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static JCheckBox createNOTCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox(new ImageIcon());
-		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
-
 		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "not" : ""));
 
 		jCheckBox.addMouseListener(new MouseAdapter() {
@@ -474,8 +471,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static JCheckBox createANDORCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox("and", new ImageIcon(), true);
-		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
 
 		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
