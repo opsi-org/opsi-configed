@@ -350,19 +350,15 @@ public class ConfigedMain implements MessagebusListener {
 
 		initialTreeActivation();
 
-		Logging.info(this, "Is messagebus null? " + (messagebus == null));
+		messagebus.getWebSocket().registerListener(this);
+		messagebus.getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
 
-		if (messagebus != null) {
-			messagebus.getWebSocket().registerListener(this);
-			messagebus.getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
-
-			if (messagebus.getWebSocket().isOpen()) {
-				// Fake opening event on registering listener since this listener
-				// does not know yet if it's open
-				mainFrame.getHostsStatusPanel().onOpen(null);
-			} else {
-				Logging.warning(this, "Messagebus is not open, but should be on start");
-			}
+		if (messagebus.getWebSocket().isOpen()) {
+			// Fake opening event on registering listener since this listener
+			// does not know yet if it's open
+			mainFrame.getHostsStatusPanel().onOpen(null);
+		} else {
+			Logging.warning(this, "Messagebus is not open, but should be on start");
 		}
 
 		setEditingTarget(EditingTarget.CLIENTS);
@@ -2473,6 +2469,7 @@ public class ConfigedMain implements MessagebusListener {
 
 			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
 			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+
 			preloadData();
 
 			FOpsiLicenseMissingText.reset();
