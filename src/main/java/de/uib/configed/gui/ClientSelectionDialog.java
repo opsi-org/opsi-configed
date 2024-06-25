@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
@@ -28,6 +29,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -399,18 +401,10 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.dataComponent.setMaximumSize(new Dimension(result.dataComponent.getMaximumSize().width,
 				result.dataComponent.getPreferredSize().height));
 
-		result.openParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_open_disabled.png", ""));
-		result.openParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_open_over.png", ""));
-		result.openParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_open_over.png", ""));
-		result.openParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_open.png", ""));
-		result.openParenthesis.setSelected(true);
+		result.openParenthesis = createParenthesisCheckBox("(");
 		result.openParenthesis.setVisible(false);
 
-		result.closeParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_close_disabled.png", ""));
-		result.closeParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
-		result.closeParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
-		result.closeParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_close.png", ""));
-		result.closeParenthesis.setSelected(true);
+		result.closeParenthesis = createParenthesisCheckBox(")");
 		result.closeParenthesis.setVisible(false);
 
 		result.vRow = layout.createParallelGroup();
@@ -453,8 +447,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	private static JCheckBox createNOTCheckBox() {
-		JCheckBox jCheckBox = new JCheckBox(Utils.getIntellijIcon("dropdown"));
-		jCheckBox.setIconTextGap(0);
+		JCheckBox jCheckBox = new JCheckBox(new ImageIcon());
 		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
@@ -480,8 +473,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	private static JCheckBox createANDORCheckBox() {
-		JCheckBox jCheckBox = new JCheckBox("and", Utils.getIntellijIcon("dropdown"), true);
-		jCheckBox.setIconTextGap(0);
+		JCheckBox jCheckBox = new JCheckBox("and", new ImageIcon(), true);
 		jCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		jCheckBox.setHorizontalTextPosition(SwingConstants.LEFT);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
@@ -503,6 +495,22 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			}
 		});
 
+		return jCheckBox;
+	}
+
+	private static JCheckBox createParenthesisCheckBox(String type) {
+		JCheckBox jCheckBox = new JCheckBox(type, new ImageIcon(), true);
+
+		jCheckBox.addItemListener((ItemEvent itemEvent) -> {
+			// We change the alpha value of the item. When the checkbox is not selected, it will be less visible
+			int alpha = jCheckBox.isSelected() ? 255 : 64;
+			Color foreground = jCheckBox.getForeground();
+			foreground = new Color(foreground.getRed(), foreground.getGreen(), foreground.getBlue(), alpha);
+			jCheckBox.setForeground(foreground);
+		});
+
+		// We want to macke the parenthesis a little larger
+		jCheckBox.setFont(jCheckBox.getFont().deriveFont((float) (jCheckBox.getFont().getSize() + 5)));
 		return jCheckBox;
 	}
 
@@ -607,10 +615,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		result.topLabel.setFont(result.topLabel.getFont().deriveFont(Font.BOLD));
 
-		result.openParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_open_disabled.png", ""));
-		result.openParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_open_over.png", ""));
-		result.openParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_open_over.png", ""));
-		result.openParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_open.png", ""));
+		result.openParenthesis = createParenthesisCheckBox("(");
 		result.openParenthesis.setSelected(false);
 
 		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
@@ -631,10 +636,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	/* This creates the bottom line of a complex group */
 	private void createComplexBottom(ComplexGroup group) {
-		group.closeParenthesis = new JCheckBox(Utils.createImageIcon("images/parenthesis_close_disabled.png", ""));
-		group.closeParenthesis.setRolloverIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
-		group.closeParenthesis.setRolloverSelectedIcon(Utils.createImageIcon("images/parenthesis_close_over.png", ""));
-		group.closeParenthesis.setSelectedIcon(Utils.createImageIcon("images/parenthesis_close.png", ""));
+		group.closeParenthesis = createParenthesisCheckBox(")");
 		group.closeParenthesis.setSelected(false);
 
 		group.connectionType = createANDORCheckBox();
