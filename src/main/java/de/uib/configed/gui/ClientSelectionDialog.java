@@ -328,7 +328,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		vMainGroup.addComponent(newElementBox, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		hMainGroup.addComponent(newElementBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH);
-		contentPane.add(newElementBox);
 
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
@@ -425,14 +424,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		hGroupData.addComponent(result.dataComponent, 100, 100, Short.MAX_VALUE);
 		hGroupParenthesisOpen.addComponent(result.openParenthesis, 20, 20, 20);
 		hGroupParenthesisClose.addComponent(result.closeParenthesis, 20, 20, 20);
-
-		contentPane.add(result.negateButton);
-		contentPane.add(result.connectionType);
-		contentPane.add(result.elementLabel);
-		contentPane.add(result.operationComponent);
-		contentPane.add(result.dataComponent);
-		contentPane.add(result.openParenthesis);
-		contentPane.add(result.closeParenthesis);
 
 		if (operations.length > 1) {
 			((JComboBox<?>) result.operationComponent).addActionListener(this::selectOperation);
@@ -625,7 +616,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		hGroupRemoveBtn.addComponent(result.removeButton);
 		hGroupElements.addComponent(result.topLabel);
 		hGroupParenthesisOpen.addComponent(result.openParenthesis, 20, 20, 20);
-		contentPane.add(result.topLabel);
 
 		result.groupList = new LinkedList<>();
 		return result;
@@ -646,7 +636,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		vGroup.addGroup(vRow);
 		hGroupConnections.addComponent(group.connectionType, 100, 100, 100);
 		hGroupParenthesisClose.addComponent(group.closeParenthesis, 20, 20, 20);
-		contentPane.add(group.connectionType);
 	}
 
 	/* Gets the selected operation and adds the given data to it. */
