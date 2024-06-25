@@ -401,10 +401,10 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.dataComponent.setMaximumSize(new Dimension(result.dataComponent.getMaximumSize().width,
 				result.dataComponent.getPreferredSize().height));
 
-		result.openParenthesis = createParenthesisCheckBox("(");
+		result.openParenthesis = createParenthesisCheckBox("(", false);
 		result.openParenthesis.setVisible(false);
 
-		result.closeParenthesis = createParenthesisCheckBox(")");
+		result.closeParenthesis = createParenthesisCheckBox(")", false);
 		result.closeParenthesis.setVisible(false);
 
 		result.vRow = layout.createParallelGroup();
@@ -493,8 +493,10 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		return jCheckBox;
 	}
 
-	private static JCheckBox createParenthesisCheckBox(String type) {
+	private static JCheckBox createParenthesisCheckBox(String type, boolean enabled) {
 		JCheckBox jCheckBox = new JCheckBox(type, new ImageIcon(), true);
+		jCheckBox.setDisabledIcon(new ImageIcon());
+		jCheckBox.setEnabled(enabled);
 
 		jCheckBox.addItemListener((ItemEvent itemEvent) -> {
 			// We change the alpha value of the item. When the checkbox is not selected, it will be less visible
@@ -610,7 +612,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		result.topLabel.setFont(result.topLabel.getFont().deriveFont(Font.BOLD));
 
-		result.openParenthesis = createParenthesisCheckBox("(");
+		result.openParenthesis = createParenthesisCheckBox("(", true);
 		result.openParenthesis.setSelected(false);
 
 		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
@@ -631,7 +633,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	/* This creates the bottom line of a complex group */
 	private void createComplexBottom(ComplexGroup group) {
-		group.closeParenthesis = createParenthesisCheckBox(")");
+		group.closeParenthesis = createParenthesisCheckBox(")", true);
 		group.closeParenthesis.setSelected(false);
 
 		group.connectionType = createANDORCheckBox();
