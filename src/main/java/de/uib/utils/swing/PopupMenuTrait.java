@@ -106,8 +106,8 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_PDF:
 			i = listPopups.indexOf(POPUP_PDF);
-			menuItems[i] = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
-					Utils.createImageIcon("images/acrobat_reader16.png", ""));
+			menuItems[i] = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
+			Utils.addThemeIconToMenuItem(menuItems[i], "anyType");
 
 			addItem(p);
 			break;

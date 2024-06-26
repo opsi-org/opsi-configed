@@ -105,24 +105,22 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	private static ImageIcon getThemeIcon(boolean isLafDark) {
-		String iconName;
+	private static ImageIcon getThemeIcon(boolean isLafDark, String iconName) {
 		ColorFilter filter = new ColorFilter();
 		if (isLafDark) {
-			iconName = "systemTheme";
 			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
 		} else {
-			iconName = "systemTheme_dark";
+			iconName = iconName + "_dark";
 			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_LIGHT);
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
-	public static void addThemeIconToMenuItem(AbstractButton abstractButton) {
-		abstractButton.setIcon(getThemeIcon(FlatLaf.isLafDark()));
+	public static void addThemeIconToMenuItem(AbstractButton abstractButton, String iconName) {
+		abstractButton.setIcon(getThemeIcon(FlatLaf.isLafDark(), iconName));
 		if (!FlatLaf.isLafDark()) {
-			abstractButton.setSelectedIcon(getThemeIcon(true));
+			abstractButton.setSelectedIcon(getThemeIcon(true, iconName));
 		}
 	}
 

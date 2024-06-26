@@ -190,7 +190,7 @@ public class MainFrame extends JFrame {
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
-		Utils.addThemeIconToMenuItem(jMenuTheme);
+		Utils.addThemeIconToMenuItem(jMenuTheme, "systemTheme");
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = ThemeManager.getSelectedTheme();
 

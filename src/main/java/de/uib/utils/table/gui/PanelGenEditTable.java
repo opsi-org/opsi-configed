@@ -526,8 +526,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				break;
 
 			case POPUP_PDF:
-				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
-						Utils.createImageIcon("images/acrobat_reader16.png", ""));
+				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
+				Utils.addThemeIconToMenuItem(menuItemPDF, "anyType");
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
 
 				addPopupItem(menuItemPDF);
