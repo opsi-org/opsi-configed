@@ -574,7 +574,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private void print() {
 		try {
-			theTable.print(null, null, null);
+			theTable.print();
 		} catch (PrinterException ex) {
 			Logging.error("Printing error ", ex);
 		}
