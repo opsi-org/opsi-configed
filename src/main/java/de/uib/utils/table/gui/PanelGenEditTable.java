@@ -506,7 +506,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 			case POPUP_PRINT:
 				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
-				menuItemPrint.addActionListener((ActionEvent actionEvent) -> print());
+				Utils.addIntellijIconToMenuItem(menuItemPrint, "print");
+				menuItemPrint.addActionListener(actionEvent -> print());
 
 				addPopupItem(menuItemPrint);
 				break;
@@ -573,7 +574,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private void print() {
 		try {
-			theTable.print();
+			theTable.print(null, null, null);
 		} catch (PrinterException ex) {
 			Logging.error("Printing error ", ex);
 		}
