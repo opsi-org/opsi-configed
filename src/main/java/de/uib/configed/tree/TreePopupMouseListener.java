@@ -37,30 +37,30 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		super(jPopupMenu);
 		this.tree = tree;
 
-		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"),
-				Utils.getIntellijIcon("add"));
+		menuItemCreateNode = new JMenuItem(Configed.getResourceValue("ClientTree.addNode"));
+		Utils.addIntellijIconToMenuItem(menuItemCreateNode, "add");
 		menuItemCreateNode.addActionListener(actionEvent -> makeSubGroup());
 		jPopupMenu.add(menuItemCreateNode);
 
-		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editNode"),
-				Utils.getIntellijIcon("edit"));
+		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editNode"));
+		Utils.addIntellijIconToMenuItem(menuItemEditNode, "edit");
 		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(mousePath));
 		jPopupMenu.add(menuItemEditNode);
 
-		menuItemDeleteNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteNode"),
-				Utils.getIntellijIcon("remove"));
+		menuItemDeleteNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteNode"));
+		Utils.addIntellijIconToMenuItem(menuItemDeleteNode, "remove");
 		menuItemDeleteNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
 		jPopupMenu.add(menuItemDeleteNode);
 
-		menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"),
-				Utils.getIntellijIcon("delete"));
+		menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"));
+		Utils.addIntellijIconToMenuItem(menuItemDeleteGroupNode, "delete");
 		menuItemDeleteGroupNode.addActionListener(actionEvent -> tree.deleteNode(mousePath));
 		jPopupMenu.add(menuItemDeleteGroupNode);
 
 		String removeAllKey = tree instanceof ClientTree ? "ClientTree.removeAllElements"
 				: "ProductTree.removeAllElements";
-		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue(removeAllKey),
-				Utils.getIntellijIcon("remove"));
+		menuItemRemoveElements = new JMenuItem(Configed.getResourceValue(removeAllKey));
+		Utils.addIntellijIconToMenuItem(menuItemRemoveElements, "remove");
 		menuItemRemoveElements.addActionListener(actionEvent -> removeElements());
 		jPopupMenu.add(menuItemRemoveElements);
 	}

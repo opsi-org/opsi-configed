@@ -77,28 +77,28 @@ public class LogFrame extends JFrame {
 	//menus
 
 	private JMenu setupMenuFile() {
-		JMenuItem jMenuFileOpen = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileOpen"),
-				Utils.getIntellijIcon("open"));
+		JMenuItem jMenuFileOpen = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+		Utils.addIntellijIconToMenuItem(jMenuFileOpen, "open");
 		jMenuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
-		JMenuItem jMenuFileClose = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileClose"),
-				Utils.getIntellijIcon("close"));
+		JMenuItem jMenuFileClose = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileClose"));
+		Utils.addIntellijIconToMenuItem(jMenuFileClose, "close");
 		jMenuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileClose.addActionListener((ActionEvent e) -> closeFile());
 
-		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"),
-				Utils.getIntellijIcon("save"));
+		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"));
+		Utils.addIntellijIconToMenuItem(jMenuFileSave, "save");
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.download());
 
-		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"),
-				Utils.getIntellijIcon("refresh"));
+		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		Utils.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
 		jMenuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"),
-				Utils.getIntellijIcon("exit"));
+		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
+		Utils.addIntellijIconToMenuItem(jMenuFileExit, "exit");
 		jMenuFileExit.addActionListener((ActionEvent e) -> Main.endApp(Main.NO_ERROR));
 
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
@@ -119,13 +119,13 @@ public class LogFrame extends JFrame {
 	}
 
 	private JMenu setupMenuView() {
-		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.zoomIn"),
-				Utils.getIntellijIcon("zoomIn"));
+		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.zoomIn"));
+		Utils.addIntellijIconToMenuItem(jMenuViewFontsizePlus, "zoomIn");
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> logPane.increaseFontSize());
 
-		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.zoomOut"),
-				Utils.getIntellijIcon("zoomOut"));
+		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.zoomOut"));
+		Utils.addIntellijIconToMenuItem(jMenuViewFontsizeMinus, "zoomOut");
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> logPane.reduceFontSize());
 

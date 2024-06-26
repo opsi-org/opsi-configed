@@ -56,8 +56,8 @@ public abstract class AbstractExportTable {
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
 
 	public JMenuItem getMenuItemExport() {
-		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"),
-				Utils.getIntellijIcon("export"));
+		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
+		Utils.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
 	}
@@ -68,8 +68,8 @@ public abstract class AbstractExportTable {
 	}
 
 	public JMenuItem getMenuItemExportSelected() {
-		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"),
-				Utils.getIntellijIcon("export"));
+		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
+		Utils.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener((ActionEvent actionEvent) -> execute(null, true));
 
 		return menuItem;

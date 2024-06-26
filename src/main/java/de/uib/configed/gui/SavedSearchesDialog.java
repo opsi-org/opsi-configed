@@ -101,26 +101,26 @@ public class SavedSearchesDialog extends FEditStringList {
 	protected void initComponents() {
 		super.initComponents();
 
-		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"),
-				Utils.getIntellijIcon("refresh"));
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
+		Utils.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "reload action");
 			reloadAction();
 		});
 
-		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveSearch"),
-				Utils.getIntellijIcon("remove"));
+		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveSearch"));
+		Utils.addIntellijIconToMenuItem(remove, "remove");
 		remove.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "remove action");
 			removeSelectedEntry();
 		});
 
-		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"),
-				Utils.getIntellijIcon("edit"));
+		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
+		Utils.addIntellijIconToMenuItem(edit, "edit");
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
 
-		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"),
-				Utils.getIntellijIcon("add"));
+		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
+		Utils.addIntellijIconToMenuItem(add, "add");
 		add.addActionListener(event -> addElement());
 
 		JPopupMenu jPopupMenu = new JPopupMenu();

@@ -267,8 +267,8 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setupMenuServerConsole() {
-		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"),
-				Utils.getIntellijIcon("edit"));
+		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
+		Utils.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
 		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
@@ -424,8 +424,9 @@ public class MainFrame extends JFrame {
 
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
-		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"),
-				Utils.getIntellijIcon("terminal"));
+		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
+		Utils.addIntellijIconToMenuItem(jMenuFrameTerminal, "terminal");
+
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 			TerminalFrame terminal = new TerminalFrame();
@@ -482,8 +483,8 @@ public class MainFrame extends JFrame {
 
 		addLogfileMenus(jMenuHelp, this);
 
-		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"),
-				Utils.getIntellijIcon("springBootHealth"));
+		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		Utils.addIntellijIconToMenuItem(jMenuHelpCheckHealth, "springBootHealth");
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
 		jMenuHelp.add(jMenuHelpCheckHealth);
 
@@ -499,8 +500,8 @@ public class MainFrame extends JFrame {
 		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(owner));
 		jMenuHelp.add(jMenuHelpCredits);
 
-		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.setIcon(Utils.getIntellijIcon("info"));
+		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"),
+				Utils.getIntellijIcon("info"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(owner));
 		jMenuHelp.add(jMenuHelpAbout);
 	}

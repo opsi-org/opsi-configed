@@ -87,8 +87,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 
 	@Override
 	public JMenuItem getMenuItemExport() {
-		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("ClientTableExporterToCSV.exportTableAsCSV"),
-				Utils.getIntellijIcon("export"));
+		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("ClientTableExporterToCSV.exportTableAsCSV"));
+		Utils.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
 			columnNames = getColumnsToInclude();
 			if (!columnNames.isEmpty()) {
@@ -101,8 +101,8 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	@Override
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(
-				Configed.getResourceValue("ClientTableExporterToCSV.exportSelectedRowsAsCSV"),
-				Utils.getIntellijIcon("export"));
+				Configed.getResourceValue("ClientTableExporterToCSV.exportSelectedRowsAsCSV"));
+		Utils.addIntellijIconToMenuItem(menuItem, "export");
 
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "menuItemExportSelectedCSV , only selected");

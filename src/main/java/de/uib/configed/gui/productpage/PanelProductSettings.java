@@ -185,7 +185,8 @@ public class PanelProductSettings extends JSplitPane {
 	private JPopupMenu producePopupMenu() {
 		JPopupMenu popup = new JPopupMenu();
 
-		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getIntellijIcon("save"));
+		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"));
+		Utils.addIntellijIconToMenuItem(save, "save");
 		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
@@ -197,8 +198,8 @@ public class PanelProductSettings extends JSplitPane {
 
 		popup.add(save);
 
-		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
-				Utils.getIntellijIcon("run"));
+		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
+		Utils.addIntellijIconToMenuItem(itemOnDemand, "run");
 		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
@@ -206,7 +207,8 @@ public class PanelProductSettings extends JSplitPane {
 		popup.add(itemOnDemand);
 
 		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem(
-				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"), Utils.getIntellijIcon("run"));
+				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"));
+		Utils.addIntellijIconToMenuItem(itemOnDemandForSelectedProducts, "run");
 		itemOnDemandForSelectedProducts
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts
@@ -230,8 +232,8 @@ public class PanelProductSettings extends JSplitPane {
 
 		showPopupOpsiclientdEvent(true);
 
-		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"),
-				Utils.getIntellijIcon("refresh"));
+		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
+		Utils.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.info(this, "reload action");
 			reloadAction();

@@ -60,13 +60,11 @@ public final class ClientMenuManager implements MenuListener {
 	private JMenuItem jMenuShutdownClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuShutdownClient"));
 	private JMenuItem jMenuRebootClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuRebootClient"));
 	private JMenuItem jMenuOpenTerminalOnClient = new JMenuItem(
-			Configed.getResourceValue("MainFrame.jMenuOpenTerminal"), Utils.getIntellijIcon("terminal"));
+			Configed.getResourceValue("MainFrame.jMenuOpenTerminal"));
 	private JMenuItem jMenuChangeDepot = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuChangeDepot"));
 	private JMenuItem jMenuChangeClientID = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
-	private JMenuItem jMenuAddClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuAddClient"),
-			Utils.getIntellijIcon("add"));
-	private JMenuItem jMenuDeleteClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDeleteClient"),
-			Utils.getIntellijIcon("delete"));
+	private JMenuItem jMenuAddClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuAddClient"));
+	private JMenuItem jMenuDeleteClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDeleteClient"));
 	private JMenuItem jMenuCopyClient = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCopyClient"));
 	private JMenu jMenuResetProducts = initResetProductsMenu();
 	private JMenuItem jMenuFreeLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
@@ -122,14 +120,15 @@ public final class ClientMenuManager implements MenuListener {
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		jMenuSelectionGetSavedSearch.addActionListener(event -> configedMain.clientSelectionGetSavedSearch());
 
-		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
-				Utils.getIntellijIcon("refresh"));
+		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
+		Utils.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");
 		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
 
 		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
 				Utils.createImageIcon("images/acrobat_reader16.png", ""));
 		jMenuCreatePdf.addActionListener(event -> createPdf());
 
+		Utils.addIntellijIconToMenuItem(jMenuAddClient, "add");
 		jMenuAddClient.addActionListener(event -> configedMain.callNewClientDialog());
 
 		jMenuDeletePackageCaches.addActionListener(event -> configedMain.deletePackageCachesOfSelectedClients());
@@ -149,12 +148,17 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShutdownClient.addActionListener(event -> configedMain.shutdownSelectedClients());
 		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
+
+		Utils.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
 		jMenuDeleteClient.addActionListener(event -> configedMain.deleteSelectedClients());
+
 		jMenuCopyClient.addActionListener(event -> configedMain.copySelectedClient());
 		jMenuFreeLicenses.addActionListener(event -> configedMain.freeAllPossibleLicensesForSelectedClients());
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		jMenuRemoteControl
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
+
+		Utils.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
 		jMenuClients.add(jMenuWakeOnLan);
@@ -520,6 +524,7 @@ public final class ClientMenuManager implements MenuListener {
 			sourceItem.addItemListener(event -> clonedItem.setSelected(sourceItem.isSelected()));
 		} else {
 			clonedItem = new JMenuItem(sourceItem.getText(), sourceItem.getIcon());
+			clonedItem.setSelectedIcon(sourceItem.getSelectedIcon());
 			clonedItem.setAccelerator(sourceItem.getAccelerator());
 			clonedItem.setEnabled(sourceItem.isEnabled());
 		}
