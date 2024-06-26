@@ -289,8 +289,7 @@ public class MainFrame extends JFrame {
 		}
 		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 
-		boolean userConfigExists = UserConfig.getCurrentUserConfig() != null;
-		jMenuServerConsole.setEnabled(userConfigExists
+		jMenuServerConsole.setEnabled(UserConfig.getCurrentUserConfig() != null
 				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 						.isGlobalReadOnly()
 				&& UserConfig.getCurrentUserConfig()
@@ -427,6 +426,11 @@ public class MainFrame extends JFrame {
 		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
 		Utils.addIntellijIconToMenuItem(jMenuFrameTerminal, "terminal");
 
+		jMenuFrameTerminal.setEnabled(UserConfig.getCurrentUserConfig() != null
+				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 			TerminalFrame terminal = new TerminalFrame();

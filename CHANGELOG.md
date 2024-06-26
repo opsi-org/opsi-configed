@@ -1,4 +1,11 @@
 # Changelog
+## [4.3.3.8] - 2024-06-25
+## Changed
+- Disable Terminal with user roles config "ssh.menu_serverconsole.active"
+
+## Fixed
+- Nullpointer Exception when messagebus events are received before data are loaded on start
+
 ## [4.3.3.7] - 2024-06-24
 ## Fixed
 - Nullpointer Exception when deleting client
