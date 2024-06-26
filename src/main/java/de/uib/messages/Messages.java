@@ -173,7 +173,7 @@ public final class Messages {
 
 	public static JMenu createJMenuLanguages(Runnable runnable) {
 		JMenu jMenuLanguage = new JMenu(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage"));
-		jMenuLanguage.setIcon(Utils.getIntellijIcon("webService"));
+		Utils.addIntellijIconToMenuItem(jMenuLanguage, "webService");
 
 		ButtonGroup groupLanguages = new ButtonGroup();
 

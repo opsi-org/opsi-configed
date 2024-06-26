@@ -155,17 +155,17 @@ public class MainFrame extends JFrame {
 	private JMenu createJMenuFile() {
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 
-		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"),
-				Utils.getIntellijIcon("exit"));
+		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
+		Utils.addIntellijIconToMenuItem(jMenuFileExit, "exit");
 		jMenuFileExit.addActionListener((ActionEvent e) -> configedMain.finishApp(true, 0));
 
-		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"),
-				Utils.getIntellijIcon("save"));
+		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
+		Utils.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
-		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"),
-				Utils.getIntellijIcon("refresh"));
+		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		Utils.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			configedMain.reload();
@@ -174,8 +174,8 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"),
-				Utils.getIntellijIcon("exit"));
+		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
+		Utils.addIntellijIconToMenuItem(jMenuFileLogout, "exit");
 		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
@@ -190,7 +190,7 @@ public class MainFrame extends JFrame {
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
-		jMenuTheme.setIcon(Utils.getThemeIcon());
+		Utils.addThemeIconToMenuItem(jMenuTheme);
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = ThemeManager.getSelectedTheme();
 

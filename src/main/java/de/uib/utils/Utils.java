@@ -105,10 +105,10 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	public static ImageIcon getThemeIcon() {
+	private static ImageIcon getThemeIcon(boolean isLafDark) {
 		String iconName;
 		ColorFilter filter = new ColorFilter();
-		if (FlatLaf.isLafDark()) {
+		if (isLafDark) {
 			iconName = "systemTheme";
 			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
 		} else {
@@ -117,6 +117,13 @@ public final class Utils {
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
+	}
+
+	public static void addThemeIconToMenuItem(AbstractButton abstractButton) {
+		abstractButton.setIcon(getThemeIcon(FlatLaf.isLafDark()));
+		if (!FlatLaf.isLafDark()) {
+			abstractButton.setSelectedIcon(getThemeIcon(true));
+		}
 	}
 
 	public static ImageIcon getLargeIntellijIcon(String iconName) {
@@ -191,6 +198,14 @@ public final class Utils {
 
 		return icon;
 
+	}
+
+	public static void addIntellijIconToMenuItem(AbstractButton abstractButton, String name) {
+		abstractButton.setIcon(getIntellijIcon(name));
+
+		FlatSVGIcon selectedIcon = new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + name + ".svg");
+		selectedIcon.setColorFilter(new ColorFilter(color -> Globals.OPSI_FOREGROUND_DARK));
+		abstractButton.setSelectedIcon(selectedIcon);
 	}
 
 	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
