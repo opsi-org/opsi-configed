@@ -195,8 +195,8 @@ public class MainFrame extends JFrame {
 		String selectedTheme = ThemeManager.getSelectedTheme();
 
 		for (final String theme : ThemeManager.getAvailableThemes()) {
-			JMenuItem themeItem = new JRadioButtonMenuItem(ThemeManager.getThemeTranslation(theme),
-					ThemeManager.getThemeIcon(theme));
+			JMenuItem themeItem = new JRadioButtonMenuItem(ThemeManager.getThemeTranslation(theme));
+			ThemeManager.setThemeIcon(themeItem, theme);
 			Logging.debug("selectedTheme " + theme);
 			themeItem.setSelected(selectedTheme.equals(theme));
 			jMenuTheme.add(themeItem);

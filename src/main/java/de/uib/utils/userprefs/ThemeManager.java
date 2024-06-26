@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.ImageIcon;
+import javax.swing.AbstractButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -57,17 +57,18 @@ public final class ThemeManager {
 		}
 	}
 
-	public static ImageIcon getThemeIcon(String theme) {
+	public static void setThemeIcon(AbstractButton abstractButton, String theme) {
 		switch (theme) {
 		case THEME_LIGHT:
-			return Utils.getIntellijIcon("lightTheme");
+			Utils.addIntellijIconToMenuItem(abstractButton, "lightTheme");
+			break;
 
 		case THEME_DARK:
-			return Utils.getIntellijIcon("darkTheme");
+			Utils.addIntellijIconToMenuItem(abstractButton, "darkTheme");
+			break;
 
 		default:
 			Logging.warning("Cannot find translation for theme " + theme);
-			return null;
 		}
 	}
 
