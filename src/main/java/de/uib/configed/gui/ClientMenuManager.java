@@ -35,6 +35,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -161,11 +162,6 @@ public final class ClientMenuManager implements MenuListener {
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
 
 		Utils.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
-		jMenuOpenTerminalOnClient.setEnabled(UserConfig.getCurrentUserConfig() != null
-				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
 		jMenuClients.add(jMenuWakeOnLan);
@@ -451,7 +447,11 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
 		jMenuCopyClient.setEnabled(countSelectedClients == 1);
-		jMenuOpenTerminalOnClient.setEnabled(countSelectedClients == 1);
+		jMenuOpenTerminalOnClient.setEnabled(countSelectedClients == 1
+				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)
+				&& !persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
 		checkMenuItemsDisabling();
 	}
