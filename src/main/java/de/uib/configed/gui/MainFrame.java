@@ -270,11 +270,8 @@ public class MainFrame extends JFrame {
 		jMenuServerConsole.addSeparator();
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
-		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
-				|| UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE) == null
-				|| !UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE);
+		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
+				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
 		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
@@ -284,9 +281,8 @@ public class MainFrame extends JFrame {
 		}
 		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 
-		jMenuServerConsole.setEnabled(UserConfig.getCurrentUserConfig() != null
-				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.isGlobalReadOnly()
+		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 	}
@@ -428,9 +424,8 @@ public class MainFrame extends JFrame {
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
 		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
-		jMenuFrameTerminal.setEnabled(UserConfig.getCurrentUserConfig() != null
-				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.isGlobalReadOnly()
+		jMenuFrameTerminal.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
@@ -575,10 +570,11 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(clientMenu.getJMenu());
 		jMenuBar.add(jMenuServerConsole);
 
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
-			jMenuServerConsole.setEnabled(false);
-			jMenuServerConsole.setToolTipText(Configed.getResourceValue("MainFrame.vpnModuleShouldBeActive"));
-		}
+		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+
 		jMenuBar.add(createJMenuFrames());
 		jMenuBar.add(createJMenuHelp());
 
