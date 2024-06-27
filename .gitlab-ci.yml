@@ -32,7 +32,12 @@ compile_and_package:
     - mv opsi-dev-tool opsi-dev-cli
     - ./opsi-dev-cli -l debug transifex upload-resource src/main/resources/de/uib/messages/opsi-configed_en.properties
     - ./opsi-dev-cli -l debug transifex download-translations opsi-configed.properties src/main/resources/de/uib/messages --min-translation-rate $TRANSIFEX_MIN_TRANSLATION_RATE -l de -l fr
-    - mvn package
+    # Unfortunately we need to build en extra jar vor mac aarch6
+    # Since JavaFX supports only one architecture per platform
+    - mvn package -Djavafx.platform=mac
+    - mkdir mac_x64
+    - mv target/$CONFIGED_JAR_NAME_WITH_DEPS mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS
+    - mvn clean package
     - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME | grep -v "java.base/sun" > target/module.deps
     # jdk.crypto.ec is needed for TLS (HTTPS)
     - echo "   jdk.crypto.ec" >> target/module.deps
@@ -40,6 +45,7 @@ compile_and_package:
   artifacts:
     name: "configed-build"
     paths:
+      - mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS
       - target/$CONFIGED_JAR_NAME_WITH_DEPS
       - target/module.deps
     expire_in: 2 day
@@ -68,6 +74,8 @@ signandupload:
     - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
     - mkdir opsi-configed
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps opsi-configed/
+    - mkdir opsi-configed/mac_x64/
+    - mv mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS opsi-configed/mac_x64/
     - cp CHANGELOG.md opsi-configed/
     - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
     - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION'

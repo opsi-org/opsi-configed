@@ -124,7 +124,7 @@ public class FEditRecord extends FEdit implements DocumentListener {
 			jTextField = new JPasswordField();
 			jTextField.getDocument().addDocumentListener(this);
 		} else {
-			jTextField = new RevertibleTextField();
+			jTextField = new JTextField();
 			jTextField.getDocument().addDocumentListener(this);
 		}
 

@@ -170,9 +170,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(CommandParameterParser.METHOD_INTERACTIVE_ELEMENT)
-				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(CommandParameterParser.METHOD_OPTION_SELECTION)) {
+				.equals(CommandParameterParser.METHOD_INTERACTIVE_ELEMENT)) {
 			Logging.debug("CREATING PARAM TEXT... ");
 			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
 					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
@@ -210,9 +208,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 	public void doActionParamAdd(JTextComponent component) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(CommandParameterParser.METHOD_INTERACTIVE_ELEMENT)
-				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(CommandParameterParser.METHOD_OPTION_SELECTION)) {
+				.equals(CommandParameterParser.METHOD_INTERACTIVE_ELEMENT)) {
 			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
 					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;

@@ -1000,7 +1000,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 						tableModel.getValueAt(theTable.convertRowIndexToModel(i), tableModel.getKeyCol()).toString());
 			}
 		} else {
-			for (int i = 0; i < theTable.getSelectedRows().length; i++) {
+			for (int i = 0; i < theTable.getSelectedRowCount(); i++) {
 				result.add(tableModel.getValueAt(theTable.convertRowIndexToModel(theTable.getSelectedRows()[i]),
 						tableModel.getKeyCol()).toString());
 			}

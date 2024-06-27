@@ -31,7 +31,6 @@ import javax.swing.event.DocumentListener;
 import org.apache.commons.io.FileUtils;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -70,11 +69,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private ConfigedMain configedMain;
 
-	public FCompleteWinProducts(ConfigedMain configedMain) {
-		this.configedMain = configedMain;
-
+	public FCompleteWinProducts() {
 		super.setIconImage(Utils.getMainIcon());
 		super.setTitle(Configed.getResourceValue("FProductAction.title"));
 
@@ -141,7 +137,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.TEXT_FIELD_DIMENSION);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(configedMain.getLinkedDepots().toArray(new String[0])));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(
+				persistenceController.getHostInfoCollections().getDepotNamesList().toArray(new String[0])));
 
 		comboChooseDepot.setEnabled(false);
 
@@ -326,8 +323,6 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			} else {
 				oldProductKey = "";
 			}
-			long start = System.nanoTime();
-			Logging.devel("" + (System.nanoTime() - start));
 
 			depots.clear();
 			depots.add((String) comboChooseDepot.getSelectedItem());
@@ -431,9 +426,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelServer, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
-						.addGap(Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
+						.addGap(Globals.GAP_SIZE + Globals.GRAPHIC_BUTTON_SIZE + Globals.HFIRST_GAP)
 						.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
@@ -441,9 +434,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelWinProduct, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
-						.addGap(Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
+						.addGap(Globals.GAP_SIZE + Globals.GRAPHIC_BUTTON_SIZE + Globals.HFIRST_GAP)
 						.addComponent(comboChooseWinProduct, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
@@ -472,18 +463,14 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelTargetPath, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
-						.addGap(Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
+						.addGap(Globals.GAP_SIZE + Globals.GRAPHIC_BUTTON_SIZE + Globals.HFIRST_GAP)
 						.addComponent(fieldTargetPath, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
 				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelProductKey, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
-						.addGap(Globals.GAP_SIZE)
-						.addGap(Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
+						.addGap(Globals.GAP_SIZE + Globals.GRAPHIC_BUTTON_SIZE + Globals.HFIRST_GAP)
 						.addComponent(fieldProductKey, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 								Globals.BUTTON_WIDTH * 2)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))

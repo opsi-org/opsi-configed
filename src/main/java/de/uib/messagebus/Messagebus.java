@@ -74,10 +74,12 @@ public class Messagebus implements MessagebusListener {
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
 		messagebusWebSocket.registerListener(this);
+
 		if (ConfigedMain.getMainFrame() != null) {
 			messagebusWebSocket.registerListener(ConfigedMain.getMainFrame().getHostsStatusPanel());
+			messagebusWebSocket.registerListener(configedMain);
 		}
-		messagebusWebSocket.registerListener(configedMain);
+
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
 		if (exec.getSessionId() != null) {
 			Logging.debug("Adding cookie header");

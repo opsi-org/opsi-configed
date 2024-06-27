@@ -37,11 +37,9 @@ public class SWAuditClientEntry {
 	}
 
 	private static String produceSWIdent(Map<String, Object> readMap) {
-		return Utils.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUB_VERSION)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
+		return Utils.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.NAME),
+				(String) readMap.get(SWAuditEntry.VERSION), (String) readMap.get(SWAuditEntry.SUB_VERSION),
+				(String) readMap.get(SWAuditEntry.LANGUAGE), (String) readMap.get(SWAuditEntry.ARCHITECTURE) });
 	}
 
 	public String getClientId() {

@@ -408,11 +408,7 @@ public class IconBarPanel extends JPanel {
 				"images/system-users-query_over.png", persistenceController.getHostDataService().getHostDisplayFields()
 						.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		iconButtonSessionInfo.setFocusable(false);
-		iconButtonSessionInfo.setEnabled(true);
-		iconButtonSessionInfo.addActionListener((ActionEvent e) -> {
-			configedMain.setColumnSessionInfo(true);
-			configedMain.getSessionInfo();
-		});
+		iconButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 	}
 
 	public void visualizeEditingTarget(EditingTarget t) {

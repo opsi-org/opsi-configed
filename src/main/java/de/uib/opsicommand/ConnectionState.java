@@ -12,7 +12,6 @@ public class ConnectionState {
 	public static final int STARTED_CONNECTING = 2;
 	public static final int CONNECTED = 3;
 	public static final int RETRY_CONNECTION = 4;
-	public static final int CLOSING = 5;
 	public static final int INTERRUPTED = 6;
 	public static final int UNAUTHORIZED = 7;
 	public static final int ERROR = 10;
@@ -87,7 +86,6 @@ public class ConnectionState {
 		case CONNECTED -> "Connected";
 		case RETRY_CONNECTION -> "Reconnecting";
 		case UNAUTHORIZED -> "Unauthorized";
-		case CLOSING -> "Closing";
 		case ERROR -> "Error";
 		default -> "UNKNOWN State";
 		};

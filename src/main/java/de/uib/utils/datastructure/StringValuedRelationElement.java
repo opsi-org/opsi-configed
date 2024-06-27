@@ -22,11 +22,6 @@ public class StringValuedRelationElement extends HashMap<String, String> {
 		super();
 	}
 
-	public StringValuedRelationElement(List<String> allowedAttributes, Map<String, ? extends Object> map) {
-		this.allowedAttributes = allowedAttributes;
-		produceFrom(map);
-	}
-
 	@Override
 	public String get(Object key) {
 		if (allowedAttributes != null && allowedAttributes.indexOf(key) < 0) {

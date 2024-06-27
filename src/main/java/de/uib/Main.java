@@ -32,7 +32,6 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
 import de.uib.utils.userprefs.ThemeManager;
 import de.uib.utils.userprefs.UserPreferences;
-import javafx.embed.swing.JFXPanel;
 
 public class Main {
 	// --------------------------------------------------------------------------------------------------------
@@ -40,10 +39,7 @@ public class Main {
 
 	public static final int NO_ERROR = 0;
 	public static final int ERROR_INVALID_OPTION = 1;
-	public static final int ERROR_MISSING_VALUE_FOR_OPTION = 2;
-
 	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
-
 	public static final int ERROR_OUT_OF_MEMORY = 21;
 
 	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
@@ -206,10 +202,6 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		// We Initialize JavaFX toolkit by creating a JFXPanel instance.
-		// This line is necessary to ensure that JavaFX runtime is initialized at start of the application.
-		new JFXPanel();
-
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
 
 		setGlobalValues();

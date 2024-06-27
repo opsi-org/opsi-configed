@@ -122,18 +122,6 @@ public class SingleCommandPackageUpdater implements SingleCommand, CommandWithPa
 		return dialog;
 	}
 
-	public void setVerbosity(int vSum) {
-		StringBuilder v = new StringBuilder();
-		for (int i = 0; i < vSum; i++) {
-			v.append("v");
-		}
-
-		verbosity = "-" + v + "";
-		if (vSum == 0) {
-			verbosity = "";
-		}
-	}
-
 	public void setRepos(Map<String, String> r) {
 		repohash = r;
 	}

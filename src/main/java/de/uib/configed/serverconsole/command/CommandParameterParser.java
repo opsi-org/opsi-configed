@@ -6,33 +6,22 @@
 
 package de.uib.configed.serverconsole.command;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.Window;
-import java.awt.event.HierarchyEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.DepotsList;
-import de.uib.configed.gui.ValueSelectorList;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -57,8 +46,6 @@ public final class CommandParameterParser {
 			.getResourceValue("CommandParameterParser.method.getSelectedDepotIPs");
 	public static final String METHOD_GET_CONFIG_SERVER_NAME = Configed
 			.getResourceValue("CommandParameterParser.method.getConfigServerName");
-	public static final String METHOD_OPTION_SELECTION = Configed
-			.getResourceValue("CommandParameterParser.method.optionSelection");
 
 	private static final String BRACKETS_NONE = " x ";
 	private static final String BRACKETS_SQUARE = "[x]";
@@ -82,7 +69,6 @@ public final class CommandParameterParser {
 		methods.put(METHOD_GET_SELECTED_DEPOT_NAMES, "getSelectedDepotNames");
 		methods.put(METHOD_GET_SELECTED_DEPOT_IPS, "getSelectedDepotIPs");
 		methods.put(METHOD_GET_CONFIG_SERVER_NAME, "getConfigServerName");
-		methods.put(METHOD_OPTION_SELECTION, "script://path/to/file");
 
 		this.configedMain = configedMain;
 		init();
@@ -165,11 +151,7 @@ public final class CommandParameterParser {
 			return Configed.getResourceValue("CommandControlDialog.parameterTest.failed");
 		}
 
-		if (result.contains("script://")) {
-			return result.replace("script://", "");
-		} else {
-			return result;
-		}
+		return result;
 	}
 
 	private void init() {
@@ -232,9 +214,6 @@ public final class CommandParameterParser {
 			result = formatResult(getSelectedDepotIPs(), format);
 		} else if (method.equals(methods.get(METHOD_GET_CONFIG_SERVER_NAME))) {
 			result = formatResult(getConfigServerName(), format);
-		} else if (method.contains("script://")) {
-			result = getSelectedValue(method);
-			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
 		} else if (format.isEmpty()) {
 			result = getUserText(method, outputDia);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
@@ -425,113 +404,6 @@ public final class CommandParameterParser {
 			}
 		}
 		return depotIPs;
-	}
-
-	private ValueSelectorList fillValueSelectorList(final List<String> values) {
-		final DepotsList valueList = new DepotsList(configedMain);
-		valueList.setVisible(true);
-		final Map<String, Object> extendedInfo = new TreeMap<>();
-		final Map<String, Map<String, Object>> info = new TreeMap<>();
-		final List<String> data = new ArrayList<>();
-
-		for (final String val : values) {
-			extendedInfo.put(val, val);
-			info.put(val, extendedInfo);
-			data.add(val);
-		}
-
-		valueList.setListData(data);
-		valueList.setInfo(info);
-
-		final ValueSelectorList valueSelectorList = new ValueSelectorList(valueList, true);
-		valueSelectorList.setVisible(true);
-
-		return valueSelectorList;
-	}
-
-	private static JOptionPane createValueSelectorDialog(final ValueSelectorList valueSelectorList) {
-		final JScrollPane valueScrollPane = valueSelectorList.getScrollpaneDepotslist();
-		final JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.add(valueSelectorList, BorderLayout.NORTH);
-		panel.add(valueScrollPane, BorderLayout.CENTER);
-
-		final JOptionPane opPane = new JOptionPane(new Object[] { panel }, JOptionPane.QUESTION_MESSAGE,
-				JOptionPane.OK_CANCEL_OPTION) {
-			@Override
-			public void selectInitialValue() {
-				super.selectInitialValue();
-				((Component) valueScrollPane).requestFocusInWindow();
-			}
-		};
-
-		opPane.addHierarchyListener((HierarchyEvent hierarchyEvent) -> {
-			Window window = SwingUtilities.getWindowAncestor(opPane);
-			if (window instanceof Dialog dialog) {
-				dialog.setResizable(true);
-			}
-		});
-
-		final JDialog jdialog = opPane.createDialog(opPane, Globals.APPNAME);
-		jdialog.setSize(400, 250);
-		jdialog.setVisible(true);
-
-		return opPane;
-	}
-
-	private String getSelectedValue(String method) {
-		if (methods.get(METHOD_OPTION_SELECTION).equals(method)) {
-			final List<String> values = new ArrayList<>();
-			values.add("Test 1");
-			values.add("Test 2");
-			values.add("Test 3");
-			final ValueSelectorList valueSelectorList = fillValueSelectorList(values);
-			final JOptionPane opPane = createValueSelectorDialog(valueSelectorList);
-
-			if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION) {
-				return valueSelectorList.getSelectedValue();
-			}
-
-			return "";
-		}
-
-		final String scriptFile = method.replace("script://", "");
-		final SingleCommand cmd = new SingleCommandTemplate("", scriptFile, "");
-		final ScriptExecutioner exe = new ScriptExecutioner(cmd);
-		exe.execute();
-
-		return exe.getValue();
-	}
-
-	private class ScriptExecutioner {
-		private String value;
-		private SingleCommand cmd;
-
-		public ScriptExecutioner(SingleCommand cmd) {
-			this.cmd = cmd;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public void execute() {
-			CommandExecutor executor = new CommandExecutor(configedMain, cmd);
-			executor.setWithGUI(false);
-			List<String> values = Arrays.asList(executor.execute().split("\n"));
-			value = retrieveSelectedValue(values);
-		}
-
-		private String retrieveSelectedValue(List<String> values) {
-			final ValueSelectorList valueSelectorList = fillValueSelectorList(values);
-			final JOptionPane opPane = createValueSelectorDialog(valueSelectorList);
-
-			if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION) {
-				return valueSelectorList.getSelectedValue();
-			}
-
-			return null;
-		}
 	}
 
 	public boolean isCanceled() {

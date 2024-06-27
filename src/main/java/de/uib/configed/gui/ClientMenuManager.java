@@ -33,6 +33,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
+import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -153,10 +155,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuShowPopupMessage.addActionListener(event -> showPopupOnClientsAction());
 		jMenuShutdownClient.addActionListener(event -> configedMain.shutdownSelectedClients());
-		jMenuRequestSessionInfo.addActionListener((ActionEvent e) -> {
-			configedMain.setColumnSessionInfo(true);
-			configedMain.getSessionInfo();
-		});
+		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
 		jMenuDeleteClient.addActionListener(event -> configedMain.deleteSelectedClients());
 		jMenuCopyClient.addActionListener(event -> configedMain.copySelectedClient());
@@ -164,6 +163,11 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		jMenuRemoteControl
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
+		jMenuOpenTerminalOnClient.setEnabled(UserConfig.getCurrentUserConfig() != null
+				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
 		jMenuClients.add(jMenuWakeOnLan);

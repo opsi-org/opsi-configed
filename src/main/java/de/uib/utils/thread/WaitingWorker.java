@@ -44,12 +44,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		return ready;
 	}
 
-	public void stop() {
-		Logging.info(this, "stop");
-		stopped = true;
-		cancel(true);
-	}
-
 	@Override
 	public Void doInBackground() {
 		// startAnotherProcess()

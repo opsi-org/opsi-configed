@@ -50,7 +50,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private JRadioButton otherOption;
 	private JComboBox<Character> quoteOptions;
 
-	private JFormattedTextField startLineInput;
 	private JFormattedTextField otherDelimiterInput;
 
 	private CSVImportDataModifier modifier;
@@ -113,7 +112,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
-		startLineInput = new JFormattedTextField(formatter);
+		JFormattedTextField startLineInput = new JFormattedTextField(formatter);
 		startLineInput.setText(String.valueOf(startLine));
 
 		tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
@@ -177,25 +176,19 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			});
 		}
 
-		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener() {
-			@Override
-			public void performAction() {
-				if (!otherDelimiterInput.getText().isEmpty()) {
-					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).build();
-					modifier.updateTable(format, startLine, thePanel);
-				}
+		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener(() -> {
+			if (!otherDelimiterInput.getText().isEmpty()) {
+				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).build();
+				modifier.updateTable(format, startLine, thePanel);
 			}
-		});
+		}));
 
-		((AbstractDocument) startLineInput.getDocument()).addDocumentListener(new InputListener() {
-			@Override
-			public void performAction() {
-				if (!startLineInput.getText().isEmpty()) {
-					startLine = Integer.parseInt(startLineInput.getText());
-					modifier.updateTable(format, startLine, thePanel);
-				}
+		((AbstractDocument) startLineInput.getDocument()).addDocumentListener(new InputListener(() -> {
+			if (!startLineInput.getText().isEmpty()) {
+				startLine = Integer.parseInt(startLineInput.getText());
+				modifier.updateTable(format, startLine, thePanel);
 			}
-		});
+		}));
 
 		JLabel startLineLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
 
@@ -332,17 +325,20 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	}
 
 	private static class InputListener implements DocumentListener {
-		public void performAction() {
-			/* Should be overridden in actual implementation */}
+		private Runnable runnable;
+
+		public InputListener(Runnable runnable) {
+			this.runnable = runnable;
+		}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			performAction();
+			runnable.run();
 		}
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
-			performAction();
+			runnable.run();
 		}
 
 		@Override

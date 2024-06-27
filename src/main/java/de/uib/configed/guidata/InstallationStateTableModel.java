@@ -121,10 +121,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private boolean[] editablePreparedColumns;
 
 	public InstallationStateTableModel(ConfigedMain configedMain,
-			Map<String, Map<String, Map<String, String>>> collectChangedStates,
-			List<String> productNamesInDeliveryOrder, Map<String, List<Map<String, String>>> statesAndActions,
-			Map<String, List<String>> possibleActions, Map<String, Map<String, Object>> productGlobalInfos,
-			List<String> displayColumns) {
+			Map<String, Map<String, Map<String, String>>> collectChangedStates, Set<String> productNames,
+			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
 		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
 			Logging.info(this.getClass(), " statesAndActions null ");
@@ -146,7 +145,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		missingImplementationForAR = new TreeSet<>();
 		product2setOfClientsWithNewAction = new HashMap<>();
 
-		productNames = new TreeSet<>(productNamesInDeliveryOrder);
+		this.productNames = productNames;
 		sortedProductsList = new ArrayList<>(productNames);
 
 		Logging.debug(this.getClass(), "productNames " + productNames);
@@ -220,11 +219,19 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		for (String productId : productIds) {
 			int row = getRowFromProductID(productId);
-			fireTableRowsUpdated(row, row);
+
+			if (row > -1) {
+				fireTableRowsUpdated(row, row);
+			}
 		}
 	}
 
 	public synchronized void updateTable(String clientId, List<String> attributes) {
+		// Don't update if client not selected / part of this table
+		if (!allClientsProductStates.containsKey(clientId)) {
+			return;
+		}
+
 		List<Map<String, String>> productInfos = persistenceController.getProductDataService().getProductInfos(clientId,
 				attributes);
 		if (!productInfos.isEmpty()) {
@@ -922,13 +929,15 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private int getRowFromProductID(String id) {
-		int superRow = sortedProductsList.indexOf(id);
+		int row = sortedProductsList.indexOf(id);
 
-		if (filterInverse == null) {
-			return superRow;
+		// Sometimes (e.g. in user roles) the productlist is not complete
+		// so we won't find the row - and return -1 directly
+		if (row == -1 || filterInverse == null) {
+			return row;
 		}
 
-		return filterInverse[superRow];
+		return filterInverse[row];
 	}
 
 	public Map<String, Map<String, Object>> getGlobalProductInfos() {

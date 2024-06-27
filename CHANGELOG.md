@@ -1,7 +1,49 @@
 # Changelog
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.3.8] - 2024-06-25
+## Changed
+- Disable Terminal with user roles config "ssh.menu_serverconsole.active"
+
+## Fixed
+- Nullpointer Exception when messagebus events are received before data are loaded on start
+
+## [4.3.3.7] - 2024-06-24
+## Fixed
+- Nullpointer Exception when deleting client
+
+
+## [4.3.3.6] - 2024-06-24
+## Fixed
+- Don't fire updateTable event when row is -1 (causes wrong rendering of cells)
+- Nullpointer Exception when product is updates that is not in product list (e.g. user roles)
+
+
+## [4.3.3.5] - 2024-06-24
+## Changed
+- Sort results when searching for directories on server
+
+## Fixed
+- Nullpointer Exception when updating table with messagebus
+- ClientTable not refreshed correctly when adding another depot to the selection while some clients are selected
+- Nullpointer Exception when exporting groups of clients to CSV (for reimport)
+- Center frames in export options on main frame
+
+## [4.3.3.4] - 2024-06-19
+## Fixed
+- Performance problem when selecting clients in client tree and then show product info
+
+## [4.3.3.3] - 2024-06-18
+## Changed
+- Use Swing component instead of JavaFX for loading mechanism because of performance issues in JavaFX
+
+## Added
+- Button to copy HostKey into Clipboard
+
+## [4.3.3.2] - 2024-06-10
+
+## [4.3.3.1] - 2024-06-06
 ## Fixed
 - Create all 4 WAN configs (before only 3 of them were created)
+- Make it impossible to delete all clients and depots by accident
 
 
 ## Changed
@@ -11,6 +53,8 @@
 - Rework design of all user/password input fields
 - Remove Wake on LAN timer, only directly wake up clients
 - Remove Product installation in Product Actions panel (already exists in server console)
+- Select all products in a group in table on double click
+- Show the products from depots selected in depotslist in product tree
 
 
 ## [4.3.3.0] - 2024-05-14

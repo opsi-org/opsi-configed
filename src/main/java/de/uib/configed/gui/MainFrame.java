@@ -16,9 +16,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -288,8 +286,7 @@ public class MainFrame extends JFrame {
 		}
 		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 
-		boolean userConfigExists = UserConfig.getCurrentUserConfig() != null;
-		jMenuServerConsole.setEnabled(userConfigExists
+		jMenuServerConsole.setEnabled(UserConfig.getCurrentUserConfig() != null
 				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 						.isGlobalReadOnly()
 				&& UserConfig.getCurrentUserConfig()
@@ -315,8 +312,6 @@ public class MainFrame extends JFrame {
 		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
 		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
 			String parentMenuName = entry.getKey();
-			List<MultiCommandTemplate> listCom = new LinkedList<>(entry.getValue());
-			Collections.sort(listCom);
 			JMenu parentMenu = new JMenu(parentMenuName);
 
 			Logging.info(this, "parent menu text " + parentMenuName);
@@ -325,7 +320,7 @@ public class MainFrame extends JFrame {
 				jMenuServerConsole.addSeparator();
 			}
 
-			addSubCommands(menuOpsi, parentMenu, listCom, commandsAreDeactivated);
+			addSubCommands(menuOpsi, parentMenu, entry.getValue(), commandsAreDeactivated);
 		}
 	}
 
@@ -435,6 +430,11 @@ public class MainFrame extends JFrame {
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
 		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
+		jMenuFrameTerminal.setEnabled(UserConfig.getCurrentUserConfig() != null
+				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			configedMain.initMessagebus();
 			TerminalFrame terminal = new TerminalFrame();
@@ -504,15 +504,19 @@ public class MainFrame extends JFrame {
 
 		jMenuHelp.addSeparator();
 
+		addCreditsMenus(jMenuHelp, this);
+
+		return jMenuHelp;
+	}
+
+	public static void addCreditsMenus(JMenu jMenuHelp, JFrame owner) {
 		JMenuItem jMenuHelpCredits = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
-		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(this));
+		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(owner));
 		jMenuHelp.add(jMenuHelpCredits);
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(this));
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(owner));
 		jMenuHelp.add(jMenuHelpAbout);
-
-		return jMenuHelp;
 	}
 
 	public static void addLogfileMenus(JMenu jMenuHelp, JFrame centerFrame) {
@@ -565,7 +569,7 @@ public class MainFrame extends JFrame {
 		getContentPane().add(centralPane, BorderLayout.CENTER);
 		getContentPane().add(statusPane, BorderLayout.SOUTH);
 
-		setTitle(configedMain.getAppTitle());
+		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);

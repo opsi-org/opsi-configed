@@ -170,7 +170,7 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 			verbosity = "";
 		} else {
 			StringBuilder v = new StringBuilder("-");
-			for (int i = 4; i < vSum; i++) {
+			for (int i = 3; i < vSum; i++) {
 				v.append("v");
 			}
 			verbosity = v.toString();

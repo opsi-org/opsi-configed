@@ -28,8 +28,4 @@ public class DataChangedKeeper implements DataChangedObserver {
 	public boolean isDataChanged() {
 		return dataChanged;
 	}
-
-	public void unsetDataChanged() {
-		dataChanged = false;
-	}
 }
