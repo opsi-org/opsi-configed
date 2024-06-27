@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.3.9] - 2024-06-27
+
+### Changed
+- Make it possible to connect to server and server console without VPN module
+- Don't allow connection to clients without VPN module
+
+
 ## [4.3.3.8] - 2024-06-25
 
 ### Changed

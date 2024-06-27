@@ -29,6 +29,8 @@ import de.uib.configed.gui.FSelectionList;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 
@@ -43,6 +45,9 @@ public final class TerminalFrame implements MessagebusListener {
 	private boolean restrictView;
 	private Runnable callback;
 	private String session;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public TerminalFrame() {
 		this(false);
@@ -152,6 +157,12 @@ public final class TerminalFrame implements MessagebusListener {
 				500, 300);
 		List<String> clientsConnectedByMessagebus = new ArrayList<>(PersistenceControllerFactory
 				.getPersistenceController().getHostDataService().getMessagebusConnectedClients());
+
+		// Don't allow connection to clients when VPN module is not available
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+			clientsConnectedByMessagebus.removeAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+		}
+
 		clientsConnectedByMessagebus.add("Configserver");
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
