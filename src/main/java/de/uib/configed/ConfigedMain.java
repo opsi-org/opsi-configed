@@ -237,7 +237,6 @@ public class ConfigedMain implements MessagebusListener {
 	private int saveDepotsViewIndex = VIEW_PRODUCT_PROPERTIES;
 	private int saveServerViewIndex = VIEW_NETWORK_CONFIGURATION;
 
-	private Map<String, Object> reachableInfo = new HashMap<>();
 	private Map<String, String> sessionInfo = new HashMap<>();
 
 	private Map<String, String> logfiles = new HashMap<>();
