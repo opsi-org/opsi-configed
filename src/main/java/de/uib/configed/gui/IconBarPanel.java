@@ -57,10 +57,6 @@ public class IconBarPanel extends JPanel {
 		return jButtonSaveConfiguration;
 	}
 
-	public JButton getjButtonReachableInfo() {
-		return jButtonReachableInfo;
-	}
-
 	public JButton getjButtonSessionInfo() {
 		return jButtonSessionInfo;
 	}
