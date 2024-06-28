@@ -368,21 +368,6 @@ public class HostDataService {
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 	}
 
-	public Map<String, Object> reachableInfo(List<String> clientIds) {
-		Logging.info(this, "reachableInfo ");
-		Object[] callParameters = new Object[] {};
-
-		RPCMethodName methodName = RPCMethodName.HOST_CONTROL_REACHABLE;
-		if (clientIds != null) {
-			Logging.info(this, "reachableInfo for clientIds " + clientIds.size());
-			callParameters = new Object[] { clientIds };
-			methodName = RPCMethodName.HOST_CONTROL_SAFE_REACHABLE;
-		}
-
-		// background call, do not show waiting info
-		return exec.getMapResult(new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT));
-	}
-
 	// executes all updates collected by setHostDescription ...
 	public void updateHosts() {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {

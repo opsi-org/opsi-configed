@@ -69,8 +69,6 @@ public final class Configed {
 	private static String savedStatesLocationName;
 	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
-	private static Integer refreshMinutes;
-
 	private static String paramHost;
 	private static String paramUser;
 	private static String paramPassword;
@@ -115,10 +113,6 @@ public final class Configed {
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
 		Configed.paramOTP = paramOTP;
-	}
-
-	public static Integer getRefreshMinutes() {
-		return refreshMinutes;
 	}
 
 	public static String getResourceValue(String key) {
@@ -250,18 +244,6 @@ public final class Configed {
 			}
 			if (canonicalPath != null) {
 				savedStatesLocationName = canonicalPath;
-			}
-		}
-
-		if (cmd.hasOption("r")) {
-			String refreshMinutesString = cmd.getOptionValue("r");
-
-			try {
-				refreshMinutes = Integer.valueOf(refreshMinutesString);
-			} catch (NumberFormatException ex) {
-				Logging.debug("  \n\nArgument >" + refreshMinutesString + "< has no integer format");
-				Main.showHelp();
-				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
 		}
 

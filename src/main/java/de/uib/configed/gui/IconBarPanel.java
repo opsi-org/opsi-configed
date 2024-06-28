@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -36,7 +35,6 @@ public class IconBarPanel extends JPanel {
 	private JButton jButtonSetGroup;
 	private JButton jButtonSaveConfiguration;
 
-	private JButton jButtonReachableInfo;
 	private JButton jButtonSessionInfo;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -232,9 +230,6 @@ public class IconBarPanel extends JPanel {
 								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(jButtonSaveConfiguration, Globals.GRAPHIC_BUTTON_SIZE,
 										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jButtonReachableInfo, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE).addComponent(jButtonSessionInfo,
 										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 										Globals.GRAPHIC_BUTTON_SIZE));
@@ -251,8 +246,6 @@ public class IconBarPanel extends JPanel {
 								Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(jButtonSaveConfiguration, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(jButtonReachableInfo, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)
 						.addComponent(jButtonSessionInfo, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
 								Globals.GRAPHIC_BUTTON_SIZE)));
 
@@ -288,16 +281,6 @@ public class IconBarPanel extends JPanel {
 		jButtonSaveConfiguration.setFocusable(false);
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
-
-		jButtonReachableInfo = new JButton(Utils.createImageIcon("images/new_networkconnection.png", ""));
-		jButtonReachableInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"));
-		jButtonReachableInfo.setFocusable(false);
-		jButtonReachableInfo
-				.setEnabled(persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"));
-		jButtonReachableInfo.addActionListener((ActionEvent e) -> {
-			jButtonReachableInfo.setEnabled(false);
-			SwingUtilities.invokeLater(configedMain::getReachableInfo);
-		});
 
 		jButtonSessionInfo = new JButton(Utils.getLargeIntellijIcon("user"));
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));

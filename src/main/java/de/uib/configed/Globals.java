@@ -163,10 +163,6 @@ public final class Globals {
 	public static final int WIDTH_INFO_LOG_FILE = 400;
 	public static final int HEIGHT_INFO_LOG_FILE = 200;
 
-	public static final int REACHABLE_INFO_FRAME_WIDTH = 300;
-	// Just enough so that the button is not hidden
-	public static final int REACHABLE_INFO_FRAME_HEIGHT = 220;
-
 	public static final Dimension GRAPHIC_BUTTON_DIMENSION = new Dimension(GRAPHIC_BUTTON_SIZE, GRAPHIC_BUTTON_SIZE);
 
 	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;

@@ -73,8 +73,6 @@ public class Main {
 				OTP is a paid feature. Should be used when license is available and OTP is enabled for a user""");
 		options.addOption("s", "savedstates", true,
 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
-		options.addOption("r", "refreshminutes", true,
-				"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never). DEFAULT: 0");
 		options.addOption("qs", "querysavedsearch", true,
 				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
 		options.addOption("qg", "definegroupbysearch", true,
