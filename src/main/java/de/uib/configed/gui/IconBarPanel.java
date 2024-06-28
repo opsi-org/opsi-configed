@@ -14,7 +14,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -46,7 +45,6 @@ public class IconBarPanel extends JPanel {
 	private IconButton iconButtonSaveConfiguration;
 	private IconButton iconButtonToggleClientFilter;
 
-	private IconButton iconButtonReachableInfo;
 	private IconButton iconButtonSessionInfo;
 
 	private LicensingInfoMap licensingInfoMap;
@@ -73,10 +71,6 @@ public class IconBarPanel extends JPanel {
 
 	public IconButton getIconButtonToggleClientFilter() {
 		return iconButtonToggleClientFilter;
-	}
-
-	public IconButton getIconButtonReachableInfo() {
-		return iconButtonReachableInfo;
 	}
 
 	public IconButton getIconButtonSessionInfo() {
@@ -328,9 +322,6 @@ public class IconBarPanel extends JPanel {
 								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(iconButtonReachableInfo, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE).addComponent(iconButtonSessionInfo,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE));
@@ -347,8 +338,6 @@ public class IconBarPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(iconButtonSaveConfiguration, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(iconButtonReachableInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addComponent(iconButtonSessionInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
@@ -392,16 +381,6 @@ public class IconBarPanel extends JPanel {
 				true);
 		iconButtonToggleClientFilter.setFocusable(false);
 		iconButtonToggleClientFilter.addActionListener((ActionEvent e) -> mainFrame.toggleClientFilterAction());
-
-		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
-				"images/new_networkconnection.png", "images/new_networkconnection.png",
-				"images/new_networkconnection.png",
-				persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"));
-		iconButtonReachableInfo.setFocusable(false);
-		iconButtonReachableInfo.addActionListener((ActionEvent e) -> {
-			iconButtonReachableInfo.setEnabled(false);
-			SwingUtilities.invokeLater(configedMain::getReachableInfo);
-		});
 
 		iconButtonSessionInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
 				"images/system-users-query.png", "images/system-users-query_over.png",

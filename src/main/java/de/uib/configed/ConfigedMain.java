@@ -113,7 +113,6 @@ import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
-import de.uib.utils.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utils.table.gui.PanelGenEditTable;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
@@ -366,8 +365,6 @@ public class ConfigedMain implements MessagebusListener {
 		anyDataChanged = false;
 
 		Logging.debug(this, "initialTreeActivation");
-
-		ReachableUpdater.startUpdater(Configed.getRefreshMinutes(), this);
 
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
 		mainFrame.enableAfterLoading();
@@ -1265,7 +1262,7 @@ public class ConfigedMain implements MessagebusListener {
 			}
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
-			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, getConnectionInfoForClient(clientId));
+			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, connectedHostsByMessagebus.contains(clientId));
 
 			List<Object> rowItems = new ArrayList<>();
 
@@ -1440,7 +1437,8 @@ public class ConfigedMain implements MessagebusListener {
 
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
-			column.setCellRenderer(new ConnectionStatusTableCellRenderer());
+			column.setCellRenderer(
+					new BooleanIconTableCellRenderer(Utils.createImageIcon("bootstrap/check_green.png", ""), null));
 		}
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
@@ -2761,63 +2759,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	public void getReachableInfo() {
-		// we put this into a thread since it may never end in case of a name resolving
-		// problem
-		new Thread() {
-			@Override
-			public void run() {
-				FShowList fShowReachableInfo = createReachableInfoDialog();
-				fShowReachableInfo.setVisible(true);
-				fShowReachableInfo.toFront();
-
-				if (selectedClients != null && !selectedClients.isEmpty()) {
-					Logging.info(this, "we have sel clients " + selectedClients.size());
-					setReachableInfo(selectedClients);
-				} else {
-					Logging.info(this, "we don't have selected clients, so we check reachable for all clients");
-					setReachableInfo(null);
-				}
-
-				fShowReachableInfo.setVisible(false);
-
-				mainFrame.getIconBarPanel().getIconButtonReachableInfo().setEnabled(true);
-			}
-		}.start();
-	}
-
-	private static FShowList createReachableInfoDialog() {
-		FShowList fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 350, 100);
-		fShowReachableInfo.setMessage(Configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
-		fShowReachableInfo.setAlwaysOnTop(true);
-		fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
-		fShowReachableInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		return fShowReachableInfo;
-	}
-
-	/*
-	 * gets the connection String for the client, depending on whether connected
-	 * to the messagebus, or reachable or not
-	 */
-	private Object getConnectionInfoForClient(String clientName) {
-		if (connectedHostsByMessagebus.contains(clientName)) {
-			return ConnectionStatusTableCellRenderer.CONNECTED_BY_MESSAGEBUS;
-		} else {
-			return getConnectionInfoStateForBoolean(reachableInfo.get(clientName));
-		}
-	}
-
-	private static String getConnectionInfoStateForBoolean(Object b) {
-		if (!(b instanceof Boolean)) {
-			return ConnectionStatusTableCellRenderer.UNKNOWN;
-		} else if (Boolean.TRUE.equals(b)) {
-			return ConnectionStatusTableCellRenderer.REACHABLE;
-		} else {
-			return ConnectionStatusTableCellRenderer.NOT_REACHABLE;
-		}
-	}
-
 	private void updateConnectionStatusInTable(String clientName) {
 		AbstractTableModel model = clientTable.getTableModel();
 
@@ -2825,7 +2766,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		for (int row = 0; row < model.getRowCount(); row++) {
 			if (model.getValueAt(row, 0).equals(clientName)) {
-				model.setValueAt(getConnectionInfoForClient(clientName), row, col);
+				model.setValueAt(connectedHostsByMessagebus.contains(clientName), row, col);
 
 				model.fireTableCellUpdated(row, col);
 
@@ -2835,28 +2776,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 		Logging.info(this,
 				"could not update connectionStatus for client " + clientName + ": not in list of shown table");
-	}
-
-	public void setReachableInfo(List<String> clientsToUpdate) {
-		this.reachableInfo = persistenceController.getHostDataService().reachableInfo(clientsToUpdate);
-
-		// update column
-		if (Boolean.TRUE
-				.equals(persistenceController.getHostDataService().getHostDisplayFields().get("clientConnected"))) {
-			AbstractTableModel model = clientTable.getTableModel();
-
-			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-
-			for (int row = 0; row < model.getRowCount(); row++) {
-				String clientId = (String) model.getValueAt(row, 0);
-
-				model.setValueAt(getConnectionInfoForClient(clientId), row, col);
-			}
-
-			model.fireTableDataChanged();
-
-			clientTable.setSelectedValues(selectedClients);
-		}
 	}
 
 	public void getSessionInfo() {
