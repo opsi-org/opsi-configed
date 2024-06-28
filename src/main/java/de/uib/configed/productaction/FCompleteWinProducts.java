@@ -255,8 +255,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 		});
 
-		buttonCallExecute = new JButton(Utils.createImageIcon("images/upload2product.png", ""));
-		buttonCallExecute.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
+		buttonCallExecute = new JButton(Utils.getIntellijIcon("upload"));
 		buttonCallExecute.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));
 
