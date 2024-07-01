@@ -121,13 +121,13 @@ public class IconBarPanel extends JPanel {
 
 	private JToolBar initIconPaneTargets() {
 		JToggleButton jButtonServerConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("editorConfig"));
-		jButtonServerConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("editorConfig").derive(32, 32));
+		jButtonServerConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("editorConfig", 32));
 		jButtonServerConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.setFocusable(false);
 
 		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("dbms"));
-		jButtonDepotsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("dbms").derive(32, 32));
+		jButtonDepotsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.setFocusable(false);

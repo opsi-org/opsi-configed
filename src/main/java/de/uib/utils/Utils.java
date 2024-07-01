@@ -217,10 +217,6 @@ public final class Utils {
 		return icon;
 	}
 
-	public static FlatSVGIcon getIntellijIcon(String iconName, Color color, int size) {
-		return getIntellijIcon(iconName, color).derive(size, size);
-	}
-
 	public static void addIntellijIconToMenuItem(AbstractButton abstractButton, String name) {
 		abstractButton.setIcon(getIntellijIcon(name));
 
@@ -245,6 +241,10 @@ public final class Utils {
 
 	public static FlatSVGIcon getSelectedIntellijIcon(String iconName) {
 		return getIntellijIcon(iconName, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT);
+	}
+
+	public static FlatSVGIcon getSelectedIntellijIcon(String iconName, int size) {
+		return getSelectedIntellijIcon(iconName).derive(size, size);
 	}
 
 	public static FlatSVGIcon getSelectedThemeIntelljIcon(String iconName) {

@@ -158,8 +158,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Utils.getIntellijIcon("circle_checkmark", Globals.OPSI_BLUE, 24);
-		disconnectedIcon = Utils.getIntellijIcon("circle", Globals.OPSI_BLUE, 24);
+		connectedIcon = Utils.getSelectedIntellijIcon("circle_checkmark", 24);
+		disconnectedIcon = Utils.getSelectedIntellijIcon("circle", 24);
 
 		connectionStateLabel = new JLabel();
 	}
