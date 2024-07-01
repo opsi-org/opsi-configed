@@ -129,7 +129,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		setupLayout();
 
 		setSearchFieldsAll();
-		setNarrow(false);
 	}
 
 	private static Collator getCollator() {
@@ -187,8 +186,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	public void setNarrow(boolean narrow) {
 		if (narrow) {
 			setupNarrowLayout();
+			buttonShowHideExtraOptions.setVisible(true);
 		}
-		buttonShowHideExtraOptions.setVisible(narrow);
+
 		comboSearchFields.setVisible(!narrow);
 		comboSearchFieldsMode.setVisible(!narrow);
 		labelSearch.setVisible(!narrow);
@@ -265,14 +265,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(filtermark);
 		flatTextFieldSearch.setTrailingComponent(jToolBar);
-
-		buttonShowHideExtraOptions = new JToggleButton(Utils.getIntellijIcon("arrowLeft"));
-		buttonShowHideExtraOptions.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
-		buttonShowHideExtraOptions
-				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
-		buttonShowHideExtraOptions.setFocusable(false);
-		buttonShowHideExtraOptions.setVisible(false);
-		buttonShowHideExtraOptions.addActionListener(event -> showExtraOptions());
 	}
 
 	private void initPopup() {
@@ -371,6 +363,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void setupNarrowLayout() {
+		buttonShowHideExtraOptions = new JToggleButton(Utils.getIntellijIcon("arrowLeft"));
+		buttonShowHideExtraOptions.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
+		buttonShowHideExtraOptions
+				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
+		buttonShowHideExtraOptions.setFocusable(false);
+		buttonShowHideExtraOptions.setVisible(false);
+		buttonShowHideExtraOptions.addActionListener(event -> showExtraOptions());
+
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
 		setLayout(layoutTablesearchPane);
 
@@ -437,11 +437,16 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createParallelGroup(Alignment.CENTER)
 				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(flatTextFieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 
 	private boolean allowSearchAction() {
