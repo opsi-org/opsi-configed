@@ -30,11 +30,11 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon objectIcon;
 	private ImageIcon objectSelectedIcon;
 
-	private ImageIcon groupIcon = Utils.getThemeIconPNG("bootstrap/group", "group unselected");
-	private ImageIcon groupContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected", "group selected");
+	private ImageIcon groupIcon = Utils.getThemeIcon("groups", 16);
+	private ImageIcon groupContainsSelectedIcon = Utils.getThemeFilledIcon("groups", 16);
 
-	private ImageIcon groupOpenIcon = Utils.getThemeIconPNG("bootstrap/group_open", "");
-	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected_open", "");
+	private ImageIcon groupOpenIcon = Utils.getThemeIcon("groups_open", 16);
+	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeFilledIcon("groups_open", 16);
 
 	public GroupTreeRenderer(AbstractGroupTree abstractGroupTree) {
 		this.abstractGroupTree = abstractGroupTree;
