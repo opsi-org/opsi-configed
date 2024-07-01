@@ -42,8 +42,8 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
 
 		if (abstractGroupTree instanceof ClientTree) {
-			objectIcon = Utils.getThemeIconPNG("bootstrap/laptop", "client");
-			objectSelectedIcon = Utils.getThemeIconPNG("bootstrap/laptop_selected", "client");
+			objectIcon = Utils.getThemeIcon("desktop", 16);
+			objectSelectedIcon = Utils.getThemeFilledIcon("desktop", 16);
 		} else {
 			objectIcon = Utils.getThemeIconPNG("bootstrap/product", "client");
 			objectSelectedIcon = Utils.getThemeIconPNG("bootstrap/product_selected", "client");

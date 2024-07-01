@@ -132,6 +132,20 @@ public final class Utils {
 		return getIntellijIcon(iconName).derive(size, size);
 	}
 
+	public static FlatSVGIcon getThemeFilledIcon(String iconName, int size) {
+		FlatSVGIcon icon = getThemeIcon(iconName, size);
+
+		ColorFilter filter = icon.getColorFilter();
+		if (FlatLaf.isLafDark()) {
+			filter.add(new Color(67, 69, 74), Globals.OPSI_FOREGROUND_DARK);
+		} else {
+			filter.add(new Color(235, 236, 240), Globals.OPSI_FOREGROUND_LIGHT);
+		}
+
+		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
+
+	}
+
 	public static FlatSVGIcon getLargeIntellijIcon(String iconName) {
 		return getIntellijIcon(iconName,
 				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT).derive(32, 32);
