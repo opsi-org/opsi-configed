@@ -165,6 +165,19 @@ public final class Utils {
 		return icon;
 	}
 
+	public static void addOpsiModulesIconToMenuItem(AbstractButton abstractButton) {
+		abstractButton.setIcon(getOpsiModulesIcon(16));
+
+		// Create filter for selected icon
+		ColorFilter filter = new ColorFilter();
+		filter.add(Globals.OPSI_MAGENTA, Globals.OPSI_FOREGROUND_DARK);
+
+		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
+		icon = icon.derive(16, 16);
+		icon.setColorFilter(filter);
+		abstractButton.setSelectedIcon(icon);
+	}
+
 	public static ImageIcon getOpsiModulesIcon(int size) {
 		return getOpsiModulesIcon().derive(size, size);
 	}
