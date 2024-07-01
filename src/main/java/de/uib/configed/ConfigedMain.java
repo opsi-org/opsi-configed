@@ -1434,7 +1434,7 @@ public class ConfigedMain implements MessagebusListener {
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
 			column.setCellRenderer(
-					new BooleanIconTableCellRenderer(Utils.createImageIcon("bootstrap/check_green.png", ""), null));
+					new BooleanIconTableCellRenderer(Utils.getIntellijIcon("checkmark", Globals.OPSI_OK), null));
 		}
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
@@ -1497,8 +1497,7 @@ public class ConfigedMain implements MessagebusListener {
 			TableColumn column = clientTable.getColumnModel().getColumn(col);
 			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-			column.setCellRenderer(
-					new BooleanIconTableCellRenderer(Utils.getThemeIconPNG("bootstrap/check", ""), null));
+			column.setCellRenderer(new BooleanIconTableCellRenderer(Utils.getIntellijIcon("checkmark"), null));
 		}
 	}
 

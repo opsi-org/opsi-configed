@@ -17,6 +17,7 @@ import javax.swing.UIManager;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -32,7 +33,7 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 
 	private ImageIcon configServerConnectedIcon = Utils.createImageIcon("bootstrap/check_circle_blue.png", "");
 	private ImageIcon configServerDisconnectedIcon = Utils.createImageIcon("bootstrap/circle_blue.png", "");
-	private ImageIcon connectedIcon = Utils.createImageIcon("bootstrap/check_green.png", "");
+	private ImageIcon connectedIcon = Utils.getIntellijIcon("checkmark", Globals.OPSI_OK);
 
 	public DepotListCellRenderer(ConfigedMain configedMain) {
 		this.configedMain = configedMain;

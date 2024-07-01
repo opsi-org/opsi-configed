@@ -185,7 +185,7 @@ public final class Utils {
 		return new ImageIcon(image);
 	}
 
-	private static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
+	public static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
 
 		ColorFilter filter = new ColorFilter();
