@@ -79,7 +79,8 @@ public final class Globals {
 	public static final Color OPSI_FOREGROUND_LIGHT = new Color(30, 30, 30);
 	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
 
-	public static final Color ICON_ACTIVE = new Color(64, 182, 224);
+	public static final Color ICON_ACTIVE_LIGHT = new Color(53, 116, 240);
+	public static final Color ICON_ACTIVE_DARK = new Color(84, 138, 247);
 
 	// End new colors
 

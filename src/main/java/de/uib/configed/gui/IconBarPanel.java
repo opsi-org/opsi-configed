@@ -121,17 +121,19 @@ public class IconBarPanel extends JPanel {
 
 	private JToolBar initIconPaneTargets() {
 		JToggleButton jButtonServerConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("editorConfig"));
+		jButtonServerConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("editorConfig").derive(32, 32));
 		jButtonServerConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.setFocusable(false);
 
 		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("dbms"));
+		jButtonDepotsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("dbms").derive(32, 32));
 		jButtonDepotsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.setFocusable(false);
 
-		JToggleButton jButtonClientsConfiguration = new JToggleButton();
-		Utils.addThemeIconToButton(jButtonClientsConfiguration, "desktop", 32);
+		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getThemeIcon("desktop", 32));
+		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("desktop").derive(32, 32));
 		jButtonClientsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setFocusable(false);
@@ -279,8 +281,7 @@ public class IconBarPanel extends JPanel {
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
-		jButtonSessionInfo = new JButton(Utils.getLargeIntellijIcon("user"));
-		Utils.addThemeIconToButton(jButtonSessionInfo, "user", 32);
+		jButtonSessionInfo = new JButton(Utils.getThemeIcon("user", 32));
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
 		jButtonSessionInfo.setFocusable(false);
 		jButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());

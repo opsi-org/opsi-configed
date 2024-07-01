@@ -124,12 +124,12 @@ public final class Utils {
 		}
 	}
 
-	public static void addThemeIconToButton(AbstractButton abstractButton, String iconName, int size) {
+	public static FlatSVGIcon getThemeIcon(String iconName, int size) {
 		if (FlatLaf.isLafDark()) {
-			iconName += iconName + "_dark";
+			iconName += "_dark";
 		}
 
-		abstractButton.setIcon(getIntellijIcon(iconName).derive(size, size));
+		return getIntellijIcon(iconName).derive(size, size);
 	}
 
 	public static FlatSVGIcon getLargeIntellijIcon(String iconName) {
@@ -214,7 +214,6 @@ public final class Utils {
 		filter.add(new Color(108, 112, 126), color);
 		FlatSVGIcon icon = new FlatSVGIcon(path);
 		icon.setColorFilter(filter);
-
 		return icon;
 	}
 
@@ -245,7 +244,7 @@ public final class Utils {
 	}
 
 	public static FlatSVGIcon getSelectedIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName, Globals.ICON_ACTIVE);
+		return getIntellijIcon(iconName, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT);
 	}
 
 	public static FlatSVGIcon getIntellijIcon(String iconName) {
