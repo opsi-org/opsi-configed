@@ -195,7 +195,10 @@ public final class Utils {
 		icon.setColorFilter(filter);
 
 		return icon;
+	}
 
+	public static FlatSVGIcon getIntellijIcon(String iconName, Color color, int size) {
+		return getIntellijIcon(iconName, color).derive(size, size);
 	}
 
 	public static void addIntellijIconToMenuItem(AbstractButton abstractButton, String name) {
