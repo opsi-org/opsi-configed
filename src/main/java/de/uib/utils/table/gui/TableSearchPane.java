@@ -63,7 +63,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JLabel labelSearchMode;
 	private JToggleButton filtermark;
 
-	private JButton buttonShowHideExtraOptions;
+	private JToggleButton buttonShowHideExtraOptions;
 
 	private JPanel navPane;
 	private PanelGenEditTable associatedPanel;
@@ -82,8 +82,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private SearchTargetModel targetModel;
 
 	private final Comparator<Object> comparator;
-
-	private boolean isExtraOptionsHidden = true;
 
 	/**
 	 * Provides search functionality for tables.
@@ -268,9 +266,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		jToolBar.add(filtermark);
 		flatTextFieldSearch.setTrailingComponent(jToolBar);
 
-		buttonShowHideExtraOptions = new JButton(Utils.getThemeIconPNG("bootstrap/caret_left_fill", ""));
+		buttonShowHideExtraOptions = new JToggleButton(Utils.getIntellijIcon("arrowLeft"));
+		buttonShowHideExtraOptions.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
 		buttonShowHideExtraOptions
 				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
+		buttonShowHideExtraOptions.setFocusable(false);
 		buttonShowHideExtraOptions.setVisible(false);
 		buttonShowHideExtraOptions.addActionListener(event -> showExtraOptions());
 	}
@@ -364,18 +364,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void showExtraOptions() {
-		if (isExtraOptionsHidden) {
-			buttonShowHideExtraOptions.setIcon(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
-		} else {
-			buttonShowHideExtraOptions.setIcon(Utils.getThemeIconPNG("bootstrap/caret_left_fill", ""));
-		}
-
-		comboSearchFields.setVisible(isExtraOptionsHidden);
-		comboSearchFieldsMode.setVisible(isExtraOptionsHidden);
-		labelSearch.setVisible(isExtraOptionsHidden);
-		labelSearchMode.setVisible(isExtraOptionsHidden);
-
-		isExtraOptionsHidden = !isExtraOptionsHidden;
+		comboSearchFields.setVisible(buttonShowHideExtraOptions.isSelected());
+		comboSearchFieldsMode.setVisible(buttonShowHideExtraOptions.isSelected());
+		labelSearch.setVisible(buttonShowHideExtraOptions.isSelected());
+		labelSearchMode.setVisible(buttonShowHideExtraOptions.isSelected());
 	}
 
 	private void setupNarrowLayout() {
@@ -406,7 +398,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addGap(Globals.GAP_SIZE));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
-				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -430,9 +422,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(flatTextFieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(buttonShowHideExtraOptions, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
-						Globals.MIN_GAP_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -449,7 +438,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonShowHideExtraOptions, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)

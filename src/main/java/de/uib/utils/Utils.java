@@ -283,12 +283,6 @@ public final class Utils {
 				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
 	}
 
-	public static ImageIcon getThemeIconPNG(String pathName, String description) {
-		pathName += FlatLaf.isLafDark() ? "_invert.png" : ".png";
-
-		return createImageIcon(pathName, description);
-	}
-
 	public static ImageIcon createImageIcon(String path, String description) {
 		String xPath = Globals.IMAGE_BASE + path;
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
