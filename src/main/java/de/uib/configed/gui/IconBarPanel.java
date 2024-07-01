@@ -133,7 +133,7 @@ public class IconBarPanel extends JPanel {
 		jButtonDepotsConfiguration.setFocusable(false);
 
 		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getThemeIcon("desktop", 32));
-		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("desktop").derive(32, 32));
+		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedThemeIntelljIcon("desktop").derive(32, 32));
 		jButtonClientsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setFocusable(false);

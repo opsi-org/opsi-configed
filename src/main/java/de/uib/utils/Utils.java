@@ -247,6 +247,18 @@ public final class Utils {
 		return getIntellijIcon(iconName, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT);
 	}
 
+	public static FlatSVGIcon getSelectedThemeIntelljIcon(String iconName) {
+		ColorFilter filter = new ColorFilter();
+		if (FlatLaf.isLafDark()) {
+			iconName += "_dark";
+			filter.add(new Color(206, 208, 214), Globals.ICON_ACTIVE_DARK);
+		} else {
+			filter.add(new Color(108, 112, 126), Globals.ICON_ACTIVE_LIGHT);
+		}
+
+		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
+	}
+
 	public static FlatSVGIcon getIntellijIcon(String iconName) {
 		return getIntellijIcon(iconName,
 				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
