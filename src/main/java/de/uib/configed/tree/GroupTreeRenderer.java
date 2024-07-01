@@ -45,8 +45,8 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 			objectIcon = Utils.getThemeIcon("desktop", 16);
 			objectSelectedIcon = Utils.getThemeFilledIcon("desktop", 16);
 		} else {
-			objectIcon = Utils.getThemeIconPNG("bootstrap/product", "client");
-			objectSelectedIcon = Utils.getThemeIconPNG("bootstrap/product_selected", "client");
+			objectIcon = Utils.getThemeIcon("package", 16);
+			objectSelectedIcon = Utils.getThemeFilledIcon("package", 16);
 		}
 	}
 

@@ -105,31 +105,36 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	private static FlatSVGIcon getThemeIcon(boolean isLafDark, String iconName) {
+	private static FlatSVGIcon getThemeIconForThemeMenu(boolean dark, String iconName) {
 		ColorFilter filter = new ColorFilter();
-		if (isLafDark) {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
-		} else {
+		if (dark) {
 			iconName = iconName + "_dark";
 			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_LIGHT);
+		} else {
+			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
 	public static void addThemeIconToMenuItem(AbstractButton abstractButton, String iconName) {
-		abstractButton.setIcon(getThemeIcon(FlatLaf.isLafDark(), iconName));
+		abstractButton.setIcon(getThemeIconForThemeMenu(!FlatLaf.isLafDark(), iconName));
 		if (!FlatLaf.isLafDark()) {
-			abstractButton.setSelectedIcon(getThemeIcon(true, iconName));
+			abstractButton.setSelectedIcon(getThemeIconForThemeMenu(false, iconName));
 		}
 	}
 
 	public static FlatSVGIcon getThemeIcon(String iconName, int size) {
+		ColorFilter filter = new ColorFilter();
 		if (FlatLaf.isLafDark()) {
-			iconName += "_dark";
+			iconName = iconName + "_dark";
+			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_DARK);
+		} else {
+			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_LIGHT);
 		}
 
-		return getIntellijIcon(iconName).derive(size, size);
+		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter).derive(size,
+				size);
 	}
 
 	public static FlatSVGIcon getThemeFilledIcon(String iconName, int size) {
