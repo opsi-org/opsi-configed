@@ -130,7 +130,8 @@ public class IconBarPanel extends JPanel {
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.setFocusable(false);
 
-		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("desktop"));
+		JToggleButton jButtonClientsConfiguration = new JToggleButton();
+		Utils.addThemeIconToButton(jButtonClientsConfiguration, "desktop", 32);
 		jButtonClientsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setFocusable(false);
@@ -279,6 +280,7 @@ public class IconBarPanel extends JPanel {
 		jButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
 		jButtonSessionInfo = new JButton(Utils.getLargeIntellijIcon("user"));
+		Utils.addThemeIconToButton(jButtonSessionInfo, "user", 32);
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
 		jButtonSessionInfo.setFocusable(false);
 		jButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());

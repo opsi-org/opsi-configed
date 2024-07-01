@@ -105,7 +105,7 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	private static ImageIcon getThemeIcon(boolean isLafDark, String iconName) {
+	private static FlatSVGIcon getThemeIcon(boolean isLafDark, String iconName) {
 		ColorFilter filter = new ColorFilter();
 		if (isLafDark) {
 			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
@@ -124,7 +124,15 @@ public final class Utils {
 		}
 	}
 
-	public static ImageIcon getLargeIntellijIcon(String iconName) {
+	public static void addThemeIconToButton(AbstractButton abstractButton, String iconName, int size) {
+		if (FlatLaf.isLafDark()) {
+			iconName += iconName + "_dark";
+		}
+
+		abstractButton.setIcon(getIntellijIcon(iconName).derive(size, size));
+	}
+
+	public static FlatSVGIcon getLargeIntellijIcon(String iconName) {
 		return getIntellijIcon(iconName,
 				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT).derive(32, 32);
 	}
@@ -178,7 +186,7 @@ public final class Utils {
 		abstractButton.setSelectedIcon(icon);
 	}
 
-	public static ImageIcon getOpsiModulesIcon(int size) {
+	public static FlatSVGIcon getOpsiModulesIcon(int size) {
 		return getOpsiModulesIcon().derive(size, size);
 	}
 
@@ -236,11 +244,11 @@ public final class Utils {
 		abstractButton.setSelectedIcon(icon);
 	}
 
-	public static ImageIcon getSelectedIntellijIcon(String iconName) {
+	public static FlatSVGIcon getSelectedIntellijIcon(String iconName) {
 		return getIntellijIcon(iconName, Globals.ICON_ACTIVE);
 	}
 
-	public static ImageIcon getIntellijIcon(String iconName) {
+	public static FlatSVGIcon getIntellijIcon(String iconName) {
 		return getIntellijIcon(iconName,
 				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
 	}
