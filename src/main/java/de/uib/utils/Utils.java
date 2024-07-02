@@ -297,16 +297,13 @@ public final class Utils {
 		}
 	}
 
-	public static ImageIcon createImageIcon(String path, String description, int width, int height) {
-		ImageIcon imageIcon = createImageIcon(path, description);
-
-		if (imageIcon == null) {
-			return null;
+	public static FlatSVGIcon getOpsiLogoWide() {
+		String iconName = "opsi_logo_wide";
+		if (FlatLaf.isLafDark()) {
+			iconName += "_dark";
 		}
 
-		Image scaledImage = imageIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-
-		return new ImageIcon(scaledImage, description);
+		return new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/" + iconName + ".svg").derive(139, 50);
 	}
 
 	public static void threadSleep(Object caller, long millis) {

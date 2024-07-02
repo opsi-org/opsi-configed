@@ -31,7 +31,6 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTextField;
@@ -162,15 +161,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		setTitle(Configed.getResourceValue("LoginDialog.title"));
 		setIconImage(Utils.getMainIcon());
 
-		// Opsilogo
-		String logoPath;
-		if (FlatLaf.isLafDark()) {
-			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
-		} else {
-			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
-		}
-
-		jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
+		jLabelLogo = new JLabel(Utils.getOpsiLogoWide());
 
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("

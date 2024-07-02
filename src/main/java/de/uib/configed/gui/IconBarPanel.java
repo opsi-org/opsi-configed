@@ -18,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
@@ -77,15 +75,7 @@ public class IconBarPanel extends JPanel {
 		c.gridx = 1;
 		c.gridy = 0;
 
-		String logoPath;
-
-		if (FlatLaf.isLafDark()) {
-			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
-		} else {
-			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
-		}
-
-		add(new JLabel(Utils.createImageIcon(logoPath, null, 150, 50)), c);
+		add(new JLabel(Utils.getOpsiLogoWide()), c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
