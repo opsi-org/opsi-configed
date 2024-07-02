@@ -57,8 +57,7 @@ public class PanelMountShare extends JPanel {
 	}
 
 	private void initComponents() {
-		buttonMountShare = new JButton(Utils.createImageIcon("images/windows16.png", ""));
-		buttonMountShare.setSelectedIcon(Utils.createImageIcon("images/windows16.png", ""));
+		buttonMountShare = new JButton(Utils.getIntellijIcon("windows"));
 		buttonMountShare.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		if (SystemInfo.isWindows) {
 			buttonMountShare.setToolTipText(

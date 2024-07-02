@@ -309,12 +309,12 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
-		JButton buttonShowDrivers = new JButton(Utils.createImageIcon("images/show-menu.png", ""));
+		JButton buttonShowDrivers = new JButton(Utils.getIntellijIcon("run"));
 		buttonShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
 		buttonShowDrivers.addActionListener(actionEvent -> showDrivers());
 
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
-		JButton btnCreateDrivers = new JButton(Utils.createImageIcon("images/run-build-file.png", ""));
+		JButton btnCreateDrivers = new JButton(Utils.getIntellijIcon("run"));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener((ActionEvent actionEvent) -> {
 			CommandExecutor executor = new CommandExecutor(configedMain,
