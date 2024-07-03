@@ -21,13 +21,14 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -68,8 +69,6 @@ public class LogPane extends JPanel implements KeyListener {
 
 	private JComboBox<String> jComboBoxSearch;
 
-	private JButton buttonSearch;
-	private JCheckBox jCheckBoxCaseSensitive;
 	private JToolBar jToolBar;
 	private JLabel labelLevel;
 	private AdaptingSlider sliderLevel;
@@ -177,7 +176,6 @@ public class LogPane extends JPanel implements KeyListener {
 		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 
 		searcher = new DocumentSearcher(jTextPane);
-		searcher.setCaseSensitivity(false);
 		highlighter = new DefaultHighlighter();
 		jTextPane.setHighlighter(highlighter);
 
@@ -196,23 +194,24 @@ public class LogPane extends JPanel implements KeyListener {
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
 
+		JToggleButton buttonCaseSensitive = new JToggleButton(Utils.getIntellijIcon("matchCase"));
+		buttonCaseSensitive.setSelectedIcon(Utils.getSelectedIntellijIcon("matchCase"));
+		buttonCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
+		buttonCaseSensitive.setSelected(false);
+		buttonCaseSensitive.addActionListener(event -> searcher.setCaseSensitivity(buttonCaseSensitive.isSelected()));
+
 		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setToolTipText(Configed.getResourceValue("TextPane.jComboBoxSearch.toolTip"));
 		jComboBoxSearch.setEditable(true);
+		((JTextField) jComboBoxSearch.getEditor().getEditorComponent())
+				.putClientProperty("JTextField.trailingComponent", buttonCaseSensitive);
 		jComboBoxSearch.addActionListener((ActionEvent event) -> {
 			search();
 			jTextPane.requestFocusInWindow();
 		});
 
-		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
-
+		JButton buttonSearch = new JButton(Utils.getIntellijIcon("search"));
 		buttonSearch.addActionListener(event -> search());
-
-		jCheckBoxCaseSensitive = new JCheckBox(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive"));
-		jCheckBoxCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
-		jCheckBoxCaseSensitive.setSelected(false);
-		jCheckBoxCaseSensitive
-				.addActionListener(event -> searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected()));
 
 		JButton buttonFontPlus = new JButton(Utils.getIntellijIcon("zoomIn"));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
@@ -223,6 +222,7 @@ public class LogPane extends JPanel implements KeyListener {
 		buttonFontMinus.addActionListener(event -> reduceFontSize());
 
 		jToolBar = new JToolBar();
+		jToolBar.add(buttonSearch);
 		jToolBar.add(buttonFontMinus);
 		jToolBar.add(buttonFontPlus);
 
@@ -253,12 +253,6 @@ public class LogPane extends JPanel implements KeyListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(buttonSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jCheckBoxCaseSensitive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE * 2)
 				.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -277,9 +271,6 @@ public class LogPane extends JPanel implements KeyListener {
 				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
 						.addComponent(labelSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(jComboBoxSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
 						.addComponent(jToolBar, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(labelDisplayRestriction, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
