@@ -9,7 +9,6 @@ package de.uib.utils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.Console;
 import java.io.File;
@@ -432,19 +431,15 @@ public final class Utils {
 	}
 
 	private static Image createMainIcon() {
-		Image mainIcon = null;
+		String iconPath = (Main.isLogviewer() ? Globals.ICON_LOGVIEWER : Globals.ICON_CONFIGED);
+		ImageIcon icon = createImageIcon(iconPath, "");
 
-		String iconPath;
-
-		iconPath = "gui/" + (Main.isLogviewer() ? Globals.ICON_LOGVIEWER : Globals.ICON_CONFIGED);
-
-		URL resource = Globals.class.getResource(iconPath);
-		if (resource == null) {
-			Logging.debug("image resource " + iconPath + "  not found");
+		if (icon != null) {
+			return icon.getImage();
 		} else {
-			mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
+			Logging.warning(Utils.class, "cannot create main icon, icon " + iconPath + "not found");
+			return null;
 		}
-		return mainIcon;
 	}
 
 	public static void setDisableCertificateVerification(boolean disable) {

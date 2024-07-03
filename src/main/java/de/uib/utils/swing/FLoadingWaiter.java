@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -60,8 +59,7 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		ImageIcon icon = Utils.createImageIcon(Globals.ICON_CONFIGED, "");
-		JLabel iconLabel = new JLabel(icon);
+		JLabel iconLabel = new JLabel(Utils.createImageIcon(Globals.ICON_CONFIGED, ""));
 
 		layout.setHorizontalGroup(
 				layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(iconLabel, 150, 150, 150)
