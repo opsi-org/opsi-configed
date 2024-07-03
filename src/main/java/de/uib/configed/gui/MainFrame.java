@@ -751,7 +751,7 @@ public class MainFrame extends JFrame {
 		info.setVisible(true);
 	}
 
-	private void showHealthDataAction() {
+	public void showHealthDataAction() {
 		if (!persistenceController.getHealthDataService().isHealthDataAlreadyLoaded()) {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
 		}

@@ -27,10 +27,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 
 public class IconBarPanel extends JPanel {
-	private JButton jButtonReload;
 	private JButton jButtonReloadLicenses;
-	private JButton jButtonNewClient;
-	private JButton jButtonSetGroup;
 	private JButton jButtonSaveConfiguration;
 
 	private JButton jButtonSessionInfo;
@@ -153,6 +150,12 @@ public class IconBarPanel extends JPanel {
 		jButtonDashboard.setFocusable(false);
 		jButtonDashboard.addActionListener(event -> configedMain.initDashInfo());
 
+		JButton jButtonHealthCheck = new JButton(Utils.getLargeIntellijIcon("springBootHealth"));
+		jButtonHealthCheck.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
+		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		jButtonHealthCheck.setFocusable(false);
+		jButtonHealthCheck.addActionListener(event -> mainFrame.showHealthDataAction());
+
 		JButton jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(32));
 		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
@@ -167,6 +170,7 @@ public class IconBarPanel extends JPanel {
 
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(jButtonDashboard);
+		jToolBar.add(jButtonHealthCheck);
 		jToolBar.add(jButtonOpsiLicenses);
 		jToolBar.add(jButtonLicenses);
 
@@ -174,7 +178,7 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private JToolBar initIconsLeft() {
-		jButtonReload = new JButton(Utils.getLargeIntellijIcon("refresh"));
+		JButton jButtonReload = new JButton(Utils.getLargeIntellijIcon("refresh"));
 		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jButtonReload.setFocusable(false);
 		jButtonReload.addActionListener((ActionEvent e) -> configedMain.reload());
@@ -185,14 +189,14 @@ public class IconBarPanel extends JPanel {
 		jButtonReloadLicenses.setVisible(false);
 		jButtonReloadLicenses.addActionListener((ActionEvent e) -> mainFrame.reloadLicensesAction());
 
-		jButtonNewClient = new JButton(Utils.getLargeIntellijIcon("add"));
+		JButton jButtonNewClient = new JButton(Utils.getLargeIntellijIcon("add"));
 		jButtonNewClient.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonNewClient"));
 		jButtonNewClient.setFocusable(false);
 		jButtonNewClient
 				.setVisible(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
 		jButtonNewClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
-		jButtonSetGroup = new JButton(Utils.getLargeIntellijIcon("search"));
+		JButton jButtonSetGroup = new JButton(Utils.getLargeIntellijIcon("search"));
 		jButtonSetGroup.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		jButtonSetGroup.setFocusable(false);
 		jButtonSetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());

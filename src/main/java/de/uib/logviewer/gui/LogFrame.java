@@ -53,11 +53,6 @@ public class LogFrame extends JFrame {
 	private static String fileName = "";
 	private StandaloneLogPane logPane;
 
-	private JButton iconButtonOpen;
-	private JButton iconButtonReload;
-	private JButton iconButtonSave;
-	private JButton iconButtonCopy;
-
 	public LogFrame() {
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		guiInit();
@@ -152,17 +147,17 @@ public class LogFrame extends JFrame {
 	}
 
 	private JToolBar createIconsToolbar() {
-		iconButtonOpen = new JButton(Utils.getIntellijIcon("open"));
+		JButton iconButtonOpen = new JButton(Utils.getIntellijIcon("open"));
 		iconButtonOpen.setToolTipText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		iconButtonOpen.setFocusable(false);
 		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
-		iconButtonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		JButton iconButtonReload = new JButton(Utils.getIntellijIcon("refresh"));
 		iconButtonReload.setToolTipText(Configed.getResourceValue("LogFrame.buttonReload"));
 		iconButtonReload.setFocusable(false);
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
-		iconButtonSave = new JButton(Utils.getIntellijIcon("download"));
+		JButton iconButtonSave = new JButton(Utils.getIntellijIcon("download"));
 		iconButtonSave.setToolTipText(Configed.getResourceValue("download"));
 		iconButtonSave.setFocusable(false);
 		iconButtonSave.addActionListener((ActionEvent e) -> {
@@ -171,7 +166,7 @@ public class LogFrame extends JFrame {
 			}
 		});
 
-		iconButtonCopy = new JButton(Utils.getIntellijIcon("copy"));
+		JButton iconButtonCopy = new JButton(Utils.getIntellijIcon("copy"));
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
 		iconButtonCopy.setFocusable(false);
 		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
