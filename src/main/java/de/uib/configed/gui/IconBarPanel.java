@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.ButtonGroup;
@@ -57,53 +55,20 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private void init() {
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		JToolBar iconsLeft = initIconsLeft();
+		JLabel opsiLogo = new JLabel(Utils.getOpsiLogoWide());
+		JToolBar targetIcons = initIconPaneTargets();
+		JToolBar extraFrames = initIconPaneExtraFrames();
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.0;
-		c.gridx = 0;
-		c.gridy = 0;
+		GroupLayout layout = new GroupLayout(this);
+		this.setLayout(layout);
 
-		add(initIconsLeft(), c);
+		layout.setVerticalGroup(layout.createParallelGroup().addComponent(iconsLeft).addComponent(opsiLogo)
+				.addComponent(targetIcons).addComponent(extraFrames));
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1.0;
-		c.gridx = 1;
-		c.gridy = 0;
-
-		add(new JLabel(Utils.getOpsiLogoWide()), c);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.0;
-		c.gridx = 2;
-		c.gridy = 0;
-		add(initIconsTopRight(), c);
-	}
-
-	private JPanel initIconsTopRight() {
-		JPanel iconsTopRight = new JPanel();
-		GroupLayout layoutIconPane0 = new GroupLayout(iconsTopRight);
-		iconsTopRight.setLayout(layoutIconPane0);
-
-		JToolBar iconPaneTargets = initIconPaneTargets();
-		JToolBar iconPaneExtraFrames = initIconPaneExtraFrames();
-
-		layoutIconPane0.setHorizontalGroup(
-				layoutIconPane0.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE));
-
-		layoutIconPane0.setVerticalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-
-		return iconsTopRight;
+		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(iconsLeft).addGap(0, 0, Short.MAX_VALUE)
+				.addComponent(opsiLogo).addGap(0, 0, Short.MAX_VALUE).addComponent(targetIcons)
+				.addGap(0, 3 * Globals.GAP_SIZE, 3 * Globals.GAP_SIZE).addComponent(extraFrames));
 	}
 
 	private JToolBar initIconPaneTargets() {
