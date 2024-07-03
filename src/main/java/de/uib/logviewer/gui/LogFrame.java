@@ -149,17 +149,14 @@ public class LogFrame extends JFrame {
 	private JToolBar createIconsToolbar() {
 		JButton iconButtonOpen = new JButton(Utils.getIntellijIcon("open"));
 		iconButtonOpen.setToolTipText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
-		iconButtonOpen.setFocusable(false);
 		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
 
 		JButton iconButtonReload = new JButton(Utils.getIntellijIcon("refresh"));
 		iconButtonReload.setToolTipText(Configed.getResourceValue("LogFrame.buttonReload"));
-		iconButtonReload.setFocusable(false);
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
 
 		JButton iconButtonSave = new JButton(Utils.getIntellijIcon("download"));
 		iconButtonSave.setToolTipText(Configed.getResourceValue("download"));
-		iconButtonSave.setFocusable(false);
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
 				logPane.download();
@@ -168,7 +165,6 @@ public class LogFrame extends JFrame {
 
 		JButton iconButtonCopy = new JButton(Utils.getIntellijIcon("copy"));
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
-		iconButtonCopy.setFocusable(false);
 		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
 
 		JToolBar jToolBar = new JToolBar();

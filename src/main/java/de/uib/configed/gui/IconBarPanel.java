@@ -75,17 +75,14 @@ public class IconBarPanel extends JPanel {
 		JToggleButton jButtonServerConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("editorConfig"));
 		jButtonServerConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("editorConfig", 32));
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
-		jButtonServerConfiguration.setFocusable(false);
 
 		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("dbms"));
 		jButtonDepotsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
-		jButtonDepotsConfiguration.setFocusable(false);
 
 		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getThemeIcon("desktop", 32));
 		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedThemeIntelljIcon("desktop").derive(32, 32));
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
-		jButtonClientsConfiguration.setFocusable(false);
 		jButtonClientsConfiguration.setSelected(true);
 
 		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
@@ -108,22 +105,18 @@ public class IconBarPanel extends JPanel {
 	private JToolBar initIconPaneExtraFrames() {
 		JButton jButtonDashboard = new JButton(Utils.getLargeIntellijIcon("dataSchema"));
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
-		jButtonDashboard.setFocusable(false);
 		jButtonDashboard.addActionListener(event -> configedMain.initDashInfo());
 
 		JButton jButtonHealthCheck = new JButton(Utils.getLargeIntellijIcon("springBootHealth"));
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		jButtonHealthCheck.setFocusable(false);
 		jButtonHealthCheck.addActionListener(event -> mainFrame.showHealthDataAction());
 
 		JButton jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(32));
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(e -> mainFrame.showOpsiModules());
-		jButtonOpsiLicenses.setFocusable(false);
 
 		JButton jButtonLicenses = new JButton(Utils.getLargeIntellijIcon("scriptingScript"));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
-		jButtonLicenses.setFocusable(false);
 		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
 		JToolBar jToolBar = new JToolBar();
@@ -138,36 +131,30 @@ public class IconBarPanel extends JPanel {
 	private JToolBar initIconsLeft() {
 		JButton jButtonReload = new JButton(Utils.getLargeIntellijIcon("refresh"));
 		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
-		jButtonReload.setFocusable(false);
 		jButtonReload.addActionListener((ActionEvent e) -> configedMain.reload());
 
 		jButtonReloadLicenses = new JButton(Utils.getReloadLicensingIcon());
 		jButtonReloadLicenses.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
-		jButtonReloadLicenses.setFocusable(false);
 		jButtonReloadLicenses.setVisible(false);
 		jButtonReloadLicenses.addActionListener((ActionEvent e) -> mainFrame.reloadLicensesAction());
 
 		JButton jButtonNewClient = new JButton(Utils.getLargeIntellijIcon("add"));
 		jButtonNewClient.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonNewClient"));
-		jButtonNewClient.setFocusable(false);
 		jButtonNewClient
 				.setVisible(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
 		jButtonNewClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
 		JButton jButtonSetGroup = new JButton(Utils.getLargeIntellijIcon("search"));
 		jButtonSetGroup.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		jButtonSetGroup.setFocusable(false);
 		jButtonSetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
 
 		jButtonSaveConfiguration = new JButton(Utils.getLargeIntellijIcon("save"));
 		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
-		jButtonSaveConfiguration.setFocusable(false);
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
 		jButtonSessionInfo = new JButton(Utils.getThemeIcon("user", 32));
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
-		jButtonSessionInfo.setFocusable(false);
 		jButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 
 		JToolBar jToolBar = new JToolBar("has a name");
