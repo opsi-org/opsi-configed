@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
@@ -69,8 +70,7 @@ public class LogPane extends JPanel implements KeyListener {
 
 	private JButton buttonSearch;
 	private JCheckBox jCheckBoxCaseSensitive;
-	private JButton buttonFontPlus;
-	private JButton buttonFontMinus;
+	private JToolBar jToolBar;
 	private JLabel labelLevel;
 	private AdaptingSlider sliderLevel;
 	private JLabel labelDisplayRestriction;
@@ -214,13 +214,17 @@ public class LogPane extends JPanel implements KeyListener {
 		jCheckBoxCaseSensitive
 				.addActionListener(event -> searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected()));
 
-		buttonFontPlus = new JButton(Utils.getIntellijIcon("zoomIn"));
+		JButton buttonFontPlus = new JButton(Utils.getIntellijIcon("zoomIn"));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(event -> increaseFontSize());
 
-		buttonFontMinus = new JButton(Utils.getIntellijIcon("zoomOut"));
+		JButton buttonFontMinus = new JButton(Utils.getIntellijIcon("zoomOut"));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(event -> reduceFontSize());
+
+		jToolBar = new JToolBar();
+		jToolBar.add(buttonFontMinus);
+		jToolBar.add(buttonFontPlus);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
 
@@ -256,9 +260,8 @@ public class LogPane extends JPanel implements KeyListener {
 				.addComponent(jCheckBoxCaseSensitive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE * 2)
-				.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE * 2)
 				.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -277,8 +280,7 @@ public class LogPane extends JPanel implements KeyListener {
 						.addComponent(buttonSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jToolBar, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(labelDisplayRestriction, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(comboType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)

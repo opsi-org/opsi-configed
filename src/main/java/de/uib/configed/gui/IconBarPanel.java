@@ -157,7 +157,7 @@ public class IconBarPanel extends JPanel {
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
 		jButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 
-		JToolBar jToolBar = new JToolBar("has a name");
+		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(jButtonReload);
 		jToolBar.add(jButtonReloadLicenses);
 		jToolBar.add(jButtonNewClient);
