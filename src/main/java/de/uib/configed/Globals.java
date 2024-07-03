@@ -149,7 +149,6 @@ public final class Globals {
 	public static final int COUNTERFIELD_WIDTH = 160;
 	public static final Dimension COUTNER_FIELD_DIMENSION = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
 	public static final Dimension NEW_SMALL_BUTTON = new Dimension(30, 30);
-	public static final Dimension MODE_SWITCH_DIMENSION = new Dimension(50, 50);
 
 	// Make width long enough so that it will be not too small for the whole text
 	public static final Dimension LABEL_SIZE_OF_JTREE = new Dimension(500, 20);

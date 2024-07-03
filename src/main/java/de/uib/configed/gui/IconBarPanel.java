@@ -74,19 +74,16 @@ public class IconBarPanel extends JPanel {
 	private JToolBar initIconPaneTargets() {
 		JToggleButton jButtonServerConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("editorConfig"));
 		jButtonServerConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("editorConfig", 32));
-		jButtonServerConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.setFocusable(false);
 
 		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Utils.getLargeIntellijIcon("dbms"));
 		jButtonDepotsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("dbms", 32));
-		jButtonDepotsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.setFocusable(false);
 
 		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getThemeIcon("desktop", 32));
 		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedThemeIntelljIcon("desktop").derive(32, 32));
-		jButtonClientsConfiguration.setSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setFocusable(false);
 		jButtonClientsConfiguration.setSelected(true);
@@ -110,25 +107,21 @@ public class IconBarPanel extends JPanel {
 
 	private JToolBar initIconPaneExtraFrames() {
 		JButton jButtonDashboard = new JButton(Utils.getLargeIntellijIcon("dataSchema"));
-		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.setFocusable(false);
 		jButtonDashboard.addActionListener(event -> configedMain.initDashInfo());
 
 		JButton jButtonHealthCheck = new JButton(Utils.getLargeIntellijIcon("springBootHealth"));
-		jButtonHealthCheck.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jButtonHealthCheck.setFocusable(false);
 		jButtonHealthCheck.addActionListener(event -> mainFrame.showHealthDataAction());
 
 		JButton jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(32));
-		jButtonOpsiLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(e -> mainFrame.showOpsiModules());
 		jButtonOpsiLicenses.setFocusable(false);
 
 		JButton jButtonLicenses = new JButton(Utils.getLargeIntellijIcon("scriptingScript"));
-		jButtonLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jButtonLicenses.setFocusable(false);
 		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
