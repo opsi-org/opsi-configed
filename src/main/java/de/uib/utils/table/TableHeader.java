@@ -71,7 +71,7 @@ public class TableHeader extends PdfPageEventHelper {
 	public void onEndPage(PdfWriter writer, Document document) {
 		PdfPTable table = new PdfPTable(3);
 
-		URL opsiImageURL = getImageResourceURL("opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png");
+		URL opsiImageURL = getImageResourceURL("opsilogos/opsi_logo_wide.png");
 		int headerWidth;
 		int xHeaderTop;
 		if (isLandscape) {
