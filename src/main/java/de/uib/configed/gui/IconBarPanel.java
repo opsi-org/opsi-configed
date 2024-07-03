@@ -90,7 +90,7 @@ public class IconBarPanel extends JPanel {
 		iconsTopRight.setLayout(layoutIconPane0);
 
 		JToolBar iconPaneTargets = initIconPaneTargets();
-		JPanel iconPaneExtraFrames = initIconPaneExtraFrames();
+		JToolBar iconPaneExtraFrames = initIconPaneExtraFrames();
 
 		layoutIconPane0.setHorizontalGroup(
 				layoutIconPane0.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
@@ -146,13 +146,7 @@ public class IconBarPanel extends JPanel {
 		return jToolBarSwitch;
 	}
 
-	private JPanel initIconPaneExtraFrames() {
-		JButton jButtonLicenses = new JButton(Utils.getLargeIntellijIcon("scriptingScript"));
-		jButtonLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
-		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
-		jButtonLicenses.setFocusable(false);
-		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
-
+	private JToolBar initIconPaneExtraFrames() {
 		JButton jButtonDashboard = new JButton(Utils.getLargeIntellijIcon("dataSchema"));
 		jButtonDashboard.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
@@ -165,83 +159,21 @@ public class IconBarPanel extends JPanel {
 		jButtonOpsiLicenses.addActionListener(e -> mainFrame.showOpsiModules());
 		jButtonOpsiLicenses.setFocusable(false);
 
-		JPanel iconPaneExtraFrames = new JPanel();
+		JButton jButtonLicenses = new JButton(Utils.getLargeIntellijIcon("scriptingScript"));
+		jButtonLicenses.setPreferredSize(Globals.MODE_SWITCH_DIMENSION);
+		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
+		jButtonLicenses.setFocusable(false);
+		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
-		GroupLayout layoutIconPaneExtraFrames = new GroupLayout(iconPaneExtraFrames);
-		iconPaneExtraFrames.setLayout(layoutIconPaneExtraFrames);
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(jButtonDashboard);
+		jToolBar.add(jButtonOpsiLicenses);
+		jToolBar.add(jButtonLicenses);
 
-		layoutIconPaneExtraFrames
-				.setHorizontalGroup(layoutIconPaneExtraFrames.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(jButtonLicenses, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE));
-
-		layoutIconPaneExtraFrames.setVerticalGroup(layoutIconPaneExtraFrames.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		return iconPaneExtraFrames;
+		return jToolBar;
 	}
 
-	private JPanel initIconsLeft() {
-		setupIcons();
-		JPanel iconsTopLeft = new JPanel();
-
-		GroupLayout layoutIconPane1 = new GroupLayout(iconsTopLeft);
-		iconsTopLeft.setLayout(layoutIconPane1);
-
-		layoutIconPane1
-				.setHorizontalGroup(
-						layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jButtonReloadLicenses, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jButtonNewClient, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jButtonSetGroup, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(jButtonSaveConfiguration, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE).addComponent(jButtonSessionInfo,
-										Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-										Globals.GRAPHIC_BUTTON_SIZE));
-
-		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(jButtonReloadLicenses, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(jButtonNewClient, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(jButtonSetGroup, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(jButtonSaveConfiguration, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(jButtonSessionInfo, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)));
-
-		return iconsTopLeft;
-	}
-
-	private void setupIcons() {
+	private JToolBar initIconsLeft() {
 		jButtonReload = new JButton(Utils.getLargeIntellijIcon("refresh"));
 		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jButtonReload.setFocusable(false);
@@ -275,6 +207,16 @@ public class IconBarPanel extends JPanel {
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
 		jButtonSessionInfo.setFocusable(false);
 		jButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
+
+		JToolBar jToolBar = new JToolBar("has a name");
+		jToolBar.add(jButtonReload);
+		jToolBar.add(jButtonReloadLicenses);
+		jToolBar.add(jButtonNewClient);
+		jToolBar.add(jButtonSetGroup);
+		jToolBar.add(jButtonSaveConfiguration);
+		jToolBar.add(jButtonSessionInfo);
+
+		return jToolBar;
 	}
 
 	public void showReloadLicensingButton() {

@@ -32,6 +32,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import de.uib.Main;
@@ -150,7 +151,7 @@ public class LogFrame extends JFrame {
 		return jMenuHelp;
 	}
 
-	private void setupIcons() {
+	private JToolBar createIconsToolbar() {
 		iconButtonOpen = new JButton(Utils.getIntellijIcon("open"));
 		iconButtonOpen.setToolTipText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		iconButtonOpen.setFocusable(false);
@@ -174,6 +175,14 @@ public class LogFrame extends JFrame {
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
 		iconButtonCopy.setFocusable(false);
 		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
+
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(iconButtonOpen);
+		jToolBar.add(iconButtonReload);
+		jToolBar.add(iconButtonSave);
+		jToolBar.add(iconButtonCopy);
+
+		return jToolBar;
 	}
 
 	private void guiInit() {
@@ -186,7 +195,7 @@ public class LogFrame extends JFrame {
 
 		this.setIconImage(Utils.getMainIcon());
 
-		setupIcons();
+		JToolBar jToolBar = createIconsToolbar();
 
 		logPane = new StandaloneLogPane();
 
@@ -194,34 +203,10 @@ public class LogFrame extends JFrame {
 		getContentPane().setLayout(layoutIconPane1);
 
 		layoutIconPane1
-				.setHorizontalGroup(
-						layoutIconPane1.createParallelGroup()
-								.addGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE,
-												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE,
-												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE,
-												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE,
-												Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
-								.addComponent(logPane));
+				.setHorizontalGroup(layoutIconPane1.createParallelGroup().addComponent(jToolBar).addComponent(logPane));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(iconButtonOpen, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(iconButtonReload, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(iconButtonSave, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE)
-						.addComponent(iconButtonCopy, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-								Globals.GRAPHIC_BUTTON_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(logPane));
+				.addComponent(jToolBar).addGap(Globals.MIN_GAP_SIZE).addComponent(logPane));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());
