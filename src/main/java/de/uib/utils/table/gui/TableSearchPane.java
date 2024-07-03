@@ -33,7 +33,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -262,9 +261,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		filtermark.addItemListener(event -> filtermarkEvent());
 		filtermark.setVisible(false);
 
-		JToolBar jToolBar = new JToolBar();
-		jToolBar.add(filtermark);
-		flatTextFieldSearch.setTrailingComponent(jToolBar);
+		flatTextFieldSearch.setTrailingComponent(filtermark);
 	}
 
 	private void initPopup() {
