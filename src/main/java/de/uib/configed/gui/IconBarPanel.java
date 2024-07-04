@@ -304,7 +304,7 @@ public class IconBarPanel extends JPanel {
 
 		layoutIconPane1
 				.setHorizontalGroup(
-						layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						layoutIconPane1.createSequentialGroup()
 								.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
