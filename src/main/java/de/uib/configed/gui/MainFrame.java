@@ -554,8 +554,10 @@ public class MainFrame extends JFrame {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(centralPane)
-				.addComponent(statusPane));
+		layout.setVerticalGroup(layout
+				.createSequentialGroup().addComponent(iconBarPanel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(centralPane).addComponent(statusPane));
 
 		layout.setHorizontalGroup(layout
 				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
