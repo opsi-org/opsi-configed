@@ -65,6 +65,7 @@ public class LogPane extends JPanel implements KeyListener {
 	private static final int MAX_LEVEL = 9;
 
 	private JTextPane jTextPane;
+	private JScrollPane jScrollPane;
 	private JLabel labelSearch;
 
 	private JComboBox<String> jComboBoxSearch;
@@ -104,8 +105,6 @@ public class LogPane extends JPanel implements KeyListener {
 	private LogFileParser parser;
 
 	public LogPane(String defaultText, boolean withPopup) {
-		super(new BorderLayout());
-
 		Logging.info(this.getClass(), "initializing");
 		title = "";
 		info = "";
@@ -186,11 +185,11 @@ public class LogPane extends JPanel implements KeyListener {
 		jTextPane.setEditable(true);
 		jTextPane.addKeyListener(this);
 
-		JScrollPane scrollpane = new JScrollPane();
-		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollpane.getVerticalScrollBar().setUnitIncrement(20);
-		scrollpane.getViewport().add(jTextPane);
-		super.add(scrollpane, BorderLayout.CENTER);
+		jScrollPane = new JScrollPane();
+		jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		jScrollPane.getVerticalScrollBar().setUnitIncrement(20);
+		jScrollPane.getViewport().add(jTextPane);
+		super.add(jScrollPane, BorderLayout.CENTER);
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
 
@@ -244,30 +243,31 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	private void setLayout() {
-		JPanel commandpane = new JPanel();
-		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
-		commandpane.setLayout(layoutCommandpane);
+		GroupLayout layoutCommandpane = new GroupLayout(this);
+		setLayout(layoutCommandpane);
 
-		layoutCommandpane.setHorizontalGroup(layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE * 2)
-				.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE * 2)
-				.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(comboType, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE * 2)
-				.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
-				.addGap(Globals.GAP_SIZE));
+		layoutCommandpane.setHorizontalGroup(layoutCommandpane.createParallelGroup().addComponent(jScrollPane)
+				.addGroup(layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE * 2)
+						.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE * 2)
+						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(comboType, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE * 2)
+						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
+						.addGap(Globals.GAP_SIZE)));
 
-		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup().addComponent(jScrollPane)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
 						.addComponent(labelSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(jComboBoxSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -279,8 +279,6 @@ public class LogPane extends JPanel implements KeyListener {
 						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
 
 				).addGap(Globals.MIN_GAP_SIZE));
-
-		super.add(commandpane, BorderLayout.SOUTH);
 	}
 
 	private void applyType() {

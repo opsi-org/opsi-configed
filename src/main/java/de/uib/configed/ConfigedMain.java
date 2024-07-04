@@ -634,7 +634,7 @@ public class ConfigedMain implements MessagebusListener {
 		if (groupActionFrame == null) {
 			groupActionFrame = new FGroupActions(this);
 			groupActionFrame.setSize(1000, 300);
-			groupActionFrame.centerOnParent();
+			groupActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 			allFrames.add(groupActionFrame);
 		}
@@ -647,7 +647,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (productActionFrame == null) {
 			productActionFrame = new FCompleteWinProducts();
-			productActionFrame.centerOnParent();
+			productActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			allFrames.add(productActionFrame);
 		}
 

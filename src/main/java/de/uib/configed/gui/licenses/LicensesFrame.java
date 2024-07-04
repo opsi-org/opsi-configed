@@ -6,13 +6,11 @@
 
 package de.uib.configed.gui.licenses;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -27,8 +25,7 @@ public class LicensesFrame extends SecondaryFrame {
 	private List<LicensesTabStatus> tabOrder;
 
 	public LicensesFrame(ConfigedMain configedMain) {
-		super();
-		super.add(createPanel(configedMain));
+		super.add(createTabbedPane(configedMain));
 	}
 
 	@Override
@@ -37,12 +34,7 @@ public class LicensesFrame extends SecondaryFrame {
 		setExtendedState(Frame.NORMAL);
 	}
 
-	private JPanel createPanel(ConfigedMain configedMain) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.setSize(600, 400);
-
-		panel.setLayout(new BorderLayout());
+	private JTabbedPane createTabbedPane(ConfigedMain configedMain) {
 		jTabbedPaneMain = new JTabbedPane(SwingConstants.TOP);
 
 		tabOrder = new ArrayList<>();
@@ -64,8 +56,7 @@ public class LicensesFrame extends SecondaryFrame {
 			}
 		});
 
-		panel.add(jTabbedPaneMain, BorderLayout.CENTER);
-		return panel;
+		return jTabbedPaneMain;
 	}
 
 	public void addTab(LicensesTabStatus s, String title, Component c) {

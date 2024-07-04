@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -25,6 +24,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -38,7 +38,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -551,10 +550,17 @@ public class MainFrame extends JFrame {
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(iconBarPanel, BorderLayout.NORTH);
-		getContentPane().add(centralPane, BorderLayout.CENTER);
-		getContentPane().add(statusPane, BorderLayout.SOUTH);
+
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(centralPane)
+				.addComponent(statusPane));
+
+		layout.setHorizontalGroup(layout
+				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
+						.addComponent(iconBarPanel).addComponent(centralPane).addComponent(statusPane))
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
 
@@ -614,7 +620,6 @@ public class MainFrame extends JFrame {
 				scrollpaneTreeProducts);
 
 		jTabbedPaneClientSelection.setSelectedIndex(1);
-		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
 
 		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,

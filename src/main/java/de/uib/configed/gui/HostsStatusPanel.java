@@ -168,7 +168,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		GroupLayout layoutStatusPane = new GroupLayout(this);
 		this.setLayout(layoutStatusPane);
 
-		layoutStatusPane.setHorizontalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+		layoutStatusPane.setHorizontalGroup(layoutStatusPane.createSequentialGroup()
 				.addComponent(labelAllClientsCount, 0, Globals.COUNTERFIELD_WIDTH, Globals.COUNTERFIELD_WIDTH)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(labelActivated, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -190,10 +190,10 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelInvolvedDepots, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(connectionStateLabel).addGap(Globals.GAP_SIZE));
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(connectionStateLabel));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
