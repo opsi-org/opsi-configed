@@ -218,7 +218,7 @@ public class PanelHWByAuditDriver extends JPanel {
 
 		fDriverUpload.setSize(Globals.HELPER_FORM_DIMENSION);
 		fDriverUpload.setVisible(true);
-		fDriverUpload.centerOnParent();
+		fDriverUpload.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		fDriverUpload.setUploadParameters(byAuditPath);
 	}
