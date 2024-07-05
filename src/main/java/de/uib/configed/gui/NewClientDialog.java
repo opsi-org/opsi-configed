@@ -686,6 +686,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	}
 
 	private static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
+		Logging.info("createCSVImportDataDialog for file " + csvFile);
 		List<String> columnNames = HostInfo.getKeysForCSV();
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
 		try {
