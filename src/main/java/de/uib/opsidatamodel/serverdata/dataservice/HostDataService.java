@@ -104,7 +104,9 @@ public class HostDataService {
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
 			boolean uefiBoot = Boolean.parseBoolean((String) client.get(11));
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(12));
-			String opsiHostKey = ((String) client.get(13)).trim();
+
+			// An empty String is an illegal opsiHostKey, so we replace it with null
+			String opsiHostKey = ((String) client.get(13)).isBlank() ? null : ((String) client.get(13)).trim();
 
 			String newClientId = hostname + "." + domainname;
 
