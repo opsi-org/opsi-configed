@@ -732,6 +732,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		JPanel centerPanel = dialog.initPanel();
 		dialog.setCenterPaneInScrollpane(centerPanel);
 		dialog.setupLayout();
+		dialog.setSize(1000, 420);
 		dialog.setVisible(true);
 	}
 
