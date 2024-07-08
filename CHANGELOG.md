@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.4.x.x] - 2024-xx-xx
+
+### Fixed
+- Errors with table and opsi-host-key in CSV client import
+- Buttons in CSV template dialog on bottom not shown completely
+
+
 ## [4.3.3.9] - 2024-06-27
 
 ### Changed
