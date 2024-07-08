@@ -71,10 +71,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
-		if (centerPanel == null) {
-			centerPanel = new JPanel();
-		}
-
 		northPanel = createNorthPanel();
 		southPanel = createSouthPanel();
 
