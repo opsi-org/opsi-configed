@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.3.10] - 2024-07-08
+## [4.4.x.x] - 2024-xx-xx
 
 ### Fixed
 - Errors with table and opsi-host-key in CSV client import
