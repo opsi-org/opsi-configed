@@ -30,11 +30,11 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon objectIcon;
 	private ImageIcon objectSelectedIcon;
 
-	private ImageIcon groupIcon = Utils.getThemeIconPNG("bootstrap/group", "group unselected");
-	private ImageIcon groupContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected", "group selected");
+	private ImageIcon groupIcon = Utils.getThemeIcon("groups", 16);
+	private ImageIcon groupContainsSelectedIcon = Utils.getThemeFilledIcon("groups", 16);
 
-	private ImageIcon groupOpenIcon = Utils.getThemeIconPNG("bootstrap/group_open", "");
-	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeIconPNG("bootstrap/group_selected_open", "");
+	private ImageIcon groupOpenIcon = Utils.getThemeIcon("groups_open", 16);
+	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeFilledIcon("groups_open", 16);
 
 	public GroupTreeRenderer(AbstractGroupTree abstractGroupTree) {
 		this.abstractGroupTree = abstractGroupTree;
@@ -42,11 +42,11 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
 
 		if (abstractGroupTree instanceof ClientTree) {
-			objectIcon = Utils.getThemeIconPNG("bootstrap/laptop", "client");
-			objectSelectedIcon = Utils.getThemeIconPNG("bootstrap/laptop_selected", "client");
+			objectIcon = Utils.getThemeIcon("desktop", 16);
+			objectSelectedIcon = Utils.getThemeFilledIcon("desktop", 16);
 		} else {
-			objectIcon = Utils.getThemeIconPNG("bootstrap/product", "client");
-			objectSelectedIcon = Utils.getThemeIconPNG("bootstrap/product_selected", "client");
+			objectIcon = Utils.getThemeIcon("package", 16);
+			objectSelectedIcon = Utils.getThemeFilledIcon("package", 16);
 		}
 	}
 

@@ -103,12 +103,10 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 
 		activateListSelectionListener();
 
-		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(table), true);
+		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, table), true);
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_WITH_ALTERNATIVES_SEARCH);
-		searchPane.setFiltering(true);
+		searchPane.setFiltering();
 
-		// filter icon inside searchpane
-		searchPane.showFilterIcon(true);
 		table.addKeyListener(searchPane);
 		table.addKeyListener(this);
 
@@ -138,8 +136,8 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		selectionModel.removeListSelectionListener(this);
 	}
 
-	public void setFilterMark(boolean b) {
-		searchPane.setFilterMark(b);
+	public boolean isFilteredMode() {
+		return searchPane.isFilteredMode();
 	}
 
 	public JTable getTable() {
@@ -192,6 +190,10 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 	public synchronized void addMouseListener(MouseListener l) {
 		scrollpane.addMouseListener(l);
 		table.addMouseListener(l);
+	}
+
+	public void setFilterMark(boolean selected) {
+		searchPane.setFilterMark(selected);
 	}
 
 	public boolean isSelectionEmpty() {

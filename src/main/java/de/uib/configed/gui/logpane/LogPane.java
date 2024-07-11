@@ -21,13 +21,15 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
@@ -68,10 +70,7 @@ public class LogPane extends JPanel implements KeyListener {
 
 	private JComboBox<String> jComboBoxSearch;
 
-	private JButton buttonSearch;
-	private JCheckBox jCheckBoxCaseSensitive;
-	private JButton buttonFontPlus;
-	private JButton buttonFontMinus;
+	private JToolBar jToolBar;
 	private JLabel labelLevel;
 	private AdaptingSlider sliderLevel;
 	private JLabel labelDisplayRestriction;
@@ -176,7 +175,6 @@ public class LogPane extends JPanel implements KeyListener {
 		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 
 		searcher = new DocumentSearcher(jTextPane);
-		searcher.setCaseSensitivity(false);
 		highlighter = new DefaultHighlighter();
 		jTextPane.setHighlighter(highlighter);
 
@@ -195,31 +193,37 @@ public class LogPane extends JPanel implements KeyListener {
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
 
+		JToggleButton buttonCaseSensitive = new JToggleButton(Utils.getIntellijIcon("matchCase"));
+		buttonCaseSensitive.setSelectedIcon(Utils.getSelectedIntellijIcon("matchCase"));
+		buttonCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
+		buttonCaseSensitive.setSelected(false);
+		buttonCaseSensitive.addActionListener(event -> searcher.setCaseSensitivity(buttonCaseSensitive.isSelected()));
+
 		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setToolTipText(Configed.getResourceValue("TextPane.jComboBoxSearch.toolTip"));
 		jComboBoxSearch.setEditable(true);
+		((JTextField) jComboBoxSearch.getEditor().getEditorComponent())
+				.putClientProperty("JTextField.trailingComponent", buttonCaseSensitive);
 		jComboBoxSearch.addActionListener((ActionEvent event) -> {
 			search();
 			jTextPane.requestFocusInWindow();
 		});
 
-		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
-
+		JButton buttonSearch = new JButton(Utils.getIntellijIcon("search"));
 		buttonSearch.addActionListener(event -> search());
 
-		jCheckBoxCaseSensitive = new JCheckBox(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive"));
-		jCheckBoxCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
-		jCheckBoxCaseSensitive.setSelected(false);
-		jCheckBoxCaseSensitive
-				.addActionListener(event -> searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected()));
-
-		buttonFontPlus = new JButton(Utils.getThemeIconPNG("bootstrap/zoom_in", ""));
+		JButton buttonFontPlus = new JButton(Utils.getIntellijIcon("zoomIn"));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(event -> increaseFontSize());
 
-		buttonFontMinus = new JButton(Utils.getThemeIconPNG("bootstrap/zoom_out", ""));
+		JButton buttonFontMinus = new JButton(Utils.getIntellijIcon("zoomOut"));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(event -> reduceFontSize());
+
+		jToolBar = new JToolBar();
+		jToolBar.add(buttonSearch);
+		jToolBar.add(buttonFontMinus);
+		jToolBar.add(buttonFontPlus);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
 
@@ -248,16 +252,9 @@ public class LogPane extends JPanel implements KeyListener {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(buttonSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCheckBoxCaseSensitive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE * 2)
-						.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE * 2)
 						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -274,11 +271,7 @@ public class LogPane extends JPanel implements KeyListener {
 				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
 						.addComponent(labelSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(jComboBoxSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jToolBar, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(labelDisplayRestriction, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(comboType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -309,12 +302,12 @@ public class LogPane extends JPanel implements KeyListener {
 		Integer[] popups;
 
 		if (Main.isLogviewer()) {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
-					PopupMenuTrait.POPUP_FLOATINGCOPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
+					PopupMenuTrait.POPUP_FLOATING_COPY };
 		} else {
-			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
-					PopupMenuTrait.POPUP_SAVE_AS_ZIP, PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATINGCOPY };
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DOWNLOAD,
+					PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP, PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP,
+					PopupMenuTrait.POPUP_FLOATING_COPY };
 		}
 
 		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
@@ -333,16 +326,16 @@ public class LogPane extends JPanel implements KeyListener {
 			reload();
 			break;
 
-		case PopupMenuTrait.POPUP_SAVE:
-			save();
+		case PopupMenuTrait.POPUP_DOWNLOAD:
+			download();
 			break;
-		case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
-			saveAsZip();
+		case PopupMenuTrait.POPUP_DOWNLOAD_AS_ZIP:
+			downloadAsZip();
 			break;
-		case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
-			saveAllAsZip();
+		case PopupMenuTrait.POPUP_DOWNLOAD_ALL_AS_ZIP:
+			downloadAllAsZip();
 			break;
-		case PopupMenuTrait.POPUP_FLOATINGCOPY:
+		case PopupMenuTrait.POPUP_FLOATING_COPY:
 			floatExternal();
 			break;
 
@@ -418,15 +411,15 @@ public class LogPane extends JPanel implements KeyListener {
 		setLevelWithoutAction(produceInitialMaxShowLevel());
 	}
 
-	public void save() {
+	public void download() {
 		Logging.debug(this, "save action");
 	}
 
-	protected void saveAsZip() {
+	protected void downloadAsZip() {
 		Logging.debug(this, "save as zip action");
 	}
 
-	protected void saveAllAsZip() {
+	protected void downloadAllAsZip() {
 		Logging.debug(this, "save all as zip action");
 	}
 

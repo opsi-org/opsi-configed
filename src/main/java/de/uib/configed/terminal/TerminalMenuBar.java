@@ -59,7 +59,7 @@ public class TerminalMenuBar extends JMenuBar {
 	}
 
 	private JMenu createViewMenu() {
-		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
+		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.zoomIn"));
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
 			TerminalWidget widget = frame.getTabbedPane().getSelectedTerminalWidget();
@@ -68,7 +68,7 @@ public class TerminalMenuBar extends JMenuBar {
 			}
 		});
 
-		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
+		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.zoomOut"));
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
 			TerminalWidget widget = frame.getTabbedPane().getSelectedTerminalWidget();

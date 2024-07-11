@@ -21,7 +21,6 @@ import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.PanelGenEditTable;
@@ -56,8 +55,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		super.setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
 
 		jButton1.setEnabled(false);
-		jButton1.setIcon(Utils.createImageIcon("images/cancel.png", ""));
-		jButton2.setIcon(Utils.createImageIcon("images/edit-delete.png", ""));
 
 		initDataStructure();
 	}

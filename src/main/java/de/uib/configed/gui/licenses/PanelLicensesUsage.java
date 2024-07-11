@@ -24,7 +24,6 @@ import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelLicensesUsage;
 import de.uib.configed.Globals;
 import de.uib.utils.swing.AutoCompletionComboBox;
@@ -105,11 +104,9 @@ public class PanelLicensesUsage extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelUsage.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panelUsage.setFiltering(true);
-		panelUsage.showFilterIcon(true);
+		panelUsage.setFiltering();
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 

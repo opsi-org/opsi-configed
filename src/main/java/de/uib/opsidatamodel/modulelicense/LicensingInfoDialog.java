@@ -22,8 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
@@ -164,19 +162,18 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	private JPanel initClientInfo() {
 		retrieveData();
 
+		JLabel orangeWarningColor = new JLabel();
+		orangeWarningColor.setOpaque(true);
+		orangeWarningColor.setBackground(Globals.OPSI_WARNING);
+
+		JLabel redWarningColor = new JLabel();
+		redWarningColor.setOpaque(true);
+		redWarningColor.setBackground(Globals.OPSI_ERROR);
+
 		JLabel orangeWarningLabel = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning") + "</html>");
-
 		JLabel redWarningLabel = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
-
-		if (FlatLaf.isLafDark()) {
-			orangeWarningLabel.setIcon(Utils.createImageIcon("images/warning_orange_dark.png", ""));
-			redWarningLabel.setIcon(Utils.createImageIcon("images/warning_red_dark.png", ""));
-		} else {
-			orangeWarningLabel.setIcon(Utils.createImageIcon("images/warning_orange.png", ""));
-			redWarningLabel.setIcon(Utils.createImageIcon("images/warning_red.png", ""));
-		}
 
 		JLabel warningLevelAbsolute = new JLabel(
 				"<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
@@ -226,7 +223,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 			thePanel.reload();
 		});
 
-		JButton buttonReload = new JButton(Utils.createImageIcon("images/reload16.png", ""));
+		JButton buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
 		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
 		buttonReload.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
@@ -251,9 +248,10 @@ public class LicensingInfoDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(
-						gLayout.createSequentialGroup().addComponent(redWarningLabel).addGap(20)
-								.addComponent(orangeWarningLabel))
+				.addGroup(gLayout.createSequentialGroup().addComponent(redWarningColor, 10, 10, 10)
+						.addComponent(redWarningLabel).addGap(0, 0, Short.MAX_VALUE).addComponent(orangeWarningColor,
+								10, 10, 10)
+						.addComponent(orangeWarningLabel))
 				.addGroup(
 						gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15).addComponent(
 								warningLevelPercent).addGap(15).addComponent(
@@ -270,13 +268,11 @@ public class LicensingInfoDialog extends FGeneralDialog {
 												.addComponent(allClientNum).addComponent(macosNum)
 												.addComponent(linuxNum).addComponent(windowsNum)))
 								.addComponent(checksumTitle).addComponent(checksum))
-						.addGap(60)
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(customerTitle)
-								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										.addComponent(customerNames)))));
+						.addGap(60).addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(customerTitle).addComponent(customerNames))));
 
 		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -284,8 +280,9 @@ public class LicensingInfoDialog extends FGeneralDialog {
 						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(redWarningLabel)
-						.addComponent(orangeWarningLabel))
+				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(redWarningColor, 10, 10, 10).addComponent(redWarningLabel)
+						.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
 				.addGap(15)
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
 						.addComponent(warningLevelPercent).addComponent(warningLevelDays))
@@ -299,13 +296,8 @@ public class LicensingInfoDialog extends FGeneralDialog {
 										.addComponent(linux).addComponent(windows))
 								.addGroup(gLayout.createSequentialGroup().addComponent(allClientNum)
 										.addComponent(macosNum).addComponent(linuxNum).addComponent(windowsNum)))
-						.addGap(30)
-						.addGroup(
-								gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(checksumTitle))
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(gLayout.createSequentialGroup().addComponent(checksum)).addGap(20)))
-						.addGap(30).addGroup(gLayout.createSequentialGroup()
-								.addGroup(gLayout.createSequentialGroup().addComponent(customerNames)))));
+						.addGap(30).addComponent(checksumTitle).addComponent(checksum)).addGap(30)
+						.addComponent(customerNames)));
 
 		return panel;
 	}

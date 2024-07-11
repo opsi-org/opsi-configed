@@ -73,8 +73,6 @@ public final class ClientMenuManager implements MenuListener {
 	private JMenuItem jMenuFreeLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
 	private JMenuItem jMenuDeletePackageCaches = new JMenuItem(
 			Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
-	private JCheckBoxMenuItem jMenuClientSelectionToggleFilter = new JCheckBoxMenuItem(
-			Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
@@ -107,10 +105,6 @@ public final class ClientMenuManager implements MenuListener {
 		return instance;
 	}
 
-	public JCheckBoxMenuItem getClientSelectionToggleFilterMenu() {
-		return jMenuClientSelectionToggleFilter;
-	}
-
 	public JMenu getJMenu() {
 		return jMenuClients;
 	}
@@ -129,16 +123,15 @@ public final class ClientMenuManager implements MenuListener {
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		jMenuSelectionGetSavedSearch.addActionListener(event -> configedMain.clientSelectionGetSavedSearch());
 
-		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
-				Utils.createImageIcon("images/reload16.png", ""));
+		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
+		Utils.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");
 		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
-		jMenuClientSelectionToggleFilter.setState(false);
-		jMenuClientSelectionToggleFilter.addActionListener(event -> mainFrame.toggleClientFilterAction());
 
-		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
-				Utils.createImageIcon("images/acrobat_reader16.png", ""));
+		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
+		Utils.addThemeIconToMenuItem(jMenuCreatePdf, "anyType");
 		jMenuCreatePdf.addActionListener(event -> createPdf());
 
+		Utils.addIntellijIconToMenuItem(jMenuAddClient, "add");
 		jMenuAddClient.addActionListener(event -> configedMain.callNewClientDialog());
 
 		jMenuDeletePackageCaches.addActionListener(event -> configedMain.deletePackageCachesOfSelectedClients());
@@ -158,12 +151,17 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShutdownClient.addActionListener(event -> configedMain.shutdownSelectedClients());
 		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
+
+		Utils.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
 		jMenuDeleteClient.addActionListener(event -> configedMain.deleteSelectedClients());
+
 		jMenuCopyClient.addActionListener(event -> configedMain.copySelectedClient());
 		jMenuFreeLicenses.addActionListener(event -> configedMain.freeAllPossibleLicensesForSelectedClients());
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		jMenuRemoteControl
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
+
+		Utils.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
 		jMenuClients.add(jMenuWakeOnLan);
@@ -200,8 +198,6 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(jMenuSelectionGetSavedSearch);
 
 		jMenuClients.addSeparator();
-
-		jMenuClients.add(jMenuClientSelectionToggleFilter);
 
 		jMenuClients.add(jMenuRebuildClientList);
 		jMenuClients.add(jMenuCreatePdf);
@@ -535,6 +531,7 @@ public final class ClientMenuManager implements MenuListener {
 			sourceItem.addItemListener(event -> clonedItem.setSelected(sourceItem.isSelected()));
 		} else {
 			clonedItem = new JMenuItem(sourceItem.getText(), sourceItem.getIcon());
+			clonedItem.setSelectedIcon(sourceItem.getSelectedIcon());
 			clonedItem.setAccelerator(sourceItem.getAccelerator());
 			clonedItem.setEnabled(sourceItem.isEnabled());
 		}

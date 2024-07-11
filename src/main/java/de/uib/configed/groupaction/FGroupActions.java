@@ -25,7 +25,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GlassPane;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -160,8 +159,8 @@ public class FGroupActions extends SecondaryFrame {
 
 		buttonSetup.addActionListener(actionEvent -> replay());
 
-		IconButton buttonReload = new IconButton(Configed.getResourceValue("reloadData"), "images/reload16.png",
-				"images/reload16_over.png", "images/reload16_disabled.png", true);
+		JButton buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		buttonReload.setToolTipText(Configed.getResourceValue("reloadData"));
 
 		buttonReload.addActionListener(actionEvent -> reload());
 

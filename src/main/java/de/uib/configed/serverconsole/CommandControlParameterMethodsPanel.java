@@ -23,9 +23,9 @@ import javax.swing.text.JTextComponent;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.serverconsole.command.CommandParameterParser;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class CommandControlParameterMethodsPanel extends JPanel {
@@ -87,12 +87,12 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 			jComboBoxParameterFormats.setEnabled(enabled);
 		});
 
-		jButtonTestParam = new IconButton(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"),
-				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
+		jButtonTestParam = new JButton(Utils.getIntellijIcon("run"));
+		jButtonTestParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"));
 		jButtonTestParam.setPreferredSize(jButtonDim);
 
-		jButtonAddParam = new IconButton(Configed.getResourceValue("CommandControlDialog.btnAddParamMethod"),
-				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
+		jButtonAddParam = new JButton(Utils.getIntellijIcon("add"));
+		jButtonAddParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnAddParamMethod"));
 		jButtonAddParam.setSize(jButtonDim);
 		jButtonAddParam.setPreferredSize(jButtonDim);
 		setComponentsEnabledRO();

@@ -16,6 +16,7 @@ import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -25,11 +26,11 @@ import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
 import de.uib.utils.swing.list.StandardListCellRenderer;
@@ -39,9 +40,9 @@ public class ProductActionPanel extends JPanel {
 	private TableSearchPane searchPane;
 	private JTable tableProducts;
 
-	private IconButton buttonReloadProductStates;
+	private JButton buttonReloadProductStates;
 
-	private IconButton buttonExecuteNow;
+	private JButton buttonExecuteNow;
 
 	private PanelProductSettings associate;
 
@@ -56,11 +57,6 @@ public class ProductActionPanel extends JPanel {
 
 	public void updateSearchFields() {
 		searchPane.setSearchFieldsAll();
-	}
-
-	public void setFilteredMode(boolean b) {
-		Logging.debug(this, "setGuiIsFiltered " + b);
-		searchPane.setFilteredMode(b);
 	}
 
 	public boolean isFilteredMode() {
@@ -79,19 +75,16 @@ public class ProductActionPanel extends JPanel {
 		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
 				true);
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
-		searchPane.setFiltering(true);
-
-		// filter icon inside searchpane
-		searchPane.showFilterIcon(true);
+		searchPane.setFiltering();
 	}
 
 	private void initComponents() {
-		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"),
-				"images/reload16.png", "images/reload16.png", "", true);
+		buttonReloadProductStates = new JButton(Utils.getIntellijIcon("refresh"));
+		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
-		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
-				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", "", true);
+		buttonExecuteNow = new JButton(Utils.getIntellijIcon("run"));
+		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
 		Map<String, String> values = new LinkedHashMap<>();
@@ -209,5 +202,9 @@ public class ProductActionPanel extends JPanel {
 		}
 
 		associate.setSelection(new HashSet<>(saveSelectedProducts));
+	}
+
+	public void setFilterMark(boolean selected) {
+		searchPane.setFilterMark(selected);
 	}
 }

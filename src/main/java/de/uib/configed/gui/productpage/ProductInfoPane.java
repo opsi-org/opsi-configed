@@ -10,12 +10,12 @@ import java.awt.Font;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
@@ -34,14 +34,12 @@ public class ProductInfoPane extends JSplitPane {
 	private JLabel jLabelProductName;
 
 	private JLabel dependenciesTextLabel;
-	private JButton dependenciesActivateButton;
+	private JToggleButton dependenciesActivateButton;
 	private JLabel depotForDependenciesLabel;
 	private PanelProductDependencies panelProductDependencies;
-	private boolean isPanelProductDependenciesVisible;
 
 	private AbstractPanelEditProperties panelEditProperties;
-	private JButton propertiesActivateButton;
-	private boolean isPanelEditPropertiesVisible = true;
+	private JToggleButton propertiesActivateButton;
 
 	private JSplitPane productSplitPane;
 	private TextMarkdownPane jTextAreaProductAdvice;
@@ -99,13 +97,16 @@ public class ProductInfoPane extends JSplitPane {
 		productSplitPane.setDividerLocation(Globals.PREF_VSIZE);
 		productSplitPane.setResizeWeight(0.5);
 
-		dependenciesActivateButton = new JButton(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
+		dependenciesActivateButton = new JToggleButton(Utils.getIntellijIcon("arrowRight"));
+		dependenciesActivateButton.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
 		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
-		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
+		dependenciesActivateButton.setFocusable(false);
+		panelProductDependencies.setVisible(false);
 
-		propertiesActivateButton = new JButton(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
+		propertiesActivateButton = new JToggleButton(Utils.getIntellijIcon("arrowRight"), true);
+		propertiesActivateButton.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
 		propertiesActivateButton.addActionListener(event -> togglePropertiesActive());
-		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
+		propertiesActivateButton.setFocusable(false);
 	}
 
 	private void setupLayout() {
@@ -201,28 +202,12 @@ public class ProductInfoPane extends JSplitPane {
 	}
 
 	private void toggleDependenciesActive() {
-		isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
-
-		setActivatedButton(dependenciesActivateButton, isPanelProductDependenciesVisible);
-
-		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
+		panelProductDependencies.setVisible(dependenciesActivateButton.isSelected());
 	}
 
 	private void togglePropertiesActive() {
-		isPanelEditPropertiesVisible = !isPanelEditPropertiesVisible;
-
-		setActivatedButton(propertiesActivateButton, isPanelEditPropertiesVisible);
-
-		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
-		panelEditProperties.setTitlePanelActivated(isPanelEditPropertiesVisible);
-	}
-
-	private static void setActivatedButton(JButton jButton, boolean isPropertiesVisible) {
-		if (isPropertiesVisible) {
-			jButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_down_fill", ""));
-		} else {
-			jButton.setIcon(Utils.getThemeIconPNG("bootstrap/caret_right_fill", ""));
-		}
+		panelEditProperties.setVisible(propertiesActivateButton.isSelected());
+		panelEditProperties.setTitlePanelActivated(propertiesActivateButton.isSelected());
 	}
 
 	private static String fillEmpty(String content) {

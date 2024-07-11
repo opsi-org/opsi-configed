@@ -250,8 +250,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
 
-	private boolean filterClientList;
-
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER
 	}
@@ -359,14 +357,11 @@ public class ConfigedMain implements MessagebusListener {
 			Logging.warning(this, "Messagebus is not open, but should be on start");
 		}
 
-		setEditingTarget(EditingTarget.CLIENTS);
-
 		anyDataChanged = false;
 
 		Logging.debug(this, "initialTreeActivation");
 
 		mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
-		mainFrame.enableAfterLoading();
 	}
 
 	private List<String> readLocallySavedServerNames() {
@@ -718,13 +713,17 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "toggleLicensesFrame is visible" + licensesFrame.isVisible());
 		licensesFrame.setLocationRelativeTo(mainFrame);
 		licensesFrame.setVisible(true);
-		mainFrame.getIconBarPanel().visualizeLicensesFramesActive(true);
+		mainFrame.getIconBarPanel().showReloadLicensingButton();
 	}
 
 	public void setEditingTarget(EditingTarget t) {
 		Logging.info(this, "setEditingTarget " + t);
+		if (t == editingTarget) {
+			Logging.info(this, "stop setting editingTarget, it remains the same");
+			return;
+		}
+
 		editingTarget = t;
-		mainFrame.getIconBarPanel().visualizeEditingTarget(t);
 		int previousViewIndex = getViewIndex();
 		// what else to do:
 		switch (t) {
@@ -1209,9 +1208,9 @@ public class ConfigedMain implements MessagebusListener {
 
 		clientsForTableModel.retainAll(clientsFilteredByTree);
 
-		Logging.info(this, " filterClientList " + filterClientList);
+		Logging.info(this, " filterClientList " + isFilterClientList());
 
-		if (filterClientList) {
+		if (isFilterClientList()) {
 			Logging.info(this,
 					"buildPclistTableModel with filterCLientList, number of selected pcs " + selectedClients.size());
 
@@ -1411,14 +1410,12 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public boolean isFilterClientList() {
-		return filterClientList;
+		return clientTable.isFilteredMode();
 	}
 
-	public void toggleFilterClientList(boolean rebuildClientListTableModel, boolean filterClientList) {
-		Logging.info(this, "toggleFilterClientList   " + filterClientList + " rebuild client list table model "
-				+ rebuildClientListTableModel);
+	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
+		Logging.info(this, "toggleFilterClientList, rebuild client list table model " + rebuildClientListTableModel);
 
-		this.filterClientList = filterClientList;
 		if (rebuildClientListTableModel) {
 			setRebuiltClientListTableModel(true, false, clientTable.getSelectedSet());
 		}
@@ -1437,7 +1434,7 @@ public class ConfigedMain implements MessagebusListener {
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
 			column.setCellRenderer(
-					new BooleanIconTableCellRenderer(Utils.createImageIcon("bootstrap/check_green.png", ""), null));
+					new BooleanIconTableCellRenderer(Utils.getIntellijIcon("checkmark", Globals.OPSI_OK), null));
 		}
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
@@ -1500,8 +1497,7 @@ public class ConfigedMain implements MessagebusListener {
 			TableColumn column = clientTable.getColumnModel().getColumn(col);
 			Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-			column.setCellRenderer(
-					new BooleanIconTableCellRenderer(Utils.getThemeIconPNG("bootstrap/check", ""), null));
+			column.setCellRenderer(new BooleanIconTableCellRenderer(Utils.getIntellijIcon("checkmark"), null));
 		}
 	}
 
@@ -1694,6 +1690,8 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
+		clientTable.setFilterMark(false);
+
 		clientsFilteredByTree.clear();
 		if (selTreePaths != null) {
 			for (TreePath selectionPath : selTreePaths) {
@@ -1744,8 +1742,8 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "activateClientByTree, pathToNode: " + pathToNode);
 
 		// since we select based on the tree view we disable the filter
-		if (filterClientList) {
-			mainFrame.toggleClientFilterAction(false);
+		if (isFilterClientList()) {
+			toggleFilterClientList(false);
 		}
 	}
 
@@ -1788,8 +1786,8 @@ public class ConfigedMain implements MessagebusListener {
 		activatedGroupModel.setActive(true);
 
 		// since we select based on the tree view we disable the filter
-		if (filterClientList) {
-			mainFrame.toggleClientFilterAction();
+		if (isFilterClientList()) {
+			toggleFilterClientList(true);
 		}
 	}
 
@@ -2478,14 +2476,12 @@ public class ConfigedMain implements MessagebusListener {
 			requestReloadStatesAndActions();
 
 			mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
-			mainFrame.enableAfterLoading();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
 
 			productTree.reInitTree();
 			clientTree.reInitTree();
 			fetchDepots();
-			setEditingTarget(editingTarget);
 
 			// if depot selection changed, we adapt the clients
 			NavigableSet<String> clientsLeft = new TreeSet<>();
@@ -2780,7 +2776,7 @@ public class ConfigedMain implements MessagebusListener {
 	public void getSessionInfo() {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
 		setColumnSessionInfo(true);
-		mainFrame.getIconBarPanel().getIconButtonSessionInfo().setEnabled(false);
+		mainFrame.getIconBarPanel().getjButtonSessionInfo().setEnabled(false);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
 		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());
 		infoRetriever.execute();
@@ -3121,7 +3117,7 @@ public class ConfigedMain implements MessagebusListener {
 			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
 			savedSearchesDialog.init();
 		} else {
-			savedSearchesDialog.start();
+			savedSearchesDialog.resetModel();
 		}
 	}
 
@@ -3198,7 +3194,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getHostDataService().deleteClients(selectedClients);
 
 		if (isFilterClientList()) {
-			mainFrame.toggleClientFilterAction();
+			toggleFilterClientList(true);;
 		}
 
 		refreshClientListKeepingGroup();

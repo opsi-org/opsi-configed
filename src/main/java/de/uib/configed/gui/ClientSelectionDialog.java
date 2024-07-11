@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,6 +15,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +27,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.swing.AbstractButton;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -74,6 +81,7 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.LowerCaseTextField;
 import de.uib.utils.swing.TextInputField;
@@ -99,8 +107,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private GroupLayout.ParallelGroup hGroupData;
 	private JPanel contentPane;
 	private JComboBox<String> newElementBox;
-	private IconAsButton buttonReload;
-	private IconAsButton buttonRestart;
+	private JButton buttonReload;
+	private JButton buttonRestart;
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
 	private JButton saveButton;
@@ -206,30 +214,18 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
 
-		saveButton = new JButton(Configed.getResourceValue("save"));
+		saveButton = new JButton(Utils.getIntellijIcon("save"));
+		saveButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.saveSearchTooltip"));
 		saveButton.addActionListener(actionEvent -> save());
 
-		buttonReload = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonReload"),
-				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
-				"images/reload16_disabled.png");
-
+		buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
 		buttonReload.addActionListener((ActionEvent e) -> reload());
 
-		buttonRestart = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"),
-				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
-				"images/reload16_disabled.png");
+		buttonRestart = new JButton(Utils.getIntellijIcon("reset"));
+		buttonRestart.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"));
 
-		buttonRestart.addActionListener((ActionEvent e) -> {
-			Logging.info(this, "actionPerformed");
-			buttonRestart.setEnabled(false);
-			buttonReload.setEnabled(false);
-
-			SwingUtilities.invokeLater(() -> {
-				manager.getBackend().setReloadRequested();
-				configedMain.callNewClientSelectionDialog();
-				// we lose all components of this dialog, there is nothing to reset
-			});
-		});
+		buttonRestart.addActionListener((ActionEvent e) -> restart());
 
 		additionalLayout.setHorizontalGroup(additionalLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -239,9 +235,12 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-				.addGap(Globals.GAP_SIZE).addComponent(buttonReload, 20, 20, 20).addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(buttonRestart, 20, 20, 20).addGap(Globals.GAP_SIZE));
+				.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE));
 
 		additionalLayout.setVerticalGroup(additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(saveNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -349,6 +348,19 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		});
 	}
 
+	private void restart() {
+		Logging.info(this, "actionPerformed");
+		buttonRestart.setEnabled(false);
+		buttonReload.setEnabled(false);
+		setCursor(Globals.WAIT_CURSOR);
+		SwingUtilities.invokeLater(() -> {
+			manager.getBackend().setReloadRequested();
+			configedMain.callNewClientSelectionDialog();
+			setCursor(null);
+			// we lose all components of this dialog, there is nothing to reset
+		});
+	}
+
 	/* This creates one line with element, operation, data, ... */
 	private SimpleGroup createSimpleGroup(AbstractSelectElement element) {
 		SimpleGroup result = new SimpleGroup();
@@ -359,13 +371,12 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			return result;
 		}
 
-		result.negateButton = new IconAsButton("", "images/boolean_not_disabled.png", "images/boolean_not_over.png",
-				"images/boolean_not.png", null);
-		result.negateButton.setActivated(false);
+		result.negateButton = createNOTCheckBox();
+
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
-		result.negateButton.addActionListener(this::notButtonAction);
-		result.connectionType = new AndOrSelectButtonByIcon();
+
+		result.connectionType = createANDORCheckBox();
 		result.connectionType.addActionListener(actionEvent -> buildParentheses());
 		result.connectionType.setMaximumSize(new Dimension(result.connectionType.getMaximumSize().width,
 				result.connectionType.getPreferredSize().height));
@@ -388,13 +399,11 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.dataComponent = new JLabel();
 		result.dataComponent.setMaximumSize(new Dimension(result.dataComponent.getMaximumSize().width,
 				result.dataComponent.getPreferredSize().height));
-		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
-				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);
-		result.openParenthesis.setActivated(true);
+
+		result.openParenthesis = createParenthesisCheckBox("(", false);
 		result.openParenthesis.setVisible(false);
-		result.closeParenthesis = new IconAsButton("", "images/parenthesis_close_disabled.png",
-				"images/parenthesis_close_over.png", "images/parenthesis_close.png", null);
-		result.closeParenthesis.setActivated(true);
+
+		result.closeParenthesis = createParenthesisCheckBox(")", false);
 		result.closeParenthesis.setVisible(false);
 
 		result.vRow = layout.createParallelGroup();
@@ -426,6 +435,74 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 
 		return result;
+	}
+
+	private static JCheckBox createNOTCheckBox() {
+		JCheckBox jCheckBox = new JCheckBox(new ImageIcon());
+		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setForeground(Globals.OPSI_WARNING);
+		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "not" : ""));
+
+		jCheckBox.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				jCheckBox.setText("not");
+				jCheckBox.setForeground(new Color(Globals.OPSI_WARNING.getRed(), Globals.OPSI_WARNING.getGreen(),
+						Globals.OPSI_WARNING.getBlue(), 128));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				jCheckBox.setText(jCheckBox.isSelected() ? "not" : "");
+				jCheckBox.setForeground(Globals.OPSI_WARNING);
+			}
+		});
+
+		return jCheckBox;
+	}
+
+	private static JCheckBox createANDORCheckBox() {
+		JCheckBox jCheckBox = new JCheckBox("and", new ImageIcon(), true);
+		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setForeground(Globals.OPSI_WARNING);
+
+		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
+
+		jCheckBox.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				jCheckBox.setText(jCheckBox.isSelected() ? "or" : "and");
+				jCheckBox.setForeground(new Color(Globals.OPSI_WARNING.getRed(), Globals.OPSI_WARNING.getGreen(),
+						Globals.OPSI_WARNING.getBlue(), 128));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or");
+				jCheckBox.setForeground(Globals.OPSI_WARNING);
+			}
+		});
+
+		return jCheckBox;
+	}
+
+	private static JCheckBox createParenthesisCheckBox(String type, boolean enabled) {
+		JCheckBox jCheckBox = new JCheckBox(type, new ImageIcon(), true);
+		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setDisabledIcon(new ImageIcon());
+		jCheckBox.setEnabled(enabled);
+
+		jCheckBox.addItemListener((ItemEvent itemEvent) -> {
+			// We change the alpha value of the item. When the checkbox is not selected, it will be less visible
+			int alpha = jCheckBox.isSelected() ? 255 : 64;
+			Color foreground = jCheckBox.getForeground();
+			foreground = new Color(foreground.getRed(), foreground.getGreen(), foreground.getBlue(), alpha);
+			jCheckBox.setForeground(foreground);
+		});
+
+		// We want to macke the parenthesis a little larger
+		jCheckBox.setFont(jCheckBox.getFont().deriveFont((float) (jCheckBox.getFont().getSize() + 5)));
+		return jCheckBox;
 	}
 
 	private ComplexGroup createHostGroup() {
@@ -516,27 +593,21 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private ComplexGroup createComplexGroup() {
 		ComplexGroup result = new ComplexGroup();
 
-		result.removeButton = new IconAsButton("", "images/user-trash.png", "images/user-trash_over.png",
-				"images/user-trash.png", "images/user-trash_disabled.png");
-		result.removeButton.setMaximumSize(new Dimension(result.removeButton.getPreferredSize().width,
-				result.removeButton.getPreferredSize().height));
+		result.removeButton = new JButton(Utils.getIntellijIcon("delete"));
 		result.removeButton.addActionListener(this::removeButton);
-		result.negateButton = new IconAsButton("", "images/boolean_not_disabled.png", "images/boolean_not_over.png",
-				"images/boolean_not.png", null);
-		result.negateButton.setActivated(false);
+
+		result.negateButton = createNOTCheckBox();
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
-		result.negateButton.addActionListener(this::notButtonAction);
+
 		result.topLabel = new JLabel();
 		result.topLabel.setMaximumSize(
 				new Dimension(result.topLabel.getMaximumSize().width, result.removeButton.getPreferredSize().height));
 
 		result.topLabel.setFont(result.topLabel.getFont().deriveFont(Font.BOLD));
 
-		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
-				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);
-		result.openParenthesis.setActivated(false);
-		result.openParenthesis.addActionListener(ClientSelectionDialog::parenthesisAction);
+		result.openParenthesis = createParenthesisCheckBox("(", true);
+		result.openParenthesis.setSelected(false);
 
 		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
 		vRow.addComponent(result.topLabel, GroupLayout.Alignment.CENTER, 20, 20, 20);
@@ -555,11 +626,10 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	/* This creates the bottom line of a complex group */
 	private void createComplexBottom(ComplexGroup group) {
-		group.closeParenthesis = new IconAsButton("", "images/parenthesis_close_disabled.png",
-				"images/parenthesis_close_over.png", "images/parenthesis_close.png", null);
-		group.closeParenthesis.setActivated(false);
-		group.closeParenthesis.addActionListener(ClientSelectionDialog::parenthesisAction);
-		group.connectionType = new AndOrSelectButtonByIcon();
+		group.closeParenthesis = createParenthesisCheckBox(")", true);
+		group.closeParenthesis.setSelected(false);
+
+		group.connectionType = createANDORCheckBox();
 		group.connectionType.addActionListener(actionEvent -> buildParentheses());
 		group.connectionType.setMaximumSize(new Dimension(group.connectionType.getMaximumSize().width,
 				group.connectionType.getPreferredSize().height));
@@ -621,9 +691,9 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		info.setOperation(null);
 		info.setParenthesisOpen(group.openParenthesis.isVisible());
 		info.setParenthesisClose(group.closeParenthesis.isVisible());
-		boolean andSelected = group.connectionType.isAndSelected();
+		boolean andSelected = group.connectionType.isSelected();
 		Logging.debug(this, group.element.getPath() + ": AND selected: " + andSelected);
-		boolean notSelected = group.negateButton.isActivated();
+		boolean notSelected = group.negateButton.isSelected();
 		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
 	}
@@ -631,10 +701,10 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static OperationWithStatus getInformation(ComplexGroup group) {
 		OperationWithStatus info = new OperationWithStatus();
 		info.setOperation(null);
-		info.setParenthesisOpen(group.openParenthesis.isActivated());
-		info.setParenthesisClose(group.closeParenthesis.isActivated());
-		boolean andSelected = group.connectionType.isAndSelected();
-		boolean notSelected = group.negateButton.isActivated();
+		info.setParenthesisOpen(group.openParenthesis.isSelected());
+		info.setParenthesisClose(group.closeParenthesis.isSelected());
+		boolean andSelected = group.connectionType.isSelected();
+		boolean notSelected = group.negateButton.isSelected();
 		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
 	}
@@ -681,12 +751,12 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				continue;
 			}
 
-			if (group.connectionType.isAndSelected() && inOr) {
+			if (group.connectionType.isSelected() && inOr) {
 				inOr = false;
 				group.closeParenthesis.setVisible(true);
 			}
 
-			if (group.connectionType.isOrSelected() && !inOr) {
+			if (!group.connectionType.isSelected() && !inOr) {
 				inOr = true;
 				group.openParenthesis.setVisible(true);
 			}
@@ -709,16 +779,16 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private void repairParentheses() {
 		Deque<ComplexGroup> stack = new ArrayDeque<>();
 		for (ComplexGroup complex : complexElements) {
-			if (complex.openParenthesis.isActivated() && complex.closeParenthesis.isActivated()) {
-				complex.openParenthesis.setActivated(false);
-				complex.closeParenthesis.setActivated(false);
-			} else if (complex.openParenthesis.isActivated()) {
+			if (complex.openParenthesis.isSelected() && complex.closeParenthesis.isSelected()) {
+				complex.openParenthesis.setSelected(false);
+				complex.closeParenthesis.setSelected(false);
+			} else if (complex.openParenthesis.isSelected()) {
 				stack.push(complex);
-			} else if (complex.closeParenthesis.isActivated()) {
+			} else if (complex.closeParenthesis.isSelected()) {
 				if (!stack.isEmpty()) {
 					stack.pop();
 				} else {
-					complex.closeParenthesis.setActivated(false);
+					complex.closeParenthesis.setSelected(false);
 				}
 			} else {
 				// Do nothing when no parenthesis is activated
@@ -726,7 +796,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 
 		for (ComplexGroup stackElement : stack) {
-			stackElement.openParenthesis.setActivated(false);
+			stackElement.openParenthesis.setSelected(false);
 		}
 	}
 
@@ -973,37 +1043,37 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 	}
 
-	private static void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not, ConnectionStatus status) {
+	private static void setConnectionTypes(JCheckBox andOr, AbstractButton not, ConnectionStatus status) {
 		switch (status) {
 		case AND:
-			andOr.selectAnd();
+			andOr.setSelected(true);
 			break;
 		case OR:
-			andOr.selectOr();
+			andOr.setSelected(false);
 			break;
 		case AND_NOT:
-			andOr.selectAnd();
-			not.setActivated(true);
+			andOr.setSelected(true);
+			not.setSelected(true);
 			break;
 		case OR_NOT:
-			andOr.selectOr();
-			not.setActivated(true);
+			andOr.setSelected(false);
+			not.setSelected(true);
 			break;
 		}
 	}
 
 	private static class SimpleGroup {
 		private AbstractSelectElement element;
-		private IconAsButton negateButton;
-		private AndOrSelectButtonByIcon connectionType;
+		private JCheckBox negateButton;
+		private JCheckBox connectionType;
 		private JLabel elementLabel;
 
 		// may be JLabel or JComboBox
 		private JComponent operationComponent;
 		private JComponent dataComponent;
 		private GroupLayout.ParallelGroup vRow;
-		private IconAsButton openParenthesis;
-		private IconAsButton closeParenthesis;
+		private JCheckBox openParenthesis;
+		private JCheckBox closeParenthesis;
 	}
 
 	public enum GroupType {
@@ -1012,13 +1082,13 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	private static class ComplexGroup {
 		private GroupType type;
-		private IconAsButton removeButton;
-		private IconAsButton negateButton;
+		private JButton removeButton;
+		private JCheckBox negateButton;
 		private JLabel topLabel;
-		private AndOrSelectButtonByIcon connectionType;
+		private JCheckBox connectionType;
 		private Deque<SimpleGroup> groupList;
-		private IconAsButton openParenthesis;
-		private IconAsButton closeParenthesis;
+		private JCheckBox openParenthesis;
+		private JCheckBox closeParenthesis;
 
 		@Override
 		public String toString() {
@@ -1119,23 +1189,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		contentPane.revalidate();
 		contentPane.repaint();
-	}
-
-	private void notButtonAction(ActionEvent event) {
-		if (!(event.getSource() instanceof IconAsButton)) {
-			return;
-		}
-		IconAsButton button = (IconAsButton) event.getSource();
-		button.setActivated(!button.isActivated());
-		Logging.debug(this, "Negate button is activated: " + button.isActivated());
-	}
-
-	private static void parenthesisAction(ActionEvent event) {
-		if (!(event.getSource() instanceof IconAsButton)) {
-			return;
-		}
-		IconAsButton button = (IconAsButton) event.getSource();
-		button.setActivated(!button.isActivated());
 	}
 
 	private void save() {

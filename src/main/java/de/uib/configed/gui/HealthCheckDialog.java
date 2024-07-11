@@ -205,7 +205,8 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
+		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("download"));
+		Utils.addIntellijIconToMenuItem(popupSaveAsZip, "download");
 
 		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
 		popupMenu.add(popupSaveAsZip);
@@ -417,9 +418,8 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 				if (!((String) healthInfo.get("details")).isBlank()) {
 					Style iconStyle = styledDocument.addStyle("iconStyle", null);
-					String imagePath = (boolean) healthInfo.get("showDetails") ? "bootstrap/caret_down_fill"
-							: "bootstrap/caret_right_fill";
-					StyleConstants.setIcon(iconStyle, Utils.getThemeIconPNG(imagePath, ""));
+					String imagePath = (boolean) healthInfo.get("showDetails") ? "arrowDown" : "arrowRight";
+					StyleConstants.setIcon(iconStyle, Utils.getIntellijIcon(imagePath));
 					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), " ",
 							iconStyle);
 				} else {

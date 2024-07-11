@@ -146,7 +146,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		if (withPopup) {
 			PopupMenuTrait popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD,
-					PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATINGCOPY }) {
+					PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY }) {
 				@Override
 				public void action(int p) {
 					switch (p) {
@@ -154,7 +154,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						reload();
 						break;
 
-					case PopupMenuTrait.POPUP_FLOATINGCOPY:
+					case PopupMenuTrait.POPUP_FLOATING_COPY:
 						floatExternal();
 						break;
 					case PopupMenuTrait.POPUP_PDF:

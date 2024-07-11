@@ -162,35 +162,39 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			if (keylistExtendible) {
 				popupItemAddStringListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
-				popupEditOptions.add(popupItemAddStringListEntry);
+				Utils.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
+				popupEditOptions.add(popupItemAddStringListEntry);
 
 				popupItemAddStringListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
-				popupEditOptions.add(popupItemAddStringListEntry);
+				Utils.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
+				popupEditOptions.add(popupItemAddStringListEntry);
 
 				popupItemAddBooleanListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
-				popupEditOptions.add(popupItemAddBooleanListEntry);
+				Utils.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
 				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean"));
+				popupEditOptions.add(popupItemAddBooleanListEntry);
 			}
 
 			if (entryRemovable) {
 				popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
+				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
 				popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
 
 				popupEditOptions.add(popupItemDeleteEntry0);
 				// the menu item seems to work only for one menu
 
-				popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText(),
-						Utils.createImageIcon("images/no-value.png", ""));
+				popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
+				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry1, "remove");
 				popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
-				popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
-						Utils.createImageIcon("images/fixed-value.png", ""));
+				popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
+				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry2, "locked");
 				popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry2);

@@ -19,7 +19,6 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
@@ -41,33 +40,27 @@ public class PanelEditLicenses extends MultiTablePanel {
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelKeys.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panelKeys.showFilterIcon(true);
-		panelKeys.setFiltering(true);
+		panelKeys.setFiltering();
 
 		panelSoftwarelicenses = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSoftwarelicense"), true, 2,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelSoftwarelicenses.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelSoftwarelicenses.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		panelSoftwarelicenses.setFiltering(true);
-		panelSoftwarelicenses.showFilterIcon(true);
+		panelSoftwarelicenses.setFiltering();
 
 		panelLicensecontracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
-		panelLicensecontracts.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelLicensecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelLicensecontracts.showFilterIcon(true);
-		panelLicensecontracts.setFiltering(true);
+		panelLicensecontracts.setFiltering();
 		panelLicensecontracts.setAwareOfTableChangedListener(true);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);

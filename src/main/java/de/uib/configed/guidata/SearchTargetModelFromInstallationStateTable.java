@@ -30,12 +30,10 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 	}
 
 	@Override
-	public void setFiltered(boolean b) {
-		if (!filtered) {
+	public void setFiltered(boolean filtered) {
+		if (filtered) {
 			selectedRows = table.getSelectedRows();
-		}
 
-		if (b && selectedRows.length > 0) {
 			int[] modelRowFilter = new int[selectedRows.length];
 			for (int i = 0; i < selectedRows.length; i++) {
 				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
@@ -45,8 +43,7 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 
 			panelProductSettings.reduceToSelected();
 		} else {
-			panelProductSettings.showAll();
+			panelProductSettings.valueChanged(false);
 		}
-		filtered = b;
 	}
 }

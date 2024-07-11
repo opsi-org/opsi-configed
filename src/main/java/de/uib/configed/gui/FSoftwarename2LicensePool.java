@@ -187,15 +187,14 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	}
 
 	private void initLayout() {
-		JButton buttonRemoveAllAssignments = new JButton(Utils.createImageIcon("images/list-remove-14.png", ""));
+		JButton buttonRemoveAllAssignments = new JButton(Utils.getIntellijIcon("remove"));
 		buttonRemoveAllAssignments.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		JLabel labelRemoveAllAssignments = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(VALUE_NO_LICENSE_POOL)));
 
-		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(
-				Utils.createImageIcon("images/list-add-14.png", ""));
+		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(Utils.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
 		buttonSetAllAssignmentsToGloballySelectedPool.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		labelSetAllAssignmentsToGloballySelectedPool = new JLabel(
@@ -203,7 +202,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		buttonSetAllAssignmentsToGloballySelectedPool
 				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(globalLicensePool)));
 
-		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton(Utils.createImageIcon("images/list-add-14.png", ""));
+		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton(Utils.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(

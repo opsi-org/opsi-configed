@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.TreeMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
@@ -70,15 +72,8 @@ public class SavedSearchesDialog extends FEditStringList {
 		setListModel(model);
 		resetModel();
 
-		buttonAdd.setVisible(true);
-		buttonRemove.setVisible(false);
+		buttonClear.setVisible(false);
 		extraField.setVisible(false);
-	}
-
-	public void start() {
-		buttonAdd.setEnabled(true);
-
-		resetModel();
 	}
 
 	@Override
@@ -94,10 +89,10 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		// redefine buttonCommit
 		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
-		buttonCommit.setIcon(Utils.createImageIcon("images/executing_command_red_22.png", ""));
-		buttonCommit.setSelectedIcon(Utils.createImageIcon("images/executing_command_red_22.png", ""));
-		buttonCommit.setDisabledIcon(Utils.createImageIcon("images/execute_disabled.png", ""));
-		buttonCommit.setPreferredSize(new java.awt.Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
+		buttonCommit.setIcon(Utils.getIntellijIcon("run"));
+		buttonCommit.setSelectedIcon(null);
+		buttonCommit.setDisabledIcon(null);
+		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));
 	}
@@ -106,37 +101,35 @@ public class SavedSearchesDialog extends FEditStringList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonRemove.addActionListener((ActionEvent e) -> {
-			Logging.debug(this, "actionPerformed");
-			removeSelectedEntry();
-		});
-
-		buttonRemove.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
-
-		buttonAdd.setEnabled(true);
-		buttonAdd.addActionListener((ActionEvent e) -> {
-			Logging.debug(this, "actionPerformed on buttonAdd ");
-			addElement();
-		});
-
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
-		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
+		Utils.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "reload action");
 			reloadAction();
 		});
-		popup.add(reload);
 
-		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
+		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveSearch"));
+		Utils.addIntellijIconToMenuItem(remove, "remove");
 		remove.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "remove action");
 			removeSelectedEntry();
 		});
-		popup.add(remove);
 
 		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
+		Utils.addIntellijIconToMenuItem(edit, "edit");
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
-		popup.add(edit);
+
+		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
+		Utils.addIntellijIconToMenuItem(add, "add");
+		add.addActionListener(event -> addElement());
+
+		JPopupMenu jPopupMenu = new JPopupMenu();
+		jPopupMenu.add(reload);
+		jPopupMenu.add(remove);
+		jPopupMenu.add(edit);
+		jPopupMenu.add(add);
+
+		visibleList.setComponentPopupMenu(jPopupMenu);
 	}
 
 	@Override

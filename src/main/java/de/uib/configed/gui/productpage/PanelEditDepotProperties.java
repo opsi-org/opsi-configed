@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -24,6 +23,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -36,7 +36,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.DepotListCellRenderer;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
@@ -67,8 +66,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	}
 
 	private void initComponents() {
-		JPanel panelDepots = new JPanel();
-
 		listDepots = new JList<>();
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);
@@ -82,46 +79,24 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JScrollPane scrollpaneDepots = new JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
 
-		JPopupMenu popupDepot = new JPopupMenu();
-		listDepots.setComponentPopupMenu(popupDepot);
+		JPopupMenu jPopupMenu = new JPopupMenu();
+		JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
+		selectAll.addActionListener(event -> selectAllDepots());
 
-		JButton buttonSelectWithEqualProperties = new JButton(Utils.createImageIcon("images/equalplus.png", ""));
-		buttonSelectWithEqualProperties
-				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
-		buttonSelectWithEqualProperties.setFocusable(false);
-		buttonSelectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
+		JMenuItem selectWithEqualProperties = new JMenuItem(
+				Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
+		selectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 
-		JButton buttonSelectAll = new JButton(Utils.createImageIcon("images/plusplus.png", ""));
-		buttonSelectAll.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
-		buttonSelectAll.setFocusable(false);
-		buttonSelectAll.addActionListener(event -> selectAllDepots());
-
-		GroupLayout layoutPanelDepots = new GroupLayout(panelDepots);
-		panelDepots.setLayout(layoutPanelDepots);
-
-		layoutPanelDepots.setVerticalGroup(layoutPanelDepots.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(scrollpaneDepots, GroupLayout.Alignment.LEADING, 0, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				.addComponent(buttonSelectWithEqualProperties, GroupLayout.Alignment.TRAILING,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonSelectAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-
-		layoutPanelDepots.setHorizontalGroup(layoutPanelDepots.createSequentialGroup()
-				.addComponent(scrollpaneDepots, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSelectWithEqualProperties, 0, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		jPopupMenu.add(selectAll);
+		jPopupMenu.add(selectWithEqualProperties);
+		listDepots.setComponentPopupMenu(jPopupMenu);
 
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
 
-		IconButton buttonSetValuesFromPackage = new IconButton(
-				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),
-				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", "", true);
-
-		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
-
+		JButton buttonSetValuesFromPackage = new JButton(Utils.getIntellijIcon("remove"));
+		buttonSetValuesFromPackage
+				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"));
 		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
 
 		JPanel panelTop = new JPanel();
@@ -129,11 +104,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		panelTop.setLayout(layoutEditProperties);
 
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(panelDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, 40, 40, 40));
+				.addComponent(scrollpaneDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
-				.addComponent(panelDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpaneDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 

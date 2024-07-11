@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -25,6 +26,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public final class ThemeManager {
@@ -52,6 +54,21 @@ public final class ThemeManager {
 		default:
 			Logging.warning("Cannot find translation for theme " + theme);
 			return null;
+		}
+	}
+
+	public static void setThemeIcon(AbstractButton abstractButton, String theme) {
+		switch (theme) {
+		case THEME_LIGHT:
+			Utils.addIntellijIconToMenuItem(abstractButton, "lightTheme");
+			break;
+
+		case THEME_DARK:
+			Utils.addIntellijIconToMenuItem(abstractButton, "darkTheme");
+			break;
+
+		default:
+			Logging.warning("Cannot find translation for theme " + theme);
 		}
 	}
 

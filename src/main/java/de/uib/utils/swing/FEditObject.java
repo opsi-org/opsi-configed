@@ -22,22 +22,22 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.formdev.flatlaf.extras.components.FlatTextField;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -57,15 +57,14 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected JPanel loggingPanel;
 	private JSplitPane splitPane;
 
-	protected IconButton buttonCommit;
-	protected IconButton buttonCancel;
-	protected IconButton buttonAdd;
-	protected IconButton buttonRemove;
+	protected JButton buttonCommit;
+	protected JButton buttonCancel;
+	protected JButton buttonClear;
+	protected JButton buttonAdd;
 
 	protected boolean editable = true;
 
-	protected JTextField extraField;
-	private JLabel extraLabel;
+	protected FlatTextField extraField;
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
@@ -86,14 +85,12 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
+		buttonClear.addActionListener(this);
+		buttonAdd.addActionListener(this);
 
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
-
-		buttonRemove.addActionListener(this);
-		buttonRemove.addKeyListener(this);
-
-		buttonAdd.addActionListener(this);
+		buttonClear.addKeyListener(this);
 		buttonAdd.addKeyListener(this);
 	}
 
@@ -114,32 +111,30 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
-				"images/apply_disabled.png", true);
+		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new IconButton(Configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel.setToolTipText(Configed.getResourceValue("FEditObject.CancelButtonTooltip"));
 		buttonCancel.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
-		buttonRemove = new IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
-				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
-		buttonRemove.setVisible(false);
+		buttonClear = new JButton();
+		buttonClear.setIcon(Utils.getIntellijIcon("clearCash"));
+		buttonClear.setToolTipText(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"));
+		buttonClear.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
+		buttonClear.setVisible(false);
 
-		buttonAdd = new IconButton(Configed.getResourceValue("FEditObject.AddButtonTooltip"), "images/list-add.png",
-				"images/list-add.png", "images/list-add_disabled.png", true);
+		buttonAdd = new JButton(Utils.getIntellijIcon("add"));
+		buttonAdd.setToolTipText(Configed.getResourceValue("FEditObject.AddButtonTooltip"));
 		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
-		buttonAdd.setVisible(false);
+		buttonAdd.setEnabled(false);
 
-		extraField = new JTextField();
+		extraField = new FlatTextField();
+		extraField.setTrailingComponent(buttonAdd);
 		extraField.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraField.setVisible(false);
-
-		extraLabel = new JLabel();
-		extraLabel.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-		extraLabel.setVisible(false);
 	}
 
 	public void setDividerLocation(double loc) {
@@ -159,29 +154,23 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 						.addGroup(layout1.createSequentialGroup()
 								.addComponent(buttonCancel, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCommit, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE, 2 * Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-								.addComponent(buttonRemove, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonAdd, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(extraLabel, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
+								.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
+								.addComponent(buttonClear, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addGap(Globals.MIN_GAP_SIZE));
 
 		layout1.setVerticalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(editingArea, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout1.createParallelGroup(Alignment.BASELINE)
+				.addGroup(layout1.createParallelGroup(Alignment.CENTER)
 						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonRemove, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonAdd, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(buttonClear, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(extraField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(extraLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)));
 
@@ -260,14 +249,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected void initEditing() {
 		Logging.debug(this, "FEditObject.initEditing");
 		setDataChanged(false);
-		buttonAdd.setEnabled(false);
-		buttonRemove.setEnabled(false);
 		extraField.setText("");
-	}
-
-	public void setExtraLabel(String s) {
-		extraLabel.setVisible(true);
-		extraLabel.setText(s);
 	}
 
 	public void enter() {
@@ -343,7 +325,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			commit();
 		} else if (e.getSource() == buttonCancel) {
 			cancel();
-		} else if (e.getSource() == buttonRemove || e.getSource() == buttonAdd) {
+		} else if (e.getSource() == buttonAdd || e.getSource() == buttonClear) {
 			// These buttons will be used only in subclasses
 		} else {
 			Logging.warning(this, "unexpected action on source " + e.getSource());

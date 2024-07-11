@@ -596,7 +596,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelWindowsSoftwareIds.chainFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				new TableModelFilter(windowsSoftwareFilterConditonShowOnlySelected));
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, false);
-		thePanel.getPanelRegisteredSoftware().showFilterIcon(true);
 
 		windowsSoftwareFilterConditionDontShowAssociatedToOtherPool = new DefaultTableModelFilterCondition(
 				WINDOWS_SOFTWARE_ID_KEY_COL);
@@ -629,8 +628,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		col = thePanel.getPanelRegisteredSoftware().getColumnModel().getColumn(COLUMN_MARK_CURSOR_ROW);
 		col.setMaxWidth(12);
-		col.setCellRenderer(new BooleanIconTableCellRenderer(Utils.createImageIcon("images/minibarpointerred.png", ""),
-				Utils.createImageIcon("images/minibarpointervoid.png", "")));
+		col.setCellRenderer(new BooleanIconTableCellRenderer(Utils.getIntellijIcon("localChanges"), null));
 
 		col = thePanel.getPanelRegisteredSoftware().getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);
 		col.setMaxWidth(MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE);
@@ -899,9 +897,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		if (oldDirection != direction) {
 			if (direction == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
-				thePanel.getPanelRegisteredSoftware().getTheSearchpane().showFilterIcon(true);
+				thePanel.getPanelRegisteredSoftware().getTheSearchpane().setFiltering();
 			} else if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
-				thePanel.getPanelRegisteredSoftware().getTheSearchpane().showFilterIcon(false);
 				resetCounters(null);
 				thePanel.getFieldCountAssignedInEditing().setText("");
 			} else {

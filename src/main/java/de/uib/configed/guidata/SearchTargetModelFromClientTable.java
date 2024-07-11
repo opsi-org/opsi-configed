@@ -13,8 +13,12 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModelFromTable;
 
 public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable {
-	public SearchTargetModelFromClientTable(JTable table) {
+	private ConfigedMain configedMain;
+
+	public SearchTargetModelFromClientTable(ConfigedMain configedMain, JTable table) {
 		super(table);
+
+		this.configedMain = configedMain;
 
 		Logging.info(this.getClass(), "table null? " + (table == null));
 	}
@@ -26,8 +30,6 @@ public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable
 
 	@Override
 	public void setFiltered(boolean b) {
-		ConfigedMain.getMainFrame().setClientFilterAction(b);
-
-		filtered = b;
+		configedMain.toggleFilterClientList(true);
 	}
 }

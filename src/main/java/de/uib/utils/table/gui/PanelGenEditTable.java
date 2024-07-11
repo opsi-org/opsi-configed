@@ -31,7 +31,7 @@ import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JFrame;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -54,7 +54,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
-import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
@@ -82,7 +81,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	public static final int POPUP_SAVE = PopupMenuTrait.POPUP_SAVE; // 8
 
-	public static final int POPUP_FLOATINGCOPY = PopupMenuTrait.POPUP_FLOATINGCOPY; // 14
+	public static final int POPUP_FLOATING_COPY = PopupMenuTrait.POPUP_FLOATING_COPY; // 14
 
 	public static final int POPUP_PDF = PopupMenuTrait.POPUP_PDF; // 21
 
@@ -116,8 +115,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	protected JTable theTable;
 	protected GenTableModel tableModel;
 
-	private IconButton buttonCommit;
-	private IconButton buttonCancel;
+	private JButton buttonCommit;
+	private JButton buttonCancel;
 	private JLabel jLabelTitle;
 
 	private JPopupMenu popupMenu;
@@ -136,8 +135,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	private boolean withTablesearchPane;
 
 	protected TableSearchPane searchPane;
-
-	private boolean filteringActive;
 
 	private String title = "";
 
@@ -221,17 +218,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		}
 
 		return result;
-	}
-
-	/**
-	 * sets frame to return to e.g. from option dialogs
-	 *
-	 * @param javax.swing.JFrame
-	 */
-	public void setMasterFrame(JFrame masterFrame) {
-		if (searchPane != null) {
-			searchPane.setMasterFrame(masterFrame);
-		}
 	}
 
 	@Override
@@ -339,17 +325,13 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return controlPanel;
 		}
 
-		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
-				"images/apply_disabled.png");
-
+		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-
-		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png");
-
-		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-
 		buttonCommit.addActionListener(action -> commit());
+
+		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCancel.addActionListener(action -> cancel());
 
 		GroupLayout layout = new GroupLayout(controlPanel);
@@ -524,12 +506,13 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 			case POPUP_PRINT:
 				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
-				menuItemPrint.addActionListener((ActionEvent actionEvent) -> print());
+				Utils.addIntellijIconToMenuItem(menuItemPrint, "print");
+				menuItemPrint.addActionListener(actionEvent -> print());
 
 				addPopupItem(menuItemPrint);
 				break;
 
-			case POPUP_FLOATINGCOPY:
+			case POPUP_FLOATING_COPY:
 				addPopupMenuFloatingCopy();
 				break;
 
@@ -544,8 +527,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				break;
 
 			case POPUP_PDF:
-				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
-						Utils.createImageIcon("images/acrobat_reader16.png", ""));
+				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
+				Utils.addThemeIconToMenuItem(menuItemPDF, "anyType");
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
 
 				addPopupItem(menuItemPDF);
@@ -559,8 +542,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private void addPopupItemReload() {
-		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"),
-				Utils.createImageIcon("images/reload16.png", ""));
+		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"));
+		Utils.addIntellijIconToMenuItem(menuItemReload, "refresh");
 
 		// does not work
 		menuItemReload.addActionListener(actionEvent -> reload());
@@ -773,21 +756,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		searchPane.setSearchMode(mode);
 	}
 
-	/**
-	 * sets a filter symbol belonging to searchPane
-	 *
-	 * @parameter boolean
-	 */
-	public void showFilterIcon(boolean b) {
-		searchPane.showFilterIcon(b);
-	}
-
-	private void setFilteringActive(boolean b) {
-		filteringActive = b;
-	}
-
 	private void setModelFilteringBySelection() {
-		if (filteringActive && tableModel != null
+		if (searchPane.isFiltering() && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
 			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
@@ -801,12 +771,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	 *
 	 * @parameter boolean
 	 */
-	public void setFiltering(boolean filtering) {
-		if (filtering) {
-			setFilteringActive(filtering);
-			// lazy activation
-		}
-		searchPane.setFiltering(filtering);
+	public void setFiltering() {
+		searchPane.setFiltering();
 	}
 
 	/**
