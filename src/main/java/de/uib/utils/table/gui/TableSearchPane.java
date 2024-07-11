@@ -803,8 +803,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private void filtermarkEvent() {
 		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + filtermark.isSelected());
 
-		if (filtermark.isSelected()) {
-			setFiltered(true);
+		// When the filtermark is not pressed it means that this event was not evoked
+		// by a click on the button. Then we want to manually control what happens with our list
+		// and not select some elements. Usually there happens another selection anyways.
+		// Also this prevents an Exception in the product table when the selection active, 
+		// but is deactivated due to a change in the product tree
+		if (filtermark.isSelected() || !filtermark.getModel().isPressed()) {
+			setFiltered(filtermark.isSelected());
 		} else {
 			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
 

@@ -2,6 +2,9 @@
 
 ## [4.4.x.x] - 2024-xx-xx
 
+### Changed
+- All icons (apart from the hardware icons) have been replaced. Mainly by Intellij Icons in SVG format
+
 ### Fixed
 - Errors with table and opsi-host-key in CSV client import
 - Buttons in CSV template dialog on bottom not shown completely
