@@ -3194,7 +3194,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getHostDataService().deleteClients(selectedClients);
 
 		if (isFilterClientList()) {
-			toggleFilterClientList(true);;
+			toggleFilterClientList(true);
 		}
 
 		refreshClientListKeepingGroup();

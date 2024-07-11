@@ -68,7 +68,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private PanelGenEditTable associatedPanel;
 
 	private JMenuItem popupSearch;
-	private JMenuItem popupSearchNext;
 	private JMenuItem popupMarkHits;
 	private JMenuItem popupMarkAndFilter;
 	private JMenuItem popupEmptySearchfield;
@@ -268,7 +267,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		popupSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.search"));
 		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
-		popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
+		JMenuItem popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
 		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
 		popupSearchNext.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 
