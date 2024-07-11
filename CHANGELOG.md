@@ -4,6 +4,7 @@
 
 ### Changed
 - All icons (apart from the hardware icons) have been replaced. Mainly by Intellij Icons in SVG format
+- Checking for client reachability is removed since it's obsolete thanks to the messagebus
 
 ### Fixed
 - Errors with table and opsi-host-key in CSV client import
