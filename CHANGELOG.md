@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.1] - 2024-07-11
 
 ### Changed
 - All icons (apart from the hardware icons) have been replaced. Mainly by Intellij Icons in SVG format
