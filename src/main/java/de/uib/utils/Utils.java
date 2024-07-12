@@ -147,12 +147,6 @@ public final class Utils {
 		}
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
-
-	}
-
-	public static FlatSVGIcon getLargeIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName,
-				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT).derive(32, 32);
 	}
 
 	private static FlatSVGIcon getOpsiModulesIcon() {
@@ -209,17 +203,17 @@ public final class Utils {
 	}
 
 	public static ImageIcon getReloadLicensingIcon() {
-		ImageIcon icon = getLargeIntellijIcon("refresh");
-		ImageIcon icon1 = getIntellijIcon("scriptingScript");
+		ImageIcon refreshIcon = getIntellijIcon("refresh", 32);
+		ImageIcon licenseIcon = getIntellijIcon("scriptingScript");
 
-		Image image1 = icon.getImage();
-		Image image2 = icon1.getImage();
-		int w = Math.max(image1.getWidth(null), image2.getWidth(null));
-		int h = Math.max(image1.getHeight(null), image2.getHeight(null));
+		Image refreshImage = refreshIcon.getImage();
+		Image licenseImage = licenseIcon.getImage();
+		int w = Math.max(refreshImage.getWidth(null), licenseImage.getWidth(null));
+		int h = Math.max(refreshImage.getHeight(null), licenseImage.getHeight(null));
 		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics g2 = image.getGraphics();
-		g2.drawImage(image1, 0, 0, null);
-		g2.drawImage(image2, 8, 8, null);
+		g2.drawImage(refreshImage, 0, 0, null);
+		g2.drawImage(licenseImage, 8, 8, null);
 		g2.dispose();
 		return new ImageIcon(image);
 	}
@@ -233,6 +227,14 @@ public final class Utils {
 		FlatSVGIcon icon = new FlatSVGIcon(path);
 		icon.setColorFilter(filter);
 		return icon;
+	}
+
+	public static FlatSVGIcon getIntellijIcon(String iconName, int size) {
+		return getIntellijIcon(iconName).derive(size, size);
+	}
+
+	public static FlatSVGIcon getIntellijIcon(String iconName, Color color, int size) {
+		return getIntellijIcon(iconName, color).derive(size, size);
 	}
 
 	public static void addIntellijIconToMenuItem(AbstractButton abstractButton, String name) {
@@ -265,7 +267,7 @@ public final class Utils {
 		return getSelectedIntellijIcon(iconName).derive(size, size);
 	}
 
-	public static FlatSVGIcon getSelectedThemeIntelljIcon(String iconName) {
+	public static FlatSVGIcon getSelectedThemeIntelljIcon(String iconName, int size) {
 		ColorFilter filter = new ColorFilter();
 		if (FlatLaf.isLafDark()) {
 			iconName += "_dark";
@@ -274,7 +276,8 @@ public final class Utils {
 			filter.add(new Color(108, 112, 126), Globals.ICON_ACTIVE_LIGHT);
 		}
 
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
+		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter).derive(size,
+				size);
 	}
 
 	public static FlatSVGIcon getIntellijIcon(String iconName) {
