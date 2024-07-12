@@ -161,7 +161,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 		JLabel jLabelNetboot = new JLabel(Configed.getResourceValue("NewClientDialog.netbootProduct"));
 
-		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
+		jComboNetboot = new JComboBox<>();
 		jComboNetboot.setMaximumRowCount(10);
 		Set<String> netbootProductNames = persistenceController.getProductDataService().getAllNetbootProductNames();
 		setJComboBoxModel(jComboNetboot, netbootProductNames);
