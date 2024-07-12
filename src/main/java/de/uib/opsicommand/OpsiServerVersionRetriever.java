@@ -115,15 +115,13 @@ public class OpsiServerVersionRetriever {
 				} catch (NumberFormatException nex) {
 					Logging.error(this, "value is unparsable to int");
 				}
-
-				setServerVersion(newServerVersion);
-				return;
 			}
+			setServerVersion(newServerVersion);
+		} else {
+			// Default is 4.3, if this query does not work
+			Logging.error("we set opsi version 4.3 because we did not find opsiconfd version in header");
+			setServerVersionNotFound();
 		}
-
-		// Default is 4.3, if this query does not work
-		Logging.error("we set opsi version 4.3 because we did not find opsiconfd version in header");
-		setServerVersionNotFound();
 	}
 
 	private static synchronized void setServerVersionNotFound() {
