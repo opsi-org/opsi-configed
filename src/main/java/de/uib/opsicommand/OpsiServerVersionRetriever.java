@@ -99,7 +99,7 @@ public class OpsiServerVersionRetriever {
 
 		if (server == null) {
 			Logging.error("error in getting server version, Headerfield is null");
-			serverVersionString = "Server version not found (assume 4.1)";
+			setServerVersionNotFound();
 			return;
 		}
 
@@ -115,15 +115,20 @@ public class OpsiServerVersionRetriever {
 				} catch (NumberFormatException nex) {
 					Logging.error(this, "value is unparsable to int");
 				}
+
+				setServerVersion(newServerVersion);
+				return;
 			}
-		} else {
-			// Default is 4.3, if this query does not work
-			Logging.info("we set opsi version 4.3 because we did not find opsiconfd version in header");
-			newServerVersion[0] = 4;
-			newServerVersion[1] = 3;
 		}
 
-		setServerVersion(newServerVersion);
+		// Default is 4.3, if this query does not work
+		Logging.error("we set opsi version 4.3 because we did not find opsiconfd version in header");
+		setServerVersionNotFound();
+	}
+
+	private static synchronized void setServerVersionNotFound() {
+		setServerVersion(new int[] { 4, 3, 0, 0 });
+		serverVersionString = "Server version not found (assume 4.3)";
 	}
 
 	private static synchronized void setServerVersion(int[] serverVersion) {
