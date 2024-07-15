@@ -4,7 +4,8 @@
 
 ### Changed
 - Assume server version 4.3 if no header was found
-
+- Show that data have changed in client info only when really changed (and not by pressing "CTRL" for example)
+- Show border around tooltip in dark mode
 
 ## [4.3.3.10] - 2024-07-08
 
