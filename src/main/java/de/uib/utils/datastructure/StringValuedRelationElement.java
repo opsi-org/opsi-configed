@@ -25,7 +25,7 @@ public class StringValuedRelationElement extends HashMap<String, String> {
 	@Override
 	public String get(Object key) {
 		if (allowedAttributes != null && allowedAttributes.indexOf(key) < 0) {
-			Logging.error(this, "key " + key + " not allowed");
+			Logging.error(this, "key ", key, " not allowed");
 			return null;
 		} else {
 			return super.get(key);

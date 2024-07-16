@@ -28,7 +28,7 @@ public class MyHandshakeCompletedListener implements HandshakeCompletedListener 
 		try {
 			peerName = session.getPeerPrincipal().getName();
 		} catch (SSLPeerUnverifiedException e) {
-			Logging.error(this, "peer's identity wasn't verified", e);
+			Logging.error(this, e, "peer's identity wasn't verified");
 		}
 
 		Logging.info(this, "protocol " + protocol + "  peerName " + peerName);

@@ -20,7 +20,7 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 		String rcPartOfKey = key.substring(RemoteControl.CONFIG_KEY.length());
 
 		if (rcPartOfKey.length() < 2 || rcPartOfKey.charAt(0) != '.') {
-			Logging.error("No remote control key given after '" + RemoteControl.CONFIG_KEY + "'");
+			Logging.error("No remote control key given after '", RemoteControl.CONFIG_KEY, "'");
 			return;
 		}
 

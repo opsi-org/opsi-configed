@@ -130,7 +130,7 @@ public class PanelMountShare extends JPanel {
 		try {
 			Runtime.getRuntime().exec(new String[] { call });
 		} catch (IOException ioex) {
-			Logging.error("io-Error: " + ioex, ioex);
+			Logging.error(ioex, "io-Error: ", ioex);
 		}
 
 		mountShareDescriptionLabel

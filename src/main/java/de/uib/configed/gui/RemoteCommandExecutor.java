@@ -55,7 +55,7 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 					publish(command + " on " + targetClient + " >" + line + "\n");
 				}
 			} catch (IOException ex) {
-				Logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
+				Logging.error(ex, "Runtime error for command >>", cmd, "<<, : ", ex);
 			}
 		}
 		return null;

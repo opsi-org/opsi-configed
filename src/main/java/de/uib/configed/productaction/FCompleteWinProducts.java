@@ -341,10 +341,10 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 		} catch (IOException ex) {
 			deactivateLoadingCursor();
-			Logging.error("copy error:\n" + ex, ex);
+			Logging.error(ex, "copy error:\n", ex);
 		} catch (HeadlessException ex) {
 			deactivateLoadingCursor();
-			Logging.error("Headless exception when invoking showOptionDialog", ex);
+			Logging.error(ex, "Headless exception when invoking showOptionDialog");
 		}
 	}
 

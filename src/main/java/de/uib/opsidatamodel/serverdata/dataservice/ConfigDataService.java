@@ -229,7 +229,7 @@ public class ConfigDataService {
 
 		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
 			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
-				Logging.error(this, "WAN config option key " + notWanConfigOption.getKey() + " is non BOOL_CONFIG");
+				Logging.error(this, "WAN config option key ", notWanConfigOption.getKey(), " is non BOOL_CONFIG");
 				notWanConfiguration.put(notWanConfigOption.getKey(), null);
 				wanConfiguration.put(notWanConfigOption.getKey(), null);
 			} else {
@@ -1026,7 +1026,7 @@ public class ConfigDataService {
 					result = true;
 				}
 			} else {
-				Logging.error(this, "it is not a boolean and not a string, how to handle it ? " + " value " + value);
+				Logging.error(this, "it is not a boolean and not a string, how to handle it ? value ", value);
 			}
 
 			Logging.debug(this, "valueFromConfigStateAsExpected " + result);

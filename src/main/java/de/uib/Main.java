@@ -210,7 +210,7 @@ public class Main {
 			CommandLineParser parser = new DefaultParser(false);
 			cmd = parser.parse(options, args, false);
 		} catch (ParseException e) {
-			Logging.error("Problem parsing arguments", e);
+			Logging.error(e, "Problem parsing arguments");
 			showHelp();
 			return;
 		}

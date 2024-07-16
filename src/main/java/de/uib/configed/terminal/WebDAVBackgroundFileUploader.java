@@ -40,7 +40,7 @@ public class WebDAVBackgroundFileUploader extends AbstractBackgroundFileUploader
 			isFileUploadSuccessfull = true;
 		} catch (IOException e) {
 			isFileUploadSuccessfull = false;
-			Logging.error(this, "Unable to upload file to a server through WebDAV", e);
+			Logging.error(this, e, "Unable to upload file to a server through WebDAV");
 		}
 	}
 

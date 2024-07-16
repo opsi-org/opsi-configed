@@ -629,7 +629,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 					}
 				} catch (IOException iox) {
 					rootFrame.deactivateLoadingCursor();
-					Logging.error("copy error:\n" + iox, iox);
+					Logging.error(iox, "copy error:\n", iox);
 				}
 			} else {
 				Logging.info(this, "execute: targetPath does not exist");

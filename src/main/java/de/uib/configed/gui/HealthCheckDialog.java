@@ -273,7 +273,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
 			channel.write(data);
 		} catch (IOException e) {
-			Logging.error(this, "" + e);
+			Logging.error(this, e, "");
 		}
 	}
 
@@ -293,7 +293,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 				zipFile(zos, file);
 			}
 		} catch (IOException e) {
-			Logging.error(this, "" + e);
+			Logging.error(this, e, "");
 		}
 	}
 
@@ -319,7 +319,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 				zos.write(buffer, 0, len);
 			}
 		} catch (IOException e) {
-			Logging.error(this, "" + e);
+			Logging.error(this, e, "");
 		}
 	}
 

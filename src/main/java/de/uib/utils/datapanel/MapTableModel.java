@@ -404,7 +404,7 @@ public class MapTableModel extends AbstractTableModel {
 		int row = keys.indexOf(key);
 
 		if (row < 0) {
-			Logging.error("key not valid: " + key);
+			Logging.error("key not valid: ", key);
 			return;
 		}
 
@@ -412,7 +412,7 @@ public class MapTableModel extends AbstractTableModel {
 			List<?> valuelist = (List<?>) optionsMap.get(key);
 
 			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
-				Logging.error("EditMapPanel: value not allowed: " + value);
+				Logging.error("EditMapPanel: value not allowed: ", value);
 				return;
 			}
 		}

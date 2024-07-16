@@ -168,7 +168,7 @@ public final class Logging {
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename), false, StandardCharsets.UTF_8);
 			logFilenameInUse = logFilename;
 		} catch (IOException ex) {
-			Logging.error("file " + logFilename + " or directory " + logDirectoryName + " not found...", ex);
+			Logging.error(ex, "file ", logFilename, " or directory ", logDirectoryName, " not found...");
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}
 	}
@@ -467,22 +467,6 @@ public final class Logging {
 
 	public static void warning(Object caller, String mesg, Throwable ex) {
 		log(caller, LEVEL_WARNING, mesg, ex);
-	}
-
-	public static void error(Object caller, String mesg) {
-		log(caller, LEVEL_ERROR, mesg);
-	}
-
-	public static void error(String mesg) {
-		log(LEVEL_ERROR, mesg);
-	}
-
-	public static void error(String mesg, Throwable ex) {
-		log(LEVEL_ERROR, mesg, ex);
-	}
-
-	public static void error(Object caller, String mesg, Throwable ex) {
-		log(caller, LEVEL_ERROR, mesg, ex);
 	}
 
 	public static void clearErrorList() {

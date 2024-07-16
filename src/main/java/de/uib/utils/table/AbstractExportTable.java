@@ -191,8 +191,7 @@ public abstract class AbstractExportTable {
 				}
 			}
 		} catch (HeadlessException exception) {
-			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename,
-					exception);
+			Logging.error(exception, Configed.getResourceValue("DocumentExport.errorNoValidFilename"), "\n", filename);
 		}
 
 		return filename;

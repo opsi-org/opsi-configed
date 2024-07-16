@@ -27,7 +27,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 		String rcPartOfKey = key.substring(SavedSearch.CONFIG_KEY.length());
 
 		if (rcPartOfKey.length() < 2 || rcPartOfKey.charAt(0) != '.') {
-			Logging.error("No name key given after '" + SavedSearch.CONFIG_KEY + "'");
+			Logging.error("No name key given after '", SavedSearch.CONFIG_KEY, "'");
 		} else {
 			rcPartOfKey = rcPartOfKey.substring(1);
 

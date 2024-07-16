@@ -156,7 +156,7 @@ public class LogTabComponent extends LogPane {
 				fWriter.write(lines[i] + "\n");
 			}
 		} catch (IOException ex) {
-			Logging.error("Error writing to a file: " + fileName + "\n --- " + ex);
+			Logging.error(ex, "Error writing to a file: ", fileName);
 		}
 	}
 
@@ -174,7 +174,7 @@ public class LogTabComponent extends LogPane {
 				}
 			}
 		} catch (IOException ex) {
-			Logging.error("Error writing zip file: " + filePath + "\n --- " + ex);
+			Logging.error(ex, "Error writing zip file: ", filePath);
 		}
 	}
 
@@ -185,7 +185,7 @@ public class LogTabComponent extends LogPane {
 			out.putNextEntry(entry);
 			writeToOutputStream(lines, out);
 		} catch (IOException ex) {
-			Logging.error("Error writing zip file: " + fileName + "\n --- " + ex);
+			Logging.error(ex, "Error writing zip file: ", fileName);
 		}
 	}
 
@@ -196,7 +196,7 @@ public class LogTabComponent extends LogPane {
 				out.write(buffer, 0, lines[i].length());
 				out.write(CRLF, 0, 2);
 			} catch (IOException ex) {
-				Logging.error("Error writing zip file: " + "\n --- " + ex);
+				Logging.error(ex, "Error writing zip file: ");
 			}
 		}
 	}

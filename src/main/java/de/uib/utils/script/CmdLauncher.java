@@ -35,7 +35,7 @@ public class CmdLauncher {
 
 			pb.start();
 		} catch (IOException ex) {
-			Logging.error("Cannot start ProcessBuilder for command >>" + cmd + "<<", ex);
+			Logging.error(ex, "Cannot start ProcessBuilder for command >>", cmd, "<<");
 		}
 	}
 }

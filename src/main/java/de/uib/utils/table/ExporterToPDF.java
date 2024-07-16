@@ -96,7 +96,7 @@ public class ExporterToPDF extends AbstractExportTable {
 				Logging.info(this, "filename for saving PDF: " + fileName);
 				File file = new File(fileName);
 				if (file.isDirectory()) {
-					Logging.error("no valid filename " + fileName);
+					Logging.error("no valid filename ", fileName);
 				} else {
 					filePath = file.getAbsolutePath();
 				}
@@ -117,7 +117,7 @@ public class ExporterToPDF extends AbstractExportTable {
 				writeFile(temp.getAbsolutePath(), fileName);
 				openFile(temp);
 			} catch (IOException e) {
-				Logging.error("Failed to create temp file", e);
+				Logging.error(e, "Failed to create temp file");
 			}
 		}
 	}
@@ -152,9 +152,9 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			document.close();
 		} catch (FileNotFoundException ex) {
-			Logging.error("file not found: " + fileName, ex);
+			Logging.error(ex, "file not found: ", fileName);
 		} catch (DocumentException dex) {
-			Logging.error("document exception, cannot get instance for " + document, dex);
+			Logging.error(dex, "document exception, cannot get instance for ", document);
 		}
 	}
 
@@ -184,7 +184,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			try {
 				Desktop.getDesktop().open(temp);
 			} catch (IOException e) {
-				Logging.error("cannot show: " + temp.getAbsolutePath(), e);
+				Logging.error(e, "cannot show: ", temp.getAbsolutePath());
 			}
 		}
 	}

@@ -39,7 +39,7 @@ public class LicenseStatusComparison extends StackPane implements DataChangeList
 		try {
 			fxmlLoader.load();
 		} catch (IOException ioE) {
-			Logging.error(this.getClass(), "Could not load fxmlLoader", ioE);
+			Logging.error(this.getClass(), ioE, "Could not load fxmlLoader");
 		}
 	}
 

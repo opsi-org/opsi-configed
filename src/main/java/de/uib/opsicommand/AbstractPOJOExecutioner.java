@@ -139,7 +139,7 @@ public abstract class AbstractPOJOExecutioner {
 			String errorMessage = getErrorFromResponse(retrieved);
 
 			if (errorMessage != null) {
-				Logging.error("Opsi service error: " + errorMessage);
+				Logging.error("Opsi service error: ", errorMessage);
 
 				return false;
 			} else {
@@ -171,7 +171,7 @@ public abstract class AbstractPOJOExecutioner {
 			});
 
 			if (originalMap.get(key) == null) {
-				Logging.error(AbstractPOJOExecutioner.class, "Missing key " + key + " in output list");
+				Logging.error(AbstractPOJOExecutioner.class, "Missing key ", key, " in output list");
 				continue;
 			}
 

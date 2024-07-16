@@ -48,8 +48,8 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		if (collection.size() != clients.size()) {
 			result = false;
 
-			Logging.error("list of data has size " + collection.size() + " differs from  length of clients list  "
-					+ clients.size());
+			Logging.error("list of data has size ", collection.size(), " differs from  length of clients list  ",
+					clients.size());
 		}
 
 		if (result) {
@@ -64,7 +64,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 				try {
 					map = (Map<?, ?>) obj;
 				} catch (ClassCastException ccex) {
-					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map", ccex);
+					Logging.error(ccex, "Wrong element type, found ", obj.getClass().getName(), ", expected a Map");
 				}
 
 				result = add(new ProductpropertiesUpdate(clients.get(i), productname, map));

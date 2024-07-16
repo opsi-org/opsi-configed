@@ -149,7 +149,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		try {
 			serviceURL = new URI(baseURL).toURL();
 		} catch (MalformedURLException | URISyntaxException ex) {
-			Logging.error(this, "URI Syntax error: " + baseURL, ex);
+			Logging.error(this, ex, "URI Syntax error: ", baseURL);
 		}
 
 		return serviceURL;
@@ -161,7 +161,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		try {
 			result = new MessagePackMapper().writeValueAsBytes(omcMap);
 		} catch (JsonProcessingException e) {
-			Logging.error(this, "unable to process JSON", e);
+			Logging.error(this, e, "unable to process JSON");
 		}
 
 		return result;
@@ -217,7 +217,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					Logging.warning(this, "Encountered unhandled connection state: " + conStat);
 				}
 			} catch (IOException ex) {
-				Logging.error(this, "Exception while data reading", ex);
+				Logging.error(this, ex, "Exception while data reading");
 			}
 		}
 
@@ -267,7 +267,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
 			});
 		} else {
-			Logging.error(this, "Unsupported Content-Type: " + contentType);
+			Logging.error(this, "Unsupported Content-Type: ", contentType);
 		}
 
 		return result;
@@ -290,8 +290,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			}
 		} else {
 			conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
-			Logging.error(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage() + " "
-					+ retrieveErrorFromResponse(connection));
+			Logging.error(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage(), " ",
+					retrieveErrorFromResponse(connection));
 		}
 	}
 
@@ -306,7 +306,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					errorInfo.append("  ");
 				}
 			} catch (IOException iox) {
-				Logging.error(this, "exception on reading error stream " + iox);
+				Logging.error(this, iox, "exception on reading error stream ");
 			}
 		}
 

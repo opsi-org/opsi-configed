@@ -137,9 +137,9 @@ public class TableHeader extends PdfPageEventHelper {
 			img.scaleToFit(width, height);
 			img.setAbsolutePosition(20, 20);
 		} catch (MalformedURLException ex) {
-			Logging.error("malformed URL --- " + ex);
+			Logging.error(ex, "malformed URL --- ");
 		} catch (IOException e) { // getInstannce
-			Logging.error("Error document add footer image --- " + e);
+			Logging.error(e, "Error document add footer image --- ");
 		}
 
 		return img;

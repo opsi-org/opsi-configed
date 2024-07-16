@@ -347,7 +347,7 @@ public final class OpsiDataBackend {
 				return new OpsiDataBigIntEqualsOperation(map, attr, (Long) data, element);
 			}
 		}
-		Logging.error("IllegalArgument: The operation " + operation + " was not found on " + element);
+		Logging.error("IllegalArgument: The operation ", operation, " was not found on ", element);
 		throw new IllegalArgumentException("The operation " + operation + " was not found on " + element);
 	}
 
@@ -381,8 +381,8 @@ public final class OpsiDataBackend {
 			return new HostOperation(operations.get(0));
 		}
 
-		Logging.error(this, "IllegalArgument: The group operation " + operation + " was not found with "
-				+ operations.size() + " operations");
+		Logging.error(this, "IllegalArgument: The group operation ", operation, " was not found with ",
+				operations.size(), " operations");
 		throw new IllegalArgumentException(
 				"The group operation " + operation + " was not found with " + operations.size() + " operations");
 	}
@@ -562,7 +562,7 @@ public final class OpsiDataBackend {
 				}
 			}
 		}
-		Logging.error(this, "Element not found: " + Arrays.toString(elementPath));
+		Logging.error(this, "Element not found: ", Arrays.toString(elementPath));
 		return "";
 	}
 

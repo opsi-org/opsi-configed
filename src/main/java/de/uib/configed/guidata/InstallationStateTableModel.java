@@ -723,7 +723,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		initChangeActionRequests();
 
 		if (possibleActions == null || possibleActions.get(productId).indexOf(ar.toString()) < 0) {
-			Logging.error(" the required action is not supported for " + productId);
+			Logging.error(" the required action is not supported for ", productId);
 			return;
 		}
 

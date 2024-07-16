@@ -176,8 +176,8 @@ public class SoftwareDataService {
 			String swKEY = entry.getIdent();
 
 			if (fSoftware2LicensePool.get(swKEY) != null && !fSoftware2LicensePool.get(swKEY).equals(licensePoolKEY)) {
-				Logging.error("software with ident \"" + swKEY + "\" has assigned license pool "
-						+ fSoftware2LicensePool.get(swKEY) + " as well as " + licensePoolKEY);
+				Logging.error("software with ident \"", swKEY, "\" has assigned license pool ",
+						fSoftware2LicensePool.get(swKEY), " as well as ", licensePoolKEY);
 			}
 			fSoftware2LicensePool.put(swKEY, licensePoolKEY);
 
@@ -481,8 +481,8 @@ public class SoftwareDataService {
 		if (exec.doCall(omc)) {
 			return softwareLicenseId;
 		} else {
-			Logging.error(this, "could not execute " + methodName + "  with softwareLicenseId " + softwareLicenseId
-					+ " and licenseContractId " + licenseContractId);
+			Logging.error(this, "could not execute ", methodName, "  with softwareLicenseId ", softwareLicenseId,
+					" and licenseContractId ", licenseContractId);
 
 			return "";
 		}

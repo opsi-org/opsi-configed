@@ -113,7 +113,7 @@ public class OpsiDataSerializer {
 			}
 			return operation;
 		} catch (Exception e) {
-			Logging.error("deserialize error for data " + data + " message " + e.getMessage(), e);
+			Logging.error(e, "deserialize error for data ", data, " message ", e.getMessage());
 			return null;
 		}
 	}
@@ -153,7 +153,7 @@ public class OpsiDataSerializer {
 				return map;
 			}
 		} catch (IOException e) {
-			Logging.error(this, e.getMessage(), e);
+			Logging.error(this, e, e.getMessage());
 			return map;
 		}
 		map = parseObject();
@@ -439,7 +439,7 @@ public class OpsiDataSerializer {
 			break;
 
 		default:
-			Logging.error(this, "dataType for " + value + " cannot be found...)");
+			Logging.error(this, "dataType for ", value, " cannot be found...)");
 			break;
 		}
 	}

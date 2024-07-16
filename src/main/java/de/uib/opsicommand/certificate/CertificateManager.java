@@ -112,7 +112,7 @@ public final class CertificateManager {
 			String alias = certificateFile.getParentFile().getName();
 			ks.setCertificateEntry(alias, certificate);
 		} catch (KeyStoreException e) {
-			Logging.error("unable to load certificate into a keystore", e);
+			Logging.error(e, "unable to load certificate into a keystore");
 		}
 	}
 
@@ -161,7 +161,7 @@ public final class CertificateManager {
 							.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			Logging.error("unable to save certificate", e);
+			Logging.error(e, "unable to save certificate");
 		}
 	}
 
@@ -205,7 +205,7 @@ public final class CertificateManager {
 			writer.write(certificateContent);
 			writer.flush();
 		} catch (IOException e) {
-			Logging.error("unable to write to certificate: " + certificateFile.getAbsolutePath(), e);
+			Logging.error(e, "unable to write to certificate: ", certificateFile.getAbsolutePath());
 		}
 	}
 }

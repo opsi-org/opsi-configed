@@ -472,7 +472,7 @@ public final class Utils {
 				Logging.info("Changed file's " + file.getAbsolutePath() + " permission");
 			}
 		} catch (IOException e) {
-			Logging.error("Unable to set default permissions on temp file", e);
+			Logging.error(e, "Unable to set default permissions on temp file");
 		}
 	}
 

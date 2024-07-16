@@ -99,7 +99,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			// checking that not the same int key is used twice
 
 			if (get(key) != null) {
-				Logging.error("duplicate key setting " + key + ", until now " + get(key) + " now " + value);
+				Logging.error("duplicate key setting ", key, ", until now ", get(key), " now ", value);
 			}
 			return super.put(key, value);
 		}
@@ -576,7 +576,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		try {
 			theTable.print();
 		} catch (PrinterException ex) {
-			Logging.error("Printing error ", ex);
+			Logging.error(ex, "Printing error ");
 		}
 	}
 

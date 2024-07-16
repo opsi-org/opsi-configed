@@ -384,7 +384,7 @@ public class GroupDataService {
 		parentId = ClientTree.translateToPersistentName(parentId);
 
 		if (id.equalsIgnoreCase(parentId)) {
-			Logging.error(this, "Cannot add group as child to itself, group ID " + id);
+			Logging.error(this, "Cannot add group as child to itself, group ID ", id);
 			return false;
 		}
 

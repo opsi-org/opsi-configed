@@ -312,7 +312,7 @@ public class Messagebus implements MessagebusListener {
 		if (WebSocketEvent.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
 			initialSubscriptionReceived = true;
 		} else if (WebSocketEvent.GENERAL_ERROR.toString().equals(type)) {
-			Logging.error(this, "Error occured on the server " + message.get("error"));
+			Logging.error(this, "Error occured on the server ", message.get("error"));
 		} else {
 			// Other events are handled by other listeners.
 		}

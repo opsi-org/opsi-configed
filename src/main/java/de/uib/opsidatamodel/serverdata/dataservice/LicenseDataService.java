@@ -417,7 +417,7 @@ public class LicenseDataService {
 			if (exec.doCall(omc)) {
 				result = licenseContractId;
 			} else {
-				Logging.error(this, "could not create license " + licenseContractId);
+				Logging.error(this, "could not create license ", licenseContractId);
 			}
 		}
 
@@ -496,7 +496,7 @@ public class LicenseDataService {
 					new OpsiMethodCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, new Object[] { licensePool }))) {
 				result = licensePoolId;
 			} else {
-				Logging.error(this, "could not update product " + productId + " to licensepool " + licensePoolId);
+				Logging.error(this, "could not update product ", productId, " to licensepool ", licensePoolId);
 			}
 		}
 

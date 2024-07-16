@@ -32,8 +32,8 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	public boolean addAll(Collection<? extends UpdateCommand> c) {
 		if (c.size() != objectIds.size()) {
 			Logging.warning(this, "object ids (not fitting to edited item) " + objectIds);
-			Logging.error("list of data has size " + c.size() + " differs from  length of objectIds list  "
-					+ objectIds.size());
+			Logging.error("list of data has size ", c.size(), " differs from  length of objectIds list  ",
+					objectIds.size());
 
 			return false;
 		}

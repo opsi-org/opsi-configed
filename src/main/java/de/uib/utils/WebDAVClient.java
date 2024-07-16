@@ -86,7 +86,7 @@ public class WebDAVClient {
 				}
 			}
 		} catch (IOException e) {
-			Logging.error(this, "Failed to retrieve directories from " + url, e);
+			Logging.error(this, e, "Failed to retrieve directories from ", url);
 		}
 		return directories;
 	}
@@ -106,7 +106,7 @@ public class WebDAVClient {
 				}
 			}
 		} catch (IOException e) {
-			Logging.error(this, "Failed to retrieve directories and files from " + url, e);
+			Logging.error(this, e, "Failed to retrieve directories and files from ", url);
 		}
 		return directoriesAndFiles;
 	}

@@ -90,7 +90,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 				listener.onMessageReceived(message);
 			}
 		} catch (IOException e) {
-			Logging.error(this, "cannot read received message: ", e);
+			Logging.error(this, e, "cannot read received message: ");
 		}
 	}
 

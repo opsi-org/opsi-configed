@@ -40,7 +40,7 @@ public class LogDataService {
 		Map<String, String> logfiles = getEmptyLogfiles();
 		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
 		if (i < 0) {
-			Logging.error("illegal logtype: " + logtype);
+			Logging.error("illegal logtype: ", logtype);
 			return logfiles;
 		}
 		Logging.debug(this, "getLogfile logtype " + logtype);

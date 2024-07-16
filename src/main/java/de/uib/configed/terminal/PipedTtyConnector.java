@@ -28,7 +28,7 @@ public class PipedTtyConnector implements TtyConnector {
 			this.writer = new PipedWriter();
 			this.reader = new PipedReader(writer);
 		} catch (IOException e) {
-			Logging.error("failed to connect piped writer with piped reader", e);
+			Logging.error(e, "failed to connect piped writer with piped reader");
 		}
 	}
 
@@ -73,7 +73,7 @@ public class PipedTtyConnector implements TtyConnector {
 			writer.write(new String(bytes, StandardCharsets.UTF_8));
 			writer.flush();
 		} catch (IOException e) {
-			Logging.error(this, "failed to write bytes", e);
+			Logging.error(this, e, "failed to write bytes");
 		}
 	}
 

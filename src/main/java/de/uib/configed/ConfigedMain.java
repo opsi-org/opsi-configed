@@ -440,7 +440,7 @@ public class ConfigedMain implements MessagebusListener {
 				messagebus.connect();
 				Logging.info(this, "connected to messagebus");
 			} catch (InterruptedException e) {
-				Logging.error(this, "could not connect to messagebus", e);
+				Logging.error(this, e, "could not connect to messagebus");
 				Thread.currentThread().interrupt();
 			}
 		}

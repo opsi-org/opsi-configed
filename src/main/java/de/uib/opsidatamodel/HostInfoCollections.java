@@ -242,7 +242,7 @@ public class HostInfoCollections {
 				filepath = new URI((String) val).getPath();
 				Logging.info(this, "retrieveOpsiHosts workbenchpath " + filepath);
 			} catch (URISyntaxException netex) {
-				Logging.error("not a correctly formed file URI: " + val, netex);
+				Logging.error(netex, "not a correctly formed file URI: ", val);
 			}
 		}
 

@@ -61,7 +61,7 @@ public class ExporterToCSV extends AbstractExportTable {
 			writeHeader(printer);
 			writeRows(printer, selectedOnly);
 		} catch (IOException ex) {
-			Logging.error(Configed.getResourceValue("ExportTable.error"), ex);
+			Logging.error(ex, Configed.getResourceValue("ExportTable.error"));
 		}
 	}
 

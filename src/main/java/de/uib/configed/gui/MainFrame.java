@@ -737,7 +737,7 @@ public class MainFrame extends JFrame {
 				try {
 					Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
 				} catch (IOException e) {
-					Logging.error("cannot open: " + Logging.getCurrentLogfilePath() + " :\n " + e);
+					Logging.error(e, "cannot open: ", Logging.getCurrentLogfilePath());
 				}
 				super.doAction2();
 			}

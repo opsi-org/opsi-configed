@@ -698,7 +698,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 				return null;
 			}
 		} catch (IOException e) {
-			Logging.error("Unable to detect format of CSV file", e);
+			Logging.error(e, "Unable to detect format of CSV file");
 		}
 
 		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())

@@ -121,9 +121,9 @@ public final class ThemeManager {
 			openSansFont = openSansFont.deriveFont(13F);
 			UIManager.put("defaultFont", openSansFont);
 		} catch (IOException e) {
-			Logging.error("Failed to retrieve font from resources (using font chosen by the system)", e);
+			Logging.error(e, "Failed to retrieve font from resources (using font chosen by the system)");
 		} catch (FontFormatException e) {
-			Logging.error("Font is faulty", e);
+			Logging.error(e, "Font is faulty");
 		}
 	}
 }

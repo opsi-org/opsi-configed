@@ -29,9 +29,8 @@ public class UncaughtConfigedExceptionHandler implements UncaughtExceptionHandle
 
 				Logging.warning("exception with null message " + exception);
 			} else {
-				Logging.error(
-						errorText + "\n" + Configed.getResourceValue("UncaughtExceptionHandler.pleaseCheckLogfile"),
-						exception);
+				Logging.error(exception, errorText, "\n",
+						Configed.getResourceValue("UncaughtExceptionHandler.pleaseCheckLogfile"));
 			}
 		} else {
 			Logging.warning("Thread " + thread + " - RunTime Error", throwable);

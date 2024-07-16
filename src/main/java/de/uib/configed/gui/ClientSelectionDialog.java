@@ -975,7 +975,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				element = createHardwareGroup(
 						getNonGroupOperation(hardwareOperation).getElement().getLocalizedPathArray()[0]);
 			} else {
-				Logging.error("Not a group operation: " + op.getClassName());
+				Logging.error("Not a group operation: ", op.getClassName());
 				reset();
 				return;
 			}

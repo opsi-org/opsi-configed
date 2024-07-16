@@ -167,8 +167,8 @@ public class UserConfig {
 
 	public void setBooleanValue(String key, Boolean val) {
 		if (!getUserBoolKeys().contains(key)) {
-			Logging.error("UserConfig.USER_BOOL_KEYS " + UserConfig.userBoolKeys);
-			Logging.error("UserConfig : illegal key " + key);
+			Logging.error("UserConfig.USER_BOOL_KEYS ", UserConfig.userBoolKeys);
+			Logging.error("UserConfig : illegal key ", key);
 		}
 		booleanMap.put(key, val);
 	}
@@ -183,8 +183,8 @@ public class UserConfig {
 
 	public Boolean getBooleanValue(String key) {
 		if (!userBoolKeys.contains(key)) {
-			Logging.error("UserConfig.USER_BOOL_KEYS " + UserConfig.userBoolKeys);
-			Logging.error("UserConfig : illegal key " + key);
+			Logging.error("UserConfig.USER_BOOL_KEYS ", UserConfig.userBoolKeys);
+			Logging.error("UserConfig : illegal key ", key);
 			return false;
 		}
 

@@ -316,7 +316,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (NumberFormatException ex) {
-			Logging.error(this, " produceConfigs ", ex);
+			Logging.error(this, ex, " produceConfigs ");
 		}
 	}
 
@@ -499,7 +499,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(getClass(), " getCurrentlyActiveLicense " + ex);
+			Logging.error(getClass(), ex, " getCurrentlyActiveLicense ");
 		}
 
 		return newest;
@@ -532,7 +532,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(getClass(), " findNextChangeDate ", ex);
+			Logging.error(getClass(), ex, " findNextChangeDate ");
 		}
 
 		return null;
@@ -577,7 +577,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(getClass(), " checkTimeLeft ", ex);
+			Logging.error(getClass(), ex, " checkTimeLeft ");
 		}
 
 		return STATE_DAYS_OKAY;
