@@ -269,6 +269,10 @@ public final class Logging {
 	}
 
 	public static synchronized void log(int level, Object caller, Throwable ex, String message, Object... mesg) {
+		if (level > logLevelConsole && level > logLevelFile) {
+			return;
+		}
+
 		StringBuilder result = new StringBuilder(message);
 		for (Object o : mesg) {
 			result.append(o);
