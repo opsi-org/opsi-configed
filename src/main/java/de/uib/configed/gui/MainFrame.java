@@ -302,7 +302,7 @@ public class MainFrame extends JFrame {
 
 		if (forbiddenConfigServer && forbiddenDepots && forbiddenClients) {
 			Logging.info(this, "setupMenuServerConsole all forbidden");
-			String s = " " + Configed.getResourceValue("MainFrame.jMenu.helper");
+			String s = " " + Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden");
 			jMenuFrameTerminal.setText(jMenuFrameTerminal.getText() + s);
 			jMenuFrameTerminal.setEnabled(false);
 		} else {

@@ -459,8 +459,8 @@ public final class ClientMenuManager implements MenuListener {
 
 		if (forbiddenClients) {
 			jMenuOpenTerminalOnClient.setEnabled(false);
-			jMenuOpenTerminalOnClient
-					.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal") + " (Forbidden)");
+			jMenuOpenTerminalOnClient.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal")
+					+ Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden"));
 		} else {
 			jMenuOpenTerminalOnClient.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal"));
 			jMenuOpenTerminalOnClient.setEnabled(countSelectedClients == 1);
