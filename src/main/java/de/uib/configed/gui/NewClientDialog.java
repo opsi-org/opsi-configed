@@ -161,7 +161,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 		JLabel jLabelNetboot = new JLabel(Configed.getResourceValue("NewClientDialog.netbootProduct"));
 
-		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
+		jComboNetboot = new JComboBox<>();
 		jComboNetboot.setMaximumRowCount(10);
 		Set<String> netbootProductNames = persistenceController.getProductDataService().getAllNetbootProductNames();
 		setJComboBoxModel(jComboNetboot, netbootProductNames);
@@ -686,6 +686,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	}
 
 	private static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
+		Logging.info("createCSVImportDataDialog for file " + csvFile);
 		List<String> columnNames = HostInfo.getKeysForCSV();
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
 		try {
@@ -731,6 +732,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		JPanel centerPanel = dialog.initPanel();
 		dialog.setCenterPaneInScrollpane(centerPanel);
 		dialog.setupLayout();
+		dialog.setSize(1000, 420);
 		dialog.setVisible(true);
 	}
 

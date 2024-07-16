@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.csv;
 
-import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,8 +29,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -47,8 +48,8 @@ import org.apache.commons.csv.QuoteMode;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.CheckBoxList;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.HeaderOptionsPanel;
 import de.uib.configed.type.HostInfo;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -68,42 +69,38 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.csvTemplateLabel"), false,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 2,
-				1000, 420, true);
+				1000, 450, true);
 
 		this.columnNames = columnNames;
 	}
 
 	@Override
 	protected void allLayout() {
-		Logging.info(this, "allLayout");
+		Logging.info(this, "allLayout in TEMPLATE");
 
-		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
-
-		if (centerPanel == null) {
-			centerPanel = new JPanel();
-		}
 
 		southPanel = createSouthPanel();
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
 
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(centerPanel)
+		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
+				.addGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
+				.addGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 	}
 
 	private JPanel createSouthPanel() {
@@ -230,7 +227,12 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		headerCheckBoxes = new ArrayList<>();
 		columnNames.forEach(header -> addHeaderCheckBox(header, model));
 
-		HeaderOptionsPanel headerOptionsPanel = new HeaderOptionsPanel(model);
+		CheckBoxList list = new CheckBoxList(model);
+		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		list.setVisibleRowCount(-1);
+
+		JScrollPane scroll = new JScrollPane(list);
+		scroll.setAlignmentX(LEFT_ALIGNMENT);
 
 		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()
 				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -238,7 +240,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(dataSelectionLabel)
 						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(headerOptionsPanel)
+				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(scroll)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(csvFormatLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
@@ -276,8 +278,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(dataLabel).addGap(Globals.GAP_SIZE).addComponent(dataSelectionLabel)
-				.addGap(Globals.GAP_SIZE).addComponent(headerOptionsPanel).addGap(Globals.GAP_SIZE)
-				.addComponent(csvFormatLabel).addGap(Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(scroll).addGap(Globals.GAP_SIZE).addComponent(csvFormatLabel)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(includeFormatHintOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 						Globals.BUTTON_HEIGHT)
 				.addGap(Globals.GAP_SIZE).addComponent(fieldSeparatorLabel).addGap(Globals.GAP_SIZE)

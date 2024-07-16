@@ -35,6 +35,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -453,11 +454,10 @@ public final class ClientMenuManager implements MenuListener {
 
 		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
 				.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
-		// boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
-		// boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
-		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
 
-		if (forbiddenClients) {
+		if (forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS)
+				|| !persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)
+				|| persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
 			jMenuOpenTerminalOnClient.setEnabled(false);
 			jMenuOpenTerminalOnClient.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal")
 					+ Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden"));

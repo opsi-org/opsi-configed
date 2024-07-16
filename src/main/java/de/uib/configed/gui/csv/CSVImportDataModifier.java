@@ -44,12 +44,10 @@ public class CSVImportDataModifier {
 	private String csvFile;
 	private List<String> columnNames;
 	private List<String> hiddenColumns;
-	private List<String> tmpHeaderNames;
 
 	public CSVImportDataModifier(String csvFile, List<String> columnNames) {
 		this.csvFile = csvFile;
 		this.columnNames = columnNames;
-		this.tmpHeaderNames = new ArrayList<>(columnNames);
 		this.hiddenColumns = new ArrayList<>();
 	}
 
@@ -72,7 +70,7 @@ public class CSVImportDataModifier {
 		if (csvData == null) {
 			return null;
 		}
-		model = createModel(thePanel, csvData, new ArrayList<>(tmpHeaderNames), format);
+		model = createModel(thePanel, csvData, new ArrayList<>(columnNames), format);
 
 		if (csvData.isEmpty()) {
 			model.deleteRows(new int[model.getRows().size()]);
@@ -100,6 +98,7 @@ public class CSVImportDataModifier {
 			importantHeaderNames.add("domain");
 			importantHeaderNames.add(HostInfo.DEPOT_OF_CLIENT_KEY);
 			importantHeaderNames.add(HostInfo.CLIENT_MAC_ADRESS_KEY);
+
 			if (!headerNames.containsAll(importantHeaderNames)) {
 				StringBuilder message = new StringBuilder();
 				message.append(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.message"));
@@ -108,9 +107,7 @@ public class CSVImportDataModifier {
 						message.toString());
 				return null;
 			}
-			tmpHeaderNames.clear();
-			tmpHeaderNames.addAll(columnNames);
-			tmpHeaderNames.addAll(headerNames);
+
 			for (CSVRecord csvRecord : parser.getRecords()) {
 				if (!csvRecord.isConsistent()) {
 					displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
@@ -142,6 +139,7 @@ public class CSVImportDataModifier {
 
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
 			List<String> columnNames, CSVFormat format) {
+		Logging.info(this, "createModel, csvData: " + csvData);
 		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 		populateSourceMap(theSourceMap, csvData);
 

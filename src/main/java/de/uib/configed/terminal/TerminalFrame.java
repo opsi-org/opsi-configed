@@ -34,6 +34,7 @@ import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserOpsipermission;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -65,9 +66,9 @@ public final class TerminalFrame implements MessagebusListener {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public TerminalFrame(ConfigedMain main) {
+	public TerminalFrame(ConfigedMain configedMain) {
 		this(false);
-		this.configedMain = main;
+		this.configedMain = configedMain;
 	}
 
 	public TerminalFrame(boolean restrictView) {
@@ -174,6 +175,8 @@ public final class TerminalFrame implements MessagebusListener {
 
 		// result list (allowed clients and depots connected by message bus)
 		List<String> clientsConnectedByMessagebus = getAllowedDevices();
+
+		clientsConnectedByMessagebus.add("Configserver");
 		// sort list of clients and depots and display dialog
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
@@ -203,6 +206,11 @@ public final class TerminalFrame implements MessagebusListener {
 		if (isConfigServerAllowed(forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER),
 				depotsConfigured, allowedDepots)) {
 			resultListAllowedDevices.add("Configserver");
+		}
+
+		// Don't allow connection to clients when VPN module is not available
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+			return resultListAllowedDevices;
 		}
 
 		// list of *all depots* to e.g. distinguish between depots and clients in list of connected devices

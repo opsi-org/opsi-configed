@@ -350,19 +350,15 @@ public class ConfigedMain implements MessagebusListener {
 
 		initialTreeActivation();
 
-		Logging.info(this, "Is messagebus null? " + (messagebus == null));
+		messagebus.getWebSocket().registerListener(this);
+		messagebus.getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
 
-		if (messagebus != null) {
-			messagebus.getWebSocket().registerListener(this);
-			messagebus.getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
-
-			if (messagebus.getWebSocket().isOpen()) {
-				// Fake opening event on registering listener since this listener
-				// does not know yet if it's open
-				mainFrame.getHostsStatusPanel().onOpen(null);
-			} else {
-				Logging.warning(this, "Messagebus is not open, but should be on start");
-			}
+		if (messagebus.getWebSocket().isOpen()) {
+			// Fake opening event on registering listener since this listener
+			// does not know yet if it's open
+			mainFrame.getHostsStatusPanel().onOpen(null);
+		} else {
+			Logging.warning(this, "Messagebus is not open, but should be on start");
 		}
 
 		setEditingTarget(EditingTarget.CLIENTS);
@@ -647,7 +643,7 @@ public class ConfigedMain implements MessagebusListener {
 		if (groupActionFrame == null) {
 			groupActionFrame = new FGroupActions(this);
 			groupActionFrame.setSize(1000, 300);
-			groupActionFrame.centerOnParent();
+			groupActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 			allFrames.add(groupActionFrame);
 		}
@@ -660,7 +656,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (productActionFrame == null) {
 			productActionFrame = new FCompleteWinProducts();
-			productActionFrame.centerOnParent();
+			productActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			allFrames.add(productActionFrame);
 		}
 
@@ -757,6 +753,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
 		clientTree.setEnabled(true);
+		productTree.setEnabled(true);
 		depotsList.setEnabled(true);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -781,6 +778,7 @@ public class ConfigedMain implements MessagebusListener {
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		clientTree.setEnabled(false);
+		productTree.setEnabled(false);
 
 		initServer();
 		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
@@ -801,6 +799,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void setEditingServer() {
 		clientTree.setEnabled(false);
+		productTree.setEnabled(false);
 
 		initServer();
 		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
@@ -2473,6 +2472,7 @@ public class ConfigedMain implements MessagebusListener {
 
 			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
 			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+
 			preloadData();
 
 			FOpsiLicenseMissingText.reset();

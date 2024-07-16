@@ -798,7 +798,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.debug(this, "recursivelyChangeActionRequest fire update for row  " + modelRow);
 
 			// tell the table model listeners where a change occurred
-			Logging.devel("fireupdate " + modelRow);
 			fireTableRowsUpdated(modelRow, modelRow);
 
 			// where a change occurred

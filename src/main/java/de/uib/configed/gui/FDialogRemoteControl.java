@@ -161,7 +161,6 @@ public class FDialogRemoteControl extends FEditStringList {
 	}
 
 	// DocumentListener
-
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		saveEditedText();

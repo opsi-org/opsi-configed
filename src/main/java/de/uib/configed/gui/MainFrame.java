@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -25,6 +24,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -39,7 +39,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -270,11 +269,8 @@ public class MainFrame extends JFrame {
 		jMenuServerConsole.addSeparator();
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
-		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
-				|| UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE) == null
-				|| !UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE);
+		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
+				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
 		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
@@ -284,10 +280,8 @@ public class MainFrame extends JFrame {
 		}
 		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 
-		boolean userConfigExists = UserConfig.getCurrentUserConfig() != null;
-		jMenuServerConsole.setEnabled(userConfigExists
-				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.isGlobalReadOnly()
+		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
@@ -567,10 +561,19 @@ public class MainFrame extends JFrame {
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(iconBarPanel, BorderLayout.NORTH);
-		getContentPane().add(centralPane, BorderLayout.CENTER);
-		getContentPane().add(statusPane, BorderLayout.SOUTH);
+
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(layout
+				.createSequentialGroup().addComponent(iconBarPanel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(centralPane).addComponent(statusPane));
+
+		layout.setHorizontalGroup(layout
+				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
+						.addComponent(iconBarPanel).addComponent(centralPane).addComponent(statusPane))
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
 
@@ -590,10 +593,11 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(clientMenu.getJMenu());
 		jMenuBar.add(jMenuServerConsole);
 
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
-			jMenuServerConsole.setEnabled(false);
-			jMenuServerConsole.setToolTipText(Configed.getResourceValue("MainFrame.vpnModuleShouldBeActive"));
-		}
+		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+
 		jMenuBar.add(createJMenuFrames());
 		jMenuBar.add(createJMenuHelp());
 
@@ -629,7 +633,6 @@ public class MainFrame extends JFrame {
 				scrollpaneTreeProducts);
 
 		jTabbedPaneClientSelection.setSelectedIndex(1);
-		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
 
 		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
