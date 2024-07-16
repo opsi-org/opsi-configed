@@ -1,10 +1,21 @@
 # Changelog
 
+## [4.4.x.x] - 2024-xx-xx
+
+### Changed
+- Assume server version 4.3 if no header was found
+- Show that data have changed in client info only when really changed (and not by pressing "CTRL" for example)
+- Show border around tooltip in dark mode
+
+
 ## [4.4.0.1] - 2024-07-11
 
 ### Changed
 - All icons (apart from the hardware icons) have been replaced. Mainly by Intellij Icons in SVG format
 - Checking for client reachability is removed since it's obsolete thanks to the messagebus
+
+
+## [4.3.3.10] - 2024-07-08
 
 ### Fixed
 - Errors with table and opsi-host-key in CSV client import

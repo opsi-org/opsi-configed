@@ -748,6 +748,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
 		clientTree.setEnabled(true);
+		productTree.setEnabled(true);
 		depotsList.setEnabled(true);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -772,6 +773,7 @@ public class ConfigedMain implements MessagebusListener {
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		clientTree.setEnabled(false);
+		productTree.setEnabled(false);
 
 		initServer();
 		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
@@ -792,6 +794,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void setEditingServer() {
 		clientTree.setEnabled(false);
+		productTree.setEnabled(false);
 
 		initServer();
 		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
