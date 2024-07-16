@@ -121,7 +121,7 @@ public class GroupDataService {
 			} else if (entry.get("type").equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
 				productGroupsList.add(entry);
 			} else {
-				Logging.warning(this, "Unexpected type: " + entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
+				Logging.warning(this, "Unexpected type: ", entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
 			}
 		}
 
@@ -217,8 +217,8 @@ public class GroupDataService {
 			} else if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
 				productGroupsList.add(entry);
 			} else {
-				Logging.warning(this, "Unexpected " + Object2GroupEntry.GROUP_TYPE_KEY + ": "
-						+ entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
+				Logging.warning(this, "Unexpected ", Object2GroupEntry.GROUP_TYPE_KEY, ": ",
+						entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
 			}
 		}
 

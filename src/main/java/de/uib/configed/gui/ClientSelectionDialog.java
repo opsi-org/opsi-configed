@@ -367,7 +367,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.element = element;
 		AbstractSelectOperation[] operations = element.supportedOperations().toArray(new AbstractSelectOperation[0]);
 		if (operations.length == 0) {
-			Logging.warning("Elements without any operations: " + result);
+			Logging.warning("Elements without any operations: ", result);
 			return result;
 		}
 
@@ -554,7 +554,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		List<AbstractSelectElement> elements = manager.getBackend().getLocalizedHardwareList().get(hardware);
 		if (elements == null) {
-			Logging.warning(this, hardware + " not found in localized hardware list");
+			Logging.warning(this, "hardware ", hardware, " not found in localized hardware list");
 		} else {
 			for (AbstractSelectElement element : elements) {
 				result.groupList.add(createSimpleGroup(element));
@@ -1039,7 +1039,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		} else if (component instanceof JSpinner jSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
 			jSpinner.setValue(data.getData());
 		} else {
-			Logging.warning("component " + component + " with datatype " + data.getType() + " not treated");
+			Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
 		}
 	}
 
@@ -1181,7 +1181,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		} else if (source instanceof JLabel) {
 			index = 0;
 		} else {
-			Logging.warning(this, "unexpected source in selectOperation: " + source);
+			Logging.warning(this, "unexpected source in selectOperation: ", source);
 		}
 		addDataComponent(sourceGroup, index);
 

@@ -48,7 +48,7 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 				} else if (caller instanceof PackageManagerInstallParameterDialog packageManagerInstallParameterDialog) {
 					packageManagerInstallParameterDialog.doAction3();
 				} else {
-					Logging.warning(this, "caller has unexpected class " + caller.getClass());
+					Logging.warning(this, "caller has unexpected class ", caller.getClass());
 				}
 			});
 		}

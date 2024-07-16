@@ -399,7 +399,7 @@ public class PanelSWInfo extends JPanel {
 		} else if (kindOfExport == KindOfExport.PDF) {
 			sendToPDF();
 		} else {
-			Logging.warning(this, "unexpected kindOfExport " + kindOfExport);
+			Logging.warning(this, "unexpected kindOfExport ", kindOfExport);
 		}
 	}
 

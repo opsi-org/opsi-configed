@@ -147,7 +147,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 				subjectAlternativeNames = certificate.getSubjectAlternativeNames().stream()
 						.map(peerHostname -> (String) peerHostname.get(1)).toList();
 			} catch (CertificateParsingException e) {
-				Logging.warning(this, "problem in parsing certificate", e);
+				Logging.warning(this, e, "problem in parsing certificate");
 			}
 
 			return subjectAlternativeNames;
@@ -166,7 +166,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 			List<String> subjectAlternativeNames = getSubjectAlternativeNames(peerCertificate);
 
 			if (subjectAlternativeNames == null || subjectAlternativeNames.isEmpty()) {
-				Logging.warning(this, "no SAN found: " + subjectAlternativeNames);
+				Logging.warning(this, "no SAN found: ", subjectAlternativeNames);
 				return false;
 			}
 

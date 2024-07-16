@@ -180,7 +180,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		try {
 			text = textPane.getText(element.getStartOffset(), element.getEndOffset() - element.getStartOffset()).trim();
 		} catch (BadLocationException e) {
-			Logging.warning("could not retrieve text from JTextPane, ", e);
+			Logging.warning(e, "could not retrieve text from JTextPane, ");
 		}
 		return (text.isEmpty() || !text.contains(":")) ? "" : text.substring(0, text.indexOf(":"));
 	}
@@ -433,7 +433,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 				}
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, "could not insert message into health check dialog", e);
+			Logging.warning(this, e, "could not insert message into health check dialog");
 		}
 
 		Matcher matcher = pattern.matcher(textPane.getText());

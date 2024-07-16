@@ -107,7 +107,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				} else if (p == PopupMenuTrait.POPUP_SAVE) {
 					actor.saveData();
 				} else {
-					Logging.warning(this, "unexpected action " + p);
+					Logging.warning(this, "unexpected action ", p);
 				}
 			}
 		};
@@ -690,7 +690,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		List<Object> newData = up.produce();
 
 		if (newData == null) {
-			Logging.warning(this, "readyObjects for userparts " + null);
+			Logging.warning(this, "readyObjects for userparts null");
 		} else {
 			if (!newData.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { newData });

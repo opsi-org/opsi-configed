@@ -59,7 +59,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 				} else if (remainder.equals(SavedSearch.DESCRIPTION_KEY)) {
 					rc.setDescription(value);
 				} else {
-					Logging.warning(this, "Unexpected remainer " + remainder);
+					Logging.warning(this, "Unexpected remainer ", remainder);
 				}
 			}
 		}

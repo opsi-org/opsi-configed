@@ -52,7 +52,7 @@ public final class ThemeManager {
 			return Configed.getResourceValue("theme.dark");
 
 		default:
-			Logging.warning("Cannot find translation for theme " + theme);
+			Logging.warning("Cannot find translation for theme ", theme);
 			return null;
 		}
 	}
@@ -68,7 +68,7 @@ public final class ThemeManager {
 			break;
 
 		default:
-			Logging.warning("Cannot find translation for theme " + theme);
+			Logging.warning("Cannot find translation for theme ", theme);
 		}
 	}
 
@@ -80,7 +80,7 @@ public final class ThemeManager {
 		if (availableThemes.contains(newTheme)) {
 			selectedTheme = newTheme;
 		} else {
-			Logging.warning("Failing to set theme that does not exist: " + newTheme);
+			Logging.warning("Failing to set theme that does not exist: ", newTheme);
 		}
 	}
 
@@ -102,7 +102,7 @@ public final class ThemeManager {
 			break;
 
 		default:
-			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + getSelectedTheme());
+			Logging.warning("tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
 			break;
 		}
 

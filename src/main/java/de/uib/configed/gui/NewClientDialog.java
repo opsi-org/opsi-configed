@@ -193,7 +193,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 						systemUUIDField.requestFocus();
 					}
 				} catch (BadLocationException ex) {
-					Logging.warning(this, "BadLocationException thrown: ", ex);
+					Logging.warning(this, ex, "BadLocationException thrown: ");
 				}
 			}
 

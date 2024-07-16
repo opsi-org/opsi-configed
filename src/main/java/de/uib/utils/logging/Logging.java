@@ -187,12 +187,12 @@ public final class Logging {
 
 		for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
 			if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i])) {
-				Logging.warning("renaming logfile failed for file: " + logFiles[i - 1]);
+				Logging.warning("renaming logfile failed for file: ", logFiles[i - 1]);
 			}
 		}
 
 		if (logFile.exists() && !logFile.renameTo(logFiles[0])) {
-			Logging.warning("renaming logfile failed for file: " + logFiles[0]);
+			Logging.warning("renaming logfile failed for file: ", logFiles[0]);
 		}
 	}
 
@@ -455,22 +455,6 @@ public final class Logging {
 
 	public static void notice(String mesg) {
 		log(LEVEL_NOTICE, mesg);
-	}
-
-	public static void warning(Object caller, String mesg) {
-		log(caller, LEVEL_WARNING, mesg);
-	}
-
-	public static void warning(String mesg) {
-		log(LEVEL_WARNING, mesg);
-	}
-
-	public static void warning(String mesg, Throwable ex) {
-		log(LEVEL_WARNING, mesg, ex);
-	}
-
-	public static void warning(Object caller, String mesg, Throwable ex) {
-		log(caller, LEVEL_WARNING, mesg, ex);
 	}
 
 	public static void clearErrorList() {

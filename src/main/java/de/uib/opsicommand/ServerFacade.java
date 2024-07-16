@@ -214,7 +214,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				} else if (conStat.getState() == ConnectionState.UNAUTHORIZED) {
 					return retrieveResponse(omc);
 				} else {
-					Logging.warning(this, "Encountered unhandled connection state: " + conStat);
+					Logging.warning(this, "Encountered unhandled connection state: ", conStat);
 				}
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");

@@ -160,9 +160,9 @@ public class ConfigDataService {
 					+ UserConfig.ROLE.substring(1, UserConfig.ROLE.length());
 
 			if (key != null && key.startsWith(pseudouserProducedByOldVersion)) {
-				Logging.warning(this, "user entry " + key
-						+ " produced by a still somewhere running old configed version , please delete user entry "
-						+ pseudouserProducedByOldVersion);
+				Logging.warning(this, "user entry ", key,
+						" produced by a still somewhere running old configed version , please delete user entry ",
+						pseudouserProducedByOldVersion);
 
 				deleteItems.add(configItem);
 
@@ -681,8 +681,8 @@ public class ConfigDataService {
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		if (configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS) == null) {
-			Logging.warning(this,
-					"checkStandardConfigs:  since no values found setting values for  " + KEY_OPSICLIENTD_EXTRA_EVENTS);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+					KEY_OPSICLIENTD_EXTRA_EVENTS);
 		}
 
 		List<String> result = Utils.takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
@@ -1101,14 +1101,14 @@ public class ConfigDataService {
 
 		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "'='" + obj + "'");
 		if (obj == null) {
-			Logging.warning(this, "getGlobalBooleanConfigValue '" + key + "' is null, returning default value: " + val);
+			Logging.warning(this, "getGlobalBooleanConfigValue '", key, "' is null, returning default value: ", val);
 			return val;
 		}
 
 		ConfigOption option = (ConfigOption) obj;
 		if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
-			Logging.warning(this, "getGlobalBooleanConfigValue type of '" + key + "' should be boolean, but is "
-					+ option.getType() + ", returning default value: " + val);
+			Logging.warning(this, "getGlobalBooleanConfigValue type of '", key, "' should be boolean, but is ",
+					option.getType(), ", returning default value: ", val);
 			return val;
 		}
 

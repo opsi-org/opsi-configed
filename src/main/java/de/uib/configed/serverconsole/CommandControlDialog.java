@@ -513,7 +513,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		try {
 			prio = Integer.parseInt(!jTextFieldPriority.getText().isEmpty() ? jTextFieldPriority.getText() : "0");
 		} catch (NumberFormatException e) {
-			Logging.warning("Cannot get value from priority field Exception: ", e);
+			Logging.warning(e, "Cannot get value from priority field Exception: ");
 		}
 		List<String> coms = new LinkedList<>();
 		for (String c : jTextPaneCommands.getText().split("\n")) {

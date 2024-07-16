@@ -381,7 +381,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		if (!success) {
-			Logging.warning(this, "cannot not find saved states in " + Configed.getSavedStatesLocationName());
+			Logging.warning(this, "cannot not find saved states in ", Configed.getSavedStatesLocationName());
 		}
 
 		if (Configed.getSavedStatesLocationName() == null || !success) {
@@ -695,7 +695,7 @@ public class ConfigedMain implements MessagebusListener {
 				licenseDisplayer.setConfigedMain(ConfigedMain.this);
 				licenseDisplayer.initAndShowGUI();
 			} catch (IOException ioE) {
-				Logging.warning(this, "Unable to open FXML file.", ioE);
+				Logging.warning(this, ioE, "Unable to open FXML file.");
 			}
 		} else {
 			licenseDisplayer.display();
@@ -1327,7 +1327,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		if (clientTree.getGroupNode(groupname) == null) {
-			Logging.warning("no group " + groupname);
+			Logging.warning("no group ", groupname);
 			return false;
 		}
 
@@ -2320,7 +2320,7 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 
 		default:
-			Logging.warning(this, "resetting View failed, no index for viewIndex: '" + viewIndex + "' found");
+			Logging.warning(this, "resetting View failed, no index for viewIndex: '", viewIndex, "' found");
 			break;
 		}
 

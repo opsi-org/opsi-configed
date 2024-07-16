@@ -88,10 +88,10 @@ public class OpsiServerVersionRetriever {
 			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 			connection.setRequestMethod("HEAD");
 		} catch (URISyntaxException e) {
-			Logging.warning(this, "cannot create URI from " + serviceURL, e);
+			Logging.warning(this, e, "cannot create URI from ", serviceURL);
 			return;
 		} catch (IOException e) {
-			Logging.warning(this, "error in testing connection to server for getting server opsi version", e);
+			Logging.warning(this, e, "error in testing connection to server for getting server opsi version");
 			return;
 		}
 

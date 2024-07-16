@@ -210,7 +210,7 @@ public class CompletionComboButton {
 
 	private final void setItems(Set<String> items, final String curdir) {
 		if (items == null) {
-			Logging.warning("getDirectoriesIn could not find directories in " + curdir);
+			Logging.warning("getDirectoriesIn could not find directories in ", curdir);
 		} else {
 			combobox.removeAllItems();
 			for (String element : defaultvalues) {

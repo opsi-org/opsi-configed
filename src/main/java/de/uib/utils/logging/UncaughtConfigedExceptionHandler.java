@@ -16,24 +16,24 @@ public class UncaughtConfigedExceptionHandler implements UncaughtExceptionHandle
 	@Override
 	public void uncaughtException(Thread thread, Throwable throwable) {
 		if (throwable instanceof Exception exception) {
-			Logging.warning("Error in thread " + thread, exception);
+			Logging.warning(exception, "Error in thread ", thread);
 
 			String errorText = Configed.getResourceValue("UncaughtExceptionHandler.notForeseenError") + " "
 					+ exception.getMessage();
 
 			if (exception instanceof IllegalComponentStateException) {
-				Logging.warning("IllegalComponentStateException " + exception);
+				Logging.warning(exception, "IllegalComponentStateException ");
 			} else if (exception.getMessage() == null) {
 				// according to some internet info it could occure on ground of some
 				// optimization in the JIT compiler
 
-				Logging.warning("exception with null message " + exception);
+				Logging.warning(exception, "exception with null message ");
 			} else {
 				Logging.error(exception, errorText, "\n",
 						Configed.getResourceValue("UncaughtExceptionHandler.pleaseCheckLogfile"));
 			}
 		} else {
-			Logging.warning("Thread " + thread + " - RunTime Error", throwable);
+			Logging.warning(throwable, "Thread ", thread, " - RunTime Error");
 			if (throwable instanceof OutOfMemoryError) {
 				Main.endApp(Main.ERROR_OUT_OF_MEMORY);
 			}

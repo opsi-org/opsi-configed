@@ -121,7 +121,7 @@ public class CSVImportDataModifier {
 				csvData.add(new HashMap<>(csvRecord.toMap()));
 			}
 		} catch (IOException | UncheckedIOException ex) {
-			Logging.warning(this, "Failed to read CSV file", ex);
+			Logging.warning(this, ex, "Failed to read CSV file");
 			displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title"),
 					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"));
 			csvData = null;

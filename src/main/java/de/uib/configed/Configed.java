@@ -128,7 +128,7 @@ public final class Configed {
 			if (Messages.getResourceBundle() == null) {
 				Logging.warning("Messages.messagesBundle is null...");
 			} else if (!Messages.getResourceBundle().containsKey(key)) {
-				Logging.warning("Messagebundle does not contain key " + key);
+				Logging.warning("Messagebundle does not contain key ", key);
 			} else {
 				result = Messages.getResourceBundle().getString(key);
 			}
@@ -296,7 +296,7 @@ public final class Configed {
 		try (FileInputStream inputStream = new FileInputStream(extraLocalizationFile)) {
 			extraLocalization.load(inputStream);
 		} catch (IOException ex) {
-			Logging.warning("could not load properties file " + extraLocalizationFile, ex);
+			Logging.warning(ex, "could not load properties file ", extraLocalizationFile);
 			return false;
 		}
 
@@ -397,7 +397,7 @@ public final class Configed {
 			Logging.info("writing saved states, created file " + savedStatesDir);
 
 			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
-				Logging.warning("mkdirs for saved states failed, for File " + savedStatesDir);
+				Logging.warning("mkdirs for saved states failed, for File ", savedStatesDir);
 			}
 
 			Logging.info("writing saved states, got dirs");
@@ -432,7 +432,7 @@ public final class Configed {
 		try {
 			Configed.getSavedStates().load();
 		} catch (IOException iox) {
-			Logging.warning("saved states file could not be loaded", iox);
+			Logging.warning(iox, "saved states file could not be loaded");
 		}
 
 		Integer oldUsageCount = Integer.valueOf(Configed.getSavedStates().getProperty("saveUsageCount", "0"));

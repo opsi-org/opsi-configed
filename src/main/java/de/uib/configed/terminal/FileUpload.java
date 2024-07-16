@@ -38,9 +38,9 @@ public class FileUpload extends DropTarget {
 			droppedFiles = (List<File>) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 			Logging.info(this, "dropped files: " + droppedFiles);
 		} catch (UnsupportedFlavorException ex) {
-			Logging.warning(this, "this should not happen, unless javaFileListFlavor is no longer supported: " + ex);
+			Logging.warning(this, ex, "this should not happen, unless javaFileListFlavor is no longer supported");
 		} catch (IOException ex) {
-			Logging.warning(this, "cannot retrieve dropped file: ", ex);
+			Logging.warning(this, ex, "cannot retrieve dropped file: ");
 		}
 
 		return droppedFiles;

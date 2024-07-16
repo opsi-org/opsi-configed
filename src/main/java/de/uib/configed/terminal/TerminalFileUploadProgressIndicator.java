@@ -65,7 +65,7 @@ public class TerminalFileUploadProgressIndicator extends JPanel {
 		try {
 			fileUploadProgressBar.setMaximum((int) Files.size(file.toPath()));
 		} catch (IOException e) {
-			Logging.warning(this, "unable to retrieve file size: ", e);
+			Logging.warning(this, e, "unable to retrieve file size: ");
 		}
 
 		uploadedFilesLabel.setText(uploadedFiles + "/" + totalFiles);

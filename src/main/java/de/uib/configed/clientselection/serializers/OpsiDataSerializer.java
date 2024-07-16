@@ -271,7 +271,7 @@ public class OpsiDataSerializer {
 					builder.append(", ");
 				}
 			} else {
-				Logging.warning("child is not a map, but " + child.getClass());
+				Logging.warning("child is not a map, but ", child.getClass());
 			}
 		}
 		builder.append(" ]");

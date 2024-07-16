@@ -423,7 +423,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		} else if (document == ipAddressField.getDocument()) {
 			applyChanges(ipAddressField, HostInfo.CLIENT_IP_ADDRESS_KEY);
 		} else {
-			Logging.warning(this, "unexpected source in reactToHostDataChange, document: " + document);
+			Logging.warning(this, "unexpected source in reactToHostDataChange, document: ", document);
 		}
 	}
 

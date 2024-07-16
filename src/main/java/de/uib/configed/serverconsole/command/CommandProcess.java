@@ -132,8 +132,8 @@ public class CommandProcess {
 		}
 		Map<String, Object> error = POJOReMapper.remap(message.get("error"), new TypeReference<Map<String, Object>>() {
 		});
-		Logging.warning(this, "Command execution failed: " + error.get("code") + " - " + error.get("message") + ": "
-				+ error.get("details"));
+		Logging.warning(this, "Command execution failed: ", error.get("code"), " - ", error.get("message"), ": ",
+				error.get("details"));
 		return (String) error.get("message");
 	}
 

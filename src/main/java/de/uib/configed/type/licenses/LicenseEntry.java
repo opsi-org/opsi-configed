@@ -44,7 +44,7 @@ public class LicenseEntry extends TreeMap<String, Object> {
 		}
 
 		if (super.get(ID_KEY) == null) {
-			Logging.warning(this.getClass(), "missing primary key in " + importedEntry);
+			Logging.warning(this.getClass(), "missing primary key in ", importedEntry);
 		}
 
 		Object maxInstallations = importedEntry.get(MAX_INSTALLATIONS_KEY);
@@ -58,8 +58,8 @@ public class LicenseEntry extends TreeMap<String, Object> {
 				super.put(MAX_INSTALLATIONS_KEY, new ExtendedInteger(integer));
 			}
 		} else {
-			Logging.warning(this.getClass(),
-					" " + importedEntry.get(ID_KEY) + " has not an integer for " + maxInstallations);
+			Logging.warning(this.getClass(), " ", importedEntry.get(ID_KEY), " has not an integer for ",
+					maxInstallations);
 		}
 
 		if (importedEntry.get(TYPE_SERVICE_KEY) != null) {
@@ -83,7 +83,7 @@ public class LicenseEntry extends TreeMap<String, Object> {
 			result = CONCURRENT;
 			break;
 		default:
-			Logging.warning(this, "illlegal servicetype " + servicetype);
+			Logging.warning(this, "illlegal servicetype ", servicetype);
 			result = "";
 		}
 		return result;

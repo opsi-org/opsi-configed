@@ -45,7 +45,7 @@ public class UnderlineHighlightPainter extends LayerPainter {
 					alloc = shape.getBounds();
 				}
 			} catch (BadLocationException e) {
-				Logging.warning(this, "could not get shape for location", e);
+				Logging.warning(this, e, "could not get shape for location");
 				return null;
 			}
 		}

@@ -269,7 +269,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 			List<String> identKeys = SWAuditEntry.KEYS_FOR_IDENT;
 			if (rowValues.length != identKeys.size()) {
-				Logging.warning(this, "illegal ID " + ID);
+				Logging.warning(this, "illegal ID ", ID);
 			} else {
 				int i = 0;
 				for (String key : identKeys) {
@@ -666,8 +666,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			setSWAssignments();
 		} else {
 			// Should not happen because SoftwareShowMode has only two elements
-			Logging.warning(this,
-					"softwareShow has Value " + softwareShow + " that does not exist in SoftwareShowMode");
+			Logging.warning(this, "softwareShow has Value ", softwareShow, " that does not exist in SoftwareShowMode");
 		}
 	}
 

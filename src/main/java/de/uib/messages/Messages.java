@@ -77,7 +77,7 @@ public final class Messages {
 		}
 
 		if (existingLocale == null) {
-			Logging.warning("Locale " + myLocale + " not existing...");
+			Logging.warning("Locale ", myLocale, " not existing...");
 		}
 
 		Logging.info("Selected locale: " + existingLocale);
@@ -113,8 +113,8 @@ public final class Messages {
 			} else if (localeString.length() == 2) {
 				produceLocale(localeString);
 			} else {
-				Logging.warning("Bad format for locale, use <language>_<country> or <language>"
-						+ ", each component consisting of two chars, or just a two char <language>");
+				Logging.warning("Bad format for locale, use <language>_<country> or <language>",
+						", each component consisting of two chars, or just a two char <language>");
 			}
 		}
 
@@ -129,7 +129,7 @@ public final class Messages {
 		try {
 			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 		} catch (MissingResourceException e) {
-			Logging.warning("Could not load messagesBundle for locale " + myLocale, e);
+			Logging.warning(e, "Could not load messagesBundle for locale ", myLocale);
 			produceLocaleEnUS();
 			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 		}
@@ -160,7 +160,7 @@ public final class Messages {
 				line = reader.readLine();
 			}
 		} catch (IOException ex) {
-			Logging.warning("Messages exception on reading!", ex);
+			Logging.warning(ex, "Messages exception on reading!");
 		}
 
 		Logging.debug("Messages, existing names " + names);

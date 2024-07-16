@@ -298,7 +298,7 @@ public class ClientTree extends AbstractGroupTree {
 		for (Entry<String, List<String>> entry : group2Members.entrySet()) {
 			GroupNode groupNode = groupNodes.get(entry.getKey());
 			if (groupNode == null) {
-				Logging.warning("group for groupId " + entry.getKey() + " not found");
+				Logging.warning("group for groupId ", entry.getKey(), " not found");
 			} else {
 				boolean register = isInDirectory(groupNode);
 				produceClients(entry.getValue(), groupNode, register);

@@ -183,7 +183,7 @@ public class ProductState extends HashMap<String, String> {
 
 	private String getRetrievedValue(String key) {
 		if (SERVICE_KEYS.indexOf(key) < 0) {
-			Logging.warning("service key " + key + " not known");
+			Logging.warning("service key ", key, " not known");
 			return "";
 		}
 

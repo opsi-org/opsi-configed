@@ -70,7 +70,7 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			try (FileInputStream reader = new FileInputStream(file)) {
 				uploadFileInChunks(file, reader.getChannel(), fileId);
 			} catch (IOException ex) {
-				Logging.warning("cannot upload file to server: ", ex);
+				Logging.warning(ex, "cannot upload file to server: ");
 			}
 
 			queue.remove(file);
@@ -180,10 +180,10 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			isFileUploadSuccessfull = true;
 		} catch (JsonProcessingException ex) {
 			isFileUploadSuccessfull = false;
-			Logging.warning(this, "error occurred while processing JSON: ", ex);
+			Logging.warning(this, ex, "error occurred while processing JSON: ");
 		} catch (IOException ex) {
 			isFileUploadSuccessfull = false;
-			Logging.warning(this, "unable to retrieve file size: ", ex);
+			Logging.warning(this, ex, "unable to retrieve file size: ");
 		}
 	}
 

@@ -473,10 +473,9 @@ public class LogPane extends JPanel implements KeyListener {
 				savedMaxShownLogLevel = Integer.valueOf(Configed.getSavedStates().getProperty("savedMaxShownLogLevel"));
 			}
 		} catch (NumberFormatException ex) {
-			Logging.warning(this,
-					"savedMaxShownLogLevel could not be read, value "
-							+ Configed.getSavedStates().getProperty("savedMaxShownLogLevel") + ", fallback to "
-							+ DEFAULT_MAX_SHOW_LEVEL);
+			Logging.warning(this, "savedMaxShownLogLevel could not be read, value ",
+					Configed.getSavedStates().getProperty("savedMaxShownLogLevel"), ", fallback to ",
+					DEFAULT_MAX_SHOW_LEVEL);
 			Configed.getSavedStates().setProperty("savedMaxShownLogLevel", String.valueOf(DEFAULT_MAX_SHOW_LEVEL));
 		}
 		Logging.info(this, "produceInitialMaxShowLevel " + savedMaxShownLogLevel);
@@ -511,7 +510,7 @@ public class LogPane extends JPanel implements KeyListener {
 				}
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, "BadLocationException thrown in logging: " + e);
+			Logging.warning(this, e, "BadLocationException thrown in logging");
 		}
 		jTextPane.setDocument(document);
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -609,7 +608,7 @@ public class LogPane extends JPanel implements KeyListener {
 						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
 				highlighter.removeAllHighlights();
 			} catch (BadLocationException e) {
-				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
+				Logging.warning(this, e, "BadLocationException for setting caret in LotPane");
 			}
 		}
 
@@ -710,7 +709,7 @@ public class LogPane extends JPanel implements KeyListener {
 				jTextPane.getCaret().setVisible(true);
 				jTextPane.setCaretPosition(offset);
 			} catch (BadLocationException e) {
-				Logging.warning(this, "error with setting the caret in LogPane: " + e);
+				Logging.warning(this, e, "error with setting the caret in LogPane");
 			}
 		}
 	}

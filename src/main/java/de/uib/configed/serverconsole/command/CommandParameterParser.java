@@ -116,7 +116,7 @@ public final class CommandParameterParser {
 		if (caller instanceof CommandExecutor) {
 			outputDia = caller.getDialog();
 		} else {
-			Logging.warning(this, "caller has unexpected type in parseParameter " + caller.getClass());
+			Logging.warning(this, "caller has unexpected type in parseParameter ", caller.getClass());
 		}
 		SingleCommand commandCopy = new SingleCommandTemplate(command);
 		List<String> params = command.getParameterList();
@@ -218,7 +218,7 @@ public final class CommandParameterParser {
 			result = getUserText(method, outputDia);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
 		} else {
-			Logging.warning(this, "unexpected method " + method + " and format " + format);
+			Logging.warning(this, "unexpected method ", method, " and format ", format);
 		}
 
 		return result;
@@ -272,7 +272,7 @@ public final class CommandParameterParser {
 			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_SQUARE, ",");
 			break;
 		default:
-			Logging.warning(this, "cannot format into \"" + format + "\" with \"" + Arrays.toString(result) + "\"");
+			Logging.warning(this, "cannot format into \"", format, "\" with \"", Arrays.toString(result), "\"");
 			break;
 		}
 		return formatedResult;

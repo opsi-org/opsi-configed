@@ -29,7 +29,7 @@ public class ReloadDispatcher {
 		if (handlers.containsKey(event)) {
 			handlers.get(event).handle(event);
 		} else {
-			Logging.warning(this, "No reload handler is available for " + event + " reload event");
+			Logging.warning(this, "No reload handler is available for ", event, " reload event");
 		}
 	}
 }

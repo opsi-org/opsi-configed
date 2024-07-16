@@ -328,7 +328,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		} else if (e.getSource() == buttonAdd || e.getSource() == buttonClear) {
 			// These buttons will be used only in subclasses
 		} else {
-			Logging.warning(this, "unexpected action on source " + e.getSource());
+			Logging.warning(this, "unexpected action on source ", e.getSource());
 		}
 	}
 	// -------------

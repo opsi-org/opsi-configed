@@ -24,7 +24,7 @@ public class LicenseUsableForEntry extends HashMap<String, String> {
 			entry.put(imported.getKey(), (String) imported.getValue());
 		}
 		if (importedEntry.get(LICENSE_ID_KEY) == null || importedEntry.get(LICENSE_POOL_ID_KEY) == null) {
-			Logging.warning("LicenseUsableForEntry,  missing primary key in " + importedEntry);
+			Logging.warning("LicenseUsableForEntry,  missing primary key in ", importedEntry);
 		}
 
 		String pseudokey = Utils.pseudokey(new String[] { entry.get(LICENSE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });

@@ -97,7 +97,7 @@ public class UserConfigProducing {
 					userNames.add(userName);
 					createPropertySubclass(userName, UserConfig.CONFIGKEY_STR_USER);
 				} else {
-					Logging.warning(this, "username not specified in key " + key);
+					Logging.warning(this, "username not specified in key ", key);
 				}
 			}
 		}
@@ -115,7 +115,7 @@ public class UserConfigProducing {
 		if (lenOfRoleName > 0) {
 			return roleName.substring(0, lenOfRoleName);
 		} else {
-			Logging.warning(this, "rolePart without proper rolename found " + roleKey);
+			Logging.warning(this, "rolePart without proper rolename found ", roleKey);
 		}
 
 		return null;

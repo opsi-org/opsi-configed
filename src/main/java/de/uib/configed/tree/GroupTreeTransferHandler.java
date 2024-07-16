@@ -75,9 +75,9 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		try {
 			transferData = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
 		} catch (UnsupportedFlavorException ex) {
-			Logging.warning(this, " unsupported data flavor " + ex);
+			Logging.warning(this, ex, " unsupported data flavor ");
 		} catch (IOException ex) {
-			Logging.warning(this, " transferable io exception " + ex);
+			Logging.warning(this, ex, " transferable io exception ");
 		}
 
 		GroupNode sourceGroupNode = transferRepresentsGroup(transferData);
@@ -150,8 +150,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 			if (dropThis != dropThisVariant) {
 				Logging.warning(this, "getSourceActions,  dropThis != dropThisVariant");
-				Logging.warning(this, "getSourceActions,  dropThis " + dropThis);
-				Logging.warning(this, "getSourceActions,  dropThisVariant " + dropThisVariant);
+				Logging.warning(this, "getSourceActions,  dropThis ", dropThis);
+				Logging.warning(this, "getSourceActions,  dropThisVariant ", dropThisVariant);
 			}
 
 			GroupNode parent = (GroupNode) dropThisVariant.getParent();

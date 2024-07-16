@@ -320,10 +320,9 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		Logging.info(this, "doActionGetVersions result " + result);
 
 		if (result == null || result.isEmpty()) {
-			Logging.warning(this,
-					"doActionGetVersions, could not find versions in file " + dir
-							+ ".Please check if directory exists and contains the file OPSI/control.\n"
-							+ "Please also check the rights of the file/s.");
+			Logging.warning(this, "doActionGetVersions, could not find versions in file ", dir,
+					".Please check if directory exists and contains the file OPSI/control.\n",
+					"Please also check the rights of the file/s.");
 		} else {
 			String[] versions = result.replace("version: ", "").split("\n");
 			Logging.info(this, "doActionGetVersions, getDirectories result " + Arrays.toString(versions));

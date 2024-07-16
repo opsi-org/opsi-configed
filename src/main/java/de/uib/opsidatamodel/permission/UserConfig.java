@@ -190,15 +190,15 @@ public class UserConfig {
 
 		if (booleanMap.get(key) == null) {
 			if (!getArcheoConfig().hasBooleanConfig(key)) {
-				Logging.warning(this, "UserConfig : no default value for key " + key + " for user " + username);
+				Logging.warning(this, "UserConfig : no default value for key ", key, " for user ", username);
 				return false;
 			} else {
 				boolean val = false;
 				if (username.equals(getArcheoConfig().getUserName())) {
-					Logging.warning(this, "UserConfig : setting value for key " + key + " for default user ");
+					Logging.warning(this, "UserConfig : setting value for key ", key, " for default user ");
 				} else {
-					Logging.warning(this, "UserConfig : setting value for key " + key + " for user " + username
-							+ " to default value " + getArcheoConfig().getBooleanValue(key));
+					Logging.warning(this, "UserConfig : setting value for key ", key, " for user ", username,
+							" to default value ", getArcheoConfig().getBooleanValue(key));
 					val = getArcheoConfig().getBooleanValue(key);
 				}
 				booleanMap.put(key, val);

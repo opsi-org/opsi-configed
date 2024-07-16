@@ -55,7 +55,7 @@ public abstract class AbstractBackgroundFileUploader extends SwingWorker<Void, I
 				terminal.getTerminalFileUploadProgressIndicator().updateFileUploadProgressBar(chunkSize,
 						(int) Files.size(currentFile.toPath()));
 			} catch (IOException e) {
-				Logging.warning(this, "unable to retrieve file size: ", e);
+				Logging.warning(this, e, "unable to retrieve file size: ");
 			}
 		}
 	}

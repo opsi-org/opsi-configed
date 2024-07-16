@@ -156,7 +156,7 @@ public abstract class AbstractSWExporter {
 				line = in.readLine();
 			}
 		} catch (IOException iox) {
-			Logging.warning(this, "IOException " + iox);
+			Logging.warning(this, iox, "IOException ");
 		}
 	}
 

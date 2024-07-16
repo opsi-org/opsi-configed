@@ -234,7 +234,7 @@ public class MapTableModel extends AbstractTableModel {
 				}
 			}
 		} else {
-			Logging.warning(this, "col is neither 0 or 1, but " + col + ", so we don't know what to do...");
+			Logging.warning(this, "col is neither 0 or 1, but ", col, ", so we don't know what to do...");
 		}
 
 		if (result == null) {

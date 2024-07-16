@@ -245,7 +245,7 @@ public class HostInfo {
 			break;
 
 		default:
-			Logging.warning(this, "key " + key + " not expected");
+			Logging.warning(this, "key ", key, " not expected");
 			break;
 		}
 	}
@@ -629,7 +629,7 @@ public class HostInfo {
 
 	public void showAndSaveInternally(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges) {
 		if (client == null || client.isEmpty()) {
-			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
+			Logging.warning(this, "show and save: no hostId given: ", sourceOfChanges);
 			return;
 		}
 

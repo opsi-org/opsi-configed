@@ -192,7 +192,7 @@ public class UserRolesConfigDataService {
 				persistenceController.getConfigDataService().getConfigListCellOptionsPD()).produce();
 
 		if (readyConfigObjects == null) {
-			Logging.warning(this, "readyObjects for userparts " + null);
+			Logging.warning(this, "readyObjects for userparts null");
 		} else {
 			if (!readyConfigObjects.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
@@ -245,7 +245,7 @@ public class UserRolesConfigDataService {
 				+ Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
 		info.append("\n");
 
-		Logging.warning(this, " user role administration configured but not permitted by the modules file " + info);
+		Logging.warning(this, " user role administration configured but not permitted by the modules file ", info);
 
 		FOpsiLicenseMissingText.callInstanceWith(info.toString());
 	}
@@ -581,8 +581,8 @@ public class UserRolesConfigDataService {
 	}
 
 	private List<Object> computeClientConfigInstallByShutdown(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 		Map<String, Object> item = Utils.createNOMBoolConfig(
 				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
@@ -594,8 +594,8 @@ public class UserRolesConfigDataService {
 
 	private List<Object> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(
 			List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 		// key not yet configured
 		List<Object> defaultValues = new ArrayList<>();
 		// example for standard configuration other than empty
@@ -625,8 +625,8 @@ public class UserRolesConfigDataService {
 	}
 
 	private List<Object> computeDisabledClientActions(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+				ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
 		// key not yet configured
 		List<Object> defaultValues = Collections.emptyList();
 
@@ -650,8 +650,8 @@ public class UserRolesConfigDataService {
 	}
 
 	private List<Object> computeOpsiclientdExtraEvents(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+				ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
 		// key not yet configured
 		List<Object> defaultValues = Collections
 				.singletonList(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
@@ -764,7 +764,7 @@ public class UserRolesConfigDataService {
 		// ping_linux
 		String key = RemoteControl.CONFIG_KEY + "." + "ping_linux";
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			String command = "xterm +hold -e ping %host%";
 			String description = "ping, started in a Linux environment";
@@ -781,7 +781,7 @@ public class UserRolesConfigDataService {
 		key = RemoteControl.CONFIG_KEY + "." + "ping_windows";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			String command = "cmd.exe /c start ping %host%";
 			String description = "ping, started in a Windows terminal";
@@ -798,7 +798,7 @@ public class UserRolesConfigDataService {
 		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_linux";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			String command = "firefox https://%host%:4441/info.html";
 			String description = "opsiclientd  timeline, called from a Linux environment, firefox recommended";
@@ -815,7 +815,7 @@ public class UserRolesConfigDataService {
 		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_windows";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			String command = "cmd.exe /c start https://%host%:4441/info.html";
 			String description = "opsiclientd  timeline, called rfrom a Windows environment";
@@ -834,7 +834,7 @@ public class UserRolesConfigDataService {
 		String key = OpsiServiceNOMPersistenceController.CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			StringBuilder qbuf = new StringBuilder("select");
 			qbuf.append(" hostId, productId, installationStatus from ");
@@ -860,7 +860,7 @@ public class UserRolesConfigDataService {
 		String key = SavedSearch.CONFIG_KEY + "." + "product_failed";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			StringBuilder val = new StringBuilder();
 			val.append("{ \"version\" : \"2\", ");
@@ -888,16 +888,16 @@ public class UserRolesConfigDataService {
 	private void checkSSHCommands(Map<String, List<Object>> configDefaultValues,
 			List<Map<String, Object>> readyObjects) {
 		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER,
 					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER_DEFAULT_VALUE,
 					"default windows username for deploy-client-agent-script"));
 		}
 
 		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW,
 					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE,
 					"default windows password for deploy-client-agent-script"));
@@ -957,8 +957,8 @@ public class UserRolesConfigDataService {
 		checkSSHCommands(configDefaultValues, readyObjects);
 
 		if (!configDefaultValues.containsKey(CONFIGED_WORKBENCH_KEY)) {
-			Logging.warning(this,
-					"checkStandardConfigs:  since no values found setting values for  " + CONFIGED_WORKBENCH_KEY);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+					CONFIGED_WORKBENCH_KEY);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", CONFIGED_WORKBENCH_KEY,
 					persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD(),
 					"default path to opsiproducts"));

@@ -84,7 +84,7 @@ public class ModulePermissionValue {
 				result = new ExtendedInteger(number);
 			}
 		} else {
-			Logging.warning(this, "ob has unexpected type " + object.getClass() + " in retrieveMaxClients");
+			Logging.warning(this, "ob has unexpected type ", object.getClass(), " in retrieveMaxClients");
 		}
 
 		return result;

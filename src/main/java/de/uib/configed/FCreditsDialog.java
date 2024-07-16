@@ -45,7 +45,7 @@ public final class FCreditsDialog extends FGeneralDialog {
 				message.append(line + "<br>");
 			}
 		} catch (IOException e) {
-			Logging.warning(this, "unable to read credits file", e);
+			Logging.warning(this, e, "unable to read credits file");
 		}
 	}
 

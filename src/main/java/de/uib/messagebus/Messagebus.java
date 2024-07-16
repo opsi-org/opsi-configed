@@ -110,7 +110,7 @@ public class Messagebus implements MessagebusListener {
 			}
 
 			if (System.currentTimeMillis() - start >= timeoutMs) {
-				Logging.warning("Timed out after " + timeoutMs + " ms while waiting for inital subscription event");
+				Logging.warning("Timed out after ", timeoutMs, " ms while waiting for inital subscription event");
 				return false;
 			}
 			Utils.threadSleep(this, 50);
@@ -124,7 +124,7 @@ public class Messagebus implements MessagebusListener {
 		try {
 			uri = new URI(produceURL());
 		} catch (URISyntaxException ex) {
-			Logging.warning(this, "Inavlid URI: " + uri, ex);
+			Logging.warning(this, ex, "Inavlid URI: ", uri);
 		}
 
 		return uri;
@@ -222,10 +222,10 @@ public class Messagebus implements MessagebusListener {
 				byte[] msgpackBytes = mapper.writeValueAsBytes(message);
 				sendMessage(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
 			} catch (JsonProcessingException ex) {
-				Logging.warning(this, "Error occurred while processing msgpack: ", ex);
+				Logging.warning(this, ex, "Error occurred while processing msgpack: ");
 			}
 		} else {
-			Logging.warning(this, "Message of type '" + message.get("type") + "' not sent, messagebus not connected");
+			Logging.warning(this, "Message of type '", message.get("type"), "' not sent, messagebus not connected");
 		}
 	}
 
@@ -302,7 +302,7 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onError(Exception ex) {
-		Logging.warning(this, "Messagebus connection error: " + ex);
+		Logging.warning(this, ex, "Messagebus connection error");
 	}
 
 	@Override

@@ -251,7 +251,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			BaseFont bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
 			symbolFont = new Font(bf, 11);
 		} catch (DocumentException | IOException e) {
-			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :", e);
+			Logging.warning(e, "ExporterToPDF::createTableDataElement", " BaseFont can't be created :");
 			symbolFont = SMALL;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();

@@ -185,8 +185,8 @@ public class SoftwareDataService {
 					v -> new ArrayList<>());
 			if (softwareIds.indexOf(swKEY) == -1) {
 				if (getInstalledSoftwareInformationForLicensingPD().get(swKEY) == null) {
-					Logging.warning(this, "license pool " + licensePoolKEY
-							+ " is assigned to a not listed software with ID " + swKEY);
+					Logging.warning(this, "license pool ", licensePoolKEY,
+							" is assigned to a not listed software with ID ", swKEY);
 					List<String> unknownSoftwareIds = fLicensePool2UnknownSoftwareList.computeIfAbsent(licensePoolKEY,
 							s -> new ArrayList<>());
 					unknownSoftwareIds.add(swKEY);
@@ -278,7 +278,7 @@ public class SoftwareDataService {
 			}
 
 			if (!swIdent) {
-				Logging.warning(this, "Missing installed software entry " + swAuditClientEntry.getSWIdent());
+				Logging.warning(this, "Missing installed software entry ", swAuditClientEntry.getSWIdent());
 			}
 		} else {
 			swIdent = true;
@@ -745,7 +745,7 @@ public class SoftwareDataService {
 			ok = removeAssociations(licensePoolIDOld, swIds);
 
 			if (!ok) {
-				Logging.warning(this, "editPool2AuditSoftware " + " failed");
+				Logging.warning(this, "editPool2AuditSoftware failed");
 			}
 		}
 
@@ -772,7 +772,7 @@ public class SoftwareDataService {
 			if (exec.doCall(omc)) {
 				ok = true;
 			} else {
-				Logging.warning(this, "editPool2AuditSoftware " + omc + " failed");
+				Logging.warning(this, "editPool2AuditSoftware ", omc, " failed");
 			}
 		}
 
@@ -880,7 +880,7 @@ public class SoftwareDataService {
 				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
 
 				if (rowsLicensesReconciliation.get(pseudokey) == null) {
-					Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
+					Logging.warning("client ", client, " or license pool ID ", licensePoolId, " do not exist");
 				} else {
 					rowsLicensesReconciliation.get(pseudokey).put("used_by_opsi", true);
 				}
@@ -938,7 +938,7 @@ public class SoftwareDataService {
 				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
 
 				if (rowsLicensesReconciliation.get(pseudokey) == null) {
-					Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
+					Logging.warning("client ", client, " or license pool ID ", licensePoolId, " do not exist");
 				} else {
 					rowsLicensesReconciliation.get(pseudokey).put("SWinventory_used", true);
 				}

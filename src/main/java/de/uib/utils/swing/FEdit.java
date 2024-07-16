@@ -257,7 +257,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		} else if (e.getSource() == buttonCancel) {
 			cancel();
 		} else {
-			Logging.warning(this, "unexpected event on source " + e.getSource());
+			Logging.warning(this, "unexpected event on source ", e.getSource());
 		}
 	}
 

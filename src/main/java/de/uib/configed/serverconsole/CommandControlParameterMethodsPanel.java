@@ -198,7 +198,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 					Configed.getResourceValue("CommandControlDialog.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (HeadlessException ble) {
-			Logging.warning(this, "Testing parameter-method failed.", ble);
+			Logging.warning(this, ble, "Testing parameter-method failed.");
 		}
 		if (caller != null) {
 			caller.setVisible(true);
@@ -222,7 +222,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
 		} catch (BadLocationException ble) {
-			Logging.warning(this, " BadLocationException  add parameter method to command failed.", ble);
+			Logging.warning(this, ble, " BadLocationException  add parameter method to command failed.");
 		}
 	}
 }

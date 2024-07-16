@@ -216,7 +216,7 @@ public class ProductDataService {
 			} else if (p.isLocalbootProduct()) {
 				depot2LocalbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
 			} else {
-				Logging.warning(this, "unexpected product type " + p.toString());
+				Logging.warning(this, "unexpected product type ", p);
 			}
 
 			Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots.computeIfAbsent(p.getProductId(),
@@ -241,8 +241,8 @@ public class ProductDataService {
 				productRow.add(productName);
 				p.appendValues(productRow);
 			} else {
-				Logging.warning(this, "retrieveProductsAllDepotsPD : product " + p.getProductId()
-						+ " seems not to exist in product table");
+				Logging.warning(this, "retrieveProductsAllDepotsPD : product ", p.getProductId(),
+						" seems not to exist in product table");
 			}
 		}
 
@@ -534,7 +534,7 @@ public class ProductDataService {
 
 		Logging.info(this, "checkProductGlobalInfos for Depot " + depotId);
 		if (!depotDataService.getDepot().equals(depotId)) {
-			Logging.warning(this, "depot irregular, preset " + depotDataService.getDepot());
+			Logging.warning(this, "depot irregular, preset ", depotDataService.getDepot());
 		}
 		if (depotId == null || depotId.isEmpty()) {
 			Logging.notice(this, "checkProductGlobalInfos called for no depot");
@@ -550,7 +550,7 @@ public class ProductDataService {
 
 		for (Entry<String, Map<String, OpsiProductInfo>> product : getProduct2VersionInfo2InfosPD().entrySet()) {
 			if (product.getValue() == null) {
-				Logging.warning(this, "retrieveProductGlobalInfos productId == null for product " + product.getKey());
+				Logging.warning(this, "retrieveProductGlobalInfos productId == null for product ", product.getKey());
 			} else {
 				Map<String, OpsiProductInfo> productAllInfos = product.getValue();
 
@@ -861,7 +861,7 @@ public class ProductDataService {
 			String host = (String) map.get("objectId");
 
 			if (!hostInfoCollections.getDepots().keySet().contains(host)) {
-				Logging.warning(this, "should be a productPropertyState for a depot, but host " + host);
+				Logging.warning(this, "should be a productPropertyState for a depot, but host ", host);
 				continue;
 			}
 

@@ -292,8 +292,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				Map<String, String> stateAndAction = product.getValue();
 
 				if (stateAndAction == null) {
-					Logging.warning(this, "produceVisualStatesFromExistingEntries, no row for " + client.getKey() + ", "
-							+ product.getKey());
+					Logging.warning(this, "produceVisualStatesFromExistingEntries, no row for ", client.getKey(), ", ",
+							product.getKey());
 					continue;
 				}
 
@@ -558,10 +558,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 									"InstallationStateTableModel.contradictingProductRequirements.title"),
 							JOptionPane.WARNING_MESSAGE);
 				} else {
-					Logging.warning(this,
-							"checkForContradictingAssignments " + info + " client " + clientId + ", actualproduct "
-									+ actualProduct + ", product " + product + ", stateType " + stateType + ", state "
-									+ state);
+					Logging.warning(this, "checkForContradictingAssignments ", info, " client ", clientId,
+							", actualproduct ", actualProduct, ", product ", product, ", stateType ", stateType,
+							", state ", state);
 
 					// Contradicting product requirements: \n
 					// Product %s \n
@@ -848,7 +847,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.debug(this, "followRequirements, required state: " + requiredState);
 
 			if (!productNames.contains(requirement.getKey())) {
-				Logging.warning("followRequirements: required product: '" + requirement.getKey() + "' not installable");
+				Logging.warning("followRequirements: required product: '", requirement.getKey(), "' not installable");
 				missingProducts.add(requirement.getKey());
 			} else {
 				if (getChangedState(clientId, requirement.getKey(), ActionRequest.KEY) != null) {
@@ -1019,7 +1018,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		} else if (column == columnsToDisplay.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 			possibleOptions = producePossibleInstallationInfos((String) getValueAt(row, column));
 		} else {
-			Logging.warning(this, "unexpected column " + column);
+			Logging.warning(this, "unexpected column ", column);
 
 			return null;
 		}
@@ -1258,7 +1257,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 			setInstallationInfo(actualProduct, (String) value);
 		} else {
-			Logging.warning(this, "unexpected indexPreparedColumns[col] " + indexPreparedColumns[col]);
+			Logging.warning(this, "unexpected indexPreparedColumns[col] ", indexPreparedColumns[col]);
 		}
 
 		configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);

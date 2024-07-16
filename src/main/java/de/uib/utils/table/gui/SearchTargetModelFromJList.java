@@ -170,7 +170,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		for (int i : selection) {
 			if (i > tableModel.getRowCount() - 1) {
-				Logging.warning(this, "tableModel has index (as should be set from selection) " + i);
+				Logging.warning(this, "tableModel has index (as should be set from selection) ", i);
 			} else {
 				jList.addSelectionInterval(i, i);
 			}

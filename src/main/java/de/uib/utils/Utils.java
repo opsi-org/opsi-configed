@@ -173,7 +173,7 @@ public final class Utils {
 				break;
 
 			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
+				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
 				break;
 			}
 		}
@@ -440,7 +440,7 @@ public final class Utils {
 		if (icon != null) {
 			return icon.getImage();
 		} else {
-			Logging.warning(Utils.class, "cannot create main icon, icon " + iconPath + "not found");
+			Logging.warning(Utils.class, "cannot create main icon, icon ", iconPath, "not found");
 			return null;
 		}
 	}

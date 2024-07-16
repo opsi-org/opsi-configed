@@ -111,7 +111,7 @@ public class TableHeader extends PdfPageEventHelper {
 		if (imgURL != null) {
 			return imgURL;
 		} else {
-			Logging.warning("Couldn't find file  " + relPath);
+			Logging.warning("Couldn't find file  ", relPath);
 			return null;
 		}
 	}

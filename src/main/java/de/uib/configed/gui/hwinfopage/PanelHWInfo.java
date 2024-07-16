@@ -346,7 +346,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 									// Not needed, since other values not used for Description on top
 								}
 							} else {
-								Logging.warning(this, "unexpected value for hwclass: " + hwClass);
+								Logging.warning(this, "unexpected value for hwclass: ", hwClass);
 							}
 						}
 

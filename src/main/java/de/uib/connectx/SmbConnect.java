@@ -63,7 +63,7 @@ public final class SmbConnect {
 			netbiosName = parts[2];
 			Logging.info("buildSambaTarget " + netbiosName);
 		} else {
-			Logging.warning("buildSambaTarget, no splitting for " + depotRemoteUrl);
+			Logging.warning("buildSambaTarget, no splitting for ", depotRemoteUrl);
 		}
 
 		result = File.separator + File.separator + netbiosName + File.separator + share;

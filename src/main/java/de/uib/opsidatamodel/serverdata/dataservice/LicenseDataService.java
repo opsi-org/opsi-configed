@@ -455,7 +455,7 @@ public class LicenseDataService {
 			if (exec.doCall(omc)) {
 				result = licensePoolId;
 			} else {
-				Logging.warning(this, "could not create licensepool " + licensePoolId);
+				Logging.warning(this, "could not create licensepool ", licensePoolId);
 			}
 		}
 

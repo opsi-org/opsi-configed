@@ -44,7 +44,7 @@ public class PipedTtyConnector implements TtyConnector {
 				reader = null;
 			}
 		} catch (IOException e) {
-			Logging.warning(this, "failed to close output/input stream: " + e);
+			Logging.warning(this, e, "failed to close output/input stream");
 		}
 	}
 

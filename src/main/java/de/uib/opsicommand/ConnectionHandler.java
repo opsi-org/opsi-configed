@@ -98,7 +98,7 @@ public class ConnectionHandler {
 			Logging.info(this, "request method is supported: " + requestMethod);
 			this.requestMethod = requestMethod;
 		} else {
-			Logging.warning(this, "request method is unsupported: " + requestMethod);
+			Logging.warning(this, "request method is unsupported: ", requestMethod);
 			throw new IllegalArgumentException("request method is unsupported: " + requestMethod);
 		}
 	}

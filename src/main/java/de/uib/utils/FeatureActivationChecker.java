@@ -55,7 +55,7 @@ public final class FeatureActivationChecker {
 				Feature feature = Feature.valueOf(featureName.toUpperCase(Locale.ROOT));
 				enumSet.add(feature);
 			} catch (IllegalArgumentException e) {
-				Logging.warning("Invalid feature name: " + featureName);
+				Logging.warning("Invalid feature name: ", featureName);
 			}
 		}
 		return enumSet;
