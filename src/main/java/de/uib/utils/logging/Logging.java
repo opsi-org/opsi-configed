@@ -268,13 +268,17 @@ public final class Logging {
 		}
 	}
 
-	public static synchronized void log(int level, Object caller, Throwable ex, Object... mesg) {
-		StringBuilder message = new StringBuilder();
+	public static synchronized void log(int level, Object caller, Throwable ex, String message, Object... mesg) {
+		StringBuilder result = new StringBuilder(message);
 		for (Object o : mesg) {
-			message.append(o);
+			result.append(o);
 		}
 
-		log(level, message.toString(), caller, ex);
+		log(level, result.toString(), caller, ex);
+	}
+
+	public static synchronized void log(int level, Object caller, Throwable ex, Object... mesg) {
+		log(level, caller, ex, "", mesg);
 	}
 
 	public static void log(Object caller, int level, Throwable ex, Object... mesg) {
@@ -289,8 +293,8 @@ public final class Logging {
 		log(level, null, ex, mesg);
 	}
 
-	public static void log(int level, Object... mesg) {
-		log(level, null, (Throwable) null, mesg);
+	public static void log(int level, String message, Object... mesg) {
+		log(level, null, (Throwable) null, message, mesg);
 	}
 
 	public static void secret(Object caller, Object... mesg) {
