@@ -26,7 +26,7 @@ public final class Logviewer {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
-		Logging.essential(this.getClass(), "starting " + getClass().getName());
+		Logging.essential(this.getClass(), "starting Logviewer");
 
 		String imageHandled = "(we start image retrieving)";
 		Logging.info(this.getClass(), imageHandled);

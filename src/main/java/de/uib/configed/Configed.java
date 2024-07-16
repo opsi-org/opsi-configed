@@ -135,7 +135,7 @@ public final class Configed {
 		}
 
 		if (showLocalizationStrings) {
-			Logging.essential("Localization of '" + key + "': " + result);
+			Logging.essential("Localization of '", key, "': ", result);
 			result = "" + result + "[[" + key + "]]";
 		}
 
@@ -306,7 +306,7 @@ public final class Configed {
 	private static void initLogging() {
 		Logging.setLogfileMarker(host);
 		Logging.initLogFile();
-		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
+		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
 			Logging.setLogLevelConsole(0);
 		}

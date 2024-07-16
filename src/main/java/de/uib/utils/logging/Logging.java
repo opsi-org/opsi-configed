@@ -485,34 +485,6 @@ public final class Logging {
 		log(caller, LEVEL_ERROR, mesg, ex);
 	}
 
-	public static void critical(Object caller, String mesg) {
-		log(caller, LEVEL_CRITICAL, mesg);
-	}
-
-	public static void critical(String mesg) {
-		log(LEVEL_CRITICAL, mesg);
-	}
-
-	public static void critical(Object caller, String mesg, Throwable ex) {
-		log(caller, LEVEL_CRITICAL, mesg, ex);
-	}
-
-	public static void essential(Object caller, String mesg) {
-		log(caller, LEVEL_ESSENTIAL, mesg);
-	}
-
-	public static void essential(String mesg) {
-		log(LEVEL_ESSENTIAL, mesg);
-	}
-
-	public static void devel(Object caller, String mesg) {
-		essential(caller, mesg);
-	}
-
-	public static void devel(String mesg) {
-		essential(mesg);
-	}
-
 	public static void clearErrorList() {
 		errorList.clear();
 	}
