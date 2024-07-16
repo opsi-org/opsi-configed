@@ -43,7 +43,7 @@ public class CommandDataService {
 		Logging.info(this, "retrieveCommandList ");
 		List<Map<String, Object>> commands = exec
 				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_GET_OBJECTS, new Object[] {}));
-		Logging.debug(this, "retrieveCommandList commands " + commands);
+		Logging.debug(this, "retrieveCommandList commands ", commands);
 		return commands;
 	}
 

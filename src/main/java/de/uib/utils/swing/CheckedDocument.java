@@ -48,7 +48,7 @@ public class CheckedDocument extends PlainDocument {
 				try {
 					s.append(cCorrected);
 				} catch (IOException e) {
-					Logging.debug(this, "error encountered while appending: " + e);
+					Logging.debug(this, "error encountered while appending: ", e);
 				}
 				result = true;
 				break;

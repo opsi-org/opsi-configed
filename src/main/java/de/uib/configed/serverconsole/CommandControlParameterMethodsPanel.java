@@ -175,7 +175,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
 					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;
-			Logging.debug("CREATED PARAM TEXT: " + paramText);
+			Logging.debug("CREATED PARAM TEXT: ", paramText);
 		} else {
 			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
 					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
@@ -183,7 +183,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;
 		}
 
-		Logging.debug("PARAM TEXT: " + paramText);
+		Logging.debug("PARAM TEXT: ", paramText);
 		try {
 			Logging.info(this, "actionPerformed(testParamMethod) parameterText ", paramText);
 			CommandParameterParser parameterParser = new CommandParameterParser(configedMain);

@@ -79,7 +79,7 @@ public class SwExporter implements ActionListener {
 			}
 
 			String filepath = filepathStart + client + "__scan_" + scandate + extension;
-			Logging.debug(this, "actionPerformed, write to " + filepath);
+			Logging.debug(this, "actionPerformed, write to ", filepath);
 			panelSWInfo.setWriteToFile(filepath);
 			panelSWInfo.export();
 		}

@@ -128,7 +128,7 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		Logging.debug(this, "setLabellingStrategy millis " + millisLevel);
+		Logging.debug(this, "setLabellingStrategy millis ", millisLevel);
 
 		// produces strings with ascii null
 		return observingMesg;

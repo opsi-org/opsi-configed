@@ -469,7 +469,7 @@ public class HostDataService {
 					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState))
 					|| (InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
 							&& hasWrongProductVersion)) {
-				Logging.debug("getClientsWithOtherProductVersion hit " + m);
+				Logging.debug("getClientsWithOtherProductVersion hit ", m);
 				result.add(client);
 			}
 		}

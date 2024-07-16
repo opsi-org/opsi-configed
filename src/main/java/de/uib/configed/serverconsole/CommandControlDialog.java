@@ -365,8 +365,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 	private void updateComponentsMenuText(String menuText) {
 		MultiCommandTemplate thiscommand = factory.getCommandByMenu(menuText);
 		if (thiscommand != null) {
-			Logging.debug(this, "updateSelectedCommand menu " + thiscommand.getMenuText() + " parent "
-					+ thiscommand.getParentMenuText());
+			Logging.debug(this, "updateSelectedCommand menu ", thiscommand.getMenuText(), " parent ",
+					thiscommand.getParentMenuText());
 			StringBuilder combuf = new StringBuilder();
 			for (SingleCommand c : thiscommand.getCommands()) {
 				String rawCommand = c.getCommandRaw();
@@ -413,7 +413,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		if (command == null) {
 			return;
 		}
-		Logging.debug(this, "doAction2 savecommand " + command.toString());
+		Logging.debug(this, "doAction2 savecommand ", command);
 
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
 
@@ -446,8 +446,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 		if (command.getMenuText() == null) {
 			command.setMenuText(CommandFactory.MENU_NEW);
 		}
-		Logging.debug(this, "doActionTestCommand buildCommand " + command.toString());
-		Logging.debug(this, "doActionTestCommand buildCommand commandlist " + command.commandlistToString());
+		Logging.debug(this, "doActionTestCommand buildCommand ", command);
+		Logging.debug(this, "doActionTestCommand buildCommand commandlist ", command.getCommands());
 
 		new Thread() {
 			@Override
@@ -486,7 +486,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 				&& !((String) jComboBoxMenuText.getSelectedItem()).trim().equals(CommandFactory.MENU_NEW)) {
 			Logging.info(this, "canCommandBeSaved menuText ", jComboBoxMenuText.getSelectedItem());
 			MultiCommandTemplate tempCommand = getCommandNow();
-			Logging.debug(this, "canCommandBeSaved command " + tempCommand);
+			Logging.debug(this, "canCommandBeSaved command ", tempCommand);
 			if (tempCommand == null) {
 				return commandCanBeSaved;
 			}
@@ -525,7 +525,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		MultiCommandTemplate tempCommand = CommandFactory.buildCommand(
 				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
 				jTextFieldTooltipText.getText(), prio, coms);
-		Logging.debug(this, "getCommandNow command: " + tempCommand);
+		Logging.debug(this, "getCommandNow command: ", tempCommand);
 
 		return tempCommand;
 	}

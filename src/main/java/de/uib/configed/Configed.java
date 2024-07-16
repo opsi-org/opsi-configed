@@ -77,9 +77,9 @@ public final class Configed {
 	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP) {
 		setParamValues(paramHost, paramUser, paramPassword, paramOTP);
 
-		Logging.debug("starting " + getClass().getName());
-		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
-		Logging.debug("server charset is configured as " + serverCharset);
+		Logging.debug("starting ", getClass().getName());
+		Logging.debug("default charset is ", Charset.defaultCharset().displayName());
+		Logging.debug("server charset is configured as ", serverCharset);
 
 		if (serverCharset.equals(Charset.defaultCharset())) {
 			Logging.debug("they are equal");
@@ -240,7 +240,7 @@ public final class Configed {
 			try {
 				canonicalPath = new File(savedStatesLocationName).getCanonicalPath();
 			} catch (IOException ex) {
-				Logging.debug("savedstates argument " + ex);
+				Logging.debug("savedstates argument ", ex);
 			}
 			if (canonicalPath != null) {
 				savedStatesLocationName = canonicalPath;
@@ -253,7 +253,7 @@ public final class Configed {
 			try {
 				OpsiMethodCall.setMaxCollectSize(Integer.parseInt(no));
 			} catch (NumberFormatException ex) {
-				Logging.debug("  \n\nArgument >" + no + "< has no integer format");
+				Logging.debug("  \n\nArgument >", no, "< has no integer format");
 				Main.showHelp();
 				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
@@ -269,16 +269,16 @@ public final class Configed {
 
 		File extraLocalizationFile = new File(extraLocalizationFileName);
 		if (!extraLocalizationFile.exists()) {
-			Logging.debug("File not found: " + extraLocalizationFileName);
+			Logging.debug("File not found: ", extraLocalizationFileName);
 		} else if (!extraLocalizationFile.canRead()) {
-			Logging.debug("File not readable " + extraLocalizationFileName);
+			Logging.debug("File not readable ", extraLocalizationFileName);
 		} else {
-			Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
-					+ localizationFilenameRegex.matcher(extraLocalizationFileName).matches());
+			Logging.debug(" ok ", LOCALIZATION_FILENAME_REGEX, "? ",
+					localizationFilenameRegex.matcher(extraLocalizationFileName).matches());
 
 			parts = extraLocalizationFileName.split("_");
 
-			Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
+			Logging.debug(" . ", parts[1], " .. ", Arrays.toString(parts[1].split("\\.")));
 
 			if (localizationFilenameRegex.matcher(extraLocalizationFileName).matches()) {
 				return loadExtraLocalization(extraLocalizationFile);

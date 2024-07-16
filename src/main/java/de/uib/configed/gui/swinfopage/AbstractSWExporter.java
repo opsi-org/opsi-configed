@@ -149,8 +149,8 @@ public abstract class AbstractSWExporter {
 
 				setWriteToFile(filepathStart + line + getExtension());
 
-				Logging.debug(" outDir: " + outDir);
-				Logging.debug(" filePath: " + filepathStart + line + getExtension());
+				Logging.debug(" outDir: ", outDir);
+				Logging.debug(" filePath: ", filepathStart, line, getExtension());
 				export();
 
 				line = in.readLine();
@@ -217,7 +217,7 @@ public abstract class AbstractSWExporter {
 
 			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 		} else {
-			Logging.debug(this, "retrieved size  " + tableData.size());
+			Logging.debug(this, "retrieved size  ", tableData.size());
 			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 		}
@@ -230,9 +230,9 @@ public abstract class AbstractSWExporter {
 	protected abstract String getExtension();
 
 	private void updateModel() {
-		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
 	}
 }

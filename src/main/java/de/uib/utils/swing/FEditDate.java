@@ -101,7 +101,7 @@ public class FEditDate extends FEdit implements MouseListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, " key event " + e);
+		Logging.debug(this, " key event ", e);
 		super.keyPressed(e);
 
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

@@ -366,7 +366,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private void sortAgainAsConfigured() {
-		Logging.debug(this, "sortAgainAsConfigured " + specialSortDescriptor);
+		Logging.debug(this, "sortAgainAsConfigured ", specialSortDescriptor);
 
 		if (specialSortDescriptor != null && !specialSortDescriptor.isEmpty()) {
 			sortDescriptor = specialSortDescriptor;
@@ -639,7 +639,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private List<SortKey> buildSortkeysFromColumns() {
-		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
+		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor ", sortDescriptor);
 		List<SortKey> sortKeys = new ArrayList<>();
 
 		if (tableModel.getColumnCount() == 0) {
@@ -933,7 +933,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setAwareOfSelectionListener(boolean b) {
-		Logging.debug(this, "setAwareOfSelectionListener  " + b);
+		Logging.debug(this, "setAwareOfSelectionListener  ", b);
 
 		awareOfSelectionListener = b;
 	}
@@ -943,7 +943,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setAwareOfTableChangedListener(boolean b) {
-		Logging.debug(this, "setAwareOfTableChangedListener  " + b);
+		Logging.debug(this, "setAwareOfTableChangedListener  ", b);
 
 		awareOfTableChangedListener = b;
 	}
@@ -993,7 +993,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public int findViewRowFromValue(Object value, int col) {
-		Logging.debug(this, "findViewRowFromValue value, col " + value + ", " + col);
+		Logging.debug(this, "findViewRowFromValue value, col ", value, ", ", col);
 
 		if (value == null) {
 			return -1;
@@ -1138,10 +1138,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	// TableModelListener
 	@Override
 	public void tableChanged(TableModelEvent e) {
-		Logging.debug(this, " tableChanged " + "source " + e.getSource() + " col " + e.getColumn());
+		Logging.debug(this, " tableChanged ", "source ", e.getSource(), " col ", e.getColumn());
 		if (tableModel != null) {
-			Logging.debug(this,
-					"tableChanged,  whereas tableModel.getColMarkCursorRow() is " + tableModel.getColMarkCursorRow());
+			Logging.debug(this, "tableChanged,  whereas tableModel.getColMarkCursorRow() is ",
+					tableModel.getColMarkCursorRow());
 		}
 
 		if (awareOfTableChangedListener && tableModel != null
@@ -1174,7 +1174,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	// ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		Logging.debug(this, "ListSelectionEvent " + e);
+		Logging.debug(this, "ListSelectionEvent ", e);
 		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;

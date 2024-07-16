@@ -126,7 +126,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 					enumSetter.accept(val);
 				}
 
-				Logging.debug(this, "actionEvent with result " + val);
+				Logging.debug(this, "actionEvent with result ", val);
 				notifyChangeListeners(new ChangeEvent(this));
 			});
 		}

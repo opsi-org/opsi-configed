@@ -66,8 +66,8 @@ public class OpsiProductInfo extends OpsiPackage {
 		hasUserLoginScript = m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null
 				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).isEmpty();
 
-		Logging.debug(this.getClass(), "created with description " + description + "\n," + " possible actions "
-				+ possibleActions + ", hasUserLoginScript " + hasUserLoginScript);
+		Logging.debug(this.getClass(), "created with description ", description, "\n,", " possible actions ",
+				possibleActions, ", hasUserLoginScript ", hasUserLoginScript);
 	}
 
 	public List<String> getPossibleActions() {

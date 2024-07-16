@@ -304,7 +304,7 @@ public class PanelSWInfo extends JPanel {
 			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 			title = scanInfo;
 		} else {
-			Logging.debug(this, "retrieved size  " + tableData.size());
+			Logging.debug(this, "retrieved size  ", tableData.size());
 			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 			title = scanInfo;
@@ -312,7 +312,7 @@ public class PanelSWInfo extends JPanel {
 
 		setSuperTitle(scanInfo);
 
-		Logging.debug(this, " got scanInfo " + scanInfo);
+		Logging.debug(this, " got scanInfo ", scanInfo);
 		return tableData;
 	}
 
@@ -456,10 +456,10 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void updateModel() {
-		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
 	}
 
 	public void setSoftwareNullInfo(String hostId) {

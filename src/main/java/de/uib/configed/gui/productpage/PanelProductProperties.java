@@ -143,7 +143,7 @@ public class PanelProductProperties extends JSplitPane {
 		public void valueChanged(ListSelectionEvent e) {
 			super.valueChanged(e);
 
-			Logging.debug(this, "valueChanged in paneProducts " + e);
+			Logging.debug(this, "valueChanged in paneProducts ", e);
 
 			if (!e.getValueIsAdjusting()) {
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
@@ -188,7 +188,7 @@ public class PanelProductProperties extends JSplitPane {
 					}
 				}
 
-				Logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
+				Logging.debug(this, "selectedRowChanged depotsOfPackage ", depotsOfPackage);
 
 				if (!depotsOfPackage.isEmpty()) {
 					infoPane.setEditValues(productEdited,

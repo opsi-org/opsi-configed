@@ -196,7 +196,7 @@ public class MainFrame extends JFrame {
 		for (final String theme : ThemeManager.getAvailableThemes()) {
 			JMenuItem themeItem = new JRadioButtonMenuItem(ThemeManager.getThemeTranslation(theme));
 			ThemeManager.setThemeIcon(themeItem, theme);
-			Logging.debug("selectedTheme " + theme);
+			Logging.debug("selectedTheme ", theme);
 			themeItem.setSelected(selectedTheme.equals(theme));
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
@@ -307,7 +307,7 @@ public class MainFrame extends JFrame {
 		final CommandFactory factory = CommandFactory.getInstance();
 		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
 
-		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
+		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs ", sortedComs);
 		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
 			String parentMenuName = entry.getKey();
 			JMenu parentMenu = new JMenu(parentMenuName);
@@ -637,7 +637,7 @@ public class MainFrame extends JFrame {
 			return;
 		}
 
-		Logging.debug(this, "saveConfigurationsSetEnabled " + b);
+		Logging.debug(this, "saveConfigurationsSetEnabled ", b);
 
 		jMenuFileSaveConfigurations.setEnabled(b);
 		iconBarPanel.getjButtonSaveConfiguration().setEnabled(b);

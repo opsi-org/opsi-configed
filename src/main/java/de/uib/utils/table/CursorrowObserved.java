@@ -22,7 +22,7 @@ public class CursorrowObserved {
 	}
 
 	public void addObserver(CursorrowObserver o) {
-		Logging.debug(this, "add Observer  " + o);
+		Logging.debug(this, "add Observer  ", o);
 		observers.add(o);
 	}
 }

@@ -59,7 +59,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 				Map<?, ?> map = null;
 				Object obj = it.next();
 
-				Logging.debug(this, "addAll, element of Collection: " + obj);
+				Logging.debug(this, "addAll, element of Collection: ", obj);
 
 				try {
 					map = (Map<?, ?>) obj;

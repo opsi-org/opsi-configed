@@ -64,7 +64,7 @@ public class CommandProcess {
 		data.put("expires", System.currentTimeMillis() + 10000);
 		data.put("command", command.split(" "));
 		data.put("shell", true);
-		Logging.debug(this, "Request data " + data);
+		Logging.debug(this, "Request data ", data);
 		configedMain.getMessagebus().sendMessage(data);
 		Logging.info(this, "Request sent");
 		locker.lock();
@@ -80,7 +80,7 @@ public class CommandProcess {
 		data.put("channel", "service:config:process");
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
-		Logging.debug(this, "Request data " + data);
+		Logging.debug(this, "Request data ", data);
 		configedMain.getMessagebus().sendMessage(data);
 		Logging.info(this, "Request sent");
 	}

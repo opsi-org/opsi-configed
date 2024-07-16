@@ -52,7 +52,7 @@ public class LogTabComponent extends LogPane {
 	}
 
 	public void loadDocument(String ident) {
-		Logging.debug(this, "loadDocument ident " + ident);
+		Logging.debug(this, "loadDocument ident ", ident);
 	}
 
 	@Override

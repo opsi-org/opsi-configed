@@ -135,7 +135,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void addSelectedRow(int row) {
-		Logging.debug(this, "addSelectedRow " + row);
+		Logging.debug(this, "addSelectedRow ", row);
 
 		if (table.getRowCount() == 0) {
 			return;

@@ -100,7 +100,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			@Override
 			public void action(int p) {
-				Logging.debug(this, "( EditMapPanelGrouped ) popup " + p);
+				Logging.debug(this, "( EditMapPanelGrouped ) popup ", p);
 
 				if (p == PopupMenuTrait.POPUP_RELOAD) {
 					reload();
@@ -352,7 +352,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	@Override
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
 		super.setEditableMap(visualdata, optionsMap);
-		Logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
+		Logging.debug(this, " setEditableMap, visualdata keys ", visualdata);
 		if (visualdata != null) {
 			treemodel = new HostConfigTreeModel(givenClasses.keySet());
 			tree.setModel(treemodel);
@@ -548,12 +548,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		NavigableSet<String> classIdsDescending = classIds.descendingSet();
 
 		for (String key : new TreeSet<>(data.keySet()).descendingSet()) {
-			Logging.debug(this, "classify key ------- " + key);
+			Logging.debug(this, "classify key ------- ", key);
 			boolean foundClass = false;
 			for (String idCollect : classIdsDescending) {
 				if (key.startsWith(idCollect)) {
 					virtualLines.get(idCollect).put(key, data.get(key));
-					Logging.debug(this, "classify idCollect -------- " + idCollect);
+					Logging.debug(this, "classify idCollect -------- ", idCollect);
 					foundClass = true;
 					break;
 				}
@@ -605,7 +605,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		if (path.getPathCount() == requiredCount
 				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
 				&& path.getPathComponent(2).toString().equals(UserConfig.ROLE)) {
-			Logging.debug(this, "recognized role path " + path);
+			Logging.debug(this, "recognized role path ", path);
 			return true;
 		}
 
@@ -631,7 +631,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		int row = tree.getRowForPath(p);
 
 		actor.reloadData();
-		Logging.debug(this, "reloaded, return to " + p);
+		Logging.debug(this, "reloaded, return to ", p);
 		if (p != null) {
 			tree.setExpandsSelectedPaths(true);
 			tree.setSelectionInterval(row, row);

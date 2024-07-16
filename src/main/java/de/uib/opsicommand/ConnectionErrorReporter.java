@@ -215,7 +215,7 @@ public final class ConnectionErrorReporter {
 		try {
 			SwingUtilities.invokeAndWait(() -> dialog.setVisible(true));
 		} catch (InvocationTargetException e) {
-			Logging.debug("exception thrown during doRun: " + e);
+			Logging.debug("exception thrown during doRun: ", e);
 		} catch (InterruptedException e) {
 			Logging.info("Thread was interrupted");
 			Thread.currentThread().interrupt();

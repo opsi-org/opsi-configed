@@ -93,7 +93,7 @@ public class UserConfigProducing {
 			} else {
 				String userName = produceUserPart(key);
 				if (userName != null) {
-					Logging.debug(this, "usernames, add " + userName + " for key " + key);
+					Logging.debug(this, "usernames, add ", userName, " for key ", key);
 					userNames.add(userName);
 					createPropertySubclass(userName, UserConfig.CONFIGKEY_STR_USER);
 				} else {
@@ -123,7 +123,7 @@ public class UserConfigProducing {
 
 	private String produceUserPart(String userKey) {
 		String username = UserConfig.getUserFromKey(userKey);
-		Logging.debug(this, "produceUserPart userpart start  " + username);
+		Logging.debug(this, "produceUserPart userpart start  ", username);
 		return username;
 	}
 
@@ -154,10 +154,10 @@ public class UserConfigProducing {
 		}
 
 		Logging.info(this, "supplyConfigPermissionList configKey ", configKeyList);
-		Logging.debug(this, "serverconfigValuesMap.get(configKeyList) " + serverconfigValuesMap.get(configKeyList));
-		Logging.debug(this, "selectedValues " + selectedValues);
-		Logging.debug(this, "currentPossibleValuesListed " + currentPossibleValuesListed);
-		Logging.debug(this, "oldPossibleValues " + oldPossibleValues);
+		Logging.debug(this, "serverconfigValuesMap.get(configKeyList) ", serverconfigValuesMap.get(configKeyList));
+		Logging.debug(this, "selectedValues ", selectedValues);
+		Logging.debug(this, "currentPossibleValuesListed ", currentPossibleValuesListed);
+		Logging.debug(this, "oldPossibleValues ", oldPossibleValues);
 
 		if (serverconfigValuesMap.get(configKeyList) == null
 				|| !serverconfigValuesMap.get(configKeyList).equals(selectedValues)

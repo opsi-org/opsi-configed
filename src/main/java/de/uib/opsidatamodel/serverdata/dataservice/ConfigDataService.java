@@ -295,8 +295,7 @@ public class ConfigDataService {
 						new TypeReference<Map<String, Object>>() {
 						});
 
-				Logging.debug(this,
-						"retrieveHostConfigs objectId,  element " + hostConfig.getKey() + ": " + hostConfig);
+				Logging.debug(this, "retrieveHostConfigs objectId,  element ", hostConfig.getKey(), ": ", hostConfig);
 
 				configs1Host.putAll(configs);
 			}
@@ -320,13 +319,12 @@ public class ConfigDataService {
 		Map<String, List<Object>> wanConfiguration = getWanConfigurationPD();
 		Map<String, List<Object>> notWanConfiguration = getNotWanConfigurationPD();
 
-		Logging.debug(this,
-				"addWANConfigState  wanConfiguration " + wanConfiguration + "\n " + wanConfiguration.size());
-		Logging.debug(this, "addWANConfigState  wanConfiguration.keySet() " + wanConfiguration.keySet());
+		Logging.debug(this, "addWANConfigState  wanConfiguration ", wanConfiguration, "\n ", wanConfiguration.size());
+		Logging.debug(this, "addWANConfigState  wanConfiguration.keySet() ", wanConfiguration.keySet());
 
-		Logging.debug(this,
-				"addWANConfigState  notWanConfiguration " + notWanConfiguration + "\n " + notWanConfiguration.size());
-		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet());
+		Logging.debug(this, "addWANConfigState  notWanConfiguration ", notWanConfiguration, "\n ",
+				notWanConfiguration.size());
+		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() ", notWanConfiguration.keySet());
 
 		setConfig(notWanConfiguration);
 		Logging.info(this, "set notWanConfiguration members where no entry exists");
@@ -416,7 +414,7 @@ public class ConfigDataService {
 			typesOfUsedConfigIds.put(ident, (String) config.get("type"));
 		}
 
-		Logging.debug(this, "setConfig(), usedConfigIds: " + usedConfigIds);
+		Logging.debug(this, "setConfig(), usedConfigIds: ", usedConfigIds);
 
 		List<Object> existingConfigIds = exec
 				.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
@@ -460,13 +458,13 @@ public class ConfigDataService {
 	private void updateConfigsOnServer(List<Map<String, Object>> createItems,
 			List<Map<String, Object>> callsConfigDeleteCollection,
 			List<Map<String, Object>> callsConfigUpdateCollection) {
-		Logging.debug(this, "setConfig() createItems " + createItems);
+		Logging.debug(this, "setConfig() createItems ", createItems);
 		if (!createItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_CREATE_OBJECTS, new Object[] { createItems });
 			exec.doCall(omc);
 		}
 
-		Logging.debug(this, "setConfig() callsConfigDeleteCollection " + callsConfigDeleteCollection);
+		Logging.debug(this, "setConfig() callsConfigDeleteCollection ", callsConfigDeleteCollection);
 
 		if (!callsConfigDeleteCollection.isEmpty()) {
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
@@ -476,7 +474,7 @@ public class ConfigDataService {
 			persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
 		}
 
-		Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
+		Logging.debug(this, "setConfig() callsConfigUpdateCollection ", callsConfigUpdateCollection);
 
 		if (!callsConfigUpdateCollection.isEmpty()) {
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
@@ -487,7 +485,7 @@ public class ConfigDataService {
 
 	// collect config updates
 	public void setConfig(Map<String, List<Object>> settings) {
-		Logging.debug(this, "setConfig settings " + settings);
+		Logging.debug(this, "setConfig settings ", settings);
 		if (configCollection == null) {
 			configCollection = new ArrayList<>();
 		}
@@ -495,10 +493,10 @@ public class ConfigDataService {
 		Map<String, ConfigOption> configOptions = getConfigOptionsPD();
 
 		for (Entry<String, List<Object>> setting : settings.entrySet()) {
-			Logging.debug(this, "setConfig,  key, settings.get(key): " + setting.getKey() + ", " + setting.getValue());
+			Logging.debug(this, "setConfig,  key, settings.get(key): ", setting.getKey(), ", ", setting.getValue());
 
-			Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): "
-					+ setting.getValue() + " , " + setting.getValue().getClass().getName());
+			Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): ",
+					setting.getValue(), " , ", setting.getValue().getClass().getName());
 
 			List<Object> oldValue = null;
 
@@ -515,8 +513,8 @@ public class ConfigDataService {
 
 				String type;
 
-				Logging.debug(this, "setConfig, key,  configOptions.get(key):  " + setting.getKey() + ", "
-						+ configOptions.get(setting.getKey()));
+				Logging.debug(this, "setConfig, key,  configOptions.get(key):  ", setting.getKey(), ", ",
+						configOptions.get(setting.getKey()));
 				if (configOptions.get(setting.getKey()) != null) {
 					type = (String) configOptions.get(setting.getKey()).get("type");
 				} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
@@ -597,7 +595,7 @@ public class ConfigDataService {
 	}
 
 	public void deleteSavedSearch(String name) {
-		Logging.debug(this, "deleteSavedSearch " + name);
+		Logging.debug(this, "deleteSavedSearch ", name);
 		SavedSearches savedSearches = getSavedSearchesPD();
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
 		Map<String, Object> item;
@@ -618,7 +616,7 @@ public class ConfigDataService {
 	}
 
 	public void saveSearch(SavedSearch ob) {
-		Logging.debug(this, "saveSearch " + ob);
+		Logging.debug(this, "saveSearch ", ob);
 
 		List<Object> readyObjects = new ArrayList<>();
 		// entry of serialization string
@@ -686,7 +684,7 @@ public class ConfigDataService {
 		}
 
 		List<String> result = Utils.takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
-		Logging.debug(this, "getOpsiclientdExtraEvents() " + result);
+		Logging.debug(this, "getOpsiclientdExtraEvents() ", result);
 		return result;
 	}
 
@@ -827,8 +825,8 @@ public class ConfigDataService {
 
 	private void updateAdditionalConfigsOnServer(List<Object> doneList, Set<String> usedConfigIds,
 			Map<String, String> typesOfUsedConfigIds) {
-		Logging.debug(this, "setAdditionalConfiguration(), usedConfigIds: " + usedConfigIds);
-		Logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  " + deleteConfigStateItems);
+		Logging.debug(this, "setAdditionalConfiguration(), usedConfigIds: ", usedConfigIds);
+		Logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  ", deleteConfigStateItems);
 		// not used
 		if (!deleteConfigStateItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_DELETE_OBJECTS,
@@ -842,11 +840,11 @@ public class ConfigDataService {
 
 		List<Object> existingConfigIds = exec
 				.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
-		Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: " + existingConfigIds.size());
+		Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: ", existingConfigIds.size());
 
 		Set<String> missingConfigIds = new HashSet<>(usedConfigIds);
 		missingConfigIds.removeAll(existingConfigIds);
-		Logging.debug(this, "setAdditionalConfiguration(), missingConfigIds: " + missingConfigIds);
+		Logging.debug(this, "setAdditionalConfiguration(), missingConfigIds: ", missingConfigIds);
 		List<Map<String, Object>> createItems = new ArrayList<>();
 		for (String missingId : missingConfigIds) {
 			Map<String, Object> item = Utils.createNOMitem(typesOfUsedConfigIds.get(missingId));
@@ -878,13 +876,13 @@ public class ConfigDataService {
 
 	public Boolean isInstallByShutdownConfigured(String hostId) {
 		String key = OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN;
-		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId + "'");
+		Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "'");
 		Boolean value = null;
 
 		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
 		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
 			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
-			Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId + "', value: " + value);
+			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', value: ", value);
 			if (value != null) {
 				return value;
 			}
@@ -892,8 +890,8 @@ public class ConfigDataService {
 
 		value = getGlobalBooleanConfigValue(key, null);
 		if (value != null) {
-			Logging.debug(this,
-					"getHostBooleanConfigValue key '" + key + "', host '" + hostId + "', global value: " + value);
+			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', global value: ",
+					value);
 			return value;
 		}
 		Logging.info(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', returning default value: ",
@@ -1008,12 +1006,12 @@ public class ConfigDataService {
 	}
 
 	private Boolean valueFromConfigStateAsExpected(Map<String, Object> configs, String configKey, boolean expectValue) {
-		Logging.debug(this, "valueFromConfigStateAsExpected configKey " + configKey);
+		Logging.debug(this, "valueFromConfigStateAsExpected configKey ", configKey);
 		boolean result = false;
 
 		if (configs != null && configs.get(configKey) != null && !((List<?>) (configs.get(configKey))).isEmpty()) {
-			Logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
-					+ configs.get(configKey) + " expected " + expectValue);
+			Logging.debug(this, "valueFromConfigStateAsExpected configKey, values ", configKey, ", valueList ",
+					configs.get(configKey), " expected ", expectValue);
 
 			Object value = ((List<?>) configs.get(configKey)).get(0);
 
@@ -1029,7 +1027,7 @@ public class ConfigDataService {
 				Logging.error(this, "it is not a boolean and not a string, how to handle it ? value ", value);
 			}
 
-			Logging.debug(this, "valueFromConfigStateAsExpected " + result);
+			Logging.debug(this, "valueFromConfigStateAsExpected ", result);
 		}
 		return result;
 	}
@@ -1099,7 +1097,7 @@ public class ConfigDataService {
 		Boolean val = defaultVal;
 		Object obj = getConfigListCellOptionsPD().get(key);
 
-		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "'='" + obj + "'");
+		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "'='", obj, "'");
 		if (obj == null) {
 			Logging.warning(this, "getGlobalBooleanConfigValue '", key, "' is null, returning default value: ", val);
 			return val;
@@ -1113,7 +1111,7 @@ public class ConfigDataService {
 		}
 
 		List<Object> values = option.getDefaultValues();
-		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "' defaultValues: " + values);
+		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "' defaultValues: ", values);
 		if (values != null && !values.isEmpty()) {
 			val = (Boolean) values.get(0);
 		}

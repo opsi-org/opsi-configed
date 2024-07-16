@@ -162,7 +162,7 @@ public class ConnectionHandler {
 				}
 			}
 
-			Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
+			Logging.debug(this, "https protocols given by system ", Configed.SYSTEM_SSL_VERSION);
 			Logging.info(this, "retrieveResponse method=", connection.getRequestMethod(), ", headers=",
 					connection.getRequestProperties(), ", cookie=", (requestProperties.get("Cookie") == null ? "null"
 							: (requestProperties.get("Cookie").substring(0, 26) + "...")));
@@ -171,7 +171,7 @@ public class ConnectionHandler {
 			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 			connection.connect();
 		} catch (SSLException ex) {
-			Logging.debug(this, "caught SSLException: " + ex);
+			Logging.debug(this, "caught SSLException: ", ex);
 
 			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED) {
 				reporter.notify(produceCertificateWarningMessage(certValidator),

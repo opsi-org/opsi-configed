@@ -29,7 +29,7 @@ public class SWcsvExporter extends AbstractSWExporter {
 		String clientName = hostId;
 		Logging.info(this, "create csv report swaudit for ", clientName);
 
-		Logging.debug("create csv report swaudit for " + clientName);
+		Logging.debug("create csv report swaudit for ", clientName);
 
 		modelSWInfo.setSorting(0, true);
 

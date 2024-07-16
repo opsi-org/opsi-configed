@@ -127,11 +127,11 @@ public final class CommandParameterParser {
 				if (result == null) {
 					canceled = true;
 				} else {
-					Logging.debug(this, "parseParameter command " + command.getCommandRaw());
-					Logging.debug(this, "parseParameter param " + param);
-					Logging.debug(this, "parseParameter result " + result);
+					Logging.debug(this, "parseParameter command ", command.getCommandRaw());
+					Logging.debug(this, "parseParameter param ", param);
+					Logging.debug(this, "parseParameter result ", result);
 					commandCopy.setCommand(commandCopy.getCommandRaw().replace(param, result));
-					Logging.debug(this, "parseParameter command " + command.getCommandRaw());
+					Logging.debug(this, "parseParameter command ", command.getCommandRaw());
 				}
 			}
 		}
@@ -323,7 +323,7 @@ public final class CommandParameterParser {
 		if (dialog == null) {
 			dialog = ConfigedMain.getMainFrame();
 		}
-		Logging.debug(this, "getUserText text " + text);
+		Logging.debug(this, "getUserText text ", text);
 		final JTextField field = new JTextField();
 
 		final JOptionPane opPane = new JOptionPane(new Object[] { new JLabel(text), field },
@@ -350,18 +350,18 @@ public final class CommandParameterParser {
 		List<String> depots = persistenceController.getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots) {
 			if (depot.startsWith(ConfigedMain.getHost())) {
-				Logging.debug(this, "getConfig_serverName " + ConfigedMain.getHost());
+				Logging.debug(this, "getConfig_serverName ", ConfigedMain.getHost());
 				return depot;
 			}
 		}
 
-		Logging.debug(this, "getConfig_serverName " + ConfigedMain.getHost());
+		Logging.debug(this, "getConfig_serverName ", ConfigedMain.getHost());
 
 		return ConfigedMain.getHost();
 	}
 
 	private String[] getSelectedClientIPs() {
-		Logging.debug(this, "getSelected_clientIPs " + configedMain.getSelectedClients());
+		Logging.debug(this, "getSelected_clientIPs ", configedMain.getSelectedClients());
 
 		String[] clientIPs = new String[configedMain.getSelectedClients().size()];
 		int counter = 0;
@@ -371,24 +371,24 @@ public final class CommandParameterParser {
 				clientIPs[counter] = hostInfo.getIpAddress();
 				counter++;
 			} else {
-				Logging.debug(this, "getSelected_clientIPs host " + name + " HostInfo null");
+				Logging.debug(this, "getSelected_clientIPs host ", name, " HostInfo null");
 			}
 		}
 		return clientIPs;
 	}
 
 	private String[] getSelectedClientNames() {
-		Logging.debug(this, "getSelected_clientnames  " + configedMain.getSelectedClients());
+		Logging.debug(this, "getSelected_clientnames  ", configedMain.getSelectedClients());
 		return configedMain.getSelectedClients().toArray(new String[0]);
 	}
 
 	private String[] getSelectedDepotNames() {
-		Logging.debug(this, "getSelected_depotnames  " + configedMain.getSelectedDepots());
+		Logging.debug(this, "getSelected_depotnames  ", configedMain.getSelectedDepots());
 		return configedMain.getSelectedDepots().toArray(new String[0]);
 	}
 
 	private String[] getSelectedDepotIPs() {
-		Logging.debug(this, "getSelected_depotIPs " + configedMain.getSelectedDepots());
+		Logging.debug(this, "getSelected_depotIPs ", configedMain.getSelectedDepots());
 
 		String[] depotIPs = new String[configedMain.getSelectedDepots().size()];
 		int counter = 0;

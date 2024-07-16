@@ -26,7 +26,7 @@ public class ModulePermissionValue {
 			if (booleanValue == null) {
 				expiresDate = retrieveExpiresDate(ob);
 				maxClients = retrieveMaxClients(ob);
-				Logging.debug(this.getClass(), "maxClients directly given " + maxClients);
+				Logging.debug(this.getClass(), "maxClients directly given ", maxClients);
 			} else if (Boolean.TRUE.equals(booleanValue)) {
 				maxClients = ExtendedInteger.INFINITE;
 			} else {
@@ -78,7 +78,7 @@ public class ModulePermissionValue {
 			try {
 				number = Integer.valueOf(string);
 			} catch (NumberFormatException ex) {
-				Logging.debug(this, "not a number: " + object);
+				Logging.debug(this, "not a number: ", object);
 			}
 			if (number != null) {
 				result = new ExtendedInteger(number);

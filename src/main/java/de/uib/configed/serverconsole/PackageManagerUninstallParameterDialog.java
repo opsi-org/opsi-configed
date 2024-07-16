@@ -106,7 +106,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		String depotParameter = "";
 		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
-		Logging.debug(this, "produceDepotParameter, selectedDepots " + selectedDepots);
+		Logging.debug(this, "produceDepotParameter, selectedDepots ", selectedDepots);
 
 		if (selectedDepots.isEmpty()) {
 			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {

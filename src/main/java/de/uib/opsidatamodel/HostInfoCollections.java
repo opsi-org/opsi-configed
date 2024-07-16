@@ -84,7 +84,7 @@ public class HostInfoCollections {
 		List<String> opsiHostNames = cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class);
 		List<String> depotNamesList = cacheManager.getCachedData(CacheIdentifier.DEPOT_NAMES_LIST, List.class);
 		boolean removed = opsiHostNames.removeAll(depotNamesList);
-		Logging.debug(this, "depots were removed from opsi host names " + removed);
+		Logging.debug(this, "depots were removed from opsi host names ", removed);
 		return opsiHostNames.size();
 	}
 
@@ -113,8 +113,8 @@ public class HostInfoCollections {
 
 	// build data
 	public void retrieveOpsiHostsPD() {
-		Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null "
-				+ (cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class) == null));
+		Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null ",
+				cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class) == null);
 
 		if (cacheManager.isDataCached(CacheIdentifier.OPSI_HOST_NAMES)) {
 			return;
@@ -292,8 +292,8 @@ public class HostInfoCollections {
 			String depotId = null;
 
 			if (!hasConfig(name)) {
-				Logging.debug(this, "retrieveOpsiHosts client  " + name + " has no config for "
-						+ OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
+				Logging.debug(this, "retrieveOpsiHosts client  ", name, " has no config for ",
+						OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 			} else {
 				depotId = (String) ((List<?>) persistenceController.getConfigDataService().getHostConfigsPD().get(name)
 						.get(OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID)).get(0);
@@ -307,7 +307,7 @@ public class HostInfoCollections {
 				// Do nothing if depotId is null
 			}
 
-			Logging.debug(this, "getConfigs for " + name);
+			Logging.debug(this, "getConfigs for ", name);
 
 			host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
 					persistenceController.getConfigDataService().isInstallByShutdownConfigured(name));
@@ -318,7 +318,7 @@ public class HostInfoCollections {
 				boolean result = persistenceController.getConfigDataService()
 						.findBooleanConfigurationComparingToDefaults(name,
 								persistenceController.getConfigDataService().getWanConfigurationPD());
-				Logging.debug(this, "host " + name + " wan config " + result);
+				Logging.debug(this, "host ", name, " wan config ", result);
 				host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
 			}
 
@@ -511,7 +511,7 @@ public class HostInfoCollections {
 		Map<String, HostInfo> host2HostInfo = cacheManager.getCachedData(CacheIdentifier.HOST_TO_HOST_INFO, Map.class);
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
-		Logging.debug(this, "setLocalHostInfo " + " " + hostId + ", " + depotId + ", " + hostInfo);
+		Logging.debug(this, "setLocalHostInfo ", " ", hostId, ", ", depotId, ", ", hostInfo);
 		mapPCInfomap.put(hostId, hostInfo);
 		host2HostInfo.put(hostId, hostInfo);
 		depot2Host2HostInfo.get(depotId).put(hostId, hostInfo);

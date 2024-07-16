@@ -335,7 +335,7 @@ public class OpsiDataSerializer {
 			throw new IllegalArgumentException("IOException in parser", e);
 		}
 
-		Logging.debug(this, "parseList " + list);
+		Logging.debug(this, "parseList ", list);
 
 		if (!done) {
 			throw new IllegalArgumentException("Unexpected EOF");
@@ -373,7 +373,7 @@ public class OpsiDataSerializer {
 	}
 
 	private Object stringToObject(String value, String name) {
-		Logging.debug(this, "stringToObject: " + name);
+		Logging.debug(this, "stringToObject: ", name);
 		if ("null".equals(value)) {
 			return null;
 		}
@@ -649,8 +649,8 @@ public class OpsiDataSerializer {
 	 */
 	private static AbstractSelectOperation checkForHostGroup(AbstractSelectOperation operation) {
 		if (!(operation instanceof AbstractSelectGroupOperation)) {
-			Logging.debug("No group: " + operation.getClassName() + ", element path size: "
-					+ operation.getElement().getPathArray().length);
+			Logging.debug("No group: " + operation.getClassName(), ", element path size: ",
+					operation.getElement().getPathArray().length);
 			if (operation.getElement().getPathArray().length == 1) {
 				return new HostOperation(operation);
 			} else {

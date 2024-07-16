@@ -134,7 +134,7 @@ public class HostInfo {
 		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
 		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 
-		Logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
+		Logging.debug(this, "getMap clientName ", clientName, " : ", unordered);
 
 		return unordered;
 	}
@@ -162,7 +162,7 @@ public class HostInfo {
 
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
 
-		Logging.debug(this, "getMap clientName " + clientName);
+		Logging.debug(this, "getMap clientName ", clientName);
 
 		return unordered;
 	}

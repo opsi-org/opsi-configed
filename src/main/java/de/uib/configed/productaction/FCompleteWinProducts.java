@@ -277,7 +277,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			File targetDirectory = null;
 
 			String pathWinPE = fieldPathWinPE.getText().trim();
-			Logging.debug(this, "copy  " + pathWinPE + " to " + targetDirectory);
+			Logging.debug(this, "copy  ", pathWinPE, " to ", targetDirectory);
 
 			if (!pathWinPE.isEmpty()) {
 				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_PE);
@@ -285,7 +285,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 
 			String pathInstallFiles = fieldPathInstallFiles.getText().trim();
-			Logging.debug(this, "copy  " + pathInstallFiles + " to " + targetDirectory);
+			Logging.debug(this, "copy  ", pathInstallFiles, " to ", targetDirectory);
 			if (!pathInstallFiles.isEmpty()) {
 				targetDirectory = new File(
 						fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_INSTALL_FILES);
@@ -311,7 +311,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			// check if product key is new and should be changed
 			Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(
 					persistenceController.getHostInfoCollections().getConfigServer(), winProduct);
-			Logging.debug(this, " getProductproperties " + propsMap);
+			Logging.debug(this, " getProductproperties ", propsMap);
 
 			String oldProductKey = null;
 

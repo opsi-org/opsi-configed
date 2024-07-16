@@ -112,7 +112,7 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			data.put("data", buff);
 			data.put("last", last);
 
-			Logging.debug(this, "uploading file chunk: " + data.toString());
+			Logging.debug(this, "uploading file chunk: ", data);
 
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
@@ -172,7 +172,7 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			data.put("size", Files.size(file.toPath()));
 			data.put("terminal_id", terminalWidget.getTerminalId());
 
-			Logging.debug(this, "file upload request: " + data.toString());
+			Logging.debug(this, "file upload request: ", data);
 
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);

@@ -55,9 +55,9 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 			d = d + "/";
 		}
 		setProduct(d + getFilenameFromUrl(url));
-		Logging.debug(this.getClass(), "SingleCommandCurl dir " + dir);
-		Logging.debug(this.getClass(), "SingleCommandCurl url " + url);
-		Logging.debug(this.getClass(), "SingleCommandCurl product " + getProduct());
+		Logging.debug(this.getClass(), "SingleCommandCurl dir ", dir);
+		Logging.debug(this.getClass(), "SingleCommandCurl url ", url);
+		Logging.debug(this.getClass(), "SingleCommandCurl product ", getProduct());
 		needParameter = false;
 	}
 

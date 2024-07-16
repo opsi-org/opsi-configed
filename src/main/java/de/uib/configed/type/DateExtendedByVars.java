@@ -29,7 +29,7 @@ public final class DateExtendedByVars extends Date {
 	}
 
 	public static String interpretVar(final String s) {
-		Logging.debug("OpsiDataDateMatcher interpretVar in " + s);
+		Logging.debug("OpsiDataDateMatcher interpretVar in ", s);
 
 		int i = s.indexOf(CHAR_DELIMITER);
 
@@ -49,7 +49,7 @@ public final class DateExtendedByVars extends Date {
 
 		replaceContent = replaceContent.substring(0, i);
 
-		Logging.debug("OpsiDataDateMatcher interpretVar replaceContent " + replaceContent);
+		Logging.debug("OpsiDataDateMatcher interpretVar replaceContent ", replaceContent);
 
 		if (!replaceContent.startsWith(MINUS)) {
 			Logging.info("OpsiDataDateMatcher interpretVar expected: \"", MINUS, "\"");
@@ -75,7 +75,7 @@ public final class DateExtendedByVars extends Date {
 
 		String timeS = stripTimeFromDay(myTime.toString());
 
-		Logging.debug("OpsiDataDateMatcher interpretVar produced time " + timeS);
+		Logging.debug("OpsiDataDateMatcher interpretVar produced time ", timeS);
 
 		String toReplace = CHAR_DELIMITER + replaceContent + CHAR_DELIMITER;
 

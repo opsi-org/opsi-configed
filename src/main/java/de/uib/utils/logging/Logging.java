@@ -417,14 +417,6 @@ public final class Logging {
 		log(level, mesg, null, (Throwable) null);
 	}
 
-	public static void debug(Object caller, String mesg) {
-		log(caller, LEVEL_DEBUG, mesg);
-	}
-
-	public static void debug(String mesg) {
-		log(LEVEL_DEBUG, mesg);
-	}
-
 	public static void clearErrorList() {
 		errorList.clear();
 	}

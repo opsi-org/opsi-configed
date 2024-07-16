@@ -293,8 +293,8 @@ public class LicenseDataService {
 					rowsLicensesUsage.remove(key);
 					fClient2LicensesUsageList.get(hostX).remove(rowmap);
 
-					Logging.debug(this, "deleteLicenseUsage check fClient2LicensesUsageList "
-							+ fClient2LicensesUsageList.get(hostX));
+					Logging.debug(this, "deleteLicenseUsage check fClient2LicensesUsageList ",
+							fClient2LicensesUsageList.get(hostX));
 				}
 			}
 
@@ -405,7 +405,7 @@ public class LicenseDataService {
 		}
 		String result = "";
 
-		Logging.debug(this, "editLicenseContract " + licenseContractId);
+		Logging.debug(this, "editLicenseContract ", licenseContractId);
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_CONTRACT_CREATE, new String[] {
@@ -421,7 +421,7 @@ public class LicenseDataService {
 			}
 		}
 
-		Logging.debug(this, "editLicenseContract result " + result);
+		Logging.debug(this, "editLicenseContract result ", result);
 
 		return result;
 	}

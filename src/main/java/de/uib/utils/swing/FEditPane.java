@@ -87,7 +87,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public void setStartText(String s) {
-		Logging.debug(this, " FEeditPane setStartText: " + s);
+		Logging.debug(this, " FEeditPane setStartText: ", s);
 		super.setStartText(s);
 
 		textpane.setText(s);

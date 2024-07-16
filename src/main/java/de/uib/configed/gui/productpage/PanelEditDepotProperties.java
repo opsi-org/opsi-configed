@@ -308,7 +308,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 					n++;
 				}
 			}
-			Logging.debug(this, "resetSelectedDepots, n, selection is " + n + ", -- " + Arrays.toString(selection));
+			Logging.debug(this, "resetSelectedDepots, n, selection is ", n, ", -- ", Arrays.toString(selection));
 
 			for (int i = 0; i < n; i++) {
 				listDepots.getSelectionModel().addSelectionInterval(selection[i], selection[i]);

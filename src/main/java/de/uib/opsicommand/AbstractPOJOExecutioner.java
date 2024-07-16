@@ -125,7 +125,7 @@ public abstract class AbstractPOJOExecutioner {
 			}
 		}
 
-		Logging.debug(this, "getResponses  result " + result);
+		Logging.debug(this, "getResponses  result ", result);
 
 		return result;
 	}
@@ -144,7 +144,7 @@ public abstract class AbstractPOJOExecutioner {
 				return false;
 			} else {
 				Object resultValue = retrieved.get("result");
-				Logging.debug(this, "got result " + resultValue);
+				Logging.debug(this, "got result ", resultValue);
 
 				return true;
 			}

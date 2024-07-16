@@ -60,12 +60,11 @@ public class OpsiMethodCall {
 	}
 
 	public static void report() {
-		Logging.debug(
-				"================================================   collected calls, maxCollectSize " + maxCollectSize);
+		Logging.debug("================================================   collected calls, maxCollectSize ",
+				maxCollectSize);
 
-		for (String c : collectedCalls) {
-			Logging.debug(c);
-		}
+		Logging.debug("collectedCalls", collectedCalls);
+
 		Logging.debug("================================================");
 	}
 

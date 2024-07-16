@@ -44,7 +44,7 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		Logging.debug(this, "change event from sliderLevel, " + getValue());
+		Logging.debug(this, "change event from sliderLevel, ", getValue());
 		if (getValueIsAdjusting()) {
 			return;
 		}
@@ -64,11 +64,11 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		Logging.debug(this, "MouseWheelEvent " + e);
+		Logging.debug(this, "MouseWheelEvent ", e);
 
 		int newIndex = getValue() - e.getWheelRotation();
 
-		Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
+		Logging.debug(this, "MouseWheelEvent newIndex ", newIndex);
 
 		if (newIndex >= getMaximum()) {
 			newIndex = getMaximum() - 1;
@@ -78,7 +78,7 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 			// Do nothing when newIndex is inside valid Values
 		}
 
-		Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
+		Logging.debug(this, "MouseWheelEvent newIndex ", newIndex);
 
 		setValue(newIndex);
 	}

@@ -463,8 +463,8 @@ public class GenTableModel extends AbstractTableModel {
 	public void setValueAt(Object newValue, int row, int col) {
 		Object oldValue = rows.get(row).get(col);
 
-		Logging.debug(this, " old value at " + row + ", " + col + " : " + oldValue);
-		Logging.debug(this, " new value at " + row + ", " + col + " : " + newValue);
+		Logging.debug(this, " old value at ", row, ", ", col, " : ", oldValue);
+		Logging.debug(this, " new value at ", row, ", ", col, " : ", newValue);
 
 		if (hasValueChanged(oldValue, newValue, col)) {
 			// we dont register updates for already registered rows, since there values are
@@ -480,7 +480,7 @@ public class GenTableModel extends AbstractTableModel {
 					updates.add(itemFactory.produceUpdateItem(rows.get(row)));
 				}
 
-				Logging.debug(this, "updated rows add " + row);
+				Logging.debug(this, "updated rows add ", row);
 
 				updatedRows.add(row);
 			}
@@ -545,7 +545,7 @@ public class GenTableModel extends AbstractTableModel {
 			rowV.set(j, a[j]);
 		}
 
-		Logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
+		Logging.debug(this, "--- addRow size, row ", rowV.size(), ", ", rowV);
 
 		rows.add(rowV);
 		addedRows.add(rows.size() - 1);
@@ -572,14 +572,14 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public void deleteRows(int[] selection) {
-		Logging.debug(this, "deleteRows " + Arrays.toString(selection));
+		Logging.debug(this, "deleteRows ", Arrays.toString(selection));
 
 		if (selection == null || selection.length == 0) {
 			return;
 		}
 
 		Arrays.sort(selection);
-		Logging.debug(this, "deleteRows, sorted " + Arrays.toString(selection));
+		Logging.debug(this, "deleteRows, sorted ", Arrays.toString(selection));
 
 		if (updates == null) {
 			Logging.info(this, "updates not initialized");
@@ -592,7 +592,7 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public void deleteRow(int rowNum) {
-		Logging.debug(this, "deleteRow " + rowNum);
+		Logging.debug(this, "deleteRow ", rowNum);
 
 		if (itemFactory == null) {
 			Logging.info("update item factory missing");
@@ -614,12 +614,12 @@ public class GenTableModel extends AbstractTableModel {
 		}
 
 		List<Object> oldValues = new ArrayList<>(rows.get(rowNum));
-		Logging.debug(this, "deleteRow values " + oldValues);
+		Logging.debug(this, "deleteRow values ", oldValues);
 		updates.add(itemFactory.produceDeleteItem(oldValues));
 		// we have to delete the source values, not the possibly changed current row
 
 		if (updatedRows.contains(rowNum)) {
-			Logging.debug(this, "deleteRow, remove from updatedRows  " + rowNum);
+			Logging.debug(this, "deleteRow, remove from updatedRows  ", rowNum);
 			updatedRows.remove(rowNum);
 		}
 

@@ -31,8 +31,8 @@ public class BooleanIconTableCellRenderer extends ColorTableCellRenderer {
 			int row, int column) {
 		super.getTableCellRendererComponent(table, null, isSelected, hasFocus, row, column);
 
-		Logging.debug("row=" + row + ", column=" + column + ", value=" + value + ", trueIcon=" + trueIcon
-				+ ", falseIcon=" + falseIcon);
+		Logging.debug("row=", row, ", column=", column, ", value=", value, ", trueIcon=", trueIcon, ", falseIcon=",
+				falseIcon);
 
 		if (Boolean.TRUE.equals(value)) {
 			setIcon(trueIcon);

@@ -106,7 +106,7 @@ public final class Messages {
 	}
 
 	public static void setLocale(String localeString) {
-		Logging.debug("Messages setLocale: " + localeString);
+		Logging.debug("Messages setLocale: ", localeString);
 		if (localeString != null && !localeString.isEmpty()) {
 			if (localeString.length() == 5 && localeString.indexOf('_') == 2) {
 				produceLocale(localeString.substring(0, 2), localeString.substring(3, 5));
@@ -163,7 +163,7 @@ public final class Messages {
 			Logging.warning(ex, "Messages exception on reading!");
 		}
 
-		Logging.debug("Messages, existing names " + names);
+		Logging.debug("Messages, existing names ", names);
 		existingLocalesNames = names;
 	}
 
@@ -183,7 +183,7 @@ public final class Messages {
 			ImageIcon localeIcon = new ImageIcon(Messages.class.getResource(locale + ".png"));
 
 			JMenuItem menuItem = new JRadioButtonMenuItem(locale, localeIcon);
-			Logging.debug("Selected locale " + selectedLocale);
+			Logging.debug("Selected locale ", selectedLocale);
 			menuItem.setSelected(selectedLocale.equals(locale));
 			jMenuLanguage.add(menuItem);
 			groupLanguages.add(menuItem);

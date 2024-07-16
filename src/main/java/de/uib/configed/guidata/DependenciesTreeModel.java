@@ -77,7 +77,7 @@ public class DependenciesTreeModel {
 	}
 
 	public DefaultMutableTreeNode getTreeNodeForProductDependencies(boolean treeInverted) {
-		Logging.debug(this, mainProductId + "-tree wird erstellt");
+		Logging.debug(this, mainProductId, "-tree wird erstellt");
 
 		if (graphIsInitialized && productMap.containsKey(mainProductId)) {
 			DefaultMutableTreeNode mainNode;

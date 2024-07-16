@@ -143,7 +143,7 @@ public class Main {
 
 				Logging.setLogLevel(loglevel);
 			} catch (NumberFormatException ex) {
-				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
+				Logging.debug(" \n\nArgument >", loglevelString, "< has no integer format");
 			}
 		}
 
@@ -181,7 +181,7 @@ public class Main {
 			try {
 				Configed.getSavedStates().store("states on finishing configed");
 			} catch (IOException iox) {
-				Logging.debug("could not store saved states, " + iox);
+				Logging.debug("could not store saved states, ", iox);
 			}
 		}
 

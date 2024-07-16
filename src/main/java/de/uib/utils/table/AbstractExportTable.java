@@ -99,7 +99,7 @@ public abstract class AbstractExportTable {
 		Boolean result = onlySelectedRows;
 
 		if (onlySelectedRows) {
-			Logging.debug("selectedRows: " + theTable.getSelectedRowCount());
+			Logging.debug("selectedRows: ", theTable.getSelectedRowCount());
 			if (theTable.getRowCount() > 0 && theTable.getSelectedRowCount() == 0) {
 				FTextArea fChoice = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("ExportTable.title"), true,
@@ -163,7 +163,7 @@ public abstract class AbstractExportTable {
 					// Do nothing when it's a file with ending ".csv"
 				}
 
-				Logging.debug(this, "filename " + filename);
+				Logging.debug(this, "filename ", filename);
 
 				if (askForOverwrite) {
 					filename = askForOverride(filename);
@@ -173,7 +173,7 @@ public abstract class AbstractExportTable {
 			exportDirectory = new File(filename).getParentFile();
 		}
 
-		Logging.debug(this, "export to " + filename);
+		Logging.debug(this, "export to ", filename);
 
 		return filename;
 	}

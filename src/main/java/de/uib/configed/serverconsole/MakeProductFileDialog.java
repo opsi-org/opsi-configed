@@ -449,7 +449,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		CommandExecutor executor = new CommandExecutor(configedMain, getPackageId);
 		executor.setWithGUI(false);
 		String result = executor.execute();
-		Logging.debug(this, "getPackageID result " + result);
+		Logging.debug(this, "getPackageID result ", result);
 		return result != null ? result.replace("id:", "").trim() : "";
 	}
 }

@@ -213,14 +213,14 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	@Override
 	public void setModal(boolean b) {
 		super.setModal(b);
-		Logging.debug(this, "setModal " + b);
+		Logging.debug(this, "setModal ", b);
 		if (b) {
 			setAlwaysOnTop(true);
 		}
 	}
 
 	public void setDataChanged(boolean b) {
-		Logging.debug(this, "setDataChanged " + b);
+		Logging.debug(this, "setDataChanged ", b);
 
 		if (forbidEditingTargetSpecific() && b) {
 			return;
@@ -259,7 +259,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	public boolean forbidEditingTargetSpecific() {
 		boolean forbidEditing = false;
 
-		Logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
+		Logging.debug("forbidEditing for target ", ConfigedMain.getEditingTarget(), "?");
 
 		if (ConfigedMain.getEditingTarget() == ConfigedMain.EditingTarget.SERVER) {
 			forbidEditing = !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -269,7 +269,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 					.isGlobalReadOnly();
 		}
 
-		Logging.debug("forbidEditing " + forbidEditing);
+		Logging.debug("forbidEditing ", forbidEditing);
 
 		return forbidEditing;
 	}

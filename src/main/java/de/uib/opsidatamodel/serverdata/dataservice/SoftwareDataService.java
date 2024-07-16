@@ -610,8 +610,8 @@ public class SoftwareDataService {
 
 	private boolean setWindowsSoftwareIds2LPool(String licensePoolId, final List<String> softwareToAssign,
 			boolean onlyAdding) {
-		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:" + licensePoolId + " , "
-				+ softwareToAssign);
+		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:", licensePoolId, " , ",
+				softwareToAssign);
 
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()
 				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
@@ -826,7 +826,7 @@ public class SoftwareDataService {
 
 		// table SOFTWARE_LICENSE_TO_LICENSE_POOL
 		Map<String, ExtendedInteger> pool2allowedUsagesCount = getPool2AllowedUsagesCount();
-		Logging.debug(this, " pool2allowedUsagesCount " + pool2allowedUsagesCount);
+		Logging.debug(this, " pool2allowedUsagesCount ", pool2allowedUsagesCount);
 
 		// table LICENSE_ON_CLIENT
 		Logging.info(this, " license usages ");
@@ -867,12 +867,12 @@ public class SoftwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, rowsLicensesReconciliation);
 		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, rowsLicenseStatistics);
 
-		Logging.debug(this, "rowsLicenseStatistics " + rowsLicenseStatistics);
+		Logging.debug(this, "rowsLicenseStatistics ", rowsLicenseStatistics);
 	}
 
 	private void setUsedByOpsiToTrue(String licensePoolId, Set<String> listOfUsingClients,
 			Map<String, Map<String, Object>> rowsLicensesReconciliation) {
-		Logging.debug(this, "pool  " + licensePoolId + " used_by_opsi on clients : " + listOfUsingClients);
+		Logging.debug(this, "pool  ", licensePoolId, " used_by_opsi on clients : ", listOfUsingClients);
 
 		if (listOfUsingClients != null) {
 			for (String client : listOfUsingClients) {
@@ -927,7 +927,7 @@ public class SoftwareDataService {
 		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (String softwareIdent : getInstalledSoftwareInformationForLicensingPD().keySet()) {
 			String licensePoolId = fSoftware2LicensePool.get(softwareIdent);
-			Logging.debug(this, "software " + softwareIdent + " installed on " + swId2clients.get(softwareIdent));
+			Logging.debug(this, "software ", softwareIdent, " installed on ", swId2clients.get(softwareIdent));
 
 			if (licensePoolId == null || swId2clients.get(softwareIdent) == null) {
 				continue;
@@ -987,17 +987,17 @@ public class SoftwareDataService {
 		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
 		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (StringValuedRelationElement swXpool : auditSoftwareXLicensePool) {
-			Logging.debug(this, " retrieveStatistics1 relationElement  " + swXpool);
+			Logging.debug(this, " retrieveStatistics1 relationElement  ", swXpool);
 			String pool = swXpool.get(LicensepoolEntry.ID_SERVICE_KEY);
 
 			TreeSet<String> clientsServedByPool = pool2clients.computeIfAbsent(pool, s -> new TreeSet<>());
 
 			String swIdent = swXpool.get(AuditSoftwareXLicensePool.SW_ID);
 
-			Logging.debug(this, " retrieveStatistics1 swIdent " + swIdent);
+			Logging.debug(this, " retrieveStatistics1 swIdent ", swIdent);
 
 			if (swId2clients.get(swIdent) != null) {
-				Logging.debug(this, "pool " + pool + " serves clients " + swId2clients.get(swIdent));
+				Logging.debug(this, "pool ", pool, " serves clients ", swId2clients.get(swIdent));
 				clientsServedByPool.addAll(swId2clients.get(swIdent));
 			}
 		}

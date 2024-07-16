@@ -35,7 +35,7 @@ public class SelectData {
 		dataObject = data;
 		dataType = type;
 
-		Logging.debug(this.getClass(), "got data, type " + data + ", " + type);
+		Logging.debug(this.getClass(), "got data, type ", data, ", ", type);
 
 		switch (type) {
 		case TEXT_TYPE, DATE_TYPE:

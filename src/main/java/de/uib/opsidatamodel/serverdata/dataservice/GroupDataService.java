@@ -92,11 +92,11 @@ public class GroupDataService {
 				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }),
 				"ident", new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" }));
-		Logging.debug(this, "getHostGroups " + result);
+		Logging.debug(this, "getHostGroups ", result);
 		result = result.addSpecialGroups();
-		Logging.debug(this, "getHostGroups " + result);
+		Logging.debug(this, "getHostGroups ", result);
 		result.alterToWorkingVersion();
-		Logging.debug(this, "getHostGroups rebuilt" + result);
+		Logging.debug(this, "getHostGroups rebuilt", result);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, result);
 	}
 
@@ -131,11 +131,11 @@ public class GroupDataService {
 				new String[] { "groupId", "parentGroupId", "description" });
 
 		HostGroups hostGroups = new HostGroups(source);
-		Logging.debug(this, "getHostGroups " + hostGroups);
+		Logging.debug(this, "getHostGroups ", hostGroups);
 		hostGroups = hostGroups.addSpecialGroups();
-		Logging.debug(this, "getHostGroups " + hostGroups);
+		Logging.debug(this, "getHostGroups ", hostGroups);
 		hostGroups.alterToWorkingVersion();
-		Logging.debug(this, "getHostGroups rebuilt" + hostGroups);
+		Logging.debug(this, "getHostGroups rebuilt", hostGroups);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, hostGroups);
 
 		// Load data for productGroups
@@ -309,7 +309,7 @@ public class GroupDataService {
 		}
 
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
-		Logging.debug(this, "addObject2Group persistentGroupId " + persistentGroupId);
+		Logging.debug(this, "addObject2Group persistentGroupId ", persistentGroupId);
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE,
 				new String[] { groupType, persistentGroupId, objectId });
@@ -450,7 +450,7 @@ public class GroupDataService {
 		parentGroupId = ClientTree.translateToPersistentName(parentGroupId);
 		updateInfo.put("parentGroupId", parentGroupId);
 
-		Logging.debug(this, "updateGroup " + parentGroupId);
+		Logging.debug(this, "updateGroup ", parentGroupId);
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_UPDATE_OBJECT, new Object[] { updateInfo });
 		boolean result = exec.doCall(omc);

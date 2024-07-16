@@ -115,8 +115,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		super(tableCellRenderer, keylistExtendible, entryRemovable, reloadable);
 		objectCounter++;
 
-		Logging.debug(this.getClass(), " created EditMapPanelX instance No " + objectCounter + "::" + keylistExtendible
-				+ ",  " + entryRemovable + ",  " + reloadable);
+		Logging.debug(this.getClass(), " created EditMapPanelX instance No ", objectCounter, "::", keylistExtendible,
+				",  ", entryRemovable, ",  ", reloadable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);
@@ -396,15 +396,15 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		if (optionsMap != null) {
 			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
-				Logging.debug(this, " key " + option.getKey() + " is nullable " + option.getValue().isNullable());
+				Logging.debug(this, " key ", option.getKey(), " is nullable ", option.getValue().isNullable());
 			}
 
 			modelProducer = new ListModelProducerForVisualDatamap<>(table, optionsMap, visualdata);
 		}
 
-		Logging.debug(this, "setEditableMap set modelProducer  == null " + (modelProducer == null));
+		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
 		if (modelProducer != null) {
-			Logging.debug(this, "setEditableMap test modelProducer " + modelProducer.getClass());
+			Logging.debug(this, "setEditableMap test modelProducer ", modelProducer.getClass());
 		}
 
 		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
@@ -578,7 +578,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	@Override
 	public void setOptionsEditable(boolean b) {
-		Logging.debug(this, "setOptionsEditable " + b);
+		Logging.debug(this, "setOptionsEditable ", b);
 
 		if (b) {
 			popupmenuAtRow = popupEditOptions;

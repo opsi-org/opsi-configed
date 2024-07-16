@@ -75,8 +75,8 @@ public class ExporterToCSV extends AbstractExportTable {
 
 	protected void writeRows(CSVPrinter printer, boolean selectedOnly) throws IOException {
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
-			Logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
-					+ " selectedOnly " + selectedOnly);
+			Logging.debug(this, "toCsv, handle row ", rowI, " selected ", theTable.isRowSelected(rowI),
+					" selectedOnly ", selectedOnly);
 			List<String> row = new ArrayList<>();
 			if (selectedOnly && !theTable.isRowSelected(rowI)) {
 				continue;

@@ -122,7 +122,7 @@ public class SingleCommandTemplate implements SingleCommand {
 		String temp2 = CommandParameterParser.REPLACEMENT_DEFAULT_2;
 		if (command != null && command.contains(temp1) && command.contains(temp2)) {
 			myTmpCommand = getCommandRaw();
-			Logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
+			Logging.debug(this, "getParameterList myCommand_tmp ", myTmpCommand);
 			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
 				String plHolder = searchPlaceholder();
 				if (!paramlist.contains(plHolder)) {
@@ -130,7 +130,7 @@ public class SingleCommandTemplate implements SingleCommand {
 				}
 			}
 		}
-		Logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
+		Logging.debug(this, "getParameterList command ", command, " placeholders ", paramlist);
 		return paramlist;
 	}
 
@@ -139,9 +139,9 @@ public class SingleCommandTemplate implements SingleCommand {
 		String temp2 = CommandParameterParser.REPLACEMENT_DEFAULT_2;
 
 		String splittedText = myTmpCommand.split(temp1, 2)[1].split(temp2, 2)[0];
-		Logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
+		Logging.debug(this, "searchPlaceholder found ", temp1, splittedText, temp2);
 		myTmpCommand = myTmpCommand.replace(temp1 + splittedText + temp2, "");
-		Logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
+		Logging.debug(this, "searchPlaceholder myCommand_tmp ", myTmpCommand);
 
 		return temp1 + splittedText + temp2;
 	}
@@ -153,7 +153,7 @@ public class SingleCommandTemplate implements SingleCommand {
 			index = s.indexOf(search, index + 1);
 			++times;
 		}
-		Logging.debug(this, "counterString placeholders count  " + times);
+		Logging.debug(this, "counterString placeholders count  ", times);
 		return times;
 	}
 
@@ -189,9 +189,5 @@ public class SingleCommandTemplate implements SingleCommand {
 		com.append("command:").append(getCommand()).append(";");
 		com.append("}");
 		return com.toString();
-	}
-
-	public String commandToString() {
-		return getCommand();
 	}
 }

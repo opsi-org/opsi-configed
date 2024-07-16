@@ -303,7 +303,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {
-		Logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licensesStatus);
+		Logging.debug(this, "reactToStateChangeRequest( newState: ", newState, "), current state ", licensesStatus);
 		if (newState != licensesStatus && licensesPanels.get(licensesStatus).mayLeave()) {
 			licensesStatus = newState;
 
@@ -745,7 +745,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void setEditingClients() {
-		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+		Logging.debug(this, "setEditingTarget preSaveSelectedClients ", preSaveSelectedClients);
 
 		clientTree.setEnabled(true);
 		productTree.setEnabled(true);
@@ -759,7 +759,7 @@ public class ConfigedMain implements MessagebusListener {
 				.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
 		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveClientsViewIndex);
 
-		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+		Logging.debug(this, "setEditingTarget preSaveSelectedClients ", preSaveSelectedClients);
 
 		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
 			clientTable.setSelectedValues(preSaveSelectedClients);
@@ -874,8 +874,8 @@ public class ConfigedMain implements MessagebusListener {
 		if (!selectedClients.isEmpty()) {
 			hostInfo.setBy(pcinfos.get(selectedClients.get(0)).getMap());
 
-			Logging.debug(this, "updateHostInfo, produce hostInfo first selClient " + selectedClients.get(0));
-			Logging.debug(this, "updateHostInfo, produce hostInfo  " + hostInfo);
+			Logging.debug(this, "updateHostInfo, produce hostInfo first selClient ", selectedClients.get(0));
+			Logging.debug(this, "updateHostInfo, produce hostInfo  ", hostInfo);
 
 			HostInfo secondInfo = new HostInfo();
 
@@ -1173,7 +1173,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private TableModel buildClientListTableModel(boolean rebuildTree) {
-		Logging.debug(this, "buildPclistTableModel rebuildTree " + rebuildTree);
+		Logging.debug(this, "buildPclistTableModel rebuildTree ", rebuildTree);
 
 		Set<String> clientsForTableModel = produceClientSetForDepots(null);
 
@@ -1282,7 +1282,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void rebuildTree(Collection<String> allPCs, Set<String> permittedHostGroups) {
-		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + allPCs);
+		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  ", allPCs);
 
 		clientTree.clear();
 
@@ -1404,8 +1404,8 @@ public class ConfigedMain implements MessagebusListener {
 		if (getViewIndex() != VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
-			Logging.debug(this, "selectedClients  " + selectedClients + " ,  getViewIndex, viewClients: "
-					+ getViewIndex() + ", " + VIEW_CLIENTS);
+			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ", getViewIndex(),
+					", ", VIEW_CLIENTS);
 			int newViewIndex = getViewIndex();
 			resetView(newViewIndex);
 		}
@@ -1638,7 +1638,7 @@ public class ConfigedMain implements MessagebusListener {
 	public void setProductEdited(String productname, PanelProductSettings sourcePanel) {
 		// called from ProductSettings
 
-		Logging.debug(this, "setProductEdited " + productname);
+		Logging.debug(this, "setProductEdited ", productname);
 
 		if (clientProductpropertiesUpdateCollection != null) {
 			updateCollection.remove(clientProductpropertiesUpdateCollection);
@@ -1663,10 +1663,10 @@ public class ConfigedMain implements MessagebusListener {
 
 		dependenciesModel.setActualProduct(productname);
 
-		Logging.debug(this, " --- mergedProductProperties " + mergedProductProperties);
+		Logging.debug(this, " --- mergedProductProperties ", mergedProductProperties);
 
-		Logging.debug(this, "setProductEdited " + productname + " client specific properties "
-				+ persistenceController.getProductDataService().hasClientSpecificProperties(productname));
+		Logging.debug(this, "setProductEdited ", productname, " client specific properties ",
+				persistenceController.getProductDataService().hasClientSpecificProperties(productname));
 
 		sourcePanel.initEditing(productname, productProperties, mergedProductProperties,
 				clientProductpropertiesUpdateCollection);
@@ -1838,7 +1838,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.info(this, "depots of selected clients:", depotsOfSelectedClients);
 
-		Logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
+		Logging.debug(this, "setDepotRepresentative(), old representative: ", depotRepresentative, " should be ");
 
 		if (!checkSynchronous(depotsOfSelectedClients)) {
 			return false;
@@ -1846,8 +1846,8 @@ public class ConfigedMain implements MessagebusListener {
 
 		String oldRepresentative = depotRepresentative;
 
-		Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
-				+ depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
+		Logging.debug(this, "setDepotRepresentative  start   up to now ", oldRepresentative, " old",
+				depotRepresentative, " equal ", oldRepresentative.equals(depotRepresentative));
 
 		Logging.info(this, "setDepotRepresentative depotsOfSelectedClients ", depotsOfSelectedClients);
 
@@ -1855,10 +1855,9 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (!depotsIterator.hasNext()) {
 			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
-			Logging.debug(this,
-					"setDepotRepresentative  without next change depotRepresentative " + " up to now "
-							+ oldRepresentative + " new " + depotRepresentative + " equal "
-							+ oldRepresentative.equals(depotRepresentative));
+			Logging.debug(this, "setDepotRepresentative  without next change depotRepresentative ", " up to now ",
+					oldRepresentative, " new ", depotRepresentative, " equal ",
+					oldRepresentative.equals(depotRepresentative));
 		} else {
 			depotRepresentative = depotsIterator.next();
 
@@ -1871,7 +1870,7 @@ public class ConfigedMain implements MessagebusListener {
 			}
 		}
 
-		Logging.debug(this, "depotRepresentative: " + depotRepresentative);
+		Logging.debug(this, "depotRepresentative: ", depotRepresentative);
 
 		Logging.info(this, "setDepotRepresentative  change depotRepresentative ", " up to now ", oldRepresentative,
 				" new ", depotRepresentative, " equal ", oldRepresentative.equals(depotRepresentative));
@@ -1938,7 +1937,7 @@ public class ConfigedMain implements MessagebusListener {
 		clientProductpropertiesUpdateCollections = new HashMap<>();
 		panelProductSettings.clearEditing();
 
-		Logging.debug(this, "setProductsPage,  depotRepresentative:" + depotRepresentative);
+		Logging.debug(this, "setProductsPage,  depotRepresentative:", depotRepresentative);
 		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
 
 		// we retrieve the properties for all clients and products
@@ -1952,7 +1951,7 @@ public class ConfigedMain implements MessagebusListener {
 		Set<String> oldProductSelection = panelProductSettings.getSelectedIDs();
 		List<? extends SortKey> currentSortKeysProducts = panelProductSettings.getSortKeys();
 		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
-		Logging.debug(this, "setProductsPage: changedProductStates " + changedProductStates);
+		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
 
 		Set<String> productNames;
 		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
@@ -2270,7 +2269,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private boolean setLogPage() {
-		Logging.debug(this, "setLogPage(), selected clients: " + selectedClients);
+		Logging.debug(this, "setLogPage(), selected clients: ", selectedClients);
 		mainFrame.getTabbedConfigPanes().setUpdatedLogfilePanel("instlog");
 		mainFrame.getTabbedConfigPanes().setLogview("instlog");
 		return true;
@@ -2342,7 +2341,7 @@ public class ConfigedMain implements MessagebusListener {
 			viewIndex = visualViewIndex;
 			depotsList.setEnabled(viewIndex == VIEW_CLIENTS);
 
-			Logging.debug(this, "switch to viewIndex " + viewIndex);
+			Logging.debug(this, "switch to viewIndex ", viewIndex);
 			boolean result = resetView(viewIndex);
 
 			if (!result) {
@@ -2397,8 +2396,8 @@ public class ConfigedMain implements MessagebusListener {
 	private void fetchDepots() {
 		Logging.info(this, "fetchDepots");
 
-		Logging.debug(this,
-				"fetchDepots sorted depots " + persistenceController.getHostInfoCollections().getDepotNamesList());
+		Logging.debug(this, "fetchDepots sorted depots ",
+				persistenceController.getHostInfoCollections().getDepotNamesList());
 
 		depots = persistenceController.getHostInfoCollections().getDepots();
 		List<String> oldSelection = depotsList.getSelectedValuesList();
@@ -2411,7 +2410,7 @@ public class ConfigedMain implements MessagebusListener {
 		depotsList.setSelectedValues(oldSelection);
 		depotsList.setValueIsAdjusting(false);
 
-		Logging.debug(this, "selected after fetch " + getSelectedDepots().size());
+		Logging.debug(this, "selected after fetch ", getSelectedDepots().size());
 	}
 
 	public void reloadLicensesData() {
@@ -2562,7 +2561,7 @@ public class ConfigedMain implements MessagebusListener {
 			Logging.info(this, "saveConfigs ");
 
 			updateProductStates();
-			Logging.debug(this, "saveConfigs: collectChangedLocalbootStates " + collectChangedLocalbootStates);
+			Logging.debug(this, "saveConfigs: collectChangedLocalbootStates ", collectChangedLocalbootStates);
 
 			Logging.info(this, "we should now start working on the update collection of size  ",
 					updateCollection.size());
@@ -2623,24 +2622,24 @@ public class ConfigedMain implements MessagebusListener {
 		public void dataHaveChanged(Object source1) {
 			this.source = (Map<?, ?>) source1;
 
-			Logging.debug(this, "dataHaveChanged source " + source);
+			Logging.debug(this, "dataHaveChanged source ", source);
 
 			if (source == null) {
 				Logging.info(this, "dataHaveChanged null");
 			} else {
 				for (Entry<?, ?> clientEntry : source.entrySet()) {
-					Logging.debug(this, "dataHaveChanged for client " + clientEntry.getKey() + " with values"
-							+ clientEntry.getValue());
+					Logging.debug(this, "dataHaveChanged for client ",
+							clientEntry.getKey() + " with values" + clientEntry.getValue());
 				}
 			}
 
 			super.dataHaveChanged(source);
 
-			Logging.debug(this, "dataHaveChanged dataChanged " + dataChanged);
+			Logging.debug(this, "dataHaveChanged dataChanged ", dataChanged);
 
 			setDataChanged(super.isDataChanged());
 
-			Logging.debug(this, "dataHaveChanged dataChanged " + dataChanged);
+			Logging.debug(this, "dataHaveChanged dataChanged ", dataChanged);
 
 			// anyDataChanged in ConfigedMain
 
@@ -2718,13 +2717,13 @@ public class ConfigedMain implements MessagebusListener {
 					JOptionPane.QUESTION_MESSAGE);
 		}
 
-		Logging.debug(this, "checkClose result " + result);
+		Logging.debug(this, "checkClose result ", result);
 		return result;
 	}
 
 	// save if not otherwise stated
 	public void checkSaveAll(boolean ask) {
-		Logging.debug(this, "checkSaveAll: anyDataChanged, ask  " + anyDataChanged + ", " + ask);
+		Logging.debug(this, "checkSaveAll: anyDataChanged, ask  ", anyDataChanged, ", ", ask);
 
 		if (anyDataChanged) {
 			// without showing, but must be on first place since we run in this method again
@@ -2877,7 +2876,7 @@ public class ConfigedMain implements MessagebusListener {
 					showInformationHostExistsAlready(newID);
 				}
 
-				Logging.debug(this, "new name " + newID);
+				Logging.debug(this, "new name ", newID);
 
 				persistenceController.getHostDataService().renameClient(selectedClients.get(0), newID);
 
@@ -3001,7 +3000,7 @@ public class ConfigedMain implements MessagebusListener {
 		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList();
 		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 		if (persistenceController.getHostDataService().createClients(clients)) {
-			Logging.debug(this, "createClients" + clients);
+			Logging.debug(this, "createClients", clients);
 			checkErrorList();
 
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
@@ -3361,7 +3360,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void selectClientsNotCurrentProductInstalled(String selectedProduct,
 			boolean includeClientsWithBrokenInstallation) {
-		Logging.debug(this, "selectClientsNotCurrentProductInstalled, products " + selectedProduct);
+		Logging.debug(this, "selectClientsNotCurrentProductInstalled, products ", selectedProduct);
 		if (selectedProduct == null || selectedProduct.isEmpty()) {
 			return;
 		}
@@ -3369,8 +3368,8 @@ public class ConfigedMain implements MessagebusListener {
 		String productVersion = persistenceController.getProductDataService().getProductVersion(selectedProduct);
 		String packageVersion = persistenceController.getProductDataService().getProductPackageVersion(selectedProduct);
 
-		Logging.debug(this, "selectClientsNotCurrentProductInstalled product " + selectedProduct + ", " + productVersion
-				+ ", " + packageVersion);
+		Logging.debug(this, "selectClientsNotCurrentProductInstalled product ", selectedProduct, ", ", productVersion,
+				", ", packageVersion);
 
 		List<String> clientsToSelect = persistenceController.getHostDataService().getClientsWithOtherProductVersion(
 				selectedProduct, productVersion, packageVersion, includeClientsWithBrokenInstallation);
@@ -3386,7 +3385,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void selectClientsWithFailedProduct(String selectedProduct) {
-		Logging.debug(this, "selectClientsWithFailedProduct, products " + selectedProduct);
+		Logging.debug(this, "selectClientsWithFailedProduct, products ", selectedProduct);
 		if (selectedProduct == null || selectedProduct.isEmpty()) {
 			return;
 		}
@@ -3412,7 +3411,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		for (JFrame f : allFrames) {
 			if (f != null) {
-				Logging.debug(this, "log event occurred in frame f , is focused " + f.isFocused() + " " + f);
+				Logging.debug(this, "log event occurred in frame f , is focused ", f.isFocused(), " ", f);
 
 				Logging.checkErrorList(f);
 				found = true;

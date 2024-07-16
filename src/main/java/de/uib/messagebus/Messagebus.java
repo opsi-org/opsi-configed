@@ -182,7 +182,7 @@ public class Messagebus implements MessagebusListener {
 		message.put("expires", System.currentTimeMillis() + 10000);
 		message.put("operation", "add");
 		message.put("channels", channels);
-		Logging.debug(this, "Sending channel subscription request: " + message.toString());
+		Logging.debug(this, "Sending channel subscription request: ", message);
 		sendMessage(message);
 	}
 
@@ -203,7 +203,7 @@ public class Messagebus implements MessagebusListener {
 		message.put("cols", cols);
 		message.put("rows", rows);
 
-		Logging.debug(this, "Sending terminal open request: " + message.toString());
+		Logging.debug(this, "Sending terminal open request: ", message);
 		sendMessage(message);
 	}
 

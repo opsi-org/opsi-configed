@@ -237,7 +237,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(false);
-		Logging.debug(this, "setSoftwareIdsFromLicensePool  setSelectedValues " + selectKeys);
+		Logging.debug(this, "setSoftwareIdsFromLicensePool  setSelectedValues ", selectKeys);
 		thePanel.getPanelRegisteredSoftware().setSelectedValues(selectKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
 		if (!selectKeys.isEmpty()) {
@@ -245,8 +245,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					WINDOWS_SOFTWARE_ID_KEY_COL, false);
 		}
 
-		Logging.debug(this, "setSoftwareIdsFromLicensePool  selectedKeys "
-				+ thePanel.getPanelRegisteredSoftware().getSelectedKeys());
+		Logging.debug(this, "setSoftwareIdsFromLicensePool  selectedKeys ",
+				thePanel.getPanelRegisteredSoftware().getSelectedKeys());
 		if (wasUsingSelectedFilter) {
 			setVisualSelection(thePanel.getPanelRegisteredSoftware().getSelectedKeys());
 		}
@@ -315,14 +315,14 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	// called by valueChanged method of ListSelectionListener
 	public void validateWindowsSoftwareKeys() {
 		String selectedLicensePool = getSelectedLicensePool();
-		Logging.debug(this, "validateWindowsSoftwareKeys for licensePoolID " + selectedLicensePool);
+		Logging.debug(this, "validateWindowsSoftwareKeys for licensePoolID ", selectedLicensePool);
 
 		if (selectedLicensePool == null) {
 			return;
 		}
 
-		Logging.debug(this, "validateWindowsSoftwareKeys thePanel.panelRegisteredSoftware.isAwareOfSelectionListener "
-				+ thePanel.getPanelRegisteredSoftware().isAwareOfSelectionListener());
+		Logging.debug(this, "validateWindowsSoftwareKeys thePanel.panelRegisteredSoftware.isAwareOfSelectionListener ",
+				thePanel.getPanelRegisteredSoftware().isAwareOfSelectionListener());
 
 		if (!thePanel.getPanelRegisteredSoftware().isAwareOfSelectionListener()) {
 			return;
@@ -349,14 +349,14 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 			boolean gotAssociation = persistenceController.getSoftwareDataService()
 					.getFSoftware2LicensePoolPD(key) != null;
-			Logging.debug(this, "validateWindowsSoftwareKeys key " + key + " gotAssociation " + gotAssociation);
+			Logging.debug(this, "validateWindowsSoftwareKeys key ", key, " gotAssociation ", gotAssociation);
 
 			Boolean newAssociation = null;
 			if (gotAssociation) {
 				newAssociation = !(persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(key)
 						.equals(selectedLicensePool));
-				Logging.debug(this, "validateWindowsSoftwareKeys has association to "
-						+ persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(key));
+				Logging.debug(this, "validateWindowsSoftwareKeys has association to ",
+						persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(key));
 			}
 
 			if (Boolean.TRUE.equals(newAssociation)) {
@@ -787,7 +787,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	}
 
 	private void setVisualSelection(List<String> keys) {
-		Logging.debug(this, "setVisualSelection for panelRegisteredSoftware on keys " + keys);
+		Logging.debug(this, "setVisualSelection for panelRegisteredSoftware on keys ", keys);
 		thePanel.getPanelRegisteredSoftware().setSelectedValues(keys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
 		if (keys != null && !keys.isEmpty()) {

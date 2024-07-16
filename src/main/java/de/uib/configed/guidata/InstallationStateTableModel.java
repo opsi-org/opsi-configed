@@ -148,7 +148,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		this.productNames = productNames;
 		sortedProductsList = new ArrayList<>(productNames);
 
-		Logging.debug(this.getClass(), "productNames " + productNames);
+		Logging.debug(this.getClass(), "productNames ", productNames);
 
 		initalizeProductStates(statesAndActions);
 	}
@@ -452,11 +452,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		for (int j = 0; j < columnsToDisplay.size(); j++) {
 			String column = columnsToDisplay.get(j);
-			Logging.debug(this, " ------- treat column " + column);
+			Logging.debug(this, " ------- treat column ", column);
 			int k = preparedColumns.indexOf(column);
 			if (k >= 0) {
 				indexPreparedColumns[j] = k;
-				Logging.debug(this, "indexPreparedColumns of displayColumn " + j + " is " + k);
+				Logging.debug(this, "indexPreparedColumns of displayColumn ", j, " is ", k);
 				columnTitles.add(getColumnTitle(column));
 			} else {
 				Logging.info(this, "column ", column, " is not prepared");
@@ -530,7 +530,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		Map<String, String> product2request = changeEventCount2product2request
 				.computeIfAbsent(onGoingCollectiveChangeEventCount, arg -> new HashMap<>());
 
-		Logging.debug(this, "checkForContradictingAssignments === product2request " + product2request);
+		Logging.debug(this, "checkForContradictingAssignments === product2request ", product2request);
 
 		String existingRequest = product2request.get(product);
 		String info = " existingRequest " + existingRequest;
@@ -539,8 +539,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		if (existingRequest == null || existingRequest.isEmpty()) {
 			product2request.put(product, state);
-			Logging.debug(this, "checkForContradictingAssignments client " + clientId + ", actualproduct "
-					+ actualProduct + ", product " + product + ", stateType " + stateType + ", state " + state);
+			Logging.debug(this, "checkForContradictingAssignments client ", clientId, ", actualproduct ", actualProduct,
+					", product ", product, ", stateType ", stateType, ", state ", state);
 		} else {
 			boolean contradicting = !existingRequest.equals(state);
 			info = info + " for onGoingCollectiveChangeEventCount " + onGoingCollectiveChangeEventCount
@@ -670,7 +670,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	public void finishCollectiveChange() {
 		Logging.info(this, "finishCollectiveChange");
 
-		Logging.debug(this, "finishCollectiveChange, changes " + collectChangedStates);
+		Logging.debug(this, "finishCollectiveChange, changes ", collectChangedStates);
 
 		if (!missingImplementationForAR.isEmpty()) {
 			StringBuilder products = new StringBuilder("\n\n\n");
@@ -727,7 +727,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		}
 
 		for (String clientId : selectedClients) {
-			Logging.debug(this, "collectiveChangeActionRequest to " + ar + "  for client " + clientId);
+			Logging.debug(this, "collectiveChangeActionRequest to ", ar, "  for client ", clientId);
 			setActionRequest(ar, productId, clientId);
 			recursivelyChangeActionRequest(clientId, productId, ar);
 		}
@@ -738,9 +738,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		// show the new settings for all products after recursion
 
 		for (Entry<String, Set<String>> product : product2setOfClientsWithNewAction.entrySet()) {
-			Logging.debug(this, "collectiveChangeActionRequest for product  " + product.getKey()
-					+ " changed product for client number : " + product.getValue().size());
-			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.size());
+			Logging.debug(this, "collectiveChangeActionRequest for product  ", product.getKey(),
+					" changed product for client number : ", product.getValue().size());
+			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  ", selectedClients.size());
 
 			// -- not each client got a new action for this product
 			String visualActionRequest = getVisualActionRequestForSelectedClients(product);
@@ -781,7 +781,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		// adds the new value to the collection of changed states
 		// calls the dependencies for the next turn
 
-		Logging.debug(this, "recursivelyChangeActionRequest " + clientId + ", " + product + ", " + ar);
+		Logging.debug(this, "recursivelyChangeActionRequest ", clientId, ", ", product + ", ", ar);
 
 		setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
 
@@ -792,9 +792,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		// of visible action in combined actions
 
 		int modelRow = getRowFromProductID(product);
-		Logging.debug(this, "recursivelyChangeActionRequest product " + product + " modelRow " + modelRow);
+		Logging.debug(this, "recursivelyChangeActionRequest product ", product, " modelRow ", modelRow);
 		if (modelRow > -1) {
-			Logging.debug(this, "recursivelyChangeActionRequest fire update for row  " + modelRow);
+			Logging.debug(this, "recursivelyChangeActionRequest fire update for row  ", modelRow);
 
 			// tell the table model listeners where a change occurred
 			fireTableRowsUpdated(modelRow, modelRow);
@@ -802,28 +802,28 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			// where a change occurred
 		}
 
-		Logging.debug(this, " change action request for client " + clientId + ",  product " + product + " to " + ar);
+		Logging.debug(this, " change action request for client ", clientId, ",  product ", product, " to ", ar);
 		if (ar.getVal() == ActionRequest.NONE) {
 			Logging.debug(this, "don't follow");
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
-			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
+			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product ", product);
 
 			Map<String, String> requirements = persistenceController.getProductDataService()
 					.getProductDeinstallRequirements(null, product);
-			Logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
+			Logging.debug(this, "ProductRequirements for uninstall for ", product, ": ", requirements);
 			followRequirements(clientId, requirements);
 		} else {
 			Map<String, String> requirements = persistenceController.getProductDataService()
 					.getProductPreRequirements(null, product);
-			Logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
+			Logging.debug(this, "ProductPreRequirements for  ", product, ": ", requirements);
 			followRequirements(clientId, requirements);
 
 			requirements = persistenceController.getProductDataService().getProductRequirements(null, product);
-			Logging.debug(this, "ProductRequirements for  " + product + ": " + requirements);
+			Logging.debug(this, "ProductRequirements for  ", product, ": ", requirements);
 			followRequirements(clientId, requirements);
 
 			requirements = persistenceController.getProductDataService().getProductPostRequirements(null, product);
-			Logging.debug(this, "ProductPostRequirements for  " + product + ": " + requirements);
+			Logging.debug(this, "ProductPostRequirements for  ", product, ": ", requirements);
 			followRequirements(clientId, requirements);
 		}
 	}
@@ -832,7 +832,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		Logging.info(this, "-- followRequirements for client ", clientId, " requirements ", requirements);
 
 		for (Entry<String, String> requirement : requirements.entrySet()) {
-			Logging.debug(this, "requiredProduct: " + requirement.getKey());
+			Logging.debug(this, "requiredProduct: ", requirement.getKey());
 			String requiredAction = ActionRequest.getLabel(ActionRequest.NONE);
 			String requiredState = InstallationStatus.getLabel(InstallationStatus.UNDEFINED);
 
@@ -842,17 +842,17 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				requiredAction = requirement.getValue().substring(colonpos + 1);
 			}
 
-			Logging.debug(this, "followRequirements, required product: " + requirement.getKey());
-			Logging.debug(this, "followRequirements, required action: " + requiredAction);
-			Logging.debug(this, "followRequirements, required state: " + requiredState);
+			Logging.debug(this, "followRequirements, required product: ", requirement.getKey());
+			Logging.debug(this, "followRequirements, required action: ", requiredAction);
+			Logging.debug(this, "followRequirements, required state: ", requiredState);
 
 			if (!productNames.contains(requirement.getKey())) {
 				Logging.warning("followRequirements: required product: '", requirement.getKey(), "' not installable");
 				missingProducts.add(requirement.getKey());
 			} else {
 				if (getChangedState(clientId, requirement.getKey(), ActionRequest.KEY) != null) {
-					Logging.debug(this, "required product: '" + requirement.getKey()
-							+ "'  has already been treated - stop recursion");
+					Logging.debug(this, "required product: '", requirement.getKey(),
+							"'  has already been treated - stop recursion");
 				}
 
 				// check required product
@@ -867,7 +867,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 		if (productStates != null) {
 			Map<String, String> stateAndAction = productStates.get(requirement.getKey());
-			Logging.debug(this, "---- stateAndAction " + stateAndAction);
+			Logging.debug(this, "---- stateAndAction ", stateAndAction);
 
 			if (stateAndAction == null) {
 				stateAndAction = new ProductState(null);
@@ -883,13 +883,13 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct "
 					+ installationStatusOfRequiredProduct);
 
-			Logging.debug(this, "requiredAction " + requiredAction);
-			Logging.debug(this, "ActionRequest.getVal(requiredAction) " + ActionRequest.getVal(requiredAction));
+			Logging.debug(this, "requiredAction ", requiredAction);
+			Logging.debug(this, "ActionRequest.getVal(requiredAction) ", ActionRequest.getVal(requiredAction));
 			int requiredAR = ActionRequest.getVal(requiredAction);
 
 			int requiredIS = InstallationStatus.getVal(requiredState);
 
-			Logging.debug(this, " requiredInstallationsStatus " + InstallationStatus.getDisplayLabel(requiredIS));
+			Logging.debug(this, " requiredInstallationsStatus ", InstallationStatus.getDisplayLabel(requiredIS));
 
 			// handle state requests
 			if ((requiredIS == InstallationStatus.INSTALLED || requiredIS == InstallationStatus.NOT_INSTALLED)
@@ -898,10 +898,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				// we overwrite the required action request
 
 				String requiredStatusS = InstallationStatus.getLabel(requiredIS);
-				Logging.debug(this, " requiredStatusS " + requiredStatusS);
+				Logging.debug(this, " requiredStatusS ", requiredStatusS);
 
 				String neededAction = REQUIRED_ACTION_FOR_STATUS.get(requiredStatusS);
-				Logging.debug(this, " needed action therefore " + neededAction);
+				Logging.debug(this, " needed action therefore ", neededAction);
 
 				requiredAR = ActionRequest.getVal(neededAction);
 			}
@@ -946,7 +946,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private String[] producePossibleActions() {
 		// selection of actions
 
-		Logging.debug(this, " possible actions  " + possibleActions);
+		Logging.debug(this, " possible actions  ", possibleActions);
 		List<String> actionsForProduct = new ArrayList<>();
 		if (possibleActions != null) {
 			for (String label : possibleActions.get(actualProduct)) {
@@ -958,7 +958,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
 			actionsForProduct.retainAll(Arrays.asList(displayLabels));
 
-			Logging.debug("Possible actions as array  " + actionsForProduct);
+			Logging.debug("Possible actions as array  ", actionsForProduct);
 		}
 
 		if (actionsForProduct.isEmpty()) {
@@ -1196,7 +1196,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	 */
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		Logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
+		Logging.debug(this, " actualProduct ", actualProduct, ", set value at ", row, ", ", col);
 		changeValueAt(value, originRow(row), col);
 		fireTableCellUpdated(row, col);
 	}
@@ -1209,8 +1209,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		String cl = value.getClass().toString();
 
-		Logging.debug(this, "actual product " + actualProduct + ", setting value at " + row + "," + col + " to " + value
-				+ " (an instance of " + cl + ")");
+		Logging.debug(this, "actual product ", actualProduct, ", setting value at ", row, ",", col, " to ", value,
+				" (an instance of ", cl, ")");
 
 		infoIfNoClientsSelected();
 

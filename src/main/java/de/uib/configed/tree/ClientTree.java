@@ -203,7 +203,7 @@ public class ClientTree extends AbstractGroupTree {
 			if (parent != null) {
 				parent.add(node);
 			} else {
-				Logging.debug(this, "not added Node for " + clientId + " under " + parent);
+				Logging.debug(this, "not added Node for ", clientId, " under ", parent);
 			}
 
 			produceDIRECTORYinfo(node);
@@ -225,7 +225,7 @@ public class ClientTree extends AbstractGroupTree {
 	// we produce all partial pathes that are defined by the persistent groups
 	public void produceAndLinkGroups(final Map<String, Map<String, String>> importedGroups,
 			Set<String> permittedGroups) {
-		Logging.debug(this, "produceAndLinkGroups " + importedGroups.keySet());
+		Logging.debug(this, "produceAndLinkGroups ", importedGroups.keySet());
 		// we need a local copy since we add virtual groups
 		groups.putAll(importedGroups);
 
@@ -367,7 +367,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	@Override
 	public void removeNodeInternally(String clientID, GroupNode parentNode) {
-		Logging.debug("removeClientInternally clientId, parentNode " + clientID + ", " + parentNode);
+		Logging.debug("removeClientInternally clientId, parentNode ", clientID, ", ", parentNode);
 
 		DefaultMutableTreeNode clientNode = getChildWithUserObjectString(clientID, parentNode);
 
@@ -399,12 +399,10 @@ public class ClientTree extends AbstractGroupTree {
 		if (existingNode == null) {
 			// we have not a node with this name in the target group
 			if (sourcePath != null) {
-				Logging.debug(this,
-						"moveObjectTo checked importID sourcePath.getLastPathComponent(); "
-								+ sourcePath.getLastPathComponent() + " class "
-								+ ((sourcePath.getLastPathComponent()).getClass()));
+				Logging.debug(this, "moveObjectTo checked importID sourcePath.getLastPathComponent(); ",
+						sourcePath.getLastPathComponent(), " class ", ((sourcePath.getLastPathComponent()).getClass()));
 			} else {
-				Logging.debug(this, "moveCmoveObjectToientTo sourcePath null, sourceParentNode " + sourceParentNode);
+				Logging.debug(this, "moveCmoveObjectToientTo sourcePath null, sourceParentNode ", sourceParentNode);
 			}
 
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
@@ -425,10 +423,8 @@ public class ClientTree extends AbstractGroupTree {
 
 			activeParents.addAll(Arrays.stream(dropPath.getPath()).map(Object::toString).collect(Collectors.toSet()));
 
-			Logging.debug(this,
-					"moveObjectTo -- remove " + importID + " from " + sourceParentID
-							+ " clientNode, sourceParentNode, sourcePath " + clientNode + ", " + sourceParentNode + ", "
-							+ sourcePath);
+			Logging.debug(this, "moveObjectTo -- remove ", importID, " from ", sourceParentID,
+					" clientNode, sourceParentNode, sourcePath ", clientNode, ", ", sourceParentNode, ", ", sourcePath);
 
 			// persistent removal
 			persistenceController.getGroupDataService().removeObject2Group(importID, sourceParentID);
@@ -444,10 +440,10 @@ public class ClientTree extends AbstractGroupTree {
 	@Override
 	public void copyObjectTo(String objectID, TreePath sourcePath, String newParentID,
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
-		Logging.debug(this, " copying " + objectID + ", sourcePath " + sourcePath + " into group " + newParentID);
+		Logging.debug(this, " copying ", objectID, ", sourcePath ", sourcePath, " into group ", newParentID);
 
-		Logging.debug(this, " -- copyObjectTo childs are persistent, newParentNode " + newParentNode + " "
-				+ DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
+		Logging.debug(this, " -- copyObjectTo childs are persistent, newParentNode ", newParentNode, " ",
+				DIRECTORY_NOT_ASSIGNED_NAME.equals(newParentNode.toString()));
 
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
 

@@ -40,8 +40,8 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 		setTooltipText(ttt);
 		setPriority(p);
 		setCommands(c);
-		Logging.debug(this, "MultiCommandTemplate this " + this.toString());
-		Logging.debug(this, "MultiCommandTemplate commandlist" + this.commandlistToString());
+		Logging.debug(this, "MultiCommandTemplate this ", this);
+		Logging.debug(this, "MultiCommandTemplate commandlist", this.getCommands());
 	}
 
 	@Override
@@ -167,23 +167,9 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 		return com.toString();
 	}
 
-	public String commandlistToString() {
-		StringBuilder commandString = new StringBuilder("[");
-		for (int i = 0; i < getCommands().size(); i++) {
-			String c = ((SingleCommandTemplate) getCommands().get(i)).commandToString();
-			if (i == getCommands().size() - 1) {
-				commandString.append(c);
-			} else {
-				commandString.append(c).append(",");
-			}
-		}
-		commandString.append("]");
-		return commandString.toString();
-	}
-
 	public MultiCommandTemplate update(MultiCommandTemplate com) {
 		if (this.id.equals(com.getId())) {
-			Logging.debug(this, "update this (" + this.toString() + ") with (" + com.toString() + ")");
+			Logging.debug(this, "update this (", this, ") with (", com, ")");
 			setCommands(com.getCommandsRaw());
 			setMenuText(com.getMenuText());
 			setParentMenuText(com.getParentMenuText());
@@ -219,41 +205,39 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 		}
 
 		if (isAnyNull(this.getId(), com.getId()) || !this.getId().trim().equals(com.getId().trim())) {
-			Logging.debug(this, "equals different id's " + this.getId().trim() + " != " + com.getId().trim() + " "
-					+ this.getId().trim().equals(com.getId().trim()));
+			Logging.debug(this, "equals different id's ", this.getId().trim(), " != ", com.getId().trim(), " ",
+					this.getId().trim().equals(com.getId().trim()));
 			return false;
 		}
 		if (isAnyNull(this.getMenuText(), com.getMenuText())
 				|| !this.getMenuText().trim().equals(com.getMenuText().trim())) {
-			Logging.debug(this, "equals different menuText's " + this.getMenuText() + " != " + com.getMenuText() + "");
+			Logging.debug(this, "equals different menuText's ", this.getMenuText(), " != ", com.getMenuText());
 			return false;
 		}
 		if (isAnyNull(this.getParentMenuText(), com.getParentMenuText())
 				|| !this.getParentMenuText().trim().equals(com.getParentMenuText().trim())) {
-			Logging.debug(this, "equals different parentMenuText's " + this.getParentMenuText() + " != "
-					+ com.getParentMenuText() + "");
+			Logging.debug(this, "equals different parentMenuText's ", this.getParentMenuText(), " != ",
+					com.getParentMenuText());
 			return false;
 		}
 		if (isAnyNull(this.getToolTipText(), com.getToolTipText())
 				|| !this.getToolTipText().trim().equals(com.getToolTipText().trim())) {
-			Logging.debug(this,
-					"equals different toolTipText's " + this.getToolTipText() + " != " + com.getToolTipText() + "");
+			Logging.debug(this, "equals different toolTipText's ", this.getToolTipText(), " != ", com.getToolTipText());
 			return false;
 		}
 		if (this.getPriority() != com.getPriority()) {
-			Logging.debug(this, "equals different priorities " + this.getPriority() + " != " + com.getPriority() + "");
+			Logging.debug(this, "equals different priorities ", this.getPriority(), " != ", com.getPriority());
 			return false;
 		}
 		if (this.getCommandsRaw().size() != com.getCommandsRaw().size()) {
-			Logging.debug(this, "equals different commandlist length " + this.getCommandsRaw().size() + " != "
-					+ com.getCommandsRaw().size() + "");
+			Logging.debug(this, "equals different commandlist length ", this.getCommandsRaw().size(), " != ",
+					com.getCommandsRaw().size());
 			return false;
 		}
 
 		for (int i = 0; i < this.getCommandsRaw().size(); i++) {
 			if (!this.getCommandsRaw().get(i).equals(com.getCommandsRaw().get(i))) {
-				Logging.debug(this,
-						"equals different commands " + this.getCommandsRaw() + " != " + com.getCommandsRaw() + "");
+				Logging.debug(this, "equals different commands ", this.getCommandsRaw(), " != ", com.getCommandsRaw());
 				return false;
 			}
 		}

@@ -140,12 +140,12 @@ public final class OpsiDataBackend {
 	 */
 	public List<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
 			boolean hasSwAudit) {
-		Logging.debug(this, "Starting the filtering.. , operation " + operation);
+		Logging.debug(this, "Starting the filtering.. , operation ", operation);
 		this.hasSoftware = hasSoftware;
 		this.hasHardware = hasHardware;
 		this.hasSwAudit = hasSwAudit;
 		List<OpsiDataClient> clients = getClients();
-		Logging.debug(this, "Number of clients to filter: " + clients.size());
+		Logging.debug(this, "Number of clients to filter: ", clients.size());
 
 		List<String> matchingClients = new LinkedList<>();
 		for (OpsiDataClient client : clients) {
@@ -162,7 +162,7 @@ public final class OpsiDataBackend {
 	 * with their backend-specific executable operations.
 	 */
 	public ExecutableOperation createExecutableOperation(AbstractSelectOperation operation) {
-		Logging.debug(this, "createFromOperationData " + operation.getClassName());
+		Logging.debug(this, "createFromOperationData ", operation.getClassName());
 
 		if (operation instanceof AbstractSelectGroupOperation groupOperation) {
 			List<AbstractSelectOperation> children = new LinkedList<>();
@@ -434,7 +434,7 @@ public final class OpsiDataBackend {
 
 		getHardwareConfig();
 
-		Logging.debug(this, "getClients hasHardware " + hasHardware);
+		Logging.debug(this, "getClients hasHardware ", hasHardware);
 		if (hasHardware) {
 			getHardwareOnClient(clientNames);
 		} else {
@@ -513,7 +513,7 @@ public final class OpsiDataBackend {
 			}
 			result.put(hardwareName, elementList);
 
-			Logging.debug(this, "" + elementList);
+			Logging.debug(this, "", elementList);
 		}
 		return result;
 	}
@@ -547,7 +547,7 @@ public final class OpsiDataBackend {
 			}
 			result.put(hardwareNameLocalized, elementList);
 
-			Logging.debug(this, "" + elementList);
+			Logging.debug(this, "", elementList);
 		}
 		return result;
 	}
@@ -575,7 +575,7 @@ public final class OpsiDataBackend {
 		for (Map<String, Object> map : hardwareOnClient) {
 			String name = (String) map.get(OpsiServiceNOMPersistenceController.HOST_KEY);
 			if (!clientToHardware.containsKey(name)) {
-				Logging.debug(this, "Non-client hostid: " + name);
+				Logging.debug(this, "Non-client hostid: ", name);
 				continue;
 			}
 			clientToHardware.get(name).add(map);
@@ -595,7 +595,7 @@ public final class OpsiDataBackend {
 		Logging.debug(this, locale);
 		hwConfig = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD("en_");
 		hwConfigLocalized = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD(locale);
-		Logging.debug(this, "" + hwConfig);
+		Logging.debug(this, "", hwConfig);
 		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<>();
 

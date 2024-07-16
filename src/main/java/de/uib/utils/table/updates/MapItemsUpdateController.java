@@ -44,7 +44,7 @@ public class MapItemsUpdateController implements UpdateController {
 		while (iter.hasNext() && success) {
 			MapBasedTableEditItem updateItem = iter.next();
 
-			Logging.debug(this, " handling updateItem " + updateItem);
+			Logging.debug(this, " handling updateItem ", updateItem);
 
 			if (updateItem.getSource() == this.tablemodel) {
 				if (updateItem.keyChanged()) {

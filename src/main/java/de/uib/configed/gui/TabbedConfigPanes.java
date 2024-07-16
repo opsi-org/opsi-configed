@@ -161,7 +161,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener((ChangeEvent e) -> {
-			Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
+			Logging.debug(this, " new logfiles tabindex ", showLogfiles.getSelectedIndex());
 
 			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
 
@@ -251,7 +251,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	public void setSoftwareAudit(String hostId) {
 		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
 
-		Logging.debug(this, "setSoftwareAudit for " + hostId);
+		Logging.debug(this, "setSoftwareAudit for ", hostId);
 		panelSWInfo.setAskForOverwrite(true);
 		panelSWInfo.setHost(hostId);
 		panelSWInfo.updateModel();

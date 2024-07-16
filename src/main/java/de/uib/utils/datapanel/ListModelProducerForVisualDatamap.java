@@ -57,7 +57,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 
 	private void mapTypes(final Map<String, Object> data) {
 		currentData = new HashMap<>();
-		Logging.debug(this, "mapTypes  " + data);
+		Logging.debug(this, "mapTypes  ", data);
 		originalTypes = new HashMap<>();
 		for (Entry<String, Object> dataEntry : data.entrySet()) {
 			originalTypes.put(dataEntry.getKey(), dataEntry.getValue().getClass());

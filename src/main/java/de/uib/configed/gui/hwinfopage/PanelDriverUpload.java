@@ -379,7 +379,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			buttonGroup.add(button);
 			button.addItemListener((ItemEvent e) -> {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					Logging.debug(this, " " + e);
+					Logging.debug(this, " ", e);
 					driverDirectory = button.getSubdir();
 
 					produceTarget();

@@ -30,7 +30,7 @@ public class OpsiDataIntEqualsOperation extends IntEqualsOperation implements Ex
 	public boolean doesMatch(OpsiDataClient client) {
 		Map<String, Object> realMap = client.getMap(map);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			Logging.debug(this, "key " + key + " not found!");
+			Logging.debug(this, "key ", key, " not found!");
 			return false;
 		}
 

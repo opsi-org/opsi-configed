@@ -43,17 +43,17 @@ public class LogDataService {
 			Logging.error("illegal logtype: ", logtype);
 			return logfiles;
 		}
-		Logging.debug(this, "getLogfile logtype " + logtype);
+		Logging.debug(this, "getLogfile logtype ", logtype);
 
 		String[] logtypes = Utils.getLogTypes();
-		Logging.debug(this, "OpsiMethodCall log_read " + logtypes[i] + " max size " + Utils.getMaxLogSize(i));
+		Logging.debug(this, "OpsiMethodCall log_read ", logtypes[i], " max size ", Utils.getMaxLogSize(i));
 		String s = "";
 		try {
 			s = exec.getStringResult(new OpsiMethodCall(RPCMethodName.LOG_READ,
 					new String[] { logtype, clientId, String.valueOf(Utils.getMaxLogSize(i)) }));
 		} catch (OutOfMemoryError e) {
 			s = "--- file too big for showing, enlarge java memory  ---";
-			Logging.debug(this, "thrown exception: " + e);
+			Logging.debug(this, "thrown exception: ", e);
 		}
 
 		logfiles.put(logtype, s);

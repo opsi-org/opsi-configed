@@ -138,7 +138,7 @@ public class ProductDataService {
 	}
 
 	public Set<String> getAllLocalbootProductNames(Collection<String> depotIds) {
-		Logging.debug(this, "getAllLocalbootProductNames for depots " + depotIds);
+		Logging.debug(this, "getAllLocalbootProductNames for depots ", depotIds);
 		Set<String> localbootProductNames = new TreeSet<>();
 		for (String depotId : depotIds) {
 			if (getDepot2LocalbootProductsPD().containsKey(depotId)) {
@@ -209,7 +209,7 @@ public class ProductDataService {
 			}
 
 			OpsiPackage p = new OpsiPackage(m);
-			Logging.debug(this, "retrieveProductsAllDepotsPD, opsi package " + p);
+			Logging.debug(this, "retrieveProductsAllDepotsPD, opsi package ", p);
 
 			if (p.isNetbootProduct()) {
 				depot2NetbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
@@ -312,7 +312,7 @@ public class ProductDataService {
 		attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_NAME);
 		attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_DESCRIPTION);
 
-		Logging.debug(this, "retrieveProductInfos callAttributes " + attribs);
+		Logging.debug(this, "retrieveProductInfos callAttributes ", attribs);
 
 		Map<String, Object> callFilter = new HashMap<>();
 
@@ -333,7 +333,7 @@ public class ProductDataService {
 			version2productInfos.put(versionInfo, productInfo);
 		}
 
-		Logging.debug(this, "retrieveProductInfos " + product2versionInfo2infos);
+		Logging.debug(this, "retrieveProductInfos ", product2versionInfo2infos);
 
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS, product2versionInfo2infos);
 		persistenceController.notifyPanelCompleteWinProducts();
@@ -375,10 +375,9 @@ public class ProductDataService {
 					.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class);
 			if (product2VersionInfo2Depots.get(productId) == null
 					|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
-				Logging.debug(this,
-						"retrieveAllProductPropertyDefinitions: no depot for " + productId + " version " + versionInfo
-								+ "  product2VersionInfo2Depots.get(productId) "
-								+ product2VersionInfo2Depots.get(productId));
+				Logging.debug(this, "retrieveAllProductPropertyDefinitions: no depot for ", productId, " version ",
+						versionInfo, "  product2VersionInfo2Depots.get(productId) ",
+						product2VersionInfo2Depots.get(productId));
 			} else {
 				for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
 					Map<String, Map<String, ListCellOptions>> product2PropertyDefinitions = depot2Product2PropertyDefinitions
@@ -520,7 +519,7 @@ public class ProductDataService {
 
 	// map with key productId
 	public Map<String, List<String>> getPossibleActionsPD(String depotId) {
-		Logging.debug(this, "getPossibleActions depot irregular " + !depotDataService.getDepot().equals(depotId));
+		Logging.debug(this, "getPossibleActions depot irregular ", !depotDataService.getDepot().equals(depotId));
 		checkProductGlobalInfosPD(depotId);
 		return cacheManager.getCachedData(CacheIdentifier.POSSIBLE_ACTIONS, Map.class);
 	}
@@ -587,7 +586,7 @@ public class ProductDataService {
 
 					aProductInfo.put(OpsiPackage.SERVICE_KEY_LOCKED, productInfo.getLockedInfo());
 
-					Logging.debug(this, "productInfo " + aProductInfo);
+					Logging.debug(this, "productInfo ", aProductInfo);
 
 					productGlobalInfos.put(product.getKey(), aProductInfo);
 				}
@@ -673,7 +672,7 @@ public class ProductDataService {
 	}
 
 	public Map<String, ConfigName2ConfigValue> getProductPropertiesPD(String pcname) {
-		Logging.debug(this, "getProductsProperties for host " + pcname);
+		Logging.debug(this, "getProductsProperties for host ", pcname);
 
 		retrieveProductPropertiesPD(Collections.singleton(pcname));
 
@@ -692,7 +691,7 @@ public class ProductDataService {
 	 * @param productname
 	 */
 	public Map<String, Object> getProductPropertiesPD(String pcname, String productname) {
-		Logging.debug(this, "getProductProperties for product, host " + productname + ", " + pcname);
+		Logging.debug(this, "getProductProperties for product, host ", productname, ", ", pcname);
 
 		retrieveProductPropertiesPD(Collections.singleton(pcname));
 
@@ -823,7 +822,7 @@ public class ProductDataService {
 	}
 
 	public Map<String, ConfigName2ConfigValue> getDefaultProductPropertiesPD(String depotId) {
-		Logging.debug(this, "getDefaultProductProperties for depot " + depotId);
+		Logging.debug(this, "getDefaultProductProperties for depot ", depotId);
 		retrieveDepotProductPropertiesPD();
 		Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class);
@@ -875,8 +874,8 @@ public class ProductDataService {
 			properties.put((String) map.get("propertyId"), map.get("values"));
 			properties.getRetrieved().put((String) map.get("propertyId"), map.get("values"));
 
-			Logging.debug(this,
-					"retrieveDepotProductProperties product properties " + map.get(OpsiPackage.DB_KEY_PRODUCT_ID));
+			Logging.debug(this, "retrieveDepotProductProperties product properties ",
+					map.get(OpsiPackage.DB_KEY_PRODUCT_ID));
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, depot2product2properties);
@@ -946,7 +945,7 @@ public class ProductDataService {
 
 	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(List<String> clientIds,
 			List<String> attributes, String productServerString) {
-		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + clientIds);
+		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : ", clientIds);
 
 		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
@@ -975,7 +974,7 @@ public class ProductDataService {
 	}
 
 	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(Collection<String> clientIds) {
-		Logging.debug(this, "getMapOfProductStatesAndActions for : " + clientIds);
+		Logging.debug(this, "getMapOfProductStatesAndActions for : ", clientIds);
 		if (clientIds == null || clientIds.isEmpty()) {
 			return new HashMap<>();
 		}
@@ -1049,7 +1048,7 @@ public class ProductDataService {
 		values.put("productId", productname);
 		values.putAll(updateValues);
 
-		Logging.debug(this, "updateProductOnClient, values " + values);
+		Logging.debug(this, "updateProductOnClient, values ", values);
 		updateItems.add(values);
 	}
 
@@ -1100,7 +1099,7 @@ public class ProductDataService {
 		List<Map<String, Object>> deleteProductItems = produceDeleteProductItems(selectedClients, productType);
 		Logging.info(this, "resetProducts deleteProductItems.size ", deleteProductItems.size(), " type", productType);
 		boolean result = resetProducts(deleteProductItems, withDependencies);
-		Logging.debug(this, "resetProducts result " + result);
+		Logging.debug(this, "resetProducts result ", result);
 		return result;
 	}
 
@@ -1147,7 +1146,7 @@ public class ProductDataService {
 
 			result = exec.doCall(omc);
 
-			Logging.debug(this, "resetProducts result " + result);
+			Logging.debug(this, "resetProducts result ", result);
 
 			if (result && withDependencies) {
 				omc = new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_STATE_DELETE,
@@ -1158,7 +1157,7 @@ public class ProductDataService {
 			}
 		}
 
-		Logging.debug(this, "resetProducts result " + result);
+		Logging.debug(this, "resetProducts result ", result);
 
 		return result;
 	}
@@ -1174,8 +1173,8 @@ public class ProductDataService {
 			result = new ArrayList<>();
 		}
 
-		Logging.debug(this,
-				"getProductDependencies for depot, product " + depotId + ", " + productId + " , result " + result);
+		Logging.debug(this, "getProductDependencies for depot, product ", depotId, ", ", productId, " , result ",
+				result);
 		return result;
 	}
 
@@ -1215,11 +1214,11 @@ public class ProductDataService {
 				state.put("propertyId", propertyId);
 
 				if (newValue == null || newValue.equals(MapTableModel.nullLIST)) {
-					Logging.debug(this, "setProductProperties,  requested deletion " + newValue);
+					Logging.debug(this, "setProductProperties,  requested deletion ", newValue);
 					deleteState(state, deleteCollection, retrievedConfig, propertyId);
 				} else {
-					Logging.debug(this,
-							"setProductProperties,  requested update " + newValue + " for oldValue " + oldValue);
+					Logging.debug(this, "setProductProperties,  requested update ", newValue, " for oldValue ",
+							oldValue);
 
 					state.put("values", newValue);
 					updateState(state, updateCollection, retrievedConfig, propertyId, newValue);
@@ -1240,7 +1239,7 @@ public class ProductDataService {
 
 	private void updateState(Map<String, Object> state, List<Map<String, Object>> updateCollection,
 			Map<String, Object> retrievedConfig, String propertyId, Object propertyValue) {
-		Logging.debug(this, "setProductProperties,  we have new state " + state);
+		Logging.debug(this, "setProductProperties,  we have new state ", state);
 		updateCollection.add(state);
 
 		// we hope that the update works and directly update the retrievedConfig
@@ -1367,7 +1366,7 @@ public class ProductDataService {
 	public String getProductInfo(String product) {
 		Map<String, Map<String, Object>> productGlobalInfos = getProductGlobalInfosPD(depotDataService.getDepot());
 		String result = "" + productGlobalInfos.get(product).get(OpsiProductInfo.SERVICE_KEY_PRODUCT_DESCRIPTION);
-		Logging.debug(this, " getProductInfo for product " + product + ": " + result);
+		Logging.debug(this, " getProductInfo for product ", product, ": ", result);
 
 		return result;
 	}
@@ -1385,7 +1384,7 @@ public class ProductDataService {
 			result = EMPTYFIELD;
 		}
 
-		Logging.debug(this, "getProductVersion which? " + result + " for product: " + product);
+		Logging.debug(this, "getProductVersion which? ", result, " for product: ", product);
 
 		return result;
 	}
@@ -1426,8 +1425,8 @@ public class ProductDataService {
 			depot = depotId;
 		}
 
-		Logging.debug(this,
-				"getProductRequirements productname, requirementType  " + productname + ", " + requirementType);
+		Logging.debug(this, "getProductRequirements productname, requirementType  ", productname, ", ",
+				requirementType);
 
 		List<Map<String, String>> dependenciesFor1product = getProductDependencies(depot, productname);
 
@@ -1436,7 +1435,7 @@ public class ProductDataService {
 		}
 
 		for (Map<String, String> aDependency : dependenciesFor1product) {
-			Logging.debug(this, " dependency map : " + aDependency);
+			Logging.debug(this, " dependency map : ", aDependency);
 
 			if (requirementType.equals(NAME_REQUIREMENT_TYPE_ON_DEINSTALL)
 					// we demand information for this type,
@@ -1456,8 +1455,8 @@ public class ProductDataService {
 			}
 		}
 
-		Logging.debug(this, "getProductRequirements depot, productname, requirementType  " + depotId + ", "
-				+ productname + ", " + requirementType);
+		Logging.debug(this, "getProductRequirements depot, productname, requirementType  ", depotId, ", ", productname,
+				", ", requirementType);
 		Logging.info(this, "getProductRequirements ", result);
 
 		return result;
@@ -1504,7 +1503,7 @@ public class ProductDataService {
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
 		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
-		Logging.debug(this, "getProductOnClientsDisplayFields() " + configOptions.get(key));
+		Logging.debug(this, "getProductOnClientsDisplayFields() ", configOptions.get(key));
 
 		List<String> configuredByService = Utils.takeAsStringList(serverPropertyMap.get(key));
 		List<?> possibleValuesAccordingToService = new ArrayList<>();
@@ -1512,8 +1511,8 @@ public class ProductDataService {
 			possibleValuesAccordingToService = (List<?>) configOptions.get(key).get("possibleValues");
 		}
 
-		Logging.debug(this, "getProductOnClientsDisplayFields() possibleValuesAccordingToService "
-				+ possibleValuesAccordingToService);
+		Logging.debug(this, "getProductOnClientsDisplayFields() possibleValuesAccordingToService ",
+				possibleValuesAccordingToService);
 
 		if (configuredByService.isEmpty() || !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
 				.equals(new HashSet<>(possibleValuesAccordingToService)))) {

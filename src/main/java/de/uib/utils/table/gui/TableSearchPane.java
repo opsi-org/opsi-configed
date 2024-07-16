@@ -463,8 +463,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setSearchFieldsAll() {
-		Logging.debug(this, "setSearchFieldsAll " + targetModel);
-		Logging.debug(this, "setSearchFieldsAll target model col count " + targetModel.getColumnCount());
+		Logging.debug(this, "setSearchFieldsAll ", targetModel);
+		Logging.debug(this, "setSearchFieldsAll target model col count ", targetModel.getColumnCount());
 
 		retainOnlyAllFieldsItem();
 

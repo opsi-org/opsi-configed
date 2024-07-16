@@ -45,8 +45,8 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		for (Map<String, String> value : softwareSet) {
 			if (value instanceof Map) {
 				client.setCurrentSoftwareValue(value);
-				Logging.debug(this,
-						" getChildOperations().get(0) instance of " + (getChildOperations().get(0)).getClass());
+				Logging.debug(this, " getChildOperations().get(0) instance of ",
+						getChildOperations().get(0).getClass());
 				if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
 					return true;
 				}
@@ -57,8 +57,8 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 
 		for (String product : productsWithDefaultValuesClient) {
 			client.setCurrentSoftwareValue(productDefaultStates.get(product));
-			Logging.debug(this, " getChildOperations().get(0) check default product values, instance of "
-					+ (getChildOperations().get(0)).getClass());
+			Logging.debug(this, " getChildOperations().get(0) check default product values, instance of ",
+					(getChildOperations().get(0)).getClass());
 			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
 				return true;
 			}

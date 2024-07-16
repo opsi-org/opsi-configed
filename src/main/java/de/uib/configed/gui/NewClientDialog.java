@@ -187,7 +187,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			public void insertUpdate(DocumentEvent e) {
 				try {
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
-					Logging.debug(this, "newPiece: '" + newPiece + "'");
+					Logging.debug(this, "newPiece: '", newPiece, "'");
 
 					if ("\t".equals(newPiece)) {
 						systemUUIDField.requestFocus();
@@ -552,13 +552,13 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			editableDomains.add(domain);
 		}
 
-		Logging.debug(this, "createClient editableDomains " + editableDomains);
+		Logging.debug(this, "createClient editableDomains ", editableDomains);
 
 		newDomainsList = editableDomains;
 
 		setDomains();
 
-		Logging.debug(this, "createClient saveDomains " + saveDomains);
+		Logging.debug(this, "createClient saveDomains ", saveDomains);
 		persistenceController.getConfigDataService().writeDomains(saveDomains);
 	}
 

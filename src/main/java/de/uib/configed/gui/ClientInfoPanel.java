@@ -402,7 +402,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	private void reactToClientDataChange(Document document) {
-		Logging.debug(this, "reactToClientDataChange, dataAreChangedProgramatically: " + dataAreChangedProgramatically);
+		Logging.debug(this, "reactToClientDataChange, dataAreChangedProgramatically: ", dataAreChangedProgramatically);
 
 		if (dataAreChangedProgramatically || configedMain.getSelectedClients().size() != 1) {
 			return;

@@ -239,7 +239,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			writer.flush();
 
 			Map<String, Object> omcMap = omc != null ? omc.getOMCMap() : new HashMap<>();
-			Logging.debug(this, "(POST) sending: " + omcMap);
+			Logging.debug(this, "(POST) sending: ", omcMap);
 		} catch (IOException iox) {
 			Logging.info(this, "exception on writing json request ", iox);
 		}
@@ -274,13 +274,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private void handleResponseCode(HttpsURLConnection connection) throws IOException {
-		Logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
+		Logging.debug(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage());
 
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
 				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
 		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-			Logging.debug("Unauthorized: " + sessionId + ", mfa=" + Utils.isMultiFactorAuthenticationEnabled());
+			Logging.debug("Unauthorized: ", sessionId, ", mfa=", Utils.isMultiFactorAuthenticationEnabled());
 			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 				password = ConfigedMain.getPassword();
@@ -335,12 +335,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		if (connection.getHeaderField("Content-Encoding") != null) {
 			gzipped = "gzip".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
-			Logging.debug(this, "gzipped " + gzipped);
+			Logging.debug(this, "gzipped ", gzipped);
 			deflated = "deflate".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
-			Logging.debug(this, "deflated " + deflated);
+			Logging.debug(this, "deflated ", deflated);
 			lz4compressed = "lz4".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 
-			Logging.debug(this, "lz4compressed " + lz4compressed);
+			Logging.debug(this, "lz4compressed ", lz4compressed);
 		}
 
 		InputStream stream = null;

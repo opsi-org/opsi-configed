@@ -63,7 +63,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	public FEdit(String initialText, String hint) {
 		super((Dialog) null);
 
-		Logging.debug(this.getClass(), " FEdit constructed for >>" + initialText + "<< title " + hint);
+		Logging.debug(this.getClass(), " FEdit constructed for >>", initialText, "<< title ", hint);
 		super.setIconImage(Utils.getMainIcon());
 
 		if (initialText != null) {
@@ -166,7 +166,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	public void setStartText(String s) {
-		Logging.debug(this, "FEdit.setStartText(): " + s);
+		Logging.debug(this, "FEdit.setStartText(): ", s);
 
 		initialText = s;
 		setDataChanged(false);
@@ -265,7 +265,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, " key event " + e);
+		Logging.debug(this, " key event ", e);
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

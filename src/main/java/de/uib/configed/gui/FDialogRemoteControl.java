@@ -97,7 +97,7 @@ public class FDialogRemoteControl extends FEditStringList {
 		super.commit();
 		setVisible(true);
 
-		Logging.debug(this, "getSelectedValue " + getSelectedList());
+		Logging.debug(this, "getSelectedValue ", getSelectedList());
 
 		appendLog(null);
 
@@ -146,8 +146,8 @@ public class FDialogRemoteControl extends FEditStringList {
 
 		selText = "" + selValue;
 
-		Logging.debug(this, "valueChanged, selText " + selText);
-		Logging.debug(this, "valueChanged, meanings.get(selText) " + meanings.get(selText));
+		Logging.debug(this, "valueChanged, selText ", selText);
+		Logging.debug(this, "valueChanged, meanings.get(selText) ", meanings.get(selText));
 
 		if (meanings != null && selText != null && meanings.get(selText) != null) {
 			extraField.setText(meanings.get(selText));

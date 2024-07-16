@@ -188,7 +188,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			return;
 		}
 
-		Logging.debug(this, clients.toString());
+		Logging.debug(this, "", clients);
 		selectionPanel.setSelectedValues(clients);
 	}
 
@@ -692,7 +692,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		info.setParenthesisOpen(group.openParenthesis.isVisible());
 		info.setParenthesisClose(group.closeParenthesis.isVisible());
 		boolean andSelected = group.connectionType.isSelected();
-		Logging.debug(this, group.element.getPath() + ": AND selected: " + andSelected);
+		Logging.debug(this, group.element.getPath(), ": AND selected: ", andSelected);
 		boolean notSelected = group.negateButton.isSelected();
 		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
@@ -956,7 +956,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		List<OperationWithStatus> topList;
 		topList = manager.operationsAsList(null);
-		Logging.debug(this, "load: size: " + topList.size());
+		Logging.debug(this, "load: size: ", topList.size());
 		for (int i = 0; i < topList.size(); i++) {
 			OperationWithStatus ows = topList.get(i);
 			AbstractSelectOperation op = ows.getOperation();
@@ -984,7 +984,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			setConnectionTypes(element.connectionType, element.negateButton, ows.getStatus());
 			List<OperationWithStatus> subList;
 			subList = manager.operationsAsList(((AbstractSelectGroupOperation) op).getChildOperations().get(0));
-			Logging.debug(this, "subload: " + subList.size());
+			Logging.debug(this, "subload: ", subList.size());
 			setGroupValues(element, subList);
 		}
 		if (!complexElements.isEmpty()) {
@@ -1022,8 +1022,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 		setComponentData(simpleGroup.dataComponent, selectOperation.getSelectData());
 		setConnectionTypes(simpleGroup.connectionType, simpleGroup.negateButton, ows.getStatus());
-		Logging.debug(this, "simple, open, closed: " + simpleGroup.element.getClassName() + ows.isParenthesisOpen()
-				+ ows.isParenthesisClosed());
+		Logging.debug(this, "simple, open, closed: ", simpleGroup.element.getClassName(), ows.isParenthesisOpen(),
+				ows.isParenthesisClosed());
 	}
 
 	private static void setComponentData(JComponent component, SelectData data) {

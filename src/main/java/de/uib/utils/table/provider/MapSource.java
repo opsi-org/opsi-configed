@@ -65,15 +65,15 @@ public class MapSource implements TableSource {
 				Object obj = mRow.get(columnNames.get(i));
 
 				if (tableEntry.getKey().startsWith("A")) {
-					Logging.debug(this, "fetchData for A-key " + tableEntry.getKey() + " col  " + columnNames.get(i)
-							+ " index " + i + " val " + obj);
+					Logging.debug(this, "fetchData for A-key ", tableEntry.getKey(), " col  ", columnNames.get(i),
+							" index ", i, " val ", obj);
 				}
 
 				if (obj != null) {
 					vRow.add(obj);
 				} else if (mRow.containsKey(columnNames.get(i))) {
-					Logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
-							+ " supplement by null");
+					Logging.debug(this, "fetchData row ", mRow, " no value in column  ", columnNames.get(i),
+							" supplement by null");
 
 					// we complete the row by null
 					vRow.add(obj);
@@ -88,7 +88,7 @@ public class MapSource implements TableSource {
 			}
 
 			if (tableEntry.getKey().startsWith("A")) {
-				Logging.debug(this, "fetchData for A-key " + tableEntry.getKey() + " produced row " + vRow);
+				Logging.debug(this, "fetchData for A-key ", tableEntry.getKey(), " produced row ", vRow);
 			}
 
 			rows.add(vRow);

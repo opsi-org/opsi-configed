@@ -532,7 +532,7 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	private void setLevelWithoutAction(Object l) {
-		Logging.debug(this, "setLevel " + l);
+		Logging.debug(this, "setLevel ", l);
 
 		Integer levelO = sliderLevel.getValue();
 		if (levelO != l) {
@@ -716,7 +716,7 @@ public class LogPane extends JPanel implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, "KeyEvent " + e);
+		Logging.debug(this, "KeyEvent ", e);
 
 		if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 			search();
