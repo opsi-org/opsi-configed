@@ -284,8 +284,7 @@ public class Messagebus implements MessagebusListener {
 					persistenceController.makeConnection();
 					waitMillis = 1000;
 				} else {
-					Logging.notice(this,
-							"Connection to messagebus lost, reconnecting in " + reconnectWaitMillis + " ms");
+					Logging.notice(this, "Connection to messagebus lost, reconnecting in ", reconnectWaitMillis, " ms");
 				}
 				try {
 					Thread.sleep(waitMillis);

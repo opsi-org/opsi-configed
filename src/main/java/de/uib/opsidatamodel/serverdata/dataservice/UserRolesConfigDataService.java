@@ -998,7 +998,7 @@ public class UserRolesConfigDataService {
 
 		// Update configs if there are some to update
 		if (!readyObjects.isEmpty()) {
-			Logging.notice(this, "There are " + readyObjects.size() + "configurations to update, so we do this now:");
+			Logging.notice(this, "There are ", readyObjects.size(), "configurations to update, so we do this now:");
 
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 

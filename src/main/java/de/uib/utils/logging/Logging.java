@@ -449,14 +449,6 @@ public final class Logging {
 		log(LEVEL_INFO, mesg);
 	}
 
-	public static void notice(Object caller, String mesg) {
-		log(caller, LEVEL_NOTICE, mesg);
-	}
-
-	public static void notice(String mesg) {
-		log(LEVEL_NOTICE, mesg);
-	}
-
 	public static void clearErrorList() {
 		errorList.clear();
 	}

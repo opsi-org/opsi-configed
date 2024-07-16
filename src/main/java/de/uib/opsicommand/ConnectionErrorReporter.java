@@ -81,7 +81,7 @@ public final class ConnectionErrorReporter {
 			displayMFADialog();
 			break;
 		default:
-			Logging.notice(this, "unhandeld error type: " + errorType);
+			Logging.notice(this, "unhandeld error type: ", errorType);
 		}
 	}
 

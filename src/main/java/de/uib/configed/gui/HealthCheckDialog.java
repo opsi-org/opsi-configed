@@ -467,7 +467,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 			StyleConstants.setForeground(style, Globals.LOG_COLOR_ERROR);
 			break;
 		default:
-			Logging.notice(this, "unsupported token: " + token);
+			Logging.notice(this, "unsupported token: ", token);
 			break;
 		}
 

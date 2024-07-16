@@ -124,7 +124,7 @@ public final class Messages {
 
 		produceSelectedLocale();
 
-		Logging.notice("Locale set to: " + myLocale);
+		Logging.notice("Locale set to: ", myLocale);
 
 		try {
 			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);

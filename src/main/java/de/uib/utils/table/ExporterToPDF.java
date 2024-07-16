@@ -101,9 +101,9 @@ public class ExporterToPDF extends AbstractExportTable {
 					filePath = file.getAbsolutePath();
 				}
 
-				Logging.notice(this, "selected fileName is: " + fileName);
+				Logging.notice(this, "selected fileName is: ", fileName);
 				fileName = checkExtension(fileName);
-				Logging.notice(this, "after checkExtension(..), fileName is now: " + fileName);
+				Logging.notice(this, "after checkExtension(..), fileName is now: ", fileName);
 				fileName = checkFile(fileName, extensionFilter);
 
 				writeFile(filePath, fileName);

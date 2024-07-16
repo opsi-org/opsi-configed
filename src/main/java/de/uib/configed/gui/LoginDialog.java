@@ -288,7 +288,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private void finishAndMakeVisible() {
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		Logging.notice(" OS " + strOS + "  Version " + osVersion);
+		Logging.notice(" OS ", strOS, "  Version ", osVersion);
 
 		setHost("localhost");
 		fieldHost.requestFocus();
