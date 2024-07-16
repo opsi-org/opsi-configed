@@ -25,6 +25,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FShowList;
 
+@SuppressWarnings("java:S923")
 public final class Logging {
 	private static String logDirectoryName;
 	private static String logFilenameInUse;
@@ -267,6 +268,131 @@ public final class Logging {
 		}
 	}
 
+	public static synchronized void log(int level, Object caller, Throwable ex, Object... mesg) {
+		StringBuilder message = new StringBuilder();
+		for (Object o : mesg) {
+			message.append(o);
+		}
+
+		log(level, message.toString(), caller, ex);
+	}
+
+	public static void log(Object caller, int level, Throwable ex, Object... mesg) {
+		log(level, caller, ex, mesg);
+	}
+
+	public static void log(Object caller, int level, Object... mesg) {
+		log(level, caller, null, mesg);
+	}
+
+	public static void log(int level, Throwable ex, Object... mesg) {
+		log(level, null, ex, mesg);
+	}
+
+	public static void log(int level, Object... mesg) {
+		log(level, null, (Throwable) null, mesg);
+	}
+
+	public static void secret(Object caller, Object... mesg) {
+		log(caller, LEVEL_SECRET, mesg);
+	}
+
+	public static void secret(String message, Object... mesg) {
+		log(LEVEL_SECRET, message, mesg);
+	}
+
+	public static void trace(Object caller, Object... mesg) {
+		log(caller, LEVEL_TRACE, mesg);
+	}
+
+	public static void trace(String message, Object... mesg) {
+		log(LEVEL_TRACE, message, mesg);
+	}
+
+	public static void debug(Object caller, Object... mesg) {
+		log(caller, LEVEL_DEBUG, mesg);
+	}
+
+	public static void debug(String message, Object... mesg) {
+		log(LEVEL_DEBUG, message, mesg);
+	}
+
+	public static void info(Object caller, Object... mesg) {
+		log(caller, LEVEL_INFO, mesg);
+	}
+
+	public static void info(String message, Object... mesg) {
+		log(LEVEL_INFO, message, mesg);
+	}
+
+	public static void notice(Object caller, Object... mesg) {
+		log(caller, LEVEL_NOTICE, mesg);
+	}
+
+	public static void notice(String message, Object... mesg) {
+		log(LEVEL_NOTICE, message, mesg);
+	}
+
+	public static void warning(Object caller, Object... mesg) {
+		log(caller, LEVEL_WARNING, mesg);
+	}
+
+	public static void warning(String message, Object... mesg) {
+		log(LEVEL_WARNING, message, mesg);
+	}
+
+	public static void warning(Throwable ex, Object... mesg) {
+		log(LEVEL_WARNING, ex, mesg);
+	}
+
+	public static void warning(Object caller, Throwable ex, Object... mesg) {
+		log(caller, LEVEL_WARNING, ex, mesg);
+	}
+
+	public static void error(Object caller, Object... mesg) {
+		log(caller, LEVEL_ERROR, mesg);
+	}
+
+	public static void error(String message, Object... mesg) {
+		log(LEVEL_ERROR, message, mesg);
+	}
+
+	public static void error(Throwable ex, Object... mesg) {
+		log(LEVEL_ERROR, ex, mesg);
+	}
+
+	public static void error(Object caller, Throwable ex, Object... mesg) {
+		log(caller, LEVEL_ERROR, ex, mesg);
+	}
+
+	public static void critical(Object caller, Object... mesg) {
+		log(caller, LEVEL_CRITICAL, mesg);
+	}
+
+	public static void critical(String message, Object... mesg) {
+		log(LEVEL_CRITICAL, message, mesg);
+	}
+
+	public static void critical(Object caller, Throwable ex, Object... mesg) {
+		log(caller, LEVEL_CRITICAL, ex, mesg);
+	}
+
+	public static void essential(Object caller, Object... mesg) {
+		log(caller, LEVEL_ESSENTIAL, mesg);
+	}
+
+	public static void essential(String message, Object... mesg) {
+		log(LEVEL_ESSENTIAL, message, mesg);
+	}
+
+	public static void devel(Object caller, Object... mesg) {
+		essential(caller, mesg);
+	}
+
+	public static void devel(String message, Object... mesg) {
+		essential(message, mesg);
+	}
+
 	public static void log(Object caller, int level, String mesg, Throwable ex) {
 		log(level, mesg, caller, ex);
 	}
@@ -280,7 +406,7 @@ public final class Logging {
 	}
 
 	public static void log(int level, String mesg) {
-		log(level, mesg, null, null);
+		log(level, mesg, null, (Throwable) null);
 	}
 
 	public static void secret(Object caller, String mesg) {
