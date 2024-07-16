@@ -417,22 +417,6 @@ public final class Logging {
 		log(level, mesg, null, (Throwable) null);
 	}
 
-	public static void secret(Object caller, String mesg) {
-		log(caller, LEVEL_SECRET, mesg);
-	}
-
-	public static void secret(String mesg) {
-		log(LEVEL_SECRET, mesg);
-	}
-
-	public static void trace(Object caller, String mesg) {
-		log(caller, LEVEL_TRACE, mesg);
-	}
-
-	public static void trace(String mesg) {
-		log(LEVEL_TRACE, mesg);
-	}
-
 	public static void debug(Object caller, String mesg) {
 		log(caller, LEVEL_DEBUG, mesg);
 	}

@@ -306,7 +306,7 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
-		Logging.trace(this, "Messagebus message received: " + message.toString());
+		Logging.trace(this, "Messagebus message received: ", message);
 		String type = (String) message.get("type");
 		if (WebSocketEvent.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
 			initialSubscriptionReceived = true;
