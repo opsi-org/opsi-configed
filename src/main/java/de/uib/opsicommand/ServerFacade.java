@@ -196,7 +196,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			return null;
 		}
 
-		Logging.info(this, "connection cipher suite " + (connection).getCipherSuite());
+		Logging.info(this, "connection cipher suite ", (connection).getCipherSuite());
 
 		Map<String, Object> result = new HashMap<>();
 
@@ -208,7 +208,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					retrieveSessionIDFromResponse(connection);
 					InputStream stream = getInputStreamBasedOnEncoding(connection);
 
-					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
+					Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
 
 					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
 				} else if (conStat.getState() == ConnectionState.UNAUTHORIZED) {
@@ -241,7 +241,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Map<String, Object> omcMap = omc != null ? omc.getOMCMap() : new HashMap<>();
 			Logging.debug(this, "(POST) sending: " + omcMap);
 		} catch (IOException iox) {
-			Logging.info(this, "exception on writing json request " + iox);
+			Logging.info(this, "exception on writing json request ", iox);
 		}
 	}
 

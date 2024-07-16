@@ -190,7 +190,7 @@ public class MultiCommandTemplate implements MultiCommand, Comparable<MultiComma
 			setTooltipText(com.getToolTipText());
 			setPriority(com.getPriority());
 		}
-		Logging.info(this, "updated command: " + this.toString());
+		Logging.info(this, "updated command: ", this);
 		return this;
 	}
 

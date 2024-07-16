@@ -19,7 +19,7 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 
 	public SearchTargetModelFromInstallationStateTable(JTable table, PanelProductSettings panelProductSettings) {
 		super(table);
-		Logging.info(this.getClass(), "table null? " + (table == null));
+		Logging.info(this.getClass(), "table null? ", table == null);
 
 		this.panelProductSettings = panelProductSettings;
 	}
@@ -39,7 +39,7 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
 			}
 
-			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));
+			Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
 
 			panelProductSettings.reduceToSelected();
 		} else {

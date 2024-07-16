@@ -235,7 +235,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 			valuesListS = "" + clientsToSelect.size();
 		}
 
-		Logging.info(this, "setSelectedValues " + valuesListS);
+		Logging.info(this, "setSelectedValues ", valuesListS);
 
 		if (clientsToSelect == null) {
 			// Clear selection when empty
@@ -263,7 +263,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 
 			moveToFirstSelected();
 
-			Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
+			Logging.info(this, "setSelectedValues  produced ", getSelectedValues().size());
 		}
 	}
 
@@ -301,9 +301,9 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 	}
 
 	public void setModel(TableModel tm) {
-		Logging.info(this, "set model with column count " + tm.getColumnCount());
+		Logging.info(this, "set model with column count ", tm.getColumnCount());
 
-		Logging.info(this, " [JTableSelectionPanel] setModel with row count " + tm.getRowCount());
+		Logging.info(this, " [JTableSelectionPanel] setModel with row count ", tm.getRowCount());
 
 		tm.addTableModelListener(table);
 

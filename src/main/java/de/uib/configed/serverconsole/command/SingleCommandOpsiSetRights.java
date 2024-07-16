@@ -38,7 +38,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 			d = d + "/";
 		}
 
-		Logging.info(this.getClass(), "CommandOpsiSetRights dir " + dir);
+		Logging.info(this.getClass(), "CommandOpsiSetRights dir ", dir);
 	}
 
 	@Override

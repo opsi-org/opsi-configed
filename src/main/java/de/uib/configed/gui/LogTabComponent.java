@@ -84,7 +84,7 @@ public class LogTabComponent extends LogPane {
 			return;
 		}
 
-		Logging.info(this, "got log file type " + logFileType);
+		Logging.info(this, "got log file type ", logFileType);
 
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		String fileName = retrieveFileName(getInfo(), ALL_LOGFILES_SUFFIX);
@@ -95,7 +95,7 @@ public class LogTabComponent extends LogPane {
 			return;
 		}
 
-		Logging.info(this, "file path retrieved: " + filePath);
+		Logging.info(this, "file path retrieved: ", filePath);
 
 		saveAllToZipFile(filePath, retrieveAllLogFiles());
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
@@ -145,7 +145,7 @@ public class LogTabComponent extends LogPane {
 				logFiles.put(ident, logFile.get(ident));
 			}
 
-			Logging.info(this, "saveAllAsZip " + ident + " " + logFile.get(ident).split("\n").length);
+			Logging.info(this, "saveAllAsZip ", ident, " ", logFile.get(ident).split("\n").length);
 		}
 		return logFiles;
 	}

@@ -125,7 +125,7 @@ public class PanelMountShare extends JPanel {
 		String call;
 		call = "explorer.exe " + " \"" + np.produceName() + "\"";
 
-		Logging.info(this, "windows call: " + call);
+		Logging.info(this, "windows call: ", call);
 
 		try {
 			Runtime.getRuntime().exec(new String[] { call });
@@ -160,15 +160,15 @@ public class PanelMountShare extends JPanel {
 		boolean found = false;
 
 		if (np.produceName() == null || np.produceName().isEmpty()) {
-			Logging.info(this, "checkConnectionToShare no filename " + np.produceName());
+			Logging.info(this, "checkConnectionToShare no filename ", np.produceName());
 		} else {
 			File f = new File(np.produceName());
 			if (!f.exists()) {
-				Logging.info(this, "checkConnectionToShare no existing filename " + np.produceName());
+				Logging.info(this, "checkConnectionToShare no existing filename ", np.produceName());
 			} else {
 				found = f.isDirectory();
 				if (!found) {
-					Logging.info(this, "checkConnectionToShare no directory " + np.produceName());
+					Logging.info(this, "checkConnectionToShare no directory ", np.produceName());
 				}
 			}
 		}

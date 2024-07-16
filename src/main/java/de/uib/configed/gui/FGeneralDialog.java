@@ -64,7 +64,7 @@ public class FGeneralDialog extends JDialog {
 	public FGeneralDialog(JFrame owner, String title) {
 		super(owner, false);
 
-		Logging.info(this.getClass(), "created by constructor 1, owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 1, owner ", owner);
 		registerWithRunningInstances();
 		super.setIconImage(Utils.getMainIcon());
 		super.setTitle(title);
@@ -76,7 +76,7 @@ public class FGeneralDialog extends JDialog {
 	public FGeneralDialog(JFrame owner, String title, boolean modal) {
 		super(owner, modal);
 
-		Logging.info(this.getClass(), "created by constructor 2, owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 2, owner ", owner);
 		registerWithRunningInstances();
 		super.setTitle(title);
 
@@ -108,7 +108,7 @@ public class FGeneralDialog extends JDialog {
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, modal);
-		Logging.info(this.getClass(), "created by constructor 3  owner " + owner);
+		Logging.info(this.getClass(), "created by constructor 3  owner ", owner);
 
 		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);
@@ -128,11 +128,11 @@ public class FGeneralDialog extends JDialog {
 	}
 
 	private void registerWithRunningInstances() {
-		Logging.info(this, "registerWithRunningInstances " + wantToBeRegisteredWithRunningInstances());
+		Logging.info(this, "registerWithRunningInstances ", wantToBeRegisteredWithRunningInstances());
 		if (wantToBeRegisteredWithRunningInstances()) {
 			FEditObject.runningInstances.add(this, "");
 		}
-		Logging.info(this, "running instances " + FEditObject.runningInstances.size());
+		Logging.info(this, "running instances ", FEditObject.runningInstances.size());
 	}
 
 	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
@@ -222,7 +222,7 @@ public class FGeneralDialog extends JDialog {
 	}
 
 	private void setButtons() {
-		Logging.info(this, "setButtons and icons " + Arrays.toString(buttonNames));
+		Logging.info(this, "setButtons and icons ", Arrays.toString(buttonNames));
 
 		jButton1.setText(buttonNames[0]);
 		button1Text = buttonNames[0];
@@ -246,7 +246,7 @@ public class FGeneralDialog extends JDialog {
 			}
 		}
 
-		Logging.info(this, "with icons " + Arrays.toString(buttonNames));
+		Logging.info(this, "with icons ", Arrays.toString(buttonNames));
 	}
 
 	public void setTooltipButtons(String tooltip1, String tooltip2, String tooltip3) {

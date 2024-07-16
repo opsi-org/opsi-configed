@@ -53,7 +53,7 @@ public class DocumentSearcher {
 
 		String content = getShownContent();
 		if (content == null) {
-			Logging.info(this, "No content is displayed. Unable to search for specified expression: " + expression);
+			Logging.info(this, "No content is displayed. Unable to search for specified expression: ", expression);
 			return -1;
 		}
 

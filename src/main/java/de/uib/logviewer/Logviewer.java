@@ -31,12 +31,12 @@ public final class Logviewer {
 		String imageHandled = "(we start image retrieving)";
 		Logging.info(this.getClass(), imageHandled);
 
-		Logging.info(this.getClass(), "--  wantedDirectory " + Logging.getLogDirectoryName());
+		Logging.info(this.getClass(), "--  wantedDirectory ", Logging.getLogDirectoryName());
 
 		if (fileName != null) {
 			LogFrame.setFileName(fileName);
 		} else {
-			Logging.info(" --  fileName " + Logging.getLogDirectoryName());
+			Logging.info(" --  fileName ", Logging.getLogDirectoryName());
 		}
 
 		SwingUtilities.invokeLater(Logviewer::init);
@@ -65,7 +65,7 @@ public final class Logviewer {
 		Utils.setMasterFrame(logFrame);
 
 		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Logging.info("screensize " + screenSize);
+		Logging.info("screensize ", screenSize);
 		logFrame.setSize((int) screenSize.getWidth() - 150, (int) screenSize.getHeight() - 150);
 		logFrame.setLocationRelativeTo(null);
 

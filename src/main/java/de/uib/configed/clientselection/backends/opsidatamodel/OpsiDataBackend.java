@@ -177,8 +177,8 @@ public final class OpsiDataBackend {
 	}
 
 	private AbstractSelectOperation createOperation(AbstractSelectOperation operation) {
-		Logging.info(this, "createOperation operation, data, element: " + operation.getClassName() + ", "
-				+ operation.getData().toString() + ",  " + operation.getElement().getClassName());
+		Logging.info(this, "createOperation operation, data, element: ", operation.getClassName(), ", ",
+				operation.getData(), ",  ", operation.getElement().getClassName());
 
 		// Host
 		AbstractSelectElement element = operation.getElement();
@@ -413,7 +413,7 @@ public final class OpsiDataBackend {
 		// take always the current host infos
 
 		clientMaps = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
-		Logging.info(this, "client maps size " + clientMaps.size());
+		Logging.info(this, "client maps size ", clientMaps.size());
 
 		if (groups == null || reloadRequested) {
 			groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
@@ -450,10 +450,10 @@ public final class OpsiDataBackend {
 
 		checkInitData();
 
-		Logging.info(this, "getClients hasSoftware " + hasSoftware);
-		Logging.info(this, "getClients hasHardware " + hasHardware);
-		Logging.info(this, "getClients hasSoftware " + hasSoftware);
-		Logging.info(this, "getClients swauditMap != null  " + (swauditMap != null));
+		Logging.info(this, "getClients hasSoftware ", hasSoftware);
+		Logging.info(this, "getClients hasHardware ", hasHardware);
+		Logging.info(this, "getClients hasSoftware ", hasSoftware);
+		Logging.info(this, "getClients swauditMap != null  ", swauditMap != null);
 
 		for (Entry<String, HostInfo> clientEntry : clientMaps.entrySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientEntry.getKey());

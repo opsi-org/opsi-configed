@@ -54,7 +54,7 @@ public class CommandDataService {
 		}
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SSH_COMMAND_DELETE_OBJECTS, new Object[] { jsonObjects });
 		boolean result = exec.doCall(omc);
-		Logging.info(this, "deleteSSHCommand result " + result);
+		Logging.info(this, "deleteSSHCommand result ", result);
 		return result;
 	}
 
@@ -67,13 +67,13 @@ public class CommandDataService {
 	}
 
 	private boolean doActionCommand(RPCMethodName method, List<Object> jsonObjects) {
-		Logging.info(this, "doActionSSHCommand method " + method);
+		Logging.info(this, "doActionSSHCommand method ", method);
 		if (Boolean.TRUE.equals(userRolesConfigDataService.isGlobalReadOnly())) {
 			return false;
 		}
 		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { jsonObjects });
 		boolean result = exec.doCall(omc);
-		Logging.info(this, "doActionSSHCommand method " + method + " result " + result);
+		Logging.info(this, "doActionSSHCommand method ", method, " result ", result);
 		return result;
 	}
 }

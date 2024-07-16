@@ -15,7 +15,7 @@ public class CursorrowObserved {
 	private Set<CursorrowObserver> observers = new HashSet<>();
 
 	public void notifyObservers(int newrow) {
-		Logging.info(this, "notify Observers with " + newrow);
+		Logging.info(this, "notify Observers with ", newrow);
 		for (CursorrowObserver o : observers) {
 			o.rowUpdated(newrow);
 		}

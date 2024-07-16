@@ -112,7 +112,7 @@ public final class CommandParameterParser {
 	}
 
 	public SingleCommand parseParameter(final SingleCommand command, CommandExecutor caller) {
-		Logging.info(this, "parseParameter command " + command.getCommandRaw());
+		Logging.info(this, "parseParameter command ", command.getCommandRaw());
 		if (caller instanceof CommandExecutor) {
 			outputDia = caller.getDialog();
 		} else {
@@ -135,7 +135,7 @@ public final class CommandParameterParser {
 				}
 			}
 		}
-		Logging.info(this, "parseParameter command " + commandCopy.getCommandRaw());
+		Logging.info(this, "parseParameter command ", commandCopy.getCommandRaw());
 		return commandCopy;
 	}
 
@@ -168,12 +168,12 @@ public final class CommandParameterParser {
 	}
 
 	public String[] splitParameter(String m) {
-		Logging.info(this, "splitParameter param " + m);
+		Logging.info(this, "splitParameter param ", m);
 		if (m.startsWith(REPLACEMENT_DEFAULT_1) && m.contains(REPLACEMENT_DEFAULT_2)) {
 			m = m.replace(REPLACEMENT_DEFAULT_1, "").replace(REPLACEMENT_DEFAULT_2, "");
 		}
 
-		Logging.info(this, "splitParameter param " + m);
+		Logging.info(this, "splitParameter param ", m);
 		String[] splitted = new String[2];
 		splitted[0] = m;
 		splitted[1] = "";
@@ -181,8 +181,8 @@ public final class CommandParameterParser {
 		if (m.contains(PARAM_SPLITTER_DEFAULT)) {
 			splitted = paramSplitterDefaultPattern.split(m);
 
-			Logging.info(this, "splitParameter method " + splitted[0]);
-			Logging.info(this, "splitParameter format " + splitted[1]);
+			Logging.info(this, "splitParameter method ", splitted[0]);
+			Logging.info(this, "splitParameter format ", splitted[1]);
 		}
 
 		return splitted;
@@ -199,14 +199,14 @@ public final class CommandParameterParser {
 	}
 
 	private String callMethod(String method, String format) {
-		Logging.info(this, "callMethod method " + method + " format " + format);
+		Logging.info(this, "callMethod method ", method, " format ", format);
 		String result = "";
 		method = method.trim();
 		if (method.equals(methods.get(METHOD_GET_SELECTED_CLIENT_NAMES))) {
-			Logging.info(this, "getSelected_clientnames " + getSelectedClientNames());
+			Logging.info(this, "getSelected_clientnames ", getSelectedClientNames());
 			result = formatResult(getSelectedClientNames(), format);
 		} else if (method.equals(methods.get(METHOD_GET_SELECTED_CLIENT_IPS))) {
-			Logging.info(this, "getSelected_clientIPs " + getSelectedClientIPs());
+			Logging.info(this, "getSelected_clientIPs ", getSelectedClientIPs());
 			result = formatResult(getSelectedClientIPs(), format);
 		} else if (method.equals(methods.get(METHOD_GET_SELECTED_DEPOT_NAMES))) {
 			result = formatResult(getSelectedDepotNames(), format);
@@ -216,7 +216,7 @@ public final class CommandParameterParser {
 			result = formatResult(getConfigServerName(), format);
 		} else if (format.isEmpty()) {
 			result = getUserText(method, outputDia);
-			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
+			Logging.info(this, "callMethod replace \"", method, "\" with \"", result, "\"");
 		} else {
 			Logging.warning(this, "unexpected method ", method, " and format ", format);
 		}
@@ -233,7 +233,7 @@ public final class CommandParameterParser {
 	private String formatResult(String[] result, String format) {
 		String formatedResult = "";
 		String f = format.replace(" ", "");
-		Logging.info(this, "callMethod format f " + f);
+		Logging.info(this, "callMethod format f ", f);
 		switch (f) {
 		case "xyz", "xyz...":
 			formatedResult = Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
@@ -246,29 +246,27 @@ public final class CommandParameterParser {
 			break;
 
 		case "'x''y''z'", "'x''y''z''...'":
-			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
+			Logging.info(this, "formatResult switch case [3] 'x''y''z''...' || 'x''y''z'");
 			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, " ");
 			break;
 		case "'x','y','z'", "'x','y','z','...'":
-			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
+			Logging.info(this, "formatResult switch case [3] 'x''y''z''...' || 'x''y''z'");
 			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, ",");
 			break;
 		case "\"x\"\"y\"\"z\"", "\"x\"\"y\"\"z\"\"...\"":
-			Logging.info(this, "formatResult switch case [4] " + "\"x\"\"y\"\"z\"\"...\"" + " || " + "\"x\"\"y\"\"z\"");
+			Logging.info(this, "formatResult switch case [4] \"x\"\"y\"\"z\"\"...\" || \"x\"\"y\"\"z\"");
 			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, " ");
 			break;
 		case "\"x\",\"y\",\"z\"", "\"x\",\"y\",\"z\",\"...\"":
-			Logging.info(this,
-					"formatResult switch case [5] " + "\"x\",\"y\",\"z\",\"...\"" + " || " + "\"x\",\"y\",\"z\"");
+			Logging.info(this, "formatResult switch case [5] \"x\",\"y\",\"z\",\"...\" || \"x\",\"y\",\"z\"");
 			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, ",");
 			break;
 		case "['x','y','z']", "['x','y','z','...']":
-			Logging.info(this, "formatResult switch case [5] " + "['x','y','z']" + " || " + "['x','y','z','...']");
+			Logging.info(this, "formatResult switch case [5] ['x','y','z'] || ['x','y','z','...']");
 			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_SQUARE, ",");
 			break;
 		case "[\"x\",\"y\",\"z\"]", "[\"x\",\"y\",\"z\",\"...\"]":
-			Logging.info(this,
-					"formatResult switch case [5] " + "[\"x\",\"y\",\"z\"]" + " || " + "[\"x\",\"y\",\"z\",\"...\"]");
+			Logging.info(this, "formatResult switch case [5] [\"x\",\"y\",\"z\"] || [\"x\",\"y\",\"z\",\"...\"]");
 			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_SQUARE, ",");
 			break;
 		default:
@@ -281,9 +279,9 @@ public final class CommandParameterParser {
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
 			String separator) {
 		replaceElements(strArr, beginEndElement);
-		Logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
+		Logging.info(this, "createFormattedDataSourceString[ ]  strArr ", Arrays.toString(strArr));
 		String formatedResult = createStringOfArray(strArr, beginEndString, separator);
-		Logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formatedResult);
+		Logging.info(this, "createFormattedDataSourceString[ ] formated_result ", formatedResult);
 
 		return formatedResult;
 	}
@@ -292,16 +290,16 @@ public final class CommandParameterParser {
 		for (int i = 0; i < strArrToReplace.length; i++) {
 			strArrToReplace[i] = strArrToReplace[i].replace(strArrToReplace[i],
 					beginEndOfElement + strArrToReplace[i] + beginEndOfElement);
-			Logging.info(this, "formatResult[] result[i] " + strArrToReplace[i]);
+			Logging.info(this, "formatResult[] result[i] ", strArrToReplace[i]);
 		}
 	}
 
 	private String createStringOfArray(String[] strArrToReplace, String beginEndOfString, String separator) {
 		String result;
 
-		Logging.info(this, "createStringOfArray strArrToReplace " + strArrToReplace);
-		Logging.info(this, "createStringOfArray strArrToReplace.length " + strArrToReplace.length + "if statement: "
-				+ (strArrToReplace.length > 1));
+		Logging.info(this, "createStringOfArray strArrToReplace ", strArrToReplace);
+		Logging.info(this, "createStringOfArray strArrToReplace.length ", strArrToReplace.length, "if statement: ",
+				strArrToReplace.length > 1);
 		if (strArrToReplace.length > 1) {
 			result = Arrays.toString(strArrToReplace).replace("[", beginEndOfString.split("x")[0])
 					.replace(",", separator).replace("]", beginEndOfString.split("x")[1]);
@@ -309,7 +307,7 @@ public final class CommandParameterParser {
 			result = Arrays.toString(strArrToReplace).replace("[", beginEndOfString.split("x")[0]).replace("]",
 					beginEndOfString.split("x")[1]);
 		}
-		Logging.info(this, "createStringOfArray result " + result);
+		Logging.info(this, "createStringOfArray result ", result);
 		return result;
 	}
 
@@ -397,7 +395,7 @@ public final class CommandParameterParser {
 		for (String name : configedMain.getSelectedDepots()) {
 			String depotip = (String) persistenceController.getHostInfoCollections().getDepots().get(name)
 					.get(HostInfo.CLIENT_IP_ADDRESS_KEY);
-			Logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
+			Logging.info(this, "getSelected_depotIPs host ", name, " depotip ", depotip);
 			if (depotip != null) {
 				depotIPs[counter] = depotip;
 				counter++;

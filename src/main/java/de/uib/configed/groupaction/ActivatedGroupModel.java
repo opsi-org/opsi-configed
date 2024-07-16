@@ -27,7 +27,7 @@ public class ActivatedGroupModel {
 	}
 
 	public void setActive(boolean b) {
-		Logging.info(this, "setActive " + b);
+		Logging.info(this, "setActive ", b);
 
 		active = b;
 
@@ -43,7 +43,7 @@ public class ActivatedGroupModel {
 	}
 
 	public void setNode(String name) {
-		Logging.info(this, "setNode " + name);
+		Logging.info(this, "setNode ", name);
 		groupName = name;
 		hostsInfo.setGroupName(name);
 	}

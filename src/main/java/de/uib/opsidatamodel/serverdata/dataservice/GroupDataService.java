@@ -265,7 +265,7 @@ public class GroupDataService {
 			return false;
 		}
 
-		Logging.info(this, "addHosts2Group hosts " + objectIds + " group " + groupId);
+		Logging.info(this, "addHosts2Group hosts ", objectIds, " group ", groupId);
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 		List<Map<String, Object>> data = new ArrayList<>();
 
@@ -277,7 +277,7 @@ public class GroupDataService {
 			data.add(item);
 		}
 
-		Logging.info(this, "addHosts2Group persistentGroupId " + persistentGroupId);
+		Logging.info(this, "addHosts2Group persistentGroupId ", persistentGroupId);
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { data });
 		return exec.doCall(omc);
 	}
@@ -287,7 +287,7 @@ public class GroupDataService {
 			return false;
 		}
 
-		Logging.info(this, "addHost2Groups host " + objectId + " groups " + groupIds);
+		Logging.info(this, "addHost2Groups host ", objectId, " groups ", groupIds);
 		List<Map<String, Object>> data = new ArrayList<>();
 
 		for (String groupId : groupIds) {

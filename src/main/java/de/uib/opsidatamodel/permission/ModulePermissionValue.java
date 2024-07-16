@@ -16,7 +16,7 @@ public class ModulePermissionValue {
 	private Boolean booleanValue;
 
 	public ModulePermissionValue(Object ob, ExtendedDate defaultExpires) {
-		Logging.info(this.getClass(), "value object given: " + ob);
+		Logging.info(this.getClass(), "value object given: ", ob);
 		booleanValue = null;
 		expiresDate = ExtendedDate.ZERO;
 		maxClients = ExtendedInteger.ZERO;
@@ -51,7 +51,7 @@ public class ModulePermissionValue {
 				result = "yes".equalsIgnoreCase(stringValue);
 			}
 		} else {
-			Logging.info("ob cannot be interpreted as boolean, it is " + ob.toString());
+			Logging.info("ob cannot be interpreted as boolean, it is ", ob);
 		}
 
 		return result;

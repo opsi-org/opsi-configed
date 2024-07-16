@@ -139,7 +139,7 @@ public class CSVImportDataModifier {
 
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
 			List<String> columnNames, CSVFormat format) {
-		Logging.info(this, "createModel, csvData: " + csvData);
+		Logging.info(this, "createModel, csvData: ", csvData);
 		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 		populateSourceMap(theSourceMap, csvData);
 

@@ -43,7 +43,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	public CommandControlParameterMethodsPanel(JDialog owner, ConfigedMain configedMain) {
 		super();
-		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
+		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main ", main);
 		main = owner;
 		this.configedMain = configedMain;
 		init();
@@ -63,7 +63,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 		jComboBoxParameterFormats = new JComboBox<>(parameterParser.getParameterFormats());
-		Logging.info(this, "cb_parameter_formats lightweight " + jComboBoxParameterFormats.isLightWeightPopupEnabled());
+		Logging.info(this, "cb_parameter_formats lightweight ", jComboBoxParameterFormats.isLightWeightPopupEnabled());
 
 		jComboBoxParameterFormats.setPreferredSize(jComboBoxDim);
 
@@ -185,10 +185,10 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		Logging.debug("PARAM TEXT: " + paramText);
 		try {
-			Logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
+			Logging.info(this, "actionPerformed(testParamMethod) parameterText ", paramText);
 			CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 			String result = "echo \"{0}\"".replace("{0}", parameterParser.testParameter(paramText));
-			Logging.info(this, "actionPerformed(testParamMethod) result " + result);
+			Logging.info(this, "actionPerformed(testParamMethod) result ", result);
 			String showThisText = "echo \"{0}\"".replace("{0}", paramText) + ":\n" + result;
 			if (result.equals(Configed.getResourceValue("CommandControlDialog.parameterTest.failed"))) {
 				showThisText = Configed.getResourceValue("CommandControlDialog.parameterTest.failed");

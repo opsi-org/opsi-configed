@@ -133,7 +133,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 			}
 		}
 
-		Logging.info(this, "produce depot parameter " + depotParameter);
+		Logging.info(this, "produce depot parameter ", depotParameter);
 
 		return depotParameter;
 	}
@@ -153,12 +153,12 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 		for (String depot : persistenceController.getHostInfoCollections().getDepotNamesList()) {
 			if (isPossibleDepot(depot, selectedProduct)) {
-				Logging.info(this, "taking this depot " + depot);
+				Logging.info(this, "taking this depot ", depot);
 				result.add(depot);
 			}
 		}
 
-		Logging.info(this, "getPossibleDepots " + result);
+		Logging.info(this, "getPossibleDepots ", result);
 
 		return result;
 	}
@@ -285,7 +285,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private void updateLoglevel() {
-		Logging.info(this, "change loglevel , selected " + jComboboxLoglevel.getSelectedItem());
+		Logging.info(this, "change loglevel , selected ", jComboboxLoglevel.getSelectedItem());
 		commandPMUninstall.setLoglevel((int) jComboboxLoglevel.getSelectedItem());
 	}
 
@@ -315,7 +315,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	public void doAction3() {
 		changeDepot();
 		final String prod = textFieldProduct.getText();
-		Logging.info(this, "doAction3 uninstall  " + prod);
+		Logging.info(this, "doAction3 uninstall  ", prod);
 
 		changeProduct(prod);
 

@@ -36,7 +36,7 @@ public class FileUpload extends DropTarget {
 
 		try {
 			droppedFiles = (List<File>) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-			Logging.info(this, "dropped files: " + droppedFiles);
+			Logging.info(this, "dropped files: ", droppedFiles);
 		} catch (UnsupportedFlavorException ex) {
 			Logging.warning(this, ex, "this should not happen, unless javaFileListFlavor is no longer supported");
 		} catch (IOException ex) {
@@ -52,7 +52,7 @@ public class FileUpload extends DropTarget {
 		List<File> files = getDroppedFiles(e);
 
 		if (files == null || files.isEmpty()) {
-			Logging.info(this, "files are null or empty: " + files);
+			Logging.info(this, "files are null or empty: ", files);
 			return;
 		}
 

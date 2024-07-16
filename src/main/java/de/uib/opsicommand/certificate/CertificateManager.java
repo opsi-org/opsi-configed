@@ -71,8 +71,8 @@ public final class CertificateManager {
 	private static void removeCertificateFromKeyStore(File certificateFile) {
 		try {
 			if (ks.isCertificateEntry(certificateFile.getParentFile().getName())) {
-				Logging.info("removing certificate from keystore, since it is invalid certificate: "
-						+ certificateFile.getAbsolutePath());
+				Logging.info("removing certificate from keystore, since it is invalid certificate: ",
+						certificateFile.getAbsolutePath());
 				ks.deleteEntry(certificateFile.getParentFile().getName());
 			}
 		} catch (KeyStoreException e) {

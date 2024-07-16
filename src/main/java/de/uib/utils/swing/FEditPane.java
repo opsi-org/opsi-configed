@@ -41,7 +41,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);
-		Logging.info(this.getClass(), " FEdit constructed for >>" + initialText + "<< title " + hint);
+		Logging.info(this.getClass(), " FEdit constructed for >>", initialText, "<< title ", hint);
 
 		initFEditText();
 		singleLine = false;
@@ -157,7 +157,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			String line = searcher.getMarkedLine(textpane.viewToModel2D(p));
 
 			if (line != null) {
-				Logging.info(this, " got link " + line);
+				Logging.info(this, " got link ", line);
 				cmdLauncher.launch("\"" + line + "\"");
 			}
 		}

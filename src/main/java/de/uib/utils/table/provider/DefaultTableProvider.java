@@ -59,7 +59,7 @@ public class DefaultTableProvider {
 			rows = source.retrieveRows();
 		}
 
-		Logging.info(this, "resetRows(), rows.size() " + rows.size());
+		Logging.info(this, "resetRows(), rows.size() ", rows.size());
 
 		if (rows == null) {
 			Logging.info(" no data rows retrieved ");

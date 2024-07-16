@@ -216,15 +216,15 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	private boolean chooseMove(String sourceGroupName, TreePath dropPath, boolean isLeaf) {
-		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath " + sourceGroupName + " , " + dropPath);
+		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath ", sourceGroupName, " , ", dropPath);
 
 		boolean result = false;
 
 		boolean stayInsideDIRECTORY = tree.isInDirectory(sourceGroupName) && tree.isInDirectory(dropPath);
 		boolean stayInsideGROUPS = tree.isInGROUPS(sourceGroupName) && tree.isInGROUPS(dropPath);
 
-		Logging.info(this,
-				"chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS " + stayInsideDIRECTORY + ", " + stayInsideGROUPS);
+		Logging.info(this, "chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS ", stayInsideDIRECTORY, ", ",
+				stayInsideGROUPS);
 
 		if (stayInsideDIRECTORY || (stayInsideGROUPS && isLeaf)) {
 			result = true;

@@ -173,7 +173,7 @@ public class Main {
 
 		// After setting locale then we can use localization values
 		Set<String> existingLocales = Messages.getLocaleNames();
-		Logging.info("Available locales: " + existingLocales);
+		Logging.info("Available locales: ", existingLocales);
 	}
 
 	public static void endApp(int exitcode) {
@@ -186,7 +186,7 @@ public class Main {
 		}
 
 		OpsiMethodCall.report();
-		Logging.info("regularly exiting app with code " + exitcode);
+		Logging.info("regularly exiting app with code ", exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {
 			fErrorOutOfMemory.setVisible(true);

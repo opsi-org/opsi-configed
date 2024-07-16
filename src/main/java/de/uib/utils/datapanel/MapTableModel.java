@@ -229,8 +229,7 @@ public class MapTableModel extends AbstractTableModel {
 				List<?> li = (List<?>) result;
 				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {
 					result = defaultData.get(key);
-					Logging.info(this,
-							"getValueAt " + row + ", " + col + " result corrected for key  " + key + ": " + result);
+					Logging.info(this, "getValueAt ", row, ", ", col, " result corrected for key  ", key, ": ", result);
 				}
 			}
 		} else {
@@ -358,8 +357,8 @@ public class MapTableModel extends AbstractTableModel {
 			return;
 		}
 
-		Logging.info(this, "Setting value in table at " + row + "," + col + " to " + value + " (an instance of "
-				+ value.getClass() + ")");
+		Logging.info(this, "Setting value in table at ", row, ",", col, " to ", value, " (an instance of ",
+				value.getClass(), ")");
 
 		// check not necessary since, by virtue of the method isCellEditable (int,int),
 		// we can only have come to here in this case

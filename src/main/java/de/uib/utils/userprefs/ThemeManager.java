@@ -85,7 +85,7 @@ public final class ThemeManager {
 	}
 
 	public static void setOpsiLaf() {
-		Logging.info("set look and feel " + getSelectedTheme());
+		Logging.info("set look and feel ", getSelectedTheme());
 
 		// Location of the theme property files - register them
 		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");

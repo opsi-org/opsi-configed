@@ -31,7 +31,7 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 		for (SWAuditClientEntry swEntry : auditList) {
 			String swIdent = swEntry.getSWIdent();
 			if (!persistenceController.getSoftwareDataService().swEntryExists(swEntry)) {
-				Logging.info(this, "no swIdent " + swIdent);
+				Logging.info(this, "no swIdent ", swIdent);
 				return false;
 			}
 

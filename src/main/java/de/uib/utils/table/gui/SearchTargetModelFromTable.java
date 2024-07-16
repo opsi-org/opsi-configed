@@ -40,7 +40,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	protected final void setTable(JTable table) {
 		this.table = table;
-		Logging.info(this, "setTable null? " + (table == null));
+		Logging.info(this, "setTable null? ", table == null);
 	}
 
 	private AbstractTableModel getTableModel() {
@@ -110,7 +110,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		int modelrow = table.convertRowIndexToModel(row);
 
-		Logging.info(this, "setCursorRow row, produced modelrow " + modelrow);
+		Logging.info(this, "setCursorRow row, produced modelrow ", modelrow);
 
 		if (table.getModel() instanceof GenTableModel genTableModel) {
 			genTableModel.setCursorRow(modelrow);
@@ -158,7 +158,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setSelection(int[] selection) {
-		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
+		Logging.info(this, "setSelection --- ", Arrays.toString(selection));
 		table.getSelectionModel().setValueIsAdjusting(true);
 		table.getSelectionModel().clearSelection();
 		for (int selectionElement : selection) {
@@ -195,7 +195,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
 			}
 
-			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));
+			Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
 
 			((RowNoTableModelFilterCondition) (model.getFilter(FILTER_BY_SELECTION).getCondition()))
 					.setFilter(modelRowFilter, model.getRows());

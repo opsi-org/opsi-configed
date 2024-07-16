@@ -76,7 +76,7 @@ public class ExporterToPDF extends AbstractExportTable {
 							Configed.getResourceValue("OpenSaveDialog.open") },
 					null);
 
-			Logging.info(this, "fileName was null, result now has value " + result);
+			Logging.info(this, "fileName was null, result now has value ", result);
 		}
 
 		if (result == JOptionPane.DEFAULT_OPTION) {
@@ -93,7 +93,7 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			// FileName is null if nothing chosen, then we do nothing
 			if (fileName != null) {
-				Logging.info(this, "filename for saving PDF: " + fileName);
+				Logging.info(this, "filename for saving PDF: ", fileName);
 				File file = new File(fileName);
 				if (file.isDirectory()) {
 					Logging.error("no valid filename ", fileName);

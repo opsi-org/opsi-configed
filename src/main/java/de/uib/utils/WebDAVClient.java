@@ -62,7 +62,7 @@ public class WebDAVClient {
 				port = Integer.parseInt(host.substring(idx + 1, host.length()));
 			}
 		} else {
-			Logging.info(this, "Host doesn't have specified port - using default port " + Globals.DEFAULT_PORT);
+			Logging.info(this, "Host doesn't have specified port - using default port ", Globals.DEFAULT_PORT);
 		}
 
 		return port;
@@ -76,7 +76,7 @@ public class WebDAVClient {
 		Set<String> directories = new TreeSet<>();
 
 		String url = getBaseURL() + currentDirectory;
-		Logging.info("use webdav to get directories and files in " + url);
+		Logging.info("use webdav to get directories and files in ", url);
 
 		try {
 			List<DavResource> resources = sardine.list(url);
@@ -95,7 +95,7 @@ public class WebDAVClient {
 		Set<String> directoriesAndFiles = new TreeSet<>();
 
 		String url = getBaseURL() + currentDirectory;
-		Logging.info("use webdav to get directories and files in " + url);
+		Logging.info("use webdav to get directories and files in ", url);
 
 		try {
 			List<DavResource> resources = sardine.list(url);

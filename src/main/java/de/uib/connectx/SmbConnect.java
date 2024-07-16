@@ -43,7 +43,7 @@ public final class SmbConnect {
 		Map<String, Map<String, Object>> depot2depotMap = PersistenceControllerFactory.getPersistenceController()
 				.getHostInfoCollections().getDepots();
 
-		Logging.info("buildSambaTarget for depotserver " + depotserver);
+		Logging.info("buildSambaTarget for depotserver ", depotserver);
 
 		if (depot2depotMap.get(depotserver) == null) {
 			return result;
@@ -61,14 +61,14 @@ public final class SmbConnect {
 
 		if (parts.length > 2) {
 			netbiosName = parts[2];
-			Logging.info("buildSambaTarget " + netbiosName);
+			Logging.info("buildSambaTarget ", netbiosName);
 		} else {
 			Logging.warning("buildSambaTarget, no splitting for ", depotRemoteUrl);
 		}
 
 		result = File.separator + File.separator + netbiosName + File.separator + share;
 
-		Logging.info("buildSambaTarget " + result);
+		Logging.info("buildSambaTarget ", result);
 
 		return result;
 	}

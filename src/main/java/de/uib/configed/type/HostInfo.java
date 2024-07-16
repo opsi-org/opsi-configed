@@ -392,7 +392,7 @@ public class HostInfo {
 	}
 
 	public void resetGui() {
-		Logging.info(this, "resetGui for " + toString());
+		Logging.info(this, "resetGui for ", this);
 
 		MainFrame mainFrame = ConfigedMain.getMainFrame();
 
@@ -609,7 +609,7 @@ public class HostInfo {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
-			Logging.info(this, "showAndSave found col " + col);
+			Logging.info(this, "showAndSave found col ", col);
 
 			if (col > -1) {
 				// write it into the visible table
@@ -633,7 +633,7 @@ public class HostInfo {
 			return;
 		}
 
-		Logging.info(this, "showAndSave client, source " + client + ", " + sourceOfChanges);
+		Logging.info(this, "showAndSave client, source ", client, ", ", sourceOfChanges);
 
 		if (sourceOfChanges == null) {
 			return;

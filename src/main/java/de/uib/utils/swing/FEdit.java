@@ -233,7 +233,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	protected void cancel() {
-		Logging.info(this, "cancel, go back to " + initialText);
+		Logging.info(this, "cancel, go back to ", initialText);
 		setStartText(initialText);
 		cancelled = true;
 

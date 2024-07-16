@@ -117,7 +117,7 @@ public class GenTableModel extends AbstractTableModel {
 
 	private void initColumns() {
 		columnNames = tableProvider.getColumnNames();
-		Logging.info(this, "initColumns " + columnNames);
+		Logging.info(this, "initColumns ", columnNames);
 
 		colEditable = new boolean[getColumnCount()];
 	}
@@ -159,7 +159,7 @@ public class GenTableModel extends AbstractTableModel {
 	 * define a complete new filter by a TableModelFilterCondition
 	 */
 	public void setFilterCondition(TableModelFilterCondition cond) {
-		Logging.info(this, "setFilterCondition " + cond);
+		Logging.info(this, "setFilterCondition ", cond);
 		clearFilter();
 		chainedFilter.set(DEFAULT_FILTER_NAME, new TableModelFilter(cond));
 
@@ -179,7 +179,7 @@ public class GenTableModel extends AbstractTableModel {
 	 */
 	public GenTableModel chainFilter(String filterName, TableModelFilter filter) {
 		chainedFilter.set(filterName, filter);
-		Logging.info(this, "chainFilter, we have chainedFilter " + chainedFilter);
+		Logging.info(this, "chainFilter, we have chainedFilter ", chainedFilter);
 
 		// for chaining in notation
 		return this;
@@ -206,17 +206,17 @@ public class GenTableModel extends AbstractTableModel {
 		Logging.info(this, " ---  produce rows");
 		setRows(tableProvider.getRows());
 
-		Logging.info(this, "produceRows(): count  " + rows.size());
+		Logging.info(this, "produceRows(): count  ", rows.size());
 
 		// update columns and class names from tableProvider
 		getColumnNames();
 
-		Logging.info(this, " ---  rows produced, columnNames: " + columnNames);
-		Logging.info(this,
-				"produceRows --- using workingfilter  " + workingFilter.getClass().getName() + " : " + workingFilter);
+		Logging.info(this, " ---  rows produced, columnNames: ", columnNames);
+		Logging.info(this, "produceRows --- using workingfilter  ", workingFilter.getClass().getName(), " : ",
+				workingFilter);
 
 		if (workingFilter != null && workingFilter.isInUse()) {
-			Logging.info(this, " --- using workingfilter  " + workingFilter.getClass().getName());
+			Logging.info(this, " --- using workingfilter  ", workingFilter.getClass().getName());
 			List<List<Object>> filteredRows = new ArrayList<>();
 
 			for (List<Object> row : rows) {
@@ -227,7 +227,7 @@ public class GenTableModel extends AbstractTableModel {
 			setRows(filteredRows);
 		}
 
-		Logging.info(this, "produceRows  filtered size " + rows.size());
+		Logging.info(this, "produceRows  filtered size ", rows.size());
 	}
 
 	public void setSorting(Integer sortCol, boolean sorting) {
@@ -251,7 +251,7 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	private void setRows(List<List<Object>> givenRows) {
-		Logging.info(this, "setRows size " + givenRows.size());
+		Logging.info(this, "setRows size ", givenRows.size());
 		if (!sorting) {
 			rows = givenRows;
 		} else {
@@ -300,7 +300,7 @@ public class GenTableModel extends AbstractTableModel {
 		}
 
 		if (chainedFilter.getElement(name) == null) {
-			Logging.info(this, "isUsingFilter, chainedFilter.getElement for name " + name + " == null");
+			Logging.info(this, "isUsingFilter, chainedFilter.getElement for name ", name, " == null");
 			return false;
 		}
 
@@ -308,15 +308,15 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public void setUsingFilter(String name, boolean newValue) {
-		Logging.info(this, "setUsingFilter " + name + " to " + newValue + " value was " + isUsingFilter(name));
+		Logging.info(this, "setUsingFilter ", name, " to ", newValue, " value was ", isUsingFilter(name));
 		if (isUsingFilter(name) != newValue) {
 			invalidate();
 			chainedFilter.getElement(name).setInUse(newValue);
 			reset();
 		}
 
-		Logging.info(this, "setUsingFilter active filter chain: " + chainedFilter.getActiveFilters());
-		Logging.info(this, "setUsingFilter we got rows: " + getRowCount());
+		Logging.info(this, "setUsingFilter active filter chain: ", chainedFilter.getActiveFilters());
+		Logging.info(this, "setUsingFilter we got rows: ", getRowCount());
 	}
 
 	private void clearUpdates() {
@@ -415,15 +415,15 @@ public class GenTableModel extends AbstractTableModel {
 	}
 
 	public int getCursorRow() {
-		Logging.info(this, "cursorrow " + cursorrow);
+		Logging.info(this, "cursorrow ", cursorrow);
 		return cursorrow;
 	}
 
 	public void setCursorRow(int modelrow) {
 		if (markCursorRow) {
-			Logging.info(this, "setCursorRow modelrow " + modelrow + " markCursorRow " + markCursorRow);
+			Logging.info(this, "setCursorRow modelrow ", modelrow, " markCursorRow ", markCursorRow);
 			if (modelrow > 0 && getColumnCount() > 2) {
-				Logging.info(this, "setCursorRow val at (modelrow,2) ) " + getValueAt(modelrow, 2));
+				Logging.info(this, "setCursorRow val at (modelrow,2) ) ", getValueAt(modelrow, 2));
 			}
 		}
 

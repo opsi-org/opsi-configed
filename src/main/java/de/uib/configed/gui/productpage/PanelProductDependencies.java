@@ -84,7 +84,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 	}
 
 	public void setEditValues(String productId, String depotId) {
-		Logging.info(this, "set product  " + productId);
+		Logging.info(this, "set product  ", productId);
 
 		dependenciesModel.setActualProduct(depotId, productId);
 	}

@@ -144,7 +144,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
 			selectedDepot = "" + comboChooseDepot.getSelectedItem();
-			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
+			Logging.info(this, "actionPerformed  depot selected ", selectedDepot);
 			depots.clear();
 			depots.add(selectedDepot);
 			SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
@@ -179,8 +179,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 	// implements NameProducer
 	@Override
 	public String produceName() {
-		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory " + fieldTargetPath + " , "
-				+ depotProductDirectory);
+		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory ", fieldTargetPath, " , ",
+				depotProductDirectory);
 		if (fieldTargetPath == null || fieldTargetPath.getText().isEmpty()
 				|| fieldTargetPath.getText().startsWith(depotProductDirectory)) {
 			return depotProductDirectory;
@@ -332,7 +332,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					activateLoadingCursor();
-					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
+					Logging.info(this, "setCommonProductPropertyValue ", depots, ", ", winProduct + ", ", values);
 					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
 							"productkey", values);
 

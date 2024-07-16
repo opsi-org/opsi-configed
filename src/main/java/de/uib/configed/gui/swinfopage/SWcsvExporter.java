@@ -27,7 +27,7 @@ public class SWcsvExporter extends AbstractSWExporter {
 	@Override
 	public void export() {
 		String clientName = hostId;
-		Logging.info(this, "create csv report swaudit for " + clientName);
+		Logging.info(this, "create csv report swaudit for ", clientName);
 
 		Logging.debug("create csv report swaudit for " + clientName);
 

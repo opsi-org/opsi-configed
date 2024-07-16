@@ -95,7 +95,7 @@ public class ConnectionHandler {
 		}
 
 		if (isMethodSupported) {
-			Logging.info(this, "request method is supported: " + requestMethod);
+			Logging.info(this, "request method is supported: ", requestMethod);
 			this.requestMethod = requestMethod;
 		} else {
 			Logging.warning(this, "request method is unsupported: ", requestMethod);
@@ -163,11 +163,9 @@ public class ConnectionHandler {
 			}
 
 			Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
-			Logging.info(this,
-					"retrieveResponse method=" + connection.getRequestMethod() + ", headers="
-							+ connection.getRequestProperties() + ", cookie="
-							+ (requestProperties.get("Cookie") == null ? "null"
-									: (requestProperties.get("Cookie").substring(0, 26) + "...")));
+			Logging.info(this, "retrieveResponse method=", connection.getRequestMethod(), ", headers=",
+					connection.getRequestProperties(), ", cookie=", (requestProperties.get("Cookie") == null ? "null"
+							: (requestProperties.get("Cookie").substring(0, 26) + "...")));
 
 			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
 			connection.setHostnameVerifier(certValidator.createHostnameVerifier());

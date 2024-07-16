@@ -159,7 +159,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		if (popupsWanted != null) {
 			for (int wantedPopup : popupsWanted) {
 				this.internalpopups.add(wantedPopup);
-				Logging.info(this.getClass(), "add popup " + wantedPopup);
+				Logging.info(this.getClass(), "add popup ", wantedPopup);
 			}
 		} else {
 			this.internalpopups.add(POPUP_RELOAD);
@@ -167,11 +167,11 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			this.internalpopups.add(POPUP_PDF);
 		}
 
-		Logging.info(this.getClass(), "internalpopups " + giveMenuitemNames(internalpopups));
+		Logging.info(this.getClass(), "internalpopups ", giveMenuitemNames(internalpopups));
 
 		this.internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 
-		Logging.info(this.getClass(), "internalpopups supplemented " + giveMenuitemNames(internalpopups));
+		Logging.info(this.getClass(), "internalpopups supplemented ", giveMenuitemNames(internalpopups));
 
 		if (title != null) {
 			this.title = title;
@@ -416,7 +416,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setTitle(String title) {
-		Logging.info(this, "setTitle " + title);
+		Logging.info(this, "setTitle ", title);
 		this.title = title;
 		jLabelTitle.setText(title);
 	}
@@ -456,7 +456,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private void addPopupmenuStandardpart() {
-		Logging.info(this, "addPopupmenuStandardpart, internalpopups " + giveMenuitemNames(internalpopups));
+		Logging.info(this, "addPopupmenuStandardpart, internalpopups ", giveMenuitemNames(internalpopups));
 
 		if (generalPopupPosition > 0) {
 			// add separator if a real position is given
@@ -465,8 +465,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, internalpopups);
 
-		Logging.info(this,
-				"addPopupmenuStandardpart, supplemented internalpopups " + giveMenuitemNames(internalpopups));
+		Logging.info(this, "addPopupmenuStandardpart, supplemented internalpopups ", giveMenuitemNames(internalpopups));
 
 		for (int popuptype : internalpopups) {
 			switch (popuptype) {
@@ -708,7 +707,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	 * set special comparator for a column
 	 */
 	public void setComparator(String colName, Comparator<Object> comparator) {
-		Logging.info(this, "setComparator " + colName + " compare by " + comparator);
+		Logging.info(this, "setComparator ", colName, " compare by ", comparator);
 		int modelCol = tableModel.getColumnNames().indexOf(colName);
 
 		if (modelCol < 0) {
@@ -803,7 +802,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		Logging.info(this, "setDataChanged " + b);
+		Logging.info(this, "setDataChanged ", b);
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
 		if (menuItemSave != null) {
@@ -817,7 +816,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public boolean isDataChanged() {
-		Logging.info(this, "isDataChanged " + dataChanged);
+		Logging.info(this, "isDataChanged ", dataChanged);
 		return dataChanged;
 	}
 
@@ -907,7 +906,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setSelection(int[] selection) {
-		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
+		Logging.info(this, "setSelection --- ", Arrays.toString(selection));
 		theTable.getSelectionModel().clearSelection();
 		for (int i = 0; i < selection.length; i++) {
 			theTable.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
@@ -1019,7 +1018,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public boolean moveToValue(String value, int col, boolean selecting) {
-		Logging.info(this, "moveToValue " + value + " col " + col + " selecting " + selecting);
+		Logging.info(this, "moveToValue ", value, " col ", col, " selecting ", selecting);
 		int viewrow = findViewRowFromValue(value, col);
 		if (viewrow > -1) {
 			tableModel.setCursorRow(theTable.convertRowIndexToModel(viewrow));
@@ -1120,9 +1119,9 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			viewCursorRow = theTable.convertRowIndexToView(tableModel.getCursorRow());
 		}
 
-		Logging.info(this, "advanceCursor from " + viewCursorRow);
+		Logging.info(this, "advanceCursor from ", viewCursorRow);
 		int nextViewCursorRow = viewCursorRow + d;
-		Logging.info(this, "advanceCursor to " + nextViewCursorRow);
+		Logging.info(this, "advanceCursor to ", nextViewCursorRow);
 		if (nextViewCursorRow < tableModel.getRowCount() && nextViewCursorRow >= 0) {
 			tableModel.setCursorRow(theTable.convertRowIndexToModel(nextViewCursorRow));
 		}
@@ -1189,7 +1188,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			setDataChanged(true);
 		}
 
-		Logging.info(this, "rows selected: " + lsm.getSelectedItemsCount());
+		Logging.info(this, "rows selected: ", lsm.getSelectedItemsCount());
 
 		if (menuItemDeleteRelation != null) {
 			menuItemDeleteRelation.setEnabled(!lsm.isSelectionEmpty());
@@ -1239,7 +1238,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	// CursorrowObserver
 	@Override
 	public void rowUpdated(int modelrow) {
-		Logging.info(this, " in PanelGenEditTable rowUpdated to modelrow " + modelrow);
+		Logging.info(this, " in PanelGenEditTable rowUpdated to modelrow ", modelrow);
 	}
 
 	private void floatExternal() {

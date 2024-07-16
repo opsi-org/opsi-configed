@@ -227,7 +227,7 @@ public class LogPane extends JPanel implements KeyListener {
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
 
-		Logging.info(this, "levels minL, maxL " + MIN_LEVEL + ", " + MAX_LEVEL);
+		Logging.info(this, "levels minL, maxL ", MIN_LEVEL, ", ", MAX_LEVEL);
 
 		sliderLevel = new AdaptingSlider(this, MIN_LEVEL, MAX_LEVEL, produceInitialMaxShowLevel());
 
@@ -478,7 +478,7 @@ public class LogPane extends JPanel implements KeyListener {
 					DEFAULT_MAX_SHOW_LEVEL);
 			Configed.getSavedStates().setProperty("savedMaxShownLogLevel", String.valueOf(DEFAULT_MAX_SHOW_LEVEL));
 		}
-		Logging.info(this, "produceInitialMaxShowLevel " + savedMaxShownLogLevel);
+		Logging.info(this, "produceInitialMaxShowLevel ", savedMaxShownLogLevel);
 		return savedMaxShownLogLevel;
 	}
 
@@ -556,8 +556,8 @@ public class LogPane extends JPanel implements KeyListener {
 
 		Integer oldLevel = showLevel;
 		showLevel = level;
-		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
-				+ parser.getMaxExistingLevel());
+		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel ", level, " , ", oldLevel, ", ",
+				parser.getMaxExistingLevel());
 
 		if (!oldLevel.equals(level)
 				&& (level < parser.getMaxExistingLevel() || oldLevel < parser.getMaxExistingLevel())) {

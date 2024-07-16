@@ -138,10 +138,10 @@ public class CompletionComboButton {
 		String strcbtext = combobox.getEditor().getItem().toString();
 		if (strcbtext != null && !strcbtext.isEmpty() && !"/".equals(strcbtext.substring(strcbtext.length() - 1))) {
 			combobox.removeItem(strcbtext);
-			Logging.info(this, "doButtonAction combo.removeItem(" + strcbtext + ")");
+			Logging.info(this, "doButtonAction combo.removeItem(", strcbtext, ")");
 			strcbtext = strcbtext + "/";
 			combobox.addItem(strcbtext);
-			Logging.info(this, "doButtonAction combo.additem(" + strcbtext + ")");
+			Logging.info(this, "doButtonAction combo.additem(", strcbtext, ")");
 			combobox.setSelectedItem(strcbtext);
 		}
 

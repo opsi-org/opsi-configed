@@ -37,7 +37,7 @@ public class SavedSearchQuery {
 	}
 
 	private void setArgs(String host, String user, String password, String otp, String searchName) {
-		Logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
+		Logging.info(this, "setArgs ", host, ", PASSWORD, ", searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;

@@ -108,7 +108,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			// the config will be created in this run of configed
 		} else {
 			defaultUser = (String) resultConfigList.get(0);
-			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER " + ((String) resultConfigList.get(0)));
+			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER ", ((String) resultConfigList.get(0)));
 		}
 
 		resultConfigList = (List<Object>) configs.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);

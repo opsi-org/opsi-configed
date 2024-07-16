@@ -140,7 +140,7 @@ public abstract class AbstractSWExporter {
 		Logging.info(this, "starting");
 
 		try (BufferedReader in = new BufferedReader(new FileReader(clientsFile, StandardCharsets.UTF_8))) {
-			Logging.info(this, " in " + in);
+			Logging.info(this, " in ", in);
 			String line = in.readLine();
 			while (line != null) {
 				// we assume that each line is a hostId
@@ -206,7 +206,7 @@ public abstract class AbstractSWExporter {
 	}
 
 	private Map<String, Map<String, Object>> retrieveSoftwareMap() {
-		Logging.info(this, "retrieving data for " + hostId);
+		Logging.info(this, "retrieving data for ", hostId);
 		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
 				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
 		Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()

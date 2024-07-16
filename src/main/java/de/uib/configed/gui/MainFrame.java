@@ -276,7 +276,7 @@ public class MainFrame extends JFrame {
 		Utils.addOpsiIconToMenuItem(menuOpsi);
 		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
 				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
-		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
+		Logging.info(this, "setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
 		addCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
@@ -312,7 +312,7 @@ public class MainFrame extends JFrame {
 			String parentMenuName = entry.getKey();
 			JMenu parentMenu = new JMenu(parentMenuName);
 
-			Logging.info(this, "parent menu text " + parentMenuName);
+			Logging.info(this, "parent menu text ", parentMenuName);
 			if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
 				jMenuServerConsole.add(menuOpsi);
 				jMenuServerConsole.addSeparator();
@@ -326,7 +326,7 @@ public class MainFrame extends JFrame {
 			boolean commandsAreDeactivated) {
 		for (final MultiCommandTemplate com : listCom) {
 			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
-			Logging.info(this, "command menuitem text " + com.getMenuText());
+			Logging.info(this, "command menuitem text ", com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> {
 				CommandExecutor executor = new CommandExecutor(configedMain, com);
@@ -600,14 +600,14 @@ public class MainFrame extends JFrame {
 		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
 		JScrollPane scrollpaneTreeProducts = new JScrollPane();
 		scrollpaneTreeProducts.getViewport().add(productTree);

@@ -189,9 +189,9 @@ public class SavedSearchesDialog extends FEditStringList {
 			setCursor(null);
 		}
 
-		Logging.info(this, "commit result == null " + (result == null));
+		Logging.info(this, "commit result == null ", result == null);
 		if (result != null) {
-			Logging.info(this, "result size " + result.size());
+			Logging.info(this, "result size ", result.size());
 			selectionPanel.setSelectedValues(result);
 		}
 	}

@@ -118,12 +118,12 @@ public class PanelProductSettings extends JSplitPane {
 
 		groupPanel = new ProductActionPanel(this, tableProducts);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event reloadAction " + ae);
+			Logging.info(this, " in top pane we got event reloadAction ", ae);
 			reloadAction();
 		});
 
 		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
+			Logging.info(this, " in top pane we got event saveAndExecuteAction ", ae);
 			saveAndExecuteAction();
 		});
 
@@ -415,7 +415,7 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
-		Logging.info(this, "setSortKeys : " + currentSortKeys);
+		Logging.info(this, "setSortKeys : ", currentSortKeys);
 		if (tableProducts.getRowSorter() != null) {
 			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
 		}
@@ -472,7 +472,7 @@ public class PanelProductSettings extends JSplitPane {
 		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 		tModel.setFilterFrom(filter);
 
-		Logging.info(this, "reduceToSet  " + filter);
+		Logging.info(this, "reduceToSet  ", filter);
 
 		tableProducts.revalidate();
 	}

@@ -126,7 +126,7 @@ public class UserRolesConfigDataService {
 			result = cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_PERMITTED, Set.class);
 		}
 
-		Logging.info(this, "getHostgroupsPermitted " + result);
+		Logging.info(this, "getHostgroupsPermitted ", result);
 
 		return result;
 	}
@@ -200,7 +200,7 @@ public class UserRolesConfigDataService {
 				exec.doCall(omc);
 			}
 
-			Logging.info(this, "readyObjects for userparts " + readyConfigObjects.size());
+			Logging.info(this, "readyObjects for userparts ", readyConfigObjects.size());
 		}
 
 		checkPermissions();
@@ -253,14 +253,14 @@ public class UserRolesConfigDataService {
 	private boolean doesUserBelongToSystemsReadOnlyGroup() {
 		boolean isUserReadOnlyUser = exec.getBooleanResult(
 				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}));
-		Logging.info(this, "does user belong to system's read-only group? " + isUserReadOnlyUser);
+		Logging.info(this, "does user belong to system's read-only group? ", isUserReadOnlyUser);
 		return isUserReadOnlyUser;
 	}
 
 	// final in order to avoid deactiviating by override
 	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs) {
 		boolean withUserRoles = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES);
-		Logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
+		Logging.info(this, "setAgainUserRegistration, userRoles can be used ", withUserRoles);
 
 		boolean resultVal = userRegisterValueFromConfigs;
 
@@ -274,7 +274,7 @@ public class UserRolesConfigDataService {
 		} else {
 			locallySavedValueUserRegister = Boolean.parseBoolean(
 					Configed.getSavedStates().getProperty(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER));
-			Logging.info(this, "setAgainUserRegistration, userRegister was activated " + locallySavedValueUserRegister);
+			Logging.info(this, "setAgainUserRegistration, userRegister was activated ", locallySavedValueUserRegister);
 			if (userRegisterValueFromConfigs) {
 				if (locallySavedValueUserRegister == null || !locallySavedValueUserRegister) {
 					// we save true
@@ -297,7 +297,7 @@ public class UserRolesConfigDataService {
 				dialog.setMessage(msg.toString());
 				dialog.setVisible(true);
 				int result = dialog.getResult();
-				Logging.info(this, "setAgainUserRegistration, reaction via option " + dialog.getResult());
+				Logging.info(this, "setAgainUserRegistration, reaction via option ", dialog.getResult());
 
 				switch (result) {
 				case 1:
@@ -347,13 +347,13 @@ public class UserRolesConfigDataService {
 		if (!globalReadOnly) {
 			// lookup if we have a config for it and set it though not set by group
 			configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY;
-			Logging.info(this, "checkPermissions  configKey " + configKey);
+			Logging.info(this, "checkPermissions  configKey ", configKey);
 			globalReadOnly = serverPropertyMap.get(configKey) != null
 					&& (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, globalReadOnly);
 		}
 
-		Logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
+		Logging.info(this, " checkPermissions globalReadOnly ", globalReadOnly);
 
 		boolean serverActionPermission = true;
 
@@ -361,10 +361,10 @@ public class UserRolesConfigDataService {
 			serverActionPermission = false;
 		} else {
 			configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE;
-			Logging.info(this, "checkPermissions  configKey " + configKey);
+			Logging.info(this, "checkPermissions  configKey ", configKey);
 
 			if (serverPropertyMap.get(configKey) != null) {
-				Logging.info(this, " checkPermissions  value  " + serverPropertyMap.get(configKey).get(0));
+				Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey).get(0));
 				serverActionPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			}
 		}
@@ -376,11 +376,11 @@ public class UserRolesConfigDataService {
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
 		String configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
-		Logging.info(this, " checkPermissions key " + configKey);
+		Logging.info(this, " checkPermissions key ", configKey);
 
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
-			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
+			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey).get(0));
 			boolean createClientPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
 		}
@@ -399,7 +399,7 @@ public class UserRolesConfigDataService {
 		}
 		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
 
-		Logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
+		Logging.info(this, "checkPermissions permittedProducts ", permittedProducts);
 	}
 
 	private void checkDepotPermissions() {
@@ -415,9 +415,9 @@ public class UserRolesConfigDataService {
 				serverPropertyMap);
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_PERMITTED, depotsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, depotsFullPermission);
-		Logging.info(this, "checkPermissions depotsFullPermission (false means, depots must be specified) "
-				+ depotsFullPermission);
-		Logging.info(this, "checkPermissions depotsPermitted " + depotsPermitted);
+		Logging.info(this, "checkPermissions depotsFullPermission (false means, depots must be specified) ",
+				depotsFullPermission);
+		Logging.info(this, "checkPermissions depotsPermitted ", depotsPermitted);
 	}
 
 	private void checkHostGroupPermissions() {
@@ -439,7 +439,7 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED,
 				hostgroupsOnlyIfExplicitlyStated);
 
-		Logging.info(this, "checkPermissions hostgroupsPermitted " + hostgroupsPermitted);
+		Logging.info(this, "checkPermissions hostgroupsPermitted ", hostgroupsPermitted);
 	}
 
 	private void checkProductPermissions() {
@@ -505,7 +505,7 @@ public class UserRolesConfigDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.USER_CONFIG_PART, userConfigPart);
-		Logging.info(this, "userConfigPart initialized, " + userConfigPart);
+		Logging.info(this, "userConfigPart initialized, ", userConfigPart);
 
 		return userConfigPart;
 	}
@@ -520,14 +520,14 @@ public class UserRolesConfigDataService {
 		applyUserSpecializedConfig = persistenceController.getModuleDataService()
 				.isOpsiModuleActive(OpsiModule.USER_ROLES) && hasKeyUserRegisterValuePD();
 		cacheManager.setCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG, applyUserSpecializedConfig);
-		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
+		Logging.info(this, "applyUserSpecializedConfig initialized, ", applyUserSpecializedConfig);
 
 		return applyUserSpecializedConfig;
 	}
 
 	private boolean checkFullPermission(Set<String> permittedEntities, final String keyUseList, final String keyList,
 			final Map<String, List<Object>> serverPropertyMap) {
-		Logging.info(this, "checkFullPermission  key name,  defaultResult true " + keyUseList);
+		Logging.info(this, "checkFullPermission  key name,  defaultResult true ", keyUseList);
 
 		boolean fullPermission = true;
 
@@ -538,11 +538,11 @@ public class UserRolesConfigDataService {
 			// we didn't configure anything, therefore we revoke the setting
 			if (serverPropertyMap.get(keyList) == null) {
 				fullPermission = true;
-				Logging.info(this, "checkFullPermission not configured keyList " + keyList);
+				Logging.info(this, "checkFullPermission not configured keyList ", keyList);
 			}
 		}
 
-		Logging.info(this, "checkFullPermission  key for list,  fullPermission " + keyList + ", " + fullPermission);
+		Logging.info(this, "checkFullPermission  key for list,  fullPermission ", keyList, ", ", fullPermission);
 
 		// we didn't configure anything, therefore we revoke the setting
 		if (!fullPermission && serverPropertyMap.get(keyList) != null) {
@@ -551,8 +551,8 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		Logging.info(this, "checkFullPermission   result " + fullPermission);
-		Logging.info(this, "checkFullPermission   produced list " + permittedEntities);
+		Logging.info(this, "checkFullPermission   result ", fullPermission);
+		Logging.info(this, "checkFullPermission   produced list ", permittedEntities);
 
 		return fullPermission;
 	}
@@ -907,7 +907,7 @@ public class UserRolesConfigDataService {
 	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
 		boolean result = persistenceController.getConfigDataService().getConfigListCellOptionsPD() != null;
-		Logging.info(this, "checkStandardConfigs, already there " + result);
+		Logging.info(this, "checkStandardConfigs, already there ", result);
 
 		if (!result) {
 			return false;
@@ -963,8 +963,8 @@ public class UserRolesConfigDataService {
 					persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD(),
 					"default path to opsiproducts"));
 		} else {
-			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to "
-					+ (String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
+			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to ",
+					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
 			persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(
 					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
 		}
@@ -1027,7 +1027,7 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		Logging.info(this, "Obsolete default user configs " + defaultUserConfigsObsolete);
+		Logging.info(this, "Obsolete default user configs ", defaultUserConfigsObsolete);
 
 		if (!defaultUserConfigsObsolete.isEmpty()) {
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,

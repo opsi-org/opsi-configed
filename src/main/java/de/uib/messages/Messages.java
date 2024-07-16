@@ -80,7 +80,7 @@ public final class Messages {
 			Logging.warning("Locale ", myLocale, " not existing...");
 		}
 
-		Logging.info("Selected locale: " + existingLocale);
+		Logging.info("Selected locale: ", existingLocale);
 
 		localeString = existingLocale;
 	}

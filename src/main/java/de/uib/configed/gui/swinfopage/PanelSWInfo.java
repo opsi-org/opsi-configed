@@ -293,7 +293,7 @@ public class PanelSWInfo extends JPanel {
 			return new HashMap<>();
 		}
 
-		Logging.info(this, "retrieving data for " + hostId);
+		Logging.info(this, "retrieving data for ", hostId);
 		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
 				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
 
@@ -394,7 +394,7 @@ public class PanelSWInfo extends JPanel {
 		csvExportTable.setAskForOverwrite(askForOverwrite);
 		String exportPath = exportFilename;
 		if (kindOfExport == KindOfExport.CSV) {
-			Logging.info(this, "export to " + exportPath);
+			Logging.info(this, "export to ", exportPath);
 			csvExportTable.execute(exportPath, false);
 		} else if (kindOfExport == KindOfExport.PDF) {
 			sendToPDF();
@@ -412,7 +412,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void sendToPDF() {
-		Logging.info(this, "create report swaudit for " + hostId + " check");
+		Logging.info(this, "create report swaudit for ", hostId, " check");
 
 		Map<String, String> metaData = new HashMap<>();
 
@@ -430,7 +430,7 @@ public class PanelSWInfo extends JPanel {
 
 	private void setSuperTitle(String s) {
 		String supertitle = s;
-		Logging.info(this, "setSuperTitle " + s);
+		Logging.info(this, "setSuperTitle ", s);
 		labelSuperTitle.setText(supertitle);
 	}
 
@@ -463,9 +463,9 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void setSoftwareNullInfo(String hostId) {
-		Logging.info(this, "setSoftwareNullInfo,  " + hostId);
+		Logging.info(this, "setSoftwareNullInfo,  ", hostId);
 
-		this.hostId = "" + hostId;
+		this.hostId = hostId;
 		title = this.hostId;
 
 		String timeS = "" + new Timestamp(System.currentTimeMillis());
@@ -478,9 +478,9 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void setHost(String hostId) {
-		Logging.info(this, "setHost" + hostId + " -- ");
+		Logging.info(this, "setHost", hostId, " -- ");
 
-		this.hostId = "" + hostId;
+		this.hostId = hostId;
 	}
 
 	private static class SWInfoTableModel extends AbstractTableModel {

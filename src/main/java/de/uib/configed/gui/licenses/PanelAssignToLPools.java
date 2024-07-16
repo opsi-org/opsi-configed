@@ -212,7 +212,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.class,
 
 				(Enum<SoftwareDirectionOfAssignment> val) -> {
-					Logging.info(this, " produced " + val);
+					Logging.info(this, " produced ", val);
 					((ControlPanelAssignToLPools) controller).setSoftwareDirectionOfAssignment(
 							(ControlPanelAssignToLPools.SoftwareDirectionOfAssignment) val);
 				});
@@ -286,7 +286,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.class,
 
 				(Enum<SoftwareShowAllMeans> val) -> {
-					Logging.info(this, " produced " + val);
+					Logging.info(this, " produced ", val);
 					((ControlPanelAssignToLPools) controller)
 							.setSoftwareShowAllMeans((ControlPanelAssignToLPools.SoftwareShowAllMeans) val);
 				});
@@ -445,8 +445,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 			fSoftwarename2LicensePool.setLocationRelativeTo(ConfigedMain.getLicensesFrame());
 		}
 
-		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
-				+ panelRadiobuttonsPreselectionForName2Pool.getValue());
+		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected ",
+				panelRadiobuttonsPreselectionForName2Pool.getValue());
 		fSoftwarename2LicensePool.setPreselectionForName2Pool(
 				(FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
 						.getValue());
@@ -457,7 +457,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	}
 
 	public void setDisplaySimilarExist(boolean b) {
-		Logging.info(this, "setDisplaySimilarExist " + b);
+		Logging.info(this, "setDisplaySimilarExist ", b);
 		jCheckBoxSimilarEntriesExist.setSelected(b);
 		if (b) {
 			jCheckBoxSimilarEntriesExist
@@ -470,9 +470,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		Logging.info(this, " stateChanged " + e);
-		Logging.info(this,
-				" stateChanged modelSWnames filterinfo " + fSoftwarename2LicensePool.getModelSWnames().getFilterInfo());
+		Logging.info(this, " stateChanged ", e);
+		Logging.info(this, " stateChanged modelSWnames filterinfo ",
+				fSoftwarename2LicensePool.getModelSWnames().getFilterInfo());
 		int selectedRow = panelRegisteredSoftware.getSelectedRow();
 		int columnNameIndex = panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME);
 		if (selectedRow == -1 || columnNameIndex == -1) {
@@ -480,7 +480,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 			return;
 		}
 		String resetToSWname = (String) panelRegisteredSoftware.getValueAt(selectedRow, columnNameIndex);
-		Logging.info(this, " stateChanged modelSWnames swname  >>" + resetToSWname + "<<");
+		Logging.info(this, " stateChanged modelSWnames swname  >>", resetToSWname, "<<");
 		fSoftwarename2LicensePool.getModelSWnames().requestReload();
 		fSoftwarename2LicensePool.getModelSWnames().reset();
 		if (fSoftwarename2LicensePool.getModelSWxLicensepool() == null) {

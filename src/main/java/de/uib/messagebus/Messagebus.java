@@ -136,13 +136,13 @@ public class Messagebus implements MessagebusListener {
 
 		if (!Utils.hasPort(host)) {
 			host = host + ":" + Globals.DEFAULT_PORT;
-			Logging.info(this, "Host doesn't have specified port (using default): " + host);
+			Logging.info(this, "Host doesn't have specified port (using default): ", host);
 		} else {
-			Logging.info(this, "Host does have specified port (using specified port): " + host);
+			Logging.info(this, "Host does have specified port (using specified port): ", host);
 		}
 
 		String url = String.format("%s://%s/messagebus/v1", protocol, host);
-		Logging.info(this, "Connecting to messagebus using the following URL: " + url);
+		Logging.info(this, "Connecting to messagebus using the following URL: ", url);
 
 		return url;
 	}
@@ -255,8 +255,8 @@ public class Messagebus implements MessagebusListener {
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
-		Logging.info(this, "Messagebus connection closed by " + (remote ? "opsi service" : "us") + " Code=" + code
-				+ " Reason='" + reason + "', disconnecting=" + disconnecting + ", reconnecting=" + reconnecting);
+		Logging.info(this, "Messagebus connection closed by ", remote ? "opsi service" : "us", " Code=", code,
+				" Reason='", reason, "', disconnecting=", disconnecting, ", reconnecting=", reconnecting);
 		boolean wasDisconnecting = disconnecting;
 		connected = false;
 		disconnecting = false;

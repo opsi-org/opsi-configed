@@ -22,9 +22,9 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 		/* Not needed */}
 
 	public void setFilter(int[] modelRowNoFilter, final List<List<Object>> rows) {
-		Logging.info(this, "setFilter int[]  " + modelRowNoFilter);
+		Logging.info(this, "setFilter int[]  ", modelRowNoFilter);
 		if (modelRowNoFilter != null) {
-			Logging.info(this, "setFilter as string " + Arrays.toString(modelRowNoFilter));
+			Logging.info(this, "setFilter as string ", Arrays.toString(modelRowNoFilter));
 		}
 
 		if (rows == null || modelRowNoFilter == null || modelRowNoFilter.length == 0) {

@@ -72,10 +72,10 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 		Map<String, String> values = new HashMap<>();
 		values.put("%host%", targetClient);
 		String hostName = targetClient;
-		Logging.info(this, " targetClient " + targetClient);
+		Logging.info(this, " targetClient ", targetClient);
 		if (targetClient.contains(".")) {
 			String[] parts = targetClient.split("\\.");
-			Logging.info(this, " targetClient " + Arrays.toString(parts));
+			Logging.info(this, " targetClient ", Arrays.toString(parts));
 			hostName = parts[0];
 		}
 

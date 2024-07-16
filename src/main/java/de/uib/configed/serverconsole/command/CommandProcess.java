@@ -45,7 +45,7 @@ public class CommandProcess {
 
 	public boolean hasFailed() {
 		boolean failed = exitCode > 1 || errorEncounteredOnStart;
-		Logging.info(this, "Has command failed? " + failed);
+		Logging.info(this, "Has command failed? ", failed);
 		return failed;
 	}
 
@@ -100,7 +100,7 @@ public class CommandProcess {
 	public void onStop(Map<String, Object> message) {
 		String stoppedProcessId = (String) message.get("process_id");
 		exitCode = (int) message.get("exit_code");
-		Logging.info(this, "Command has exited with exit code " + exitCode);
+		Logging.info(this, "Command has exited with exit code ", exitCode);
 		if (stoppedProcessId != null && stoppedProcessId.equals(id)) {
 			finished = true;
 			locker.unlock();
@@ -149,7 +149,7 @@ public class CommandProcess {
 
 		@Override
 		public void run() {
-			Logging.info(this, "Process stop thread initiated with timeout " + processTimeout);
+			Logging.info(this, "Process stop thread initiated with timeout ", processTimeout);
 			Instant now = Instant.now();
 			Duration duration = Duration.between(processStartTime, now);
 			while (true) {

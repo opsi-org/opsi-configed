@@ -31,7 +31,7 @@ public class MyHandshakeCompletedListener implements HandshakeCompletedListener 
 			Logging.error(this, e, "peer's identity wasn't verified");
 		}
 
-		Logging.info(this, "protocol " + protocol + "  peerName " + peerName);
-		Logging.info(this, "cipher suite " + cipherSuite);
+		Logging.info(this, "protocol ", protocol, "  peerName ", peerName);
+		Logging.info(this, "cipher suite ", cipherSuite);
 	}
 }

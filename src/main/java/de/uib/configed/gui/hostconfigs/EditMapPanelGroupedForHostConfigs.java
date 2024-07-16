@@ -266,7 +266,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-				Logging.info(this, " sel path " + selPath);
+				Logging.info(this, " sel path ", selPath);
 				if (selPath != null && isUserRoot(selPath)) {
 					super.maybeShowPopup(e);
 				}
@@ -278,7 +278,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-				Logging.info(this, " sel path " + selPath);
+				Logging.info(this, " sel path ", selPath);
 				if (selPath != null && isRolePath(selPath, false)) {
 					super.maybeShowPopup(e);
 				}
@@ -290,7 +290,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-				Logging.info(this, " sel path " + selPath);
+				Logging.info(this, " sel path ", selPath);
 				if (selPath != null && isRolePath(selPath, true)) {
 					super.maybeShowPopup(e);
 				}
@@ -306,7 +306,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	protected void removeSubpanelClass(String key) {
-		Logging.info(this, "remove " + key + " from " + givenClasses);
+		Logging.info(this, "remove ", key, " from ", givenClasses);
 		givenClasses.remove(key);
 	}
 
@@ -471,7 +471,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		theRoles.add(UserConfig.NONE_PROTOTYPE);
 
 		for (String classkey : new TreeSet<>(partialPanels.keySet())) {
-			Logging.info(this, "classkey " + classkey);
+			Logging.info(this, "classkey ", classkey);
 
 			String role = roleFromRolerootKey(classkey);
 
@@ -485,8 +485,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			}
 		}
 
-		Logging.info(this, "theRoles found " + theRoles);
-		Logging.info(this, "theUsers found " + theUsers);
+		Logging.info(this, "theRoles found ", theRoles);
+		Logging.info(this, "theUsers found ", theUsers);
 
 		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
 			entry.getValue().setEditableFunction(key -> isEditable(key, entry));
@@ -495,7 +495,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// Modification info and some userroles cannot be edited
 	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
-		Logging.info(this, "entry " + partialPanelEntry + " key " + key);
+		Logging.info(this, "entry ", partialPanelEntry, " key ", key);
 
 		boolean result;
 
@@ -508,7 +508,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			result = true;
 		}
 
-		Logging.info(this, "key denied ? " + key + " : " + result);
+		Logging.info(this, "key denied ? ", key, " : ", result);
 		return result;
 	}
 
@@ -650,8 +650,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			public void doAction2() {
 				Logging.info(this, "doAction2");
 				super.doAction2();
-				Logging.info(this, "addUser action, result Text " + getResultText());
-				Logging.info(this, "addUser action, result listelement " + getSelectedListelement());
+				Logging.info(this, "addUser action, result Text ", getResultText());
+				Logging.info(this, "addUser action, result listelement ", getSelectedListelement());
 
 				setUserConfig(getResultText(), getSelectedListelement());
 			}
@@ -671,7 +671,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		f.setSize(new Dimension(500, 400));
 		f.setVisible(true);
 
-		Logging.info(this, "addUser finished, result " + f.getResult());
+		Logging.info(this, "addUser finished, result ", f.getResult());
 
 		if (f.getResult() == 1) {
 			Logging.info(this, "addUser ok");
@@ -698,7 +698,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				persistenceController.getExecutioner().doCall(omc);
 			}
 
-			Logging.info(this, "readyObjects for userparts " + newData.size());
+			Logging.info(this, "readyObjects for userparts ", newData.size());
 		}
 	}
 
@@ -711,8 +711,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			public void doAction2() {
 				Logging.info(this, "doAction2");
 				super.doAction2();
-				Logging.info(this, "addUser action, result Text " + getResultText());
-				Logging.info(this, "addUser action, result listelement " + getSelectedListelement());
+				Logging.info(this, "addUser action, result Text ", getResultText());
+				Logging.info(this, "addUser action, result listelement ", getSelectedListelement());
 
 				setRoleConfig(getResultText(), getSelectedListelement());
 			}
@@ -737,7 +737,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		TreePath p = tree.getSelectionPath();
 
 		if (p != null) {
-			Logging.info(this, "deleteUser path " + p);
+			Logging.info(this, "deleteUser path ", p);
 
 			int startComponentI = USER_START_INDEX;
 			StringBuilder keyB = new StringBuilder(p.getPathComponent(startComponentI).toString());
@@ -747,10 +747,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				keyB.append(p.getPathComponent(i).toString());
 			}
 			String key = keyB.toString();
-			Logging.info(this, "deleteUser, selected user key " + key);
+			Logging.info(this, "deleteUser, selected user key ", key);
 
 			List<String> propertyNames = partialPanels.get(key).getNames();
-			Logging.info(this, "deleteUser, property names " + propertyNames);
+			Logging.info(this, "deleteUser, property names ", propertyNames);
 			for (String name : propertyNames) {
 				((EditMapPanelX) partialPanels.get(key)).removeProperty(name);
 			}
@@ -767,12 +767,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setRoleConfig(String name, String rolename) {
-		Logging.info(this, "setRoleConfig " + name + "," + rolename);
+		Logging.info(this, "setRoleConfig ", name, ",", rolename);
 		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name, rolename);
 	}
 
 	private void setUserConfig(String name, String rolename) {
-		Logging.info(this, "setUserConfig " + name + "," + rolename);
+		Logging.info(this, "setUserConfig ", name, ",", rolename);
 		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addUserConfig(name, rolename);
 	}
 

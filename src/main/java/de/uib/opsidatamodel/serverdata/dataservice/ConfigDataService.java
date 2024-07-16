@@ -166,7 +166,7 @@ public class ConfigDataService {
 
 				deleteItems.add(configItem);
 
-				Logging.info(this, "deleteItem " + configItem);
+				Logging.info(this, "deleteItem ", configItem);
 
 				continue;
 			}
@@ -188,7 +188,7 @@ public class ConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 
-		Logging.info(this, "{ole deleteItems " + deleteItems.size());
+		Logging.info(this, "{ole deleteItems ", deleteItems.size());
 
 		if (!deleteItems.isEmpty()) {
 			OpsiMethodCall omcDeleteItems = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,
@@ -217,7 +217,7 @@ public class ConfigDataService {
 		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + WAN_PARTKEY);
 
-		Logging.info(this, " getWANConfigOptions   " + allWanConfigOptions);
+		Logging.info(this, " getWANConfigOptions   ", allWanConfigOptions);
 
 		Map<String, ConfigOption> notWanConfigOptions = extractSubConfigOptionsByInitial(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + ".");
@@ -246,9 +246,9 @@ public class ConfigDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.WAN_CONFIGURATION, wanConfiguration);
-		Logging.info(this, "getWANConfigOptions wanConfiguration " + wanConfiguration);
+		Logging.info(this, "getWANConfigOptions wanConfiguration ", wanConfiguration);
 		cacheManager.setCachedData(CacheIdentifier.NOT_WAN_CONFIGURATION, notWanConfiguration);
-		Logging.info(this, "getWANConfigOptions notWanConfiguration  " + notWanConfiguration);
+		Logging.info(this, "getWANConfigOptions notWanConfiguration  ", notWanConfiguration);
 
 		return allWanConfigOptions;
 	}
@@ -303,7 +303,7 @@ public class ConfigDataService {
 		}
 
 		timeCheck.stop();
-		Logging.info(this, "retrieveHostConfigs retrieved " + hostConfigs.keySet());
+		Logging.info(this, "retrieveHostConfigs retrieved ", hostConfigs.keySet());
 
 		cacheManager.setCachedData(CacheIdentifier.HOST_CONFIGS, hostConfigs);
 		persistenceController.notifyPanelCompleteWinProducts();
@@ -346,23 +346,23 @@ public class ConfigDataService {
 		}
 
 		for (Entry<String, List<Object>> config : specifiedConfiguration.entrySet()) {
-			Logging.info(this, "addWANConfigState configId " + config.getKey());
+			Logging.info(this, "addWANConfigState configId ", config.getKey());
 			Map<String, Object> item = Utils.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
 
 			item.put(OpsiServiceNOMPersistenceController.CONFIG_ID, config.getKey());
 
-			Logging.info(this, "addWANConfigState values " + config.getValue());
+			Logging.info(this, "addWANConfigState values ", config.getValue());
 
 			item.put(OpsiServiceNOMPersistenceController.VALUES_ID, config.getValue());
 
 			item.put(OpsiServiceNOMPersistenceController.OBJECT_ID, clientId);
 
-			Logging.info(this, "addWANConfigState configId, item " + config.getKey() + ", " + item);
+			Logging.info(this, "addWANConfigState configId, item ", config.getKey(), ", ", item);
 
 			// locally, hopefully the RPC call will work
 			if (getHostConfigsPD().get(clientId) == null) {
-				Logging.info(this, "addWANConfigState; until now, no config(State) existed for client " + clientId
-						+ " no local update");
+				Logging.info(this, "addWANConfigState; until now, no config(State) existed for client ", clientId,
+						" no local update");
 				getHostConfigsPD().put(clientId, new HashMap<>());
 			}
 
@@ -377,7 +377,7 @@ public class ConfigDataService {
 
 	public boolean setWANConfigs(String clientId, boolean wan) {
 		boolean result = false;
-		Logging.info(this, "setWANConfigs " + clientId + " . " + wan);
+		Logging.info(this, "setWANConfigs ", clientId, " . ", wan);
 
 		List<Map<String, Object>> jsonObjects = addWANConfigStates(clientId, wan, null);
 
@@ -400,13 +400,13 @@ public class ConfigDataService {
 			return;
 		}
 
-		Logging.info(this, "setConfig(),  configCollection null " + (configCollection == null));
+		Logging.info(this, "setConfig(),  configCollection null ", (configCollection == null));
 
 		if (configCollection == null || configCollection.isEmpty()) {
 			return;
 		}
 
-		Logging.info(this, "setConfig(),  configCollection size  " + configCollection.size());
+		Logging.info(this, "setConfig(),  configCollection size  ", configCollection.size());
 		// add configId where necessary
 		List<String> usedConfigIds = new ArrayList<>();
 		Map<String, String> typesOfUsedConfigIds = new HashMap<>();
@@ -421,11 +421,11 @@ public class ConfigDataService {
 		List<Object> existingConfigIds = exec
 				.getListResult(new OpsiMethodCall(RPCMethodName.CONFIG_GET_IDENTS, new Object[] {}));
 
-		Logging.info(this, "setConfig(), existingConfigIds: " + existingConfigIds.size());
+		Logging.info(this, "setConfig(), existingConfigIds: ", existingConfigIds.size());
 
 		usedConfigIds.removeAll(existingConfigIds);
 
-		Logging.info(this, "setConfig(), usedConfigIds: " + usedConfigIds);
+		Logging.info(this, "setConfig(), usedConfigIds: ", usedConfigIds);
 		List<Map<String, Object>> createItems = new ArrayList<>();
 		for (String missingId : usedConfigIds) {
 			Map<String, Object> item = Utils.createNOMitem(typesOfUsedConfigIds.get(missingId));
@@ -454,7 +454,7 @@ public class ConfigDataService {
 		retrieveConfigOptionsPD();
 		configCollection.clear();
 
-		Logging.info(this, "setConfig(),  configCollection result: " + configCollection);
+		Logging.info(this, "setConfig(),  configCollection result: ", configCollection);
 	}
 
 	private void updateConfigsOnServer(List<Map<String, Object>> createItems,
@@ -506,7 +506,7 @@ public class ConfigDataService {
 				oldValue = configOptions.get(setting.getKey()).getDefaultValues();
 			}
 
-			Logging.info(this, "setConfig, key, oldValue: " + setting.getKey() + ", " + oldValue);
+			Logging.info(this, "setConfig, key, oldValue: ", setting.getKey(), ", ", oldValue);
 
 			if (!setting.getValue().equals(oldValue)) {
 				Map<String, Object> config = new HashMap<>();
@@ -730,15 +730,15 @@ public class ConfigDataService {
 		}
 
 		Set<String> currentKeys = settings.keySet();
-		Logging.info(this, "setAdditionalConfigurations current keySet size: " + currentKeys.size());
+		Logging.info(this, "setAdditionalConfigurations current keySet size: ", currentKeys.size());
 		if (settings.getRetrieved() != null) {
 			Set<String> retrievedKeys = settings.getRetrieved().keySet();
 
-			Logging.info(this, "setAdditionalConfigurations retrieved keys size  " + retrievedKeys.size());
+			Logging.info(this, "setAdditionalConfigurations retrieved keys size  ", retrievedKeys.size());
 
 			Set<String> removedKeys = new HashSet<>(retrievedKeys);
 			removedKeys.removeAll(currentKeys);
-			Logging.info(this, "setAdditionalConfigurations removed " + removedKeys);
+			Logging.info(this, "setAdditionalConfigurations removed ", removedKeys);
 
 			if (!removedKeys.isEmpty()) {
 				if (deleteConfigStateItems == null) {
@@ -896,14 +896,14 @@ public class ConfigDataService {
 					"getHostBooleanConfigValue key '" + key + "', host '" + hostId + "', global value: " + value);
 			return value;
 		}
-		Logging.info(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostId
-				+ "', returning default value: " + false);
+		Logging.info(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', returning default value: ",
+				false);
 		return false;
 	}
 
 	public Boolean isWanConfigured(String host) {
 		Map<String, List<Object>> wanConfiguration = getWanConfigurationPD();
-		Logging.info(this, " isWanConfigured wanConfiguration  " + wanConfiguration + " for host " + host);
+		Logging.info(this, " isWanConfigured wanConfiguration  ", wanConfiguration, " for host ", host);
 		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
 
@@ -995,7 +995,7 @@ public class ConfigDataService {
 		boolean tested = false;
 		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
 			if (configuration.getValue() == null) {
-				Logging.info(this, "We encountered non BOOL_CONFIG option " + configuration.getKey() + "; We skip it");
+				Logging.info(this, "We encountered non BOOL_CONFIG option ", configuration.getKey(), "; We skip it");
 			} else {
 				tested = valueFromConfigStateAsExpected(getHostConfig(host), configuration.getKey(),
 						(Boolean) (configuration.getValue().get(0)));
@@ -1037,7 +1037,7 @@ public class ConfigDataService {
 	public boolean configureUefiBoot(String clientId, boolean uefiBoot) {
 		boolean result = false;
 
-		Logging.info(this, "configureUefiBoot, clientId " + clientId + " " + uefiBoot);
+		Logging.info(this, "configureUefiBoot, clientId ", clientId + " ", uefiBoot);
 
 		List<String> values = new ArrayList<>();
 
@@ -1067,8 +1067,8 @@ public class ConfigDataService {
 				getHostConfigsPD().put(clientId, new HashMap<>());
 			}
 
-			Logging.info(this,
-					"configureUefiBoot, configs for clientId " + clientId + " " + getHostConfigsPD().get(clientId));
+			Logging.info(this, "configureUefiBoot, configs for clientId ", clientId, " ",
+					getHostConfigsPD().get(clientId));
 			getHostConfigsPD().get(clientId).put(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME, values);
 		}
 
@@ -1076,7 +1076,7 @@ public class ConfigDataService {
 	}
 
 	private boolean setHostBooleanConfigValue(String configId, String hostName, boolean val) {
-		Logging.info(this, "setHostBooleanConfigValue " + hostName + " configId " + configId + " val " + val);
+		Logging.info(this, "setHostBooleanConfigValue ", hostName, " configId ", configId, " val ", val);
 
 		List<Object> values = new ArrayList<>();
 		values.add(val);
@@ -1131,11 +1131,11 @@ public class ConfigDataService {
 
 		Map<String, List<Object>> configDefaultValues = getConfigDefaultValuesPD();
 		if (configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY) == null) {
-			Logging.info(this,
-					"no values found for   " + OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY);
+			Logging.info(this, "no values found for   ",
+					OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY);
 		} else {
-			Logging.info(this, "getDomains "
-					+ configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY));
+			Logging.info(this, "getDomains ",
+					configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY));
 
 			for (Object entry : configDefaultValues
 					.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY)) {
@@ -1146,7 +1146,7 @@ public class ConfigDataService {
 
 		result.add(getOpsiDefaultDomainPD());
 
-		Logging.info(this, "getDomains " + result);
+		Logging.info(this, "getDomains ", result);
 		return new ArrayList<>(result);
 	}
 

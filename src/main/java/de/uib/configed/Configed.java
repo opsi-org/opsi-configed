@@ -96,8 +96,8 @@ public final class Configed {
 
 		// Try with resources so that it will be closed in implicit finally statement
 		try (Formatter formatter = new Formatter()) {
-			Logging.info(
-					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1_000_000));
+			Logging.info(" we get max memory ",
+					formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1_000_000));
 		}
 
 		FOpsiLicenseMissingText.reset();
@@ -120,7 +120,7 @@ public final class Configed {
 		if (extraLocalization != null) {
 			result = extraLocalization.getProperty(key);
 			if (result == null) {
-				Logging.info("extraLocalization.getProperty null for key " + key);
+				Logging.info("extraLocalization.getProperty null for key ", key);
 			}
 		}
 
@@ -377,7 +377,7 @@ public final class Configed {
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
 
 			List<Object> newData = up.produce();
-			Logging.debug("UserConfigProducing: newData " + newData);
+			Logging.debug("UserConfigProducing: newData ", newData);
 
 			Main.endApp(Main.NO_ERROR);
 		} else {
@@ -391,10 +391,10 @@ public final class Configed {
 		File savedStatesDir = null;
 
 		if (savedStatesLocationName != null) {
-			Logging.info("trying to write saved states to " + savedStatesLocationName);
+			Logging.info("trying to write saved states to ", savedStatesLocationName);
 			String directoryName = getSavedStatesDirectoryName(savedStatesLocationName);
 			savedStatesDir = new File(directoryName);
-			Logging.info("writing saved states, created file " + savedStatesDir);
+			Logging.info("writing saved states, created file ", savedStatesDir);
 
 			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
 				Logging.warning("mkdirs for saved states failed, for File ", savedStatesDir);
@@ -412,7 +412,7 @@ public final class Configed {
 		}
 
 		if (savedStatesLocationName == null || Configed.getSavedStates() == null) {
-			Logging.info("writing saved states to " + Utils.getSavedStatesDefaultLocation());
+			Logging.info("writing saved states to ", Utils.getSavedStatesDefaultLocation());
 			savedStatesDir = new File(getSavedStatesDirectoryName(Utils.getSavedStatesDefaultLocation()));
 
 			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {

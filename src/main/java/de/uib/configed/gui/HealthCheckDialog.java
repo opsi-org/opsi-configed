@@ -279,7 +279,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private void zipFiles(String zipFile, List<File> files) {
 		if (zipFile == null || zipFile.isEmpty()) {
-			Logging.info(this, "invalid file name: " + zipFile);
+			Logging.info(this, "invalid file name: ", zipFile);
 			return;
 		}
 

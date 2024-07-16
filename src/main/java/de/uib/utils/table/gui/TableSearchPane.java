@@ -704,7 +704,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * select all rows with value form searchfield, checks the filter
 	 */
 	private void markAllAndFilter() {
-		Logging.info(this, " markAllAndFilter filtering active" + isFiltering());
+		Logging.info(this, " markAllAndFilter filtering active", isFiltering());
 
 		filtermark.setSelected(false);
 		markAll();
@@ -800,7 +800,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	// ----------------------------------
 
 	private void filtermarkEvent() {
-		Logging.info(this, "actionPerformed on filtermark, isFilteredMode " + filtermark.isSelected());
+		Logging.info(this, "actionPerformed on filtermark, isFilteredMode ", filtermark.isSelected());
 
 		// When the filtermark is not pressed it means that this event was not evoked
 		// by a click on the button. Then we want to manually control what happens with our list

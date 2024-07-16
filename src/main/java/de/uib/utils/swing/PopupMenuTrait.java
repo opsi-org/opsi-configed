@@ -145,7 +145,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			break;
 
 		default:
-			Logging.info(this, "popuptype " + p + " not implemented");
+			Logging.info(this, "popuptype ", p, " not implemented");
 			break;
 		}
 	}
@@ -162,7 +162,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	public void setText(int popup, String s) {
 		int i = listPopups.indexOf(popup);
 		if (i < 0) {
-			Logging.info(this, "setText - popup " + popup + " not in list");
+			Logging.info(this, "setText - popup ", popup, " not in list");
 			return;
 		}
 
@@ -172,7 +172,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	public void setToolTipText(int popup, String s) {
 		int i = listPopups.indexOf(popup);
 		if (i < 0) {
-			Logging.info(this, "setToolTipText - popup " + popup + " not in list");
+			Logging.info(this, "setToolTipText - popup ", popup, " not in list");
 			return;
 		}
 

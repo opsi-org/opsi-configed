@@ -142,12 +142,12 @@ public class HostInfoCollections {
 
 		Map<String, Map<String, Object>> masterDepots = cacheManager.getCachedData(CacheIdentifier.MASTER_DEPOTS,
 				Map.class);
-		Logging.info(this, "retrieveOpsiHost found masterDepots " + masterDepots.size());
+		Logging.info(this, "retrieveOpsiHost found masterDepots ", masterDepots.size());
 
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfos = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
 		for (String depot : masterDepots.keySet()) {
-			Logging.info(this, "retrieveOpsiHosts clients in " + depot + ": " + depot2Host2HostInfos.get(depot).size());
+			Logging.info(this, "retrieveOpsiHosts clients in ", depot, ": ", depot2Host2HostInfos.get(depot).size());
 		}
 
 		TreeSet<String> depotNamesSorted = new TreeSet<>(masterDepots.keySet());
@@ -161,10 +161,10 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_NAMES_LIST, depotNamesList);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 
-		Logging.info(this, "retrieveOpsiHosts  HostInfo instances counter " + HostInfo.getInstancesCount());
-		Logging.info(this, "retrieveOpsiHosts  hostnames size "
-				+ cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class).size());
-		Logging.info(this, "retrieveOpsiHosts   depotNamesList size " + depotNamesList.size());
+		Logging.info(this, "retrieveOpsiHosts  HostInfo instances counter ", HostInfo.getInstancesCount());
+		Logging.info(this, "retrieveOpsiHosts  hostnames size ",
+				cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class).size());
+		Logging.info(this, "retrieveOpsiHosts   depotNamesList size ", depotNamesList.size());
 	}
 
 	private void showNoDataDialog(int countHosts) {
@@ -208,7 +208,7 @@ public class HostInfoCollections {
 					.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER);
 
 			if (isConfigserver) {
-				Logging.info(this, "retrieveOpsiHosts  type opsiconfigserver host " + hideOpsiHostKey(host));
+				Logging.info(this, "retrieveOpsiHosts  type opsiconfigserver host ", hideOpsiHostKey(host));
 
 				configServer = name;
 				depotNamesList.add(name);
@@ -240,7 +240,7 @@ public class HostInfoCollections {
 		if (val != null && !"".equals(val)) {
 			try {
 				filepath = new URI((String) val).getPath();
-				Logging.info(this, "retrieveOpsiHosts workbenchpath " + filepath);
+				Logging.info(this, "retrieveOpsiHosts workbenchpath ", filepath);
 			} catch (URISyntaxException netex) {
 				Logging.error(netex, "not a correctly formed file URI: ", val);
 			}
@@ -422,14 +422,14 @@ public class HostInfoCollections {
 		Map<String, HostInfo> mapPCInfomap = cacheManager.getCachedData(CacheIdentifier.MAP_PC_INFO_MAP, Map.class);
 		HostInfo hostInfo = mapPCInfomap.get(clientName);
 
-		Logging.info(this, "setDepot, hostinfo for client " + clientName + " : " + mapPCInfomap.get(clientName));
+		Logging.info(this, "setDepot, hostinfo for client ", clientName, " : ", mapPCInfomap.get(clientName));
 
 		hostInfo.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 
 		Map<String, String> mapPcBelongsToDepot = cacheManager.getCachedData(CacheIdentifier.MAP_PC_BELONGS_TO_DEPOT,
 				Map.class);
 		String oldDepot = mapPcBelongsToDepot.get(clientName);
-		Logging.info(this, "setDepot clientName, oldDepot " + clientName + ", " + oldDepot);
+		Logging.info(this, "setDepot clientName, oldDepot ", clientName, ", ", oldDepot);
 		mapPcBelongsToDepot.put(clientName, depotId);
 		cacheManager.setCachedData(CacheIdentifier.MAP_PC_BELONGS_TO_DEPOT, mapPcBelongsToDepot);
 
@@ -502,7 +502,7 @@ public class HostInfoCollections {
 		if (mapPCInfomap != null && mapPCInfomap.get(hostId) != null) {
 			mapPCInfomap.get(hostId).put(property, value);
 			cacheManager.setCachedData(CacheIdentifier.MAP_PC_INFO_MAP, mapPCInfomap);
-			Logging.info(this, "updateLocalHostInfo " + hostId + " - " + property + " : " + value);
+			Logging.info(this, "updateLocalHostInfo ", hostId, " - ", property, " : ", value);
 		}
 	}
 

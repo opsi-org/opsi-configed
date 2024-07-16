@@ -134,7 +134,7 @@ public class LicenseDataService {
 					contractSet.add(entry.getId());
 				}
 			}
-			Logging.info(this, "contractsToNotify " + contractsToNotify);
+			Logging.info(this, "contractsToNotify ", contractsToNotify);
 		}
 		cacheManager.setCachedData(CacheIdentifier.LICENSE_CONTRACTS, licenseContracts);
 		cacheManager.setCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, contractsToNotify);
@@ -260,8 +260,8 @@ public class LicenseDataService {
 	}
 
 	public boolean executeCollectedDeletionsLicenseUsage() {
-		Logging.info(this, "executeCollectedDeletionsLicenseUsage itemsDeletionLicenseUsage == null "
-				+ (itemsDeletionLicenseUsage == null));
+		Logging.info(this, "executeCollectedDeletionsLicenseUsage itemsDeletionLicenseUsage == null ",
+				itemsDeletionLicenseUsage == null);
 		boolean result = false;
 		if (itemsDeletionLicenseUsage == null) {
 			result = true;
@@ -324,8 +324,8 @@ public class LicenseDataService {
 				LicenseUsageEntry rowmap = rowsLicensesUsage.get(key);
 				rowsLicensesUsage.remove(key);
 				fClient2LicensesUsageList.get(hostId).remove(rowmap);
-				Logging.info(this,
-						"deleteLicenseUsage check fClient2LicensesUsageList " + fClient2LicensesUsageList.get(hostId));
+				Logging.info(this, "deleteLicenseUsage check fClient2LicensesUsageList ",
+						fClient2LicensesUsageList.get(hostId));
 			}
 		}
 
@@ -358,14 +358,14 @@ public class LicenseDataService {
 	public Map<String, Map<String, String>> getRelationsProductId2LPool() {
 		Map<String, Map<String, String>> rowsLicensePoolXOpsiProduct = new HashMap<>();
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			Logging.info(this, "licensePoolXOpsiProduct size " + getLicensePoolXOpsiProductPD().size());
+			Logging.info(this, "licensePoolXOpsiProduct size ", getLicensePoolXOpsiProductPD().size());
 			for (StringValuedRelationElement element : getLicensePoolXOpsiProductPD()) {
 				rowsLicensePoolXOpsiProduct
 						.put(Utils.pseudokey(new String[] { element.get(LicensePoolXOpsiProduct.LICENSE_POOL_KEY),
 								element.get(LicensePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);
 			}
 		}
-		Logging.info(this, "rowsLicensePoolXOpsiProduct size " + rowsLicensePoolXOpsiProduct.size());
+		Logging.info(this, "rowsLicensePoolXOpsiProduct size ", rowsLicensePoolXOpsiProduct.size());
 		return rowsLicensePoolXOpsiProduct;
 	}
 
@@ -463,7 +463,7 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteLicensePool(String licensePoolId) {
-		Logging.info(this, "deleteLicensePool " + licensePoolId);
+		Logging.info(this, "deleteLicensePool ", licensePoolId);
 
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;

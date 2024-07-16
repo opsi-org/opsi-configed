@@ -161,14 +161,14 @@ public class PanelProductProperties extends JSplitPane {
 		}
 
 		private void updateInfoPane(int row) {
-			Logging.info(this, "selected  row " + row);
+			Logging.info(this, "selected  row ", row);
 
 			if (row == -1) {
 				depotsOfPackage.clear();
 			} else {
 				String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
 
-				Logging.info(this, "selected  product: " + productEdited);
+				Logging.info(this, "selected  product: ", productEdited);
 
 				String versionInfo = OpsiPackage.produceVersionInfo(
 						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
@@ -178,7 +178,7 @@ public class PanelProductProperties extends JSplitPane {
 						.getProduct2VersionInfo2DepotsPD()
 						.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
-				Logging.info(this, "valueChanged  versionInfo " + versionInfo);
+				Logging.info(this, "valueChanged  versionInfo ", versionInfo);
 
 				depotsOfPackage = new LinkedList<>();
 

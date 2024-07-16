@@ -60,7 +60,7 @@ public class OpsiProductInfo extends OpsiPackage {
 		try {
 			priority = Integer.valueOf("" + m.get(SERVICE_KEY_PRIORITY));
 		} catch (NumberFormatException ex) {
-			Logging.info(this.getClass(), "no priority " + m.get(SERVICE_KEY_PRIORITY));
+			Logging.info(this.getClass(), "no priority ", m.get(SERVICE_KEY_PRIORITY));
 		}
 
 		hasUserLoginScript = m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null

@@ -70,7 +70,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
-			Logging.info(this, "removing specific value for key " + key);
+			Logging.info(this, "removing specific value for key ", key);
 			// signal removal of entry to persistence modul
 			mapTableModel.removeEntry(key);
 
@@ -90,7 +90,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private class SettingDefaultValuesHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
-			Logging.info(this, "setting default value for key " + key);
+			Logging.info(this, "setting default value for key ", key);
 			// signal removal of entry to persistence modul
 			mapTableModel.removeEntry(key);
 
@@ -524,25 +524,25 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	 * @param String key - the key to delete
 	 */
 	public void removeProperty(String key) {
-		Logging.info(this, " EditMapPanelX instance No " + objectCounter + "::" + " removeProperty for key " + key
-				+ " via  handler " + propertyHandler);
+		Logging.info(this, " EditMapPanelX instance No ", objectCounter, "::", " removeProperty for key ", key,
+				" via  handler ", propertyHandler);
 
 		propertyHandler.removeValue(key);
 
-		Logging.info(this, " EditMapPanelX instance No " + objectCounter + "::" + " handled removeProperty for key "
-				+ key + " options " + optionsMap.get(key));
+		Logging.info(this, " EditMapPanelX instance No ", objectCounter, "::", " handled removeProperty for key ", key,
+				" options ", optionsMap.get(key));
 
 		Object defaultValue = defaultsMap.get(key);
 
 		if (defaultValue == null) {
-			Logging.info(this, "there was no default value for " + key);
+			Logging.info(this, "there was no default value for ", key);
 		} else {
-			Logging.info(this, "handled removeProperty for key " + key + " default value  " + defaultValue
-					+ " - should be identical with - " + optionsMap.get(key).getDefaultValues());
+			Logging.info(this, "handled removeProperty for key ", key, " default value  ", defaultValue,
+					" - should be identical with - ", optionsMap.get(key).getDefaultValues());
 		}
 
 		names = mapTableModel.getKeys();
-		Logging.info(this, "removeProperty names left: " + names);
+		Logging.info(this, "removeProperty names left: ", names);
 	}
 
 	private void stopEditing() {

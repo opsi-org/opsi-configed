@@ -33,7 +33,7 @@ public class MapSource implements TableSource {
 	protected boolean reloadRequested;
 
 	public MapSource(List<String> columnNames, Map<String, Map<String, Object>> table, boolean rowCounting) {
-		Logging.info(this.getClass(), "constructed with cols " + columnNames);
+		Logging.info(this.getClass(), "constructed with cols ", columnNames);
 		this.columnNames = columnNames;
 		this.table = table;
 		this.rowCounting = rowCounting;
@@ -44,7 +44,7 @@ public class MapSource implements TableSource {
 	private void init() {
 		setRowCounting(rowCounting);
 		if (rowCounting) {
-			Logging.info(this, "completed to cols " + columnNames);
+			Logging.info(this, "completed to cols ", columnNames);
 		}
 		rows = new ArrayList<>();
 	}
@@ -81,9 +81,9 @@ public class MapSource implements TableSource {
 					vRow.add("" + rowCount);
 				} else {
 					vRow.add("");
-					Logging.info(this,
-							"fetchData row " + mRow + " ob == null, possibly the column name is not correct, column "
-									+ i + ", " + columnNames.get(i));
+					Logging.info(this, "fetchData row ", mRow,
+							" ob == null, possibly the column name is not correct, column ", i, ", ",
+							columnNames.get(i));
 				}
 			}
 
@@ -106,7 +106,7 @@ public class MapSource implements TableSource {
 	public List<List<Object>> retrieveRows() {
 		Logging.info(this, " -- retrieveRows");
 		fetchData();
-		Logging.info(this, " -- retrieveRows rows.size() " + rows.size());
+		Logging.info(this, " -- retrieveRows rows.size() ", rows.size());
 		return rows;
 	}
 

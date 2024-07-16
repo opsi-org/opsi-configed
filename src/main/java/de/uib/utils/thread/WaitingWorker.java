@@ -73,8 +73,8 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		}
 
 		Logging.info(this,
-				" doInBackground finished: ready, stopped, elapsedMillis < waitingSleeper.getWaitingMillis() " + ready
-						+ ", " + stopped + ", " + (elapsedMillis >= waitingSleeper.getWaitingMillis()));
+				" doInBackground finished: ready, stopped, elapsedMillis < waitingSleeper.getWaitingMillis() ", ready,
+				", ", stopped, ", ", elapsedMillis >= waitingSleeper.getWaitingMillis());
 
 		if (timeoutReached) {
 			Logging.warning(this, " doInBackground finished, timeoutReached");
@@ -99,7 +99,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		Logging.debug(this, "process, millis " + millis);
 		double proportion = ((double) millis) / (double) waitingSleeper.getOneProgressBarLengthWaitingMillis();
-		Logging.info(this, "process, millis/estimatedTotalWaitMillis  " + proportion);
+		Logging.info(this, "process, millis/estimatedTotalWaitMillis  ", proportion);
 
 		int portion = (int) (barLength * proportion);
 		portion = portion % barLength;
@@ -114,7 +114,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	//
 	@Override
 	public void done() {
-		Logging.info(this, "done,  stopped is " + stopped);
+		Logging.info(this, "done,  stopped is ", stopped);
 		if (!stopped) {
 			waitingSleeper.actAfterWaiting();
 		}

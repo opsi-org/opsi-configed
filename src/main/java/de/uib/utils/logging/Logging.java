@@ -153,7 +153,7 @@ public final class Logging {
 
 			logDirectoryName = logDirectory.getAbsolutePath();
 
-			info("Logging directory is: " + logDirectoryName);
+			info("Logging directory is: ", logDirectoryName);
 
 			logDirectory.mkdirs();
 
@@ -425,14 +425,6 @@ public final class Logging {
 		log(LEVEL_DEBUG, mesg);
 	}
 
-	public static void info(Object caller, String mesg) {
-		log(caller, LEVEL_INFO, mesg);
-	}
-
-	public static void info(String mesg) {
-		log(LEVEL_INFO, mesg);
-	}
-
 	public static void clearErrorList() {
 		errorList.clear();
 	}
@@ -449,7 +441,7 @@ public final class Logging {
 
 		int errorCount = errorList.size();
 
-		info("error list size " + errorCount);
+		info("error list size ", errorCount);
 
 		if (errorCount == 0) {
 			return;

@@ -327,7 +327,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 	}
 
 	private void updateLists(String selectedCommand) {
-		Logging.info(this, "updateLists selectedCommand " + selectedCommand);
+		Logging.info(this, "updateLists selectedCommand ", selectedCommand);
 		jComboBoxMenuText.removeAllItems();
 		jComboBoxParentMenuText.removeAllItems();
 
@@ -354,7 +354,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 	}
 
 	private void updateSelectedCommand(String menuText) {
-		Logging.info(this, "updateSelectedCommand menuText " + menuText);
+		Logging.info(this, "updateSelectedCommand menuText ", menuText);
 		if (menuText == null || menuText.isEmpty() || menuText.equals(CommandFactory.MENU_NEW)) {
 			updateComponents(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS, "", CommandFactory.DEFAULT_POSITION, "");
 		} else {
@@ -484,7 +484,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 
 		if (jComboBoxMenuText.getSelectedItem() != null
 				&& !((String) jComboBoxMenuText.getSelectedItem()).trim().equals(CommandFactory.MENU_NEW)) {
-			Logging.info(this, "canCommandBeSaved menuText " + jComboBoxMenuText.getSelectedItem());
+			Logging.info(this, "canCommandBeSaved menuText ", jComboBoxMenuText.getSelectedItem());
 			MultiCommandTemplate tempCommand = getCommandNow();
 			Logging.debug(this, "canCommandBeSaved command " + tempCommand);
 			if (tempCommand == null) {

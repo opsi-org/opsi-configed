@@ -541,7 +541,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		int order = 0;
 		saveDomains.add("" + order + ":" + selectedDomain);
 		editableDomains.add(selectedDomain);
-		Logging.info(this, "createClient domains" + domains);
+		Logging.info(this, "createClient domains", domains);
 
 		domains.remove(selectedDomain);
 
@@ -686,7 +686,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	}
 
 	private static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
-		Logging.info("createCSVImportDataDialog for file " + csvFile);
+		Logging.info("createCSVImportDataDialog for file ", csvFile);
 		List<String> columnNames = HostInfo.getKeysForCSV();
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
 		try {

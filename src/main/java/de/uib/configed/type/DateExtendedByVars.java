@@ -40,7 +40,7 @@ public final class DateExtendedByVars extends Date {
 		i++;
 
 		if (i > s.length()) {
-			Logging.info("OpsiDataDateMatcher interpretVar \"" + CHAR_DELIMITER + "\" found at end of string");
+			Logging.info("OpsiDataDateMatcher interpretVar \"", CHAR_DELIMITER, "\" found at end of string");
 			return s;
 		}
 
@@ -52,7 +52,7 @@ public final class DateExtendedByVars extends Date {
 		Logging.debug("OpsiDataDateMatcher interpretVar replaceContent " + replaceContent);
 
 		if (!replaceContent.startsWith(MINUS)) {
-			Logging.info("OpsiDataDateMatcher interpretVar expected: \"" + MINUS + "\"");
+			Logging.info("OpsiDataDateMatcher interpretVar expected: \"", MINUS, "\"");
 			return s;
 		}
 
@@ -63,7 +63,7 @@ public final class DateExtendedByVars extends Date {
 		try {
 			subtrahend = Integer.valueOf(subtrahendS);
 		} catch (NumberFormatException ex) {
-			Logging.info("OpsiDataDateMatcher interpretVar not a number: " + subtrahendS + ", error: " + ex);
+			Logging.info("OpsiDataDateMatcher interpretVar not a number: ", subtrahendS, ", error: ", ex);
 			return s;
 		}
 

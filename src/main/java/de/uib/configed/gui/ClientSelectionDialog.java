@@ -160,7 +160,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	public void loadSearch(String name) {
-		Logging.info(this, "loadSearch " + name);
+		Logging.info(this, "loadSearch ", name);
 
 		manager.loadSearch(name);
 		loadFromManager();
@@ -884,9 +884,9 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	 * start the client filtering.
 	 */
 	private void collectData() {
-		Logging.info(this, "collectData  complexElements " + complexElements);
+		Logging.info(this, "collectData  complexElements ", complexElements);
 		manager.clearOperations();
-		Logging.info(this, "collectData  complexElements " + complexElements);
+		Logging.info(this, "collectData  complexElements ", complexElements);
 		repairParentheses();
 		for (ComplexGroup complex : complexElements) {
 			OperationWithStatus groupStatus;
@@ -1101,7 +1101,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		while (complexIterator.hasNext()) {
 			ComplexGroup group = complexIterator.next();
 
-			Logging.info(this, "removing group of type " + group.type);
+			Logging.info(this, "removing group of type ", group.type);
 
 			if (group.removeButton == e.getSource()) {
 				contentPane.remove(group.topLabel);

@@ -310,14 +310,14 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private String doActionGetVersions() {
 		String dir = Utils.getServerPathFromWebDAVPath((String) jComboBoxMainDir.getEditor().getItem())
 				+ "OPSI/control";
-		Logging.info(this, "doActionGetVersions, dir " + dir);
+		Logging.info(this, "doActionGetVersions, dir ", dir);
 		SingleCommandTemplate getVersions = new SingleCommandTemplate(
 				GET_VERSIONS_COMMAND.replace(DIRECTORY_REPLACEMENT_PATTERN, dir));
 		CommandExecutor executor = new CommandExecutor(configedMain, getVersions);
 		executor.setWithGUI(false);
-		Logging.info(this, "doActionGetVersions, command " + getVersions);
+		Logging.info(this, "doActionGetVersions, command ", getVersions);
 		String result = executor.execute();
-		Logging.info(this, "doActionGetVersions result " + result);
+		Logging.info(this, "doActionGetVersions result ", result);
 
 		if (result == null || result.isEmpty()) {
 			Logging.warning(this, "doActionGetVersions, could not find versions in file ", dir,
@@ -325,9 +325,9 @@ public class MakeProductFileDialog extends FGeneralDialog {
 					"Please also check the rights of the file/s.");
 		} else {
 			String[] versions = result.replace("version: ", "").split("\n");
-			Logging.info(this, "doActionGetVersions, getDirectories result " + Arrays.toString(versions));
+			Logging.info(this, "doActionGetVersions, getDirectories result ", Arrays.toString(versions));
 			if (versions.length < 1) {
-				Logging.info(this, "doActionGetVersions, not expected versions array " + Arrays.toString(versions));
+				Logging.info(this, "doActionGetVersions, not expected versions array ", Arrays.toString(versions));
 				return "";
 			}
 			return versions[0] + ";;;" + versions[1];
@@ -425,7 +425,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		}
 		commands.addCommand(opsiMakeProductFileCommand);
 
-		Logging.info(this, "Start Commands " + commands);
+		Logging.info(this, "Start Commands ", commands);
 		new Thread() {
 			@Override
 			public void run() {

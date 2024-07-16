@@ -131,7 +131,7 @@ public class SelectionManager {
 			Logging.info(this, "Nothing selected");
 			return new ArrayList<>();
 		} else {
-			Logging.info("\n" + operation.printOperation(""));
+			Logging.info("\n", operation.printOperation(""));
 		}
 
 		long startTime = System.nanoTime();
@@ -144,8 +144,8 @@ public class SelectionManager {
 	// it should be checked before if operation is null
 	private List<String> selectClientsLocal(AbstractSelectOperation operation) {
 		ExecutableOperation selectOperation = backend.createExecutableOperation(operation);
-		Logging.info(this, "selectClients, operation " + operation.getClassName());
-		Logging.info(this, "" + ((AbstractSelectGroupOperation) operation).getChildOperations().size());
+		Logging.info(this, "selectClients, operation ", operation.getClassName());
+		Logging.info(this, "", ((AbstractSelectGroupOperation) operation).getChildOperations().size());
 		return backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
 	}
 
@@ -187,13 +187,13 @@ public class SelectionManager {
 
 	/** Load the given search. It will replace the current operation tree. */
 	public void loadSearch(String name) {
-		Logging.info(this, "loadSearch " + name);
+		Logging.info(this, "loadSearch ", name);
 		clearOperations();
 		if (name == null || name.isEmpty()) {
 			isSerializedLoaded = false;
 			return;
 		}
-		Logging.info(this, "setSearch " + name);
+		Logging.info(this, "setSearch ", name);
 		setSearch(serializer.load(name));
 	}
 

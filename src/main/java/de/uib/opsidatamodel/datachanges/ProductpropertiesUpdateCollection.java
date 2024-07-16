@@ -41,8 +41,8 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		if (!collection.isEmpty()) {
 			Iterator<? extends UpdateCommand> it = collection.iterator();
 			Object obj = it.next();
-			Logging.info(this, "addAll on collection of size " + collection.size() + " of type " + obj.getClass()
-					+ " should produce values for all " + clients.size() + " hosts");
+			Logging.info(this, "addAll on collection of size ", collection.size(), " of type ", obj.getClass(),
+					" should produce values for all ", clients.size(), " hosts");
 		}
 
 		if (collection.size() != clients.size()) {
@@ -94,7 +94,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			if (updateCommand instanceof ProductpropertiesUpdate productpropertiesUpdate) {
 				productpropertiesUpdate.revert();
 			} else {
-				Logging.info(this, "revert: not a ProductpropertiesUpdate : " + updateCommand);
+				Logging.info(this, "revert: not a ProductpropertiesUpdate : ", updateCommand);
 			}
 		}
 	}

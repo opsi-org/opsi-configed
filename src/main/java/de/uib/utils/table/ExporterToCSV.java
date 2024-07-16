@@ -40,8 +40,8 @@ public class ExporterToCSV extends AbstractExportTable {
 
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
-		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
-				+ "\", " + "\"" + CSV_SEPARATOR + "\"");
+		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep ", "\"", fileName, "\", ", onlySelectedRows,
+				"\", ", "\"", CSV_SEPARATOR, "\"");
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null) {

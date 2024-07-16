@@ -77,7 +77,7 @@ public class UserOpsipermission extends UserConfigModule {
 				PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE);
 		CORRESPONDENCE_TO_LIST_KEYS.put(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED,
 				PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE);
-		Logging.info(" CORRESPONDENCE_TO_LIST_KEYS " + CORRESPONDENCE_TO_LIST_KEYS);
+		Logging.info(" CORRESPONDENCE_TO_LIST_KEYS ", CORRESPONDENCE_TO_LIST_KEYS);
 	}
 
 	public static final Set<String> LIST_KEYS = Set.of(CORRESPONDENCE_TO_LIST_KEYS.values().toArray(String[]::new));
@@ -101,7 +101,7 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public UserOpsipermission(String uname) {
 		super(uname);
-		Logging.info(this.getClass(),
-				"created for username " + uname + " with " + super.getBooleanMap() + " -- " + super.getValuesMap());
+		Logging.info(this.getClass(), "created for username ", uname, " with ", super.getBooleanMap(), " -- ",
+				super.getValuesMap());
 	}
 }

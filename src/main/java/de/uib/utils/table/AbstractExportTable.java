@@ -119,7 +119,7 @@ public abstract class AbstractExportTable {
 				int answer = fChoice.getResult();
 
 				result = null;
-				Logging.info(this, "checkSelection answered " + answer);
+				Logging.info(this, "checkSelection answered ", answer);
 				if (answer == 1) {
 					result = true;
 				} else if (answer == 2) {
@@ -129,7 +129,7 @@ public abstract class AbstractExportTable {
 				}
 			}
 		}
-		Logging.info(this, "checkSelection gives: onlySelectedRows = " + result);
+		Logging.info(this, "checkSelection gives: onlySelectedRows = ", result);
 
 		return result;
 	}
@@ -200,7 +200,7 @@ public abstract class AbstractExportTable {
 	protected String getFileLocation() {
 		String fileName = null;
 
-		Logging.info(this, "getFileLocation with writeToFile " + writeToFile);
+		Logging.info(this, "getFileLocation with writeToFile ", writeToFile);
 
 		File defaultFile = new File(writeToFile);
 
@@ -215,7 +215,7 @@ public abstract class AbstractExportTable {
 		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("buttonOK"));
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
-			Logging.info(this, "clicked ok on JFileChosser, get now fileName: " + fileName);
+			Logging.info(this, "clicked ok on JFileChosser, get now fileName: ", fileName);
 		}
 
 		if (fileName != null) {

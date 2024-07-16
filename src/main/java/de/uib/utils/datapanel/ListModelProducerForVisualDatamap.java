@@ -74,7 +74,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 			return listmodels.get(row);
 		}
 
-		Logging.info(this, "getListModel, row " + row + ", column " + column);
+		Logging.info(this, "getListModel, row ", row, ", column ", column);
 
 		// build listmodel
 
@@ -83,8 +83,8 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		ListCellOptions options = getListCellOptions(key);
 
 		List<Object> values = options.getPossibleValues();
-		Logging.info(this, "getListModel key " + key + " the option values " + values);
-		Logging.info(this, "getListModel key " + key + " options  " + options);
+		Logging.info(this, "getListModel key ", key, " the option values ", values);
+		Logging.info(this, "getListModel key ", key, " options  ", options);
 
 		DefaultListModel<Object> model = new DefaultListModel<>();
 		Iterator<? extends Object> iter = values.iterator();
