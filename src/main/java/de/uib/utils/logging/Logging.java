@@ -224,17 +224,24 @@ public final class Logging {
 		return "" + c.size();
 	}
 
-	public static synchronized void log(int level, String mesg, Object caller, Throwable ex) {
+	public static synchronized void log(int level, Object caller, Throwable ex, String message, Object... mesg) {
 		if (level > logLevelConsole && level > logLevelFile) {
 			return;
 		}
 
+		StringBuilder result = new StringBuilder(message);
+		for (Object o : mesg) {
+			result.append(o);
+		}
+
+		String loggingMessage = result.toString();
+
 		String currentTime = formatter.format(LocalDateTime.now());
 		String context = Thread.currentThread().getName();
 		if (caller instanceof Class) {
-			mesg += "   (" + ((Class<?>) caller).getName() + ")";
+			loggingMessage += "   (" + ((Class<?>) caller).getName() + ")";
 		} else if (caller != null) {
-			mesg += "   (" + caller.getClass().getName() + ")";
+			loggingMessage += "   (" + caller.getClass().getName() + ")";
 		} else {
 			// Do nothing if caller is null
 		}
@@ -250,7 +257,7 @@ public final class Logging {
 			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
 					"\033[0m");
 
-			System.err.println(String.format(format, level, currentTime, context, mesg) + exMesg);
+			System.err.println(String.format(format, level, currentTime, context, loggingMessage) + exMesg);
 		}
 
 		if (level <= logLevelFile) {
@@ -258,27 +265,14 @@ public final class Logging {
 				initLogFile();
 			}
 			if (logFileWriter != null) {
-				logFileWriter.println(String.format(logFormat, level, currentTime, context, mesg) + exMesg);
+				logFileWriter.println(String.format(logFormat, level, currentTime, context, loggingMessage) + exMesg);
 				logFileWriter.flush();
 			}
 		}
 
 		if (showOnGUI(level)) {
-			addErrorToList(mesg, currentTime);
+			addErrorToList(loggingMessage, currentTime);
 		}
-	}
-
-	public static synchronized void log(int level, Object caller, Throwable ex, String message, Object... mesg) {
-		if (level > logLevelConsole && level > logLevelFile) {
-			return;
-		}
-
-		StringBuilder result = new StringBuilder(message);
-		for (Object o : mesg) {
-			result.append(o);
-		}
-
-		log(level, result.toString(), caller, ex);
 	}
 
 	public static synchronized void log(int level, Object caller, Throwable ex, Object... mesg) {
@@ -399,22 +393,6 @@ public final class Logging {
 
 	public static void devel(String message, Object... mesg) {
 		essential(message, mesg);
-	}
-
-	public static void log(Object caller, int level, String mesg, Throwable ex) {
-		log(level, mesg, caller, ex);
-	}
-
-	public static void log(Object caller, int level, String mesg) {
-		log(level, mesg, caller, null);
-	}
-
-	public static void log(int level, String mesg, Throwable ex) {
-		log(level, mesg, null, ex);
-	}
-
-	public static void log(int level, String mesg) {
-		log(level, mesg, null, (Throwable) null);
 	}
 
 	public static void clearErrorList() {

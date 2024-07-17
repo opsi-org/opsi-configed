@@ -7,7 +7,6 @@
 package de.uib.utils.logging;
 
 public class TimeCheck {
-	private static int loglevel = Logging.LEVEL_NOTICE;
 	private static final int MAX_SHOWN = 500;
 
 	private Object caller;
@@ -22,7 +21,7 @@ public class TimeCheck {
 	private static String shorten(String s) {
 		String result = "";
 		if (s != null) {
-			if (s.length() >= MAX_SHOWN && loglevel < Logging.LEVEL_DEBUG) {
+			if (s.length() >= MAX_SHOWN) {
 				result = s.substring(0, MAX_SHOWN);
 				result = result + " ... ";
 			} else {
@@ -35,7 +34,7 @@ public class TimeCheck {
 
 	public TimeCheck start() {
 		startmillis = System.currentTimeMillis();
-		Logging.log(caller, loglevel, "started: " + mesg + " ");
+		Logging.notice(caller, "started: ", mesg, " ");
 		return this;
 	}
 
@@ -49,6 +48,6 @@ public class TimeCheck {
 			info = mesg;
 		}
 		long endmillis = System.currentTimeMillis();
-		Logging.log(caller, loglevel, "ended (" + (endmillis - startmillis) + " ms): " + info);
+		Logging.notice(caller, "ended (", endmillis - startmillis, " ms): ", info);
 	}
 }
