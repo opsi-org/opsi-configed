@@ -61,10 +61,6 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonExecute);
 	}
 
-	protected void reload() {
-		configedMain.reload();
-	}
-
 	private void cancel() {
 		super.doAction1();
 	}
