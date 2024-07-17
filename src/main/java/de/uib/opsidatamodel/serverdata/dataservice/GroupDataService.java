@@ -92,11 +92,11 @@ public class GroupDataService {
 				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }),
 				"ident", new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" }));
-		Logging.debug(this, "getHostGroups " + result);
+		Logging.debug(this, "getHostGroups ", result);
 		result = result.addSpecialGroups();
-		Logging.debug(this, "getHostGroups " + result);
+		Logging.debug(this, "getHostGroups ", result);
 		result.alterToWorkingVersion();
-		Logging.debug(this, "getHostGroups rebuilt" + result);
+		Logging.debug(this, "getHostGroups rebuilt", result);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, result);
 	}
 
@@ -121,7 +121,7 @@ public class GroupDataService {
 			} else if (entry.get("type").equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
 				productGroupsList.add(entry);
 			} else {
-				Logging.warning(this, "Unexpected type: " + entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
+				Logging.warning(this, "Unexpected type: ", entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
 			}
 		}
 
@@ -131,11 +131,11 @@ public class GroupDataService {
 				new String[] { "groupId", "parentGroupId", "description" });
 
 		HostGroups hostGroups = new HostGroups(source);
-		Logging.debug(this, "getHostGroups " + hostGroups);
+		Logging.debug(this, "getHostGroups ", hostGroups);
 		hostGroups = hostGroups.addSpecialGroups();
-		Logging.debug(this, "getHostGroups " + hostGroups);
+		Logging.debug(this, "getHostGroups ", hostGroups);
 		hostGroups.alterToWorkingVersion();
-		Logging.debug(this, "getHostGroups rebuilt" + hostGroups);
+		Logging.debug(this, "getHostGroups rebuilt", hostGroups);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, hostGroups);
 
 		// Load data for productGroups
@@ -217,8 +217,8 @@ public class GroupDataService {
 			} else if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
 				productGroupsList.add(entry);
 			} else {
-				Logging.warning(this, "Unexpected " + Object2GroupEntry.GROUP_TYPE_KEY + ": "
-						+ entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
+				Logging.warning(this, "Unexpected ", Object2GroupEntry.GROUP_TYPE_KEY, ": ",
+						entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
 			}
 		}
 
@@ -265,7 +265,7 @@ public class GroupDataService {
 			return false;
 		}
 
-		Logging.info(this, "addHosts2Group hosts " + objectIds + " group " + groupId);
+		Logging.info(this, "addHosts2Group hosts ", objectIds, " group ", groupId);
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
 		List<Map<String, Object>> data = new ArrayList<>();
 
@@ -277,7 +277,7 @@ public class GroupDataService {
 			data.add(item);
 		}
 
-		Logging.info(this, "addHosts2Group persistentGroupId " + persistentGroupId);
+		Logging.info(this, "addHosts2Group persistentGroupId ", persistentGroupId);
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS, new Object[] { data });
 		return exec.doCall(omc);
 	}
@@ -287,7 +287,7 @@ public class GroupDataService {
 			return false;
 		}
 
-		Logging.info(this, "addHost2Groups host " + objectId + " groups " + groupIds);
+		Logging.info(this, "addHost2Groups host ", objectId, " groups ", groupIds);
 		List<Map<String, Object>> data = new ArrayList<>();
 
 		for (String groupId : groupIds) {
@@ -309,7 +309,7 @@ public class GroupDataService {
 		}
 
 		String persistentGroupId = ClientTree.translateToPersistentName(groupId);
-		Logging.debug(this, "addObject2Group persistentGroupId " + persistentGroupId);
+		Logging.debug(this, "addObject2Group persistentGroupId ", persistentGroupId);
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE,
 				new String[] { groupType, persistentGroupId, objectId });
@@ -384,7 +384,7 @@ public class GroupDataService {
 		parentId = ClientTree.translateToPersistentName(parentId);
 
 		if (id.equalsIgnoreCase(parentId)) {
-			Logging.error(this, "Cannot add group as child to itself, group ID " + id);
+			Logging.error(this, "Cannot add group as child to itself, group ID ", id);
 			return false;
 		}
 
@@ -450,7 +450,7 @@ public class GroupDataService {
 		parentGroupId = ClientTree.translateToPersistentName(parentGroupId);
 		updateInfo.put("parentGroupId", parentGroupId);
 
-		Logging.debug(this, "updateGroup " + parentGroupId);
+		Logging.debug(this, "updateGroup ", parentGroupId);
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GROUP_UPDATE_OBJECT, new Object[] { updateInfo });
 		boolean result = exec.doCall(omc);

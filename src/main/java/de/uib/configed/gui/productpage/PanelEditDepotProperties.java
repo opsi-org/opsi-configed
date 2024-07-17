@@ -164,7 +164,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		Logging.info(this, "setDepotListData for count depots " + depots.size());
+		Logging.info(this, "setDepotListData for count depots ", depots.size());
 
 		this.productEdited = productEdited;
 		listDepots.setListData(depots.toArray(new String[0]));
@@ -200,9 +200,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 						.getDepot2product2propertiesPD().get(depot);
 
 				if (product2properties == null) {
-					Logging.info(this, " product2properties null for depot " + depot);
+					Logging.info(this, " product2properties null for depot ", depot);
 				} else if (product2properties.get(productEdited) == null) {
-					Logging.info(this, " product2properties null for depot, product " + depot + ", " + productEdited);
+					Logging.info(this, " product2properties null for depot, product ", depot, ", ", productEdited);
 				} else {
 					storableProperties.add(product2properties.get(productEdited));
 				}
@@ -261,8 +261,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		for (int i = 1; i < depots.size(); i++) {
 			properties = depot2product2properties.get(depots.get(i)).get(productId);
 			if (properties == null) {
-				Logging.info(this,
-						"mergeProperties, product on depot has not properties " + productId + " on " + depots.get(i));
+				Logging.info(this, "mergeProperties, product on depot has not properties ", productId, " on ",
+						depots.get(i));
 				continue;
 			}
 
@@ -308,7 +308,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 					n++;
 				}
 			}
-			Logging.debug(this, "resetSelectedDepots, n, selection is " + n + ", -- " + Arrays.toString(selection));
+			Logging.debug(this, "resetSelectedDepots, n, selection is ", n, ", -- ", Arrays.toString(selection));
 
 			for (int i = 0; i < n; i++) {
 				listDepots.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
@@ -338,7 +338,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Logging.info(this, "mouseClicked " + e);
+		Logging.info(this, "mouseClicked ", e);
 		if (e.getSource() == listDepots) {
 			saveSelectedDepots();
 		}

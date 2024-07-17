@@ -105,8 +105,8 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 		indexUsedByOpsi = columnNames.size() - 1;
 		columnNames.add("SWinventory_used");
 		indexSWInventoryUsed = columnNames.size() - 1;
-		Logging.debug(this, "columnNames: " + columnNames);
-		Logging.debug(this, "cols index_used_by_opsi  " + indexUsedByOpsi + " , " + indexSWInventoryUsed);
+		Logging.debug(this, "columnNames: ", columnNames);
+		Logging.debug(this, "cols index_used_by_opsi  ", indexUsedByOpsi, " , ", indexSWInventoryUsed);
 
 		MapTableUpdateItemFactory updateItemFactoryLicensesReconciliation = new MapTableUpdateItemFactory(
 				modelLicensesReconciliation, columnNames);

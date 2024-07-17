@@ -77,9 +77,9 @@ public final class Configed {
 	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP) {
 		setParamValues(paramHost, paramUser, paramPassword, paramOTP);
 
-		Logging.debug("starting " + getClass().getName());
-		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
-		Logging.debug("server charset is configured as " + serverCharset);
+		Logging.debug("starting ", getClass().getName());
+		Logging.debug("default charset is ", Charset.defaultCharset().displayName());
+		Logging.debug("server charset is configured as ", serverCharset);
 
 		if (serverCharset.equals(Charset.defaultCharset())) {
 			Logging.debug("they are equal");
@@ -91,13 +91,13 @@ public final class Configed {
 	public static void startConfiged() {
 		Logging.notice("system information: ");
 
-		Logging.notice(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ")");
-		Logging.notice(" running by java version " + JAVA_VERSION + " and java vendor " + JAVA_VENDOR);
+		Logging.notice(" configed version ", Globals.VERSION, " (" + Globals.VERDATE, ")");
+		Logging.notice(" running by java version ", JAVA_VERSION, " and java vendor ", JAVA_VENDOR);
 
 		// Try with resources so that it will be closed in implicit finally statement
 		try (Formatter formatter = new Formatter()) {
-			Logging.info(
-					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1_000_000));
+			Logging.info(" we get max memory ",
+					formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1_000_000));
 		}
 
 		FOpsiLicenseMissingText.reset();
@@ -120,7 +120,7 @@ public final class Configed {
 		if (extraLocalization != null) {
 			result = extraLocalization.getProperty(key);
 			if (result == null) {
-				Logging.info("extraLocalization.getProperty null for key " + key);
+				Logging.info("extraLocalization.getProperty null for key ", key);
 			}
 		}
 
@@ -128,14 +128,14 @@ public final class Configed {
 			if (Messages.getResourceBundle() == null) {
 				Logging.warning("Messages.messagesBundle is null...");
 			} else if (!Messages.getResourceBundle().containsKey(key)) {
-				Logging.warning("Messagebundle does not contain key " + key);
+				Logging.warning("Messagebundle does not contain key ", key);
 			} else {
 				result = Messages.getResourceBundle().getString(key);
 			}
 		}
 
 		if (showLocalizationStrings) {
-			Logging.essential("Localization of '" + key + "': " + result);
+			Logging.essential("Localization of '", key, "': ", result);
 			result = "" + result + "[[" + key + "]]";
 		}
 
@@ -240,7 +240,7 @@ public final class Configed {
 			try {
 				canonicalPath = new File(savedStatesLocationName).getCanonicalPath();
 			} catch (IOException ex) {
-				Logging.debug("savedstates argument " + ex);
+				Logging.debug("savedstates argument ", ex);
 			}
 			if (canonicalPath != null) {
 				savedStatesLocationName = canonicalPath;
@@ -253,7 +253,7 @@ public final class Configed {
 			try {
 				OpsiMethodCall.setMaxCollectSize(Integer.parseInt(no));
 			} catch (NumberFormatException ex) {
-				Logging.debug("  \n\nArgument >" + no + "< has no integer format");
+				Logging.debug("  \n\nArgument >", no, "< has no integer format");
 				Main.showHelp();
 				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
@@ -269,16 +269,16 @@ public final class Configed {
 
 		File extraLocalizationFile = new File(extraLocalizationFileName);
 		if (!extraLocalizationFile.exists()) {
-			Logging.debug("File not found: " + extraLocalizationFileName);
+			Logging.debug("File not found: ", extraLocalizationFileName);
 		} else if (!extraLocalizationFile.canRead()) {
-			Logging.debug("File not readable " + extraLocalizationFileName);
+			Logging.debug("File not readable ", extraLocalizationFileName);
 		} else {
-			Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
-					+ localizationFilenameRegex.matcher(extraLocalizationFileName).matches());
+			Logging.debug(" ok ", LOCALIZATION_FILENAME_REGEX, "? ",
+					localizationFilenameRegex.matcher(extraLocalizationFileName).matches());
 
 			parts = extraLocalizationFileName.split("_");
 
-			Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
+			Logging.debug(" . ", parts[1], " .. ", Arrays.toString(parts[1].split("\\.")));
 
 			if (localizationFilenameRegex.matcher(extraLocalizationFileName).matches()) {
 				return loadExtraLocalization(extraLocalizationFile);
@@ -296,7 +296,7 @@ public final class Configed {
 		try (FileInputStream inputStream = new FileInputStream(extraLocalizationFile)) {
 			extraLocalization.load(inputStream);
 		} catch (IOException ex) {
-			Logging.warning("could not load properties file " + extraLocalizationFile, ex);
+			Logging.warning(ex, "could not load properties file ", extraLocalizationFile);
 			return false;
 		}
 
@@ -306,7 +306,7 @@ public final class Configed {
 	private static void initLogging() {
 		Logging.setLogfileMarker(host);
 		Logging.initLogFile();
-		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
+		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
 			Logging.setLogLevelConsole(0);
 		}
@@ -377,7 +377,7 @@ public final class Configed {
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
 
 			List<Object> newData = up.produce();
-			Logging.debug("UserConfigProducing: newData " + newData);
+			Logging.debug("UserConfigProducing: newData ", newData);
 
 			Main.endApp(Main.NO_ERROR);
 		} else {
@@ -391,13 +391,13 @@ public final class Configed {
 		File savedStatesDir = null;
 
 		if (savedStatesLocationName != null) {
-			Logging.info("trying to write saved states to " + savedStatesLocationName);
+			Logging.info("trying to write saved states to ", savedStatesLocationName);
 			String directoryName = getSavedStatesDirectoryName(savedStatesLocationName);
 			savedStatesDir = new File(directoryName);
-			Logging.info("writing saved states, created file " + savedStatesDir);
+			Logging.info("writing saved states, created file ", savedStatesDir);
 
 			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
-				Logging.warning("mkdirs for saved states failed, for File " + savedStatesDir);
+				Logging.warning("mkdirs for saved states failed, for File ", savedStatesDir);
 			}
 
 			Logging.info("writing saved states, got dirs");
@@ -412,7 +412,7 @@ public final class Configed {
 		}
 
 		if (savedStatesLocationName == null || Configed.getSavedStates() == null) {
-			Logging.info("writing saved states to " + Utils.getSavedStatesDefaultLocation());
+			Logging.info("writing saved states to ", Utils.getSavedStatesDefaultLocation());
 			savedStatesDir = new File(getSavedStatesDirectoryName(Utils.getSavedStatesDefaultLocation()));
 
 			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
@@ -432,7 +432,7 @@ public final class Configed {
 		try {
 			Configed.getSavedStates().load();
 		} catch (IOException iox) {
-			Logging.warning("saved states file could not be loaded", iox);
+			Logging.warning(iox, "saved states file could not be loaded");
 		}
 
 		Integer oldUsageCount = Integer.valueOf(Configed.getSavedStates().getProperty("saveUsageCount", "0"));

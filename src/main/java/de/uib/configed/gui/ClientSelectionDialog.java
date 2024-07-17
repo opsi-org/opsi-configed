@@ -160,7 +160,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	public void loadSearch(String name) {
-		Logging.info(this, "loadSearch " + name);
+		Logging.info(this, "loadSearch ", name);
 
 		manager.loadSearch(name);
 		loadFromManager();
@@ -188,7 +188,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			return;
 		}
 
-		Logging.debug(this, clients.toString());
+		Logging.debug(this, "", clients);
 		selectionPanel.setSelectedValues(clients);
 	}
 
@@ -367,7 +367,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		result.element = element;
 		AbstractSelectOperation[] operations = element.supportedOperations().toArray(new AbstractSelectOperation[0]);
 		if (operations.length == 0) {
-			Logging.warning("Elements without any operations: " + result);
+			Logging.warning("Elements without any operations: ", result);
 			return result;
 		}
 
@@ -554,7 +554,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		List<AbstractSelectElement> elements = manager.getBackend().getLocalizedHardwareList().get(hardware);
 		if (elements == null) {
-			Logging.warning(this, hardware + " not found in localized hardware list");
+			Logging.warning(this, "hardware ", hardware, " not found in localized hardware list");
 		} else {
 			for (AbstractSelectElement element : elements) {
 				result.groupList.add(createSimpleGroup(element));
@@ -692,7 +692,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		info.setParenthesisOpen(group.openParenthesis.isVisible());
 		info.setParenthesisClose(group.closeParenthesis.isVisible());
 		boolean andSelected = group.connectionType.isSelected();
-		Logging.debug(this, group.element.getPath() + ": AND selected: " + andSelected);
+		Logging.debug(this, group.element.getPath(), ": AND selected: ", andSelected);
 		boolean notSelected = group.negateButton.isSelected();
 		info.setStatus(getStatus(andSelected, notSelected));
 		return info;
@@ -884,9 +884,9 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	 * start the client filtering.
 	 */
 	private void collectData() {
-		Logging.info(this, "collectData  complexElements " + complexElements);
+		Logging.info(this, "collectData  complexElements ", complexElements);
 		manager.clearOperations();
-		Logging.info(this, "collectData  complexElements " + complexElements);
+		Logging.info(this, "collectData  complexElements ", complexElements);
 		repairParentheses();
 		for (ComplexGroup complex : complexElements) {
 			OperationWithStatus groupStatus;
@@ -956,7 +956,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		List<OperationWithStatus> topList;
 		topList = manager.operationsAsList(null);
-		Logging.debug(this, "load: size: " + topList.size());
+		Logging.debug(this, "load: size: ", topList.size());
 		for (int i = 0; i < topList.size(); i++) {
 			OperationWithStatus ows = topList.get(i);
 			AbstractSelectOperation op = ows.getOperation();
@@ -975,7 +975,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				element = createHardwareGroup(
 						getNonGroupOperation(hardwareOperation).getElement().getLocalizedPathArray()[0]);
 			} else {
-				Logging.error("Not a group operation: " + op.getClassName());
+				Logging.error("Not a group operation: ", op.getClassName());
 				reset();
 				return;
 			}
@@ -984,7 +984,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			setConnectionTypes(element.connectionType, element.negateButton, ows.getStatus());
 			List<OperationWithStatus> subList;
 			subList = manager.operationsAsList(((AbstractSelectGroupOperation) op).getChildOperations().get(0));
-			Logging.debug(this, "subload: " + subList.size());
+			Logging.debug(this, "subload: ", subList.size());
 			setGroupValues(element, subList);
 		}
 		if (!complexElements.isEmpty()) {
@@ -1022,8 +1022,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		}
 		setComponentData(simpleGroup.dataComponent, selectOperation.getSelectData());
 		setConnectionTypes(simpleGroup.connectionType, simpleGroup.negateButton, ows.getStatus());
-		Logging.debug(this, "simple, open, closed: " + simpleGroup.element.getClassName() + ows.isParenthesisOpen()
-				+ ows.isParenthesisClosed());
+		Logging.debug(this, "simple, open, closed: ", simpleGroup.element.getClassName(), ows.isParenthesisOpen(),
+				ows.isParenthesisClosed());
 	}
 
 	private static void setComponentData(JComponent component, SelectData data) {
@@ -1039,7 +1039,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		} else if (component instanceof JSpinner jSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
 			jSpinner.setValue(data.getData());
 		} else {
-			Logging.warning("component " + component + " with datatype " + data.getType() + " not treated");
+			Logging.warning("component ", component, " with datatype ", data.getType(), " not treated");
 		}
 	}
 
@@ -1101,7 +1101,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		while (complexIterator.hasNext()) {
 			ComplexGroup group = complexIterator.next();
 
-			Logging.info(this, "removing group of type " + group.type);
+			Logging.info(this, "removing group of type ", group.type);
 
 			if (group.removeButton == e.getSource()) {
 				contentPane.remove(group.topLabel);
@@ -1181,7 +1181,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		} else if (source instanceof JLabel) {
 			index = 0;
 		} else {
-			Logging.warning(this, "unexpected source in selectOperation: " + source);
+			Logging.warning(this, "unexpected source in selectOperation: ", source);
 		}
 		addDataComponent(sourceGroup, index);
 

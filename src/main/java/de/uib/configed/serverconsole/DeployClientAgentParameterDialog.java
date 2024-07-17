@@ -161,7 +161,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 						Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize.REBOOT"),
 						Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize.SHUTDOWN") },
 				FinalActionType.class, ((Enum<FinalActionType> val) -> {
-					Logging.info(this, "change to " + val);
+					Logging.info(this, "change to ", val);
 					finalAction = (FinalActionType) val;
 				}));
 

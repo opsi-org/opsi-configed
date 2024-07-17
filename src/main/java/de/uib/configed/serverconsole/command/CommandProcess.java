@@ -45,7 +45,7 @@ public class CommandProcess {
 
 	public boolean hasFailed() {
 		boolean failed = exitCode > 1 || errorEncounteredOnStart;
-		Logging.info(this, "Has command failed? " + failed);
+		Logging.info(this, "Has command failed? ", failed);
 		return failed;
 	}
 
@@ -64,7 +64,7 @@ public class CommandProcess {
 		data.put("expires", System.currentTimeMillis() + 10000);
 		data.put("command", command.split(" "));
 		data.put("shell", true);
-		Logging.debug(this, "Request data " + data);
+		Logging.debug(this, "Request data ", data);
 		configedMain.getMessagebus().sendMessage(data);
 		Logging.info(this, "Request sent");
 		locker.lock();
@@ -80,7 +80,7 @@ public class CommandProcess {
 		data.put("channel", "service:config:process");
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
-		Logging.debug(this, "Request data " + data);
+		Logging.debug(this, "Request data ", data);
 		configedMain.getMessagebus().sendMessage(data);
 		Logging.info(this, "Request sent");
 	}
@@ -100,7 +100,7 @@ public class CommandProcess {
 	public void onStop(Map<String, Object> message) {
 		String stoppedProcessId = (String) message.get("process_id");
 		exitCode = (int) message.get("exit_code");
-		Logging.info(this, "Command has exited with exit code " + exitCode);
+		Logging.info(this, "Command has exited with exit code ", exitCode);
 		if (stoppedProcessId != null && stoppedProcessId.equals(id)) {
 			finished = true;
 			locker.unlock();
@@ -132,8 +132,8 @@ public class CommandProcess {
 		}
 		Map<String, Object> error = POJOReMapper.remap(message.get("error"), new TypeReference<Map<String, Object>>() {
 		});
-		Logging.warning(this, "Command execution failed: " + error.get("code") + " - " + error.get("message") + ": "
-				+ error.get("details"));
+		Logging.warning(this, "Command execution failed: ", error.get("code"), " - ", error.get("message"), ": ",
+				error.get("details"));
 		return (String) error.get("message");
 	}
 
@@ -149,7 +149,7 @@ public class CommandProcess {
 
 		@Override
 		public void run() {
-			Logging.info(this, "Process stop thread initiated with timeout " + processTimeout);
+			Logging.info(this, "Process stop thread initiated with timeout ", processTimeout);
 			Instant now = Instant.now();
 			Duration duration = Duration.between(processStartTime, now);
 			while (true) {

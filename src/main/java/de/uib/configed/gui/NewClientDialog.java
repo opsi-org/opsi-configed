@@ -187,13 +187,13 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			public void insertUpdate(DocumentEvent e) {
 				try {
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
-					Logging.debug(this, "newPiece: '" + newPiece + "'");
+					Logging.debug(this, "newPiece: '", newPiece, "'");
 
 					if ("\t".equals(newPiece)) {
 						systemUUIDField.requestFocus();
 					}
 				} catch (BadLocationException ex) {
-					Logging.warning(this, "BadLocationException thrown: ", ex);
+					Logging.warning(this, ex, "BadLocationException thrown: ");
 				}
 			}
 
@@ -541,7 +541,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		int order = 0;
 		saveDomains.add("" + order + ":" + selectedDomain);
 		editableDomains.add(selectedDomain);
-		Logging.info(this, "createClient domains" + domains);
+		Logging.info(this, "createClient domains", domains);
 
 		domains.remove(selectedDomain);
 
@@ -552,13 +552,13 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			editableDomains.add(domain);
 		}
 
-		Logging.debug(this, "createClient editableDomains " + editableDomains);
+		Logging.debug(this, "createClient editableDomains ", editableDomains);
 
 		newDomainsList = editableDomains;
 
 		setDomains();
 
-		Logging.debug(this, "createClient saveDomains " + saveDomains);
+		Logging.debug(this, "createClient saveDomains ", saveDomains);
 		persistenceController.getConfigDataService().writeDomains(saveDomains);
 	}
 
@@ -686,7 +686,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	}
 
 	private static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
-		Logging.info("createCSVImportDataDialog for file " + csvFile);
+		Logging.info("createCSVImportDataDialog for file ", csvFile);
 		List<String> columnNames = HostInfo.getKeysForCSV();
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
 		try {
@@ -698,7 +698,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 				return null;
 			}
 		} catch (IOException e) {
-			Logging.error("Unable to detect format of CSV file", e);
+			Logging.error(e, "Unable to detect format of CSV file");
 		}
 
 		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())

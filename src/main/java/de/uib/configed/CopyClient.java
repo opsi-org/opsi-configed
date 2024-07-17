@@ -80,7 +80,7 @@ public class CopyClient {
 	 * products, product's properties and config states.
 	 */
 	public void copy() {
-		Logging.debug("Copy client: " + clientToCopy + " -> " + newClientNameWithDomain);
+		Logging.debug("Copy client: ", clientToCopy, " -> ", newClientNameWithDomain);
 		copyClient();
 		copyGroups();
 		copyProducts();

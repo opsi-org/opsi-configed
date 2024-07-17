@@ -24,8 +24,8 @@ public class Object2Product2VersionList extends HashMap<String, HashMap<String, 
 		}
 
 		if (versions.size() != 1) {
-			Logging.warning(this,
-					"addPackage " + productName + " on depot " + depot + " has not got one version, but " + versions);
+			Logging.warning(this, "addPackage ", productName, " on depot ", depot, " has not got one version, but ",
+					versions);
 		}
 	}
 }

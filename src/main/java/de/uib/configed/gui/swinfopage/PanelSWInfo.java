@@ -293,7 +293,7 @@ public class PanelSWInfo extends JPanel {
 			return new HashMap<>();
 		}
 
-		Logging.info(this, "retrieving data for " + hostId);
+		Logging.info(this, "retrieving data for ", hostId);
 		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
 				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
 
@@ -304,7 +304,7 @@ public class PanelSWInfo extends JPanel {
 			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 			title = scanInfo;
 		} else {
-			Logging.debug(this, "retrieved size  " + tableData.size());
+			Logging.debug(this, "retrieved size  ", tableData.size());
 			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 			title = scanInfo;
@@ -312,7 +312,7 @@ public class PanelSWInfo extends JPanel {
 
 		setSuperTitle(scanInfo);
 
-		Logging.debug(this, " got scanInfo " + scanInfo);
+		Logging.debug(this, " got scanInfo ", scanInfo);
 		return tableData;
 	}
 
@@ -394,12 +394,12 @@ public class PanelSWInfo extends JPanel {
 		csvExportTable.setAskForOverwrite(askForOverwrite);
 		String exportPath = exportFilename;
 		if (kindOfExport == KindOfExport.CSV) {
-			Logging.info(this, "export to " + exportPath);
+			Logging.info(this, "export to ", exportPath);
 			csvExportTable.execute(exportPath, false);
 		} else if (kindOfExport == KindOfExport.PDF) {
 			sendToPDF();
 		} else {
-			Logging.warning(this, "unexpected kindOfExport " + kindOfExport);
+			Logging.warning(this, "unexpected kindOfExport ", kindOfExport);
 		}
 	}
 
@@ -412,7 +412,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void sendToPDF() {
-		Logging.info(this, "create report swaudit for " + hostId + " check");
+		Logging.info(this, "create report swaudit for ", hostId, " check");
 
 		Map<String, String> metaData = new HashMap<>();
 
@@ -430,7 +430,7 @@ public class PanelSWInfo extends JPanel {
 
 	private void setSuperTitle(String s) {
 		String supertitle = s;
-		Logging.info(this, "setSuperTitle " + s);
+		Logging.info(this, "setSuperTitle ", s);
 		labelSuperTitle.setText(supertitle);
 	}
 
@@ -456,16 +456,16 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void updateModel() {
-		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
 	}
 
 	public void setSoftwareNullInfo(String hostId) {
-		Logging.info(this, "setSoftwareNullInfo,  " + hostId);
+		Logging.info(this, "setSoftwareNullInfo,  ", hostId);
 
-		this.hostId = "" + hostId;
+		this.hostId = hostId;
 		title = this.hostId;
 
 		String timeS = "" + new Timestamp(System.currentTimeMillis());
@@ -478,9 +478,9 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void setHost(String hostId) {
-		Logging.info(this, "setHost" + hostId + " -- ");
+		Logging.info(this, "setHost", hostId, " -- ");
 
-		this.hostId = "" + hostId;
+		this.hostId = hostId;
 	}
 
 	private static class SWInfoTableModel extends AbstractTableModel {

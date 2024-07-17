@@ -227,7 +227,7 @@ public class LogPane extends JPanel implements KeyListener {
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
 
-		Logging.info(this, "levels minL, maxL " + MIN_LEVEL + ", " + MAX_LEVEL);
+		Logging.info(this, "levels minL, maxL ", MIN_LEVEL, ", ", MAX_LEVEL);
 
 		sliderLevel = new AdaptingSlider(this, MIN_LEVEL, MAX_LEVEL, produceInitialMaxShowLevel());
 
@@ -473,13 +473,12 @@ public class LogPane extends JPanel implements KeyListener {
 				savedMaxShownLogLevel = Integer.valueOf(Configed.getSavedStates().getProperty("savedMaxShownLogLevel"));
 			}
 		} catch (NumberFormatException ex) {
-			Logging.warning(this,
-					"savedMaxShownLogLevel could not be read, value "
-							+ Configed.getSavedStates().getProperty("savedMaxShownLogLevel") + ", fallback to "
-							+ DEFAULT_MAX_SHOW_LEVEL);
+			Logging.warning(this, "savedMaxShownLogLevel could not be read, value ",
+					Configed.getSavedStates().getProperty("savedMaxShownLogLevel"), ", fallback to ",
+					DEFAULT_MAX_SHOW_LEVEL);
 			Configed.getSavedStates().setProperty("savedMaxShownLogLevel", String.valueOf(DEFAULT_MAX_SHOW_LEVEL));
 		}
-		Logging.info(this, "produceInitialMaxShowLevel " + savedMaxShownLogLevel);
+		Logging.info(this, "produceInitialMaxShowLevel ", savedMaxShownLogLevel);
 		return savedMaxShownLogLevel;
 	}
 
@@ -511,7 +510,7 @@ public class LogPane extends JPanel implements KeyListener {
 				}
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, "BadLocationException thrown in logging: " + e);
+			Logging.warning(this, e, "BadLocationException thrown in logging");
 		}
 		jTextPane.setDocument(document);
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -533,7 +532,7 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	private void setLevelWithoutAction(Object l) {
-		Logging.debug(this, "setLevel " + l);
+		Logging.debug(this, "setLevel ", l);
 
 		Integer levelO = sliderLevel.getValue();
 		if (levelO != l) {
@@ -557,8 +556,8 @@ public class LogPane extends JPanel implements KeyListener {
 
 		Integer oldLevel = showLevel;
 		showLevel = level;
-		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
-				+ parser.getMaxExistingLevel());
+		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel ", level, " , ", oldLevel, ", ",
+				parser.getMaxExistingLevel());
 
 		if (!oldLevel.equals(level)
 				&& (level < parser.getMaxExistingLevel() || oldLevel < parser.getMaxExistingLevel())) {
@@ -609,7 +608,7 @@ public class LogPane extends JPanel implements KeyListener {
 						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
 				highlighter.removeAllHighlights();
 			} catch (BadLocationException e) {
-				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
+				Logging.warning(this, e, "BadLocationException for setting caret in LotPane");
 			}
 		}
 
@@ -710,14 +709,14 @@ public class LogPane extends JPanel implements KeyListener {
 				jTextPane.getCaret().setVisible(true);
 				jTextPane.setCaretPosition(offset);
 			} catch (BadLocationException e) {
-				Logging.warning(this, "error with setting the caret in LogPane: " + e);
+				Logging.warning(this, e, "error with setting the caret in LogPane");
 			}
 		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, "KeyEvent " + e);
+		Logging.debug(this, "KeyEvent ", e);
 
 		if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 			search();

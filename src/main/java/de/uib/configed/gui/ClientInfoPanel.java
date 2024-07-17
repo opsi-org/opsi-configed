@@ -348,22 +348,22 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	public void setUefiBoot() {
 		Boolean value = persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients());
 
-		Logging.info(this, "setUefiBoot " + value);
+		Logging.info(this, "setUefiBoot ", value);
 		checkBoxUEFIBoot.setChecked(value);
 	}
 
 	public void setWANConfig(Boolean value) {
-		Logging.info(this, "setWANConfig " + value);
+		Logging.info(this, "setWANConfig ", value);
 		checkBoxWANConfig.setChecked(value);
 	}
 
 	public void setShutdownInstall(Boolean value) {
-		Logging.info(this, "setShutdownInstall " + value);
+		Logging.info(this, "setShutdownInstall ", value);
 		checkBoxInstallByShutdown.setChecked(value);
 	}
 
 	public void setOpsiHostKey(String s) {
-		Logging.info(this, "setOpsiHostKey " + s);
+		Logging.info(this, "setOpsiHostKey ", s);
 		hostKeyField.setText(s);
 	}
 
@@ -402,7 +402,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	}
 
 	private void reactToClientDataChange(Document document) {
-		Logging.debug(this, "reactToClientDataChange, dataAreChangedProgramatically: " + dataAreChangedProgramatically);
+		Logging.debug(this, "reactToClientDataChange, dataAreChangedProgramatically: ", dataAreChangedProgramatically);
 
 		if (dataAreChangedProgramatically || configedMain.getSelectedClients().size() != 1) {
 			return;
@@ -423,7 +423,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		} else if (document == ipAddressField.getDocument()) {
 			applyChanges(ipAddressField, HostInfo.CLIENT_IP_ADDRESS_KEY);
 		} else {
-			Logging.warning(this, "unexpected source in reactToHostDataChange, document: " + document);
+			Logging.warning(this, "unexpected source in reactToHostDataChange, document: ", document);
 		}
 	}
 

@@ -59,7 +59,7 @@ public class AuditSoftwareXLicensePool extends Relation {
 		// give zero length parts as ""
 		String[] parts = ident.split(";", -1);
 		if (parts.length < 5) {
-			Logging.warning("produceMapFromSWident, ident can not be splitted. " + ident);
+			Logging.warning("produceMapFromSWident, ident can not be splitted. ", ident);
 		}
 
 		Map<String, String> m = new HashMap<>();

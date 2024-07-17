@@ -125,12 +125,12 @@ public class PanelMountShare extends JPanel {
 		String call;
 		call = "explorer.exe " + " \"" + np.produceName() + "\"";
 
-		Logging.info(this, "windows call: " + call);
+		Logging.info(this, "windows call: ", call);
 
 		try {
 			Runtime.getRuntime().exec(new String[] { call });
 		} catch (IOException ioex) {
-			Logging.error("io-Error: " + ioex, ioex);
+			Logging.error(ioex, "io-Error: ", ioex);
 		}
 
 		mountShareDescriptionLabel
@@ -160,15 +160,15 @@ public class PanelMountShare extends JPanel {
 		boolean found = false;
 
 		if (np.produceName() == null || np.produceName().isEmpty()) {
-			Logging.info(this, "checkConnectionToShare no filename " + np.produceName());
+			Logging.info(this, "checkConnectionToShare no filename ", np.produceName());
 		} else {
 			File f = new File(np.produceName());
 			if (!f.exists()) {
-				Logging.info(this, "checkConnectionToShare no existing filename " + np.produceName());
+				Logging.info(this, "checkConnectionToShare no existing filename ", np.produceName());
 			} else {
 				found = f.isDirectory();
 				if (!found) {
-					Logging.info(this, "checkConnectionToShare no directory " + np.produceName());
+					Logging.info(this, "checkConnectionToShare no directory ", np.produceName());
 				}
 			}
 		}
@@ -184,12 +184,12 @@ public class PanelMountShare extends JPanel {
 			public void run() {
 				for (int i = 0; !smbMounted && i < seconds; i++) {
 					try {
-						Logging.debug(this, "trying to find dir, count " + i);
+						Logging.debug(this, "trying to find dir, count ", i);
 						sleep(1000);
 						checkConnectionToShare();
 						rootFrame.toFront();
 					} catch (InterruptedException ex) {
-						Logging.debug(this, "Exception " + ex);
+						Logging.debug(this, "Exception ", ex);
 						Thread.currentThread().interrupt();
 					}
 				}

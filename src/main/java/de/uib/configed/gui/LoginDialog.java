@@ -288,7 +288,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private void finishAndMakeVisible() {
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		Logging.notice(" OS " + strOS + "  Version " + osVersion);
+		Logging.notice(" OS ", strOS, "  Version ", osVersion);
 
 		setHost("localhost");
 		fieldHost.requestFocus();
@@ -306,7 +306,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
 
 			// we can finish
-			Logging.info(this, "connected with persis " + persistenceController);
+			Logging.info(this, "connected with persis ", persistenceController);
 			configedMain.setPersistenceController(persistenceController);
 			configedMain.loadDataAndGo();
 		} else {
@@ -387,8 +387,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
 		ConfigedMain.setUser(user);
 		ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
-		Logging.info(this,
-				"invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", " + user);
+		Logging.info(this, "invoking PersistenceControllerFactory host, user, ", fieldHost.getSelectedItem(), ", ",
+				user);
 
 		Configed.setHost((String) fieldHost.getSelectedItem());
 		Configed.initSavedStates();
@@ -397,8 +397,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			return;
 		}
 
-		Logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
-		Logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
+		Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());
+		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
 		Logging.info(this, "start WaitingWorker");
 		waitingWorker = new WaitingWorker(this);
 		waitingWorker.execute();
@@ -411,7 +411,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()),
 						String.valueOf(fieldOTP.getPassword()));
 
-				Logging.info(this, "got persis, == null " + (persistenceController == null));
+				Logging.info(this, "got persis, == null ", persistenceController == null);
 
 				Logging.info(this, "waitingTask can be set to ready");
 				waitingWorker.setReady();

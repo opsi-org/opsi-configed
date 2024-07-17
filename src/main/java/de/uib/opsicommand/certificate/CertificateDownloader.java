@@ -65,7 +65,7 @@ public final class CertificateDownloader {
 		try {
 			url = new URI(urlPath).toURL();
 		} catch (URISyntaxException | MalformedURLException e) {
-			Logging.error("url is malformed: " + url, e);
+			Logging.error(e, "url is malformed: ", url);
 		}
 
 		if (url == null) {
@@ -79,7 +79,7 @@ public final class CertificateDownloader {
 					.toFile();
 			Utils.restrictAccessToFile(tmpCertFile);
 		} catch (IOException e) {
-			Logging.error("unable to create tmp certificate file", e);
+			Logging.error(e, "unable to create tmp certificate file");
 		}
 
 		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
@@ -91,7 +91,7 @@ public final class CertificateDownloader {
 						Configed.getResourceValue("CertificateDownloader.unableToDownloadCertificate") + " " + url,
 						ConnectionErrorType.FAILED_CERTIFICATE_DOWNLOAD_ERROR);
 			}
-			Logging.error("unable to download certificate from specified url: " + url.toString(), e);
+			Logging.error(e, "unable to download certificate from specified url: ", url);
 		}
 
 		if (tmpCertFile != null && tmpCertFile.length() != 0) {

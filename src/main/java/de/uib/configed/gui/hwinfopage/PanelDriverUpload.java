@@ -99,20 +99,20 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 				stateServerPath = targetPath.isDirectory();
 				serverPathChecked.setSelected(stateServerPath);
-				Logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
-				Logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
-				Logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
+				Logging.info(this, "checkFiles  stateServerPath targetPath ", targetPath);
+				Logging.info(this, "checkFiles  stateServerPath driverPath ", driverPath);
+				Logging.info(this, "checkFiles  stateServerPath isDirectory ", stateServerPath);
 
 				stateDriverPath = driverPath.exists();
 				driverPathChecked.setSelected(stateDriverPath);
-				Logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
+				Logging.info(this, "checkFiles stateDriverPath ", stateDriverPath);
 
 				if (stateServerPath && stateDriverPath) {
 					result = true;
 				}
 			}
 
-			Logging.info(this, "checkFiles " + result);
+			Logging.info(this, "checkFiles ", result);
 
 			if (buttonUploadDrivers != null) {
 				buttonUploadDrivers.setEnabled(result);
@@ -178,7 +178,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		selectedDepot = (String) comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
-		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory ", depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
 
@@ -202,7 +202,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		initComponents();
 
-		Logging.info(this.getClass(), "depotProductDirectory " + depotProductDirectory);
+		Logging.info(this.getClass(), "depotProductDirectory ", depotProductDirectory);
 		smbMounted = new File(depotProductDirectory).exists();
 		panelMountShare.mount(smbMounted);
 
@@ -226,14 +226,14 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
 			selectedDepot = (String) comboChooseDepot.getSelectedItem();
-			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
+			Logging.info(this, "actionPerformed  depot selected ", selectedDepot);
 		});
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.setSize(Globals.TEXT_FIELD_DIMENSION);
 		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();
-			Logging.info(this, "winProduct  " + winProduct);
+			Logging.info(this, "winProduct  ", winProduct);
 			produceTarget();
 		});
 
@@ -266,7 +266,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void retrieveWinProducts() {
-		Logging.info(this, "retrieveWinProducts in " + depotProductDirectory);
+		Logging.info(this, "retrieveWinProducts in ", depotProductDirectory);
 
 		if (depotProductDirectory == null) {
 			return;
@@ -276,7 +276,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		smbMounted = new File(depotProductDirectory).exists();
 
-		Logging.info(this, "retrieveWinProducts smbMounted " + smbMounted);
+		Logging.info(this, "retrieveWinProducts smbMounted ", smbMounted);
 
 		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(depotProductDirectory);
 
@@ -379,7 +379,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			buttonGroup.add(button);
 			button.addItemListener((ItemEvent e) -> {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					Logging.debug(this, " " + e);
+					Logging.debug(this, " ", e);
 					driverDirectory = button.getSubdir();
 
 					produceTarget();
@@ -440,8 +440,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		buttonUploadDrivers.setEnabled(false);
 
 		buttonUploadDrivers.addActionListener((ActionEvent actionEvent) -> {
-			Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
-					+ fieldServerPath.getText());
+			Logging.info(this, "actionPerformed on buttonUploadDrivers from ", fieldDriverPath.getText(), " to ",
+					fieldServerPath.getText());
 
 			execute();
 		});
@@ -572,7 +572,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void makePath(File path) {
-		Logging.info(this, "makePath for " + path);
+		Logging.info(this, "makePath for ", path);
 
 		if (path != null && !path.exists()) {
 			int returnedOption = JOptionPane.showConfirmDialog(rootFrame,
@@ -585,7 +585,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			}
 		}
 
-		Logging.info(this, "makePath result " + path);
+		Logging.info(this, "makePath result ", path);
 	}
 
 	private void showDrivers() {
@@ -614,7 +614,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			waiter.startWaiting();
 			rootFrame.activateLoadingCursor();
 
-			Logging.info(this, "copy  " + driverPath + " to " + targetPath);
+			Logging.info(this, "copy  ", driverPath, " to ", targetPath);
 
 			makePath(targetPath);
 
@@ -629,7 +629,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 					}
 				} catch (IOException iox) {
 					rootFrame.deactivateLoadingCursor();
-					Logging.error("copy error:\n" + iox, iox);
+					Logging.error(iox, "copy error:\n", iox);
 				}
 			} else {
 				Logging.info(this, "execute: targetPath does not exist");
@@ -638,7 +638,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			if (stateServerPath) {
 				String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
 						+ winProduct + "/" + SmbConnect.unixPath(DIRECTORY_DRIVERS);
-				Logging.info(this, "set rights for " + driverDir);
+				Logging.info(this, "set rights for ", driverDir);
 				persistenceController.getRPCMethodExecutor().setRights(driverDir);
 			}
 
@@ -698,8 +698,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	@Override
 	public String produceName() {
 		if (fieldServerPath != null) {
-			Logging.info(this, "produceName ? fieldServerPath , depotProductDirectory " + fieldServerPath.getText()
-					+ " , " + depotProductDirectory);
+			Logging.info(this, "produceName ? fieldServerPath , depotProductDirectory ", fieldServerPath.getText(),
+					" , ", depotProductDirectory);
 		}
 
 		if (fieldServerPath == null || fieldServerPath.getText().isEmpty()

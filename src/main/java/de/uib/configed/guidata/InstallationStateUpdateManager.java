@@ -73,7 +73,7 @@ public class InstallationStateUpdateManager {
 
 	public void updateProductStates(Map<String, Map<String, Map<String, String>>> collectChangedProductStates,
 			int productType) {
-		Logging.info(this, "updateProductStates: collectChangedProductStates  " + collectChangedProductStates);
+		Logging.info(this, "updateProductStates: collectChangedProductStates  ", collectChangedProductStates);
 
 		if (collectChangedProductStates != null && !collectChangedProductStates.isEmpty()) {
 			for (Entry<String, Map<String, Map<String, String>>> changedClientState : collectChangedProductStates

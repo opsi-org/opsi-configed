@@ -37,7 +37,7 @@ public class SavedSearchQuery {
 	}
 
 	private void setArgs(String host, String user, String password, String otp, String searchName) {
-		Logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
+		Logging.info(this, "setArgs ", host, ", PASSWORD, ", searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;
@@ -98,17 +98,17 @@ public class SavedSearchQuery {
 		}
 
 		if (!persistenceController.getGroupDataService().deleteGroup(groupName)) {
-			Logging.error("delete group error, groupName " + groupName);
+			Logging.error("delete group error, groupName ", groupName);
 			Main.endApp(6);
 		}
 
 		if (!persistenceController.getGroupDataService().addGroup(hostGroups.get(groupName), true)) {
-			Logging.error("add group error, group " + hostGroups.get(groupName));
+			Logging.error("add group error, group ", hostGroups.get(groupName));
 			Main.endApp(7);
 		}
 
 		if (!persistenceController.getGroupDataService().addHosts2Group(hosts, groupName)) {
-			Logging.error("addHosts2Group error, group " + groupName);
+			Logging.error("addHosts2Group error, group ", groupName);
 			Main.endApp(8);
 		}
 	}

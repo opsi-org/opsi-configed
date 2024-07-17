@@ -95,10 +95,10 @@ public class ConnectionHandler {
 		}
 
 		if (isMethodSupported) {
-			Logging.info(this, "request method is supported: " + requestMethod);
+			Logging.info(this, "request method is supported: ", requestMethod);
 			this.requestMethod = requestMethod;
 		} else {
-			Logging.warning(this, "request method is unsupported: " + requestMethod);
+			Logging.warning(this, "request method is unsupported: ", requestMethod);
 			throw new IllegalArgumentException("request method is unsupported: " + requestMethod);
 		}
 	}
@@ -162,18 +162,16 @@ public class ConnectionHandler {
 				}
 			}
 
-			Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
-			Logging.info(this,
-					"retrieveResponse method=" + connection.getRequestMethod() + ", headers="
-							+ connection.getRequestProperties() + ", cookie="
-							+ (requestProperties.get("Cookie") == null ? "null"
-									: (requestProperties.get("Cookie").substring(0, 26) + "...")));
+			Logging.debug(this, "https protocols given by system ", Configed.SYSTEM_SSL_VERSION);
+			Logging.info(this, "retrieveResponse method=", connection.getRequestMethod(), ", headers=",
+					connection.getRequestProperties(), ", cookie=", (requestProperties.get("Cookie") == null ? "null"
+							: (requestProperties.get("Cookie").substring(0, 26) + "...")));
 
 			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
 			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 			connection.connect();
 		} catch (SSLException ex) {
-			Logging.debug(this, "caught SSLException: " + ex);
+			Logging.debug(this, "caught SSLException: ", ex);
 
 			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED) {
 				reporter.notify(produceCertificateWarningMessage(certValidator),
@@ -187,7 +185,7 @@ public class ConnectionHandler {
 				conStat = reporter.getConnectionState();
 			} else {
 				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-				Logging.error("Exception on connecting, ", ex);
+				Logging.error(ex, "Exception on connecting, ");
 			}
 
 			connection = null;

@@ -143,7 +143,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 			command.setRepo(repo);
 		}
 
-		Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
+		Logging.info(this, "doAction2 opsi-package-updater: ", command);
 		CommandExecutor executor = new CommandExecutor(configedMain, command);
 		executor.execute();
 	}

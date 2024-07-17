@@ -88,10 +88,10 @@ public class OpsiServerVersionRetriever {
 			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 			connection.setRequestMethod("HEAD");
 		} catch (URISyntaxException e) {
-			Logging.warning(this, "cannot create URI from " + serviceURL, e);
+			Logging.warning(this, e, "cannot create URI from ", serviceURL);
 			return;
 		} catch (IOException e) {
-			Logging.warning(this, "error in testing connection to server for getting server opsi version", e);
+			Logging.warning(this, e, "error in testing connection to server for getting server opsi version");
 			return;
 		}
 
@@ -107,7 +107,7 @@ public class OpsiServerVersionRetriever {
 
 		Matcher matcher = versionPattern.matcher(server);
 		if (matcher.find()) {
-			Logging.info(this, "opsi server version: " + matcher.group(1));
+			Logging.info(this, "opsi server version: ", matcher.group(1));
 			String[] versionParts = matcher.group(1).split("\\.");
 			for (int i = 0; i < versionParts.length && i < EXPECTED_SERVER_VERSION_LENGTH; i++) {
 				try {
@@ -144,6 +144,6 @@ public class OpsiServerVersionRetriever {
 		serverVersionString = serverVersionBuilder.toString();
 		serverComparableVersion = new ComparableVersion(serverVersionString);
 
-		Logging.info("we set the server version: " + serverVersionString);
+		Logging.info("we set the server version: ", serverVersionString);
 	}
 }

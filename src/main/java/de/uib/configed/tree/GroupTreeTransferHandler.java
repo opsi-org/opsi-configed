@@ -49,7 +49,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		String node = parts[parts.length - 1];
 		GroupNode result = tree.getGroupNode(node);
 
-		Logging.debug(this, "transferRepresentsGroup : " + treeRepresentation + ", result " + result);
+		Logging.debug(this, "transferRepresentsGroup : ", treeRepresentation, ", result ", result);
 
 		return result;
 	}
@@ -64,7 +64,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		}
 
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
-		Logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() " + dropLocation.getPath());
+		Logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() ", dropLocation.getPath());
 
 		if (dropLocation.getPath() == null) {
 			return false;
@@ -75,9 +75,9 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		try {
 			transferData = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
 		} catch (UnsupportedFlavorException ex) {
-			Logging.warning(this, " unsupported data flavor " + ex);
+			Logging.warning(this, ex, " unsupported data flavor ");
 		} catch (IOException ex) {
-			Logging.warning(this, " transferable io exception " + ex);
+			Logging.warning(this, ex, " transferable io exception ");
 		}
 
 		GroupNode sourceGroupNode = transferRepresentsGroup(transferData);
@@ -91,18 +91,18 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		Object[] dropObjectPath = new Object[0];
 		if (targetNode != null) {
 			dropObjectPath = targetNode.getUserObjectPath();
-			Logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
+			Logging.debug(this, "canImport targetNode.isImmutable() ", targetNode.isImmutable());
 		}
 
-		Logging.debug(this, "canImport sourceGroupNode " + sourceGroupNode);
+		Logging.debug(this, "canImport sourceGroupNode ", sourceGroupNode);
 		if (sourceGroupNode != null && targetNode != null) {
-			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
-			Logging.debug(this, "canImport !allows subgroups "
-					+ ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString()));
+			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() ", targetNode.allowsOnlyGroupChilds());
+			Logging.debug(this, "canImport !allows subgroups ",
+					ClientTree.DIRECTORY_NOT_ASSIGNED_NAME.equals(targetNode.toString()));
 		}
 
-		Logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
-		Logging.debug(this, "canImport source path " + Arrays.toString(sourceObjectPath));
+		Logging.debug(this, "canImport, dropOnThis  path ", Arrays.toString(dropObjectPath));
+		Logging.debug(this, "canImport source path ", Arrays.toString(sourceObjectPath));
 
 		return canImport(targetNode, sourceGroupNode, dropObjectPath, sourceObjectPath, dropOnThisNodeId);
 	}
@@ -121,14 +121,14 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 		boolean result = !targetNode.isImmutable() && canImportGroupNode && canImportNonGroupNode && isSameGroupBranch;
 
-		Logging.debug(this, "canImport, dropOnThis " + dropOnThisNodeId);
-		Logging.debug(this, "canImport: " + result);
+		Logging.debug(this, "canImport, dropOnThis ", dropOnThisNodeId);
+		Logging.debug(this, "canImport: ", result);
 		return result;
 	}
 
 	@Override
 	public int getSourceActions(JComponent c) {
-		Logging.debug(this, "getSourceActions,  activePaths " + Arrays.toString(tree.getSelectionPaths()));
+		Logging.debug(this, "getSourceActions,  activePaths ", Arrays.toString(tree.getSelectionPaths()));
 
 		if (isSourceActionsNONE()) {
 			return TransferHandler.NONE;
@@ -150,13 +150,13 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 			if (dropThis != dropThisVariant) {
 				Logging.warning(this, "getSourceActions,  dropThis != dropThisVariant");
-				Logging.warning(this, "getSourceActions,  dropThis " + dropThis);
-				Logging.warning(this, "getSourceActions,  dropThisVariant " + dropThisVariant);
+				Logging.warning(this, "getSourceActions,  dropThis ", dropThis);
+				Logging.warning(this, "getSourceActions,  dropThisVariant ", dropThisVariant);
 			}
 
 			GroupNode parent = (GroupNode) dropThisVariant.getParent();
 
-			Logging.debug(this, "getSourceActions,  dropThis " + dropThis + " parent " + parent);
+			Logging.debug(this, "getSourceActions,  dropThis ", dropThis, " parent ", parent);
 
 			if (parent.isImmutable()) {
 				Logging.debug(this, "getSourceActions dropObject is immutable, TransferHandler.NONE");
@@ -180,7 +180,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		// (for top groups the NONE handler was already returned)
 		for (TreePath path : tree.getSelectionPaths()) {
 			if (tree.isChildOfALL((DefaultMutableTreeNode) path.getLastPathComponent())) {
-				Logging.debug(this, "getSourceActions path " + path + " childOfALL, should be TransferHandler.COPY");
+				Logging.debug(this, "getSourceActions path ", path, " childOfALL, should be TransferHandler.COPY");
 				return TransferHandler.COPY;
 				// we dont accept to move any item out of ALL
 			}
@@ -216,30 +216,29 @@ public class GroupTreeTransferHandler extends TransferHandler {
 	}
 
 	private boolean chooseMove(String sourceGroupName, TreePath dropPath, boolean isLeaf) {
-		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath " + sourceGroupName + " , " + dropPath);
+		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath ", sourceGroupName, " , ", dropPath);
 
 		boolean result = false;
 
 		boolean stayInsideDIRECTORY = tree.isInDirectory(sourceGroupName) && tree.isInDirectory(dropPath);
 		boolean stayInsideGROUPS = tree.isInGROUPS(sourceGroupName) && tree.isInGROUPS(dropPath);
 
-		Logging.info(this,
-				"chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS " + stayInsideDIRECTORY + ", " + stayInsideGROUPS);
+		Logging.info(this, "chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS ", stayInsideDIRECTORY, ", ",
+				stayInsideGROUPS);
 
 		if (stayInsideDIRECTORY || (stayInsideGROUPS && isLeaf)) {
 			result = true;
 		}
 
-		Logging.debug(this, "chooseMOVE  " + result);
+		Logging.debug(this, "chooseMOVE  ", result);
 
 		return result;
 	}
 
 	private void handleObjectID(String importID, TreePath sourcePath, GroupNode sourceParentNode, String sourceParentID,
 			TreePath dropPath, DefaultMutableTreeNode dropParentNode, String dropParentID) {
-		Logging.debug(this,
-				"handleClientID importID, sourcePath, sourceParentID, sourceParentNode, dropParentID,  " + importID
-						+ ", " + sourcePath + " , " + sourceParentID + ", " + sourceParentNode + ", " + dropParentID);
+		Logging.debug(this, "handleClientID importID, sourcePath, sourceParentID, sourceParentNode, dropParentID,  ",
+				importID, ", ", sourcePath, " , ", sourceParentID, ", ", sourceParentNode, ", ", dropParentID);
 
 		boolean moving = false;
 
@@ -251,8 +250,8 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				Logging.debug(this, "handleClientID tree.getLocationsInDirectory 1");
 				Iterator<GroupNode> iter = locations.iterator();
 				firstDIRECTORYgroupname = iter.next().toString();
-				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname "
-						+ firstDIRECTORYgroupname);
+				Logging.debug(this, "handleClientID tree.getLocationsInDirectory firstDIRECTORYgroupname ",
+						firstDIRECTORYgroupname);
 				sourceParentID = firstDIRECTORYgroupname;
 				moving = chooseMove(firstDIRECTORYgroupname, dropPath, false);
 
@@ -280,11 +279,11 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		DefaultMutableTreeNode dropParentNode = (DefaultMutableTreeNode) dropPath.getLastPathComponent();
 		String dropParentID = dropParentNode.getUserObject().toString();
 
-		Logging.debug(this, "dropPath " + dropPath);
+		Logging.debug(this, "dropPath ", dropPath);
 
 		// what is to be moved/copied
 
-		Logging.debug(this, "importData, getActivePaths(): " + Arrays.toString(tree.getSelectionPaths()));
+		Logging.debug(this, "importData, getActivePaths(): ", Arrays.toString(tree.getSelectionPaths()));
 
 		Set<String> selectedObjects = tree.getSelectedObjectsInTable();
 		// possibly transfer of a group node
@@ -297,7 +296,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 			}
 		}
 
-		Logging.debug(this, "importData, values: " + selectedObjects);
+		Logging.debug(this, "importData, values: ", selectedObjects);
 
 		// if the source is the tree then we arranged lines for the transfer
 		// the other possible source are lines from the JTable, as well arranged to
@@ -307,10 +306,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 		for (String selectedObject : new TreeSet<>(selectedObjects)) {
 			String sourceParentID = null;
 
-			Logging.debug(this, "importData " + selectedObject);
+			Logging.debug(this, "importData ", selectedObject);
 
 			TreePath sourcePath = tree.getActiveTreePath(selectedObject);
-			Logging.debug(this, "active source tree path for selectedObject " + selectedObject + ": " + sourcePath);
+			Logging.debug(this, "active source tree path for selectedObject ", selectedObject, ": ", sourcePath);
 
 			GroupNode sourceParentNode = null;
 			GroupNode groupNode = null;
@@ -322,10 +321,10 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				groupNode = tree.getGroupNode(selectedObject);
 			} else {
 				// coming from table, replace!
-				Logging.debug(this, "importData, sourceParentID " + sourceParentID);
+				Logging.debug(this, "importData, sourceParentID ", sourceParentID);
 			}
-			Logging.debug(this, "importData, sourceParentNode " + sourceParentNode);
-			Logging.debug(this, "importData, groupNode " + groupNode);
+			Logging.debug(this, "importData, sourceParentNode ", sourceParentNode);
+			Logging.debug(this, "importData, groupNode ", groupNode);
 
 			if (groupNode != null) {
 				// it is a group and it could be moved
@@ -338,13 +337,13 @@ public class GroupTreeTransferHandler extends TransferHandler {
 				}
 			} else {
 				// import node
-				Logging.debug(this, "importData handling selectedObject " + selectedObject);
+				Logging.debug(this, "importData handling selectedObject ", selectedObject);
 
 				handleObjectID(selectedObject, sourcePath, sourceParentNode, sourceParentID, dropPath, dropParentNode,
 						dropParentID);
 			}
 
-			Logging.debug(this, "importData ready, selectedObject " + selectedObject);
+			Logging.debug(this, "importData ready, selectedObject ", selectedObject);
 		}
 
 		return true;
@@ -352,7 +351,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
-		Logging.debug(this, " exportToClipboard " + comp + " , " + clip + ", " + action);
+		Logging.debug(this, " exportToClipboard ", comp + " , ", clip, ", ", action);
 		super.exportToClipboard(comp, clip, action);
 	}
 }

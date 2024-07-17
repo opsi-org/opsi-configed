@@ -196,7 +196,7 @@ public class MainFrame extends JFrame {
 		for (final String theme : ThemeManager.getAvailableThemes()) {
 			JMenuItem themeItem = new JRadioButtonMenuItem(ThemeManager.getThemeTranslation(theme));
 			ThemeManager.setThemeIcon(themeItem, theme);
-			Logging.debug("selectedTheme " + theme);
+			Logging.debug("selectedTheme ", theme);
 			themeItem.setSelected(selectedTheme.equals(theme));
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
@@ -276,7 +276,7 @@ public class MainFrame extends JFrame {
 		Utils.addOpsiIconToMenuItem(menuOpsi);
 		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
 				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
-		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
+		Logging.info(this, "setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
 		addCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
@@ -307,12 +307,12 @@ public class MainFrame extends JFrame {
 		final CommandFactory factory = CommandFactory.getInstance();
 		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
 
-		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
+		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs ", sortedComs);
 		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
 			String parentMenuName = entry.getKey();
 			JMenu parentMenu = new JMenu(parentMenuName);
 
-			Logging.info(this, "parent menu text " + parentMenuName);
+			Logging.info(this, "parent menu text ", parentMenuName);
 			if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
 				jMenuServerConsole.add(menuOpsi);
 				jMenuServerConsole.addSeparator();
@@ -326,7 +326,7 @@ public class MainFrame extends JFrame {
 			boolean commandsAreDeactivated) {
 		for (final MultiCommandTemplate com : listCom) {
 			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
-			Logging.info(this, "command menuitem text " + com.getMenuText());
+			Logging.info(this, "command menuitem text ", com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> {
 				CommandExecutor executor = new CommandExecutor(configedMain, com);
@@ -600,14 +600,14 @@ public class MainFrame extends JFrame {
 		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
 		JScrollPane scrollpaneTreeProducts = new JScrollPane();
 		scrollpaneTreeProducts.getViewport().add(productTree);
@@ -637,7 +637,7 @@ public class MainFrame extends JFrame {
 			return;
 		}
 
-		Logging.debug(this, "saveConfigurationsSetEnabled " + b);
+		Logging.debug(this, "saveConfigurationsSetEnabled ", b);
 
 		jMenuFileSaveConfigurations.setEnabled(b);
 		iconBarPanel.getjButtonSaveConfiguration().setEnabled(b);
@@ -737,7 +737,7 @@ public class MainFrame extends JFrame {
 				try {
 					Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
 				} catch (IOException e) {
-					Logging.error("cannot open: " + Logging.getCurrentLogfilePath() + " :\n " + e);
+					Logging.error(e, "cannot open: ", Logging.getCurrentLogfilePath());
 				}
 				super.doAction2();
 			}

@@ -40,7 +40,7 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	}
 
 	public void setInfo(Map<String, Map<String, Object>> extendedInfo) {
-		Logging.debug(this, "setInfo " + extendedInfo);
+		Logging.debug(this, "setInfo ", extendedInfo);
 		this.extendedInfo = extendedInfo;
 	}
 

@@ -126,7 +126,7 @@ public class UserRolesConfigDataService {
 			result = cacheManager.getCachedData(CacheIdentifier.HOST_GROUPS_PERMITTED, Set.class);
 		}
 
-		Logging.info(this, "getHostgroupsPermitted " + result);
+		Logging.info(this, "getHostgroupsPermitted ", result);
 
 		return result;
 	}
@@ -192,7 +192,7 @@ public class UserRolesConfigDataService {
 				persistenceController.getConfigDataService().getConfigListCellOptionsPD()).produce();
 
 		if (readyConfigObjects == null) {
-			Logging.warning(this, "readyObjects for userparts " + null);
+			Logging.warning(this, "readyObjects for userparts null");
 		} else {
 			if (!readyConfigObjects.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
@@ -200,7 +200,7 @@ public class UserRolesConfigDataService {
 				exec.doCall(omc);
 			}
 
-			Logging.info(this, "readyObjects for userparts " + readyConfigObjects.size());
+			Logging.info(this, "readyObjects for userparts ", readyConfigObjects.size());
 		}
 
 		checkPermissions();
@@ -245,7 +245,7 @@ public class UserRolesConfigDataService {
 				+ Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
 		info.append("\n");
 
-		Logging.warning(this, " user role administration configured but not permitted by the modules file " + info);
+		Logging.warning(this, " user role administration configured but not permitted by the modules file ", info);
 
 		FOpsiLicenseMissingText.callInstanceWith(info.toString());
 	}
@@ -253,14 +253,14 @@ public class UserRolesConfigDataService {
 	private boolean doesUserBelongToSystemsReadOnlyGroup() {
 		boolean isUserReadOnlyUser = exec.getBooleanResult(
 				new OpsiMethodCall(RPCMethodName.ACCESS_CONTROL_USER_IS_READ_ONLY_USER, new String[] {}));
-		Logging.info(this, "does user belong to system's read-only group? " + isUserReadOnlyUser);
+		Logging.info(this, "does user belong to system's read-only group? ", isUserReadOnlyUser);
 		return isUserReadOnlyUser;
 	}
 
 	// final in order to avoid deactiviating by override
 	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs) {
 		boolean withUserRoles = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES);
-		Logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
+		Logging.info(this, "setAgainUserRegistration, userRoles can be used ", withUserRoles);
 
 		boolean resultVal = userRegisterValueFromConfigs;
 
@@ -274,7 +274,7 @@ public class UserRolesConfigDataService {
 		} else {
 			locallySavedValueUserRegister = Boolean.parseBoolean(
 					Configed.getSavedStates().getProperty(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER));
-			Logging.info(this, "setAgainUserRegistration, userRegister was activated " + locallySavedValueUserRegister);
+			Logging.info(this, "setAgainUserRegistration, userRegister was activated ", locallySavedValueUserRegister);
 			if (userRegisterValueFromConfigs) {
 				if (locallySavedValueUserRegister == null || !locallySavedValueUserRegister) {
 					// we save true
@@ -297,7 +297,7 @@ public class UserRolesConfigDataService {
 				dialog.setMessage(msg.toString());
 				dialog.setVisible(true);
 				int result = dialog.getResult();
-				Logging.info(this, "setAgainUserRegistration, reaction via option " + dialog.getResult());
+				Logging.info(this, "setAgainUserRegistration, reaction via option ", dialog.getResult());
 
 				switch (result) {
 				case 1:
@@ -347,13 +347,13 @@ public class UserRolesConfigDataService {
 		if (!globalReadOnly) {
 			// lookup if we have a config for it and set it though not set by group
 			configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY;
-			Logging.info(this, "checkPermissions  configKey " + configKey);
+			Logging.info(this, "checkPermissions  configKey ", configKey);
 			globalReadOnly = serverPropertyMap.get(configKey) != null
 					&& (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, globalReadOnly);
 		}
 
-		Logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
+		Logging.info(this, " checkPermissions globalReadOnly ", globalReadOnly);
 
 		boolean serverActionPermission = true;
 
@@ -361,10 +361,10 @@ public class UserRolesConfigDataService {
 			serverActionPermission = false;
 		} else {
 			configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE;
-			Logging.info(this, "checkPermissions  configKey " + configKey);
+			Logging.info(this, "checkPermissions  configKey ", configKey);
 
 			if (serverPropertyMap.get(configKey) != null) {
-				Logging.info(this, " checkPermissions  value  " + serverPropertyMap.get(configKey).get(0));
+				Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey).get(0));
 				serverActionPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			}
 		}
@@ -376,11 +376,11 @@ public class UserRolesConfigDataService {
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
 		String configKey = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
-		Logging.info(this, " checkPermissions key " + configKey);
+		Logging.info(this, " checkPermissions key ", configKey);
 
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
-			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
+			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey).get(0));
 			boolean createClientPermission = (Boolean) serverPropertyMap.get(configKey).get(0);
 			cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, createClientPermission);
 		}
@@ -399,7 +399,7 @@ public class UserRolesConfigDataService {
 		}
 		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCTS, permittedProducts);
 
-		Logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
+		Logging.info(this, "checkPermissions permittedProducts ", permittedProducts);
 	}
 
 	private void checkDepotPermissions() {
@@ -415,9 +415,9 @@ public class UserRolesConfigDataService {
 				serverPropertyMap);
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_PERMITTED, depotsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, depotsFullPermission);
-		Logging.info(this, "checkPermissions depotsFullPermission (false means, depots must be specified) "
-				+ depotsFullPermission);
-		Logging.info(this, "checkPermissions depotsPermitted " + depotsPermitted);
+		Logging.info(this, "checkPermissions depotsFullPermission (false means, depots must be specified) ",
+				depotsFullPermission);
+		Logging.info(this, "checkPermissions depotsPermitted ", depotsPermitted);
 	}
 
 	private void checkHostGroupPermissions() {
@@ -439,7 +439,7 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED,
 				hostgroupsOnlyIfExplicitlyStated);
 
-		Logging.info(this, "checkPermissions hostgroupsPermitted " + hostgroupsPermitted);
+		Logging.info(this, "checkPermissions hostgroupsPermitted ", hostgroupsPermitted);
 	}
 
 	private void checkProductPermissions() {
@@ -505,7 +505,7 @@ public class UserRolesConfigDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.USER_CONFIG_PART, userConfigPart);
-		Logging.info(this, "userConfigPart initialized, " + userConfigPart);
+		Logging.info(this, "userConfigPart initialized, ", userConfigPart);
 
 		return userConfigPart;
 	}
@@ -520,14 +520,14 @@ public class UserRolesConfigDataService {
 		applyUserSpecializedConfig = persistenceController.getModuleDataService()
 				.isOpsiModuleActive(OpsiModule.USER_ROLES) && hasKeyUserRegisterValuePD();
 		cacheManager.setCachedData(CacheIdentifier.APPLY_USER_SPECIALIZED_CONFIG, applyUserSpecializedConfig);
-		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
+		Logging.info(this, "applyUserSpecializedConfig initialized, ", applyUserSpecializedConfig);
 
 		return applyUserSpecializedConfig;
 	}
 
 	private boolean checkFullPermission(Set<String> permittedEntities, final String keyUseList, final String keyList,
 			final Map<String, List<Object>> serverPropertyMap) {
-		Logging.info(this, "checkFullPermission  key name,  defaultResult true " + keyUseList);
+		Logging.info(this, "checkFullPermission  key name,  defaultResult true ", keyUseList);
 
 		boolean fullPermission = true;
 
@@ -538,11 +538,11 @@ public class UserRolesConfigDataService {
 			// we didn't configure anything, therefore we revoke the setting
 			if (serverPropertyMap.get(keyList) == null) {
 				fullPermission = true;
-				Logging.info(this, "checkFullPermission not configured keyList " + keyList);
+				Logging.info(this, "checkFullPermission not configured keyList ", keyList);
 			}
 		}
 
-		Logging.info(this, "checkFullPermission  key for list,  fullPermission " + keyList + ", " + fullPermission);
+		Logging.info(this, "checkFullPermission  key for list,  fullPermission ", keyList, ", ", fullPermission);
 
 		// we didn't configure anything, therefore we revoke the setting
 		if (!fullPermission && serverPropertyMap.get(keyList) != null) {
@@ -551,8 +551,8 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		Logging.info(this, "checkFullPermission   result " + fullPermission);
-		Logging.info(this, "checkFullPermission   produced list " + permittedEntities);
+		Logging.info(this, "checkFullPermission   result ", fullPermission);
+		Logging.info(this, "checkFullPermission   produced list ", permittedEntities);
 
 		return fullPermission;
 	}
@@ -581,8 +581,8 @@ public class UserRolesConfigDataService {
 	}
 
 	private List<Object> computeClientConfigInstallByShutdown(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 		Map<String, Object> item = Utils.createNOMBoolConfig(
 				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
@@ -594,8 +594,8 @@ public class UserRolesConfigDataService {
 
 	private List<Object> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(
 			List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 		// key not yet configured
 		List<Object> defaultValues = new ArrayList<>();
 		// example for standard configuration other than empty
@@ -625,8 +625,8 @@ public class UserRolesConfigDataService {
 	}
 
 	private List<Object> computeDisabledClientActions(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+				ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS);
 		// key not yet configured
 		List<Object> defaultValues = Collections.emptyList();
 
@@ -650,8 +650,8 @@ public class UserRolesConfigDataService {
 	}
 
 	private List<Object> computeOpsiclientdExtraEvents(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-				+ ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
+		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+				ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS);
 		// key not yet configured
 		List<Object> defaultValues = Collections
 				.singletonList(OpsiServiceNOMPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
@@ -764,7 +764,7 @@ public class UserRolesConfigDataService {
 		// ping_linux
 		String key = RemoteControl.CONFIG_KEY + "." + "ping_linux";
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			String command = "xterm +hold -e ping %host%";
 			String description = "ping, started in a Linux environment";
@@ -781,7 +781,7 @@ public class UserRolesConfigDataService {
 		key = RemoteControl.CONFIG_KEY + "." + "ping_windows";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			String command = "cmd.exe /c start ping %host%";
 			String description = "ping, started in a Windows terminal";
@@ -798,7 +798,7 @@ public class UserRolesConfigDataService {
 		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_linux";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			String command = "firefox https://%host%:4441/info.html";
 			String description = "opsiclientd  timeline, called from a Linux environment, firefox recommended";
@@ -815,7 +815,7 @@ public class UserRolesConfigDataService {
 		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_windows";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			String command = "cmd.exe /c start https://%host%:4441/info.html";
 			String description = "opsiclientd  timeline, called rfrom a Windows environment";
@@ -834,7 +834,7 @@ public class UserRolesConfigDataService {
 		String key = OpsiServiceNOMPersistenceController.CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			StringBuilder qbuf = new StringBuilder("select");
 			qbuf.append(" hostId, productId, installationStatus from ");
@@ -860,7 +860,7 @@ public class UserRolesConfigDataService {
 		String key = SavedSearch.CONFIG_KEY + "." + "product_failed";
 
 		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
 
 			StringBuilder val = new StringBuilder();
 			val.append("{ \"version\" : \"2\", ");
@@ -888,16 +888,16 @@ public class UserRolesConfigDataService {
 	private void checkSSHCommands(Map<String, List<Object>> configDefaultValues,
 			List<Map<String, Object>> readyObjects) {
 		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER,
 					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER_DEFAULT_VALUE,
 					"default windows username for deploy-client-agent-script"));
 		}
 
 		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW,
 					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE,
 					"default windows password for deploy-client-agent-script"));
@@ -907,7 +907,7 @@ public class UserRolesConfigDataService {
 	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
 		boolean result = persistenceController.getConfigDataService().getConfigListCellOptionsPD() != null;
-		Logging.info(this, "checkStandardConfigs, already there " + result);
+		Logging.info(this, "checkStandardConfigs, already there ", result);
 
 		if (!result) {
 			return false;
@@ -957,14 +957,14 @@ public class UserRolesConfigDataService {
 		checkSSHCommands(configDefaultValues, readyObjects);
 
 		if (!configDefaultValues.containsKey(CONFIGED_WORKBENCH_KEY)) {
-			Logging.warning(this,
-					"checkStandardConfigs:  since no values found setting values for  " + CONFIGED_WORKBENCH_KEY);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
+					CONFIGED_WORKBENCH_KEY);
 			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", CONFIGED_WORKBENCH_KEY,
 					persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD(),
 					"default path to opsiproducts"));
 		} else {
-			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to "
-					+ (String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
+			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to ",
+					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
 			persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(
 					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
 		}
@@ -998,7 +998,7 @@ public class UserRolesConfigDataService {
 
 		// Update configs if there are some to update
 		if (!readyObjects.isEmpty()) {
-			Logging.notice(this, "There are " + readyObjects.size() + "configurations to update, so we do this now:");
+			Logging.notice(this, "There are ", readyObjects.size(), "configurations to update, so we do this now:");
 
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
 
@@ -1027,7 +1027,7 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		Logging.info(this, "Obsolete default user configs " + defaultUserConfigsObsolete);
+		Logging.info(this, "Obsolete default user configs ", defaultUserConfigsObsolete);
 
 		if (!defaultUserConfigsObsolete.isEmpty()) {
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS,

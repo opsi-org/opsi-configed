@@ -235,7 +235,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 			valuesListS = "" + clientsToSelect.size();
 		}
 
-		Logging.info(this, "setSelectedValues " + valuesListS);
+		Logging.info(this, "setSelectedValues ", valuesListS);
 
 		if (clientsToSelect == null) {
 			// Clear selection when empty
@@ -251,11 +251,11 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 			selectionModel.setValueIsAdjusting(true);
 			selectionModel.clearSelection();
 			for (int i = 0; i < table.getRowCount(); i++) {
-				Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
+				Logging.debug(this, "setSelectedValues checkValue for i ", i, ": ", table.getValueAt(i, 0));
 
 				if (clientsToSelect.contains(table.getValueAt(i, 0))) {
 					selectionModel.addSelectionInterval(i, i);
-					Logging.debug(this, "setSelectedValues add interval " + i);
+					Logging.debug(this, "setSelectedValues add interval ", i);
 				}
 			}
 
@@ -263,7 +263,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 
 			moveToFirstSelected();
 
-			Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
+			Logging.info(this, "setSelectedValues  produced ", getSelectedValues().size());
 		}
 	}
 
@@ -301,9 +301,9 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 	}
 
 	public void setModel(TableModel tm) {
-		Logging.info(this, "set model with column count " + tm.getColumnCount());
+		Logging.info(this, "set model with column count ", tm.getColumnCount());
 
-		Logging.info(this, " [JTableSelectionPanel] setModel with row count " + tm.getRowCount());
+		Logging.info(this, " [JTableSelectionPanel] setModel with row count ", tm.getRowCount());
 
 		tm.addTableModelListener(table);
 
@@ -357,7 +357,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 				|| !remoteControls.equals(persistenceController.getConfigDataService().getRemoteControlsPD())) {
 			remoteControls = persistenceController.getConfigDataService().getRemoteControlsPD();
 
-			Logging.debug(this, "remoteControls " + remoteControls);
+			Logging.debug(this, "remoteControls ", remoteControls);
 
 			Map<String, String> tooltips = new LinkedHashMap<>();
 			Map<String, String> rcCommands = new HashMap<>();

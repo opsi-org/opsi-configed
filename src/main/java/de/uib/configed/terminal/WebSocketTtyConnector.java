@@ -50,7 +50,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 				writer = null;
 			}
 		} catch (IOException e) {
-			Logging.warning(this, "failed to close output/input stream: " + e);
+			Logging.warning(this, e, "failed to close output/input stream");
 		}
 	}
 
@@ -78,7 +78,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 			writer.write(dataJsonBytes);
 			writer.flush();
 		} catch (IOException ex) {
-			Logging.warning(this, "cannot resize terminal window: ", ex);
+			Logging.warning(this, ex, "cannot resize terminal window: ");
 		}
 	}
 
@@ -109,7 +109,7 @@ public class WebSocketTtyConnector implements TtyConnector {
 			writer.write(dataJsonBytes);
 			writer.flush();
 		} catch (IOException ex) {
-			Logging.warning("cannot send message to server: ", ex);
+			Logging.warning(ex, "cannot send message to server: ");
 		}
 	}
 

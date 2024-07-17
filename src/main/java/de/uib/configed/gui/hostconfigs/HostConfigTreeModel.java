@@ -27,7 +27,7 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 	public HostConfigTreeModel(Set<String> keys) {
 		super(new DefaultMutableTreeNode(""));
 
-		Logging.debug(this.getClass(), "HostConfigTreeModel created for " + keys);
+		Logging.debug(this.getClass(), "HostConfigTreeModel created for ", keys);
 		super.setAsksAllowsChildren(true);
 
 		rootNode = (DefaultMutableTreeNode) super.getRoot();
@@ -44,7 +44,7 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 	}
 
 	private void generateAllPaths(Set<String> keys) {
-		Logging.debug(this, "generateFrom keys " + keys);
+		Logging.debug(this, "generateFrom keys ", keys);
 
 		Map<String, DefaultMutableTreeNode> path2Node = new TreeMap<>();
 

@@ -144,7 +144,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
 			selectedDepot = "" + comboChooseDepot.getSelectedItem();
-			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
+			Logging.info(this, "actionPerformed  depot selected ", selectedDepot);
 			depots.clear();
 			depots.add(selectedDepot);
 			SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
@@ -179,8 +179,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 	// implements NameProducer
 	@Override
 	public String produceName() {
-		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory " + fieldTargetPath + " , "
-				+ depotProductDirectory);
+		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory ", fieldTargetPath, " , ",
+				depotProductDirectory);
 		if (fieldTargetPath == null || fieldTargetPath.getText().isEmpty()
 				|| fieldTargetPath.getText().startsWith(depotProductDirectory)) {
 			return depotProductDirectory;
@@ -277,7 +277,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			File targetDirectory = null;
 
 			String pathWinPE = fieldPathWinPE.getText().trim();
-			Logging.debug(this, "copy  " + pathWinPE + " to " + targetDirectory);
+			Logging.debug(this, "copy  ", pathWinPE, " to ", targetDirectory);
 
 			if (!pathWinPE.isEmpty()) {
 				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_PE);
@@ -285,7 +285,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 
 			String pathInstallFiles = fieldPathInstallFiles.getText().trim();
-			Logging.debug(this, "copy  " + pathInstallFiles + " to " + targetDirectory);
+			Logging.debug(this, "copy  ", pathInstallFiles, " to ", targetDirectory);
 			if (!pathInstallFiles.isEmpty()) {
 				targetDirectory = new File(
 						fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_INSTALL_FILES);
@@ -311,7 +311,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			// check if product key is new and should be changed
 			Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(
 					persistenceController.getHostInfoCollections().getConfigServer(), winProduct);
-			Logging.debug(this, " getProductproperties " + propsMap);
+			Logging.debug(this, " getProductproperties ", propsMap);
 
 			String oldProductKey = null;
 
@@ -332,7 +332,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					activateLoadingCursor();
-					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
+					Logging.info(this, "setCommonProductPropertyValue ", depots, ", ", winProduct + ", ", values);
 					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
 							"productkey", values);
 
@@ -341,10 +341,10 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 		} catch (IOException ex) {
 			deactivateLoadingCursor();
-			Logging.error("copy error:\n" + ex, ex);
+			Logging.error(ex, "copy error:\n", ex);
 		} catch (HeadlessException ex) {
 			deactivateLoadingCursor();
-			Logging.error("Headless exception when invoking showOptionDialog", ex);
+			Logging.error(ex, "Headless exception when invoking showOptionDialog");
 		}
 	}
 

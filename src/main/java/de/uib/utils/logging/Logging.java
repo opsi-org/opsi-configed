@@ -25,6 +25,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FShowList;
 
+@SuppressWarnings("java:S923")
 public final class Logging {
 	private static String logDirectoryName;
 	private static String logFilenameInUse;
@@ -152,7 +153,7 @@ public final class Logging {
 
 			logDirectoryName = logDirectory.getAbsolutePath();
 
-			info("Logging directory is: " + logDirectoryName);
+			info("Logging directory is: ", logDirectoryName);
 
 			logDirectory.mkdirs();
 
@@ -167,7 +168,7 @@ public final class Logging {
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename), false, StandardCharsets.UTF_8);
 			logFilenameInUse = logFilename;
 		} catch (IOException ex) {
-			Logging.error("file " + logFilename + " or directory " + logDirectoryName + " not found...", ex);
+			Logging.error(ex, "file ", logFilename, " or directory ", logDirectoryName, " not found...");
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}
 	}
@@ -186,12 +187,12 @@ public final class Logging {
 
 		for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
 			if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i])) {
-				Logging.warning("renaming logfile failed for file: " + logFiles[i - 1]);
+				Logging.warning("renaming logfile failed for file: ", logFiles[i - 1]);
 			}
 		}
 
 		if (logFile.exists() && !logFile.renameTo(logFiles[0])) {
-			Logging.warning("renaming logfile failed for file: " + logFiles[0]);
+			Logging.warning("renaming logfile failed for file: ", logFiles[0]);
 		}
 	}
 
@@ -223,17 +224,24 @@ public final class Logging {
 		return "" + c.size();
 	}
 
-	public static synchronized void log(int level, String mesg, Object caller, Throwable ex) {
+	public static synchronized void log(int level, Object caller, Throwable ex, String message, Object... mesg) {
 		if (level > logLevelConsole && level > logLevelFile) {
 			return;
 		}
 
+		StringBuilder result = new StringBuilder(message);
+		for (Object o : mesg) {
+			result.append(o);
+		}
+
+		String loggingMessage = result.toString();
+
 		String currentTime = formatter.format(LocalDateTime.now());
 		String context = Thread.currentThread().getName();
 		if (caller instanceof Class) {
-			mesg += "   (" + ((Class<?>) caller).getName() + ")";
+			loggingMessage += "   (" + ((Class<?>) caller).getName() + ")";
 		} else if (caller != null) {
-			mesg += "   (" + caller.getClass().getName() + ")";
+			loggingMessage += "   (" + caller.getClass().getName() + ")";
 		} else {
 			// Do nothing if caller is null
 		}
@@ -249,7 +257,7 @@ public final class Logging {
 			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
 					"\033[0m");
 
-			System.err.println(String.format(format, level, currentTime, context, mesg) + exMesg);
+			System.err.println(String.format(format, level, currentTime, context, loggingMessage) + exMesg);
 		}
 
 		if (level <= logLevelFile) {
@@ -257,130 +265,134 @@ public final class Logging {
 				initLogFile();
 			}
 			if (logFileWriter != null) {
-				logFileWriter.println(String.format(logFormat, level, currentTime, context, mesg) + exMesg);
+				logFileWriter.println(String.format(logFormat, level, currentTime, context, loggingMessage) + exMesg);
 				logFileWriter.flush();
 			}
 		}
 
 		if (showOnGUI(level)) {
-			addErrorToList(mesg, currentTime);
+			addErrorToList(loggingMessage, currentTime);
 		}
 	}
 
-	public static void log(Object caller, int level, String mesg, Throwable ex) {
-		log(level, mesg, caller, ex);
+	public static synchronized void log(int level, Object caller, Throwable ex, Object... mesg) {
+		log(level, caller, ex, "", mesg);
 	}
 
-	public static void log(Object caller, int level, String mesg) {
-		log(level, mesg, caller, null);
+	public static void log(Object caller, int level, Throwable ex, Object... mesg) {
+		log(level, caller, ex, mesg);
 	}
 
-	public static void log(int level, String mesg, Throwable ex) {
-		log(level, mesg, null, ex);
+	public static void log(Object caller, int level, Object... mesg) {
+		log(level, caller, null, mesg);
 	}
 
-	public static void log(int level, String mesg) {
-		log(level, mesg, null, null);
+	public static void log(int level, Throwable ex, Object... mesg) {
+		log(level, null, ex, mesg);
 	}
 
-	public static void secret(Object caller, String mesg) {
+	public static void log(int level, String message, Object... mesg) {
+		log(level, null, (Throwable) null, message, mesg);
+	}
+
+	public static void secret(Object caller, Object... mesg) {
 		log(caller, LEVEL_SECRET, mesg);
 	}
 
-	public static void secret(String mesg) {
-		log(LEVEL_SECRET, mesg);
+	public static void secret(String message, Object... mesg) {
+		log(LEVEL_SECRET, message, mesg);
 	}
 
-	public static void trace(Object caller, String mesg) {
+	public static void trace(Object caller, Object... mesg) {
 		log(caller, LEVEL_TRACE, mesg);
 	}
 
-	public static void trace(String mesg) {
-		log(LEVEL_TRACE, mesg);
+	public static void trace(String message, Object... mesg) {
+		log(LEVEL_TRACE, message, mesg);
 	}
 
-	public static void debug(Object caller, String mesg) {
+	public static void debug(Object caller, Object... mesg) {
 		log(caller, LEVEL_DEBUG, mesg);
 	}
 
-	public static void debug(String mesg) {
-		log(LEVEL_DEBUG, mesg);
+	public static void debug(String message, Object... mesg) {
+		log(LEVEL_DEBUG, message, mesg);
 	}
 
-	public static void info(Object caller, String mesg) {
+	public static void info(Object caller, Object... mesg) {
 		log(caller, LEVEL_INFO, mesg);
 	}
 
-	public static void info(String mesg) {
-		log(LEVEL_INFO, mesg);
+	public static void info(String message, Object... mesg) {
+		log(LEVEL_INFO, message, mesg);
 	}
 
-	public static void notice(Object caller, String mesg) {
+	public static void notice(Object caller, Object... mesg) {
 		log(caller, LEVEL_NOTICE, mesg);
 	}
 
-	public static void notice(String mesg) {
-		log(LEVEL_NOTICE, mesg);
+	public static void notice(String message, Object... mesg) {
+		log(LEVEL_NOTICE, message, mesg);
 	}
 
-	public static void warning(Object caller, String mesg) {
+	public static void warning(Object caller, Object... mesg) {
 		log(caller, LEVEL_WARNING, mesg);
 	}
 
-	public static void warning(String mesg) {
-		log(LEVEL_WARNING, mesg);
+	public static void warning(String message, Object... mesg) {
+		log(LEVEL_WARNING, message, mesg);
 	}
 
-	public static void warning(String mesg, Throwable ex) {
-		log(LEVEL_WARNING, mesg, ex);
+	public static void warning(Throwable ex, Object... mesg) {
+		log(LEVEL_WARNING, ex, mesg);
 	}
 
-	public static void warning(Object caller, String mesg, Throwable ex) {
-		log(caller, LEVEL_WARNING, mesg, ex);
+	public static void warning(Object caller, Throwable ex, Object... mesg) {
+		log(caller, LEVEL_WARNING, ex, mesg);
 	}
 
-	public static void error(Object caller, String mesg) {
+	public static void error(Object caller, Object... mesg) {
 		log(caller, LEVEL_ERROR, mesg);
 	}
 
-	public static void error(String mesg) {
-		log(LEVEL_ERROR, mesg);
+	public static void error(String message, Object... mesg) {
+		log(LEVEL_ERROR, message, mesg);
 	}
 
-	public static void error(String mesg, Throwable ex) {
-		log(LEVEL_ERROR, mesg, ex);
+	public static void error(Throwable ex, Object... mesg) {
+		log(LEVEL_ERROR, ex, mesg);
 	}
 
-	public static void error(Object caller, String mesg, Throwable ex) {
-		log(caller, LEVEL_ERROR, mesg, ex);
+	public static void error(Object caller, Throwable ex, Object... mesg) {
+		log(caller, LEVEL_ERROR, ex, mesg);
 	}
 
-	public static void critical(Object caller, String mesg) {
+	public static void critical(Object caller, Object... mesg) {
 		log(caller, LEVEL_CRITICAL, mesg);
 	}
 
-	public static void critical(String mesg) {
-		log(LEVEL_CRITICAL, mesg);
+	public static void critical(String message, Object... mesg) {
+		log(LEVEL_CRITICAL, message, mesg);
 	}
 
-	public static void critical(Object caller, String mesg, Throwable ex) {
-		log(caller, LEVEL_CRITICAL, mesg, ex);
+	public static void critical(Object caller, Throwable ex, Object... mesg) {
+		log(caller, LEVEL_CRITICAL, ex, mesg);
 	}
 
-	public static void essential(Object caller, String mesg) {
+	public static void essential(Object caller, Object... mesg) {
 		log(caller, LEVEL_ESSENTIAL, mesg);
 	}
 
-	public static void essential(String mesg) {
-		log(LEVEL_ESSENTIAL, mesg);
+	public static void essential(String message, Object... mesg) {
+		log(LEVEL_ESSENTIAL, message, mesg);
 	}
 
-	public static void devel(Object caller, String mesg) {
+	public static void devel(Object caller, Object... mesg) {
 		essential(caller, mesg);
 	}
 
-	public static void devel(String mesg) {
-		essential(mesg);
+	public static void devel(String message, Object... mesg) {
+		essential(message, mesg);
 	}
 
 	public static void clearErrorList() {
@@ -399,7 +411,7 @@ public final class Logging {
 
 		int errorCount = errorList.size();
 
-		info("error list size " + errorCount);
+		info("error list size ", errorCount);
 
 		if (errorCount == 0) {
 			return;

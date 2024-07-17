@@ -93,7 +93,7 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	private void replay() {
-		Logging.debug(this, "replay " + comboSelectImage.getSelectedItem());
+		Logging.debug(this, "replay ", comboSelectImage.getSelectedItem());
 
 		if (comboSelectImage.getSelectedItem() == null) {
 			return;

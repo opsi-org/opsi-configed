@@ -33,7 +33,7 @@ public class LicensepoolEntry extends AbstractTableEntry {
 	@Override
 	public String put(String key, String value) {
 		if (KEYS.indexOf(key) <= -1) {
-			Logging.error(this, "not valid key: " + key);
+			Logging.error(this, "not valid key: ", key);
 			return null;
 		} else {
 			return super.put(key, value);

@@ -176,8 +176,8 @@ public class SoftwareDataService {
 			String swKEY = entry.getIdent();
 
 			if (fSoftware2LicensePool.get(swKEY) != null && !fSoftware2LicensePool.get(swKEY).equals(licensePoolKEY)) {
-				Logging.error("software with ident \"" + swKEY + "\" has assigned license pool "
-						+ fSoftware2LicensePool.get(swKEY) + " as well as " + licensePoolKEY);
+				Logging.error("software with ident \"", swKEY, "\" has assigned license pool ",
+						fSoftware2LicensePool.get(swKEY), " as well as ", licensePoolKEY);
 			}
 			fSoftware2LicensePool.put(swKEY, licensePoolKEY);
 
@@ -185,8 +185,8 @@ public class SoftwareDataService {
 					v -> new ArrayList<>());
 			if (softwareIds.indexOf(swKEY) == -1) {
 				if (getInstalledSoftwareInformationForLicensingPD().get(swKEY) == null) {
-					Logging.warning(this, "license pool " + licensePoolKEY
-							+ " is assigned to a not listed software with ID " + swKEY);
+					Logging.warning(this, "license pool ", licensePoolKEY,
+							" is assigned to a not listed software with ID ", swKEY);
 					List<String> unknownSoftwareIds = fLicensePool2UnknownSoftwareList.computeIfAbsent(licensePoolKEY,
 							s -> new ArrayList<>());
 					unknownSoftwareIds.add(swKEY);
@@ -197,8 +197,8 @@ public class SoftwareDataService {
 			}
 		}
 
-		Logging.info(this, "retrieveRelationsAuditSoftwareToLicensePools,  softwareWithoutAssociatedLicensePool "
-				+ softwareWithoutAssociatedLicensePool.size());
+		Logging.info(this, "retrieveRelationsAuditSoftwareToLicensePools,  softwareWithoutAssociatedLicensePool ",
+				softwareWithoutAssociatedLicensePool.size());
 	}
 
 	public AuditSoftwareXLicensePool getAuditSoftwareXLicensePoolPD() {
@@ -251,13 +251,13 @@ public class SoftwareDataService {
 	}
 
 	public boolean swEntryExists(SWAuditClientEntry swAuditClientEntry) {
-		Logging.info(this, "Check if software ident " + swAuditClientEntry.getSWIdent() + " entry exists");
+		Logging.info(this, "Check if software ident ", swAuditClientEntry.getSWIdent(), " entry exists");
 		retrieveInstalledSoftwareInformationPD();
 		boolean swIdent = false;
 		Set<String> softwareList = getSoftwareListPD();
 		if (softwareList == null || !softwareList.contains(swAuditClientEntry.getSWIdent())) {
 			if (softwareList != null) {
-				Logging.info(this, "Until now existing installed software entries " + softwareList.size());
+				Logging.info(this, "Until now existing installed software entries ", softwareList.size());
 			}
 
 			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
@@ -270,15 +270,15 @@ public class SoftwareDataService {
 				Logging.info(this, "Reloading installed software information");
 				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 				softwareList = getSoftwareListPD();
-				Logging.info(this, "Now existing installed software entries " + softwareList.size());
+				Logging.info(this, "Now existing installed software entries ", softwareList.size());
 				if (softwareList.contains(swAuditClientEntry.getSWIdent())) {
-					Logging.info(this, "Found software ident " + swAuditClientEntry.getSWIdent() + " after reload");
+					Logging.info(this, "Found software ident ", swAuditClientEntry.getSWIdent(), " after reload");
 					swIdent = true;
 				}
 			}
 
 			if (!swIdent) {
-				Logging.warning(this, "Missing installed software entry " + swAuditClientEntry.getSWIdent());
+				Logging.warning(this, "Missing installed software entry ", swAuditClientEntry.getSWIdent());
 			}
 		} else {
 			swIdent = true;
@@ -370,8 +370,8 @@ public class SoftwareDataService {
 
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(Collection<String> clients) {
 		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
-		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: " + clients.size());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start ", Utils.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: ", clients.size());
 		final int STEP_SIZE = 100;
 
 		Iterator<String> clientIterator = clients.iterator();
@@ -392,8 +392,8 @@ public class SoftwareDataService {
 					new Object[] { callAttributes, callFilter });
 			List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(omc);
 
-			Logging.info(this,
-					"retrieveSoftwareAuditOnClients, finished a request, map size " + softwareAuditOnClients.size());
+			Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size ",
+					softwareAuditOnClients.size());
 
 			for (String clientId : clientListForCall) {
 				client2software.put(clientId, new LinkedList<>());
@@ -412,8 +412,7 @@ public class SoftwareDataService {
 			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 		}
 
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end ", Utils.usedMemory());
 
 		return client2software;
 	}
@@ -481,8 +480,8 @@ public class SoftwareDataService {
 		if (exec.doCall(omc)) {
 			return softwareLicenseId;
 		} else {
-			Logging.error(this, "could not execute " + methodName + "  with softwareLicenseId " + softwareLicenseId
-					+ " and licenseContractId " + licenseContractId);
+			Logging.error(this, "could not execute ", methodName, "  with softwareLicenseId ", softwareLicenseId,
+					" and licenseContractId ", licenseContractId);
 
 			return "";
 		}
@@ -559,7 +558,7 @@ public class SoftwareDataService {
 	}
 
 	public boolean removeAssociations(String licensePoolId, List<String> softwareIds) {
-		Logging.info(this, "removeAssociations licensePoolId, softwareIds " + licensePoolId + ", " + softwareIds);
+		Logging.info(this, "removeAssociations licensePoolId, softwareIds ", licensePoolId, ", ", softwareIds);
 
 		if (licensePoolId == null || softwareIds == null || !userRolesConfigDataService.hasServerFullPermissionPD()
 				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
@@ -611,8 +610,8 @@ public class SoftwareDataService {
 
 	private boolean setWindowsSoftwareIds2LPool(String licensePoolId, final List<String> softwareToAssign,
 			boolean onlyAdding) {
-		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:" + licensePoolId + " , "
-				+ softwareToAssign);
+		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:", licensePoolId, " , ",
+				softwareToAssign);
 
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()
 				|| !moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
@@ -635,8 +634,8 @@ public class SoftwareDataService {
 		oldEntriesTruely.removeAll(softwareToAssign);
 		oldEntriesTruely.retainAll(instSwI.keySet());
 
-		Logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely " + softwareToAssignTruely);
-		Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
+		Logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely ", softwareToAssignTruely);
+		Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely ", oldEntriesTruely);
 
 		boolean result = updateLicensepoolsOnServer(onlyAdding, oldEntriesTruely, entriesToRemove, licensePoolId,
 				instSwI, softwareToAssignTruely);
@@ -654,8 +653,8 @@ public class SoftwareDataService {
 			softwareWithoutAssociatedLicensePool.addAll(entriesToRemove);
 			softwareWithoutAssociatedLicensePool.removeAll(softwareToAssign);
 
-			Logging.info(this, "setWindowsSoftwareIds2LPool licensePool, fLicensePool2SoftwareList " + licensePoolId
-					+ " : " + fLicensePool2SoftwareList.get(licensePoolId));
+			Logging.info(this, "setWindowsSoftwareIds2LPool licensePool, fLicensePool2SoftwareList ", licensePoolId,
+					" : ", fLicensePool2SoftwareList.get(licensePoolId));
 
 			for (String ident : newList) {
 				// give zero length parts as ""
@@ -666,8 +665,8 @@ public class SoftwareDataService {
 				swIdents.add(ident);
 
 				Logging.info(this,
-						"setWindowsSoftwareIds2LPool, collecting all idents for a name (even if not belonging to the pool), add ident "
-								+ ident + " to set for name " + swName);
+						"setWindowsSoftwareIds2LPool, collecting all idents for a name (even if not belonging to the pool), add ident ",
+						ident, " to set for name ", swName);
 			}
 		}
 
@@ -690,10 +689,10 @@ public class SoftwareDataService {
 				item.put("type", "AuditSoftwareToLicensePool");
 				deleteItems.add(item);
 
-				Logging.info(this, "" + instSwI.get(swIdent));
+				Logging.info(this, "", instSwI.get(swIdent));
 			}
-			Logging.info(this, "entriesToRemove " + entriesToRemove);
-			Logging.info(this, "deleteItems " + deleteItems);
+			Logging.info(this, "entriesToRemove ", entriesToRemove);
+			Logging.info(this, "deleteItems ", deleteItems);
 
 			if (!deleteItems.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_DELETE_OBJECTS,
@@ -718,7 +717,7 @@ public class SoftwareDataService {
 			createItems.add(item);
 		}
 
-		Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
+		Logging.info(this, "setWindowsSoftwareIds2LPool, createItems ", createItems);
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
 				new Object[] { createItems });
@@ -745,7 +744,7 @@ public class SoftwareDataService {
 			ok = removeAssociations(licensePoolIDOld, swIds);
 
 			if (!ok) {
-				Logging.warning(this, "editPool2AuditSoftware " + " failed");
+				Logging.warning(this, "editPool2AuditSoftware failed");
 			}
 		}
 
@@ -768,31 +767,31 @@ public class SoftwareDataService {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_TO_LICENSE_POOL_CREATE_OBJECTS,
 					new Object[] { readyObjects });
 
-			Logging.info(this, "editPool2AuditSoftware call " + omc);
+			Logging.info(this, "editPool2AuditSoftware call ", omc);
 			if (exec.doCall(omc)) {
 				ok = true;
 			} else {
-				Logging.warning(this, "editPool2AuditSoftware " + omc + " failed");
+				Logging.warning(this, "editPool2AuditSoftware ", omc, " failed");
 			}
 		}
 
-		Logging.info(this, "editPool2AuditSoftware ok " + ok);
+		Logging.info(this, "editPool2AuditSoftware ok ", ok);
 
 		if (ok) {
 			Map<String, String> fSoftware2LicensePool = cacheManager
 					.getCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL, Map.class);
 			Map<String, List<String>> fLicensePool2SoftwareList = cacheManager
 					.getCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, Map.class);
-			Logging.info(this, "fSoftware2LicensePool == null " + (fSoftware2LicensePool == null));
+			Logging.info(this, "fSoftware2LicensePool == null ", fSoftware2LicensePool == null);
 
 			if (fSoftware2LicensePool != null) {
-				Logging.info(this, "fSoftware2LicensePool.get( softwareID ) " + fSoftware2LicensePool.get(softwareID));
+				Logging.info(this, "fSoftware2LicensePool.get( softwareID ) ", fSoftware2LicensePool.get(softwareID));
 				fSoftware2LicensePool.put(softwareID, licensePoolIDNew);
 			}
 			List<String> fLicensePoolSoftwareList = fLicensePool2SoftwareList.computeIfAbsent(licensePoolIDNew,
 					arg -> new ArrayList<>());
 
-			Logging.info(this, "fLicensePool2SoftwareList.get( licensePoolIDNew ) " + fLicensePoolSoftwareList);
+			Logging.info(this, "fLicensePool2SoftwareList.get( licensePoolIDNew ) ", fLicensePoolSoftwareList);
 
 			fLicensePoolSoftwareList.add(softwareID);
 			cacheManager.setCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST, fLicensePool2SoftwareList);
@@ -827,7 +826,7 @@ public class SoftwareDataService {
 
 		// table SOFTWARE_LICENSE_TO_LICENSE_POOL
 		Map<String, ExtendedInteger> pool2allowedUsagesCount = getPool2AllowedUsagesCount();
-		Logging.debug(this, " pool2allowedUsagesCount " + pool2allowedUsagesCount);
+		Logging.debug(this, " pool2allowedUsagesCount ", pool2allowedUsagesCount);
 
 		// table LICENSE_ON_CLIENT
 		Logging.info(this, " license usages ");
@@ -868,19 +867,19 @@ public class SoftwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION, rowsLicensesReconciliation);
 		cacheManager.setCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS, rowsLicenseStatistics);
 
-		Logging.debug(this, "rowsLicenseStatistics " + rowsLicenseStatistics);
+		Logging.debug(this, "rowsLicenseStatistics ", rowsLicenseStatistics);
 	}
 
 	private void setUsedByOpsiToTrue(String licensePoolId, Set<String> listOfUsingClients,
 			Map<String, Map<String, Object>> rowsLicensesReconciliation) {
-		Logging.debug(this, "pool  " + licensePoolId + " used_by_opsi on clients : " + listOfUsingClients);
+		Logging.debug(this, "pool  ", licensePoolId, " used_by_opsi on clients : ", listOfUsingClients);
 
 		if (listOfUsingClients != null) {
 			for (String client : listOfUsingClients) {
 				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
 
 				if (rowsLicensesReconciliation.get(pseudokey) == null) {
-					Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
+					Logging.warning("client ", client, " or license pool ID ", licensePoolId, " do not exist");
 				} else {
 					rowsLicensesReconciliation.get(pseudokey).put("used_by_opsi", true);
 				}
@@ -928,7 +927,7 @@ public class SoftwareDataService {
 		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (String softwareIdent : getInstalledSoftwareInformationForLicensingPD().keySet()) {
 			String licensePoolId = fSoftware2LicensePool.get(softwareIdent);
-			Logging.debug(this, "software " + softwareIdent + " installed on " + swId2clients.get(softwareIdent));
+			Logging.debug(this, "software ", softwareIdent, " installed on ", swId2clients.get(softwareIdent));
 
 			if (licensePoolId == null || swId2clients.get(softwareIdent) == null) {
 				continue;
@@ -938,7 +937,7 @@ public class SoftwareDataService {
 				String pseudokey = Utils.pseudokey(new String[] { client, licensePoolId });
 
 				if (rowsLicensesReconciliation.get(pseudokey) == null) {
-					Logging.warning("client " + client + " or license pool ID " + licensePoolId + " do not exist");
+					Logging.warning("client ", client, " or license pool ID ", licensePoolId, " do not exist");
 				} else {
 					rowsLicensesReconciliation.get(pseudokey).put("SWinventory_used", true);
 				}
@@ -988,17 +987,17 @@ public class SoftwareDataService {
 		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
 		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (StringValuedRelationElement swXpool : auditSoftwareXLicensePool) {
-			Logging.debug(this, " retrieveStatistics1 relationElement  " + swXpool);
+			Logging.debug(this, " retrieveStatistics1 relationElement  ", swXpool);
 			String pool = swXpool.get(LicensepoolEntry.ID_SERVICE_KEY);
 
 			TreeSet<String> clientsServedByPool = pool2clients.computeIfAbsent(pool, s -> new TreeSet<>());
 
 			String swIdent = swXpool.get(AuditSoftwareXLicensePool.SW_ID);
 
-			Logging.debug(this, " retrieveStatistics1 swIdent " + swIdent);
+			Logging.debug(this, " retrieveStatistics1 swIdent ", swIdent);
 
 			if (swId2clients.get(swIdent) != null) {
-				Logging.debug(this, "pool " + pool + " serves clients " + swId2clients.get(swIdent));
+				Logging.debug(this, "pool ", pool, " serves clients ", swId2clients.get(swIdent));
 				clientsServedByPool.addAll(swId2clients.get(swIdent));
 			}
 		}
@@ -1006,7 +1005,7 @@ public class SoftwareDataService {
 	}
 
 	private Map<String, Set<String>> getSoftwareIdentOnClients(final List<String> clients) {
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Utils.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start ", Utils.usedMemory());
 		int stepSize = 100;
 		Map<String, Set<String>> softwareIdent2clients = new HashMap<>();
 		while (!clients.isEmpty()) {
@@ -1028,8 +1027,8 @@ public class SoftwareDataService {
 					new Object[] { callAttributes, callFilter });
 			List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(omc);
 
-			Logging.info(this,
-					"retrieveSoftwareAuditOnClients, finished a request, map size " + softwareAuditOnClients.size());
+			Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size ",
+					softwareAuditOnClients.size());
 
 			for (Map<String, Object> item : softwareAuditOnClients) {
 				SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
@@ -1041,7 +1040,7 @@ public class SoftwareDataService {
 			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 		}
 
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Utils.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end ", Utils.usedMemory());
 		persistenceController.notifyPanelCompleteWinProducts();
 
 		return softwareIdent2clients;

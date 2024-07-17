@@ -12,10 +12,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.Highlight;
+import javax.swing.text.JTextComponent;
 
 import de.uib.utils.logging.Logging;
-
-import javax.swing.text.JTextComponent;
 
 /**
  * A simple class that searches for an expression in a document and highlights
@@ -54,7 +53,7 @@ public class DocumentSearcher {
 
 		String content = getShownContent();
 		if (content == null) {
-			Logging.info(this, "No content is displayed. Unable to search for specified expression: " + expression);
+			Logging.info(this, "No content is displayed. Unable to search for specified expression: ", expression);
 			return -1;
 		}
 
@@ -85,7 +84,7 @@ public class DocumentSearcher {
 			}
 		} catch (BadLocationException e) {
 			// Cannot happen
-			Logging.warning(this, "unexpected exception in search", e);
+			Logging.warning(this, e, "unexpected exception in search");
 		}
 		return content;
 	}
@@ -119,7 +118,7 @@ public class DocumentSearcher {
 		try {
 			comp.getHighlighter().addHighlight(startIndex, endIndex, painter);
 		} catch (BadLocationException e) {
-			Logging.warning(this, "could not add highlight to comphighlighter", e);
+			Logging.warning(this, e, "could not add highlight to comphighlighter");
 		}
 	}
 }

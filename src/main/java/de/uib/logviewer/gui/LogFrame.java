@@ -261,7 +261,7 @@ public class LogFrame extends JFrame {
 			if (fn != null && !fn.isEmpty()) {
 				return readFile(fn);
 			} else {
-				Logging.error(this, "File does not exist: " + fn);
+				Logging.error(this, "File does not exist: ", fn);
 				JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn,
 						null, JOptionPane.WARNING_MESSAGE);
 				return "";
@@ -277,9 +277,8 @@ public class LogFrame extends JFrame {
 					i++;
 				}
 			} catch (IOException ex) {
-				Logging.error(
-						"Error encountered while trying to save to file: " + filename + "\n --- ; stop saving to file",
-						ex);
+				Logging.error(ex, "Error encountered while trying to save to file: ", filename,
+						"\n --- ; stop saving to file");
 			}
 		}
 	}
@@ -310,9 +309,9 @@ public class LogFrame extends JFrame {
 		openFile(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 
 		if (fileName != null && !fileName.isEmpty()) {
-			Logging.info(this, "Used memory " + Utils.usedMemory());
+			Logging.info(this, "Used memory ", Utils.usedMemory());
 			logPane.setText(readFile(fileName));
-			Logging.info(this, "Used memory " + Utils.usedMemory());
+			Logging.info(this, "Used memory ", Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
 			logPane.removeAllHighlights();
@@ -336,7 +335,7 @@ public class LogFrame extends JFrame {
 		File file = new File(fileName);
 
 		if (file.isDirectory()) {
-			Logging.error("This is not a file, it is a directory: " + fileName);
+			Logging.error("This is not a file, it is a directory: ", fileName);
 			resetFileName();
 			JOptionPane.showMessageDialog(this,
 					Configed.getResourceValue("LogFrame.notFileButDirectory") + " " + fileName, null,
@@ -344,7 +343,7 @@ public class LogFrame extends JFrame {
 		} else if (file.exists()) {
 			String fileExtension = getFileExtension(fileName);
 			if (!isFileExtensionSupported(fileExtension)) {
-				Logging.error(this, "File with extension " + fileExtension + " is unsupported");
+				Logging.error(this, "File with extension ", fileExtension, " is unsupported");
 				FTextArea fUnsupportedFileExtensionInfo = new FTextArea(this,
 						Configed.getResourceValue("LogFrame.unsupportedFileExtension.title"),
 						Configed.getResourceValue("ConfigedMain.noGroupSelected"), true,
@@ -360,7 +359,7 @@ public class LogFrame extends JFrame {
 				result = readCompressedFile(file);
 			}
 		} else {
-			Logging.error("This file does not exist: " + fileName);
+			Logging.error("This file does not exist: ", fileName);
 			resetFileName();
 			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fileName,
 					null, JOptionPane.WARNING_MESSAGE);
@@ -421,7 +420,7 @@ public class LogFrame extends JFrame {
 			result = readInputStream(fis);
 			fis.close();
 		} catch (IOException ex) {
-			Logging.error("Error opening file: " + ex);
+			Logging.error(ex, "Error opening file: ");
 			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.errorOpeningFile") + "\n" + ex,
 					null, JOptionPane.WARNING_MESSAGE);
 		}
@@ -441,7 +440,7 @@ public class LogFrame extends JFrame {
 			}
 			br.close();
 		} catch (IOException ex) {
-			Logging.error("Error reading file: " + ex);
+			Logging.error(ex, "Error reading file: ");
 			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.errorReadingFile") + "\n" + ex,
 					null, JOptionPane.WARNING_MESSAGE);
 		}

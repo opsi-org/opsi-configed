@@ -40,8 +40,8 @@ public class ProductVersionCellRenderer extends ColoredTableCellRenderer {
 				String serverProductVersion = "";
 
 				if (istm.getGlobalProductInfos().get(productId) == null) {
-					Logging.warning(this,
-							" istm.getGlobalProductInfos()).get(productId) == null for productId " + productId);
+					Logging.warning(this, " istm.getGlobalProductInfos()).get(productId) == null for productId ",
+							productId);
 				} else {
 					serverProductVersion = serverProductVersion
 							+ istm.getGlobalProductInfos().get(productId).get(ProductState.KEY_VERSION_INFO);

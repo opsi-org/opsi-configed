@@ -112,7 +112,7 @@ public final class LicensingInfoMap {
 	private List<String> disabledWarningModules;
 
 	private LicensingInfoMap(Map<String, Object> jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
-		Logging.info(getClass(), "generate with reducedView " + reduced + " at the moment ignored, we set false");
+		Logging.info(getClass(), "generate with reducedView ", reduced, " at the moment ignored, we set false");
 
 		jOResult = POJOReMapper.remap(jsonObj.get(RESULT), new TypeReference<Map<String, Object>>() {
 		});
@@ -136,7 +136,7 @@ public final class LicensingInfoMap {
 
 	public static LicensingInfoMap getInstance(Map<String, Object> jsonObj, Map<String, List<Object>> configVals,
 			boolean reduced) {
-		Logging.info("reduced, instance here " + reduced + ", " + instance);
+		Logging.info("reduced, instance here ", reduced, ", ", instance);
 
 		if (instance == null || instanceComplete == null || instanceReduced == null) {
 			instanceComplete = new LicensingInfoMap(jsonObj, configVals, false);
@@ -153,8 +153,8 @@ public final class LicensingInfoMap {
 	}
 
 	public static void setReduced(boolean reduced) {
-		Logging.info("setReduced instanceReduced " + instanceReduced + " cols " + instanceReduced.getColumnNames());
-		Logging.info("setReduced instanceComplete " + instanceComplete + " cols " + instanceComplete.getColumnNames());
+		Logging.info("setReduced instanceReduced ", instanceReduced, " cols ", instanceReduced.getColumnNames());
+		Logging.info("setReduced instanceComplete ", instanceComplete, " cols ", instanceComplete.getColumnNames());
 
 		reducedView = reduced;
 		if (reduced) {
@@ -316,7 +316,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (NumberFormatException ex) {
-			Logging.error(this, " produceConfigs ", ex);
+			Logging.error(this, ex, " produceConfigs ");
 		}
 	}
 
@@ -499,7 +499,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(getClass(), " getCurrentlyActiveLicense " + ex);
+			Logging.error(getClass(), ex, " getCurrentlyActiveLicense ");
 		}
 
 		return newest;
@@ -532,7 +532,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(getClass(), " findNextChangeDate ", ex);
+			Logging.error(getClass(), ex, " findNextChangeDate ");
 		}
 
 		return null;
@@ -577,7 +577,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(getClass(), " checkTimeLeft ", ex);
+			Logging.error(getClass(), ex, " checkTimeLeft ");
 		}
 
 		return STATE_DAYS_OKAY;

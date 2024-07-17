@@ -156,7 +156,7 @@ public class OpsiServiceNOMPersistenceController {
 	private String triggeredEvent;
 
 	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
-		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
+		Logging.info(this.getClass(), "start construction, \nconnect to ", server, " as ", user);
 		this.user = user;
 
 		Logging.debug(this.getClass(), "create");
@@ -434,7 +434,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		result = result && getConnectionState().getState() == ConnectionState.CONNECTED;
-		Logging.info(this, "tried to make connection result " + result);
+		Logging.info(this, "tried to make connection result ", result);
 		return result;
 	}
 

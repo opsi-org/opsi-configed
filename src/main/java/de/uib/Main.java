@@ -112,7 +112,7 @@ public class Main {
 	}
 
 	public static void showHelp() {
-		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ")");
+		Logging.essential("configed version ", Globals.VERSION, " (", Globals.VERDATE, ")");
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setWidth(Integer.MAX_VALUE);
@@ -143,12 +143,12 @@ public class Main {
 
 				Logging.setLogLevel(loglevel);
 			} catch (NumberFormatException ex) {
-				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
+				Logging.debug(" \n\nArgument >", loglevelString, "< has no integer format");
 			}
 		}
 
 		if (cmd.hasOption("version")) {
-			Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ")");
+			Logging.essential("configed version ", Globals.VERSION, " (", Globals.VERDATE, ")");
 			endApp(0);
 		}
 
@@ -173,7 +173,7 @@ public class Main {
 
 		// After setting locale then we can use localization values
 		Set<String> existingLocales = Messages.getLocaleNames();
-		Logging.info("Available locales: " + existingLocales);
+		Logging.info("Available locales: ", existingLocales);
 	}
 
 	public static void endApp(int exitcode) {
@@ -181,12 +181,12 @@ public class Main {
 			try {
 				Configed.getSavedStates().store("states on finishing configed");
 			} catch (IOException iox) {
-				Logging.debug("could not store saved states, " + iox);
+				Logging.debug("could not store saved states, ", iox);
 			}
 		}
 
 		OpsiMethodCall.report();
-		Logging.info("regularly exiting app with code " + exitcode);
+		Logging.info("regularly exiting app with code ", exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {
 			fErrorOutOfMemory.setVisible(true);
@@ -210,7 +210,7 @@ public class Main {
 			CommandLineParser parser = new DefaultParser(false);
 			cmd = parser.parse(options, args, false);
 		} catch (ParseException e) {
-			Logging.error("Problem parsing arguments", e);
+			Logging.error(e, "Problem parsing arguments");
 			showHelp();
 			return;
 		}

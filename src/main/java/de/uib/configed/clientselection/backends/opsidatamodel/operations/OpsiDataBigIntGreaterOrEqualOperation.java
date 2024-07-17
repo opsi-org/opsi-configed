@@ -37,7 +37,7 @@ public class OpsiDataBigIntGreaterOrEqualOperation extends BigIntGreaterOrEqualO
 				return true;
 			}
 		} else {
-			Logging.error(this, "data is no BigInteger!" + realData);
+			Logging.error(this, "data is no BigInteger!", realData);
 		}
 
 		return false;

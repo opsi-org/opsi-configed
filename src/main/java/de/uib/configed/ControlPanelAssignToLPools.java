@@ -117,15 +117,15 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	public void setSoftwareIdsFromLicensePool() {
 		String selectedLicensePool = getSelectedLicensePool();
-		Logging.info(this, "setSoftwareIdsFromLicensePoot, selectedLicensePool " + selectedLicensePool);
+		Logging.info(this, "setSoftwareIdsFromLicensePoot, selectedLicensePool ", selectedLicensePool);
 
 		setSoftwareIdsFromLicensePool(selectedLicensePool);
 	}
 
 	public void setSoftwareIdsFromLicensePool(final String poolID) {
-		Logging.info(this,
-				"setSoftwareIdsFromLicensePool " + poolID + " should be thePanel.panelLicensepools.getSelectedRow() "
-						+ thePanel.getPanelLicensepools().getSelectedRow());
+		Logging.info(this, "setSoftwareIdsFromLicensePool ", poolID,
+				" should be thePanel.panelLicensepools.getSelectedRow() ",
+				thePanel.getPanelLicensepools().getSelectedRow());
 		Logging.info(this, "setSoftwareIdsFromLicensePool, call thePanel.fSoftwarename2LicensePool.setGlobalPool ");
 		if (thePanel.getFSoftwarename2LicensePool() != null) {
 			thePanel.getFSoftwarename2LicensePool().setGlobalPool(poolID);
@@ -135,7 +135,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		boolean wasUsingSelectedFilter = modelWindowsSoftwareIds
 				.isUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED);
-		Logging.info(this, "setSoftwareIdsFromLicensePool wasUsingSelectedFilter " + wasUsingSelectedFilter);
+		Logging.info(this, "setSoftwareIdsFromLicensePool wasUsingSelectedFilter ", wasUsingSelectedFilter);
 
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, false);
 
@@ -151,13 +151,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			softwareIdsForPool = persistenceController.getSoftwareDataService().getSoftwareListByLicensePoolPD(poolID);
 		}
 
-		Logging.info(this, "setSoftwareIdsFromLicensePool  softwareIds for licensePool  " + poolID + " : "
-				+ softwareIdsForPool.size());
-		Logging.info(this, "setSoftwareIdsFromLicensePool  unknown softwareIds for licensePool  " + poolID + " : "
-				+ persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicensePoolPD(poolID).size());
+		Logging.info(this, "setSoftwareIdsFromLicensePool  softwareIds for licensePool  ", poolID, " : ",
+				softwareIdsForPool.size());
+		Logging.info(this, "setSoftwareIdsFromLicensePool  unknown softwareIds for licensePool  ", poolID, " : ",
+				persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicensePoolPD(poolID).size());
 
 		Integer totalUnassignedSWEntries = getUnAssignedSoftwareIds().size();
-		Logging.info(this, "setSoftwareIdsFromLicensePool unAssignedSoftwareIds " + totalUnassignedSWEntries);
+		Logging.info(this, "setSoftwareIdsFromLicensePool unAssignedSoftwareIds ", totalUnassignedSWEntries);
 
 		resetCounters(poolID);
 		thePanel.getFieldCountAllWindowsSoftware().setText("0");
@@ -208,8 +208,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		produceFilterSets(softwareIdsForPool);
 
-		Logging.info(this, "setSoftwareIdsFromLicensePool setUsingFilter "
-				+ GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED + " to " + wasUsingSelectedFilter);
+		Logging.info(this, "setSoftwareIdsFromLicensePool setUsingFilter ",
+				GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, " to ", wasUsingSelectedFilter);
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				wasUsingSelectedFilter);
 		thePanel.getPanelRegisteredSoftware().showFiltered(wasUsingSelectedFilter);
@@ -218,7 +218,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				getSoftwareShowAllMeans() != SoftwareShowAllMeans.ALL);
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
-		Logging.info(this, "modelWindowsSoftwareIds row count " + totalShownEntries);
+		Logging.info(this, "modelWindowsSoftwareIds row count ", totalShownEntries);
 		thePanel.getFieldCountAllWindowsSoftware().setText(produceCount(totalSWEntries));
 		thePanel.getFieldCountDisplayedWindowsSoftware().setText(produceCount(totalShownEntries));
 		thePanel.getFieldCountNotAssignedSoftware().setText(produceCount(totalUnassignedSWEntries));
@@ -237,7 +237,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(false);
-		Logging.debug(this, "setSoftwareIdsFromLicensePool  setSelectedValues " + selectKeys);
+		Logging.debug(this, "setSoftwareIdsFromLicensePool  setSelectedValues ", selectKeys);
 		thePanel.getPanelRegisteredSoftware().setSelectedValues(selectKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
 		if (!selectKeys.isEmpty()) {
@@ -245,8 +245,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					WINDOWS_SOFTWARE_ID_KEY_COL, false);
 		}
 
-		Logging.debug(this, "setSoftwareIdsFromLicensePool  selectedKeys "
-				+ thePanel.getPanelRegisteredSoftware().getSelectedKeys());
+		Logging.debug(this, "setSoftwareIdsFromLicensePool  selectedKeys ",
+				thePanel.getPanelRegisteredSoftware().getSelectedKeys());
 		if (wasUsingSelectedFilter) {
 			setVisualSelection(thePanel.getPanelRegisteredSoftware().getSelectedKeys());
 		}
@@ -269,7 +269,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 			List<String> identKeys = SWAuditEntry.KEYS_FOR_IDENT;
 			if (rowValues.length != identKeys.size()) {
-				Logging.warning(this, "illegal ID " + ID);
+				Logging.warning(this, "illegal ID ", ID);
 			} else {
 				int i = 0;
 				for (String key : identKeys) {
@@ -279,7 +279,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			}
 
 			rowMap.put("ID", ID);
-			Logging.info(this, "unknownSoftwareIdsForPool " + rowMap);
+			Logging.info(this, "unknownSoftwareIdsForPool ", rowMap);
 
 			missingSoftwareMap.put(ID, rowMap);
 		}
@@ -301,7 +301,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	}
 
 	private void resetCounters(String licensePoolId) {
-		Logging.info(this, "resetCounters for pool " + licensePoolId);
+		Logging.info(this, "resetCounters for pool ", licensePoolId);
 		String baseCount = "0";
 		if (licensePoolId == null) {
 			baseCount = "";
@@ -315,14 +315,14 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	// called by valueChanged method of ListSelectionListener
 	public void validateWindowsSoftwareKeys() {
 		String selectedLicensePool = getSelectedLicensePool();
-		Logging.debug(this, "validateWindowsSoftwareKeys for licensePoolID " + selectedLicensePool);
+		Logging.debug(this, "validateWindowsSoftwareKeys for licensePoolID ", selectedLicensePool);
 
 		if (selectedLicensePool == null) {
 			return;
 		}
 
-		Logging.debug(this, "validateWindowsSoftwareKeys thePanel.panelRegisteredSoftware.isAwareOfSelectionListener "
-				+ thePanel.getPanelRegisteredSoftware().isAwareOfSelectionListener());
+		Logging.debug(this, "validateWindowsSoftwareKeys thePanel.panelRegisteredSoftware.isAwareOfSelectionListener ",
+				thePanel.getPanelRegisteredSoftware().isAwareOfSelectionListener());
 
 		if (!thePanel.getPanelRegisteredSoftware().isAwareOfSelectionListener()) {
 			return;
@@ -333,8 +333,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		if (selKeys != null) {
 			showSelKeys = "" + selKeys.size();
 		}
-		Logging.info(this, "validateWindowsSoftwareKeys selectedKeys " + showSelKeys
-				+ " associated to selectedLicensePool " + selectedLicensePool);
+		Logging.info(this, "validateWindowsSoftwareKeys selectedKeys ", showSelKeys,
+				" associated to selectedLicensePool ", selectedLicensePool);
 
 		if (selKeys == null) {
 			resetCounters(selectedLicensePool);
@@ -349,14 +349,14 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 			boolean gotAssociation = persistenceController.getSoftwareDataService()
 					.getFSoftware2LicensePoolPD(key) != null;
-			Logging.debug(this, "validateWindowsSoftwareKeys key " + key + " gotAssociation " + gotAssociation);
+			Logging.debug(this, "validateWindowsSoftwareKeys key ", key, " gotAssociation ", gotAssociation);
 
 			Boolean newAssociation = null;
 			if (gotAssociation) {
 				newAssociation = !(persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(key)
 						.equals(selectedLicensePool));
-				Logging.debug(this, "validateWindowsSoftwareKeys has association to "
-						+ persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(key));
+				Logging.debug(this, "validateWindowsSoftwareKeys has association to ",
+						persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(key));
 			}
 
 			if (Boolean.TRUE.equals(newAssociation)) {
@@ -370,11 +370,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			}
 		}
 
-		Logging.info(this, "cancelSelectionKeys " + cancelSelectionKeys);
+		Logging.info(this, "cancelSelectionKeys ", cancelSelectionKeys);
 		// without this condition we run into a loop
 		if (!cancelSelectionKeys.isEmpty()) {
 			selKeys.removeAll(cancelSelectionKeys);
-			Logging.info(this, "selKeys after removal " + selKeys);
+			Logging.info(this, "selKeys after removal ", selKeys);
 			thePanel.getPanelRegisteredSoftware().setSelectedValues(selKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
 		}
 
@@ -387,7 +387,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		String option = Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.options");
 		String title = Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.title");
 
-		Logging.info(" software with ident \"" + key + "\" already associated to license pool " + otherPool);
+		Logging.info(" software with ident \"", key, "\" already associated to license pool ", otherPool);
 
 		FTextArea dialog = new FTextArea(ConfigedMain.getLicensesFrame(), title, true,
 				new String[] { Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
@@ -396,7 +396,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		dialog.setMessage(info + "\n\n" + option);
 		dialog.setVisible(true);
 
-		Logging.info(this, "validateWindowsSoftwareKeys result " + dialog.getResult());
+		Logging.info(this, "validateWindowsSoftwareKeys result ", dialog.getResult());
 
 		if (dialog.getResult() == 1) {
 			// we cancel the new selection
@@ -547,8 +547,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		columnNames.remove("licenseKey");
 
-		Logging.info(this, "panelRegisteredSoftware constructed with (size) cols " + "(" + columnNames.size() + ") "
-				+ columnNames);
+		Logging.info(this, "panelRegisteredSoftware constructed with (size) cols (", columnNames.size(), ") ",
+				columnNames);
 
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
@@ -568,7 +568,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.getPanelRegisteredSoftware(),
 				updateCollection);
 
-		Logging.info(this, "modelWindowsSoftwareIds row count " + modelWindowsSoftwareIds.getRowCount());
+		Logging.info(this, "modelWindowsSoftwareIds row count ", modelWindowsSoftwareIds.getRowCount());
 		tableModels.add(modelWindowsSoftwareIds);
 		tablePanes.add(thePanel.getPanelRegisteredSoftware());
 
@@ -666,8 +666,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			setSWAssignments();
 		} else {
 			// Should not happen because SoftwareShowMode has only two elements
-			Logging.warning(this,
-					"softwareShow has Value " + softwareShow + " that does not exist in SoftwareShowMode");
+			Logging.warning(this, "softwareShow has Value ", softwareShow, " that does not exist in SoftwareShowMode");
 		}
 	}
 
@@ -700,14 +699,14 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	}
 
 	public boolean updateLicensepool(String poolId, List<String> softwareIds) {
-		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicensePool " + removeKeysFromOtherLicensePool);
+		Logging.info(this, "sendUpdate poolId, softwareIds: ", poolId, ", ", softwareIds);
+		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicensePool ", removeKeysFromOtherLicensePool);
 
 		if (removeKeysFromOtherLicensePool != null) {
 			for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicensePool.entrySet()) {
 				if (otherStringPoolEntry.getValue().isEmpty()) {
-					Logging.info(this,
-							"we wont remove association since entry is empty: " + otherStringPoolEntry.getKey());
+					Logging.info(this, "we wont remove association since entry is empty: ",
+							otherStringPoolEntry.getKey());
 				} else if (persistenceController.getSoftwareDataService()
 						.removeAssociations(otherStringPoolEntry.getKey(), otherStringPoolEntry.getValue())) {
 					removeKeysFromOtherLicensePool.remove(otherStringPoolEntry.getKey());
@@ -726,19 +725,19 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			result = persistenceController.getSoftwareDataService().addWindowsSoftwareIds2LPool(poolId, softwareIds);
 		}
 
-		Logging.info(this, "sendUpdate, setSoftwareIdsFromLicensePool poolId " + poolId);
+		Logging.info(this, "sendUpdate, setSoftwareIdsFromLicensePool poolId ", poolId);
 		setSoftwareIdsFromLicensePool(poolId);
 
 		Logging.info(this, "sendUpdate, adapt Softwarename2LicensePool");
-		Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
-		Logging.info(this, "sendUpdate, we have software ids "
-				+ persistenceController.getSoftwareDataService().getSoftwareListByLicensePoolPD(poolId).size()
-				+ " they are " + persistenceController.getSoftwareDataService().getSoftwareListByLicensePoolPD(poolId));
+		Logging.info(this, "sendUpdate, we have software ids ", softwareIds.size());
+		Logging.info(this, "sendUpdate, we have software ids ",
+				persistenceController.getSoftwareDataService().getSoftwareListByLicensePoolPD(poolId).size(),
+				" they are " + persistenceController.getSoftwareDataService().getSoftwareListByLicensePoolPD(poolId));
 
 		List<String> oldSWListForPool = persistenceController.getSoftwareDataService()
 				.getSoftwareListByLicensePoolPD(poolId);
 
-		Logging.info(this, "sendUpdate remove " + oldSWListForPool + " from Software2LicensePool ");
+		Logging.info(this, "sendUpdate remove ", oldSWListForPool, " from Software2LicensePool ");
 		persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD().keySet()
 				.removeAll(oldSWListForPool);
 
@@ -788,7 +787,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	}
 
 	private void setVisualSelection(List<String> keys) {
-		Logging.debug(this, "setVisualSelection for panelRegisteredSoftware on keys " + keys);
+		Logging.debug(this, "setVisualSelection for panelRegisteredSoftware on keys ", keys);
 		thePanel.getPanelRegisteredSoftware().setSelectedValues(keys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
 		if (keys != null && !keys.isEmpty()) {
@@ -814,7 +813,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			filterInfo = "" + filter1.size();
 		}
 
-		Logging.info(this, "produceFilterSets setFilter dontShowAssociatedToOtherPool " + filterInfo);
+		Logging.info(this, "produceFilterSets setFilter dontShowAssociatedToOtherPool ", filterInfo);
 
 		windowsSoftwareFilterConditionDontShowAssociatedToOtherPool.setFilter(filter1);
 	}
@@ -830,7 +829,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		if (filter0 != null) {
 			filterInfo = "" + filter0.size();
 		}
-		Logging.info(this, "produceFilterSets setFilter dontShowAssociatedToOtherPool " + filterInfo);
+		Logging.info(this, "produceFilterSets setFilter dontShowAssociatedToOtherPool ", filterInfo);
 		windowsSoftwareFilterConditonShowOnlySelected.setFilter(filter0);
 
 		produceFilter1(assignedWindowsSoftwareIds);
@@ -841,10 +840,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(false);
 
 		List<String> selectedKeys = thePanel.getPanelRegisteredSoftware().getSelectedKeys();
-		Logging.info(this, "setSWAssignments  selectedKeys " + selectedKeys);
+		Logging.info(this, "setSWAssignments  selectedKeys ", selectedKeys);
 
-		Logging.info(this, "setSWAssignments usingFilter " + (softwareShow == SoftwareShowMode.ASSIGNED)
-				+ " selected keys " + selectedKeys);
+		Logging.info(this, "setSWAssignments usingFilter ", softwareShow == SoftwareShowMode.ASSIGNED,
+				" selected keys ", selectedKeys);
 
 		boolean usingShowSelectedFilter = softwareShow == SoftwareShowMode.ASSIGNED;
 		if (usingShowSelectedFilter) {
@@ -863,7 +862,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		setVisualSelection(selectedKeys);
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
-		Logging.info(this, "modelWindowsSoftwareIds row count 2 " + modelWindowsSoftwareIds.getRowCount());
+		Logging.info(this, "modelWindowsSoftwareIds row count 2 ", modelWindowsSoftwareIds.getRowCount());
 		thePanel.getFieldCountDisplayedWindowsSoftware().setText(produceCount(totalShownEntries));
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(true);
 		thePanel.getPanelRegisteredSoftware().setDataChanged(b);
@@ -882,8 +881,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			thePanel.getPanelRegisteredSoftware().setAwareOfTableChangedListener(false);
 
 			String selectedLicensePool = null;
-			Logging.info(this, " setShowOnlyAssociationsToSelectedPoolOrNoPool selected license row "
-					+ thePanel.getPanelLicensepools().getSelectedRow());
+			Logging.info(this, " setShowOnlyAssociationsToSelectedPoolOrNoPool selected license row ",
+					thePanel.getPanelLicensepools().getSelectedRow());
 			selectedLicensePool = getSelectedLicensePool();
 			setSoftwareIdsFromLicensePool(selectedLicensePool);
 
@@ -905,7 +904,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				// Should not happen because enum SoftwareDirectionOfAssignment has only two values
 			}
 
-			Logging.info(this, "switched to " + direction);
+			Logging.info(this, "switched to ", direction);
 			initializeVisualSettings();
 		}
 	}
@@ -924,7 +923,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		List<String> newKeys = new ArrayList<>(thePanel.getPanelRegisteredSoftware().getSelectedKeys());
 		newKeys.removeAll(oldSWList);
 
-		Logging.info(this, "new keys " + newKeys);
+		Logging.info(this, "new keys ", newKeys);
 
 		return !newKeys.isEmpty();
 	}

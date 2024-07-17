@@ -152,7 +152,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			@Override
 			public void loadDocument(String logtype) {
 				super.loadDocument(logtype);
-				Logging.info(this, "loadDocument logtype " + logtype);
+				Logging.info(this, "loadDocument logtype ", logtype);
 				setUpdatedLogfilePanel(logtype);
 			}
 		};
@@ -161,7 +161,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener((ChangeEvent e) -> {
-			Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
+			Logging.debug(this, " new logfiles tabindex ", showLogfiles.getSelectedIndex());
 
 			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
 
@@ -176,8 +176,8 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		insertTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"), null, panelProductProperties,
 				null, ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
-		Logging.info(this, "added tab  " + Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")
-				+ " index " + indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
+				" index ", indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
 		panelHostProperties = new PanelHostProperties();
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
@@ -185,8 +185,8 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		insertTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), null, panelHostProperties, null,
 				ConfigedMain.VIEW_HOST_PROPERTIES);
 
-		Logging.info(this, "added tab  " + Configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
-				+ indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
+		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.jPanel_HostProperties"), " index ",
+				indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
 
 		setSelectedIndex(0);
 	}
@@ -198,7 +198,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		// report state change request to controller
 
-		Logging.info(this, "stateChanged of tabbedPane, visualIndex " + visualIndex);
+		Logging.info(this, "stateChanged of tabbedPane, visualIndex ", visualIndex);
 		configedMain.setViewIndex(visualIndex);
 
 		// retrieve the state index finally produced by main
@@ -238,7 +238,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	public void setSoftwareAudit() {
 		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() > 1) {
-			Logging.info(this, "setSoftwareAudit for clients " + configedMain.getSelectedClients().size());
+			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());
 
 			showSoftwareInfo(showSoftwareLogMultiClientReport);
 		} else {
@@ -251,7 +251,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	public void setSoftwareAudit(String hostId) {
 		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
 
-		Logging.debug(this, "setSoftwareAudit for " + hostId);
+		Logging.debug(this, "setSoftwareAudit for ", hostId);
 		panelSWInfo.setAskForOverwrite(true);
 		panelSWInfo.setHost(hostId);
 		panelSWInfo.updateModel();
@@ -289,7 +289,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	}
 
 	public void setUpdatedLogfilePanel(String logtype) {
-		Logging.info(this, "setUpdatedLogfilePanel " + logtype);
+		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
 		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_logfiles")), showLogfiles);
 		showLogfiles.setDocuments(configedMain.getLogfilesUpdating(logtype),
 				mainFrame.getHostsStatusPanel().getSelectedClientNames());

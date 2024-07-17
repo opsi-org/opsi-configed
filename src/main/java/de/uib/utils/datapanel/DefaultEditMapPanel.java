@@ -51,7 +51,7 @@ public class DefaultEditMapPanel extends JPanel {
 	private static class DefaultPropertyHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
-			Logging.debug(this, "removing value for key " + key);
+			Logging.debug(this, "removing value for key ", key);
 			mapTableModel.removeEntry(key);
 		}
 
@@ -96,8 +96,8 @@ public class DefaultEditMapPanel extends JPanel {
 		this.reloadable = reloadable;
 
 		this.tableCellRenderer = tableCellRenderer;
-		Logging.debug(this.getClass(),
-				"DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
+		Logging.debug(this.getClass(), "DefaultEditMapPanel ", keylistExtendible, ",  ", keylistEditable, ",  ",
+				reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
@@ -227,11 +227,11 @@ public class DefaultEditMapPanel extends JPanel {
 	protected void logPopupElements() {
 		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
 		int size = popupElements.length;
-		Logging.debug(this, "logPopupElements " + size);
+		Logging.debug(this, "logPopupElements ", size);
 	}
 
 	public void setOptionsEditable(boolean b) {
-		Logging.debug(this, "DefaultEditMapPanel.setOptionsEditable " + b);
+		Logging.debug(this, "DefaultEditMapPanel.setOptionsEditable ", b);
 
 		if (b) {
 			popupmenuAtRow = popupEditOptions;

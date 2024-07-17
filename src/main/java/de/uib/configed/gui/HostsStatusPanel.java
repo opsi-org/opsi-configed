@@ -56,7 +56,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	}
 
 	public void setGroupName(String s) {
-		Logging.info(this, "setGroupName " + s);
+		Logging.info(this, "setGroupName ", s);
 		fieldGroupActivated.setText(s);
 	}
 
@@ -74,10 +74,10 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	public void updateValues(Integer clientsCount, Integer selectedClientsCount, String selectedClientNames,
 			String involvedDepots) {
-		Logging.info(this,
-				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
-		Logging.info(this,
-				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
+		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
+				selectedClientsCount);
+		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
+				selectedClientsCount);
 
 		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
 

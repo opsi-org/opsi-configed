@@ -52,7 +52,7 @@ public class LogTabComponent extends LogPane {
 	}
 
 	public void loadDocument(String ident) {
-		Logging.debug(this, "loadDocument ident " + ident);
+		Logging.debug(this, "loadDocument ident ", ident);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class LogTabComponent extends LogPane {
 			return;
 		}
 
-		Logging.info(this, "got log file type " + logFileType);
+		Logging.info(this, "got log file type ", logFileType);
 
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		String fileName = retrieveFileName(getInfo(), ALL_LOGFILES_SUFFIX);
@@ -95,7 +95,7 @@ public class LogTabComponent extends LogPane {
 			return;
 		}
 
-		Logging.info(this, "file path retrieved: " + filePath);
+		Logging.info(this, "file path retrieved: ", filePath);
 
 		saveAllToZipFile(filePath, retrieveAllLogFiles());
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
@@ -145,7 +145,7 @@ public class LogTabComponent extends LogPane {
 				logFiles.put(ident, logFile.get(ident));
 			}
 
-			Logging.info(this, "saveAllAsZip " + ident + " " + logFile.get(ident).split("\n").length);
+			Logging.info(this, "saveAllAsZip ", ident, " ", logFile.get(ident).split("\n").length);
 		}
 		return logFiles;
 	}
@@ -156,7 +156,7 @@ public class LogTabComponent extends LogPane {
 				fWriter.write(lines[i] + "\n");
 			}
 		} catch (IOException ex) {
-			Logging.error("Error writing to a file: " + fileName + "\n --- " + ex);
+			Logging.error(ex, "Error writing to a file: ", fileName);
 		}
 	}
 
@@ -174,7 +174,7 @@ public class LogTabComponent extends LogPane {
 				}
 			}
 		} catch (IOException ex) {
-			Logging.error("Error writing zip file: " + filePath + "\n --- " + ex);
+			Logging.error(ex, "Error writing zip file: ", filePath);
 		}
 	}
 
@@ -185,7 +185,7 @@ public class LogTabComponent extends LogPane {
 			out.putNextEntry(entry);
 			writeToOutputStream(lines, out);
 		} catch (IOException ex) {
-			Logging.error("Error writing zip file: " + fileName + "\n --- " + ex);
+			Logging.error(ex, "Error writing zip file: ", fileName);
 		}
 	}
 
@@ -196,7 +196,7 @@ public class LogTabComponent extends LogPane {
 				out.write(buffer, 0, lines[i].length());
 				out.write(CRLF, 0, 2);
 			} catch (IOException ex) {
-				Logging.error("Error writing zip file: " + "\n --- " + ex);
+				Logging.error(ex, "Error writing zip file: ");
 			}
 		}
 	}

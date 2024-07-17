@@ -89,7 +89,7 @@ public class ModuleDataService {
 			produceOpsiModulesInfoPD();
 		}
 
-		Logging.info(this, " withUserRoles " + isOpsiModuleActive(OpsiModule.USER_ROLES));
+		Logging.info(this, " withUserRoles ", isOpsiModuleActive(OpsiModule.USER_ROLES));
 	}
 
 	public final Map<String, Object> getOpsiLicensingInfoOpsiAdminPD() {
@@ -136,10 +136,9 @@ public class ModuleDataService {
 		hostInfoCollections.retrieveOpsiHostsPD();
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-		Logging.info(this,
-				"getOverLimitModuleList() "
-						+ LicensingInfoMap.getInstance(getOpsiLicensingInfoOpsiAdminPD(), configDefaultValues, true)
-								.getCurrentOverLimitModuleList());
+		Logging.info(this, "getOverLimitModuleList() ",
+				LicensingInfoMap.getInstance(getOpsiLicensingInfoOpsiAdminPD(), configDefaultValues, true)
+						.getCurrentOverLimitModuleList());
 
 		LicensingInfoMap licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfoOpsiAdminPD(),
 				configDefaultValues, !LicensingInfoDialog.isExtendedView());
@@ -152,12 +151,12 @@ public class ModuleDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
 
-		Logging.info(this, "opsiModules result " + opsiModules);
+		Logging.info(this, "opsiModules result ", opsiModules);
 
-		Logging.info(this, "produceOpsiModulesInfo withUserRoles " + isOpsiModuleActive(OpsiModule.USER_ROLES));
-		Logging.info(this, "produceOpsiModulesInfo wan " + isOpsiModuleActive(OpsiModule.VPN));
-		Logging.info(this,
-				"produceOpsiModulesInfo withLicenseManagement " + isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT));
+		Logging.info(this, "produceOpsiModulesInfo withUserRoles ", isOpsiModuleActive(OpsiModule.USER_ROLES));
+		Logging.info(this, "produceOpsiModulesInfo wan ", isOpsiModuleActive(OpsiModule.VPN));
+		Logging.info(this, "produceOpsiModulesInfo withLicenseManagement ",
+				isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT));
 		// sets value to true if we use the mysql backend and informs that we are
 		// underlicensed
 	}
@@ -180,7 +179,7 @@ public class ModuleDataService {
 		Map<String, Object> opsiInformation = produceOpsiInformationPD();
 		// prepare the user info
 		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
-		Logging.info(this, "opsi module information " + opsiModulesInfo);
+		Logging.info(this, "opsi module information ", opsiModulesInfo);
 
 		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
@@ -195,18 +194,18 @@ public class ModuleDataService {
 
 		LocalDateTime today = LocalDateTime.now();
 
-		Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
+		Logging.info(this, "opsiModulesInfo ", opsiModulesInfo);
 
 		// read in modules
 		for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
-			Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo);
+			Logging.info(this, "module from opsiModulesInfo, key ", opsiModuleInfo);
 			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue(),
 					new TypeReference<Map<String, Object>>() {
 					});
 			ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
 					validUntil);
 
-			Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
+			Logging.info(this, "handle modules key, modulePermission  ", modulePermission);
 			Boolean permissionCheck = modulePermission.getBoolean();
 			opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
 			if (permissionCheck != null) {
@@ -218,13 +217,12 @@ public class ModuleDataService {
 			}
 		}
 
-		Logging.info(this, "modules resulting step 0  " + opsiModules);
+		Logging.info(this, "modules resulting step 0  ", opsiModules);
 
 		// existing
 		for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
 			ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
-			Logging.info(this,
-					"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
+			Logging.info(this, "handle modules key ", opsiCountModule.getKey(), " permission was ", modulePermission);
 			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue(),
 					new TypeReference<Map<String, Object>>() {
 					});
@@ -235,8 +233,7 @@ public class ModuleDataService {
 
 			modulePermission = new ModulePermissionValue(opsiModuleData.get("client_number"), validUntil);
 
-			Logging.info(this,
-					"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
+			Logging.info(this, "handle modules key ", opsiCountModule.getKey(), " permission set ", modulePermission);
 			// replace value got from modulesInfo
 			opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
 
@@ -247,8 +244,8 @@ public class ModuleDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, opsiModulesDisplayInfo);
 
-		Logging.info(this, "modules resulting step 1 " + opsiModules);
-		Logging.info(this, "countModules is  " + opsiCountModules);
+		Logging.info(this, "modules resulting step 1 ", opsiModules);
+		Logging.info(this, "countModules is  ", opsiCountModules);
 
 		// set values for modules checked by configed
 		for (String key : MODULE_CHECKED) {
@@ -263,11 +260,11 @@ public class ModuleDataService {
 
 			if (modulePermission.getBoolean() != null) {
 				opsiModules.put(key, modulePermission.getBoolean());
-				Logging.info(this,
-						" retrieveOpsiModules, set opsiModules for key " + key + ": " + modulePermission.getBoolean());
+				Logging.info(this, " retrieveOpsiModules, set opsiModules for key ", key, ": ",
+						modulePermission.getBoolean());
 			} else {
 				opsiModules.put(key, true);
-				Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
+				Logging.info(this, " retrieveOpsiModules ", key, " ", maxClientsForThisModule.getNumber());
 
 				if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
 					opsiModules.put(key, false);
@@ -275,16 +272,15 @@ public class ModuleDataService {
 					Integer warningLimit = null;
 					Integer stopLimit = null;
 
-					Logging.info(this,
-							" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
+					Logging.info(this, " retrieveOpsiModules ", key, " up to now globalMaxClients ", globalMaxClients);
 
-					Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
-							+ maxClientsForThisModule.getNumber());
+					Logging.info(this, " retrieveOpsiModules ", key, " maxClientsForThisModule.getNumber ",
+							maxClientsForThisModule.getNumber());
 
 					globalMaxClients = calculateModulePermission(globalMaxClients, maxClientsForThisModule.getNumber());
 
-					Logging.info(this,
-							" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
+					Logging.info(this, " retrieveOpsiModules ", key, " result:  globalMaxClients is ",
+							globalMaxClients);
 
 					Integer newGlobalLimit = globalMaxClients.getNumber();
 
@@ -295,8 +291,8 @@ public class ModuleDataService {
 						stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
 					}
 
-					Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
-							+ " stopLimit " + stopLimit);
+					Logging.info(this, " retrieveOpsiModules ", key, " old  warningLimit ", warningLimit, " stopLimit ",
+							stopLimit);
 
 					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
 						opsiModules.put(key, false);
@@ -313,8 +309,8 @@ public class ModuleDataService {
 			}
 		}
 
-		Logging.info(this, "modules resulting step 2  " + opsiModules);
-		Logging.info(this, "count Modules is  " + opsiCountModules);
+		Logging.info(this, "modules resulting step 2  ", opsiModules);
+		Logging.info(this, "count Modules is  ", opsiCountModules);
 
 		for (String key : MODULE_CHECKED) {
 			int countClientsInThisBlock = countClients;
@@ -325,14 +321,14 @@ public class ModuleDataService {
 				continue;
 			}
 
-			Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
+			Logging.info(this, "check module ", key, " problem on start ", (!(opsiModules.get(key))));
 			boolean problemToIndicate = true;
 			ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
 			ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
 			ExtendedDate expiresForThisModule = modulePermission.getExpires();
 
-			Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
-					+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
+			Logging.info(this, "check  module ", key, " maxAllowedClientsForThisModule ",
+					maxAllowedClientsForThisModule, " expiresForThisModule ", expiresForThisModule);
 
 			if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO)) {
 				problemToIndicate = false;
@@ -343,11 +339,11 @@ public class ModuleDataService {
 				problemToIndicate = false;
 			}
 
-			Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
+			Logging.info(this, "check module ", key, "  problemToIndicate ", problemToIndicate);
 
 			if (problemToIndicate) {
-				Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
-						+ " count " + countClientsInThisBlock);
+				Logging.info(this, "retrieveOpsiModules ", key, " , maxClients ", maxAllowedClientsForThisModule,
+						" count ", countClientsInThisBlock);
 
 				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
 					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
@@ -362,31 +358,25 @@ public class ModuleDataService {
 					int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
 
 					if (countClientsInThisBlock > stopCount) {
-						Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount + " count clients "
-								+ countClients);
+						Logging.info(this, "retrieveOpsiModules ", key, " stopCount ", stopCount, " count clients ",
+								countClients);
 
-						String warningText =
-
-								String.format(
-										// locale.
-										Configed.getResourceValue("Permission.modules.clientcount.error"),
-										"" + countClientsInThisBlock, "" + key,
-										"" + maxAllowedClientsForThisModule.getNumber());
+						String warningText = String.format(
+								Configed.getResourceValue("Permission.modules.clientcount.error"),
+								"" + countClientsInThisBlock, "" + key,
+								"" + maxAllowedClientsForThisModule.getNumber());
 
 						missingModulesPermissionInfo.add(warningText);
 
 						Logging.warning(this, warningText);
 					} else if (countClientsInThisBlock > startWarningCount) {
-						Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
-								+ " count clients " + countClients);
+						Logging.info(this, "retrieveOpsiModules ", key, " startWarningCount ", startWarningCount,
+								" count clients ", countClients);
 
-						String warningText =
-
-								String.format(
-										// locale,
-										Configed.getResourceValue("Permission.modules.clientcount.warning"),
-										"" + countClientsInThisBlock, "" + key,
-										"" + maxAllowedClientsForThisModule.getNumber());
+						String warningText = String.format(
+								Configed.getResourceValue("Permission.modules.clientcount.warning"),
+								"" + countClientsInThisBlock, "" + key,
+								"" + maxAllowedClientsForThisModule.getNumber());
 
 						missingModulesPermissionInfo.add(warningText);
 						Logging.warning(this, warningText);
@@ -397,15 +387,15 @@ public class ModuleDataService {
 			}
 		}
 
-		Logging.info(this, "modules resulting  " + opsiModules);
-		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
+		Logging.info(this, "modules resulting  ", opsiModules);
+		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos ", missingModulesPermissionInfo);
 
 		// Will be called only, when info empty
 		callOpsiLicenseMissingModules(missingModulesPermissionInfo);
 
-		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
-		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
-		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
+		Logging.info(this, "retrieveOpsiModules opsiCountModules ", opsiCountModules);
+		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions ", opsiModulesPermissions);
+		Logging.info(this, "retrieveOpsiModules opsiModules ", opsiModules);
 	}
 
 	private void callOpsiLicenseMissingModules(List<String> missingModulesPermissionInfo) {
@@ -416,7 +406,7 @@ public class ModuleDataService {
 					info.append(moduleInfo + "\n");
 				}
 
-				Logging.info(this, "missingModules " + info);
+				Logging.info(this, "missingModules ", info);
 				FOpsiLicenseMissingText.callInstanceWith(info.toString());
 			});
 		}
@@ -424,13 +414,13 @@ public class ModuleDataService {
 
 	private ExtendedInteger calculateModulePermission(ExtendedInteger globalMaxClients,
 			final Integer specialMaxClientNumber) {
-		Logging.info(this, "calculateModulePermission globalMaxClients " + globalMaxClients + " specialMaxClientNumber "
-				+ specialMaxClientNumber);
+		Logging.info(this, "calculateModulePermission globalMaxClients ", globalMaxClients, " specialMaxClientNumber ",
+				specialMaxClientNumber);
 		Integer maxClients = null;
 
 		if (specialMaxClientNumber != null) {
 			int compareResult = globalMaxClients.compareTo(specialMaxClientNumber);
-			Logging.info(this, "calculateModulePermission compareResult " + compareResult);
+			Logging.info(this, "calculateModulePermission compareResult ", compareResult);
 
 			// the global max client count is reduced, a real warning and error limit exists
 			if (compareResult < 0) {
@@ -441,7 +431,7 @@ public class ModuleDataService {
 			}
 		}
 
-		Logging.info(this, "calculateModulePermission returns " + maxClients);
+		Logging.info(this, "calculateModulePermission returns ", maxClients);
 
 		if (maxClients == null) {
 			return globalMaxClients;

@@ -52,7 +52,7 @@ public final class ThemeManager {
 			return Configed.getResourceValue("theme.dark");
 
 		default:
-			Logging.warning("Cannot find translation for theme " + theme);
+			Logging.warning("Cannot find translation for theme ", theme);
 			return null;
 		}
 	}
@@ -68,7 +68,7 @@ public final class ThemeManager {
 			break;
 
 		default:
-			Logging.warning("Cannot find translation for theme " + theme);
+			Logging.warning("Cannot find translation for theme ", theme);
 		}
 	}
 
@@ -80,12 +80,12 @@ public final class ThemeManager {
 		if (availableThemes.contains(newTheme)) {
 			selectedTheme = newTheme;
 		} else {
-			Logging.warning("Failing to set theme that does not exist: " + newTheme);
+			Logging.warning("Failing to set theme that does not exist: ", newTheme);
 		}
 	}
 
 	public static void setOpsiLaf() {
-		Logging.info("set look and feel " + getSelectedTheme());
+		Logging.info("set look and feel ", getSelectedTheme());
 
 		// Location of the theme property files - register them
 		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");
@@ -102,7 +102,7 @@ public final class ThemeManager {
 			break;
 
 		default:
-			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + getSelectedTheme());
+			Logging.warning("tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
 			break;
 		}
 
@@ -121,9 +121,9 @@ public final class ThemeManager {
 			openSansFont = openSansFont.deriveFont(13F);
 			UIManager.put("defaultFont", openSansFont);
 		} catch (IOException e) {
-			Logging.error("Failed to retrieve font from resources (using font chosen by the system)", e);
+			Logging.error(e, "Failed to retrieve font from resources (using font chosen by the system)");
 		} catch (FontFormatException e) {
-			Logging.error("Font is faulty", e);
+			Logging.error(e, "Font is faulty");
 		}
 	}
 }

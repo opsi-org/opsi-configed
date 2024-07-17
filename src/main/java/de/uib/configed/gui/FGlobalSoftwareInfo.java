@@ -96,8 +96,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public void doAction2() {
 		Logging.debug(this, "doAction2");
 
-		Logging.info(this, "removeAssociations for " + " licensePool " + myController.getSelectedLicensePool()
-				+ " selected SW keys " + panelGlobalSoftware.getSelectedKeys());
+		Logging.info(this, "removeAssociations for ", " licensePool ", myController.getSelectedLicensePool(),
+				" selected SW keys ", panelGlobalSoftware.getSelectedKeys());
 
 		boolean success = persistenceController.getSoftwareDataService()
 				.removeAssociations(myController.getSelectedLicensePool(), panelGlobalSoftware.getSelectedKeys());
@@ -105,9 +105,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		if (success) {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {
 				int row = panelGlobalSoftware.findViewRowFromValue(key, keyCol);
-				Logging.info(this, "doAction2 key, " + key + ", row " + row);
-				Logging.info(this,
-						"doAction2 model row " + panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
+				Logging.info(this, "doAction2 key, ", key, ", row ", row);
+				Logging.info(this, "doAction2 model row ",
+						panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
 				panelGlobalSoftware.getTableModel()
 						.deleteRow(panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
 			}

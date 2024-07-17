@@ -38,7 +38,7 @@ class JsonParser {
 		int i;
 
 		while ((i = reader.read()) != -1) {
-			Logging.debug(this, (char) i + " " + currentPosition.toString());
+			Logging.debug(this, (char) i, " ", currentPosition);
 			managePosition();
 			char c = (char) i;
 			if (Character.isWhitespace(c)) {
@@ -119,7 +119,7 @@ class JsonParser {
 		} else if (currentPosition == PositionType.OBJECT_END || currentPosition == PositionType.LIST_END) {
 			stack.pop();
 			currentPosition = stack.peek();
-			Logging.debug(this, "managePosition: " + currentPosition.toString());
+			Logging.debug(this, "managePosition: ", currentPosition);
 			if (currentPosition == PositionType.OBJECT_BEGIN) {
 				inList = false;
 			} else {

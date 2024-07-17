@@ -163,7 +163,7 @@ public final class CommandFactory {
 	}
 
 	public boolean saveCommand(MultiCommandTemplate command) {
-		Logging.info(this, "saveCommand command " + command.toString());
+		Logging.info(this, "saveCommand command ", command);
 		List<Object> jsonObjects = new ArrayList<>();
 		jsonObjects.add(buildCommandMap(command));
 
@@ -197,7 +197,7 @@ public final class CommandFactory {
 	public boolean isCommandEqualSavedCommand(MultiCommandTemplate command) {
 		boolean result = false;
 		if (knownMenus.contains(command.getMenuText())) {
-			Logging.debug(this, "isCommandEqualSavedCommand comparing command " + command.toString());
+			Logging.debug(this, "isCommandEqualSavedCommand comparing command ", command);
 			if (commandList == null) {
 				Logging.debug(this, "isCommandEqualSavedCommand command list is null");
 				result = false;
@@ -211,11 +211,11 @@ public final class CommandFactory {
 				Logging.debug(this, "isCommandEqualSavedCommand command is new");
 				result = false;
 			} else {
-				Logging.debug(this, "isCommandEqualSavedCommand command list " + commandList);
-				Logging.debug(this, "isCommandEqualSavedCommand found command "
-						+ commandList.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))));
-				Logging.debug(this, "isCommandEqualSavedCommand are commands equal? " + commandList
-						.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))).equals(command));
+				Logging.debug(this, "isCommandEqualSavedCommand command list ", commandList);
+				Logging.debug(this, "isCommandEqualSavedCommand found command ",
+						commandList.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))));
+				Logging.debug(this, "isCommandEqualSavedCommand are commands equal? ",
+						commandList.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))).equals(command));
 				result = commandList.get(commandList.indexOf(getCommandByMenu(command.getMenuText()))).equals(command);
 			}
 		}
@@ -223,7 +223,7 @@ public final class CommandFactory {
 	}
 
 	public void deleteCommandByMenu(String menu) {
-		Logging.info(this, "deleting command menu " + menu);
+		Logging.info(this, "deleting command menu ", menu);
 		List<String> jsonObjects = new ArrayList<>();
 		jsonObjects.add(menu);
 		if (persistenceController.getSSHCommandDataService().deleteCommand(jsonObjects)) {

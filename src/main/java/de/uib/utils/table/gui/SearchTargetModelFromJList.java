@@ -147,7 +147,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public void addSelectedRow(int row) {
-		Logging.info(this, "addSelectedRow " + row);
+		Logging.info(this, "addSelectedRow ", row);
 
 		jList.addSelectionInterval(row, row);
 
@@ -170,7 +170,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		for (int i : selection) {
 			if (i > tableModel.getRowCount() - 1) {
-				Logging.warning(this, "tableModel has index (as should be set from selection) " + i);
+				Logging.warning(this, "tableModel has index (as should be set from selection) ", i);
 			} else {
 				jList.addSelectionInterval(i, i);
 			}
@@ -189,7 +189,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public void setFiltered(boolean filtered) {
-		Logging.info(this, "setFiltered " + filtered);
+		Logging.info(this, "setFiltered ", filtered);
 
 		if (filtered) {
 			unfilteredSelection = jList.getSelectedIndices();
@@ -221,6 +221,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 			jList.setSelectionInterval(0, 0);
 		}
 
-		Logging.info(this, "setFilter " + theValues);
+		Logging.info(this, "setFilter ", theValues);
 	}
 }

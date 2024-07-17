@@ -50,7 +50,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	}
 
 	public void setActionListenerForStart(ActionListener li) {
-		Logging.info(this, "setActionListenerForStart " + li);
+		Logging.info(this, "setActionListenerForStart ", li);
 		if (actionListenerForStart != null) {
 			buttonStart.removeActionListener(actionListenerForStart);
 		}
@@ -119,7 +119,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		checkAskForOverwrite.addItemListener((ItemEvent e) -> {
 			askForOverwrite = checkAskForOverwrite.isSelected();
-			Logging.info(this, "askForOverwrite new value : " + askForOverwrite);
+			Logging.info(this, "askForOverwrite new value : ", askForOverwrite);
 		});
 
 		buttonStart = new JButton(Configed.getResourceValue("PanelSWMultiClientReport.start"));
@@ -172,19 +172,19 @@ public class PanelSWMultiClientReport extends JPanel {
 		JCheckBox checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.addItemListener((ItemEvent e) -> {
 			withMsUpdates = checkWithMsUpdates.isSelected();
-			Logging.info(this, "withMsUpdates new value : " + withMsUpdates);
+			Logging.info(this, "withMsUpdates new value : ", withMsUpdates);
 		});
 
 		JCheckBox checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		checkWithMsUpdates2.addItemListener((ItemEvent e) -> {
 			withMsUpdates2 = checkWithMsUpdates2.isSelected();
-			Logging.info(this, "withMsUpdates2 new value : " + withMsUpdates2);
+			Logging.info(this, "withMsUpdates2 new value : ", withMsUpdates2);
 		});
 
 		PanelStateSwitch<KindOfExport> panelSelectExportType = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
 				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, ((Enum<KindOfExport> val) -> {
-					Logging.info(this, "change to " + val);
+					Logging.info(this, "change to ", val);
 					kindOfExport = (PanelSWInfo.KindOfExport) val;
 					Configed.getSavedStates().setProperty("swaudit_kind_of_export", "" + val);
 				}));
@@ -194,8 +194,8 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		kindOfExport = (PanelSWInfo.KindOfExport) panelSelectExportType.getValue();
 
-		Logging.info(this, "kindOfExport set from savedStates  " + koe);
-		Logging.info(this, "kindOfExport   " + kindOfExport);
+		Logging.info(this, "kindOfExport set from savedStates  ", koe);
+		Logging.info(this, "kindOfExport   ", kindOfExport);
 
 		JPanel subpanelPreConfig = new JPanel();
 
@@ -352,7 +352,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			exportDirectory = chooserDirectory.getSelectedFile();
-			Logging.info(this, "selected directory " + exportDirectory);
+			Logging.info(this, "selected directory ", exportDirectory);
 
 			if (exportDirectory != null) {
 				exportDirectoryS = exportDirectory.toString();

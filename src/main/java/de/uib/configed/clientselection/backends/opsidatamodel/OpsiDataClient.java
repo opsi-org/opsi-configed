@@ -161,7 +161,7 @@ public class OpsiDataClient {
 		}
 
 		hardwareValue = hardwareIterator.next();
-		Logging.debug(this, "hardwareIteratorNext: " + hardwareValue.toString());
+		Logging.debug(this, "hardwareIteratorNext: ", hardwareValue);
 		return true;
 	}
 
@@ -173,8 +173,8 @@ public class OpsiDataClient {
 	/** Get the hardware Map for this string */
 	private Map<String, Object> getHardwareMap(String key) {
 		if (hardwareIterator == null) {
-			Logging.debug(this, "getHardwareMap key " + key);
-			Logging.debug(this, "getHardwareMap hardwareInfo " + hardwareInfo);
+			Logging.debug(this, "getHardwareMap key ", key);
+			Logging.debug(this, "getHardwareMap hardwareInfo ", hardwareInfo);
 			Set<Map<String, Object>> values = new HashSet<>();
 			for (Map<String, Object> map : hardwareInfo) {
 				if (key.equals(map.get("hardwareClass"))) {
@@ -182,7 +182,7 @@ public class OpsiDataClient {
 				}
 			}
 
-			Logging.debug(this, values.toString());
+			Logging.debug(this, "", values);
 
 			hardwareValue = null;
 			hardwareIterator = values.iterator();

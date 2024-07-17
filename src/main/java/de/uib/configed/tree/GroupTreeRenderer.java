@@ -56,7 +56,7 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 		if (!(value instanceof DefaultMutableTreeNode)) {
-			Logging.warning(this, "We expected a DefaultMutableTreeNode, but received " + value.getClass().toString());
+			Logging.warning(this, "We expected a DefaultMutableTreeNode, but received ", value.getClass());
 		}
 
 		String text = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);

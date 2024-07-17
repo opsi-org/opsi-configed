@@ -48,7 +48,7 @@ public class ByteUnitConverter {
 			size = bytes / Math.pow(1000, 4);
 			break;
 		default:
-			Logging.warning(this, "unknown unit byte: " + byteUnitToUse);
+			Logging.warning(this, "unknown unit byte: ", byteUnitToUse);
 			break;
 		}
 

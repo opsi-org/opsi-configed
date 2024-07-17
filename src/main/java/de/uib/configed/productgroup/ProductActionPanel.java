@@ -172,8 +172,8 @@ public class ProductActionPanel extends JPanel {
 	private void handleCollectiveAction(String selected, InstallationStateTableModel insTableModel) {
 		Set<String> saveSelectedProducts = associate.getSelectedIDs();
 
-		Logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedRowsInModelTerms());
-		Logging.info(this, "handleCollectiveAction, selected products " + saveSelectedProducts);
+		Logging.info(this, "handleCollectiveAction, selected products ", associate.getSelectedRowsInModelTerms());
+		Logging.info(this, "handleCollectiveAction, selected products ", saveSelectedProducts);
 
 		if (!insTableModel.infoIfNoClientsSelected()) {
 			insTableModel.initCollectiveChange();
@@ -192,7 +192,7 @@ public class ProductActionPanel extends JPanel {
 
 			if (actionType != ActionRequest.INVALID) {
 				associate.getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
-					Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0));
+					Logging.info(" row id ", x, " product ", insTableModel.getValueAt(x, 0));
 					insTableModel.collectiveChangeActionRequest((String) insTableModel.getValueAt(x, 0),
 							new ActionRequest(actionType));
 				});

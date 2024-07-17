@@ -140,12 +140,12 @@ public final class OpsiDataBackend {
 	 */
 	public List<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
 			boolean hasSwAudit) {
-		Logging.debug(this, "Starting the filtering.. , operation " + operation);
+		Logging.debug(this, "Starting the filtering.. , operation ", operation);
 		this.hasSoftware = hasSoftware;
 		this.hasHardware = hasHardware;
 		this.hasSwAudit = hasSwAudit;
 		List<OpsiDataClient> clients = getClients();
-		Logging.debug(this, "Number of clients to filter: " + clients.size());
+		Logging.debug(this, "Number of clients to filter: ", clients.size());
 
 		List<String> matchingClients = new LinkedList<>();
 		for (OpsiDataClient client : clients) {
@@ -162,7 +162,7 @@ public final class OpsiDataBackend {
 	 * with their backend-specific executable operations.
 	 */
 	public ExecutableOperation createExecutableOperation(AbstractSelectOperation operation) {
-		Logging.debug(this, "createFromOperationData " + operation.getClassName());
+		Logging.debug(this, "createFromOperationData ", operation.getClassName());
 
 		if (operation instanceof AbstractSelectGroupOperation groupOperation) {
 			List<AbstractSelectOperation> children = new LinkedList<>();
@@ -177,8 +177,8 @@ public final class OpsiDataBackend {
 	}
 
 	private AbstractSelectOperation createOperation(AbstractSelectOperation operation) {
-		Logging.info(this, "createOperation operation, data, element: " + operation.getClassName() + ", "
-				+ operation.getData().toString() + ",  " + operation.getElement().getClassName());
+		Logging.info(this, "createOperation operation, data, element: ", operation.getClassName(), ", ",
+				operation.getData(), ",  ", operation.getElement().getClassName());
 
 		// Host
 		AbstractSelectElement element = operation.getElement();
@@ -347,7 +347,7 @@ public final class OpsiDataBackend {
 				return new OpsiDataBigIntEqualsOperation(map, attr, (Long) data, element);
 			}
 		}
-		Logging.error("IllegalArgument: The operation " + operation + " was not found on " + element);
+		Logging.error("IllegalArgument: The operation ", operation, " was not found on ", element);
 		throw new IllegalArgumentException("The operation " + operation + " was not found on " + element);
 	}
 
@@ -381,8 +381,8 @@ public final class OpsiDataBackend {
 			return new HostOperation(operations.get(0));
 		}
 
-		Logging.error(this, "IllegalArgument: The group operation " + operation + " was not found with "
-				+ operations.size() + " operations");
+		Logging.error(this, "IllegalArgument: The group operation ", operation, " was not found with ",
+				operations.size(), " operations");
 		throw new IllegalArgumentException(
 				"The group operation " + operation + " was not found with " + operations.size() + " operations");
 	}
@@ -413,7 +413,7 @@ public final class OpsiDataBackend {
 		// take always the current host infos
 
 		clientMaps = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
-		Logging.info(this, "client maps size " + clientMaps.size());
+		Logging.info(this, "client maps size ", clientMaps.size());
 
 		if (groups == null || reloadRequested) {
 			groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
@@ -434,7 +434,7 @@ public final class OpsiDataBackend {
 
 		getHardwareConfig();
 
-		Logging.debug(this, "getClients hasHardware " + hasHardware);
+		Logging.debug(this, "getClients hasHardware ", hasHardware);
 		if (hasHardware) {
 			getHardwareOnClient(clientNames);
 		} else {
@@ -450,10 +450,10 @@ public final class OpsiDataBackend {
 
 		checkInitData();
 
-		Logging.info(this, "getClients hasSoftware " + hasSoftware);
-		Logging.info(this, "getClients hasHardware " + hasHardware);
-		Logging.info(this, "getClients hasSoftware " + hasSoftware);
-		Logging.info(this, "getClients swauditMap != null  " + (swauditMap != null));
+		Logging.info(this, "getClients hasSoftware ", hasSoftware);
+		Logging.info(this, "getClients hasHardware ", hasHardware);
+		Logging.info(this, "getClients hasSoftware ", hasSoftware);
+		Logging.info(this, "getClients swauditMap != null  ", swauditMap != null);
 
 		for (Entry<String, HostInfo> clientEntry : clientMaps.entrySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientEntry.getKey());
@@ -513,7 +513,7 @@ public final class OpsiDataBackend {
 			}
 			result.put(hardwareName, elementList);
 
-			Logging.debug(this, "" + elementList);
+			Logging.debug(this, "", elementList);
 		}
 		return result;
 	}
@@ -547,7 +547,7 @@ public final class OpsiDataBackend {
 			}
 			result.put(hardwareNameLocalized, elementList);
 
-			Logging.debug(this, "" + elementList);
+			Logging.debug(this, "", elementList);
 		}
 		return result;
 	}
@@ -562,7 +562,7 @@ public final class OpsiDataBackend {
 				}
 			}
 		}
-		Logging.error(this, "Element not found: " + Arrays.toString(elementPath));
+		Logging.error(this, "Element not found: ", Arrays.toString(elementPath));
 		return "";
 	}
 
@@ -575,7 +575,7 @@ public final class OpsiDataBackend {
 		for (Map<String, Object> map : hardwareOnClient) {
 			String name = (String) map.get(OpsiServiceNOMPersistenceController.HOST_KEY);
 			if (!clientToHardware.containsKey(name)) {
-				Logging.debug(this, "Non-client hostid: " + name);
+				Logging.debug(this, "Non-client hostid: ", name);
 				continue;
 			}
 			clientToHardware.get(name).add(map);
@@ -595,7 +595,7 @@ public final class OpsiDataBackend {
 		Logging.debug(this, locale);
 		hwConfig = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD("en_");
 		hwConfigLocalized = persistenceController.getHardwareDataService().getOpsiHWAuditConfPD(locale);
-		Logging.debug(this, "" + hwConfig);
+		Logging.debug(this, "", hwConfig);
 		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<>();
 

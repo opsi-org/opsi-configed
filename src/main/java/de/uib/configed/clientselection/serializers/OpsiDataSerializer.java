@@ -71,7 +71,7 @@ public class OpsiDataSerializer {
 	 */
 	public void save(AbstractSelectOperation topOperation, String name, String description) {
 		Map<String, Object> data = produceData(topOperation);
-		Logging.info(this, "save data " + data);
+		Logging.info(this, "save data ", data);
 		saveData(name, description, data);
 	}
 
@@ -101,9 +101,9 @@ public class OpsiDataSerializer {
 			return null;
 		}
 
-		Logging.info(this, "deserialize data " + data);
+		Logging.info(this, "deserialize data ", data);
 		if (data.get(KEY_ELEMENT_PATH) != null) {
-			Logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH)));
+			Logging.info("deserialize, elementPath ", Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH)));
 		}
 
 		try {
@@ -113,7 +113,7 @@ public class OpsiDataSerializer {
 			}
 			return operation;
 		} catch (Exception e) {
-			Logging.error("deserialize error for data " + data + " message " + e.getMessage(), e);
+			Logging.error(e, "deserialize error for data ", data, " message ", e.getMessage());
 			return null;
 		}
 	}
@@ -123,7 +123,7 @@ public class OpsiDataSerializer {
 	 */
 
 	public AbstractSelectOperation deserialize(String serialized) {
-		Logging.info(this, "deserialize serialized " + serialized);
+		Logging.info(this, "deserialize serialized ", serialized);
 		AbstractSelectOperation result = null;
 
 		Map<String, Object> data = decipher(serialized);
@@ -136,7 +136,7 @@ public class OpsiDataSerializer {
 	 * Get one search from searches map
 	 */
 	public AbstractSelectOperation load(String name) {
-		Logging.info(this, "load " + name);
+		Logging.info(this, "load ", name);
 
 		Map<String, Object> data = getData(name);
 		return deserialize(data);
@@ -153,7 +153,7 @@ public class OpsiDataSerializer {
 				return map;
 			}
 		} catch (IOException e) {
-			Logging.error(this, e.getMessage(), e);
+			Logging.error(this, e, e.getMessage());
 			return map;
 		}
 		map = parseObject();
@@ -187,7 +187,7 @@ public class OpsiDataSerializer {
 		jsonString += createJsonRecursive(data);
 		jsonString += " }";
 
-		Logging.info(this, name + ": " + jsonString);
+		Logging.info(this, name, ": ", jsonString);
 		searches.put(name, jsonString);
 		SavedSearch saveObj = new SavedSearch(name, jsonString, description);
 		persistenceController.getConfigDataService().saveSearch(saveObj);
@@ -271,7 +271,7 @@ public class OpsiDataSerializer {
 					builder.append(", ");
 				}
 			} else {
-				Logging.warning("child is not a map, but " + child.getClass());
+				Logging.warning("child is not a map, but ", child.getClass());
 			}
 		}
 		builder.append(" ]");
@@ -335,7 +335,7 @@ public class OpsiDataSerializer {
 			throw new IllegalArgumentException("IOException in parser", e);
 		}
 
-		Logging.debug(this, "parseList " + list);
+		Logging.debug(this, "parseList ", list);
 
 		if (!done) {
 			throw new IllegalArgumentException("Unexpected EOF");
@@ -373,7 +373,7 @@ public class OpsiDataSerializer {
 	}
 
 	private Object stringToObject(String value, String name) {
-		Logging.debug(this, "stringToObject: " + name);
+		Logging.debug(this, "stringToObject: ", name);
 		if ("null".equals(value)) {
 			return null;
 		}
@@ -389,7 +389,7 @@ public class OpsiDataSerializer {
 		if ("dataType".equals(name)) {
 			checkLastDataType(value);
 
-			Logging.info(this, "lastDataType is now " + lastDataType);
+			Logging.info(this, "lastDataType is now ", lastDataType);
 
 			return lastDataType;
 		}
@@ -439,7 +439,7 @@ public class OpsiDataSerializer {
 			break;
 
 		default:
-			Logging.error(this, "dataType for " + value + " cannot be found...)");
+			Logging.error(this, "dataType for ", value, " cannot be found...)");
 			break;
 		}
 	}
@@ -450,17 +450,17 @@ public class OpsiDataSerializer {
 	 */
 	private AbstractSelectOperation getOperation(Map<String, Object> data,
 			Map<String, List<AbstractSelectElement>> hardware) throws Exception {
-		Logging.info(this, "getOperation for map " + data + "; hardware " + hardware);
+		Logging.info(this, "getOperation for map ", data, "; hardware ", hardware);
 
 		String elementPathS = null;
 		if (data.get(KEY_ELEMENT_PATH) != null) {
 			elementPathS = Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH));
-			Logging.info(this, "getOperation, elementPath in data " + elementPathS);
+			Logging.info(this, "getOperation, elementPath in data ", elementPathS);
 		}
 		// Element
 		AbstractSelectElement element = null;
 		String elementName = (String) data.get(KEY_ELEMENT_NAME);
-		Logging.info(this, "Element name: " + elementName);
+		Logging.info(this, "Element name: ", elementName);
 
 		if (elementName != null && !(elementName.isEmpty())) {
 			String subelementName = (String) data.get(KEY_SUBELEMENT_NAME);
@@ -485,14 +485,12 @@ public class OpsiDataSerializer {
 				if (hardware == null) {
 					hardware = manager.getBackend().getHardwareList();
 				}
-				Logging.info(this, "getOperation elementPath[0] " + elementPath[0]);
+				Logging.info(this, "getOperation elementPath[0] ", elementPath[0]);
 				List<AbstractSelectElement> elements = hardware.get(elementPath[0]);
 
 				for (AbstractSelectElement possibleElement : elements) {
-					Logging.info(this,
-							"getOperation possibleElement.getClassName() " + possibleElement
-									+ " compare with elementName " + elementName + " or perhaps with elementPathS "
-									+ elementPathS);
+					Logging.info(this, "getOperation possibleElement.getClassName() ", possibleElement,
+							" compare with elementName ", elementName, " or perhaps with elementPathS ", elementPathS);
 
 					// originally, but is nonsense -------------------------------------------
 					if (possibleElement.getClassName().equals(elementName)
@@ -509,8 +507,8 @@ public class OpsiDataSerializer {
 		}
 
 		if (element != null) {
-			String elS = "" + element + " class " + element.getClass() + " path " + element.getPath();
-			Logging.info(this, "getOperation element " + elS);
+			Logging.info(this, "getOperation element ", element, " class ", element.getClass(), " path ",
+					element.getPath());
 		}
 
 		// Children
@@ -524,35 +522,35 @@ public class OpsiDataSerializer {
 
 		// Operation
 		String operationName = (String) data.get(KEY_OPERATION);
-		Logging.info(this, "getOperation Operation name: " + operationName);
+		Logging.info(this, "getOperation Operation name: ", operationName);
 		AbstractSelectOperation operation;
 
 		if (getSearchDataVersion() == 1) {
 			operation = parseOperationVersion1(operationName, element, children);
 		} else {
 			Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
-			Logging.info(this, "getOperation operationClass  " + operationClass.toString());
+			Logging.info(this, "getOperation operationClass  ", operationClass.toString());
 			if (element != null) {
-				Logging.info(this, "getOperation element != null, element  " + element);
+				Logging.info(this, "getOperation element != null, element  ", element);
 				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
 			} else if (children.size() == 1) {
 				Class<?> list = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
-				Logging.info(this, "getOperation List name: " + list.toString());
+				Logging.info(this, "getOperation List name: ", list);
 				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children.get(0));
 			} else {
 				Class<?> list = Class.forName("java.util.List");
-				Logging.info(this, "getOperation List name: " + list.toString());
+				Logging.info(this, "getOperation List name: ", list);
 				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
 			}
 		}
 
-		Logging.info(this, "getOperation  " + operation);
+		Logging.info(this, "getOperation  ", operation);
 
 		// Data
 		SelectData.DataType dataType = (SelectData.DataType) data.get(KEY_DATA_TYPE);
-		Logging.info(this, "getOperation dataType " + dataType);
+		Logging.info(this, "getOperation dataType ", dataType);
 		Object realData = data.get("data");
-		Logging.info(this, "getOperation realData " + realData);
+		Logging.info(this, "getOperation realData ", realData);
 		SelectData selectData;
 		if (dataType == null || data == null) {
 			selectData = null;
@@ -601,7 +599,7 @@ public class OpsiDataSerializer {
 		} else {
 			map.put("children", null);
 		}
-		Logging.info(this, "produced " + map);
+		Logging.info(this, "produced ", map);
 		return map;
 	}
 
@@ -651,8 +649,8 @@ public class OpsiDataSerializer {
 	 */
 	private static AbstractSelectOperation checkForHostGroup(AbstractSelectOperation operation) {
 		if (!(operation instanceof AbstractSelectGroupOperation)) {
-			Logging.debug("No group: " + operation.getClassName() + ", element path size: "
-					+ operation.getElement().getPathArray().length);
+			Logging.debug("No group: " + operation.getClassName(), ", element path size: ",
+					operation.getElement().getPathArray().length);
 			if (operation.getElement().getPathArray().length == 1) {
 				return new HostOperation(operation);
 			} else {

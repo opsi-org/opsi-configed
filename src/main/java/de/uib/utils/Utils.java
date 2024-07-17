@@ -173,7 +173,7 @@ public final class Utils {
 				break;
 
 			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
+				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
 				break;
 			}
 		}
@@ -294,7 +294,7 @@ public final class Utils {
 		if (imgURL != null) {
 			return new ImageIcon(imgURL, description);
 		} else {
-			Logging.info("Couldn't find file: " + path);
+			Logging.info("Couldn't find file: ", path);
 			return null;
 		}
 	}
@@ -312,7 +312,7 @@ public final class Utils {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException ie) {
-			Logging.info(caller, "sleeping interrupted: " + ie);
+			Logging.info(caller, "sleeping interrupted: ", ie);
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -330,7 +330,7 @@ public final class Utils {
 		} else {
 			result.add(now);
 		}
-		Logging.info("getNowTimeListValue" + result);
+		Logging.info("getNowTimeListValue", result);
 		return result;
 	}
 
@@ -440,7 +440,7 @@ public final class Utils {
 		if (icon != null) {
 			return icon.getImage();
 		} else {
-			Logging.warning(Utils.class, "cannot create main icon, icon " + iconPath + "not found");
+			Logging.warning(Utils.class, "cannot create main icon, icon ", iconPath, "not found");
 			return null;
 		}
 	}
@@ -455,24 +455,24 @@ public final class Utils {
 
 	public static void restrictAccessToFile(File file) {
 		try {
-			Logging.info(
-					"Restricting file's " + file.getAbsolutePath() + " access to only allow owner to modify/read file");
+			Logging.info("Restricting file's ", file.getAbsolutePath(),
+					" access to only allow owner to modify/read file");
 			String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-			Logging.info("Detected operating system " + osName);
+			Logging.info("Detected operating system ", osName);
 			if (osName.contains("win")) {
 				boolean readablePermissionChanged = file.setReadable(true, true);
 				boolean writablePermissionChanged = file.setWritable(true, true);
-				Logging.info("Readable permission for file " + file.getAbsolutePath() + " changed "
-						+ readablePermissionChanged);
-				Logging.info("Writable permission for file " + file.getAbsolutePath() + " changed "
-						+ writablePermissionChanged);
+				Logging.info("Readable permission for file ", file.getAbsolutePath(), " changed ",
+						readablePermissionChanged);
+				Logging.info("Writable permission for file ", file.getAbsolutePath(), " changed ",
+						writablePermissionChanged);
 			} else {
 				Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rw-------");
 				Files.setPosixFilePermissions(file.toPath(), permissions);
-				Logging.info("Changed file's " + file.getAbsolutePath() + " permission");
+				Logging.info("Changed file's ", file.getAbsolutePath(), " permission");
 			}
 		} catch (IOException e) {
-			Logging.error("Unable to set default permissions on temp file", e);
+			Logging.error(e, "Unable to set default permissions on temp file");
 		}
 	}
 
@@ -615,10 +615,10 @@ public final class Utils {
 		boolean result = false;
 
 		if (host.contains("[") && host.contains("]")) {
-			Logging.info("Host is IPv6: " + host);
+			Logging.info("Host is IPv6: ", host);
 			result = host.indexOf(":", host.indexOf("]")) != -1;
 		} else {
-			Logging.info("Host is either IPv4 or FQDN: " + host);
+			Logging.info("Host is either IPv4 or FQDN: ", host);
 			result = host.contains(":");
 		}
 

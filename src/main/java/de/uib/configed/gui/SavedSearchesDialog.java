@@ -134,7 +134,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	@Override
 	public void setVisible(boolean b) {
-		Logging.debug(this, "setVisible " + b);
+		Logging.debug(this, "setVisible ", b);
 		super.setVisible(b);
 	}
 
@@ -148,7 +148,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		Logging.debug(this, "SavedSearchesDialog ListSelectionListener valueChanged " + e);
+		Logging.debug(this, "SavedSearchesDialog ListSelectionListener valueChanged ", e);
 
 		super.valueChanged(e);
 
@@ -189,9 +189,9 @@ public class SavedSearchesDialog extends FEditStringList {
 			setCursor(null);
 		}
 
-		Logging.info(this, "commit result == null " + (result == null));
+		Logging.info(this, "commit result == null ", result == null);
 		if (result != null) {
-			Logging.info(this, "result size " + result.size());
+			Logging.info(this, "result size ", result.size());
 			selectionPanel.setSelectedValues(result);
 		}
 	}
@@ -205,13 +205,13 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	private void removeSelectedEntry() {
 		int index = visibleList.getSelectedIndex();
-		Logging.debug(this, "remove selected Entry, list index " + index);
+		Logging.debug(this, "remove selected Entry, list index ", index);
 
 		if (index == -1) {
 			return;
 		}
 
-		Logging.debug(this, "remove entry at " + index);
+		Logging.debug(this, "remove entry at ", index);
 
 		removeSavedSearch(model.get(index));
 		model.remove(index);

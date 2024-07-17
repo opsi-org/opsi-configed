@@ -27,7 +27,7 @@ public class UserConfigModule {
 	protected UserConfigModule(String userName) {
 		this.username = userName;
 
-		Logging.info(this.getClass(), "create UserConfigModule for user named " + username);
+		Logging.info(this.getClass(), "create UserConfigModule for user named ", username);
 
 		booleanMap = new LinkedHashMap<>();
 		boolKeys = new LinkedHashSet<>();
@@ -35,9 +35,8 @@ public class UserConfigModule {
 		possibleValuesMap = new LinkedHashMap<>();
 		listKeys = new LinkedHashSet<>();
 
-		Logging.info(this.getClass(),
-				"for user " + userName + " we got by prototype " + booleanMap + " -- " + valuesMap);
-		Logging.info(this.getClass(), "for user " + userName + " bool keys " + boolKeys + " -- list keys " + listKeys);
+		Logging.info(this.getClass(), "for user ", userName, " we got by prototype ", booleanMap, " -- ", valuesMap);
+		Logging.info(this.getClass(), "for user ", userName, " bool keys ", boolKeys, " -- list keys ", listKeys);
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class UserConfigModule {
 	}
 
 	public void setBooleanValue(String key, Boolean val) {
-		Logging.info(this, "for user " + username + " setBooleanValue " + key + " : " + val);
+		Logging.info(this, "for user ", username, " setBooleanValue ", key, " : ", val);
 		booleanMap.put(key, val);
 	}
 
@@ -55,12 +54,12 @@ public class UserConfigModule {
 	}
 
 	public void setValues(String key, List<Object> values) {
-		Logging.info(this, "for user " + username + ", key " + key + " setValues " + values);
-		Logging.info(this, "we have list_keys " + listKeys);
-		Logging.info(this, "we have bool_keys " + boolKeys);
+		Logging.info(this, "for user ", username, ", key ", key, " setValues ", values);
+		Logging.info(this, "we have list_keys ", listKeys);
+		Logging.info(this, "we have bool_keys ", boolKeys);
 
 		if (!listKeys.contains(key)) {
-			Logging.info("UserOpsiPermisson : still missing key " + key);
+			Logging.info("UserOpsiPermisson : still missing key ", key);
 		}
 
 		valuesMap.put(key, values);
@@ -71,12 +70,12 @@ public class UserConfigModule {
 	}
 
 	public void setPossibleValues(String key, List<Object> possibleValues) {
-		Logging.info(this, "for user " + username + ", key " + key + " setPossibleValues " + possibleValues);
-		Logging.info(this, "we have list_keys " + listKeys);
-		Logging.info(this, "we have bool_keys " + boolKeys);
+		Logging.info(this, "for user ", username, ", key ", key, " setPossibleValues ", possibleValues);
+		Logging.info(this, "we have list_keys ", listKeys);
+		Logging.info(this, "we have bool_keys ", boolKeys);
 
 		if (!listKeys.contains(key)) {
-			Logging.info("UserOpsiPermisson : still missing key " + key);
+			Logging.info("UserOpsiPermisson : still missing key ", key);
 		}
 
 		possibleValuesMap.put(key, possibleValues);

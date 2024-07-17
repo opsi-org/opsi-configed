@@ -117,7 +117,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	}
 
 	private void retrieveData() {
-		Logging.info(this, "retrieveData extendedView " + extendedView);
+		Logging.info(this, "retrieveData extendedView ", extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		licenseMap = LicensingInfoMap.getInstance();
 		columnNames = licenseMap.getColumnNames();
@@ -134,7 +134,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 				false) {
 			@Override
 			public void reload() {
-				Logging.info(this, " LicInfoPanelGenTable reload, reduced " + !LicensingInfoDialog.extendedView);
+				Logging.info(this, " LicInfoPanelGenTable reload, reduced ", !LicensingInfoDialog.extendedView);
 				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
@@ -304,7 +304,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 	private static void setExtendedView(boolean isExtendedView) {
 		LicensingInfoDialog.extendedView = isExtendedView;
-		Logging.info("extendedView " + extendedView + ", i.e. reduced " + !extendedView);
+		Logging.info("extendedView ", extendedView, ", i.e. reduced ", !extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		LicensingInfoMap.requestRefresh();
 	}

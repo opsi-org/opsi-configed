@@ -134,7 +134,7 @@ public class HostInfo {
 		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
 		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 
-		Logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
+		Logging.debug(this, "getMap clientName ", clientName, " : ", unordered);
 
 		return unordered;
 	}
@@ -162,7 +162,7 @@ public class HostInfo {
 
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
 
-		Logging.debug(this, "getMap clientName " + clientName);
+		Logging.debug(this, "getMap clientName ", clientName);
 
 		return unordered;
 	}
@@ -245,7 +245,7 @@ public class HostInfo {
 			break;
 
 		default:
-			Logging.warning(this, "key " + key + " not expected");
+			Logging.warning(this, "key ", key, " not expected");
 			break;
 		}
 	}
@@ -392,7 +392,7 @@ public class HostInfo {
 	}
 
 	public void resetGui() {
-		Logging.info(this, "resetGui for " + toString());
+		Logging.info(this, "resetGui for ", this);
 
 		MainFrame mainFrame = ConfigedMain.getMainFrame();
 
@@ -609,7 +609,7 @@ public class HostInfo {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
-			Logging.info(this, "showAndSave found col " + col);
+			Logging.info(this, "showAndSave found col ", col);
 
 			if (col > -1) {
 				// write it into the visible table
@@ -629,11 +629,11 @@ public class HostInfo {
 
 	public void showAndSaveInternally(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges) {
 		if (client == null || client.isEmpty()) {
-			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
+			Logging.warning(this, "show and save: no hostId given: ", sourceOfChanges);
 			return;
 		}
 
-		Logging.info(this, "showAndSave client, source " + client + ", " + sourceOfChanges);
+		Logging.info(this, "showAndSave client, source ", client, ", ", sourceOfChanges);
 
 		if (sourceOfChanges == null) {
 			return;

@@ -327,7 +327,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 	}
 
 	private void updateLists(String selectedCommand) {
-		Logging.info(this, "updateLists selectedCommand " + selectedCommand);
+		Logging.info(this, "updateLists selectedCommand ", selectedCommand);
 		jComboBoxMenuText.removeAllItems();
 		jComboBoxParentMenuText.removeAllItems();
 
@@ -354,7 +354,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 	}
 
 	private void updateSelectedCommand(String menuText) {
-		Logging.info(this, "updateSelectedCommand menuText " + menuText);
+		Logging.info(this, "updateSelectedCommand menuText ", menuText);
 		if (menuText == null || menuText.isEmpty() || menuText.equals(CommandFactory.MENU_NEW)) {
 			updateComponents(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS, "", CommandFactory.DEFAULT_POSITION, "");
 		} else {
@@ -365,8 +365,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 	private void updateComponentsMenuText(String menuText) {
 		MultiCommandTemplate thiscommand = factory.getCommandByMenu(menuText);
 		if (thiscommand != null) {
-			Logging.debug(this, "updateSelectedCommand menu " + thiscommand.getMenuText() + " parent "
-					+ thiscommand.getParentMenuText());
+			Logging.debug(this, "updateSelectedCommand menu ", thiscommand.getMenuText(), " parent ",
+					thiscommand.getParentMenuText());
 			StringBuilder combuf = new StringBuilder();
 			for (SingleCommand c : thiscommand.getCommands()) {
 				String rawCommand = c.getCommandRaw();
@@ -413,7 +413,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		if (command == null) {
 			return;
 		}
-		Logging.debug(this, "doAction2 savecommand " + command.toString());
+		Logging.debug(this, "doAction2 savecommand ", command);
 
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
 
@@ -446,8 +446,8 @@ public final class CommandControlDialog extends FGeneralDialog {
 		if (command.getMenuText() == null) {
 			command.setMenuText(CommandFactory.MENU_NEW);
 		}
-		Logging.debug(this, "doActionTestCommand buildCommand " + command.toString());
-		Logging.debug(this, "doActionTestCommand buildCommand commandlist " + command.commandlistToString());
+		Logging.debug(this, "doActionTestCommand buildCommand ", command);
+		Logging.debug(this, "doActionTestCommand buildCommand commandlist ", command.getCommands());
 
 		new Thread() {
 			@Override
@@ -484,9 +484,9 @@ public final class CommandControlDialog extends FGeneralDialog {
 
 		if (jComboBoxMenuText.getSelectedItem() != null
 				&& !((String) jComboBoxMenuText.getSelectedItem()).trim().equals(CommandFactory.MENU_NEW)) {
-			Logging.info(this, "canCommandBeSaved menuText " + jComboBoxMenuText.getSelectedItem());
+			Logging.info(this, "canCommandBeSaved menuText ", jComboBoxMenuText.getSelectedItem());
 			MultiCommandTemplate tempCommand = getCommandNow();
-			Logging.debug(this, "canCommandBeSaved command " + tempCommand);
+			Logging.debug(this, "canCommandBeSaved command ", tempCommand);
 			if (tempCommand == null) {
 				return commandCanBeSaved;
 			}
@@ -513,7 +513,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		try {
 			prio = Integer.parseInt(!jTextFieldPriority.getText().isEmpty() ? jTextFieldPriority.getText() : "0");
 		} catch (NumberFormatException e) {
-			Logging.warning("Cannot get value from priority field Exception: ", e);
+			Logging.warning(e, "Cannot get value from priority field Exception: ");
 		}
 		List<String> coms = new LinkedList<>();
 		for (String c : jTextPaneCommands.getText().split("\n")) {
@@ -525,7 +525,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		MultiCommandTemplate tempCommand = CommandFactory.buildCommand(
 				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
 				jTextFieldTooltipText.getText(), prio, coms);
-		Logging.debug(this, "getCommandNow command: " + tempCommand);
+		Logging.debug(this, "getCommandNow command: ", tempCommand);
 
 		return tempCommand;
 	}

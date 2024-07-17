@@ -20,7 +20,7 @@ public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable
 
 		this.configedMain = configedMain;
 
-		Logging.info(this.getClass(), "table null? " + (table == null));
+		Logging.info(this.getClass(), "table null? ", table == null);
 	}
 
 	@Override

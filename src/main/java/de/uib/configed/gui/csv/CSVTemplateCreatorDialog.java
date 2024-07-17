@@ -394,7 +394,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 			printer.printRecord(headers);
 		} catch (IOException e) {
-			Logging.error(this, "Unable to write to file", e);
+			Logging.error(this, e, "Unable to write to file");
 		}
 	}
 }

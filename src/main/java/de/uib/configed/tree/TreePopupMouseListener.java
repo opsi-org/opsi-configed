@@ -108,7 +108,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 			return false;
 		}
 
-		Logging.debug(this, "shouldShow clickPath  " + mousePath);
+		Logging.debug(this, "shouldShow clickPath  ", mousePath);
 
 		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
 

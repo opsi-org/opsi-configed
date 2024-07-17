@@ -76,7 +76,7 @@ public class ExporterToPDF extends AbstractExportTable {
 							Configed.getResourceValue("OpenSaveDialog.open") },
 					null);
 
-			Logging.info(this, "fileName was null, result now has value " + result);
+			Logging.info(this, "fileName was null, result now has value ", result);
 		}
 
 		if (result == JOptionPane.DEFAULT_OPTION) {
@@ -93,17 +93,17 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			// FileName is null if nothing chosen, then we do nothing
 			if (fileName != null) {
-				Logging.info(this, "filename for saving PDF: " + fileName);
+				Logging.info(this, "filename for saving PDF: ", fileName);
 				File file = new File(fileName);
 				if (file.isDirectory()) {
-					Logging.error("no valid filename " + fileName);
+					Logging.error("no valid filename ", fileName);
 				} else {
 					filePath = file.getAbsolutePath();
 				}
 
-				Logging.notice(this, "selected fileName is: " + fileName);
+				Logging.notice(this, "selected fileName is: ", fileName);
 				fileName = checkExtension(fileName);
-				Logging.notice(this, "after checkExtension(..), fileName is now: " + fileName);
+				Logging.notice(this, "after checkExtension(..), fileName is now: ", fileName);
 				fileName = checkFile(fileName, extensionFilter);
 
 				writeFile(filePath, fileName);
@@ -117,7 +117,7 @@ public class ExporterToPDF extends AbstractExportTable {
 				writeFile(temp.getAbsolutePath(), fileName);
 				openFile(temp);
 			} catch (IOException e) {
-				Logging.error("Failed to create temp file", e);
+				Logging.error(e, "Failed to create temp file");
 			}
 		}
 	}
@@ -152,9 +152,9 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			document.close();
 		} catch (FileNotFoundException ex) {
-			Logging.error("file not found: " + fileName, ex);
+			Logging.error(ex, "file not found: ", fileName);
 		} catch (DocumentException dex) {
-			Logging.error("document exception, cannot get instance for " + document, dex);
+			Logging.error(dex, "document exception, cannot get instance for ", document);
 		}
 	}
 
@@ -184,7 +184,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			try {
 				Desktop.getDesktop().open(temp);
 			} catch (IOException e) {
-				Logging.error("cannot show: " + temp.getAbsolutePath(), e);
+				Logging.error(e, "cannot show: ", temp.getAbsolutePath());
 			}
 		}
 	}
@@ -251,7 +251,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			BaseFont bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
 			symbolFont = new Font(bf, 11);
 		} catch (DocumentException | IOException e) {
-			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :", e);
+			Logging.warning(e, "ExporterToPDF::createTableDataElement", " BaseFont can't be created :");
 			symbolFont = SMALL;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();

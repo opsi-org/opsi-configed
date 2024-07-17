@@ -24,7 +24,7 @@ public class ConfigUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		Logging.info(this, "doCall, setting class " + newdata.getClass() + ", the new data is " + newdata);
+		Logging.info(this, "doCall, setting class ", newdata.getClass(), ", the new data is ", newdata);
 
 		persistenceController.getConfigDataService().setConfig(newdata);
 	}

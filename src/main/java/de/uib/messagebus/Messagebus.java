@@ -110,7 +110,7 @@ public class Messagebus implements MessagebusListener {
 			}
 
 			if (System.currentTimeMillis() - start >= timeoutMs) {
-				Logging.warning("Timed out after " + timeoutMs + " ms while waiting for inital subscription event");
+				Logging.warning("Timed out after ", timeoutMs, " ms while waiting for inital subscription event");
 				return false;
 			}
 			Utils.threadSleep(this, 50);
@@ -124,7 +124,7 @@ public class Messagebus implements MessagebusListener {
 		try {
 			uri = new URI(produceURL());
 		} catch (URISyntaxException ex) {
-			Logging.warning(this, "Inavlid URI: " + uri, ex);
+			Logging.warning(this, ex, "Inavlid URI: ", uri);
 		}
 
 		return uri;
@@ -136,13 +136,13 @@ public class Messagebus implements MessagebusListener {
 
 		if (!Utils.hasPort(host)) {
 			host = host + ":" + Globals.DEFAULT_PORT;
-			Logging.info(this, "Host doesn't have specified port (using default): " + host);
+			Logging.info(this, "Host doesn't have specified port (using default): ", host);
 		} else {
-			Logging.info(this, "Host does have specified port (using specified port): " + host);
+			Logging.info(this, "Host does have specified port (using specified port): ", host);
 		}
 
 		String url = String.format("%s://%s/messagebus/v1", protocol, host);
-		Logging.info(this, "Connecting to messagebus using the following URL: " + url);
+		Logging.info(this, "Connecting to messagebus using the following URL: ", url);
 
 		return url;
 	}
@@ -182,7 +182,7 @@ public class Messagebus implements MessagebusListener {
 		message.put("expires", System.currentTimeMillis() + 10000);
 		message.put("operation", "add");
 		message.put("channels", channels);
-		Logging.debug(this, "Sending channel subscription request: " + message.toString());
+		Logging.debug(this, "Sending channel subscription request: ", message);
 		sendMessage(message);
 	}
 
@@ -203,7 +203,7 @@ public class Messagebus implements MessagebusListener {
 		message.put("cols", cols);
 		message.put("rows", rows);
 
-		Logging.debug(this, "Sending terminal open request: " + message.toString());
+		Logging.debug(this, "Sending terminal open request: ", message);
 		sendMessage(message);
 	}
 
@@ -222,10 +222,10 @@ public class Messagebus implements MessagebusListener {
 				byte[] msgpackBytes = mapper.writeValueAsBytes(message);
 				sendMessage(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
 			} catch (JsonProcessingException ex) {
-				Logging.warning(this, "Error occurred while processing msgpack: ", ex);
+				Logging.warning(this, ex, "Error occurred while processing msgpack: ");
 			}
 		} else {
-			Logging.warning(this, "Message of type '" + message.get("type") + "' not sent, messagebus not connected");
+			Logging.warning(this, "Message of type '", message.get("type"), "' not sent, messagebus not connected");
 		}
 	}
 
@@ -255,8 +255,8 @@ public class Messagebus implements MessagebusListener {
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
-		Logging.info(this, "Messagebus connection closed by " + (remote ? "opsi service" : "us") + " Code=" + code
-				+ " Reason='" + reason + "', disconnecting=" + disconnecting + ", reconnecting=" + reconnecting);
+		Logging.info(this, "Messagebus connection closed by ", remote ? "opsi service" : "us", " Code=", code,
+				" Reason='", reason, "', disconnecting=", disconnecting, ", reconnecting=", reconnecting);
 		boolean wasDisconnecting = disconnecting;
 		connected = false;
 		disconnecting = false;
@@ -284,8 +284,7 @@ public class Messagebus implements MessagebusListener {
 					persistenceController.makeConnection();
 					waitMillis = 1000;
 				} else {
-					Logging.notice(this,
-							"Connection to messagebus lost, reconnecting in " + reconnectWaitMillis + " ms");
+					Logging.notice(this, "Connection to messagebus lost, reconnecting in ", reconnectWaitMillis, " ms");
 				}
 				try {
 					Thread.sleep(waitMillis);
@@ -302,17 +301,17 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onError(Exception ex) {
-		Logging.warning(this, "Messagebus connection error: " + ex);
+		Logging.warning(this, ex, "Messagebus connection error");
 	}
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
-		Logging.trace(this, "Messagebus message received: " + message.toString());
+		Logging.trace(this, "Messagebus message received: ", message);
 		String type = (String) message.get("type");
 		if (WebSocketEvent.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
 			initialSubscriptionReceived = true;
 		} else if (WebSocketEvent.GENERAL_ERROR.toString().equals(type)) {
-			Logging.error(this, "Error occured on the server " + message.get("error"));
+			Logging.error(this, "Error occured on the server ", message.get("error"));
 		} else {
 			// Other events are handled by other listeners.
 		}

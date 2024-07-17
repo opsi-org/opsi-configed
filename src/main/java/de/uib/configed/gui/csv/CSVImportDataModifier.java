@@ -121,7 +121,7 @@ public class CSVImportDataModifier {
 				csvData.add(new HashMap<>(csvRecord.toMap()));
 			}
 		} catch (IOException | UncheckedIOException ex) {
-			Logging.warning(this, "Failed to read CSV file", ex);
+			Logging.warning(this, ex, "Failed to read CSV file");
 			displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title"),
 					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"));
 			csvData = null;
@@ -139,7 +139,7 @@ public class CSVImportDataModifier {
 
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
 			List<String> columnNames, CSVFormat format) {
-		Logging.info(this, "createModel, csvData: " + csvData);
+		Logging.info(this, "createModel, csvData: ", csvData);
 		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 		populateSourceMap(theSourceMap, csvData);
 

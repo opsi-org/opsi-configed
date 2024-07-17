@@ -439,7 +439,7 @@ public final class ClientMenuManager implements MenuListener {
 
 	private void enableMenuItemsForClients() {
 		int countSelectedClients = configedMain.getSelectedClients().size();
-		Logging.debug(" enableMenuItemsForClients, countSelectedClients " + countSelectedClients);
+		Logging.debug(" enableMenuItemsForClients, countSelectedClients ", countSelectedClients);
 
 		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
 			jMenuItem.setEnabled(countSelectedClients >= 1);
@@ -463,7 +463,7 @@ public final class ClientMenuManager implements MenuListener {
 		if (disabledClientMenuEntries != null) {
 			for (String menuActionType : disabledClientMenuEntries) {
 				JMenuItem menuItem = menuItemsHost.get(menuActionType);
-				Logging.debug("disable " + menuActionType + ", " + menuItem);
+				Logging.debug("disable ", menuActionType, ", ", menuItem);
 				menuItem.setEnabled(false);
 			}
 

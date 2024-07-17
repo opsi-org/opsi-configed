@@ -67,10 +67,10 @@ public class SelectionManager {
 	/** Save this group operation in the manager for a later build. */
 	public void addGroupOperation(GroupType groupType, OperationWithStatus groupStatus,
 			List<OperationWithStatus> operationsWithStatuses) {
-		Logging.debug(this, "Adding group operation " + groupType + " with " + operationsWithStatuses.toString());
+		Logging.debug(this, "Adding group operation ", groupType, " with ", operationsWithStatuses.toString());
 
 		AbstractSelectOperation operation = build(operationsWithStatuses, new int[] { 0 });
-		Logging.debug(this, "addGroupOperation: " + groupType + " " + operation + " " + operation);
+		Logging.debug(this, "addGroupOperation: ", groupType, " ", operation, " ", operation);
 
 		switch (groupType) {
 		case SOFTWARE_GROUP:
@@ -131,12 +131,12 @@ public class SelectionManager {
 			Logging.info(this, "Nothing selected");
 			return new ArrayList<>();
 		} else {
-			Logging.info("\n" + operation.printOperation(""));
+			Logging.info("\n", operation.printOperation(""));
 		}
 
 		long startTime = System.nanoTime();
 		List<String> l = selectClientsLocal(operation);
-		Logging.notice(this, "select Clients " + ((System.nanoTime() - startTime) / 1_000_000));
+		Logging.notice(this, "select Clients ", ((System.nanoTime() - startTime) / 1_000_000));
 		return l;
 	}
 
@@ -144,14 +144,14 @@ public class SelectionManager {
 	// it should be checked before if operation is null
 	private List<String> selectClientsLocal(AbstractSelectOperation operation) {
 		ExecutableOperation selectOperation = backend.createExecutableOperation(operation);
-		Logging.info(this, "selectClients, operation " + operation.getClassName());
-		Logging.info(this, "" + ((AbstractSelectGroupOperation) operation).getChildOperations().size());
+		Logging.info(this, "selectClients, operation ", operation.getClassName());
+		Logging.info(this, "", ((AbstractSelectGroupOperation) operation).getChildOperations().size());
 		return backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
 	}
 
 	/** Save the current operation tree with the serializer */
 	public void saveSearch(String name, String description) {
-		Logging.debug(this, "saveSearch " + name);
+		Logging.debug(this, "saveSearch ", name);
 		AbstractSelectOperation operation = getTopOperation();
 		if (operation == null) {
 			Logging.debug(this, "Nothing selected");
@@ -180,20 +180,20 @@ public class SelectionManager {
 	 * tree.
 	 */
 	public void setSearch(String serialized) {
-		Logging.debug(this, "setSearch " + serialized);
+		Logging.debug(this, "setSearch ", serialized);
 		clearOperations();
 		setSearch(serializer.deserialize(serialized));
 	}
 
 	/** Load the given search. It will replace the current operation tree. */
 	public void loadSearch(String name) {
-		Logging.info(this, "loadSearch " + name);
+		Logging.info(this, "loadSearch ", name);
 		clearOperations();
 		if (name == null || name.isEmpty()) {
 			isSerializedLoaded = false;
 			return;
 		}
-		Logging.info(this, "setSearch " + name);
+		Logging.info(this, "setSearch ", name);
 		setSearch(serializer.load(name));
 	}
 
@@ -203,8 +203,8 @@ public class SelectionManager {
 
 	/* Build a operation tree from the temporary data given by the UI */
 	private AbstractSelectOperation build(List<OperationWithStatus> input, int[] currentPos) {
-		Logging.debug(this, "build counter: " + currentPos[0]);
-		Logging.debug(this, "input size: " + input.size());
+		Logging.debug(this, "build counter: ", currentPos[0]);
+		Logging.debug(this, "input size: ", input.size());
 		if (input.isEmpty()) {
 			return null;
 		}
@@ -215,14 +215,14 @@ public class SelectionManager {
 
 		while (currentPos[0] < input.size()) {
 			OperationWithStatus currentInput = input.get(currentPos[0]);
-			Logging.debug("Position: " + currentPos[0]);
-			Logging.debug("currentInput: " + currentInput.getOperation() + currentInput.getStatus()
-					+ currentInput.isParenthesisOpen() + currentInput.isParenthesisClosed());
+			Logging.debug("Position: ", currentPos[0]);
+			Logging.debug("currentInput: ", currentInput.getOperation(), currentInput.getStatus(),
+					currentInput.isParenthesisOpen(), currentInput.isParenthesisClosed());
 			if (currentInput.isParenthesisOpen()) {
 				// so we don't go one step deeper next time here, too
 				currentInput.setParenthesisOpen(false);
 				AbstractSelectOperation operation = build(input, currentPos);
-				Logging.debug("\n" + operation.printOperation(""));
+				Logging.debug("\n", operation.printOperation(""));
 				currentPos[0]--;
 				currentInput = input.get(currentPos[0]);
 				currentInput.setOperation(operation);
@@ -248,7 +248,7 @@ public class SelectionManager {
 				break;
 			}
 		}
-		Logging.debug(this, "After break: " + currentPos[0]);
+		Logging.debug(this, "After break: ", currentPos[0]);
 
 		return getOperationFromConnections(orConnections, andConnections);
 	}

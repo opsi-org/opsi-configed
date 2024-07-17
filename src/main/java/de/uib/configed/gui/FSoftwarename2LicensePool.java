@@ -166,7 +166,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			Logging.info(this, "panelSWxLicensepool ListSelectionEvent " + e);
+			Logging.info(this, "panelSWxLicensepool ListSelectionEvent ", e);
 			super.valueChanged(e);
 
 			Object val = null;
@@ -329,12 +329,12 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
 			if (!e.getValueIsAdjusting() && isVisible()) {
-				Logging.info(this, "selectedRow " + panelSWnames.getSelectedRow());
+				Logging.info(this, "selectedRow ", panelSWnames.getSelectedRow());
 
 				if (panelSWnames.getSelectedRow() >= 0) {
 					String swName = (String) panelSWnames.getValueAt(panelSWnames.getSelectedRow(), 0);
 
-					Logging.info(this, " setTableModelSWxLicensepool for " + swName);
+					Logging.info(this, " setTableModelSWxLicensepool for ", swName);
 
 					setTableModelSWxLicensepool(swName);
 				}
@@ -409,7 +409,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 		modelSWnames.reset();
 
-		Logging.info(this, "setPreselectionForName2Pool, we did a reset for modelSWnames with " + val);
+		Logging.info(this, "setPreselectionForName2Pool, we did a reset for modelSWnames with ", val);
 	}
 
 	private Set<String> getRangeSWxLicensepool(String swName) {
@@ -462,13 +462,13 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 			buttonActive = true;
 		}
 
-		Logging.info(this, "setGlobalPool  labelSetAllAssignmentsToGloballySelectedPool" + labelText);
+		Logging.info(this, "setGlobalPool  labelSetAllAssignmentsToGloballySelectedPool", labelText);
 		labelSetAllAssignmentsToGloballySelectedPool.setText(labelText);
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(buttonActive);
 	}
 
 	private Map<String, Map<String, Object>> produceModelSWxLicensepool(String swName) {
-		Logging.info(this, "produceModelSWxLicensepool for swName: " + swName);
+		Logging.info(this, "produceModelSWxLicensepool for swName: ", swName);
 
 		Map<String, Map<String, Object>> result = new TreeMap<>();
 
@@ -486,13 +486,13 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 			result.put(swID, rowMap);
 		}
 
-		Logging.info(this, "produceModelSWxLicensepool for swName: " + swName + ": " + result);
+		Logging.info(this, "produceModelSWxLicensepool for swName: ", swName, ": ", result);
 
 		return result;
 	}
 
 	private void setTableModelSWxLicensepool(String swName) {
-		Logging.info(this, " setTableModelSWxLicensepool for " + swName + " with cols " + columnNamesSWxLicensepool);
+		Logging.info(this, " setTableModelSWxLicensepool for ", swName, " with cols ", columnNamesSWxLicensepool);
 
 		MapTableUpdateItemFactory updateItemFactoySWxLicensepool = new MapTableUpdateItemFactory(
 				columnNamesSWxLicensepool);
@@ -501,7 +501,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 				new DefaultTableProvider(new RetrieverMapSource(columnNamesSWxLicensepool, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						Logging.info(this, "retrieveMap for swName " + swName);
+						Logging.info(this, "retrieveMap for swName ", swName);
 						if (!configedMain.isAllLicenseDataReloaded()) {
 							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 						}
@@ -523,7 +523,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 				new MapItemsUpdateController(panelSWxLicensepool, modelSWxLicensepool, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						Logging.info(this, "sendUpdate " + rowmap);
+						Logging.info(this, "sendUpdate ", rowmap);
 
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicensePool.SW_ID);
@@ -537,7 +537,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
-						Logging.info(this, "sendDelete " + rowmap);
+						Logging.info(this, "sendDelete ", rowmap);
 						// deleting not activated in panel
 
 						return false;

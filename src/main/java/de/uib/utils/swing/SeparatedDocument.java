@@ -39,7 +39,7 @@ public class SeparatedDocument extends CheckedDocument {
 					remove(offset, 1);
 				}
 			} catch (BadLocationException ex) {
-				Logging.warning(this, "Exception with location in giveAllowedCharacters", ex);
+				Logging.warning(this, ex, "Exception with location in giveAllowedCharacters");
 			}
 		}
 
