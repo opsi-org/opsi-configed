@@ -964,7 +964,7 @@ public class UserRolesConfigDataService {
 					"default path to opsiproducts"));
 		} else {
 			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to ",
-					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
+					configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
 			persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(
 					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
 		}
