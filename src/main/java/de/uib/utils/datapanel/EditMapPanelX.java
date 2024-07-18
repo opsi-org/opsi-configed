@@ -107,8 +107,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 	}
 
-	private final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
-	private final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
+	private AbstractPropertyHandler removingSpecificValuesPropertyHandler;
+	private AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
 			boolean reloadable) {
@@ -147,13 +147,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
-		// initialize special property handlers
-		removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
-		removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
-
-		settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
-		settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
-
 		if (keylistExtendible || entryRemovable) {
 			popupEditOptions.addSeparator();
 
@@ -186,6 +179,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 				popupEditOptions.add(popupItemDeleteEntry0);
 				// the menu item seems to work only for one menu
+
+				// initialize special property handlers
+				removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
+				removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
+
+				settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
+				settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
 
 				popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
 				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry1, "remove");
