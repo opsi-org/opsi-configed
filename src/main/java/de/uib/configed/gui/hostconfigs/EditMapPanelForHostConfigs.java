@@ -111,7 +111,6 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.addMouseWheelListener(mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
 
 		jScrollPane = new JScrollPane(table);
 

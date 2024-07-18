@@ -7,6 +7,8 @@
 - Show that data have changed in client info only when really changed (and not by pressing "CTRL" for example)
 - Show border around tooltip in dark mode
 - Rework Logging so that message strings are not build when not needed (performance)
+- React to "ENTER" input when in host and OTP dialog in login
+- Scroll in scrollPane instead of inside the table rows in host configs, product properties, etc.
 
 ## [4.4.0.1] - 2024-07-11
 

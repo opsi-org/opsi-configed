@@ -299,8 +299,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		table.addMouseWheelListener(mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
-
 		jScrollPane = new JScrollPane(table);
 
 		add(jScrollPane, BorderLayout.CENTER);
@@ -355,22 +353,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 
 		return "<html>" + tooltip + "</html>";
-	}
-
-	protected void reactToMouseWheelEvent(int wheelRotation) {
-		int selRow = table.getSelectedRow() + wheelRotation;
-
-		if (selRow >= table.getRowCount()) {
-			selRow = table.getRowCount() - 1;
-		}
-
-		int startRow = 0;
-
-		if (selRow < startRow) {
-			selRow = startRow;
-		}
-
-		setSelectedRow(selRow);
 	}
 
 	@Override
@@ -562,19 +544,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	@Override
 	public void focusGained(FocusEvent e) {
 		/* Not needed */}
-
-	private void setSelectedRow(int row) {
-		table.setRowSelectionInterval(row, row);
-
-		showSelectedRow();
-	}
-
-	private void showSelectedRow() {
-		int row = table.getSelectedRow();
-		if (row != -1) {
-			table.scrollRectToVisible(table.getCellRect(row, 0, false));
-		}
-	}
 
 	@Override
 	public void setOptionsEditable(boolean b) {
