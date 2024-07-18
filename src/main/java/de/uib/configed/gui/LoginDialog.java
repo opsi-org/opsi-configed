@@ -23,10 +23,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -170,7 +170,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
-		fieldHost.addKeyListener(newKeyListener);
+		fieldHost.getEditor().getEditorComponent().addKeyListener(newKeyListener);
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(newKeyListener);
@@ -183,6 +183,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, true));
 		fieldOTP.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderOTP"));
+		fieldOTP.addKeyListener(newKeyListener);
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
@@ -214,15 +215,13 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void setupLayout() {
-		JPanel panel = new JPanel();
-
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-		panel.setBorder(padding);
+		((JComponent) getContentPane()).setBorder(padding);
 
-		GroupLayout groupLayout = new GroupLayout(panel);
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
 
 		groupLayout.setHonorsVisibility(false);
-		panel.setLayout(groupLayout);
+		getContentPane().setLayout(groupLayout);
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
 				.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -281,8 +280,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
 						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE)));
-
-		this.getContentPane().add(panel);
 	}
 
 	private void finishAndMakeVisible() {
