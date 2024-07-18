@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.2] - 2024-07-18
 
 ### Changed
 - Assume server version 4.3 if no header was found
