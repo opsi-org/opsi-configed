@@ -10,6 +10,10 @@
 - React to "ENTER" input when in host and OTP dialog in login
 - Scroll in scrollPane instead of inside the table rows in host configs, product properties, etc.
 
+### Fixed
+- Don't use native library from flatlaf in MacOS to prevent crashes
+
+
 ## [4.4.0.1] - 2024-07-11
 
 ### Changed

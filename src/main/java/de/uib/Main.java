@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import org.apache.commons.cli.CommandLine;
@@ -19,6 +20,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+
+import com.formdev.flatlaf.util.SystemInfo;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -199,6 +202,18 @@ public class Main {
 		return isLogviewer;
 	}
 
+	private static void setSystemSpecificProperties() {
+		if (SystemInfo.isLinux) {
+			// enable custom window decorations
+			JFrame.setDefaultLookAndFeelDecorated(true);
+			JDialog.setDefaultLookAndFeelDecorated(true);
+		} else if (SystemInfo.isMacOS) {
+			System.setProperty("flatlaf.useNativeLibrary", "false");
+		} else {
+			// Do nothing for other operating systems
+		}
+	}
+
 	public static void main(String[] args) {
 		Thread.setDefaultUncaughtExceptionHandler(new UncaughtConfigedExceptionHandler());
 
@@ -220,6 +235,8 @@ public class Main {
 		Locale.setDefault(Messages.getLocale());
 
 		ThemeManager.setOpsiLaf();
+
+		setSystemSpecificProperties();
 
 		if (isLogviewer) {
 			Logviewer.main(cmd);

@@ -14,14 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.AbstractButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.util.SystemInfo;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -104,12 +101,6 @@ public final class ThemeManager {
 		default:
 			Logging.warning("tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
 			break;
-		}
-
-		if (SystemInfo.isLinux) {
-			// enable custom window decorations
-			JFrame.setDefaultLookAndFeelDecorated(true);
-			JDialog.setDefaultLookAndFeelDecorated(true);
 		}
 
 		Globals.setTableColors();
