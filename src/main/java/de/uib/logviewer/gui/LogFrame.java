@@ -94,7 +94,7 @@ public class LogFrame extends JFrame {
 		jMenuFileReload.addActionListener((ActionEvent e) -> reloadFile());
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
-		Utils.addIntellijIconToMenuItem(jMenuFileExit, "exit");
+		Utils.addThemeIconToMenuItem(jMenuFileExit, "exit");
 		jMenuFileExit.addActionListener((ActionEvent e) -> Main.endApp(Main.NO_ERROR));
 
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));

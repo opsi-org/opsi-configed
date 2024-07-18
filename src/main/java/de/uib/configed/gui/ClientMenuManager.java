@@ -128,7 +128,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
 
 		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
-		Utils.addThemeIconToMenuItem(jMenuCreatePdf, "anyType");
+		Utils.addThemeIconInvertedToMenuItem(jMenuCreatePdf, "anyType");
 		jMenuCreatePdf.addActionListener(event -> createPdf());
 
 		Utils.addIntellijIconToMenuItem(jMenuAddClient, "add");

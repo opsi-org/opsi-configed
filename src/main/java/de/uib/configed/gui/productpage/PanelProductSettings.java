@@ -241,7 +241,7 @@ public class PanelProductSettings extends JSplitPane {
 		popup.add(reload);
 
 		JMenuItem createReport = new JMenuItem(Configed.getResourceValue("PanelProductSettings.pdf"));
-		Utils.addThemeIconToMenuItem(createReport, "anyType");
+		Utils.addThemeIconInvertedToMenuItem(createReport, "anyType");
 		createReport.addActionListener((ActionEvent e) -> createReport());
 		popup.add(createReport);
 

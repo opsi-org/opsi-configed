@@ -116,11 +116,17 @@ public final class Utils {
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
-	public static void addThemeIconToMenuItem(AbstractButton abstractButton, String iconName) {
+	public static void addThemeIconInvertedToMenuItem(AbstractButton abstractButton, String iconName) {
 		abstractButton.setIcon(getThemeIconForThemeMenu(!FlatLaf.isLafDark(), iconName));
 		if (!FlatLaf.isLafDark()) {
 			abstractButton.setSelectedIcon(getThemeIconForThemeMenu(false, iconName));
 		}
+	}
+
+	public static void addThemeIconToMenuItem(AbstractButton abstractButton, String iconName) {
+		abstractButton.setIcon(getThemeIcon(iconName, 16));
+		abstractButton.setSelectedIcon(
+				getThemeIcon(iconName, 16).setColorFilter(new ColorFilter(color -> Globals.OPSI_FOREGROUND_DARK)));
 	}
 
 	public static FlatSVGIcon getThemeIcon(String iconName, int size) {

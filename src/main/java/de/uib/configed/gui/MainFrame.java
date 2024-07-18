@@ -155,7 +155,7 @@ public class MainFrame extends JFrame {
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
-		Utils.addIntellijIconToMenuItem(jMenuFileExit, "exit");
+		Utils.addThemeIconToMenuItem(jMenuFileExit, "exit");
 		jMenuFileExit.addActionListener((ActionEvent e) -> configedMain.finishApp(true, 0));
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
@@ -174,7 +174,7 @@ public class MainFrame extends JFrame {
 		});
 
 		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
-		Utils.addIntellijIconToMenuItem(jMenuFileLogout, "exit");
+		Utils.addThemeIconToMenuItem(jMenuFileLogout, "exit");
 		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
@@ -189,7 +189,7 @@ public class MainFrame extends JFrame {
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
-		Utils.addThemeIconToMenuItem(jMenuTheme, "systemTheme");
+		Utils.addThemeIconInvertedToMenuItem(jMenuTheme, "systemTheme");
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = ThemeManager.getSelectedTheme();
 
