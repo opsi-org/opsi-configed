@@ -145,7 +145,7 @@ public class UserConfigProducing {
 		// item variable for adding items to readyObjects
 		Map<String, Object> item = null;
 
-		if (serverconfigValuesMap.get(configKeyUseList) == null) {
+		if (configKeyUseList != null && serverconfigValuesMap.get(configKeyUseList) == null) {
 			Logging.info(this, "supplyConfigPermissionList. serverconfigValuesMap has no value for key ",
 					configKeyUseList);
 			item = Utils.createNOMBoolConfig(configKeyUseList, initialValue,
@@ -335,6 +335,8 @@ public class UserConfigProducing {
 				readyObjects.size());
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig ", userConfig);
 
+		updateConfigListItem(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN,
+				UserServerConsoleConfig.FORBIDDEN_OPTIONS, userConfig, prototypeConfig, prototypeObligatory, startKey);
 		updateDepots(userConfig, prototypeConfig, prototypeObligatory, startKey);
 		updateHostGroups(userConfig, prototypeConfig, prototypeObligatory, startKey, username);
 		updateProductGroups(userConfig, prototypeConfig, prototypeObligatory, startKey);
@@ -363,6 +365,45 @@ public class UserConfigProducing {
 			readyObjects.add(itemModifyTime);
 		}
 	}
+
+	// private void updateTerminalConfig(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
+	// 		String startKey) {
+	// 	// List<Object> selectedValuesTerminal = new ArrayList<>(); // default is to allow all
+	// 	// Set<Object> possibleValuesTerminal = new TreeSet<>();
+	// 	// Set<Object> oldPossibleValuesTerminal = new TreeSet<>();
+	// 	// String configKeyUseList = null;
+	// 	// String partkey = UserTerminalConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
+	// 	// String configKeyList = startKey + partkey;
+
+	// 	// // defaultvalueForRestrictionUsage doesnt matter cause configKeyUseList is null
+	// 	// boolean defaultvalueForRestrictionUsage = false;
+	// 	// // value of server is set, read it
+	// 	// if (serverconfigValuesMap.get(configKeyList) != null) {
+	// 	// 	Logging.info("configterminal1a createValues");
+	// 	// 	selectedValuesTerminal = serverconfigValuesMap.get(configKeyList);
+	// 	// }
+	// 	// userConfig.setValues(partkey, selectedValuesTerminal);
+
+	// 	// if (configOptionsMap.get(configKeyList) == null
+	// 	// 		|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
+	// 	// 	// initialization of possible values
+	// 	// 	Logging.info("configterminal2a createValues");
+	// 	// 	oldPossibleValuesTerminal = new TreeSet<>();
+	// 	// 	possibleValuesTerminal.addAll(prototypeConfig.getPossibleValues(partkey));
+	// 	// } else {
+	// 	// 	Logging.info("configterminal2b " + "configExists");
+	// 	// 	oldPossibleValuesTerminal = new TreeSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
+	// 	// 	possibleValuesTerminal.addAll(prototypeConfig.getPossibleValues(partkey));
+	// 	// }
+	// 	// // selectedValuesTerminal = prototypeConfig.getValues(partkey)
+	// 	// // oldPossibleValuesTerminal.addAll(configOptionsMap.get(configKeyList).getPossibleValues());
+	// 	// // possibleValuesTerminal.addAll(prototypeConfig.getPossibleValues(partkey));
+	// 	// Logging.info("configterminal1a " + "selectedValuesTerminal " + selectedValuesTerminal);
+	// 	// Logging.info("configterminal1a " + "possibleValuesTerminal " + possibleValuesTerminal);
+
+	// 	// supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
+	// 	// 		selectedValuesTerminal, oldPossibleValuesTerminal, possibleValuesTerminal);
+	// }
 
 	private void updateDepots(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
 			String startKey) {
@@ -405,6 +446,7 @@ public class UserConfigProducing {
 			currentPossibleValuesDepotListed.add(configserver);
 
 			Set<Object> posVals = new TreeSet<>();
+			posVals.addAll(existingDepots);
 			posVals.addAll(existingDepots);
 			posVals.addAll(oldPossibleValuesDepot);
 
@@ -532,6 +574,72 @@ public class UserConfigProducing {
 				currentPossibleValuesProductgroupsListed);
 
 		supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
+				selectedValuesProductgroups, oldPossibleValuesProductgroups, currentPossibleValuesProductgroupsListed);
+	}
+
+	private void updateConfigListItem(String partkey, List<Object> possibleValues, UserConfig userConfig,
+			UserConfig prototypeConfig, boolean prototypeObligatory, String startKey) {
+		// Methode zum initialisieren von Listenwerten
+		// analog zu updateProductGroups, ignoriert aber das configure-config 
+		// und setzt übergegebene possibleValues
+
+		List<Object> selectedValuesProductgroups = null;
+		List<Object> possibleValuesProductgroups = null;
+		Set<Object> oldPossibleValuesProductgroups = null;
+		Set<Object> currentPossibleValuesProductgroupsListed = null;
+
+		// String configKeyConfigured = startKey + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
+		String configKeyConfigured = null;
+		// String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
+		String configKeyList = startKey + partkey;
+
+		Logging.info(this, "updateTerminalConfig, configKeyConfigured ", configKeyConfigured, ", configKeyList ",
+				configKeyList);
+
+		// boolean defaultvalueForRestrictionUsage = prototypeConfig.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED);
+		boolean defaultvalueForRestrictionUsage = false; // doesnt matter if configKeyConfigured is null
+
+		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
+			selectedValuesProductgroups = prototypeConfig.getValues(partkey);
+			Logging.info(this, "updateTerminalConfig, selectedValuesProductgroups from prototype ",
+					selectedValuesProductgroups);
+		} else {
+			selectedValuesProductgroups = serverconfigValuesMap.get(configKeyList);
+			Logging.info(this, "updateTerminalConfig, selectedValuesProductgroups from server ",
+					selectedValuesProductgroups);
+		}
+
+		userConfig.setValues(partkey, selectedValuesProductgroups);
+
+		if (configOptionsMap.get(configKeyList) == null
+				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
+			oldPossibleValuesProductgroups = new TreeSet<>();
+		} else {
+			oldPossibleValuesProductgroups = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
+		}
+
+		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
+
+		if (prototypeObligatory) {
+			possibleValuesProductgroups = prototypeConfig.getPossibleValues(partkey);
+			currentPossibleValuesProductgroupsListed.addAll(possibleValuesProductgroups);
+		} else {
+			// Set<Object> posVals = new TreeSet<>(existingProductgroups);
+
+			Set<Object> posVals = new TreeSet<>(possibleValues);
+			currentPossibleValuesProductgroupsListed.addAll(posVals);
+		}
+
+		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesProductgroupsListed));
+
+		Logging.info(this, "updateProductGroups selectedValuesProductgroups before supplying ",
+				selectedValuesProductgroups);
+		Logging.info(this, "updateProductGroups oldPossibleValuesProductgroupsListed before supplying ",
+				oldPossibleValuesProductgroups);
+		Logging.info(this, "updateProductGroups currentPossibleValuesProductgroupsListed before supplying ",
+				currentPossibleValuesProductgroupsListed);
+
+		supplyConfigPermissionList(configKeyConfigured, defaultvalueForRestrictionUsage, configKeyList,
 				selectedValuesProductgroups, oldPossibleValuesProductgroups, currentPossibleValuesProductgroupsListed);
 	}
 

@@ -904,8 +904,8 @@ public class ConfigedMain implements MessagebusListener {
 				}
 			}
 		};
-
 		depotsList.addListSelectionListener(depotsListSelectionListener);
+		// TODO: add right click manager for depots items to open context menu
 
 		fetchDepots();
 
@@ -3307,7 +3307,7 @@ public class ConfigedMain implements MessagebusListener {
 			return;
 		}
 
-		TerminalFrame terminalFrame = new TerminalFrame();
+		TerminalFrame terminalFrame = new TerminalFrame(this);
 		terminalFrame.setMessagebus(messagebus);
 		terminalFrame.setSession(selectedClients.get(0));
 		terminalFrame.display();
