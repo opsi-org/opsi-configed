@@ -781,7 +781,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		// adds the new value to the collection of changed states
 		// calls the dependencies for the next turn
 
-		Logging.debug(this, "recursivelyChangeActionRequest ", clientId, ", ", product + ", ", ar);
+		Logging.debug(this, "recursivelyChangeActionRequest ", clientId, ", ", product, ", ", ar);
 
 		setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
 

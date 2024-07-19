@@ -382,7 +382,7 @@ public class UserRolesConfigDataService {
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 
-			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey)));
+			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
 		}

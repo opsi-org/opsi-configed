@@ -447,7 +447,7 @@ public class UserConfigProducing {
 			selectedValuesHostgroup = serverconfigValuesMap.get(configKeyList);
 		}
 
-		Logging.info(this, "selectedValuesHostgroup for user ", username + ": ", selectedValuesHostgroup);
+		Logging.info(this, "selectedValuesHostgroup for user ", username, ": ", selectedValuesHostgroup);
 
 		userConfig.setValues(partkey, selectedValuesHostgroup);
 

@@ -351,7 +351,7 @@ public class GroupTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
-		Logging.debug(this, " exportToClipboard ", comp + " , ", clip, ", ", action);
+		Logging.debug(this, " exportToClipboard ", comp, " , ", clip, ", ", action);
 		super.exportToClipboard(comp, clip, action);
 	}
 }

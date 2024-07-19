@@ -99,7 +99,7 @@ public class ProductState extends HashMap<String, String> {
 	@Override
 	public String put(String key, String value) {
 		if (KEYS.indexOf(key) < 0) {
-			Logging.error(this, "key ", key, " not known, value was ", value + " , ", KEYS);
+			Logging.error(this, "key ", key, " not known, value was ", value, " , ", KEYS);
 			return null;
 		} else {
 			return super.put(key, value);
