@@ -732,7 +732,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "sendUpdate, we have software ids ", softwareIds.size());
 		Logging.info(this, "sendUpdate, we have software ids ",
 				persistenceController.getSoftwareDataService().getSoftwareListByLicensePoolPD(poolId).size(),
-				" they are " + persistenceController.getSoftwareDataService().getSoftwareListByLicensePoolPD(poolId));
+				" they are ", persistenceController.getSoftwareDataService().getSoftwareListByLicensePoolPD(poolId));
 
 		List<String> oldSWListForPool = persistenceController.getSoftwareDataService()
 				.getSoftwareListByLicensePoolPD(poolId);
