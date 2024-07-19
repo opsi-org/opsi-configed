@@ -491,8 +491,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private void setInstallationInfo(String clientId, String product, String value) {
-		Logging.debug(this,
-				"setInstallationInfo for product, client, value " + product + ", " + clientId + ", " + value);
+		Logging.debug(this, "setInstallationInfo for product, client, value ", product, ", ", clientId, ", ", value);
 
 		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.computeIfAbsent(clientId,
 				arg -> new HashMap<>());
@@ -732,8 +731,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			recursivelyChangeActionRequest(clientId, productId, ar);
 		}
 
-		Logging.debug(this, "collectiveChangeActionRequest for product, changed products "
-				+ product2setOfClientsWithNewAction.keySet());
+		Logging.debug(this, "collectiveChangeActionRequest for product, changed products ",
+				product2setOfClientsWithNewAction.keySet());
 
 		// show the new settings for all products after recursion
 
@@ -875,13 +874,13 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 			String actionRequestForRequiredProduct = stateAndAction.get(ActionRequest.KEY);
 
-			Logging.debug(this, "---- stateAndAction until now: ActionRequest for requiredProduct "
-					+ actionRequestForRequiredProduct);
+			Logging.debug(this, "---- stateAndAction until now: ActionRequest for requiredProduct ",
+					actionRequestForRequiredProduct);
 
 			String installationStatusOfRequiredProduct = stateAndAction.get(InstallationStatus.KEY);
 
-			Logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct "
-					+ installationStatusOfRequiredProduct);
+			Logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct ",
+					installationStatusOfRequiredProduct);
 
 			Logging.debug(this, "requiredAction ", requiredAction);
 			Logging.debug(this, "ActionRequest.getVal(requiredAction) ", ActionRequest.getVal(requiredAction));

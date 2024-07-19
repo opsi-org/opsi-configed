@@ -490,8 +490,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 			if (tempCommand == null) {
 				return commandCanBeSaved;
 			}
-			Logging.debug(this,
-					"canCommandBeSaved is command saved " + factory.isCommandEqualSavedCommand(tempCommand));
+			Logging.debug(this, "canCommandBeSaved is command saved ", factory.isCommandEqualSavedCommand(tempCommand));
 			commandCanBeSaved = !factory.isCommandEqualSavedCommand(tempCommand);
 		}
 

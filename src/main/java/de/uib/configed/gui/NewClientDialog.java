@@ -511,10 +511,9 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
 			final boolean wanConfig, final String[] groups, final String netbootProduct) {
 		if (checkClientCorrectness(hostname, selectedDomain)) {
-			Logging.debug(this,
-					"createClient " + hostname + ", " + selectedDomain + ", " + depotID + ", " + description + ", "
-							+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiboot + ", " + wanConfig
-							+ ", " + Arrays.toString(groups) + ", " + netbootProduct);
+			Logging.debug(this, "createClient ", hostname, ", ", selectedDomain, ", ", depotID, ", ", description, ", ",
+					inventorynumber, ", ", notes, shutdownInstall, ", ", uefiboot, ", ", wanConfig, ", ",
+					Arrays.toString(groups), ", ", netbootProduct);
 
 			String newClientID = hostname + "." + selectedDomain;
 

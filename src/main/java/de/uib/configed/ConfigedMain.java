@@ -2628,8 +2628,8 @@ public class ConfigedMain implements MessagebusListener {
 				Logging.info(this, "dataHaveChanged null");
 			} else {
 				for (Entry<?, ?> clientEntry : source.entrySet()) {
-					Logging.debug(this, "dataHaveChanged for client ",
-							clientEntry.getKey() + " with values" + clientEntry.getValue());
+					Logging.debug(this, "dataHaveChanged for client ", clientEntry.getKey(), " with values",
+							clientEntry.getValue());
 				}
 			}
 
