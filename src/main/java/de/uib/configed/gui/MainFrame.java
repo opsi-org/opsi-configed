@@ -284,6 +284,34 @@ public class MainFrame extends JFrame {
 				.getUserRolesConfigDataService().isGlobalReadOnly()
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+
+		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
+
+		// check terminal access rights defined by user roles
+		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
+				.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
+		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
+		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
+		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
+
+		if (forbiddenConfigServer && forbiddenDepots && forbiddenClients) {
+			Logging.info(this, "setupMenuServerConsole all forbidden");
+			String s = " " + Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden");
+			jMenuFrameTerminal.setText(jMenuFrameTerminal.getText() + s);
+			jMenuFrameTerminal.setEnabled(false);
+		} else {
+			Logging.info(this, "setupMenuServerConsole forbiddenItems " + forbiddenItems);
+			Logging.info(this, "setupMenuServerConsole forbiddenConfigServer " + forbiddenConfigServer
+					+ " forbiddenDepots " + forbiddenDepots + " forbiddenClients " + forbiddenClients);
+			jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
+				configedMain.initMessagebus();
+				TerminalFrame terminal = new TerminalFrame(configedMain);
+				terminal.setMessagebus(configedMain.getMessagebus());
+				terminal.display();
+			});
+		}
+
+		jMenuServerConsole.add(jMenuFrameTerminal);
 	}
 
 	private void addDefaultOpsiCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
@@ -422,23 +450,10 @@ public class MainFrame extends JFrame {
 
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
-		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
-		jMenuFrameTerminal.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
-		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
-			configedMain.initMessagebus();
-			TerminalFrame terminal = new TerminalFrame();
-			terminal.setMessagebus(configedMain.getMessagebus());
-			terminal.display();
-		});
-
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameDashboard);
 		jMenuFrames.add(jMenuFrameLicenses);
-		jMenuFrames.add(jMenuFrameTerminal);
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
 

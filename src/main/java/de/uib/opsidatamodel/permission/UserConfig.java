@@ -113,7 +113,6 @@ public class UserConfig {
 			userStringValueKeys = new LinkedHashSet<>(getUserStringValueKeysWithoutRole());
 			userStringValueKeys.add(HAS_ROLE_ATTRIBUT);
 		}
-
 		return userStringValueKeys;
 	}
 
@@ -131,6 +130,7 @@ public class UserConfig {
 			userListKeys = new LinkedHashSet<>();
 
 			userListKeys.addAll(UserOpsipermission.LIST_KEYS);
+			userListKeys.addAll(UserServerConsoleConfig.LIST_KEYS);
 		}
 
 		return userListKeys;
@@ -146,11 +146,13 @@ public class UserConfig {
 		getUserBoolKeys();
 		getUserListKeys();
 
-		archeoPrototypeConfig.booleanMap.putAll(UserServerConsoleConfig.DEFAULT.getBooleanMap());
 		archeoPrototypeConfig.booleanMap.putAll(UserOpsipermission.DEFAULT.getBooleanMap());
+		archeoPrototypeConfig.booleanMap.putAll(UserServerConsoleConfig.DEFAULT.getBooleanMap());
 
 		archeoPrototypeConfig.valuesMap.putAll(UserOpsipermission.DEFAULT.getValuesMap());
+		archeoPrototypeConfig.valuesMap.putAll(UserServerConsoleConfig.DEFAULT.getValuesMap());
 		archeoPrototypeConfig.possibleValuesMap.putAll(UserOpsipermission.DEFAULT.getPossibleValuesMap());
+		archeoPrototypeConfig.possibleValuesMap.putAll(UserServerConsoleConfig.DEFAULT.getPossibleValuesMap());
 
 		archeoPrototypeConfig.setValues(MODIFICATION_INFO_KEY, ZERO_TIME);
 
@@ -232,7 +234,6 @@ public class UserConfig {
 		if (currentConfig == null) {
 			return archeoPrototypeConfig;
 		}
-
 		return currentConfig;
 	}
 
