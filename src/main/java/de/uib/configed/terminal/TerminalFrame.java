@@ -176,8 +176,6 @@ public final class TerminalFrame implements MessagebusListener {
 		// result list (allowed clients and depots connected by message bus)
 		List<String> clientsConnectedByMessagebus = getAllowedDevices();
 
-		clientsConnectedByMessagebus.add("Configserver");
-		// sort list of clients and depots and display dialog
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
 		sessionsDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
