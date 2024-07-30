@@ -71,7 +71,7 @@ public class TableHeader extends PdfPageEventHelper {
 	public void onEndPage(PdfWriter writer, Document document) {
 		PdfPTable table = new PdfPTable(3);
 
-		URL opsiImageURL = getImageResourceURL("opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png");
+		URL opsiImageURL = getImageResourceURL("opsilogos/opsi_logo_wide.png");
 		int headerWidth;
 		int xHeaderTop;
 		if (isLandscape) {
@@ -111,7 +111,7 @@ public class TableHeader extends PdfPageEventHelper {
 		if (imgURL != null) {
 			return imgURL;
 		} else {
-			Logging.warning("Couldn't find file  " + relPath);
+			Logging.warning("Couldn't find file  ", relPath);
 			return null;
 		}
 	}
@@ -137,9 +137,9 @@ public class TableHeader extends PdfPageEventHelper {
 			img.scaleToFit(width, height);
 			img.setAbsolutePosition(20, 20);
 		} catch (MalformedURLException ex) {
-			Logging.error("malformed URL --- " + ex);
+			Logging.error(ex, "malformed URL --- ");
 		} catch (IOException e) { // getInstannce
-			Logging.error("Error document add footer image --- " + e);
+			Logging.error(e, "Error document add footer image --- ");
 		}
 
 		return img;

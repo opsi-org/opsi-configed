@@ -76,7 +76,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		String nameVal = (String) tableModel.getValueAt(modelrow,
 				getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
 
-		Logging.info(this, " got name " + nameVal);
+		Logging.info(this, " got name ", nameVal);
 
 		if (controller.getTabClient().getFSoftwarename2LicensePool() != null) {
 			controller.getTabClient().getFSoftwarename2LicensePool().getPanelSWnames().moveToValue(nameVal, 0);
@@ -150,7 +150,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void setDataChanged(boolean b) {
 		if (b && controller.acknowledgeChangeForSWList()) {
 			int col = theTable.getEditingColumn();
-			Logging.info(this, "setDataChanged col " + col);
+			Logging.info(this, "setDataChanged col ", col);
 			if (tableModel.gotMarkCursorRow() && col != tableModel.getColMarkCursorRow()) {
 				super.setDataChanged(true);
 			}
@@ -162,7 +162,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	@Override
 	public void rowUpdated(int modelrow) {
 		super.rowUpdated(modelrow);
-		Logging.info(this, " rowUpdated to modelrow " + modelrow);
+		Logging.info(this, " rowUpdated to modelrow ", modelrow);
 		callName2Pool(modelrow);
 	}
 }

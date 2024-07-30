@@ -6,7 +6,6 @@
 
 package de.uib.utils.swing;
 
-import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
 
@@ -17,26 +16,18 @@ import de.uib.configed.gui.GlassPane;
 import de.uib.utils.logging.Logging;
 
 public class SecondaryFrame extends JFrame {
-	protected Container masterFrame;
-
 	private GlassPane glassPane;
 
 	public SecondaryFrame() {
-		this.masterFrame = ConfigedMain.getMainFrame();
-
 		glassPane = new GlassPane();
 		super.setGlassPane(glassPane);
 	}
 
 	public void start() {
 		setExtendedState(Frame.NORMAL);
-		centerOnParent();
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		setVisible(true);
 		Logging.info(this, "started");
-	}
-
-	public void centerOnParent() {
-		setLocationRelativeTo(masterFrame);
 	}
 
 	public void activateLoadingCursor() {

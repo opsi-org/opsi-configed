@@ -92,3 +92,9 @@ License: [MIT License](https://www.slf4j.org/license.html)
 Author(s): Lasse Collin, Igor Pavlov, and Brett Okken
 Website: https://xz.tukaani.org/xz-for-java/
 License: https://github.com/tukaani-project/xz-java/blob/master/COPYING
+
+
+**IntelliJ Icons**
+Author(s): JetBrains
+Websize: https://intellij-icons.jetbrains.design/
+License: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)

@@ -27,7 +27,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 		String rcPartOfKey = key.substring(SavedSearch.CONFIG_KEY.length());
 
 		if (rcPartOfKey.length() < 2 || rcPartOfKey.charAt(0) != '.') {
-			Logging.error("No name key given after '" + SavedSearch.CONFIG_KEY + "'");
+			Logging.error("No name key given after '", SavedSearch.CONFIG_KEY, "'");
 		} else {
 			rcPartOfKey = rcPartOfKey.substring(1);
 
@@ -59,7 +59,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 				} else if (remainder.equals(SavedSearch.DESCRIPTION_KEY)) {
 					rc.setDescription(value);
 				} else {
-					Logging.warning(this, "Unexpected remainer " + remainder);
+					Logging.warning(this, "Unexpected remainer ", remainder);
 				}
 			}
 		}

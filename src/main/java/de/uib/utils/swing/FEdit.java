@@ -24,6 +24,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.AbstractCellEditor;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -32,7 +33,6 @@ import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -46,8 +46,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected JComponent editingArea;
 	private JLabel labelHint;
 
-	protected IconButton buttonCommit;
-	private IconButton buttonCancel;
+	protected JButton buttonCommit;
+	private JButton buttonCancel;
 
 	private boolean cancelled;
 	private boolean starting = true;
@@ -63,7 +63,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	public FEdit(String initialText, String hint) {
 		super((Dialog) null);
 
-		Logging.debug(this.getClass(), " FEdit constructed for >>" + initialText + "<< title " + hint);
+		Logging.debug(this.getClass(), " FEdit constructed for >>", initialText, "<< title ", hint);
 		super.setIconImage(Utils.getMainIcon());
 
 		if (initialText != null) {
@@ -87,19 +87,12 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		labelHint = new JLabel();
 
-		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
-				"images/apply_disabled.png", true) {
-			@Override
-			public void setEnabled(boolean b) {
-				super.setEnabled(b);
-				Logging.debug(this, "setEnabled " + b);
-			}
-		};
-
+		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel.setToolTipText(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"));
 		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 	}
 
@@ -173,7 +166,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	public void setStartText(String s) {
-		Logging.debug(this, "FEdit.setStartText(): " + s);
+		Logging.debug(this, "FEdit.setStartText(): ", s);
 
 		initialText = s;
 		setDataChanged(false);
@@ -240,7 +233,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	protected void cancel() {
-		Logging.info(this, "cancel, go back to " + initialText);
+		Logging.info(this, "cancel, go back to ", initialText);
 		setStartText(initialText);
 		cancelled = true;
 
@@ -264,7 +257,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		} else if (e.getSource() == buttonCancel) {
 			cancel();
 		} else {
-			Logging.warning(this, "unexpected event on source " + e.getSource());
+			Logging.warning(this, "unexpected event on source ", e.getSource());
 		}
 	}
 
@@ -272,7 +265,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, " key event " + e);
+		Logging.debug(this, " key event ", e);
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

@@ -38,7 +38,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 			d = d + "/";
 		}
 
-		Logging.info(this.getClass(), "CommandOpsiSetRights dir " + dir);
+		Logging.info(this.getClass(), "CommandOpsiSetRights dir ", dir);
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 		String temp2 = CommandParameterParser.REPLACEMENT_DEFAULT_2;
 		if (command != null && command.contains(temp1) && command.contains(temp2)) {
 			myTmpCommand = getCommandRaw();
-			Logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
+			Logging.debug(this, "getParameterList myCommand_tmp ", myTmpCommand);
 			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
 				String plHolder = searchPlaceholder();
 				if (!paramlist.contains(plHolder)) {
@@ -119,7 +119,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 				}
 			}
 		}
-		Logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
+		Logging.debug(this, "getParameterList command ", command, " placeholders ", paramlist);
 		return paramlist;
 	}
 
@@ -128,9 +128,9 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 		String temp2 = CommandParameterParser.REPLACEMENT_DEFAULT_2;
 
 		String splittedText = myTmpCommand.split(temp1, 2)[1].split(temp2, 2)[0];
-		Logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
+		Logging.debug(this, "searchPlaceholder found ", temp1, splittedText, temp2);
 		myTmpCommand = myTmpCommand.replace(temp1 + splittedText + temp2, "");
-		Logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
+		Logging.debug(this, "searchPlaceholder myCommand_tmp ", myTmpCommand);
 
 		return temp1 + splittedText + temp2;
 	}
@@ -142,7 +142,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 			index = s.indexOf(search, index + 1);
 			++times;
 		}
-		Logging.debug(this, "counterString placeholders count  " + times);
+		Logging.debug(this, "counterString placeholders count  ", times);
 		return times;
 	}
 

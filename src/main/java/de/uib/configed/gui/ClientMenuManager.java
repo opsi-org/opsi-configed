@@ -35,6 +35,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
+import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -72,8 +73,6 @@ public final class ClientMenuManager implements MenuListener {
 	private JMenuItem jMenuFreeLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
 	private JMenuItem jMenuDeletePackageCaches = new JMenuItem(
 			Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
-	private JCheckBoxMenuItem jMenuClientSelectionToggleFilter = new JCheckBoxMenuItem(
-			Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
@@ -106,10 +105,6 @@ public final class ClientMenuManager implements MenuListener {
 		return instance;
 	}
 
-	public JCheckBoxMenuItem getClientSelectionToggleFilterMenu() {
-		return jMenuClientSelectionToggleFilter;
-	}
-
 	public JMenu getJMenu() {
 		return jMenuClients;
 	}
@@ -128,16 +123,15 @@ public final class ClientMenuManager implements MenuListener {
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		jMenuSelectionGetSavedSearch.addActionListener(event -> configedMain.clientSelectionGetSavedSearch());
 
-		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"),
-				Utils.createImageIcon("images/reload16.png", ""));
+		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
+		Utils.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");
 		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
-		jMenuClientSelectionToggleFilter.setState(false);
-		jMenuClientSelectionToggleFilter.addActionListener(event -> mainFrame.toggleClientFilterAction());
 
-		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
-				Utils.createImageIcon("images/acrobat_reader16.png", ""));
+		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
+		Utils.addThemeIconInvertedToMenuItem(jMenuCreatePdf, "anyType");
 		jMenuCreatePdf.addActionListener(event -> createPdf());
 
+		Utils.addIntellijIconToMenuItem(jMenuAddClient, "add");
 		jMenuAddClient.addActionListener(event -> configedMain.callNewClientDialog());
 
 		jMenuDeletePackageCaches.addActionListener(event -> configedMain.deletePackageCachesOfSelectedClients());
@@ -157,17 +151,17 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShutdownClient.addActionListener(event -> configedMain.shutdownSelectedClients());
 		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
+
+		Utils.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
 		jMenuDeleteClient.addActionListener(event -> configedMain.deleteSelectedClients());
+
 		jMenuCopyClient.addActionListener(event -> configedMain.copySelectedClient());
 		jMenuFreeLicenses.addActionListener(event -> configedMain.freeAllPossibleLicensesForSelectedClients());
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		jMenuRemoteControl
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
-		jMenuOpenTerminalOnClient.setEnabled(UserConfig.getCurrentUserConfig() != null
-				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+
+		Utils.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
 		jMenuClients.add(jMenuWakeOnLan);
@@ -204,8 +198,6 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(jMenuSelectionGetSavedSearch);
 
 		jMenuClients.addSeparator();
-
-		jMenuClients.add(jMenuClientSelectionToggleFilter);
 
 		jMenuClients.add(jMenuRebuildClientList);
 		jMenuClients.add(jMenuCreatePdf);
@@ -447,7 +439,7 @@ public final class ClientMenuManager implements MenuListener {
 
 	private void enableMenuItemsForClients() {
 		int countSelectedClients = configedMain.getSelectedClients().size();
-		Logging.debug(" enableMenuItemsForClients, countSelectedClients " + countSelectedClients);
+		Logging.debug(" enableMenuItemsForClients, countSelectedClients ", countSelectedClients);
 
 		for (JMenuItem jMenuItem : clientMenuItemsDependOnSelectionCount) {
 			jMenuItem.setEnabled(countSelectedClients >= 1);
@@ -455,7 +447,20 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
 		jMenuCopyClient.setEnabled(countSelectedClients == 1);
-		jMenuOpenTerminalOnClient.setEnabled(countSelectedClients == 1);
+
+		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
+				.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
+
+		if (forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS)
+				|| !persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)
+				|| persistenceController.getUserRolesConfigDataService().isGlobalReadOnly()) {
+			jMenuOpenTerminalOnClient.setEnabled(false);
+			jMenuOpenTerminalOnClient.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal")
+					+ Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden"));
+		} else {
+			jMenuOpenTerminalOnClient.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminal"));
+			jMenuOpenTerminalOnClient.setEnabled(countSelectedClients == 1);
+		}
 
 		checkMenuItemsDisabling();
 	}
@@ -467,7 +472,7 @@ public final class ClientMenuManager implements MenuListener {
 		if (disabledClientMenuEntries != null) {
 			for (String menuActionType : disabledClientMenuEntries) {
 				JMenuItem menuItem = menuItemsHost.get(menuActionType);
-				Logging.debug("disable " + menuActionType + ", " + menuItem);
+				Logging.debug("disable ", menuActionType, ", ", menuItem);
 				menuItem.setEnabled(false);
 			}
 
@@ -535,6 +540,7 @@ public final class ClientMenuManager implements MenuListener {
 			sourceItem.addItemListener(event -> clonedItem.setSelected(sourceItem.isSelected()));
 		} else {
 			clonedItem = new JMenuItem(sourceItem.getText(), sourceItem.getIcon());
+			clonedItem.setSelectedIcon(sourceItem.getSelectedIcon());
 			clonedItem.setAccelerator(sourceItem.getAccelerator());
 			clonedItem.setEnabled(sourceItem.isEnabled());
 		}

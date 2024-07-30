@@ -60,7 +60,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 	public String getCommand() {
 		command = "opsi-package-manager  --force -q " + verbosity + updateInstalled + setupInstalled + property + depot
 				+ freeInput + opsiproduct;
-		Logging.info(this, "got command " + command);
+		Logging.info(this, "got command ", command);
 		return command;
 	}
 

@@ -25,14 +25,14 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 	public OpsiDataStringEqualsOperation(String map, String key, String data, AbstractSelectElement element) {
 		super(element);
-		Logging.debug(this.getClass(),
-				"OpsiDataStringEqualsOperation maptype, key, data: " + map + ", " + key + ", " + data);
+		Logging.debug(this.getClass(), "OpsiDataStringEqualsOperation maptype, key, data: ", map, ", ", key, ", ",
+				data);
 		this.map = map;
 		this.key = key;
 		this.data = data.toLowerCase(Locale.ROOT);
 		if (data.contains("*")) {
 			dataSplitted = this.data.split("\\*");
-			Logging.debug(this.getClass(), "OpsiDataStringEqualsOperation " + dataSplitted.length);
+			Logging.debug(this.getClass(), "OpsiDataStringEqualsOperation ", dataSplitted.length);
 		}
 		startsWith = data.startsWith("*");
 		endsWith = data.endsWith("*");
@@ -40,16 +40,16 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 	@Override
 	public boolean doesMatch(OpsiDataClient client) {
-		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client " + client);
+		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client ", client);
 
 		Map<String, Object> realMap = client.getMap(map);
-		Logging.debug(this, "doesMatch,  we look into map for key " + key);
+		Logging.debug(this, "doesMatch,  we look into map for key ", key);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
 			return false;
 		}
 
 		String realData = realMap.get(key).toString().toLowerCase(Locale.ROOT);
-		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch realData " + realData);
+		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch realData ", realData);
 		return checkData(realData);
 	}
 

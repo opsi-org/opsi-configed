@@ -120,7 +120,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.getPanelKeys(), modelLicensekeys, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						Logging.info(this, "sendUpdate " + rowmap);
+						Logging.info(this, "sendUpdate ", rowmap);
 
 						return persistenceController.getSoftwareDataService().editRelationSoftwareL2LPool(
 								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"),
@@ -129,7 +129,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
-						Logging.info(this, "sendDelete " + rowmap);
+						Logging.info(this, "sendDelete ", rowmap);
 						modelLicensekeys.requestReload();
 						return persistenceController.getSoftwareDataService().deleteRelationSoftwareL2LPool(
 								(String) rowmap.get("softwareLicenseId"), (String) rowmap.get("licensePoolId"));

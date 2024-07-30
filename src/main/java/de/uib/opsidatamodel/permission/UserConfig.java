@@ -88,7 +88,7 @@ public class UserConfig {
 	private Map<String, List<Object>> possibleValuesMap;
 
 	public UserConfig(String userName) {
-		Logging.info(this.getClass(), "create for " + userName);
+		Logging.info(this.getClass(), "create for ", userName);
 		this.username = userName;
 		booleanMap = new LinkedHashMap<>();
 		valuesMap = new LinkedHashMap<>();
@@ -113,7 +113,6 @@ public class UserConfig {
 			userStringValueKeys = new LinkedHashSet<>(getUserStringValueKeysWithoutRole());
 			userStringValueKeys.add(HAS_ROLE_ATTRIBUT);
 		}
-
 		return userStringValueKeys;
 	}
 
@@ -131,6 +130,7 @@ public class UserConfig {
 			userListKeys = new LinkedHashSet<>();
 
 			userListKeys.addAll(UserOpsipermission.LIST_KEYS);
+			userListKeys.addAll(UserServerConsoleConfig.LIST_KEYS);
 		}
 
 		return userListKeys;
@@ -146,11 +146,13 @@ public class UserConfig {
 		getUserBoolKeys();
 		getUserListKeys();
 
-		archeoPrototypeConfig.booleanMap.putAll(UserServerConsoleConfig.DEFAULT.getBooleanMap());
 		archeoPrototypeConfig.booleanMap.putAll(UserOpsipermission.DEFAULT.getBooleanMap());
+		archeoPrototypeConfig.booleanMap.putAll(UserServerConsoleConfig.DEFAULT.getBooleanMap());
 
 		archeoPrototypeConfig.valuesMap.putAll(UserOpsipermission.DEFAULT.getValuesMap());
+		archeoPrototypeConfig.valuesMap.putAll(UserServerConsoleConfig.DEFAULT.getValuesMap());
 		archeoPrototypeConfig.possibleValuesMap.putAll(UserOpsipermission.DEFAULT.getPossibleValuesMap());
+		archeoPrototypeConfig.possibleValuesMap.putAll(UserServerConsoleConfig.DEFAULT.getPossibleValuesMap());
 
 		archeoPrototypeConfig.setValues(MODIFICATION_INFO_KEY, ZERO_TIME);
 
@@ -167,8 +169,8 @@ public class UserConfig {
 
 	public void setBooleanValue(String key, Boolean val) {
 		if (!getUserBoolKeys().contains(key)) {
-			Logging.error("UserConfig.USER_BOOL_KEYS " + UserConfig.userBoolKeys);
-			Logging.error("UserConfig : illegal key " + key);
+			Logging.error("UserConfig.USER_BOOL_KEYS ", UserConfig.userBoolKeys);
+			Logging.error("UserConfig : illegal key ", key);
 		}
 		booleanMap.put(key, val);
 	}
@@ -183,22 +185,22 @@ public class UserConfig {
 
 	public Boolean getBooleanValue(String key) {
 		if (!userBoolKeys.contains(key)) {
-			Logging.error("UserConfig.USER_BOOL_KEYS " + UserConfig.userBoolKeys);
-			Logging.error("UserConfig : illegal key " + key);
+			Logging.error("UserConfig.USER_BOOL_KEYS ", UserConfig.userBoolKeys);
+			Logging.error("UserConfig : illegal key ", key);
 			return false;
 		}
 
 		if (booleanMap.get(key) == null) {
 			if (!getArcheoConfig().hasBooleanConfig(key)) {
-				Logging.warning(this, "UserConfig : no default value for key " + key + " for user " + username);
+				Logging.warning(this, "UserConfig : no default value for key ", key, " for user ", username);
 				return false;
 			} else {
 				boolean val = false;
 				if (username.equals(getArcheoConfig().getUserName())) {
-					Logging.warning(this, "UserConfig : setting value for key " + key + " for default user ");
+					Logging.warning(this, "UserConfig : setting value for key ", key, " for default user ");
 				} else {
-					Logging.warning(this, "UserConfig : setting value for key " + key + " for user " + username
-							+ " to default value " + getArcheoConfig().getBooleanValue(key));
+					Logging.warning(this, "UserConfig : setting value for key ", key, " for user ", username,
+							" to default value ", getArcheoConfig().getBooleanValue(key));
 					val = getArcheoConfig().getBooleanValue(key);
 				}
 				booleanMap.put(key, val);
@@ -232,7 +234,6 @@ public class UserConfig {
 		if (currentConfig == null) {
 			return archeoPrototypeConfig;
 		}
-
 		return currentConfig;
 	}
 

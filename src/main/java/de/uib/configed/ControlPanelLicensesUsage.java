@@ -102,7 +102,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 				.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()));
 		choicesAllHosts.set(0, "");
 		Collections.sort(choicesAllHosts);
-		Logging.debug(this, "choicesAllHosts " + choicesAllHosts);
+		Logging.debug(this, "choicesAllHosts ", choicesAllHosts);
 		DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		thePanel.setClientsSource(comboBoxModel);
 	}

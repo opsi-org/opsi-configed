@@ -31,7 +31,7 @@ import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JFrame;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -54,7 +54,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
-import de.uib.configed.gui.IconButton;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
@@ -82,7 +81,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	public static final int POPUP_SAVE = PopupMenuTrait.POPUP_SAVE; // 8
 
-	public static final int POPUP_FLOATINGCOPY = PopupMenuTrait.POPUP_FLOATINGCOPY; // 14
+	public static final int POPUP_FLOATING_COPY = PopupMenuTrait.POPUP_FLOATING_COPY; // 14
 
 	public static final int POPUP_PDF = PopupMenuTrait.POPUP_PDF; // 21
 
@@ -100,7 +99,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			// checking that not the same int key is used twice
 
 			if (get(key) != null) {
-				Logging.error("duplicate key setting " + key + ", until now " + get(key) + " now " + value);
+				Logging.error("duplicate key setting ", key, ", until now ", get(key), " now ", value);
 			}
 			return super.put(key, value);
 		}
@@ -116,8 +115,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	protected JTable theTable;
 	protected GenTableModel tableModel;
 
-	private IconButton buttonCommit;
-	private IconButton buttonCancel;
+	private JButton buttonCommit;
+	private JButton buttonCancel;
 	private JLabel jLabelTitle;
 
 	private JPopupMenu popupMenu;
@@ -136,8 +135,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	private boolean withTablesearchPane;
 
 	protected TableSearchPane searchPane;
-
-	private boolean filteringActive;
 
 	private String title = "";
 
@@ -162,7 +159,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		if (popupsWanted != null) {
 			for (int wantedPopup : popupsWanted) {
 				this.internalpopups.add(wantedPopup);
-				Logging.info(this.getClass(), "add popup " + wantedPopup);
+				Logging.info(this.getClass(), "add popup ", wantedPopup);
 			}
 		} else {
 			this.internalpopups.add(POPUP_RELOAD);
@@ -170,11 +167,11 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			this.internalpopups.add(POPUP_PDF);
 		}
 
-		Logging.info(this.getClass(), "internalpopups " + giveMenuitemNames(internalpopups));
+		Logging.info(this.getClass(), "internalpopups ", giveMenuitemNames(internalpopups));
 
 		this.internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 
-		Logging.info(this.getClass(), "internalpopups supplemented " + giveMenuitemNames(internalpopups));
+		Logging.info(this.getClass(), "internalpopups supplemented ", giveMenuitemNames(internalpopups));
 
 		if (title != null) {
 			this.title = title;
@@ -221,17 +218,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		}
 
 		return result;
-	}
-
-	/**
-	 * sets frame to return to e.g. from option dialogs
-	 *
-	 * @param javax.swing.JFrame
-	 */
-	public void setMasterFrame(JFrame masterFrame) {
-		if (searchPane != null) {
-			searchPane.setMasterFrame(masterFrame);
-		}
 	}
 
 	@Override
@@ -339,17 +325,13 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return controlPanel;
 		}
 
-		buttonCommit = new IconButton(Configed.getResourceValue("save"), "images/apply.png", "images/apply_over.png",
-				"images/apply_disabled.png");
-
+		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-
-		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png");
-
-		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
-
 		buttonCommit.addActionListener(action -> commit());
+
+		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCancel.addActionListener(action -> cancel());
 
 		GroupLayout layout = new GroupLayout(controlPanel);
@@ -384,7 +366,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private void sortAgainAsConfigured() {
-		Logging.debug(this, "sortAgainAsConfigured " + specialSortDescriptor);
+		Logging.debug(this, "sortAgainAsConfigured ", specialSortDescriptor);
 
 		if (specialSortDescriptor != null && !specialSortDescriptor.isEmpty()) {
 			sortDescriptor = specialSortDescriptor;
@@ -434,7 +416,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setTitle(String title) {
-		Logging.info(this, "setTitle " + title);
+		Logging.info(this, "setTitle ", title);
 		this.title = title;
 		jLabelTitle.setText(title);
 	}
@@ -474,7 +456,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private void addPopupmenuStandardpart() {
-		Logging.info(this, "addPopupmenuStandardpart, internalpopups " + giveMenuitemNames(internalpopups));
+		Logging.info(this, "addPopupmenuStandardpart, internalpopups ", giveMenuitemNames(internalpopups));
 
 		if (generalPopupPosition > 0) {
 			// add separator if a real position is given
@@ -483,8 +465,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, internalpopups);
 
-		Logging.info(this,
-				"addPopupmenuStandardpart, supplemented internalpopups " + giveMenuitemNames(internalpopups));
+		Logging.info(this, "addPopupmenuStandardpart, supplemented internalpopups ", giveMenuitemNames(internalpopups));
 
 		for (int popuptype : internalpopups) {
 			switch (popuptype) {
@@ -524,12 +505,13 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 			case POPUP_PRINT:
 				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
-				menuItemPrint.addActionListener((ActionEvent actionEvent) -> print());
+				Utils.addIntellijIconToMenuItem(menuItemPrint, "print");
+				menuItemPrint.addActionListener(actionEvent -> print());
 
 				addPopupItem(menuItemPrint);
 				break;
 
-			case POPUP_FLOATINGCOPY:
+			case POPUP_FLOATING_COPY:
 				addPopupMenuFloatingCopy();
 				break;
 
@@ -544,8 +526,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				break;
 
 			case POPUP_PDF:
-				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"),
-						Utils.createImageIcon("images/acrobat_reader16.png", ""));
+				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
+				Utils.addThemeIconInvertedToMenuItem(menuItemPDF, "anyType");
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
 
 				addPopupItem(menuItemPDF);
@@ -559,8 +541,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private void addPopupItemReload() {
-		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"),
-				Utils.createImageIcon("images/reload16.png", ""));
+		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"));
+		Utils.addIntellijIconToMenuItem(menuItemReload, "refresh");
 
 		// does not work
 		menuItemReload.addActionListener(actionEvent -> reload());
@@ -593,7 +575,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		try {
 			theTable.print();
 		} catch (PrinterException ex) {
-			Logging.error("Printing error ", ex);
+			Logging.error(ex, "Printing error ");
 		}
 	}
 
@@ -657,7 +639,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private List<SortKey> buildSortkeysFromColumns() {
-		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
+		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor ", sortDescriptor);
 		List<SortKey> sortKeys = new ArrayList<>();
 
 		if (tableModel.getColumnCount() == 0) {
@@ -725,7 +707,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	 * set special comparator for a column
 	 */
 	public void setComparator(String colName, Comparator<Object> comparator) {
-		Logging.info(this, "setComparator " + colName + " compare by " + comparator);
+		Logging.info(this, "setComparator ", colName, " compare by ", comparator);
 		int modelCol = tableModel.getColumnNames().indexOf(colName);
 
 		if (modelCol < 0) {
@@ -773,21 +755,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		searchPane.setSearchMode(mode);
 	}
 
-	/**
-	 * sets a filter symbol belonging to searchPane
-	 *
-	 * @parameter boolean
-	 */
-	public void showFilterIcon(boolean b) {
-		searchPane.showFilterIcon(b);
-	}
-
-	private void setFilteringActive(boolean b) {
-		filteringActive = b;
-	}
-
 	private void setModelFilteringBySelection() {
-		if (filteringActive && tableModel != null
+		if (searchPane.isFiltering() && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
 			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
@@ -801,12 +770,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	 *
 	 * @parameter boolean
 	 */
-	public void setFiltering(boolean filtering) {
-		if (filtering) {
-			setFilteringActive(filtering);
-			// lazy activation
-		}
-		searchPane.setFiltering(filtering);
+	public void setFiltering() {
+		searchPane.setFiltering();
 	}
 
 	/**
@@ -837,7 +802,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		Logging.info(this, "setDataChanged " + b);
+		Logging.info(this, "setDataChanged ", b);
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
 		if (menuItemSave != null) {
@@ -851,7 +816,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public boolean isDataChanged() {
-		Logging.info(this, "isDataChanged " + dataChanged);
+		Logging.info(this, "isDataChanged ", dataChanged);
 		return dataChanged;
 	}
 
@@ -941,7 +906,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setSelection(int[] selection) {
-		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
+		Logging.info(this, "setSelection --- ", Arrays.toString(selection));
 		theTable.getSelectionModel().clearSelection();
 		for (int i = 0; i < selection.length; i++) {
 			theTable.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
@@ -968,7 +933,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setAwareOfSelectionListener(boolean b) {
-		Logging.debug(this, "setAwareOfSelectionListener  " + b);
+		Logging.debug(this, "setAwareOfSelectionListener  ", b);
 
 		awareOfSelectionListener = b;
 	}
@@ -978,7 +943,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setAwareOfTableChangedListener(boolean b) {
-		Logging.debug(this, "setAwareOfTableChangedListener  " + b);
+		Logging.debug(this, "setAwareOfTableChangedListener  ", b);
 
 		awareOfTableChangedListener = b;
 	}
@@ -1028,7 +993,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public int findViewRowFromValue(Object value, int col) {
-		Logging.debug(this, "findViewRowFromValue value, col " + value + ", " + col);
+		Logging.debug(this, "findViewRowFromValue value, col ", value, ", ", col);
 
 		if (value == null) {
 			return -1;
@@ -1053,7 +1018,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public boolean moveToValue(String value, int col, boolean selecting) {
-		Logging.info(this, "moveToValue " + value + " col " + col + " selecting " + selecting);
+		Logging.info(this, "moveToValue ", value, " col ", col, " selecting ", selecting);
 		int viewrow = findViewRowFromValue(value, col);
 		if (viewrow > -1) {
 			tableModel.setCursorRow(theTable.convertRowIndexToModel(viewrow));
@@ -1154,9 +1119,9 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			viewCursorRow = theTable.convertRowIndexToView(tableModel.getCursorRow());
 		}
 
-		Logging.info(this, "advanceCursor from " + viewCursorRow);
+		Logging.info(this, "advanceCursor from ", viewCursorRow);
 		int nextViewCursorRow = viewCursorRow + d;
-		Logging.info(this, "advanceCursor to " + nextViewCursorRow);
+		Logging.info(this, "advanceCursor to ", nextViewCursorRow);
 		if (nextViewCursorRow < tableModel.getRowCount() && nextViewCursorRow >= 0) {
 			tableModel.setCursorRow(theTable.convertRowIndexToModel(nextViewCursorRow));
 		}
@@ -1173,10 +1138,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	// TableModelListener
 	@Override
 	public void tableChanged(TableModelEvent e) {
-		Logging.debug(this, " tableChanged " + "source " + e.getSource() + " col " + e.getColumn());
+		Logging.debug(this, " tableChanged ", "source ", e.getSource(), " col ", e.getColumn());
 		if (tableModel != null) {
-			Logging.debug(this,
-					"tableChanged,  whereas tableModel.getColMarkCursorRow() is " + tableModel.getColMarkCursorRow());
+			Logging.debug(this, "tableChanged,  whereas tableModel.getColMarkCursorRow() is ",
+					tableModel.getColMarkCursorRow());
 		}
 
 		if (awareOfTableChangedListener && tableModel != null
@@ -1209,7 +1174,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	// ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		Logging.debug(this, "ListSelectionEvent " + e);
+		Logging.debug(this, "ListSelectionEvent ", e);
 		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;
@@ -1223,7 +1188,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			setDataChanged(true);
 		}
 
-		Logging.info(this, "rows selected: " + lsm.getSelectedItemsCount());
+		Logging.info(this, "rows selected: ", lsm.getSelectedItemsCount());
 
 		if (menuItemDeleteRelation != null) {
 			menuItemDeleteRelation.setEnabled(!lsm.isSelectionEmpty());
@@ -1273,7 +1238,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	// CursorrowObserver
 	@Override
 	public void rowUpdated(int modelrow) {
-		Logging.info(this, " in PanelGenEditTable rowUpdated to modelrow " + modelrow);
+		Logging.info(this, " in PanelGenEditTable rowUpdated to modelrow ", modelrow);
 	}
 
 	private void floatExternal() {

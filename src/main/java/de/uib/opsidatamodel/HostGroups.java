@@ -44,14 +44,14 @@ public class HostGroups extends TreeMap<String, Map<String, String>> {
 
 			put(ClientTree.DIRECTORY_PERSISTENT_NAME, directoryGroup);
 
-			Logging.debug(this, "addSpecialGroups we have " + this);
+			Logging.debug(this, "addSpecialGroups we have ", this);
 		}
 
 		return this;
 	}
 
 	public void alterToWorkingVersion() {
-		Logging.debug(this, "alterToWorkingVersion we have " + this);
+		Logging.debug(this, "alterToWorkingVersion we have ", this);
 
 		for (Map<String, String> groupInfo : values()) {
 			if (ClientTree.DIRECTORY_PERSISTENT_NAME.equals(groupInfo.get("parentGroupId"))) {

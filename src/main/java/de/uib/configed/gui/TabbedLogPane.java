@@ -139,7 +139,7 @@ public class TabbedLogPane extends JTabbedPane {
 	}
 
 	public void setDocuments(final Map<String, String> documents, final String info) {
-		Logging.info(this, "idents.length " + idents.length + " info: " + info);
+		Logging.info(this, "idents.length ", idents.length, " info: ", info);
 		for (String ident : idents) {
 			setDocument(ident, documents.get(ident), info);
 		}
@@ -147,7 +147,7 @@ public class TabbedLogPane extends JTabbedPane {
 
 	private void setDocument(String ident, final String document, final String info) {
 		int i = identsList.indexOf(ident);
-		Logging.info(this, "setDocument " + i + " document == null " + (document == null));
+		Logging.info(this, "setDocument ", i, " document == null ", (document == null));
 		if (i < 0 || i >= idents.length) {
 			return;
 		}

@@ -52,7 +52,7 @@ public class PanelHostProperties extends JPanel {
 
 	public void initMultipleHostsEditing(String selectedDepot, Map<String, Map<String, Object>> multipleMaps,
 			UpdateCollection updateCollection, Set<String> keysOfReadOnlyEntries) {
-		Logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps));
+		Logging.debug(this, "initMultipleHosts ", " configs  ", multipleMaps);
 
 		this.multipleMaps = multipleMaps;
 		editMapPanel.setUpdateCollection(updateCollection);
@@ -78,7 +78,7 @@ public class PanelHostProperties extends JPanel {
 				cellOptions = DefaultListCellOptions.getNewEmptyListCellOptions();
 			}
 
-			Logging.debug(this, "cellOptions: " + cellOptions);
+			Logging.debug(this, "cellOptions: ", cellOptions);
 
 			result.put(entry.getKey(), cellOptions);
 		}
@@ -91,7 +91,7 @@ public class PanelHostProperties extends JPanel {
 		} else {
 			List<Map<String, Object>> editedMaps = new ArrayList<>(1);
 			editedMaps.add(multipleMaps.get(selectedDepot));
-			Logging.debug(this, "setMap " + multipleMaps.get(selectedDepot));
+			Logging.debug(this, "setMap ", multipleMaps.get(selectedDepot));
 			editMapPanel.setEditableMap(multipleMaps.get(selectedDepot),
 					deriveOptionsMap(multipleMaps.get(selectedDepot)));
 			editMapPanel.setStoreData(editedMaps);

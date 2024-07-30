@@ -90,7 +90,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 				listener.onMessageReceived(message);
 			}
 		} catch (IOException e) {
-			Logging.error(this, "cannot read received message: ", e);
+			Logging.error(this, e, "cannot read received message: ");
 		}
 	}
 
@@ -98,8 +98,8 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
-		Logging.debug(this, "Websocket closed by " + (remote ? "opsi service" : "us") + " Code=" + code + " Reason='"
-				+ reason + "'");
+		Logging.debug(this, "Websocket closed by ", remote ? "opsi service" : "us", " Code=", code, " Reason='", reason,
+				"'");
 
 		for (MessagebusListener listener : listeners) {
 			listener.onClose(code, reason, remote);
@@ -108,7 +108,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 
 	@Override
 	public void onError(Exception ex) {
-		Logging.debug(this, "Websocket error: " + ex);
+		Logging.debug(this, "Websocket error: ", ex);
 		for (MessagebusListener listener : listeners) {
 			listener.onError(ex);
 		}

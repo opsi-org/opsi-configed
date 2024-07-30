@@ -104,7 +104,9 @@ public class HostDataService {
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
 			boolean uefiBoot = Boolean.parseBoolean((String) client.get(11));
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(12));
-			String opsiHostKey = ((String) client.get(13)).trim();
+
+			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
+			String opsiHostKey = ((String) client.get(13)).isBlank() ? null : ((String) client.get(13)).trim();
 
 			String newClientId = hostname + "." + domainname;
 
@@ -150,7 +152,7 @@ public class HostDataService {
 				itemShI.put(OpsiServiceNOMPersistenceController.CONFIG_ID,
 						OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
-				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
+				Logging.info(this, "create client, config item for shutdownInstall ", itemShI);
 
 				configStatesJsonObject.add(itemShI);
 			}
@@ -182,7 +184,7 @@ public class HostDataService {
 			groups = new String[] {};
 		}
 
-		Logging.info(this, "createClient" + " group " + Arrays.toString(groups));
+		Logging.info(this, "createClient", " group ", Arrays.toString(groups));
 		for (String group : groups) {
 			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
 			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
@@ -252,7 +254,7 @@ public class HostDataService {
 		}
 
 		if (result && productNetboot != null && !productNetboot.isEmpty()) {
-			Logging.info(this, "createClient" + " productNetboot " + productNetboot);
+			Logging.info(this, "createClient productNetboot ", productNetboot);
 			List<Map<String, Object>> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemProducts = Utils.createNOMitem("ProductOnClient");
 			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
@@ -275,7 +277,7 @@ public class HostDataService {
 			hostInfo.setShutdownInstall(shutdownInstall);
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 
-			Logging.info(this, " createClient hostInfo " + hostInfo);
+			Logging.info(this, " createClient hostInfo ", hostInfo);
 		}
 
 		return result;
@@ -315,7 +317,7 @@ public class HostDataService {
 			itemShI.put(OpsiServiceNOMPersistenceController.CONFIG_ID,
 					OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
-			Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
+			Logging.info(this, "create client, config item for shutdownInstall ", itemShI);
 
 			jsonObjects.add(itemShI);
 		}
@@ -331,7 +333,7 @@ public class HostDataService {
 			return true;
 		}
 
-		Logging.info(this, "createClient" + " group " + Arrays.toString(groups));
+		Logging.info(this, "createClient group ", Arrays.toString(groups));
 		List<Map<String, Object>> jsonObjects = new ArrayList<>();
 		for (String group : groups) {
 			Map<String, Object> itemGroup = Utils.createNOMitem(Object2GroupEntry.TYPE_NAME);
@@ -366,21 +368,6 @@ public class HostDataService {
 		exec.doCall(omc);
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-	}
-
-	public Map<String, Object> reachableInfo(List<String> clientIds) {
-		Logging.info(this, "reachableInfo ");
-		Object[] callParameters = new Object[] {};
-
-		RPCMethodName methodName = RPCMethodName.HOST_CONTROL_REACHABLE;
-		if (clientIds != null) {
-			Logging.info(this, "reachableInfo for clientIds " + clientIds.size());
-			callParameters = new Object[] { clientIds };
-			methodName = RPCMethodName.HOST_CONTROL_SAFE_REACHABLE;
-		}
-
-		// background call, do not show waiting info
-		return exec.getMapResult(new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT));
 	}
 
 	// executes all updates collected by setHostDescription ...
@@ -482,11 +469,11 @@ public class HostDataService {
 					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState))
 					|| (InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
 							&& hasWrongProductVersion)) {
-				Logging.debug("getClientsWithOtherProductVersion hit " + m);
+				Logging.debug("getClientsWithOtherProductVersion hit ", m);
 				result.add(client);
 			}
 		}
-		Logging.info(this, "getClientsWithOtherProductVersion globally " + result.size());
+		Logging.info(this, "getClientsWithOtherProductVersion globally ", result.size());
 		return result;
 	}
 
@@ -607,8 +594,8 @@ public class HostDataService {
 	private List<String> produceHostDisplayFields(List<String> givenList) {
 		List<String> result = null;
 		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
-		Logging.info(this,
-				"produceHost_displayFields configOptions.get(key) " + configOptions.get(KEY_HOST_DISPLAYFIELDS));
+		Logging.info(this, "produceHost_displayFields configOptions.get(key) ",
+				configOptions.get(KEY_HOST_DISPLAYFIELDS));
 
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
@@ -636,7 +623,7 @@ public class HostDataService {
 		if (givenList == null || givenList.isEmpty()) {
 			result = defaultValues;
 
-			Logging.info(this, "givenList is null or empty: " + givenList);
+			Logging.info(this, "givenList is null or empty: ", givenList);
 
 			// create config for service
 			Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");

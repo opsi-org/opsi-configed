@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -25,8 +24,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
 import javax.swing.Icon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -39,7 +38,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -86,9 +84,7 @@ public class MainFrame extends JFrame {
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
-	private JMenuItem jMenuFrameLicenses;
 	private JMenuItem jMenuFrameShowDialogs;
-	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter;
 
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
@@ -161,22 +157,26 @@ public class MainFrame extends JFrame {
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
+		Utils.addThemeIconToMenuItem(jMenuFileExit, "exit");
 		jMenuFileExit.addActionListener((ActionEvent e) -> configedMain.finishApp(true, 0));
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
+		Utils.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		Utils.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			configedMain.reload();
-			if (iconBarPanel.getIconButtonReloadLicenses().isEnabled()) {
+			if (iconBarPanel.getjButtonReloadLicenses().isEnabled()) {
 				reloadLicensesAction();
 			}
 		});
 
 		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
+		Utils.addThemeIconToMenuItem(jMenuFileLogout, "exit");
 		jMenuFileLogout.addActionListener((ActionEvent e) -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
@@ -191,12 +191,14 @@ public class MainFrame extends JFrame {
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
+		Utils.addThemeIconInvertedToMenuItem(jMenuTheme, "systemTheme");
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = ThemeManager.getSelectedTheme();
 
 		for (final String theme : ThemeManager.getAvailableThemes()) {
 			JMenuItem themeItem = new JRadioButtonMenuItem(ThemeManager.getThemeTranslation(theme));
-			Logging.debug("selectedTheme " + theme);
+			ThemeManager.setThemeIcon(themeItem, theme);
+			Logging.debug("selectedTheme ", theme);
 			themeItem.setSelected(selectedTheme.equals(theme));
 			jMenuTheme.add(themeItem);
 			groupThemes.add(themeItem);
@@ -267,17 +269,16 @@ public class MainFrame extends JFrame {
 
 	private void setupMenuServerConsole() {
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
+		Utils.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
 		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
-		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
-				|| UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE) == null
-				|| !UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE);
-		Logging.info(this, "setupMenuTerminal commandsAreDeactivated " + commandsAreDeactivated);
+		Utils.addOpsiIconToMenuItem(menuOpsi);
+		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
+				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
+		Logging.info(this, "setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
 		addCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
@@ -286,11 +287,39 @@ public class MainFrame extends JFrame {
 		}
 		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
 
-		jMenuServerConsole.setEnabled(UserConfig.getCurrentUserConfig() != null
-				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.isGlobalReadOnly()
+		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+
+		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"),
+				Utils.getIntellijIcon("terminal"));
+
+		// check terminal access rights defined by user roles
+		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
+				.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
+		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
+		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
+		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
+
+		if (forbiddenConfigServer && forbiddenDepots && forbiddenClients) {
+			Logging.info(this, "setupMenuServerConsole all forbidden");
+			String s = " " + Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden");
+			jMenuFrameTerminal.setText(jMenuFrameTerminal.getText() + s);
+			jMenuFrameTerminal.setEnabled(false);
+		} else {
+			Logging.info(this, "setupMenuServerConsole forbiddenItems ", forbiddenItems);
+			Logging.info(this, "setupMenuServerConsole forbiddenConfigServer ", forbiddenConfigServer,
+					" forbiddenDepots ", forbiddenDepots, " forbiddenClients ", forbiddenClients);
+			jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
+				configedMain.initMessagebus();
+				TerminalFrame terminal = new TerminalFrame(configedMain);
+				terminal.setMessagebus(configedMain.getMessagebus());
+				terminal.display();
+			});
+		}
+
+		jMenuServerConsole.add(jMenuFrameTerminal);
 	}
 
 	private void addDefaultOpsiCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
@@ -309,12 +338,12 @@ public class MainFrame extends JFrame {
 		final CommandFactory factory = CommandFactory.getInstance();
 		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
 
-		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
+		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs ", sortedComs);
 		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
 			String parentMenuName = entry.getKey();
 			JMenu parentMenu = new JMenu(parentMenuName);
 
-			Logging.info(this, "parent menu text " + parentMenuName);
+			Logging.info(this, "parent menu text ", parentMenuName);
 			if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
 				jMenuServerConsole.add(menuOpsi);
 				jMenuServerConsole.addSeparator();
@@ -328,7 +357,7 @@ public class MainFrame extends JFrame {
 			boolean commandsAreDeactivated) {
 		for (final MultiCommandTemplate com : listCom) {
 			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
-			Logging.info(this, "command menuitem text " + com.getMenuText());
+			Logging.info(this, "command menuitem text ", com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> {
 				CommandExecutor executor = new CommandExecutor(configedMain, com);
@@ -387,11 +416,6 @@ public class MainFrame extends JFrame {
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
 
-		jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
-		jMenuClientselectionToggleClientFilter.setState(false);
-		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
-
 		jMenuClientselection.add(jMenuClientselectionGetGroup);
 		jMenuClientselection.add(jMenuClientselectionGetSavedSearch);
 
@@ -401,9 +425,6 @@ public class MainFrame extends JFrame {
 		jMenuClientselection.add(jMenuClientselectionProductNotUptodateOrBroken);
 		jMenuClientselection.add(jMenuClientselectionFailedProduct);
 		jMenuClientselection.add(jMenuClientselectionFailedInPeriod);
-
-		jMenuClientselection.addSeparator();
-		jMenuClientselection.add(jMenuClientselectionToggleClientFilter);
 
 		return jMenuClientselection;
 	}
@@ -423,24 +444,10 @@ public class MainFrame extends JFrame {
 		JMenuItem jMenuFrameDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
 
-		jMenuFrameLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
-		jMenuFrameLicenses.setEnabled(false);
+		JMenuItem jMenuFrameLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
 		jMenuFrameLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
 
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
-
-		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
-		jMenuFrameTerminal.setEnabled(UserConfig.getCurrentUserConfig() != null
-				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
-		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
-			configedMain.initMessagebus();
-			TerminalFrame terminal = new TerminalFrame();
-			terminal.setMessagebus(configedMain.getMessagebus());
-			terminal.display();
-		});
 
 		JMenuItem jMenuFrameMsgOfTheDay = null;
 		if (ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3.15.2")
@@ -448,12 +455,11 @@ public class MainFrame extends JFrame {
 			jMenuFrameMsgOfTheDay = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"));
 			jMenuFrameMsgOfTheDay.addActionListener((ActionEvent e) -> showMsgOfTheDay());
 		}
-
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameDashboard);
 		jMenuFrames.add(jMenuFrameLicenses);
-		jMenuFrames.add(jMenuFrameTerminal);
+
 		if (jMenuFrameMsgOfTheDay != null) {
 			jMenuFrames.add(jMenuFrameMsgOfTheDay);
 		}
@@ -465,14 +471,17 @@ public class MainFrame extends JFrame {
 
 	public static void addHelpLinks(JMenu jMenuHelp) {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
+		Utils.addOpsiIconToMenuItem(jMenuHelpDoc);
 		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
 		jMenuHelp.add(jMenuHelpDoc);
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
+		Utils.addOpsiIconToMenuItem(jMenuHelpForum);
 		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
+		Utils.addOpsiIconToMenuItem(jMenuHelpSupport);
 		jMenuHelpSupport.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 		jMenuHelp.add(jMenuHelpSupport);
 	}
@@ -492,6 +501,7 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
+		Utils.addOpsiModulesIconToMenuItem(jMenuHelpOpsiModuleInformation);
 		jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
 
 		jMenuHelp.add(jMenuHelpOpsiModuleInformation);
@@ -499,6 +509,7 @@ public class MainFrame extends JFrame {
 		addLogfileMenus(jMenuHelp, this);
 
 		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		Utils.addIntellijIconToMenuItem(jMenuHelpCheckHealth, "springBootHealth");
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
 		jMenuHelp.add(jMenuHelpCheckHealth);
 
@@ -514,7 +525,8 @@ public class MainFrame extends JFrame {
 		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(owner));
 		jMenuHelp.add(jMenuHelpCredits);
 
-		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
+		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"),
+				Utils.getIntellijIcon("info"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(owner));
 		jMenuHelp.add(jMenuHelpAbout);
 	}
@@ -564,10 +576,19 @@ public class MainFrame extends JFrame {
 		JSplitPane centralPane = initCentralPane();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(iconBarPanel, BorderLayout.NORTH);
-		getContentPane().add(centralPane, BorderLayout.CENTER);
-		getContentPane().add(statusPane, BorderLayout.SOUTH);
+
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(layout
+				.createSequentialGroup().addComponent(iconBarPanel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(centralPane).addComponent(statusPane));
+
+		layout.setHorizontalGroup(layout
+				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
+						.addComponent(iconBarPanel).addComponent(centralPane).addComponent(statusPane))
+				.addGap(Globals.MIN_GAP_SIZE));
 
 		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
 
@@ -587,10 +608,11 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(clientMenu.getJMenu());
 		jMenuBar.add(jMenuServerConsole);
 
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
-			jMenuServerConsole.setEnabled(false);
-			jMenuServerConsole.setToolTipText(Configed.getResourceValue("MainFrame.vpnModuleShouldBeActive"));
-		}
+		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+
 		jMenuBar.add(createJMenuFrames());
 		jMenuBar.add(createJMenuHelp());
 
@@ -604,14 +626,14 @@ public class MainFrame extends JFrame {
 		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() "
-				+ scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
+		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
+				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
 
 		JScrollPane scrollpaneTreeProducts = new JScrollPane();
 		scrollpaneTreeProducts.getViewport().add(productTree);
@@ -626,7 +648,6 @@ public class MainFrame extends JFrame {
 				scrollpaneTreeProducts);
 
 		jTabbedPaneClientSelection.setSelectedIndex(1);
-		jTabbedPaneClientSelection.setBorder(new EmptyBorder(0, Globals.MIN_GAP_SIZE, 0, 0));
 
 		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
@@ -642,33 +663,15 @@ public class MainFrame extends JFrame {
 			return;
 		}
 
-		Logging.debug(this, "saveConfigurationsSetEnabled " + b);
+		Logging.debug(this, "saveConfigurationsSetEnabled ", b);
 
 		jMenuFileSaveConfigurations.setEnabled(b);
-		iconBarPanel.getIconButtonSaveConfiguration().setEnabled(b);
+		iconBarPanel.getjButtonSaveConfiguration().setEnabled(b);
 	}
 
 	private void startControlAction() {
 		Logging.debug(this, "jMenuControlAction");
 		configedMain.startControlDialog();
-	}
-
-	public void setClientFilterAction(boolean b) {
-		if (configedMain.isFilterClientList() != b) {
-			toggleClientFilterAction();
-		}
-	}
-
-	public void toggleClientFilterAction() {
-		toggleClientFilterAction(true);
-	}
-
-	public void toggleClientFilterAction(boolean rebuildClientListTableModel) {
-		configedMain.toggleFilterClientList(rebuildClientListTableModel, !configedMain.isFilterClientList());
-		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
-		clientMenu.getClientSelectionToggleFilterMenu().setState(configedMain.isFilterClientList());
-		iconBarPanel.getIconButtonToggleClientFilter().setSelected(configedMain.isFilterClientList());
-		clientTable.setFilterMark(configedMain.isFilterClientList());
 	}
 
 	private void groupByNotCurrentProductVersion() {
@@ -688,9 +691,8 @@ public class MainFrame extends JFrame {
 
 	private String getLocalbootProductsFromSelection() {
 		FSelectionList fProductSelectionList = new FSelectionList(this,
-				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" }, new Icon[] {
-						Utils.createImageIcon("images/cancel.png", ""), Utils.createImageIcon("images/apply.png", "") },
-				400, 600);
+				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" },
+				new Icon[] { Utils.getIntellijIcon("close"), Utils.getIntellijIcon("checkmark") }, 400, 600);
 		fProductSelectionList.setListData(new ArrayList<>(
 				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		fProductSelectionList.setVisible(true);
@@ -761,7 +763,7 @@ public class MainFrame extends JFrame {
 				try {
 					Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
 				} catch (IOException e) {
-					Logging.error("cannot open: " + Logging.getCurrentLogfilePath() + " :\n " + e);
+					Logging.error(e, "cannot open: ", Logging.getCurrentLogfilePath());
 				}
 				super.doAction2();
 			}
@@ -788,7 +790,7 @@ public class MainFrame extends JFrame {
 		dialog.setVisible(true);
 	}
 
-	private void showHealthDataAction() {
+	public void showHealthDataAction() {
 		if (!persistenceController.getHealthDataService().isHealthDataAlreadyLoaded()) {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
 		}
@@ -833,11 +835,6 @@ public class MainFrame extends JFrame {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
 		jMenuFrameShowDialogs.setEnabled(existJDialogInstances);
-	}
-
-	public void enableAfterLoading() {
-		iconBarPanel.enableAfterLoading();
-		jMenuFrameLicenses.setEnabled(true);
 	}
 
 	public LicensingInfoDialog getFDialogOpsiLicensingInfo() {

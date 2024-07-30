@@ -23,7 +23,7 @@ public class WebSocketInputStream {
 		try {
 			reader.connect(writer);
 		} catch (IOException e) {
-			Logging.error("I/O error occured while connecting reader with writer: " + e.getMessage());
+			Logging.error("I/O error occured while connecting reader with writer: ", e.getMessage());
 		}
 	}
 

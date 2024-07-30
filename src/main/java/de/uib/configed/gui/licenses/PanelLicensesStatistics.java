@@ -36,12 +36,10 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 	private void initComponents() {
 		panelStatistics = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleStatistics"), false, 0, null, true);
-		panelStatistics.setMasterFrame(ConfigedMain.getLicensesFrame());
 		panelStatistics.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelStatistics.showFilterIcon(true);
-		panelStatistics.setFiltering(true);
+		panelStatistics.setFiltering();
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

@@ -70,7 +70,7 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			try (FileInputStream reader = new FileInputStream(file)) {
 				uploadFileInChunks(file, reader.getChannel(), fileId);
 			} catch (IOException ex) {
-				Logging.warning("cannot upload file to server: ", ex);
+				Logging.warning(ex, "cannot upload file to server: ");
 			}
 
 			queue.remove(file);
@@ -112,7 +112,7 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			data.put("data", buff);
 			data.put("last", last);
 
-			Logging.debug(this, "uploading file chunk: " + data.toString());
+			Logging.debug(this, "uploading file chunk: ", data);
 
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
@@ -172,7 +172,7 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			data.put("size", Files.size(file.toPath()));
 			data.put("terminal_id", terminalWidget.getTerminalId());
 
-			Logging.debug(this, "file upload request: " + data.toString());
+			Logging.debug(this, "file upload request: ", data);
 
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
@@ -180,10 +180,10 @@ public class MessagebusBackgroundFileUploader extends AbstractBackgroundFileUplo
 			isFileUploadSuccessfull = true;
 		} catch (JsonProcessingException ex) {
 			isFileUploadSuccessfull = false;
-			Logging.warning(this, "error occurred while processing JSON: ", ex);
+			Logging.warning(this, ex, "error occurred while processing JSON: ");
 		} catch (IOException ex) {
 			isFileUploadSuccessfull = false;
-			Logging.warning(this, "unable to retrieve file size: ", ex);
+			Logging.warning(this, ex, "unable to retrieve file size: ");
 		}
 	}
 

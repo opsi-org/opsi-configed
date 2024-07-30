@@ -9,9 +9,6 @@ package de.uib.configed.gui;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +20,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
@@ -39,7 +39,7 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 
-public class ClientInfoPanel extends JPanel implements KeyListener {
+public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientDescription;
 	private JLabel labelClientInventoryNumber;
 	private JLabel labelClientNotes;
@@ -66,6 +66,10 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	private FlatPasswordField hostKeyField;
 
 	private Map<String, Map<String, String>> changedClientInfos;
+
+	// We need this flag so that the document listener is not active when
+	// the data in the components are updated by the program instead of by user input
+	private boolean dataAreChangedProgramatically;
 
 	private ConfigedMain configedMain;
 
@@ -101,12 +105,12 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
 		jTextFieldDescription.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-		jTextFieldDescription.addKeyListener(this);
+		jTextFieldDescription.getDocument().addDocumentListener(this);
 
 		jTextFieldInventoryNumber = new JTextField();
 		jTextFieldInventoryNumber.setEditable(true);
 		jTextFieldInventoryNumber.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-		jTextFieldInventoryNumber.addKeyListener(this);
+		jTextFieldInventoryNumber.getDocument().addDocumentListener(this);
 
 		jTextAreaNotes = new JTextArea();
 
@@ -114,7 +118,7 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
 
-		jTextAreaNotes.addKeyListener(this);
+		jTextAreaNotes.getDocument().addDocumentListener(this);
 
 		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
 		scrollpaneNotes.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
@@ -124,18 +128,18 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		systemUUIDField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
 				Character.MIN_VALUE, 36, true), "", 36);
-		systemUUIDField.addKeyListener(this);
+		systemUUIDField.getDocument().addDocumentListener(this);
 
 		macAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
 				2, true), "", 17);
 
-		macAddressField.addKeyListener(this);
+		macAddressField.getDocument().addDocumentListener(this);
 
 		ipAddressField = new JTextField(new SeparatedDocument(
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
 				28, Character.MIN_VALUE, 4, false), "", 24);
-		ipAddressField.addKeyListener(this);
+		ipAddressField.getDocument().addDocumentListener(this);
 
 		checkBoxUEFIBoot = new FlatTriStateCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
 		checkBoxUEFIBoot.setAllowIndeterminate(false);
@@ -155,13 +159,13 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		updateClientCheckboxText();
 
 		jTextFieldOneTimePassword = new JTextField();
-		jTextFieldOneTimePassword.addKeyListener(this);
+		jTextFieldOneTimePassword.getDocument().addDocumentListener(this);
 
 		hostKeyField = new FlatPasswordField();
 		hostKeyField.setEditable(false);
 
 		// This button copies the hostKey into the clipboard
-		JButton jButtonCopyHostKey = new JButton(Utils.createImageIcon("images/edit-copy.png", ""));
+		JButton jButtonCopyHostKey = new JButton(Utils.getIntellijIcon("copy"));
 		jButtonCopyHostKey.setToolTipText(Configed.getResourceValue("MainFrame.copyHostKey"));
 		jButtonCopyHostKey.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(new String(hostKeyField.getPassword())), null));
@@ -300,52 +304,66 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 	}
 
 	public void setClientDescriptionText(String s) {
+		dataAreChangedProgramatically = true;
 		jTextFieldDescription.setText(s);
+		dataAreChangedProgramatically = false;
 	}
 
 	public void setClientInventoryNumberText(String s) {
+		dataAreChangedProgramatically = true;
 		jTextFieldInventoryNumber.setText(s);
+		dataAreChangedProgramatically = false;
 	}
 
 	public void setClientOneTimePasswordText(String s) {
+		dataAreChangedProgramatically = true;
 		jTextFieldOneTimePassword.setText(s);
+		dataAreChangedProgramatically = false;
 	}
 
 	public void setClientNotesText(String s) {
+		dataAreChangedProgramatically = true;
 		jTextAreaNotes.setText(s);
+		dataAreChangedProgramatically = false;
 	}
 
 	public void setClientMacAddress(String s) {
+		dataAreChangedProgramatically = true;
 		macAddressField.setText(s);
+		dataAreChangedProgramatically = false;
 	}
 
 	public void setClientSystemUUID(String s) {
+		dataAreChangedProgramatically = true;
 		systemUUIDField.setText(s);
+		dataAreChangedProgramatically = false;
 	}
 
 	public void setClientIpAddress(String s) {
+		dataAreChangedProgramatically = true;
 		ipAddressField.setText(s);
+		dataAreChangedProgramatically = false;
 	}
 
 	public void setUefiBoot() {
 		Boolean value = persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients());
 
-		Logging.info(this, "setUefiBoot " + value);
+		Logging.info(this, "setUefiBoot ", value);
 		checkBoxUEFIBoot.setChecked(value);
 	}
 
 	public void setWANConfig(Boolean value) {
-		Logging.info(this, "setWANConfig " + value);
+		Logging.info(this, "setWANConfig ", value);
 		checkBoxWANConfig.setChecked(value);
 	}
 
 	public void setShutdownInstall(Boolean value) {
-		Logging.info(this, "setShutdownInstall " + value);
+		Logging.info(this, "setShutdownInstall ", value);
 		checkBoxInstallByShutdown.setChecked(value);
 	}
 
 	public void setOpsiHostKey(String s) {
-		Logging.info(this, "setOpsiHostKey " + s);
+		Logging.info(this, "setOpsiHostKey ", s);
 		hostKeyField.setText(s);
 	}
 
@@ -383,27 +401,29 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		}
 	}
 
-	private void reactToClientDataChange(InputEvent e) {
-		if (configedMain.getSelectedClients().size() != 1) {
+	private void reactToClientDataChange(Document document) {
+		Logging.debug(this, "reactToClientDataChange, dataAreChangedProgramatically: ", dataAreChangedProgramatically);
+
+		if (dataAreChangedProgramatically || configedMain.getSelectedClients().size() != 1) {
 			return;
 		}
 
-		if (e.getSource() == jTextFieldDescription) {
+		if (document == jTextFieldDescription.getDocument()) {
 			applyChanges(jTextFieldDescription, HostInfo.CLIENT_DESCRIPTION_KEY);
-		} else if (e.getSource() == jTextFieldInventoryNumber) {
+		} else if (document == jTextFieldInventoryNumber.getDocument()) {
 			applyChanges(jTextFieldInventoryNumber, HostInfo.CLIENT_INVENTORY_NUMBER_KEY);
-		} else if (e.getSource() == jTextFieldOneTimePassword) {
+		} else if (document == jTextFieldOneTimePassword.getDocument()) {
 			applyChanges(jTextFieldOneTimePassword, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY);
-		} else if (e.getSource() == jTextAreaNotes) {
+		} else if (document == jTextAreaNotes.getDocument()) {
 			applyChanges(jTextAreaNotes, HostInfo.CLIENT_NOTES_KEY);
-		} else if (e.getSource() == systemUUIDField) {
+		} else if (document == systemUUIDField.getDocument()) {
 			applyChanges(systemUUIDField, HostInfo.CLIENT_SYSTEM_UUID_KEY);
-		} else if (e.getSource() == macAddressField) {
+		} else if (document == macAddressField.getDocument()) {
 			applyChanges(macAddressField, HostInfo.CLIENT_MAC_ADRESS_KEY);
-		} else if (e.getSource() == ipAddressField) {
+		} else if (document == ipAddressField.getDocument()) {
 			applyChanges(ipAddressField, HostInfo.CLIENT_IP_ADDRESS_KEY);
 		} else {
-			Logging.warning(this, "unexpected source in reactToHostDataChange: " + e.getSource());
+			Logging.warning(this, "unexpected source in reactToHostDataChange, document: ", document);
 		}
 	}
 
@@ -468,18 +488,19 @@ public class ClientInfoPanel extends JPanel implements KeyListener {
 		}
 	}
 
+	// DocumentListener
 	@Override
-	public void keyPressed(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		Logging.debug(this, "key released " + configedMain.getSelectedClients());
-
-		reactToClientDataChange(e);
+	public void changedUpdate(DocumentEvent e) {
+		reactToClientDataChange(e.getDocument());
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
+	public void insertUpdate(DocumentEvent e) {
+		reactToClientDataChange(e.getDocument());
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		reactToClientDataChange(e.getDocument());
+	}
 }

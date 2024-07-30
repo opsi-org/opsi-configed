@@ -47,7 +47,7 @@ public class RPCMethodExecutor {
 	}
 
 	public boolean setRights(String path) {
-		Logging.info(this, "setRights for path " + path);
+		Logging.info(this, "setRights for path ", path);
 		String[] args = new String[] { path };
 		if (path == null) {
 			args = new String[] {};
@@ -123,7 +123,7 @@ public class RPCMethodExecutor {
 
 			if (error != null) {
 				error = response.getKey() + ":\t" + error;
-				Logging.info(callingMethodName + ",  " + error);
+				Logging.info(callingMethodName, ",  ", error);
 				errors.add(error);
 			}
 		}

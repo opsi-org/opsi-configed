@@ -57,7 +57,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 
 	private void mapTypes(final Map<String, Object> data) {
 		currentData = new HashMap<>();
-		Logging.debug(this, "mapTypes  " + data);
+		Logging.debug(this, "mapTypes  ", data);
 		originalTypes = new HashMap<>();
 		for (Entry<String, Object> dataEntry : data.entrySet()) {
 			originalTypes.put(dataEntry.getKey(), dataEntry.getValue().getClass());
@@ -74,7 +74,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 			return listmodels.get(row);
 		}
 
-		Logging.info(this, "getListModel, row " + row + ", column " + column);
+		Logging.info(this, "getListModel, row ", row, ", column ", column);
 
 		// build listmodel
 
@@ -83,8 +83,8 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		ListCellOptions options = getListCellOptions(key);
 
 		List<Object> values = options.getPossibleValues();
-		Logging.info(this, "getListModel key " + key + " the option values " + values);
-		Logging.info(this, "getListModel key " + key + " options  " + options);
+		Logging.info(this, "getListModel key ", key, " the option values ", values);
+		Logging.info(this, "getListModel key ", key, " options  ", options);
 
 		DefaultListModel<Object> model = new DefaultListModel<>();
 		Iterator<? extends Object> iter = values.iterator();

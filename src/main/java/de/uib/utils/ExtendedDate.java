@@ -59,7 +59,7 @@ public class ExtendedDate {
 				try {
 					setFromDate(LocalDateTime.parse(string));
 				} catch (DateTimeParseException e) {
-					Logging.warning(this, "Cannot parse value to get Timestamp of " + string, e);
+					Logging.warning(this, e, "Cannot parse value to get Timestamp of ", string);
 				}
 			}
 

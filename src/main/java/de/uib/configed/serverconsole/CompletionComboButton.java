@@ -91,7 +91,7 @@ public class CompletionComboButton {
 
 		Logging.info(this, "init");
 		for (String elem : defaultvalues) {
-			Logging.debug(this, "init defaultvalues contains " + elem);
+			Logging.debug(this, "init defaultvalues contains ", elem);
 		}
 	}
 
@@ -138,10 +138,10 @@ public class CompletionComboButton {
 		String strcbtext = combobox.getEditor().getItem().toString();
 		if (strcbtext != null && !strcbtext.isEmpty() && !"/".equals(strcbtext.substring(strcbtext.length() - 1))) {
 			combobox.removeItem(strcbtext);
-			Logging.info(this, "doButtonAction combo.removeItem(" + strcbtext + ")");
+			Logging.info(this, "doButtonAction combo.removeItem(", strcbtext, ")");
 			strcbtext = strcbtext + "/";
 			combobox.addItem(strcbtext);
-			Logging.info(this, "doButtonAction combo.additem(" + strcbtext + ")");
+			Logging.info(this, "doButtonAction combo.additem(", strcbtext, ")");
 			combobox.setSelectedItem(strcbtext);
 		}
 
@@ -204,27 +204,27 @@ public class CompletionComboButton {
 
 	private boolean containsInDefaults(String other) {
 		boolean contains = defaultvalues.contains(other);
-		Logging.debug(this, "contains_in_defaults defaultvalues.contains_in_defaults(" + other + ") = " + contains);
+		Logging.debug(this, "contains_in_defaults defaultvalues.contains_in_defaults(", other, ") = ", contains);
 		return contains;
 	}
 
 	private final void setItems(Set<String> items, final String curdir) {
 		if (items == null) {
-			Logging.warning("getDirectoriesIn could not find directories in " + curdir);
+			Logging.warning("getDirectoriesIn could not find directories in ", curdir);
 		} else {
 			combobox.removeAllItems();
 			for (String element : defaultvalues) {
 				combobox.addItem(element);
-				Logging.debug(this, "setItems add " + element);
+				Logging.debug(this, "setItems add ", element);
 			}
 			String curDirLocated = curdir;
 			if (!containsInDefaults(curDirLocated)) {
 				combobox.addItem(curDirLocated);
 			}
 
-			Logging.debug(this, "setItems add " + curDirLocated);
+			Logging.debug(this, "setItems add ", curDirLocated);
 			for (String item : items) {
-				Logging.debug(this, "setItems add " + item);
+				Logging.debug(this, "setItems add ", item);
 				int itemIndex = ((DefaultComboBoxModel<String>) combobox.getModel()).getIndexOf(item);
 				if (itemIndex != -1) {
 					continue;

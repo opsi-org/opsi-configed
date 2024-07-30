@@ -80,13 +80,13 @@ public class SecureCertificateValidator implements CertificateValidator {
 
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (KeyStoreException e) {
-			Logging.error(this, "keystore wasn't initialized: " + e.toString(), e);
+			Logging.error(this, e, "keystore wasn't initialized: ", e.toString());
 		} catch (NoSuchAlgorithmException e) {
-			Logging.error(this, "provider doesn't support algorithm", e);
+			Logging.error(this, e, "provider doesn't support algorithm");
 		} catch (UnrecoverableKeyException e) {
-			Logging.error(this, "unable to provide key", e);
+			Logging.error(this, e, "unable to provide key");
 		} catch (KeyManagementException e) {
-			Logging.error(this, "failed to initialize SSL context: " + e.toString(), e);
+			Logging.error(this, e, "failed to initialize SSL context: ", e.toString());
 		}
 
 		return sslFactory;
@@ -134,7 +134,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 					throw new IllegalStateException("Peer does not have any certificates or they aren't X.509");
 				}
 			} catch (SSLPeerUnverifiedException ex) {
-				Logging.error(this, "peer's identity wasn't verified", ex);
+				Logging.error(this, ex, "peer's identity wasn't verified");
 			}
 
 			return null;
@@ -147,7 +147,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 				subjectAlternativeNames = certificate.getSubjectAlternativeNames().stream()
 						.map(peerHostname -> (String) peerHostname.get(1)).toList();
 			} catch (CertificateParsingException e) {
-				Logging.warning(this, "problem in parsing certificate", e);
+				Logging.warning(this, e, "problem in parsing certificate");
 			}
 
 			return subjectAlternativeNames;
@@ -166,7 +166,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 			List<String> subjectAlternativeNames = getSubjectAlternativeNames(peerCertificate);
 
 			if (subjectAlternativeNames == null || subjectAlternativeNames.isEmpty()) {
-				Logging.warning(this, "no SAN found: " + subjectAlternativeNames);
+				Logging.warning(this, "no SAN found: ", subjectAlternativeNames);
 				return false;
 			}
 

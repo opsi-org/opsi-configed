@@ -48,9 +48,9 @@ public class InsecureCertificateValidator implements CertificateValidator {
 			sslContext.init(null, new TrustManager[] { new InsecureX509TrustManager() }, new SecureRandom());
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (NoSuchAlgorithmException e) {
-			Logging.error(this, "provider doesn't support algorithm", e);
+			Logging.error(this, e, "provider doesn't support algorithm");
 		} catch (KeyManagementException e) {
-			Logging.error(this, "failed to initialize SSL context", e);
+			Logging.error(this, e, "failed to initialize SSL context");
 		}
 
 		return sslFactory;

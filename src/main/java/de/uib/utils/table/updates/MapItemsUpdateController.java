@@ -44,7 +44,7 @@ public class MapItemsUpdateController implements UpdateController {
 		while (iter.hasNext() && success) {
 			MapBasedTableEditItem updateItem = iter.next();
 
-			Logging.debug(this, " handling updateItem " + updateItem);
+			Logging.debug(this, " handling updateItem ", updateItem);
 
 			if (updateItem.getSource() == this.tablemodel) {
 				if (updateItem.keyChanged()) {
@@ -67,11 +67,11 @@ public class MapItemsUpdateController implements UpdateController {
 			// (either all or no one)
 			removeItemsWithSource(updateCollection.iterator(), tablemodel);
 
-			Logging.info(this, " we start with the new data set, reload request  " + tablemodel.isReloadRequested());
+			Logging.info(this, " we start with the new data set, reload request  ", tablemodel.isReloadRequested());
 			tablemodel.startWithCurrentData();
 			tablemodel.reset();
 
-			Logging.info(this, "saveChanges lastKeyValue " + lastKeyValue);
+			Logging.info(this, "saveChanges lastKeyValue ", lastKeyValue);
 			panel.moveToKeyValue(lastKeyValue);
 		} else if (!successfullInsertsWithNewKeys.isEmpty()) {
 			// we have to remove all update items ...

@@ -36,8 +36,8 @@ public class SensitiveCellEditorForDataPanel extends SensitiveCellEditor {
 						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
 						JOptionPane.YES_NO_OPTION);
 
-				Logging.info(this,
-						" getTableCellEditorComponent, celleditor working, returned option " + returnedOption);
+				Logging.info(this, " getTableCellEditorComponent, celleditor working, returned option ",
+						returnedOption);
 				if (returnedOption != JOptionPane.YES_OPTION) {
 					return null;
 				}

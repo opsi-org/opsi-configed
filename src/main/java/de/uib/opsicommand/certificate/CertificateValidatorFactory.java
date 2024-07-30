@@ -42,7 +42,7 @@ public final class CertificateValidatorFactory {
 	 *         {@link SecureCertificateValidator} is returned.
 	 */
 	public static CertificateValidator createValidator() {
-		Logging.info("certificate verification is disabled: " + Utils.isCertificateVerificationDisabled());
+		Logging.info("certificate verification is disabled: ", Utils.isCertificateVerificationDisabled());
 		if (Utils.isCertificateVerificationDisabled()) {
 			Logging.info("using insecure certificate validator");
 			return new InsecureCertificateValidator();

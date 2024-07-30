@@ -245,7 +245,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		}
 
 		pmInstallCom = PMInstallServerPanel.getCommand(installCurlPanel.getProduct());
-		Logging.info(this, "c " + pmInstallCom);
+		Logging.info(this, "c ", pmInstallCom);
 		if (pmInstallCom != null) {
 			commands.addCommand(pmInstallCom);
 		} else {

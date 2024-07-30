@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditStringList;
 
@@ -48,13 +49,14 @@ public class FDialogRemoteControl extends FEditStringList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonCommit.createIconButton(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
-				"images/executing_command_red_22.png", "images/executing_command_red_22_over.png",
-				"images/executing_command_22_disabled.png", true);
+		// Change tooltips to run and cancel action
+		buttonCommit.setIcon(Utils.getIntellijIcon("run"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"));
 
-		buttonCancel.createIconButton(Configed.getResourceValue("buttonCancel"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));
 
+		// Here it's impossible to add the functionality
+		buttonAdd.setVisible(false);
 		extraField.getDocument().addDocumentListener(this);
 	}
 
@@ -95,7 +97,7 @@ public class FDialogRemoteControl extends FEditStringList {
 		super.commit();
 		setVisible(true);
 
-		Logging.debug(this, "getSelectedValue " + getSelectedList());
+		Logging.debug(this, "getSelectedValue ", getSelectedList());
 
 		appendLog(null);
 
@@ -144,8 +146,8 @@ public class FDialogRemoteControl extends FEditStringList {
 
 		selText = "" + selValue;
 
-		Logging.debug(this, "valueChanged, selText " + selText);
-		Logging.debug(this, "valueChanged, meanings.get(selText) " + meanings.get(selText));
+		Logging.debug(this, "valueChanged, selText ", selText);
+		Logging.debug(this, "valueChanged, meanings.get(selText) ", meanings.get(selText));
 
 		if (meanings != null && selText != null && meanings.get(selText) != null) {
 			extraField.setText(meanings.get(selText));
@@ -161,7 +163,6 @@ public class FDialogRemoteControl extends FEditStringList {
 	}
 
 	// DocumentListener
-
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		saveEditedText();

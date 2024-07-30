@@ -29,9 +29,9 @@ public class OpsiDataIntGreaterThanOperation extends IntGreaterThanOperation imp
 	@Override
 	public boolean doesMatch(OpsiDataClient client) {
 		Map<String, Object> realMap = client.getMap(map);
-		Logging.debug(this, realMap.toString());
+		Logging.debug(this, "", realMap);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			Logging.debug(this, "key " + key + " not found!");
+			Logging.debug(this, "key ", key, " not found!");
 			return false;
 		}
 

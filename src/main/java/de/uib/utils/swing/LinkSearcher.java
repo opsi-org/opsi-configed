@@ -110,7 +110,7 @@ public class LinkSearcher {
 				content = d.getText(0, d.getLength()).toLowerCase(Locale.ROOT);
 			}
 		} catch (BadLocationException e) {
-			Logging.warning(this, "Exception thrown when getting Document: " + e);
+			Logging.warning(this, e, "Exception thrown when getting Document");
 			return -1;
 		}
 
@@ -131,7 +131,7 @@ public class LinkSearcher {
 				try {
 					highlighter.addHighlight(startIndex + posInLine, startIndex + posInLine + len, painter);
 				} catch (BadLocationException e) {
-					Logging.warning(this, "could not find location for highlighter", e);
+					Logging.warning(this, e, "could not find location for highlighter");
 				}
 			}
 			startIndex = endIndex + 1;

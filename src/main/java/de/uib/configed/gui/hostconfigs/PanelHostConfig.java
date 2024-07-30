@@ -35,9 +35,6 @@ public class PanelHostConfig extends JPanel {
 	// delegate
 	private EditMapPanelGroupedForHostConfigs editMapPanel;
 
-	private boolean keylistExtendible = true;
-	private boolean entryRemovable = true;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
@@ -66,13 +63,13 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void handleUserInPropertyClass(String superclass, String user) {
-		Logging.info(this, "handleUserInPropertyClass " + user + " in class " + superclass);
+		Logging.info(this, "handleUserInPropertyClass ", user, " in class ", superclass);
 
 		String newpropertyclass = superclass + "." + user;
 		OpsiServiceNOMPersistenceController.getPropertyClassesServer().computeIfAbsent(newpropertyclass,
 				(String arg) -> {
-					Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
-							+ newpropertyclass + "]");
+					Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named ", user, " [",
+							newpropertyclass, "]");
 					return "";
 				});
 	}
@@ -87,13 +84,11 @@ public class PanelHostConfig extends JPanel {
 
 			if (key.startsWith(PROPERTY_CLASS_ROLE + ".")) {
 				String user = key.split("\\.")[2];
-				Logging.info(this,
-						"putUsersToPropertyclassesTreeMap found role (user) " + user + " by config key " + key + "");
+				Logging.info(this, "putUsersToPropertyclassesTreeMap found role (user) ", user, " by config key ", key);
 				handleUserInPropertyClass(PROPERTY_CLASS_ROLE, user);
 			} else if (key.startsWith(PROPERTY_CLASS_USER + ".")) {
 				String user = key.split("\\.")[1];
-				Logging.info(this,
-						"putUsersToPropertyclassesTreeMap found user " + user + " by config key " + key + "");
+				Logging.info(this, "putUsersToPropertyclassesTreeMap found user ", user, " by config key ", key);
 				if (!"{}".equals(user)) {
 					handleUserInPropertyClass(PROPERTY_CLASS_USER, user);
 				}
@@ -106,8 +101,8 @@ public class PanelHostConfig extends JPanel {
 	private void buildPanel() {
 		putUsersToPropertyclassesTreeMap();
 
-		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(), keylistExtendible,
-				entryRemovable, new DefaultEditMapPanel.Actor() {
+		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(), true, true,
+				new DefaultEditMapPanel.Actor() {
 					@Override
 					public void reloadData() {
 						reloadHostConfig();
@@ -139,7 +134,7 @@ public class PanelHostConfig extends JPanel {
 			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
 			boolean optionsEditable, NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
 			boolean includeAdditionalTooltipText) {
-		Logging.info(this, "initEditing  optionsEditable " + optionsEditable);
+		Logging.info(this, "initEditing  optionsEditable ", optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
 		if (originalMap != null) {
 			editMapPanel.setOriginalMap(originalMap);

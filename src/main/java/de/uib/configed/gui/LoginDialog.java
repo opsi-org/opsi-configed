@@ -23,15 +23,14 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTextField;
@@ -162,15 +161,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		setTitle(Configed.getResourceValue("LoginDialog.title"));
 		setIconImage(Utils.getMainIcon());
 
-		// Opsilogo
-		String logoPath;
-		if (FlatLaf.isLafDark()) {
-			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_ohne_Text_quer_neg.png";
-		} else {
-			logoPath = "opsilogos/UIB_1704_2023_OPSI_Logo_Bildmarke_kurz_quer.png";
-		}
-
-		jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
+		jLabelLogo = new JLabel(Utils.getOpsiLogoWide());
 
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
@@ -179,7 +170,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
-		fieldHost.addKeyListener(newKeyListener);
+		fieldHost.getEditor().getEditorComponent().addKeyListener(newKeyListener);
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(newKeyListener);
@@ -192,6 +183,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, true));
 		fieldOTP.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderOTP"));
+		fieldOTP.addKeyListener(newKeyListener);
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
@@ -223,15 +215,13 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void setupLayout() {
-		JPanel panel = new JPanel();
-
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-		panel.setBorder(padding);
+		((JComponent) getContentPane()).setBorder(padding);
 
-		GroupLayout groupLayout = new GroupLayout(panel);
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
 
 		groupLayout.setHonorsVisibility(false);
-		panel.setLayout(groupLayout);
+		getContentPane().setLayout(groupLayout);
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
 				.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -290,14 +280,12 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
 						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE)));
-
-		this.getContentPane().add(panel);
 	}
 
 	private void finishAndMakeVisible() {
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		Logging.notice(" OS " + strOS + "  Version " + osVersion);
+		Logging.notice(" OS ", strOS, "  Version ", osVersion);
 
 		setHost("localhost");
 		fieldHost.requestFocus();
@@ -315,7 +303,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
 
 			// we can finish
-			Logging.info(this, "connected with persis " + persistenceController);
+			Logging.info(this, "connected with persis ", persistenceController);
 			configedMain.setPersistenceController(persistenceController);
 			configedMain.loadDataAndGo();
 		} else {
@@ -396,8 +384,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
 		ConfigedMain.setUser(user);
 		ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
-		Logging.info(this,
-				"invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", " + user);
+		Logging.info(this, "invoking PersistenceControllerFactory host, user, ", fieldHost.getSelectedItem(), ", ",
+				user);
 
 		Configed.setHost((String) fieldHost.getSelectedItem());
 		Configed.initSavedStates();
@@ -406,8 +394,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			return;
 		}
 
-		Logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
-		Logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
+		Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());
+		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
 		Logging.info(this, "start WaitingWorker");
 		waitingWorker = new WaitingWorker(this);
 		waitingWorker.execute();
@@ -420,7 +408,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()),
 						String.valueOf(fieldOTP.getPassword()));
 
-				Logging.info(this, "got persis, == null " + (persistenceController == null));
+				Logging.info(this, "got persis, == null ", persistenceController == null);
 
 				Logging.info(this, "waitingTask can be set to ready");
 				waitingWorker.setReady();

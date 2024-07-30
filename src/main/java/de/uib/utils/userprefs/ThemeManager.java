@@ -13,18 +13,17 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
+import javax.swing.AbstractButton;
 import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.util.SystemInfo;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public final class ThemeManager {
@@ -50,8 +49,23 @@ public final class ThemeManager {
 			return Configed.getResourceValue("theme.dark");
 
 		default:
-			Logging.warning("Cannot find translation for theme " + theme);
+			Logging.warning("Cannot find translation for theme ", theme);
 			return null;
+		}
+	}
+
+	public static void setThemeIcon(AbstractButton abstractButton, String theme) {
+		switch (theme) {
+		case THEME_LIGHT:
+			Utils.addIntellijIconToMenuItem(abstractButton, "lightTheme");
+			break;
+
+		case THEME_DARK:
+			Utils.addIntellijIconToMenuItem(abstractButton, "darkTheme");
+			break;
+
+		default:
+			Logging.warning("Cannot find translation for theme ", theme);
 		}
 	}
 
@@ -63,12 +77,12 @@ public final class ThemeManager {
 		if (availableThemes.contains(newTheme)) {
 			selectedTheme = newTheme;
 		} else {
-			Logging.warning("Failing to set theme that does not exist: " + newTheme);
+			Logging.warning("Failing to set theme that does not exist: ", newTheme);
 		}
 	}
 
 	public static void setOpsiLaf() {
-		Logging.info("set look and feel " + getSelectedTheme());
+		Logging.info("set look and feel ", getSelectedTheme());
 
 		// Location of the theme property files - register them
 		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");
@@ -85,14 +99,8 @@ public final class ThemeManager {
 			break;
 
 		default:
-			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + getSelectedTheme());
+			Logging.warning("tried to set theme in setOpsiLaf that does not exist: ", getSelectedTheme());
 			break;
-		}
-
-		if (SystemInfo.isLinux) {
-			// enable custom window decorations
-			JFrame.setDefaultLookAndFeelDecorated(true);
-			JDialog.setDefaultLookAndFeelDecorated(true);
 		}
 
 		Globals.setTableColors();
@@ -104,9 +112,9 @@ public final class ThemeManager {
 			openSansFont = openSansFont.deriveFont(13F);
 			UIManager.put("defaultFont", openSansFont);
 		} catch (IOException e) {
-			Logging.error("Failed to retrieve font from resources (using font chosen by the system)", e);
+			Logging.error(e, "Failed to retrieve font from resources (using font chosen by the system)");
 		} catch (FontFormatException e) {
-			Logging.error("Font is faulty", e);
+			Logging.error(e, "Font is faulty");
 		}
 	}
 }

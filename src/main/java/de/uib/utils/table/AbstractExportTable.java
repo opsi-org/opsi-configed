@@ -57,6 +57,7 @@ public abstract class AbstractExportTable {
 
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
+		Utils.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
 	}
@@ -68,6 +69,7 @@ public abstract class AbstractExportTable {
 
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
+		Utils.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener((ActionEvent actionEvent) -> execute(null, true));
 
 		return menuItem;
@@ -97,7 +99,7 @@ public abstract class AbstractExportTable {
 		Boolean result = onlySelectedRows;
 
 		if (onlySelectedRows) {
-			Logging.debug("selectedRows: " + theTable.getSelectedRowCount());
+			Logging.debug("selectedRows: ", theTable.getSelectedRowCount());
 			if (theTable.getRowCount() > 0 && theTable.getSelectedRowCount() == 0) {
 				FTextArea fChoice = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("ExportTable.title"), true,
@@ -117,17 +119,17 @@ public abstract class AbstractExportTable {
 				int answer = fChoice.getResult();
 
 				result = null;
-				Logging.info(this, "checkSelection answered " + answer);
+				Logging.info(this, "checkSelection answered ", answer);
 				if (answer == 1) {
 					result = true;
 				} else if (answer == 2) {
 					result = false;
 				} else {
-					Logging.warning(this, "unexpected answer " + answer);
+					Logging.warning(this, "unexpected answer ", answer);
 				}
 			}
 		}
-		Logging.info(this, "checkSelection gives: onlySelectedRows = " + result);
+		Logging.info(this, "checkSelection gives: onlySelectedRows = ", result);
 
 		return result;
 	}
@@ -161,7 +163,7 @@ public abstract class AbstractExportTable {
 					// Do nothing when it's a file with ending ".csv"
 				}
 
-				Logging.debug(this, "filename " + filename);
+				Logging.debug(this, "filename ", filename);
 
 				if (askForOverwrite) {
 					filename = askForOverride(filename);
@@ -171,7 +173,7 @@ public abstract class AbstractExportTable {
 			exportDirectory = new File(filename).getParentFile();
 		}
 
-		Logging.debug(this, "export to " + filename);
+		Logging.debug(this, "export to ", filename);
 
 		return filename;
 	}
@@ -189,8 +191,7 @@ public abstract class AbstractExportTable {
 				}
 			}
 		} catch (HeadlessException exception) {
-			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename,
-					exception);
+			Logging.error(exception, Configed.getResourceValue("DocumentExport.errorNoValidFilename"), "\n", filename);
 		}
 
 		return filename;
@@ -199,7 +200,7 @@ public abstract class AbstractExportTable {
 	protected String getFileLocation() {
 		String fileName = null;
 
-		Logging.info(this, "getFileLocation with writeToFile " + writeToFile);
+		Logging.info(this, "getFileLocation with writeToFile ", writeToFile);
 
 		File defaultFile = new File(writeToFile);
 
@@ -214,7 +215,7 @@ public abstract class AbstractExportTable {
 		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("buttonOK"));
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
-			Logging.info(this, "clicked ok on JFileChosser, get now fileName: " + fileName);
+			Logging.info(this, "clicked ok on JFileChosser, get now fileName: ", fileName);
 		}
 
 		if (fileName != null) {

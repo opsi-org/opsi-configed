@@ -24,11 +24,7 @@ public class TextInputField extends JPanel {
 	private List<String> proposedValues;
 	private Character[] orderedBeginChars;
 
-	public enum InputType {
-		TEXT, DATE, VALUELIST
-	}
-
-	private InputType inputType;
+	private boolean isValueList;
 
 	public TextInputField(String initialValue) {
 		this(initialValue, null);
@@ -39,20 +35,17 @@ public class TextInputField extends JPanel {
 
 		String initValue = initialValue;
 
-		inputType = InputType.VALUELIST;
-
 		if (proposedValues == null) {
 			this.proposedValues = new ArrayList<>();
+			isValueList = false;
 
 			if (initialValue == null) {
-				inputType = InputType.DATE;
 				initValue = "";
-			} else {
-				inputType = InputType.TEXT;
 			}
 		} else {
 			this.proposedValues = proposedValues;
 			proposedValues.add(0, "");
+			isValueList = true;
 		}
 
 		if (proposedValues != null) {
@@ -78,7 +71,7 @@ public class TextInputField extends JPanel {
 		combo = new AutoCompletionComboBox<>();
 		combo.setModel(new DefaultComboBoxModel<>(this.proposedValues.toArray(new String[0])));
 
-		if (inputType == InputType.VALUELIST) {
+		if (isValueList) {
 			super.add(combo);
 		} else {
 			super.add(textfield);
@@ -107,7 +100,7 @@ public class TextInputField extends JPanel {
 	}
 
 	public String getText() {
-		if (inputType == InputType.VALUELIST) {
+		if (isValueList) {
 			return combo.getSelectedItem().toString();
 		} else {
 			return textfield.getText();

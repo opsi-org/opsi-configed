@@ -197,7 +197,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 			}
 		}
 
-		Logging.info(this, "getAllowedInstallTargets " + result);
+		Logging.info(this, "getAllowedInstallTargets ", result);
 
 		return result;
 	}
@@ -230,13 +230,13 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 			}
 		}
 
-		Logging.info(this, "produce depot parameter " + depotParameter);
+		Logging.info(this, "produce depot parameter ", depotParameter);
 		return depotParameter;
 	}
 
 	private void initDepots() {
 		depots = getAllowedInstallTargets();
-		Logging.info(this, "depots: " + depots.toString());
+		Logging.info(this, "depots: ", depots);
 		fDepotList.setListData(depots);
 		if (depots.isEmpty()) {
 			jButtonDepotselection.setVisible(false);

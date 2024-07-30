@@ -25,8 +25,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	protected int[] selectedRows = new int[0];
 
-	protected boolean filtered;
-
 	public SearchTargetModelFromTable() {
 		this((JTable) null);
 	}
@@ -42,7 +40,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	protected final void setTable(JTable table) {
 		this.table = table;
-		Logging.info(this, "setTable null? " + (table == null));
+		Logging.info(this, "setTable null? ", table == null);
 	}
 
 	private AbstractTableModel getTableModel() {
@@ -112,7 +110,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		int modelrow = table.convertRowIndexToModel(row);
 
-		Logging.info(this, "setCursorRow row, produced modelrow " + modelrow);
+		Logging.info(this, "setCursorRow row, produced modelrow ", modelrow);
 
 		if (table.getModel() instanceof GenTableModel genTableModel) {
 			genTableModel.setCursorRow(modelrow);
@@ -137,7 +135,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void addSelectedRow(int row) {
-		Logging.debug(this, "addSelectedRow " + row);
+		Logging.debug(this, "addSelectedRow ", row);
 
 		if (table.getRowCount() == 0) {
 			return;
@@ -160,11 +158,13 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setSelection(int[] selection) {
-		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
+		Logging.info(this, "setSelection --- ", Arrays.toString(selection));
+		table.getSelectionModel().setValueIsAdjusting(true);
 		table.getSelectionModel().clearSelection();
 		for (int selectionElement : selection) {
 			table.getSelectionModel().addSelectionInterval(selectionElement, selectionElement);
 		}
+		table.getSelectionModel().setValueIsAdjusting(false);
 	}
 
 	private void returnToNotChanged(boolean wasChanged) {
@@ -176,7 +176,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	}
 
 	@Override
-	public void setFiltered(boolean b) {
+	public void setFiltered(boolean filtered) {
 		boolean wasChanged = false;
 
 		if (thePanel != null) {
@@ -185,17 +185,17 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		GenTableModel model = (GenTableModel) table.getModel();
 
-		if (!filtered) {
+		if (filtered) {
 			selectedRows = table.getSelectedRows();
 		}
 
-		if (b && selectedRows.length > 0) {
+		if (filtered && selectedRows.length > 0) {
 			int[] modelRowFilter = new int[selectedRows.length];
 			for (int i = 0; i < selectedRows.length; i++) {
 				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
 			}
 
-			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));
+			Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
 
 			((RowNoTableModelFilterCondition) (model.getFilter(FILTER_BY_SELECTION).getCondition()))
 					.setFilter(modelRowFilter, model.getRows());
@@ -210,7 +210,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			// restore the original selection
 			setSelection(selectedRows);
 		}
-		filtered = b;
 
 		returnToNotChanged(wasChanged);
 	}

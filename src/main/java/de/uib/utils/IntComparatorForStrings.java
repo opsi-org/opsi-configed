@@ -23,7 +23,7 @@ public class IntComparatorForStrings implements Comparator<String> {
 		try {
 			result = Integer.parseInt(str);
 		} catch (NumberFormatException ex) {
-			Logging.debug("not a number " + str);
+			Logging.debug("not a number ", str);
 		}
 		return result;
 	}

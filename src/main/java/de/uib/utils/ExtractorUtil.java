@@ -56,7 +56,7 @@ public final class ExtractorUtil {
 			if (file.getName().contains(".tar")) {
 				archiveFormat = ArchiveStreamFactory.TAR;
 			} else {
-				Logging.error("Unable to detect archive format for file " + file.getAbsolutePath(), e);
+				Logging.error(e, "Unable to detect archive format for file ", file.getAbsolutePath());
 			}
 		}
 		return archiveFormat;
@@ -73,7 +73,7 @@ public final class ExtractorUtil {
 				}
 			}
 		} catch (IOException e) {
-			Logging.error("Unable to read ZIP file " + file.getAbsolutePath(), e);
+			Logging.error(e, "Unable to read ZIP file ", file.getAbsolutePath());
 		}
 		return files;
 	}
@@ -92,18 +92,18 @@ public final class ExtractorUtil {
 			if (e.getFormat().equals(ArchiveStreamFactory.SEVEN_Z)) {
 				files = extractSevenZIP(file);
 			} else {
-				Logging.error("Archive format " + archiveFormat + " does not support streaming", e);
+				Logging.error(e, "Archive format ", archiveFormat, " does not support streaming");
 			}
 		} catch (ArchiveException e) {
-			Logging.error("Archive format is unknown " + archiveFormat, e);
+			Logging.error(e, "Archive format is unknown ", archiveFormat);
 		} catch (IOException e) {
-			Logging.error("Unable to read zip file " + file.getAbsolutePath(), e);
+			Logging.error(e, "Unable to read zip file ", file.getAbsolutePath());
 		} catch (DateTimeException e) {
 			// In version 1.25.0 (and earlier) of Apache Commons Compress lib
 			// the `DateTimeException` might occur indicating that PAX header
 			// of an archive is corrupt. We catch this manually until new lib's
 			// version comes out, which does not require us to do so.
-			Logging.error("Corrupted PAX header", e);
+			Logging.error(e, "Corrupted PAX header");
 		}
 		return files;
 	}
@@ -118,10 +118,10 @@ public final class ExtractorUtil {
 			}
 			is = new BufferedInputStream(is);
 		} catch (FileNotFoundException e) {
-			Logging.error("File not found " + file.getAbsolutePath(), e);
+			Logging.error(e, "File not found ", file.getAbsolutePath());
 			return is;
 		} catch (IOException e) {
-			Logging.error("Unable to retrieve input stream ", e);
+			Logging.error(e, "Unable to retrieve input stream ");
 		}
 		return is;
 	}
@@ -138,7 +138,7 @@ public final class ExtractorUtil {
 				}
 			}
 		} catch (IOException e) {
-			Logging.error("Unable to read 7z file " + file.getAbsolutePath(), e);
+			Logging.error(e, "Unable to read 7z file ", file.getAbsolutePath());
 		}
 		return files;
 	}

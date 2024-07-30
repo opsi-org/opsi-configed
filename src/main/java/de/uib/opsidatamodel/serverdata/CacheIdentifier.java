@@ -301,6 +301,10 @@ public enum CacheIdentifier {
 	 * return type {@code Set<String>}
 	 */
 	HOST_GROUPS_PERMITTED("host_groups_permitted"),
+	/**
+	 * return type {@code Set<String>}
+	 */
+	TERMINAL_FORBIDDEN("terminal_forbidden"),
 
 	/**
 	 * return type {@code String}

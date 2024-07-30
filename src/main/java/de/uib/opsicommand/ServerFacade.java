@@ -149,7 +149,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		try {
 			serviceURL = new URI(baseURL).toURL();
 		} catch (MalformedURLException | URISyntaxException ex) {
-			Logging.error(this, "URI Syntax error: " + baseURL, ex);
+			Logging.error(this, ex, "URI Syntax error: ", baseURL);
 		}
 
 		return serviceURL;
@@ -161,7 +161,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		try {
 			result = new MessagePackMapper().writeValueAsBytes(omcMap);
 		} catch (JsonProcessingException e) {
-			Logging.error(this, "unable to process JSON", e);
+			Logging.error(this, e, "unable to process JSON");
 		}
 
 		return result;
@@ -196,7 +196,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			return null;
 		}
 
-		Logging.info(this, "connection cipher suite " + (connection).getCipherSuite());
+		Logging.info(this, "connection cipher suite ", (connection).getCipherSuite());
 
 		Map<String, Object> result = new HashMap<>();
 
@@ -208,16 +208,16 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					retrieveSessionIDFromResponse(connection);
 					InputStream stream = getInputStreamBasedOnEncoding(connection);
 
-					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
+					Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
 
 					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
 				} else if (conStat.getState() == ConnectionState.UNAUTHORIZED) {
 					return retrieveResponse(omc);
 				} else {
-					Logging.warning(this, "Encountered unhandled connection state: " + conStat);
+					Logging.warning(this, "Encountered unhandled connection state: ", conStat);
 				}
 			} catch (IOException ex) {
-				Logging.error(this, "Exception while data reading", ex);
+				Logging.error(this, ex, "Exception while data reading");
 			}
 		}
 
@@ -239,9 +239,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			writer.flush();
 
 			Map<String, Object> omcMap = omc != null ? omc.getOMCMap() : new HashMap<>();
-			Logging.debug(this, "(POST) sending: " + omcMap);
+			Logging.debug(this, "(POST) sending: ", omcMap);
 		} catch (IOException iox) {
-			Logging.info(this, "exception on writing json request " + iox);
+			Logging.info(this, "exception on writing json request ", iox);
 		}
 	}
 
@@ -267,20 +267,20 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
 			});
 		} else {
-			Logging.error(this, "Unsupported Content-Type: " + contentType);
+			Logging.error(this, "Unsupported Content-Type: ", contentType);
 		}
 
 		return result;
 	}
 
 	private void handleResponseCode(HttpsURLConnection connection) throws IOException {
-		Logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
+		Logging.debug(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage());
 
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
 				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
 		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-			Logging.debug("Unauthorized: " + sessionId + ", mfa=" + Utils.isMultiFactorAuthenticationEnabled());
+			Logging.debug("Unauthorized: ", sessionId, ", mfa=", Utils.isMultiFactorAuthenticationEnabled());
 			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 				password = ConfigedMain.getPassword();
@@ -290,8 +290,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			}
 		} else {
 			conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
-			Logging.error(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage() + " "
-					+ retrieveErrorFromResponse(connection));
+			Logging.error(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage(), " ",
+					retrieveErrorFromResponse(connection));
 		}
 	}
 
@@ -306,7 +306,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					errorInfo.append("  ");
 				}
 			} catch (IOException iox) {
-				Logging.error(this, "exception on reading error stream " + iox);
+				Logging.error(this, iox, "exception on reading error stream ");
 			}
 		}
 
@@ -335,12 +335,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		if (connection.getHeaderField("Content-Encoding") != null) {
 			gzipped = "gzip".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
-			Logging.debug(this, "gzipped " + gzipped);
+			Logging.debug(this, "gzipped ", gzipped);
 			deflated = "deflate".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
-			Logging.debug(this, "deflated " + deflated);
+			Logging.debug(this, "deflated ", deflated);
 			lz4compressed = "lz4".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 
-			Logging.debug(this, "lz4compressed " + lz4compressed);
+			Logging.debug(this, "lz4compressed ", lz4compressed);
 		}
 
 		InputStream stream = null;

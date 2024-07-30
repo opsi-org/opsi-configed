@@ -118,12 +118,12 @@ public class PanelProductSettings extends JSplitPane {
 
 		groupPanel = new ProductActionPanel(this, tableProducts);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event reloadAction " + ae);
+			Logging.info(this, " in top pane we got event reloadAction ", ae);
 			reloadAction();
 		});
 
 		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
+			Logging.info(this, " in top pane we got event saveAndExecuteAction ", ae);
 			saveAndExecuteAction();
 		});
 
@@ -185,7 +185,8 @@ public class PanelProductSettings extends JSplitPane {
 	private JPopupMenu producePopupMenu() {
 		JPopupMenu popup = new JPopupMenu();
 
-		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"), Utils.getSaveIcon());
+		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"));
+		Utils.addIntellijIconToMenuItem(save, "save");
 		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
@@ -197,8 +198,8 @@ public class PanelProductSettings extends JSplitPane {
 
 		popup.add(save);
 
-		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
-				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
+		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
+		Utils.addIntellijIconToMenuItem(itemOnDemand, "run");
 		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
@@ -206,8 +207,8 @@ public class PanelProductSettings extends JSplitPane {
 		popup.add(itemOnDemand);
 
 		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem(
-				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"),
-				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
+				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"));
+		Utils.addIntellijIconToMenuItem(itemOnDemandForSelectedProducts, "run");
 		itemOnDemandForSelectedProducts
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts
@@ -232,7 +233,7 @@ public class PanelProductSettings extends JSplitPane {
 		showPopupOpsiclientdEvent(true);
 
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
-		reload.setIcon(Utils.createImageIcon("images/reload16.png", ""));
+		Utils.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.info(this, "reload action");
 			reloadAction();
@@ -240,7 +241,7 @@ public class PanelProductSettings extends JSplitPane {
 		popup.add(reload);
 
 		JMenuItem createReport = new JMenuItem(Configed.getResourceValue("PanelProductSettings.pdf"));
-		createReport.setIcon(Utils.createImageIcon("images/acrobat_reader16.png", ""));
+		Utils.addThemeIconInvertedToMenuItem(createReport, "anyType");
 		createReport.addActionListener((ActionEvent e) -> createReport());
 		popup.add(createReport);
 
@@ -320,10 +321,10 @@ public class PanelProductSettings extends JSplitPane {
 			clearEditing();
 		} else {
 			int selectedRow = lsm.getMinSelectionIndex();
-			Logging.debug(this, "selected " + selectedRow);
-			Logging.debug(this, "selected modelIndex " + tableProducts.convertRowIndexToModel(selectedRow));
-			Logging.debug(this, "selected  value at "
-					+ tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
+			Logging.debug(this, "selected ", selectedRow);
+			Logging.debug(this, "selected modelIndex ", tableProducts.convertRowIndexToModel(selectedRow));
+			Logging.debug(this, "selected  value at ",
+					tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
 			configedMain.setProductEdited(
 					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0),
 					this);
@@ -414,7 +415,7 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
-		Logging.info(this, "setSortKeys : " + currentSortKeys);
+		Logging.info(this, "setSortKeys : ", currentSortKeys);
 		if (tableProducts.getRowSorter() != null) {
 			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
 		}
@@ -471,34 +472,30 @@ public class PanelProductSettings extends JSplitPane {
 		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
 		tModel.setFilterFrom(filter);
 
-		Logging.info(this, "reduceToSet  " + filter);
-
-		groupPanel.setFilteredMode(filter != null && !filter.isEmpty());
+		Logging.info(this, "reduceToSet  ", filter);
 
 		tableProducts.revalidate();
 	}
 
 	public void reduceToSelected() {
 		Set<String> selection = getSelectedIDs();
-		Logging.debug(this, "reduceToSelected: selectedIds  " + selection);
+		Logging.debug(this, "reduceToSelected: selectedIds  ", selection);
 		reduceToSet(selection);
 		setSelection(selection);
 	}
 
 	public void setFilter(Set<String> filter) {
-		groupPanel.setFilteredMode(false);
 		if (tableProducts.getModel() instanceof InstallationStateTableModel installationStateTableModel) {
 			installationStateTableModel.setFilterFrom(filter);
 		}
 	}
 
-	public void showAll() {
-		Set<String> selection = getSelectedIDs();
-		setFilter(null);
-		setSelection(selection);
-	}
+	public void valueChanged(boolean doSelection) {
+		// We want to deactivate filter before changing something
+		groupPanel.setFilterMark(false);
 
-	public void valueChanged(TreePath[] selectionPaths, boolean doSelection) {
+		TreePath[] selectionPaths = productTree.getSelectionPaths();
+
 		if (selectionPaths == null) {
 			setFilter(null);
 		} else if (selectionPaths.length == 1) {
@@ -537,14 +534,14 @@ public class PanelProductSettings extends JSplitPane {
 
 		// We don't want to call setSelection here, since it will be called after this method
 		if (!isFilteredMode()) {
-			valueChanged(productTree.getSelectionPaths(), false);
+			valueChanged(false);
 		}
 
-		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
+		Logging.debug(this, " tableProducts columns  count ", tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
 
 		while (enumer.hasMoreElements()) {
-			Logging.debug(this, " tableProducts column  " + enumer.nextElement().getHeaderValue());
+			Logging.debug(this, " tableProducts column  ", enumer.nextElement().getHeaderValue());
 		}
 	}
 

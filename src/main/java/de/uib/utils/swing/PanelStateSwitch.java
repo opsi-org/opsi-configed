@@ -50,7 +50,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
 			Consumer<Enum<E>> enumSetter) {
-		Logging.info(this.getClass(), " my enum " + myenum);
+		Logging.info(this.getClass(), " my enum ", myenum);
 
 		this.title = title;
 
@@ -75,9 +75,9 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		this.enumSetter = enumSetter;
 
 		if (myenumClass != null && myenumClass.isEnum()) {
-			Logging.info(this.getClass(), " type of myenum " + myenumClass.getTypeName());
+			Logging.info(this.getClass(), " type of myenum ", myenumClass.getTypeName());
 
-			Logging.info(this.getClass(), " enum constants " + Arrays.toString(myenumClass.getEnumConstants()));
+			Logging.info(this.getClass(), " enum constants ", Arrays.toString(myenumClass.getEnumConstants()));
 
 			int i = 0;
 			for (Object constant : myenumClass.getEnumConstants()) {
@@ -85,13 +85,13 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 					producedValue = (Enum) constant;
 				}
 				i++;
-				Logging.info(this.getClass(), " enum constant  " + constant + " class " + constant.getClass());
+				Logging.info(this.getClass(), " enum constant  ", constant, " class ", constant.getClass());
 			}
 		}
 
 		this.startValue = startValue;
 
-		Logging.info(this.getClass(), " string val of start value " + startValue.toString());
+		Logging.info(this.getClass(), " string val of start value ", startValue.toString());
 
 		initComponents();
 
@@ -103,7 +103,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	protected void notifyChangeListeners(ChangeEvent e) {
-		Logging.info(this, "notifyChangeListeners " + e);
+		Logging.info(this, "notifyChangeListeners ", e);
 		for (ChangeListener cl : changeListeners) {
 			cl.stateChanged(e);
 		}
@@ -126,7 +126,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 					enumSetter.accept(val);
 				}
 
-				Logging.debug(this, "actionEvent with result " + val);
+				Logging.debug(this, "actionEvent with result ", val);
 				notifyChangeListeners(new ChangeEvent(this));
 			});
 		}
@@ -184,7 +184,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 		groupedButtons.get(producedValue).setSelected(true);
 
-		Logging.info(this, "setValueByString " + producedValue);
+		Logging.info(this, "setValueByString ", producedValue);
 
 		if (enumSetter != null) {
 			enumSetter.accept(producedValue);

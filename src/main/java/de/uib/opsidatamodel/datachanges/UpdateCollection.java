@@ -24,7 +24,7 @@ public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand
 		Iterator<? extends UpdateCommand> it = c.iterator();
 		while (it.hasNext() && success) {
 			UpdateCommand updateCommand = it.next();
-			Logging.debug(this, "addAll, element of Collection: " + updateCommand);
+			Logging.debug(this, "addAll, element of Collection: ", updateCommand);
 			if (!add(updateCommand)) {
 				success = false;
 			}
@@ -40,13 +40,13 @@ public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand
 			UpdateCommand updateCommand = it.next();
 			// a element of the collection is a collection, we do our best to clear recursively
 			if (updateCommand instanceof Collection<?> updateCollection) {
-				Logging.debug(this, "by recursion, we will clear " + updateCommand);
+				Logging.debug(this, "by recursion, we will clear ", updateCommand);
 				updateCollection.clear();
 			}
 		}
-		Logging.debug(this, "to clear elements of implementor " + implementor);
+		Logging.debug(this, "to clear elements of implementor ", implementor);
 		implementor.clear();
-		Logging.debug(this, "cleared: elements of implementor " + implementor.size());
+		Logging.debug(this, "cleared: elements of implementor ", implementor.size());
 	}
 
 	public void clearElements() {
@@ -145,7 +145,7 @@ public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand
 
 	@Override
 	public boolean add(UpdateCommand obj) {
-		Logging.debug(this, "###### UpdateCollection add Object  " + obj);
+		Logging.debug(this, "###### UpdateCollection add Object  ", obj);
 
 		if (obj == null) {
 			return true;
@@ -165,7 +165,7 @@ public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand
 	 */
 	@Override
 	public void doCall() {
-		Logging.debug(this, "doCall, element count: " + size());
+		Logging.debug(this, "doCall, element count: ", size());
 
 		if (isEmpty()) {
 			return;

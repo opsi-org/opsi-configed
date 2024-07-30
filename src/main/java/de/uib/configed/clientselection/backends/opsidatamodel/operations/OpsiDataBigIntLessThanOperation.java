@@ -36,7 +36,7 @@ public class OpsiDataBigIntLessThanOperation extends BigIntLessThanOperation imp
 				return true;
 			}
 		} else {
-			Logging.error(this, "data is no BigInteger!" + realData);
+			Logging.error(this, "data is no BigInteger!", realData);
 		}
 
 		return false;

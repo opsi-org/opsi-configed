@@ -20,7 +20,7 @@ import javax.swing.UIManager;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2024-06-25";
+	public static final String VERDATE = "2024-07-18";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
@@ -78,6 +78,9 @@ public final class Globals {
 
 	public static final Color OPSI_FOREGROUND_LIGHT = new Color(30, 30, 30);
 	public static final Color OPSI_FOREGROUND_DARK = new Color(225, 225, 225);
+
+	public static final Color ICON_ACTIVE_LIGHT = new Color(53, 116, 240);
+	public static final Color ICON_ACTIVE_DARK = new Color(84, 138, 247);
 
 	// End new colors
 
@@ -137,7 +140,6 @@ public final class Globals {
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
 	public static final int LABEL_WIDTH = 80;
-	public static final int SQUARE_BUTTON_WIDTH = 24;
 
 	public static final Dimension BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
 	public static final Dimension SMALL_BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
@@ -147,7 +149,6 @@ public final class Globals {
 	public static final int COUNTERFIELD_WIDTH = 160;
 	public static final Dimension COUTNER_FIELD_DIMENSION = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
 	public static final Dimension NEW_SMALL_BUTTON = new Dimension(30, 30);
-	public static final Dimension MODE_SWITCH_DIMENSION = new Dimension(50, 50);
 
 	// Make width long enough so that it will be not too small for the whole text
 	public static final Dimension LABEL_SIZE_OF_JTREE = new Dimension(500, 20);
@@ -161,10 +162,6 @@ public final class Globals {
 
 	public static final int WIDTH_INFO_LOG_FILE = 400;
 	public static final int HEIGHT_INFO_LOG_FILE = 200;
-
-	public static final int REACHABLE_INFO_FRAME_WIDTH = 300;
-	// Just enough so that the button is not hidden
-	public static final int REACHABLE_INFO_FRAME_HEIGHT = 220;
 
 	public static final Dimension GRAPHIC_BUTTON_DIMENSION = new Dimension(GRAPHIC_BUTTON_SIZE, GRAPHIC_BUTTON_SIZE);
 

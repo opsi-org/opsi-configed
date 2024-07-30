@@ -143,7 +143,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		try {
 			widget = (TerminalWidget) jTabbedPane.getComponentAt(index);
 		} catch (IndexOutOfBoundsException e) {
-			Logging.warning(this, "Requested component does not exist " + index, e);
+			Logging.warning(this, e, "Requested component does not exist ", index);
 		}
 		return widget;
 	}

@@ -21,7 +21,7 @@ import de.uib.utils.logging.Logging;
 
 public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 	private static final String DISPLAY_INFINITE = "\u221E";
-	private static final ImageIcon availableIcon = Utils.getThemeIconPNG("bootstrap/check", "");
+	private static final ImageIcon availableIcon = Utils.getIntellijIcon("checkmark");
 
 	protected LicensingInfoMap licensingInfoMap;
 

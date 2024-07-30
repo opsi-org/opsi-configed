@@ -15,14 +15,14 @@ public class CursorrowObserved {
 	private Set<CursorrowObserver> observers = new HashSet<>();
 
 	public void notifyObservers(int newrow) {
-		Logging.info(this, "notify Observers with " + newrow);
+		Logging.info(this, "notify Observers with ", newrow);
 		for (CursorrowObserver o : observers) {
 			o.rowUpdated(newrow);
 		}
 	}
 
 	public void addObserver(CursorrowObserver o) {
-		Logging.debug(this, "add Observer  " + o);
+		Logging.debug(this, "add Observer  ", o);
 		observers.add(o);
 	}
 }

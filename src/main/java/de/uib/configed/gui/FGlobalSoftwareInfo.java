@@ -21,7 +21,6 @@ import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.PanelGenEditTable;
@@ -56,8 +55,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		super.setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
 
 		jButton1.setEnabled(false);
-		jButton1.setIcon(Utils.createImageIcon("images/cancel.png", ""));
-		jButton2.setIcon(Utils.createImageIcon("images/edit-delete.png", ""));
 
 		initDataStructure();
 	}
@@ -99,8 +96,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public void doAction2() {
 		Logging.debug(this, "doAction2");
 
-		Logging.info(this, "removeAssociations for " + " licensePool " + myController.getSelectedLicensePool()
-				+ " selected SW keys " + panelGlobalSoftware.getSelectedKeys());
+		Logging.info(this, "removeAssociations for ", " licensePool ", myController.getSelectedLicensePool(),
+				" selected SW keys ", panelGlobalSoftware.getSelectedKeys());
 
 		boolean success = persistenceController.getSoftwareDataService()
 				.removeAssociations(myController.getSelectedLicensePool(), panelGlobalSoftware.getSelectedKeys());
@@ -108,9 +105,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		if (success) {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {
 				int row = panelGlobalSoftware.findViewRowFromValue(key, keyCol);
-				Logging.info(this, "doAction2 key, " + key + ", row " + row);
-				Logging.info(this,
-						"doAction2 model row " + panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
+				Logging.info(this, "doAction2 key, ", key, ", row ", row);
+				Logging.info(this, "doAction2 model row ",
+						panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
 				panelGlobalSoftware.getTableModel()
 						.deleteRow(panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
 			}

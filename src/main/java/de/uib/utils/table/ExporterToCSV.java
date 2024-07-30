@@ -40,8 +40,8 @@ public class ExporterToCSV extends AbstractExportTable {
 
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
-		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
-				+ "\", " + "\"" + CSV_SEPARATOR + "\"");
+		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep ", "\"", fileName, "\", ", onlySelectedRows,
+				"\", ", "\"", CSV_SEPARATOR, "\"");
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null) {
@@ -61,7 +61,7 @@ public class ExporterToCSV extends AbstractExportTable {
 			writeHeader(printer);
 			writeRows(printer, selectedOnly);
 		} catch (IOException ex) {
-			Logging.error(Configed.getResourceValue("ExportTable.error"), ex);
+			Logging.error(ex, Configed.getResourceValue("ExportTable.error"));
 		}
 	}
 
@@ -75,8 +75,8 @@ public class ExporterToCSV extends AbstractExportTable {
 
 	protected void writeRows(CSVPrinter printer, boolean selectedOnly) throws IOException {
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
-			Logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
-					+ " selectedOnly " + selectedOnly);
+			Logging.debug(this, "toCsv, handle row ", rowI, " selected ", theTable.isRowSelected(rowI),
+					" selectedOnly ", selectedOnly);
 			List<String> row = new ArrayList<>();
 			if (selectedOnly && !theTable.isRowSelected(rowI)) {
 				continue;

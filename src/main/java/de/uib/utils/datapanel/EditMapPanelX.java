@@ -70,7 +70,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
-			Logging.info(this, "removing specific value for key " + key);
+			Logging.info(this, "removing specific value for key ", key);
 			// signal removal of entry to persistence modul
 			mapTableModel.removeEntry(key);
 
@@ -90,7 +90,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private class SettingDefaultValuesHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
-			Logging.info(this, "setting default value for key " + key);
+			Logging.info(this, "setting default value for key ", key);
 			// signal removal of entry to persistence modul
 			mapTableModel.removeEntry(key);
 
@@ -107,16 +107,16 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 	}
 
-	private final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
-	private final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
+	private AbstractPropertyHandler removingSpecificValuesPropertyHandler;
+	private AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
 			boolean reloadable) {
 		super(tableCellRenderer, keylistExtendible, entryRemovable, reloadable);
 		objectCounter++;
 
-		Logging.debug(this.getClass(), " created EditMapPanelX instance No " + objectCounter + "::" + keylistExtendible
-				+ ",  " + entryRemovable + ",  " + reloadable);
+		Logging.debug(this.getClass(), " created EditMapPanelX instance No ", objectCounter, "::", keylistExtendible,
+				",  ", entryRemovable, ",  ", reloadable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);
@@ -147,13 +147,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
-		// initialize special property handlers
-		removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
-		removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
-
-		settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
-		settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
-
 		if (keylistExtendible || entryRemovable) {
 			popupEditOptions.addSeparator();
 
@@ -162,35 +155,46 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			if (keylistExtendible) {
 				popupItemAddStringListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
-				popupEditOptions.add(popupItemAddStringListEntry);
+				Utils.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
+				popupEditOptions.add(popupItemAddStringListEntry);
 
 				popupItemAddStringListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
-				popupEditOptions.add(popupItemAddStringListEntry);
+				Utils.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
+				popupEditOptions.add(popupItemAddStringListEntry);
 
 				popupItemAddBooleanListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
-				popupEditOptions.add(popupItemAddBooleanListEntry);
+				Utils.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
 				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean"));
+				popupEditOptions.add(popupItemAddBooleanListEntry);
 			}
 
 			if (entryRemovable) {
 				popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
+				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
 				popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
 
 				popupEditOptions.add(popupItemDeleteEntry0);
 				// the menu item seems to work only for one menu
 
-				popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText(),
-						Utils.createImageIcon("images/no-value.png", ""));
+				// initialize special property handlers
+				removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
+				removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
+
+				settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
+				settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
+
+				popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
+				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry1, "remove");
 				popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
-				popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
-						Utils.createImageIcon("images/fixed-value.png", ""));
+				popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
+				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry2, "locked");
 				popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry2);
@@ -295,8 +299,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		table.addMouseWheelListener(mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
-
 		jScrollPane = new JScrollPane(table);
 
 		add(jScrollPane, BorderLayout.CENTER);
@@ -353,22 +355,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		return "<html>" + tooltip + "</html>";
 	}
 
-	protected void reactToMouseWheelEvent(int wheelRotation) {
-		int selRow = table.getSelectedRow() + wheelRotation;
-
-		if (selRow >= table.getRowCount()) {
-			selRow = table.getRowCount() - 1;
-		}
-
-		int startRow = 0;
-
-		if (selRow < startRow) {
-			selRow = startRow;
-		}
-
-		setSelectedRow(selRow);
-	}
-
 	@Override
 	public void init() {
 		setEditableMap(null, null);
@@ -392,15 +378,15 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		if (optionsMap != null) {
 			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
-				Logging.debug(this, " key " + option.getKey() + " is nullable " + option.getValue().isNullable());
+				Logging.debug(this, " key ", option.getKey(), " is nullable ", option.getValue().isNullable());
 			}
 
 			modelProducer = new ListModelProducerForVisualDatamap<>(table, optionsMap, visualdata);
 		}
 
-		Logging.debug(this, "setEditableMap set modelProducer  == null " + (modelProducer == null));
+		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
 		if (modelProducer != null) {
-			Logging.debug(this, "setEditableMap test modelProducer " + modelProducer.getClass());
+			Logging.debug(this, "setEditableMap test modelProducer ", modelProducer.getClass());
 		}
 
 		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
@@ -520,25 +506,25 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	 * @param String key - the key to delete
 	 */
 	public void removeProperty(String key) {
-		Logging.info(this, " EditMapPanelX instance No " + objectCounter + "::" + " removeProperty for key " + key
-				+ " via  handler " + propertyHandler);
+		Logging.info(this, " EditMapPanelX instance No ", objectCounter, "::", " removeProperty for key ", key,
+				" via  handler ", propertyHandler);
 
 		propertyHandler.removeValue(key);
 
-		Logging.info(this, " EditMapPanelX instance No " + objectCounter + "::" + " handled removeProperty for key "
-				+ key + " options " + optionsMap.get(key));
+		Logging.info(this, " EditMapPanelX instance No ", objectCounter, "::", " handled removeProperty for key ", key,
+				" options ", optionsMap.get(key));
 
 		Object defaultValue = defaultsMap.get(key);
 
 		if (defaultValue == null) {
-			Logging.info(this, "there was no default value for " + key);
+			Logging.info(this, "there was no default value for ", key);
 		} else {
-			Logging.info(this, "handled removeProperty for key " + key + " default value  " + defaultValue
-					+ " - should be identical with - " + optionsMap.get(key).getDefaultValues());
+			Logging.info(this, "handled removeProperty for key ", key, " default value  ", defaultValue,
+					" - should be identical with - ", optionsMap.get(key).getDefaultValues());
 		}
 
 		names = mapTableModel.getKeys();
-		Logging.info(this, "removeProperty names left: " + names);
+		Logging.info(this, "removeProperty names left: ", names);
 	}
 
 	private void stopEditing() {
@@ -559,22 +545,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	public void focusGained(FocusEvent e) {
 		/* Not needed */}
 
-	private void setSelectedRow(int row) {
-		table.setRowSelectionInterval(row, row);
-
-		showSelectedRow();
-	}
-
-	private void showSelectedRow() {
-		int row = table.getSelectedRow();
-		if (row != -1) {
-			table.scrollRectToVisible(table.getCellRect(row, 0, false));
-		}
-	}
-
 	@Override
 	public void setOptionsEditable(boolean b) {
-		Logging.debug(this, "setOptionsEditable " + b);
+		Logging.debug(this, "setOptionsEditable ", b);
 
 		if (b) {
 			popupmenuAtRow = popupEditOptions;

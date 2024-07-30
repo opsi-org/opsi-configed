@@ -58,7 +58,7 @@ public class XTree extends JTree {
 	}
 
 	public void expandRows(Collection<Integer> rows) {
-		Logging.debug(this, "expandRows " + rows.size());
+		Logging.debug(this, "expandRows ", rows.size());
 		for (Integer row : rows) {
 			expandRow(row);
 		}

@@ -161,9 +161,9 @@ public class MapTableModel extends AbstractTableModel {
 	public void addEntry(String key, Object newval, boolean toStore) {
 		data.put(key, newval);
 		oridata.put(key, newval);
-		Logging.debug(this, " keys " + keys);
+		Logging.debug(this, " keys ", keys);
 		keys = new ArrayList<>(data.keySet());
-		Logging.debug(this, " new keys  " + keys);
+		Logging.debug(this, " new keys  ", keys);
 		if (toStore) {
 			putEntryIntoStoredMaps(key, newval, toStore);
 		}
@@ -229,12 +229,11 @@ public class MapTableModel extends AbstractTableModel {
 				List<?> li = (List<?>) result;
 				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {
 					result = defaultData.get(key);
-					Logging.info(this,
-							"getValueAt " + row + ", " + col + " result corrected for key  " + key + ": " + result);
+					Logging.info(this, "getValueAt ", row, ", ", col, " result corrected for key  ", key, ": ", result);
 				}
 			}
 		} else {
-			Logging.warning(this, "col is neither 0 or 1, but " + col + ", so we don't know what to do...");
+			Logging.warning(this, "col is neither 0 or 1, but ", col, ", so we don't know what to do...");
 		}
 
 		if (result == null) {
@@ -294,8 +293,7 @@ public class MapTableModel extends AbstractTableModel {
 				updateCollection.addAll(storeData);
 			}
 
-			Logging.debug(this,
-					" ---  updateCollection: " + updateCollection + "  has size " + updateCollection.size());
+			Logging.debug(this, " ---  updateCollection: ", updateCollection, "  has size ", updateCollection.size());
 		}
 	}
 
@@ -305,8 +303,8 @@ public class MapTableModel extends AbstractTableModel {
 				aStoreMap.put(myKey, nullLIST);
 			}
 
-			Logging.debug(this,
-					"remove entry --  updateCollection: " + updateCollection + "  has size " + updateCollection.size());
+			Logging.debug(this, "remove entry --  updateCollection: ", updateCollection, "  has size ",
+					updateCollection.size());
 			weHaveChangedStoredMaps();
 		}
 	}
@@ -319,8 +317,8 @@ public class MapTableModel extends AbstractTableModel {
 
 	// we put a new entry into each map in the given collection
 	private void putEntryIntoStoredMaps(String myKey, Object value, boolean toStore) {
-		Logging.debug(this, "putEntryIntoStoredMaps myKey, value: " + myKey + ", " + value);
-		Logging.debug(this, "putEntryIntoStoredMaps storeData  counting " + storeData.size());
+		Logging.debug(this, "putEntryIntoStoredMaps myKey, value: ", myKey, ", ", value);
+		Logging.debug(this, "putEntryIntoStoredMaps storeData  counting ", storeData.size());
 		if (storeData != null) {
 			Iterator<Map<String, Object>> it = storeData.iterator();
 			while (it.hasNext()) {
@@ -354,12 +352,12 @@ public class MapTableModel extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		if (value == null) {
-			Logging.debug(this, "call set value in table at " + row + "," + col + " to null");
+			Logging.debug(this, "call set value in table at ", row, ",", col, " to null");
 			return;
 		}
 
-		Logging.info(this, "Setting value in table at " + row + "," + col + " to " + value + " (an instance of "
-				+ value.getClass() + ")");
+		Logging.info(this, "Setting value in table at ", row, ",", col, " to ", value, " (an instance of ",
+				value.getClass(), ")");
 
 		// check not necessary since, by virtue of the method isCellEditable (int,int),
 		// we can only have come to here in this case
@@ -372,13 +370,13 @@ public class MapTableModel extends AbstractTableModel {
 			data.put(myKey, o);
 			// the external view data
 			oridata.put(myKey, o);
-			Logging.debug(this, "put into oridata for myKey o " + myKey + ": " + o);
+			Logging.debug(this, "put into oridata for myKey o ", myKey, ": ", o);
 			// the data sources:
 
 			modelProducer.updateData(oridata);
 
 			if (writeData) {
-				Logging.debug(this, " -------  storeData " + value + " (class : " + value.getClass());
+				Logging.debug(this, " -------  storeData ", value, " (class : ", value.getClass());
 				putEntryIntoStoredMaps(myKey, value);
 
 				modifiedKey = getModifiedKey();
@@ -404,7 +402,7 @@ public class MapTableModel extends AbstractTableModel {
 		int row = keys.indexOf(key);
 
 		if (row < 0) {
-			Logging.error("key not valid: " + key);
+			Logging.error("key not valid: ", key);
 			return;
 		}
 
@@ -412,7 +410,7 @@ public class MapTableModel extends AbstractTableModel {
 			List<?> valuelist = (List<?>) optionsMap.get(key);
 
 			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
-				Logging.error("EditMapPanel: value not allowed: " + value);
+				Logging.error("EditMapPanel: value not allowed: ", value);
 				return;
 			}
 		}
@@ -434,7 +432,7 @@ public class MapTableModel extends AbstractTableModel {
 	}
 
 	private void notifyChange() {
-		Logging.debug(this, "notifyChange, notify observers " + observers.size());
+		Logging.debug(this, "notifyChange, notify observers ", observers.size());
 		for (int i = 0; i < observers.size(); i++) {
 			(observers.get(i)).dataHaveChanged(this);
 		}

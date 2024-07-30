@@ -117,7 +117,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 			}
 
 			commands.addCommand(curl);
-			Logging.info(this, "doAction1 wget " + curl);
+			Logging.info(this, "doAction1 wget ", curl);
 		}
 		if (jCheckBoxCompareMD5.isSelected()) {
 			String product = mainDir + "/" + getFilenameFromUrl(mainProduct);

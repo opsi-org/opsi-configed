@@ -107,7 +107,7 @@ public class DepotDataService {
 		List<String> result = new ArrayList<>();
 
 		TreeSet<OpsiPackage> originalProductStock = productDataService.getDepot2PackagesPD().get(depot);
-		Logging.info(this, "getAllDepotsWithIdenticalProductStock " + originalProductStock);
+		Logging.info(this, "getAllDepotsWithIdenticalProductStock ", originalProductStock);
 
 		for (String testDepot : hostInfoCollections.getAllDepots().keySet()) {
 			if (depot.equals(testDepot) || areProductStocksIdentical(originalProductStock,
@@ -115,7 +115,7 @@ public class DepotDataService {
 				result.add(testDepot);
 			}
 		}
-		Logging.info(this, "getAllDepotsWithIdenticalProductStock  result " + result);
+		Logging.info(this, "getAllDepotsWithIdenticalProductStock  result ", result);
 
 		return result;
 	}
@@ -127,7 +127,7 @@ public class DepotDataService {
 	}
 
 	public void setDepot(String depotId) {
-		Logging.info(this, "setDepot: " + depotId);
+		Logging.info(this, "setDepot: ", depotId);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT, depotId);
 	}
 

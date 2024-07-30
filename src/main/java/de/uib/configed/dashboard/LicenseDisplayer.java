@@ -148,8 +148,8 @@ public class LicenseDisplayer {
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = persistenceController.getLicenseDataService()
 				.getLicenseContractsToNotifyPD();
 
-		Logging.info(this, "contractsExpired " + contractsExpired);
-		Logging.info(this, "contractsToNotify " + contractsToNotify);
+		Logging.info(this, "contractsExpired ", contractsExpired);
+		Logging.info(this, "contractsToNotify ", contractsToNotify);
 
 		result.append("  ");
 		result.append(Configed.getResourceValue("Dashboard.expiredContracts"));
@@ -223,7 +223,7 @@ public class LicenseDisplayer {
 					}
 				}
 
-				Logging.info(this, "produced rows, foundVariantLicensepools " + foundVariantLicensepools);
+				Logging.info(this, "produced rows, foundVariantLicensepools ", foundVariantLicensepools);
 			}
 		};
 
@@ -231,7 +231,7 @@ public class LicenseDisplayer {
 
 		List<List<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
-			Logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
+			Logging.info(this, "initDashInfo, modelSWnames.getRows() size ", specialrows.size());
 		}
 
 		StringBuilder result = new StringBuilder();
@@ -267,7 +267,7 @@ public class LicenseDisplayer {
 	private boolean checkExistNamesWithVariantLicensepools(String name) {
 		Set<String> range = getRangeSWxLicensepool(name);
 		if (range.size() > 1) {
-			Logging.info(this, "checkExistNamesWithVariantLicensepools, found  for " + name + " :  " + range);
+			Logging.info(this, "checkExistNamesWithVariantLicensepools, found  for ", name, " :  ", range);
 			return true;
 		}
 		return false;

@@ -40,8 +40,8 @@ public class SecureSSLSocketFactory extends SSLSocketFactory {
 	@SuppressWarnings("java:S1192")
 	public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
 		SSLSocket socket = (SSLSocket) delegate.createSocket(s, host, port, autoClose);
-		Logging.debug(this, "createSocket host, port: " + host + "," + port + " autoClose " + autoClose
-				+ " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+		Logging.debug(this, "createSocket host, port: ", host, ",", port, " autoClose ", autoClose,
+				" enabled cipher suites ", Arrays.toString(socket.getEnabledCipherSuites()));
 
 		if (null != handshakeListener) {
 			socket.addHandshakeCompletedListener(handshakeListener);
@@ -53,8 +53,8 @@ public class SecureSSLSocketFactory extends SSLSocketFactory {
 	@Override
 	public Socket createSocket() throws IOException {
 		SSLSocket socket = (SSLSocket) delegate.createSocket();
-		Logging.debug(this,
-				"createSocket " + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+		Logging.debug(this, "createSocket ", " enabled cipher suites ",
+				Arrays.toString(socket.getEnabledCipherSuites()));
 		// on some connections there is, after some time, a javax.net.ssl.SSLException:
 		// SSL peer shut down incorrect
 		// the standard enabled cipher suite seems to be TLS_RSA_WITH_AES_256_CBC_SHA256
@@ -69,8 +69,8 @@ public class SecureSSLSocketFactory extends SSLSocketFactory {
 	@Override
 	public Socket createSocket(InetAddress host, int port) throws IOException {
 		SSLSocket socket = (SSLSocket) delegate.createSocket(host, port);
-		Logging.debug(this, "createSocket host, port: " + host + "," + port + " enabled cipher suites "
-				+ Arrays.toString(socket.getEnabledCipherSuites()));
+		Logging.debug(this, "createSocket host, port: ", host, ",", port, " enabled cipher suites ",
+				Arrays.toString(socket.getEnabledCipherSuites()));
 
 		if (null != handshakeListener) {
 			socket.addHandshakeCompletedListener(handshakeListener);
@@ -83,9 +83,9 @@ public class SecureSSLSocketFactory extends SSLSocketFactory {
 	public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
 			throws IOException {
 		SSLSocket socket = (SSLSocket) delegate.createSocket(address, port, localAddress, localPort);
-		Logging.debug(this,
-				"createSocket adress, port, localAddress, localPort: " + address + "," + port + "," + localAddress + ","
-						+ localPort + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+		Logging.debug(this, "createSocket adress, port, localAddress, localPort: ", address, ",", port, ",",
+				localAddress, ",", localPort, " enabled cipher suites ",
+				Arrays.toString(socket.getEnabledCipherSuites()));
 
 		if (null != handshakeListener) {
 			socket.addHandshakeCompletedListener(handshakeListener);
@@ -97,8 +97,8 @@ public class SecureSSLSocketFactory extends SSLSocketFactory {
 	@Override
 	public Socket createSocket(String host, int port) throws IOException {
 		SSLSocket socket = (SSLSocket) delegate.createSocket(host, port);
-		Logging.debug(this, "createSocket host, port: " + host + "," + port + " enabled cipher suites "
-				+ Arrays.toString(socket.getEnabledCipherSuites()));
+		Logging.debug(this, "createSocket host, port: ", host, ",", port, " enabled cipher suites ",
+				Arrays.toString(socket.getEnabledCipherSuites()));
 
 		if (null != handshakeListener) {
 			socket.addHandshakeCompletedListener(handshakeListener);
@@ -110,8 +110,8 @@ public class SecureSSLSocketFactory extends SSLSocketFactory {
 	@Override
 	public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
 		SSLSocket socket = (SSLSocket) delegate.createSocket(host, port, localHost, localPort);
-		Logging.debug(this, "createSocket host, port, localHost, localPort: " + host + "," + port + "," + localHost
-				+ "," + localPort + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+		Logging.debug(this, "createSocket host, port, localHost, localPort: ", host, ",", port, ",", localHost, ",",
+				localPort, " enabled cipher suites ", Arrays.toString(socket.getEnabledCipherSuites()));
 
 		if (null != handshakeListener) {
 			socket.addHandshakeCompletedListener(handshakeListener);

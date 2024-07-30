@@ -134,7 +134,7 @@ public class LicenseDataService {
 					contractSet.add(entry.getId());
 				}
 			}
-			Logging.info(this, "contractsToNotify " + contractsToNotify);
+			Logging.info(this, "contractsToNotify ", contractsToNotify);
 		}
 		cacheManager.setCachedData(CacheIdentifier.LICENSE_CONTRACTS, licenseContracts);
 		cacheManager.setCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY, contractsToNotify);
@@ -260,8 +260,8 @@ public class LicenseDataService {
 	}
 
 	public boolean executeCollectedDeletionsLicenseUsage() {
-		Logging.info(this, "executeCollectedDeletionsLicenseUsage itemsDeletionLicenseUsage == null "
-				+ (itemsDeletionLicenseUsage == null));
+		Logging.info(this, "executeCollectedDeletionsLicenseUsage itemsDeletionLicenseUsage == null ",
+				itemsDeletionLicenseUsage == null);
 		boolean result = false;
 		if (itemsDeletionLicenseUsage == null) {
 			result = true;
@@ -293,8 +293,8 @@ public class LicenseDataService {
 					rowsLicensesUsage.remove(key);
 					fClient2LicensesUsageList.get(hostX).remove(rowmap);
 
-					Logging.debug(this, "deleteLicenseUsage check fClient2LicensesUsageList "
-							+ fClient2LicensesUsageList.get(hostX));
+					Logging.debug(this, "deleteLicenseUsage check fClient2LicensesUsageList ",
+							fClient2LicensesUsageList.get(hostX));
 				}
 			}
 
@@ -324,8 +324,8 @@ public class LicenseDataService {
 				LicenseUsageEntry rowmap = rowsLicensesUsage.get(key);
 				rowsLicensesUsage.remove(key);
 				fClient2LicensesUsageList.get(hostId).remove(rowmap);
-				Logging.info(this,
-						"deleteLicenseUsage check fClient2LicensesUsageList " + fClient2LicensesUsageList.get(hostId));
+				Logging.info(this, "deleteLicenseUsage check fClient2LicensesUsageList ",
+						fClient2LicensesUsageList.get(hostId));
 			}
 		}
 
@@ -358,14 +358,14 @@ public class LicenseDataService {
 	public Map<String, Map<String, String>> getRelationsProductId2LPool() {
 		Map<String, Map<String, String>> rowsLicensePoolXOpsiProduct = new HashMap<>();
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-			Logging.info(this, "licensePoolXOpsiProduct size " + getLicensePoolXOpsiProductPD().size());
+			Logging.info(this, "licensePoolXOpsiProduct size ", getLicensePoolXOpsiProductPD().size());
 			for (StringValuedRelationElement element : getLicensePoolXOpsiProductPD()) {
 				rowsLicensePoolXOpsiProduct
 						.put(Utils.pseudokey(new String[] { element.get(LicensePoolXOpsiProduct.LICENSE_POOL_KEY),
 								element.get(LicensePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);
 			}
 		}
-		Logging.info(this, "rowsLicensePoolXOpsiProduct size " + rowsLicensePoolXOpsiProduct.size());
+		Logging.info(this, "rowsLicensePoolXOpsiProduct size ", rowsLicensePoolXOpsiProduct.size());
 		return rowsLicensePoolXOpsiProduct;
 	}
 
@@ -405,7 +405,7 @@ public class LicenseDataService {
 		}
 		String result = "";
 
-		Logging.debug(this, "editLicenseContract " + licenseContractId);
+		Logging.debug(this, "editLicenseContract ", licenseContractId);
 
 		if (moduleDataService.isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.LICENSE_CONTRACT_CREATE, new String[] {
@@ -417,11 +417,11 @@ public class LicenseDataService {
 			if (exec.doCall(omc)) {
 				result = licenseContractId;
 			} else {
-				Logging.error(this, "could not create license " + licenseContractId);
+				Logging.error(this, "could not create license ", licenseContractId);
 			}
 		}
 
-		Logging.debug(this, "editLicenseContract result " + result);
+		Logging.debug(this, "editLicenseContract result ", result);
 
 		return result;
 	}
@@ -455,7 +455,7 @@ public class LicenseDataService {
 			if (exec.doCall(omc)) {
 				result = licensePoolId;
 			} else {
-				Logging.warning(this, "could not create licensepool " + licensePoolId);
+				Logging.warning(this, "could not create licensepool ", licensePoolId);
 			}
 		}
 
@@ -463,7 +463,7 @@ public class LicenseDataService {
 	}
 
 	public boolean deleteLicensePool(String licensePoolId) {
-		Logging.info(this, "deleteLicensePool " + licensePoolId);
+		Logging.info(this, "deleteLicensePool ", licensePoolId);
 
 		if (!userRolesConfigDataService.hasServerFullPermissionPD()) {
 			return false;
@@ -496,7 +496,7 @@ public class LicenseDataService {
 					new OpsiMethodCall(RPCMethodName.LICENSE_POOL_UPDATE_OBJECT, new Object[] { licensePool }))) {
 				result = licensePoolId;
 			} else {
-				Logging.error(this, "could not update product " + productId + " to licensepool " + licensePoolId);
+				Logging.error(this, "could not update product ", productId, " to licensepool ", licensePoolId);
 			}
 		}
 

@@ -103,12 +103,10 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 
 		activateListSelectionListener();
 
-		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(table), true);
+		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, table), true);
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_WITH_ALTERNATIVES_SEARCH);
-		searchPane.setFiltering(true);
+		searchPane.setFiltering();
 
-		// filter icon inside searchpane
-		searchPane.showFilterIcon(true);
 		table.addKeyListener(searchPane);
 		table.addKeyListener(this);
 
@@ -138,8 +136,8 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		selectionModel.removeListSelectionListener(this);
 	}
 
-	public void setFilterMark(boolean b) {
-		searchPane.setFilterMark(b);
+	public boolean isFilteredMode() {
+		return searchPane.isFilteredMode();
 	}
 
 	public JTable getTable() {
@@ -194,6 +192,10 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		table.addMouseListener(l);
 	}
 
+	public void setFilterMark(boolean selected) {
+		searchPane.setFilterMark(selected);
+	}
+
 	public boolean isSelectionEmpty() {
 		return table.getSelectedRowCount() == 0;
 	}
@@ -233,7 +235,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 			valuesListS = "" + clientsToSelect.size();
 		}
 
-		Logging.info(this, "setSelectedValues " + valuesListS);
+		Logging.info(this, "setSelectedValues ", valuesListS);
 
 		if (clientsToSelect == null) {
 			// Clear selection when empty
@@ -249,11 +251,11 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 			selectionModel.setValueIsAdjusting(true);
 			selectionModel.clearSelection();
 			for (int i = 0; i < table.getRowCount(); i++) {
-				Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
+				Logging.debug(this, "setSelectedValues checkValue for i ", i, ": ", table.getValueAt(i, 0));
 
 				if (clientsToSelect.contains(table.getValueAt(i, 0))) {
 					selectionModel.addSelectionInterval(i, i);
-					Logging.debug(this, "setSelectedValues add interval " + i);
+					Logging.debug(this, "setSelectedValues add interval ", i);
 				}
 			}
 
@@ -261,7 +263,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 
 			moveToFirstSelected();
 
-			Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
+			Logging.info(this, "setSelectedValues  produced ", getSelectedValues().size());
 		}
 	}
 
@@ -299,9 +301,9 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 	}
 
 	public void setModel(TableModel tm) {
-		Logging.info(this, "set model with column count " + tm.getColumnCount());
+		Logging.info(this, "set model with column count ", tm.getColumnCount());
 
-		Logging.info(this, " [JTableSelectionPanel] setModel with row count " + tm.getRowCount());
+		Logging.info(this, " [JTableSelectionPanel] setModel with row count ", tm.getRowCount());
 
 		tm.addTableModelListener(table);
 
@@ -355,7 +357,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 				|| !remoteControls.equals(persistenceController.getConfigDataService().getRemoteControlsPD())) {
 			remoteControls = persistenceController.getConfigDataService().getRemoteControlsPD();
 
-			Logging.debug(this, "remoteControls " + remoteControls);
+			Logging.debug(this, "remoteControls ", remoteControls);
 
 			Map<String, String> tooltips = new LinkedHashMap<>();
 			Map<String, String> rcCommands = new HashMap<>();

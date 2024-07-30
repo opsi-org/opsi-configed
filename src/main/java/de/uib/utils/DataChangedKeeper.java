@@ -17,7 +17,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 
 	@Override
 	public void dataHaveChanged(Object source) {
-		Logging.debug(this, "dataHaveChanged " + source);
+		Logging.debug(this, "dataHaveChanged ", source);
 		dataChanged = true;
 
 		if (actUpon != null) {

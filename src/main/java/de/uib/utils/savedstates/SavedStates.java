@@ -28,7 +28,7 @@ public class SavedStates {
 		try (FileInputStream in = new FileInputStream(propertiesFile)) {
 			properties.load(in);
 		} catch (FileNotFoundException e) {
-			Logging.warning(this, "saved states file not found", e);
+			Logging.warning(this, e, "saved states file not found");
 		}
 	}
 
@@ -60,7 +60,7 @@ public class SavedStates {
 		try (FileOutputStream out = new FileOutputStream(propertiesFile)) {
 			properties.store(out, comments);
 		} catch (FileNotFoundException e) {
-			Logging.warning(this, "saved states file not found", e);
+			Logging.warning(this, e, "saved states file not found");
 		}
 	}
 }

@@ -51,7 +51,7 @@ public class CSVFileDataUpdater implements MapBasedUpdater {
 				printer.printRecord(modifiedRow);
 			}
 		} catch (IOException e) {
-			Logging.error("Unable to write to the CSV file", e);
+			Logging.error(e, "Unable to write to the CSV file");
 			return null;
 		}
 

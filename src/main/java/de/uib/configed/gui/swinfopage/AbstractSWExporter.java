@@ -140,7 +140,7 @@ public abstract class AbstractSWExporter {
 		Logging.info(this, "starting");
 
 		try (BufferedReader in = new BufferedReader(new FileReader(clientsFile, StandardCharsets.UTF_8))) {
-			Logging.info(this, " in " + in);
+			Logging.info(this, " in ", in);
 			String line = in.readLine();
 			while (line != null) {
 				// we assume that each line is a hostId
@@ -149,14 +149,14 @@ public abstract class AbstractSWExporter {
 
 				setWriteToFile(filepathStart + line + getExtension());
 
-				Logging.debug(" outDir: " + outDir);
-				Logging.debug(" filePath: " + filepathStart + line + getExtension());
+				Logging.debug(" outDir: ", outDir);
+				Logging.debug(" filePath: ", filepathStart, line, getExtension());
 				export();
 
 				line = in.readLine();
 			}
 		} catch (IOException iox) {
-			Logging.warning(this, "IOException " + iox);
+			Logging.warning(this, iox, "IOException ");
 		}
 	}
 
@@ -206,7 +206,7 @@ public abstract class AbstractSWExporter {
 	}
 
 	private Map<String, Map<String, Object>> retrieveSoftwareMap() {
-		Logging.info(this, "retrieving data for " + hostId);
+		Logging.info(this, "retrieving data for ", hostId);
 		Map<String, List<SWAuditClientEntry>> swAuditClientEntries = persistenceController.getSoftwareDataService()
 				.getSoftwareAuditOnClients(Collections.singletonList(hostId));
 		Map<String, Map<String, Object>> tableData = persistenceController.getSoftwareDataService()
@@ -217,7 +217,7 @@ public abstract class AbstractSWExporter {
 
 			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 		} else {
-			Logging.debug(this, "retrieved size  " + tableData.size());
+			Logging.debug(this, "retrieved size  ", tableData.size());
 			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
 		}
@@ -230,9 +230,9 @@ public abstract class AbstractSWExporter {
 	protected abstract String getExtension();
 
 	private void updateModel() {
-		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.debug(this, "update modelSWInfo.getRowCount() ", modelSWInfo.getRowCount());
 	}
 }

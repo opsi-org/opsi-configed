@@ -167,7 +167,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		initActiveParents();
 
 		activeParents.addAll(collectParentIDs(getSelectedObjectsInTable()));
-		Logging.debug(this, "produceActiveParents activeParents " + activeParents);
+		Logging.debug(this, "produceActiveParents activeParents ", activeParents);
 
 		repaint();
 	}
@@ -359,7 +359,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			// get persistence
 			if (persistenceController.getGroupDataService().addGroup(newGroup, this instanceof ClientTree)) {
 				groups.put(newGroupKey, newGroup);
-				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup " + newGroupKey + ", " + newGroup);
+				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup ", newGroupKey, ", ", newGroup);
 				GroupNode newNode = insertGroup(newGroupKey, groupData.get("description"), node);
 				groupNodes.put(newGroupKey, newNode);
 

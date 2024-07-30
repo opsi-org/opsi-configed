@@ -23,9 +23,9 @@ import javax.swing.text.JTextComponent;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.configed.serverconsole.command.CommandParameterParser;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class CommandControlParameterMethodsPanel extends JPanel {
@@ -43,7 +43,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	public CommandControlParameterMethodsPanel(JDialog owner, ConfigedMain configedMain) {
 		super();
-		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main " + main);
+		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main ", main);
 		main = owner;
 		this.configedMain = configedMain;
 		init();
@@ -63,7 +63,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 		jComboBoxParameterFormats = new JComboBox<>(parameterParser.getParameterFormats());
-		Logging.info(this, "cb_parameter_formats lightweight " + jComboBoxParameterFormats.isLightWeightPopupEnabled());
+		Logging.info(this, "cb_parameter_formats lightweight ", jComboBoxParameterFormats.isLightWeightPopupEnabled());
 
 		jComboBoxParameterFormats.setPreferredSize(jComboBoxDim);
 
@@ -87,12 +87,12 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 			jComboBoxParameterFormats.setEnabled(enabled);
 		});
 
-		jButtonTestParam = new IconButton(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"),
-				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
+		jButtonTestParam = new JButton(Utils.getIntellijIcon("run"));
+		jButtonTestParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"));
 		jButtonTestParam.setPreferredSize(jButtonDim);
 
-		jButtonAddParam = new IconButton(Configed.getResourceValue("CommandControlDialog.btnAddParamMethod"),
-				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
+		jButtonAddParam = new JButton(Utils.getIntellijIcon("add"));
+		jButtonAddParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnAddParamMethod"));
 		jButtonAddParam.setSize(jButtonDim);
 		jButtonAddParam.setPreferredSize(jButtonDim);
 		setComponentsEnabledRO();
@@ -175,7 +175,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
 					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;
-			Logging.debug("CREATED PARAM TEXT: " + paramText);
+			Logging.debug("CREATED PARAM TEXT: ", paramText);
 		} else {
 			paramText = CommandParameterParser.REPLACEMENT_DEFAULT_1
 					+ CommandParameterParser.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
@@ -183,12 +183,12 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 					+ CommandParameterParser.REPLACEMENT_DEFAULT_2;
 		}
 
-		Logging.debug("PARAM TEXT: " + paramText);
+		Logging.debug("PARAM TEXT: ", paramText);
 		try {
-			Logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
+			Logging.info(this, "actionPerformed(testParamMethod) parameterText ", paramText);
 			CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 			String result = "echo \"{0}\"".replace("{0}", parameterParser.testParameter(paramText));
-			Logging.info(this, "actionPerformed(testParamMethod) result " + result);
+			Logging.info(this, "actionPerformed(testParamMethod) result ", result);
 			String showThisText = "echo \"{0}\"".replace("{0}", paramText) + ":\n" + result;
 			if (result.equals(Configed.getResourceValue("CommandControlDialog.parameterTest.failed"))) {
 				showThisText = Configed.getResourceValue("CommandControlDialog.parameterTest.failed");
@@ -198,7 +198,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 					Configed.getResourceValue("CommandControlDialog.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (HeadlessException ble) {
-			Logging.warning(this, "Testing parameter-method failed.", ble);
+			Logging.warning(this, ble, "Testing parameter-method failed.");
 		}
 		if (caller != null) {
 			caller.setVisible(true);
@@ -222,7 +222,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
 		} catch (BadLocationException ble) {
-			Logging.warning(this, " BadLocationException  add parameter method to command failed.", ble);
+			Logging.warning(this, ble, " BadLocationException  add parameter method to command failed.");
 		}
 	}
 }

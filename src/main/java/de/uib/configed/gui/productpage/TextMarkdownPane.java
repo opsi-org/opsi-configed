@@ -41,7 +41,7 @@ public class TextMarkdownPane extends JTextPane {
 	}
 
 	private void hyperlinkUpdate(HyperlinkEvent event) {
-		Logging.info(this, "Hyperlinkevent in Markdown, inputevent: " + event.getInputEvent());
+		Logging.info(this, "Hyperlinkevent in Markdown, inputevent: ", event.getInputEvent());
 
 		String link = event.getURL().toString();
 

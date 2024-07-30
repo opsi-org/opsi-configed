@@ -71,7 +71,7 @@ public class FEditDate extends FEdit implements MouseListener {
 	public final void setStartText(String s) {
 		super.setStartText(s);
 
-		Logging.info(this, "setStartText(): " + s);
+		Logging.info(this, "setStartText(): ", s);
 
 		if (s != null && !s.isEmpty()) {
 			datePicker.setValue(LocalDate.parse(s));
@@ -93,15 +93,15 @@ public class FEditDate extends FEdit implements MouseListener {
 
 	@Override
 	public String getText() {
-		Logging.info(this, "getText initialText was " + initialText);
+		Logging.info(this, "getText initialText was ", initialText);
 		initialText = datePicker.getValue() != null ? datePicker.getValue().toString() : "";
-		Logging.info(this, "getText initialText changed to  " + initialText);
+		Logging.info(this, "getText initialText changed to  ", initialText);
 		return initialText;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Logging.debug(this, " key event " + e);
+		Logging.debug(this, " key event ", e);
 		super.keyPressed(e);
 
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

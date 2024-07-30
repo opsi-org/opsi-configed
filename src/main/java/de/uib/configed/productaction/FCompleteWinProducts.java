@@ -144,7 +144,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
 			selectedDepot = "" + comboChooseDepot.getSelectedItem();
-			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
+			Logging.info(this, "actionPerformed  depot selected ", selectedDepot);
 			depots.clear();
 			depots.add(selectedDepot);
 			SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
@@ -179,8 +179,8 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 	// implements NameProducer
 	@Override
 	public String produceName() {
-		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory " + fieldTargetPath + " , "
-				+ depotProductDirectory);
+		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory ", fieldTargetPath, " , ",
+				depotProductDirectory);
 		if (fieldTargetPath == null || fieldTargetPath.getText().isEmpty()
 				|| fieldTargetPath.getText().startsWith(depotProductDirectory)) {
 			return depotProductDirectory;
@@ -220,8 +220,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 		fieldProductKey = new JTextField();
 		fieldProductKey.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallSelectFolderWinPE = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectFolderWinPE.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderWinPE = new JButton(Utils.getIntellijIcon("open"));
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
@@ -237,8 +236,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 		});
 
-		buttonCallSelectFolderInstallFiles = new JButton(Utils.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectFolderInstallFiles.setSelectedIcon(Utils.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectFolderInstallFiles = new JButton(Utils.getIntellijIcon("open"));
 		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderInstallFiles
 				.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));
@@ -257,8 +255,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 		});
 
-		buttonCallExecute = new JButton(Utils.createImageIcon("images/upload2product.png", ""));
-		buttonCallExecute.setSelectedIcon(Utils.createImageIcon("images/upload2product.png", ""));
+		buttonCallExecute = new JButton(Utils.getIntellijIcon("upload"));
 		buttonCallExecute.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));
 
@@ -266,9 +263,9 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 		buttonCallExecute.addActionListener((ActionEvent e) -> {
 			Logging.debug(this,
-					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct "
-							+ fieldPathWinPE.getText() + ", " + fieldPathInstallFiles.getText() + ", "
-							+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
+					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct ",
+					fieldPathWinPE.getText(), ", ", fieldPathInstallFiles.getText(), ", ", fieldProductKey.getText(),
+					", ", comboChooseWinProduct.getSelectedItem());
 			execute();
 		});
 	}
@@ -280,7 +277,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			File targetDirectory = null;
 
 			String pathWinPE = fieldPathWinPE.getText().trim();
-			Logging.debug(this, "copy  " + pathWinPE + " to " + targetDirectory);
+			Logging.debug(this, "copy  ", pathWinPE, " to ", targetDirectory);
 
 			if (!pathWinPE.isEmpty()) {
 				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_PE);
@@ -288,7 +285,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 
 			String pathInstallFiles = fieldPathInstallFiles.getText().trim();
-			Logging.debug(this, "copy  " + pathInstallFiles + " to " + targetDirectory);
+			Logging.debug(this, "copy  ", pathInstallFiles, " to ", targetDirectory);
 			if (!pathInstallFiles.isEmpty()) {
 				targetDirectory = new File(
 						fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_INSTALL_FILES);
@@ -314,7 +311,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			// check if product key is new and should be changed
 			Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(
 					persistenceController.getHostInfoCollections().getConfigServer(), winProduct);
-			Logging.debug(this, " getProductproperties " + propsMap);
+			Logging.debug(this, " getProductproperties ", propsMap);
 
 			String oldProductKey = null;
 
@@ -335,7 +332,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					activateLoadingCursor();
-					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
+					Logging.info(this, "setCommonProductPropertyValue ", depots, ", ", winProduct, ", ", values);
 					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
 							"productkey", values);
 
@@ -344,10 +341,10 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 		} catch (IOException ex) {
 			deactivateLoadingCursor();
-			Logging.error("copy error:\n" + ex, ex);
+			Logging.error(ex, "copy error:\n", ex);
 		} catch (HeadlessException ex) {
 			deactivateLoadingCursor();
-			Logging.error("Headless exception when invoking showOptionDialog", ex);
+			Logging.error(ex, "Headless exception when invoking showOptionDialog");
 		}
 	}
 

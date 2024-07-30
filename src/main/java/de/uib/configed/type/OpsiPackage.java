@@ -64,7 +64,7 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 			this.lockedText = "";
 		}
 
-		Logging.debug(this.getClass(), "created : " + productId + ", " + productType + ", " + versionInfo);
+		Logging.debug(this.getClass(), "created : ", productId, ", ", productType, ", ", versionInfo);
 
 		representation = buildRepresentation();
 	}
@@ -74,7 +74,7 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 				"" + m.get(SERVICE_KEY_PACKAGE_VERSION), "" + m.get(SERVICE_KEY_PRODUCT_TYPE),
 				Boolean.TRUE.equals(m.get(SERVICE_KEY_LOCKED)));
 
-		Logging.debug(this.getClass(), "built from " + m);
+		Logging.debug(this.getClass(), "built from ", m);
 	}
 
 	public String getProductId() {

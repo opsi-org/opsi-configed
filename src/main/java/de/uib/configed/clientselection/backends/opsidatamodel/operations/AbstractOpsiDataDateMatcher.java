@@ -18,7 +18,7 @@ public abstract class AbstractOpsiDataDateMatcher {
 	private String data;
 
 	protected AbstractOpsiDataDateMatcher(String map, String key, String data) {
-		Logging.debug(this.getClass(), "created:  maptype, key, data: " + map + ", " + key + ", " + data);
+		Logging.debug(this.getClass(), "created:  maptype, key, data: ", map, ", ", key, ", ", data);
 
 		this.map = map;
 		this.key = key;
@@ -26,7 +26,7 @@ public abstract class AbstractOpsiDataDateMatcher {
 	}
 
 	public boolean doesMatch(OpsiDataClient client) {
-		Logging.debug(this, "doesMatch client " + client);
+		Logging.debug(this, "doesMatch client ", client);
 
 		Map<String, Object> realMap = client.getMap(map);
 
@@ -41,7 +41,7 @@ public abstract class AbstractOpsiDataDateMatcher {
 
 	private boolean checkData(final String realdata) {
 		if (!(realdata instanceof String)) {
-			Logging.debug(this, "OpsiDataDateMatcher data not a string: " + realdata);
+			Logging.debug(this, "OpsiDataDateMatcher data not a string: ", realdata);
 			return false;
 		}
 

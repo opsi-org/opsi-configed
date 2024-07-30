@@ -46,8 +46,8 @@ public class ExtendedInteger implements Comparable<Integer> {
 				// no exception:
 				value = s;
 			} catch (NumberFormatException ex) {
-				Logging.error("possible values are numbers  or \"" + INFINITE_IMPORT + "\" resp. \"" + DISPLAY_INFINITE
-						+ "\"", ex);
+				Logging.error(ex, "possible values are numbers  or \"", INFINITE_IMPORT, "\" resp. \"",
+						DISPLAY_INFINITE, "\"");
 			}
 		}
 	}

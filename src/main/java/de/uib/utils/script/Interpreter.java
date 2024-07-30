@@ -11,10 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 
 import de.uib.utils.logging.Logging;
-
-import java.util.StringTokenizer;
 
 //a very rough class for simple command interpreting
 public class Interpreter {
@@ -98,11 +97,11 @@ public class Interpreter {
 
 	public String interpret() {
 		for (Entry<String, String> specialEntry : specialValues.entrySet()) {
-			Logging.debug(this, "interpret: replace " + specialEntry.getKey() + " by " + specialEntry.getValue());
+			Logging.debug(this, "interpret: replace ", specialEntry.getKey(), " by ", specialEntry.getValue());
 			command = command.replace(specialEntry.getKey(), specialEntry.getValue());
 		}
 
-		Logging.debug(this, "produced command " + command);
+		Logging.debug(this, "produced command ", command);
 		return command;
 	}
 }

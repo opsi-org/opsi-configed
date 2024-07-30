@@ -56,7 +56,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		int row = tree.getRowForPath(p);
 
 		actor.reloadData();
-		Logging.info(this, "reloaded, return to " + p);
+		Logging.info(this, "reloaded, return to ", p);
 		if (p != null) {
 			tree.setExpandsSelectedPaths(true);
 			tree.setSelectionInterval(row, row);
@@ -111,7 +111,6 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.addMouseWheelListener(mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
 
 		jScrollPane = new JScrollPane(table);
 
@@ -220,7 +219,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		tableModel.addColumn(Configed.getResourceValue("EditMapPanel.ColumnHeaderValue"));
 
 		List<String> keys = mapTableModel.getKeys();
-		Logging.info(this, "createJTableForPDF keys " + keys);
+		Logging.info(this, "createJTableForPDF keys ", keys);
 		for (String key : keys) {
 			String property = "";
 

@@ -125,7 +125,7 @@ public abstract class AbstractPOJOExecutioner {
 			}
 		}
 
-		Logging.debug(this, "getResponses  result " + result);
+		Logging.debug(this, "getResponses  result ", result);
 
 		return result;
 	}
@@ -139,12 +139,12 @@ public abstract class AbstractPOJOExecutioner {
 			String errorMessage = getErrorFromResponse(retrieved);
 
 			if (errorMessage != null) {
-				Logging.error("Opsi service error: " + errorMessage);
+				Logging.error("Opsi service error: ", errorMessage);
 
 				return false;
 			} else {
 				Object resultValue = retrieved.get("result");
-				Logging.debug(this, "got result " + resultValue);
+				Logging.debug(this, "got result ", resultValue);
 
 				return true;
 			}
@@ -171,7 +171,7 @@ public abstract class AbstractPOJOExecutioner {
 			});
 
 			if (originalMap.get(key) == null) {
-				Logging.error(AbstractPOJOExecutioner.class, "Missing key " + key + " in output list");
+				Logging.error(AbstractPOJOExecutioner.class, "Missing key ", key, " in output list");
 				continue;
 			}
 

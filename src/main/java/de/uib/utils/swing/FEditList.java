@@ -17,7 +17,6 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
@@ -26,9 +25,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.configed.gui.IconButton;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.StandardListCellRenderer;
 import de.uib.utils.table.gui.SensitiveCellEditor;
@@ -43,8 +39,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	private List<O> initiallySelected;
 
 	protected Object selValue = "";
-
-	protected JPopupMenu popup;
 
 	private SensitiveCellEditor celleditor;
 
@@ -70,22 +64,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		scrollpane.setViewportView(visibleList);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 		editable = false;
-
-		popup = new JPopupMenu();
-		visibleList.setComponentPopupMenu(popup);
-	}
-
-	@Override
-	protected void createComponents() {
-		super.createComponents();
-
-		// we define buttonRemove in a different way since it is used only to clear
-		// selection
-
-		buttonRemove = new IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
-				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
-		buttonRemove.setVisible(false);
 	}
 
 	@Override
@@ -104,7 +82,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 	public void setSelectionMode(int selectionMode) {
 		visibleList.setSelectionMode(selectionMode);
-		buttonRemove.setVisible(selectionMode != ListSelectionModel.SINGLE_SELECTION);
+		buttonClear.setVisible(selectionMode != ListSelectionModel.SINGLE_SELECTION);
 	}
 
 	/**
@@ -121,7 +99,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	public void setEditable(boolean b) {
 		super.setEditable(b);
 		extraField.setVisible(b);
-		buttonAdd.setVisible(b);
 	}
 
 	private void addSelectedValues(List<O> toSelect) {
@@ -229,7 +206,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
 
-		if (e.getSource() == buttonRemove) {
+		if (e.getSource() == buttonClear) {
 			visibleList.clearSelection();
 		}
 	}
@@ -239,7 +216,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	public void keyPressed(KeyEvent e) {
 		super.keyPressed(e);
 
-		if (e.getSource() == buttonRemove) {
+		if (e.getSource() == buttonClear) {
 			visibleList.clearSelection();
 		}
 	}
@@ -256,7 +233,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() > 1) {
+		if (e.getClickCount() == 2) {
 			String txt = "" + visibleList.getModel().getElementAt(visibleList.locationToIndex(e.getPoint()));
 
 			extraField.setText(txt);
@@ -305,7 +282,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	protected void initEditing() {
 		super.initEditing();
 		Logging.debug(this, "FEditList.initEditing");
-		buttonRemove.setEnabled(true);
+		buttonClear.setEnabled(true);
 	}
 
 	// interface ListSelectionListener
@@ -321,6 +298,6 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 		setTracker(selectedList);
 
-		buttonRemove.setEnabled(!selectedList.isEmpty());
+		buttonClear.setEnabled(!selectedList.isEmpty());
 	}
 }

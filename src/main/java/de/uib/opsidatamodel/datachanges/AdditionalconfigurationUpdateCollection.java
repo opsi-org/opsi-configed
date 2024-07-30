@@ -31,9 +31,9 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	@Override
 	public boolean addAll(Collection<? extends UpdateCommand> c) {
 		if (c.size() != objectIds.size()) {
-			Logging.warning(this, "object ids (not fitting to edited item) " + objectIds);
-			Logging.error("list of data has size " + c.size() + " differs from  length of objectIds list  "
-					+ objectIds.size());
+			Logging.warning(this, "object ids (not fitting to edited item) ", objectIds);
+			Logging.error("list of data has size ", c.size(), " differs from  length of objectIds list  ",
+					objectIds.size());
 
 			return false;
 		}
@@ -46,7 +46,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 			if (updateCommand instanceof Map) {
 				Map<?, ?> map = (Map<?, ?>) updateCommand;
 
-				Logging.debug(this, "addAll for one obj, map " + map);
+				Logging.debug(this, "addAll for one obj, map ", map);
 
 				if (masterConfig) {
 					Logging.debug(this, "adding ConfigUpdate");
@@ -71,7 +71,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	@Override
 	public void doCall() {
 		super.doCall();
-		Logging.debug(this, "doCall, after recursion, element count: " + size());
+		Logging.debug(this, "doCall, after recursion, element count: ", size());
 		if (masterConfig) {
 			persistenceController.getConfigDataService().setConfig();
 		} else {

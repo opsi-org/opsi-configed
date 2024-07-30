@@ -38,10 +38,9 @@ public final class PersistenceControllerFactory {
 
 		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
 				user, password, otp);
-		Logging.info(
-				"a PersistenceController initiated by option sqlAndGetRows got " + (persistenceController == null));
+		Logging.info("a PersistenceController initiated by option sqlAndGetRows got ", persistenceController == null);
 
-		Logging.info("a PersistenceController initiated, got null? " + (persistenceController == null));
+		Logging.info("a PersistenceController initiated, got null? ", persistenceController == null);
 
 		while (persistenceController.getConnectionState().getState() == ConnectionState.UNDEFINED
 				|| persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
@@ -69,13 +68,13 @@ public final class PersistenceControllerFactory {
 
 	public static ConnectionState getConnectionState() {
 		if (staticPersistControl == null) {
-			Logging.info("PersistenceControllerFactory getConnectionState, " + " staticPersistControl null");
+			Logging.info("PersistenceControllerFactory getConnectionState,  staticPersistControl null");
 
 			return ConnectionState.ConnectionUndefined;
 		}
 
 		ConnectionState result = staticPersistControl.getConnectionState();
-		Logging.info("PersistenceControllerFactory getConnectionState " + result);
+		Logging.info("PersistenceControllerFactory getConnectionState ", result);
 
 		return staticPersistControl.getConnectionState();
 	}

@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
@@ -23,7 +23,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModel;
 import de.uib.utils.table.gui.SearchTargetModelFromJList;
@@ -33,10 +32,6 @@ public class DepotListPresenter extends JPanel {
 	private DepotsList depotslist;
 	private JScrollPane scrollpaneDepotslist;
 	// this will not be shown in this panel but exported for use in other panels
-
-	private JLabel labelDepotServer;
-	private JButton buttonSelectDepotsWithEqualProperties;
-	private JButton buttonSelectDepotsAll;
 
 	private TableSearchPane searchPane;
 
@@ -86,26 +81,6 @@ public class DepotListPresenter extends JPanel {
 	}
 
 	private void initComponents() {
-		labelDepotServer = new JLabel();
-		if (multidepot) {
-			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depots"));
-		} else {
-			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depot"));
-		}
-
-		buttonSelectDepotsWithEqualProperties = new JButton(Utils.createImageIcon("images/equalplus.png", ""));
-		buttonSelectDepotsWithEqualProperties
-				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
-		buttonSelectDepotsWithEqualProperties.setFocusable(false);
-		buttonSelectDepotsWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
-		buttonSelectDepotsWithEqualProperties.setEnabled(multidepot);
-
-		buttonSelectDepotsAll = new JButton(Utils.createImageIcon("images/plusplus.png", ""));
-		buttonSelectDepotsAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
-		buttonSelectDepotsAll.setFocusable(false);
-		buttonSelectDepotsAll.addActionListener(event -> depotslist.selectAll());
-		buttonSelectDepotsAll.setEnabled(multidepot);
-
 		if (!multidepot) {
 			searchPane.setEnabled(false);
 		}
@@ -120,6 +95,21 @@ public class DepotListPresenter extends JPanel {
 		scrollpaneDepotslist.getViewport().add(depotslist);
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
+
+		if (multidepot) {
+			JPopupMenu jPopupMenu = new JPopupMenu();
+			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
+			selectAll.addActionListener(event -> depotslist.selectAll());
+
+			JMenuItem selectWithEqualProperties = new JMenuItem(
+					Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
+			selectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
+
+			jPopupMenu.add(selectAll);
+			jPopupMenu.add(selectWithEqualProperties);
+
+			depotslist.setComponentPopupMenu(jPopupMenu);
+		}
 	}
 
 	private void layouting() {
@@ -127,28 +117,12 @@ public class DepotListPresenter extends JPanel {
 		this.setLayout(layout);
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelDepotServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSelectDepotsWithEqualProperties, GroupLayout.Alignment.TRAILING,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSelectDepotsAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(searchPane,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(scrollpaneDepotslist, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelDepotServer, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(buttonSelectDepotsWithEqualProperties, Globals.SQUARE_BUTTON_WIDTH,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSelectDepotsAll, Globals.SQUARE_BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
 				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))

@@ -25,7 +25,7 @@ public class HostUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		Logging.debug(this, "doCall, newdata " + newdata);
+		Logging.debug(this, "doCall, newdata ", newdata);
 		persistenceController.getHostDataService().setHostValues(newdata);
 	}
 }

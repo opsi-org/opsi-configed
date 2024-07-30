@@ -41,7 +41,7 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 			String cmd = interpretCommand(command, targetClient);
 			List<String> parts = Interpreter.splitToList(cmd);
 			try {
-				Logging.debug(this, "startRemoteControlForSelectedClients, cmd: " + cmd + " splitted to " + parts);
+				Logging.debug(this, "startRemoteControlForSelectedClients, cmd: ", cmd, " splitted to ", parts);
 
 				ProcessBuilder pb = new ProcessBuilder(parts);
 				pb.redirectErrorStream(true);
@@ -55,7 +55,7 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 					publish(command + " on " + targetClient + " >" + line + "\n");
 				}
 			} catch (IOException ex) {
-				Logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
+				Logging.error(ex, "Runtime error for command >>", cmd, "<<, : ", ex);
 			}
 		}
 		return null;
@@ -72,10 +72,10 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 		Map<String, String> values = new HashMap<>();
 		values.put("%host%", targetClient);
 		String hostName = targetClient;
-		Logging.info(this, " targetClient " + targetClient);
+		Logging.info(this, " targetClient ", targetClient);
 		if (targetClient.contains(".")) {
 			String[] parts = targetClient.split("\\.");
-			Logging.info(this, " targetClient " + Arrays.toString(parts));
+			Logging.info(this, " targetClient ", Arrays.toString(parts));
 			hostName = parts[0];
 		}
 

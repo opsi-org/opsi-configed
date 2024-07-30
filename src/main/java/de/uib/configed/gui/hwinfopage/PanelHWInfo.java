@@ -146,7 +146,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		if (withPopup) {
 			PopupMenuTrait popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD,
-					PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATINGCOPY }) {
+					PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATING_COPY }) {
 				@Override
 				public void action(int p) {
 					switch (p) {
@@ -154,7 +154,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						reload();
 						break;
 
-					case PopupMenuTrait.POPUP_FLOATINGCOPY:
+					case PopupMenuTrait.POPUP_FLOATING_COPY:
 						floatExternal();
 						break;
 					case PopupMenuTrait.POPUP_PDF:
@@ -312,14 +312,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		if (values != null) {
 			for (Map<String, Object> value : values) {
 				String opsi = (String) value.get("Opsi");
-				Logging.debug(this, "opsi " + opsi);
+				Logging.debug(this, "opsi ", opsi);
 
 				// table row keys //no encoding needed
 				String ui = (String) value.get("UI");
 				String unit = null;
 				if (value.containsKey("Unit")) {
 					unit = (String) value.get("Unit");
-					Logging.debug(this, "unit  " + unit);
+					Logging.debug(this, "unit  ", unit);
 				}
 
 				for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
@@ -327,7 +327,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						String cv = "" + deviceInfoEntry.getValue();
 
 						if (reduceScanToByAuditClasses && hwClass != null) {
-							Logging.debug(this, "key " + opsi);
+							Logging.debug(this, "key ", opsi);
 
 							if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
 								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
@@ -346,7 +346,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 									// Not needed, since other values not used for Description on top
 								}
 							} else {
-								Logging.warning(this, "unexpected value for hwclass: " + hwClass);
+								Logging.warning(this, "unexpected value for hwclass: ", hwClass);
 							}
 						}
 
@@ -355,7 +355,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						}
 						String[] row = { ui, cv };
 						data.add(row);
-						Logging.debug(this, "hwClass row  version 1 " + hwClass + ": " + Arrays.toString(row));
+						Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", Arrays.toString(row));
 						break;
 					}
 				}
@@ -364,7 +364,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			for (Entry<String, Object> info : deviceInfo.entrySet()) {
 				String[] row = { info.getKey(), (String) info.getValue() };
 				data.add(row);
-				Logging.debug(this, "hwClass row  " + hwClass + ": " + Arrays.toString(row));
+				Logging.debug(this, "hwClass row  ", hwClass, ": ", Arrays.toString(row));
 			}
 		}
 
@@ -380,7 +380,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		TreePath selectedPath = tree.getSelectionPath();
-		Logging.debug(this, "selectedPath " + selectedPath);
+		Logging.debug(this, "selectedPath ", selectedPath);
 		if (!node.isLeaf()) {
 			tree.expandPath(selectedPath);
 		} else {
@@ -462,7 +462,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			List<Map<String, Object>> devices = hwInfo.get(hwClass);
 			if (devices == null) {
-				Logging.debug(this, "No devices of hwclass " + hwClass + " found");
+				Logging.debug(this, "No devices of hwclass ", hwClass, " found");
 				continue;
 			}
 

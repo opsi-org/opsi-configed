@@ -76,7 +76,7 @@ public class DepotInfo implements DataChangeListener {
 		} else if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER)) {
 			result = "Config Server";
 		} else {
-			Logging.warning("Encountered unhandled depot type: " + depotType);
+			Logging.warning("Encountered unhandled depot type: ", depotType);
 		}
 
 		return result;

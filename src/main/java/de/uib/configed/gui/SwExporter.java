@@ -40,8 +40,8 @@ public class SwExporter implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Logging.info(this, "actionPerformed " + "  showSoftwareLog_MultiClientReport.wantsWithMsUpdates  "
-				+ showSoftwareLogMultiClientReport.wantsWithMsUpdates());
+		Logging.info(this, "actionPerformed ", "  showSoftwareLog_MultiClientReport.wantsWithMsUpdates  ",
+				showSoftwareLogMultiClientReport.wantsWithMsUpdates());
 
 		// save states now
 
@@ -79,7 +79,7 @@ public class SwExporter implements ActionListener {
 			}
 
 			String filepath = filepathStart + client + "__scan_" + scandate + extension;
-			Logging.debug(this, "actionPerformed, write to " + filepath);
+			Logging.debug(this, "actionPerformed, write to ", filepath);
 			panelSWInfo.setWriteToFile(filepath);
 			panelSWInfo.export();
 		}
