@@ -95,7 +95,7 @@ public class MainFrame extends JFrame {
 	private GlassPane glassPane;
 
 	private DepotListPresenter depotListPresenter;
-
+	private DepotsList depotsList;
 	private ClientTree clientTree;
 	private ProductTree productTree;
 
@@ -114,7 +114,8 @@ public class MainFrame extends JFrame {
 		this.clientTree = clientTree;
 		this.productTree = productTree;
 
-		depotListPresenter = new DepotListPresenter(depotsList);
+		this.depotsList = depotsList;
+		depotListPresenter = new DepotListPresenter(this.depotsList, configedMain);
 
 		this.configedMain = configedMain;
 
@@ -821,5 +822,9 @@ public class MainFrame extends JFrame {
 
 	public LicensingInfoDialog getFDialogOpsiLicensingInfo() {
 		return fDialogOpsiLicensingInfo;
+	}
+
+	public void rebuildDepotPopup() {
+		depotListPresenter.rebuildPopup();
 	}
 }

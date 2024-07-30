@@ -32,6 +32,7 @@ import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.ThreadLocker;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -47,11 +48,16 @@ public class Messagebus implements MessagebusListener {
 	private boolean initialSubscriptionReceived;
 	private ConfigedMain configedMain;
 
+	// to check if channel subscription event was received
+	private String channelSessionTerminalId;
+	private ThreadLocker locker;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
+		locker = new ThreadLocker();
 	}
 
 	public WebSocketClientEndpoint getWebSocket() {
@@ -188,8 +194,11 @@ public class Messagebus implements MessagebusListener {
 
 	public void sendTerminalOpenRequest(String channel, int rows, int cols) {
 		String terminalId = UUID.randomUUID().toString();
-
-		sendChannelSubscriptionRequest(Collections.singletonList("session:" + terminalId));
+		// to verify server response contains this requested channel
+		channelSessionTerminalId = String.format("session:%s", terminalId);
+		sendChannelSubscriptionRequest(Collections.singletonList(channelSessionTerminalId));
+		// need to wait for the subscription to be processed
+		locker.lock(5000);
 
 		Map<String, Object> message = new HashMap<>();
 		message.put("type", WebSocketEvent.TERMINAL_OPEN_REQUEST.toString());
@@ -241,9 +250,9 @@ public class Messagebus implements MessagebusListener {
 		if (messagebusWebSocket != null && isConnected()) {
 			disconnecting = true;
 			messagebusWebSocket.closeBlocking();
-			Logging.info(this, "Connection to messagebus closed");
+			Logging.warning(this, "Connection to messagebus closed");
 		} else {
-			Logging.info(this, "Messagebus not connected");
+			Logging.warning(this, "Messagebus not connected");
 		}
 	}
 
@@ -310,6 +319,17 @@ public class Messagebus implements MessagebusListener {
 		String type = (String) message.get("type");
 		if (WebSocketEvent.CHANNEL_SUBSCRIPTION_EVENT.toString().equals(type)) {
 			initialSubscriptionReceived = true;
+			if (message.get("subscribed_channels") == null) {
+				Logging.warning("No channels in subscription event: ", message);
+				return;
+			}
+			List<?> channels = (List<?>) message.get("subscribed_channels");
+			if (channels.stream().anyMatch((Object channel) -> channel.toString().equals(channelSessionTerminalId))) {
+				// check if the subscripted_channels in response contains the requested channel
+				// ensures that we send terminalOpenRequest only after we subscribed the correct channel
+				channelSessionTerminalId = null;
+				locker.unlock();
+			}
 		} else if (WebSocketEvent.GENERAL_ERROR.toString().equals(type)) {
 			Logging.error(this, "Error occured on the server ", message.get("error"));
 		} else {
