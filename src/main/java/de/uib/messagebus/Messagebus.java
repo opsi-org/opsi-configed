@@ -250,9 +250,9 @@ public class Messagebus implements MessagebusListener {
 		if (messagebusWebSocket != null && isConnected()) {
 			disconnecting = true;
 			messagebusWebSocket.closeBlocking();
-			Logging.warning(this, "Connection to messagebus closed");
+			Logging.info(this, "Connection to messagebus closed");
 		} else {
-			Logging.warning(this, "Messagebus not connected");
+			Logging.info(this, "Messagebus not connected");
 		}
 	}
 
