@@ -34,6 +34,7 @@ import javax.swing.event.DocumentListener;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
@@ -61,7 +62,12 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 
 		initComponents();
 		defineLayout();
-		disableComponents(disabled);
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			disableComponents(true);
+		} else {
+			disableComponents(disabled);
+		}
 	}
 
 	public void setDataMap(Map<String, String> data) {
