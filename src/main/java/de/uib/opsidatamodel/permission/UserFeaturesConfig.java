@@ -27,9 +27,6 @@ public class UserFeaturesConfig extends UserConfigModule {
 	static {
 		Logging.info("init ARCHEO_ for UserFeaturesConfig");
 		DEFAULT = new UserFeaturesConfig(UserConfig.ARCHEO_ROLE_NAME);
-		// DEFAULT.setBooleanValue(KEY_SERVER_CONSOLE_MENU_ACTIVE, true);
-		// DEFAULT.setBooleanValue(KEY_SERVER_CONSOLE_COMMANDCONTROL_ACTIVE, false);
-		// DEFAULT.setBooleanValue(KEY_SERVER_CONSOLE_COMMANDS_ACTIVE, true);
 
 		DEFAULT.setValues(KEY_MOTD_ACCESS_FORBIDDEN, new ArrayList<>());
 		DEFAULT.setPossibleValues(KEY_MOTD_ACCESS_FORBIDDEN, FORBIDDEN_OPTIONS);
