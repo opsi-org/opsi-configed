@@ -81,10 +81,8 @@ public class FMessageOfTheDay extends FGeneralDialog {
 						.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(pMsgInfoGeneral, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(pMsgInfoUser, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+				.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoGeneral, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoUser, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		gpl.setHorizontalGroup(gpl.createParallelGroup()
 				.addGroup(gpl.createSequentialGroup()
