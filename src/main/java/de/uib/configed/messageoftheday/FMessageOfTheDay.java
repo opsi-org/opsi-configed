@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -52,21 +54,33 @@ public class FMessageOfTheDay extends FGeneralDialog {
 				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
 		forbiddenDevice = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE);
 		forbiddenUser = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
-
+		if (forbiddenDevice && forbiddenUser) {
+			Logging.error("MessageOfTheDay Feature is forbidden by configs");
+			return;
+		}
 		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
 		define();
 		init();
 	}
 
 	private void init() {
-		pMsgInfoGeneral.resetData();
-		pMsgInfoUser.resetData();
+		if (!forbiddenDevice) {
+			pMsgInfoGeneral.resetData();
+		}
+		if (!forbiddenUser) {
+			pMsgInfoUser.resetData();
+		}
 		setSaveButtonEnable(false);
 	}
 
 	private void define() {
-		pMsgInfoGeneral = new PanelMessageInfos(this, PanelMessageInfos.InfoType.DEVICE, motdData, forbiddenDevice);
-		pMsgInfoUser = new PanelMessageInfos(this, PanelMessageInfos.InfoType.USER, motdData, forbiddenUser);
+		if (!forbiddenDevice) {
+			pMsgInfoGeneral = new PanelMessageInfos(this, PanelMessageInfos.InfoType.DEVICE, motdData, forbiddenDevice);
+		}
+		if (!forbiddenUser) {
+			pMsgInfoUser = new PanelMessageInfos(this, PanelMessageInfos.InfoType.USER, motdData, forbiddenUser);
+		}
+
 		setSaveButtonEnable(false);
 
 		JPanel panel = new JPanel();
@@ -74,24 +88,32 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		panel.setLayout(gpl);
 
 		resetButton.addActionListener(e -> resetData());
-
 		JLabel frameTitleLabel = new JLabel(Configed.getResourceValue("MessageOfTheDay.title"));
-		gpl.setVerticalGroup(gpl.createSequentialGroup()
-				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoGeneral, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoUser, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		gpl.setHorizontalGroup(gpl.createParallelGroup()
-				.addGroup(gpl.createSequentialGroup()
-						.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(pMsgInfoGeneral, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(pMsgInfoUser, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		SequentialGroup seqGroup = gpl.createSequentialGroup();
+		seqGroup.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
+		ParallelGroup vertGroup = gpl.createParallelGroup();
+		vertGroup.addGroup(gpl.createSequentialGroup()
+				.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+
+		if (!forbiddenDevice) {
+			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoGeneral, 100, GroupLayout.PREFERRED_SIZE,
+					Short.MAX_VALUE);
+			vertGroup.addComponent(pMsgInfoGeneral, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
+		}
+		if (!forbiddenUser) {
+			vertGroup.addComponent(pMsgInfoUser, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
+			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoUser, 100, GroupLayout.PREFERRED_SIZE,
+					Short.MAX_VALUE);
+		}
+		gpl.setVerticalGroup(seqGroup);
+		gpl.setHorizontalGroup(vertGroup);
 		scrollpane.getViewport().add(panel);
 		scrollpane.setBorder(null);
 	}
@@ -101,14 +123,23 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		if (pMsgInfoGeneral == null || pMsgInfoUser == null) {
 			return;
 		}
-		boolean txtUserEqualToDefault = pMsgInfoUser.getText()
-				.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER));
-		boolean txtUserValidUntilEqualToDefault = pMsgInfoUser.getValidUntil()
-				.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
-		boolean txtDeviceEqualToDefault = pMsgInfoGeneral.getText()
-				.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE));
-		boolean txtDeviceValidUntilEqualToDefault = pMsgInfoGeneral.getValidUntil()
-				.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL));
+		boolean txtUserEqualToDefault = true;
+		boolean txtUserValidUntilEqualToDefault = true;
+		if (!forbiddenUser) {
+			txtUserEqualToDefault = pMsgInfoUser.getText()
+					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER));
+			txtUserValidUntilEqualToDefault = pMsgInfoUser.getValidUntil()
+					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
+		}
+
+		boolean txtDeviceEqualToDefault = true;
+		boolean txtDeviceValidUntilEqualToDefault = true;
+		if (!forbiddenDevice) {
+			txtDeviceEqualToDefault = pMsgInfoGeneral.getText()
+					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE));
+			txtDeviceValidUntilEqualToDefault = pMsgInfoGeneral.getValidUntil()
+					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL));
+		}
 
 		setSaveButtonEnable(!(txtUserEqualToDefault && txtDeviceEqualToDefault && txtUserValidUntilEqualToDefault
 				&& txtDeviceValidUntilEqualToDefault));
@@ -117,10 +148,14 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	private void resetData() {
 		Logging.debug("FMessageOfTheDay resetData");
 		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
-		pMsgInfoGeneral.setDataMap(motdData);
-		pMsgInfoGeneral.resetData();
-		pMsgInfoUser.setDataMap(motdData);
-		pMsgInfoUser.resetData();
+		if (!forbiddenDevice) {
+			pMsgInfoGeneral.setDataMap(motdData);
+			pMsgInfoGeneral.resetData();
+		}
+		if (!forbiddenUser) {
+			pMsgInfoUser.setDataMap(motdData);
+			pMsgInfoUser.resetData();
+		}
 		setSaveButtonEnable(false);
 	}
 
@@ -133,12 +168,20 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	public void doAction2() {
 		Logging.debug("FMessageOfTheDay doAction2 store");
 		Map<String, String> data = new HashMap<>();
-		data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE, pMsgInfoGeneral.getText());
-		data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL,
-				pMsgInfoGeneral.getValidUntil());
-		data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER, pMsgInfoUser.getText());
-		data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL,
-				pMsgInfoUser.getValidUntil());
+		if (!forbiddenDevice) {
+			data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE, pMsgInfoGeneral.getText());
+			data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL,
+					pMsgInfoGeneral.getValidUntil());
+		}
+		if (!forbiddenUser) {
+			data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER, pMsgInfoUser.getText());
+			data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL,
+					pMsgInfoUser.getValidUntil());
+		}
+		if (data.isEmpty()) {
+			Logging.error("FMessageOfTheDay doAction2 store no data", data);
+			return;
+		}
 		persistenceController.getConfigDataService().setMessageOfTheDayConfigs(data);
 		Logging.info("FMessageOfTheDay doAction2 store done: " + data);
 		resetData();
@@ -151,6 +194,12 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		// to ensure that the buttons are visible
 		jButton1.repaint();
 		jButton2.repaint();
-		pMsgInfoGeneral.requestFocus();
+		if (!forbiddenDevice) {
+			pMsgInfoGeneral.repaint();
+		} else if (!forbiddenUser) {
+			pMsgInfoUser.repaint();
+		} else {
+			Logging.error("FMessageOfTheDay paint forbidden");
+		}
 	}
 }
