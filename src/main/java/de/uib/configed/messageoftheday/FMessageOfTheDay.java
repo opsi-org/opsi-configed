@@ -8,6 +8,7 @@ package de.uib.configed.messageoftheday;
 
 import java.awt.Graphics;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -20,6 +21,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.MainFrame;
+import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.permission.UserFeaturesConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
@@ -37,26 +40,33 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	private PanelMessageInfos pMsgInfoUser;
 	private JButton resetButton = new JButton(Configed.getResourceValue("MessageOfTheDay.resetButton"));
 	private Map<String, String> motdData = new HashMap<>();
+	private boolean forbiddenDevice;
+	private boolean forbiddenUser;
 
 	public FMessageOfTheDay() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
 				700, 500, true);
+
+		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
+				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
+		forbiddenDevice = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE);
+		forbiddenUser = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
+
 		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
 		define();
 		init();
 	}
 
 	private void init() {
-
 		pMsgInfoGeneral.resetData();
 		pMsgInfoUser.resetData();
 		setSaveButtonEnable(false);
 	}
 
 	private void define() {
-		pMsgInfoGeneral = new PanelMessageInfos(this, PanelMessageInfos.InfoType.DEVICE, motdData);
-		pMsgInfoUser = new PanelMessageInfos(this, PanelMessageInfos.InfoType.USER, motdData);
+		pMsgInfoGeneral = new PanelMessageInfos(this, PanelMessageInfos.InfoType.DEVICE, motdData, forbiddenDevice);
+		pMsgInfoUser = new PanelMessageInfos(this, PanelMessageInfos.InfoType.USER, motdData, forbiddenUser);
 		setSaveButtonEnable(false);
 
 		JPanel panel = new JPanel();

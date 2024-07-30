@@ -51,8 +51,9 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 	private Map<String, String> motdData;
 	private JRadioButton dateChooserButton;
 	private JRadioButton infiniteDateChooserButton;
+	private JLabel topicLabel;
 
-	public PanelMessageInfos(FMessageOfTheDay caller, InfoType type, Map<String, String> msgdata) {
+	public PanelMessageInfos(FMessageOfTheDay caller, InfoType type, Map<String, String> msgdata, boolean disabled) {
 		Logging.debug("PanelMessageInfos type: " + type);
 		this.type = type;
 		this.motdData = msgdata;
@@ -60,6 +61,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 
 		initComponents();
 		defineLayout();
+		disableComponents(disabled);
 	}
 
 	public void setDataMap(Map<String, String> data) {
@@ -75,7 +77,19 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 	public String getValidUntil() {
 		Logging.debug("PanelMessageInfos " + this.type + " getValidUntil " + date);
 		return date;
+	}
 
+	private void disableComponents(boolean disabled) {
+		Logging.debug("PanelMessageInfos setDisabled: " + disabled);
+		textArea.setEnabled(!disabled);
+		dateChooserButton.setEnabled(!disabled);
+		infiniteDateChooserButton.setEnabled(!disabled);
+		dateTimePicker.setEnabled(!disabled);
+		dateChooserText.setEnabled(!disabled);
+		if (disabled) {
+			topicLabel.setText(String.format("%s %s", Configed.getResourceValue("MessageOfTheDay.device.textAreaLabel"),
+					Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden")));
+		}
 	}
 
 	public void resetData() {
@@ -177,7 +191,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		if (type == InfoType.USER) {
 			keyTextAreaLabel = "MessageOfTheDay.user.textAreaLabel";
 		}
-		JLabel topicLabel = new JLabel(Configed.getResourceValue(keyTextAreaLabel));
+		topicLabel = new JLabel(Configed.getResourceValue(keyTextAreaLabel));
 		JLabel dateLabel = new JLabel(Configed.getResourceValue("MessageOfTheDay.device.dateLabel"));
 		JLabel dateForeverLabel = new JLabel(Configed.getResourceValue("MessageOfTheDay.preForeverButtonLabel"));
 
