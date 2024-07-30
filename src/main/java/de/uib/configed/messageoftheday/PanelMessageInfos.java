@@ -55,7 +55,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 	private JLabel topicLabel;
 
 	public PanelMessageInfos(FMessageOfTheDay caller, InfoType type, Map<String, String> msgdata, boolean disabled) {
-		Logging.debug("PanelMessageInfos type: " + type);
+		Logging.debug("PanelMessageInfos type: ", type);
 		this.type = type;
 		this.motdData = msgdata;
 		this.caller = caller;
@@ -76,17 +76,17 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 	}
 
 	public String getText() {
-		Logging.debug("PanelMessageInfos " + this.type + " getText " + textArea.getText());
+		Logging.debug("PanelMessageInfos", this.type, "getText", textArea.getText());
 		return textArea.getText();
 	}
 
 	public String getValidUntil() {
-		Logging.debug("PanelMessageInfos " + this.type + " getValidUntil " + date);
+		Logging.debug("PanelMessageInfos", this.type, "getValidUntil", date);
 		return date;
 	}
 
 	private void disableComponents(boolean disabled) {
-		Logging.debug("PanelMessageInfos setDisabled: " + disabled);
+		Logging.debug("PanelMessageInfos setDisabled: ", disabled);
 		textArea.setEnabled(!disabled);
 		dateChooserButton.setEnabled(!disabled);
 		infiniteDateChooserButton.setEnabled(!disabled);
@@ -272,7 +272,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 	}
 
 	private void setDateText(String date, String unix) {
-		Logging.debug("PanelMessageInfos setDateText: " + date + " (" + unix + ")");
+		Logging.debug("PanelMessageInfos setDateText: ", date, " (", unix, ")");
 		String datetextfield = "";
 		if (date != null && !date.isEmpty()) {
 			datetextfield = date;
@@ -292,7 +292,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 			caller.checkDefaultValues();
 			return;
 		}
-		Logging.debug("PanelMessageInfos dataChanged: " + datetime);
+		Logging.debug("PanelMessageInfos dataChanged: ", datetime);
 		long unixTime = datetime.atZone(DateTimePicker.ZONEID).toEpochSecond();
 		setDateText(datetime.toString(), unixTime);
 		date = Long.toString(unixTime);

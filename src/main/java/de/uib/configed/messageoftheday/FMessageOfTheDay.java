@@ -160,7 +160,7 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	}
 
 	public void setSaveButtonEnable(boolean enable) {
-		Logging.debug("FMessageOfTheDay setSaveButtonEnable " + enable);
+		Logging.debug("FMessageOfTheDay setSaveButtonEnable ", enable);
 		jButton2.setEnabled(enable);
 	}
 
@@ -183,7 +183,7 @@ public class FMessageOfTheDay extends FGeneralDialog {
 			return;
 		}
 		persistenceController.getConfigDataService().setMessageOfTheDayConfigs(data);
-		Logging.info("FMessageOfTheDay doAction2 store done: " + data);
+		Logging.info("FMessageOfTheDay doAction2 store done: ", data);
 		resetData();
 		setSaveButtonEnable(false);
 	}

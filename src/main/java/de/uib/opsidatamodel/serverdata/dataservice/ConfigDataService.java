@@ -1140,7 +1140,7 @@ public class ConfigDataService {
 
 		String possibleValues = "possibleValues";
 		for (int i = 0; i < keys.length; i++) {
-			Logging.debug(this, "setMessageOfTheDayConfigs key " + keys[i] + " data " + data[i]);
+			Logging.debug(this, "setMessageOfTheDayConfigs key ", keys[i], " data ", data[i]);
 			ConfigOption option = getConfigOptionsPD().get(keys[i]);
 			option.setDefaultValues(List.of(data[i]));
 			option.put(possibleValues, List.of(data[i]));
@@ -1159,12 +1159,12 @@ public class ConfigDataService {
 		for (String key : keys) {
 			ConfigOption option = getConfigOptionsPD().get(key);
 			if (option == null) {
-				Logging.warning(this, "getMessageOfTheDayConfigs, no option found for key " + key);
+				Logging.warning(this, "getMessageOfTheDayConfigs, no option found for key ", key);
 				continue;
 			}
 			result.put(key, option.getDefaultValues().get(0).toString());
 		}
-		Logging.debug(this, "getMessageOfTheDayConfigs result " + result);
+		Logging.debug(this, "getMessageOfTheDayConfigs result ", result);
 		return result;
 	}
 

@@ -50,8 +50,8 @@ public class DateTimePicker extends DatePicker {
 
 	public DateTimePicker(IDateTimePickerCaller caller) {
 		Logging.debug("DateTimePicker constructor");
-		Logging.debug("DateTimePicker zoneid: " + ZONEID);
-		Logging.debug("DateTimePicker datetimeNow: " + datetimeNow());
+		Logging.debug("DateTimePicker zoneid: ", ZONEID);
+		Logging.debug("DateTimePicker datetimeNow: ", datetimeNow());
 		this.caller = caller;
 	}
 
@@ -86,15 +86,15 @@ public class DateTimePicker extends DatePicker {
 		// Syncronize changes to dateTimeValue back to the underlying date value
 		dateTimeValue.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue,
 				LocalDateTime newValue) -> {
-			Logging.debug("DateTimePicker dateTimeValue listener newValue: " + newValue + " oldValue: " + oldValue);
+			Logging.debug("DateTimePicker dateTimeValue listener newValue: ", newValue, " oldValue: ", oldValue);
 			setValue(newValue == null ? null : newValue.toLocalDate());
 		});
 
 		// Persist changes onblur
 		getEditor().focusedProperty()
 				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-					Logging.debug(
-							"DateTimePicker focusedProperty listener newValue: " + newValue + " oldValue: " + oldValue);
+					Logging.debug("DateTimePicker focusedProperty listener newValue: ", newValue, " oldValue: ",
+							oldValue);
 					if (!newValue.booleanValue()) {
 						simulateEnterPressed();
 					}
@@ -120,12 +120,12 @@ public class DateTimePicker extends DatePicker {
 	public long getDateTimeValueUnix() {
 		LocalDateTime ldt = dateTimeValue.get();
 		long unixTime = ldt.atZone(DateTimePicker.ZONEID).toEpochSecond();
-		Logging.debug("DateTimePicker getDateTimeValueUnix: " + unixTime);
+		Logging.debug("DateTimePicker getDateTimeValueUnix: ", unixTime);
 		return unixTime;
 	}
 
 	public LocalDateTime getDateTimeValue() {
-		Logging.debug("DateTimePicker getDateTimeValueLDT: " + dateTimeValue.get());
+		Logging.debug("DateTimePicker getDateTimeValueLDT: ", dateTimeValue.get());
 		return dateTimeValue.get();
 	}
 
@@ -134,7 +134,7 @@ public class DateTimePicker extends DatePicker {
 	}
 
 	public void setDateTimeValue(long unixTime, boolean notify) {
-		Logging.debug("DateTimePicker setDateTimeValueUnix: " + unixTime);
+		Logging.debug("DateTimePicker setDateTimeValueUnix: ", unixTime);
 		if (unixTime <= 0) {
 			setDateTimeValue(null);
 			return;
@@ -153,7 +153,7 @@ public class DateTimePicker extends DatePicker {
 		if (dateTime == null) {
 			Logging.debug("DateTimePicker setDateTimeValueLDT: null");
 		} else {
-			Logging.debug("DateTimePicker setDateTimeValue: " + dateTime);
+			Logging.debug("DateTimePicker setDateTimeValue: ", dateTime);
 			isEnabled = true;
 			this.dateTimeValue.set(dateTime);
 		}
@@ -174,7 +174,7 @@ public class DateTimePicker extends DatePicker {
 	}
 
 	public String getFormat() {
-		Logging.debug("DateTimePicker getFormat: " + format.get());
+		Logging.debug("DateTimePicker getFormat: ", format.get());
 		return format.get();
 	}
 
@@ -184,22 +184,22 @@ public class DateTimePicker extends DatePicker {
 	}
 
 	public void setFormat(String format) {
-		Logging.debug("DateTimePicker setFormat: " + format);
+		Logging.debug("DateTimePicker setFormat: ", format);
 		this.format.set(format);
 	}
 
 	class InternalConverter extends StringConverter<LocalDate> {
 		public String toString(LocalDate object) {
-			Logging.debug("DateTimePicker InternalConverter toString was: " + object);
+			Logging.debug("DateTimePicker InternalConverter toString was: ", object);
 			LocalDateTime value = getDateTimeValue();
 			String s = (value != null) ? value.format(formatter) : "";
-			Logging.debug("DateTimePicker InternalConverter toString is: " + s);
+			Logging.debug("DateTimePicker InternalConverter toString is: ", s);
 			setDateTimeValue(value);
 			return s;
 		}
 
 		public LocalDate fromString(String value) {
-			Logging.debug("DateTimePicker InternalConverter fromString: " + value);
+			Logging.debug("DateTimePicker InternalConverter fromString: ", value);
 			if (value == null || "0".equals(value) || "".equals(value)) {
 				setDateTimeValue(null);
 				return null;
@@ -214,7 +214,7 @@ public class DateTimePicker extends DatePicker {
 				}
 				currValue = currValue2;
 			} catch (DateTimeParseException e) {
-				Logging.error("DateTime InternalConverter Error: " + e + ". Set previous value.");
+				Logging.error(e, "DateTime InternalConverter Error. Set previous value.");
 			}
 
 			setDateTimeValue(currValue);
