@@ -33,6 +33,7 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.productpage.TextMarkdownPane;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
@@ -47,7 +48,9 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 	private String date;
 	private JTextField dateChooserText = new JTextField();
 	private JTextArea textArea;
+	private TextMarkdownPane markdownPreview;
 	private JScrollPane areaScrollPane;
+	private JScrollPane areaScrollPaneMD;
 	private DateTimePickerWrapper dateTimePicker;
 	private Map<String, String> motdData;
 	private JRadioButton dateChooserButton;
@@ -67,6 +70,14 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 			disableComponents(true);
 		} else {
 			disableComponents(disabled);
+		}
+	}
+
+	public void setShowPreview(boolean showPreview) {
+		if (areaScrollPaneMD != null) {
+			areaScrollPaneMD.setVisible(showPreview);
+			defineLayout();
+			this.repaint();
 		}
 	}
 
@@ -159,6 +170,13 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		textArea.setRows(5);
 		areaScrollPane = new JScrollPane(textArea);
 		areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		areaScrollPane.setMinimumSize(new Dimension(200, 100));
+
+		markdownPreview = new TextMarkdownPane();
+		markdownPreview.setText(textArea.getText());
+		areaScrollPaneMD = new JScrollPane(markdownPreview);
+		areaScrollPaneMD.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		areaScrollPaneMD.setMinimumSize(new Dimension(200, 100));
 
 		dateTimePicker = new DateTimePickerWrapper(this);
 		dateChooserButton = new JRadioButton();
@@ -189,6 +207,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				caller.checkDefaultValues();
+				markdownPreview.setText(textArea.getText());
 			}
 
 			@Override
@@ -211,41 +230,52 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(
+						topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup()
+						// TODO: set height of scroll areas to maximum of available space, do not allow panel to scroll, only inside the scroll areas
+						.addComponent(areaScrollPane).addComponent(areaScrollPaneMD)
+				// .addComponent(areaScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				// 		Short.MAX_VALUE)
+				// .addGap(Globals.GAP_SIZE).addComponent(areaScrollPaneMD, GroupLayout.PREFERRED_SIZE,
+				// 		GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				).addGap(
+						Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						// .addComponent(dateChooserText, GroupLayout.PREFERRED_SIZE,
+						// 		GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(dateChooserButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(dateTimePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(dateForeverLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(infiniteDateChooserButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE))
+				.addGap(Globals.GAP_SIZE));
+
+		layout.setHorizontalGroup(layout
+				.createSequentialGroup().addGap(
+						Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
 						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(areaScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(
-								layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										// .addComponent(dateChooserText, GroupLayout.PREFERRED_SIZE,
-										// 		GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(dateChooserButton, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(dateTimePicker, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(dateForeverLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(infiniteDateChooserButton, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE))
-						.addGap(Globals.GAP_SIZE));
-
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
-								.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+						.addGroup(layout.createSequentialGroup()
+								// horizontal settings
 								.addComponent(areaScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
-								.addGroup(layout.createSequentialGroup()
+								// .addGap(Globals.GAP_SIZE)
+								.addComponent(areaScrollPaneMD, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE))
+						.addGroup(
+								layout.createSequentialGroup()
 										.addComponent(dateLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.GAP_SIZE)
@@ -261,8 +291,8 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 										.addComponent(infiniteDateChooserButton, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.GAP_SIZE))
-								.addGap(Globals.GAP_SIZE))
-						.addGap(Globals.GAP_SIZE));
+						.addGap(Globals.GAP_SIZE))
+				.addGap(Globals.GAP_SIZE));
 
 		this.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 	}

@@ -15,6 +15,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -41,9 +42,11 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	private PanelMessageInfos pMsgInfoGeneral;
 	private PanelMessageInfos pMsgInfoUser;
 	private JButton resetButton = new JButton(Configed.getResourceValue("MessageOfTheDay.resetButton"));
+	private JCheckBox previewCheckbox = new JCheckBox(Configed.getResourceValue("MessageOfTheDay.previewButton"));
 	private Map<String, String> motdData = new HashMap<>();
 	private boolean forbiddenDevice;
 	private boolean forbiddenUser;
+	private boolean showPreview = true;
 
 	public FMessageOfTheDay() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"), false,
@@ -88,19 +91,35 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		panel.setLayout(gpl);
 
 		resetButton.addActionListener(e -> resetData());
+		// previewCheckbox.setSelected(showPreview);
+		// previewCheckbox.addActionListener((ActionEvent e) -> {
+		// 	showPreview = previewCheckbox.isSelected();
+		// 	if (!forbiddenDevice) {
+		// 		pMsgInfoGeneral.setShowPreview(showPreview);
+		// 	}
+		// 	if (!forbiddenUser) {
+		// 		pMsgInfoUser.setShowPreview(showPreview);
+		// 	}
+		// });
 		JLabel frameTitleLabel = new JLabel(Configed.getResourceValue("MessageOfTheDay.title"));
 
 		SequentialGroup seqGroup = gpl.createSequentialGroup();
 		seqGroup.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
 				.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+				.addGap(Globals.GAP_SIZE).addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				// .addComponent(previewCheckbox, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+
+				));
 
 		ParallelGroup vertGroup = gpl.createParallelGroup();
 		vertGroup.addGroup(gpl.createSequentialGroup()
 				.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+				.addGap(Globals.GAP_SIZE).addGroup(gpl.createSequentialGroup().addComponent(resetButton, 30,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				// .addGap(Globals.GAP_SIZE)
+				// .addComponent(previewCheckbox, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				));
 
 		if (!forbiddenDevice) {
 			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoGeneral, 100, GroupLayout.PREFERRED_SIZE,
@@ -194,12 +213,12 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		// to ensure that the buttons are visible
 		jButton1.repaint();
 		jButton2.repaint();
-		if (!forbiddenDevice) {
-			pMsgInfoGeneral.repaint();
-		} else if (!forbiddenUser) {
-			pMsgInfoUser.repaint();
-		} else {
-			Logging.error("FMessageOfTheDay paint forbidden");
-		}
+		// if (!forbiddenDevice) {
+		// 	pMsgInfoGeneral.repaint();
+		// } else if (!forbiddenUser) {
+		// 	pMsgInfoUser.repaint();
+		// } else {
+		// 	Logging.error("FMessageOfTheDay paint forbidden");
+		// }
 	}
 }
