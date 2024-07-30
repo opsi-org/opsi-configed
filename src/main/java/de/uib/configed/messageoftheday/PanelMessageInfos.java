@@ -86,9 +86,16 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		infiniteDateChooserButton.setEnabled(!disabled);
 		dateTimePicker.setEnabled(!disabled);
 		dateChooserText.setEnabled(!disabled);
+
+		String keyTextAreaLabel = "MessageOfTheDay.device.textAreaLabel";
+		if (type == InfoType.USER) {
+			keyTextAreaLabel = "MessageOfTheDay.user.textAreaLabel";
+		}
 		if (disabled) {
-			topicLabel.setText(String.format("%s %s", Configed.getResourceValue("MessageOfTheDay.device.textAreaLabel"),
+			topicLabel.setText(String.format("%s %s", Configed.getResourceValue(keyTextAreaLabel),
 					Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden")));
+		} else {
+			topicLabel.setText(Configed.getResourceValue(keyTextAreaLabel));
 		}
 	}
 
