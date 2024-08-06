@@ -289,38 +289,35 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			break;
 
 		case SERVER:
-			addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null, panelHostConfig, null);
+			addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
 			break;
 		}
 	}
 
 	private void addClientTabs() {
-		addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), null, panelClientSelection, null);
+		addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), panelClientSelection);
 
-		addTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), null,
-				panelLocalbootProductSettings, null);
+		addTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), panelLocalbootProductSettings);
 
-		addTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), null, panelNetbootProductSettings,
-				null);
+		addTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), panelNetbootProductSettings);
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null, panelHostConfig, null);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null, new JPanel(), null);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), new JPanel());
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), null, showSoftwareLogNotFound, null);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), showSoftwareLogNotFound);
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), null, showLogfiles, null);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), showLogfiles);
 	}
 
 	private void addDepotTabs() {
-		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), null, panelHostConfig, null);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
 
-		addTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"), null, panelProductProperties,
-				null);
+		addTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"), panelProductProperties);
 		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				" index ", indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), null, panelHostProperties, null);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), panelHostProperties);
 
 		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.jPanel_HostProperties"), " index ",
 				indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
