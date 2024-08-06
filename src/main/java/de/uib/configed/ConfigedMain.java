@@ -720,8 +720,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		editingTarget = t;
-		ViewIndex previousViewIndex = getViewIndex();
-		// what else to do:
+
 		switch (t) {
 		case CLIENTS:
 			setEditingClients();
@@ -734,9 +733,6 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 		default:
 			break;
-		}
-		if (getViewIndex() == previousViewIndex) {
-			resetView(viewIndex);
 		}
 	}
 
