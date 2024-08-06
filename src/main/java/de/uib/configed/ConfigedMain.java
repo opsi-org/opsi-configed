@@ -752,11 +752,7 @@ public class ConfigedMain implements MessagebusListener {
 		depotsList.setEnabled(true);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(true);
-		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
-				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
-		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
-				.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+		mainFrame.getTabbedConfigPanes().initView(EditingTarget.CLIENTS);
 		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveClientsViewIndex);
 
 		Logging.debug(this, "setEditingTarget preSaveSelectedClients ", preSaveSelectedClients);
@@ -776,13 +772,7 @@ public class ConfigedMain implements MessagebusListener {
 		productTree.setEnabled(false);
 
 		initServer();
-		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
-		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
-				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
-		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
-				.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
-		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
-				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+		mainFrame.getTabbedConfigPanes().initView(EditingTarget.DEPOTS);
 
 		Logging.info(this, "setEditingTarget  call setVisualIndex  saved ", saveDepotsViewIndex, " resp. ",
 				mainFrame.getTabbedConfigPanes()
@@ -796,9 +786,7 @@ public class ConfigedMain implements MessagebusListener {
 		productTree.setEnabled(false);
 
 		initServer();
-		mainFrame.getTabbedConfigPanes().setConfigPanesEnabled(false);
-		mainFrame.getTabbedConfigPanes().setEnabledAt(mainFrame.getTabbedConfigPanes()
-				.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+		mainFrame.getTabbedConfigPanes().initView(EditingTarget.SERVER);
 
 		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveServerViewIndex);
 	}
