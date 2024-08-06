@@ -22,6 +22,7 @@ import javax.swing.event.ChangeListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
+import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.productpage.PanelProductProperties;
@@ -169,16 +170,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		Logging.info(this, "stateChanged of tabbedPane, visualIndex ", visualIndex);
 		configedMain.setViewIndex(visualIndex);
-
-		// retrieve the state index finally produced by main
-		int newStateIndex = configedMain.getViewIndex();
-
-		// if the controller did not accept the new index set it back
-		// observe that we get a recursion since we initiate another state change
-		// the recursion breaks since main.setViewIndex does not yield a different value
-		if (visualIndex != newStateIndex) {
-			setSelectedIndex(newStateIndex);
-		}
 	}
 
 	private void initSoftWareInfo() {
@@ -187,7 +178,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			protected void reload() {
 				super.reload();
 				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
+				configedMain.resetView(ViewIndex.VIEW_SOFTWARE_INFO);
 			}
 		};
 	}
@@ -199,7 +190,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				protected void reload() {
 					super.reload();
 					// otherwise we get a wait cursor only in table component
-					configedMain.resetView(ConfigedMain.VIEW_HARDWARE_INFO);
+					configedMain.resetView(ViewIndex.VIEW_HARDWARE_INFO);
 				}
 			};
 		}

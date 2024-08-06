@@ -124,15 +124,10 @@ import javafx.embed.swing.JFXPanel;
 public class ConfigedMain implements MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
-	public static final int VIEW_CLIENTS = 0;
-	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
-	public static final int VIEW_NETBOOT_PRODUCTS = 2;
-	public static final int VIEW_NETWORK_CONFIGURATION = 3;
-	public static final int VIEW_HARDWARE_INFO = 4;
-	public static final int VIEW_SOFTWARE_INFO = 5;
-	public static final int VIEW_LOG = 6;
-	public static final int VIEW_PRODUCT_PROPERTIES = 7;
-	public static final int VIEW_HOST_PROPERTIES = 8;
+	public enum ViewIndex {
+		VIEW_CLIENTS, VIEW_LOCALBOOT_PRODUCTS, VIEW_NETBOOT_PRODUCTS, VIEW_NETWORK_CONFIGURATION, VIEW_HARDWARE_INFO,
+		VIEW_SOFTWARE_INFO, VIEW_LOG, VIEW_PRODUCT_PROPERTIES, VIEW_HOST_PROPERTIES
+	}
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
@@ -232,10 +227,11 @@ public class ConfigedMain implements MessagebusListener {
 
 	private int clientCount;
 
-	private int viewIndex = VIEW_CLIENTS;
-	private int saveClientsViewIndex = VIEW_CLIENTS;
-	private int saveDepotsViewIndex = VIEW_PRODUCT_PROPERTIES;
-	private int saveServerViewIndex = VIEW_NETWORK_CONFIGURATION;
+	private ViewIndex viewIndex = ViewIndex.VIEW_CLIENTS;
+
+	// These are the default views for client and depot view
+	private int saveClientsViewIndex;
+	private int saveDepotsViewIndex = 1;
 
 	private Map<String, String> sessionInfo = new HashMap<>();
 
@@ -453,7 +449,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void addClientToTable(String clientId) {
 		if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| getViewIndex() != VIEW_CLIENTS) {
+				|| getViewIndex() != ViewIndex.VIEW_CLIENTS) {
 			return;
 		}
 
@@ -469,7 +465,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void removeClientFromTable(String clientId) {
 		if (!persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| getViewIndex() != VIEW_CLIENTS) {
+				|| getViewIndex() != ViewIndex.VIEW_CLIENTS) {
 			return;
 		}
 
@@ -479,11 +475,11 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
-		if (getViewIndex() == VIEW_LOCALBOOT_PRODUCTS
+		if (getViewIndex() == ViewIndex.VIEW_LOCALBOOT_PRODUCTS
 				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
 			updateManager.updateProductTableForClient(clientId, attributes);
-		} else if (getViewIndex() == VIEW_NETBOOT_PRODUCTS
+		} else if (getViewIndex() == ViewIndex.VIEW_NETBOOT_PRODUCTS
 				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
 			// Remove uneeded attributes
@@ -724,7 +720,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		editingTarget = t;
-		int previousViewIndex = getViewIndex();
+		ViewIndex previousViewIndex = getViewIndex();
 		// what else to do:
 		switch (t) {
 		case CLIENTS:
@@ -787,8 +783,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		initServer();
 		mainFrame.getTabbedConfigPanes().initView(EditingTarget.SERVER);
-
-		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveServerViewIndex);
 	}
 
 	public void actOnListSelection() {
@@ -1389,12 +1383,12 @@ public class ConfigedMain implements MessagebusListener {
 
 		clientTree.produceActiveParents();
 
-		if (getViewIndex() != VIEW_CLIENTS) {
+		if (getViewIndex() != ViewIndex.VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
-			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ", getViewIndex(),
-					", ", VIEW_CLIENTS);
-			int newViewIndex = getViewIndex();
+			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ",
+					getViewIndex());
+			ViewIndex newViewIndex = getViewIndex();
 			resetView(newViewIndex);
 		}
 	}
@@ -1660,7 +1654,7 @@ public class ConfigedMain implements MessagebusListener {
 				clientProductpropertiesUpdateCollection);
 	}
 
-	public int getViewIndex() {
+	public ViewIndex getViewIndex() {
 		return viewIndex;
 	}
 
@@ -2263,7 +2257,7 @@ public class ConfigedMain implements MessagebusListener {
 		return true;
 	}
 
-	public boolean resetView(int viewIndex) {
+	public boolean resetView(ViewIndex viewIndex) {
 		Logging.info(this, "resetView to ", viewIndex, "  selectedClients size: ", selectedClients.size());
 		mainFrame.activateLoadingCursor();
 		boolean result = true;
@@ -2318,16 +2312,94 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void setViewIndex(int visualViewIndex) {
-		int oldViewIndex = viewIndex;
+		if (visualViewIndex == -1) {
+			Logging.info(this, "Won't set view index, since selected visualViewIndex is -1");
+			return;
+		}
 
-		Logging.info(this, "visualViewIndex ", visualViewIndex, ", (old) viewIndex ", viewIndex);
+		switch (editingTarget) {
+		case CLIENTS:
+			setClientsViewIndex(visualViewIndex);
+			break;
+
+		case DEPOTS:
+			setDepotsViewIndex(visualViewIndex);
+			break;
+
+		case SERVER:
+			// Here we only have one tab
+			setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+			break;
+		}
+	}
+
+	private void setClientsViewIndex(int visualViewIndex) {
+		switch (visualViewIndex) {
+		case 0:
+			setViewIndex(ViewIndex.VIEW_CLIENTS);
+			break;
+
+		case 1:
+			setViewIndex(ViewIndex.VIEW_LOCALBOOT_PRODUCTS);
+			break;
+
+		case 2:
+			setViewIndex(ViewIndex.VIEW_NETBOOT_PRODUCTS);
+			break;
+
+		case 3:
+			setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+			break;
+
+		case 4:
+			setViewIndex(ViewIndex.VIEW_HARDWARE_INFO);
+			break;
+
+		case 5:
+			setViewIndex(ViewIndex.VIEW_SOFTWARE_INFO);
+			break;
+
+		case 6:
+			setViewIndex(ViewIndex.VIEW_LOG);
+			break;
+
+		default:
+			Logging.warning(this, "unexpected visualViewIndex ", visualViewIndex, " in clients view");
+			break;
+		}
+	}
+
+	private void setDepotsViewIndex(int visualViewIndex) {
+		switch (visualViewIndex) {
+		case 0:
+			setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+			break;
+
+		case 1:
+			setViewIndex(ViewIndex.VIEW_PRODUCT_PROPERTIES);
+			break;
+
+		case 2:
+			setViewIndex(ViewIndex.VIEW_HOST_PROPERTIES);
+			break;
+
+		default:
+			Logging.warning(this, "unexpected visualViewIndex ", visualViewIndex, " in depots view");
+			break;
+		}
+	}
+
+	public void setViewIndex(ViewIndex newViewIndex) {
+		ViewIndex oldViewIndex = viewIndex;
+
+		Logging.info(this, "visualViewIndex ", newViewIndex, ", (old) viewIndex ", viewIndex);
 		Logging.info(this, "setViewIndex anyDataChanged ", anyDataChanged);
 
 		checkSaveAll(true);
 
 		if (initialDataLoader.isDataLoaded()) {
-			viewIndex = visualViewIndex;
-			depotsList.setEnabled(viewIndex == VIEW_CLIENTS);
+			viewIndex = newViewIndex;
+			depotsList.setEnabled(viewIndex == ViewIndex.VIEW_CLIENTS);
 
 			Logging.debug(this, "switch to viewIndex ", viewIndex);
 			boolean result = resetView(viewIndex);
@@ -2347,15 +2419,15 @@ public class ConfigedMain implements MessagebusListener {
 	private void saveCurrentViewIndex() {
 		switch (editingTarget) {
 		case CLIENTS:
-			saveClientsViewIndex = viewIndex;
+			saveClientsViewIndex = mainFrame.getTabbedConfigPanes().getSelectedIndex();
 			break;
 
 		case DEPOTS:
-			saveDepotsViewIndex = viewIndex;
+			saveDepotsViewIndex = mainFrame.getTabbedConfigPanes().getSelectedIndex();
 			break;
 
 		case SERVER:
-			saveServerViewIndex = viewIndex;
+			// Do nothing, server always has the same index
 			break;
 		}
 	}
@@ -2441,8 +2513,6 @@ public class ConfigedMain implements MessagebusListener {
 	private void reloadData() {
 		checkSaveAll(true);
 
-		int saveViewIndex = getViewIndex();
-		Logging.info(this, " reloadData saveViewIndex ", saveViewIndex);
 		List<String> selValuesList = clientTable.getSelectedValues();
 		Logging.info(this, "reloadData, selValuesList.size ", selValuesList.size());
 		// dont do anything if we did not finish another thread for this
@@ -2793,7 +2863,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		requestReloadStatesAndActions();
 
-		if (getViewIndex() == VIEW_LOCALBOOT_PRODUCTS || getViewIndex() == VIEW_NETBOOT_PRODUCTS) {
+		if (getViewIndex() == ViewIndex.VIEW_LOCALBOOT_PRODUCTS || getViewIndex() == ViewIndex.VIEW_NETBOOT_PRODUCTS) {
 			resetView(getViewIndex());
 		}
 

@@ -178,7 +178,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		// because of potential memory problems we switch to
 		// client view
-		configedMain.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS);
+		configedMain.setVisualViewIndex(0);
 
 		if (manager != null) {
 			clients = manager.selectClients();

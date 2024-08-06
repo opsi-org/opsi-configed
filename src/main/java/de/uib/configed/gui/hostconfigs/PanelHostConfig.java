@@ -15,6 +15,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
@@ -53,7 +54,7 @@ public class PanelHostConfig extends JPanel {
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
 
-		configedMain.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
+		configedMain.resetView(ViewIndex.VIEW_NETWORK_CONFIGURATION);
 	}
 
 	// overwrite in subclasses
