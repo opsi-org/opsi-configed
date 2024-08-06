@@ -160,7 +160,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private List<String> selectedClients = new ArrayList<>();
 	private List<String> saveSelectedClients;
-	private List<String> preSaveSelectedClients;
 
 	private Set<String> clientsFilteredByTree = new HashSet<>();
 	private ActivatedGroupModel activatedGroupModel;
@@ -737,48 +736,35 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void setEditingClients() {
-		Logging.debug(this, "setEditingTarget preSaveSelectedClients ", preSaveSelectedClients);
-
 		clientTree.setEnabled(true);
 		productTree.setEnabled(true);
 		depotsList.setEnabled(true);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.CLIENTS);
-		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveClientsViewIndex);
-
-		Logging.debug(this, "setEditingTarget preSaveSelectedClients ", preSaveSelectedClients);
-
-		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
-			clientTable.setSelectedValues(preSaveSelectedClients);
-		}
+		mainFrame.getTabbedConfigPanes().initView(EditingTarget.CLIENTS, saveClientsViewIndex);
 	}
 
 	private void setEditingDepots() {
-		Logging.info(this, "setEditingTarget  DEPOTS");
-
 		depotsList.setEnabled(true);
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		clientTree.setEnabled(false);
 		productTree.setEnabled(false);
 
-		initServer();
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.DEPOTS);
+		// Save changed data before going to new view
+		checkSaveAll(true);
 
-		Logging.info(this, "setEditingTarget  call setVisualIndex  saved ", saveDepotsViewIndex, " resp. ",
-				mainFrame.getTabbedConfigPanes()
-						.indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
-
-		mainFrame.getTabbedConfigPanes().setVisualViewIndex(saveDepotsViewIndex);
+		mainFrame.getTabbedConfigPanes().initView(EditingTarget.DEPOTS, saveDepotsViewIndex);
 	}
 
 	private void setEditingServer() {
 		clientTree.setEnabled(false);
 		productTree.setEnabled(false);
 
-		initServer();
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.SERVER);
+		// Save changed data before going to new view
+		checkSaveAll(true);
+
+		mainFrame.getTabbedConfigPanes().initView(EditingTarget.SERVER, 0);
 	}
 
 	public void actOnListSelection() {
@@ -2303,8 +2289,8 @@ public class ConfigedMain implements MessagebusListener {
 		return result;
 	}
 
-	public void setVisualViewIndex(int i) {
-		mainFrame.getTabbedConfigPanes().setVisualViewIndex(i);
+	public void setSelectedIndex(int i) {
+		mainFrame.getTabbedConfigPanes().setSelectedIndex(i);
 	}
 
 	public void setViewIndex(int visualViewIndex) {
@@ -2426,11 +2412,6 @@ public class ConfigedMain implements MessagebusListener {
 			// Do nothing, server always has the same index
 			break;
 		}
-	}
-
-	public void initServer() {
-		checkSaveAll(true);
-		preSaveSelectedClients = saveSelectedClients;
 	}
 
 	public List<String> getSelectedDepots() {

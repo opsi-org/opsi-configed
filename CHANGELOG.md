@@ -1,4 +1,8 @@
 # Changelog
+## [4.4.x.x] - 2024-xx-xx
+
+### Changed
+- Only show enabled tabs in Client/Depot/Server configuration
 
 ## [4.4.0.2] - 2024-07-18
 

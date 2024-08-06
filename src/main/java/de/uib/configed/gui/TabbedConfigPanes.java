@@ -98,8 +98,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	}
 
 	private void init() {
-		addChangeListener(this);
-
 		popupClients = mainFrame.getClientMenu().getPopupMenuClone();
 		mainFrame.getClientTable().addMouseListener(new PopupMouseListener(popupClients));
 
@@ -157,8 +155,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		panelHostProperties = new PanelHostProperties();
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 
-		initView(EditingTarget.CLIENTS);
-		setSelectedIndex(0);
+		initView(EditingTarget.CLIENTS, 0);
 	}
 
 	@Override
@@ -274,9 +271,10 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		panelProductProperties.setDividerLocation(0.8);
 	}
 
-	public void initView(EditingTarget editingTarget) {
-		Logging.debug(this, "initView for editing target ", editingTarget);
+	public void initView(EditingTarget editingTarget, int view) {
+		Logging.debug(this, "initView for editing target ", editingTarget, "and view", view);
 
+		removeChangeListener(this);
 		removeAll();
 
 		switch (editingTarget) {
@@ -292,6 +290,12 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
 			break;
 		}
+
+		setSelectedIndex(view);
+
+		addChangeListener(this);
+
+		fireStateChanged();
 	}
 
 	private void addClientTabs() {
