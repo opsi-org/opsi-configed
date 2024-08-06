@@ -38,7 +38,7 @@ public class DateTimePickerWrapper extends JFXPanel {
 
 	@Override
 	public void setEnabled(boolean enabled) {
-		Logging.debug("MyDateTimePicker setEnabled: " + enabled);
+		Logging.debug("MyDateTimePicker setEnabled: ", enabled);
 		dateTimePicker.setDisable(!enabled);
 	}
 
