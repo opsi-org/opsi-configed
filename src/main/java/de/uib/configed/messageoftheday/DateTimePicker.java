@@ -130,11 +130,12 @@ public class DateTimePicker extends DatePicker {
 	}
 
 	public void setDateTimeValue(long unixTime) {
+		Logging.debug("DateTimePicker setDateTimeValueUnix0: ", unixTime);
 		setDateTimeValue(unixTime, true);
 	}
 
 	public void setDateTimeValue(long unixTime, boolean notify) {
-		Logging.debug("DateTimePicker setDateTimeValueUnix: ", unixTime);
+		Logging.debug("DateTimePicker setDateTimeValueUnix1: ", unixTime);
 		if (unixTime <= 0) {
 			setDateTimeValue(null);
 			return;
@@ -145,26 +146,36 @@ public class DateTimePicker extends DatePicker {
 	}
 
 	public void setDateTimeValue(LocalDateTime dateTime) {
+		Logging.debug("DateTimePicker setDateTimeValueLDT2: ", dateTime);
 		setDateTimeValue(dateTime, true);
 	}
 
+	/**
+	 * Set the date time value of the picker.
+	 * 
+	 * @param dateTime The date time value to set or null
+	 * @param notify   If true, the gui will be updated and the caller will be
+	 *                 notified
+	 */
 	public void setDateTimeValue(LocalDateTime dateTime, boolean notify) {
-		boolean isEnabled = false;
 		if (dateTime == null) {
-			Logging.debug("DateTimePicker setDateTimeValueLDT: null");
-		} else {
-			Logging.debug("DateTimePicker setDateTimeValue: ", dateTime);
-			isEnabled = true;
-			this.dateTimeValue.set(dateTime);
+			Logging.debug("DateTimePicker setDateTimeValueLDT3: null");
+			return;
+		}
+		Logging.debug("DateTimePicker setDateTimeValue3: ", dateTime);
+		this.dateTimeValue.set(dateTime);
+		if (getEditor() == null) {
+			Logging.warning("DateTime Error: Editor is null.");
+			return;
 		}
 
-		if (caller != null && notify) {
-			getEditor().setText(dateTime == null ? "" : dateTime.format(formatter));
-			if (isEnabled) {
-				caller.dataChanged(getDateTimeValue());
-			} else {
-				caller.dataChanged(null);
+		getEditor().setText(dateTime.format(formatter));
+		if (notify) {
+			if (caller == null) {
+				Logging.warning("Caller is null");
+				return;
 			}
+			caller.dataChanged(getDateTimeValue());
 		}
 	}
 
@@ -190,16 +201,17 @@ public class DateTimePicker extends DatePicker {
 
 	class InternalConverter extends StringConverter<LocalDate> {
 		public String toString(LocalDate object) {
-			Logging.debug("DateTimePicker InternalConverter toString was: ", object);
-			LocalDateTime value = getDateTimeValue();
+			Logging.trace("DateTimePicker InternalConverter toString was: ", object);
+			// LocalDateTime value = object == null ? null : LocalDateTime.of(object, timeNow());
+			LocalDateTime value = object == null ? null : getDateTimeValue();
 			String s = (value != null) ? value.format(formatter) : "";
-			Logging.debug("DateTimePicker InternalConverter toString is: ", s);
+			Logging.trace("DateTimePicker InternalConverter toString is: ", s);
 			setDateTimeValue(value);
 			return s;
 		}
 
 		public LocalDate fromString(String value) {
-			Logging.debug("DateTimePicker InternalConverter fromString: ", value);
+			Logging.trace("DateTimePicker InternalConverter fromString: ", value);
 			if (value == null || "0".equals(value) || "".equals(value)) {
 				setDateTimeValue(null);
 				return null;

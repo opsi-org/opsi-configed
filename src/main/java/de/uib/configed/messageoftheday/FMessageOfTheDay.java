@@ -51,7 +51,7 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	public FMessageOfTheDay() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
-				700, 500, true);
+				900, 600, true);
 
 		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
 				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
@@ -67,10 +67,15 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	}
 
 	private void init() {
+		Logging.debug("FMessageOfTheDay resetData from init(both)");
 		if (!forbiddenDevice) {
+			Logging.debug("FMessageOfTheDay start data reset for device",
+					motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL));
 			pMsgInfoGeneral.resetData();
 		}
 		if (!forbiddenUser) {
+			Logging.debug("FMessageOfTheDay start data reset for user",
+					motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
 			pMsgInfoUser.resetData();
 		}
 		setSaveButtonEnable(false);
@@ -91,16 +96,6 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		panel.setLayout(gpl);
 
 		resetButton.addActionListener(e -> resetData());
-		// previewCheckbox.setSelected(showPreview);
-		// previewCheckbox.addActionListener((ActionEvent e) -> {
-		// 	showPreview = previewCheckbox.isSelected();
-		// 	if (!forbiddenDevice) {
-		// 		pMsgInfoGeneral.setShowPreview(showPreview);
-		// 	}
-		// 	if (!forbiddenUser) {
-		// 		pMsgInfoUser.setShowPreview(showPreview);
-		// 	}
-		// });
 		JLabel frameTitleLabel = new JLabel(Configed.getResourceValue("MessageOfTheDay.title"));
 
 		SequentialGroup seqGroup = gpl.createSequentialGroup();
@@ -142,14 +137,6 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		if (pMsgInfoGeneral == null || pMsgInfoUser == null) {
 			return;
 		}
-		boolean txtUserEqualToDefault = true;
-		boolean txtUserValidUntilEqualToDefault = true;
-		if (!forbiddenUser) {
-			txtUserEqualToDefault = pMsgInfoUser.getText()
-					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER));
-			txtUserValidUntilEqualToDefault = pMsgInfoUser.getValidUntil()
-					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
-		}
 
 		boolean txtDeviceEqualToDefault = true;
 		boolean txtDeviceValidUntilEqualToDefault = true;
@@ -160,12 +147,21 @@ public class FMessageOfTheDay extends FGeneralDialog {
 					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL));
 		}
 
+		boolean txtUserEqualToDefault = true;
+		boolean txtUserValidUntilEqualToDefault = true;
+		if (!forbiddenUser) {
+			txtUserEqualToDefault = pMsgInfoUser.getText()
+					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER));
+			txtUserValidUntilEqualToDefault = pMsgInfoUser.getValidUntil()
+					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
+		}
+
 		setSaveButtonEnable(!(txtUserEqualToDefault && txtDeviceEqualToDefault && txtUserValidUntilEqualToDefault
 				&& txtDeviceValidUntilEqualToDefault));
 	}
 
 	private void resetData() {
-		Logging.debug("FMessageOfTheDay resetData");
+		Logging.debug("FMessageOfTheDay resetData(both)");
 		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
 		if (!forbiddenDevice) {
 			pMsgInfoGeneral.setDataMap(motdData);
@@ -176,6 +172,7 @@ public class FMessageOfTheDay extends FGeneralDialog {
 			pMsgInfoUser.resetData();
 		}
 		setSaveButtonEnable(false);
+
 	}
 
 	public void setSaveButtonEnable(boolean enable) {
