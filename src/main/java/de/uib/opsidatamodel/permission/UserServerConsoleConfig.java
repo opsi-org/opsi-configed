@@ -45,7 +45,7 @@ public class UserServerConsoleConfig extends UserConfigModule {
 		super.setValues(KEY_TERMINAL_ACCESS_FORBIDDEN, new ArrayList<>());
 		super.setPossibleValues(KEY_TERMINAL_ACCESS_FORBIDDEN, FORBIDDEN_OPTIONS);
 
-		Logging.info(this.getClass(), "create UserServerConsoleConfig for user named ", userName,
-				" with default values ", super.getBooleanMap(), " -- ", super.getValuesMap());
+		Logging.info(this, "create UserServerConsoleConfig for user named ", userName, " with default values ",
+				super.getBooleanMap(), " -- ", super.getValuesMap());
 	}
 }

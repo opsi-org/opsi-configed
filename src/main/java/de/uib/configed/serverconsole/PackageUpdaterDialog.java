@@ -46,7 +46,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 		super(null, Configed.getResourceValue("PackageUpdaterDialog.title"), false);
 		this.configedMain = configedMain;
 		command = new SingleCommandPackageUpdater();
-		Logging.info(this.getClass(), "with command");
+		Logging.info(this, "with command");
 		retrieveRepos();
 		init();
 		initLayout();

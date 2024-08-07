@@ -47,8 +47,8 @@ public class UserConfigProducing {
 		this.serverconfigValuesMap = serverconfigValuesMap;
 		this.configOptionsMap = configOptionsMap;
 
-		Logging.info(this.getClass(), "create with existing collections depots, hostgroups, productgroups ",
-				existingDepots.size(), " - ", existingHostgroups.size(), " - ", existingProductgroups.size());
+		Logging.info(this, "create with existing collections depots, hostgroups, productgroups ", existingDepots.size(),
+				" - ", existingHostgroups.size(), " - ", existingProductgroups.size());
 	}
 
 	public List<Object> produce() {

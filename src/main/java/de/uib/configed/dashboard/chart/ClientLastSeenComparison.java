@@ -38,7 +38,7 @@ public class ClientLastSeenComparison extends StackPane implements DataChangeLis
 		try {
 			fxmlLoader.load();
 		} catch (IOException ioE) {
-			Logging.error(this.getClass(), ioE, "Could not load fxmlLoader");
+			Logging.error(this, ioE, "Could not load fxmlLoader");
 		}
 	}
 

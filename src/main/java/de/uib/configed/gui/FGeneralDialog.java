@@ -64,7 +64,7 @@ public class FGeneralDialog extends JDialog {
 	public FGeneralDialog(JFrame owner, String title) {
 		super(owner, false);
 
-		Logging.info(this.getClass(), "created by constructor 1, owner ", owner);
+		Logging.info(this, "created by constructor 1, owner ", owner);
 		registerWithRunningInstances();
 		super.setIconImage(Utils.getMainIcon());
 		super.setTitle(title);
@@ -76,7 +76,7 @@ public class FGeneralDialog extends JDialog {
 	public FGeneralDialog(JFrame owner, String title, boolean modal) {
 		super(owner, modal);
 
-		Logging.info(this.getClass(), "created by constructor 2, owner ", owner);
+		Logging.info(this, "created by constructor 2, owner ", owner);
 		registerWithRunningInstances();
 		super.setTitle(title);
 
@@ -108,7 +108,7 @@ public class FGeneralDialog extends JDialog {
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, modal);
-		Logging.info(this.getClass(), "created by constructor 3  owner ", owner);
+		Logging.info(this, "created by constructor 3  owner ", owner);
 
 		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);

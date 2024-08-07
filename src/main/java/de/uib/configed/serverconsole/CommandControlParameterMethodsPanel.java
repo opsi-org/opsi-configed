@@ -43,7 +43,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	public CommandControlParameterMethodsPanel(JDialog owner, ConfigedMain configedMain) {
 		super();
-		Logging.info(this.getClass(), "SSHCommandControlParameterMethodsPane  main ", main);
+		Logging.info(this, "SSHCommandControlParameterMethodsPane  main ", main);
 		main = owner;
 		this.configedMain = configedMain;
 		init();

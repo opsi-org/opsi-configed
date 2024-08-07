@@ -31,7 +31,7 @@ public class RunningInstances<T> {
 	public RunningInstances(Class<?> type, String askForLeave) {
 		this.classname = type.getName();
 		this.askForLeave = askForLeave;
-		Logging.info(this.getClass(), "created for class ", classname);
+		Logging.info(this, "created for class ", classname);
 		instances = new ConcurrentHashMap<>();
 	}
 

@@ -37,9 +37,9 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 		setProductVersion(prv);
 		setMd5sum(m);
 		setZsync(z);
-		Logging.info(this.getClass(), "CommandOpsimakeproductfile dir ", dir);
-		Logging.info(this.getClass(), "CommandOpsimakeproductfile packageVersion ", packageVersion);
-		Logging.info(this.getClass(), "CommandOpsimakeproductfile productVersion ", productVersion);
+		Logging.info(this, "CommandOpsimakeproductfile dir ", dir);
+		Logging.info(this, "CommandOpsimakeproductfile packageVersion ", packageVersion);
+		Logging.info(this, "CommandOpsimakeproductfile productVersion ", productVersion);
 	}
 
 	public SingleCommandOpsiMakeProductFile(String d, String pav, String prv) {

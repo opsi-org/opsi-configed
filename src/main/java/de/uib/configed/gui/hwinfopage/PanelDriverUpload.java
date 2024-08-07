@@ -178,7 +178,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		selectedDepot = (String) comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
-		Logging.info(this.getClass(), "depotProductDirectory ", depotProductDirectory);
+		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
 
@@ -202,7 +202,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		initComponents();
 
-		Logging.info(this.getClass(), "depotProductDirectory ", depotProductDirectory);
+		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 		smbMounted = new File(depotProductDirectory).exists();
 		panelMountShare.mount(smbMounted);
 

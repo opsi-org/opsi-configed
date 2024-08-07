@@ -102,7 +102,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
 
-		Logging.info(this.getClass(), "DeployClientAgentParameterDialog build");
+		Logging.info(this, "DeployClientAgentParameterDialog build");
 	}
 
 	private void init() {

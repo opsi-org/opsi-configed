@@ -27,7 +27,7 @@ public class HostConfigTreeModel extends DefaultTreeModel {
 	public HostConfigTreeModel(Set<String> keys) {
 		super(new DefaultMutableTreeNode(""));
 
-		Logging.debug(this.getClass(), "HostConfigTreeModel created for ", keys);
+		Logging.debug(this, "HostConfigTreeModel created for ", keys);
 		super.setAsksAllowsChildren(true);
 
 		rootNode = (DefaultMutableTreeNode) super.getRoot();

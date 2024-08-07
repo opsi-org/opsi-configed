@@ -42,7 +42,7 @@ public class CompletionComboButton {
 	}
 
 	public CompletionComboButton(List<String> values, String searchSpecificFiles, String comboboxDefaultPath) {
-		Logging.info(this.getClass(), "instance created");
+		Logging.info(this, "instance created");
 		this.fileExtension = searchSpecificFiles;
 		this.comboboxDefaultPath = comboboxDefaultPath;
 		init(values);

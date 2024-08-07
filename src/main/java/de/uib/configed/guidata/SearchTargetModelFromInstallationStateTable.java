@@ -19,7 +19,7 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 
 	public SearchTargetModelFromInstallationStateTable(JTable table, PanelProductSettings panelProductSettings) {
 		super(table);
-		Logging.info(this.getClass(), "table null? ", table == null);
+		Logging.info(this, "table null? ", table == null);
 
 		this.panelProductSettings = panelProductSettings;
 	}

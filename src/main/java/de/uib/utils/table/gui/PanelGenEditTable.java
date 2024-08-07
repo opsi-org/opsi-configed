@@ -159,7 +159,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		if (popupsWanted != null) {
 			for (int wantedPopup : popupsWanted) {
 				this.internalpopups.add(wantedPopup);
-				Logging.info(this.getClass(), "add popup ", wantedPopup);
+				Logging.info(this, "add popup ", wantedPopup);
 			}
 		} else {
 			this.internalpopups.add(POPUP_RELOAD);
@@ -167,11 +167,11 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			this.internalpopups.add(POPUP_PDF);
 		}
 
-		Logging.info(this.getClass(), "internalpopups ", giveMenuitemNames(internalpopups));
+		Logging.info(this, "internalpopups ", giveMenuitemNames(internalpopups));
 
 		this.internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 
-		Logging.info(this.getClass(), "internalpopups supplemented ", giveMenuitemNames(internalpopups));
+		Logging.info(this, "internalpopups supplemented ", giveMenuitemNames(internalpopups));
 
 		if (title != null) {
 			this.title = title;
