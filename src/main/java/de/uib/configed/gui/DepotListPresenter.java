@@ -24,7 +24,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
-import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -152,9 +151,7 @@ public class DepotListPresenter extends JPanel {
 		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly();
 
-		// TODO: does vpn-module really have to be active to open a terminal on a depot?
-		boolean vpnAvailable = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN);
-		return isConfigserverAndForbidden || isDepotAndForbidden || isReadOnly || !vpnAvailable;
+		return isConfigserverAndForbidden || isDepotAndForbidden || isReadOnly;
 	}
 
 	private void initComponents() {
