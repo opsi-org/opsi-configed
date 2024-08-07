@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
@@ -2423,7 +2422,10 @@ public class ConfigedMain implements MessagebusListener {
 			preloadData();
 
 			FOpsiLicenseMissingText.reset();
-			mainFrame.getTabbedConfigPanes().getPanelProductProperties().reload();
+			if (mainFrame.getTabbedConfigPanes().getPanelProductProperties() != null) {
+				mainFrame.getTabbedConfigPanes().getPanelProductProperties().reload();
+			}
+
 			if (mainFrame.getFDialogOpsiLicensingInfo() != null) {
 				mainFrame.getFDialogOpsiLicensingInfo().reload();
 			}
@@ -2439,7 +2441,7 @@ public class ConfigedMain implements MessagebusListener {
 			fetchDepots();
 
 			// if depot selection changed, we adapt the clients
-			NavigableSet<String> clientsLeft = new TreeSet<>();
+			Set<String> clientsLeft = new TreeSet<>();
 			for (String client : selValuesList) {
 				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
 						.get(client);
