@@ -114,19 +114,14 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 		productTree.setPanels(panelLocalbootProductSettings, panelNetbootProductSettings);
 
-		initHostConfigTab();
-		initSoftWareInfo();
-		initHardwareInfo();
-		initLogTab();
-
-		panelProductProperties = new PanelProductProperties(configedMain);
-
-		initHostPropertiesTab();
-
 		initView(EditingTarget.CLIENTS, 0);
 	}
 
-	private void initSoftWareInfo() {
+	private void initSoftWareInfoTab() {
+		if (panelSWInfo != null) {
+			return;
+		}
+
 		panelSWInfo = new PanelSWInfo(true) {
 			@Override
 			protected void reload() {
@@ -146,20 +141,26 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 	}
 
-	private void initHardwareInfo() {
-		if (panelHWInfo == null) {
-			panelHWInfo = new PanelHWInfo(configedMain) {
-				@Override
-				protected void reload() {
-					super.reload();
-					// otherwise we get a wait cursor only in table component
-					configedMain.resetView(ViewIndex.VIEW_HARDWARE_INFO);
-				}
-			};
+	private void initHardwareInfoTab() {
+		if (panelHWInfo != null) {
+			return;
 		}
+
+		panelHWInfo = new PanelHWInfo(configedMain) {
+			@Override
+			protected void reload() {
+				super.reload();
+				// otherwise we get a wait cursor only in table component
+				configedMain.resetView(ViewIndex.VIEW_HARDWARE_INFO);
+			}
+		};
 	}
 
 	private void initLogTab() {
+		if (showLogfiles != null) {
+			return;
+		}
+
 		showLogfiles = new TabbedLogPane(configedMain) {
 			@Override
 			public void loadDocument(String logtype) {
@@ -182,13 +183,37 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	}
 
 	private void initHostConfigTab() {
+		if (panelHostConfig != null) {
+			return;
+		}
+
 		panelHostConfig = new PanelHostConfig(configedMain);
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
+
+		setComponentAt(getSelectedIndex(), panelHostConfig);
+	}
+
+	private void initPanelPropertiesTab() {
+		if (panelProductProperties != null) {
+			return;
+		}
+
+		panelProductProperties = new PanelProductProperties(configedMain);
+		setComponentAt(getSelectedIndex(), panelProductProperties);
+		panelProductProperties.validate();
+
+		panelProductProperties.setDividerLocation(0.8);
 	}
 
 	private void initHostPropertiesTab() {
+		if (panelHostProperties != null) {
+			return;
+		}
+
 		panelHostProperties = new PanelHostProperties();
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
+
+		setComponentAt(getSelectedIndex(), panelHostProperties);
 	}
 
 	public void setSoftwareAudit() {
@@ -266,7 +291,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		panelClientSelection.setDividerLocation(0.8);
 		panelLocalbootProductSettings.setDividerLocation(0.8);
 		panelNetbootProductSettings.setDividerLocation(0.8);
-		panelProductProperties.setDividerLocation(0.8);
 	}
 
 	@Override
@@ -291,7 +315,8 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			break;
 
 		case SERVER:
-			// Here we only have one tab
+			// Here we only have one tab		
+			initHostConfigTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
 			break;
 		}
@@ -312,18 +337,22 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			break;
 
 		case 3:
+			initHostConfigTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
 			break;
 
 		case 4:
+			initHardwareInfoTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_HARDWARE_INFO);
 			break;
 
 		case 5:
+			initSoftWareInfoTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_SOFTWARE_INFO);
 			break;
 
 		case 6:
+			initLogTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_LOG);
 			break;
 
@@ -336,14 +365,17 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private void setDepotsViewIndex(int visualViewIndex) {
 		switch (visualViewIndex) {
 		case 0:
+			initHostConfigTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
 			break;
 
 		case 1:
+			initPanelPropertiesTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_PRODUCT_PROPERTIES);
 			break;
 
 		case 2:
+			initHostPropertiesTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_HOST_PROPERTIES);
 			break;
 
@@ -389,7 +421,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), new JPanel());
+		addTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null);
 
 		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), showSoftwareLogNotFound);
 
@@ -408,11 +440,5 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.jPanel_HostProperties"), " index ",
 				indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
 
-	}
-
-	public void setVisualViewIndex(int i) {
-		if (i >= 0 && i < getTabCount()) {
-			setSelectedIndex(i);
-		}
 	}
 }
