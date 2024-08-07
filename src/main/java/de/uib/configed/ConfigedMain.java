@@ -1364,7 +1364,8 @@ public class ConfigedMain implements MessagebusListener {
 
 		clientTree.produceActiveParents();
 
-		if (viewIndex != ViewIndex.VIEW_CLIENTS) {
+		// With a new client the view should be updated, but only when we are in the Client configuration
+		if (editingTarget == EditingTarget.CLIENTS && viewIndex != ViewIndex.VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
 			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ", viewIndex);
