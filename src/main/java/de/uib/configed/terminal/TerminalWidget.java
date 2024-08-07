@@ -232,7 +232,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 				getTtyConnector().write(message);
 			}
 		} catch (IOException e) {
-			Logging.error(e, "failed to write message: ");
+			Logging.error(this, e, "failed to write message: ");
 		}
 	}
 
@@ -300,7 +300,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		if (webSocketInputStream != null) {
 			// Sometimes terminalOpenEvent is received multiple times
 			// we do not want to overwrite the first initialized webSocketInputStream
-			Logging.debug("Terminal already opened");
+			Logging.debug(this, "Terminal already opened");
 			return;
 		}
 
@@ -308,7 +308,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		terminalId = (String) message.get("terminal_id");
 		terminalChannel = (String) message.get("back_channel");
 		sessionChannel = terminalChannel;
-		Logging.info("Initialized terminal channel:", terminalChannel, terminalId);
+		Logging.info(this, "Initialized terminal channel:", terminalChannel, terminalId);
 
 		terminalFrame.changeTitle();
 		locker.unlock();
@@ -331,7 +331,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 					webSocketInputStream.write((byte[]) message.get("data"));
 				}
 			} catch (IOException e) {
-				Logging.error(e, "failed to write message: ");
+				Logging.error(this, e, "failed to write message: ");
 			}
 		} else if (WebSocketEvent.FILE_UPLOAD_RESULT.toString().equals(type)) {
 			Map<String, Object> data = new HashMap<>();

@@ -116,7 +116,7 @@ public class Messagebus implements MessagebusListener {
 			}
 
 			if (System.currentTimeMillis() - start >= timeoutMs) {
-				Logging.warning("Timed out after ", timeoutMs, " ms while waiting for inital subscription event");
+				Logging.warning(this, "Timed out after ", timeoutMs, " ms while waiting for inital subscription event");
 				return false;
 			}
 			Utils.threadSleep(this, 50);
