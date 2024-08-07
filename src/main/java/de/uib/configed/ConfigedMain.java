@@ -448,7 +448,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void addClientToTable(String clientId) {
 		if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| getViewIndex() != ViewIndex.VIEW_CLIENTS) {
+				|| viewIndex != ViewIndex.VIEW_CLIENTS) {
 			return;
 		}
 
@@ -464,7 +464,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void removeClientFromTable(String clientId) {
 		if (!persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| getViewIndex() != ViewIndex.VIEW_CLIENTS) {
+				|| viewIndex != ViewIndex.VIEW_CLIENTS) {
 			return;
 		}
 
@@ -474,11 +474,11 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void updateProductTableForClient(String clientId, String productType) {
-		if (getViewIndex() == ViewIndex.VIEW_LOCALBOOT_PRODUCTS
+		if (viewIndex == ViewIndex.VIEW_LOCALBOOT_PRODUCTS
 				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getLocalbootStateAndActionsAttributes();
 			updateManager.updateProductTableForClient(clientId, attributes);
-		} else if (getViewIndex() == ViewIndex.VIEW_NETBOOT_PRODUCTS
+		} else if (viewIndex == ViewIndex.VIEW_NETBOOT_PRODUCTS
 				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
 			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
 			// Remove uneeded attributes
@@ -1365,13 +1365,11 @@ public class ConfigedMain implements MessagebusListener {
 
 		clientTree.produceActiveParents();
 
-		if (getViewIndex() != ViewIndex.VIEW_CLIENTS) {
+		if (viewIndex != ViewIndex.VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
-			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ",
-					getViewIndex());
-			ViewIndex newViewIndex = getViewIndex();
-			resetView(newViewIndex);
+			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ", viewIndex);
+			resetView();
 		}
 	}
 
@@ -1636,10 +1634,6 @@ public class ConfigedMain implements MessagebusListener {
 				clientProductpropertiesUpdateCollection);
 	}
 
-	public ViewIndex getViewIndex() {
-		return viewIndex;
-	}
-
 	private void treeClientsSelectAction(TreePath newSelectedPath) {
 		Logging.info(this, "treeClientsSelectAction");
 
@@ -1775,7 +1769,7 @@ public class ConfigedMain implements MessagebusListener {
 			refreshClientListKeepingGroup();
 		}
 
-		setViewIndex(getViewIndex());
+		setViewIndex(viewIndex);
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -2239,6 +2233,10 @@ public class ConfigedMain implements MessagebusListener {
 		return true;
 	}
 
+	public boolean resetView() {
+		return resetView(viewIndex);
+	}
+
 	public boolean resetView(ViewIndex viewIndex) {
 		Logging.info(this, "resetView to ", viewIndex, "  selectedClients size: ", selectedClients.size());
 		mainFrame.activateLoadingCursor();
@@ -2384,7 +2382,7 @@ public class ConfigedMain implements MessagebusListener {
 			depotsList.setEnabled(viewIndex == ViewIndex.VIEW_CLIENTS);
 
 			Logging.debug(this, "switch to viewIndex ", viewIndex);
-			boolean result = resetView(viewIndex);
+			boolean result = resetView();
 
 			if (!result) {
 				viewIndex = oldViewIndex;
@@ -2840,8 +2838,8 @@ public class ConfigedMain implements MessagebusListener {
 
 		requestReloadStatesAndActions();
 
-		if (getViewIndex() == ViewIndex.VIEW_LOCALBOOT_PRODUCTS || getViewIndex() == ViewIndex.VIEW_NETBOOT_PRODUCTS) {
-			resetView(getViewIndex());
+		if (viewIndex == ViewIndex.VIEW_LOCALBOOT_PRODUCTS || viewIndex == ViewIndex.VIEW_NETBOOT_PRODUCTS) {
+			resetView();
 		}
 
 		mainFrame.deactivateLoadingCursor();
