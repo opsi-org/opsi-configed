@@ -232,7 +232,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 				getTtyConnector().write(message);
 			}
 		} catch (IOException e) {
-			Logging.error(e, "failed to write message: ");
+			Logging.error(this, e, "failed to write message: ");
 		}
 	}
 
@@ -296,6 +296,24 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		// Not required to implement.
 	}
 
+	public void initTerminalChannel(Map<String, Object> message) {
+		if (webSocketInputStream != null) {
+			// Sometimes terminalOpenEvent is received multiple times
+			// we do not want to overwrite the first initialized webSocketInputStream
+			Logging.debug(this, "Terminal already opened");
+			return;
+		}
+
+		webSocketInputStream = new WebSocketInputStream();
+		terminalId = (String) message.get("terminal_id");
+		terminalChannel = (String) message.get("back_channel");
+		sessionChannel = terminalChannel;
+		Logging.info(this, "Initialized terminal channel:", terminalChannel, terminalId);
+
+		terminalFrame.changeTitle();
+		locker.unlock();
+	}
+
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
 		if (!isFirstConnection() && !isMessageForThisChannel(message)) {
@@ -304,11 +322,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 
 		String type = (String) message.get("type");
 		if (WebSocketEvent.TERMINAL_OPEN_EVENT.toString().equals(type)) {
-			webSocketInputStream = new WebSocketInputStream();
-			terminalId = (String) message.get("terminal_id");
-			terminalChannel = (String) message.get("back_channel");
-			terminalFrame.changeTitle();
-			locker.unlock();
+			initTerminalChannel(message);
 		} else if (WebSocketEvent.TERMINAL_CLOSE_EVENT.toString().equals(type)) {
 			close();
 		} else if (WebSocketEvent.TERMINAL_DATA_READ.toString().equals(type)) {
@@ -317,7 +331,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 					webSocketInputStream.write((byte[]) message.get("data"));
 				}
 			} catch (IOException e) {
-				Logging.error(e, "failed to write message: ");
+				Logging.error(this, e, "failed to write message: ");
 			}
 		} else if (WebSocketEvent.FILE_UPLOAD_RESULT.toString().equals(type)) {
 			Map<String, Object> data = new HashMap<>();

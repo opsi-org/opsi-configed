@@ -1766,6 +1766,7 @@ public class ConfigedMain implements MessagebusListener {
 
 			productTree.reInitTree();
 			refreshClientListKeepingGroup();
+			mainFrame.rebuildDepotPopup();
 		}
 
 		setViewIndex(viewIndex);
@@ -3257,16 +3258,35 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void openTerminalOnClient() {
-		if (!getConnectedClientsByMessagebus().contains(selectedClients.get(0))) {
-			Logging.info(this, "Client shell access feature is only supported for clients connected with messagebus");
-			JOptionPane.showMessageDialog(mainFrame,
-					Configed.getResourceValue("ConfigedMain.openTerminalOnClientFeature.message"));
-			return;
+		openTerminalOnHost("Client");
+	}
+
+	public void openTerminalOnDepot() {
+		openTerminalOnHost("ConfigserverOrDepot");
+	}
+
+	private void openTerminalOnHost(String type) {
+		if (!"Client".equals(type) && !"ConfigserverOrDepot".equals(type)) {
+			throw new IllegalArgumentException("type must be either 'Client' or 'Depot'");
+		}
+		String connectToHost = ("Client".equals(type)) ? selectedClients.get(0) : depotsList.getSelectedValue();
+		if (connectToHost == null) {
+			throw new IllegalArgumentException("host must not be null. (type: " + type + ")");
+		}
+		if ("ConfigserverOrDepot".equals(type)
+				&& connectToHost.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
+			connectToHost = "Configserver";
 		}
 
+		if (!getConnectedClientsByMessagebus().contains(connectToHost) && !"Configserver".equals(connectToHost)) {
+			Logging.info(this, type, " shell access feature is only supported for clients connected with messagebus");
+			JOptionPane.showMessageDialog(mainFrame,
+					Configed.getResourceValue("ConfigedMain.openTerminalOn" + type + "Feature.message"));
+			return;
+		}
 		TerminalFrame terminalFrame = new TerminalFrame(this);
 		terminalFrame.setMessagebus(messagebus);
-		terminalFrame.setSession(selectedClients.get(0));
+		terminalFrame.setSession(connectToHost);
 		terminalFrame.display();
 	}
 

@@ -231,7 +231,8 @@ public final class Logging {
 
 		StringBuilder result = new StringBuilder(message);
 		for (Object o : mesg) {
-			result.append(o);
+			// python style
+			result.append(o).append(" ");
 		}
 
 		String currentTime = formatter.format(LocalDateTime.now());
