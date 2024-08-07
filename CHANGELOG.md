@@ -3,6 +3,7 @@
 
 ### Changed
 - Only show enabled tabs in Client/Depot/Server configuration
+- Lazy loading for all tabs in Client/Depot/Server configuration apart from Client and Product tables
 
 ## [4.4.0.2] - 2024-07-18
 
