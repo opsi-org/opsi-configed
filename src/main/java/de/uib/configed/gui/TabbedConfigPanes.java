@@ -38,6 +38,8 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
+	public static final float DIVIDER_LOCATION = 0.8F;
+
 	private ConfigedMain configedMain;
 	private MainFrame mainFrame;
 	private ProductTree productTree;
@@ -199,10 +201,8 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		}
 
 		panelProductProperties = new PanelProductProperties(configedMain);
-		setComponentAt(getSelectedIndex(), panelProductProperties);
-		panelProductProperties.validate();
 
-		panelProductProperties.setDividerLocation(0.8);
+		setComponentAt(getSelectedIndex(), panelProductProperties);
 	}
 
 	private void initHostPropertiesTab() {
@@ -288,9 +288,9 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	}
 
 	public void initSplitPanes() {
-		panelClientSelection.setDividerLocation(0.8);
-		panelLocalbootProductSettings.setDividerLocation(0.8);
-		panelNetbootProductSettings.setDividerLocation(0.8);
+		panelClientSelection.setDividerLocation(DIVIDER_LOCATION);
+		panelLocalbootProductSettings.setDividerLocation(DIVIDER_LOCATION);
+		panelNetbootProductSettings.setDividerLocation(DIVIDER_LOCATION);
 	}
 
 	@Override
