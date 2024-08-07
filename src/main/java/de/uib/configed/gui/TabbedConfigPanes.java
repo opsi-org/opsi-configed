@@ -126,17 +126,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		initView(EditingTarget.CLIENTS, 0);
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		// report state change request to
-		int visualIndex = getSelectedIndex();
-
-		// report state change request to controller
-
-		Logging.info(this, "stateChanged of tabbedPane, visualIndex ", visualIndex);
-		configedMain.setViewIndex(visualIndex);
-	}
-
 	private void initSoftWareInfo() {
 		panelSWInfo = new PanelSWInfo(true) {
 			@Override
@@ -278,6 +267,90 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		panelLocalbootProductSettings.setDividerLocation(0.8);
 		panelNetbootProductSettings.setDividerLocation(0.8);
 		panelProductProperties.setDividerLocation(0.8);
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// report state change request to
+		int visualIndex = getSelectedIndex();
+
+		Logging.info(this, "stateChanged of tabbedPane, visualIndex ", visualIndex);
+		if (visualIndex == -1) {
+			Logging.info(this, "Won't set view index, since selected visualViewIndex is -1");
+			return;
+		}
+
+		// report state change request to controller
+		switch (ConfigedMain.getEditingTarget()) {
+		case CLIENTS:
+			setClientsViewIndex(visualIndex);
+			break;
+
+		case DEPOTS:
+			setDepotsViewIndex(visualIndex);
+			break;
+
+		case SERVER:
+			// Here we only have one tab
+			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+			break;
+		}
+	}
+
+	private void setClientsViewIndex(int visualViewIndex) {
+		switch (visualViewIndex) {
+		case 0:
+			configedMain.setViewIndex(ViewIndex.VIEW_CLIENTS);
+			break;
+
+		case 1:
+			configedMain.setViewIndex(ViewIndex.VIEW_LOCALBOOT_PRODUCTS);
+			break;
+
+		case 2:
+			configedMain.setViewIndex(ViewIndex.VIEW_NETBOOT_PRODUCTS);
+			break;
+
+		case 3:
+			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+			break;
+
+		case 4:
+			configedMain.setViewIndex(ViewIndex.VIEW_HARDWARE_INFO);
+			break;
+
+		case 5:
+			configedMain.setViewIndex(ViewIndex.VIEW_SOFTWARE_INFO);
+			break;
+
+		case 6:
+			configedMain.setViewIndex(ViewIndex.VIEW_LOG);
+			break;
+
+		default:
+			Logging.warning(this, "unexpected visualViewIndex ", visualViewIndex, " in clients view");
+			break;
+		}
+	}
+
+	private void setDepotsViewIndex(int visualViewIndex) {
+		switch (visualViewIndex) {
+		case 0:
+			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+			break;
+
+		case 1:
+			configedMain.setViewIndex(ViewIndex.VIEW_PRODUCT_PROPERTIES);
+			break;
+
+		case 2:
+			configedMain.setViewIndex(ViewIndex.VIEW_HOST_PROPERTIES);
+			break;
+
+		default:
+			Logging.warning(this, "unexpected visualViewIndex ", visualViewIndex, " in depots view");
+			break;
+		}
 	}
 
 	public void initView(EditingTarget editingTarget, int view) {
