@@ -114,46 +114,14 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 		productTree.setPanels(panelLocalbootProductSettings, panelNetbootProductSettings);
 
-		panelHostConfig = new PanelHostConfig(configedMain);
-
-		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
-
+		initHostConfigTab();
 		initSoftWareInfo();
 		initHardwareInfo();
-
-		labelNoSoftware = new JLabel();
-
-		showSoftwareLogNotFound = new JPanel();
-		showSoftwareLogNotFound.add(labelNoSoftware);
-
-		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
-		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
-		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
-
-		showLogfiles = new TabbedLogPane(configedMain) {
-			@Override
-			public void loadDocument(String logtype) {
-				super.loadDocument(logtype);
-				Logging.info(this, "loadDocument logtype ", logtype);
-				setUpdatedLogfilePanel(logtype);
-			}
-		};
-
-		showLogfiles.addChangeListener((ChangeEvent e) -> {
-			Logging.debug(this, " new logfiles tabindex ", showLogfiles.getSelectedIndex());
-
-			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
-
-			// logfile empty?
-			if (!configedMain.logfileExists(logtype)) {
-				setUpdatedLogfilePanel(logtype);
-			}
-		});
+		initLogTab();
 
 		panelProductProperties = new PanelProductProperties(configedMain);
 
-		panelHostProperties = new PanelHostProperties();
-		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
+		initHostPropertiesTab();
 
 		initView(EditingTarget.CLIENTS, 0);
 	}
@@ -178,6 +146,15 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				configedMain.resetView(ViewIndex.VIEW_SOFTWARE_INFO);
 			}
 		};
+
+		labelNoSoftware = new JLabel();
+
+		showSoftwareLogNotFound = new JPanel();
+		showSoftwareLogNotFound.add(labelNoSoftware);
+
+		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
+		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
+		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 	}
 
 	private void initHardwareInfo() {
@@ -191,6 +168,38 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				}
 			};
 		}
+	}
+
+	private void initLogTab() {
+		showLogfiles = new TabbedLogPane(configedMain) {
+			@Override
+			public void loadDocument(String logtype) {
+				super.loadDocument(logtype);
+				Logging.info(this, "loadDocument logtype ", logtype);
+				setUpdatedLogfilePanel(logtype);
+			}
+		};
+
+		showLogfiles.addChangeListener((ChangeEvent e) -> {
+			Logging.debug(this, " new logfiles tabindex ", showLogfiles.getSelectedIndex());
+
+			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
+
+			// logfile empty?
+			if (!configedMain.logfileExists(logtype)) {
+				setUpdatedLogfilePanel(logtype);
+			}
+		});
+	}
+
+	private void initHostConfigTab() {
+		panelHostConfig = new PanelHostConfig(configedMain);
+		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
+	}
+
+	private void initHostPropertiesTab() {
+		panelHostProperties = new PanelHostProperties();
+		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 	}
 
 	public void setSoftwareAudit() {
