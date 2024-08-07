@@ -80,8 +80,8 @@ public class InstallationStateUpdateManager {
 					.entrySet()) {
 				Map<String, Map<String, String>> clientValues = changedClientState.getValue();
 
-				Logging.debug(this, "updateProductStates, collectChangedProductStates , client "
-						+ changedClientState.getKey() + " values " + clientValues);
+				Logging.debug(this, "updateProductStates, collectChangedProductStates , client ",
+						changedClientState.getKey(), " values ", clientValues);
 
 				if (clientValues.keySet() == null || clientValues.isEmpty()) {
 					continue;

@@ -13,8 +13,10 @@ import java.awt.event.WindowEvent;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
@@ -29,15 +31,29 @@ import de.uib.configed.gui.FSelectionList;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
+import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.permission.UserOpsipermission;
+import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 
 public final class TerminalFrame implements MessagebusListener {
 	private JFrame frame;
 
 	private Messagebus messagebus;
+
+	// User roles configs
+	private boolean depotsConfigured = UserConfig.getCurrentUserConfig()
+			.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED);
+	private boolean clientsConfigured = UserConfig.getCurrentUserConfig()
+			.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED);
+	private List<Object> allowedDepots = UserConfig.getCurrentUserConfig()
+			.getValues(UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE);
+	private List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
+			.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
 
 	private TerminalTabbedPane tabbedPane;
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
@@ -45,12 +61,14 @@ public final class TerminalFrame implements MessagebusListener {
 	private boolean restrictView;
 	private Runnable callback;
 	private String session;
+	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public TerminalFrame() {
+	public TerminalFrame(ConfigedMain configedMain) {
 		this(false);
+		this.configedMain = configedMain;
 	}
 
 	public TerminalFrame(boolean restrictView) {
@@ -133,7 +151,7 @@ public final class TerminalFrame implements MessagebusListener {
 			return;
 		}
 
-		TerminalFrame terminalFrame = new TerminalFrame();
+		TerminalFrame terminalFrame = new TerminalFrame(this.configedMain);
 		terminalFrame.setMessagebus(messagebus);
 		terminalFrame.display();
 	}
@@ -151,19 +169,13 @@ public final class TerminalFrame implements MessagebusListener {
 		if (restrictView) {
 			return;
 		}
-
 		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
 				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
 				500, 300);
-		List<String> clientsConnectedByMessagebus = new ArrayList<>(PersistenceControllerFactory
-				.getPersistenceController().getHostDataService().getMessagebusConnectedClients());
 
-		// Don't allow connection to clients when VPN module is not available
-		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
-			clientsConnectedByMessagebus.removeAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
-		}
+		// result list (allowed clients and depots connected by message bus)
+		List<String> clientsConnectedByMessagebus = getAllowedDevices();
 
-		clientsConnectedByMessagebus.add("Configserver");
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
 		sessionsDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -175,6 +187,153 @@ public final class TerminalFrame implements MessagebusListener {
 				tabbedPane.getSelectedTerminalWidget().close();
 				tabbedPane.resetTerminalWidgetOnSelectedTab();
 				tabbedPane.openSessionOnSelectedTab(sessionsDialog.getSelectedValue());
+			}
+		}
+	}
+
+	/**
+	 * Filter the list of connectable devices (clients and depots) by user roles
+	 * 'priviliges.host.depotaccess.*' and 'connect.terminal.forbidden'
+	 * 
+	 * @return List of allowed devices (clients and depots/server)
+	 */
+	private List<String> getAllowedDevices() {
+		// result list (allowed clients and depots connected by message bus)
+		List<String> resultListAllowedDevices = new ArrayList<>();
+
+		if (isConfigServerAllowed(forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER),
+				depotsConfigured, allowedDepots)) {
+			resultListAllowedDevices.add("Configserver");
+		}
+
+		// Don't allow connection to clients when VPN module is not available
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)) {
+			return resultListAllowedDevices;
+		}
+
+		// list of *all depots* to e.g. distinguish between depots and clients in list of connected devices
+		List<String> depotsList = persistenceController.getHostInfoCollections().getDepotNamesList();
+		Logging.info(this, "terminal, depotsList: ", depotsList);
+
+		Set<String> allClientsDepotsConnected2Msgbus = getAllowedHostsByUserRolesHosts(depotsList);
+		filterByMsgbusForbiddenConfig(resultListAllowedDevices, allClientsDepotsConnected2Msgbus, depotsList);
+		return resultListAllowedDevices;
+	}
+
+	/**
+	 * Check if configserver is allowed by user roles
+	 * 'priviliges.host.depotaccess.*' and msgbus-settings
+	 * 'connect.terminal.forbidden'
+	 * 
+	 * @param forbiddenConfigServer true if configserver is forbidden by
+	 *                              'connect.terminal.forbidden'
+	 * @param depotsConfigured      true if user roles
+	 *                              'priviliges.host.depotaccess.*' are
+	 *                              configured
+	 * @param allowedDepots         List of allowed depots by user role
+	 *                              'priviliges.host.depotaccess.depots'
+	 * @return true if configserver is allowed
+	 */
+	private boolean isConfigServerAllowed(boolean forbiddenConfigServer, boolean depotsConfigured,
+			List<Object> allowedDepots) {
+		Logging.debug(this, "terminal, allowedDepots: ", allowedDepots);
+		String configserverName = persistenceController.getHostInfoCollections().getConfigServer();
+		boolean allowed = (!forbiddenConfigServer && (!depotsConfigured || allowedDepots.contains(configserverName)));
+		Logging.debug(this, "terminal, configserver allowed (", allowed, "): ", configserverName,
+				" (depotsConfigured: ", depotsConfigured, "allowedDepots: ", allowedDepots, ", ");
+		return allowed;
+	}
+
+	/**
+	 * Filter clients and depots by configured permissions (user roles
+	 * 'priviliges.host.depotaccess.depots' and
+	 * 'priviliges.host.groupaccess.hostgroups') This is done by getting the
+	 * connected devices (clients and depots) by message bus and filtering them
+	 * by the user roles. The result is a list of clients and depots allowed by
+	 * user roles (priviliges.host.depotaccess.depots and
+	 * priviliges.host.groupaccess.hostgroups)
+	 * 
+	 * @param allDepots List of all server/depots (including forbidden items,
+	 *                  etc.)
+	 * @return Set of clients and depots allowed by user roles
+	 */
+	private Set<String> getAllowedHostsByUserRolesHosts(List<String> allDepots) {
+		Set<String> allClientsDepotsConnected2Msgbus = persistenceController.getHostDataService()
+				.getMessagebusConnectedClients();
+		Set<String> allClientsDepotsConnected2MsgbusCopy = new HashSet<>(allClientsDepotsConnected2Msgbus);
+		Logging.info(this, "terminal, allClientsDepotsConnected2Msgbus: ", allClientsDepotsConnected2Msgbus);
+
+		// list of clients allowed by user roles
+		Set<String> clientsOfAllowedDepots = persistenceController.getHostInfoCollections()
+				.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients());
+		Logging.info(this, "terminal, clientsForDepots: ", clientsOfAllowedDepots);
+
+		// filter clients and depots by configured permissions (user roles)
+		if (depotsConfigured || clientsConfigured) {
+			for (String clientOrDepot : allClientsDepotsConnected2MsgbusCopy) {
+				boolean isDepot = allDepots.contains(clientOrDepot);
+
+				if (isDepot && depotsConfigured && !allowedDepots.contains(clientOrDepot)) {
+					allClientsDepotsConnected2Msgbus.remove(clientOrDepot);
+				} else if (!isDepot && !clientsOfAllowedDepots.contains(clientOrDepot)) {
+					allClientsDepotsConnected2Msgbus.remove(clientOrDepot);
+				} else {
+					// pass
+				}
+			}
+			Logging.info(this, "terminal, allAllowedClientsAndDepots (without client2Depot): ",
+					allClientsDepotsConnected2Msgbus);
+		}
+		return allClientsDepotsConnected2Msgbus;
+	}
+
+	/**
+	 * Filter the resultlist (clients and depots allowed by user roles) by the
+	 * new user role config 'connect.terminal.forbidden' This method updates the
+	 * resultList parameter
+	 * 
+	 * @param resultList                         List of clients and depots
+	 *                                           allowed by user roles. it will
+	 *                                           be shown to the user
+	 * @param allClientsDepotsAllowedByPrivilege Set of clients and depots
+	 *                                           allowed by user roles
+	 *                                           (priviliges.host.depotaccess.depots
+	 *                                           and
+	 *                                           priviliges.host.groupaccess.hostgroups)
+	 * @param depotsList                         List of all server/depots
+	 *                                           (including forbidden items,
+	 *                                           etc.)
+	 */
+	private void filterByMsgbusForbiddenConfig(List<String> resultList, Set<String> allClientsDepotsAllowedByPrivilege,
+			List<String> depotsList) {
+
+		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
+		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
+		// filter clients and depots by configured permissions (mostly msg bus settings cause user roles already filtered)
+		if (forbiddenDepots && forbiddenClients) {
+			// pass. no clients or depots allowed
+		} else if (!forbiddenDepots && !forbiddenClients) {
+			// filtered by allowedDepots and allowedClients (user roles)
+			resultList.addAll(allClientsDepotsAllowedByPrivilege);
+		} else {
+			// either depots or clients forbidden so we split them
+			Set<String> allDepots = new HashSet<>();
+			for (String depot : depotsList) {
+				if (allClientsDepotsAllowedByPrivilege.contains(depot)) {
+					allClientsDepotsAllowedByPrivilege.remove(depot);
+					allDepots.add(depot);
+				}
+			}
+			// now we have two lists:
+			// * allClientsDepotsAllowedByPrivilege contains only clients (we removed the depots)
+			// * allDepots contains only depots
+			if (!forbiddenClients) {
+				Logging.debug(this, "terminal, allAllowedClients: ", allClientsDepotsAllowedByPrivilege);
+				resultList.addAll(allClientsDepotsAllowedByPrivilege);
+			} else {
+				// !forbiddenDepots
+				Logging.info(this, "terminal, allAllowedDepots: ", allDepots);
+				resultList.addAll(allDepots);
 			}
 		}
 	}

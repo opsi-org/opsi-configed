@@ -649,7 +649,7 @@ public class OpsiDataSerializer {
 	 */
 	private static AbstractSelectOperation checkForHostGroup(AbstractSelectOperation operation) {
 		if (!(operation instanceof AbstractSelectGroupOperation)) {
-			Logging.debug("No group: " + operation.getClassName(), ", element path size: ",
+			Logging.debug("No group: ", operation.getClassName(), ", element path size: ",
 					operation.getElement().getPathArray().length);
 			if (operation.getElement().getPathArray().length == 1) {
 				return new HostOperation(operation);

@@ -868,8 +868,8 @@ public class ConfigedMain implements MessagebusListener {
 				}
 			}
 		};
-
 		depotsList.addListSelectionListener(depotsListSelectionListener);
+		// TODO: add right click manager for depots items to open context menu
 
 		fetchDepots();
 
@@ -2583,8 +2583,8 @@ public class ConfigedMain implements MessagebusListener {
 				Logging.info(this, "dataHaveChanged null");
 			} else {
 				for (Entry<?, ?> clientEntry : source.entrySet()) {
-					Logging.debug(this, "dataHaveChanged for client ",
-							clientEntry.getKey() + " with values" + clientEntry.getValue());
+					Logging.debug(this, "dataHaveChanged for client ", clientEntry.getKey(), " with values",
+							clientEntry.getValue());
 				}
 			}
 
@@ -3262,7 +3262,7 @@ public class ConfigedMain implements MessagebusListener {
 			return;
 		}
 
-		TerminalFrame terminalFrame = new TerminalFrame();
+		TerminalFrame terminalFrame = new TerminalFrame(this);
 		terminalFrame.setMessagebus(messagebus);
 		terminalFrame.setSession(selectedClients.get(0));
 		terminalFrame.display();

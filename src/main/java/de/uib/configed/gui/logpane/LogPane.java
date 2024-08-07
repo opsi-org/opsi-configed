@@ -105,7 +105,7 @@ public class LogPane extends JPanel implements KeyListener {
 	private LogFileParser parser;
 
 	public LogPane(String defaultText, boolean withPopup) {
-		Logging.info(this.getClass(), "initializing");
+		Logging.info(this, "initializing");
 		title = "";
 		info = "";
 

@@ -50,14 +50,14 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
 			Consumer<Enum<E>> enumSetter) {
-		Logging.info(this.getClass(), " my enum ", myenum);
+		Logging.info(this, " my enum ", myenum);
 
 		this.title = title;
 
 		changeListeners = new ArrayList<>();
 
 		if (labels != null && labels.length < values.length) {
-			Logging.warning(this.getClass(), "missing label");
+			Logging.warning(this, "missing label");
 		}
 
 		this.labels = new LinkedHashMap<>();
@@ -75,9 +75,9 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		this.enumSetter = enumSetter;
 
 		if (myenumClass != null && myenumClass.isEnum()) {
-			Logging.info(this.getClass(), " type of myenum ", myenumClass.getTypeName());
+			Logging.info(this, " type of myenum ", myenumClass.getTypeName());
 
-			Logging.info(this.getClass(), " enum constants ", Arrays.toString(myenumClass.getEnumConstants()));
+			Logging.info(this, " enum constants ", Arrays.toString(myenumClass.getEnumConstants()));
 
 			int i = 0;
 			for (Object constant : myenumClass.getEnumConstants()) {
@@ -85,13 +85,13 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 					producedValue = (Enum) constant;
 				}
 				i++;
-				Logging.info(this.getClass(), " enum constant  ", constant, " class ", constant.getClass());
+				Logging.info(this, " enum constant  ", constant, " class ", constant.getClass());
 			}
 		}
 
 		this.startValue = startValue;
 
-		Logging.info(this.getClass(), " string val of start value ", startValue.toString());
+		Logging.info(this, " string val of start value ", startValue.toString());
 
 		initComponents();
 

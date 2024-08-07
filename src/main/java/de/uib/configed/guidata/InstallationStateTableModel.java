@@ -124,11 +124,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, Set<String> productNames,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
-		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
+		Logging.info(this, "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
-			Logging.info(this.getClass(), " statesAndActions null ");
+			Logging.info(this, " statesAndActions null ");
 		} else {
-			Logging.info(this.getClass(), " statesAndActions ", statesAndActions.size());
+			Logging.info(this, " statesAndActions ", statesAndActions.size());
 		}
 
 		this.configedMain = configedMain;
@@ -148,7 +148,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		this.productNames = productNames;
 		sortedProductsList = new ArrayList<>(productNames);
 
-		Logging.debug(this.getClass(), "productNames ", productNames);
+		Logging.debug(this, "productNames ", productNames);
 
 		initalizeProductStates(statesAndActions);
 	}
@@ -491,8 +491,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private void setInstallationInfo(String clientId, String product, String value) {
-		Logging.debug(this,
-				"setInstallationInfo for product, client, value " + product + ", " + clientId + ", " + value);
+		Logging.debug(this, "setInstallationInfo for product, client, value ", product, ", ", clientId, ", ", value);
 
 		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.computeIfAbsent(clientId,
 				arg -> new HashMap<>());
@@ -732,8 +731,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			recursivelyChangeActionRequest(clientId, productId, ar);
 		}
 
-		Logging.debug(this, "collectiveChangeActionRequest for product, changed products "
-				+ product2setOfClientsWithNewAction.keySet());
+		Logging.debug(this, "collectiveChangeActionRequest for product, changed products ",
+				product2setOfClientsWithNewAction.keySet());
 
 		// show the new settings for all products after recursion
 
@@ -781,7 +780,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		// adds the new value to the collection of changed states
 		// calls the dependencies for the next turn
 
-		Logging.debug(this, "recursivelyChangeActionRequest ", clientId, ", ", product + ", ", ar);
+		Logging.debug(this, "recursivelyChangeActionRequest ", clientId, ", ", product, ", ", ar);
 
 		setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
 
@@ -875,13 +874,13 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 			String actionRequestForRequiredProduct = stateAndAction.get(ActionRequest.KEY);
 
-			Logging.debug(this, "---- stateAndAction until now: ActionRequest for requiredProduct "
-					+ actionRequestForRequiredProduct);
+			Logging.debug(this, "---- stateAndAction until now: ActionRequest for requiredProduct ",
+					actionRequestForRequiredProduct);
 
 			String installationStatusOfRequiredProduct = stateAndAction.get(InstallationStatus.KEY);
 
-			Logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct "
-					+ installationStatusOfRequiredProduct);
+			Logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct ",
+					installationStatusOfRequiredProduct);
 
 			Logging.debug(this, "requiredAction ", requiredAction);
 			Logging.debug(this, "ActionRequest.getVal(requiredAction) ", ActionRequest.getVal(requiredAction));

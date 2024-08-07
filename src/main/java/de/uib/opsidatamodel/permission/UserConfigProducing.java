@@ -47,8 +47,8 @@ public class UserConfigProducing {
 		this.serverconfigValuesMap = serverconfigValuesMap;
 		this.configOptionsMap = configOptionsMap;
 
-		Logging.info(this.getClass(), "create with existing collections depots, hostgroups, productgroups ",
-				existingDepots.size(), " - ", existingHostgroups.size(), " - ", existingProductgroups.size());
+		Logging.info(this, "create with existing collections depots, hostgroups, productgroups ", existingDepots.size(),
+				" - ", existingHostgroups.size(), " - ", existingProductgroups.size());
 	}
 
 	public List<Object> produce() {
@@ -145,7 +145,7 @@ public class UserConfigProducing {
 		// item variable for adding items to readyObjects
 		Map<String, Object> item = null;
 
-		if (serverconfigValuesMap.get(configKeyUseList) == null) {
+		if (configKeyUseList != null && serverconfigValuesMap.get(configKeyUseList) == null) {
 			Logging.info(this, "supplyConfigPermissionList. serverconfigValuesMap has no value for key ",
 					configKeyUseList);
 			item = Utils.createNOMBoolConfig(configKeyUseList, initialValue,
@@ -335,6 +335,8 @@ public class UserConfigProducing {
 				readyObjects.size());
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig ", userConfig);
 
+		updateConfigListItem(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN,
+				UserServerConsoleConfig.FORBIDDEN_OPTIONS, userConfig, prototypeConfig, prototypeObligatory, startKey);
 		updateDepots(userConfig, prototypeConfig, prototypeObligatory, startKey);
 		updateHostGroups(userConfig, prototypeConfig, prototypeObligatory, startKey, username);
 		updateProductGroups(userConfig, prototypeConfig, prototypeObligatory, startKey);
@@ -445,7 +447,7 @@ public class UserConfigProducing {
 			selectedValuesHostgroup = serverconfigValuesMap.get(configKeyList);
 		}
 
-		Logging.info(this, "selectedValuesHostgroup for user ", username + ": ", selectedValuesHostgroup);
+		Logging.info(this, "selectedValuesHostgroup for user ", username, ": ", selectedValuesHostgroup);
 
 		userConfig.setValues(partkey, selectedValuesHostgroup);
 
@@ -532,6 +534,67 @@ public class UserConfigProducing {
 				currentPossibleValuesProductgroupsListed);
 
 		supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
+				selectedValuesProductgroups, oldPossibleValuesProductgroups, currentPossibleValuesProductgroupsListed);
+	}
+
+	private void updateConfigListItem(String partkey, List<Object> possibleValues, UserConfig userConfig,
+			UserConfig prototypeConfig, boolean prototypeObligatory, String startKey) {
+		// Methode zum initialisieren von Listenwerten
+		// analog zu updateProductGroups, ignoriert aber das configure-config 
+		// und setzt übergegebene possibleValues
+
+		List<Object> selectedValuesProductgroups = null;
+		List<Object> possibleValuesProductgroups = null;
+		Set<Object> oldPossibleValuesProductgroups = null;
+		Set<Object> currentPossibleValuesProductgroupsListed = null;
+
+		String configKeyConfigured = null;
+		String configKeyList = startKey + partkey;
+
+		Logging.info(this, "updateTerminalConfig, configKeyConfigured ", configKeyConfigured, ", configKeyList ",
+				configKeyList);
+
+		boolean defaultvalueForRestrictionUsage = false;
+
+		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
+			selectedValuesProductgroups = prototypeConfig.getValues(partkey);
+			Logging.info(this, "updateTerminalConfig, selectedValuesProductgroups from prototype ",
+					selectedValuesProductgroups);
+		} else {
+			selectedValuesProductgroups = serverconfigValuesMap.get(configKeyList);
+			Logging.info(this, "updateTerminalConfig, selectedValuesProductgroups from server ",
+					selectedValuesProductgroups);
+		}
+
+		userConfig.setValues(partkey, selectedValuesProductgroups);
+
+		if (configOptionsMap.get(configKeyList) == null
+				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
+			oldPossibleValuesProductgroups = new TreeSet<>();
+		} else {
+			oldPossibleValuesProductgroups = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
+		}
+
+		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
+
+		if (prototypeObligatory) {
+			possibleValuesProductgroups = prototypeConfig.getPossibleValues(partkey);
+			currentPossibleValuesProductgroupsListed.addAll(possibleValuesProductgroups);
+		} else {
+			Set<Object> posVals = new TreeSet<>(possibleValues);
+			currentPossibleValuesProductgroupsListed.addAll(posVals);
+		}
+
+		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesProductgroupsListed));
+
+		Logging.info(this, "updateProductGroups selectedValuesProductgroups before supplying ",
+				selectedValuesProductgroups);
+		Logging.info(this, "updateProductGroups oldPossibleValuesProductgroupsListed before supplying ",
+				oldPossibleValuesProductgroups);
+		Logging.info(this, "updateProductGroups currentPossibleValuesProductgroupsListed before supplying ",
+				currentPossibleValuesProductgroupsListed);
+
+		supplyConfigPermissionList(configKeyConfigured, defaultvalueForRestrictionUsage, configKeyList,
 				selectedValuesProductgroups, oldPossibleValuesProductgroups, currentPossibleValuesProductgroupsListed);
 	}
 

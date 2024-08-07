@@ -156,10 +156,10 @@ public class OpsiServiceNOMPersistenceController {
 	private String triggeredEvent;
 
 	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
-		Logging.info(this.getClass(), "start construction, \nconnect to ", server, " as ", user);
+		Logging.info(this, "start construction, \nconnect to ", server, " as ", user);
 		this.user = user;
 
-		Logging.debug(this.getClass(), "create");
+		Logging.debug(this, "create");
 
 		init();
 

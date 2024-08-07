@@ -263,9 +263,9 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 		buttonCallExecute.addActionListener((ActionEvent e) -> {
 			Logging.debug(this,
-					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct "
-							+ fieldPathWinPE.getText() + ", " + fieldPathInstallFiles.getText() + ", "
-							+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
+					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct ",
+					fieldPathWinPE.getText(), ", ", fieldPathInstallFiles.getText(), ", ", fieldProductKey.getText(),
+					", ", comboChooseWinProduct.getSelectedItem());
 			execute();
 		});
 	}
@@ -332,7 +332,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					activateLoadingCursor();
-					Logging.info(this, "setCommonProductPropertyValue ", depots, ", ", winProduct + ", ", values);
+					Logging.info(this, "setCommonProductPropertyValue ", depots, ", ", winProduct, ", ", values);
 					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
 							"productkey", values);
 

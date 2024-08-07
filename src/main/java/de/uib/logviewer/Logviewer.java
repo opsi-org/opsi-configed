@@ -26,12 +26,12 @@ public final class Logviewer {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
-		Logging.essential(this.getClass(), "starting Logviewer");
+		Logging.essential(this, "starting Logviewer");
 
 		String imageHandled = "(we start image retrieving)";
-		Logging.info(this.getClass(), imageHandled);
+		Logging.info(this, imageHandled);
 
-		Logging.info(this.getClass(), "--  wantedDirectory ", Logging.getLogDirectoryName());
+		Logging.info(this, "--  wantedDirectory ", Logging.getLogDirectoryName());
 
 		if (fileName != null) {
 			LogFrame.setFileName(fileName);

@@ -115,8 +115,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		super(tableCellRenderer, keylistExtendible, entryRemovable, reloadable);
 		objectCounter++;
 
-		Logging.debug(this.getClass(), " created EditMapPanelX instance No ", objectCounter, "::", keylistExtendible,
-				",  ", entryRemovable, ",  ", reloadable);
+		Logging.debug(this, " created EditMapPanelX instance No ", objectCounter, "::", keylistExtendible, ",  ",
+				entryRemovable, ",  ", reloadable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);

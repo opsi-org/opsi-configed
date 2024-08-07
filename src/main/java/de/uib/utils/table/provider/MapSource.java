@@ -33,7 +33,7 @@ public class MapSource implements TableSource {
 	protected boolean reloadRequested;
 
 	public MapSource(List<String> columnNames, Map<String, Map<String, Object>> table, boolean rowCounting) {
-		Logging.info(this.getClass(), "constructed with cols ", columnNames);
+		Logging.info(this, "constructed with cols ", columnNames);
 		this.columnNames = columnNames;
 		this.table = table;
 		this.rowCounting = rowCounting;

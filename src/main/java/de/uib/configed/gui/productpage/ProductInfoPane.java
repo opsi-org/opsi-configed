@@ -249,7 +249,7 @@ public class ProductInfoPane extends JSplitPane {
 		String versionInfo = OpsiPackage.produceVersionInfo(productVersion, packageVersion);
 		OpsiProductInfo info = persistenceController.getProductDataService().getProduct2VersionInfo2InfosPD()
 				.get(productId).get(versionInfo);
-		Logging.info(this, "got product infos  productId, versionInfo:  ", productId, ", ", versionInfo, ": " + info);
+		Logging.info(this, "got product infos  productId, versionInfo:  ", productId, ", ", versionInfo, ": ", info);
 
 		setProductName(info.getProductName());
 		setProductInfo(info.getDescription());

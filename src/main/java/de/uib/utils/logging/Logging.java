@@ -234,14 +234,14 @@ public final class Logging {
 			result.append(o);
 		}
 
-		String loggingMessage = result.toString();
-
 		String currentTime = formatter.format(LocalDateTime.now());
 		String context = Thread.currentThread().getName();
 		if (caller instanceof Class) {
-			loggingMessage += "   (" + ((Class<?>) caller).getName() + ")";
+			result.append("   (").append(((Class<?>) caller).getName()).append(")");
+
 		} else if (caller != null) {
-			loggingMessage += "   (" + caller.getClass().getName() + ")";
+			result.append("   (").append(caller.getClass().getName()).append(")");
+
 		} else {
 			// Do nothing if caller is null
 		}
@@ -252,6 +252,8 @@ public final class Logging {
 			ex.printStackTrace(new PrintWriter(sw));
 			exMesg = "\n" + sw.toString();
 		}
+
+		String loggingMessage = result.toString();
 
 		if (level <= logLevelConsole) {
 			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",

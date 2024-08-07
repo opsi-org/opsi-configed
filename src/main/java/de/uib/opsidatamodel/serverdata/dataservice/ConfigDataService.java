@@ -1035,7 +1035,7 @@ public class ConfigDataService {
 	public boolean configureUefiBoot(String clientId, boolean uefiBoot) {
 		boolean result = false;
 
-		Logging.info(this, "configureUefiBoot, clientId ", clientId + " ", uefiBoot);
+		Logging.info(this, "configureUefiBoot, clientId ", clientId, " ", uefiBoot);
 
 		List<String> values = new ArrayList<>();
 
