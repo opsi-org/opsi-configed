@@ -265,7 +265,7 @@ public class PanelProductSettings extends JSplitPane {
 				boolean oldstate = productDisplayField.getValue();
 				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
 				configedMain.requestReloadStatesAndActions();
-				configedMain.resetView(configedMain.getViewIndex());
+				configedMain.resetView();
 			});
 
 			jMenuVisibleColumns.add(item);
@@ -392,7 +392,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 		configedMain.requestReloadStatesAndActions();
-		configedMain.resetView(configedMain.getViewIndex());
+		configedMain.resetView();
 		configedMain.setDataChanged(false);
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
