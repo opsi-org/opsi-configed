@@ -15,9 +15,12 @@ import java.util.Map;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.TabbedConfigPanes;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -33,7 +36,7 @@ import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.ExternalSource;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 
-public class PanelProductProperties extends JSplitPane {
+public class PanelProductProperties extends JSplitPane implements AncestorListener {
 	private PanelGenEditTable paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
@@ -44,6 +47,8 @@ public class PanelProductProperties extends JSplitPane {
 	public PanelProductProperties(ConfigedMain configedMain) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.configedMain = configedMain;
+		super.addAncestorListener(this);
+
 		init();
 	}
 
@@ -200,5 +205,20 @@ public class PanelProductProperties extends JSplitPane {
 				panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 			}
 		}
+	}
+
+	@Override
+	public void ancestorAdded(AncestorEvent event) {
+		// Not needed for this here
+	}
+
+	@Override
+	public void ancestorMoved(AncestorEvent event) {
+		setDividerLocation(TabbedConfigPanes.DIVIDER_LOCATION);
+	}
+
+	@Override
+	public void ancestorRemoved(AncestorEvent event) {
+		// Not needed for this here
 	}
 }
