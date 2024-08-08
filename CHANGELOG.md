@@ -4,6 +4,7 @@
 
 ### Fixed
 - Don't unnecessarily refresh saved searches when editing search
+- Problems with column visibility in Product and Client tables after full reload
 
 
 ## [4.3.3.11] - 2024-07-18

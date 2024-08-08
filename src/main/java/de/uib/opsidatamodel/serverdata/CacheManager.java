@@ -6,8 +6,10 @@
 
 package de.uib.opsidatamodel.serverdata;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +30,12 @@ public final class CacheManager {
 	@SuppressWarnings({ "java:S3077" })
 	private static volatile CacheManager instance;
 	private Map<CacheIdentifier, Object> cache = new EnumMap<>(CacheIdentifier.class);
+
+	// This is a list of caches that we want to keep in a reload since it contains data about the GUI
+	// that should not change.
+	private List<CacheIdentifier> cacheToKeep = Arrays.asList(CacheIdentifier.HOST_DISPLAY_FIELDS,
+			CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_LOCALBOOT_PRODUCTS,
+			CacheIdentifier.PRODUCT_ON_CLIENTS_DISPLAY_FIELDS_NETBOOT_PRODUCTS);
 
 	private CacheManager() {
 	}
@@ -90,6 +98,10 @@ public final class CacheManager {
 	 */
 	public void clearAllCachedData() {
 		cache.clear();
+	}
+
+	public void clearForReload() {
+		cache.keySet().retainAll(cacheToKeep);
 	}
 
 	public boolean isDataCached(Collection<CacheIdentifier> identifiers) {
