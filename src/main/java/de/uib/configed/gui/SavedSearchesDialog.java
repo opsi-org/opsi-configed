@@ -75,12 +75,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		extraField.setVisible(false);
 	}
 
-	public void start() {
-		buttonAdd.setEnabled(true);
-
-		resetModel();
-	}
-
 	@Override
 	protected void createComponents() {
 		super.createComponents();

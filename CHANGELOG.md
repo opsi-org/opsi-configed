@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.3.x.x] - 2024-xx-xx
+
+### Fixed
+- Don't unnecessarily refresh saved searches when editing search
+
+
 ## [4.3.3.11] - 2024-07-18
 
 ### Changed
