@@ -1,10 +1,11 @@
 # Changelog
 
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.3.12] - 2024-08-08
 
 ### Fixed
 - Don't unnecessarily refresh saved searches when editing search
 - Problems with column visibility in Product and Client tables after full reload
+- Start Remote Desktop Processes synchronuously instead of one after another when selected several clients
 
 
 ## [4.3.3.11] - 2024-07-18

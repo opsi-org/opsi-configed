@@ -25,39 +25,38 @@ import de.uib.utils.script.Interpreter;
 
 public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 	private String command;
-	private List<String> targetClients;
+	private String client;
 	private FDialogRemoteControl fDialogRemoteControl;
 
-	public RemoteCommandExecutor(FDialogRemoteControl fDialogRemoteControl, String firstSelectedClient,
-			List<String> targetClients) {
+	public RemoteCommandExecutor(FDialogRemoteControl fDialogRemoteControl, String command, String client) {
 		this.fDialogRemoteControl = fDialogRemoteControl;
-		this.command = firstSelectedClient;
-		this.targetClients = targetClients;
+		this.command = command;
+		this.client = client;
 	}
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		for (String targetClient : targetClients) {
-			String cmd = interpretCommand(command, targetClient);
-			List<String> parts = Interpreter.splitToList(cmd);
-			try {
-				Logging.debug(this, "startRemoteControlForSelectedClients, cmd: " + cmd + " splitted to " + parts);
+		String cmd = interpretCommand(command, client);
+		
+		List<String> parts = Interpreter.splitToList(cmd);
+		try {
+			Logging.debug(this, "startRemoteControlForSelectedClients, cmd: " + cmd + " splitted to " + parts);
 
-				ProcessBuilder pb = new ProcessBuilder(parts);
-				pb.redirectErrorStream(true);
+			ProcessBuilder pb = new ProcessBuilder(parts);
+			pb.redirectErrorStream(true);
 
-				Process proc = pb.start();
-				BufferedReader br = new BufferedReader(
-						new InputStreamReader(proc.getInputStream(), StandardCharsets.UTF_8));
+			Process proc = pb.start();
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(proc.getInputStream(), StandardCharsets.UTF_8));
 
-				String line = null;
-				while ((line = br.readLine()) != null) {
-					publish(command + " on " + targetClient + " >" + line + "\n");
-				}
-			} catch (IOException ex) {
-				Logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				publish(command + " on " + client + " >" + line + "\n");
 			}
+		} catch (IOException ex) {
+			Logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
 		}
+
 		return null;
 	}
 
