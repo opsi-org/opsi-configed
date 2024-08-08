@@ -311,6 +311,10 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+		if (e.getValueIsAdjusting()) {
+			return;
+		}
+
 		List<O> selectedList = getSelectedList();
 
 		if (!nullable && selectedList.isEmpty()) {
