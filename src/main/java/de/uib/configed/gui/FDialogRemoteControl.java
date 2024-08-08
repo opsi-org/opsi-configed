@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.event.MouseEvent;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.SwingUtilities;
@@ -102,14 +101,11 @@ public class FDialogRemoteControl extends FEditStringList {
 		appendLog(null);
 
 		if (!getSelectedList().isEmpty()) {
-			final String command = "" + getSelectedList().get(0);
-			executeCommand(command, configedMain.getSelectedClients());
+			String command = getSelectedList().getFirst();
+			for (String client : configedMain.getSelectedClients()) {
+				new RemoteCommandExecutor(this, command, client).execute();
+			}
 		}
-	}
-
-	private void executeCommand(String command, List<String> targetClients) {
-		RemoteCommandExecutor remoteCommandExecutor = new RemoteCommandExecutor(this, command, targetClients);
-		remoteCommandExecutor.execute();
 	}
 
 	@Override

@@ -1,9 +1,15 @@
 # Changelog
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.3] - 2024-08-08
 
 ### Changed
 - Only show enabled tabs in Client/Depot/Server configuration
 - Lazy loading for all tabs in Client/Depot/Server configuration apart from Client and Product tables
+
+### Fixed
+- Don't unnecessarily refresh saved searches when editing search
+- Problems with column visibility in Product and Client tables after full reload
+- Start Remote Desktop Processes synchronuously instead of one after another when selected several clients
+
 
 ## [4.4.0.2] - 2024-07-18
 

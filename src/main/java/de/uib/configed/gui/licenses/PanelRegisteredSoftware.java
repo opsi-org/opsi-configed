@@ -10,8 +10,6 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.event.ListSelectionEvent;
-
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -93,13 +91,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void setSelectedValues(List<String> values, int col) {
 		super.setSelectedValues(values, col);
 		saveRowSelection = theTable.getSelectedRows();
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (isAwareOfSelectionListener()) {
-			Logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
-		}
 	}
 
 	private boolean mouseInColumnOfMarkCursor(Point p) {

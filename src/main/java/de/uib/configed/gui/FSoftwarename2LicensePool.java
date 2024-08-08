@@ -169,6 +169,10 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 			Logging.info(this, "panelSWxLicensepool ListSelectionEvent ", e);
 			super.valueChanged(e);
 
+			if (e.getValueIsAdjusting()) {
+				return;
+			}
+
 			Object val = null;
 			int selRow = getSelectedRow();
 			if (selRow > -1) {

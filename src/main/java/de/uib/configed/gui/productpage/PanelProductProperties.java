@@ -150,18 +150,20 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 			Logging.debug(this, "valueChanged in paneProducts ", e);
 
-			if (!e.getValueIsAdjusting()) {
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			if (e.getValueIsAdjusting()) {
+				return;
+			}
 
-				if (lsm.getSelectedItemsCount() == 1) {
-					updateInfoPane(lsm.getMinSelectionIndex());
-				} else {
-					Logging.info(this, "selected not a unique row ");
-					infoPane.clearEditing();
-					propertiesPanel.init();
-					panelEditProperties.clearDepotListData();
-				}
+			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+			lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+			if (lsm.getSelectedItemsCount() == 1) {
+				updateInfoPane(lsm.getMinSelectionIndex());
+			} else {
+				Logging.info(this, "selected not a unique row ");
+				infoPane.clearEditing();
+				propertiesPanel.init();
+				panelEditProperties.clearDepotListData();
 			}
 		}
 

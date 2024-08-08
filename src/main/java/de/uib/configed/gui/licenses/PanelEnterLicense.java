@@ -35,7 +35,6 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -58,7 +57,6 @@ public class PanelEnterLicense extends MultiTablePanel {
 	private PanelGenEditTable panelLicenseContracts;
 
 	private String selectedLicensePool = "";
-	private ListSelectionListener licensePoolSelectionListener;
 
 	private JButton jButtonCreateStandard;
 	private JButton jButtonCreateVolume;
@@ -560,10 +558,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 	@Override
 	public void reset() {
-		panelLicensePools.removeListSelectionListener(licensePoolSelectionListener);
 		super.reset();
 		deactivate();
-		panelLicensePools.addListSelectionListener(licensePoolSelectionListener);
 		panelLicensePools.moveToValue(selectedLicensePool, 0);
 	}
 
