@@ -155,7 +155,7 @@ public final class Utils {
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
-	private static FlatSVGIcon getOpsiModulesIcon() {
+	public static FlatSVGIcon getOpsiModulesIcon() {
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 
@@ -188,24 +188,7 @@ public final class Utils {
 		final Color color = iconColor;
 		icon.setColorFilter(new ColorFilter(arg -> color));
 
-		return icon;
-	}
-
-	public static void addOpsiModulesIconToMenuItem(AbstractButton abstractButton) {
-		abstractButton.setIcon(getOpsiModulesIcon(16));
-
-		// Create filter for selected icon
-		ColorFilter filter = new ColorFilter();
-		filter.add(Globals.OPSI_MAGENTA, Globals.OPSI_FOREGROUND_DARK);
-
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-		icon = icon.derive(16, 16);
-		icon.setColorFilter(filter);
-		abstractButton.setSelectedIcon(icon);
-	}
-
-	public static FlatSVGIcon getOpsiModulesIcon(int size) {
-		return getOpsiModulesIcon().derive(size, size);
+		return icon.derive(32, 32);
 	}
 
 	public static ImageIcon getReloadLicensingIcon() {

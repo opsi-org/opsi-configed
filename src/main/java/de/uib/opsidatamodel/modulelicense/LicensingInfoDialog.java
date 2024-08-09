@@ -6,7 +6,6 @@
 
 package de.uib.opsidatamodel.modulelicense;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,16 +14,13 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -39,7 +35,7 @@ import de.uib.utils.table.provider.MapSource;
 import de.uib.utils.table.provider.TableSource;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 
-public class LicensingInfoDialog extends FGeneralDialog {
+public class LicensingInfoDialog extends JPanel {
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
 
@@ -53,67 +49,19 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	private List<String> columnNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
-	public LicensingInfoDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
-			int preferredWidth, int preferredHeight, boolean lazyLayout) {
-		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, lazyLayout);
+	public LicensingInfoDialog() {
 
-		super.setCenterPaneInScrollpane(initMainPanel());
-		super.setAdditionalPane(initClientInfo());
+		PanelGenEditTable mainPanel = initMainPanel();
+		JPanel clientInfo = initClientInfo();
 
-		super.setupLayout();
-		super.setVisible(true);
-	}
+		GroupLayout groupLayout = new GroupLayout(this);
+		super.setLayout(groupLayout);
 
-	@Override
-	protected void allLayout() {
-		// we could design an adapted layout and infuse it in guiInit
+		groupLayout
+				.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(mainPanel).addComponent(clientInfo));
 
-		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-
-		if (centerPanel == null) {
-			centerPanel = new JPanel();
-		}
-
-		southPanel = new JPanel();
-
-		GroupLayout southLayout = new GroupLayout(southPanel);
-		southPanel.setLayout(southLayout);
-
-		southLayout.setHorizontalGroup(southLayout.createParallelGroup(Alignment.LEADING).addGroup(southLayout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
-
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-
-				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		GroupLayout allLayout = new GroupLayout(allpane);
-		allpane.setLayout(allLayout);
-
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(centerPanel, 200, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-
-				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
-
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
+		groupLayout
+				.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(mainPanel).addComponent(clientInfo));
 	}
 
 	private void retrieveData() {

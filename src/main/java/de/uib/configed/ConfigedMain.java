@@ -240,7 +240,7 @@ public class ConfigedMain implements MessagebusListener {
 	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
 
 	public enum EditingTarget {
-		CLIENTS, DEPOTS, SERVER, DASHBOARD, LICENSE_MANAGEMENT
+		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, LICENSE_MANAGEMENT
 	}
 	// with this enum type we build a state model, which target shall be edited
 
@@ -721,6 +721,10 @@ public class ConfigedMain implements MessagebusListener {
 
 		case DASHBOARD:
 			mainFrame.setDashboardPanel();
+			break;
+
+		case OPSI_MODULES:
+			mainFrame.showOpsiModules();
 			break;
 
 		case LICENSE_MANAGEMENT:

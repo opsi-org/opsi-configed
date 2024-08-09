@@ -92,6 +92,10 @@ public class IconBarPanel extends JPanel {
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DASHBOARD));
 
+		JToggleButton jButtonOpsiLicenses = new JToggleButton(Utils.getOpsiModulesIcon());
+		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
+		jButtonOpsiLicenses.addActionListener(e -> configedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
+
 		JToggleButton jButtonLicenses = new JToggleButton(Utils.getIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jButtonLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
@@ -101,6 +105,7 @@ public class IconBarPanel extends JPanel {
 		buttonGroup.add(jButtonDepotsConfiguration);
 		buttonGroup.add(jButtonServerConfiguration);
 		buttonGroup.add(jButtonDashboard);
+		buttonGroup.add(jButtonOpsiLicenses);
 		buttonGroup.add(jButtonLicenses);
 
 		JToolBar jToolBar = new JToolBar();
@@ -108,6 +113,7 @@ public class IconBarPanel extends JPanel {
 		jToolBar.add(jButtonDepotsConfiguration);
 		jToolBar.add(jButtonServerConfiguration);
 		jToolBar.add(jButtonDashboard);
+		jToolBar.add(jButtonOpsiLicenses);
 		jToolBar.add(jButtonLicenses);
 
 		return jToolBar;
@@ -118,13 +124,8 @@ public class IconBarPanel extends JPanel {
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jButtonHealthCheck.addActionListener(event -> mainFrame.showHealthDataAction());
 
-		JButton jButtonOpsiLicenses = new JButton(Utils.getOpsiModulesIcon(32));
-		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		jButtonOpsiLicenses.addActionListener(e -> mainFrame.showOpsiModules());
-
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(jButtonHealthCheck);
-		jToolBar.add(jButtonOpsiLicenses);
 
 		return jToolBar;
 	}

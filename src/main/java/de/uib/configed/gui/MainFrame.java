@@ -481,13 +481,6 @@ public class MainFrame extends JFrame {
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
 
-		JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		Utils.addOpsiModulesIconToMenuItem(jMenuHelpOpsiModuleInformation);
-		jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
-
-		jMenuHelp.add(jMenuHelpOpsiModuleInformation);
-
 		addLogfileMenus(jMenuHelp, this);
 
 		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
@@ -558,6 +551,25 @@ public class MainFrame extends JFrame {
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layout.createParallelGroup().addComponent(iconBarPanel).addComponent(dashboard))
+				.addGap(Globals.MIN_GAP_SIZE));
+	}
+
+	private void callOpsiLicensingInfo() {
+		if (fDialogOpsiLicensingInfo == null) {
+			fDialogOpsiLicensingInfo = new LicensingInfoDialog();
+		}
+
+		getContentPane().removeAll();
+
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(fDialogOpsiLicensingInfo));
+
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(
+						layout.createParallelGroup().addComponent(iconBarPanel).addComponent(fDialogOpsiLicensingInfo))
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
@@ -812,7 +824,7 @@ public class MainFrame extends JFrame {
 		healthCheckDataLoader.execute();
 	}
 
-	protected void showOpsiModules() {
+	public void showOpsiModules() {
 		if (!persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
 			StringBuilder message = new StringBuilder();
 			Map<String, Object> modulesInfo = persistenceController.getModuleDataService().getOpsiModulesInfosPD();
@@ -830,17 +842,6 @@ public class MainFrame extends JFrame {
 			f.setVisible(true);
 		} else {
 			callOpsiLicensingInfo();
-		}
-	}
-
-	private void callOpsiLicensingInfo() {
-		if (fDialogOpsiLicensingInfo == null) {
-			fDialogOpsiLicensingInfo = new LicensingInfoDialog(this,
-					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 1, 900, 700, true);
-		} else {
-			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
-			fDialogOpsiLicensingInfo.setVisible(true);
 		}
 	}
 
