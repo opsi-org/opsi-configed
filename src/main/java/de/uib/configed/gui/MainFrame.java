@@ -84,7 +84,7 @@ public class MainFrame extends JFrame {
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
-	private JMenuItem jMenuFrameShowDialogs;
+	private JMenuItem jMenuShowDialogs;
 
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
@@ -293,7 +293,7 @@ public class MainFrame extends JFrame {
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
-		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"),
+		JMenuItem jMenuTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"),
 				Utils.getIntellijIcon("terminal"));
 
 		// check terminal access rights defined by user roles
@@ -306,13 +306,13 @@ public class MainFrame extends JFrame {
 		if (forbiddenConfigServer && forbiddenDepots && forbiddenClients) {
 			Logging.info(this, "setupMenuServerConsole all forbidden");
 			String s = " " + Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden");
-			jMenuFrameTerminal.setText(jMenuFrameTerminal.getText() + s);
-			jMenuFrameTerminal.setEnabled(false);
+			jMenuTerminal.setText(jMenuTerminal.getText() + s);
+			jMenuTerminal.setEnabled(false);
 		} else {
 			Logging.info(this, "setupMenuServerConsole forbiddenItems ", forbiddenItems);
 			Logging.info(this, "setupMenuServerConsole forbiddenConfigServer ", forbiddenConfigServer,
 					" forbiddenDepots ", forbiddenDepots, " forbiddenClients ", forbiddenClients);
-			jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
+			jMenuTerminal.addActionListener((ActionEvent e) -> {
 				configedMain.initMessagebus();
 				TerminalFrame terminal = new TerminalFrame(configedMain);
 				terminal.setMessagebus(configedMain.getMessagebus());
@@ -320,7 +320,7 @@ public class MainFrame extends JFrame {
 			});
 		}
 
-		jMenuServerConsole.add(jMenuFrameTerminal);
+		jMenuServerConsole.add(jMenuTerminal);
 	}
 
 	private void addDefaultOpsiCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
@@ -430,26 +430,25 @@ public class MainFrame extends JFrame {
 		return jMenuClientselection;
 	}
 
-	private JMenu createJMenuFrames() {
-		JMenu jMenuFrames = new JMenu(Configed.getResourceValue("MainFrame.jMenuFrames"));
+	private JMenu jMenuExtras() {
+		JMenu jMenuExtras = new JMenu(Configed.getResourceValue("MainFrame.jMenuExtras"));
 
-		JMenuItem jMenuFrameWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups
+		JMenuItem jMenuWorkOnGroups = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWorkOnGroups"));
+		jMenuWorkOnGroups
 				.setEnabled(persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING));
-		jMenuFrameWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
+		jMenuWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
-		JMenuItem jMenuFrameWorkOnProducts = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
-		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
+		JMenuItem jMenuWorkOnProducts = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWorkOnProducts"));
+		jMenuWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
-		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
+		jMenuShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
-		jMenuFrames.add(jMenuFrameWorkOnGroups);
-		jMenuFrames.add(jMenuFrameWorkOnProducts);
-		jMenuFrames.addSeparator();
-		jMenuFrames.add(jMenuFrameShowDialogs);
+		jMenuExtras.add(jMenuWorkOnGroups);
+		jMenuExtras.add(jMenuWorkOnProducts);
+		jMenuExtras.addSeparator();
+		jMenuExtras.add(jMenuShowDialogs);
 
-		return jMenuFrames;
+		return jMenuExtras;
 	}
 
 	public static void addHelpLinks(JMenu jMenuHelp) {
@@ -633,7 +632,7 @@ public class MainFrame extends JFrame {
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
-		jMenuBar.add(createJMenuFrames());
+		jMenuBar.add(jMenuExtras());
 		jMenuBar.add(createJMenuHelp());
 
 		return jMenuBar;
@@ -848,7 +847,7 @@ public class MainFrame extends JFrame {
 	public void instancesChanged(Set<?> instances) {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
-		jMenuFrameShowDialogs.setEnabled(existJDialogInstances);
+		jMenuShowDialogs.setEnabled(existJDialogInstances);
 	}
 
 	public LicensingInfoDialog getFDialogOpsiLicensingInfo() {
