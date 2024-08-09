@@ -51,7 +51,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 
 	public String getSoftwareLicenseReservation(String clientId) {
 		if (clientId == null || clientId.isEmpty()) {
-			JOptionPane.showMessageDialog(ConfigedMain.getLicensesPane(),
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectClient"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 
@@ -61,7 +61,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		List<String> selectedLPoolIds = thePanel.getPanelLicensePools().getSelectedKeys();
 
 		if (selectedLPoolIds == null || selectedLPoolIds.size() != 1) {
-			JOptionPane.showMessageDialog(ConfigedMain.getLicensesPane(),
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectOneLicensepool"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 

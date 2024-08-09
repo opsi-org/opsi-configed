@@ -3475,7 +3475,7 @@ public class ConfigedMain implements MessagebusListener {
 		boolean checkSavedLicensesFrame = checkSavedLicensesFrame();
 
 		if (!checkSavedLicensesFrame) {
-			licensesPane.setVisible(true);
+			setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
 		}
 
 		Logging.info(this, "close instance result ", checkSavedLicensesFrame);

@@ -62,10 +62,8 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 	public void reset() {
 		if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_STATISTICS)) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
-			ConfigedMain.getLicensesPane().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {
 				panelStatistics.reload();
-				ConfigedMain.getLicensesPane().setCursor(null);
 				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			});
 		} else if (panelStatistics.getTableModel().getRows().isEmpty()) {
