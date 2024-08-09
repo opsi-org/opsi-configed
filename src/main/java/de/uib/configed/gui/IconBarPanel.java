@@ -83,6 +83,11 @@ public class IconBarPanel extends JPanel {
 		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getThemeIcon("desktop", 32));
 		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedThemeIntelljIcon("desktop", 32));
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+
+		JToggleButton jButtonLicenses = new JToggleButton(Utils.getIntellijIcon("scriptingScript", 32));
+		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
+		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
+
 		jButtonClientsConfiguration.setSelected(true);
 
 		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
@@ -93,13 +98,15 @@ public class IconBarPanel extends JPanel {
 		buttonGroup.add(jButtonClientsConfiguration);
 		buttonGroup.add(jButtonDepotsConfiguration);
 		buttonGroup.add(jButtonServerConfiguration);
+		buttonGroup.add(jButtonLicenses);
 
-		JToolBar jToolBarSwitch = new JToolBar();
-		jToolBarSwitch.add(jButtonClientsConfiguration);
-		jToolBarSwitch.add(jButtonDepotsConfiguration);
-		jToolBarSwitch.add(jButtonServerConfiguration);
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(jButtonClientsConfiguration);
+		jToolBar.add(jButtonDepotsConfiguration);
+		jToolBar.add(jButtonServerConfiguration);
+		jToolBar.add(jButtonLicenses);
 
-		return jToolBarSwitch;
+		return jToolBar;
 	}
 
 	private JToolBar initIconPaneExtraFrames() {
@@ -115,15 +122,10 @@ public class IconBarPanel extends JPanel {
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(e -> mainFrame.showOpsiModules());
 
-		JButton jButtonLicenses = new JButton(Utils.getIntellijIcon("scriptingScript", 32));
-		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
-		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
-
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(jButtonDashboard);
 		jToolBar.add(jButtonHealthCheck);
 		jToolBar.add(jButtonOpsiLicenses);
-		jToolBar.add(jButtonLicenses);
 
 		return jToolBar;
 	}

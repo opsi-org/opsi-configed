@@ -443,15 +443,11 @@ public class MainFrame extends JFrame {
 		JMenuItem jMenuFrameDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
 
-		JMenuItem jMenuFrameLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameLicenses"));
-		jMenuFrameLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
-
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameDashboard);
-		jMenuFrames.add(jMenuFrameLicenses);
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
 
