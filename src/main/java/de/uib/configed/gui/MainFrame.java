@@ -43,6 +43,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
+import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.CommandWithParameters;
@@ -76,6 +77,7 @@ public class MainFrame extends JFrame {
 
 	private ClientMenuManager clientMenu;
 	private JSplitPane configurationPanel;
+	private Dashboard dashboard;
 	// Inititalize it here so that we keep the reference throughout a full reload
 	private JMenu jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
 
@@ -440,14 +442,10 @@ public class MainFrame extends JFrame {
 				Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
 		jMenuFrameWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
 
-		JMenuItem jMenuFrameDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
-		jMenuFrameDashboard.addActionListener(event -> configedMain.initDashInfo());
-
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
-		jMenuFrames.add(jMenuFrameDashboard);
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
 
@@ -544,6 +542,24 @@ public class MainFrame extends JFrame {
 		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction(centerFrame));
 
 		jMenuHelp.add(jMenuHelpLogfileLocation);
+	}
+
+	public void setDashboardPanel() {
+		Logging.info(this, "initDashboard ", dashboard);
+		if (dashboard == null) {
+			dashboard = new Dashboard(configedMain);
+		}
+
+		getContentPane().removeAll();
+
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(dashboard));
+
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup().addComponent(iconBarPanel).addComponent(dashboard))
+				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	private void guiInit() {

@@ -58,7 +58,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
-import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
@@ -219,8 +218,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
 
-	private Dashboard dashboard;
-
 	private int clientCount;
 
 	private ViewIndex viewIndex = ViewIndex.VIEW_CLIENTS;
@@ -243,7 +240,7 @@ public class ConfigedMain implements MessagebusListener {
 	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
 
 	public enum EditingTarget {
-		CLIENTS, DEPOTS, SERVER, LICENSE_MANAGEMENT
+		CLIENTS, DEPOTS, SERVER, DASHBOARD, LICENSE_MANAGEMENT
 	}
 	// with this enum type we build a state model, which target shall be edited
 
@@ -409,16 +406,6 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "readLocallySavedServerNames  result ", result);
 
 		return result;
-	}
-
-	public void initDashInfo() {
-		Logging.info(this, "initDashboard ", dashboard);
-		if (dashboard == null) {
-			dashboard = new Dashboard(this);
-			dashboard.initAndShowGUI();
-		} else {
-			dashboard.show();
-		}
 	}
 
 	public boolean initMessagebus() {
@@ -722,6 +709,10 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 		case SERVER:
 			setEditingServer();
+			break;
+
+		case DASHBOARD:
+			mainFrame.setDashboardPanel();
 			break;
 
 		case LICENSE_MANAGEMENT:
@@ -2331,8 +2322,8 @@ public class ConfigedMain implements MessagebusListener {
 			saveDepotsViewIndex = mainFrame.getTabbedConfigPanes().getSelectedIndex();
 			break;
 
-		case SERVER:
-			// Do nothing, server always has the same index
+		default:
+			// Other targets don't have different tab views
 			break;
 		}
 	}

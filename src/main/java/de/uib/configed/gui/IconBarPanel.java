@@ -72,47 +72,48 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private JToolBar initIconPaneTargets() {
-		JToggleButton jButtonServerConfiguration = new JToggleButton(Utils.getIntellijIcon("editorConfig", 32));
-		jButtonServerConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("editorConfig", 32));
-		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
+		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getThemeIcon("desktop", 32));
+		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedThemeIntelljIcon("desktop", 32));
+		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+		jButtonClientsConfiguration.setSelected(true);
+		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
 
 		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Utils.getIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
+		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
 
-		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getThemeIcon("desktop", 32));
-		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedThemeIntelljIcon("desktop", 32));
-		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+		JToggleButton jButtonServerConfiguration = new JToggleButton(Utils.getIntellijIcon("editorConfig", 32));
+		jButtonServerConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("editorConfig", 32));
+		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
+		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
+
+		JToggleButton jButtonDashboard = new JToggleButton(Utils.getIntellijIcon("dataSchema", 32));
+		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
+		jButtonDashboard.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DASHBOARD));
 
 		JToggleButton jButtonLicenses = new JToggleButton(Utils.getIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
-		jButtonClientsConfiguration.setSelected(true);
-
-		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
-		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
-		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
 		jButtonLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(jButtonClientsConfiguration);
 		buttonGroup.add(jButtonDepotsConfiguration);
 		buttonGroup.add(jButtonServerConfiguration);
+		buttonGroup.add(jButtonDashboard);
 		buttonGroup.add(jButtonLicenses);
 
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(jButtonClientsConfiguration);
 		jToolBar.add(jButtonDepotsConfiguration);
 		jToolBar.add(jButtonServerConfiguration);
+		jToolBar.add(jButtonDashboard);
 		jToolBar.add(jButtonLicenses);
 
 		return jToolBar;
 	}
 
 	private JToolBar initIconPaneExtraFrames() {
-		JButton jButtonDashboard = new JButton(Utils.getIntellijIcon("dataSchema", 32));
-		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
-		jButtonDashboard.addActionListener(event -> configedMain.initDashInfo());
-
 		JButton jButtonHealthCheck = new JButton(Utils.getIntellijIcon("springBootHealth", 32));
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jButtonHealthCheck.addActionListener(event -> mainFrame.showHealthDataAction());
@@ -122,7 +123,6 @@ public class IconBarPanel extends JPanel {
 		jButtonOpsiLicenses.addActionListener(e -> mainFrame.showOpsiModules());
 
 		JToolBar jToolBar = new JToolBar();
-		jToolBar.add(jButtonDashboard);
 		jToolBar.add(jButtonHealthCheck);
 		jToolBar.add(jButtonOpsiLicenses);
 
