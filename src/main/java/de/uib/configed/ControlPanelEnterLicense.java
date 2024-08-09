@@ -54,7 +54,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	}
 
 	public void saveNewLicense(Map<String, String> m) {
-		ConfigedMain.getLicensesFrame().activateLoadingCursor();
+		//ConfigedMain.getLicensesFrame().activateLoadingCursor();
 
 		persistenceController.getSoftwareDataService().editSoftwareLicense(m.get(LicenseEntry.ID_KEY),
 				m.get(LicenseEntry.LICENSE_CONTRACT_ID_KEY), m.get(LicenseEntry.TYPE_KEY),
@@ -71,7 +71,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		thePanel.getPanelKeys().setDataChanged(false);
 		thePanel.getPanelKeys().moveToKeyValue(keyValue);
 
-		ConfigedMain.getLicensesFrame().deactivateLoadingCursor();
+		//ConfigedMain.getLicensesFrame().deactivateLoadingCursor();
 
 		configedMain.checkErrorList();
 	}

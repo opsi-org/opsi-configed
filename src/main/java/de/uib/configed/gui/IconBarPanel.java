@@ -86,13 +86,12 @@ public class IconBarPanel extends JPanel {
 
 		JToggleButton jButtonLicenses = new JToggleButton(Utils.getIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
-		jButtonLicenses.addActionListener(event -> configedMain.handleLicensesManagementRequest());
-
 		jButtonClientsConfiguration.setSelected(true);
 
 		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
 		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
 		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
+		jButtonLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(jButtonClientsConfiguration);

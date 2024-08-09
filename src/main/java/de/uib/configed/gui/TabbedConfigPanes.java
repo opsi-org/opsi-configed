@@ -319,6 +319,10 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			initHostConfigTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
 			break;
+
+		default:
+			Logging.warning(this, "Unexpected editing target", ConfigedMain.getEditingTarget());
+			break;
 		}
 	}
 
@@ -402,6 +406,10 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		case SERVER:
 			addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
+			break;
+
+		default:
+			// Do nothing when we are not in one of these controls
 			break;
 		}
 

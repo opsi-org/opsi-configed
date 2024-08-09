@@ -75,7 +75,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem jMenuFileSaveConfigurations;
 
 	private ClientMenuManager clientMenu;
-
+	private JSplitPane configurationPanel;
 	// Inititalize it here so that we keep the reference throughout a full reload
 	private JMenu jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
 
@@ -558,9 +558,20 @@ public class MainFrame extends JFrame {
 
 		setJMenuBar(initMenuBar());
 
-		JSplitPane configurationPanel = initConfigurationPanel();
+		configurationPanel = initConfigurationPanel();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
+
+		setConfigurationPanel();
+
+		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
+
+		glassPane = new GlassPane();
+		setGlassPane(glassPane);
+	}
+
+	public void setConfigurationPanel() {
+		getContentPane().removeAll();
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -572,11 +583,21 @@ public class MainFrame extends JFrame {
 				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
 						.addComponent(iconBarPanel).addComponent(configurationPanel).addComponent(statusPane))
 				.addGap(Globals.MIN_GAP_SIZE));
+	}
 
-		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
+	public void setLicenseManagementPanel() {
+		getContentPane().removeAll();
 
-		glassPane = new GlassPane();
-		setGlassPane(glassPane);
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(ConfigedMain.getLicensesPane()));
+
+		layout.setHorizontalGroup(layout
+				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
+						.addComponent(iconBarPanel).addComponent(ConfigedMain.getLicensesPane()))
+				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	private JMenuBar initMenuBar() {
@@ -724,7 +745,7 @@ public class MainFrame extends JFrame {
 			@Override
 			public void run() {
 				configedMain.reloadLicensesData();
-				ConfigedMain.getLicensesFrame().setVisible(true);
+				ConfigedMain.getLicensesPane().setVisible(true);
 				deactivateLoadingPane();
 			}
 		}.start();

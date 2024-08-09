@@ -7,7 +7,6 @@
 package de.uib.configed.gui.licenses;
 
 import java.awt.Component;
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,30 +16,16 @@ import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.LicensesTabStatus;
-import de.uib.utils.swing.SecondaryFrame;
 
-public class LicensesFrame extends SecondaryFrame {
-	private JTabbedPane jTabbedPaneMain;
-
+public class LicensesPane extends JTabbedPane {
 	private List<LicensesTabStatus> tabOrder;
 
-	public LicensesFrame(ConfigedMain configedMain) {
-		super.add(createTabbedPane(configedMain));
-	}
-
-	@Override
-	public void start() {
-		setVisible(true);
-		setExtendedState(Frame.NORMAL);
-	}
-
-	private JTabbedPane createTabbedPane(ConfigedMain configedMain) {
-		jTabbedPaneMain = new JTabbedPane(SwingConstants.TOP);
-
+	public LicensesPane(ConfigedMain configedMain) {
+		super(SwingConstants.TOP);
 		tabOrder = new ArrayList<>();
 
-		jTabbedPaneMain.addChangeListener((ChangeEvent changeEvent) -> {
-			int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
+		super.addChangeListener((ChangeEvent changeEvent) -> {
+			int newVisualIndex = getSelectedIndex();
 
 			LicensesTabStatus newS = tabOrder.get(newVisualIndex);
 
@@ -52,23 +37,13 @@ public class LicensesFrame extends SecondaryFrame {
 			// the recursion breaks since newVisualIndex is identical with
 			// the old and does not yield a different value
 			if (newS != s) {
-				jTabbedPaneMain.setSelectedIndex(tabOrder.indexOf(s));
+				setSelectedIndex(tabOrder.indexOf(s));
 			}
 		});
-
-		return jTabbedPaneMain;
 	}
 
 	public void addTab(LicensesTabStatus s, String title, Component c) {
 		tabOrder.add(s);
-		jTabbedPaneMain.addTab(title, c);
-	}
-
-	public void removeTab(LicensesTabStatus s) {
-		int tabIndex = tabOrder.indexOf(s);
-		if (tabIndex > 0) {
-			jTabbedPaneMain.remove(tabIndex);
-			tabOrder.remove(tabIndex);
-		}
+		addTab(title, c);
 	}
 }

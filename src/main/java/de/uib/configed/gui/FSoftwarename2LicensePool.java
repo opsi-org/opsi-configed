@@ -83,7 +83,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	private ConfigedMain configedMain;
 
 	public FSoftwarename2LicensePool(ControlPanelAssignToLPools myController, ConfigedMain configedMain) {
-		super(ConfigedMain.getLicensesFrame(), Configed.getResourceValue("FSoftwarename2LicensePool.title"), false,
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("FSoftwarename2LicensePool.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800, true);
 
 		this.myController = myController;

@@ -124,7 +124,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 
 		buttonShowAssignedNotExisting.addActionListener((ActionEvent actionEvent) -> {
-			fMissingSoftwareInfo.setLocationRelativeTo(ConfigedMain.getLicensesFrame());
+			fMissingSoftwareInfo.setLocationRelativeTo(ConfigedMain.getLicensesPane());
 			fMissingSoftwareInfo.setVisible(true);
 		});
 
@@ -442,7 +442,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	private void buttonSupplementSimilarAction() {
 		if (!fSoftwarename2LicensePool.isVisible()) {
-			fSoftwarename2LicensePool.setLocationRelativeTo(ConfigedMain.getLicensesFrame());
+			fSoftwarename2LicensePool.setLocationRelativeTo(ConfigedMain.getLicensesPane());
 		}
 
 		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected ",

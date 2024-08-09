@@ -154,14 +154,14 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 	private boolean checkAndStart() {
 		if (panelLicensePools.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(ConfigedMain.getLicensesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicensesPane(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectLicensepool"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
 		if (panelLicenseContracts.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(ConfigedMain.getLicensesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getLicensesPane(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectLicensecontract"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 			return false;

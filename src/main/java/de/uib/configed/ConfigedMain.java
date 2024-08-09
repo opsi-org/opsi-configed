@@ -73,7 +73,7 @@ import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
-import de.uib.configed.gui.licenses.LicensesFrame;
+import de.uib.configed.gui.licenses.LicensesPane;
 import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.DependenciesModel;
@@ -130,9 +130,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
-	private static final Dimension LICENSES_DIMENSION = new Dimension(1200, 900);
-
-	private static LicensesFrame licensesFrame;
+	private static LicensesPane licensesPane;
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
 
@@ -245,7 +243,7 @@ public class ConfigedMain implements MessagebusListener {
 	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
 
 	public enum EditingTarget {
-		CLIENTS, DEPOTS, SERVER
+		CLIENTS, DEPOTS, SERVER, LICENSE_MANAGEMENT
 	}
 	// with this enum type we build a state model, which target shall be edited
 
@@ -293,7 +291,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void addClient(LicensesTabStatus status, MultiTablePanel panel) {
 		licensesPanels.put(status, panel);
-		licensesFrame.addTab(status, licensesPanelsTabNames.get(status), panel);
+		licensesPane.addTab(status, licensesPanelsTabNames.get(status), panel);
 	}
 
 	public LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {
@@ -648,10 +646,10 @@ public class ConfigedMain implements MessagebusListener {
 		productActionFrame.start();
 	}
 
-	public void handleLicensesManagementRequest() {
+	private void setLicensesManagement() {
 		// show Loading pane only when something needs to be loaded from server
 		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& licensesFrame == null) {
+				&& licensesPane == null) {
 			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
 		}
 		new Thread() {
@@ -697,16 +695,14 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void toggleLicensesFrame() {
-		if (licensesFrame == null) {
+		if (licensesPane == null) {
 			isInitialLicenseDataLoading = true;
 			initLicensesFrame();
-			allFrames.add(licensesFrame);
 			isInitialLicenseDataLoading = false;
 		}
 
-		Logging.info(this, "toggleLicensesFrame is visible", licensesFrame.isVisible());
-		licensesFrame.setLocationRelativeTo(mainFrame);
-		licensesFrame.setVisible(true);
+		Logging.info(this, "show licensing pane");
+		mainFrame.setLicenseManagementPanel();
 		mainFrame.getIconBarPanel().showReloadLicensingButton();
 	}
 
@@ -716,8 +712,6 @@ public class ConfigedMain implements MessagebusListener {
 			Logging.info(this, "stop setting editingTarget, it remains the same");
 			return;
 		}
-
-		editingTarget = t;
 
 		switch (t) {
 		case CLIENTS:
@@ -729,12 +723,24 @@ public class ConfigedMain implements MessagebusListener {
 		case SERVER:
 			setEditingServer();
 			break;
-		default:
+
+		case LICENSE_MANAGEMENT:
+			setLicensesManagement();
 			break;
+		}
+
+		editingTarget = t;
+	}
+
+	private static void initConfigurationView() {
+		if (editingTarget != EditingTarget.CLIENTS && editingTarget != EditingTarget.DEPOTS
+				&& editingTarget != EditingTarget.SERVER) {
+			mainFrame.setConfigurationPanel();
 		}
 	}
 
 	private void setEditingClients() {
+		initConfigurationView();
 		clientTree.setEnabled(true);
 		productTree.setEnabled(true);
 		depotsList.setEnabled(true);
@@ -744,6 +750,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void setEditingDepots() {
+		initConfigurationView();
 		depotsList.setEnabled(true);
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -757,6 +764,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void setEditingServer() {
+		initConfigurationView();
 		clientTree.setEnabled(false);
 		productTree.setEnabled(false);
 
@@ -1009,10 +1017,10 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void startLicensesFrame() {
-		licensesFrame = new LicensesFrame(this);
-		Utils.setMasterFrame(licensesFrame);
-		licensesFrame.setIconImage(Utils.getMainIcon());
-		licensesFrame.setTitle(persistenceController.getHostInfoCollections().getConfigServer() + ":  "
+		licensesPane = new LicensesPane(this);
+
+		// TODO: What title setting when changing view?
+		mainFrame.setTitle(persistenceController.getHostInfoCollections().getConfigServer() + ":  "
 				+ Configed.getResourceValue("ConfigedMain.Licenses"));
 
 		// panelAssignToLPools
@@ -1057,12 +1065,6 @@ public class ConfigedMain implements MessagebusListener {
 		ControlPanelLicensesStatistics controlPanelLicensesStatistics = new ControlPanelLicensesStatistics(this);
 		addClient(LicensesTabStatus.STATISTICS, controlPanelLicensesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicensesStatistics);
-
-		licensesFrame.start();
-
-		Logging.info(this, "set size and location of licensesFrame");
-
-		licensesFrame.setSize(LICENSES_DIMENSION);
 	}
 
 	// returns true if we have a PersistenceController and are connected
@@ -3479,7 +3481,7 @@ public class ConfigedMain implements MessagebusListener {
 		boolean checkSavedLicensesFrame = checkSavedLicensesFrame();
 
 		if (!checkSavedLicensesFrame) {
-			licensesFrame.setVisible(true);
+			licensesPane.setVisible(true);
 		}
 
 		Logging.info(this, "close instance result ", checkSavedLicensesFrame);
@@ -3494,11 +3496,11 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public static void requestLicensesFrameReload() {
-		licensesFrame = null;
+		licensesPane = null;
 	}
 
-	public static LicensesFrame getLicensesFrame() {
-		return licensesFrame;
+	public static LicensesPane getLicensesPane() {
+		return licensesPane;
 	}
 
 	public static String getHost() {
