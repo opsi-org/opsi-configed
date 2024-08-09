@@ -8,8 +8,6 @@ package de.uib.configed.dashboard;
 
 import java.io.IOException;
 
-import javax.swing.JPanel;
-
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.dashboard.collector.ClientData;
 import de.uib.configed.dashboard.collector.DepotData;
@@ -25,7 +23,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.stage.WindowEvent;
 
-public class Dashboard extends JPanel {
+public class Dashboard extends JFXPanel {
 	public static final String MAIN_VIEW = "main";
 	public static final String CLIENT_VIEW = "client";
 	public static final String PRODUCT_VIEW = "product";
@@ -41,22 +39,17 @@ public class Dashboard extends JPanel {
 	}
 
 	private void init() {
-		final JFXPanel fxPanel = new JFXPanel();
-		add(fxPanel);
-
 		Platform.setImplicitExit(false);
 		Platform.runLater(() -> {
 			try {
-				initFX(fxPanel);
+				initFX();
 			} catch (IOException ioE) {
 				Logging.error(this, ioE, "Unable to open fxml file");
 			}
 		});
 	}
 
-	private void windowClosing(WindowEvent e) {
-		Platform.runLater(() -> ViewManager.displayView(MAIN_VIEW));
-
+	private void clearAllData(WindowEvent e) {
 		ClientData.clear();
 		ProductData.clear();
 		ModuleData.clear();
@@ -64,10 +57,10 @@ public class Dashboard extends JPanel {
 		DepotData.clear();
 	}
 
-	private void initFX(final JFXPanel fxPanel) throws IOException {
-		mainView = new MainView(fxPanel, configedMain);
-		ClientView clientView = new ClientView(fxPanel);
-		ProductView productView = new ProductView(fxPanel);
+	private void initFX() throws IOException {
+		mainView = new MainView(this, configedMain);
+		ClientView clientView = new ClientView(this);
+		ProductView productView = new ProductView(this);
 
 		ViewManager.addView(MAIN_VIEW, mainView);
 		ViewManager.addView(CLIENT_VIEW, clientView);
