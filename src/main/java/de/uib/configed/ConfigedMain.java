@@ -693,21 +693,29 @@ public class ConfigedMain implements MessagebusListener {
 		mainFrame.getIconBarPanel().showReloadLicensingButton();
 	}
 
-	public void setEditingTarget(EditingTarget t) {
-		Logging.info(this, "setEditingTarget ", t);
-		if (t == editingTarget) {
+	public void setEditingTarget(EditingTarget newEditingTarget) {
+		Logging.info(this, "setEditingTarget ", newEditingTarget);
+		if (newEditingTarget == editingTarget) {
 			Logging.info(this, "stop setting editingTarget, it remains the same");
 			return;
 		}
 
-		switch (t) {
+		// When setting the new editingTarget, the methods already need to know the new editing target
+		// So whe have to set it now
+		EditingTarget oldEditingTarget = editingTarget;
+		editingTarget = newEditingTarget;
+
+		switch (editingTarget) {
 		case CLIENTS:
+			initConfigurationView(oldEditingTarget);
 			setEditingClients();
 			break;
 		case DEPOTS:
+			initConfigurationView(oldEditingTarget);
 			setEditingDepots();
 			break;
 		case SERVER:
+			initConfigurationView(oldEditingTarget);
 			setEditingServer();
 			break;
 
@@ -719,19 +727,16 @@ public class ConfigedMain implements MessagebusListener {
 			setLicensesManagement();
 			break;
 		}
-
-		editingTarget = t;
 	}
 
-	private static void initConfigurationView() {
-		if (editingTarget != EditingTarget.CLIENTS && editingTarget != EditingTarget.DEPOTS
-				&& editingTarget != EditingTarget.SERVER) {
+	private static void initConfigurationView(EditingTarget oldEditingTarget) {
+		if (oldEditingTarget != EditingTarget.CLIENTS && oldEditingTarget != EditingTarget.DEPOTS
+				&& oldEditingTarget != EditingTarget.SERVER) {
 			mainFrame.setConfigurationPanel();
 		}
 	}
 
 	private void setEditingClients() {
-		initConfigurationView();
 		clientTree.setEnabled(true);
 		productTree.setEnabled(true);
 		depotsList.setEnabled(true);
@@ -741,7 +746,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void setEditingDepots() {
-		initConfigurationView();
 		depotsList.setEnabled(true);
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -755,7 +759,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void setEditingServer() {
-		initConfigurationView();
 		clientTree.setEnabled(false);
 		productTree.setEnabled(false);
 
