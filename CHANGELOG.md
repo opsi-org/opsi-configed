@@ -1,4 +1,10 @@
 # Changelog
+## [4.4.x.x] - 2024-xx-xx
+
+### Changed
+- Show licenses management in MainFrame
+
+
 ## [4.4.0.3] - 2024-08-08
 
 ### Changed
