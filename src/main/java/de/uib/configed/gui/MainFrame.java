@@ -562,21 +562,19 @@ public class MainFrame extends JFrame {
 
 		setJMenuBar(initMenuBar());
 
-		JSplitPane centralPane = initCentralPane();
+		JSplitPane configurationPanel = initConfigurationPanel();
 		statusPane = new HostsStatusPanel();
 		iconBarPanel = new IconBarPanel(configedMain, this);
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout
-				.createSequentialGroup().addComponent(iconBarPanel, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(centralPane).addComponent(statusPane));
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(iconBarPanel)
+				.addComponent(configurationPanel).addComponent(statusPane));
 
 		layout.setHorizontalGroup(layout
 				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
-						.addComponent(iconBarPanel).addComponent(centralPane).addComponent(statusPane))
+						.addComponent(iconBarPanel).addComponent(configurationPanel).addComponent(statusPane))
 				.addGap(Globals.MIN_GAP_SIZE));
 
 		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
@@ -608,7 +606,7 @@ public class MainFrame extends JFrame {
 		return jMenuBar;
 	}
 
-	private JSplitPane initCentralPane() {
+	private JSplitPane initConfigurationPanel() {
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 		scrollpaneTreeClients.getViewport().add(clientTree);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
