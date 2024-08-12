@@ -73,17 +73,17 @@ public class LicensesPane extends JTabbedPane {
 		super.addChangeListener((ChangeEvent changeEvent) -> {
 			int newVisualIndex = getSelectedIndex();
 
-			LicensesTabStatus newS = tabOrder.get(newVisualIndex);
+			LicensesTabStatus newStatus = tabOrder.get(newVisualIndex);
 
 			// report state change request to controller and look, what it produces
-			LicensesTabStatus s = reactToStateChangeRequest(newS);
+			LicensesTabStatus status = reactToStateChangeRequest(newStatus);
 
 			// if the controller did not accept the new index set it back
 			// observe that we get a recursion since we initiate another state change
 			// the recursion breaks since newVisualIndex is identical with
 			// the old and does not yield a different value
-			if (newS != s) {
-				setSelectedIndex(tabOrder.indexOf(s));
+			if (newStatus != status) {
+				setSelectedIndex(tabOrder.indexOf(status));
 			}
 		});
 	}
