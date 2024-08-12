@@ -55,7 +55,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
-public class HealthCheckDialog extends JPanel {
+public class HealthCheckPanel extends JPanel {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
 
@@ -70,7 +70,7 @@ public class HealthCheckDialog extends JPanel {
 
 	private Map<String, Map<String, Object>> healthData;
 
-	public HealthCheckDialog() {
+	public HealthCheckPanel() {
 		saveHealthDataToFile();
 
 		initLayout();

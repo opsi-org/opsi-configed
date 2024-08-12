@@ -95,7 +95,7 @@ public class IconBarPanel extends JPanel {
 
 		JToggleButton jButtonHealthCheck = new JToggleButton(Utils.getIntellijIcon("springBootHealth", 32));
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		jButtonHealthCheck.addActionListener(event -> mainFrame.showHealthDataAction());
+		jButtonHealthCheck.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.HEALTH_CHECK));
 
 		JToggleButton jButtonLicenses = new JToggleButton(Utils.getIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));

@@ -30,7 +30,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -79,6 +78,8 @@ public class MainFrame extends JFrame {
 	private ClientMenuManager clientMenu;
 	private JSplitPane configurationPanel;
 	private Dashboard dashboard;
+	private HealthCheckPanel healthCheckPanel;
+
 	// Inititalize it here so that we keep the reference throughout a full reload
 	private JMenu jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
 
@@ -550,7 +551,12 @@ public class MainFrame extends JFrame {
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
-	public void setHealthCheckPanel(JPanel healthCheckPanel) {
+	public void setHealthCheckPanel() {
+		Logging.info(this, "init health check dialog ", healthCheckPanel);
+		if (healthCheckPanel == null) {
+			healthCheckPanel = new HealthCheckPanel();
+		}
+
 		getContentPane().removeAll();
 
 		GroupLayout layout = new GroupLayout(getContentPane());
@@ -830,8 +836,7 @@ public class MainFrame extends JFrame {
 			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
 		}
 
-		HealthCheckDataLoader healthCheckDataLoader = new HealthCheckDataLoader();
-		healthCheckDataLoader.execute();
+		new HealthCheckDataLoader().execute();
 	}
 
 	public void showOpsiModules() {
