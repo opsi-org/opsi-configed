@@ -16,9 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -86,18 +89,23 @@ public class IconBarPanel extends JPanel {
 		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
 
 		JToggleButton jButtonDashboard = new JToggleButton(Utils.getIntellijIcon("dataSchema", 32));
+		jButtonDashboard.setSelectedIcon(Utils.getSelectedIntellijIcon("dataSchema", 32));
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DASHBOARD));
 
 		JToggleButton jButtonOpsiLicenses = new JToggleButton(Utils.getOpsiModulesIcon());
+		jButtonOpsiLicenses.setSelectedIcon(
+				Utils.getOpsiIcon(32, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT));
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		jButtonOpsiLicenses.addActionListener(e -> configedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
+		jButtonOpsiLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
 
 		JToggleButton jButtonHealthCheck = new JToggleButton(Utils.getIntellijIcon("springBootHealth", 32));
+		jButtonHealthCheck.setSelectedIcon(Utils.getSelectedIntellijIcon("springBootHealth", 32));
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jButtonHealthCheck.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.HEALTH_CHECK));
 
 		JToggleButton jButtonLicenses = new JToggleButton(Utils.getIntellijIcon("scriptingScript", 32));
+		jButtonLicenses.setSelectedIcon(Utils.getSelectedIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jButtonLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
 

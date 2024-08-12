@@ -184,11 +184,7 @@ public final class Utils {
 			}
 		}
 
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-		final Color color = iconColor;
-		icon.setColorFilter(new ColorFilter(arg -> color));
-
-		return icon.derive(32, 32);
+		return getOpsiIcon(32, iconColor);
 	}
 
 	public static ImageIcon getReloadLicensingIcon() {
@@ -234,6 +230,15 @@ public final class Utils {
 		abstractButton.setSelectedIcon(selectedIcon);
 	}
 
+	public static FlatSVGIcon getOpsiIcon(int size) {
+		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
+		return icon.derive(size, size);
+	}
+
+	public static FlatSVGIcon getOpsiIcon(int size, Color color) {
+		return getOpsiIcon(size).setColorFilter(new ColorFilter(oldColor -> color));
+	}
+
 	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
 		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
 
@@ -249,7 +254,10 @@ public final class Utils {
 	}
 
 	public static FlatSVGIcon getSelectedIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT);
+		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
+		Color newColor = FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT;
+
+		return new FlatSVGIcon(path).setColorFilter(new ColorFilter(color -> newColor));
 	}
 
 	public static FlatSVGIcon getSelectedIntellijIcon(String iconName, int size) {
