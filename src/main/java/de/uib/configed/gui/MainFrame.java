@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -546,6 +547,20 @@ public class MainFrame extends JFrame {
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layout.createParallelGroup().addComponent(iconBarPanel).addComponent(dashboard))
+				.addGap(Globals.MIN_GAP_SIZE));
+	}
+
+	public void setHealthCheckPanel(JPanel healthCheckPanel) {
+		getContentPane().removeAll();
+
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(healthCheckPanel));
+
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup().addComponent(iconBarPanel).addComponent(healthCheckPanel))
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
