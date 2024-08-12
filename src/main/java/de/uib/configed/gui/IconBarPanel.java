@@ -19,7 +19,6 @@ import javax.swing.JToolBar;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
-import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
@@ -58,17 +57,15 @@ public class IconBarPanel extends JPanel {
 		JToolBar iconsLeft = initIconsLeft();
 		JLabel opsiLogo = new JLabel(Utils.getOpsiLogoWide());
 		JToolBar targetIcons = initIconPaneTargets();
-		JToolBar extraFrames = initIconPaneExtraFrames();
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createParallelGroup().addComponent(iconsLeft).addComponent(opsiLogo)
-				.addComponent(targetIcons).addComponent(extraFrames));
+		layout.setVerticalGroup(
+				layout.createParallelGroup().addComponent(iconsLeft).addComponent(opsiLogo).addComponent(targetIcons));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(iconsLeft).addGap(0, 0, Short.MAX_VALUE)
-				.addComponent(opsiLogo).addGap(0, 0, Short.MAX_VALUE).addComponent(targetIcons)
-				.addGap(0, 3 * Globals.GAP_SIZE, 3 * Globals.GAP_SIZE).addComponent(extraFrames));
+				.addComponent(opsiLogo).addGap(0, 0, Short.MAX_VALUE).addComponent(targetIcons));
 	}
 
 	private JToolBar initIconPaneTargets() {
@@ -96,6 +93,10 @@ public class IconBarPanel extends JPanel {
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(e -> configedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
 
+		JToggleButton jButtonHealthCheck = new JToggleButton(Utils.getIntellijIcon("springBootHealth", 32));
+		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		jButtonHealthCheck.addActionListener(event -> mainFrame.showHealthDataAction());
+
 		JToggleButton jButtonLicenses = new JToggleButton(Utils.getIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jButtonLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
@@ -106,6 +107,7 @@ public class IconBarPanel extends JPanel {
 		buttonGroup.add(jButtonServerConfiguration);
 		buttonGroup.add(jButtonDashboard);
 		buttonGroup.add(jButtonOpsiLicenses);
+		buttonGroup.add(jButtonHealthCheck);
 		buttonGroup.add(jButtonLicenses);
 
 		JToolBar jToolBar = new JToolBar();
@@ -114,18 +116,8 @@ public class IconBarPanel extends JPanel {
 		jToolBar.add(jButtonServerConfiguration);
 		jToolBar.add(jButtonDashboard);
 		jToolBar.add(jButtonOpsiLicenses);
-		jToolBar.add(jButtonLicenses);
-
-		return jToolBar;
-	}
-
-	private JToolBar initIconPaneExtraFrames() {
-		JButton jButtonHealthCheck = new JButton(Utils.getIntellijIcon("springBootHealth", 32));
-		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		jButtonHealthCheck.addActionListener(event -> mainFrame.showHealthDataAction());
-
-		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(jButtonHealthCheck);
+		jToolBar.add(jButtonLicenses);
 
 		return jToolBar;
 	}
