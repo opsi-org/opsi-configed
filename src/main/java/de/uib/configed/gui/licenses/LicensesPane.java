@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.licenses;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Iterator;
@@ -189,28 +188,28 @@ public class LicensesPane extends JTabbedPane {
 		licensesPanelsTabNames.put(LicensesTabStatus.LICENSEPOOL,
 				Configed.getResourceValue("ConfigedMain.Licenses.TabLicensepools"));
 		ControlPanelAssignToLPools controlPanelAssignToLPools = new ControlPanelAssignToLPools(this);
-		addClient(LicensesTabStatus.LICENSEPOOL, controlPanelAssignToLPools.getTabClient());
+		addTab(LicensesTabStatus.LICENSEPOOL, controlPanelAssignToLPools.getTabClient());
 		allControlMultiTablePanels.add(controlPanelAssignToLPools);
 
 		// panelEnterLicense
 		licensesPanelsTabNames.put(LicensesTabStatus.ENTER_LICENSE,
 				Configed.getResourceValue("ConfigedMain.Licenses.TabNewLicense"));
 		ControlPanelEnterLicense controlPanelEnterLicense = new ControlPanelEnterLicense(configedMain, this);
-		addClient(LicensesTabStatus.ENTER_LICENSE, controlPanelEnterLicense.getTabClient());
+		addTab(LicensesTabStatus.ENTER_LICENSE, controlPanelEnterLicense.getTabClient());
 		allControlMultiTablePanels.add(controlPanelEnterLicense);
 
 		// panelEditLicense
 		licensesPanelsTabNames.put(LicensesTabStatus.EDIT_LICENSE,
 				Configed.getResourceValue("ConfigedMain.Licenses.TabEditLicense"));
 		ControlPanelEditLicenses controlPanelEditLicenses = new ControlPanelEditLicenses(configedMain, this);
-		addClient(LicensesTabStatus.EDIT_LICENSE, controlPanelEditLicenses.getTabClient());
+		addTab(LicensesTabStatus.EDIT_LICENSE, controlPanelEditLicenses.getTabClient());
 		allControlMultiTablePanels.add(controlPanelEditLicenses);
 
 		// panelUsage
 		licensesPanelsTabNames.put(LicensesTabStatus.USAGE,
 				Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseUsage"));
 		ControlPanelLicensesUsage controlPanelLicensesUsage = new ControlPanelLicensesUsage(configedMain, this);
-		addClient(LicensesTabStatus.USAGE, controlPanelLicensesUsage.getTabClient());
+		addTab(LicensesTabStatus.USAGE, controlPanelLicensesUsage.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicensesUsage);
 
 		// panelReconciliation
@@ -218,7 +217,7 @@ public class LicensesPane extends JTabbedPane {
 				Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseReconciliation"));
 		ControlPanelLicensesReconciliation controlPanelLicensesReconciliation = new ControlPanelLicensesReconciliation(
 				configedMain);
-		addClient(LicensesTabStatus.RECONCILIATION, controlPanelLicensesReconciliation.getTabClient());
+		addTab(LicensesTabStatus.RECONCILIATION, controlPanelLicensesReconciliation.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicensesReconciliation);
 
 		// panelStatistics
@@ -226,14 +225,9 @@ public class LicensesPane extends JTabbedPane {
 				Configed.getResourceValue("ConfigedMain.Licenses.TabStatistics"));
 		ControlPanelLicensesStatistics controlPanelLicensesStatistics = new ControlPanelLicensesStatistics(
 				configedMain);
-		addClient(LicensesTabStatus.STATISTICS, controlPanelLicensesStatistics.getTabClient());
+		addTab(LicensesTabStatus.STATISTICS, controlPanelLicensesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicensesStatistics);
 
-	}
-
-	private void addClient(LicensesTabStatus status, MultiTablePanel panel) {
-		licensesPanels.put(status, panel);
-		addTab(status, licensesPanelsTabNames.get(status), panel);
 	}
 
 	private LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {
@@ -283,9 +277,10 @@ public class LicensesPane extends JTabbedPane {
 		return result;
 	}
 
-	public void addTab(LicensesTabStatus s, String title, Component c) {
-		tabOrder.add(s);
-		addTab(title, c);
+	public void addTab(LicensesTabStatus status, MultiTablePanel panel) {
+		licensesPanels.put(status, panel);
+		tabOrder.add(status);
+		addTab(licensesPanelsTabNames.get(status), panel);
 	}
 
 	public DefaultTableProvider getLicensePoolTableProvider() {
