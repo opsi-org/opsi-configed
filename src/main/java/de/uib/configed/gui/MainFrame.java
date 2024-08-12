@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -539,16 +540,7 @@ public class MainFrame extends JFrame {
 			dashboard = new Dashboard(configedMain);
 		}
 
-		getContentPane().removeAll();
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(dashboard));
-
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(iconBarPanel).addComponent(dashboard))
-				.addGap(Globals.MIN_GAP_SIZE));
+		setPanel(dashboard);
 	}
 
 	public void setHealthCheckPanel() {
@@ -557,17 +549,7 @@ public class MainFrame extends JFrame {
 			healthCheckPanel = new HealthCheckPanel();
 		}
 
-		getContentPane().removeAll();
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(healthCheckPanel));
-
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(iconBarPanel).addComponent(healthCheckPanel))
-				.addGap(Globals.MIN_GAP_SIZE));
+		setPanel(healthCheckPanel);
 	}
 
 	private void callOpsiLicensingInfo() {
@@ -575,18 +557,7 @@ public class MainFrame extends JFrame {
 			fDialogOpsiLicensingInfo = new LicensingInfoDialog();
 		}
 
-		getContentPane().removeAll();
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(fDialogOpsiLicensingInfo));
-
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(
-						layout.createParallelGroup().addComponent(iconBarPanel).addComponent(fDialogOpsiLicensingInfo))
-				.addGap(Globals.MIN_GAP_SIZE));
+		setPanel(fDialogOpsiLicensingInfo);
 	}
 
 	private void guiInit() {
@@ -628,19 +599,21 @@ public class MainFrame extends JFrame {
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
-	public void setLicenseManagementPanel() {
+	public void setPanel(Container container) {
 		getContentPane().removeAll();
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(ConfigedMain.getLicensesPane()));
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(container));
 
-		layout.setHorizontalGroup(layout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
-						.addComponent(iconBarPanel).addComponent(ConfigedMain.getLicensesPane()))
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup().addComponent(iconBarPanel).addComponent(container))
 				.addGap(Globals.MIN_GAP_SIZE));
+	}
+
+	public void setLicenseManagementPanel() {
+		setPanel(ConfigedMain.getLicensesPane());
 	}
 
 	private JMenuBar initMenuBar() {
