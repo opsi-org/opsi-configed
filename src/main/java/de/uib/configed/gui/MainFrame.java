@@ -483,11 +483,6 @@ public class MainFrame extends JFrame {
 
 		addLogfileMenus(jMenuHelp, this);
 
-		JMenuItem jMenuHelpCheckHealth = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		Utils.addIntellijIconToMenuItem(jMenuHelpCheckHealth, "springBootHealth");
-		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
-		jMenuHelp.add(jMenuHelpCheckHealth);
-
 		jMenuHelp.addSeparator();
 
 		addCreditsMenus(jMenuHelp, this);
