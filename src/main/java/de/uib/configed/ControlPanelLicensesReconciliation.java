@@ -114,9 +114,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded() && !configedMain.isInitialLicenseDataLoading()) {
-							persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
-						}
+						persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
 					}
 
 					@Override
@@ -125,9 +123,8 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 						if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 							return new HashMap<>();
 						}
-						return !configedMain.isInitialLicenseDataLoading()
-								? persistenceController.getSoftwareDataService().getLicensesReconciliationPD()
-								: new HashMap<>();
+
+						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
 					}
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
 

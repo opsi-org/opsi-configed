@@ -130,7 +130,7 @@ public class IconBarPanel extends JPanel {
 		jButtonReloadLicenses = new JButton(Utils.getReloadLicensingIcon());
 		jButtonReloadLicenses.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		jButtonReloadLicenses.setVisible(false);
-		jButtonReloadLicenses.addActionListener((ActionEvent e) -> mainFrame.reloadLicensesAction());
+		jButtonReloadLicenses.addActionListener((ActionEvent e) -> configedMain.reloadLicensesAction());
 
 		JButton jButtonNewClient = new JButton(Utils.getIntellijIcon("add", 32));
 		jButtonNewClient.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonNewClient"));

@@ -174,7 +174,7 @@ public class MainFrame extends JFrame {
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			configedMain.reload();
 			if (iconBarPanel.getjButtonReloadLicenses().isEnabled()) {
-				reloadLicensesAction();
+				configedMain.reloadLicensesAction();
 			}
 		});
 
@@ -780,18 +780,6 @@ public class MainFrame extends JFrame {
 		} else {
 			setCursor(null);
 		}
-	}
-
-	protected void reloadLicensesAction() {
-		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
-		new Thread() {
-			@Override
-			public void run() {
-				configedMain.reloadLicensesData();
-				ConfigedMain.getLicensesPane().setVisible(true);
-				deactivateLoadingPane();
-			}
-		}.start();
 	}
 
 	private static void showLogfileLocationAction(JFrame centerFrame) {

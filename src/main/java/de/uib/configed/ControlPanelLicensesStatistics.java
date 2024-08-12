@@ -66,9 +66,7 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded() && !configedMain.isInitialLicenseDataLoading()) {
-							persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
-						}
+						persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
 					}
 
 					@Override
@@ -77,9 +75,8 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 						if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 							return new HashMap<>();
 						}
-						return !configedMain.isInitialLicenseDataLoading()
-								? persistenceController.getSoftwareDataService().getLicenseStatistics()
-								: new HashMap<>();
+
+						return persistenceController.getSoftwareDataService().getLicenseStatistics();
 					}
 				})), 0, thePanel.getPanelStatistics(), updateCollection);
 		updateItemFactoryStatistics.setSource(modelStatistics);

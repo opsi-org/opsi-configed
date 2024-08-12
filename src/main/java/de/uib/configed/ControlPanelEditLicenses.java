@@ -20,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
+import de.uib.configed.gui.licenses.LicensesPane;
 import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelEditLicenses;
 import de.uib.configed.type.licenses.LicenseEntry;
@@ -47,10 +48,13 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
+	private LicensesPane licensesPane;
 
-	public ControlPanelEditLicenses(ConfigedMain configedMain) {
+	public ControlPanelEditLicenses(ConfigedMain configedMain, LicensesPane licensesPane) {
 		thePanel = new PanelEditLicenses(this);
 		this.configedMain = configedMain;
+		this.licensesPane = licensesPane;
+
 		init();
 	}
 
@@ -77,8 +81,9 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		columnNames.add("licenseKey");
 		MapTableUpdateItemFactory updateItemFactoryLicensekeys = new MapTableUpdateItemFactory(modelLicensekeys,
 				columnNames);
-		modelLicensekeys = new GenTableModel(updateItemFactoryLicensekeys, configedMain.licenseOptionsTableProvider, -1,
-				new int[] { 0, 1 }, thePanel.getPanelKeys(), updateCollection, true);
+		modelLicensekeys = new GenTableModel(updateItemFactoryLicensekeys,
+				licensesPane.getLicenseOptionsTableProvider(), -1, new int[] { 0, 1 }, thePanel.getPanelKeys(),
+				updateCollection, true);
 		updateItemFactoryLicensekeys.setSource(modelLicensekeys);
 
 		tableModels.add(modelLicensekeys);
@@ -105,8 +110,8 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		TableColumn col = thePanel.getPanelKeys().getColumnModel().getColumn(1);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
-			List<String> poolIds = configedMain.licensePoolTableProvider.getOrderedColumn(
-					configedMain.licensePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
+			List<String> poolIds = licensesPane.getLicensePoolTableProvider().getOrderedColumn(
+					licensesPane.getLicensePoolTableProvider().getColumnNames().indexOf("licensePoolId"), false);
 
 			if (poolIds.size() <= 1) {
 				poolIds.add("");
@@ -148,7 +153,8 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactorySoftwarelicenses = new MapTableUpdateItemFactory(
 				modelSoftwarelicenses, columnNames);
 		modelSoftwarelicenses = new GenTableModel(updateItemFactorySoftwarelicenses,
-				configedMain.softwarelicensesTableProvider, 0, thePanel.getPanelSoftwarelicenses(), updateCollection);
+				licensesPane.getSoftwarelicensesTableProvider(), 0, thePanel.getPanelSoftwarelicenses(),
+				updateCollection);
 		updateItemFactorySoftwarelicenses.setSource(modelSoftwarelicenses);
 
 		tableModels.add(modelSoftwarelicenses);
@@ -216,7 +222,8 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		columnNames.add("notes");
 		MapTableUpdateItemFactory updateItemFactoryLicensecontracts = new MapTableUpdateItemFactory(columnNames);
 		modelLicensecontracts = new GenTableModel(updateItemFactoryLicensecontracts,
-				configedMain.licenseContractsTableProvider, 0, thePanel.getPanelLicensecontracts(), updateCollection);
+				licensesPane.getLicenseContractsTableProvider(), 0, thePanel.getPanelLicensecontracts(),
+				updateCollection);
 		updateItemFactoryLicensecontracts.setSource(modelLicensecontracts);
 
 		tableModels.add(modelLicensecontracts);
