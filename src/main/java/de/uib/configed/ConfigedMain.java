@@ -3253,7 +3253,7 @@ public class ConfigedMain implements MessagebusListener {
 			loginDialog.dispose();
 		}
 
-		boolean checkSavedLicensesFrame = licensesPane.checkSavedLicensesPane();
+		boolean checkSavedLicensesFrame = licensesPane == null || licensesPane.checkSavedLicensesPane();
 
 		if (!checkSavedLicensesFrame) {
 			setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);

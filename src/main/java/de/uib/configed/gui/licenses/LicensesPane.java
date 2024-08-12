@@ -245,10 +245,6 @@ public class LicensesPane extends JTabbedPane {
 	}
 
 	public boolean checkSavedLicensesPane() {
-		if (allControlMultiTablePanels == null) {
-			return true;
-		}
-
 		boolean change = false;
 		boolean result = false;
 		Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
