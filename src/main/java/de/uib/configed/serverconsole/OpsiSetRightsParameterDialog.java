@@ -82,8 +82,8 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonDoAction);
 
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
+		jButtonDoAction.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		jButtonSearchDir = completion.getButton();
 		jComboBoxAutoCompletion = completion.getCombobox();
@@ -93,10 +93,6 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 		jComboBoxAutoCompletion.setSelectedItem("");
 		inputPanel.add(jComboBoxAutoCompletion);
 		inputPanel.add(jButtonSearchDir);
-	}
-
-	private void setComponentsEnabled(boolean value) {
-		jButtonDoAction.setEnabled(value);
 	}
 
 	@Override

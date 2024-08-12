@@ -168,7 +168,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				popupItemAddBooleanListEntry = new JMenuItem(
 						Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
 				Utils.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
-				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean"));
+				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean", false));
 				popupEditOptions.add(popupItemAddBooleanListEntry);
 			}
 
@@ -419,10 +419,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 
 		return ok;
-	}
-
-	private void addEntryFor(final String classname) {
-		addEntryFor(classname, false);
 	}
 
 	private void addEntryFor(final String classname, final boolean multiselection) {

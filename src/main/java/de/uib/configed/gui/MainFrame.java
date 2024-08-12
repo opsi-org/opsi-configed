@@ -612,10 +612,6 @@ public class MainFrame extends JFrame {
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
-	public void setLicenseManagementPanel() {
-		setPanel(ConfigedMain.getLicensesPane());
-	}
-
 	private JMenuBar initMenuBar() {
 		initMenuData();
 

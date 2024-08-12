@@ -644,7 +644,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		Logging.info(this, "show licensing pane");
-		mainFrame.setLicenseManagementPanel();
+		mainFrame.setPanel(licensesPane);;
 		mainFrame.getIconBarPanel().showReloadLicensingButton();
 	}
 
@@ -878,13 +878,9 @@ public class ConfigedMain implements MessagebusListener {
 	private void initLicensesFrame() {
 		long startmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicensesFrame start ");
-		startLicensesFrame();
+		licensesPane = new LicensesPane(this);
 		long endmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
-	}
-
-	private void startLicensesFrame() {
-		licensesPane = new LicensesPane(this);
 	}
 
 	// returns true if we have a PersistenceController and are connected

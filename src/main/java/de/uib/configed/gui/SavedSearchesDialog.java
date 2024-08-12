@@ -121,7 +121,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
 		Utils.addIntellijIconToMenuItem(add, "add");
-		add.addActionListener(event -> addElement());
+		add.addActionListener(event -> configedMain.callClientSelectionDialog());
 
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		jPopupMenu.add(reload);
@@ -228,11 +228,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		persistenceController.reloadData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString());
 		resetModel();
-	}
-
-	// overwrite to implement
-	private void addElement() {
-		configedMain.callClientSelectionDialog();
 	}
 
 	// overwrite to implement
