@@ -39,7 +39,7 @@ public class LicensingInfoDialog extends JPanel {
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
 
-	private LicensingInfoPanelGenEditTable thePanel;
+	private LicensingInfoPanelGenEditTable licensingInfoPanel;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private LicensingInfoMap licenseMap;
@@ -51,7 +51,7 @@ public class LicensingInfoDialog extends JPanel {
 
 	public LicensingInfoDialog() {
 
-		PanelGenEditTable mainPanel = initMainPanel();
+		PanelGenEditTable mainPanel = initLicensingInfoPanel();
 		JPanel clientInfo = initClientInfo();
 
 		GroupLayout groupLayout = new GroupLayout(this);
@@ -72,10 +72,10 @@ public class LicensingInfoDialog extends JPanel {
 		theSourceMap = licenseMap.getTableMap();
 	}
 
-	private PanelGenEditTable initMainPanel() {
+	private PanelGenEditTable initLicensingInfoPanel() {
 		retrieveData();
 
-		thePanel = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0,
+		licensingInfoPanel = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0,
 				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
 						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
 						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
@@ -101,10 +101,10 @@ public class LicensingInfoDialog extends JPanel {
 
 		buildModel();
 
-		thePanel.getColumnModel().getColumn(0).setPreferredWidth(150);
-		thePanel.getColumnModel().getColumn(1).setPreferredWidth(60);
+		licensingInfoPanel.getColumnModel().getColumn(0).setPreferredWidth(150);
+		licensingInfoPanel.getColumnModel().getColumn(1).setPreferredWidth(60);
 
-		return thePanel;
+		return licensingInfoPanel;
 	}
 
 	private JPanel initClientInfo() {
@@ -160,7 +160,7 @@ public class LicensingInfoDialog extends JPanel {
 
 		checkExtendedView.addActionListener((ActionEvent actionEvent) -> {
 			setExtendedView(checkExtendedView.isSelected());
-			thePanel.reload();
+			licensingInfoPanel.reload();
 		});
 
 		JCheckBox checkShowOnlyAvailableModules = new JCheckBox(
@@ -168,7 +168,7 @@ public class LicensingInfoDialog extends JPanel {
 
 		checkShowOnlyAvailableModules.addActionListener((ActionEvent actionEvent) -> {
 			showOnlyAvailableModules(checkShowOnlyAvailableModules.isSelected());
-			thePanel.reload();
+			licensingInfoPanel.reload();
 		});
 
 		JButton buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
@@ -177,7 +177,7 @@ public class LicensingInfoDialog extends JPanel {
 
 		buttonReload.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
-			thePanel.reload();
+			licensingInfoPanel.reload();
 		});
 
 		JPanel panel = new JPanel();
@@ -266,20 +266,20 @@ public class LicensingInfoDialog extends JPanel {
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 
 		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
-				thePanel, updateCollection);
+				licensingInfoPanel, updateCollection);
 
 		theModel.reset();
 
 		columnNames = theModel.getColumnNames();
 
-		thePanel.setTableModel(theModel);
+		licensingInfoPanel.setTableModel(theModel);
 
-		thePanel.getTheTable().setDefaultRenderer(Object.class,
+		licensingInfoPanel.getTheTable().setDefaultRenderer(Object.class,
 				new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
 	}
 
 	public void reload() {
-		thePanel.reload();
+		licensingInfoPanel.reload();
 	}
 
 	public static boolean isExtendedView() {
