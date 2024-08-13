@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -201,7 +200,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		}
 
 		panelProductProperties = new PanelProductProperties(configedMain);
-
 		setComponentAt(getSelectedIndex(), panelProductProperties);
 	}
 
@@ -212,7 +210,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		panelHostProperties = new PanelHostProperties();
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
-
 		setComponentAt(getSelectedIndex(), panelHostProperties);
 	}
 
@@ -240,8 +237,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	}
 
 	private void showHardwareInfo(JPanel showHardwareLog) {
-		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog")), showHardwareLog);
-
+		setComponentAt(getSelectedIndex(), showHardwareLog);
 		showHardwareLog.repaint();
 	}
 
@@ -259,18 +255,17 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
 		panelHWInfo.setHardwareInfo(hardwareInfo);
-
 		showHardwareInfo(panelHWInfo);
 	}
 
 	private void showSoftwareInfo(JPanel showSoftwareLog) {
-		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog")), showSoftwareLog);
-		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().repaint());
+		setComponentAt(getSelectedIndex(), showSoftwareLog);
+		showSoftwareLog.repaint();
 	}
 
 	public void setUpdatedLogfilePanel(String logtype) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
-		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_logfiles")), showLogfiles);
+		setComponentAt(getSelectedIndex(), showLogfiles);
 		showLogfiles.setDocuments(configedMain.getLogfilesUpdating(logtype),
 				mainFrame.getHostsStatusPanel().getSelectedClientNames());
 	}
@@ -280,6 +275,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		if (i < 0) {
 			return;
 		}
+
 		showLogfiles.setSelectedIndex(i);
 	}
 
