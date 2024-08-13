@@ -2027,8 +2027,8 @@ public class ConfigedMain implements MessagebusListener {
 
 			if (result) {
 				viewIndex = newViewIndex;
-				Logging.debug(" tab index could not be changed");
 			} else {
+				Logging.debug(" tab index could not be changed, go to clients view");
 				viewIndex = ViewIndex.VIEW_CLIENTS;
 				mainFrame.getTabbedConfigPanes().setSelectedIndex(0);
 			}
