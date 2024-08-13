@@ -1955,8 +1955,8 @@ public class ConfigedMain implements MessagebusListener {
 		mainFrame.getTabbedConfigPanes().setLogview("instlog");
 	}
 
-	public boolean resetView() {
-		return resetView(viewIndex);
+	public void resetView() {
+		resetView(viewIndex);
 	}
 
 	public boolean resetView(ViewIndex viewIndex) {
