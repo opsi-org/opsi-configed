@@ -52,7 +52,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private PanelSWInfo panelSWInfo;
 	private JPanel showSoftwareLogNotFound;
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-	private JLabel labelNoSoftware;
 
 	private PanelHWInfo panelHWInfo;
 	private JPanel showHardwareLogNotFoundPanel;
@@ -132,10 +131,8 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			}
 		};
 
-		labelNoSoftware = new JLabel();
-
 		showSoftwareLogNotFound = new JPanel();
-		showSoftwareLogNotFound.add(labelNoSoftware);
+		showSoftwareLogNotFound.add(new JLabel(Configed.getResourceValue("MainFrame.TabRequiresClientSelected")));
 
 		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
 		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
@@ -214,26 +211,22 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	}
 
 	public void setSoftwareAudit() {
-		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() > 1) {
+		if (configedMain.getSelectedClients().isEmpty()) {
+			// handled by the following methods
+			showSoftwareInfo(showSoftwareLogNotFound);
+		} else if (configedMain.getSelectedClients().size() == 1) {
+			String hostId = configedMain.getSelectedClients().getFirst();
+			Logging.debug(this, "setSoftwareAudit for ", hostId);
+			panelSWInfo.setAskForOverwrite(true);
+			panelSWInfo.setHost(hostId);
+			panelSWInfo.updateModel();
+
+			showSoftwareInfo(panelSWInfo);
+		} else {
 			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());
 
 			showSoftwareInfo(showSoftwareLogMultiClientReport);
-		} else {
-			// handled by the following methods
-			labelNoSoftware.setText(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"));
-			showSoftwareInfo(showSoftwareLogNotFound);
 		}
-	}
-
-	public void setSoftwareAudit(String hostId) {
-		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
-
-		Logging.debug(this, "setSoftwareAudit for ", hostId);
-		panelSWInfo.setAskForOverwrite(true);
-		panelSWInfo.setHost(hostId);
-		panelSWInfo.updateModel();
-
-		showSoftwareInfo(panelSWInfo);
 	}
 
 	private void showHardwareInfo(JPanel showHardwareLog) {

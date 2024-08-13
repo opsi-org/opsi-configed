@@ -1934,12 +1934,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private boolean setSoftwareInfoPage() {
 		Logging.info(this, "setSoftwareInfoPage(), number selected clients ", selectedClients.size());
-
-		if (selectedClients.size() == 1) {
-			mainFrame.getTabbedConfigPanes().setSoftwareAudit(selectedClients.get(0));
-		} else {
-			mainFrame.getTabbedConfigPanes().setSoftwareAudit();
-		}
+		mainFrame.getTabbedConfigPanes().setSoftwareAudit();
 
 		return true;
 	}
