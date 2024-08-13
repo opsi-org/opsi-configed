@@ -42,9 +42,12 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.dashboard.LicenseDisplayer;
+import de.uib.configed.gui.licenses.LicensesPane;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.CommandWithParameters;
@@ -55,6 +58,7 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
@@ -66,6 +70,8 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.userprefs.ThemeManager;
 import de.uib.utils.userprefs.UserPreferences;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 
 public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
@@ -78,6 +84,8 @@ public class MainFrame extends JFrame {
 
 	private ClientMenuManager clientMenu;
 	private JSplitPane configurationPanel;
+	private LicensesPane licensesPane;
+	private LicenseDisplayer licenseDisplayer;
 	private Dashboard dashboard;
 	private HealthCheckPanel healthCheckPanel;
 
@@ -175,7 +183,7 @@ public class MainFrame extends JFrame {
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			configedMain.reload();
 			if (iconBarPanel.getjButtonReloadLicenses().isEnabled()) {
-				configedMain.reloadLicensesAction();
+				reloadLicensesAction();
 			}
 		});
 
@@ -225,8 +233,20 @@ public class MainFrame extends JFrame {
 		ConfigedMain.setPassword(null);
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
-		ConfigedMain.requestLicensesFrameReload();
+		licensesPane = null;
 		restartConfiged();
+	}
+
+	public boolean checkSaveLicenses() {
+		boolean checkSavedLicensesFrame = licensesPane == null || licensesPane.checkSavedLicensesPane();
+
+		if (!checkSavedLicensesFrame) {
+			configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
+		}
+
+		Logging.info(this, "close instance result ", checkSavedLicensesFrame);
+
+		return checkSavedLicensesFrame;
 	}
 
 	private void restartConfiged() {
@@ -815,6 +835,83 @@ public class MainFrame extends JFrame {
 		} else {
 			callOpsiLicensingInfo();
 		}
+	}
+
+	public void setLicensesManagement() {
+		// show Loading pane only when something needs to be loaded from server
+		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
+				&& licensesPane == null) {
+			activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
+		}
+		new Thread() {
+			@Override
+			public void run() {
+				Logging.info(this, "handleLicensesManagementRequest called");
+				persistenceController.getModuleDataService().retrieveOpsiModules();
+
+				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
+					toggleLicensesFrame();
+				} else {
+					FOpsiLicenseMissingText
+							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
+				}
+
+				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
+						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
+						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
+					// Starting JavaFX-Thread by creating a new JFXPanel, but not
+					// using it since it is not needed.
+					new JFXPanel();
+
+					Platform.runLater(() -> showLicenseDisplayer());
+				}
+
+				deactivateLoadingPane();
+			}
+		}.start();
+	}
+
+	private void initLicensesFrame() {
+		long startmillis = System.currentTimeMillis();
+		Logging.info(this, "initLicensesFrame start ");
+		licensesPane = new LicensesPane(configedMain);
+		long endmillis = System.currentTimeMillis();
+		Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
+	}
+
+	private void showLicenseDisplayer() {
+		if (licenseDisplayer == null) {
+			try {
+				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer.setConfigedMain(configedMain);
+				licenseDisplayer.initAndShowGUI();
+			} catch (IOException ioE) {
+				Logging.warning(this, ioE, "Unable to open FXML file.");
+			}
+		} else {
+			licenseDisplayer.display();
+		}
+	}
+
+	public void toggleLicensesFrame() {
+		if (licensesPane == null) {
+			initLicensesFrame();
+		}
+
+		Logging.info(this, "show licensing pane");
+		setPanel(licensesPane);
+		iconBarPanel.showReloadLicensingButton();
+	}
+
+	public void reloadLicensesAction() {
+		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
+		new Thread() {
+			@Override
+			public void run() {
+				licensesPane.reloadLicensesData();
+				deactivateLoadingPane();
+			}
+		}.start();
 	}
 
 	public void instancesChanged(Set<?> instances) {

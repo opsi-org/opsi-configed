@@ -9,7 +9,6 @@ package de.uib.configed;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +56,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
-import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
@@ -71,7 +69,6 @@ import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
-import de.uib.configed.gui.licenses.LicensesPane;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
@@ -109,8 +106,6 @@ import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 
 public class ConfigedMain implements MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -122,7 +117,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
-	private static LicensesPane licensesPane;
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
 
@@ -236,7 +230,6 @@ public class ConfigedMain implements MessagebusListener {
 	private NewClientDialog newClientDialog;
 
 	private InitialDataLoader initialDataLoader;
-	private LicenseDisplayer licenseDisplayer;
 
 	public ConfigedMain(String host, String user, String password, String otp) {
 		if (ConfigedMain.host == null) {
@@ -590,64 +583,6 @@ public class ConfigedMain implements MessagebusListener {
 		productActionFrame.start();
 	}
 
-	private void setLicensesManagement() {
-		// show Loading pane only when something needs to be loaded from server
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& licensesPane == null) {
-			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
-		}
-		new Thread() {
-			@Override
-			public void run() {
-				Logging.info(this, "handleLicensesManagementRequest called");
-				persistenceController.getModuleDataService().retrieveOpsiModules();
-
-				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-					toggleLicensesFrame();
-				} else {
-					FOpsiLicenseMissingText
-							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
-				}
-
-				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
-						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
-						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
-					// Starting JavaFX-Thread by creating a new JFXPanel, but not
-					// using it since it is not needed.
-					new JFXPanel();
-
-					Platform.runLater(() -> showLicenseDisplayer());
-				}
-
-				mainFrame.deactivateLoadingPane();
-			}
-		}.start();
-	}
-
-	private void showLicenseDisplayer() {
-		if (licenseDisplayer == null) {
-			try {
-				licenseDisplayer = new LicenseDisplayer();
-				licenseDisplayer.setConfigedMain(ConfigedMain.this);
-				licenseDisplayer.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.warning(this, ioE, "Unable to open FXML file.");
-			}
-		} else {
-			licenseDisplayer.display();
-		}
-	}
-
-	public void toggleLicensesFrame() {
-		if (licensesPane == null) {
-			initLicensesFrame();
-		}
-
-		Logging.info(this, "show licensing pane");
-		mainFrame.setPanel(licensesPane);;
-		mainFrame.getIconBarPanel().showReloadLicensingButton();
-	}
-
 	public void setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info(this, "setEditingTarget ", newEditingTarget);
 		if (newEditingTarget == editingTarget) {
@@ -687,7 +622,7 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 
 		case LICENSE_MANAGEMENT:
-			setLicensesManagement();
+			mainFrame.setLicensesManagement();
 			break;
 		}
 	}
@@ -873,14 +808,6 @@ public class ConfigedMain implements MessagebusListener {
 		// Center mainFrame on screen of configed.fProgress
 		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
 				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
-	}
-
-	private void initLicensesFrame() {
-		long startmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicensesFrame start ");
-		licensesPane = new LicensesPane(this);
-		long endmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
 	}
 
 	// returns true if we have a PersistenceController and are connected
@@ -2203,17 +2130,6 @@ public class ConfigedMain implements MessagebusListener {
 		SwingUtilities.invokeLater(this::reloadData);
 	}
 
-	public void reloadLicensesAction() {
-		mainFrame.activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
-		new Thread() {
-			@Override
-			public void run() {
-				licensesPane.reloadLicensesData();
-				mainFrame.deactivateLoadingPane();
-			}
-		}.start();
-	}
-
 	private void reloadData() {
 		checkSaveAll(true);
 
@@ -3238,40 +3154,24 @@ public class ConfigedMain implements MessagebusListener {
 			}
 		}
 
+		boolean result = true;
+
 		if (mainFrame != null) {
-			mainFrame.setVisible(false);
-			mainFrame.dispose();
-			mainFrame = null;
+			result = mainFrame.checkSaveLicenses();
+			if (result) {
+				mainFrame.setVisible(false);
+				mainFrame.dispose();
+				mainFrame = null;
+			}
 		}
 
-		if (loginDialog != null) {
-			loginDialog.setVisible(false);
-			loginDialog.dispose();
-		}
-
-		boolean checkSavedLicensesFrame = licensesPane == null || licensesPane.checkSavedLicensesPane();
-
-		if (!checkSavedLicensesFrame) {
-			setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
-		}
-
-		Logging.info(this, "close instance result ", checkSavedLicensesFrame);
-
-		return checkSavedLicensesFrame;
+		return result;
 	}
 
 	public void finishApp(boolean checkdirty, int exitcode) {
 		if (closeInstance(checkdirty)) {
 			Main.endApp(exitcode);
 		}
-	}
-
-	public static void requestLicensesFrameReload() {
-		licensesPane = null;
-	}
-
-	public static LicensesPane getLicensesPane() {
-		return licensesPane;
 	}
 
 	public static String getHost() {
