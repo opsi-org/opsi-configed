@@ -1779,10 +1779,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private boolean setProductPropertiesPage() {
-		if (editingTarget != EditingTarget.DEPOTS) {
-			return false;
-		}
-
 		Logging.debug(this, "setProductPropertiesPage");
 		mainFrame.getTabbedConfigPanes().getPanelProductProperties().setProductProperties();
 		depotsList.setEnabled(true);
@@ -1793,10 +1789,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private boolean setHostPropertiesPage() {
-		if (editingTarget != EditingTarget.DEPOTS) {
-			return false;
-		}
-
 		Logging.debug(this, "setHostPropertiesPage");
 
 		depotsList.setEnabled(true);
@@ -1974,7 +1966,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private boolean setLogPage() {
 		Logging.debug(this, "setLogPage(), selected clients: ", selectedClients);
-		mainFrame.getTabbedConfigPanes().setUpdatedLogfilePanel("instlog");
+		mainFrame.getTabbedConfigPanes().setLogFileTab("instlog");
 		mainFrame.getTabbedConfigPanes().setLogview("instlog");
 		return true;
 	}

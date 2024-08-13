@@ -167,7 +167,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			public void loadDocument(String logtype) {
 				super.loadDocument(logtype);
 				Logging.info(this, "loadDocument logtype ", logtype);
-				setUpdatedLogfilePanel(logtype);
+				setLogFileTab(logtype);
 			}
 		};
 
@@ -178,7 +178,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 			// logfile empty?
 			if (!configedMain.logfileExists(logtype)) {
-				setUpdatedLogfilePanel(logtype);
+				setLogFileTab(logtype);
 			}
 		});
 	}
@@ -263,7 +263,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		showSoftwareLog.repaint();
 	}
 
-	public void setUpdatedLogfilePanel(String logtype) {
+	public void setLogFileTab(String logtype) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
 		setComponentAt(getSelectedIndex(), showLogfiles);
 		showLogfiles.setDocuments(configedMain.getLogfilesUpdating(logtype),
