@@ -2014,23 +2014,23 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void setViewIndex(ViewIndex newViewIndex) {
-		ViewIndex oldViewIndex = viewIndex;
-
 		Logging.info(this, "visualViewIndex ", newViewIndex, ", (old) viewIndex ", viewIndex);
 		Logging.info(this, "setViewIndex anyDataChanged ", anyDataChanged);
 
 		checkSaveAll(true);
 
 		if (initialDataLoader.isDataLoaded()) {
-			viewIndex = newViewIndex;
 			depotsList.setEnabled(viewIndex == ViewIndex.VIEW_CLIENTS);
 
 			Logging.debug(this, "switch to viewIndex ", viewIndex);
-			boolean result = resetView();
+			boolean result = resetView(newViewIndex);
 
-			if (!result) {
-				viewIndex = oldViewIndex;
+			if (result) {
+				viewIndex = newViewIndex;
 				Logging.debug(" tab index could not be changed");
+			} else {
+				viewIndex = ViewIndex.VIEW_CLIENTS;
+				mainFrame.getTabbedConfigPanes().setSelectedIndex(0);
 			}
 
 			saveCurrentViewIndex();
