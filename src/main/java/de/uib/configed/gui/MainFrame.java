@@ -234,6 +234,8 @@ public class MainFrame extends JFrame {
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
 		licensesPane = null;
+		licenseDisplayer = null;
+		dashboard.clearAllData();
 		restartConfiged();
 	}
 

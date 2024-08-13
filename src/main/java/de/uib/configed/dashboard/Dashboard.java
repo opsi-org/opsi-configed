@@ -21,7 +21,6 @@ import de.uib.configed.dashboard.view.ViewManager;
 import de.uib.utils.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.stage.WindowEvent;
 
 public class Dashboard extends JFXPanel {
 	public static final String MAIN_VIEW = "main";
@@ -49,7 +48,7 @@ public class Dashboard extends JFXPanel {
 		});
 	}
 
-	private void clearAllData(WindowEvent e) {
+	public void clearAllData() {
 		ClientData.clear();
 		ProductData.clear();
 		ModuleData.clear();
