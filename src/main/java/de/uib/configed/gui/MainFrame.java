@@ -108,7 +108,6 @@ public class MainFrame extends JFrame {
 	private GlassPane glassPane;
 
 	private DepotListPresenter depotListPresenter;
-	private DepotsList depotsList;
 	private ClientTree clientTree;
 	private ProductTree productTree;
 
@@ -127,8 +126,7 @@ public class MainFrame extends JFrame {
 		this.clientTree = clientTree;
 		this.productTree = productTree;
 
-		this.depotsList = depotsList;
-		depotListPresenter = new DepotListPresenter(this.depotsList, configedMain);
+		depotListPresenter = new DepotListPresenter(depotsList, configedMain);
 
 		this.configedMain = configedMain;
 

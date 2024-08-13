@@ -2020,7 +2020,7 @@ public class ConfigedMain implements MessagebusListener {
 		checkSaveAll(true);
 
 		if (initialDataLoader.isDataLoaded()) {
-			depotsList.setEnabled(viewIndex == ViewIndex.VIEW_CLIENTS);
+			depotsList.setEnabled(newViewIndex == ViewIndex.VIEW_CLIENTS);
 
 			Logging.debug(this, "switch to viewIndex ", viewIndex);
 			boolean result = resetView(newViewIndex);
