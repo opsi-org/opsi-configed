@@ -278,10 +278,6 @@ public class LicensingInfoPanel extends JPanel {
 				new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
 	}
 
-	public void reload() {
-		licensingInfoPanel.reload();
-	}
-
 	public static boolean isExtendedView() {
 		return extendedView;
 	}

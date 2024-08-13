@@ -2122,13 +2122,8 @@ public class ConfigedMain implements MessagebusListener {
 			preloadData();
 
 			FOpsiLicenseMissingText.reset();
-			if (mainFrame.getTabbedConfigPanes().getPanelProductProperties() != null) {
-				mainFrame.getTabbedConfigPanes().getPanelProductProperties().reload();
-			}
 
-			if (mainFrame.getLicensingInfoPanel() != null) {
-				mainFrame.getLicensingInfoPanel().reload();
-			}
+			mainFrame.resetData();
 
 			requestReloadStatesAndActions();
 

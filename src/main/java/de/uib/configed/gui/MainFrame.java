@@ -99,7 +99,7 @@ public class MainFrame extends JFrame {
 
 	private JMenuItem jMenuShowDialogs;
 
-	private TabbedConfigPanes jTabbedPaneConfigPanes;
+	private TabbedConfigPanes tabbedPaneConfigPanes;
 
 	private HostsStatusPanel statusPane;
 
@@ -151,7 +151,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public TabbedConfigPanes getTabbedConfigPanes() {
-		return jTabbedPaneConfigPanes;
+		return tabbedPaneConfigPanes;
 	}
 
 	public HostsStatusPanel getHostsStatusPanel() {
@@ -234,7 +234,18 @@ public class MainFrame extends JFrame {
 		licensesPanel = null;
 		licenseDisplayer = null;
 		dashboard.clearAllData();
+		licensingInfoPanel = null;
 		restartConfiged();
+	}
+
+	public void resetData() {
+		licensesPanel = null;
+		licenseDisplayer = null;
+		if (dashboard != null) {
+			dashboard.clearAllData();
+			dashboard = null;
+		}
+		licensingInfoPanel = null;
 	}
 
 	public boolean checkSaveLicenses() {
@@ -685,9 +696,9 @@ public class MainFrame extends JFrame {
 
 		jTabbedPaneClientSelection.setSelectedIndex(1);
 
-		jTabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
+		tabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
-				jTabbedPaneConfigPanes);
+				tabbedPaneConfigPanes);
 		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
 		return centralPane;
