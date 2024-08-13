@@ -47,7 +47,7 @@ import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.LicenseDisplayer;
-import de.uib.configed.gui.licenses.LicensesPane;
+import de.uib.configed.gui.licenses.LicensesPanel;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.CommandWithParameters;
@@ -59,7 +59,7 @@ import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoPanel;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -83,11 +83,13 @@ public class MainFrame extends JFrame {
 	private JMenuItem jMenuFileSaveConfigurations;
 
 	private ClientMenuManager clientMenu;
+
 	private JSplitPane configurationPanel;
-	private LicensesPane licensesPane;
-	private LicenseDisplayer licenseDisplayer;
 	private Dashboard dashboard;
+	private LicensingInfoPanel licensingInnfoPanel;
 	private HealthCheckPanel healthCheckPanel;
+	private LicensesPanel licensesPanel;
+	private LicenseDisplayer licenseDisplayer;
 
 	// Inititalize it here so that we keep the reference throughout a full reload
 	private JMenu jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
@@ -100,8 +102,6 @@ public class MainFrame extends JFrame {
 	private TabbedConfigPanes jTabbedPaneConfigPanes;
 
 	private HostsStatusPanel statusPane;
-
-	private LicensingInfoDialog fDialogOpsiLicensingInfo;
 
 	private ClientTable clientTable;
 
@@ -233,14 +233,14 @@ public class MainFrame extends JFrame {
 		ConfigedMain.setPassword(null);
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
-		licensesPane = null;
+		licensesPanel = null;
 		licenseDisplayer = null;
 		dashboard.clearAllData();
 		restartConfiged();
 	}
 
 	public boolean checkSaveLicenses() {
-		boolean checkSavedLicensesFrame = licensesPane == null || licensesPane.checkSavedLicensesPane();
+		boolean checkSavedLicensesFrame = licensesPanel == null || licensesPanel.checkSavedLicensesPane();
 
 		if (!checkSavedLicensesFrame) {
 			configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
@@ -575,11 +575,11 @@ public class MainFrame extends JFrame {
 	}
 
 	private void callOpsiLicensingInfo() {
-		if (fDialogOpsiLicensingInfo == null) {
-			fDialogOpsiLicensingInfo = new LicensingInfoDialog();
+		if (licensingInnfoPanel == null) {
+			licensingInnfoPanel = new LicensingInfoPanel();
 		}
 
-		setPanel(fDialogOpsiLicensingInfo);
+		setPanel(licensingInnfoPanel);
 	}
 
 	private void guiInit() {
@@ -842,7 +842,7 @@ public class MainFrame extends JFrame {
 	public void setLicensesManagement() {
 		// show Loading pane only when something needs to be loaded from server
 		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& licensesPane == null) {
+				&& licensesPanel == null) {
 			activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
 		}
 		new Thread() {
@@ -876,7 +876,7 @@ public class MainFrame extends JFrame {
 	private void initLicensesFrame() {
 		long startmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicensesFrame start ");
-		licensesPane = new LicensesPane(configedMain);
+		licensesPanel = new LicensesPanel(configedMain);
 		long endmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
 	}
@@ -896,12 +896,12 @@ public class MainFrame extends JFrame {
 	}
 
 	public void toggleLicensesFrame() {
-		if (licensesPane == null) {
+		if (licensesPanel == null) {
 			initLicensesFrame();
 		}
 
 		Logging.info(this, "show licensing pane");
-		setPanel(licensesPane);
+		setPanel(licensesPanel);
 		iconBarPanel.showReloadLicensingButton();
 	}
 
@@ -910,7 +910,7 @@ public class MainFrame extends JFrame {
 		new Thread() {
 			@Override
 			public void run() {
-				licensesPane.reloadLicensesData();
+				licensesPanel.reloadLicensesData();
 				deactivateLoadingPane();
 			}
 		}.start();
@@ -922,8 +922,8 @@ public class MainFrame extends JFrame {
 		jMenuShowDialogs.setEnabled(existJDialogInstances);
 	}
 
-	public LicensingInfoDialog getFDialogOpsiLicensingInfo() {
-		return fDialogOpsiLicensingInfo;
+	public LicensingInfoPanel getFDialogOpsiLicensingInfo() {
+		return licensingInnfoPanel;
 	}
 
 	public void rebuildDepotPopup() {

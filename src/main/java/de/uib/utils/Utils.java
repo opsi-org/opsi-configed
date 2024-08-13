@@ -41,8 +41,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoPanel;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
@@ -164,7 +164,7 @@ public final class Utils {
 			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
 					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!LicensingInfoDialog.isExtendedView());
+					!LicensingInfoPanel.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
