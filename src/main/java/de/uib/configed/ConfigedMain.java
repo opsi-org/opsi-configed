@@ -1778,17 +1778,15 @@ public class ConfigedMain implements MessagebusListener {
 		return mergedMap;
 	}
 
-	private boolean setProductPropertiesPage() {
+	private void setProductPropertiesPage() {
 		Logging.debug(this, "setProductPropertiesPage");
 		mainFrame.getTabbedConfigPanes().getPanelProductProperties().setProductProperties();
 		depotsList.setEnabled(true);
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		return true;
 	}
 
-	private boolean setHostPropertiesPage() {
+	private void setHostPropertiesPage() {
 		Logging.debug(this, "setHostPropertiesPage");
 
 		depotsList.setEnabled(true);
@@ -1813,8 +1811,6 @@ public class ConfigedMain implements MessagebusListener {
 		mainFrame.getTabbedConfigPanes().getPanelHostProperties().initMultipleHostsEditing(depot,
 				depotPropertiesForPermittedDepots, hostUpdateCollection,
 				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
-
-		return true;
 	}
 
 	private static void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
@@ -1824,7 +1820,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public boolean setNetworkConfigurationPage() {
+	public void setNetworkConfigurationPage() {
 		Logging.info(this, "setNetworkconfigurationPage ");
 		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", selectedClients);
 
@@ -1896,8 +1892,6 @@ public class ConfigedMain implements MessagebusListener {
 					additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
 		}
-
-		return true;
 	}
 
 	private static Map<String, ListCellOptions> deepCopyConfigListCellOptions(
@@ -1919,7 +1913,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	private boolean setHardwareInfoPage() {
+	private void setHardwareInfoPage() {
 		Logging.info(this, "setHardwareInfoPage for, clients count ", selectedClients.size());
 
 		if (selectedClients.size() == 1) {
@@ -1928,15 +1922,11 @@ public class ConfigedMain implements MessagebusListener {
 		} else {
 			mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
 		}
-
-		return true;
 	}
 
-	private boolean setSoftwareInfoPage() {
+	private void setSoftwareInfoPage() {
 		Logging.info(this, "setSoftwareInfoPage(), number selected clients ", selectedClients.size());
 		mainFrame.getTabbedConfigPanes().setSoftwareAudit();
-
-		return true;
 	}
 
 	public boolean logfileExists(String logtype) {
@@ -1959,11 +1949,10 @@ public class ConfigedMain implements MessagebusListener {
 		return logfiles;
 	}
 
-	private boolean setLogPage() {
+	private void setLogPage() {
 		Logging.debug(this, "setLogPage(), selected clients: ", selectedClients);
 		mainFrame.getTabbedConfigPanes().setLogFileTab("instlog");
 		mainFrame.getTabbedConfigPanes().setLogview("instlog");
-		return true;
 	}
 
 	public boolean resetView() {
@@ -1988,27 +1977,27 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 
 		case VIEW_NETWORK_CONFIGURATION:
-			result = setNetworkConfigurationPage();
+			setNetworkConfigurationPage();
 			break;
 
 		case VIEW_HARDWARE_INFO:
-			result = setHardwareInfoPage();
+			setHardwareInfoPage();
 			break;
 
 		case VIEW_SOFTWARE_INFO:
-			result = setSoftwareInfoPage();
+			setSoftwareInfoPage();
 			break;
 
 		case VIEW_LOG:
-			result = setLogPage();
+			setLogPage();
 			break;
 
 		case VIEW_PRODUCT_PROPERTIES:
-			result = setProductPropertiesPage();
+			setProductPropertiesPage();
 			break;
 
 		case VIEW_HOST_PROPERTIES:
-			result = setHostPropertiesPage();
+			setHostPropertiesPage();
 			break;
 
 		default:

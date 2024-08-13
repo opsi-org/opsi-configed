@@ -212,7 +212,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	public void setSoftwareAudit() {
 		if (configedMain.getSelectedClients().isEmpty()) {
-			// handled by the following methods
 			showSoftwareInfo(showSoftwareLogNotFound);
 		} else if (configedMain.getSelectedClients().size() == 1) {
 			String hostId = configedMain.getSelectedClients().getFirst();
