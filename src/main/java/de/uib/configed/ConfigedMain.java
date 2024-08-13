@@ -2126,8 +2126,8 @@ public class ConfigedMain implements MessagebusListener {
 				mainFrame.getTabbedConfigPanes().getPanelProductProperties().reload();
 			}
 
-			if (mainFrame.getFDialogOpsiLicensingInfo() != null) {
-				mainFrame.getFDialogOpsiLicensingInfo().reload();
+			if (mainFrame.getLicensingInfoPanel() != null) {
+				mainFrame.getLicensingInfoPanel().reload();
 			}
 
 			requestReloadStatesAndActions();

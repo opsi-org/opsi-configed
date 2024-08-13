@@ -86,7 +86,7 @@ public class MainFrame extends JFrame {
 
 	private JSplitPane configurationPanel;
 	private Dashboard dashboard;
-	private LicensingInfoPanel licensingInnfoPanel;
+	private LicensingInfoPanel licensingInfoPanel;
 	private HealthCheckPanel healthCheckPanel;
 	private LicensesPanel licensesPanel;
 	private LicenseDisplayer licenseDisplayer;
@@ -573,11 +573,11 @@ public class MainFrame extends JFrame {
 	}
 
 	private void callOpsiLicensingInfo() {
-		if (licensingInnfoPanel == null) {
-			licensingInnfoPanel = new LicensingInfoPanel();
+		if (licensingInfoPanel == null) {
+			licensingInfoPanel = new LicensingInfoPanel();
 		}
 
-		setPanel(licensingInnfoPanel);
+		setPanel(licensingInfoPanel);
 	}
 
 	private void guiInit() {
@@ -920,8 +920,8 @@ public class MainFrame extends JFrame {
 		jMenuShowDialogs.setEnabled(existJDialogInstances);
 	}
 
-	public LicensingInfoPanel getFDialogOpsiLicensingInfo() {
-		return licensingInnfoPanel;
+	public LicensingInfoPanel getLicensingInfoPanel() {
+		return licensingInfoPanel;
 	}
 
 	public void rebuildDepotPopup() {
