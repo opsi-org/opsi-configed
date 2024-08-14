@@ -2168,12 +2168,12 @@ public class ConfigedMain implements MessagebusListener {
 			hostInfo.resetGui();
 		}
 
+		mainFrame.deactivateLoadingPane();
+
 		// We want to reset and reload the page that is being shown now...
 		EditingTarget t = editingTarget;
 		editingTarget = null;
 		setEditingTarget(t);
-
-		mainFrame.deactivateLoadingPane();
 	}
 
 	public void addToGlobalUpdateCollection(UpdateCollection newCollection) {

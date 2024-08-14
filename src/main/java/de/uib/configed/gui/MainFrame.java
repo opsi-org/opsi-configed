@@ -231,16 +231,14 @@ public class MainFrame extends JFrame {
 		ConfigedMain.setPassword(null);
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
-		licensesPanel = null;
-		licenseDisplayer = null;
-		dashboard.clearAllData();
-		licensingInfoPanel = null;
+		resetData();
 		restartConfiged();
 	}
 
 	public void resetData() {
 		licensesPanel = null;
 		licenseDisplayer = null;
+		healthCheckPanel = null;
 		if (dashboard != null) {
 			dashboard.clearAllData();
 			dashboard = null;
