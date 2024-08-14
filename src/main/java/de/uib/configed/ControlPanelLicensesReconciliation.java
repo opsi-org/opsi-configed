@@ -43,11 +43,8 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 	private int indexUsedByOpsi;
 	private int indexSWInventoryUsed;
 
-	private ConfigedMain configedMain;
-
-	public ControlPanelLicensesReconciliation(ConfigedMain configedMain) {
+	public ControlPanelLicensesReconciliation() {
 		thePanel = new PanelLicensesReconciliation(this);
-		this.configedMain = configedMain;
 
 		init();
 	}

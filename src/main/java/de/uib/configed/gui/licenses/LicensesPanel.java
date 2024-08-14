@@ -180,10 +180,6 @@ public class LicensesPanel extends JTabbedPane {
 	}
 
 	private void initTabs() {
-		// TODO: What title setting when changing view?
-		ConfigedMain.getMainFrame().setTitle(persistenceController.getHostInfoCollections().getConfigServer() + ":  "
-				+ Configed.getResourceValue("ConfigedMain.Licenses"));
-
 		// panelAssignToLPools
 		licensesPanelsTabNames.put(LicensesTabStatus.LICENSEPOOL,
 				Configed.getResourceValue("ConfigedMain.Licenses.TabLicensepools"));
@@ -215,16 +211,14 @@ public class LicensesPanel extends JTabbedPane {
 		// panelReconciliation
 		licensesPanelsTabNames.put(LicensesTabStatus.RECONCILIATION,
 				Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseReconciliation"));
-		ControlPanelLicensesReconciliation controlPanelLicensesReconciliation = new ControlPanelLicensesReconciliation(
-				configedMain);
+		ControlPanelLicensesReconciliation controlPanelLicensesReconciliation = new ControlPanelLicensesReconciliation();
 		addTab(LicensesTabStatus.RECONCILIATION, controlPanelLicensesReconciliation.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicensesReconciliation);
 
 		// panelStatistics
 		licensesPanelsTabNames.put(LicensesTabStatus.STATISTICS,
 				Configed.getResourceValue("ConfigedMain.Licenses.TabStatistics"));
-		ControlPanelLicensesStatistics controlPanelLicensesStatistics = new ControlPanelLicensesStatistics(
-				configedMain);
+		ControlPanelLicensesStatistics controlPanelLicensesStatistics = new ControlPanelLicensesStatistics();
 		addTab(LicensesTabStatus.STATISTICS, controlPanelLicensesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicensesStatistics);
 

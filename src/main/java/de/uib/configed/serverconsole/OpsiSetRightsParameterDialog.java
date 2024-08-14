@@ -38,7 +38,6 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonSearchDir;
 
-	private JButton jButtonDoAction;
 	private SingleCommandOpsiSetRights commandOpsiSetRights;
 	private List<String> additionalDefaultPaths = new ArrayList<>();
 	private CompletionComboButton completion;
@@ -64,7 +63,7 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		jLabelInfo = new JLabel(Configed.getResourceValue("SingleCommandOpsiSetRights.additionalPath"));
 		inputPanel.add(jLabelInfo);
-		jButtonDoAction = new JButton(Configed.getResourceValue("buttonExecute"));
+		JButton jButtonDoAction = new JButton(Configed.getResourceValue("buttonExecute"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 

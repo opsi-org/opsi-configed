@@ -33,11 +33,8 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private ConfigedMain configedMain;
-
-	public ControlPanelLicensesStatistics(ConfigedMain configedMain) {
+	public ControlPanelLicensesStatistics() {
 		thePanel = new PanelLicensesStatistics(this);
-		this.configedMain = configedMain;
 
 		init();
 	}
