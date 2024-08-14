@@ -52,7 +52,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class HealthCheckPanel extends JPanel {
@@ -188,7 +188,7 @@ public class HealthCheckPanel extends JPanel {
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("download"));
-		Utils.addIntellijIconToMenuItem(popupSaveAsZip, "download");
+		Icons.addIntellijIconToMenuItem(popupSaveAsZip, "download");
 
 		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
 		popupMenu.add(popupSaveAsZip);
@@ -376,7 +376,7 @@ public class HealthCheckPanel extends JPanel {
 				if (!((String) healthInfo.get("details")).isBlank()) {
 					Style iconStyle = styledDocument.addStyle("iconStyle", null);
 					String imagePath = (boolean) healthInfo.get("showDetails") ? "arrowDown" : "arrowRight";
-					StyleConstants.setIcon(iconStyle, Utils.getIntellijIcon(imagePath));
+					StyleConstants.setIcon(iconStyle, Icons.getIntellijIcon(imagePath));
 					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), " ",
 							iconStyle);
 				} else {

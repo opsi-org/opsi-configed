@@ -39,7 +39,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.observer.RunningInstances;
 
@@ -68,7 +68,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 
 		if (initialValue != null) {
 			this.initialValue = initialValue;
@@ -111,22 +111,22 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit = new JButton(Icons.getIntellijIcon("checkmark"));
 		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel = new JButton(Icons.getIntellijIcon("close"));
 		buttonCancel.setToolTipText(Configed.getResourceValue("FEditObject.CancelButtonTooltip"));
 		buttonCancel.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
 		buttonClear = new JButton();
-		buttonClear.setIcon(Utils.getIntellijIcon("clearCash"));
+		buttonClear.setIcon(Icons.getIntellijIcon("clearCash"));
 		buttonClear.setToolTipText(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"));
 		buttonClear.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonClear.setVisible(false);
 
-		buttonAdd = new JButton(Utils.getIntellijIcon("add"));
+		buttonAdd = new JButton(Icons.getIntellijIcon("add"));
 		buttonAdd.setToolTipText(Configed.getResourceValue("FEditObject.AddButtonTooltip"));
 		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonAdd.setEnabled(false);

@@ -37,7 +37,7 @@ import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public final class TerminalFrame implements MessagebusListener {
@@ -101,7 +101,7 @@ public final class TerminalFrame implements MessagebusListener {
 
 	private void createAndShowGUI() {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
-		frame.setIconImage(Utils.getMainIcon());
+		frame.setIconImage(Icons.getMainIcon());
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		TerminalMenuBar menuBar = new TerminalMenuBar(this, restrictView);
 		menuBar.init();

@@ -19,7 +19,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.messagebus.MessagebusListener;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
@@ -158,8 +158,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Utils.getSelectedIntellijIcon("circle_checkmark", 24);
-		disconnectedIcon = Utils.getSelectedIntellijIcon("circle", 24);
+		connectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
+		disconnectedIcon = Icons.getSelectedIntellijIcon("circle", 24);
 
 		connectionStateLabel = new JLabel();
 	}

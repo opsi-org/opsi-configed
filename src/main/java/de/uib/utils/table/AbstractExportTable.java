@@ -23,6 +23,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -57,7 +58,7 @@ public abstract class AbstractExportTable {
 
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
-		Utils.addIntellijIconToMenuItem(menuItem, "export");
+		Icons.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
 	}
@@ -69,7 +70,7 @@ public abstract class AbstractExportTable {
 
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
-		Utils.addIntellijIconToMenuItem(menuItem, "export");
+		Icons.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener((ActionEvent actionEvent) -> execute(null, true));
 
 		return menuItem;

@@ -99,6 +99,7 @@ import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.DataChangedKeeper;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
@@ -1143,7 +1144,7 @@ public class ConfigedMain implements MessagebusListener {
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
 			column.setCellRenderer(
-					new BooleanIconTableCellRenderer(Utils.getIntellijIcon("checkmark", Globals.OPSI_OK), null));
+					new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark", Globals.OPSI_OK), null));
 		}
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
@@ -1206,7 +1207,7 @@ public class ConfigedMain implements MessagebusListener {
 			TableColumn column = clientTable.getColumnModel().getColumn(col);
 			Logging.info(this, "setSelectionPanelCols  column ", column.getHeaderValue());
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-			column.setCellRenderer(new BooleanIconTableCellRenderer(Utils.getIntellijIcon("checkmark"), null));
+			column.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
 		}
 	}
 

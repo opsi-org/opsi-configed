@@ -33,7 +33,7 @@ import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class FEdit extends JDialog implements ActionListener, KeyListener {
@@ -64,7 +64,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		super((Dialog) null);
 
 		Logging.debug(this, " FEdit constructed for >>", initialText, "<< title ", hint);
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 
 		if (initialText != null) {
 			this.initialText = initialText;
@@ -87,11 +87,11 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		labelHint = new JLabel();
 
-		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit = new JButton(Icons.getIntellijIcon("checkmark"));
 		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel = new JButton(Icons.getIntellijIcon("close"));
 		buttonCancel.setToolTipText(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"));
 		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 	}

@@ -38,7 +38,7 @@ import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommand;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 
@@ -141,7 +141,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		jComboBoxParentMenuText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
-		JButton buttonDelete = new JButton(Utils.getIntellijIcon("remove"));
+		JButton buttonDelete = new JButton(Icons.getIntellijIcon("remove"));
 		buttonDelete.setToolTipText(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"));
 		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
@@ -261,7 +261,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		JLabel labelCommands = new JLabel(Configed.getResourceValue("CommandControlDialog.commands"));
 		labelCommands.setToolTipText(Configed.getResourceValue("CommandControlDialog.commands.tooltip"));
 
-		JButton buttonTestCommand = new JButton(Utils.getIntellijIcon("run"));
+		JButton buttonTestCommand = new JButton(Icons.getIntellijIcon("run"));
 		buttonTestCommand.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnTestCommand"));
 		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonTestCommand.addActionListener(actionEvent -> doActionTestCommand());

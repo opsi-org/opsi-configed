@@ -66,6 +66,7 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.userprefs.ThemeManager;
@@ -167,16 +168,16 @@ public class MainFrame extends JFrame {
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
-		Utils.addThemeIconToMenuItem(jMenuFileExit, "exit");
+		Icons.addThemeIconToMenuItem(jMenuFileExit, "exit");
 		jMenuFileExit.addActionListener((ActionEvent e) -> configedMain.finishApp(true, 0));
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
-		Utils.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
+		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
-		Utils.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
+		Icons.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			configedMain.reload();
@@ -186,7 +187,7 @@ public class MainFrame extends JFrame {
 		});
 
 		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
-		Utils.addThemeIconToMenuItem(jMenuFileLogout, "exit");
+		Icons.addThemeIconToMenuItem(jMenuFileLogout, "exit");
 		jMenuFileLogout.addActionListener(actionEvent -> logout());
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
@@ -201,7 +202,7 @@ public class MainFrame extends JFrame {
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
 		JMenu jMenuTheme = new JMenu(Configed.getResourceValue("theme"));
-		Utils.addThemeIconInvertedToMenuItem(jMenuTheme, "systemTheme");
+		Icons.addThemeIconInvertedToMenuItem(jMenuTheme, "systemTheme");
 		ButtonGroup groupThemes = new ButtonGroup();
 		String selectedTheme = ThemeManager.getSelectedTheme();
 
@@ -302,13 +303,13 @@ public class MainFrame extends JFrame {
 
 	private void setupMenuServerConsole() {
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
-		Utils.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
+		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
 		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
-		Utils.addOpsiIconToMenuItem(menuOpsi);
+		Icons.addOpsiIconToMenuItem(menuOpsi);
 		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
 				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
 		Logging.info(this, "setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
@@ -326,7 +327,7 @@ public class MainFrame extends JFrame {
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
 		JMenuItem jMenuTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
-		Utils.addIntellijIconToMenuItem(jMenuTerminal, "terminal");
+		Icons.addIntellijIconToMenuItem(jMenuTerminal, "terminal");
 
 		// check terminal access rights defined by user roles
 		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
@@ -485,17 +486,17 @@ public class MainFrame extends JFrame {
 
 	public static void addHelpLinks(JMenu jMenuHelp) {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
-		Utils.addOpsiIconToMenuItem(jMenuHelpDoc);
+		Icons.addOpsiIconToMenuItem(jMenuHelpDoc);
 		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
 		jMenuHelp.add(jMenuHelpDoc);
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
-		Utils.addOpsiIconToMenuItem(jMenuHelpForum);
+		Icons.addOpsiIconToMenuItem(jMenuHelpForum);
 		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
-		Utils.addOpsiIconToMenuItem(jMenuHelpSupport);
+		Icons.addOpsiIconToMenuItem(jMenuHelpSupport);
 		jMenuHelpSupport.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 		jMenuHelp.add(jMenuHelpSupport);
 	}
@@ -528,7 +529,7 @@ public class MainFrame extends JFrame {
 		jMenuHelp.add(jMenuHelpCredits);
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"),
-				Utils.getIntellijIcon("info"));
+				Icons.getIntellijIcon("info"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(owner));
 		jMenuHelp.add(jMenuHelpAbout);
 	}
@@ -597,7 +598,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		this.setIconImage(Utils.getMainIcon());
+		this.setIconImage(Icons.getMainIcon());
 
 		setJMenuBar(initMenuBar());
 
@@ -737,7 +738,7 @@ public class MainFrame extends JFrame {
 	private String getLocalbootProductsFromSelection() {
 		FSelectionList fProductSelectionList = new FSelectionList(this,
 				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" },
-				new Icon[] { Utils.getIntellijIcon("close"), Utils.getIntellijIcon("checkmark") }, 400, 600);
+				new Icon[] { Icons.getIntellijIcon("close"), Icons.getIntellijIcon("checkmark") }, 400, 600);
 		fProductSelectionList.setListData(new ArrayList<>(
 				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		fProductSelectionList.setVisible(true);

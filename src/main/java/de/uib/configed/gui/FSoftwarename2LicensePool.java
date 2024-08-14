@@ -34,7 +34,7 @@ import de.uib.configed.type.licenses.LicensepoolEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.DefaultTableModelFilterCondition;
 import de.uib.utils.table.GenTableModel;
@@ -188,14 +188,14 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	}
 
 	private void initLayout() {
-		JButton buttonRemoveAllAssignments = new JButton(Utils.getIntellijIcon("remove"));
+		JButton buttonRemoveAllAssignments = new JButton(Icons.getIntellijIcon("remove"));
 		buttonRemoveAllAssignments.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		JLabel labelRemoveAllAssignments = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(VALUE_NO_LICENSE_POOL)));
 
-		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(Utils.getIntellijIcon("add"));
+		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
 		buttonSetAllAssignmentsToGloballySelectedPool.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		labelSetAllAssignmentsToGloballySelectedPool = new JLabel(
@@ -203,7 +203,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		buttonSetAllAssignmentsToGloballySelectedPool
 				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(globalLicensePool)));
 
-		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton(Utils.getIntellijIcon("add"));
+		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(

@@ -18,7 +18,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class GroupTreeRenderer extends DefaultTreeCellRenderer {
@@ -30,11 +30,11 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon objectIcon;
 	private ImageIcon objectSelectedIcon;
 
-	private ImageIcon groupIcon = Utils.getThemeIcon("groups", 16);
-	private ImageIcon groupContainsSelectedIcon = Utils.getThemeFilledIcon("groups", 16);
+	private ImageIcon groupIcon = Icons.getThemeIcon("groups", 16);
+	private ImageIcon groupContainsSelectedIcon = Icons.getThemeFilledIcon("groups", 16);
 
-	private ImageIcon groupOpenIcon = Utils.getThemeIcon("groups_open", 16);
-	private ImageIcon groupOpenContainsSelectedIcon = Utils.getThemeFilledIcon("groups_open", 16);
+	private ImageIcon groupOpenIcon = Icons.getThemeIcon("groups_open", 16);
+	private ImageIcon groupOpenContainsSelectedIcon = Icons.getThemeFilledIcon("groups_open", 16);
 
 	public GroupTreeRenderer(AbstractGroupTree abstractGroupTree) {
 		this.abstractGroupTree = abstractGroupTree;
@@ -42,11 +42,11 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
 
 		if (abstractGroupTree instanceof ClientTree) {
-			objectIcon = Utils.getThemeIcon("desktop", 16);
-			objectSelectedIcon = Utils.getThemeFilledIcon("desktop", 16);
+			objectIcon = Icons.getThemeIcon("desktop", 16);
+			objectSelectedIcon = Icons.getThemeFilledIcon("desktop", 16);
 		} else {
-			objectIcon = Utils.getThemeIcon("package", 16);
-			objectSelectedIcon = Utils.getThemeFilledIcon("package", 16);
+			objectIcon = Icons.getThemeIcon("package", 16);
+			objectSelectedIcon = Icons.getThemeFilledIcon("package", 16);
 		}
 	}
 

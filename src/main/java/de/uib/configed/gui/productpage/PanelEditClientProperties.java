@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 
 public class PanelEditClientProperties extends AbstractPanelEditProperties {
@@ -35,12 +35,12 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 
-		buttonSetValuesFromServerDefaults = new JButton(Utils.getIntellijIcon("locked"));
+		buttonSetValuesFromServerDefaults = new JButton(Icons.getIntellijIcon("locked"));
 		buttonSetValuesFromServerDefaults
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"));
 		buttonSetValuesFromServerDefaults.addActionListener((ActionEvent e) -> productPropertiesPanel.resetDefaults());
 
-		buttonRemoveSpecificValues = new JButton(Utils.getIntellijIcon("remove"));
+		buttonRemoveSpecificValues = new JButton(Icons.getIntellijIcon("remove"));
 		buttonRemoveSpecificValues
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"));
 		buttonRemoveSpecificValues.addActionListener((ActionEvent e) -> productPropertiesPanel.setVoid());

@@ -30,7 +30,7 @@ import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
 import de.uib.utils.swing.list.StandardListCellRenderer;
@@ -79,11 +79,11 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		buttonReloadProductStates = new JButton(Utils.getIntellijIcon("refresh"));
+		buttonReloadProductStates = new JButton(Icons.getIntellijIcon("refresh"));
 		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 		buttonReloadProductStates.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 
-		buttonExecuteNow = new JButton(Utils.getIntellijIcon("run"));
+		buttonExecuteNow = new JButton(Icons.getIntellijIcon("run"));
 		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 

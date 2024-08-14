@@ -31,7 +31,7 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditStringList;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
@@ -89,7 +89,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		// redefine buttonCommit
 		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
-		buttonCommit.setIcon(Utils.getIntellijIcon("run"));
+		buttonCommit.setIcon(Icons.getIntellijIcon("run"));
 		buttonCommit.setSelectedIcon(null);
 		buttonCommit.setDisabledIcon(null);
 		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
@@ -102,25 +102,25 @@ public class SavedSearchesDialog extends FEditStringList {
 		super.initComponents();
 
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
-		Utils.addIntellijIconToMenuItem(reload, "refresh");
+		Icons.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "reload action");
 			reloadAction();
 		});
 
 		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveSearch"));
-		Utils.addIntellijIconToMenuItem(remove, "remove");
+		Icons.addIntellijIconToMenuItem(remove, "remove");
 		remove.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "remove action");
 			removeSelectedEntry();
 		});
 
 		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
-		Utils.addIntellijIconToMenuItem(edit, "edit");
+		Icons.addIntellijIconToMenuItem(edit, "edit");
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
 
 		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
-		Utils.addIntellijIconToMenuItem(add, "add");
+		Icons.addIntellijIconToMenuItem(add, "add");
 		add.addActionListener(event -> configedMain.callClientSelectionDialog());
 
 		JPopupMenu jPopupMenu = new JPopupMenu();

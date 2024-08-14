@@ -20,7 +20,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class DepotListCellRenderer extends DefaultListCellRenderer {
@@ -31,9 +31,9 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private ImageIcon configServerConnectedIcon = Utils.getSelectedIntellijIcon("circle_checkmark");
-	private ImageIcon configServerDisconnectedIcon = Utils.getSelectedIntellijIcon("circle");
-	private ImageIcon connectedIcon = Utils.getIntellijIcon("checkmark", Globals.OPSI_OK);
+	private ImageIcon configServerConnectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark");
+	private ImageIcon configServerDisconnectedIcon = Icons.getSelectedIntellijIcon("circle");
+	private ImageIcon connectedIcon = Icons.getIntellijIcon("checkmark", Globals.OPSI_OK);
 
 	public DepotListCellRenderer(ConfigedMain configedMain) {
 		this.configedMain = configedMain;

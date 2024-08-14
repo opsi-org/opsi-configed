@@ -35,7 +35,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 
@@ -165,7 +165,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		hostKeyField.setEditable(false);
 
 		// This button copies the hostKey into the clipboard
-		JButton jButtonCopyHostKey = new JButton(Utils.getIntellijIcon("copy"));
+		JButton jButtonCopyHostKey = new JButton(Icons.getIntellijIcon("copy"));
 		jButtonCopyHostKey.setToolTipText(Configed.getResourceValue("MainFrame.copyHostKey"));
 		jButtonCopyHostKey.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(new String(hostKeyField.getPassword())), null));

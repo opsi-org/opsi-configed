@@ -55,6 +55,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -325,12 +326,12 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return controlPanel;
 		}
 
-		buttonCommit = new JButton(Utils.getIntellijIcon("checkmark"));
+		buttonCommit = new JButton(Icons.getIntellijIcon("checkmark"));
 		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
 		buttonCommit.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCommit.addActionListener(action -> commit());
 
-		buttonCancel = new JButton(Utils.getIntellijIcon("close"));
+		buttonCancel = new JButton(Icons.getIntellijIcon("close"));
 		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCancel.addActionListener(action -> cancel());
 
@@ -505,7 +506,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 			case POPUP_PRINT:
 				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
-				Utils.addIntellijIconToMenuItem(menuItemPrint, "print");
+				Icons.addIntellijIconToMenuItem(menuItemPrint, "print");
 				menuItemPrint.addActionListener(actionEvent -> print());
 
 				addPopupItem(menuItemPrint);
@@ -527,7 +528,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 			case POPUP_PDF:
 				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
-				Utils.addThemeIconInvertedToMenuItem(menuItemPDF, "anyType");
+				Icons.addThemeIconInvertedToMenuItem(menuItemPDF, "anyType");
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
 
 				addPopupItem(menuItemPDF);
@@ -542,7 +543,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private void addPopupItemReload() {
 		JMenuItem menuItemReload = new JMenuItem(Configed.getResourceValue("reloadData"));
-		Utils.addIntellijIconToMenuItem(menuItemReload, "refresh");
+		Icons.addIntellijIconToMenuItem(menuItemReload, "refresh");
 
 		// does not work
 		menuItemReload.addActionListener(actionEvent -> reload());

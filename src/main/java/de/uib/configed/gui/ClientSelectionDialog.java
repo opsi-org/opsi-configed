@@ -81,7 +81,7 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.LowerCaseTextField;
 import de.uib.utils.swing.TextInputField;
@@ -214,15 +214,15 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
 
-		saveButton = new JButton(Utils.getIntellijIcon("save"));
+		saveButton = new JButton(Icons.getIntellijIcon("save"));
 		saveButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.saveSearchTooltip"));
 		saveButton.addActionListener(actionEvent -> save());
 
-		buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
 		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
 		buttonReload.addActionListener((ActionEvent e) -> reload());
 
-		buttonRestart = new JButton(Utils.getIntellijIcon("reset"));
+		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));
 		buttonRestart.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"));
 
 		buttonRestart.addActionListener((ActionEvent e) -> restart());
@@ -593,7 +593,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private ComplexGroup createComplexGroup() {
 		ComplexGroup result = new ComplexGroup();
 
-		result.removeButton = new JButton(Utils.getIntellijIcon("delete"));
+		result.removeButton = new JButton(Icons.getIntellijIcon("delete"));
 		result.removeButton.addActionListener(this::removeButton);
 
 		result.negateButton = createNOTCheckBox();

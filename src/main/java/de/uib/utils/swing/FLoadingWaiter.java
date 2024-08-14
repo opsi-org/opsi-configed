@@ -18,7 +18,7 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.thread.WaitingSleeper;
 import de.uib.utils.thread.WaitingWorker;
@@ -44,7 +44,7 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 	}
 
 	private void createGUI(Component owner) {
-		setIconImage(Utils.getMainIcon());
+		setIconImage(Icons.getMainIcon());
 
 		progressBar = new JProgressBar();
 
@@ -59,7 +59,7 @@ public class FLoadingWaiter extends JFrame implements WaitingSleeper {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		JLabel iconLabel = new JLabel(Utils.createImageIcon(Globals.ICON_CONFIGED, ""));
+		JLabel iconLabel = new JLabel(Icons.createImageIcon(Globals.ICON_CONFIGED, ""));
 
 		layout.setHorizontalGroup(
 				layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(iconLabel, 150, 150, 150)

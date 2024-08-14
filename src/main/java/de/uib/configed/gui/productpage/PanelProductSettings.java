@@ -54,8 +54,8 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
+import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
-import de.uib.utils.Utils;
 import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
@@ -186,7 +186,7 @@ public class PanelProductSettings extends JSplitPane {
 		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem save = new JMenuItem(Configed.getResourceValue("save"));
-		Utils.addIntellijIconToMenuItem(save, "save");
+		Icons.addIntellijIconToMenuItem(save, "save");
 		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
@@ -199,7 +199,7 @@ public class PanelProductSettings extends JSplitPane {
 		popup.add(save);
 
 		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
-		Utils.addIntellijIconToMenuItem(itemOnDemand, "run");
+		Icons.addIntellijIconToMenuItem(itemOnDemand, "run");
 		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
@@ -208,7 +208,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		JMenuItem itemOnDemandForSelectedProducts = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Opsiclientd.executeSelected"));
-		Utils.addIntellijIconToMenuItem(itemOnDemandForSelectedProducts, "run");
+		Icons.addIntellijIconToMenuItem(itemOnDemandForSelectedProducts, "run");
 		itemOnDemandForSelectedProducts
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts
@@ -233,7 +233,7 @@ public class PanelProductSettings extends JSplitPane {
 		showPopupOpsiclientdEvent(true);
 
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
-		Utils.addIntellijIconToMenuItem(reload, "refresh");
+		Icons.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener((ActionEvent e) -> {
 			Logging.info(this, "reload action");
 			reloadAction();
@@ -241,7 +241,7 @@ public class PanelProductSettings extends JSplitPane {
 		popup.add(reload);
 
 		JMenuItem createReport = new JMenuItem(Configed.getResourceValue("PanelProductSettings.pdf"));
-		Utils.addThemeIconInvertedToMenuItem(createReport, "anyType");
+		Icons.addThemeIconInvertedToMenuItem(createReport, "anyType");
 		createReport.addActionListener((ActionEvent e) -> createReport());
 		popup.add(createReport);
 

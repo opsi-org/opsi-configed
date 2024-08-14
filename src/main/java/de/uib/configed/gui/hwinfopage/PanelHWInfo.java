@@ -40,7 +40,7 @@ import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ExporterToPDF;
@@ -212,10 +212,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static Icon createImageIcon(String hwClass) {
-		Icon classIcon = Utils.createImageIcon("hwinfo_images/" + hwClass + ".png", "");
+		Icon classIcon = Icons.createImageIcon("hwinfo_images/" + hwClass + ".png", "");
 
 		if (classIcon == null) {
-			classIcon = Utils.createImageIcon("hwinfo_images/DEVICE.png", "");
+			classIcon = Icons.createImageIcon("hwinfo_images/DEVICE.png", "");
 		}
 
 		return classIcon;

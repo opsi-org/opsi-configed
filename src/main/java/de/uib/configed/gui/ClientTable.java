@@ -47,7 +47,7 @@ import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.configed.type.RemoteControl;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
@@ -165,7 +165,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 	}
 
 	public void setMissingDataPanel() {
-		JLabel missingData0 = new JLabel(Utils.createImageIcon(Globals.ICON_CONFIGED, ""));
+		JLabel missingData0 = new JLabel(Icons.createImageIcon(Globals.ICON_CONFIGED, ""));
 		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 		JPanel mdPanel = new JPanel();

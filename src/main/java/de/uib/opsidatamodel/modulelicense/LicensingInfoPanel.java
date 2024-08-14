@@ -24,7 +24,7 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.LicensingInfoPanelGenEditTable;
@@ -171,7 +171,7 @@ public class LicensingInfoPanel extends JPanel {
 			licensingTable.reload();
 		});
 
-		JButton buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		JButton buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
 		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
 		buttonReload.setPreferredSize(Globals.NEW_SMALL_BUTTON);
 

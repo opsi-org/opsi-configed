@@ -25,7 +25,7 @@ import javax.swing.JScrollPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditObject;
 
@@ -66,7 +66,7 @@ public class FGeneralDialog extends JDialog {
 
 		Logging.info(this, "created by constructor 1, owner ", owner);
 		registerWithRunningInstances();
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(title);
 
 		checkAdditionalPane();
@@ -80,7 +80,7 @@ public class FGeneralDialog extends JDialog {
 		registerWithRunningInstances();
 		super.setTitle(title);
 
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 		checkAdditionalPane();
 		additionalPane.setVisible(false);
 		guiInit();
@@ -139,7 +139,7 @@ public class FGeneralDialog extends JDialog {
 			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		registerWithRunningInstances();
 
-		setIconImage(Utils.getMainIcon());
+		setIconImage(Icons.getMainIcon());
 
 		if (lastButtonNo > -1) {
 			this.noOfButtons = lastButtonNo;

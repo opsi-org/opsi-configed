@@ -29,7 +29,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SecondaryFrame;
 
@@ -57,7 +57,7 @@ public class FGroupActions extends SecondaryFrame {
 		define();
 		reload();
 
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(Configed.getResourceValue("FGroupAction.title"));
 
 		glassPane = new GlassPane();
@@ -159,7 +159,7 @@ public class FGroupActions extends SecondaryFrame {
 
 		buttonSetup.addActionListener(actionEvent -> replay());
 
-		JButton buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		JButton buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
 		buttonReload.setToolTipText(Configed.getResourceValue("reloadData"));
 
 		buttonReload.addActionListener(actionEvent -> reload());

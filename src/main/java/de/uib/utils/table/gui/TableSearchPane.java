@@ -43,7 +43,7 @@ import com.formdev.flatlaf.icons.FlatSearchIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
@@ -254,8 +254,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
-		filtermark = new JToggleButton(Utils.getIntellijIcon("funnelRegular"));
-		filtermark.setSelectedIcon(Utils.getSelectedIntellijIcon("funnelRegular"));
+		filtermark = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
+		filtermark.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addItemListener(event -> filtermarkEvent());
 		filtermark.setVisible(false);
@@ -306,22 +306,22 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private void initNavigationPanel() {
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 
-		JButton nextButton = new JButton(Utils.getIntellijIcon("playForward"));
+		JButton nextButton = new JButton(Icons.getIntellijIcon("playForward"));
 		nextButton.setToolTipText(Configed.getResourceValue("NavigationPanel.nextEntryTooltip"));
 		nextButton.setPreferredSize(navButtonDimension);
 		nextButton.addActionListener(event -> associatedPanel.advanceCursor(+1));
 
-		JButton previousButton = new JButton(Utils.getIntellijIcon("playBack"));
+		JButton previousButton = new JButton(Icons.getIntellijIcon("playBack"));
 		previousButton.setToolTipText(Configed.getResourceValue("NavigationPanel.previousEntryTooltip"));
 		previousButton.setPreferredSize(navButtonDimension);
 		previousButton.addActionListener(event -> associatedPanel.advanceCursor(-1));
 
-		JButton firstButton = new JButton(Utils.getIntellijIcon("playFirst"));
+		JButton firstButton = new JButton(Icons.getIntellijIcon("playFirst"));
 		firstButton.setToolTipText(Configed.getResourceValue("NavigationPanel.firstEntryTooltip"));
 		firstButton.setPreferredSize(navButtonDimension);
 		firstButton.addActionListener(event -> associatedPanel.setCursorToFirstRow());
 
-		JButton lastButton = new JButton(Utils.getIntellijIcon("playLast"));
+		JButton lastButton = new JButton(Icons.getIntellijIcon("playLast"));
 		lastButton.setToolTipText(Configed.getResourceValue("NavigationPanel.lastEntryTooltip"));
 		lastButton.setPreferredSize(navButtonDimension);
 		lastButton.addActionListener(event -> associatedPanel.setCursorToLastRow());
@@ -359,8 +359,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void setupNarrowLayout() {
-		buttonShowHideExtraOptions = new JToggleButton(Utils.getIntellijIcon("arrowLeft"));
-		buttonShowHideExtraOptions.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
+		buttonShowHideExtraOptions = new JToggleButton(Icons.getIntellijIcon("arrowLeft"));
+		buttonShowHideExtraOptions.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
 		buttonShowHideExtraOptions
 				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
 		buttonShowHideExtraOptions.setFocusable(false);

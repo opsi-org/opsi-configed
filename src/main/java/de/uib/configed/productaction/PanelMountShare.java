@@ -22,8 +22,8 @@ import com.formdev.flatlaf.util.SystemInfo;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class PanelMountShare extends JPanel {
@@ -57,7 +57,7 @@ public class PanelMountShare extends JPanel {
 	}
 
 	private void initComponents() {
-		buttonMountShare = new JButton(Utils.getIntellijIcon("windows"));
+		buttonMountShare = new JButton(Icons.getIntellijIcon("windows"));
 		buttonMountShare.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		if (SystemInfo.isWindows) {
 			buttonMountShare.setToolTipText(

@@ -47,7 +47,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 
@@ -193,8 +193,8 @@ public class LogPane extends JPanel implements KeyListener {
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
 
-		JToggleButton buttonCaseSensitive = new JToggleButton(Utils.getIntellijIcon("matchCase"));
-		buttonCaseSensitive.setSelectedIcon(Utils.getSelectedIntellijIcon("matchCase"));
+		JToggleButton buttonCaseSensitive = new JToggleButton(Icons.getIntellijIcon("matchCase"));
+		buttonCaseSensitive.setSelectedIcon(Icons.getSelectedIntellijIcon("matchCase"));
 		buttonCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
 		buttonCaseSensitive.setSelected(false);
 		buttonCaseSensitive.addActionListener(event -> searcher.setCaseSensitivity(buttonCaseSensitive.isSelected()));
@@ -209,14 +209,14 @@ public class LogPane extends JPanel implements KeyListener {
 			jTextPane.requestFocusInWindow();
 		});
 
-		JButton buttonSearch = new JButton(Utils.getIntellijIcon("search"));
+		JButton buttonSearch = new JButton(Icons.getIntellijIcon("search"));
 		buttonSearch.addActionListener(event -> search());
 
-		JButton buttonFontPlus = new JButton(Utils.getIntellijIcon("zoomIn"));
+		JButton buttonFontPlus = new JButton(Icons.getIntellijIcon("zoomIn"));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(event -> increaseFontSize());
 
-		JButton buttonFontMinus = new JButton(Utils.getIntellijIcon("zoomOut"));
+		JButton buttonFontMinus = new JButton(Icons.getIntellijIcon("zoomOut"));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(event -> reduceFontSize());
 

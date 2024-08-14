@@ -24,7 +24,7 @@ import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 
 public class IconBarPanel extends JPanel {
 	private JButton jButtonReloadLicenses;
@@ -58,7 +58,7 @@ public class IconBarPanel extends JPanel {
 
 	private void init() {
 		JToolBar iconsLeft = initIconsLeft();
-		JLabel opsiLogo = new JLabel(Utils.getOpsiLogoWide());
+		JLabel opsiLogo = new JLabel(Icons.getOpsiLogoWide());
 		JToolBar targetIcons = initIconPaneTargets();
 
 		GroupLayout layout = new GroupLayout(this);
@@ -72,40 +72,40 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private JToolBar initIconPaneTargets() {
-		JToggleButton jButtonClientsConfiguration = new JToggleButton(Utils.getThemeIcon("desktop", 32));
-		jButtonClientsConfiguration.setSelectedIcon(Utils.getSelectedThemeIntelljIcon("desktop", 32));
+		JToggleButton jButtonClientsConfiguration = new JToggleButton(Icons.getThemeIcon("desktop", 32));
+		jButtonClientsConfiguration.setSelectedIcon(Icons.getSelectedThemeIntelljIcon("desktop", 32));
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setSelected(true);
 		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
 
-		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Utils.getIntellijIcon("dbms", 32));
-		jButtonDepotsConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("dbms", 32));
+		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Icons.getIntellijIcon("dbms", 32));
+		jButtonDepotsConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
 
-		JToggleButton jButtonServerConfiguration = new JToggleButton(Utils.getIntellijIcon("editorConfig", 32));
-		jButtonServerConfiguration.setSelectedIcon(Utils.getSelectedIntellijIcon("editorConfig", 32));
+		JToggleButton jButtonServerConfiguration = new JToggleButton(Icons.getIntellijIcon("editorConfig", 32));
+		jButtonServerConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("editorConfig", 32));
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
 
-		JToggleButton jButtonDashboard = new JToggleButton(Utils.getIntellijIcon("dataSchema", 32));
-		jButtonDashboard.setSelectedIcon(Utils.getSelectedIntellijIcon("dataSchema", 32));
+		JToggleButton jButtonDashboard = new JToggleButton(Icons.getIntellijIcon("dataSchema", 32));
+		jButtonDashboard.setSelectedIcon(Icons.getSelectedIntellijIcon("dataSchema", 32));
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DASHBOARD));
 
-		JToggleButton jButtonOpsiLicenses = new JToggleButton(Utils.getOpsiModulesIcon());
+		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiModulesIcon());
 		jButtonOpsiLicenses.setSelectedIcon(
-				Utils.getOpsiIcon(32, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT));
+				Icons.getOpsiIcon(32, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT));
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
 
-		JToggleButton jButtonHealthCheck = new JToggleButton(Utils.getIntellijIcon("springBootHealth", 32));
-		jButtonHealthCheck.setSelectedIcon(Utils.getSelectedIntellijIcon("springBootHealth", 32));
+		JToggleButton jButtonHealthCheck = new JToggleButton(Icons.getIntellijIcon("springBootHealth", 32));
+		jButtonHealthCheck.setSelectedIcon(Icons.getSelectedIntellijIcon("springBootHealth", 32));
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jButtonHealthCheck.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.HEALTH_CHECK));
 
-		JToggleButton jButtonLicenses = new JToggleButton(Utils.getIntellijIcon("scriptingScript", 32));
-		jButtonLicenses.setSelectedIcon(Utils.getSelectedIntellijIcon("scriptingScript", 32));
+		JToggleButton jButtonLicenses = new JToggleButton(Icons.getIntellijIcon("scriptingScript", 32));
+		jButtonLicenses.setSelectedIcon(Icons.getSelectedIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jButtonLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
 
@@ -131,31 +131,31 @@ public class IconBarPanel extends JPanel {
 	}
 
 	private JToolBar initIconsLeft() {
-		JButton jButtonReload = new JButton(Utils.getIntellijIcon("refresh", 32));
+		JButton jButtonReload = new JButton(Icons.getIntellijIcon("refresh", 32));
 		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jButtonReload.addActionListener((ActionEvent e) -> configedMain.reload());
 
-		jButtonReloadLicenses = new JButton(Utils.getReloadLicensingIcon());
+		jButtonReloadLicenses = new JButton(Icons.getReloadLicensingIcon());
 		jButtonReloadLicenses.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		jButtonReloadLicenses.setVisible(false);
 		jButtonReloadLicenses.addActionListener((ActionEvent e) -> mainFrame.reloadLicensesAction());
 
-		JButton jButtonNewClient = new JButton(Utils.getIntellijIcon("add", 32));
+		JButton jButtonNewClient = new JButton(Icons.getIntellijIcon("add", 32));
 		jButtonNewClient.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonNewClient"));
 		jButtonNewClient
 				.setVisible(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
 		jButtonNewClient.addActionListener((ActionEvent e) -> configedMain.callNewClientDialog());
 
-		JButton jButtonSetGroup = new JButton(Utils.getIntellijIcon("search", 32));
+		JButton jButtonSetGroup = new JButton(Icons.getIntellijIcon("search", 32));
 		jButtonSetGroup.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		jButtonSetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
 
-		jButtonSaveConfiguration = new JButton(Utils.getIntellijIcon("save", 32));
+		jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save", 32));
 		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
 
-		jButtonSessionInfo = new JButton(Utils.getThemeIcon("user", 32));
+		jButtonSessionInfo = new JButton(Icons.getThemeIcon("user", 32));
 		jButtonSessionInfo.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSessionInfo"));
 		jButtonSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 

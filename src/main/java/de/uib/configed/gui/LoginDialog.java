@@ -43,7 +43,7 @@ import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.thread.WaitingSleeper;
@@ -159,9 +159,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private void initGuiElements() {
 		setTitle(Configed.getResourceValue("LoginDialog.title"));
-		setIconImage(Utils.getMainIcon());
+		setIconImage(Icons.getMainIcon());
 
-		jLabelLogo = new JLabel(Utils.getOpsiLogoWide());
+		jLabelLogo = new JLabel(Icons.getOpsiLogoWide());
 
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("

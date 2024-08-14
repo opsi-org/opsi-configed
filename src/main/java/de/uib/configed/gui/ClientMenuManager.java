@@ -39,7 +39,7 @@ import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditObject;
 import de.uib.utils.swing.FEditText;
@@ -124,14 +124,14 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuSelectionGetSavedSearch.addActionListener(event -> configedMain.clientSelectionGetSavedSearch());
 
 		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
-		Utils.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");
+		Icons.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");
 		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
 
 		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
-		Utils.addThemeIconInvertedToMenuItem(jMenuCreatePdf, "anyType");
+		Icons.addThemeIconInvertedToMenuItem(jMenuCreatePdf, "anyType");
 		jMenuCreatePdf.addActionListener(event -> createPdf());
 
-		Utils.addIntellijIconToMenuItem(jMenuAddClient, "add");
+		Icons.addIntellijIconToMenuItem(jMenuAddClient, "add");
 		jMenuAddClient.addActionListener(event -> configedMain.callNewClientDialog());
 
 		jMenuDeletePackageCaches.addActionListener(event -> configedMain.deletePackageCachesOfSelectedClients());
@@ -152,7 +152,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
 
-		Utils.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
+		Icons.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
 		jMenuDeleteClient.addActionListener(event -> configedMain.deleteSelectedClients());
 
 		jMenuCopyClient.addActionListener(event -> configedMain.copySelectedClient());
@@ -161,7 +161,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuRemoteControl
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
 
-		Utils.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
+		Icons.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
 		jMenuClients.add(jMenuWakeOnLan);
