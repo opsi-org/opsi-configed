@@ -325,8 +325,8 @@ public class MainFrame extends JFrame {
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
-		JMenuItem jMenuTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"),
-				Utils.getIntellijIcon("terminal"));
+		JMenuItem jMenuTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
+		Utils.addIntellijIconToMenuItem(jMenuTerminal, "terminal");
 
 		// check terminal access rights defined by user roles
 		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
