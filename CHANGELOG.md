@@ -1,8 +1,11 @@
 # Changelog
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.4] - 2024-08-14
 
 ### Changed
 - Show licenses management, opsi licensing info, health check and the dashboard in MainFrame
+
+### Fixed
+- Space between options in command for uninstalling opsi products
 
 
 ## [4.4.0.3] - 2024-08-08
