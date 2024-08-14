@@ -132,8 +132,16 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		}
 	}
 
-	public void deactivateListSelectionListener() {
-		selectionModel.removeListSelectionListener(this);
+	// This returns if the selectionListener was actually deactivated
+	// if the list only contains one listener, it's only the JTable itself
+	// that is listening, but not our other listener
+	public boolean deactivateListSelectionListener() {
+		if (selectionModel.getListSelectionListeners().length == 1) {
+			return false;
+		} else {
+			selectionModel.removeListSelectionListener(this);
+			return true;
+		}
 	}
 
 	public boolean isFilteredMode() {

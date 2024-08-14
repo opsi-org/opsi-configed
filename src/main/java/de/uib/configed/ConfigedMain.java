@@ -1233,9 +1233,13 @@ public class ConfigedMain implements MessagebusListener {
 
 		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
 
-		clientTable.deactivateListSelectionListener();
+		// We want to deactivate the listener here, since we want it to react only later when 
+		// the values are selected. We only reactivate the listener if it was active before.
+		boolean listenerDeactivated = clientTable.deactivateListSelectionListener();
 		clientTable.setModel(tm);
-		clientTable.activateListSelectionListener();
+		if (listenerDeactivated) {
+			clientTable.activateListSelectionListener();
+		}
 
 		setTableColumnWidths(clientTable.getTable(), columnWidths);
 
@@ -1515,7 +1519,11 @@ public class ConfigedMain implements MessagebusListener {
 			mainFrame.rebuildDepotPopup();
 		}
 
-		setViewIndex(viewIndex);
+		// When we are in the client configuration changing the depot should have no effect,
+		// this will be triggered by the selection of the client table
+		if (editingTarget == EditingTarget.DEPOTS) {
+			setViewIndex(viewIndex);
+		}
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -2149,8 +2157,8 @@ public class ConfigedMain implements MessagebusListener {
 			Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
 			Logging.debug(this, " reset the values, particularly in list ");
-			clientTable.activateListSelectionListener();
 			clientTable.setSelectedValues(clientsLeft);
+			clientTable.activateListSelectionListener();
 
 			Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
 			mainFrame.reloadServerConsoleMenu();
@@ -2159,6 +2167,11 @@ public class ConfigedMain implements MessagebusListener {
 
 			hostInfo.resetGui();
 		}
+
+		// We want to reset and reload the page that is being shown now...
+		EditingTarget t = editingTarget;
+		editingTarget = null;
+		setEditingTarget(t);
 
 		mainFrame.deactivateLoadingPane();
 	}
