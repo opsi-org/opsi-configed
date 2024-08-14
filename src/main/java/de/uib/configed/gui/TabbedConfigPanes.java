@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -53,7 +52,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private PanelSWInfo panelSWInfo;
 	private JPanel showSoftwareLogNotFound;
 	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-	private JLabel labelNoSoftware;
 
 	private PanelHWInfo panelHWInfo;
 	private JPanel showHardwareLogNotFoundPanel;
@@ -133,10 +131,8 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			}
 		};
 
-		labelNoSoftware = new JLabel();
-
 		showSoftwareLogNotFound = new JPanel();
-		showSoftwareLogNotFound.add(labelNoSoftware);
+		showSoftwareLogNotFound.add(new JLabel(Configed.getResourceValue("MainFrame.TabRequiresClientSelected")));
 
 		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
 		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
@@ -168,7 +164,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			public void loadDocument(String logtype) {
 				super.loadDocument(logtype);
 				Logging.info(this, "loadDocument logtype ", logtype);
-				setUpdatedLogfilePanel(logtype);
+				setLogFileTab(logtype);
 			}
 		};
 
@@ -179,7 +175,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 			// logfile empty?
 			if (!configedMain.logfileExists(logtype)) {
-				setUpdatedLogfilePanel(logtype);
+				setLogFileTab(logtype);
 			}
 		});
 	}
@@ -201,7 +197,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		}
 
 		panelProductProperties = new PanelProductProperties(configedMain);
-
 		setComponentAt(getSelectedIndex(), panelProductProperties);
 	}
 
@@ -212,36 +207,29 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		panelHostProperties = new PanelHostProperties();
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
-
 		setComponentAt(getSelectedIndex(), panelHostProperties);
 	}
 
 	public void setSoftwareAudit() {
-		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() > 1) {
+		if (configedMain.getSelectedClients().isEmpty()) {
+			showSoftwareInfo(showSoftwareLogNotFound);
+		} else if (configedMain.getSelectedClients().size() == 1) {
+			String hostId = configedMain.getSelectedClients().getFirst();
+			Logging.debug(this, "setSoftwareAudit for ", hostId);
+			panelSWInfo.setAskForOverwrite(true);
+			panelSWInfo.setHost(hostId);
+			panelSWInfo.updateModel();
+
+			showSoftwareInfo(panelSWInfo);
+		} else {
 			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());
 
 			showSoftwareInfo(showSoftwareLogMultiClientReport);
-		} else {
-			// handled by the following methods
-			labelNoSoftware.setText(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"));
-			showSoftwareInfo(showSoftwareLogNotFound);
 		}
 	}
 
-	public void setSoftwareAudit(String hostId) {
-		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
-
-		Logging.debug(this, "setSoftwareAudit for ", hostId);
-		panelSWInfo.setAskForOverwrite(true);
-		panelSWInfo.setHost(hostId);
-		panelSWInfo.updateModel();
-
-		showSoftwareInfo(panelSWInfo);
-	}
-
 	private void showHardwareInfo(JPanel showHardwareLog) {
-		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog")), showHardwareLog);
-
+		setComponentAt(getSelectedIndex(), showHardwareLog);
 		showHardwareLog.repaint();
 	}
 
@@ -259,18 +247,17 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
 		panelHWInfo.setHardwareInfo(hardwareInfo);
-
 		showHardwareInfo(panelHWInfo);
 	}
 
 	private void showSoftwareInfo(JPanel showSoftwareLog) {
-		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog")), showSoftwareLog);
-		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().repaint());
+		setComponentAt(getSelectedIndex(), showSoftwareLog);
+		showSoftwareLog.repaint();
 	}
 
-	public void setUpdatedLogfilePanel(String logtype) {
+	public void setLogFileTab(String logtype) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
-		setComponentAt(indexOfTab(Configed.getResourceValue("MainFrame.jPanel_logfiles")), showLogfiles);
+		setComponentAt(getSelectedIndex(), showLogfiles);
 		showLogfiles.setDocuments(configedMain.getLogfilesUpdating(logtype),
 				mainFrame.getHostsStatusPanel().getSelectedClientNames());
 	}
@@ -280,6 +267,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		if (i < 0) {
 			return;
 		}
+
 		showLogfiles.setSelectedIndex(i);
 	}
 
@@ -318,6 +306,10 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			// Here we only have one tab		
 			initHostConfigTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+			break;
+
+		default:
+			Logging.warning(this, "Unexpected editing target", ConfigedMain.getEditingTarget());
 			break;
 		}
 	}
@@ -402,6 +394,10 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 		case SERVER:
 			addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
+			break;
+
+		default:
+			// Do nothing when we are not in one of these controls
 			break;
 		}
 

@@ -9,14 +9,12 @@ package de.uib.configed;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,8 +56,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
-import de.uib.configed.dashboard.Dashboard;
-import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
@@ -73,8 +69,6 @@ import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
-import de.uib.configed.gui.licenses.LicensesFrame;
-import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
@@ -89,7 +83,6 @@ import de.uib.configed.tree.ProductTree;
 import de.uib.configed.type.DateExtendedByVars;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
@@ -112,13 +105,7 @@ import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
-import de.uib.utils.table.gui.PanelGenEditTable;
-import de.uib.utils.table.provider.DefaultTableProvider;
-import de.uib.utils.table.provider.MapRetriever;
-import de.uib.utils.table.provider.RetrieverMapSource;
 import de.uib.utils.userprefs.UserPreferences;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 
 public class ConfigedMain implements MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -130,9 +117,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
-	private static final Dimension LICENSES_DIMENSION = new Dimension(1200, 900);
-
-	private static LicensesFrame licensesFrame;
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
 
@@ -144,12 +128,6 @@ public class ConfigedMain implements MessagebusListener {
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
 	private OpsiServiceNOMPersistenceController persistenceController;
-
-	// global table providers for license management
-	protected DefaultTableProvider licensePoolTableProvider;
-	protected DefaultTableProvider licenseOptionsTableProvider;
-	protected DefaultTableProvider licenseContractsTableProvider;
-	protected DefaultTableProvider softwarelicensesTableProvider;
 
 	private GeneralDataChangedKeeper generalDataChangedKeeper;
 	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
@@ -219,10 +197,6 @@ public class ConfigedMain implements MessagebusListener {
 	private FGroupActions groupActionFrame;
 	private FCompleteWinProducts productActionFrame;
 
-	private List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
-
-	private Dashboard dashboard;
-
 	private int clientCount;
 
 	private ViewIndex viewIndex = ViewIndex.VIEW_CLIENTS;
@@ -239,13 +213,8 @@ public class ConfigedMain implements MessagebusListener {
 		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
 	}
 
-	private Map<LicensesTabStatus, MultiTablePanel> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
-	private LicensesTabStatus licensesStatus;
-
-	private Map<LicensesTabStatus, String> licensesPanelsTabNames = new EnumMap<>(LicensesTabStatus.class);
-
 	public enum EditingTarget {
-		CLIENTS, DEPOTS, SERVER
+		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, HEALTH_CHECK, LICENSE_MANAGEMENT
 	}
 	// with this enum type we build a state model, which target shall be edited
 
@@ -260,11 +229,7 @@ public class ConfigedMain implements MessagebusListener {
 	private CommandControlDialog commandControlDialog;
 	private NewClientDialog newClientDialog;
 
-	private boolean isAllLicenseDataReloaded;
-	private boolean isInitialLicenseDataLoading;
-
 	private InitialDataLoader initialDataLoader;
-	private LicenseDisplayer licenseDisplayer;
 
 	public ConfigedMain(String host, String user, String password, String otp) {
 		if (ConfigedMain.host == null) {
@@ -289,25 +254,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public LoginDialog getLoginDialog() {
 		return loginDialog;
-	}
-
-	private void addClient(LicensesTabStatus status, MultiTablePanel panel) {
-		licensesPanels.put(status, panel);
-		licensesFrame.addTab(status, licensesPanelsTabNames.get(status), panel);
-	}
-
-	public LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {
-		Logging.debug(this, "reactToStateChangeRequest( newState: ", newState, "), current state ", licensesStatus);
-		if (newState != licensesStatus && licensesPanels.get(licensesStatus).mayLeave()) {
-			licensesStatus = newState;
-
-			if (licensesPanels.get(licensesStatus) != null) {
-				licensesPanels.get(licensesStatus).reset();
-			}
-			// otherwise we return the old status
-		}
-
-		return licensesStatus;
 	}
 
 	public static ConfigedMain.EditingTarget getEditingTarget() {
@@ -411,16 +357,6 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "readLocallySavedServerNames  result ", result);
 
 		return result;
-	}
-
-	public void initDashInfo() {
-		Logging.info(this, "initDashboard ", dashboard);
-		if (dashboard == null) {
-			dashboard = new Dashboard(this);
-			dashboard.initAndShowGUI();
-		} else {
-			dashboard.show();
-		}
 	}
 
 	public boolean initMessagebus() {
@@ -534,7 +470,6 @@ public class ConfigedMain implements MessagebusListener {
 		generalDataChangedKeeper = new GeneralDataChangedKeeper();
 		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper();
 		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
-		allControlMultiTablePanels = new ArrayList<>();
 
 		initMessagebus();
 	}
@@ -648,89 +583,54 @@ public class ConfigedMain implements MessagebusListener {
 		productActionFrame.start();
 	}
 
-	public void handleLicensesManagementRequest() {
-		// show Loading pane only when something needs to be loaded from server
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& licensesFrame == null) {
-			mainFrame.activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
-		}
-		new Thread() {
-			@Override
-			public void run() {
-				Logging.info(this, "handleLicensesManagementRequest called");
-				persistenceController.getModuleDataService().retrieveOpsiModules();
-
-				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-					toggleLicensesFrame();
-				} else {
-					FOpsiLicenseMissingText
-							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
-				}
-
-				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
-						OpsiServiceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT,
-						OpsiServiceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENSEMANAGEMENT))) {
-					// Starting JavaFX-Thread by creating a new JFXPanel, but not
-					// using it since it is not needed.
-					new JFXPanel();
-
-					Platform.runLater(() -> showLicenseDisplayer());
-				}
-
-				mainFrame.deactivateLoadingPane();
-			}
-		}.start();
-	}
-
-	private void showLicenseDisplayer() {
-		if (licenseDisplayer == null) {
-			try {
-				licenseDisplayer = new LicenseDisplayer();
-				licenseDisplayer.setConfigedMain(ConfigedMain.this);
-				licenseDisplayer.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.warning(this, ioE, "Unable to open FXML file.");
-			}
-		} else {
-			licenseDisplayer.display();
-		}
-	}
-
-	public void toggleLicensesFrame() {
-		if (licensesFrame == null) {
-			isInitialLicenseDataLoading = true;
-			initLicensesFrame();
-			allFrames.add(licensesFrame);
-			isInitialLicenseDataLoading = false;
-		}
-
-		Logging.info(this, "toggleLicensesFrame is visible", licensesFrame.isVisible());
-		licensesFrame.setLocationRelativeTo(mainFrame);
-		licensesFrame.setVisible(true);
-		mainFrame.getIconBarPanel().showReloadLicensingButton();
-	}
-
-	public void setEditingTarget(EditingTarget t) {
-		Logging.info(this, "setEditingTarget ", t);
-		if (t == editingTarget) {
+	public void setEditingTarget(EditingTarget newEditingTarget) {
+		Logging.info(this, "setEditingTarget ", newEditingTarget);
+		if (newEditingTarget == editingTarget) {
 			Logging.info(this, "stop setting editingTarget, it remains the same");
 			return;
 		}
 
-		editingTarget = t;
+		// When setting the new editingTarget, the methods already need to know the new editing target
+		// So whe have to set it now
+		EditingTarget oldEditingTarget = editingTarget;
+		editingTarget = newEditingTarget;
 
-		switch (t) {
+		switch (editingTarget) {
 		case CLIENTS:
+			initConfigurationView(oldEditingTarget);
 			setEditingClients();
 			break;
 		case DEPOTS:
+			initConfigurationView(oldEditingTarget);
 			setEditingDepots();
 			break;
 		case SERVER:
+			initConfigurationView(oldEditingTarget);
 			setEditingServer();
 			break;
-		default:
+
+		case DASHBOARD:
+			mainFrame.setDashboardPanel();
 			break;
+
+		case OPSI_MODULES:
+			mainFrame.showOpsiModules();
+			break;
+
+		case HEALTH_CHECK:
+			mainFrame.showHealthDataAction();
+			break;
+
+		case LICENSE_MANAGEMENT:
+			mainFrame.setLicensesManagement();
+			break;
+		}
+	}
+
+	private static void initConfigurationView(EditingTarget oldEditingTarget) {
+		if (oldEditingTarget != EditingTarget.CLIENTS && oldEditingTarget != EditingTarget.DEPOTS
+				&& oldEditingTarget != EditingTarget.SERVER) {
+			mainFrame.setConfigurationPanel();
 		}
 	}
 
@@ -908,161 +808,6 @@ public class ConfigedMain implements MessagebusListener {
 		// Center mainFrame on screen of configed.fProgress
 		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
 				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
-	}
-
-	private void initLicensesFrame() {
-		long startmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicensesFrame start ");
-		initTableData();
-		startLicensesFrame();
-		long endmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
-	}
-
-	private void initTableData() {
-		licensesStatus = LicensesTabStatus.LICENSEPOOL;
-
-		// global table providers
-		List<String> columnNames = new ArrayList<>();
-		columnNames.add("licensePoolId");
-		columnNames.add("description");
-
-		licensePoolTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-			@Override
-			public void reloadMap() {
-				if (!isAllLicenseDataReloaded()) {
-					persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
-				}
-			}
-
-			@Override
-			public Map<String, Map<String, Object>> retrieveMap() {
-				return (Map) persistenceController.getLicenseDataService().getLicensePoolsPD();
-			}
-		}));
-
-		columnNames = new ArrayList<>();
-		columnNames.add("softwareLicenseId");
-		columnNames.add("licensePoolId");
-		columnNames.add("licenseKey");
-
-		licenseOptionsTableProvider = new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
-			@Override
-			public void reloadMap() {
-				if (!isAllLicenseDataReloaded()) {
-					persistenceController
-							.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
-				}
-			}
-
-			@Override
-			public Map<String, Map<String, Object>> retrieveMap() {
-				return persistenceController.getLicenseDataService().getRelationsSoftwareL2LPool();
-			}
-		}));
-
-		columnNames = new ArrayList<>();
-		columnNames.add("licenseContractId");
-		columnNames.add("partner");
-		columnNames.add("conclusionDate");
-		columnNames.add("notificationDate");
-		columnNames.add("expirationDate");
-		columnNames.add("notes");
-
-		licenseContractsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						if (!isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(ReloadEvent.LICENSE_CONTRACT_DATA_RELOAD.toString());
-						}
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicenseContractsPD();
-					}
-				}));
-
-		columnNames = new ArrayList<>();
-		columnNames.add(LicenseEntry.ID_KEY);
-		columnNames.add(LicenseEntry.LICENSE_CONTRACT_ID_KEY);
-		columnNames.add(LicenseEntry.TYPE_KEY);
-		columnNames.add(LicenseEntry.MAX_INSTALLATIONS_KEY);
-		columnNames.add(LicenseEntry.BOUND_TO_HOST_KEY);
-		columnNames.add(LicenseEntry.EXPIRATION_DATE_KEY);
-
-		softwarelicensesTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, new MapRetriever() {
-					@Override
-					public void reloadMap() {
-						if (!isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(CacheIdentifier.LICENSES.toString());
-						}
-					}
-
-					@Override
-					public Map<String, Map<String, Object>> retrieveMap() {
-						return (Map) persistenceController.getLicenseDataService().getLicensesPD();
-					}
-				}));
-	}
-
-	private void startLicensesFrame() {
-		licensesFrame = new LicensesFrame(this);
-		Utils.setMasterFrame(licensesFrame);
-		licensesFrame.setIconImage(Utils.getMainIcon());
-		licensesFrame.setTitle(persistenceController.getHostInfoCollections().getConfigServer() + ":  "
-				+ Configed.getResourceValue("ConfigedMain.Licenses"));
-
-		// panelAssignToLPools
-		licensesPanelsTabNames.put(LicensesTabStatus.LICENSEPOOL,
-				Configed.getResourceValue("ConfigedMain.Licenses.TabLicensepools"));
-		ControlPanelAssignToLPools controlPanelAssignToLPools = new ControlPanelAssignToLPools(this);
-		addClient(LicensesTabStatus.LICENSEPOOL, controlPanelAssignToLPools.getTabClient());
-		allControlMultiTablePanels.add(controlPanelAssignToLPools);
-
-		// panelEnterLicense
-		licensesPanelsTabNames.put(LicensesTabStatus.ENTER_LICENSE,
-				Configed.getResourceValue("ConfigedMain.Licenses.TabNewLicense"));
-		ControlPanelEnterLicense controlPanelEnterLicense = new ControlPanelEnterLicense(this);
-		addClient(LicensesTabStatus.ENTER_LICENSE, controlPanelEnterLicense.getTabClient());
-		allControlMultiTablePanels.add(controlPanelEnterLicense);
-
-		// panelEditLicense
-		licensesPanelsTabNames.put(LicensesTabStatus.EDIT_LICENSE,
-				Configed.getResourceValue("ConfigedMain.Licenses.TabEditLicense"));
-		ControlPanelEditLicenses controlPanelEditLicenses = new ControlPanelEditLicenses(this);
-		addClient(LicensesTabStatus.EDIT_LICENSE, controlPanelEditLicenses.getTabClient());
-		allControlMultiTablePanels.add(controlPanelEditLicenses);
-
-		// panelUsage
-		licensesPanelsTabNames.put(LicensesTabStatus.USAGE,
-				Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseUsage"));
-		ControlPanelLicensesUsage controlPanelLicensesUsage = new ControlPanelLicensesUsage(this);
-		addClient(LicensesTabStatus.USAGE, controlPanelLicensesUsage.getTabClient());
-		allControlMultiTablePanels.add(controlPanelLicensesUsage);
-
-		// panelReconciliation
-		licensesPanelsTabNames.put(LicensesTabStatus.RECONCILIATION,
-				Configed.getResourceValue("ConfigedMain.Licenses.TabLicenseReconciliation"));
-		ControlPanelLicensesReconciliation controlPanelLicensesReconciliation = new ControlPanelLicensesReconciliation(
-				this);
-		addClient(LicensesTabStatus.RECONCILIATION, controlPanelLicensesReconciliation.getTabClient());
-		allControlMultiTablePanels.add(controlPanelLicensesReconciliation);
-
-		// panelStatistics
-		licensesPanelsTabNames.put(LicensesTabStatus.STATISTICS,
-				Configed.getResourceValue("ConfigedMain.Licenses.TabStatistics"));
-		ControlPanelLicensesStatistics controlPanelLicensesStatistics = new ControlPanelLicensesStatistics(this);
-		addClient(LicensesTabStatus.STATISTICS, controlPanelLicensesStatistics.getTabClient());
-		allControlMultiTablePanels.add(controlPanelLicensesStatistics);
-
-		licensesFrame.start();
-
-		Logging.info(this, "set size and location of licensesFrame");
-
-		licensesFrame.setSize(LICENSES_DIMENSION);
 	}
 
 	// returns true if we have a PersistenceController and are connected
@@ -1488,9 +1233,13 @@ public class ConfigedMain implements MessagebusListener {
 
 		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
 
-		clientTable.deactivateListSelectionListener();
+		// We want to deactivate the listener here, since we want it to react only later when 
+		// the values are selected. We only reactivate the listener if it was active before.
+		boolean listenerDeactivated = clientTable.deactivateListSelectionListener();
 		clientTable.setModel(tm);
-		clientTable.activateListSelectionListener();
+		if (listenerDeactivated) {
+			clientTable.activateListSelectionListener();
+		}
 
 		setTableColumnWidths(clientTable.getTable(), columnWidths);
 
@@ -1770,7 +1519,11 @@ public class ConfigedMain implements MessagebusListener {
 			mainFrame.rebuildDepotPopup();
 		}
 
-		setViewIndex(viewIndex);
+		// When we are in the client configuration changing the depot should have no effect,
+		// this will be triggered by the selection of the client table
+		if (editingTarget == EditingTarget.DEPOTS) {
+			setViewIndex(viewIndex);
+		}
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -2033,25 +1786,15 @@ public class ConfigedMain implements MessagebusListener {
 		return mergedMap;
 	}
 
-	private boolean setProductPropertiesPage() {
-		if (editingTarget != EditingTarget.DEPOTS) {
-			return false;
-		}
-
+	private void setProductPropertiesPage() {
 		Logging.debug(this, "setProductPropertiesPage");
 		mainFrame.getTabbedConfigPanes().getPanelProductProperties().setProductProperties();
 		depotsList.setEnabled(true);
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		return true;
 	}
 
-	private boolean setHostPropertiesPage() {
-		if (editingTarget != EditingTarget.DEPOTS) {
-			return false;
-		}
-
+	private void setHostPropertiesPage() {
 		Logging.debug(this, "setHostPropertiesPage");
 
 		depotsList.setEnabled(true);
@@ -2076,8 +1819,6 @@ public class ConfigedMain implements MessagebusListener {
 		mainFrame.getTabbedConfigPanes().getPanelHostProperties().initMultipleHostsEditing(depot,
 				depotPropertiesForPermittedDepots, hostUpdateCollection,
 				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
-
-		return true;
 	}
 
 	private static void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
@@ -2087,7 +1828,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public boolean setNetworkConfigurationPage() {
+	public void setNetworkConfigurationPage() {
 		Logging.info(this, "setNetworkconfigurationPage ");
 		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", selectedClients);
 
@@ -2159,8 +1900,6 @@ public class ConfigedMain implements MessagebusListener {
 					additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
 		}
-
-		return true;
 	}
 
 	private static Map<String, ListCellOptions> deepCopyConfigListCellOptions(
@@ -2182,7 +1921,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	private boolean setHardwareInfoPage() {
+	private void setHardwareInfoPage() {
 		Logging.info(this, "setHardwareInfoPage for, clients count ", selectedClients.size());
 
 		if (selectedClients.size() == 1) {
@@ -2191,20 +1930,11 @@ public class ConfigedMain implements MessagebusListener {
 		} else {
 			mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
 		}
-
-		return true;
 	}
 
-	private boolean setSoftwareInfoPage() {
+	private void setSoftwareInfoPage() {
 		Logging.info(this, "setSoftwareInfoPage(), number selected clients ", selectedClients.size());
-
-		if (selectedClients.size() == 1) {
-			mainFrame.getTabbedConfigPanes().setSoftwareAudit(selectedClients.get(0));
-		} else {
-			mainFrame.getTabbedConfigPanes().setSoftwareAudit();
-		}
-
-		return true;
+		mainFrame.getTabbedConfigPanes().setSoftwareAudit();
 	}
 
 	public boolean logfileExists(String logtype) {
@@ -2227,15 +1957,14 @@ public class ConfigedMain implements MessagebusListener {
 		return logfiles;
 	}
 
-	private boolean setLogPage() {
+	private void setLogPage() {
 		Logging.debug(this, "setLogPage(), selected clients: ", selectedClients);
-		mainFrame.getTabbedConfigPanes().setUpdatedLogfilePanel("instlog");
+		mainFrame.getTabbedConfigPanes().setLogFileTab("instlog");
 		mainFrame.getTabbedConfigPanes().setLogview("instlog");
-		return true;
 	}
 
-	public boolean resetView() {
-		return resetView(viewIndex);
+	public void resetView() {
+		resetView(viewIndex);
 	}
 
 	public boolean resetView(ViewIndex viewIndex) {
@@ -2256,27 +1985,27 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 
 		case VIEW_NETWORK_CONFIGURATION:
-			result = setNetworkConfigurationPage();
+			setNetworkConfigurationPage();
 			break;
 
 		case VIEW_HARDWARE_INFO:
-			result = setHardwareInfoPage();
+			setHardwareInfoPage();
 			break;
 
 		case VIEW_SOFTWARE_INFO:
-			result = setSoftwareInfoPage();
+			setSoftwareInfoPage();
 			break;
 
 		case VIEW_LOG:
-			result = setLogPage();
+			setLogPage();
 			break;
 
 		case VIEW_PRODUCT_PROPERTIES:
-			result = setProductPropertiesPage();
+			setProductPropertiesPage();
 			break;
 
 		case VIEW_HOST_PROPERTIES:
-			result = setHostPropertiesPage();
+			setHostPropertiesPage();
 			break;
 
 		default:
@@ -2293,23 +2022,23 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void setViewIndex(ViewIndex newViewIndex) {
-		ViewIndex oldViewIndex = viewIndex;
-
 		Logging.info(this, "visualViewIndex ", newViewIndex, ", (old) viewIndex ", viewIndex);
 		Logging.info(this, "setViewIndex anyDataChanged ", anyDataChanged);
 
 		checkSaveAll(true);
 
 		if (initialDataLoader.isDataLoaded()) {
-			viewIndex = newViewIndex;
-			depotsList.setEnabled(viewIndex == ViewIndex.VIEW_CLIENTS);
+			depotsList.setEnabled(newViewIndex == ViewIndex.VIEW_CLIENTS);
 
 			Logging.debug(this, "switch to viewIndex ", viewIndex);
-			boolean result = resetView();
+			boolean result = resetView(newViewIndex);
 
-			if (!result) {
-				viewIndex = oldViewIndex;
-				Logging.debug(" tab index could not be changed");
+			if (result) {
+				viewIndex = newViewIndex;
+			} else {
+				Logging.debug(" tab index could not be changed, go to clients view");
+				viewIndex = ViewIndex.VIEW_CLIENTS;
+				mainFrame.getTabbedConfigPanes().setSelectedIndex(0);
 			}
 
 			saveCurrentViewIndex();
@@ -2329,8 +2058,8 @@ public class ConfigedMain implements MessagebusListener {
 			saveDepotsViewIndex = mainFrame.getTabbedConfigPanes().getSelectedIndex();
 			break;
 
-		case SERVER:
-			// Do nothing, server always has the same index
+		default:
+			// Other targets don't have different tab views
 			break;
 		}
 	}
@@ -2371,29 +2100,6 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.debug(this, "selected after fetch ", getSelectedDepots().size());
 	}
 
-	public void reloadLicensesData() {
-		Logging.info(this, "reloadLicensesData");
-		if (initialDataLoader.isDataLoaded()) {
-			persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
-			isAllLicenseDataReloaded = true;
-
-			for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
-				for (PanelGenEditTable p : cmtp.getTablePanes()) {
-					p.reload();
-				}
-			}
-			isAllLicenseDataReloaded = false;
-		}
-	}
-
-	public boolean isAllLicenseDataReloaded() {
-		return isAllLicenseDataReloaded;
-	}
-
-	public boolean isInitialLicenseDataLoading() {
-		return isInitialLicenseDataLoading;
-	}
-
 	private void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
 		String oldGroupSelection = activatedGroupModel.getGroupName();
@@ -2424,13 +2130,8 @@ public class ConfigedMain implements MessagebusListener {
 			preloadData();
 
 			FOpsiLicenseMissingText.reset();
-			if (mainFrame.getTabbedConfigPanes().getPanelProductProperties() != null) {
-				mainFrame.getTabbedConfigPanes().getPanelProductProperties().reload();
-			}
 
-			if (mainFrame.getFDialogOpsiLicensingInfo() != null) {
-				mainFrame.getFDialogOpsiLicensingInfo().reload();
-			}
+			mainFrame.resetData();
 
 			requestReloadStatesAndActions();
 
@@ -2456,8 +2157,8 @@ public class ConfigedMain implements MessagebusListener {
 			Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
 			Logging.debug(this, " reset the values, particularly in list ");
-			clientTable.activateListSelectionListener();
 			clientTable.setSelectedValues(clientsLeft);
+			clientTable.activateListSelectionListener();
 
 			Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
 			mainFrame.reloadServerConsoleMenu();
@@ -2468,6 +2169,11 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		mainFrame.deactivateLoadingPane();
+
+		// We want to reset and reload the page that is being shown now...
+		EditingTarget t = editingTarget;
+		editingTarget = null;
+		setEditingTarget(t);
 	}
 
 	public void addToGlobalUpdateCollection(UpdateCollection newCollection) {
@@ -3406,39 +3112,6 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.checkErrorList(mainFrame);
 	}
 
-	private boolean checkSavedLicensesFrame() {
-		if (allControlMultiTablePanels == null) {
-			return true;
-		}
-
-		boolean change = false;
-		boolean result = false;
-		Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
-		while (!change && iter.hasNext()) {
-			AbstractControlMultiTablePanel cmtp = iter.next();
-			Iterator<PanelGenEditTable> iterP = cmtp.tablePanes.iterator();
-			while (!change && iterP.hasNext()) {
-				PanelGenEditTable p = iterP.next();
-				change = p.isDataChanged();
-			}
-		}
-
-		if (change) {
-			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp"),
-					Configed.getResourceValue("ConfigedMain.Licenses.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-
-			if (returnedOption == JOptionPane.YES_OPTION) {
-				result = true;
-			}
-		} else {
-			result = true;
-		}
-
-		return result;
-	}
-
 	public static JFrame getFrame() {
 		if (mainFrame != null) {
 			return mainFrame;
@@ -3465,40 +3138,24 @@ public class ConfigedMain implements MessagebusListener {
 			}
 		}
 
+		boolean result = true;
+
 		if (mainFrame != null) {
-			mainFrame.setVisible(false);
-			mainFrame.dispose();
-			mainFrame = null;
+			result = mainFrame.checkSaveLicenses();
+			if (result) {
+				mainFrame.setVisible(false);
+				mainFrame.dispose();
+				mainFrame = null;
+			}
 		}
 
-		if (loginDialog != null) {
-			loginDialog.setVisible(false);
-			loginDialog.dispose();
-		}
-
-		boolean checkSavedLicensesFrame = checkSavedLicensesFrame();
-
-		if (!checkSavedLicensesFrame) {
-			licensesFrame.setVisible(true);
-		}
-
-		Logging.info(this, "close instance result ", checkSavedLicensesFrame);
-
-		return checkSavedLicensesFrame;
+		return result;
 	}
 
 	public void finishApp(boolean checkdirty, int exitcode) {
 		if (closeInstance(checkdirty)) {
 			Main.endApp(exitcode);
 		}
-	}
-
-	public static void requestLicensesFrameReload() {
-		licensesFrame = null;
-	}
-
-	public static LicensesFrame getLicensesFrame() {
-		return licensesFrame;
 	}
 
 	public static String getHost() {

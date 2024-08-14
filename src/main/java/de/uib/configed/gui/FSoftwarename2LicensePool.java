@@ -67,7 +67,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private ControlPanelAssignToLPools myController;
+	private ControlPanelAssignToLPools controlPanelAssignToLPools;
 
 	public enum Softwarename2LicensepoolRestriction {
 		SHOW_ALL_NAMES, SHOW_ONLY_NAMES_WITH_VARIANT_LICENSEPOOLS, SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENSEPOOL
@@ -80,14 +80,11 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 	private String globalLicensePool;
 
-	private ConfigedMain configedMain;
-
-	public FSoftwarename2LicensePool(ControlPanelAssignToLPools myController, ConfigedMain configedMain) {
-		super(ConfigedMain.getLicensesFrame(), Configed.getResourceValue("FSoftwarename2LicensePool.title"), false,
+	public FSoftwarename2LicensePool(ControlPanelAssignToLPools controlPanelAssignToLPools) {
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("FSoftwarename2LicensePool.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800, true);
 
-		this.myController = myController;
-		this.configedMain = configedMain;
+		this.controlPanelAssignToLPools = controlPanelAssignToLPools;
 
 		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 
@@ -161,7 +158,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		@Override
 		public void commit() {
 			super.commit();
-			myController.setSoftwareIdsFromLicensePool();
+			controlPanelAssignToLPools.setSoftwareIdsFromLicensePool();
 		}
 
 		@Override
@@ -365,9 +362,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-						}
+						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 					}
 
 					@Override
@@ -385,7 +380,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 					foundVariantLicensepools = checkExistNamesWithVariantLicensepools((String) getValueAt(i, 0));
 					i++;
 				}
-				myController.getTabClient().setDisplaySimilarExist(foundVariantLicensepools);
+				controlPanelAssignToLPools.getTabClient().setDisplaySimilarExist(foundVariantLicensepools);
 			}
 
 			@Override
@@ -506,9 +501,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 					@Override
 					public void reloadMap() {
 						Logging.info(this, "retrieveMap for swName ", swName);
-						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-						}
+						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 					}
 
 					@Override

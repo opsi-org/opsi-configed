@@ -197,7 +197,7 @@ public class LicenseDisplayer {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (configedMain != null && !configedMain.isAllLicenseDataReloaded()) {
+						if (configedMain != null) {
 							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 						}
 					}

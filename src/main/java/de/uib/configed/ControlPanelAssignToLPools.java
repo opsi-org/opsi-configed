@@ -28,6 +28,7 @@ import javax.swing.table.TableColumn;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicensePool;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.gui.licenses.LicensesPanel;
 import de.uib.configed.gui.licenses.PanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
@@ -72,7 +73,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
 
-	private ConfigedMain configedMain;
+	private LicensesPanel licensesPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -99,9 +100,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private Map<String, List<String>> removeKeysFromOtherLicensePool;
 
-	public ControlPanelAssignToLPools(ConfigedMain configedMain) {
+	public ControlPanelAssignToLPools(LicensesPanel licensesPane) {
 		thePanel = new PanelAssignToLPools(this);
-		this.configedMain = configedMain;
+		this.licensesPane = licensesPane;
+
 		init();
 	}
 
@@ -165,7 +167,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getButtonShowAssignedNotExisting().setEnabled(!persistenceController.getSoftwareDataService()
 				.getUnknownSoftwareListForLicensePoolPD(poolID).isEmpty());
 		if (thePanel.getFMissingSoftwareInfo() == null) {
-			thePanel.setFMissingSoftwareInfo(new FGlobalSoftwareInfo(ConfigedMain.getLicensesFrame(), this));
+			thePanel.setFMissingSoftwareInfo(new FGlobalSoftwareInfo(ConfigedMain.getMainFrame(), this));
 		}
 
 		if (!persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicensePoolPD(poolID).isEmpty()) {
@@ -175,10 +177,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 							new MapRetriever() {
 								@Override
 								public void reloadMap() {
-									if (!configedMain.isAllLicenseDataReloaded()) {
-										persistenceController
-												.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
-									}
+									persistenceController
+											.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
 								}
 
 								@Override
@@ -389,7 +389,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		Logging.info(" software with ident \"", key, "\" already associated to license pool ", otherPool);
 
-		FTextArea dialog = new FTextArea(ConfigedMain.getLicensesFrame(), title, true,
+		FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(), title, true,
 				new String[] { Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
 						Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
 				400, 200);
@@ -419,8 +419,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		columnNames.add("description");
 		MapTableUpdateItemFactory updateItemFactoryLicensepools = new MapTableUpdateItemFactory(modelLicensepools,
 				columnNames);
-		modelLicensepools = new GenTableModel(updateItemFactoryLicensepools, configedMain.licensePoolTableProvider, 0,
-				thePanel.getPanelLicensepools(), updateCollection);
+		modelLicensepools = new GenTableModel(updateItemFactoryLicensepools, licensesPane.getLicensePoolTableProvider(),
+				0, thePanel.getPanelLicensepools(), updateCollection);
 		updateItemFactoryLicensepools.setSource(modelLicensepools);
 
 		tableModels.add(modelLicensepools);
@@ -468,9 +468,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
-						}
+						persistenceController.reloadData(ReloadEvent.LICENSE_POOL_DATA_RELOAD.toString());
 					}
 
 					@Override
@@ -509,8 +507,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		JComboBox<String> comboLP0 = new JComboBox<>();
 
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
-			List<String> poolIds = configedMain.licensePoolTableProvider.getOrderedColumn(
-					configedMain.licensePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
+			List<String> poolIds = licensesPane.getLicensePoolTableProvider().getOrderedColumn(
+					licensesPane.getLicensePoolTableProvider().getColumnNames().indexOf("licensePoolId"), false);
 
 			if (poolIds.size() <= 1) {
 				poolIds.add("");
@@ -555,9 +553,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-						}
+						persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 					}
 
 					@Override
@@ -644,8 +640,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().setUpdateController(new SelectionMemorizerUpdateController(
 				thePanel.getPanelLicensepools(), 0, thePanel.getPanelRegisteredSoftware(), this));
 
-		final ControlPanelAssignToLPools contr = this;
-		thePanel.setFSoftwarename2LicensePool(new FSoftwarename2LicensePool(contr, configedMain));
+		thePanel.setFSoftwarename2LicensePool(new FSoftwarename2LicensePool(this));
 		thePanel.getFSoftwarename2LicensePool().setTableModel(); // test
 		thePanel.setDisplaySimilarExist(
 				thePanel.getFSoftwarename2LicensePool().checkExistNamesWithVariantLicensepools());
@@ -672,7 +667,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private String updateLicensepool(Map<String, Object> rowmap) {
 		// hack for avoiding unvoluntary reuse of a license pool id
-		boolean existsNewRow = configedMain.licensePoolTableProvider.getRows().size() < modelLicensepools.getRowCount();
+		boolean existsNewRow = licensesPane.getLicensePoolTableProvider().getRows().size() < modelLicensepools
+				.getRowCount();
 
 		if (existsNewRow && persistenceController.getLicenseDataService().getLicensePoolsPD()
 				.containsKey(rowmap.get("licensePoolId"))) {

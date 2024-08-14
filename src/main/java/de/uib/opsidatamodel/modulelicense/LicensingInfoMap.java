@@ -83,7 +83,7 @@ public final class LicensingInfoMap {
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
 
-	private static boolean reducedView = !LicensingInfoDialog.isExtendedView();
+	private static boolean reducedView = !LicensingInfoPanel.isExtendedView();
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -265,7 +265,7 @@ public final class LicensingInfoMap {
 
 		List<String> result;
 
-		if (LicensingInfoDialog.isShowOnlyAvailableModules()) {
+		if (LicensingInfoPanel.isShowOnlyAvailableModules()) {
 			result = new ArrayList<>(availableModules);
 		} else {
 			result = new ArrayList<>(knownModulesList);

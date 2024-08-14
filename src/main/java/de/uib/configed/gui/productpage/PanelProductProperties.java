@@ -113,10 +113,6 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		}
 	}
 
-	public void reload() {
-		paneProducts.reload();
-	}
-
 	@SuppressWarnings({ "java:S2972" })
 	private class PaneProducts extends PanelGenEditTable {
 		private List<String> columnNames;
