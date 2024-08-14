@@ -440,6 +440,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static JCheckBox createNOTCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox(new ImageIcon());
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setFocusable(false);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
 		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "not" : ""));
 
@@ -464,8 +465,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static JCheckBox createANDORCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox("and", new ImageIcon(), true);
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setFocusable(false);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
-
 		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
 
 		jCheckBox.addMouseListener(new MouseAdapter() {
@@ -489,6 +490,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static JCheckBox createParenthesisCheckBox(String type, boolean enabled) {
 		JCheckBox jCheckBox = new JCheckBox(type, new ImageIcon(), true);
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setFocusable(false);
 		jCheckBox.setDisabledIcon(new ImageIcon());
 		jCheckBox.setEnabled(enabled);
 
