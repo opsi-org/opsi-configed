@@ -20,7 +20,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	private String opsiproduct;
 	private String depots;
-	private String verbosity = " -vvv";
+	private String verbosity = "";
 	private String keepFiles = "";
 	private String freeInput = "";
 
@@ -70,7 +70,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	@Override
 	public String getCommand() {
-		command = "opsi-package-manager -q" + verbosity + keepFiles + depots + freeInput + opsiproduct;
+		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
 		return command;
 	}
 

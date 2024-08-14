@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.3.3.13] - 2024-04-08
+
+## Fixed
+- Space between options in command for uninstalling opsi products
+
+
 ## [4.3.3.12] - 2024-08-08
 
 ### Fixed
