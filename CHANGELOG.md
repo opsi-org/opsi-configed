@@ -1,5 +1,5 @@
 # Changelog
-## [4.4.0.4] - 2024-08-14
+## [4.4.0.5] - 2024-08-15
 
 ### Changed
 - Keep connection and certificate validators so that they don't have to be recreated with every server request to improve performance
