@@ -144,7 +144,7 @@ public class ConnectionHandler {
 			return null;
 		}
 
-		CertificateValidator certValidator = CertificateValidatorFactory.createValidator();
+		CertificateValidator certValidator = CertificateValidatorFactory.getValidator();
 		HttpsURLConnection connection = null;
 
 		try {
@@ -167,8 +167,8 @@ public class ConnectionHandler {
 					connection.getRequestProperties(), ", cookie=", (requestProperties.get("Cookie") == null ? "null"
 							: (requestProperties.get("Cookie").substring(0, 26) + "...")));
 
-			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
-			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
+			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
+			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
 			connection.connect();
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: ", ex);

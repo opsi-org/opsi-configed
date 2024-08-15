@@ -83,9 +83,9 @@ public class OpsiServerVersionRetriever {
 					.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
 			connection.setRequestProperty("Authorization", "Basic " + authorization);
 
-			CertificateValidator certValidator = CertificateValidatorFactory.createInsecure();
-			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
-			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
+			CertificateValidator certValidator = CertificateValidatorFactory.getInsecure();
+			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
+			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
 			connection.setRequestMethod("HEAD");
 		} catch (URISyntaxException e) {
 			Logging.warning(this, e, "cannot create URI from ", serviceURL);
