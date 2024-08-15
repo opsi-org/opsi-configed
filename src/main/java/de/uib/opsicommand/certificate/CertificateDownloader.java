@@ -56,9 +56,9 @@ public final class CertificateDownloader {
 			return;
 		}
 
-		CertificateValidator validator = CertificateValidatorFactory.createInsecure();
-		HttpsURLConnection.setDefaultSSLSocketFactory(validator.createSSLSocketFactory());
-		HttpsURLConnection.setDefaultHostnameVerifier(validator.createHostnameVerifier());
+		CertificateValidator validator = CertificateValidatorFactory.getInsecure();
+		HttpsURLConnection.setDefaultSSLSocketFactory(validator.getSSLSocketFactory());
+		HttpsURLConnection.setDefaultHostnameVerifier(validator.getHostnameVerifier());
 
 		URL url = null;
 

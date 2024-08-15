@@ -134,9 +134,9 @@ public class SelectionManager {
 			Logging.info("\n", operation.printOperation(""));
 		}
 
-		long startTime = System.nanoTime();
+		long startTime = System.currentTimeMillis();
 		List<String> l = selectClientsLocal(operation);
-		Logging.notice(this, "select Clients ", ((System.nanoTime() - startTime) / 1_000_000));
+		Logging.notice(this, "select Clients ", System.currentTimeMillis() - startTime);
 		return l;
 	}
 

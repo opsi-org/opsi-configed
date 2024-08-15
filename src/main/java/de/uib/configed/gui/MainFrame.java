@@ -58,6 +58,7 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoPanel;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -233,6 +234,10 @@ public class MainFrame extends JFrame {
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
 		resetData();
+
+		// We need to reset the validators so that new ones will be created when reconnecting
+		CertificateValidatorFactory.resetCertificateValidators();
+
 		restartConfiged();
 	}
 

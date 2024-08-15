@@ -16,6 +16,9 @@ import de.uib.utils.logging.Logging;
  * It is based on Factory Method design pattern.
  */
 public final class CertificateValidatorFactory {
+	private static CertificateValidator insecureCertificateValidator;
+	private static CertificateValidator secureCertificateValidator;
+
 	private CertificateValidatorFactory() {
 	}
 
@@ -28,8 +31,11 @@ public final class CertificateValidatorFactory {
 	 * 
 	 * @return An instance of {@link InsecureCertificateValidator}.
 	 */
-	public static CertificateValidator createInsecure() {
-		return new InsecureCertificateValidator();
+	public static CertificateValidator getInsecure() {
+		if (insecureCertificateValidator == null) {
+			insecureCertificateValidator = new InsecureCertificateValidator();
+		}
+		return insecureCertificateValidator;
 	}
 
 	/**
@@ -41,13 +47,22 @@ public final class CertificateValidatorFactory {
 	 *         {@link InsecureCertificateValidator} is returned; otherwise, a
 	 *         {@link SecureCertificateValidator} is returned.
 	 */
-	public static CertificateValidator createValidator() {
+	public static CertificateValidator getValidator() {
 		Logging.info("certificate verification is disabled: ", Utils.isCertificateVerificationDisabled());
 		if (Utils.isCertificateVerificationDisabled()) {
 			Logging.info("using insecure certificate validator");
-			return new InsecureCertificateValidator();
+			return getInsecure();
 		}
 		Logging.info("using secure certificate validator");
-		return new SecureCertificateValidator();
+		if (secureCertificateValidator == null) {
+			secureCertificateValidator = new SecureCertificateValidator();
+		}
+
+		return secureCertificateValidator;
+	}
+
+	public static void resetCertificateValidators() {
+		insecureCertificateValidator = null;
+		secureCertificateValidator = null;
 	}
 }

@@ -39,7 +39,7 @@ public final class ConnectionErrorReporter {
 	}
 
 	/**
-	 * Constructs new instnace of {@link ConnectionErrorReporter} with provided
+	 * Constructs new instance of {@link ConnectionErrorReporter} with provided
 	 * information.
 	 * <p>
 	 * {@link ConnectionState} is used to indicate the connection state. The

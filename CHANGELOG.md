@@ -2,6 +2,12 @@
 ## [4.4.0.4] - 2024-08-14
 
 ### Changed
+- Keep connection and certificate validators so that they don't have to be recreated with every server request to improve performance
+
+
+## [4.4.0.4] - 2024-08-14
+
+### Changed
 - Show licenses management, opsi licensing info, health check and the dashboard in MainFrame
 
 ### Fixed
