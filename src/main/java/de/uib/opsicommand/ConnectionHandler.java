@@ -180,6 +180,10 @@ public class ConnectionHandler {
 
 			conStat = reporter.getConnectionState();
 			connection = null;
+
+			// We need to reset the certificate validators when the validation failed
+			// so that new validators can be created on the next try
+			CertificateValidatorFactory.resetCertificateValidators();
 		} catch (IOException ex) {
 			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				conStat = reporter.getConnectionState();
@@ -189,6 +193,10 @@ public class ConnectionHandler {
 			}
 
 			connection = null;
+
+			// We need to reset the certificate validators when the validation failed
+			// so that new validators can be created on the next try
+			CertificateValidatorFactory.resetCertificateValidators();
 		}
 
 		return connection;

@@ -60,4 +60,9 @@ public final class CertificateValidatorFactory {
 
 		return secureCertificateValidator;
 	}
+
+	public static void resetCertificateValidators() {
+		insecureCertificateValidator = null;
+		secureCertificateValidator = null;
+	}
 }
