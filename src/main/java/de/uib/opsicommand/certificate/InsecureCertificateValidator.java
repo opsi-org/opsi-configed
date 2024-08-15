@@ -50,7 +50,6 @@ public class InsecureCertificateValidator implements CertificateValidator {
 	}
 
 	private void createSSLSocketFactory() {
-		long start = System.nanoTime();
 		try {
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(null, new TrustManager[] { new InsecureX509TrustManager() }, new SecureRandom());
@@ -61,7 +60,6 @@ public class InsecureCertificateValidator implements CertificateValidator {
 		} catch (KeyManagementException e) {
 			Logging.error(this, e, "failed to initialize SSL context");
 		}
-		Logging.devel("create insecure ", System.nanoTime() - start);
 	}
 
 	@Override
