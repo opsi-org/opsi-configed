@@ -12,10 +12,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 
 public abstract class AbstractPanelEditProperties extends JPanel {
-	protected DefaultEditMapPanel productPropertiesPanel;
+	protected static final int MIN_WIDTH = 50;
 
-	protected int minHSize = 50;
-	protected int prefHSize = 80;
+	protected DefaultEditMapPanel productPropertiesPanel;
 
 	protected ConfigedMain configedMain;
 

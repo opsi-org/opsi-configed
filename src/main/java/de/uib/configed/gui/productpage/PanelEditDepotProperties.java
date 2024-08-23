@@ -104,12 +104,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		panelTop.setLayout(layoutEditProperties);
 
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(scrollpaneDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpaneDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
 		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
-				.addComponent(scrollpaneDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpaneDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
@@ -121,7 +121,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		GroupLayout layoutAll = new GroupLayout(this);
 		setLayout(layoutAll);
 
-		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, minHSize,
+		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, MIN_WIDTH,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, Globals.MIN_TABLE_V_SIZE,
@@ -135,7 +135,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		titlePanel.setLayout(titleLayout);
 
 		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
-				minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		titleLayout.setVerticalGroup(titleLayout
 				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelEditDepotProductProperties,

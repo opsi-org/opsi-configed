@@ -49,7 +49,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		setLayout(layoutEditProperties);
 
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(productPropertiesPanel, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutEditProperties.setVerticalGroup(
 				layoutEditProperties.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
@@ -63,7 +63,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		titlePanel.setLayout(titleLayout);
 
 		titleLayout.setHorizontalGroup(titleLayout.createSequentialGroup()
-				.addComponent(jLabelProductProperties, minHSize, prefHSize, Short.MAX_VALUE)
+				.addComponent(jLabelProductProperties, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.DEFAULT_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonRemoveSpecificValues, GroupLayout.DEFAULT_SIZE,
