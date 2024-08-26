@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -126,7 +125,6 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 	}
 
 	public void updateTable() {
-		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()));
 		if (scrollpane.getViewport().getView() == table) {
 			// Do nothing if we already set the table as view
 			return;
@@ -377,7 +375,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 
 			Logging.debug(this, "remoteControls ", remoteControls);
 
-			Map<String, String> tooltips = new LinkedHashMap<>();
+			Map<String, String> tooltips = new HashMap<>();
 			Map<String, String> rcCommands = new HashMap<>();
 			Map<String, Boolean> commandsEditable = new HashMap<>();
 
