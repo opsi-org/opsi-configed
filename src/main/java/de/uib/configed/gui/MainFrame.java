@@ -131,11 +131,6 @@ public class MainFrame extends JFrame {
 		this.configedMain = configedMain;
 
 		guiInit();
-		initData();
-	}
-
-	private void initData() {
-		statusPane.updateValues(0, null, null, null);
 	}
 
 	public ClientTable getClientTable() {

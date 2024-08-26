@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -74,8 +75,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	public void updateValues(Integer clientsCount, Integer selectedClientsCount, String selectedClientNames,
 			String involvedDepots) {
-		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
-				selectedClientsCount);
+		Long start = System.nanoTime();
 		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
 				selectedClientsCount);
 
@@ -98,6 +98,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 			fieldInvolvedDepots.setToolTipText(
 					"<html><body><p>" + involvedDepots.replace(";\n", "<br\\ >") + "</p></body></html>");
 		}
+		Logging.devel("", System.nanoTime() - start);
+		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()));
 	}
 
 	public void setGroupClientsCount(int n) {

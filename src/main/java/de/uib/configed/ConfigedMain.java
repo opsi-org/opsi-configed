@@ -1073,30 +1073,8 @@ public class ConfigedMain implements MessagebusListener {
 		return selectedClients;
 	}
 
-	private void setSelectedClientsArray(Collection<String> a) {
-		if (a == null) {
-			return;
-		}
-
-		Logging.info(this, "setSelectedClientsArray ", a.size());
-		Logging.info(this, "selectedClients was before ", selectedClients.size());
-
-		selectedClients = new ArrayList<>(a);
-
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients.size(),
-				Utils.getListStringRepresentation(selectedClients, null), clientInDepot);
-	}
-
 	private void setSelectedClients(List<String> clientNames) {
-		if (clientNames == null) {
-			Logging.info(this, "setSelectedClients clientNames null");
-		} else {
-			Logging.info(this, "setSelectedClients clientNames size ", clientNames.size());
-		}
-
-		if (clientNames == null) {
-			return;
-		}
+		Logging.info(this, "setSelectedClients clientNames size ", clientNames.size());
 
 		if (clientNames.equals(saveSelectedClients)) {
 			Logging.info(this, "setSelectedClients clientNames.equals(saveSelectedClients)");
@@ -1106,7 +1084,10 @@ public class ConfigedMain implements MessagebusListener {
 
 		requestReloadStatesAndActions();
 
-		setSelectedClientsArray(clientNames);
+		Logging.info(this, "setSelectedClientsArray ", clientNames.size());
+		Logging.info(this, "selectedClients was before ", selectedClients.size());
+
+		selectedClients = new ArrayList<>(clientNames);
 
 		clientTree.produceActiveParents();
 
