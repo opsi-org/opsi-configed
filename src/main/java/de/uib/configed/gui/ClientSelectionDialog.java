@@ -15,7 +15,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
@@ -107,7 +106,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private JButton buttonRestart;
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
-	private JButton saveButton;
 
 	private LinkedList<ComplexGroup> complexElements;
 
@@ -150,7 +148,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	@Override
 	public void doAction3() {
 		Logging.info(this, "doAction3");
-		List<String> clients = new ArrayList<>();
 
 		collectData();
 
@@ -158,13 +155,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		// client view
 		configedMain.setSelectedIndex(0);
 
-		if (manager != null) {
-			clients = manager.selectClients();
-		}
-
-		if (clients == null) {
-			return;
-		}
+		List<String> clients = manager.selectClients();
 
 		Logging.debug(this, "", clients);
 		selectionPanel.setSelectedValues(clients);
@@ -192,7 +183,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
 
-		saveButton = new JButton(Icons.getIntellijIcon("save"));
+		JButton saveButton = new JButton(Icons.getIntellijIcon("save"));
 		saveButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.saveSearchTooltip"));
 		saveButton.addActionListener(actionEvent -> save());
 
@@ -1174,7 +1165,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private void save() {
 		String text = saveNameField.getText();
 		if (text.isEmpty()) {
-			JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
 					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle"), JOptionPane.OK_OPTION);
 			toFront();
 		} else if (searchNamePattern.matcher(text).matches()) {
@@ -1182,7 +1173,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 			manager.saveSearch(text, saveDescriptionField.getText());
 			savedSearchesDialog.reloadAction();
 		} else {
-			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(this, "wrong name", "error", JOptionPane.OK_OPTION);
 			toFront();
 		}
 	}

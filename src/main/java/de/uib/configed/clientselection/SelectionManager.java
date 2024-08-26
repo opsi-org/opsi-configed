@@ -135,18 +135,12 @@ public class SelectionManager {
 		}
 
 		long startTime = System.currentTimeMillis();
-		List<String> l = selectClientsLocal(operation);
-		Logging.notice(this, "select Clients ", System.currentTimeMillis() - startTime);
-		return l;
-	}
-
-	// Filter the clients and get the matching clients back with old backend,
-	// it should be checked before if operation is null
-	private List<String> selectClientsLocal(AbstractSelectOperation operation) {
 		ExecutableOperation selectOperation = backend.createExecutableOperation(operation);
 		Logging.info(this, "selectClients, operation ", operation.getClassName());
 		Logging.info(this, "", ((AbstractSelectGroupOperation) operation).getChildOperations().size());
-		return backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
+		List<String> selectedClients = backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
+		Logging.notice(this, "select Clients ", System.currentTimeMillis() - startTime);
+		return selectedClients;
 	}
 
 	/** Save the current operation tree with the serializer */
