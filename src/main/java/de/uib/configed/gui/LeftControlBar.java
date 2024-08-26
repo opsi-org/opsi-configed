@@ -7,12 +7,12 @@
 package de.uib.configed.gui;
 
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -22,24 +22,29 @@ import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 
-public class LeftControlBar extends JPanel {
-	private JToolBar actionBar;
-	private JToolBar controlBar;
-
+public class LeftControlBar extends JToolBar {
 	private JButton jButtonSaveConfiguration;
 
 	private ConfigedMain configedMain;
 
 	public LeftControlBar(ConfigedMain configedMain) {
+		super(SwingConstants.VERTICAL);
+
 		this.configedMain = configedMain;
-
-		initActionBar();
-		initControlBar();
-
-		initLayout();
+		initOpsiIcon();
+		initActionIcons();
+		initControlIcons();
 	}
 
-	private void initActionBar() {
+	private void initOpsiIcon() {
+		JLabel opsiIconLabel = new JLabel(Icons.getOpsiIcon(32));
+
+		// We need here exactly 5 Pixels border so that the icon will be centered in the JToolBar
+		opsiIconLabel.setBorder(new EmptyBorder(0, 5, 0, 0));
+		add(opsiIconLabel);
+	}
+
+	private void initActionIcons() {
 		JButton jButtonReload = new JButton(Icons.getIntellijIcon("refresh", 32));
 		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jButtonReload.addActionListener(event -> configedMain.reload());
@@ -49,12 +54,12 @@ public class LeftControlBar extends JPanel {
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener(event -> configedMain.checkSaveAll(false));
 
-		actionBar = new JToolBar(SwingConstants.VERTICAL);
-		actionBar.add(jButtonReload);
-		actionBar.add(jButtonSaveConfiguration);
+		addSeparator();
+		add(jButtonReload);
+		add(jButtonSaveConfiguration);
 	}
 
-	private void initControlBar() {
+	private void initControlIcons() {
 		JToggleButton jButtonClientsConfiguration = new JToggleButton(Icons.getThemeIcon("desktop", 32));
 		jButtonClientsConfiguration.setSelectedIcon(Icons.getSelectedThemeIntelljIcon("desktop", 32));
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
@@ -101,23 +106,14 @@ public class LeftControlBar extends JPanel {
 		buttonGroup.add(jButtonHealthCheck);
 		buttonGroup.add(jButtonLicenses);
 
-		controlBar = new JToolBar(SwingConstants.VERTICAL);
-		controlBar.add(jButtonClientsConfiguration);
-		controlBar.add(jButtonDepotsConfiguration);
-		controlBar.add(jButtonServerConfiguration);
-		controlBar.add(jButtonDashboard);
-		controlBar.add(jButtonOpsiLicenses);
-		controlBar.add(jButtonHealthCheck);
-		controlBar.add(jButtonLicenses);
-	}
-
-	private void initLayout() {
-		GroupLayout layout = new GroupLayout(this);
-		setLayout(layout);
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(actionBar).addComponent(controlBar));
-
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(actionBar).addComponent(controlBar));
+		addSeparator();
+		add(jButtonClientsConfiguration);
+		add(jButtonDepotsConfiguration);
+		add(jButtonServerConfiguration);
+		add(jButtonDashboard);
+		add(jButtonOpsiLicenses);
+		add(jButtonHealthCheck);
+		add(jButtonLicenses);
 	}
 
 	public void enableSaveButton(boolean enable) {

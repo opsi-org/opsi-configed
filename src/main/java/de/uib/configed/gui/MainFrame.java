@@ -609,11 +609,14 @@ public class MainFrame extends JFrame {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createParallelGroup().addComponent(leftControlBar)
+		layout.setVerticalGroup(layout.createParallelGroup()
+				.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGroup(layout.createSequentialGroup().addComponent(configurationPanel).addComponent(statusPane)));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(leftControlBar)
+				.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGroup(layout.createParallelGroup().addComponent(configurationPanel).addComponent(statusPane))
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
@@ -624,12 +627,15 @@ public class MainFrame extends JFrame {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createParallelGroup().addComponent(leftControlBar)
+		layout.setVerticalGroup(layout
+				.createParallelGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGroup(layout.createSequentialGroup().addComponent(container)));
 
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(leftControlBar)
-						.addGroup(layout.createParallelGroup().addComponent(container)).addGap(Globals.MIN_GAP_SIZE));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup().addComponent(container)).addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	private JMenuBar initMenuBar() {
