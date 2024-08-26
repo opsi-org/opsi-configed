@@ -84,6 +84,8 @@ public class MainFrame extends JFrame {
 
 	private ClientMenuManager clientMenu;
 
+	private LeftControlBar leftControlBar;
+
 	private JSplitPane configurationPanel;
 	private Dashboard dashboard;
 	private LicensingInfoPanel licensingInfoPanel;
@@ -111,8 +113,6 @@ public class MainFrame extends JFrame {
 	private ClientTree clientTree;
 	private ProductTree productTree;
 
-	private IconBarPanel iconBarPanel;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -137,10 +137,6 @@ public class MainFrame extends JFrame {
 		return clientTable;
 	}
 
-	public IconBarPanel getIconBarPanel() {
-		return iconBarPanel;
-	}
-
 	public ClientMenuManager getClientMenu() {
 		return clientMenu;
 	}
@@ -163,22 +159,16 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		Icons.addThemeIconToMenuItem(jMenuFileExit, "exit");
-		jMenuFileExit.addActionListener((ActionEvent e) -> configedMain.finishApp(true, 0));
+		jMenuFileExit.addActionListener(actionEvent -> configedMain.finishApp(true, 0));
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> configedMain.checkSaveAll(false));
+		jMenuFileSaveConfigurations.addActionListener(actionEvent -> configedMain.checkSaveAll(false));
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		Icons.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
-
-		jMenuFileReload.addActionListener((ActionEvent e) -> {
-			configedMain.reload();
-			if (iconBarPanel.getjButtonReloadLicenses().isEnabled()) {
-				reloadLicensesAction();
-			}
-		});
+		jMenuFileReload.addActionListener(actionEvent -> configedMain.reload());
 
 		JMenuItem jMenuFileLogout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileLogout"));
 		Icons.addThemeIconToMenuItem(jMenuFileLogout, "exit");
@@ -602,7 +592,8 @@ public class MainFrame extends JFrame {
 
 		configurationPanel = initConfigurationPanel();
 		statusPane = new HostsStatusPanel();
-		iconBarPanel = new IconBarPanel(configedMain, this);
+
+		leftControlBar = new LeftControlBar(configedMain);
 
 		setConfigurationPanel();
 
@@ -618,12 +609,12 @@ public class MainFrame extends JFrame {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(iconBarPanel)
-				.addComponent(configurationPanel).addComponent(statusPane));
+		layout.setVerticalGroup(layout.createParallelGroup().addComponent(leftControlBar)
+				.addGroup(layout.createSequentialGroup().addComponent(configurationPanel).addComponent(statusPane)));
 
-		layout.setHorizontalGroup(layout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup()
-						.addComponent(iconBarPanel).addComponent(configurationPanel).addComponent(statusPane))
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(leftControlBar)
+				.addGroup(layout.createParallelGroup().addComponent(configurationPanel).addComponent(statusPane))
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
@@ -633,11 +624,12 @@ public class MainFrame extends JFrame {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(iconBarPanel).addComponent(container));
+		layout.setVerticalGroup(layout.createParallelGroup().addComponent(leftControlBar)
+				.addGroup(layout.createSequentialGroup().addComponent(container)));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(iconBarPanel).addComponent(container))
-				.addGap(Globals.MIN_GAP_SIZE));
+		layout.setHorizontalGroup(
+				layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(leftControlBar)
+						.addGroup(layout.createParallelGroup().addComponent(container)).addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	private JMenuBar initMenuBar() {
@@ -710,7 +702,7 @@ public class MainFrame extends JFrame {
 		Logging.debug(this, "saveConfigurationsSetEnabled ", b);
 
 		jMenuFileSaveConfigurations.setEnabled(b);
-		iconBarPanel.getjButtonSaveConfiguration().setEnabled(b);
+		leftControlBar.enableSaveButton(b);
 	}
 
 	private void startControlAction() {
@@ -908,10 +900,10 @@ public class MainFrame extends JFrame {
 
 		Logging.info(this, "show licensing pane");
 		setPanel(licensesPanel);
-		iconBarPanel.showReloadLicensingButton();
 	}
 
-	public void reloadLicensesAction() {
+	// TODO find a way to reload the licenses
+	private void reloadLicensesAction() {
 		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
 		new Thread() {
 			@Override

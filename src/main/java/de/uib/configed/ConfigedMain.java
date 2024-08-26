@@ -2417,7 +2417,6 @@ public class ConfigedMain implements MessagebusListener {
 	public void getSessionInfo() {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
 		setColumnSessionInfo(true);
-		mainFrame.getIconBarPanel().getjButtonSessionInfo().setEnabled(false);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
 		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());
 		infoRetriever.execute();
