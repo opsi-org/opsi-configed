@@ -812,7 +812,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	private void addTextTypeComponent(SimpleGroup sourceGroup) {
-		TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
+		TextInputField fieldText = new TextInputField(sourceGroup.element.getEnumData());
 		fieldText.setEditable(true);
 		fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
@@ -821,7 +821,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	private void addDateTypeComponent(SimpleGroup sourceGroup) {
-		TextInputField fieldDate = new TextInputField(null);
+		TextInputField fieldDate = new TextInputField();
 		fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldDate.setToolTipText("yyyy-mm-dd");
 		fieldDate.setClientSelectionDialog(this);
@@ -842,7 +842,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	private void addDoubleTypeComponent(SimpleGroup sourceGroup) {
-		TextInputField fieldDouble = new TextInputField("");
+		TextInputField fieldDouble = new TextInputField();
 		fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldDouble.setToolTipText(
 				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
