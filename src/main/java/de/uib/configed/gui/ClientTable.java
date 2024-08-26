@@ -112,8 +112,6 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		table.addKeyListener(searchPane);
 		table.addKeyListener(this);
 
-		scrollpane.getViewport().add(table);
-
 		GroupLayout layoutLeftPane = new GroupLayout(this);
 		this.setLayout(layoutLeftPane);
 
@@ -125,6 +123,20 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+	}
+
+	public void updateTable() {
+		Logging.devel(Arrays.toString(Thread.currentThread().getStackTrace()));
+		if (scrollpane.getViewport().getView() == table) {
+			// Do nothing if we already set the table as view
+			return;
+		}
+
+		if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
+			setMissingDataPanel();
+		} else {
+			scrollpane.getViewport().setView(table);
+		}
 	}
 
 	public void activateListSelectionListener() {
@@ -160,10 +172,6 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		if (!e.getValueIsAdjusting()) {
 			configedMain.actOnListSelection();
 		}
-	}
-
-	public void setDataPanel() {
-		scrollpane.getViewport().setView(table);
 	}
 
 	public void setMissingDataPanel() {

@@ -870,12 +870,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		if (mainFrame != null) {
 			mainFrame.getHostsStatusPanel().updateValues(clientCount, null, null, null);
-
-			if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
-				clientTable.setMissingDataPanel();
-			} else {
-				clientTable.setDataPanel();
-			}
+			clientTable.updateTable();
 		}
 
 		return m;
