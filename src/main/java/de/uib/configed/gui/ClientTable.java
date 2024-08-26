@@ -54,6 +54,8 @@ import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ClientTable extends JPanel implements ListSelectionListener, KeyListener {
+	public static final int REMOTE_CONTROL_FRAME_WIDTH = 800;
+
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
@@ -401,7 +403,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 
 		dialogRemoteControl.resetValue();
 
-		dialogRemoteControl.setSize(MainFrame.F_WIDTH, ConfigedMain.getMainFrame().getHeight() / 2);
+		dialogRemoteControl.setSize(REMOTE_CONTROL_FRAME_WIDTH, ConfigedMain.getMainFrame().getHeight() / 2);
 		dialogRemoteControl.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		dialogRemoteControl.setVisible(true);

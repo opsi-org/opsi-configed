@@ -78,8 +78,6 @@ import javafx.embed.swing.JFXPanel;
 public class MainFrame extends JFrame {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
 
-	public static final int F_WIDTH = 800;
-
 	private ConfigedMain configedMain;
 
 	private JMenuItem jMenuFileSaveConfigurations;
