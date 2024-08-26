@@ -7,14 +7,10 @@
 package de.uib.configed.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -139,24 +135,6 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		manager = new SelectionManager("OpsiData");
 		complexElements = new LinkedList<>();
 		init();
-
-		super.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				Logging.info(this, "ClientSelectionDialog resized");
-				// move it up and down for fixing the combobox popup vanishing
-				Component c = e.getComponent();
-				Point point = c.getLocation();
-				Point savePoint = new Point(point);
-				point.setLocation(point.getX(), point.getY() + 1.0);
-				c.setLocation(point);
-				c.revalidate();
-				c.repaint();
-				c.setLocation(savePoint);
-				c.revalidate();
-				c.repaint();
-			}
-		});
 	}
 
 	public void loadSearch(String name) {
