@@ -193,16 +193,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private void floatExternal() {
-		PanelHWInfo copyOfMe;
-		GeneralFrame externalView;
-
-		copyOfMe = new PanelHWInfo(false, configedMain);
+		PanelHWInfo copyOfMe = new PanelHWInfo(false, configedMain);
 		copyOfMe.setHardwareInfo(hwInfo);
 
 		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());
 
-		externalView = new GeneralFrame(null, treeRootTitle, false);
+		GeneralFrame externalView = new GeneralFrame(null, treeRootTitle, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setSize(this.getSize());
 		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());

@@ -1243,14 +1243,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	private void floatExternal() {
-		PanelGenEditTable copyOfMe;
-		GeneralFrame externalView;
-
-		copyOfMe = new PanelGenEditTable(title, false);
-
+		PanelGenEditTable copyOfMe = new PanelGenEditTable(title, false);
 		copyOfMe.setTableModel(tableModel);
 
-		externalView = new GeneralFrame(null, "hallo", false);
+		GeneralFrame externalView = new GeneralFrame(null, "hallo", false);
 		externalView.addPanel(copyOfMe);
 		externalView.setSize(this.getSize());
 		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());

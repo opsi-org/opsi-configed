@@ -440,14 +440,11 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void floatExternalX() {
-		PanelSWInfo copyOfMe;
-		GeneralFrame externalView;
-
-		copyOfMe = new PanelSWInfo(false);
+		PanelSWInfo copyOfMe = new PanelSWInfo(false);
 		copyOfMe.setHost(hostId);
 		copyOfMe.updateModel();
 
-		externalView = new GeneralFrame(null, title, false);
+		GeneralFrame externalView = new GeneralFrame(null, title, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setSize(this.getSize());
 		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
