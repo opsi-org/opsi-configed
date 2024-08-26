@@ -78,14 +78,14 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.LowerCaseTextField;
 import de.uib.utils.swing.TextInputField;
 
 /**
  * This dialog shows a number of options you can use to select specific clients.
  */
 public class ClientSelectionDialog extends FGeneralDialog implements ActionListener, DocumentListener {
-	private static final Pattern searchNamePattern = Pattern.compile("[\\p{javaLowerCase}\\d_-]*");
+	private static final Pattern searchNamePattern = Pattern.compile("[\\p{Alpha}\\d_-]*",
+			Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int FRAME_WIDTH = 750;
 	private static final int FRAME_HEIGHT = 650;
@@ -174,7 +174,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		additionalPane.setLayout(additionalLayout);
 		additionalPane.setMinimumSize(new Dimension(200, 200));
 
-		saveNameField = new LowerCaseTextField();
+		saveNameField = new JTextField();
 		saveNameField.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
 
 		saveDescriptionField = new JTextField();
