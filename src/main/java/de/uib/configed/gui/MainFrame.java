@@ -31,13 +31,9 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
@@ -76,8 +72,6 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
 public class MainFrame extends JFrame {
-	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
-
 	private ConfigedMain configedMain;
 
 	private JMenuItem jMenuFileSaveConfigurations;
@@ -86,7 +80,8 @@ public class MainFrame extends JFrame {
 
 	private LeftControlBar leftControlBar;
 
-	private JSplitPane configurationPanel;
+	private MainPanelManager mainPanelManager;
+
 	private Dashboard dashboard;
 	private LicensingInfoPanel licensingInfoPanel;
 	private HealthCheckPanel healthCheckPanel;
@@ -101,36 +96,21 @@ public class MainFrame extends JFrame {
 
 	private JMenuItem jMenuShowDialogs;
 
-	private TabbedConfigPanes tabbedPaneConfigPanes;
-
-	private HostsStatusPanel statusPane;
-
 	private ClientTable clientTable;
 
 	private GlassPane glassPane;
 
-	private DepotListPresenter depotListPresenter;
-	private ClientTree clientTree;
-	private ProductTree productTree;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public MainFrame(ConfigedMain configedMain, ClientTable panelClientlist, DepotsList depotsList,
-			ClientTree clientTree, ProductTree productTree) {
+	public MainFrame(ConfigedMain configedMain, ClientTable clientTable, DepotsList depotsList, ClientTree clientTree,
+			ProductTree productTree) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-
-		this.clientTable = panelClientlist;
-
-		this.clientTree = clientTree;
-		this.productTree = productTree;
-
-		depotListPresenter = new DepotListPresenter(depotsList, configedMain);
-
+		this.clientTable = clientTable;
 		this.configedMain = configedMain;
 
-		guiInit();
+		guiInit(depotsList, clientTree, productTree);
 	}
 
 	public ClientTable getClientTable() {
@@ -142,11 +122,11 @@ public class MainFrame extends JFrame {
 	}
 
 	public TabbedConfigPanes getTabbedConfigPanes() {
-		return tabbedPaneConfigPanes;
+		return mainPanelManager.getTabbedConfigPanes();
 	}
 
 	public HostsStatusPanel getHostsStatusPanel() {
-		return statusPane;
+		return mainPanelManager.getHostsStatusPanel();
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -578,7 +558,7 @@ public class MainFrame extends JFrame {
 		setPanel(licensingInfoPanel);
 	}
 
-	private void guiInit() {
+	private void guiInit(DepotsList depotsList, ClientTree clientTree, ProductTree productTree) {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent event) {
@@ -590,10 +570,8 @@ public class MainFrame extends JFrame {
 
 		setJMenuBar(initMenuBar());
 
-		configurationPanel = initConfigurationPanel();
-		statusPane = new HostsStatusPanel();
-
 		leftControlBar = new LeftControlBar(configedMain);
+		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
 
 		setConfigurationPanel();
 
@@ -604,24 +582,10 @@ public class MainFrame extends JFrame {
 	}
 
 	public void setConfigurationPanel() {
-		getContentPane().removeAll();
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-
-		layout.setVerticalGroup(layout.createParallelGroup()
-				.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup().addComponent(configurationPanel).addComponent(statusPane)));
-
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(configurationPanel).addComponent(statusPane))
-				.addGap(Globals.MIN_GAP_SIZE));
+		showPanel(mainPanelManager.getConfigurationPanel());
 	}
 
-	public void setPanel(Container container) {
+	private void setPanel(Container container) {
 		getContentPane().removeAll();
 
 		GroupLayout layout = new GroupLayout(getContentPane());
@@ -636,6 +600,19 @@ public class MainFrame extends JFrame {
 				.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(layout.createParallelGroup().addComponent(container)).addGap(Globals.MIN_GAP_SIZE));
+	}
+
+	private void showPanel(JPanel jPanel) {
+		getContentPane().removeAll();
+
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(layout.createParallelGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jPanel));
+		layout.setHorizontalGroup(
+				layout.createSequentialGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jPanel));
 	}
 
 	private JMenuBar initMenuBar() {
@@ -659,44 +636,6 @@ public class MainFrame extends JFrame {
 		jMenuBar.add(createJMenuHelp());
 
 		return jMenuBar;
-	}
-
-	private JSplitPane initConfigurationPanel() {
-		JScrollPane scrollpaneTreeClients = new JScrollPane();
-		scrollpaneTreeClients.getViewport().add(clientTree);
-		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeClients.setPreferredSize(clientTree.getMaximumSize());
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimum() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimum());
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
-
-		Logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() ",
-				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize());
-
-		JScrollPane scrollpaneTreeProducts = new JScrollPane();
-		scrollpaneTreeProducts.getViewport().add(productTree);
-		scrollpaneTreeProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeProducts.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpaneTreeProducts.setPreferredSize(productTree.getMaximumSize());
-
-		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
-		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ClientTree"), scrollpaneTreeClients);
-		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ProductTree"),
-				scrollpaneTreeProducts);
-
-		jTabbedPaneClientSelection.setSelectedIndex(1);
-
-		tabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, this, productTree);
-		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
-				tabbedPaneConfigPanes);
-		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
-
-		return centralPane;
 	}
 
 	public void saveConfigurationsSetEnabled(boolean b) {
@@ -931,6 +870,6 @@ public class MainFrame extends JFrame {
 	}
 
 	public void rebuildDepotPopup() {
-		depotListPresenter.rebuildPopup();
+		mainPanelManager.rebuildDepotPopup();
 	}
 }
