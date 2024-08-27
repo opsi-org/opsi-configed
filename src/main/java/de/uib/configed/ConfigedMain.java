@@ -782,9 +782,9 @@ public class ConfigedMain implements MessagebusListener {
 		depotsList.setSelectedValues(oldSelectedDepots);
 	}
 
-	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
+	private static void startMainFrame(ConfigedMain configedMain, ClientTable clientTable, DepotsList depotsList,
 			ClientTree clientTree, ProductTree productTree) {
-		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, clientTree, productTree);
+		mainFrame = new MainFrame(configedMain, clientTable, depotsList, clientTree, productTree);
 		Utils.setMasterFrame(mainFrame);
 
 		// rearranging visual components
