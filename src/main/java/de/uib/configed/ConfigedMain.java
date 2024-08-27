@@ -611,7 +611,7 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 
 		case DASHBOARD:
-			mainFrame.setDashboardPanel();
+			mainFrame.showDashboard();
 			break;
 
 		case OPSI_MODULES:
@@ -623,7 +623,7 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 
 		case LICENSE_MANAGEMENT:
-			mainFrame.setLicensesManagement();
+			mainFrame.startLicensingManagement();
 			break;
 		}
 	}
@@ -631,7 +631,7 @@ public class ConfigedMain implements MessagebusListener {
 	private static void initConfigurationView(EditingTarget oldEditingTarget) {
 		if (oldEditingTarget != EditingTarget.CLIENTS && oldEditingTarget != EditingTarget.DEPOTS
 				&& oldEditingTarget != EditingTarget.SERVER) {
-			mainFrame.setConfigurationPanel();
+			mainFrame.showConfigurationPanel();
 		}
 	}
 

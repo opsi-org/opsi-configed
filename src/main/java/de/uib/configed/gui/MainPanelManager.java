@@ -16,8 +16,11 @@ import javax.swing.SwingConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.gui.licenses.LicensesPanel;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoPanel;
 import de.uib.utils.logging.Logging;
 
 public class MainPanelManager {
@@ -31,6 +34,14 @@ public class MainPanelManager {
 	private JPanel configurationPanel;
 	private TabbedConfigPanes tabbedPaneConfigPanes;
 	private HostsStatusPanel hostsStatusPanel;
+
+	private Dashboard dashboard;
+
+	private LicensingInfoPanel licensingInfoPanel;
+
+	private HealthCheckPanel healthCheckPanel;
+
+	private LicensesPanel licensesPanel;
 
 	private ConfigedMain configedMain;
 
@@ -99,6 +110,46 @@ public class MainPanelManager {
 		return configurationPanel;
 	}
 
+	public Dashboard getDashBoardPanel() {
+		Logging.info(this, "initDashboard ", dashboard);
+		if (dashboard == null) {
+			dashboard = new Dashboard(configedMain);
+		}
+
+		return dashboard;
+	}
+
+	public LicensingInfoPanel getLicensingInfoPanel() {
+		if (licensingInfoPanel == null) {
+			licensingInfoPanel = new LicensingInfoPanel();
+		}
+		return licensingInfoPanel;
+	}
+
+	public HealthCheckPanel getHealthCheckPanel() {
+		Logging.info(this, "init health check dialog ", healthCheckPanel);
+		if (healthCheckPanel == null) {
+			healthCheckPanel = new HealthCheckPanel();
+		}
+
+		return healthCheckPanel;
+	}
+
+	public LicensesPanel getLicensesPanel() {
+		if (licensesPanel == null) {
+			// show Loading pane only when something needs to be loaded from server
+			ConfigedMain.getMainFrame().activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
+
+			long startmillis = System.currentTimeMillis();
+			Logging.info(this, "initLicensesFrame start ");
+			licensesPanel = new LicensesPanel(configedMain);
+			long endmillis = System.currentTimeMillis();
+			Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
+		}
+
+		return licensesPanel;
+	}
+
 	public TabbedConfigPanes getTabbedConfigPanes() {
 		return tabbedPaneConfigPanes;
 	}
@@ -109,5 +160,34 @@ public class MainPanelManager {
 
 	public HostsStatusPanel getHostsStatusPanel() {
 		return hostsStatusPanel;
+	}
+
+	public void resetData() {
+		if (dashboard != null) {
+			dashboard.clearAllData();
+			dashboard = null;
+		}
+
+		licensingInfoPanel = null;
+		healthCheckPanel = null;
+
+		licensesPanel = null;
+	}
+
+	// TODO find a way to reload the licenses
+	private void reloadLicensesAction() {
+		ConfigedMain.getMainFrame()
+				.activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
+		new Thread() {
+			@Override
+			public void run() {
+				licensesPanel.reloadLicensesData();
+				ConfigedMain.getMainFrame().deactivateLoadingPane();
+			}
+		}.start();
+	}
+
+	public boolean checkSavedLicenses() {
+		return licensesPanel == null || licensesPanel.checkSavedLicensesPane();
 	}
 }

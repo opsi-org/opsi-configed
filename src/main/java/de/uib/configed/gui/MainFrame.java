@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -27,11 +26,11 @@ import java.util.TreeSet;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -41,9 +40,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
-import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.LicenseDisplayer;
-import de.uib.configed.gui.licenses.LicensesPanel;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.CommandWithParameters;
@@ -56,7 +53,6 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoPanel;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -82,10 +78,6 @@ public class MainFrame extends JFrame {
 
 	private MainPanelManager mainPanelManager;
 
-	private Dashboard dashboard;
-	private LicensingInfoPanel licensingInfoPanel;
-	private HealthCheckPanel healthCheckPanel;
-	private LicensesPanel licensesPanel;
 	private LicenseDisplayer licenseDisplayer;
 
 	// Inititalize it here so that we keep the reference throughout a full reload
@@ -111,6 +103,29 @@ public class MainFrame extends JFrame {
 		this.configedMain = configedMain;
 
 		guiInit(depotsList, clientTree, productTree);
+	}
+
+	private void guiInit(DepotsList depotsList, ClientTree clientTree, ProductTree productTree) {
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent event) {
+				configedMain.finishApp(true, 0);
+			}
+		});
+
+		this.setIconImage(Icons.getMainIcon());
+
+		setJMenuBar(initMenuBar());
+
+		leftControlBar = new LeftControlBar(configedMain);
+		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
+
+		showConfigurationPanel();
+
+		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
+
+		glassPane = new GlassPane();
+		setGlassPane(glassPane);
 	}
 
 	public ClientTable getClientTable() {
@@ -205,18 +220,13 @@ public class MainFrame extends JFrame {
 	}
 
 	public void resetData() {
-		licensesPanel = null;
+		mainPanelManager.resetData();
+
 		licenseDisplayer = null;
-		healthCheckPanel = null;
-		if (dashboard != null) {
-			dashboard.clearAllData();
-			dashboard = null;
-		}
-		licensingInfoPanel = null;
 	}
 
 	public boolean checkSaveLicenses() {
-		boolean checkSavedLicensesFrame = licensesPanel == null || licensesPanel.checkSavedLicensesPane();
+		boolean checkSavedLicensesFrame = mainPanelManager.checkSavedLicenses();
 
 		if (!checkSavedLicensesFrame) {
 			configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
@@ -532,87 +542,29 @@ public class MainFrame extends JFrame {
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 	}
 
-	public void setDashboardPanel() {
-		Logging.info(this, "initDashboard ", dashboard);
-		if (dashboard == null) {
-			dashboard = new Dashboard(configedMain);
-		}
-
-		setPanel(dashboard);
+	public void showDashboard() {
+		showPanel(mainPanelManager.getDashBoardPanel());
 	}
 
-	public void setHealthCheckPanel() {
-		Logging.info(this, "init health check dialog ", healthCheckPanel);
-		if (healthCheckPanel == null) {
-			healthCheckPanel = new HealthCheckPanel();
-		}
-
-		setPanel(healthCheckPanel);
+	public void showHealthCheckPanel() {
+		showPanel(mainPanelManager.getHealthCheckPanel());
 	}
 
-	private void callOpsiLicensingInfo() {
-		if (licensingInfoPanel == null) {
-			licensingInfoPanel = new LicensingInfoPanel();
-		}
-
-		setPanel(licensingInfoPanel);
-	}
-
-	private void guiInit(DepotsList depotsList, ClientTree clientTree, ProductTree productTree) {
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent event) {
-				configedMain.finishApp(true, 0);
-			}
-		});
-
-		this.setIconImage(Icons.getMainIcon());
-
-		setJMenuBar(initMenuBar());
-
-		leftControlBar = new LeftControlBar(configedMain);
-		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
-
-		setConfigurationPanel();
-
-		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
-
-		glassPane = new GlassPane();
-		setGlassPane(glassPane);
-	}
-
-	public void setConfigurationPanel() {
+	public void showConfigurationPanel() {
 		showPanel(mainPanelManager.getConfigurationPanel());
 	}
 
-	private void setPanel(Container container) {
-		getContentPane().removeAll();
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-
-		layout.setVerticalGroup(layout
-				.createParallelGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup().addComponent(container)));
-
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(container)).addGap(Globals.MIN_GAP_SIZE));
-	}
-
-	private void showPanel(JPanel jPanel) {
+	private void showPanel(JComponent panel) {
 		getContentPane().removeAll();
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
 		layout.setVerticalGroup(layout.createParallelGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jPanel));
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(panel));
 		layout.setHorizontalGroup(
 				layout.createSequentialGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(jPanel));
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(panel));
 	}
 
 	private JMenuBar initMenuBar() {
@@ -778,24 +730,21 @@ public class MainFrame extends JFrame {
 
 			f.setVisible(true);
 		} else {
-			callOpsiLicensingInfo();
+			showPanel(mainPanelManager.getLicensingInfoPanel());
 		}
 	}
 
-	public void setLicensesManagement() {
-		// show Loading pane only when something needs to be loaded from server
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)
-				&& licensesPanel == null) {
-			activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
-		}
+	public void startLicensingManagement() {
+		Logging.info(this, "startLicensingManagement called");
+
 		new Thread() {
 			@Override
 			public void run() {
-				Logging.info(this, "handleLicensesManagementRequest called");
 				persistenceController.getModuleDataService().retrieveOpsiModules();
 
 				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
-					toggleLicensesFrame();
+					Logging.info(this, "show licensing pane");
+					showPanel(mainPanelManager.getLicensesPanel());
 				} else {
 					FOpsiLicenseMissingText
 							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
@@ -816,14 +765,6 @@ public class MainFrame extends JFrame {
 		}.start();
 	}
 
-	private void initLicensesFrame() {
-		long startmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicensesFrame start ");
-		licensesPanel = new LicensesPanel(configedMain);
-		long endmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
-	}
-
 	private void showLicenseDisplayer() {
 		if (licenseDisplayer == null) {
 			try {
@@ -838,35 +779,10 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	public void toggleLicensesFrame() {
-		if (licensesPanel == null) {
-			initLicensesFrame();
-		}
-
-		Logging.info(this, "show licensing pane");
-		setPanel(licensesPanel);
-	}
-
-	// TODO find a way to reload the licenses
-	private void reloadLicensesAction() {
-		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
-		new Thread() {
-			@Override
-			public void run() {
-				licensesPanel.reloadLicensesData();
-				deactivateLoadingPane();
-			}
-		}.start();
-	}
-
 	public void instancesChanged(Set<?> instances) {
 		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
 		jMenuShowDialogs.setEnabled(existJDialogInstances);
-	}
-
-	public LicensingInfoPanel getLicensingInfoPanel() {
-		return licensingInfoPanel;
 	}
 
 	public void rebuildDepotPopup() {
