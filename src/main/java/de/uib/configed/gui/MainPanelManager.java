@@ -101,19 +101,17 @@ public class MainPanelManager {
 
 		hostsStatusPanel = new HostsStatusPanel();
 
-		JToolBar controlBar = topToolBarManager.getConfigurationToolBar();
-
 		JPanel jPanel = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(jPanel);
 		jPanel.setLayout(groupLayout);
 
-		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(controlBar)
-				.addComponent(jSplitPane).addComponent(hostsStatusPanel));
+		groupLayout.setVerticalGroup(
+				groupLayout.createSequentialGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
 
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(controlBar)
-				.addComponent(jSplitPane).addComponent(hostsStatusPanel));
+		groupLayout.setHorizontalGroup(
+				groupLayout.createParallelGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
 
-		return jPanel;
+		return createPanel(jPanel, topToolBarManager.getConfigurationToolBar());
 	}
 
 	public JPanel getConfigurationPanel() {
@@ -143,7 +141,7 @@ public class MainPanelManager {
 		Logging.info(this, "init health check ", healthCheck);
 		if (healthCheckPanel == null) {
 			healthCheck = new HealthCheck();
-			healthCheckPanel = createPanel(healthCheck, new JToolBar());
+			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckToolBar(healthCheck));
 		}
 
 		return healthCheckPanel;

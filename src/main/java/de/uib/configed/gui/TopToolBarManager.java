@@ -21,32 +21,13 @@ import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utils.Icons;
 
 public class TopToolBarManager {
-	private JToolBar configurationToolBar;
-
-	OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private ConfigedMain configedMain;
 
 	public TopToolBarManager(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
-
-		initConfigurationToolBar();
-	}
-
-	private void initConfigurationToolBar() {
-		JButton addClientButton = new JButton(Icons.getIntellijIcon("add"));
-		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
-		addClientButton.addActionListener(event -> configedMain.callNewClientDialog());
-		addClientButton.setEnabled(!persistenceController.getConfigDataService().getDisabledClientMenuEntries()
-				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT));
-
-		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search"));
-		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		clientSearchButton.addActionListener(event -> configedMain.callClientSelectionDialog());
-
-		configurationToolBar = new JToolBar();
-		configurationToolBar.add(addClientButton);
-		configurationToolBar.add(clientSearchButton);
 	}
 
 	public JToolBar getOpsiLicensingToolBar(OpsiLicensing opsiLicensing) {
@@ -63,7 +44,32 @@ public class TopToolBarManager {
 		return toolBar;
 	}
 
+	public JToolBar getHealthCheckToolBar(HealthCheck healthCheck) {
+		JButton downloadButton = new JButton(Icons.getIntellijIcon("download"));
+		downloadButton.setToolTipText(Configed.getResourceValue("download"));
+		downloadButton.addActionListener(actionEvent -> healthCheck.saveAsZip());
+
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(downloadButton);
+
+		return jToolBar;
+	}
+
 	public JToolBar getConfigurationToolBar() {
-		return configurationToolBar;
+		JButton addClientButton = new JButton(Icons.getIntellijIcon("add"));
+		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
+		addClientButton.addActionListener(event -> configedMain.callNewClientDialog());
+		addClientButton.setEnabled(!persistenceController.getConfigDataService().getDisabledClientMenuEntries()
+				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT));
+
+		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search"));
+		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
+		clientSearchButton.addActionListener(event -> configedMain.callClientSelectionDialog());
+
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(addClientButton);
+		jToolBar.add(clientSearchButton);
+
+		return jToolBar;
 	}
 }
