@@ -562,9 +562,10 @@ public class MainFrame extends JFrame {
 
 		layout.setVerticalGroup(layout.createParallelGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(panel));
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(panel));
+		layout.setHorizontalGroup(layout
+				.createSequentialGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(panel).addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	private JMenuBar initMenuBar() {
