@@ -195,8 +195,9 @@ public class MainPanelManager {
 
 	public void resetData() {
 		if (dashboard != null) {
+			// We need to clear all data, otherwise they will be kept
 			dashboard.clearAllData();
-			dashboard = null;
+			dashboardPanel = null;
 		}
 
 		licensingInfoPanel = null;
