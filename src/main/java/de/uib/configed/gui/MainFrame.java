@@ -118,7 +118,7 @@ public class MainFrame extends JFrame {
 		setJMenuBar(initMenuBar());
 
 		leftControlBar = new LeftControlBar(configedMain);
-		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
+		mainPanelManager = new MainPanelManager(configedMain, depotsList, clientTree, productTree);
 
 		showConfigurationPanel();
 
@@ -547,11 +547,11 @@ public class MainFrame extends JFrame {
 	}
 
 	public void showHealthCheckPanel() {
-		showPanel(mainPanelManager.getHealthCheck());
+		showPanel(mainPanelManager.getHealthCheckPanel());
 	}
 
 	public void showConfigurationPanel() {
-		showPanel(mainPanelManager.getConfigurationPanel());
+		showPanel(mainPanelManager.getConfigurationPanel(this));
 	}
 
 	private void showPanel(JComponent panel) {
@@ -745,7 +745,7 @@ public class MainFrame extends JFrame {
 
 				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 					Logging.info(this, "show licensing pane");
-					showPanel(mainPanelManager.getLicenseManagement());
+					showPanel(mainPanelManager.getLicenseManagementPanel());
 				} else {
 					FOpsiLicenseMissingText
 							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));

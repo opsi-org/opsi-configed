@@ -33,7 +33,6 @@ public class MainPanelManager {
 	private ClientTree clientTree;
 	private ProductTree productTree;
 
-	private JPanel configurationPanel;
 	private TabbedConfigPanes tabbedPaneConfigPanes;
 	private HostsStatusPanel hostsStatusPanel;
 
@@ -52,8 +51,8 @@ public class MainPanelManager {
 
 	private ConfigedMain configedMain;
 
-	public MainPanelManager(ConfigedMain configedMain, MainFrame mainFrame, DepotsList depotsList,
-			ClientTree clientTree, ProductTree productTree) {
+	public MainPanelManager(ConfigedMain configedMain, DepotsList depotsList, ClientTree clientTree,
+			ProductTree productTree) {
 		this.configedMain = configedMain;
 		this.clientTree = clientTree;
 		this.productTree = productTree;
@@ -61,10 +60,9 @@ public class MainPanelManager {
 		topToolBarManager = new TopToolBarManager(configedMain);
 
 		depotListPresenter = new DepotListPresenter(depotsList, configedMain);
-		configurationPanel = initConfigurationPanel(mainFrame);
 	}
 
-	private JPanel initConfigurationPanel(MainFrame mainFrame) {
+	public JPanel getConfigurationPanel(MainFrame mainFrame) {
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 		scrollpaneTreeClients.getViewport().add(clientTree);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -114,10 +112,6 @@ public class MainPanelManager {
 		return createPanel(jPanel, topToolBarManager.getConfigurationToolBar());
 	}
 
-	public JPanel getConfigurationPanel() {
-		return configurationPanel;
-	}
-
 	public JPanel getDashBoardPanel() {
 		Logging.info(this, "initDashboardpanel");
 		if (dashboardPanel == null) {
@@ -137,7 +131,7 @@ public class MainPanelManager {
 		return licensingInfoPanel;
 	}
 
-	public JPanel getHealthCheck() {
+	public JPanel getHealthCheckPanel() {
 		Logging.info(this, "init health check ", healthCheck);
 		if (healthCheckPanel == null) {
 			healthCheck = new HealthCheck();
@@ -147,7 +141,7 @@ public class MainPanelManager {
 		return healthCheckPanel;
 	}
 
-	public JPanel getLicenseManagement() {
+	public JPanel getLicenseManagementPanel() {
 		if (licenseManagement == null) {
 			// show Loading pane only when something needs to be loaded from server
 			ConfigedMain.getMainFrame().activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
