@@ -8,6 +8,7 @@ package de.uib.configed.gui;
 
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -18,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.tree.ClientTree;
@@ -109,14 +111,14 @@ public class MainPanelManager {
 		groupLayout.setHorizontalGroup(
 				groupLayout.createParallelGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
 
-		return createPanel(jPanel, topToolBarManager.getConfigurationToolBar());
+		return createPanel(jPanel, topToolBarManager.getConfigurationToolBar(), "?");
 	}
 
 	public JPanel getDashBoardPanel() {
 		Logging.info(this, "initDashboardpanel");
 		if (dashboardPanel == null) {
 			dashboard = new Dashboard(configedMain);
-			dashboardPanel = createPanel(dashboard, new JToolBar());
+			dashboardPanel = createPanel(dashboard, new JToolBar(), Configed.getResourceValue("Dashboard.title"));
 		}
 
 		return dashboardPanel;
@@ -125,7 +127,8 @@ public class MainPanelManager {
 	public JPanel getOpsiLicensingPanel() {
 		if (licensingInfoPanel == null) {
 			OpsiLicensing opsiLicensing = new OpsiLicensing();
-			licensingInfoPanel = createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingToolBar(opsiLicensing));
+			licensingInfoPanel = createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingToolBar(opsiLicensing),
+					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		}
 
 		return licensingInfoPanel;
@@ -135,7 +138,8 @@ public class MainPanelManager {
 		Logging.info(this, "init health check ", healthCheck);
 		if (healthCheckPanel == null) {
 			healthCheck = new HealthCheck();
-			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckToolBar(healthCheck));
+			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckToolBar(healthCheck),
+					Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		}
 
 		return healthCheckPanel;
@@ -151,19 +155,28 @@ public class MainPanelManager {
 			long endmillis = System.currentTimeMillis();
 			Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
 
-			licenseManagementPanel = createPanel(licenseManagement, new JToolBar());
+			licenseManagementPanel = createPanel(licenseManagement, new JToolBar(),
+					Configed.getResourceValue("MainFrame.labelLicenses"));
 		}
 
 		return licenseManagementPanel;
 	}
 
-	private static JPanel createPanel(JComponent component, JToolBar toolBar) {
+	private static JPanel createPanel(JComponent component, JToolBar toolBar, String title) {
+		JLabel titleLabel = new JLabel(title);
+
 		JPanel panel = new JPanel();
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(toolBar).addComponent(component));
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(toolBar).addComponent(component));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGroup(
+				layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(toolBar).addComponent(titleLabel))
+				.addComponent(component));
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup().addComponent(toolBar)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(titleLabel)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
+				.addComponent(component));
 
 		return panel;
 	}
