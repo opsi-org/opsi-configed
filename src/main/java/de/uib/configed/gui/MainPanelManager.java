@@ -130,10 +130,10 @@ public class MainPanelManager {
 		return dashboardPanel;
 	}
 
-	public JPanel getLicensingInfoPanel() {
+	public JPanel getOpsiLicensingPanel() {
 		if (licensingInfoPanel == null) {
 			OpsiLicensing opsiLicensing = new OpsiLicensing();
-			licensingInfoPanel = createPanel(opsiLicensing, new JToolBar());
+			licensingInfoPanel = createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingToolBar(opsiLicensing));
 		}
 
 		return licensingInfoPanel;

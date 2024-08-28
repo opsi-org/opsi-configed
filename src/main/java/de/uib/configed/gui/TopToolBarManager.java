@@ -6,11 +6,15 @@
 
 package de.uib.configed.gui;
 
+import java.awt.event.ActionEvent;
+
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -43,6 +47,20 @@ public class TopToolBarManager {
 		configurationToolBar = new JToolBar();
 		configurationToolBar.add(addClientButton);
 		configurationToolBar.add(clientSearchButton);
+	}
+
+	public JToolBar getOpsiLicensingToolBar(OpsiLicensing opsiLicensing) {
+		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh"));
+		reloadButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
+		reloadButton.addActionListener((ActionEvent actionEvent) -> {
+			LicensingInfoMap.requestRefresh();
+			opsiLicensing.reload();
+		});
+
+		JToolBar toolBar = new JToolBar();
+		toolBar.add(reloadButton);
+
+		return toolBar;
 	}
 
 	public JToolBar getConfigurationToolBar() {

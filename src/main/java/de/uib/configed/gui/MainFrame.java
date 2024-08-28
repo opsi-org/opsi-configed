@@ -731,7 +731,7 @@ public class MainFrame extends JFrame {
 
 			f.setVisible(true);
 		} else {
-			showPanel(mainPanelManager.getLicensingInfoPanel());
+			showPanel(mainPanelManager.getOpsiLicensingPanel());
 		}
 	}
 
