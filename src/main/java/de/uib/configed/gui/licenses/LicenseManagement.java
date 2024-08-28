@@ -38,7 +38,7 @@ import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
 
-public class LicensesPanel extends JTabbedPane {
+public class LicenseManagement extends JTabbedPane {
 	private List<LicensesTabStatus> tabOrder;
 
 	private Map<LicensesTabStatus, MultiTablePanel> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
@@ -59,7 +59,7 @@ public class LicensesPanel extends JTabbedPane {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public LicensesPanel(ConfigedMain configedMain) {
+	public LicenseManagement(ConfigedMain configedMain) {
 		super(SwingConstants.TOP);
 
 		this.configedMain = configedMain;

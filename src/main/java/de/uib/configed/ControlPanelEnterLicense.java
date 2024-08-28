@@ -16,7 +16,7 @@ import java.util.TreeSet;
 import javax.swing.JMenuItem;
 import javax.swing.table.TableColumn;
 
-import de.uib.configed.gui.licenses.LicensesPanel;
+import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelEnterLicense;
 import de.uib.configed.type.licenses.LicenseEntry;
@@ -42,9 +42,9 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
-	private LicensesPanel licensesPane;
+	private LicenseManagement licensesPane;
 
-	public ControlPanelEnterLicense(ConfigedMain configedMain, LicensesPanel licensesPane) {
+	public ControlPanelEnterLicense(ConfigedMain configedMain, LicenseManagement licensesPane) {
 		thePanel = new PanelEnterLicense(this);
 		this.configedMain = configedMain;
 		this.licensesPane = licensesPane;

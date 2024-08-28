@@ -547,7 +547,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void showHealthCheckPanel() {
-		showPanel(mainPanelManager.getHealthCheckPanel());
+		showPanel(mainPanelManager.getHealthCheck());
 	}
 
 	public void showConfigurationPanel() {
@@ -745,7 +745,7 @@ public class MainFrame extends JFrame {
 
 				if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LICENSE_MANAGEMENT)) {
 					Logging.info(this, "show licensing pane");
-					showPanel(mainPanelManager.getLicensesPanel());
+					showPanel(mainPanelManager.getLicenseManagement());
 				} else {
 					FOpsiLicenseMissingText
 							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));

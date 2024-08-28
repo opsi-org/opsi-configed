@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import javax.swing.GroupLayout;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -18,10 +19,10 @@ import javax.swing.SwingConstants;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.dashboard.Dashboard;
-import de.uib.configed.gui.licenses.LicensesPanel;
+import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoPanel;
+import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.utils.logging.Logging;
 
 public class MainPanelManager {
@@ -36,13 +37,16 @@ public class MainPanelManager {
 	private TabbedConfigPanes tabbedPaneConfigPanes;
 	private HostsStatusPanel hostsStatusPanel;
 
+	private JPanel dashboardPanel;
 	private Dashboard dashboard;
 
-	private LicensingInfoPanel licensingInfoPanel;
+	private JPanel licensingInfoPanel;
 
-	private HealthCheckPanel healthCheckPanel;
+	private JPanel healthCheckPanel;
+	private HealthCheck healthCheck;
 
-	private LicensesPanel licensesPanel;
+	private JPanel licenseManagementPanel;
+	private LicenseManagement licenseManagement;
 
 	private TopToolBarManager topToolBarManager;
 
@@ -116,44 +120,60 @@ public class MainPanelManager {
 		return configurationPanel;
 	}
 
-	public Dashboard getDashBoardPanel() {
-		Logging.info(this, "initDashboard ", dashboard);
-		if (dashboard == null) {
+	public JPanel getDashBoardPanel() {
+		Logging.info(this, "initDashboardpanel");
+		if (dashboardPanel == null) {
 			dashboard = new Dashboard(configedMain);
+			dashboardPanel = createPanel(dashboard, new JToolBar());
 		}
 
-		return dashboard;
+		return dashboardPanel;
 	}
 
-	public LicensingInfoPanel getLicensingInfoPanel() {
+	public JPanel getLicensingInfoPanel() {
 		if (licensingInfoPanel == null) {
-			licensingInfoPanel = new LicensingInfoPanel();
+			OpsiLicensing opsiLicensing = new OpsiLicensing();
+			licensingInfoPanel = createPanel(opsiLicensing, new JToolBar());
 		}
+
 		return licensingInfoPanel;
 	}
 
-	public HealthCheckPanel getHealthCheckPanel() {
-		Logging.info(this, "init health check dialog ", healthCheckPanel);
+	public JPanel getHealthCheck() {
+		Logging.info(this, "init health check ", healthCheck);
 		if (healthCheckPanel == null) {
-			healthCheckPanel = new HealthCheckPanel();
+			healthCheck = new HealthCheck();
+			healthCheckPanel = createPanel(healthCheck, new JToolBar());
 		}
 
 		return healthCheckPanel;
 	}
 
-	public LicensesPanel getLicensesPanel() {
-		if (licensesPanel == null) {
+	public JPanel getLicenseManagement() {
+		if (licenseManagement == null) {
 			// show Loading pane only when something needs to be loaded from server
 			ConfigedMain.getMainFrame().activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
-
 			long startmillis = System.currentTimeMillis();
 			Logging.info(this, "initLicensesFrame start ");
-			licensesPanel = new LicensesPanel(configedMain);
+			licenseManagement = new LicenseManagement(configedMain);
 			long endmillis = System.currentTimeMillis();
 			Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
+
+			licenseManagementPanel = createPanel(licenseManagement, new JToolBar());
 		}
 
-		return licensesPanel;
+		return licenseManagementPanel;
+	}
+
+	private static JPanel createPanel(JComponent component, JToolBar toolBar) {
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(toolBar).addComponent(component));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(toolBar).addComponent(component));
+
+		return panel;
 	}
 
 	public TabbedConfigPanes getTabbedConfigPanes() {
@@ -175,9 +195,9 @@ public class MainPanelManager {
 		}
 
 		licensingInfoPanel = null;
-		healthCheckPanel = null;
+		healthCheck = null;
 
-		licensesPanel = null;
+		licenseManagement = null;
 	}
 
 	// TODO find a way to reload the licenses
@@ -187,13 +207,13 @@ public class MainPanelManager {
 		new Thread() {
 			@Override
 			public void run() {
-				licensesPanel.reloadLicensesData();
+				licenseManagement.reloadLicensesData();
 				ConfigedMain.getMainFrame().deactivateLoadingPane();
 			}
 		}.start();
 	}
 
 	public boolean checkSavedLicenses() {
-		return licensesPanel == null || licensesPanel.checkSavedLicensesPane();
+		return licenseManagement == null || licenseManagement.checkSavedLicensesPane();
 	}
 }

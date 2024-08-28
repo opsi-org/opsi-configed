@@ -20,7 +20,7 @@ import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoPanel;
+import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
@@ -110,7 +110,7 @@ public final class Icons {
 			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
 					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!LicensingInfoPanel.isExtendedView());
+					!OpsiLicensing.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:

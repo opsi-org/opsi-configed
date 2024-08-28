@@ -35,7 +35,7 @@ import de.uib.utils.table.provider.MapSource;
 import de.uib.utils.table.provider.TableSource;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 
-public class LicensingInfoPanel extends JPanel {
+public class OpsiLicensing extends JPanel {
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
 
@@ -49,7 +49,7 @@ public class LicensingInfoPanel extends JPanel {
 	private List<String> columnNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
-	public LicensingInfoPanel() {
+	public OpsiLicensing() {
 
 		PanelGenEditTable mainPanel = initLicensingInfoPanel();
 		JPanel clientInfo = initClientInfo();
@@ -82,14 +82,14 @@ public class LicensingInfoPanel extends JPanel {
 				false) {
 			@Override
 			public void reload() {
-				Logging.info(this, " LicInfoPanelGenTable reload, reduced ", !LicensingInfoPanel.extendedView);
+				Logging.info(this, " LicInfoPanelGenTable reload, reduced ", !OpsiLicensing.extendedView);
 				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
 						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-						!LicensingInfoPanel.extendedView);
+						!OpsiLicensing.extendedView);
 				retrieveData();
 				tableSource = new MapSource(columnNames, theSourceMap, false);
 				buildModel();
@@ -251,14 +251,14 @@ public class LicensingInfoPanel extends JPanel {
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {
-		LicensingInfoPanel.extendedView = isExtendedView;
+		OpsiLicensing.extendedView = isExtendedView;
 		Logging.info("extendedView ", extendedView, ", i.e. reduced ", !extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		LicensingInfoMap.requestRefresh();
 	}
 
 	private static void showOnlyAvailableModules(boolean showOnlyAvailableModules) {
-		LicensingInfoPanel.showOnlyAvailableModules = showOnlyAvailableModules;
+		OpsiLicensing.showOnlyAvailableModules = showOnlyAvailableModules;
 		LicensingInfoMap.requestRefresh();
 	}
 

@@ -28,7 +28,7 @@ import javax.swing.table.TableColumn;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicensePool;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.gui.licenses.LicensesPanel;
+import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.gui.licenses.PanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
@@ -73,7 +73,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
 
-	private LicensesPanel licensesPane;
+	private LicenseManagement licensesPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -100,7 +100,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private Map<String, List<String>> removeKeysFromOtherLicensePool;
 
-	public ControlPanelAssignToLPools(LicensesPanel licensesPane) {
+	public ControlPanelAssignToLPools(LicenseManagement licensesPane) {
 		thePanel = new PanelAssignToLPools(this);
 		this.licensesPane = licensesPane;
 
