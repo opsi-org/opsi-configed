@@ -441,8 +441,10 @@ public class PanelSWInfo extends JPanel {
 
 	private void reload() {
 		Logging.debug(this, "reload action");
+		ConfigedMain.getMainFrame().activateLoadingCursor();
 		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 		configedMain.resetView(ViewIndex.VIEW_SOFTWARE_INFO);
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	private void floatExternalX() {
