@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
@@ -43,6 +44,8 @@ public class MainPanelManager {
 
 	private LicensesPanel licensesPanel;
 
+	private TopToolBarManager topToolBarManager;
+
 	private ConfigedMain configedMain;
 
 	public MainPanelManager(ConfigedMain configedMain, MainFrame mainFrame, DepotsList depotsList,
@@ -51,8 +54,9 @@ public class MainPanelManager {
 		this.clientTree = clientTree;
 		this.productTree = productTree;
 
-		depotListPresenter = new DepotListPresenter(depotsList, configedMain);
+		topToolBarManager = new TopToolBarManager(configedMain);
 
+		depotListPresenter = new DepotListPresenter(depotsList, configedMain);
 		configurationPanel = initConfigurationPanel(mainFrame);
 	}
 
@@ -93,15 +97,17 @@ public class MainPanelManager {
 
 		hostsStatusPanel = new HostsStatusPanel();
 
+		JToolBar controlBar = topToolBarManager.getConfigurationToolBar();
+
 		JPanel jPanel = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(jPanel);
 		jPanel.setLayout(groupLayout);
 
-		groupLayout.setVerticalGroup(
-				groupLayout.createSequentialGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
+		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(controlBar)
+				.addComponent(jSplitPane).addComponent(hostsStatusPanel));
 
-		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(controlBar)
+				.addComponent(jSplitPane).addComponent(hostsStatusPanel));
 
 		return jPanel;
 	}
