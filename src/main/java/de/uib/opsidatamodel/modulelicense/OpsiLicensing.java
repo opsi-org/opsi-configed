@@ -73,11 +73,7 @@ public class OpsiLicensing extends JPanel {
 	private PanelGenEditTable initLicensingInfoPanel() {
 		retrieveData();
 
-		licensingTable = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0,
-				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
-						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
-						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
-				false) {
+		licensingTable = new LicensingInfoPanelGenEditTable() {
 			@Override
 			public void reload() {
 				Logging.info(this, " LicInfoPanelGenTable reload, reduced ", !OpsiLicensing.extendedView);
