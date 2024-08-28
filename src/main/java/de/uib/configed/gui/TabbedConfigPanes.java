@@ -29,9 +29,6 @@ import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.tree.ProductTree;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -61,9 +58,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private ClientInfoPanel clientInfoPanel;
 
 	private JPopupMenu popupClients;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	public TabbedConfigPanes(ConfigedMain configedMain, MainFrame mainFrame, ProductTree productTree) {
 		this.configedMain = configedMain;
@@ -122,14 +116,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			return;
 		}
 
-		panelSWInfo = new PanelSWInfo(true) {
-			@Override
-			protected void reload() {
-				super.reload();
-				persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-				configedMain.resetView(ViewIndex.VIEW_SOFTWARE_INFO);
-			}
-		};
+		panelSWInfo = new PanelSWInfo(configedMain, true);
 
 		showSoftwareLogNotFound = new JPanel();
 		showSoftwareLogNotFound.add(new JLabel(Configed.getResourceValue("MainFrame.TabRequiresClientSelected")));
@@ -141,7 +128,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	private void initHardwareInfoTab() {
 		if (panelHWInfo == null) {
-			panelHWInfo = new PanelHWInfo(configedMain);
+			panelHWInfo = new PanelHWInfo(true, configedMain);
 		}
 	}
 

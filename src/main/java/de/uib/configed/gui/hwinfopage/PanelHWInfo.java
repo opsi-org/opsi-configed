@@ -96,10 +96,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelHWInfo(ConfigedMain configedMain) {
-		this(true, configedMain);
-	}
-
 	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain) {
 		this.withPopup = withPopup;
 		this.configedMain = configedMain;
