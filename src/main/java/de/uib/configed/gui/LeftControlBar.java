@@ -38,6 +38,7 @@ public class LeftControlBar extends JToolBar {
 
 	private void initOpsiIcon() {
 		JLabel opsiIconLabel = new JLabel(Icons.getOpsiIcon(32));
+		opsiIconLabel.setToolTipText(Globals.APPNAME + " " + Globals.VERSION + " (" + Globals.VERDATE + ")");
 
 		// We need here exactly 5 Pixels border so that the icon will be centered in the JToolBar
 		opsiIconLabel.setBorder(new EmptyBorder(0, 5, 0, 0));
