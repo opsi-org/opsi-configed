@@ -137,14 +137,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			return;
 		}
 
-		showLogfiles = new TabbedLogPane(configedMain) {
-			@Override
-			public void loadDocument(String logtype) {
-				super.loadDocument(logtype);
-				Logging.info(this, "loadDocument logtype ", logtype);
-				setLogFileTab(logtype);
-			}
-		};
+		showLogfiles = new TabbedLogPane(configedMain);
 
 		showLogfiles.addChangeListener((ChangeEvent e) -> {
 			Logging.debug(this, " new logfiles tabindex ", showLogfiles.getSelectedIndex());
