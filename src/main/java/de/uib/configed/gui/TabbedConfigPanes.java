@@ -140,18 +140,9 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	}
 
 	private void initHardwareInfoTab() {
-		if (panelHWInfo != null) {
-			return;
+		if (panelHWInfo == null) {
+			panelHWInfo = new PanelHWInfo(configedMain);
 		}
-
-		panelHWInfo = new PanelHWInfo(configedMain) {
-			@Override
-			protected void reload() {
-				super.reload();
-				// otherwise we get a wait cursor only in table component
-				configedMain.resetView(ViewIndex.VIEW_HARDWARE_INFO);
-			}
-		};
 	}
 
 	private void initLogTab() {

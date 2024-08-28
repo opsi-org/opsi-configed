@@ -33,6 +33,7 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.tree.IconNode;
@@ -189,7 +190,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	/** overwrite in subclasses */
 	protected void reload() {
-		Logging.debug(this, "reload action");
+		Logging.debug(this, "reload hardware info");
+		configedMain.resetView(ViewIndex.VIEW_HARDWARE_INFO);
 	}
 
 	private void floatExternal() {
