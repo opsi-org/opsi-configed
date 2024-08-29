@@ -21,6 +21,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ClientConfiguration;
+import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -40,13 +41,16 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 	private PanelGenEditTable paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
+	private DepotsList depotsList;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelProductProperties(ConfigedMain configedMain) {
+	public PanelProductProperties(ConfigedMain configedMain, DepotsList depotsList) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.configedMain = configedMain;
+		this.depotsList = depotsList;
+
 		super.addAncestorListener(this);
 
 		init();
@@ -95,7 +99,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		return new GenTableModel(null,
-				new DefaultTableProvider(new ExternalSource(columnNames, configedMain.getSelectedDepots())), -1,
+				new DefaultTableProvider(new ExternalSource(columnNames, depotsList.getSelectedValuesList())), -1,
 				paneProducts, updateCollection);
 	}
 

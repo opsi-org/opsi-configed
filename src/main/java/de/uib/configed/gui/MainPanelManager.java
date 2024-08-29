@@ -26,6 +26,8 @@ import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
 import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class MainPanelManager {
@@ -39,6 +41,7 @@ public class MainPanelManager {
 	private JTabbedPane leftTabs;
 
 	private DepotConfiguration depotConfiguration;
+	private JSplitPane depotConfigurationSplitPane;
 	private ServerConfiguration serverConfiguration;
 
 	private JPanel dashboardPanel;
@@ -55,6 +58,9 @@ public class MainPanelManager {
 	private TopToolBarManager topToolBarManager;
 
 	private ConfigedMain configedMain;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public MainPanelManager(ConfigedMain configedMain, MainFrame mainFrame, DepotsList depotsList,
 			ClientTree clientTree, ProductTree productTree) {
@@ -120,16 +126,22 @@ public class MainPanelManager {
 				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 	}
 
-	public JPanel getDepotConfigurationPanel() {
-		if (depotConfiguration == null) {
-			depotConfiguration = new DepotConfiguration(configedMain);
+	public JPanel getDepotConfigurationSplitPane() {
+		if (depotConfigurationSplitPane == null) {
+			DepotsList depotsList = new DepotsList(configedMain);
+			depotsList.setListData(persistenceController.getHostInfoCollections().getDepotNamesList());
+			depotsList.setInfo(persistenceController.getHostInfoCollections().getDepots());
+			depotConfiguration = new DepotConfiguration(configedMain, depotsList);
+
+			depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false,
+					new DepotListPresenter(depotsList, configedMain), depotConfiguration);
+
+			depotConfigurationSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
+			depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 		}
 
-		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, leftTabs, depotConfiguration);
-		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
-		jSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
-
-		return createPanel(jSplitPane, new JToolBar(), Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
+		return createPanel(depotConfigurationSplitPane, new JToolBar(),
+				Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 	}
 
 	public JPanel getServerConfigurationPanel() {

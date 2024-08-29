@@ -113,7 +113,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public enum ViewIndex {
 		VIEW_CLIENTS, VIEW_LOCALBOOT_PRODUCTS, VIEW_NETBOOT_PRODUCTS, VIEW_NETWORK_CONFIGURATION, VIEW_HARDWARE_INFO,
-		VIEW_SOFTWARE_INFO, VIEW_LOG, VIEW_PRODUCT_PROPERTIES, VIEW_HOST_PROPERTIES
+		VIEW_SOFTWARE_INFO, VIEW_LOG, VIEW_HOST_PROPERTIES
 	}
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
@@ -1474,12 +1474,6 @@ public class ConfigedMain implements MessagebusListener {
 			productTree.reInitTree();
 			refreshClientListKeepingGroup();
 		}
-
-		// When we are in the client configuration changing the depot should have no effect,
-		// this will be triggered by the selection of the client table
-		if (editingTarget == EditingTarget.DEPOTS) {
-			setViewIndex(viewIndex);
-		}
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -1742,14 +1736,6 @@ public class ConfigedMain implements MessagebusListener {
 		return mergedMap;
 	}
 
-	private void setProductPropertiesPage() {
-		Logging.debug(this, "setProductPropertiesPage");
-		mainFrame.getDepotConfiguration().getPanelProductProperties().setProductProperties();
-		depotsList.setEnabled(true);
-		depotsList.requestFocus();
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-	}
-
 	private void setHostPropertiesPage() {
 		Logging.debug(this, "setHostPropertiesPage");
 
@@ -1954,10 +1940,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		case VIEW_LOG:
 			setLogPage();
-			break;
-
-		case VIEW_PRODUCT_PROPERTIES:
-			setProductPropertiesPage();
 			break;
 
 		case VIEW_HOST_PROPERTIES:

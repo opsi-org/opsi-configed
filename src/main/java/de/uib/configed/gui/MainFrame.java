@@ -559,7 +559,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void showDepotConfiguration() {
-		showPanel(mainPanelManager.getDepotConfigurationPanel());
+		showPanel(mainPanelManager.getDepotConfigurationSplitPane());
 	}
 
 	public void showServerConfiguration() {

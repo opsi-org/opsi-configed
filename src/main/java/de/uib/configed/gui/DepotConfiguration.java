@@ -7,8 +7,11 @@
 package de.uib.configed.gui;
 
 import javax.swing.JTabbedPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -17,15 +20,19 @@ import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.utils.logging.Logging;
 
-public class DepotConfiguration extends JTabbedPane implements ChangeListener {
+public class DepotConfiguration extends JTabbedPane implements ChangeListener, ListSelectionListener {
 	private PanelHostConfig panelHostConfig;
 	private PanelHostProperties panelHostProperties;
 	private PanelProductProperties panelProductProperties;
 
 	private ConfigedMain configedMain;
+	private DepotsList depotsList;
 
-	public DepotConfiguration(ConfigedMain configedMain) {
+	public DepotConfiguration(ConfigedMain configedMain, DepotsList depotsList) {
 		this.configedMain = configedMain;
+		this.depotsList = depotsList;
+
+		depotsList.addListSelectionListener(this);
 
 		initTabs();
 
@@ -51,12 +58,17 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener {
 		return panelHostProperties;
 	}
 
-	public PanelProductProperties getPanelProductProperties() {
-		return panelProductProperties;
+	@Override
+	public void stateChanged(ChangeEvent event) {
+		updateTab();
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent event) {
+	public void valueChanged(ListSelectionEvent event) {
+		updateTab();
+	}
+
+	private void updateTab() {
 		switch (getSelectedIndex()) {
 		case 0:
 			initHostConfigTab();
@@ -65,7 +77,11 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener {
 
 		case 1:
 			initPanelPropertiesTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_PRODUCT_PROPERTIES);
+			panelProductProperties.setProductProperties();
+			depotsList.setEnabled(true);
+			depotsList.requestFocus();
+			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
 			break;
 
 		case 2:
@@ -77,7 +93,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener {
 			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in depots view");
 			break;
 		}
-
 	}
 
 	private void initHostConfigTab() {
@@ -96,7 +111,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener {
 			return;
 		}
 
-		panelProductProperties = new PanelProductProperties(configedMain);
+		panelProductProperties = new PanelProductProperties(configedMain, depotsList);
 		setComponentAt(getSelectedIndex(), panelProductProperties);
 	}
 
