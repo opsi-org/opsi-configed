@@ -35,7 +35,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -589,15 +588,18 @@ public class ConfigedMain implements MessagebusListener {
 		switch (editingTarget) {
 		case CLIENTS:
 			mainFrame.showClientConfiguration();
-			setEditingClients();
 			break;
 		case DEPOTS:
 			mainFrame.showDepotConfiguration();
-			setEditingDepots();
+
+			// Save changed data before going to new view
+			checkSaveAll(true);
 			break;
 		case SERVER:
 			mainFrame.showServerConfiguration();
-			setEditingServer();
+
+			// Save changed data before going to new view
+			checkSaveAll(true);
 			break;
 
 		case DASHBOARD:
@@ -616,32 +618,6 @@ public class ConfigedMain implements MessagebusListener {
 			mainFrame.startLicensingManagement();
 			break;
 		}
-	}
-
-	private void setEditingClients() {
-		clientTree.setEnabled(true);
-		productTree.setEnabled(true);
-		depotsList.setEnabled(true);
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-	}
-
-	private void setEditingDepots() {
-		depotsList.setEnabled(true);
-		depotsList.requestFocus();
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		clientTree.setEnabled(false);
-		productTree.setEnabled(false);
-
-		// Save changed data before going to new view
-		checkSaveAll(true);
-	}
-
-	private void setEditingServer() {
-		clientTree.setEnabled(false);
-		productTree.setEnabled(false);
-
-		// Save changed data before going to new view
-		checkSaveAll(true);
 	}
 
 	public void actOnListSelection() {
