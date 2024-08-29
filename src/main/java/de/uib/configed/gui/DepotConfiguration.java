@@ -93,6 +93,8 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 	private void updateTab() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
+		depotsList.requestFocus();
+
 		switch (getSelectedIndex()) {
 		case 0:
 			initHostConfigTab();
@@ -102,8 +104,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		case 1:
 			initPanelPropertiesTab();
 			panelProductProperties.setProductProperties();
-			depotsList.setEnabled(true);
-			depotsList.requestFocus();
 			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 			break;
@@ -154,8 +154,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 	private void setHostPropertiesPage() {
 		Logging.debug(this, "setHostPropertiesPage");
 
-		depotsList.setEnabled(true);
-		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController.getDepotDataService()
@@ -188,8 +186,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 				depotsList.getSelectedValuesList());
 		configedMain.addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
 
-		depotsList.setEnabled(true);
-		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		List<Map<String, Object>> additionalConfigs = configedMain
