@@ -18,7 +18,6 @@ import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
@@ -85,15 +84,19 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
-		updateTab();
+		if (!event.getValueIsAdjusting()) {
+			Logging.info(this, "value changed of depot selection, update tab in depot configuration");
+			updateTab();
+		}
 	}
 
 	private void updateTab() {
+		ConfigedMain.getMainFrame().activateLoadingCursor();
+
 		switch (getSelectedIndex()) {
 		case 0:
 			initHostConfigTab();
 			setHostConfigTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
 			break;
 
 		case 1:
@@ -114,6 +117,8 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in depots view");
 			break;
 		}
+
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	private void initHostConfigTab() {
