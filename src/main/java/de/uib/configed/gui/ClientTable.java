@@ -423,7 +423,7 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 			startRemoteControlForSelectedClients();
 		} else if (e.getKeyCode() == KeyEvent.VK_F10) {
 			Logging.debug(this, "keypressed: f10");
-			ConfigedMain.getMainFrame().getTabbedConfigPanes().showPopupClients();
+			ConfigedMain.getMainFrame().getClientConfiguration().showPopupClients();
 		} else {
 			// Nothing to do for all the other keys
 		}

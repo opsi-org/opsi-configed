@@ -35,8 +35,12 @@ public class MainPanelManager {
 	private ClientTree clientTree;
 	private ProductTree productTree;
 
-	private TabbedConfigPanes tabbedPaneConfigPanes;
+	private ClientConfiguration clientConfiguration;
 	private HostsStatusPanel hostsStatusPanel;
+	private JTabbedPane leftTabs;
+
+	private DepotConfiguration depotConfiguration;
+	private ServerConfiguration serverConfiguration;
 
 	private JPanel dashboardPanel;
 	private Dashboard dashboard;
@@ -53,8 +57,8 @@ public class MainPanelManager {
 
 	private ConfigedMain configedMain;
 
-	public MainPanelManager(ConfigedMain configedMain, DepotsList depotsList, ClientTree clientTree,
-			ProductTree productTree) {
+	public MainPanelManager(ConfigedMain configedMain, MainFrame mainFrame, DepotsList depotsList,
+			ClientTree clientTree, ProductTree productTree) {
 		this.configedMain = configedMain;
 		this.clientTree = clientTree;
 		this.productTree = productTree;
@@ -62,9 +66,11 @@ public class MainPanelManager {
 		topToolBarManager = new TopToolBarManager(configedMain);
 
 		depotListPresenter = new DepotListPresenter(depotsList, configedMain);
+
+		initialInitialization(mainFrame);
 	}
 
-	public JPanel getConfigurationPanel(MainFrame mainFrame) {
+	private void initialInitialization(MainFrame mainFrame) {
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 		scrollpaneTreeClients.getViewport().add(clientTree);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -86,20 +92,20 @@ public class MainPanelManager {
 		scrollpaneTreeProducts.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollpaneTreeProducts.setPreferredSize(productTree.getMaximumSize());
 
-		JTabbedPane jTabbedPaneClientSelection = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
-		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ClientTree"), scrollpaneTreeClients);
-		jTabbedPaneClientSelection.addTab(Configed.getResourceValue("MainFrame.tab_ProductTree"),
-				scrollpaneTreeProducts);
+		leftTabs = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+		leftTabs.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
+		leftTabs.addTab(Configed.getResourceValue("MainFrame.tab_ClientTree"), scrollpaneTreeClients);
+		leftTabs.addTab(Configed.getResourceValue("MainFrame.tab_ProductTree"), scrollpaneTreeProducts);
 
-		jTabbedPaneClientSelection.setSelectedIndex(1);
+		leftTabs.setSelectedIndex(1);
 
-		tabbedPaneConfigPanes = new TabbedConfigPanes(configedMain, mainFrame, productTree);
-		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jTabbedPaneClientSelection,
-				tabbedPaneConfigPanes);
-		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
-
+		clientConfiguration = new ClientConfiguration(configedMain, mainFrame, productTree);
 		hostsStatusPanel = new HostsStatusPanel();
+	}
+
+	public JPanel getClientConfigurationPanel() {
+		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, leftTabs, clientConfiguration);
+		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
 		JPanel jPanel = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(jPanel);
@@ -111,7 +117,26 @@ public class MainPanelManager {
 		groupLayout.setHorizontalGroup(
 				groupLayout.createParallelGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
 
-		return createPanel(jPanel, topToolBarManager.getConfigurationToolBar(), "?");
+		return createPanel(jPanel, topToolBarManager.getConfigurationToolBar(),
+				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+	}
+
+	public JPanel getDepotConfigurationPanel() {
+		if (depotConfiguration == null) {
+			depotConfiguration = new DepotConfiguration(configedMain);
+		}
+
+		return createPanel(depotConfiguration, new JToolBar(),
+				Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
+	}
+
+	public JPanel getServerConfigurationPanel() {
+		if (serverConfiguration == null) {
+			serverConfiguration = new ServerConfiguration(configedMain);
+		}
+
+		return createPanel(serverConfiguration, new JToolBar(),
+				Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 	}
 
 	public JPanel getDashBoardPanel() {
@@ -181,8 +206,12 @@ public class MainPanelManager {
 		return panel;
 	}
 
-	public TabbedConfigPanes getTabbedConfigPanes() {
-		return tabbedPaneConfigPanes;
+	public ClientConfiguration getClientConfiguration() {
+		return clientConfiguration;
+	}
+
+	public DepotConfiguration getDepotConfiguration() {
+		return depotConfiguration;
 	}
 
 	public void rebuildDepotPopup() {

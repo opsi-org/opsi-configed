@@ -20,11 +20,9 @@ import javax.swing.event.ChangeListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
-import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
@@ -33,7 +31,7 @@ import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
-public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
+public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public static final float DIVIDER_LOCATION = 0.8F;
 
 	private ConfigedMain configedMain;
@@ -43,8 +41,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 	private PanelProductSettings panelLocalbootProductSettings;
 	private PanelProductSettings panelNetbootProductSettings;
 	private PanelHostConfig panelHostConfig;
-	private PanelHostProperties panelHostProperties;
-	private PanelProductProperties panelProductProperties;
 
 	private PanelSWInfo panelSWInfo;
 	private JPanel showSoftwareLogNotFound;
@@ -59,12 +55,14 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	private JPopupMenu popupClients;
 
-	public TabbedConfigPanes(ConfigedMain configedMain, MainFrame mainFrame, ProductTree productTree) {
+	public ClientConfiguration(ConfigedMain configedMain, MainFrame mainFrame, ProductTree productTree) {
 		this.configedMain = configedMain;
 		this.mainFrame = mainFrame;
 		this.productTree = productTree;
 
 		init();
+
+		super.addChangeListener(this);
 	}
 
 	public PanelProductSettings getPanelLocalbootProductSettings() {
@@ -77,14 +75,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	public PanelHostConfig getPanelHostConfig() {
 		return panelHostConfig;
-	}
-
-	public PanelHostProperties getPanelHostProperties() {
-		return panelHostProperties;
-	}
-
-	public PanelProductProperties getPanelProductProperties() {
-		return panelProductProperties;
 	}
 
 	public ClientInfoPanel getClientInfoPanel() {
@@ -108,7 +98,19 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 		productTree.setPanels(panelLocalbootProductSettings, panelNetbootProductSettings);
 
-		initView(EditingTarget.CLIENTS, 0);
+		addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), panelClientSelection);
+
+		addTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), panelLocalbootProductSettings);
+
+		addTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), panelNetbootProductSettings);
+
+		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
+
+		addTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null);
+
+		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), showSoftwareLogNotFound);
+
+		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), showLogfiles);
 	}
 
 	private void initSoftWareInfoTab() {
@@ -130,6 +132,8 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		if (panelHWInfo == null) {
 			panelHWInfo = new PanelHWInfo(true, configedMain);
 		}
+
+		setComponentAt(getSelectedIndex(), panelHWInfo);
 	}
 
 	private void initLogTab() {
@@ -160,25 +164,6 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
-	}
-
-	private void initPanelPropertiesTab() {
-		if (panelProductProperties != null) {
-			return;
-		}
-
-		panelProductProperties = new PanelProductProperties(configedMain);
-		setComponentAt(getSelectedIndex(), panelProductProperties);
-	}
-
-	private void initHostPropertiesTab() {
-		if (panelHostProperties != null) {
-			return;
-		}
-
-		panelHostProperties = new PanelHostProperties();
-		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
-		setComponentAt(getSelectedIndex(), panelHostProperties);
 	}
 
 	public void setSoftwareAudit() {
@@ -254,39 +239,7 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		// report state change request to
-		int visualIndex = getSelectedIndex();
-
-		Logging.info(this, "stateChanged of tabbedPane, visualIndex ", visualIndex);
-		if (visualIndex == -1) {
-			Logging.info(this, "Won't set view index, since selected visualViewIndex is -1");
-			return;
-		}
-
-		// report state change request to controller
-		switch (ConfigedMain.getEditingTarget()) {
-		case CLIENTS:
-			setClientsViewIndex(visualIndex);
-			break;
-
-		case DEPOTS:
-			setDepotsViewIndex(visualIndex);
-			break;
-
-		case SERVER:
-			// Here we only have one tab		
-			initHostConfigTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
-			break;
-
-		default:
-			Logging.warning(this, "Unexpected editing target", ConfigedMain.getEditingTarget());
-			break;
-		}
-	}
-
-	private void setClientsViewIndex(int visualViewIndex) {
-		switch (visualViewIndex) {
+		switch (getSelectedIndex()) {
 		case 0:
 			configedMain.setViewIndex(ViewIndex.VIEW_CLIENTS);
 			break;
@@ -320,92 +273,8 @@ public class TabbedConfigPanes extends JTabbedPane implements ChangeListener {
 			break;
 
 		default:
-			Logging.warning(this, "unexpected visualViewIndex ", visualViewIndex, " in clients view");
+			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
 			break;
 		}
-	}
-
-	private void setDepotsViewIndex(int visualViewIndex) {
-		switch (visualViewIndex) {
-		case 0:
-			initHostConfigTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
-			break;
-
-		case 1:
-			initPanelPropertiesTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_PRODUCT_PROPERTIES);
-			break;
-
-		case 2:
-			initHostPropertiesTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_HOST_PROPERTIES);
-			break;
-
-		default:
-			Logging.warning(this, "unexpected visualViewIndex ", visualViewIndex, " in depots view");
-			break;
-		}
-	}
-
-	public void initView(EditingTarget editingTarget, int view) {
-		Logging.debug(this, "initView for editing target ", editingTarget, "and view", view);
-
-		removeChangeListener(this);
-		removeAll();
-
-		switch (editingTarget) {
-		case CLIENTS:
-			addClientTabs();
-			break;
-
-		case DEPOTS:
-			addDepotTabs();
-			break;
-
-		case SERVER:
-			addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
-			break;
-
-		default:
-			// Do nothing when we are not in one of these controls
-			break;
-		}
-
-		setSelectedIndex(view);
-
-		addChangeListener(this);
-
-		fireStateChanged();
-	}
-
-	private void addClientTabs() {
-		addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), panelClientSelection);
-
-		addTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), panelLocalbootProductSettings);
-
-		addTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), panelNetbootProductSettings);
-
-		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
-
-		addTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog"), null);
-
-		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), showSoftwareLogNotFound);
-
-		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), showLogfiles);
-	}
-
-	private void addDepotTabs() {
-		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
-
-		addTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"), panelProductProperties);
-		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				" index ", indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
-
-		addTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), panelHostProperties);
-
-		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.jPanel_HostProperties"), " index ",
-				indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
-
 	}
 }

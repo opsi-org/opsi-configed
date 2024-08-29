@@ -20,7 +20,7 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.TabbedConfigPanes;
+import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -212,7 +212,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 	@Override
 	public void ancestorMoved(AncestorEvent event) {
-		setDividerLocation(TabbedConfigPanes.DIVIDER_LOCATION);
+		setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
 	}
 
 	@Override

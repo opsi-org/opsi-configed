@@ -202,10 +202,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private ViewIndex viewIndex = ViewIndex.VIEW_CLIENTS;
 
-	// These are the default views for client and depot view
-	private int saveClientsViewIndex;
-	private int saveDepotsViewIndex = 1;
-
 	private Map<String, String> sessionInfo = new HashMap<>();
 
 	private Map<String, String> logfiles = new HashMap<>();
@@ -280,8 +276,8 @@ public class ConfigedMain implements MessagebusListener {
 		startMainFrame(this, clientTable, depotsList, clientTree, productTree);
 
 		updateManager = new InstallationStateUpdateManager(this,
-				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getTableProducts(),
-				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().getTableProducts());
+				mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getTableProducts(),
+				mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getTableProducts());
 
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
@@ -302,7 +298,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.debug(this, "initialTreeActivation");
 
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
+		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 	}
 
 	private List<String> readLocallySavedServerNames() {
@@ -591,22 +587,19 @@ public class ConfigedMain implements MessagebusListener {
 			return;
 		}
 
-		// When setting the new editingTarget, the methods already need to know the new editing target
-		// So whe have to set it now
-		EditingTarget oldEditingTarget = editingTarget;
 		editingTarget = newEditingTarget;
 
 		switch (editingTarget) {
 		case CLIENTS:
-			initConfigurationView(oldEditingTarget);
+			mainFrame.showClientConfiguration();
 			setEditingClients();
 			break;
 		case DEPOTS:
-			initConfigurationView(oldEditingTarget);
+			mainFrame.showDepotConfiguration();
 			setEditingDepots();
 			break;
 		case SERVER:
-			initConfigurationView(oldEditingTarget);
+			mainFrame.showServerConfiguration();
 			setEditingServer();
 			break;
 
@@ -628,20 +621,11 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	private static void initConfigurationView(EditingTarget oldEditingTarget) {
-		if (oldEditingTarget != EditingTarget.CLIENTS && oldEditingTarget != EditingTarget.DEPOTS
-				&& oldEditingTarget != EditingTarget.SERVER) {
-			mainFrame.showConfigurationPanel();
-		}
-	}
-
 	private void setEditingClients() {
 		clientTree.setEnabled(true);
 		productTree.setEnabled(true);
 		depotsList.setEnabled(true);
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.CLIENTS, saveClientsViewIndex);
 	}
 
 	private void setEditingDepots() {
@@ -653,8 +637,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		// Save changed data before going to new view
 		checkSaveAll(true);
-
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.DEPOTS, saveDepotsViewIndex);
 	}
 
 	private void setEditingServer() {
@@ -663,8 +645,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		// Save changed data before going to new view
 		checkSaveAll(true);
-
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.SERVER, 0);
 	}
 
 	public void actOnListSelection() {
@@ -687,7 +667,7 @@ public class ConfigedMain implements MessagebusListener {
 
 			updateHostInfo();
 
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
+			mainFrame.getClientConfiguration().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
 					selectedClients.isEmpty());
 
 			// initialize the following method
@@ -710,9 +690,9 @@ public class ConfigedMain implements MessagebusListener {
 			clientInDepot = depotsAdded.toString();
 
 			if (selectedClients.size() == 1) {
-				mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientID(selectedClients.get(0));
+				mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
 			} else {
-				mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientID("");
+				mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
 			}
 
 			hostInfo.resetGui();
@@ -1319,8 +1299,8 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private static void clearListEditors() {
-		mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().clearListEditors();
-		mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().clearListEditors();
+		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().clearListEditors();
+		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().clearListEditors();
 	}
 
 	public void setProductEdited(String productname, PanelProductSettings sourcePanel) {
@@ -1603,14 +1583,14 @@ public class ConfigedMain implements MessagebusListener {
 	private boolean setLocalbootProductsPage() {
 		return setProductsPage(collectChangedLocalbootStates, getLocalbootStateAndActionsAttributes(),
 				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings(),
+				mainFrame.getClientConfiguration().getPanelLocalbootProductSettings(),
 				getLocalbootProductDisplayFieldsList());
 	}
 
 	private boolean setNetbootProductsPage() {
 		return setProductsPage(collectChangedNetbootStates, Collections.emptyList(),
 				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(),
+				mainFrame.getClientConfiguration().getPanelNetbootProductSettings(),
 				getNetbootProductDisplayFieldsList());
 	}
 
@@ -1765,7 +1745,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void setProductPropertiesPage() {
 		Logging.debug(this, "setProductPropertiesPage");
-		mainFrame.getTabbedConfigPanes().getPanelProductProperties().setProductProperties();
+		mainFrame.getDepotConfiguration().getPanelProductProperties().setProductProperties();
 		depotsList.setEnabled(true);
 		depotsList.requestFocus();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -1793,7 +1773,7 @@ public class ConfigedMain implements MessagebusListener {
 			depot = depotsList.getSelectedValuesList().get(0);
 		}
 
-		mainFrame.getTabbedConfigPanes().getPanelHostProperties().initMultipleHostsEditing(depot,
+		mainFrame.getDepotConfiguration().getPanelHostProperties().initMultipleHostsEditing(depot,
 				depotPropertiesForPermittedDepots, hostUpdateCollection,
 				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 	}
@@ -1832,7 +1812,7 @@ public class ConfigedMain implements MessagebusListener {
 					.getConfigDefaultValuesPD();
 			additionalConfigs.add(defaultValuesMap);
 			additionalconfigurationUpdateCollection.setMasterConfig(true);
-			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(
+			mainFrame.getClientConfiguration().getPanelHostConfig().initEditing(
 					"  " + persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
 					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 					additionalConfigs, additionalconfigurationUpdateCollection, true,
@@ -1847,7 +1827,7 @@ public class ConfigedMain implements MessagebusListener {
 					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 			Map<String, Object> originalMap = mergeMaps(
 					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(getSelectedDepots()));
-			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(
+			mainFrame.getClientConfiguration().getPanelHostConfig().initEditing(
 					Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null), mergedVisualMap,
 					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
 					additionalconfigurationUpdateCollection, false,
@@ -1872,7 +1852,7 @@ public class ConfigedMain implements MessagebusListener {
 			}
 			Map<String, Object> originalMap = mergeMaps(
 					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(selectedClients));
-			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(
+			mainFrame.getClientConfiguration().getPanelHostConfig().initEditing(
 					Utils.getListStringRepresentation(selectedClients, null), mergedVisualMap, configListCellOptions,
 					additionalConfigs, additionalconfigurationUpdateCollection, false,
 					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
@@ -1902,16 +1882,16 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setHardwareInfoPage for, clients count ", selectedClients.size());
 
 		if (selectedClients.size() == 1) {
-			mainFrame.getTabbedConfigPanes().setHardwareInfo(
+			mainFrame.getClientConfiguration().setHardwareInfo(
 					persistenceController.getHardwareDataService().getHardwareInfo(selectedClients.get(0)));
 		} else {
-			mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
+			mainFrame.getClientConfiguration().setHardwareInfoNotPossible();
 		}
 	}
 
 	private void setSoftwareInfoPage() {
 		Logging.info(this, "setSoftwareInfoPage(), number selected clients ", selectedClients.size());
-		mainFrame.getTabbedConfigPanes().setSoftwareAudit();
+		mainFrame.getClientConfiguration().setSoftwareAudit();
 	}
 
 	public boolean logfileExists(String logtype) {
@@ -1936,8 +1916,8 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void setLogPage() {
 		Logging.debug(this, "setLogPage(), selected clients: ", selectedClients);
-		mainFrame.getTabbedConfigPanes().setLogFileTab("instlog");
-		mainFrame.getTabbedConfigPanes().setLogview("instlog");
+		mainFrame.getClientConfiguration().setLogFileTab("instlog");
+		mainFrame.getClientConfiguration().setLogview("instlog");
 	}
 
 	public void resetView() {
@@ -1995,7 +1975,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void setSelectedIndex(int i) {
-		mainFrame.getTabbedConfigPanes().setSelectedIndex(i);
+		mainFrame.getClientConfiguration().setSelectedIndex(i);
 	}
 
 	public void setViewIndex(ViewIndex newViewIndex) {
@@ -2015,29 +1995,12 @@ public class ConfigedMain implements MessagebusListener {
 			} else {
 				Logging.debug(" tab index could not be changed, go to clients view");
 				viewIndex = ViewIndex.VIEW_CLIENTS;
-				mainFrame.getTabbedConfigPanes().setSelectedIndex(0);
+				mainFrame.getClientConfiguration().setSelectedIndex(0);
 			}
 
-			saveCurrentViewIndex();
 			if (result) {
 				clearListEditors();
 			}
-		}
-	}
-
-	private void saveCurrentViewIndex() {
-		switch (editingTarget) {
-		case CLIENTS:
-			saveClientsViewIndex = mainFrame.getTabbedConfigPanes().getSelectedIndex();
-			break;
-
-		case DEPOTS:
-			saveDepotsViewIndex = mainFrame.getTabbedConfigPanes().getSelectedIndex();
-			break;
-
-		default:
-			// Other targets don't have different tab views
-			break;
 		}
 	}
 
@@ -2112,7 +2075,7 @@ public class ConfigedMain implements MessagebusListener {
 
 			requestReloadStatesAndActions();
 
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
+			mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 
 			Logging.info(this, " in reload, we are in thread ", Thread.currentThread());
 
@@ -2718,7 +2681,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void processActionRequestsSelectedProducts() {
-		processActionRequests(mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getSelectedIDs());
+		processActionRequests(mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getSelectedIDs());
 	}
 
 	private void processActionRequests(Set<String> products) {

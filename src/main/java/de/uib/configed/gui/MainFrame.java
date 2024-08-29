@@ -118,9 +118,9 @@ public class MainFrame extends JFrame {
 		setJMenuBar(initMenuBar());
 
 		leftControlBar = new LeftControlBar(configedMain);
-		mainPanelManager = new MainPanelManager(configedMain, depotsList, clientTree, productTree);
+		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
 
-		showConfigurationPanel();
+		showClientConfiguration();
 
 		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
 
@@ -136,8 +136,12 @@ public class MainFrame extends JFrame {
 		return clientMenu;
 	}
 
-	public TabbedConfigPanes getTabbedConfigPanes() {
-		return mainPanelManager.getTabbedConfigPanes();
+	public ClientConfiguration getClientConfiguration() {
+		return mainPanelManager.getClientConfiguration();
+	}
+
+	public DepotConfiguration getDepotConfiguration() {
+		return mainPanelManager.getDepotConfiguration();
 	}
 
 	public HostsStatusPanel getHostsStatusPanel() {
@@ -550,8 +554,16 @@ public class MainFrame extends JFrame {
 		showPanel(mainPanelManager.getHealthCheckPanel());
 	}
 
-	public void showConfigurationPanel() {
-		showPanel(mainPanelManager.getConfigurationPanel(this));
+	public void showClientConfiguration() {
+		showPanel(mainPanelManager.getClientConfigurationPanel());
+	}
+
+	public void showDepotConfiguration() {
+		showPanel(mainPanelManager.getDepotConfigurationPanel());
+	}
+
+	public void showServerConfiguration() {
+		showPanel(mainPanelManager.getServerConfigurationPanel());
 	}
 
 	private void showPanel(JComponent panel) {

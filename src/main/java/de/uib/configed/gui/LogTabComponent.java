@@ -49,7 +49,7 @@ public class LogTabComponent extends LogPane {
 		Logging.info("reload logFileType ", logFileType);
 
 		ConfigedMain.getMainFrame().activateLoadingCursor();
-		ConfigedMain.getMainFrame().getTabbedConfigPanes().setLogFileTab(logFileType);
+		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab(logFileType);
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
