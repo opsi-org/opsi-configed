@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JTabbedPane;
@@ -20,12 +21,16 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.productpage.PanelProductProperties;
+import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class DepotConfiguration extends JTabbedPane implements ChangeListener, ListSelectionListener {
+	private AdditionalconfigurationUpdateCollection additionalconfigurationUpdateCollection;
+
 	private PanelHostConfig panelHostConfig;
 
 	private PanelHostProperties panelHostProperties;
@@ -87,6 +92,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		switch (getSelectedIndex()) {
 		case 0:
 			initHostConfigTab();
+			setHostConfigTab();
 			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
 			break;
 
@@ -166,4 +172,31 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 	}
 
+	private void setHostConfigTab() {
+		Logging.info(this, "setHostConfigTab  selected Depots ", depotsList.getSelectedValuesList());
+
+		if (additionalconfigurationUpdateCollection != null) {
+			configedMain.removeFromGlobalUpdateCollection(additionalconfigurationUpdateCollection);
+		}
+
+		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(
+				depotsList.getSelectedValuesList());
+		configedMain.addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
+
+		depotsList.setEnabled(true);
+		depotsList.requestFocus();
+		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+		List<Map<String, Object>> additionalConfigs = configedMain
+				.produceAdditionalConfigs(depotsList.getSelectedValuesList());
+		Map<String, Object> mergedVisualMap = ConfigedMain.mergeMaps(additionalConfigs);
+		ConfigedMain.removeKeysStartingWith(mergedVisualMap,
+				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
+		Map<String, Object> originalMap = ConfigedMain.mergeMaps(persistenceController.getConfigDataService()
+				.getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
+		panelHostConfig.initEditing(Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null),
+				mergedVisualMap, persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
+				additionalConfigs, additionalconfigurationUpdateCollection, false,
+				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
+	}
 }

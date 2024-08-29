@@ -1697,7 +1697,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	private static Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
+	public static Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
 		Map<String, Object> mergedMap = new HashMap<>();
 		if (collection == null || collection.isEmpty()) {
 			return mergedMap;
@@ -1733,7 +1733,8 @@ public class ConfigedMain implements MessagebusListener {
 		return mergedMap;
 	}
 
-	private static void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
+	public static void removeKeysStartingWith(Map<String, ? extends Object> m,
+			Iterable<String> keystartersStrNotWanted) {
 		for (String start : keystartersStrNotWanted) {
 			m.keySet().removeIf(key -> key.startsWith(start));
 		}
@@ -1747,8 +1748,6 @@ public class ConfigedMain implements MessagebusListener {
 		List<String> objectIds = new ArrayList<>();
 		if (editingTarget == EditingTarget.SERVER) {
 			objectIds.add(persistenceController.getHostInfoCollections().getConfigServer());
-		} else if (editingTarget == EditingTarget.DEPOTS) {
-			objectIds.addAll(depotsList.getSelectedValuesList());
 		} else {
 			objectIds.addAll(selectedClients);
 		}
@@ -1773,20 +1772,7 @@ public class ConfigedMain implements MessagebusListener {
 					additionalConfigs, additionalconfigurationUpdateCollection, true,
 					OpsiServiceNOMPersistenceController.getPropertyClassesServer());
 		} else if (editingTarget == EditingTarget.DEPOTS) {
-			depotsList.setEnabled(true);
-			depotsList.requestFocus();
-			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(getSelectedDepots());
-			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
-			removeKeysStartingWith(mergedVisualMap,
-					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-			Map<String, Object> originalMap = mergeMaps(
-					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(getSelectedDepots()));
-			mainFrame.getClientConfiguration().getPanelHostConfig().initEditing(
-					Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null), mergedVisualMap,
-					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
-					additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
+			// NOT HERE ANYMORE TODO
 		} else {
 			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(selectedClients);
 			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
@@ -1823,7 +1809,7 @@ public class ConfigedMain implements MessagebusListener {
 		return copy;
 	}
 
-	private List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
+	public List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
 		Logging.info(this, "additionalConfig fetch for ", list);
 
 		if (list.isEmpty()) {
