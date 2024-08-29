@@ -591,15 +591,10 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 		case DEPOTS:
 			mainFrame.showDepotConfiguration();
-
-			// Save changed data before going to new view
-			checkSaveAll(true);
 			break;
+
 		case SERVER:
 			mainFrame.showServerConfiguration();
-
-			// Save changed data before going to new view
-			checkSaveAll(true);
 			break;
 
 		case DASHBOARD:
