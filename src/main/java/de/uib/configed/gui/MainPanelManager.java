@@ -40,7 +40,6 @@ public class MainPanelManager {
 	private HostsStatusPanel hostsStatusPanel;
 	private JTabbedPane leftTabs;
 
-	private DepotConfiguration depotConfiguration;
 	private JSplitPane depotConfigurationSplitPane;
 	private ServerConfiguration serverConfiguration;
 
@@ -131,7 +130,7 @@ public class MainPanelManager {
 			DepotsList depotsList = new DepotsList(configedMain);
 			depotsList.setListData(persistenceController.getHostInfoCollections().getDepotNamesList());
 			depotsList.setInfo(persistenceController.getHostInfoCollections().getDepots());
-			depotConfiguration = new DepotConfiguration(configedMain, depotsList);
+			DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 
 			depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false,
 					new DepotListPresenter(depotsList, configedMain), depotConfiguration);
@@ -223,10 +222,6 @@ public class MainPanelManager {
 
 	public ClientConfiguration getClientConfiguration() {
 		return clientConfiguration;
-	}
-
-	public DepotConfiguration getDepotConfiguration() {
-		return depotConfiguration;
 	}
 
 	public HostsStatusPanel getHostsStatusPanel() {

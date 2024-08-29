@@ -140,10 +140,6 @@ public class MainFrame extends JFrame {
 		return mainPanelManager.getClientConfiguration();
 	}
 
-	public DepotConfiguration getDepotConfiguration() {
-		return mainPanelManager.getDepotConfiguration();
-	}
-
 	public HostsStatusPanel getHostsStatusPanel() {
 		return mainPanelManager.getHostsStatusPanel();
 	}
