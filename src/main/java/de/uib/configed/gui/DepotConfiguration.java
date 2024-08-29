@@ -43,6 +43,8 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener {
 
 		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.jPanel_HostProperties"), " index ",
 				indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
+
+		setSelectedIndex(1);
 	}
 
 	public PanelHostProperties getPanelHostProperties() {

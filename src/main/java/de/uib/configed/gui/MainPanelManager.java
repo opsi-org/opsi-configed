@@ -16,6 +16,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -126,13 +127,17 @@ public class MainPanelManager {
 			depotConfiguration = new DepotConfiguration(configedMain);
 		}
 
-		return createPanel(depotConfiguration, new JToolBar(),
-				Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
+		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, leftTabs, depotConfiguration);
+		jSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
+		jSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
+
+		return createPanel(jSplitPane, new JToolBar(), Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
 	}
 
 	public JPanel getServerConfigurationPanel() {
 		if (serverConfiguration == null) {
 			serverConfiguration = new ServerConfiguration(configedMain);
+			serverConfiguration.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 		}
 
 		return createPanel(serverConfiguration, new JToolBar(),

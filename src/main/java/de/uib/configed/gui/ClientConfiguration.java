@@ -129,10 +129,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	private void initHardwareInfoTab() {
-		if (panelHWInfo == null) {
-			panelHWInfo = new PanelHWInfo(true, configedMain);
+		if (panelHWInfo != null) {
+			return;
 		}
 
+		panelHWInfo = new PanelHWInfo(true, configedMain);
 		setComponentAt(getSelectedIndex(), panelHWInfo);
 	}
 
