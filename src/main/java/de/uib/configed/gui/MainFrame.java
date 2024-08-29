@@ -797,8 +797,4 @@ public class MainFrame extends JFrame {
 
 		jMenuShowDialogs.setEnabled(existJDialogInstances);
 	}
-
-	public void rebuildDepotPopup() {
-		mainPanelManager.rebuildDepotPopup();
-	}
 }

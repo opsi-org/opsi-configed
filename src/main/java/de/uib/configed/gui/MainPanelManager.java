@@ -31,8 +31,6 @@ import de.uib.utils.logging.Logging;
 public class MainPanelManager {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
 
-	private DepotListPresenter depotListPresenter;
-
 	private ClientTree clientTree;
 	private ProductTree productTree;
 
@@ -66,12 +64,12 @@ public class MainPanelManager {
 
 		topToolBarManager = new TopToolBarManager(configedMain);
 
-		depotListPresenter = new DepotListPresenter(depotsList, configedMain);
-
-		initialInitialization(mainFrame);
+		initialInitialization(depotsList, mainFrame);
 	}
 
-	private void initialInitialization(MainFrame mainFrame) {
+	private void initialInitialization(DepotsList depotsList, MainFrame mainFrame) {
+		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList, configedMain);
+
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 		scrollpaneTreeClients.getViewport().add(clientTree);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -217,10 +215,6 @@ public class MainPanelManager {
 
 	public DepotConfiguration getDepotConfiguration() {
 		return depotConfiguration;
-	}
-
-	public void rebuildDepotPopup() {
-		depotListPresenter.rebuildPopup();
 	}
 
 	public HostsStatusPanel getHostsStatusPanel() {

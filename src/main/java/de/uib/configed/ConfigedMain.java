@@ -1473,7 +1473,6 @@ public class ConfigedMain implements MessagebusListener {
 
 			productTree.reInitTree();
 			refreshClientListKeepingGroup();
-			mainFrame.rebuildDepotPopup();
 		}
 
 		// When we are in the client configuration changing the depot should have no effect,
