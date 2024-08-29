@@ -43,12 +43,13 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		this.configedMain = configedMain;
 		this.depotsList = depotsList;
 
-		depotsList.addListSelectionListener(this);
-
 		initTabs();
 
 		// At the beginning, we want to have the same depots selected as in the client configuration
 		depotsList.setSelectedValues(configedMain.getSelectedDepots());
+		updateTab();
+
+		depotsList.addListSelectionListener(this);
 
 		super.addChangeListener(this);
 	}
