@@ -3,7 +3,7 @@
 ## [4.3.3.x] - 2024-xx-xx
 ## Fixed
 - Show correctly the new lines ("\n") in tooltips
-
+- Correct support page in help menu
 
 ## [4.3.3.13] - 2024-04-08
 

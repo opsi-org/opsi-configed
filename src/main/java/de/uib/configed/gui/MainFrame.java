@@ -469,8 +469,11 @@ public class MainFrame extends JFrame {
 		jMenuHelpForum.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
+		// Get the language used for the support page
+		String language = "de".equals(Messages.getLocale().getLanguage()) ? "de" : "en";
 		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
-		jMenuHelpSupport.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
+		jMenuHelpSupport
+				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.UIB_PAGE + language + "/support"));
 		jMenuHelp.add(jMenuHelpSupport);
 	}
 
