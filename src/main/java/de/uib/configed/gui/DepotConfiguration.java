@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui;
 
+import java.util.Map;
+
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
@@ -18,15 +20,24 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.productpage.PanelProductProperties;
+import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class DepotConfiguration extends JTabbedPane implements ChangeListener, ListSelectionListener {
 	private PanelHostConfig panelHostConfig;
+
 	private PanelHostProperties panelHostProperties;
+	private HostUpdateCollection hostUpdateCollection;
+
 	private PanelProductProperties panelProductProperties;
 
 	private ConfigedMain configedMain;
 	private DepotsList depotsList;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public DepotConfiguration(ConfigedMain configedMain, DepotsList depotsList) {
 		this.configedMain = configedMain;
@@ -86,7 +97,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		case 2:
 			initHostPropertiesTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_HOST_PROPERTIES);
+			setHostPropertiesPage();
 			break;
 
 		default:
@@ -124,4 +135,31 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 		setComponentAt(getSelectedIndex(), panelHostProperties);
 	}
+
+	private void setHostPropertiesPage() {
+		Logging.debug(this, "setHostPropertiesPage");
+
+		depotsList.setEnabled(true);
+		depotsList.requestFocus();
+		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController.getDepotDataService()
+				.getDepotPropertiesForPermittedDepots();
+
+		if (hostUpdateCollection != null) {
+			configedMain.removeFromGlobalUpdateCollection(hostUpdateCollection);
+		}
+
+		hostUpdateCollection = new HostUpdateCollection();
+		configedMain.addToGlobalUpdateCollection(hostUpdateCollection);
+
+		String depot = "";
+		if (!depotsList.getSelectedValuesList().isEmpty()) {
+			depot = depotsList.getSelectedValuesList().get(0);
+		}
+
+		panelHostProperties.initMultipleHostsEditing(depot, depotPropertiesForPermittedDepots, hostUpdateCollection,
+				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+	}
+
 }

@@ -89,7 +89,6 @@ import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
-import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
@@ -113,7 +112,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public enum ViewIndex {
 		VIEW_CLIENTS, VIEW_LOCALBOOT_PRODUCTS, VIEW_NETBOOT_PRODUCTS, VIEW_NETWORK_CONFIGURATION, VIEW_HARDWARE_INFO,
-		VIEW_SOFTWARE_INFO, VIEW_LOG, VIEW_HOST_PROPERTIES
+		VIEW_SOFTWARE_INFO, VIEW_LOG
 	}
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
@@ -166,8 +165,6 @@ public class ConfigedMain implements MessagebusListener {
 	private ProductpropertiesUpdateCollection clientProductpropertiesUpdateCollection;
 
 	private AdditionalconfigurationUpdateCollection additionalconfigurationUpdateCollection;
-
-	private HostUpdateCollection hostUpdateCollection;
 
 	private InstallationStateUpdateManager updateManager;
 
@@ -1736,33 +1733,6 @@ public class ConfigedMain implements MessagebusListener {
 		return mergedMap;
 	}
 
-	private void setHostPropertiesPage() {
-		Logging.debug(this, "setHostPropertiesPage");
-
-		depotsList.setEnabled(true);
-		depotsList.requestFocus();
-		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController.getDepotDataService()
-				.getDepotPropertiesForPermittedDepots();
-
-		if (hostUpdateCollection != null) {
-			updateCollection.remove(hostUpdateCollection);
-		}
-
-		hostUpdateCollection = new HostUpdateCollection();
-		addToGlobalUpdateCollection(hostUpdateCollection);
-
-		String depot = "";
-		if (!depotsList.getSelectedValuesList().isEmpty()) {
-			depot = depotsList.getSelectedValuesList().get(0);
-		}
-
-		mainFrame.getDepotConfiguration().getPanelHostProperties().initMultipleHostsEditing(depot,
-				depotPropertiesForPermittedDepots, hostUpdateCollection,
-				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
-	}
-
 	private static void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
 		for (String start : keystartersStrNotWanted) {
 			m.keySet().removeIf(key -> key.startsWith(start));
@@ -1942,10 +1912,6 @@ public class ConfigedMain implements MessagebusListener {
 			setLogPage();
 			break;
 
-		case VIEW_HOST_PROPERTIES:
-			setHostPropertiesPage();
-			break;
-
 		default:
 			Logging.warning(this, "resetting View failed, no index for viewIndex: '", viewIndex, "' found");
 			break;
@@ -2099,6 +2065,10 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void addToGlobalUpdateCollection(UpdateCollection newCollection) {
 		updateCollection.add(newCollection);
+	}
+
+	public void removeFromGlobalUpdateCollection(UpdateCollection newCollection) {
+		updateCollection.remove(newCollection);
 	}
 
 	public GeneralDataChangedKeeper getGeneralDataChangedKeeper() {
