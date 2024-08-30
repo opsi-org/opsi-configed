@@ -184,6 +184,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(
 				depotsList.getSelectedValuesList());
+
 		configedMain.addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
 
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

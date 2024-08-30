@@ -45,8 +45,7 @@ public class PanelHostConfig extends JPanel {
 		buildPanel();
 	}
 
-	// overwrite in subclasses
-	protected void reloadHostConfig() {
+	private void reloadHostConfig() {
 		Logging.info(this, "reloadHostConfig");
 
 		configedMain.cancelChanges();
@@ -57,8 +56,7 @@ public class PanelHostConfig extends JPanel {
 		configedMain.resetView(ViewIndex.VIEW_NETWORK_CONFIGURATION);
 	}
 
-	// overwrite in subclasses
-	protected void saveHostConfig() {
+	private void saveHostConfig() {
 		Logging.debug(this, "saveHostConfig");
 		configedMain.checkSaveAll(false);
 	}
