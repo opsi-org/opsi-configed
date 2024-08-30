@@ -1866,23 +1866,21 @@ public class ConfigedMain implements MessagebusListener {
 
 		checkSaveAll(true);
 
-		if (initialDataLoader.isDataLoaded()) {
-			depotsList.setEnabled(newViewIndex == ViewIndex.VIEW_CLIENTS);
+		depotsList.setEnabled(newViewIndex == ViewIndex.VIEW_CLIENTS);
 
-			Logging.debug(this, "switch to viewIndex ", viewIndex);
-			boolean result = resetView(newViewIndex);
+		Logging.debug(this, "switch to viewIndex ", viewIndex);
+		boolean result = resetView(newViewIndex);
 
-			if (result) {
-				viewIndex = newViewIndex;
-			} else {
-				Logging.debug(" tab index could not be changed, go to clients view");
-				viewIndex = ViewIndex.VIEW_CLIENTS;
-				mainFrame.getClientConfiguration().setSelectedIndex(0);
-			}
+		if (result) {
+			viewIndex = newViewIndex;
+		} else {
+			Logging.debug(" tab index could not be changed, go to clients view");
+			viewIndex = ViewIndex.VIEW_CLIENTS;
+			mainFrame.getClientConfiguration().setSelectedIndex(0);
+		}
 
-			if (result) {
-				clearListEditors();
-			}
+		if (result) {
+			clearListEditors();
 		}
 	}
 
@@ -1941,54 +1939,51 @@ public class ConfigedMain implements MessagebusListener {
 
 		List<String> selValuesList = clientTable.getSelectedValues();
 		Logging.info(this, "reloadData, selValuesList.size ", selValuesList.size());
-		// dont do anything if we did not finish another thread for this
-		if (initialDataLoader.isDataLoaded()) {
-			clientTable.deactivateListSelectionListener();
-			allowedClients = null;
 
-			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
-			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+		clientTable.deactivateListSelectionListener();
+		allowedClients = null;
 
-			preloadData();
+		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
+		persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
 
-			FOpsiLicenseMissingText.reset();
+		preloadData();
 
-			mainFrame.resetData();
+		FOpsiLicenseMissingText.reset();
 
-			requestReloadStatesAndActions();
+		mainFrame.resetData();
 
-			mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+		requestReloadStatesAndActions();
 
-			Logging.info(this, " in reload, we are in thread ", Thread.currentThread());
+		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 
-			productTree.reInitTree();
-			clientTree.reInitTree();
-			fetchDepots();
+		Logging.info(this, " in reload, we are in thread ", Thread.currentThread());
 
-			// if depot selection changed, we adapt the clients
-			Set<String> clientsLeft = new TreeSet<>();
-			for (String client : selValuesList) {
-				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-						.get(client);
+		productTree.reInitTree();
+		clientTree.reInitTree();
+		fetchDepots();
 
-				if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
-					clientsLeft.add(client);
-				}
+		// if depot selection changed, we adapt the clients
+		Set<String> clientsLeft = new TreeSet<>();
+		for (String client : selValuesList) {
+			String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client);
+
+			if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
+				clientsLeft.add(client);
 			}
-
-			Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
-
-			Logging.debug(this, " reset the values, particularly in list ");
-			clientTable.setSelectedValues(clientsLeft);
-			clientTable.activateListSelectionListener();
-
-			Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
-			mainFrame.reloadServerConsoleMenu();
-
-			updateHostInfo();
-
-			hostInfo.resetGui();
 		}
+
+		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
+
+		Logging.debug(this, " reset the values, particularly in list ");
+		clientTable.setSelectedValues(clientsLeft);
+		clientTable.activateListSelectionListener();
+
+		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
+		mainFrame.reloadServerConsoleMenu();
+
+		updateHostInfo();
+
+		hostInfo.resetGui();
 
 		mainFrame.deactivateLoadingPane();
 
