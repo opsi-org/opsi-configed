@@ -28,8 +28,9 @@ public class ServerConfiguration extends JTabbedPane {
 			.getPersistenceController();
 
 	public ServerConfiguration(ConfigedMain configedMain) {
-
 		panelHostConfig = new PanelHostConfig(configedMain);
+		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
+
 		setNetworkConfigurationPage(configedMain);
 
 		super.addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
