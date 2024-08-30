@@ -18,7 +18,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
-import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
+import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -123,15 +123,15 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
-			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
-			boolean optionsEditable, NavigableMap<String, String> classesMap) {
-		initEditing(labeltext, configVisualMap, configOptions, collectionConfigStored, configurationUpdateCollection,
+			Collection collectionConfigStored, ConfigUpdateCollection configUpdateCollection, boolean optionsEditable,
+			NavigableMap<String, String> classesMap) {
+		initEditing(labeltext, configVisualMap, configOptions, collectionConfigStored, configUpdateCollection,
 				optionsEditable, classesMap, null, false);
 	}
 
 	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
-			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
-			boolean optionsEditable, NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
+			Collection collectionConfigStored, ConfigUpdateCollection configUpdateCollection, boolean optionsEditable,
+			NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
 			boolean includeAdditionalTooltipText) {
 		Logging.info(this, "initEditing  optionsEditable ", optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
@@ -141,7 +141,7 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.includeAdditionalTooltipText(includeAdditionalTooltipText);
 		editMapPanel.setEditableMap(configVisualMap, configOptions);
 		editMapPanel.setStoreData(collectionConfigStored);
-		editMapPanel.setUpdateCollection(configurationUpdateCollection);
+		editMapPanel.setUpdateCollection(configUpdateCollection);
 		editMapPanel.setLabel(labeltext);
 		editMapPanel.setOptionsEditable(optionsEditable);
 	}

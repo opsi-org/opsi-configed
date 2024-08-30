@@ -453,10 +453,10 @@ public class HostInfoCollections {
 		for (String client : clients) {
 			setDepot(client, depotId);
 			// collect data
-			persistenceController.getConfigDataService().setAdditionalConfiguration(client, config);
+			persistenceController.getConfigDataService().setConfiguration(client, config);
 		}
 		// send data
-		persistenceController.getConfigDataService().setAdditionalConfiguration();
+		persistenceController.getConfigDataService().setConfg();
 	}
 
 	// update derived data (caution!), does not create a HostInfo

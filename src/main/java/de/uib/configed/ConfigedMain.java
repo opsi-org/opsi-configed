@@ -87,7 +87,7 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
+import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
@@ -163,7 +163,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	private ProductpropertiesUpdateCollection clientProductpropertiesUpdateCollection;
 
-	private AdditionalconfigurationUpdateCollection additionalconfigurationUpdateCollection;
+	private ConfigUpdateCollection configUpdateCollection;
 
 	private InstallationStateUpdateManager updateManager;
 
@@ -1716,11 +1716,11 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setNetworkconfigurationPage ");
 		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", selectedClients);
 
-		if (additionalconfigurationUpdateCollection != null) {
-			updateCollection.remove(additionalconfigurationUpdateCollection);
+		if (configUpdateCollection != null) {
+			updateCollection.remove(configUpdateCollection);
 		}
-		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(selectedClients);
-		addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
+		configUpdateCollection = new ConfigUpdateCollection(selectedClients);
+		addToGlobalUpdateCollection(configUpdateCollection);
 
 		depotsList.setEnabled(false);
 
@@ -1745,7 +1745,7 @@ public class ConfigedMain implements MessagebusListener {
 				persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(selectedClients));
 		mainFrame.getClientConfiguration().getPanelHostConfig().initEditing(
 				Utils.getListStringRepresentation(selectedClients, null), mergedVisualMap, configListCellOptions,
-				additionalConfigs, additionalconfigurationUpdateCollection, false,
+				additionalConfigs, configUpdateCollection, false,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
 	}
 
