@@ -132,8 +132,24 @@ public class MainPanelManager {
 			depotsList.setInfo(persistenceController.getHostInfoCollections().getDepots());
 			DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 
-			depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false,
-					new DepotListPresenter(depotsList, configedMain), depotConfiguration);
+			JLabel depotSelectionLabel = new JLabel(Configed.getResourceValue("DepotListPresenter.depotSelection"));
+			DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList, configedMain);
+
+			JPanel depotsListPanel = new JPanel();
+			GroupLayout layout = new GroupLayout(depotsListPanel);
+			depotsListPanel.setLayout(layout);
+
+			layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+					.addComponent(depotSelectionLabel).addGap(Globals.MIN_GAP_SIZE).addComponent(depotListPresenter));
+			layout.setHorizontalGroup(layout.createParallelGroup()
+					.addGroup(layout.createSequentialGroup()
+							.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
+							.addComponent(depotSelectionLabel)
+							.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
+					.addComponent(depotListPresenter));
+
+			depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, depotsListPanel,
+					depotConfiguration);
 
 			depotConfigurationSplitPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 			depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
