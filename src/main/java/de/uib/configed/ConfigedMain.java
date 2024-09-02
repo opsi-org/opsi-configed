@@ -87,7 +87,6 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
@@ -102,7 +101,6 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.FEditText;
-import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
 
@@ -110,8 +108,7 @@ public class ConfigedMain implements MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	public enum ViewIndex {
-		VIEW_CLIENTS, VIEW_LOCALBOOT_PRODUCTS, VIEW_NETBOOT_PRODUCTS, VIEW_NETWORK_CONFIGURATION, VIEW_HARDWARE_INFO,
-		VIEW_SOFTWARE_INFO, VIEW_LOG
+		VIEW_CLIENTS, VIEW_LOCALBOOT_PRODUCTS, VIEW_NETBOOT_PRODUCTS
 	}
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
@@ -162,8 +159,6 @@ public class ConfigedMain implements MessagebusListener {
 	 */
 
 	private ProductpropertiesUpdateCollection clientProductpropertiesUpdateCollection;
-
-	private ConfigUpdateCollection configUpdateCollection;
 
 	private InstallationStateUpdateManager updateManager;
 
@@ -1711,53 +1706,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked" })
-	public void setNetworkConfigurationPage() {
-		Logging.info(this, "setNetworkconfigurationPage ");
-		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", selectedClients);
-
-		if (configUpdateCollection != null) {
-			updateCollection.remove(configUpdateCollection);
-		}
-		configUpdateCollection = new ConfigUpdateCollection(selectedClients);
-		addToGlobalUpdateCollection(configUpdateCollection);
-
-		depotsList.setEnabled(false);
-
-		List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(selectedClients);
-		Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
-		removeKeysStartingWith(mergedVisualMap,
-				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-		Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
-				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
-		if (!selectedClients.isEmpty()) {
-			List<String> depotIds = new ArrayList<>();
-			depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
-					.get(selectedClients.get(0)).getInDepot());
-			Map<String, Object> defaultValues = persistenceController.getConfigDataService()
-					.getHostsConfigsWithDefaults(depotIds).get(0);
-			for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
-				configListCellOptions.get(entry.getKey())
-						.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
-			}
-		}
-		Map<String, Object> originalMap = mergeMaps(
-				persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(selectedClients));
-		mainFrame.getClientConfiguration().getPanelHostConfig().initEditing(
-				Utils.getListStringRepresentation(selectedClients, null), mergedVisualMap, configListCellOptions,
-				additionalConfigs, configUpdateCollection, false,
-				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
-	}
-
-	private static Map<String, ListCellOptions> deepCopyConfigListCellOptions(
-			Map<String, ListCellOptions> originalMap) {
-		Map<String, ListCellOptions> copy = new HashMap<>();
-		for (Entry<String, ListCellOptions> entry : originalMap.entrySet()) {
-			copy.put(entry.getKey(), entry.getValue().deepCopy());
-		}
-		return copy;
-	}
-
 	public List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
 		Logging.info(this, "additionalConfig fetch for ", list);
 
@@ -1766,22 +1714,6 @@ public class ConfigedMain implements MessagebusListener {
 		} else {
 			return persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
 		}
-	}
-
-	private void setHardwareInfoPage() {
-		Logging.info(this, "setHardwareInfoPage for, clients count ", selectedClients.size());
-
-		if (selectedClients.size() == 1) {
-			mainFrame.getClientConfiguration().setHardwareInfo(
-					persistenceController.getHardwareDataService().getHardwareInfo(selectedClients.get(0)));
-		} else {
-			mainFrame.getClientConfiguration().setHardwareInfoNotPossible();
-		}
-	}
-
-	private void setSoftwareInfoPage() {
-		Logging.info(this, "setSoftwareInfoPage(), number selected clients ", selectedClients.size());
-		mainFrame.getClientConfiguration().setSoftwareAudit();
 	}
 
 	public boolean logfileExists(String logtype) {
@@ -1804,12 +1736,6 @@ public class ConfigedMain implements MessagebusListener {
 		return logfiles;
 	}
 
-	private void setLogPage() {
-		Logging.debug(this, "setLogPage(), selected clients: ", selectedClients);
-		mainFrame.getClientConfiguration().setLogFileTab("instlog");
-		mainFrame.getClientConfiguration().setLogview("instlog");
-	}
-
 	public void resetView() {
 		resetView(viewIndex);
 	}
@@ -1829,22 +1755,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		case VIEW_NETBOOT_PRODUCTS:
 			result = setNetbootProductsPage();
-			break;
-
-		case VIEW_NETWORK_CONFIGURATION:
-			setNetworkConfigurationPage();
-			break;
-
-		case VIEW_HARDWARE_INFO:
-			setHardwareInfoPage();
-			break;
-
-		case VIEW_SOFTWARE_INFO:
-			setSoftwareInfoPage();
-			break;
-
-		case VIEW_LOG:
-			setLogPage();
 			break;
 
 		default:

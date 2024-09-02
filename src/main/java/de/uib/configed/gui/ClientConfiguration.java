@@ -6,9 +6,12 @@
 
 package de.uib.configed.gui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,12 +30,18 @@ import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.tree.ProductTree;
+import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.table.ListCellOptions;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public static final float DIVIDER_LOCATION = 0.8F;
+
+	private ConfigUpdateCollection configUpdateCollection;
 
 	private ConfigedMain configedMain;
 	private MainFrame mainFrame;
@@ -54,6 +63,9 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	private ClientInfoPanel clientInfoPanel;
 
 	private JPopupMenu popupClients;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public ClientConfiguration(ConfigedMain configedMain, MainFrame mainFrame, ProductTree productTree) {
 		this.configedMain = configedMain;
@@ -133,7 +145,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			return;
 		}
 
-		panelHWInfo = new PanelHWInfo(true, configedMain);
+		panelHWInfo = new PanelHWInfo(true, configedMain, this);
 		setComponentAt(getSelectedIndex(), panelHWInfo);
 	}
 
@@ -161,50 +173,9 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(configedMain);
-		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
+		panelHostConfig = new PanelHostConfig(configedMain, this::setHardwareInfoPage);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
-	}
-
-	public void setSoftwareAudit() {
-		if (configedMain.getSelectedClients().isEmpty()) {
-			showSoftwareInfo(showSoftwareLogNotFound);
-		} else if (configedMain.getSelectedClients().size() == 1) {
-			String hostId = configedMain.getSelectedClients().getFirst();
-			Logging.debug(this, "setSoftwareAudit for ", hostId);
-			panelSWInfo.setAskForOverwrite(true);
-			panelSWInfo.setHost(hostId);
-			panelSWInfo.updateModel();
-
-			showSoftwareInfo(panelSWInfo);
-		} else {
-			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());
-
-			showSoftwareInfo(showSoftwareLogMultiClientReport);
-		}
-	}
-
-	private void showHardwareInfo(JPanel showHardwareLog) {
-		setComponentAt(getSelectedIndex(), showHardwareLog);
-		showHardwareLog.repaint();
-	}
-
-	public void setHardwareInfoNotPossible() {
-		Logging.info(this, "setHardwareInfoNotPossible");
-
-		if (showHardwareLogNotFoundPanel == null) {
-			showHardwareLogNotFoundPanel = new JPanel();
-			showHardwareLogNotFoundPanel
-					.add(new JLabel(Configed.getResourceValue("MainFrame.TabActiveForSingleClient")));
-		}
-
-		showHardwareInfo(showHardwareLogNotFoundPanel);
-	}
-
-	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
-		panelHWInfo.setHardwareInfo(hardwareInfo);
-		showHardwareInfo(panelHWInfo);
 	}
 
 	private void showSoftwareInfo(JPanel showSoftwareLog) {
@@ -255,27 +226,132 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		case 3:
 			initHostConfigTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+			setHostParameterPage();
 			break;
 
 		case 4:
 			initHardwareInfoTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_HARDWARE_INFO);
+			setHardwareInfoPage();
 			break;
 
 		case 5:
 			initSoftWareInfoTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_SOFTWARE_INFO);
+			setSoftwareAudit();
 			break;
 
 		case 6:
 			initLogTab();
-			configedMain.setViewIndex(ViewIndex.VIEW_LOG);
+			setLogPage();
 			break;
 
 		default:
 			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
 			break;
 		}
+	}
+
+	public void setHostParameterPage() {
+		Logging.info(this, "setNetworkconfigurationPage ");
+		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", configedMain.getSelectedClients());
+
+		if (configUpdateCollection != null) {
+			configedMain.removeFromGlobalUpdateCollection(configUpdateCollection);
+		}
+
+		configUpdateCollection = new ConfigUpdateCollection(configedMain.getSelectedClients());
+		configedMain.addToGlobalUpdateCollection(configUpdateCollection);
+
+		//	depotsList.setEnabled(false);
+
+		List<Map<String, Object>> additionalConfigs = configedMain
+				.produceAdditionalConfigs(configedMain.getSelectedClients());
+		Map<String, Object> mergedVisualMap = ConfigedMain.mergeMaps(additionalConfigs);
+		ConfigedMain.removeKeysStartingWith(mergedVisualMap,
+				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
+		Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
+				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
+		if (!configedMain.getSelectedClients().isEmpty()) {
+			List<String> depotIds = new ArrayList<>();
+			depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
+					.get(configedMain.getSelectedClients().get(0)).getInDepot());
+			Map<String, Object> defaultValues = persistenceController.getConfigDataService()
+					.getHostsConfigsWithDefaults(depotIds).get(0);
+			for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
+				configListCellOptions.get(entry.getKey())
+						.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
+			}
+		}
+		Map<String, Object> originalMap = ConfigedMain.mergeMaps(persistenceController.getConfigDataService()
+				.getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
+		mainFrame.getClientConfiguration().getPanelHostConfig().initEditing(
+				Utils.getListStringRepresentation(configedMain.getSelectedClients(), null), mergedVisualMap,
+				configListCellOptions, additionalConfigs, configUpdateCollection, false,
+				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
+	}
+
+	private static Map<String, ListCellOptions> deepCopyConfigListCellOptions(
+			Map<String, ListCellOptions> originalMap) {
+		Map<String, ListCellOptions> copy = new HashMap<>();
+		for (Entry<String, ListCellOptions> entry : originalMap.entrySet()) {
+			copy.put(entry.getKey(), entry.getValue().deepCopy());
+		}
+		return copy;
+	}
+
+	public void setHardwareInfoPage() {
+		Logging.info(this, "setHardwareInfoPage for, clients count ", configedMain.getSelectedClients().size());
+
+		if (configedMain.getSelectedClients().size() == 1) {
+			mainFrame.getClientConfiguration().setHardwareInfo(persistenceController.getHardwareDataService()
+					.getHardwareInfo(configedMain.getSelectedClients().get(0)));
+		} else {
+			mainFrame.getClientConfiguration().setHardwareInfoNotPossible();
+		}
+	}
+
+	private void showHardwareInfo(JPanel showHardwareLog) {
+		setComponentAt(getSelectedIndex(), showHardwareLog);
+		showHardwareLog.repaint();
+	}
+
+	public void setHardwareInfoNotPossible() {
+		Logging.info(this, "setHardwareInfoNotPossible");
+
+		if (showHardwareLogNotFoundPanel == null) {
+			showHardwareLogNotFoundPanel = new JPanel();
+			showHardwareLogNotFoundPanel
+					.add(new JLabel(Configed.getResourceValue("MainFrame.TabActiveForSingleClient")));
+		}
+
+		showHardwareInfo(showHardwareLogNotFoundPanel);
+	}
+
+	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
+		panelHWInfo.setHardwareInfo(hardwareInfo);
+		showHardwareInfo(panelHWInfo);
+	}
+
+	public void setSoftwareAudit() {
+		if (configedMain.getSelectedClients().isEmpty()) {
+			showSoftwareInfo(showSoftwareLogNotFound);
+		} else if (configedMain.getSelectedClients().size() == 1) {
+			String hostId = configedMain.getSelectedClients().getFirst();
+			Logging.debug(this, "setSoftwareAudit for ", hostId);
+			panelSWInfo.setAskForOverwrite(true);
+			panelSWInfo.setHost(hostId);
+			panelSWInfo.updateModel();
+
+			showSoftwareInfo(panelSWInfo);
+		} else {
+			Logging.info(this, "setSoftwareAudit for clients ", configedMain.getSelectedClients().size());
+
+			showSoftwareInfo(showSoftwareLogMultiClientReport);
+		}
+	}
+
+	private void setLogPage() {
+		Logging.debug(this, "setLogPage");
+		mainFrame.getClientConfiguration().setLogFileTab("instlog");
+		mainFrame.getClientConfiguration().setLogview("instlog");
 	}
 }

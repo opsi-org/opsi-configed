@@ -15,7 +15,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
@@ -24,7 +23,6 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.DataChangedObserver;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ListCellOptions;
@@ -39,10 +37,15 @@ public class PanelHostConfig extends JPanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
+	private Runnable configUpdater;
 
-	public PanelHostConfig(ConfigedMain configedMain) {
+	public PanelHostConfig(ConfigedMain configedMain, Runnable configUpdater) {
 		this.configedMain = configedMain;
+		this.configUpdater = configUpdater;
+
 		buildPanel();
+
+		editMapPanel.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
 	}
 
 	private void reloadHostConfig() {
@@ -53,7 +56,7 @@ public class PanelHostConfig extends JPanel {
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
 
-		configedMain.resetView(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+		configUpdater.run();
 	}
 
 	private void saveHostConfig() {
@@ -144,10 +147,5 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.setUpdateCollection(configUpdateCollection);
 		editMapPanel.setLabel(labeltext);
 		editMapPanel.setOptionsEditable(optionsEditable);
-	}
-
-	// delegated methods
-	public void registerDataChangedObserver(DataChangedObserver o) {
-		editMapPanel.registerDataChangedObserver(o);
 	}
 }

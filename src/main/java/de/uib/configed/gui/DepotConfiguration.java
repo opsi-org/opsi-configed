@@ -126,8 +126,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(configedMain);
-		panelHostConfig.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
+		panelHostConfig = new PanelHostConfig(configedMain, this::setHostPropertiesPage);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}
@@ -183,7 +182,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		}
 
 		configUpdateCollection = new ConfigUpdateCollection(depotsList.getSelectedValuesList());
-
 		configedMain.addToGlobalUpdateCollection(configUpdateCollection);
 
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

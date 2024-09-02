@@ -31,7 +31,6 @@ import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.type.SWAuditClientEntry;
@@ -443,7 +442,7 @@ public class PanelSWInfo extends JPanel {
 		Logging.debug(this, "reload action");
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
-		configedMain.resetView(ViewIndex.VIEW_SOFTWARE_INFO);
+		ConfigedMain.getMainFrame().getClientConfiguration().setSoftwareAudit();
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 

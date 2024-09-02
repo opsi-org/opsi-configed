@@ -33,8 +33,8 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
@@ -92,13 +92,16 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private boolean withPopup;
 
 	private ConfigedMain configedMain;
+	private ClientConfiguration clientConfiguration;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain) {
+	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
 		this.withPopup = withPopup;
 		this.configedMain = configedMain;
+		this.clientConfiguration = clientConfiguration;
+
 		buildPanel();
 	}
 
@@ -187,11 +190,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	/** overwrite in subclasses */
 	protected void reload() {
 		Logging.debug(this, "reload hardware info");
-		configedMain.resetView(ViewIndex.VIEW_HARDWARE_INFO);
+		clientConfiguration.setHardwareInfoPage();
 	}
 
 	private void floatExternal() {
-		PanelHWInfo copyOfMe = new PanelHWInfo(false, configedMain);
+		PanelHWInfo copyOfMe = new PanelHWInfo(false, configedMain, clientConfiguration);
 		copyOfMe.setHardwareInfo(hwInfo);
 
 		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
