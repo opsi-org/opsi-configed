@@ -209,8 +209,20 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		panelNetbootProductSettings.setDividerLocation(DIVIDER_LOCATION);
 	}
 
+	public void updateProductTab() {
+		if (getSelectedIndex() == 1 || getSelectedIndex() == 2) {
+			stateChanged(null);
+		}
+	}
+
 	@Override
 	public void stateChanged(ChangeEvent e) {
+		Logging.devel(this, "state change in clientConfiguration with selected index", getSelectedIndex());
+
+		configedMain.checkSaveAll(true);
+
+		mainFrame.activateLoadingCursor();
+
 		switch (getSelectedIndex()) {
 		case 0:
 			configedMain.setViewIndex(ViewIndex.VIEW_CLIENTS);
@@ -248,6 +260,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			Logging.warning(this, "unexpected visualViewIndex ", getSelectedIndex(), " in clients view");
 			break;
 		}
+
+		mainFrame.deactivateLoadingCursor();
 	}
 
 	public void setHostParameterPage() {

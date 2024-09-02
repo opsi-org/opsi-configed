@@ -1738,7 +1738,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public boolean resetView(ViewIndex viewIndex) {
 		Logging.info(this, "resetView to ", viewIndex, "  selectedClients size: ", selectedClients.size());
-		mainFrame.activateLoadingCursor();
+
 		boolean result = true;
 
 		switch (viewIndex) {
@@ -1758,7 +1758,6 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 		}
 
-		mainFrame.deactivateLoadingCursor();
 		return result;
 	}
 
@@ -1769,10 +1768,6 @@ public class ConfigedMain implements MessagebusListener {
 	public void setViewIndex(ViewIndex newViewIndex) {
 		Logging.info(this, "visualViewIndex ", newViewIndex, ", (old) viewIndex ", viewIndex);
 		Logging.info(this, "setViewIndex anyDataChanged ", anyDataChanged);
-
-		checkSaveAll(true);
-
-		depotsList.setEnabled(newViewIndex == ViewIndex.VIEW_CLIENTS);
 
 		Logging.debug(this, "switch to viewIndex ", viewIndex);
 		boolean result = resetView(newViewIndex);
@@ -2196,9 +2191,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		requestReloadStatesAndActions();
 
-		if (viewIndex == ViewIndex.VIEW_LOCALBOOT_PRODUCTS || viewIndex == ViewIndex.VIEW_NETBOOT_PRODUCTS) {
-			mainFrame.getClientConfiguration().stateChanged(null);
-		}
+		mainFrame.getClientConfiguration().updateProductTab();
 
 		mainFrame.deactivateLoadingCursor();
 	}
