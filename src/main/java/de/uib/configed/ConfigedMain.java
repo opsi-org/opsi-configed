@@ -1034,7 +1034,7 @@ public class ConfigedMain implements MessagebusListener {
 			// change in selection not via clientpage (i.e. via tree)
 
 			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ", viewIndex);
-			resetView();
+			resetView(viewIndex);
 		}
 	}
 
@@ -1736,10 +1736,6 @@ public class ConfigedMain implements MessagebusListener {
 		return logfiles;
 	}
 
-	public void resetView() {
-		resetView(viewIndex);
-	}
-
 	public boolean resetView(ViewIndex viewIndex) {
 		Logging.info(this, "resetView to ", viewIndex, "  selectedClients size: ", selectedClients.size());
 		mainFrame.activateLoadingCursor();
@@ -2201,7 +2197,7 @@ public class ConfigedMain implements MessagebusListener {
 		requestReloadStatesAndActions();
 
 		if (viewIndex == ViewIndex.VIEW_LOCALBOOT_PRODUCTS || viewIndex == ViewIndex.VIEW_NETBOOT_PRODUCTS) {
-			resetView();
+			resetView(viewIndex);
 		}
 
 		mainFrame.deactivateLoadingCursor();

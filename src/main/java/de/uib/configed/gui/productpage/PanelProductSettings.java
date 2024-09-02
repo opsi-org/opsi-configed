@@ -43,6 +43,7 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
@@ -265,7 +266,9 @@ public class PanelProductSettings extends JSplitPane {
 				boolean oldstate = productDisplayField.getValue();
 				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
 				configedMain.requestReloadStatesAndActions();
-				configedMain.resetView();
+				configedMain.resetView(
+						type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS ? ViewIndex.VIEW_LOCALBOOT_PRODUCTS
+								: ViewIndex.VIEW_NETBOOT_PRODUCTS);
 			});
 
 			jMenuVisibleColumns.add(item);
@@ -392,7 +395,9 @@ public class PanelProductSettings extends JSplitPane {
 
 		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 		configedMain.requestReloadStatesAndActions();
-		configedMain.resetView();
+		configedMain
+				.resetView(type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS ? ViewIndex.VIEW_LOCALBOOT_PRODUCTS
+						: ViewIndex.VIEW_NETBOOT_PRODUCTS);
 		configedMain.setDataChanged(false);
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
