@@ -28,6 +28,7 @@ import de.uib.configed.tree.ProductTree;
 import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
 
 public class MainPanelManager {
@@ -210,7 +211,8 @@ public class MainPanelManager {
 			long endmillis = System.currentTimeMillis();
 			Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
 
-			licenseManagementPanel = createPanel(licenseManagement, new JToolBar(),
+			licenseManagementPanel = createPanel(licenseManagement,
+					topToolBarManager.getLicensingManagementToolbar(this),
 					Configed.getResourceValue("MainFrame.labelLicenses"));
 		}
 
@@ -257,14 +259,15 @@ public class MainPanelManager {
 		licenseManagement = null;
 	}
 
-	// TODO find a way to reload the licenses
-	private void reloadLicensesAction() {
+	public void reloadLicensesAction() {
 		ConfigedMain.getMainFrame()
 				.activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
 		new Thread() {
 			@Override
 			public void run() {
-				licenseManagement.reloadLicensesData();
+				persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
+				licenseManagement = null;
+				ConfigedMain.getMainFrame().startLicensingManagement();
 				ConfigedMain.getMainFrame().deactivateLoadingPane();
 			}
 		}.start();

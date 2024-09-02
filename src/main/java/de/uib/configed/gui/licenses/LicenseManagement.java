@@ -88,17 +88,6 @@ public class LicenseManagement extends JTabbedPane {
 		});
 	}
 
-	public void reloadLicensesData() {
-		Logging.info(this, "reloadLicensesData");
-		persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
-
-		for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
-			for (PanelGenEditTable p : cmtp.getTablePanes()) {
-				p.reload();
-			}
-		}
-	}
-
 	private void initTableData() {
 		licensesStatus = LicensesTabStatus.LICENSEPOOL;
 

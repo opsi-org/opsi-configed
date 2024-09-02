@@ -72,4 +72,14 @@ public class TopToolBarManager {
 
 		return jToolBar;
 	}
+
+	public JToolBar getLicensingManagementToolbar(MainPanelManager mainPanelManager) {
+		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh"));
+		reloadButton.addActionListener(event -> mainPanelManager.reloadLicensesAction());
+
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(reloadButton);
+
+		return jToolBar;
+	}
 }
