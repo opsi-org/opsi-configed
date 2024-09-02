@@ -261,8 +261,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		configUpdateCollection = new ConfigUpdateCollection(configedMain.getSelectedClients());
 		configedMain.addToGlobalUpdateCollection(configUpdateCollection);
 
-		//	depotsList.setEnabled(false);
-
 		List<Map<String, Object>> additionalConfigs = configedMain
 				.produceAdditionalConfigs(configedMain.getSelectedClients());
 		Map<String, Object> mergedVisualMap = ConfigedMain.mergeMaps(additionalConfigs);

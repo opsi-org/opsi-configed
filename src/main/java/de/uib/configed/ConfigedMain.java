@@ -1030,11 +1030,11 @@ public class ConfigedMain implements MessagebusListener {
 		clientTree.produceActiveParents();
 
 		// With a new client the view should be updated, but only when we are in the Client configuration
-		if (editingTarget == EditingTarget.CLIENTS && viewIndex != ViewIndex.VIEW_CLIENTS) {
+		if (editingTarget == EditingTarget.CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
 			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ", viewIndex);
-			resetView(viewIndex);
+			mainFrame.getClientConfiguration().stateChanged(null);
 		}
 	}
 
@@ -2197,7 +2197,7 @@ public class ConfigedMain implements MessagebusListener {
 		requestReloadStatesAndActions();
 
 		if (viewIndex == ViewIndex.VIEW_LOCALBOOT_PRODUCTS || viewIndex == ViewIndex.VIEW_NETBOOT_PRODUCTS) {
-			resetView(viewIndex);
+			mainFrame.getClientConfiguration().stateChanged(null);
 		}
 
 		mainFrame.deactivateLoadingCursor();
