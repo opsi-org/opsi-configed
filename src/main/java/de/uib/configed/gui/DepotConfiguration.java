@@ -110,7 +110,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		case 2:
 			initHostPropertiesTab();
-			setHostPropertiesPage();
+			setHostParameterPage();
 			break;
 
 		default:
@@ -126,7 +126,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(configedMain, this::setHostPropertiesPage);
+		panelHostConfig = new PanelHostConfig(configedMain, this::setHostParameterPage);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}
@@ -150,7 +150,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		setComponentAt(getSelectedIndex(), panelHostProperties);
 	}
 
-	private void setHostPropertiesPage() {
+	private void setHostParameterPage() {
 		Logging.debug(this, "setHostPropertiesPage");
 
 		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

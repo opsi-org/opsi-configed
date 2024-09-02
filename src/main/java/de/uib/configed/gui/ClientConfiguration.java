@@ -173,7 +173,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(configedMain, this::setHardwareInfoPage);
+		panelHostConfig = new PanelHostConfig(configedMain, this::setHostParameterPage);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}
