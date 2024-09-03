@@ -163,10 +163,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Map<String, String> logfiles = new HashMap<>();
 
-	public enum LicensesTabStatus {
-		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
-	}
-
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, HEALTH_CHECK, LICENSE_MANAGEMENT
 	}
@@ -800,9 +796,9 @@ public class ConfigedMain implements MessagebusListener {
 
 		clientsForTableModel.retainAll(clientsFilteredByTree);
 
-		Logging.info(this, " filterClientList ", isFilterClientList());
+		Logging.info(this, " clientTable isFilteredMode ", clientTable.isFilteredMode());
 
-		if (isFilterClientList()) {
+		if (clientTable.isFilteredMode()) {
 			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs ",
 					selectedClients.size());
 
@@ -977,10 +973,6 @@ public class ConfigedMain implements MessagebusListener {
 			// change in selection not via clientpage (i.e. via tree)
 			mainFrame.getClientConfiguration().stateChanged(null);
 		}
-	}
-
-	private boolean isFilterClientList() {
-		return clientTable.isFilteredMode();
 	}
 
 	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
@@ -1208,7 +1200,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "activateClientByTree, pathToNode: ", pathToNode);
 
 		// since we select based on the tree view we disable the filter
-		if (isFilterClientList()) {
+		if (clientTable.isFilteredMode()) {
 			toggleFilterClientList(false);
 		}
 	}
@@ -1252,7 +1244,7 @@ public class ConfigedMain implements MessagebusListener {
 		activatedGroupModel.setActive(true);
 
 		// since we select based on the tree view we disable the filter
-		if (isFilterClientList()) {
+		if (clientTable.isFilteredMode()) {
 			toggleFilterClientList(true);
 		}
 	}
@@ -1381,10 +1373,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		return logfiles;
-	}
-
-	public void setSelectedIndex(int i) {
-		mainFrame.getClientConfiguration().setSelectedIndex(i);
 	}
 
 	public List<String> getSelectedDepots() {
@@ -2173,7 +2161,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		persistenceController.getHostDataService().deleteClients(selectedClients);
 
-		if (isFilterClientList()) {
+		if (clientTable.isFilteredMode()) {
 			toggleFilterClientList(true);
 		}
 

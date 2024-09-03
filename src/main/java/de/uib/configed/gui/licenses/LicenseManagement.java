@@ -20,7 +20,6 @@ import javax.swing.event.ChangeEvent;
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.LicensesTabStatus;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.ControlPanelEditLicenses;
 import de.uib.configed.ControlPanelEnterLicense;
@@ -39,6 +38,10 @@ import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
 
 public class LicenseManagement extends JTabbedPane {
+	public enum LicensesTabStatus {
+		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
+	}
+
 	private List<LicensesTabStatus> tabOrder;
 
 	private Map<LicensesTabStatus, MultiTablePanel> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
