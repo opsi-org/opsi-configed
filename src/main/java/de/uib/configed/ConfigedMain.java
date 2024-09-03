@@ -518,6 +518,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info(this, "setEditingTarget ", newEditingTarget);
+		checkSaveAll(true);
 		if (newEditingTarget == editingTarget) {
 			Logging.info(this, "stop setting editingTarget, it remains the same");
 			return;
