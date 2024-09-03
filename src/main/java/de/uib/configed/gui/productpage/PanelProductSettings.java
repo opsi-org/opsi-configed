@@ -327,7 +327,7 @@ public class PanelProductSettings extends JSplitPane {
 			Logging.debug(this, "selected modelIndex ", tableProducts.convertRowIndexToModel(selectedRow));
 			Logging.debug(this, "selected  value at ",
 					tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
-			configedMain.setProductEdited(
+			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setProductEdited(
 					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0),
 					this);
 		}

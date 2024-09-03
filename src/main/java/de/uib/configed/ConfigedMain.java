@@ -68,10 +68,8 @@ import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
-import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.InstallationStateUpdateManager;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.serverconsole.CommandControlDialog;
@@ -87,10 +85,8 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -106,10 +102,6 @@ import de.uib.utils.userprefs.UserPreferences;
 
 public class ConfigedMain implements MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
-
-	public enum ViewIndex {
-		VIEW_CLIENTS, VIEW_LOCALBOOT_PRODUCTS, VIEW_NETBOOT_PRODUCTS
-	}
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
@@ -148,28 +140,7 @@ public class ConfigedMain implements MessagebusListener {
 	private SavedSearchesDialog savedSearchesDialog;
 	private ClientSelectionDialog clientSelectionDialog;
 
-	// the properties for one product and all selected clients
-	private Collection<Map<String, Object>> productProperties;
 	private UpdateCollection updateCollection = new UpdateCollection();
-	private Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
-	/*
-	 * for each product:
-	 * a collection of all clients
-	 * that contains name value pairs with changed data
-	 */
-
-	private ProductpropertiesUpdateCollection clientProductpropertiesUpdateCollection;
-
-	private InstallationStateUpdateManager updateManager;
-
-	// Map<client, <product, <propertykey, propertyvalue>>>
-	private Map<String, Map<String, Map<String, String>>> collectChangedLocalbootStates = new HashMap<>();
-	private Map<String, Map<String, Map<String, String>>> collectChangedNetbootStates = new HashMap<>();
-
-	// a map of products, product --> list of used as an indicator that a product is in the depot
-	private Map<String, List<String>> possibleActions = new HashMap<>();
-
-	private Map<String, ListMerger> mergedProductProperties;
 
 	private Set<String> allowedClients;
 
@@ -190,8 +161,6 @@ public class ConfigedMain implements MessagebusListener {
 	private FCompleteWinProducts productActionFrame;
 
 	private int clientCount;
-
-	private ViewIndex viewIndex = ViewIndex.VIEW_CLIENTS;
 
 	private Map<String, String> sessionInfo = new HashMap<>();
 
@@ -265,10 +234,6 @@ public class ConfigedMain implements MessagebusListener {
 		clientTable.initSortKeys();
 
 		startMainFrame(this, clientTable, depotsList, clientTree, productTree);
-
-		updateManager = new InstallationStateUpdateManager(this,
-				mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getTableProducts(),
-				mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getTableProducts());
 
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
@@ -371,7 +336,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void addClientToTable(String clientId) {
 		if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| viewIndex != ViewIndex.VIEW_CLIENTS) {
+				|| mainFrame.getClientConfiguration().getSelectedIndex() != 0) {
 			return;
 		}
 
@@ -387,32 +352,13 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void removeClientFromTable(String clientId) {
 		if (!persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| viewIndex != ViewIndex.VIEW_CLIENTS) {
+				|| mainFrame.getClientConfiguration().getSelectedIndex() != 0) {
 			return;
 		}
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
-	}
-
-	public void updateProductTableForClient(String clientId, String productType) {
-		if (viewIndex == ViewIndex.VIEW_LOCALBOOT_PRODUCTS
-				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
-			List<String> attributes = getLocalbootStateAndActionsAttributes();
-			updateManager.updateProductTableForClient(clientId, attributes);
-		} else if (viewIndex == ViewIndex.VIEW_NETBOOT_PRODUCTS
-				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
-			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
-			// Remove uneeded attributes
-			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
-			attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
-
-			updateManager.updateProductTableForClient(clientId, attributes);
-		} else {
-			Logging.info(this, "in updateProduct nothing to update because Tab for productType ", productType,
-					"not open or configed not yet initialized");
-		}
 	}
 
 	public Set<String> getConnectedClientsByMessagebus() {
@@ -488,7 +434,6 @@ public class ConfigedMain implements MessagebusListener {
 				.getProductGroupsPD();
 		fillterPermittedProductGroups(productGroups.keySet());
 
-		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
 		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
@@ -614,7 +559,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
-		checkErrorList();
+		Logging.checkErrorList(mainFrame);
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): ", clientTable.getSelectedValues().size());
 
@@ -1032,13 +977,11 @@ public class ConfigedMain implements MessagebusListener {
 		// With a new client the view should be updated, but only when we are in the Client configuration
 		if (editingTarget == EditingTarget.CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
-
-			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ", viewIndex);
 			mainFrame.getClientConfiguration().stateChanged(null);
 		}
 	}
 
-	public boolean isFilterClientList() {
+	private boolean isFilterClientList() {
 		return clientTable.isFilteredMode();
 	}
 
@@ -1200,109 +1143,6 @@ public class ConfigedMain implements MessagebusListener {
 		return depotsOfSelectedClients;
 	}
 
-	private void collectTheProductProperties(String productEdited) {
-		// we build
-		// --
-		// -- the map of the merged product properties from combining the properties of
-		// all selected clients
-
-		Logging.info(this, "collectTheProductProperties for ", productEdited);
-		mergedProductProperties = new HashMap<>();
-		productProperties = new ArrayList<>(selectedClients.size());
-
-		if (!selectedClients.isEmpty() && possibleActions.get(productEdited) != null) {
-			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(selectedClients.get(0), productEdited);
-
-			if (productPropertiesFor1Client != null) {
-				productProperties.add(productPropertiesFor1Client);
-
-				for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
-					// create a merger for product property
-					ListMerger merger = new ListMerger((List<?>) productProperty.getValue());
-
-					mergedProductProperties.put(productProperty.getKey(), merger);
-				}
-
-				// merge the other clients
-				mergeOtherClients(productEdited);
-			}
-		}
-	}
-
-	private void mergeOtherClients(String productEdited) {
-		for (int i = 1; i < selectedClients.size(); i++) {
-			String selectedClient = selectedClients.get(i);
-
-			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(selectedClient, productEdited);
-
-			productProperties.add(productPropertiesFor1Client);
-
-			for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
-				List<?> value = (List<?>) productProperty.getValue();
-
-				if (mergedProductProperties.get(productProperty.getValue()) == null) {
-					// we need a new property. it is not common
-
-					ListMerger merger = new ListMerger(value);
-
-					merger.setHavingNoCommonValue();
-					mergedProductProperties.put(productProperty.getKey(), merger);
-				} else {
-					ListMerger merger = mergedProductProperties.get(productProperty.getKey());
-
-					ListMerger mergedValue = merger.merge(value);
-
-					// on merging we check if the value is the same as before
-					mergedProductProperties.put(productProperty.getKey(), mergedValue);
-				}
-			}
-		}
-	}
-
-	private static void clearListEditors() {
-		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().clearListEditors();
-		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().clearListEditors();
-	}
-
-	public void setProductEdited(String productname, PanelProductSettings sourcePanel) {
-		// called from ProductSettings
-
-		Logging.debug(this, "setProductEdited ", productname);
-
-		if (clientProductpropertiesUpdateCollection != null) {
-			updateCollection.remove(clientProductpropertiesUpdateCollection);
-		}
-		clientProductpropertiesUpdateCollection = null;
-
-		if (clientProductpropertiesUpdateCollections.get(productname) == null) {
-			// have we got already a clientProductpropertiesUpdateCollection for this
-			// product?
-			// if not, we produce one
-
-			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(selectedClients,
-					productname);
-
-			clientProductpropertiesUpdateCollections.put(productname, clientProductpropertiesUpdateCollection);
-			addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
-		} else {
-			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productname);
-		}
-
-		collectTheProductProperties(productname);
-
-		dependenciesModel.setActualProduct(productname);
-
-		Logging.debug(this, " --- mergedProductProperties ", mergedProductProperties);
-
-		Logging.debug(this, "setProductEdited ", productname, " client specific properties ",
-				persistenceController.getProductDataService().hasClientSpecificProperties(productname));
-
-		sourcePanel.initEditing(productname, productProperties, mergedProductProperties,
-				clientProductpropertiesUpdateCollection);
-	}
-
 	private void treeClientsSelectAction(TreePath newSelectedPath) {
 		Logging.info(this, "treeClientsSelectAction");
 
@@ -1450,7 +1290,7 @@ public class ConfigedMain implements MessagebusListener {
 		return true;
 	}
 
-	private boolean setDepotRepresentative() {
+	public boolean setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
 		if (getSelectedClients().isEmpty()) {
@@ -1511,137 +1351,11 @@ public class ConfigedMain implements MessagebusListener {
 		return true;
 	}
 
-	private List<String> getLocalbootProductDisplayFieldsList() {
-		List<String> result = new ArrayList<>();
-		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
-				.getProductOnClientsDisplayFieldsLocalbootProducts().entrySet()) {
-			if (Boolean.TRUE.equals(productDisplay.getValue())) {
-				result.add(productDisplay.getKey());
-			}
-		}
-
-		return result;
+	public String getDepotRepresentative() {
+		return depotRepresentative;
 	}
 
-	private List<String> getNetbootProductDisplayFieldsList() {
-		List<String> result = new ArrayList<>();
-
-		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
-				.getProductOnClientsDisplayFieldsNetbootProducts().entrySet()) {
-			if (Boolean.TRUE.equals(productDisplay.getValue())) {
-				result.add(productDisplay.getKey());
-			}
-		}
-
-		return result;
-	}
-
-	private boolean setLocalbootProductsPage() {
-		return setProductsPage(collectChangedLocalbootStates, getLocalbootStateAndActionsAttributes(),
-				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getClientConfiguration().getPanelLocalbootProductSettings(),
-				getLocalbootProductDisplayFieldsList());
-	}
-
-	private boolean setNetbootProductsPage() {
-		return setProductsPage(collectChangedNetbootStates, Collections.emptyList(),
-				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getClientConfiguration().getPanelNetbootProductSettings(),
-				getNetbootProductDisplayFieldsList());
-	}
-
-	private boolean setProductsPage(Map<String, Map<String, Map<String, String>>> changedProductStates,
-			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings,
-			List<String> displayFields) {
-		if (!setDepotRepresentative()) {
-			return false;
-		}
-		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getProductDataService()
-				.getMapOfProductStatesAndActions(selectedClients, attributes, productServerString);
-
-		clientProductpropertiesUpdateCollections = new HashMap<>();
-		panelProductSettings.clearEditing();
-
-		Logging.debug(this, "setProductsPage,  depotRepresentative:", depotRepresentative);
-		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
-
-		// we retrieve the properties for all clients and products
-
-		// it is necessary to do this before resetting selection below (*) since there a
-		// listener is triggered
-		// which loads the productProperties for each client separately
-
-		persistenceController.getProductDataService().retrieveProductPropertiesPD(clientTable.getSelectedValues());
-
-		Set<String> oldProductSelection = panelProductSettings.getSelectedIDs();
-		List<? extends SortKey> currentSortKeysProducts = panelProductSettings.getSortKeys();
-		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
-		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
-
-		Set<String> productNames;
-		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
-			productNames = persistenceController.getProductDataService()
-					.getAllLocalbootProductNames(depotRepresentative);
-		} else {
-			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
-		}
-
-		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
-				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
-				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
-		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(this, changedProductStates,
-				productNames, statesAndActions, possibleActions,
-				persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
-				displayFields);
-		panelProductSettings.setTableModel(istmForSelectedClients);
-
-		panelProductSettings.setSortKeys(currentSortKeysProducts);
-
-		panelProductSettings.setSelection(oldProductSelection);
-		if (panelProductSettings.isFilteredMode()) {
-			panelProductSettings.reduceToSelected();
-		}
-
-		panelProductSettings.updateSearchFields();
-
-		int[] columnWidths = getTableColumnWidths(panelProductSettings.getTableProducts());
-		setTableColumnWidths(panelProductSettings.getTableProducts(), columnWidths);
-
-		return true;
-	}
-
-	private List<String> getLocalbootStateAndActionsAttributes() {
-		List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
-
-		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_INSTALLATION_INFO)) {
-			attributes.add(ProductState.KEY_ACTION_PROGRESS);
-			attributes.add(ProductState.KEY_LAST_ACTION);
-		}
-
-		// Remove uneeded attributes
-		attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
-
-		attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
-		return attributes;
-	}
-
-	private static List<String> getAttributesFromProductDisplayFields(List<String> productDisplayFields) {
-		List<String> attributes = new ArrayList<>();
-		for (String v : productDisplayFields) {
-			if (ProductState.KEY_VERSION_INFO.equals(v)) {
-				attributes.add(ProductState.KEY_PACKAGE_VERSION);
-				attributes.add(ProductState.KEY_PRODUCT_VERSION);
-			} else if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
-				attributes.add(ProductState.KEY_ACTION_RESULT);
-			} else {
-				attributes.add(v);
-			}
-		}
-
-		return attributes;
-	}
-
-	private static int[] getTableColumnWidths(JTable table) {
+	public static int[] getTableColumnWidths(JTable table) {
 		TableColumnModel columnModel = table.getColumnModel();
 		int[] columnWidths = new int[columnModel.getColumnCount()];
 
@@ -1653,7 +1367,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	// only has an effect if number of table columns not changed
-	private static void setTableColumnWidths(JTable table, int[] columnWidths) {
+	public static void setTableColumnWidths(JTable table, int[] columnWidths) {
 		// Only do it if number of columns didn't change
 		if (columnWidths.length == table.getColumnModel().getColumnCount()) {
 			for (int i = 0; i < columnWidths.length; i++) {
@@ -1736,53 +1450,8 @@ public class ConfigedMain implements MessagebusListener {
 		return logfiles;
 	}
 
-	public boolean resetView(ViewIndex viewIndex) {
-		Logging.info(this, "resetView to ", viewIndex, "  selectedClients size: ", selectedClients.size());
-
-		boolean result = true;
-
-		switch (viewIndex) {
-		case VIEW_CLIENTS:
-			break;
-
-		case VIEW_LOCALBOOT_PRODUCTS:
-			result = setLocalbootProductsPage();
-			break;
-
-		case VIEW_NETBOOT_PRODUCTS:
-			result = setNetbootProductsPage();
-			break;
-
-		default:
-			Logging.warning(this, "resetting View failed, no index for viewIndex: '", viewIndex, "' found");
-			break;
-		}
-
-		return result;
-	}
-
 	public void setSelectedIndex(int i) {
 		mainFrame.getClientConfiguration().setSelectedIndex(i);
-	}
-
-	public void setViewIndex(ViewIndex newViewIndex) {
-		Logging.info(this, "visualViewIndex ", newViewIndex, ", (old) viewIndex ", viewIndex);
-		Logging.info(this, "setViewIndex anyDataChanged ", anyDataChanged);
-
-		Logging.debug(this, "switch to viewIndex ", viewIndex);
-		boolean result = resetView(newViewIndex);
-
-		if (result) {
-			viewIndex = newViewIndex;
-		} else {
-			Logging.debug(" tab index could not be changed, go to clients view");
-			viewIndex = ViewIndex.VIEW_CLIENTS;
-			mainFrame.getClientConfiguration().setSelectedIndex(0);
-		}
-
-		if (result) {
-			clearListEditors();
-		}
 	}
 
 	public List<String> getSelectedDepots() {
@@ -1948,13 +1617,12 @@ public class ConfigedMain implements MessagebusListener {
 			Logging.info(this, "saveConfigs ");
 
 			updateProductStates();
-			Logging.debug(this, "saveConfigs: collectChangedLocalbootStates ", collectChangedLocalbootStates);
 
 			Logging.info(this, "we should now start working on the update collection of size  ",
 					updateCollection.size());
 
 			updateCollection.doCall();
-			checkErrorList();
+			Logging.checkErrorList(mainFrame);
 
 			Logging.info(this, "we clear the update collection ", updateCollection.getClass());
 
@@ -1977,9 +1645,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		private void updateProductStates() {
-			updateManager.updateProductStates(collectChangedLocalbootStates, OpsiPackage.TYPE_LOCALBOOT);
-
-			updateManager.updateProductStates(collectChangedNetbootStates, OpsiPackage.TYPE_NETBOOT);
+			mainFrame.getClientConfiguration().getProductPageManager().updateProductStates();
 		}
 	}
 
@@ -2340,7 +2006,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.debug(this, " start moving to another depot");
 		persistenceController.getHostInfoCollections().setDepotForClients(selectedClients, targetDepot);
-		checkErrorList();
+		Logging.checkErrorList(mainFrame);
 		refreshClientListKeepingGroup();
 	}
 
@@ -2385,7 +2051,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 		if (persistenceController.getHostDataService().createClients(clients)) {
 			Logging.debug(this, "createClients", clients);
-			checkErrorList();
+			Logging.checkErrorList(mainFrame);
 
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
@@ -2398,7 +2064,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void createClient(String newClientID, final String[] groups) {
-		checkErrorList();
+		Logging.checkErrorList(mainFrame);
 		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
 		setRebuiltClientListTableModel(true);
@@ -2827,10 +2493,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	protected void checkErrorList() {
-		Logging.checkErrorList(mainFrame);
-	}
-
 	public static JFrame getFrame() {
 		if (mainFrame != null) {
 			return mainFrame;
@@ -2935,11 +2597,7 @@ public class ConfigedMain implements MessagebusListener {
 				new TypeReference<Map<String, Object>>() {
 				});
 
-		if (WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString().equals(eventType)
-				|| WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.toString().equals(eventType)
-				|| WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString().equals(eventType)) {
-			updateManager.updateProduct(eventData);
-		} else if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
+		if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
 			addClientToConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
 		} else if (WebSocketEvent.HOST_DISCONNECTED.toString().equals(eventType)) {
 			removeClientFromConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));

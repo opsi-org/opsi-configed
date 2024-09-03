@@ -23,7 +23,7 @@ import javax.swing.event.ChangeListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.ViewIndex;
+import de.uib.configed.ProductPageManager;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.productpage.PanelProductSettings;
@@ -64,6 +64,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private JPopupMenu popupClients;
 
+	private ProductPageManager productPageManager;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -74,6 +76,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		init();
 
+		productPageManager = new ProductPageManager(configedMain, this);
+
 		super.addChangeListener(this);
 	}
 
@@ -83,6 +87,10 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	public PanelProductSettings getPanelNetbootProductSettings() {
 		return panelNetbootProductSettings;
+	}
+
+	public ProductPageManager getProductPageManager() {
+		return productPageManager;
 	}
 
 	public PanelHostConfig getPanelHostConfig() {
@@ -190,7 +198,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 				mainFrame.getHostsStatusPanel().getSelectedClientNames());
 	}
 
-	public void setLogview(String logtype) {
+	private void setLogview(String logtype) {
 		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
 		if (i < 0) {
 			return;
@@ -217,7 +225,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		Logging.devel(this, "state change in clientConfiguration with selected index", getSelectedIndex());
+		Logging.info(this, "state change in clientConfiguration with selected index", getSelectedIndex());
 
 		configedMain.checkSaveAll(true);
 
@@ -225,15 +233,15 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		switch (getSelectedIndex()) {
 		case 0:
-			configedMain.setViewIndex(ViewIndex.VIEW_CLIENTS);
+			// This is client view, nothing needs to be done...
 			break;
 
 		case 1:
-			configedMain.setViewIndex(ViewIndex.VIEW_LOCALBOOT_PRODUCTS);
+			productPageManager.setLocalbootProductsPage();
 			break;
 
 		case 2:
-			configedMain.setViewIndex(ViewIndex.VIEW_NETBOOT_PRODUCTS);
+			productPageManager.setNetbootProductsPage();
 			break;
 
 		case 3:
@@ -295,9 +303,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		}
 		Map<String, Object> originalMap = ConfigedMain.mergeMaps(persistenceController.getConfigDataService()
 				.getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
-		mainFrame.getClientConfiguration().getPanelHostConfig().initEditing(
-				Utils.getListStringRepresentation(configedMain.getSelectedClients(), null), mergedVisualMap,
-				configListCellOptions, additionalConfigs, configUpdateCollection, false,
+		panelHostConfig.initEditing(Utils.getListStringRepresentation(configedMain.getSelectedClients(), null),
+				mergedVisualMap, configListCellOptions, additionalConfigs, configUpdateCollection, false,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
 	}
 
@@ -314,10 +321,10 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		Logging.info(this, "setHardwareInfoPage for, clients count ", configedMain.getSelectedClients().size());
 
 		if (configedMain.getSelectedClients().size() == 1) {
-			mainFrame.getClientConfiguration().setHardwareInfo(persistenceController.getHardwareDataService()
+			setHardwareInfo(persistenceController.getHardwareDataService()
 					.getHardwareInfo(configedMain.getSelectedClients().get(0)));
 		} else {
-			mainFrame.getClientConfiguration().setHardwareInfoNotPossible();
+			setHardwareInfoNotPossible();
 		}
 	}
 
@@ -326,7 +333,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		showHardwareLog.repaint();
 	}
 
-	public void setHardwareInfoNotPossible() {
+	private void setHardwareInfoNotPossible() {
 		Logging.info(this, "setHardwareInfoNotPossible");
 
 		if (showHardwareLogNotFoundPanel == null) {
@@ -338,7 +345,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		showHardwareInfo(showHardwareLogNotFoundPanel);
 	}
 
-	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
+	private void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
 		panelHWInfo.setHardwareInfo(hardwareInfo);
 		showHardwareInfo(panelHWInfo);
 	}
@@ -363,7 +370,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private void setLogPage() {
 		Logging.debug(this, "setLogPage");
-		mainFrame.getClientConfiguration().setLogFileTab("instlog");
-		mainFrame.getClientConfiguration().setLogview("instlog");
+		setLogFileTab("instlog");
+		setLogview("instlog");
 	}
 }

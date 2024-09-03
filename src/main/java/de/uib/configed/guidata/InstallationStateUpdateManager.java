@@ -137,7 +137,8 @@ public class InstallationStateUpdateManager {
 			public void run() {
 				if (configedMain.getSelectedClients().size() == 1
 						&& clientId.equals(configedMain.getSelectedClients().get(0))) {
-					configedMain.updateProductTableForClient(clientId, productType);
+					ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager()
+							.updateProductTableForClient(clientId, productType);
 					productsToUpdate.clear();
 				}
 			}

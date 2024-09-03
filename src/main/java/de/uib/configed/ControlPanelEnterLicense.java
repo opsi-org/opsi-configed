@@ -23,6 +23,7 @@ import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditDate;
 import de.uib.utils.swing.FEditPane;
 import de.uib.utils.table.GenTableModel;
@@ -77,7 +78,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 
-		configedMain.checkErrorList();
+		Logging.checkErrorList(ConfigedMain.getMainFrame());
 	}
 
 	@Override
