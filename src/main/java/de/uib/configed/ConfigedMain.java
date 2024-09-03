@@ -33,7 +33,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingUtilities;
@@ -42,7 +41,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -70,7 +68,6 @@ import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.serverconsole.CommandControlDialog;
 import de.uib.configed.terminal.TerminalFrame;
@@ -1095,7 +1092,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setRebuiltClientListTableModel --- got model selected ",
 				clientTable.getSelectedValues().size());
 
-		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
+		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTable.getTable());
 
 		// We want to deactivate the listener here, since we want it to react only later when 
 		// the values are selected. We only reactivate the listener if it was active before.
@@ -1105,7 +1102,7 @@ public class ConfigedMain implements MessagebusListener {
 			clientTable.activateListSelectionListener();
 		}
 
-		setTableColumnWidths(clientTable.getTable(), columnWidths);
+		ConfigedUtilityMethods.setTableColumnWidths(clientTable.getTable(), columnWidths);
 
 		clientTable.initColumnNames();
 		Logging.debug(this, " --- model set  ");
@@ -1354,71 +1351,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public String getDepotRepresentative() {
 		return depotRepresentative;
-	}
-
-	public static int[] getTableColumnWidths(JTable table) {
-		TableColumnModel columnModel = table.getColumnModel();
-		int[] columnWidths = new int[columnModel.getColumnCount()];
-
-		for (int i = 0; i < columnModel.getColumnCount(); i++) {
-			columnWidths[i] = columnModel.getColumn(i).getWidth();
-		}
-
-		return columnWidths;
-	}
-
-	// only has an effect if number of table columns not changed
-	public static void setTableColumnWidths(JTable table, int[] columnWidths) {
-		// Only do it if number of columns didn't change
-		if (columnWidths.length == table.getColumnModel().getColumnCount()) {
-			for (int i = 0; i < columnWidths.length; i++) {
-				table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
-				table.getColumnModel().getColumn(i).setWidth(columnWidths[i]);
-			}
-		}
-	}
-
-	public static Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
-		Map<String, Object> mergedMap = new HashMap<>();
-		if (collection == null || collection.isEmpty()) {
-			return mergedMap;
-		}
-
-		Map<String, Object> mergeIn = collection.get(0);
-
-		for (Entry<String, Object> entry : mergeIn.entrySet()) {
-			List<?> value = (List<?>) entry.getValue();
-			ListMerger merger = new ListMerger(value);
-			mergedMap.put(entry.getKey(), merger);
-		}
-
-		// merge the other maps
-		for (int i = 1; i < collection.size(); i++) {
-			mergeIn = collection.get(i);
-
-			for (Entry<String, Object> mergeInEntry : mergeIn.entrySet()) {
-				List<?> value = (List<?>) mergeInEntry.getValue();
-
-				if (mergedMap.get(mergeInEntry.getKey()) == null) {
-					ListMerger merger = new ListMerger(value);
-					merger.setHavingNoCommonValue();
-					mergedMap.put(mergeInEntry.getKey(), merger);
-				} else {
-					ListMerger merger = (ListMerger) mergedMap.get(mergeInEntry.getKey());
-					ListMerger mergedValue = merger.merge(value);
-					mergedMap.put(mergeInEntry.getKey(), mergedValue);
-				}
-			}
-		}
-
-		return mergedMap;
-	}
-
-	public static void removeKeysStartingWith(Map<String, ? extends Object> m,
-			Iterable<String> keystartersStrNotWanted) {
-		for (String start : keystartersStrNotWanted) {
-			m.keySet().removeIf(key -> key.startsWith(start));
-		}
 	}
 
 	public List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {

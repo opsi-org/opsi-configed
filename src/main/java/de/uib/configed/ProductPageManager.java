@@ -155,8 +155,8 @@ public class ProductPageManager implements MessagebusListener {
 
 		panelProductSettings.updateSearchFields();
 
-		int[] columnWidths = ConfigedMain.getTableColumnWidths(panelProductSettings.getTableProducts());
-		ConfigedMain.setTableColumnWidths(panelProductSettings.getTableProducts(), columnWidths);
+		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(panelProductSettings.getTableProducts());
+		ConfigedUtilityMethods.setTableColumnWidths(panelProductSettings.getTableProducts(), columnWidths);
 	}
 
 	private List<String> getLocalbootStateAndActionsAttributes() {

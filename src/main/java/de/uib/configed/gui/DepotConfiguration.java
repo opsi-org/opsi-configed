@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedUtilityMethods;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
@@ -188,10 +189,10 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		List<Map<String, Object>> additionalConfigs = configedMain
 				.produceAdditionalConfigs(depotsList.getSelectedValuesList());
-		Map<String, Object> mergedVisualMap = ConfigedMain.mergeMaps(additionalConfigs);
-		ConfigedMain.removeKeysStartingWith(mergedVisualMap,
+		Map<String, Object> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
+		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-		Map<String, Object> originalMap = ConfigedMain.mergeMaps(persistenceController.getConfigDataService()
+		Map<String, Object> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController.getConfigDataService()
 				.getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null),
 				mergedVisualMap, persistenceController.getConfigDataService().getConfigListCellOptionsPD(),

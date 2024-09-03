@@ -23,6 +23,7 @@ import javax.swing.event.ChangeListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedUtilityMethods;
 import de.uib.configed.ProductPageManager;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
@@ -285,8 +286,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		List<Map<String, Object>> additionalConfigs = configedMain
 				.produceAdditionalConfigs(configedMain.getSelectedClients());
-		Map<String, Object> mergedVisualMap = ConfigedMain.mergeMaps(additionalConfigs);
-		ConfigedMain.removeKeysStartingWith(mergedVisualMap,
+		Map<String, Object> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
+		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 		Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
 				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
@@ -301,7 +302,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 						.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
 			}
 		}
-		Map<String, Object> originalMap = ConfigedMain.mergeMaps(persistenceController.getConfigDataService()
+		Map<String, Object> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController.getConfigDataService()
 				.getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(configedMain.getSelectedClients(), null),
 				mergedVisualMap, configListCellOptions, additionalConfigs, configUpdateCollection, false,
