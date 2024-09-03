@@ -1,13 +1,16 @@
 # Changelog
 
 ## [4.3.3.x] - 2024-xx-xx
-## Fixed
+### Fixed
 - Show correctly the new lines ("\n") in tooltips
 - Correct support page in help menu
 
+### Changed
+- Small change in Layout in Dialogs
+
 ## [4.3.3.13] - 2024-04-08
 
-## Fixed
+### Fixed
 - Space between options in command for uninstalling opsi products
 
 
