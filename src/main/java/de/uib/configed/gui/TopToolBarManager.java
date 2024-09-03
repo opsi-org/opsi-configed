@@ -75,6 +75,7 @@ public class TopToolBarManager {
 
 	public JToolBar getLicensingManagementToolbar(MainPanelManager mainPanelManager) {
 		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh"));
+		reloadButton.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		reloadButton.addActionListener(event -> mainPanelManager.reloadLicensesAction());
 
 		JToolBar jToolBar = new JToolBar();
