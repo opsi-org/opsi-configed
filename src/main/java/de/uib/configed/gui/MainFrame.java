@@ -111,7 +111,7 @@ public class MainFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent event) {
-				configedMain.finishApp(true, 0);
+				ConfigedMain.finishApp(true, 0);
 			}
 		});
 
@@ -156,7 +156,7 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		Icons.addThemeIconToMenuItem(jMenuFileExit, "exit");
-		jMenuFileExit.addActionListener(actionEvent -> configedMain.finishApp(true, 0));
+		jMenuFileExit.addActionListener(actionEvent -> ConfigedMain.finishApp(true, 0));
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
@@ -173,8 +173,8 @@ public class MainFrame extends JFrame {
 
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
-		jMenuFile.add(Messages.createJMenuLanguages(this::restartConfiged));
-		jMenuFile.add(createJMenuTheme(this::restartConfiged));
+		jMenuFile.add(Messages.createJMenuLanguages(MainFrame::restartConfiged));
+		jMenuFile.add(createJMenuTheme(MainFrame::restartConfiged));
 		jMenuFile.add(jMenuFileLogout);
 		jMenuFile.add(jMenuFileExit);
 
@@ -239,8 +239,8 @@ public class MainFrame extends JFrame {
 		return checkSavedLicensesFrame;
 	}
 
-	private void restartConfiged() {
-		configedMain.closeInstance(true);
+	private static void restartConfiged() {
+		ConfigedMain.closeInstance(true);
 		new Thread() {
 			@Override
 			public void run() {

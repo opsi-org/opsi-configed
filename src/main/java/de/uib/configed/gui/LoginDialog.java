@@ -416,7 +416,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	private void endProgram() {
-		configedMain.finishApp(false, 0);
+		ConfigedMain.finishApp(false, 0);
 	}
 
 	@Override

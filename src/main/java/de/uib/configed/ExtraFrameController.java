@@ -82,9 +82,9 @@ public final class ExtraFrameController {
 		}
 	}
 
-	public static void callNewClientDialog(ConfigedMain configedMain) {
+	public static void callNewClientDialog() {
 		if (newClientDialog == null) {
-			newClientDialog = new NewClientDialog(configedMain);
+			newClientDialog = new NewClientDialog();
 		}
 
 		newClientDialog.setDefaultValues();

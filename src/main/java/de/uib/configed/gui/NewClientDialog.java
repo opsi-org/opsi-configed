@@ -61,8 +61,6 @@ import de.uib.utils.swing.SeparatedDocument;
 public final class NewClientDialog extends FGeneralDialog implements KeyListener {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
 
-	private ConfigedMain configedMain;
-
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
 	private JTextField jTextGroupsSelection;
@@ -83,14 +81,12 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public NewClientDialog(ConfigedMain configedMain) {
+	public NewClientDialog() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.title"), false, new String[] {
 				Configed.getResourceValue("buttonClose"), Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				730, 670);
 
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-
-		this.configedMain = configedMain;
 
 		init();
 	}

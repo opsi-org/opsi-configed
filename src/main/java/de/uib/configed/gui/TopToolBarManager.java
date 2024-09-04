@@ -59,7 +59,7 @@ public class TopToolBarManager {
 	public JToolBar getConfigurationToolBar() {
 		JButton addClientButton = new JButton(Icons.getIntellijIcon("add"));
 		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
-		addClientButton.addActionListener(event -> ExtraFrameController.callNewClientDialog(configedMain));
+		addClientButton.addActionListener(event -> ExtraFrameController.callNewClientDialog());
 		addClientButton.setEnabled(!persistenceController.getConfigDataService().getDisabledClientMenuEntries()
 				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT));
 
