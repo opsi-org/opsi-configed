@@ -2001,8 +2001,8 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	public boolean closeInstance(boolean checkdirty) {
-		Logging.info(this, "start closing instance, checkdirty ", checkdirty);
+	public static boolean closeInstance(boolean checkdirty) {
+		Logging.info("start closing instance, checkdirty ", checkdirty);
 
 		if (checkdirty) {
 			int closeCheckResult = ChangedDataManager.checkClose();
@@ -2033,7 +2033,7 @@ public class ConfigedMain implements MessagebusListener {
 		return result;
 	}
 
-	public void finishApp(boolean checkdirty, int exitcode) {
+	public static void finishApp(boolean checkdirty, int exitcode) {
 		if (closeInstance(checkdirty)) {
 			Main.endApp(exitcode);
 		}
