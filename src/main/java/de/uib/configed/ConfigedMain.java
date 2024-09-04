@@ -1219,7 +1219,7 @@ public class ConfigedMain implements MessagebusListener {
 	public boolean setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
-		if (getSelectedClients().isEmpty()) {
+		if (selectedClients.isEmpty()) {
 			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
 
 			return true;
@@ -1526,7 +1526,7 @@ public class ConfigedMain implements MessagebusListener {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
 		setColumnSessionInfo(true);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
-		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());
+		infoRetriever.setOnlySelectedClients(!selectedClients.isEmpty());
 		infoRetriever.execute();
 	}
 
@@ -1765,10 +1765,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void wakeSelectedClients() {
-		if (selectedClients == null) {
-			return;
-		}
-
 		Logging.info(this, "wakeUp ", selectedClients.size());
 		if (selectedClients.isEmpty()) {
 			return;

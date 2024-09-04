@@ -78,7 +78,7 @@ public class LogTabComponent extends LogPane {
 
 	@Override
 	protected void downloadAllAsZip() {
-		if (configedMain.getSelectedClients() == null || configedMain.getSelectedClients().isEmpty()) {
+		if (configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
 

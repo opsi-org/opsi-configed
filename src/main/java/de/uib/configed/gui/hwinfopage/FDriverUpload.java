@@ -49,7 +49,7 @@ public class FDriverUpload extends SecondaryFrame {
 
 		String clientName;
 
-		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() == 1) {
+		if (configedMain.getSelectedClients().size() == 1) {
 			clientName = configedMain.getSelectedClients().get(0);
 		} else {
 			clientName = "";
