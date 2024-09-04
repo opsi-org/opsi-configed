@@ -106,10 +106,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	private GeneralDataChangedKeeper generalDataChangedKeeper;
-	private ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
-	private GeneralDataChangedKeeper hostConfigsDataChangedKeeper;
-
 	private DependenciesModel dependenciesModel;
 
 	private List<String> selectedClients = new ArrayList<>();
@@ -117,8 +113,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Set<String> clientsFilteredByTree = new HashSet<>();
 	private ActivatedGroupModel activatedGroupModel;
-
-	private boolean anyDataChanged;
 
 	private String clientInDepot;
 	private HostInfo hostInfo = new HostInfo();
@@ -212,8 +206,6 @@ public class ConfigedMain implements MessagebusListener {
 		} else {
 			Logging.warning(this, "Messagebus is not open, but should be on start");
 		}
-
-		anyDataChanged = false;
 
 		Logging.debug(this, "initialTreeActivation");
 
@@ -364,9 +356,8 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void initData() {
 		dependenciesModel = new DependenciesModel();
-		generalDataChangedKeeper = new GeneralDataChangedKeeper(this);
-		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper(this, hostInfo);
-		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper(this);
+
+		ChangedDataManager.initData(this, hostInfo);
 
 		initMessagebus();
 	}
@@ -448,7 +439,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info(this, "setEditingTarget ", newEditingTarget);
-		checkSaveAll(true);
+		ChangedDataManager.checkSaveAll(true);
 		if (newEditingTarget == editingTarget) {
 			Logging.info(this, "stop setting editingTarget, it remains the same");
 			return;
@@ -489,7 +480,7 @@ public class ConfigedMain implements MessagebusListener {
 	public void actOnListSelection() {
 		Logging.info(this, "actOnListSelection");
 
-		checkSaveAll(true);
+		ChangedDataManager.checkSaveAll(true);
 		Logging.checkErrorList();
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): ", clientTable.getSelectedValues().size());
@@ -1340,7 +1331,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	private void reloadData() {
-		checkSaveAll(true);
+		ChangedDataManager.checkSaveAll(true);
 
 		List<String> selValuesList = clientTable.getSelectedValues();
 		Logging.info(this, "reloadData, selValuesList.size ", selValuesList.size());
@@ -1396,90 +1387,6 @@ public class ConfigedMain implements MessagebusListener {
 		EditingTarget t = editingTarget;
 		editingTarget = null;
 		setEditingTarget(t);
-	}
-
-	public GeneralDataChangedKeeper getGeneralDataChangedKeeper() {
-		return generalDataChangedKeeper;
-	}
-
-	/* ============================================ */
-
-	public GeneralDataChangedKeeper getHostConfigsDataChangedKeeper() {
-		return hostConfigsDataChangedKeeper;
-	}
-
-	/* ============================================ */
-
-	public ClientInfoDataChangedKeeper getClientInfoDataChangedKeeper() {
-		return clientInfoDataChangedKeeper;
-	}
-
-	/* ============================================ */
-
-	public void setDataChanged(boolean b) {
-		setDataChanged(b, true);
-	}
-
-	private void setDataChanged(boolean b, boolean show) {
-		Logging.info(this, "setDataChanged ", b, ", showing ", show);
-		anyDataChanged = b;
-
-		if (show && mainFrame != null) {
-			mainFrame.saveConfigurationsSetEnabled(b);
-		}
-	}
-
-	public void cancelChanges() {
-		Logging.info(this, "cancelChanges ");
-		setDataChanged(false);
-		generalDataChangedKeeper.cancel();
-	}
-
-	public int checkClose() {
-		int result = 0;
-
-		if (anyDataChanged) {
-			result = JOptionPane.showConfirmDialog(mainFrame,
-					Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
-					Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"), JOptionPane.YES_NO_CANCEL_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-		}
-
-		Logging.debug(this, "checkClose result ", result);
-		return result;
-	}
-
-	// save if not otherwise stated
-	public void checkSaveAll(boolean ask) {
-		Logging.debug(this, "checkSaveAll: anyDataChanged, ask  ", anyDataChanged, ", ", ask);
-
-		if (anyDataChanged) {
-			// without showing, but must be on first place since we run in this method again
-			setDataChanged(false, false);
-
-			if (ask) {
-				if (clientInfoDataChangedKeeper.askSave()) {
-					clientInfoDataChangedKeeper.save();
-				} else {
-					// reset to old values
-					hostInfo.resetGui();
-				}
-			} else {
-				clientInfoDataChangedKeeper.save();
-			}
-
-			if (!ask || generalDataChangedKeeper.askSave()) {
-				generalDataChangedKeeper.save();
-			}
-
-			if (!ask || hostConfigsDataChangedKeeper.askSave()) {
-				hostConfigsDataChangedKeeper.save();
-			} else {
-				hostConfigsDataChangedKeeper.cancel();
-			}
-
-			setDataChanged(false, true);
-		}
 	}
 
 	private void updateConnectionStatusInTable(String clientName) {
@@ -1796,7 +1703,7 @@ public class ConfigedMain implements MessagebusListener {
 			return;
 		}
 
-		checkSaveAll(false);
+		ChangedDataManager.checkSaveAll(false);
 
 		new AbstractErrorListProducer("opsiclientd processActionRequests") {
 			@Override
@@ -2098,10 +2005,10 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "start closing instance, checkdirty ", checkdirty);
 
 		if (checkdirty) {
-			int closeCheckResult = checkClose();
+			int closeCheckResult = ChangedDataManager.checkClose();
 
 			if (closeCheckResult == JOptionPane.YES_OPTION) {
-				checkSaveAll(false);
+				ChangedDataManager.checkSaveAll(false);
 			} else if (closeCheckResult != JOptionPane.NO_OPTION) {
 				return false;
 			} else {

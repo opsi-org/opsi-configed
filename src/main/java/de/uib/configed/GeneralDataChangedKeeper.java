@@ -15,19 +15,13 @@ import de.uib.utils.logging.Logging;
 public class GeneralDataChangedKeeper extends DataChangedKeeper {
 	private FTextArea fAskSaveProductConfiguration;
 
-	private ConfigedMain configedMain;
-
-	public GeneralDataChangedKeeper(ConfigedMain configedMain) {
-		this.configedMain = configedMain;
-	}
-
 	@Override
 	public void dataHaveChanged(Object source) {
 		super.dataHaveChanged(source);
 		Logging.info(this, "dataHaveChanged from ", source);
 
 		// anyDataChanged in ConfigedMain
-		configedMain.setDataChanged(super.isDataChanged());
+		ChangedDataManager.setDataChanged(super.isDataChanged());
 	}
 
 	public boolean askSave() {

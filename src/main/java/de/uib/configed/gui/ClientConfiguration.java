@@ -21,6 +21,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedUtilityMethods;
@@ -185,7 +186,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(configedMain, this::setHostParameterPage);
+		panelHostConfig = new PanelHostConfig(this::setHostParameterPage);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}
@@ -252,7 +253,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		Logging.info(this, "state change in clientConfiguration with selected index", getSelectedIndex());
 
-		configedMain.checkSaveAll(true);
+		ChangedDataManager.checkSaveAll(true);
 
 		mainFrame.activateLoadingCursor();
 

@@ -19,6 +19,7 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.DepotsList;
@@ -63,7 +64,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		EditMapPanelX propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
-		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
+		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
 

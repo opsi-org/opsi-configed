@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedUtilityMethods;
@@ -128,7 +129,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(configedMain, this::setHostParameterPage);
+		panelHostConfig = new PanelHostConfig(this::setHostParameterPage);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}
@@ -148,7 +149,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		}
 
 		panelHostProperties = new PanelHostProperties();
-		panelHostProperties.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
+		panelHostProperties.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 		setComponentAt(getSelectedIndex(), panelHostProperties);
 	}
 

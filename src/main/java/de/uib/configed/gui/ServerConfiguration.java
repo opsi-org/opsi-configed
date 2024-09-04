@@ -29,7 +29,7 @@ public class ServerConfiguration extends JTabbedPane {
 			.getPersistenceController();
 
 	public ServerConfiguration(ConfigedMain configedMain) {
-		panelHostConfig = new PanelHostConfig(configedMain, this::setHostParameterPage);
+		panelHostConfig = new PanelHostConfig(this::setHostParameterPage);
 
 		setHostParameterPage();
 

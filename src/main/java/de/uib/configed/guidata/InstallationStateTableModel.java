@@ -26,6 +26,7 @@ import javax.swing.table.AbstractTableModel;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -598,7 +599,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		changedStatesForProduct.put(stateType, state);
 
-		configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
+		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
 	private String getChangedState(String clientId, String product, String stateType) {
@@ -1259,7 +1260,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.warning(this, "unexpected indexPreparedColumns[col] ", indexPreparedColumns[col]);
 		}
 
-		configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
+		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
 	private void setLatestProductVersion() {

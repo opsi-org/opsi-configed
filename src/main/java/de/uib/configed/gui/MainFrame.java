@@ -35,6 +35,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
@@ -160,7 +161,7 @@ public class MainFrame extends JFrame {
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSaveConfigurations.addActionListener(actionEvent -> configedMain.checkSaveAll(false));
+		jMenuFileSaveConfigurations.addActionListener(actionEvent -> ChangedDataManager.checkSaveAll(false));
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		Icons.addIntellijIconToMenuItem(jMenuFileReload, "refresh");

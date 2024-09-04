@@ -41,6 +41,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ClientMenuManager;
@@ -162,7 +163,7 @@ public class PanelProductSettings extends JSplitPane {
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
-		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
+		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
@@ -192,7 +193,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		save.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "actionevent on save-menue");
-			configedMain.checkSaveAll(false);
+			ChangedDataManager.checkSaveAll(false);
 			configedMain.requestReloadStatesAndActions();
 		});
 
@@ -397,14 +398,14 @@ public class PanelProductSettings extends JSplitPane {
 
 		// We want to rebuild the shown page in the client configuration after reload
 		ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
-		configedMain.setDataChanged(false);
+		ChangedDataManager.setDataChanged(false);
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	protected void saveAndExecuteAction() {
 		Logging.info(this, "saveAndExecuteAction");
-		configedMain.checkSaveAll(false);
+		ChangedDataManager.checkSaveAll(false);
 		configedMain.requestReloadStatesAndActions();
 		configedMain.processActionRequestsAllProducts();
 	}

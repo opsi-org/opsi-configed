@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLaf;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
@@ -53,7 +54,7 @@ public class LeftControlBar extends JToolBar {
 		jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save", 32));
 		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
 		jButtonSaveConfiguration.setEnabled(false);
-		jButtonSaveConfiguration.addActionListener(event -> configedMain.checkSaveAll(false));
+		jButtonSaveConfiguration.addActionListener(event -> ChangedDataManager.checkSaveAll(false));
 
 		addSeparator();
 		add(jButtonReload);

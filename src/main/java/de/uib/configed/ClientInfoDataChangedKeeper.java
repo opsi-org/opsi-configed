@@ -54,12 +54,9 @@ public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 
 		Logging.debug(this, "dataHaveChanged dataChanged ", dataChanged);
 
-		configedMain.setDataChanged(super.isDataChanged());
-
-		Logging.debug(this, "dataHaveChanged dataChanged ", dataChanged);
+		ChangedDataManager.setDataChanged(super.isDataChanged());
 
 		// anyDataChanged in ConfigedMain
-
 		Logging.info(this, "dataHaveChanged dataChanged ", dataChanged);
 	}
 

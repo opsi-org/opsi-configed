@@ -14,7 +14,7 @@ import java.util.NavigableMap;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
@@ -36,22 +36,21 @@ public class PanelHostConfig extends JPanel {
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private ConfigedMain configedMain;
+
 	private Runnable configUpdater;
 
-	public PanelHostConfig(ConfigedMain configedMain, Runnable configUpdater) {
-		this.configedMain = configedMain;
+	public PanelHostConfig(Runnable configUpdater) {
 		this.configUpdater = configUpdater;
 
 		buildPanel();
 
-		editMapPanel.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
+		editMapPanel.registerDataChangedObserver(ChangedDataManager.getHostConfigsDataChangedKeeper());
 	}
 
 	private void reloadHostConfig() {
 		Logging.info(this, "reloadHostConfig");
 
-		configedMain.cancelChanges();
+		ChangedDataManager.cancelChanges();
 
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
@@ -61,7 +60,7 @@ public class PanelHostConfig extends JPanel {
 
 	private void saveHostConfig() {
 		Logging.debug(this, "saveHostConfig");
-		configedMain.checkSaveAll(false);
+		ChangedDataManager.checkSaveAll(false);
 	}
 
 	private void handleUserInPropertyClass(String superclass, String user) {
