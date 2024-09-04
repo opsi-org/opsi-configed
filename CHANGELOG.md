@@ -3,7 +3,7 @@
 
 ### Changed
 - Keep connection and certificate validators so that they don't have to be recreated with every server request to improve performance
-
+- Rework GUI design, put View change to the left, etc.
 
 ## [4.4.0.4] - 2024-08-14
 
