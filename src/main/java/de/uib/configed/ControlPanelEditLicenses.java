@@ -20,7 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
-import de.uib.configed.gui.licenses.LicensesPanel;
+import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelEditLicenses;
 import de.uib.configed.type.licenses.LicenseEntry;
@@ -48,9 +48,9 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
-	private LicensesPanel licensesPane;
+	private LicenseManagement licensesPane;
 
-	public ControlPanelEditLicenses(ConfigedMain configedMain, LicensesPanel licensesPane) {
+	public ControlPanelEditLicenses(ConfigedMain configedMain, LicenseManagement licensesPane) {
 		thePanel = new PanelEditLicenses(this);
 		this.configedMain = configedMain;
 		this.licensesPane = licensesPane;

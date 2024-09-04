@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,7 +23,6 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.LicensingInfoPanelGenEditTable;
@@ -35,7 +33,7 @@ import de.uib.utils.table.provider.MapSource;
 import de.uib.utils.table.provider.TableSource;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 
-public class LicensingInfoPanel extends JPanel {
+public class OpsiLicensing extends JPanel {
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
 
@@ -49,7 +47,7 @@ public class LicensingInfoPanel extends JPanel {
 	private List<String> columnNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
-	public LicensingInfoPanel() {
+	public OpsiLicensing() {
 
 		PanelGenEditTable mainPanel = initLicensingInfoPanel();
 		JPanel clientInfo = initClientInfo();
@@ -75,21 +73,17 @@ public class LicensingInfoPanel extends JPanel {
 	private PanelGenEditTable initLicensingInfoPanel() {
 		retrieveData();
 
-		licensingTable = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0,
-				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
-						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
-						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
-				false) {
+		licensingTable = new LicensingInfoPanelGenEditTable() {
 			@Override
 			public void reload() {
-				Logging.info(this, " LicInfoPanelGenTable reload, reduced ", !LicensingInfoPanel.extendedView);
+				Logging.info(this, " LicInfoPanelGenTable reload, reduced ", !OpsiLicensing.extendedView);
 				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
 						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-						!LicensingInfoPanel.extendedView);
+						!OpsiLicensing.extendedView);
 				retrieveData();
 				tableSource = new MapSource(columnNames, theSourceMap, false);
 				buildModel();
@@ -171,15 +165,6 @@ public class LicensingInfoPanel extends JPanel {
 			licensingTable.reload();
 		});
 
-		JButton buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
-		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
-		buttonReload.setPreferredSize(Globals.NEW_SMALL_BUTTON);
-
-		buttonReload.addActionListener((ActionEvent actionEvent) -> {
-			LicensingInfoMap.requestRefresh();
-			licensingTable.reload();
-		});
-
 		JPanel panel = new JPanel();
 		GroupLayout gLayout = new GroupLayout(panel);
 		panel.setLayout(gLayout);
@@ -189,21 +174,15 @@ public class LicensingInfoPanel extends JPanel {
 
 		gLayout.setHorizontalGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(gLayout.createSequentialGroup()
-						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(50)
 						.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gLayout.createSequentialGroup().addComponent(redWarningColor, 10, 10, 10)
-						.addComponent(redWarningLabel).addGap(0, 0, Short.MAX_VALUE).addComponent(orangeWarningColor,
-								10, 10, 10)
-						.addComponent(orangeWarningLabel))
-				.addGroup(
-						gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15).addComponent(
-								warningLevelPercent).addGap(15).addComponent(
-										warningLevelDays))
+						.addComponent(redWarningLabel).addGap(0, 0, Short.MAX_VALUE)
+						.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
+				.addGroup(gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15)
+						.addComponent(warningLevelPercent).addGap(15).addComponent(warningLevelDays))
 				.addGroup(gLayout
 						.createSequentialGroup().addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 
@@ -219,46 +198,48 @@ public class LicensingInfoPanel extends JPanel {
 						.addGap(60).addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(customerTitle).addComponent(customerNames))));
 
-		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(redWarningColor, 10, 10, 10).addComponent(redWarningLabel)
-						.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
-				.addGap(15)
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
-						.addComponent(warningLevelPercent).addComponent(warningLevelDays))
-				.addGap(25)
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(clientTitle)
-						.addGap(30).addComponent(customerTitle))
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(gLayout
-						.createSequentialGroup()
+		gLayout.setVerticalGroup(
+				gLayout.createSequentialGroup()
+						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(redWarningColor, 10, 10, 10).addComponent(redWarningLabel)
+								.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
+						.addGap(15)
+						.addGroup(gLayout
+								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
+								.addComponent(warningLevelPercent).addComponent(warningLevelDays))
+						.addGap(25)
+						.addGroup(gLayout
+								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(clientTitle).addGap(30)
+								.addComponent(customerTitle))
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(gLayout.createSequentialGroup().addComponent(allClient).addComponent(macos)
-										.addComponent(linux).addComponent(windows))
-								.addGroup(gLayout.createSequentialGroup().addComponent(allClientNum)
-										.addComponent(macosNum).addComponent(linuxNum).addComponent(windowsNum)))
-						.addGap(30).addComponent(checksumTitle).addComponent(checksum)).addGap(30)
-						.addComponent(customerNames)));
+								.addGroup(gLayout.createSequentialGroup()
+										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addGroup(gLayout.createSequentialGroup().addComponent(allClient)
+														.addComponent(macos).addComponent(linux).addComponent(windows))
+												.addGroup(gLayout.createSequentialGroup().addComponent(allClientNum)
+														.addComponent(macosNum).addComponent(linuxNum)
+														.addComponent(windowsNum)))
+										.addGap(30).addComponent(checksumTitle).addComponent(checksum))
+								.addGap(30).addComponent(customerNames)));
 
 		return panel;
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {
-		LicensingInfoPanel.extendedView = isExtendedView;
+		OpsiLicensing.extendedView = isExtendedView;
 		Logging.info("extendedView ", extendedView, ", i.e. reduced ", !extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		LicensingInfoMap.requestRefresh();
 	}
 
 	private static void showOnlyAvailableModules(boolean showOnlyAvailableModules) {
-		LicensingInfoPanel.showOnlyAvailableModules = showOnlyAvailableModules;
+		OpsiLicensing.showOnlyAvailableModules = showOnlyAvailableModules;
 		LicensingInfoMap.requestRefresh();
 	}
 
@@ -284,5 +265,9 @@ public class LicensingInfoPanel extends JPanel {
 
 	public static boolean isShowOnlyAvailableModules() {
 		return showOnlyAvailableModules;
+	}
+
+	public void reload() {
+		licensingTable.reload();
 	}
 }

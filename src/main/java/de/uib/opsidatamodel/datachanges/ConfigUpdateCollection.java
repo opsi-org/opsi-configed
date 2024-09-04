@@ -16,14 +16,14 @@ import de.uib.utils.logging.Logging;
 
 /**
 */
-public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
+public class ConfigUpdateCollection extends UpdateCollection {
 	private List<String> objectIds;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private boolean masterConfig;
 
-	public AdditionalconfigurationUpdateCollection(List<String> objectIds) {
+	public ConfigUpdateCollection(List<String> objectIds) {
 		super();
 		this.objectIds = objectIds;
 	}
@@ -53,7 +53,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 					result = add(new ConfigUpdate(map));
 				} else {
 					Logging.debug(this, "adding AdditionalconfigurationUpdate");
-					result = add(new AdditionalconfigurationUpdate(objectIds.get(i), map));
+					result = add(new ConfigUpdateCommand(objectIds.get(i), map));
 				}
 				i++;
 			}
@@ -75,7 +75,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		if (masterConfig) {
 			persistenceController.getConfigDataService().setConfig();
 		} else {
-			persistenceController.getConfigDataService().setAdditionalConfiguration();
+			persistenceController.getConfigDataService().setConfg();
 		}
 		clear();
 	}

@@ -150,6 +150,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShowPopupMessage.addActionListener(event -> showPopupOnClientsAction());
 		jMenuShutdownClient.addActionListener(event -> configedMain.shutdownSelectedClients());
 		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
+		Icons.addThemeIconInvertedToMenuItem(jMenuRequestSessionInfo, "user");
 		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
 
 		Icons.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");

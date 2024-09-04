@@ -15,16 +15,14 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.ViewIndex;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
-import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
+import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.DataChangedObserver;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ListCellOptions;
@@ -39,14 +37,18 @@ public class PanelHostConfig extends JPanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
+	private Runnable configUpdater;
 
-	public PanelHostConfig(ConfigedMain configedMain) {
+	public PanelHostConfig(ConfigedMain configedMain, Runnable configUpdater) {
 		this.configedMain = configedMain;
+		this.configUpdater = configUpdater;
+
 		buildPanel();
+
+		editMapPanel.registerDataChangedObserver(configedMain.getHostConfigsDataChangedKeeper());
 	}
 
-	// overwrite in subclasses
-	protected void reloadHostConfig() {
+	private void reloadHostConfig() {
 		Logging.info(this, "reloadHostConfig");
 
 		configedMain.cancelChanges();
@@ -54,11 +56,10 @@ public class PanelHostConfig extends JPanel {
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		persistenceController.reloadData(CacheIdentifier.HOST_CONFIGS.toString());
 
-		configedMain.resetView(ViewIndex.VIEW_NETWORK_CONFIGURATION);
+		configUpdater.run();
 	}
 
-	// overwrite in subclasses
-	protected void saveHostConfig() {
+	private void saveHostConfig() {
 		Logging.debug(this, "saveHostConfig");
 		configedMain.checkSaveAll(false);
 	}
@@ -125,15 +126,15 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
-			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
-			boolean optionsEditable, NavigableMap<String, String> classesMap) {
-		initEditing(labeltext, configVisualMap, configOptions, collectionConfigStored, configurationUpdateCollection,
+			Collection collectionConfigStored, ConfigUpdateCollection configUpdateCollection, boolean optionsEditable,
+			NavigableMap<String, String> classesMap) {
+		initEditing(labeltext, configVisualMap, configOptions, collectionConfigStored, configUpdateCollection,
 				optionsEditable, classesMap, null, false);
 	}
 
 	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
-			Collection collectionConfigStored, AdditionalconfigurationUpdateCollection configurationUpdateCollection,
-			boolean optionsEditable, NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
+			Collection collectionConfigStored, ConfigUpdateCollection configUpdateCollection, boolean optionsEditable,
+			NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
 			boolean includeAdditionalTooltipText) {
 		Logging.info(this, "initEditing  optionsEditable ", optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
@@ -143,13 +144,8 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.includeAdditionalTooltipText(includeAdditionalTooltipText);
 		editMapPanel.setEditableMap(configVisualMap, configOptions);
 		editMapPanel.setStoreData(collectionConfigStored);
-		editMapPanel.setUpdateCollection(configurationUpdateCollection);
+		editMapPanel.setUpdateCollection(configUpdateCollection);
 		editMapPanel.setLabel(labeltext);
 		editMapPanel.setOptionsEditable(optionsEditable);
-	}
-
-	// delegated methods
-	public void registerDataChangedObserver(DataChangedObserver o) {
-		editMapPanel.registerDataChangedObserver(o);
 	}
 }

@@ -24,7 +24,7 @@ public class HealthCheckDataLoader extends SwingWorker<Void, Void> {
 
 	@Override
 	public void done() {
-		ConfigedMain.getMainFrame().setHealthCheckPanel();
+		ConfigedMain.getMainFrame().showHealthCheckPanel();
 		ConfigedMain.getMainFrame().deactivateLoadingPane();
 	}
 }

@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -87,12 +89,7 @@ public class DepotListPresenter extends JPanel {
 		return scrollpaneDepotslist;
 	}
 
-	/***
-	 * Rebuild popup window (context menu) for depotslist This is needed to
-	 * update the selected depot (e.g. open terminal on the selected depot)
-	 * after the depotslist has been updated
-	 */
-	public void rebuildPopup() {
+	private void buildPopup() {
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		if (multidepot) {
 			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
@@ -102,13 +99,38 @@ public class DepotListPresenter extends JPanel {
 			selectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 			jPopupMenu.add(selectAll);
 			jPopupMenu.add(selectWithEqualProperties);
-
 		}
 
 		JMenuItem showShell = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuOpenTerminalOnDepot"));
 		Icons.addIntellijIconToMenuItem(showShell, "terminal");
 		jPopupMenu.add(showShell);
 
+		jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent event) {
+				// We don't need this action here
+			}
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent popupMenuEvent) {
+				updatePopupMenuItem(showShell);
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
+				// We don't need this action here
+			}
+		});
+
+		depotslist.setComponentPopupMenu(jPopupMenu);
+	}
+
+	/***
+	 * Rebuild popup window (context menu) for depotslist This is needed to
+	 * update the selected depot (e.g. open terminal on the selected depot)
+	 * after the depotslist has been updated
+	 */
+	private void updatePopupMenuItem(JMenuItem showShell) {
 		if (depotslist.getSelectedValuesList().isEmpty() || depotslist.getSelectedValuesList().size() > 1) {
 			// Disable the button if no depots selected or more than one depot
 			showShell.setEnabled(false);
@@ -126,7 +148,6 @@ public class DepotListPresenter extends JPanel {
 			}
 			showShell.addActionListener(event -> configedMain.openTerminalOnDepot());
 		}
-		depotslist.setComponentPopupMenu(jPopupMenu);
 	}
 
 	/**
@@ -169,7 +190,7 @@ public class DepotListPresenter extends JPanel {
 		scrollpaneDepotslist.getViewport().add(depotslist);
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
-		rebuildPopup();
+		buildPopup();
 	}
 
 	private void layouting() {

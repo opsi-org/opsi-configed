@@ -133,11 +133,6 @@ public class TabbedLogPane extends JTabbedPane {
 		super.addTab(idents[i], textPanes[i]);
 	}
 
-	public void loadDocument(String ident) {
-		LogTabComponent logTabComponent = (LogTabComponent) getTabComponentAt(getSelectedIndex());
-		logTabComponent.loadDocument(ident);
-	}
-
 	public void setDocuments(final Map<String, String> documents, final String info) {
 		Logging.info(this, "idents.length ", idents.length, " info: ", info);
 		for (String ident : idents) {

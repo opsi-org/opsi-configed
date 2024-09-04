@@ -250,6 +250,7 @@ public final class Utils {
 		return sb.toString();
 	}
 
+	// TODO replace with Jackson something?
 	public static List<String> takeAsStringList(List<Object> list) {
 		List<String> result = new ArrayList<>();
 

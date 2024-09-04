@@ -45,8 +45,6 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 	protected void done() {
 		Logging.info(this, "Session information retrieved");
 
-		ConfigedMain.getMainFrame().getIconBarPanel().getjButtonSessionInfo().setEnabled(true);
-
 		// update column
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {

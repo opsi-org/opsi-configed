@@ -396,18 +396,18 @@ public class HostInfo {
 
 		MainFrame mainFrame = ConfigedMain.getMainFrame();
 
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientDescriptionText(clientDescription);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInventoryNumberText(clientInventoryNumber);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientNotesText(clientNotes);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientSystemUUID(clientSystemUUID);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientMacAddress(clientMacAddress);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientIpAddress(clientIpAddress);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setUefiBoot();
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setWANConfig(clientWanConfig);
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setShutdownInstall(clientShutdownInstall);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDescriptionText(clientDescription);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientInventoryNumberText(clientInventoryNumber);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientNotesText(clientNotes);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientSystemUUID(clientSystemUUID);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMacAddress(clientMacAddress);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientIpAddress(clientIpAddress);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot();
+		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig(clientWanConfig);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setShutdownInstall(clientShutdownInstall);
 
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().setOpsiHostKey(hostKey);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setOpsiHostKey(hostKey);
 	}
 
 	private void setClientDescription(ClientTable selectionPanel, String client, Map<?, ?> sourceOfChanges, int row) {
@@ -420,7 +420,7 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
 					.setClientDescriptionText(clientDescription);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -443,7 +443,7 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
 					.setClientInventoryNumberText(clientInventoryNumber);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -459,7 +459,7 @@ public class HostInfo {
 			clientOneTimePassword = (String) sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY);
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
 					.setClientOneTimePasswordText(clientOneTimePassword);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -475,7 +475,7 @@ public class HostInfo {
 			clientNotes = (String) sourceOfChanges.get(CLIENT_NOTES_KEY);
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel().setClientNotesText(clientNotes);
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel().setClientNotesText(clientNotes);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
@@ -495,7 +495,7 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
 					.setClientSystemUUID(clientSystemUUID);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -517,7 +517,7 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel()
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
 					.setClientMacAddress(clientMacAddress);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -539,7 +539,8 @@ public class HostInfo {
 			}
 
 			// restoring old value
-			ConfigedMain.getMainFrame().getTabbedConfigPanes().getClientInfoPanel().setClientIpAddress(clientIpAddress);
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
+					.setClientIpAddress(clientIpAddress);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();

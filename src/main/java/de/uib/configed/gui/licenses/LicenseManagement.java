@@ -20,7 +20,6 @@ import javax.swing.event.ChangeEvent;
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.LicensesTabStatus;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.ControlPanelEditLicenses;
 import de.uib.configed.ControlPanelEnterLicense;
@@ -38,7 +37,11 @@ import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
 
-public class LicensesPanel extends JTabbedPane {
+public class LicenseManagement extends JTabbedPane {
+	public enum LicensesTabStatus {
+		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
+	}
+
 	private List<LicensesTabStatus> tabOrder;
 
 	private Map<LicensesTabStatus, MultiTablePanel> licensesPanels = new EnumMap<>(LicensesTabStatus.class);
@@ -59,7 +62,7 @@ public class LicensesPanel extends JTabbedPane {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public LicensesPanel(ConfigedMain configedMain) {
+	public LicenseManagement(ConfigedMain configedMain) {
 		super(SwingConstants.TOP);
 
 		this.configedMain = configedMain;
@@ -86,17 +89,6 @@ public class LicensesPanel extends JTabbedPane {
 				setSelectedIndex(tabOrder.indexOf(status));
 			}
 		});
-	}
-
-	public void reloadLicensesData() {
-		Logging.info(this, "reloadLicensesData");
-		persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
-
-		for (AbstractControlMultiTablePanel cmtp : allControlMultiTablePanels) {
-			for (PanelGenEditTable p : cmtp.getTablePanes()) {
-				p.reload();
-			}
-		}
 	}
 
 	private void initTableData() {
