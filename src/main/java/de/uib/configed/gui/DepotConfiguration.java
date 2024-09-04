@@ -19,6 +19,7 @@ import javax.swing.event.ListSelectionListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedUtilityMethods;
+import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
@@ -160,11 +161,11 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 				.getDepotPropertiesForPermittedDepots();
 
 		if (hostUpdateCollection != null) {
-			configedMain.removeFromGlobalUpdateCollection(hostUpdateCollection);
+			UpdateCollectionManager.removeFromGlobalUpdateCollection(hostUpdateCollection);
 		}
 
 		hostUpdateCollection = new HostUpdateCollection();
-		configedMain.addToGlobalUpdateCollection(hostUpdateCollection);
+		UpdateCollectionManager.addToGlobalUpdateCollection(hostUpdateCollection);
 
 		String depot = "";
 		if (!depotsList.getSelectedValuesList().isEmpty()) {
@@ -179,11 +180,11 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		Logging.info(this, "setHostConfigTab  selected Depots ", depotsList.getSelectedValuesList());
 
 		if (configUpdateCollection != null) {
-			configedMain.removeFromGlobalUpdateCollection(configUpdateCollection);
+			UpdateCollectionManager.removeFromGlobalUpdateCollection(configUpdateCollection);
 		}
 
 		configUpdateCollection = new ConfigUpdateCollection(depotsList.getSelectedValuesList());
-		configedMain.addToGlobalUpdateCollection(configUpdateCollection);
+		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
 
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

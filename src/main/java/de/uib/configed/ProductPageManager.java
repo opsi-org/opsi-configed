@@ -240,7 +240,7 @@ public class ProductPageManager implements MessagebusListener {
 		Logging.debug(this, "setProductEdited ", productname);
 
 		if (clientProductpropertiesUpdateCollection != null) {
-			configedMain.removeFromGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
+			UpdateCollectionManager.removeFromGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
 		}
 		clientProductpropertiesUpdateCollection = null;
 
@@ -253,7 +253,7 @@ public class ProductPageManager implements MessagebusListener {
 					configedMain.getSelectedClients(), productname);
 
 			clientProductpropertiesUpdateCollections.put(productname, clientProductpropertiesUpdateCollection);
-			configedMain.addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
+			UpdateCollectionManager.addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
 		} else {
 			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productname);
 		}

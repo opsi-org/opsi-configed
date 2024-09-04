@@ -25,6 +25,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedUtilityMethods;
 import de.uib.configed.ProductPageManager;
+import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.productpage.PanelProductSettings;
@@ -278,11 +279,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", configedMain.getSelectedClients());
 
 		if (configUpdateCollection != null) {
-			configedMain.removeFromGlobalUpdateCollection(configUpdateCollection);
+			UpdateCollectionManager.removeFromGlobalUpdateCollection(configUpdateCollection);
 		}
 
 		configUpdateCollection = new ConfigUpdateCollection(configedMain.getSelectedClients());
-		configedMain.addToGlobalUpdateCollection(configUpdateCollection);
+		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
 
 		List<Map<String, Object>> additionalConfigs = configedMain
 				.produceAdditionalConfigs(configedMain.getSelectedClients());

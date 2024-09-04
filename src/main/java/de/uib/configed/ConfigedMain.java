@@ -76,7 +76,6 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -126,9 +125,6 @@ public class ConfigedMain implements MessagebusListener {
 	private HostInfo hostInfo = new HostInfo();
 
 	private FTextArea fAskSaveChangedText;
-	private FTextArea fAskSaveProductConfiguration;
-
-	private UpdateCollection updateCollection = new UpdateCollection();
 
 	private Set<String> allowedClients;
 
@@ -373,9 +369,9 @@ public class ConfigedMain implements MessagebusListener {
 
 	private void initData() {
 		dependenciesModel = new DependenciesModel();
-		generalDataChangedKeeper = new GeneralDataChangedKeeper();
+		generalDataChangedKeeper = new GeneralDataChangedKeeper(this);
 		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper();
-		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
+		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper(this);
 
 		initMessagebus();
 	}
@@ -1427,90 +1423,8 @@ public class ConfigedMain implements MessagebusListener {
 		setEditingTarget(t);
 	}
 
-	public void addToGlobalUpdateCollection(UpdateCollection newCollection) {
-		updateCollection.add(newCollection);
-	}
-
-	public void removeFromGlobalUpdateCollection(UpdateCollection newCollection) {
-		updateCollection.remove(newCollection);
-	}
-
 	public GeneralDataChangedKeeper getGeneralDataChangedKeeper() {
 		return generalDataChangedKeeper;
-	}
-
-	/*
-	 * ============================================
-	 * inner class generalDataChangedKeeper
-	 * ===========================================
-	 */
-	public class GeneralDataChangedKeeper extends DataChangedKeeper {
-		@Override
-		public void dataHaveChanged(Object source) {
-			super.dataHaveChanged(source);
-			Logging.info(this, "dataHaveChanged from ", source);
-
-			// anyDataChanged in ConfigedMain
-			setDataChanged(super.isDataChanged());
-		}
-
-		public boolean askSave() {
-			boolean result = false;
-			if (this.dataChanged) {
-				if (fAskSaveProductConfiguration == null) {
-					fAskSaveProductConfiguration = new FTextArea(mainFrame, Globals.APPNAME, true, new String[] {
-							Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-					fAskSaveProductConfiguration
-							.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
-
-					fAskSaveProductConfiguration.setSize(new Dimension(300, 220));
-				}
-
-				fAskSaveProductConfiguration.setLocationRelativeTo(mainFrame);
-				fAskSaveProductConfiguration.setVisible(true);
-
-				result = fAskSaveProductConfiguration.getResult() == 2;
-
-				fAskSaveProductConfiguration.setVisible(false);
-			}
-
-			return result;
-		}
-
-		private void saveConfigs() {
-			Logging.info(this, "saveConfigs ");
-
-			updateProductStates();
-
-			Logging.info(this, "we should now start working on the update collection of size  ",
-					updateCollection.size());
-
-			updateCollection.doCall();
-			Logging.checkErrorList();
-
-			Logging.info(this, "we clear the update collection ", updateCollection.getClass());
-
-			updateCollection.clearElements();
-		}
-
-		public void save() {
-			if (this.dataChanged) {
-				saveConfigs();
-			}
-
-			this.dataChanged = false;
-		}
-
-		public void cancel() {
-			Logging.info(this, "cancel");
-			this.dataChanged = false;
-
-			updateCollection.cancel();
-		}
-
-		private void updateProductStates() {
-			mainFrame.getClientConfiguration().getProductPageManager().updateProductStates();
-		}
 	}
 
 	/* ============================================ */

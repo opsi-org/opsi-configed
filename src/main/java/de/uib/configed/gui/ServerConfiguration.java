@@ -15,6 +15,7 @@ import javax.swing.JTabbedPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -28,19 +29,19 @@ public class ServerConfiguration extends JTabbedPane {
 			.getPersistenceController();
 
 	public ServerConfiguration(ConfigedMain configedMain) {
-		panelHostConfig = new PanelHostConfig(configedMain, () -> setHostParameterPage(configedMain));
+		panelHostConfig = new PanelHostConfig(configedMain, this::setHostParameterPage);
 
-		setHostParameterPage(configedMain);
+		setHostParameterPage();
 
 		super.addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
 	}
 
-	private void setHostParameterPage(ConfigedMain configedMain) {
+	private void setHostParameterPage() {
 		Logging.info(this, "setNetworkconfigurationPage for server");
 		ConfigUpdateCollection configUpdateCollection = new ConfigUpdateCollection(
 				Collections.singletonList(persistenceController.getHostInfoCollections().getConfigServer()));
 
-		configedMain.addToGlobalUpdateCollection(configUpdateCollection);
+		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
 
 		List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
 		Map<String, List<Object>> defaultValuesMap = persistenceController.getConfigDataService()

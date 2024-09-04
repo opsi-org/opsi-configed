@@ -35,6 +35,7 @@ import javax.swing.event.ListSelectionListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.DepotListCellRenderer;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -213,7 +214,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
 					listDepots.getSelectedValuesList(), productEdited);
 			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
-			configedMain.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
+			UpdateCollectionManager.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}
 	}
 
