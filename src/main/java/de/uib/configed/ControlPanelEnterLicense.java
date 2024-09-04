@@ -77,7 +77,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 
-		Logging.checkErrorList(ConfigedMain.getMainFrame());
+		Logging.checkErrorList();
 	}
 
 	@Override

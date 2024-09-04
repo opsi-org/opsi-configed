@@ -31,7 +31,7 @@ public class InitialDataLoader extends SwingWorker<Void, Void> {
 
 		isDataLoaded = true;
 
-		Logging.checkErrorList(ConfigedMain.getMainFrame());
+		Logging.checkErrorList();
 		configedMain.getLoginDialog().setVisible(false);
 
 		Logging.info("setting mainframe visible");

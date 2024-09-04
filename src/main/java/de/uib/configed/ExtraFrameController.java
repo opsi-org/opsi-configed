@@ -99,7 +99,7 @@ public final class ExtraFrameController {
 		commandControlDialog.setVisible(true);
 	}
 
-	public static void startProductActionFrame(ConfigedMain configedMain) {
+	public static void startProductActionFrame() {
 		Logging.info("startProductActionFrame ");
 
 		if (productActionFrame == null) {

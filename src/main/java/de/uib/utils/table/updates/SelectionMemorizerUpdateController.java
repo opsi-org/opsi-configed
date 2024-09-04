@@ -46,7 +46,7 @@ public class SelectionMemorizerUpdateController implements UpdateController {
 
 		boolean success = controlPanelAssignToLPools.updateLicensepool(keyValue, panel.getSelectedKeys());
 
-		Logging.checkErrorList(null);
+		Logging.checkErrorList();
 
 		return success;
 	}

@@ -521,7 +521,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
-		Logging.checkErrorList(mainFrame);
+		Logging.checkErrorList();
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): ", clientTable.getSelectedValues().size());
 
@@ -1508,7 +1508,7 @@ public class ConfigedMain implements MessagebusListener {
 					updateCollection.size());
 
 			updateCollection.doCall();
-			Logging.checkErrorList(mainFrame);
+			Logging.checkErrorList();
 
 			Logging.info(this, "we clear the update collection ", updateCollection.getClass());
 
@@ -1882,7 +1882,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.debug(this, " start moving to another depot");
 		persistenceController.getHostInfoCollections().setDepotForClients(selectedClients, targetDepot);
-		Logging.checkErrorList(mainFrame);
+		Logging.checkErrorList();
 		refreshClientListKeepingGroup();
 	}
 
@@ -1927,7 +1927,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 		if (persistenceController.getHostDataService().createClients(clients)) {
 			Logging.debug(this, "createClients", clients);
-			Logging.checkErrorList(mainFrame);
+			Logging.checkErrorList();
 
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
@@ -1940,7 +1940,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void createClient(String newClientID, final String[] groups) {
-		Logging.checkErrorList(mainFrame);
+		Logging.checkErrorList();
 		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
 		setRebuiltClientListTableModel(true);

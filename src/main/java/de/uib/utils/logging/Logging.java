@@ -19,8 +19,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JFrame;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FShowList;
@@ -210,7 +208,7 @@ public final class Logging {
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
 
-		checkErrorList(ConfigedMain.getMainFrame());
+		checkErrorList();
 	}
 
 	public static String getSize(Collection<String> c) {
@@ -399,15 +397,8 @@ public final class Logging {
 		errorList.clear();
 	}
 
-	public static synchronized void checkErrorList(JFrame parentFrame) {
-		// if errors Occurred show a window with the logged errors
-
-		final JFrame f;
-		if (parentFrame == null) {
-			f = ConfigedMain.getMainFrame();
-		} else {
-			f = parentFrame;
-		}
+	// if errors Occurred show a window with the logged errors
+	public static synchronized void checkErrorList() {
 
 		int errorCount = errorList.size();
 
@@ -418,7 +409,7 @@ public final class Logging {
 		}
 
 		if (fErrors == null) {
-			fErrors = new FShowList(f, Configed.getResourceValue("problemsOccured"), false,
+			fErrors = new FShowList(ConfigedMain.getMainFrame(), Configed.getResourceValue("problemsOccured"), false,
 					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
 		}
 
