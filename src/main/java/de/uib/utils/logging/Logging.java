@@ -76,8 +76,6 @@ public final class Logging {
 
 	private static FShowList fErrors;
 
-	private static ConfigedMain configedMain;
-
 	// private constructor to hide the implicit public one
 	private Logging() {
 	}
@@ -426,10 +424,6 @@ public final class Logging {
 		}
 
 		return result.toString();
-	}
-
-	public static void registerConfigedMain(ConfigedMain configedMain) {
-		Logging.configedMain = configedMain;
 	}
 
 	public static String getLogDirectoryName() {

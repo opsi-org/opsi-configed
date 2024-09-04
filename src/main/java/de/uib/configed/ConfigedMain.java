@@ -180,8 +180,6 @@ public class ConfigedMain implements MessagebusListener {
 		if (ConfigedMain.otp == null) {
 			setOTP(otp);
 		}
-
-		Logging.registerConfigedMain(this);
 	}
 
 	public static MainFrame getMainFrame() {
