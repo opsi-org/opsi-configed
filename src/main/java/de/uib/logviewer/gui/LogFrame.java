@@ -14,7 +14,6 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,7 +39,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
-import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utils.ExtractorUtil;
@@ -189,7 +187,7 @@ public class LogFrame extends JFrame {
 
 		JToolBar jToolBar = createIconsToolbar();
 
-		logPane = new StandaloneLogPane();
+		logPane = new StandaloneLogPane(this);
 
 		GroupLayout layoutIconPane1 = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layoutIconPane1);
@@ -228,69 +226,13 @@ public class LogFrame extends JFrame {
 		setTitle(null);
 	}
 
-	private class StandaloneLogPane extends LogPane {
-		public StandaloneLogPane() {
-			super("", true);
-		}
-
-		@Override
-		public void reload() {
-			int caretPosition = getCaretPosition();
-			super.setText(reloadFile(fileName));
-			super.setTitle(fileName);
-			super.setCaretPosition(caretPosition);
-			super.removeAllHighlights();
-		}
-
-		public void close() {
-			resetFileName();
-			super.setText(fileName);
-			super.setTitle(fileName);
-			super.removeAllHighlights();
-		}
-
-		@Override
-		public void download() {
-			String fn = openFile(Configed.getResourceValue("LogFrame.jMenuFileSave"));
-			if (fn != null && !fn.isEmpty()) {
-				saveToFile(fn, logPane.lines);
-				super.setTitle(fn);
-			}
-		}
-
-		private String reloadFile(String fn) {
-			if (fn != null && !fn.isEmpty()) {
-				return readFile(fn);
-			} else {
-				Logging.error(this, "File does not exist: ", fn);
-				JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn,
-						null, JOptionPane.WARNING_MESSAGE);
-				return "";
-			}
-		}
-
-		private void saveToFile(String filename, String[] logfilelines) {
-			try (FileWriter fWriter = new FileWriter(filename, StandardCharsets.UTF_8)) {
-				int i = 0;
-				while (i < logfilelines.length) {
-					fWriter.write(logfilelines[i] + "\n");
-					LogFrame.this.setTitle(filename);
-					i++;
-				}
-			} catch (IOException ex) {
-				Logging.error(ex, "Error encountered while trying to save to file: ", filename,
-						"\n --- ; stop saving to file");
-			}
-		}
-	}
-
 	/**********************************************************************************************/
 	// File operations
 	public static void setFileName(String fn) {
 		LogFrame.fileName = fn;
 	}
 
-	private static String openFile(String title) {
+	public static String openFile(String title) {
 		JFileChooser chooser = new JFileChooser(fileName);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
@@ -303,6 +245,10 @@ public class LogFrame extends JFrame {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}
 
+		return fileName;
+	}
+
+	public String getFileName() {
 		return fileName;
 	}
 
@@ -331,7 +277,7 @@ public class LogFrame extends JFrame {
 		}
 	}
 
-	private String readFile(String fileName) {
+	public String readFile(String fileName) {
 		String result = "";
 		File file = new File(fileName);
 
@@ -406,7 +352,7 @@ public class LogFrame extends JFrame {
 			return;
 		}
 		for (Entry<String, String> entry : files.entrySet()) {
-			StandaloneLogPane externalLogPane = new StandaloneLogPane();
+			StandaloneLogPane externalLogPane = new StandaloneLogPane(this);
 			externalLogPane.externalize(entry.getKey(), logPane.getSize());
 			externalLogPane.setTitle(entry.getKey());
 			externalLogPane.setText(entry.getValue());
@@ -416,10 +362,8 @@ public class LogFrame extends JFrame {
 	private String readNotCompressedFile(File file) {
 		Logging.info(this, "Start readNotCompressedFile");
 		String result = "";
-		try {
-			InputStream fis = new FileInputStream(file);
+		try (InputStream fis = new FileInputStream(file)) {
 			result = readInputStream(fis);
-			fis.close();
 		} catch (IOException ex) {
 			Logging.error(ex, "Error opening file: ");
 			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.errorOpeningFile") + "\n" + ex,
@@ -448,7 +392,7 @@ public class LogFrame extends JFrame {
 		return sb.toString();
 	}
 
-	private static void resetFileName() {
+	public static void resetFileName() {
 		fileName = "";
 	}
 }
