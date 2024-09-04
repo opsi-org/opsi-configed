@@ -55,7 +55,6 @@ import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
-import de.uib.configed.gui.ClientSelectionDialog;
 import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.FShowList;
@@ -65,7 +64,6 @@ import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
-import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productaction.FCompleteWinProducts;
@@ -133,9 +131,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private FTextArea fAskSaveChangedText;
 	private FTextArea fAskSaveProductConfiguration;
-
-	private SavedSearchesDialog savedSearchesDialog;
-	private ClientSelectionDialog clientSelectionDialog;
 
 	private UpdateCollection updateCollection = new UpdateCollection();
 
@@ -415,9 +410,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsNetbootProducts();
 		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsLocalbootProducts();
 
-		if (savedSearchesDialog != null) {
-			savedSearchesDialog.resetModel();
-		}
+		ExtraFrameController.reloadDialogs();
 
 		// Load all group data in this method to only call one method!
 		persistenceController.getGroupDataService().retrieveAllGroupsPD();
@@ -2077,23 +2070,6 @@ public class ConfigedMain implements MessagebusListener {
 		}.start();
 	}
 
-	private void initSavedSearchesDialog() {
-		if (savedSearchesDialog == null) {
-			Logging.debug(this, "create SavedSearchesDialog");
-			savedSearchesDialog = new SavedSearchesDialog(clientTable, this);
-			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
-			savedSearchesDialog.init();
-		}
-	}
-
-	public void clientSelectionGetSavedSearch() {
-		Logging.debug(this, "clientSelectionGetSavedSearch");
-		initSavedSearchesDialog();
-
-		savedSearchesDialog.setLocationRelativeTo(mainFrame);
-		savedSearchesDialog.setVisible(true);
-	}
-
 	public void startControlDialog() {
 		if (commandControlDialog == null) {
 			commandControlDialog = new CommandControlDialog(this);
@@ -2296,29 +2272,6 @@ public class ConfigedMain implements MessagebusListener {
 		terminalFrame.setMessagebus(messagebus);
 		terminalFrame.setSession(connectToHost);
 		terminalFrame.display();
-	}
-
-	public void callNewClientSelectionDialog() {
-		if (clientSelectionDialog != null) {
-			clientSelectionDialog.leave();
-			clientSelectionDialog = null;
-		}
-		callClientSelectionDialog();
-	}
-
-	public void callClientSelectionDialog() {
-		initSavedSearchesDialog();
-
-		if (clientSelectionDialog == null) {
-			clientSelectionDialog = new ClientSelectionDialog(this, clientTable, savedSearchesDialog);
-		}
-
-		clientSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		clientSelectionDialog.setVisible(true);
-	}
-
-	public void loadSearch(String name) {
-		clientSelectionDialog.loadSearch(name);
 	}
 
 	public void setSelectedClients(Collection<String> clientsToSelect) {

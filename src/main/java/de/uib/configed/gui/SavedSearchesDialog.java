@@ -24,6 +24,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.opsidatamodel.SavedSearches;
@@ -117,11 +118,12 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		Icons.addIntellijIconToMenuItem(edit, "edit");
-		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
+		edit.addActionListener(
+				actionEvent -> ExtraFrameController.editClientSearch(configedMain, visibleList.getSelectedValue()));
 
 		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
 		Icons.addIntellijIconToMenuItem(add, "add");
-		add.addActionListener(event -> configedMain.callClientSelectionDialog());
+		add.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		jPopupMenu.add(reload);
@@ -228,12 +230,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		persistenceController.reloadData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString());
 		resetModel();
-	}
-
-	// overwrite to implement
-	private void editSearch(String name) {
-		configedMain.callClientSelectionDialog();
-		configedMain.loadSearch(name);
 	}
 
 	public void resetModel() {

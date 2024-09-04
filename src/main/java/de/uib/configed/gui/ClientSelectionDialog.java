@@ -42,6 +42,7 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
@@ -324,7 +325,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			manager.getBackend().setReloadRequested();
-			configedMain.callNewClientSelectionDialog();
+			ExtraFrameController.callNewClientSelectionDialog(configedMain);
 			setCursor(null);
 			// we lose all components of this dialog, there is nothing to reset
 		});

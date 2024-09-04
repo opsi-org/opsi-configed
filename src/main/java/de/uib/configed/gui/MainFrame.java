@@ -38,6 +38,7 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
+import de.uib.configed.ExtraFrameController;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
@@ -396,12 +397,13 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuClientselectionGetGroup = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		jMenuClientselectionGetGroup.addActionListener((ActionEvent e) -> configedMain.callClientSelectionDialog());
+		jMenuClientselectionGetGroup
+				.addActionListener((ActionEvent e) -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
 		JMenuItem jMenuClientselectionGetSavedSearch = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		jMenuClientselectionGetSavedSearch
-				.addActionListener((ActionEvent e) -> configedMain.clientSelectionGetSavedSearch());
+				.addActionListener((ActionEvent e) -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain));
 
 		JMenuItem jMenuClientselectionProductNotUptodate = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersion"));

@@ -31,6 +31,7 @@ import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -117,11 +118,12 @@ public final class ClientMenuManager implements MenuListener {
 
 		JMenuItem jMenuSelectionGetGroup = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		jMenuSelectionGetGroup.addActionListener(event -> configedMain.callClientSelectionDialog());
+		jMenuSelectionGetGroup.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
 		JMenuItem jMenuSelectionGetSavedSearch = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
-		jMenuSelectionGetSavedSearch.addActionListener(event -> configedMain.clientSelectionGetSavedSearch());
+		jMenuSelectionGetSavedSearch
+				.addActionListener(event -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain));
 
 		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
 		Icons.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");

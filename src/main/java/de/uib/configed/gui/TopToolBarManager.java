@@ -13,6 +13,7 @@ import javax.swing.JToolBar;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ExtraFrameController;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -64,7 +65,7 @@ public class TopToolBarManager {
 
 		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search"));
 		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		clientSearchButton.addActionListener(event -> configedMain.callClientSelectionDialog());
+		clientSearchButton.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(addClientButton);
