@@ -202,12 +202,12 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 				mainFrame.getHostsStatusPanel().getSelectedClientNames());
 	}
 
-	public boolean logfileExists(String logtype) {
+	private boolean logfileExists(String logtype) {
 		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).isEmpty()
 				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 	}
 
-	public Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {
+	private Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {
 		Logging.info(this, "getLogfilesUpdating ", logtypeToUpdate);
 
 		if (configedMain.getSelectedClients().size() == 1) {
