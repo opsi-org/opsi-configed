@@ -415,7 +415,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		}.start();
 	}
 
-	private void endProgram() {
+	private static void endProgram() {
 		ConfigedMain.finishApp(false, 0);
 	}
 
