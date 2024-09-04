@@ -8,6 +8,7 @@ package de.uib.configed;
 
 import java.awt.Dimension;
 
+import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
@@ -27,6 +28,7 @@ public final class ExtraFrameController {
 	private static NewClientDialog newClientDialog;
 	private static EditTerminalCommandsDialog commandControlDialog;
 	private static FCompleteWinProducts productActionFrame;
+	private static FGroupActions groupActionFrame;
 
 	// We have a private empty constructor to prevent instantiation
 	private ExtraFrameController() {
@@ -108,5 +110,15 @@ public final class ExtraFrameController {
 		}
 
 		productActionFrame.start();
+	}
+
+	public static void startGroupActionFrame(ConfigedMain configedMain) {
+		if (groupActionFrame == null) {
+			groupActionFrame = new FGroupActions(configedMain);
+			groupActionFrame.setSize(1000, 300);
+		}
+
+		groupActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		groupActionFrame.start();
 	}
 }

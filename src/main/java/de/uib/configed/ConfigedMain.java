@@ -54,7 +54,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.groupaction.ActivatedGroupModel;
-import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.FShowList;
@@ -143,8 +142,6 @@ public class ConfigedMain implements MessagebusListener {
 	private DepotsList depotsList;
 	private Map<String, Map<String, Object>> depots;
 	private String depotRepresentative;
-
-	private FGroupActions groupActionFrame;
 
 	private int clientCount;
 
@@ -444,35 +441,18 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void handleGroupActionRequest() {
-		if (persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING)) {
-			startGroupActionFrame();
-		} else {
+		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING)) {
 			Logging.error(this,
 					"this should not happen: group actions are not available since the module \"local_imaging\" is not available");
-		}
-	}
-
-	private void startGroupActionFrame() {
-		Logging.info(this, "startGroupActionFrame clientsFilteredByTree ", activatedGroupModel.getAssociatedClients(),
-				" active ", activatedGroupModel.isActive());
-
-		if (!activatedGroupModel.isActive()) {
+		} else if (!activatedGroupModel.isActive()) {
 			FTextArea f = new FTextArea(mainFrame, Configed.getResourceValue("information"),
 					Configed.getResourceValue("ConfigedMain.noGroupSelected"), true,
 					new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 
 			f.setVisible(true);
-
-			return;
+		} else {
+			ExtraFrameController.startGroupActionFrame(this);
 		}
-
-		if (groupActionFrame == null) {
-			groupActionFrame = new FGroupActions(this);
-			groupActionFrame.setSize(1000, 300);
-			groupActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		}
-
-		groupActionFrame.start();
 	}
 
 	public void setEditingTarget(EditingTarget newEditingTarget) {
