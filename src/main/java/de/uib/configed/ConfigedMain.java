@@ -557,57 +557,54 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): ", clientTable.getSelectedValues().size());
 
-		// when initializing the program the frame may not exist
-		if (mainFrame != null) {
-			Logging.info(this, "ListSelectionListener valueChanged selectionPanel.isSelectionEmpty() ",
-					clientTable.isSelectionEmpty());
-			setSelectedClients(clientTable.getSelectedValues());
+		Logging.info(this, "ListSelectionListener valueChanged selectionPanel.isSelectionEmpty() ",
+				clientTable.isSelectionEmpty());
+		setSelectedClients(clientTable.getSelectedValues());
 
-			clientInDepot = "";
+		clientInDepot = "";
 
-			hostInfo.initialize();
+		hostInfo.initialize();
 
-			updateHostInfo();
+		updateHostInfo();
 
-			mainFrame.getClientConfiguration().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
-					selectedClients.isEmpty());
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
+				selectedClients.isEmpty());
 
-			// initialize the following method
-			Iterator<String> selectedDepotsIterator = getDepotsOfSelectedClients().iterator();
-			StringBuilder depotsAdded = new StringBuilder();
+		// initialize the following method
+		Iterator<String> selectedDepotsIterator = getDepotsOfSelectedClients().iterator();
+		StringBuilder depotsAdded = new StringBuilder();
 
-			String singleDepot = "";
+		String singleDepot = "";
 
-			if (selectedDepotsIterator.hasNext()) {
-				singleDepot = selectedDepotsIterator.next();
-				depotsAdded.append(singleDepot);
-			}
-
-			while (selectedDepotsIterator.hasNext()) {
-				String appS = selectedDepotsIterator.next();
-				depotsAdded.append(";\n");
-				depotsAdded.append(appS);
-			}
-
-			clientInDepot = depotsAdded.toString();
-
-			if (selectedClients.size() == 1) {
-				mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
-			} else {
-				mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
-			}
-
-			hostInfo.resetGui();
-
-			Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
-					" as well as ", clientTable.getSelectedValues().size());
-
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients.size(),
-					Utils.getListStringRepresentation(selectedClients, HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD),
-					clientInDepot);
-
-			activatedGroupModel.setActive(selectedClients.isEmpty());
+		if (selectedDepotsIterator.hasNext()) {
+			singleDepot = selectedDepotsIterator.next();
+			depotsAdded.append(singleDepot);
 		}
+
+		while (selectedDepotsIterator.hasNext()) {
+			String appS = selectedDepotsIterator.next();
+			depotsAdded.append(";\n");
+			depotsAdded.append(appS);
+		}
+
+		clientInDepot = depotsAdded.toString();
+
+		if (selectedClients.size() == 1) {
+			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
+		} else {
+			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
+		}
+
+		hostInfo.resetGui();
+
+		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
+				" as well as ", clientTable.getSelectedValues().size());
+
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients.size(),
+				Utils.getListStringRepresentation(selectedClients, HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD),
+				clientInDepot);
+
+		activatedGroupModel.setActive(selectedClients.isEmpty());
 
 		clientTree.updateSelectedObjectsInTable();
 	}
