@@ -32,6 +32,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
+import de.uib.configed.ServerActionManager;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
@@ -135,30 +136,30 @@ public final class ClientMenuManager implements MenuListener {
 		Icons.addIntellijIconToMenuItem(jMenuAddClient, "add");
 		jMenuAddClient.addActionListener(event -> ExtraFrameController.callNewClientDialog(configedMain));
 
-		jMenuDeletePackageCaches.addActionListener(event -> configedMain.deletePackageCachesOfSelectedClients());
+		jMenuDeletePackageCaches.addActionListener(event -> ServerActionManager.deletePackageCachesOfSelectedClients());
 
 		JMenuItem jMenuWakeOnLan = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-		jMenuWakeOnLan.addActionListener(event -> configedMain.wakeSelectedClients());
+		jMenuWakeOnLan.addActionListener(event -> ServerActionManager.wakeSelectedClients());
 
 		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
-			item.addActionListener(actionEvent -> configedMain.fireOpsiclientdEventOnSelectedClients(event));
+			item.addActionListener(actionEvent -> ServerActionManager.fireOpsiclientdEventOnSelectedClients(event));
 			jMenuOpsiClientdEvent.add(item);
 		}
 
 		jMenuShowPopupMessage.addActionListener(event -> showPopupOnClientsAction());
-		jMenuShutdownClient.addActionListener(event -> configedMain.shutdownSelectedClients());
+		jMenuShutdownClient.addActionListener(event -> ServerActionManager.shutdownSelectedClients());
 		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
 		Icons.addThemeIconInvertedToMenuItem(jMenuRequestSessionInfo, "user");
-		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
+		jMenuRebootClient.addActionListener(event -> ServerActionManager.rebootSelectedClients());
 
 		Icons.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
-		jMenuDeleteClient.addActionListener(event -> configedMain.deleteSelectedClients());
+		jMenuDeleteClient.addActionListener(event -> ServerActionManager.deleteSelectedClients());
 
-		jMenuCopyClient.addActionListener(event -> configedMain.copySelectedClient());
-		jMenuFreeLicenses.addActionListener(event -> configedMain.freeAllPossibleLicensesForSelectedClients());
+		jMenuCopyClient.addActionListener(event -> ServerActionManager.copySelectedClient());
+		jMenuFreeLicenses.addActionListener(event -> ServerActionManager.freeAllPossibleLicensesForSelectedClients());
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		jMenuRemoteControl
 				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
@@ -216,19 +217,19 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(initShowColumnsMenu());
 	}
 
-	private JMenu initResetProductsMenu() {
+	private static JMenu initResetProductsMenu() {
 		return createResetProductsMenuItemsTo();
 	}
 
-	public JMenu createResetProductsMenuItemsTo() {
+	public static JMenu createResetProductsMenuItemsTo() {
 		return createResetProductsMenuItemsTo(true, true, true);
 	}
 
-	public JMenu createResetLocalbootProductsMenuItemsTo() {
+	public static JMenu createResetLocalbootProductsMenuItemsTo() {
 		return createResetProductsMenuItemsTo(true, false, false);
 	}
 
-	public JMenu createResetNetbootProductsMenuItemsTo() {
+	public static JMenu createResetNetbootProductsMenuItemsTo() {
 		return createResetProductsMenuItemsTo(false, true, false);
 	}
 
@@ -241,7 +242,7 @@ public final class ClientMenuManager implements MenuListener {
 		return jMenuShowScheduledWOL;
 	}
 
-	private JMenu createResetProductsMenuItemsTo(boolean includeResetOptionForLocalbootProducts,
+	private static JMenu createResetProductsMenuItemsTo(boolean includeResetOptionForLocalbootProducts,
 			boolean includeResetOptionForNetbootProducts, boolean includeResetOptionForBothProducts) {
 		JMenu jMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
 
@@ -402,7 +403,7 @@ public final class ClientMenuManager implements MenuListener {
 				if (!getExtra().isEmpty()) {
 					duration = Float.parseFloat(getExtra());
 				}
-				configedMain.showPopupOnSelectedClients(getText(), duration);
+				ServerActionManager.showPopupOnSelectedClients(getText(), duration);
 			}
 		};
 
@@ -433,9 +434,9 @@ public final class ClientMenuManager implements MenuListener {
 		}
 	}
 
-	private void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
+	private static void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
-		configedMain.resetProductsForSelectedClients(withProductProperties, resetLocalbootProducts,
+		ServerActionManager.resetProductsForSelectedClients(withProductProperties, resetLocalbootProducts,
 				resetNetbootProducts);
 	}
 

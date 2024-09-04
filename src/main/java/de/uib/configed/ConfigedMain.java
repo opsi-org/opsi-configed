@@ -22,18 +22,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
-import javax.swing.GroupLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -56,7 +51,6 @@ import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.DepotsList;
-import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.FShowListWithComboSelect;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.HostsStatusPanel;
@@ -70,8 +64,6 @@ import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
 import de.uib.configed.type.DateExtendedByVars;
 import de.uib.configed.type.HostInfo;
-import de.uib.configed.type.OpsiPackage;
-import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
@@ -84,7 +76,6 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
@@ -357,7 +348,9 @@ public class ConfigedMain implements MessagebusListener {
 	private void initData() {
 		dependenciesModel = new DependenciesModel();
 
+		// Init data for these manager classes so they can work
 		ChangedDataManager.initData(this, hostInfo);
+		ServerActionManager.initData(this);
 
 		initMessagebus();
 	}
@@ -988,7 +981,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	private void setRebuiltClientListTableModel(boolean restoreSortKeys) {
+	public void setRebuiltClientListTableModel(boolean restoreSortKeys) {
 		Logging.info(this, "setRebuiltClientListTableModel, we have selected Set : ", clientTable.getSelectedSet());
 
 		setRebuiltClientListTableModel(restoreSortKeys, true, clientTable.getSelectedSet());
@@ -1316,7 +1309,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.debug(this, "selected after fetch ", getSelectedDepots().size());
 	}
 
-	private void refreshClientListKeepingGroup() {
+	public void refreshClientListKeepingGroup() {
 		// dont do anything if we did not finish another thread for this
 		String oldGroupSelection = activatedGroupModel.getGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection ", oldGroupSelection);
@@ -1421,65 +1414,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void setSessionInfo(Map<String, String> sessionInfo) {
 		this.sessionInfo = sessionInfo;
-	}
-
-	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
-			boolean resetNetbootProducts) {
-		String confirmInfoMessage = getConfirmInfoMessage(resetLocalbootProducts, resetNetbootProducts);
-		if (selectedClients.isEmpty() || confirmInfoMessage.isEmpty()
-				|| !confirmActionForSelectedClients(confirmInfoMessage)) {
-			return;
-		}
-
-		mainFrame.activateLoadingCursor();
-
-		persistenceController.getProductDataService().resetProducts(selectedClients, withDependencies,
-				resetLocalbootProducts ? OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING
-						: OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
-
-		requestReloadStatesAndActions();
-
-		mainFrame.getClientConfiguration().updateProductTab();
-
-		mainFrame.deactivateLoadingCursor();
-	}
-
-	private String getConfirmInfoMessage(boolean resetLocalbootProducts, boolean resetNetbootProducts) {
-		String confirmInfo = "";
-		if (resetLocalbootProducts && resetNetbootProducts) {
-			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetProducts.question");
-		} else if (resetLocalbootProducts) {
-			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetLocalbootProducts.question");
-		} else if (resetNetbootProducts) {
-			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetNetbootProducts.question");
-		} else {
-			Logging.warning(this, "cannot reset products because they're neither localboot nor netboot");
-		}
-		return confirmInfo;
-	}
-
-	public boolean freeAllPossibleLicensesForSelectedClients() {
-		Logging.info(this, "freeAllPossibleLicensesForSelectedClients, count ", selectedClients.size());
-
-		if (selectedClients.isEmpty()) {
-			return true;
-		}
-
-		if (!confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.confirmFreeLicenses.question"))) {
-			return false;
-		}
-
-		for (String client : selectedClients) {
-			Map<String, List<LicenseUsageEntry>> fClient2LicensesUsageList = persistenceController
-					.getLicenseDataService().getFClient2LicensesUsageListPD();
-
-			for (LicenseUsageEntry m : fClient2LicensesUsageList.get(client)) {
-				persistenceController.getLicenseDataService().addDeletionLicenseUsage(client, m.getLicenseId(),
-						m.getLicensePool());
-			}
-		}
-
-		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenseUsage();
 	}
 
 	public void callChangeClientIDDialog() {
@@ -1616,279 +1550,6 @@ public class ConfigedMain implements MessagebusListener {
 		hostInfo.resetGui();
 
 		mainFrame.deactivateLoadingCursor();
-	}
-
-	public void createClients(List<List<Object>> clients) {
-		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList();
-		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
-		if (persistenceController.getHostDataService().createClients(clients)) {
-			Logging.debug(this, "createClients", clients);
-			Logging.checkErrorList();
-
-			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
-
-			setRebuiltClientListTableModel(true);
-			activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
-			setClients(createdClientNames);
-		} else {
-			persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
-		}
-	}
-
-	public void createClient(String newClientID, final String[] groups) {
-		Logging.checkErrorList();
-		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
-
-		setRebuiltClientListTableModel(true);
-
-		if (groups.length == 0 || groups.length > 1 || !activateGroup(false, groups[0])) {
-			activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
-		}
-
-		// Sets the client on the table
-		setClient(newClientID);
-	}
-
-	public void wakeSelectedClients() {
-		Logging.info(this, "wakeUp ", selectedClients.size());
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients")) {
-			@Override
-			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().wakeOnLanOpsi43(selectedClients);
-			}
-		}.start();
-	}
-
-	public void deletePackageCachesOfSelectedClients() {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
-			@Override
-			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().deletePackageCaches(selectedClients);
-			}
-		}.start();
-	}
-
-	public void fireOpsiclientdEventOnSelectedClients(final String event) {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		new AbstractErrorListProducer("opsiclientd " + event) {
-			@Override
-			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().fireOpsiclientdEventOnClients(event,
-						selectedClients);
-			}
-		}.start();
-	}
-
-	public void processActionRequestsAllProducts() {
-		processActionRequests(Collections.emptySet());
-	}
-
-	public void processActionRequestsSelectedProducts() {
-		processActionRequests(mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getSelectedIDs());
-	}
-
-	private void processActionRequests(Set<String> products) {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		ChangedDataManager.checkSaveAll(false);
-
-		new AbstractErrorListProducer("opsiclientd processActionRequests") {
-			@Override
-			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().processActionRequests(selectedClients, products);
-			}
-		}.start();
-	}
-
-	public void showPopupOnSelectedClients(final String message, final Float seconds) {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
-			@Override
-			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().showPopupOnClients(message, selectedClients,
-						seconds);
-			}
-		}.start();
-	}
-
-	private boolean confirmActionForSelectedClients(String confirmInfo) {
-		FShowList fConfirmActionForClients = new FShowList(mainFrame, Globals.APPNAME, true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
-				400);
-
-		fConfirmActionForClients.setMessage(
-				confirmInfo + "\n\n" + Utils.getListStringRepresentation(selectedClients, null).replace(";", ""));
-
-		fConfirmActionForClients.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fConfirmActionForClients.setAlwaysOnTop(true);
-		fConfirmActionForClients.setVisible(true);
-
-		return fConfirmActionForClients.getResult() == 2;
-	}
-
-	public void shutdownSelectedClients() {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		if (confirmActionForSelectedClients(
-				Configed.getResourceValue("ConfigedMain.ConfirmShutdownClients.question"))) {
-			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
-				@Override
-				protected List<String> getErrors() {
-					return persistenceController.getRPCMethodExecutor().shutdownClients(selectedClients);
-				}
-			}.start();
-		}
-	}
-
-	public void rebootSelectedClients() {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		if (confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.ConfirmRebootClients.question"))) {
-			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoRebootClients")) {
-				@Override
-				protected List<String> getErrors() {
-					return persistenceController.getRPCMethodExecutor().rebootClients(selectedClients);
-				}
-			}.start();
-		}
-	}
-
-	public void deleteSelectedClients() {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		if (!confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.ConfirmDeleteClients.question"))) {
-			return;
-		}
-
-		persistenceController.getHostDataService().deleteClients(selectedClients);
-
-		if (clientTable.isFilteredMode()) {
-			toggleFilterClientList(true);
-		}
-
-		refreshClientListKeepingGroup();
-	}
-
-	public void copySelectedClient() {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		Optional<HostInfo> selectedClient = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps().values()
-				.stream().filter(hostValues -> hostValues.getName().equals(selectedClients.get(0))).findFirst();
-
-		if (!selectedClient.isPresent()) {
-			return;
-		}
-
-		JPanel additionalPane = new JPanel();
-		GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
-		additionalPane.setLayout(additionalPaneLayout);
-
-		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
-		JTextField jTextHostname = new JTextField(new CheckedDocument(
-				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
-						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
-				-1), "", 17);
-		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
-		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
-		jTextHostname.setText(copySuffixAddition.add());
-
-		additionalPaneLayout.setHorizontalGroup(
-				additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelHostname).addGap(Globals.GAP_SIZE).addComponent(jTextHostname));
-		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-				.addComponent(jLabelHostname)
-				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-				.addComponent(jTextHostname));
-
-		FTextArea fAskCopyClient = new FTextArea(getMainFrame(), Configed.getResourceValue("MainFrame.jMenuCopyClient"),
-				true, new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") },
-				Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
-
-		StringBuilder message = new StringBuilder();
-		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
-		message.append("\n\n");
-		message.append(selectedClient.get().getName());
-
-		fAskCopyClient.setMessage(message.toString());
-		fAskCopyClient.setLocationRelativeTo(getMainFrame());
-		fAskCopyClient.setAlwaysOnTop(true);
-		fAskCopyClient.setVisible(true);
-
-		if (fAskCopyClient.getResult() == 2) {
-			mainFrame.activateLoadingCursor();
-			String newClientName = jTextHostname.getText();
-			boolean proceed = true;
-			if (newClientName.isEmpty()) {
-				proceed = false;
-			}
-
-			HostInfo clientToCopy = selectedClient.get();
-			String newClientNameWithDomain = newClientName + "."
-					+ Utils.getDomainFromClientName(clientToCopy.getName());
-			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
-				boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
-				if (!overwriteExistingHost) {
-					proceed = false;
-				}
-			}
-
-			Logging.info(this, "copy client with new name ", newClientName);
-			if (proceed) {
-				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
-				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
-				copyClient.copy();
-
-				setRebuiltClientListTableModel(true);
-				activateGroup(false, activatedGroupModel.getGroupName());
-				setClient(newClientNameWithDomain);
-			}
-			mainFrame.deactivateLoadingCursor();
-		}
-	}
-
-	private static boolean ask2OverwriteExistingHost(String host) {
-		FTextArea fAskOverwriteExsitingHost = new FTextArea(getMainFrame(),
-				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-
-		StringBuilder message = new StringBuilder();
-		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
-		message.append(" \"");
-		message.append(host);
-		message.append("\" \n");
-		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
-
-		fAskOverwriteExsitingHost.setMessage(message.toString());
-		fAskOverwriteExsitingHost.setLocationRelativeTo(getMainFrame());
-		fAskOverwriteExsitingHost.setAlwaysOnTop(true);
-		fAskOverwriteExsitingHost.setVisible(true);
-
-		return fAskOverwriteExsitingHost.getResult() == 2;
 	}
 
 	public void openTerminalOnClient() {

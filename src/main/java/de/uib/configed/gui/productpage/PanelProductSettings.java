@@ -44,6 +44,7 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ServerActionManager;
 import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
@@ -213,7 +214,7 @@ public class PanelProductSettings extends JSplitPane {
 		itemOnDemandForSelectedProducts
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts
-				.addActionListener(actionEvent -> configedMain.processActionRequestsSelectedProducts());
+				.addActionListener(actionEvent -> ServerActionManager.processActionRequestsSelectedProducts());
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		popup.add(itemOnDemandForSelectedProducts);
@@ -407,7 +408,7 @@ public class PanelProductSettings extends JSplitPane {
 		Logging.info(this, "saveAndExecuteAction");
 		ChangedDataManager.checkSaveAll(false);
 		configedMain.requestReloadStatesAndActions();
-		configedMain.processActionRequestsAllProducts();
+		ServerActionManager.processActionRequestsAllProducts();
 	}
 
 	@SuppressWarnings("java:S1452")

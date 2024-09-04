@@ -44,6 +44,7 @@ import org.apache.commons.csv.CSVFormat;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.ServerActionManager;
 import de.uib.configed.gui.csv.CSVFormatDetector;
 import de.uib.configed.gui.csv.CSVImportDataDialog;
 import de.uib.configed.gui.csv.CSVImportDataModifier;
@@ -497,7 +498,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			}
 		}
 
-		configedMain.createClients(modifiedClients);
+		ServerActionManager.createClients(modifiedClients);
 	}
 
 	private static boolean isBoolean(String bool) {
@@ -520,7 +521,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			if (persistenceController.getHostDataService().createClient(hostname, selectedDomain, depotID, description,
 					inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig,
 					groups, netbootProduct)) {
-				configedMain.createClient(newClientID, groups);
+				ServerActionManager.createClient(newClientID, groups);
 			} else {
 				persistenceController.getHostInfoCollections().removeOpsiHostName(newClientID);
 			}
