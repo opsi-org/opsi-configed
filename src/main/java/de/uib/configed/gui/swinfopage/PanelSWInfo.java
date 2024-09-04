@@ -37,6 +37,7 @@ import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ExporterToCSV;
@@ -92,7 +93,10 @@ public class PanelSWInfo extends JPanel {
 
 	private JCheckBox checkWithMsUpdates2;
 
-	public PanelSWInfo(boolean withPopup) {
+	private ConfigedMain configedMain;
+
+	public PanelSWInfo(ConfigedMain configedMain, boolean withPopup) {
+		this.configedMain = configedMain;
 		this.withPopup = withPopup;
 
 		initTableComponents();
@@ -434,13 +438,16 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle.setText(supertitle);
 	}
 
-	/** overwrite in subclasses */
-	protected void reload() {
+	private void reload() {
 		Logging.debug(this, "reload action");
+		ConfigedMain.getMainFrame().activateLoadingCursor();
+		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+		ConfigedMain.getMainFrame().getClientConfiguration().setSoftwareAudit();
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	private void floatExternalX() {
-		PanelSWInfo copyOfMe = new PanelSWInfo(false);
+		PanelSWInfo copyOfMe = new PanelSWInfo(configedMain, false);
 		copyOfMe.setHost(hostId);
 		copyOfMe.updateModel();
 

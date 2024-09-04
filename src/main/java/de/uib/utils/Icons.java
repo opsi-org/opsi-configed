@@ -7,9 +7,7 @@
 package de.uib.utils;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
@@ -22,7 +20,7 @@ import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoPanel;
+import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
@@ -112,7 +110,7 @@ public final class Icons {
 			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
 					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!LicensingInfoPanel.isExtendedView());
+					!OpsiLicensing.isExtendedView());
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
@@ -133,22 +131,6 @@ public final class Icons {
 		}
 
 		return getOpsiIcon(32, iconColor);
-	}
-
-	public static ImageIcon getReloadLicensingIcon() {
-		ImageIcon refreshIcon = getIntellijIcon("refresh", 32);
-		ImageIcon licenseIcon = getIntellijIcon("scriptingScript");
-
-		Image refreshImage = refreshIcon.getImage();
-		Image licenseImage = licenseIcon.getImage();
-		int w = Math.max(refreshImage.getWidth(null), licenseImage.getWidth(null));
-		int h = Math.max(refreshImage.getHeight(null), licenseImage.getHeight(null));
-		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics g2 = image.getGraphics();
-		g2.drawImage(refreshImage, 0, 0, null);
-		g2.drawImage(licenseImage, 8, 8, null);
-		g2.dispose();
-		return new ImageIcon(image);
 	}
 
 	public static FlatSVGIcon getIntellijIcon(String iconName, Color color) {

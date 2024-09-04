@@ -12,14 +12,14 @@ import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
-public class AdditionalconfigurationUpdate implements UpdateCommand {
+public class ConfigUpdateCommand implements UpdateCommand {
 	private String objectId;
 	private Map<?, ?> newdata;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public AdditionalconfigurationUpdate(String objectId, Map<?, ?> newdata) {
+	public ConfigUpdateCommand(String objectId, Map<?, ?> newdata) {
 		this.objectId = objectId;
 		this.newdata = newdata;
 	}
@@ -27,7 +27,7 @@ public class AdditionalconfigurationUpdate implements UpdateCommand {
 	@Override
 	public void doCall() {
 		if (newdata instanceof ConfigName2ConfigValue configState) {
-			persistenceController.getConfigDataService().setAdditionalConfiguration(objectId, configState);
+			persistenceController.getConfigDataService().setConfiguration(objectId, configState);
 		}
 	}
 }

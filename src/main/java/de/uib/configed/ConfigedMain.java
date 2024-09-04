@@ -33,9 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -43,7 +41,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -69,11 +66,8 @@ import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
-import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.InstallationStateUpdateManager;
-import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.serverconsole.CommandControlDialog;
 import de.uib.configed.terminal.TerminalFrame;
@@ -88,12 +82,8 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
-import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
-import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -104,17 +94,11 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.FEditText;
-import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
 
 public class ConfigedMain implements MessagebusListener {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
-
-	public enum ViewIndex {
-		VIEW_CLIENTS, VIEW_LOCALBOOT_PRODUCTS, VIEW_NETBOOT_PRODUCTS, VIEW_NETWORK_CONFIGURATION, VIEW_HARDWARE_INFO,
-		VIEW_SOFTWARE_INFO, VIEW_LOG, VIEW_PRODUCT_PROPERTIES, VIEW_HOST_PROPERTIES
-	}
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
 
@@ -153,32 +137,7 @@ public class ConfigedMain implements MessagebusListener {
 	private SavedSearchesDialog savedSearchesDialog;
 	private ClientSelectionDialog clientSelectionDialog;
 
-	// the properties for one product and all selected clients
-	private Collection<Map<String, Object>> productProperties;
 	private UpdateCollection updateCollection = new UpdateCollection();
-	private Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
-	/*
-	 * for each product:
-	 * a collection of all clients
-	 * that contains name value pairs with changed data
-	 */
-
-	private ProductpropertiesUpdateCollection clientProductpropertiesUpdateCollection;
-
-	private AdditionalconfigurationUpdateCollection additionalconfigurationUpdateCollection;
-
-	private HostUpdateCollection hostUpdateCollection;
-
-	private InstallationStateUpdateManager updateManager;
-
-	// Map<client, <product, <propertykey, propertyvalue>>>
-	private Map<String, Map<String, Map<String, String>>> collectChangedLocalbootStates = new HashMap<>();
-	private Map<String, Map<String, Map<String, String>>> collectChangedNetbootStates = new HashMap<>();
-
-	// a map of products, product --> list of used as an indicator that a product is in the depot
-	private Map<String, List<String>> possibleActions = new HashMap<>();
-
-	private Map<String, ListMerger> mergedProductProperties;
 
 	private Set<String> allowedClients;
 
@@ -200,19 +159,9 @@ public class ConfigedMain implements MessagebusListener {
 
 	private int clientCount;
 
-	private ViewIndex viewIndex = ViewIndex.VIEW_CLIENTS;
-
-	// These are the default views for client and depot view
-	private int saveClientsViewIndex;
-	private int saveDepotsViewIndex = 1;
-
 	private Map<String, String> sessionInfo = new HashMap<>();
 
 	private Map<String, String> logfiles = new HashMap<>();
-
-	public enum LicensesTabStatus {
-		LICENSEPOOL, ENTER_LICENSE, EDIT_LICENSE, USAGE, RECONCILIATION, STATISTICS
-	}
 
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, HEALTH_CHECK, LICENSE_MANAGEMENT
@@ -279,10 +228,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		startMainFrame(this, clientTable, depotsList, clientTree, productTree);
 
-		updateManager = new InstallationStateUpdateManager(this,
-				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getTableProducts(),
-				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().getTableProducts());
-
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
 		initialTreeActivation();
@@ -302,7 +247,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.debug(this, "initialTreeActivation");
 
-		mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
+		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 	}
 
 	private List<String> readLocallySavedServerNames() {
@@ -384,7 +329,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void addClientToTable(String clientId) {
 		if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| viewIndex != ViewIndex.VIEW_CLIENTS) {
+				|| mainFrame.getClientConfiguration().getSelectedIndex() != 0) {
 			return;
 		}
 
@@ -400,32 +345,13 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void removeClientFromTable(String clientId) {
 		if (!persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| viewIndex != ViewIndex.VIEW_CLIENTS) {
+				|| mainFrame.getClientConfiguration().getSelectedIndex() != 0) {
 			return;
 		}
 
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
-	}
-
-	public void updateProductTableForClient(String clientId, String productType) {
-		if (viewIndex == ViewIndex.VIEW_LOCALBOOT_PRODUCTS
-				&& OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
-			List<String> attributes = getLocalbootStateAndActionsAttributes();
-			updateManager.updateProductTableForClient(clientId, attributes);
-		} else if (viewIndex == ViewIndex.VIEW_NETBOOT_PRODUCTS
-				&& OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING.equals(productType)) {
-			List<String> attributes = getAttributesFromProductDisplayFields(getNetbootProductDisplayFieldsList());
-			// Remove uneeded attributes
-			attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
-			attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
-
-			updateManager.updateProductTableForClient(clientId, attributes);
-		} else {
-			Logging.info(this, "in updateProduct nothing to update because Tab for productType ", productType,
-					"not open or configed not yet initialized");
-		}
 	}
 
 	public Set<String> getConnectedClientsByMessagebus() {
@@ -501,7 +427,6 @@ public class ConfigedMain implements MessagebusListener {
 				.getProductGroupsPD();
 		fillterPermittedProductGroups(productGroups.keySet());
 
-		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
 		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
@@ -586,32 +511,28 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void setEditingTarget(EditingTarget newEditingTarget) {
 		Logging.info(this, "setEditingTarget ", newEditingTarget);
+		checkSaveAll(true);
 		if (newEditingTarget == editingTarget) {
 			Logging.info(this, "stop setting editingTarget, it remains the same");
 			return;
 		}
 
-		// When setting the new editingTarget, the methods already need to know the new editing target
-		// So whe have to set it now
-		EditingTarget oldEditingTarget = editingTarget;
 		editingTarget = newEditingTarget;
 
 		switch (editingTarget) {
 		case CLIENTS:
-			initConfigurationView(oldEditingTarget);
-			setEditingClients();
+			mainFrame.showClientConfiguration();
 			break;
 		case DEPOTS:
-			initConfigurationView(oldEditingTarget);
-			setEditingDepots();
+			mainFrame.showDepotConfiguration();
 			break;
+
 		case SERVER:
-			initConfigurationView(oldEditingTarget);
-			setEditingServer();
+			mainFrame.showServerConfiguration();
 			break;
 
 		case DASHBOARD:
-			mainFrame.setDashboardPanel();
+			mainFrame.showDashboard();
 			break;
 
 		case OPSI_MODULES:
@@ -623,55 +544,16 @@ public class ConfigedMain implements MessagebusListener {
 			break;
 
 		case LICENSE_MANAGEMENT:
-			mainFrame.setLicensesManagement();
+			mainFrame.startLicensingManagement();
 			break;
 		}
-	}
-
-	private static void initConfigurationView(EditingTarget oldEditingTarget) {
-		if (oldEditingTarget != EditingTarget.CLIENTS && oldEditingTarget != EditingTarget.DEPOTS
-				&& oldEditingTarget != EditingTarget.SERVER) {
-			mainFrame.setConfigurationPanel();
-		}
-	}
-
-	private void setEditingClients() {
-		clientTree.setEnabled(true);
-		productTree.setEnabled(true);
-		depotsList.setEnabled(true);
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.CLIENTS, saveClientsViewIndex);
-	}
-
-	private void setEditingDepots() {
-		depotsList.setEnabled(true);
-		depotsList.requestFocus();
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		clientTree.setEnabled(false);
-		productTree.setEnabled(false);
-
-		// Save changed data before going to new view
-		checkSaveAll(true);
-
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.DEPOTS, saveDepotsViewIndex);
-	}
-
-	private void setEditingServer() {
-		clientTree.setEnabled(false);
-		productTree.setEnabled(false);
-
-		// Save changed data before going to new view
-		checkSaveAll(true);
-
-		mainFrame.getTabbedConfigPanes().initView(EditingTarget.SERVER, 0);
 	}
 
 	public void actOnListSelection() {
 		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
-		checkErrorList();
+		Logging.checkErrorList(mainFrame);
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): ", clientTable.getSelectedValues().size());
 
@@ -687,7 +569,7 @@ public class ConfigedMain implements MessagebusListener {
 
 			updateHostInfo();
 
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
+			mainFrame.getClientConfiguration().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
 					selectedClients.isEmpty());
 
 			// initialize the following method
@@ -710,9 +592,9 @@ public class ConfigedMain implements MessagebusListener {
 			clientInDepot = depotsAdded.toString();
 
 			if (selectedClients.size() == 1) {
-				mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientID(selectedClients.get(0));
+				mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
 			} else {
-				mainFrame.getTabbedConfigPanes().getClientInfoPanel().setClientID("");
+				mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
 			}
 
 			hostInfo.resetGui();
@@ -782,9 +664,9 @@ public class ConfigedMain implements MessagebusListener {
 		depotsList.setSelectedValues(oldSelectedDepots);
 	}
 
-	private static void startMainFrame(ConfigedMain configedMain, ClientTable selectionPanel, DepotsList depotsList,
+	private static void startMainFrame(ConfigedMain configedMain, ClientTable clientTable, DepotsList depotsList,
 			ClientTree clientTree, ProductTree productTree) {
-		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, clientTree, productTree);
+		mainFrame = new MainFrame(configedMain, clientTable, depotsList, clientTree, productTree);
 		Utils.setMasterFrame(mainFrame);
 
 		// rearranging visual components
@@ -914,9 +796,9 @@ public class ConfigedMain implements MessagebusListener {
 
 		clientsForTableModel.retainAll(clientsFilteredByTree);
 
-		Logging.info(this, " filterClientList ", isFilterClientList());
+		Logging.info(this, " clientTable isFilteredMode ", clientTable.isFilteredMode());
 
-		if (isFilterClientList()) {
+		if (clientTable.isFilteredMode()) {
 			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs ",
 					selectedClients.size());
 
@@ -1087,16 +969,10 @@ public class ConfigedMain implements MessagebusListener {
 		clientTree.produceActiveParents();
 
 		// With a new client the view should be updated, but only when we are in the Client configuration
-		if (editingTarget == EditingTarget.CLIENTS && viewIndex != ViewIndex.VIEW_CLIENTS) {
+		if (editingTarget == EditingTarget.CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
-
-			Logging.debug(this, "selectedClients  ", selectedClients, " ,  getViewIndex, viewClients: ", viewIndex);
-			resetView();
+			mainFrame.getClientConfiguration().stateChanged(null);
 		}
-	}
-
-	public boolean isFilterClientList() {
-		return clientTable.isFilteredMode();
 	}
 
 	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
@@ -1208,7 +1084,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setRebuiltClientListTableModel --- got model selected ",
 				clientTable.getSelectedValues().size());
 
-		int[] columnWidths = getTableColumnWidths(clientTable.getTable());
+		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTable.getTable());
 
 		// We want to deactivate the listener here, since we want it to react only later when 
 		// the values are selected. We only reactivate the listener if it was active before.
@@ -1218,7 +1094,7 @@ public class ConfigedMain implements MessagebusListener {
 			clientTable.activateListSelectionListener();
 		}
 
-		setTableColumnWidths(clientTable.getTable(), columnWidths);
+		ConfigedUtilityMethods.setTableColumnWidths(clientTable.getTable(), columnWidths);
 
 		clientTable.initColumnNames();
 		Logging.debug(this, " --- model set  ");
@@ -1255,109 +1131,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		return depotsOfSelectedClients;
-	}
-
-	private void collectTheProductProperties(String productEdited) {
-		// we build
-		// --
-		// -- the map of the merged product properties from combining the properties of
-		// all selected clients
-
-		Logging.info(this, "collectTheProductProperties for ", productEdited);
-		mergedProductProperties = new HashMap<>();
-		productProperties = new ArrayList<>(selectedClients.size());
-
-		if (!selectedClients.isEmpty() && possibleActions.get(productEdited) != null) {
-			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(selectedClients.get(0), productEdited);
-
-			if (productPropertiesFor1Client != null) {
-				productProperties.add(productPropertiesFor1Client);
-
-				for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
-					// create a merger for product property
-					ListMerger merger = new ListMerger((List<?>) productProperty.getValue());
-
-					mergedProductProperties.put(productProperty.getKey(), merger);
-				}
-
-				// merge the other clients
-				mergeOtherClients(productEdited);
-			}
-		}
-	}
-
-	private void mergeOtherClients(String productEdited) {
-		for (int i = 1; i < selectedClients.size(); i++) {
-			String selectedClient = selectedClients.get(i);
-
-			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
-					.getProductPropertiesPD(selectedClient, productEdited);
-
-			productProperties.add(productPropertiesFor1Client);
-
-			for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
-				List<?> value = (List<?>) productProperty.getValue();
-
-				if (mergedProductProperties.get(productProperty.getValue()) == null) {
-					// we need a new property. it is not common
-
-					ListMerger merger = new ListMerger(value);
-
-					merger.setHavingNoCommonValue();
-					mergedProductProperties.put(productProperty.getKey(), merger);
-				} else {
-					ListMerger merger = mergedProductProperties.get(productProperty.getKey());
-
-					ListMerger mergedValue = merger.merge(value);
-
-					// on merging we check if the value is the same as before
-					mergedProductProperties.put(productProperty.getKey(), mergedValue);
-				}
-			}
-		}
-	}
-
-	private static void clearListEditors() {
-		mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().clearListEditors();
-		mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings().clearListEditors();
-	}
-
-	public void setProductEdited(String productname, PanelProductSettings sourcePanel) {
-		// called from ProductSettings
-
-		Logging.debug(this, "setProductEdited ", productname);
-
-		if (clientProductpropertiesUpdateCollection != null) {
-			updateCollection.remove(clientProductpropertiesUpdateCollection);
-		}
-		clientProductpropertiesUpdateCollection = null;
-
-		if (clientProductpropertiesUpdateCollections.get(productname) == null) {
-			// have we got already a clientProductpropertiesUpdateCollection for this
-			// product?
-			// if not, we produce one
-
-			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(selectedClients,
-					productname);
-
-			clientProductpropertiesUpdateCollections.put(productname, clientProductpropertiesUpdateCollection);
-			addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
-		} else {
-			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productname);
-		}
-
-		collectTheProductProperties(productname);
-
-		dependenciesModel.setActualProduct(productname);
-
-		Logging.debug(this, " --- mergedProductProperties ", mergedProductProperties);
-
-		Logging.debug(this, "setProductEdited ", productname, " client specific properties ",
-				persistenceController.getProductDataService().hasClientSpecificProperties(productname));
-
-		sourcePanel.initEditing(productname, productProperties, mergedProductProperties,
-				clientProductpropertiesUpdateCollection);
 	}
 
 	private void treeClientsSelectAction(TreePath newSelectedPath) {
@@ -1427,7 +1200,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "activateClientByTree, pathToNode: ", pathToNode);
 
 		// since we select based on the tree view we disable the filter
-		if (isFilterClientList()) {
+		if (clientTable.isFilteredMode()) {
 			toggleFilterClientList(false);
 		}
 	}
@@ -1471,7 +1244,7 @@ public class ConfigedMain implements MessagebusListener {
 		activatedGroupModel.setActive(true);
 
 		// since we select based on the tree view we disable the filter
-		if (isFilterClientList()) {
+		if (clientTable.isFilteredMode()) {
 			toggleFilterClientList(true);
 		}
 	}
@@ -1493,13 +1266,6 @@ public class ConfigedMain implements MessagebusListener {
 
 			productTree.reInitTree();
 			refreshClientListKeepingGroup();
-			mainFrame.rebuildDepotPopup();
-		}
-
-		// When we are in the client configuration changing the depot should have no effect,
-		// this will be triggered by the selection of the client table
-		if (editingTarget == EditingTarget.DEPOTS) {
-			setViewIndex(viewIndex);
 		}
 	}
 
@@ -1514,7 +1280,7 @@ public class ConfigedMain implements MessagebusListener {
 		return true;
 	}
 
-	private boolean setDepotRepresentative() {
+	public boolean setDepotRepresentative() {
 		Logging.debug(this, "setDepotRepresentative");
 
 		if (getSelectedClients().isEmpty()) {
@@ -1575,320 +1341,11 @@ public class ConfigedMain implements MessagebusListener {
 		return true;
 	}
 
-	private List<String> getLocalbootProductDisplayFieldsList() {
-		List<String> result = new ArrayList<>();
-		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
-				.getProductOnClientsDisplayFieldsLocalbootProducts().entrySet()) {
-			if (Boolean.TRUE.equals(productDisplay.getValue())) {
-				result.add(productDisplay.getKey());
-			}
-		}
-
-		return result;
+	public String getDepotRepresentative() {
+		return depotRepresentative;
 	}
 
-	private List<String> getNetbootProductDisplayFieldsList() {
-		List<String> result = new ArrayList<>();
-
-		for (Entry<String, Boolean> productDisplay : persistenceController.getProductDataService()
-				.getProductOnClientsDisplayFieldsNetbootProducts().entrySet()) {
-			if (Boolean.TRUE.equals(productDisplay.getValue())) {
-				result.add(productDisplay.getKey());
-			}
-		}
-
-		return result;
-	}
-
-	private boolean setLocalbootProductsPage() {
-		return setProductsPage(collectChangedLocalbootStates, getLocalbootStateAndActionsAttributes(),
-				OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings(),
-				getLocalbootProductDisplayFieldsList());
-	}
-
-	private boolean setNetbootProductsPage() {
-		return setProductsPage(collectChangedNetbootStates, Collections.emptyList(),
-				OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING,
-				mainFrame.getTabbedConfigPanes().getPanelNetbootProductSettings(),
-				getNetbootProductDisplayFieldsList());
-	}
-
-	private boolean setProductsPage(Map<String, Map<String, Map<String, String>>> changedProductStates,
-			List<String> attributes, String productServerString, PanelProductSettings panelProductSettings,
-			List<String> displayFields) {
-		if (!setDepotRepresentative()) {
-			return false;
-		}
-		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getProductDataService()
-				.getMapOfProductStatesAndActions(selectedClients, attributes, productServerString);
-
-		clientProductpropertiesUpdateCollections = new HashMap<>();
-		panelProductSettings.clearEditing();
-
-		Logging.debug(this, "setProductsPage,  depotRepresentative:", depotRepresentative);
-		possibleActions = persistenceController.getProductDataService().getPossibleActionsPD(depotRepresentative);
-
-		// we retrieve the properties for all clients and products
-
-		// it is necessary to do this before resetting selection below (*) since there a
-		// listener is triggered
-		// which loads the productProperties for each client separately
-
-		persistenceController.getProductDataService().retrieveProductPropertiesPD(clientTable.getSelectedValues());
-
-		Set<String> oldProductSelection = panelProductSettings.getSelectedIDs();
-		List<? extends SortKey> currentSortKeysProducts = panelProductSettings.getSortKeys();
-		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
-		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
-
-		Set<String> productNames;
-		if (OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)) {
-			productNames = persistenceController.getProductDataService()
-					.getAllLocalbootProductNames(depotRepresentative);
-		} else {
-			productNames = persistenceController.getProductDataService().getAllNetbootProductNames(depotRepresentative);
-		}
-
-		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
-				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
-				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
-		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(this, changedProductStates,
-				productNames, statesAndActions, possibleActions,
-				persistenceController.getProductDataService().getProductGlobalInfosPD(depotRepresentative),
-				displayFields);
-		panelProductSettings.setTableModel(istmForSelectedClients);
-
-		panelProductSettings.setSortKeys(currentSortKeysProducts);
-
-		panelProductSettings.setSelection(oldProductSelection);
-		if (panelProductSettings.isFilteredMode()) {
-			panelProductSettings.reduceToSelected();
-		}
-
-		panelProductSettings.updateSearchFields();
-
-		int[] columnWidths = getTableColumnWidths(panelProductSettings.getTableProducts());
-		setTableColumnWidths(panelProductSettings.getTableProducts(), columnWidths);
-
-		return true;
-	}
-
-	private List<String> getLocalbootStateAndActionsAttributes() {
-		List<String> attributes = getAttributesFromProductDisplayFields(getLocalbootProductDisplayFieldsList());
-
-		if (getLocalbootProductDisplayFieldsList().contains(ProductState.KEY_INSTALLATION_INFO)) {
-			attributes.add(ProductState.KEY_ACTION_PROGRESS);
-			attributes.add(ProductState.KEY_LAST_ACTION);
-		}
-
-		// Remove uneeded attributes
-		attributes.remove(ProductState.KEY_PRODUCT_PRIORITY);
-
-		attributes.add(ProductState.KEY_LAST_STATE_CHANGE);
-		return attributes;
-	}
-
-	private static List<String> getAttributesFromProductDisplayFields(List<String> productDisplayFields) {
-		List<String> attributes = new ArrayList<>();
-		for (String v : productDisplayFields) {
-			if (ProductState.KEY_VERSION_INFO.equals(v)) {
-				attributes.add(ProductState.KEY_PACKAGE_VERSION);
-				attributes.add(ProductState.KEY_PRODUCT_VERSION);
-			} else if (ProductState.KEY_INSTALLATION_INFO.equals(v)) {
-				attributes.add(ProductState.KEY_ACTION_RESULT);
-			} else {
-				attributes.add(v);
-			}
-		}
-
-		return attributes;
-	}
-
-	private static int[] getTableColumnWidths(JTable table) {
-		TableColumnModel columnModel = table.getColumnModel();
-		int[] columnWidths = new int[columnModel.getColumnCount()];
-
-		for (int i = 0; i < columnModel.getColumnCount(); i++) {
-			columnWidths[i] = columnModel.getColumn(i).getWidth();
-		}
-
-		return columnWidths;
-	}
-
-	// only has an effect if number of table columns not changed
-	private static void setTableColumnWidths(JTable table, int[] columnWidths) {
-		// Only do it if number of columns didn't change
-		if (columnWidths.length == table.getColumnModel().getColumnCount()) {
-			for (int i = 0; i < columnWidths.length; i++) {
-				table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
-				table.getColumnModel().getColumn(i).setWidth(columnWidths[i]);
-			}
-		}
-	}
-
-	private static Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
-		Map<String, Object> mergedMap = new HashMap<>();
-		if (collection == null || collection.isEmpty()) {
-			return mergedMap;
-		}
-
-		Map<String, Object> mergeIn = collection.get(0);
-
-		for (Entry<String, Object> entry : mergeIn.entrySet()) {
-			List<?> value = (List<?>) entry.getValue();
-			ListMerger merger = new ListMerger(value);
-			mergedMap.put(entry.getKey(), merger);
-		}
-
-		// merge the other maps
-		for (int i = 1; i < collection.size(); i++) {
-			mergeIn = collection.get(i);
-
-			for (Entry<String, Object> mergeInEntry : mergeIn.entrySet()) {
-				List<?> value = (List<?>) mergeInEntry.getValue();
-
-				if (mergedMap.get(mergeInEntry.getKey()) == null) {
-					ListMerger merger = new ListMerger(value);
-					merger.setHavingNoCommonValue();
-					mergedMap.put(mergeInEntry.getKey(), merger);
-				} else {
-					ListMerger merger = (ListMerger) mergedMap.get(mergeInEntry.getKey());
-					ListMerger mergedValue = merger.merge(value);
-					mergedMap.put(mergeInEntry.getKey(), mergedValue);
-				}
-			}
-		}
-
-		return mergedMap;
-	}
-
-	private void setProductPropertiesPage() {
-		Logging.debug(this, "setProductPropertiesPage");
-		mainFrame.getTabbedConfigPanes().getPanelProductProperties().setProductProperties();
-		depotsList.setEnabled(true);
-		depotsList.requestFocus();
-		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-	}
-
-	private void setHostPropertiesPage() {
-		Logging.debug(this, "setHostPropertiesPage");
-
-		depotsList.setEnabled(true);
-		depotsList.requestFocus();
-		depotsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persistenceController.getDepotDataService()
-				.getDepotPropertiesForPermittedDepots();
-
-		if (hostUpdateCollection != null) {
-			updateCollection.remove(hostUpdateCollection);
-		}
-
-		hostUpdateCollection = new HostUpdateCollection();
-		addToGlobalUpdateCollection(hostUpdateCollection);
-
-		String depot = "";
-		if (!depotsList.getSelectedValuesList().isEmpty()) {
-			depot = depotsList.getSelectedValuesList().get(0);
-		}
-
-		mainFrame.getTabbedConfigPanes().getPanelHostProperties().initMultipleHostsEditing(depot,
-				depotPropertiesForPermittedDepots, hostUpdateCollection,
-				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
-	}
-
-	private static void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
-		for (String start : keystartersStrNotWanted) {
-			m.keySet().removeIf(key -> key.startsWith(start));
-		}
-	}
-
-	@SuppressWarnings({ "unchecked" })
-	public void setNetworkConfigurationPage() {
-		Logging.info(this, "setNetworkconfigurationPage ");
-		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", selectedClients);
-
-		List<String> objectIds = new ArrayList<>();
-		if (editingTarget == EditingTarget.SERVER) {
-			objectIds.add(persistenceController.getHostInfoCollections().getConfigServer());
-		} else if (editingTarget == EditingTarget.DEPOTS) {
-			objectIds.addAll(depotsList.getSelectedValuesList());
-		} else {
-			objectIds.addAll(selectedClients);
-		}
-
-		if (additionalconfigurationUpdateCollection != null) {
-			updateCollection.remove(additionalconfigurationUpdateCollection);
-		}
-		additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(objectIds);
-		addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
-
-		depotsList.setEnabled(false);
-
-		if (editingTarget == EditingTarget.SERVER) {
-			List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
-			Map<String, List<Object>> defaultValuesMap = persistenceController.getConfigDataService()
-					.getConfigDefaultValuesPD();
-			additionalConfigs.add(defaultValuesMap);
-			additionalconfigurationUpdateCollection.setMasterConfig(true);
-			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(
-					"  " + persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
-					additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
-					additionalConfigs, additionalconfigurationUpdateCollection, true,
-					OpsiServiceNOMPersistenceController.getPropertyClassesServer());
-		} else if (editingTarget == EditingTarget.DEPOTS) {
-			depotsList.setEnabled(true);
-			depotsList.requestFocus();
-			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(getSelectedDepots());
-			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
-			removeKeysStartingWith(mergedVisualMap,
-					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-			Map<String, Object> originalMap = mergeMaps(
-					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(getSelectedDepots()));
-			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(
-					Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null), mergedVisualMap,
-					persistenceController.getConfigDataService().getConfigListCellOptionsPD(), additionalConfigs,
-					additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
-		} else {
-			List<Map<String, Object>> additionalConfigs = produceAdditionalConfigs(selectedClients);
-			Map<String, Object> mergedVisualMap = mergeMaps(additionalConfigs);
-			removeKeysStartingWith(mergedVisualMap,
-					OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-			Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
-					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
-			if (!selectedClients.isEmpty()) {
-				List<String> depotIds = new ArrayList<>();
-				depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
-						.get(selectedClients.get(0)).getInDepot());
-				Map<String, Object> defaultValues = persistenceController.getConfigDataService()
-						.getHostsConfigsWithDefaults(depotIds).get(0);
-				for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
-					configListCellOptions.get(entry.getKey())
-							.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
-				}
-			}
-			Map<String, Object> originalMap = mergeMaps(
-					persistenceController.getConfigDataService().getHostsConfigsWithoutDefaults(selectedClients));
-			mainFrame.getTabbedConfigPanes().getPanelHostConfig().initEditing(
-					Utils.getListStringRepresentation(selectedClients, null), mergedVisualMap, configListCellOptions,
-					additionalConfigs, additionalconfigurationUpdateCollection, false,
-					OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
-		}
-	}
-
-	private static Map<String, ListCellOptions> deepCopyConfigListCellOptions(
-			Map<String, ListCellOptions> originalMap) {
-		Map<String, ListCellOptions> copy = new HashMap<>();
-		for (Entry<String, ListCellOptions> entry : originalMap.entrySet()) {
-			copy.put(entry.getKey(), entry.getValue().deepCopy());
-		}
-		return copy;
-	}
-
-	private List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
+	public List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
 		Logging.info(this, "additionalConfig fetch for ", list);
 
 		if (list.isEmpty()) {
@@ -1896,22 +1353,6 @@ public class ConfigedMain implements MessagebusListener {
 		} else {
 			return persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
 		}
-	}
-
-	private void setHardwareInfoPage() {
-		Logging.info(this, "setHardwareInfoPage for, clients count ", selectedClients.size());
-
-		if (selectedClients.size() == 1) {
-			mainFrame.getTabbedConfigPanes().setHardwareInfo(
-					persistenceController.getHardwareDataService().getHardwareInfo(selectedClients.get(0)));
-		} else {
-			mainFrame.getTabbedConfigPanes().setHardwareInfoNotPossible();
-		}
-	}
-
-	private void setSoftwareInfoPage() {
-		Logging.info(this, "setSoftwareInfoPage(), number selected clients ", selectedClients.size());
-		mainFrame.getTabbedConfigPanes().setSoftwareAudit();
 	}
 
 	public boolean logfileExists(String logtype) {
@@ -1932,113 +1373,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		return logfiles;
-	}
-
-	private void setLogPage() {
-		Logging.debug(this, "setLogPage(), selected clients: ", selectedClients);
-		mainFrame.getTabbedConfigPanes().setLogFileTab("instlog");
-		mainFrame.getTabbedConfigPanes().setLogview("instlog");
-	}
-
-	public void resetView() {
-		resetView(viewIndex);
-	}
-
-	public boolean resetView(ViewIndex viewIndex) {
-		Logging.info(this, "resetView to ", viewIndex, "  selectedClients size: ", selectedClients.size());
-		mainFrame.activateLoadingCursor();
-		boolean result = true;
-
-		switch (viewIndex) {
-		case VIEW_CLIENTS:
-			break;
-
-		case VIEW_LOCALBOOT_PRODUCTS:
-			result = setLocalbootProductsPage();
-			break;
-
-		case VIEW_NETBOOT_PRODUCTS:
-			result = setNetbootProductsPage();
-			break;
-
-		case VIEW_NETWORK_CONFIGURATION:
-			setNetworkConfigurationPage();
-			break;
-
-		case VIEW_HARDWARE_INFO:
-			setHardwareInfoPage();
-			break;
-
-		case VIEW_SOFTWARE_INFO:
-			setSoftwareInfoPage();
-			break;
-
-		case VIEW_LOG:
-			setLogPage();
-			break;
-
-		case VIEW_PRODUCT_PROPERTIES:
-			setProductPropertiesPage();
-			break;
-
-		case VIEW_HOST_PROPERTIES:
-			setHostPropertiesPage();
-			break;
-
-		default:
-			Logging.warning(this, "resetting View failed, no index for viewIndex: '", viewIndex, "' found");
-			break;
-		}
-
-		mainFrame.deactivateLoadingCursor();
-		return result;
-	}
-
-	public void setSelectedIndex(int i) {
-		mainFrame.getTabbedConfigPanes().setSelectedIndex(i);
-	}
-
-	public void setViewIndex(ViewIndex newViewIndex) {
-		Logging.info(this, "visualViewIndex ", newViewIndex, ", (old) viewIndex ", viewIndex);
-		Logging.info(this, "setViewIndex anyDataChanged ", anyDataChanged);
-
-		checkSaveAll(true);
-
-		if (initialDataLoader.isDataLoaded()) {
-			depotsList.setEnabled(newViewIndex == ViewIndex.VIEW_CLIENTS);
-
-			Logging.debug(this, "switch to viewIndex ", viewIndex);
-			boolean result = resetView(newViewIndex);
-
-			if (result) {
-				viewIndex = newViewIndex;
-			} else {
-				Logging.debug(" tab index could not be changed, go to clients view");
-				viewIndex = ViewIndex.VIEW_CLIENTS;
-				mainFrame.getTabbedConfigPanes().setSelectedIndex(0);
-			}
-
-			saveCurrentViewIndex();
-			if (result) {
-				clearListEditors();
-			}
-		}
-	}
-
-	private void saveCurrentViewIndex() {
-		switch (editingTarget) {
-		case CLIENTS:
-			saveClientsViewIndex = mainFrame.getTabbedConfigPanes().getSelectedIndex();
-			break;
-
-		case DEPOTS:
-			saveDepotsViewIndex = mainFrame.getTabbedConfigPanes().getSelectedIndex();
-			break;
-
-		default:
-			// Other targets don't have different tab views
-			break;
-		}
 	}
 
 	public List<String> getSelectedDepots() {
@@ -2096,54 +1430,51 @@ public class ConfigedMain implements MessagebusListener {
 
 		List<String> selValuesList = clientTable.getSelectedValues();
 		Logging.info(this, "reloadData, selValuesList.size ", selValuesList.size());
-		// dont do anything if we did not finish another thread for this
-		if (initialDataLoader.isDataLoaded()) {
-			clientTable.deactivateListSelectionListener();
-			allowedClients = null;
 
-			persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
-			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+		clientTable.deactivateListSelectionListener();
+		allowedClients = null;
 
-			preloadData();
+		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
+		persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
 
-			FOpsiLicenseMissingText.reset();
+		preloadData();
 
-			mainFrame.resetData();
+		FOpsiLicenseMissingText.reset();
 
-			requestReloadStatesAndActions();
+		mainFrame.resetData();
 
-			mainFrame.getTabbedConfigPanes().getClientInfoPanel().updateClientCheckboxText();
+		requestReloadStatesAndActions();
 
-			Logging.info(this, " in reload, we are in thread ", Thread.currentThread());
+		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 
-			productTree.reInitTree();
-			clientTree.reInitTree();
-			fetchDepots();
+		Logging.info(this, " in reload, we are in thread ", Thread.currentThread());
 
-			// if depot selection changed, we adapt the clients
-			Set<String> clientsLeft = new TreeSet<>();
-			for (String client : selValuesList) {
-				String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-						.get(client);
+		productTree.reInitTree();
+		clientTree.reInitTree();
+		fetchDepots();
 
-				if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
-					clientsLeft.add(client);
-				}
+		// if depot selection changed, we adapt the clients
+		Set<String> clientsLeft = new TreeSet<>();
+		for (String client : selValuesList) {
+			String depotForClient = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client);
+
+			if (depotForClient != null && depotsList.getSelectedValuesList().contains(depotForClient)) {
+				clientsLeft.add(client);
 			}
-
-			Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
-
-			Logging.debug(this, " reset the values, particularly in list ");
-			clientTable.setSelectedValues(clientsLeft);
-			clientTable.activateListSelectionListener();
-
-			Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
-			mainFrame.reloadServerConsoleMenu();
-
-			updateHostInfo();
-
-			hostInfo.resetGui();
 		}
+
+		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
+
+		Logging.debug(this, " reset the values, particularly in list ");
+		clientTable.setSelectedValues(clientsLeft);
+		clientTable.activateListSelectionListener();
+
+		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
+		mainFrame.reloadServerConsoleMenu();
+
+		updateHostInfo();
+
+		hostInfo.resetGui();
 
 		mainFrame.deactivateLoadingPane();
 
@@ -2155,6 +1486,10 @@ public class ConfigedMain implements MessagebusListener {
 
 	public void addToGlobalUpdateCollection(UpdateCollection newCollection) {
 		updateCollection.add(newCollection);
+	}
+
+	public void removeFromGlobalUpdateCollection(UpdateCollection newCollection) {
+		updateCollection.remove(newCollection);
 	}
 
 	public GeneralDataChangedKeeper getGeneralDataChangedKeeper() {
@@ -2203,13 +1538,12 @@ public class ConfigedMain implements MessagebusListener {
 			Logging.info(this, "saveConfigs ");
 
 			updateProductStates();
-			Logging.debug(this, "saveConfigs: collectChangedLocalbootStates ", collectChangedLocalbootStates);
 
 			Logging.info(this, "we should now start working on the update collection of size  ",
 					updateCollection.size());
 
 			updateCollection.doCall();
-			checkErrorList();
+			Logging.checkErrorList(mainFrame);
 
 			Logging.info(this, "we clear the update collection ", updateCollection.getClass());
 
@@ -2232,9 +1566,7 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		private void updateProductStates() {
-			updateManager.updateProductStates(collectChangedLocalbootStates, OpsiPackage.TYPE_LOCALBOOT);
-
-			updateManager.updateProductStates(collectChangedNetbootStates, OpsiPackage.TYPE_NETBOOT);
+			mainFrame.getClientConfiguration().getProductPageManager().updateProductStates();
 		}
 	}
 
@@ -2417,7 +1749,6 @@ public class ConfigedMain implements MessagebusListener {
 	public void getSessionInfo() {
 		mainFrame.setCursor(Globals.WAIT_CURSOR);
 		setColumnSessionInfo(true);
-		mainFrame.getIconBarPanel().getjButtonSessionInfo().setEnabled(false);
 		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
 		infoRetriever.setOnlySelectedClients(selectedClients != null && !selectedClients.isEmpty());
 		infoRetriever.execute();
@@ -2447,9 +1778,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		requestReloadStatesAndActions();
 
-		if (viewIndex == ViewIndex.VIEW_LOCALBOOT_PRODUCTS || viewIndex == ViewIndex.VIEW_NETBOOT_PRODUCTS) {
-			resetView();
-		}
+		mainFrame.getClientConfiguration().updateProductTab();
 
 		mainFrame.deactivateLoadingCursor();
 	}
@@ -2598,7 +1927,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.debug(this, " start moving to another depot");
 		persistenceController.getHostInfoCollections().setDepotForClients(selectedClients, targetDepot);
-		checkErrorList();
+		Logging.checkErrorList(mainFrame);
 		refreshClientListKeepingGroup();
 	}
 
@@ -2643,7 +1972,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 		if (persistenceController.getHostDataService().createClients(clients)) {
 			Logging.debug(this, "createClients", clients);
-			checkErrorList();
+			Logging.checkErrorList(mainFrame);
 
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
@@ -2656,7 +1985,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void createClient(String newClientID, final String[] groups) {
-		checkErrorList();
+		Logging.checkErrorList(mainFrame);
 		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
 		setRebuiltClientListTableModel(true);
@@ -2719,7 +2048,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void processActionRequestsSelectedProducts() {
-		processActionRequests(mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getSelectedIDs());
+		processActionRequests(mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getSelectedIDs());
 	}
 
 	private void processActionRequests(Set<String> products) {
@@ -2832,7 +2161,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		persistenceController.getHostDataService().deleteClients(selectedClients);
 
-		if (isFilterClientList()) {
+		if (clientTable.isFilteredMode()) {
 			toggleFilterClientList(true);
 		}
 
@@ -3085,10 +2414,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	protected void checkErrorList() {
-		Logging.checkErrorList(mainFrame);
-	}
-
 	public static JFrame getFrame() {
 		if (mainFrame != null) {
 			return mainFrame;
@@ -3113,6 +2438,9 @@ public class ConfigedMain implements MessagebusListener {
 			} else {
 				// Do when closing without option
 			}
+
+			// We set editing target because after restarting the configed, we will show this panel!
+			editingTarget = EditingTarget.CLIENTS;
 		}
 
 		boolean result = true;
@@ -3193,11 +2521,7 @@ public class ConfigedMain implements MessagebusListener {
 				new TypeReference<Map<String, Object>>() {
 				});
 
-		if (WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString().equals(eventType)
-				|| WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.toString().equals(eventType)
-				|| WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString().equals(eventType)) {
-			updateManager.updateProduct(eventData);
-		} else if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
+		if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
 			addClientToConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
 		} else if (WebSocketEvent.HOST_DISCONNECTED.toString().equals(eventType)) {
 			removeClientFromConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));

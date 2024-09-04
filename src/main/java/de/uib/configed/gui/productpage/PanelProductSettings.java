@@ -265,7 +265,9 @@ public class PanelProductSettings extends JSplitPane {
 				boolean oldstate = productDisplayField.getValue();
 				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
 				configedMain.requestReloadStatesAndActions();
-				configedMain.resetView();
+
+				// We need to rebuild the shown page in the client configuration to make changes effective
+				ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
 			});
 
 			jMenuVisibleColumns.add(item);
@@ -325,7 +327,7 @@ public class PanelProductSettings extends JSplitPane {
 			Logging.debug(this, "selected modelIndex ", tableProducts.convertRowIndexToModel(selectedRow));
 			Logging.debug(this, "selected  value at ",
 					tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
-			configedMain.setProductEdited(
+			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setProductEdited(
 					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0),
 					this);
 		}
@@ -392,7 +394,9 @@ public class PanelProductSettings extends JSplitPane {
 
 		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
 		configedMain.requestReloadStatesAndActions();
-		configedMain.resetView();
+
+		// We want to rebuild the shown page in the client configuration after reload
+		ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
 		configedMain.setDataChanged(false);
 
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();

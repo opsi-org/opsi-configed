@@ -55,7 +55,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
-public class HealthCheckPanel extends JPanel {
+public class HealthCheck extends JPanel {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
 
@@ -70,7 +70,7 @@ public class HealthCheckPanel extends JPanel {
 
 	private Map<String, Map<String, Object>> healthData;
 
-	public HealthCheckPanel() {
+	public HealthCheck() {
 		saveHealthDataToFile();
 
 		initLayout();
@@ -196,7 +196,7 @@ public class HealthCheckPanel extends JPanel {
 		return popupMenu;
 	}
 
-	private void saveAsZip() {
+	public void saveAsZip() {
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Zip file (.zip)", "zip");
 		jFileChooser.addChoosableFileFilter(fileFilter);

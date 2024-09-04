@@ -15,9 +15,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
 public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
-	public LicensingInfoPanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
-			boolean withTablesearchPane) {
-		super(title, editing, generalPopupPosition, popupsWanted, withTablesearchPane);
+	public LicensingInfoPanelGenEditTable() {
+		super(null, false, 0,
+				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
+						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
+						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
+				false);
+
 		setMarkBoldHeaderCellRenderer();
 	}
 
