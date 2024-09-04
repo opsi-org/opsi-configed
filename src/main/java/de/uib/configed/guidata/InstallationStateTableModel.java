@@ -73,8 +73,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 	private String actualProduct = "";
 
-	private ConfigedMain configedMain;
-
 	private List<String> sortedProductsList;
 
 	private int onGoingCollectiveChangeEventCount = -1;
@@ -121,7 +119,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private int[] indexPreparedColumns;
 	private boolean[] editablePreparedColumns;
 
-	public InstallationStateTableModel(ConfigedMain configedMain,
+	public InstallationStateTableModel(List<String> selectedClients,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, Set<String> productNames,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
@@ -132,10 +130,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.info(this, " statesAndActions ", statesAndActions.size());
 		}
 
-		this.configedMain = configedMain;
-
+		this.selectedClients = selectedClients;
 		this.collectChangedStates = collectChangedStates;
-		this.selectedClients = configedMain.getSelectedClients();
 
 		this.possibleActions = possibleActions;
 		this.globalProductInfos = productGlobalInfos;

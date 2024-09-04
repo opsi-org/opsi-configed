@@ -140,9 +140,10 @@ public class ProductPageManager implements MessagebusListener {
 		UserPreferences.set(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING.equals(productServerString)
 				? UserPreferences.LOCALBOOT_TABLE_DISPLAY_FIELDS
 				: UserPreferences.NETBOOT_TABLE_DISPLAY_FIELDS, String.join(",", displayFields));
-		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(configedMain,
-				changedProductStates, productNames, statesAndActions, possibleActions, persistenceController
-						.getProductDataService().getProductGlobalInfosPD(configedMain.getDepotRepresentative()),
+		InstallationStateTableModel istmForSelectedClients = new InstallationStateTableModel(
+				configedMain.getSelectedClients(), changedProductStates, productNames, statesAndActions,
+				possibleActions, persistenceController.getProductDataService()
+						.getProductGlobalInfosPD(configedMain.getDepotRepresentative()),
 				displayFields);
 		panelProductSettings.setTableModel(istmForSelectedClients);
 

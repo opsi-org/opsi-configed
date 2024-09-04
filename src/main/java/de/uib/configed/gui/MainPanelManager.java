@@ -162,7 +162,7 @@ public class MainPanelManager {
 
 	public JPanel getServerConfigurationPanel() {
 		if (serverConfiguration == null) {
-			serverConfiguration = new ServerConfiguration(configedMain);
+			serverConfiguration = new ServerConfiguration();
 			serverConfiguration.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 		}
 

@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.swing.JTabbedPane;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
@@ -28,7 +27,7 @@ public class ServerConfiguration extends JTabbedPane {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ServerConfiguration(ConfigedMain configedMain) {
+	public ServerConfiguration() {
 		panelHostConfig = new PanelHostConfig(this::setHostParameterPage);
 
 		setHostParameterPage();
