@@ -6,7 +6,6 @@
 
 package de.uib.utils.table.gui;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -529,7 +528,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			case POPUP_PDF:
 				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
 				Icons.addThemeIconInvertedToMenuItem(menuItemPDF, "anyType");
-				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
+				menuItemPDF.addActionListener(actionEvent -> exportTable());
 
 				addPopupItem(menuItemPDF);
 				break;
@@ -568,7 +567,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	private void addPopupMenuDeleteRow() {
 		menuItemDeleteRelation = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.deleteRow"));
 		menuItemDeleteRelation.setEnabled(false);
-		menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> deleteRelation());
+		menuItemDeleteRelation.addActionListener(actionEvent -> deleteRelation());
 		addPopupItem(menuItemDeleteRelation);
 	}
 

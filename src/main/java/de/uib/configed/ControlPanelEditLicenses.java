@@ -182,13 +182,13 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		JMenuItem menuItemAddLicense = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewSoftwarelicense"));
-		menuItemAddLicense.addActionListener((ActionEvent e) -> addLicense());
+		menuItemAddLicense.addActionListener(actionEvent -> addLicense());
 
 		thePanel.getPanelSoftwarelicenses().addPopupItem(menuItemAddLicense);
 
 		JMenuItem menuItemPickSoftwarelicense = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.MenuItemTransferIDFromSoftwarelicenseToLicensekey"));
-		menuItemPickSoftwarelicense.addActionListener((ActionEvent e) -> pickSoftwareLicense());
+		menuItemPickSoftwarelicense.addActionListener(actionEvent -> pickSoftwareLicense());
 
 		thePanel.getPanelSoftwarelicenses().addPopupItem(menuItemPickSoftwarelicense);
 
@@ -235,13 +235,13 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewLicensecontract"));
-		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
+		menuItemAddContract.addActionListener(actionEvent -> addContract());
 
 		thePanel.getPanelLicensecontracts().addPopupItem(menuItemAddContract);
 
 		JMenuItem menuItemPickLicensecontract = new JMenuItem(Configed
 				.getResourceValue("ConfigedMain.Licenses.MenuItemTransferIDFromLicensecontractToSoftwarelicense"));
-		menuItemPickLicensecontract.addActionListener((ActionEvent e) -> pickLicenseContract());
+		menuItemPickLicensecontract.addActionListener(actionEvent -> pickLicenseContract());
 
 		thePanel.getPanelLicensecontracts().addPopupItem(menuItemPickLicensecontract);
 

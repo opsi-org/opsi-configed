@@ -8,7 +8,6 @@ package de.uib.configed.serverconsole;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -145,7 +144,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		buttonDelete.setToolTipText(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"));
 		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
-		buttonDelete.addActionListener((ActionEvent actionEvent) -> deleteCommand());
+		buttonDelete.addActionListener(actionEvent -> deleteCommand());
 		buttonDelete.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
 

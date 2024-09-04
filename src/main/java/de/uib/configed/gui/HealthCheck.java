@@ -190,7 +190,7 @@ public class HealthCheck extends JPanel {
 		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("download"));
 		Icons.addIntellijIconToMenuItem(popupSaveAsZip, "download");
 
-		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
+		popupSaveAsZip.addActionListener(actionEvent -> saveAsZip());
 		popupMenu.add(popupSaveAsZip);
 
 		return popupMenu;

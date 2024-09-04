@@ -6,7 +6,6 @@
 
 package de.uib.configed;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +157,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	private void initPopupMenu() {
 		JMenuItem menuItemAddContract = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewLicensecontract"));
-		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
+		menuItemAddContract.addActionListener(actionEvent -> addContract());
 
 		thePanel.getPanelLicenseContracts().addPopupItem(menuItemAddContract);
 	}

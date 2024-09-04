@@ -139,7 +139,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		buttonSupplementSimilar.setToolTipText(
 				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.tooltip"));
 
-		buttonSupplementSimilar.addActionListener((ActionEvent e) -> buttonSupplementSimilarAction());
+		buttonSupplementSimilar.addActionListener(actionEvents -> buttonSupplementSimilarAction());
 
 		jCheckBoxSimilarEntriesExist = new JCheckBox();
 		jCheckBoxSimilarEntriesExist.setEnabled(false);

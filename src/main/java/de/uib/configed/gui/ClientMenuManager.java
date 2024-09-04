@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.Component;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -145,7 +144,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
-			item.addActionListener((ActionEvent e) -> configedMain.fireOpsiclientdEventOnSelectedClients(event));
+			item.addActionListener(actionEvent -> configedMain.fireOpsiclientdEventOnSelectedClients(event));
 			jMenuOpsiClientdEvent.add(item);
 		}
 

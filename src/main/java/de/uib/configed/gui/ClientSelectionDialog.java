@@ -190,12 +190,12 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
 		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
-		buttonReload.addActionListener((ActionEvent e) -> reload());
+		buttonReload.addActionListener(actionEvent -> reload());
 
 		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));
 		buttonRestart.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"));
 
-		buttonRestart.addActionListener((ActionEvent e) -> restart());
+		buttonRestart.addActionListener(actionEvent -> restart());
 
 		additionalLayout.setHorizontalGroup(additionalLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

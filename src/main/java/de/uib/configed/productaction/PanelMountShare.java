@@ -6,7 +6,6 @@
 
 package de.uib.configed.productaction;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class PanelMountShare extends JPanel {
 
 		buttonMountShare.setEnabled(SystemInfo.isWindows);
 
-		buttonMountShare.addActionListener((ActionEvent e) -> callMountShare());
+		buttonMountShare.addActionListener(actionEvent -> callMountShare());
 	}
 
 	private void defineLayout() {

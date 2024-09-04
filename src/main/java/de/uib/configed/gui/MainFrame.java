@@ -283,7 +283,7 @@ public class MainFrame extends JFrame {
 	private void setupMenuServerConsole() {
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
-		jMenuCommandControl.addActionListener((ActionEvent e) -> startControlAction());
+		jMenuCommandControl.addActionListener(actionEvent -> startControlAction());
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
 
@@ -340,7 +340,7 @@ public class MainFrame extends JFrame {
 			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(
-					(ActionEvent e) -> ((CommandWithParameters) command).startParameterGui(configedMain));
+					actionEvent -> ((CommandWithParameters) command).startParameterGui(configedMain));
 			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
 			menuOpsi.add(jMenuOpsiCommand);
@@ -398,25 +398,25 @@ public class MainFrame extends JFrame {
 		JMenuItem jMenuClientselectionGetGroup = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		jMenuClientselectionGetGroup
-				.addActionListener((ActionEvent e) -> ExtraFrameController.callClientSelectionDialog(configedMain));
+				.addActionListener(actionEvent -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
 		JMenuItem jMenuClientselectionGetSavedSearch = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		jMenuClientselectionGetSavedSearch
-				.addActionListener((ActionEvent e) -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain));
+				.addActionListener(actionEvent -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain));
 
 		JMenuItem jMenuClientselectionProductNotUptodate = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersion"));
-		jMenuClientselectionProductNotUptodate.addActionListener((ActionEvent e) -> groupByNotCurrentProductVersion());
+		jMenuClientselectionProductNotUptodate.addActionListener(actionEvent -> groupByNotCurrentProductVersion());
 
 		JMenuItem jMenuClientselectionProductNotUptodateOrBroken = new JMenuItem(Configed
 				.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersionOrUnknownState"));
 		jMenuClientselectionProductNotUptodateOrBroken
-				.addActionListener((ActionEvent e) -> groupByNotCurrentProductVersionOrBrokenInstallation());
+				.addActionListener(actionEvent -> groupByNotCurrentProductVersionOrBrokenInstallation());
 
 		JMenuItem jMenuClientselectionFailedProduct = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedForProduct"));
-		jMenuClientselectionFailedProduct.addActionListener((ActionEvent e) -> groupByFailedProduct());
+		jMenuClientselectionFailedProduct.addActionListener(actionEvent -> groupByFailedProduct());
 
 		JMenu jMenuClientselectionFailedInPeriod = new JMenu(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
@@ -424,7 +424,7 @@ public class MainFrame extends JFrame {
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItem(entry.getValue());
 
-			item.addActionListener((ActionEvent e) -> configedMain
+			item.addActionListener(actionEvent -> configedMain
 					.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
 
 			jMenuClientselectionFailedInPeriod.add(item);
@@ -505,12 +505,12 @@ public class MainFrame extends JFrame {
 
 	public static void addCreditsMenus(JMenu jMenuHelp, JFrame owner) {
 		JMenuItem jMenuHelpCredits = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
-		jMenuHelpCredits.addActionListener((ActionEvent e) -> FCreditsDialog.display(owner));
+		jMenuHelpCredits.addActionListener(actionEvent -> FCreditsDialog.display(owner));
 		jMenuHelp.add(jMenuHelpCredits);
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"),
 				Icons.getIntellijIcon("info"));
-		jMenuHelpAbout.addActionListener((ActionEvent e) -> Utils.showAboutAction(owner));
+		jMenuHelpAbout.addActionListener(actionEvent -> Utils.showAboutAction(owner));
 		jMenuHelp.add(jMenuHelpAbout);
 	}
 
@@ -539,7 +539,7 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuHelpLogfileLocation = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"));
-		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction(centerFrame));
+		jMenuHelpLogfileLocation.addActionListener(actionEvent -> showLogfileLocationAction(centerFrame));
 
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 	}

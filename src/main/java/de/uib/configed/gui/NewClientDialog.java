@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -435,11 +434,11 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	private void createNorthPanel() {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
-		jCSVTemplateButton.addActionListener((ActionEvent e) -> displayCSVTemplateDialog());
+		jCSVTemplateButton.addActionListener(actionEvent -> displayCSVTemplateDialog());
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
-		jImportButton.addActionListener((ActionEvent e) -> importCSV());
+		jImportButton.addActionListener(actionEvent -> importCSV());
 
 		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);

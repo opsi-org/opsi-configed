@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -196,10 +195,10 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
-		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
+		jButtonCancel.addActionListener(actionEvent -> endProgram());
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
-		jButtonCommit.addActionListener((ActionEvent e) -> tryConnecting());
+		jButtonCommit.addActionListener(actionEvent -> tryConnecting());
 	}
 
 	private void showOTPField(boolean show) {

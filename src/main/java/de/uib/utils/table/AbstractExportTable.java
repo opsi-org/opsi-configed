@@ -8,7 +8,6 @@ package de.uib.utils.table;
 
 import java.awt.Container;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Locale;
 import java.util.Map;
@@ -71,7 +70,7 @@ public abstract class AbstractExportTable {
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
 		Icons.addIntellijIconToMenuItem(menuItem, "export");
-		menuItem.addActionListener((ActionEvent actionEvent) -> execute(null, true));
+		menuItem.addActionListener(actionEvent -> execute(null, true));
 
 		return menuItem;
 	}

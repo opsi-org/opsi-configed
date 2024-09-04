@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.swinfopage;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -163,7 +162,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		buttonCallSelectExportDirectory
 				.setToolTipText(Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
-		buttonCallSelectExportDirectory.addActionListener((ActionEvent e) -> buttonCallSelectExportDirectory());
+		buttonCallSelectExportDirectory.addActionListener(actionEvent -> buttonCallSelectExportDirectory());
 
 		JLabel labelWithMsUpdates = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates"));
 

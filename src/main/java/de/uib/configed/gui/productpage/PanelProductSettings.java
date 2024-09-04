@@ -201,7 +201,7 @@ public class PanelProductSettings extends JSplitPane {
 		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		Icons.addIntellijIconToMenuItem(itemOnDemand, "run");
 		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
-		itemOnDemand.addActionListener((ActionEvent e) -> saveAndExecuteAction());
+		itemOnDemand.addActionListener(actionEvent -> saveAndExecuteAction());
 		itemOnDemand.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		popup.add(itemOnDemand);
@@ -212,7 +212,7 @@ public class PanelProductSettings extends JSplitPane {
 		itemOnDemandForSelectedProducts
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemandForSelectedProducts
-				.addActionListener((ActionEvent e) -> configedMain.processActionRequestsSelectedProducts());
+				.addActionListener(actionEvent -> configedMain.processActionRequestsSelectedProducts());
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		popup.add(itemOnDemandForSelectedProducts);
@@ -242,7 +242,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		JMenuItem createReport = new JMenuItem(Configed.getResourceValue("PanelProductSettings.pdf"));
 		Icons.addThemeIconInvertedToMenuItem(createReport, "anyType");
-		createReport.addActionListener((ActionEvent e) -> createReport());
+		createReport.addActionListener(actionEvent -> createReport());
 		popup.add(createReport);
 
 		ExporterToCSV exportTable = new ExporterToCSV(tableProducts);
