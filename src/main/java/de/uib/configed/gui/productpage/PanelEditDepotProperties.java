@@ -61,12 +61,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			.getPersistenceController();
 
 	public PanelEditDepotProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
-		super(configedMain, productPropertiesPanel);
-		initComponents();
+		super(productPropertiesPanel);
+		initComponents(configedMain);
 		initTitlePanel();
 	}
 
-	private void initComponents() {
+	private void initComponents(ConfigedMain configedMain) {
 		listDepots = new JList<>();
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);

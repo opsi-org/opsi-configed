@@ -164,7 +164,7 @@ public class PanelProductSettings extends JSplitPane {
 		propertiesPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 
-		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(configedMain, propertiesPanel);
+		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
 
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());

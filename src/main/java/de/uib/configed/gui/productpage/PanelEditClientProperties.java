@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
@@ -24,8 +23,8 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	private JPanel titlePanel;
 
-	public PanelEditClientProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
-		super(configedMain, productPropertiesPanel);
+	public PanelEditClientProperties(DefaultEditMapPanel productPropertiesPanel) {
+		super(productPropertiesPanel);
 		initComponents();
 		initTitlePanel();
 	}
