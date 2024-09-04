@@ -81,7 +81,6 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.DataChangedKeeper;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -123,8 +122,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private String clientInDepot;
 	private HostInfo hostInfo = new HostInfo();
-
-	private FTextArea fAskSaveChangedText;
 
 	private Set<String> allowedClients;
 
@@ -370,7 +367,7 @@ public class ConfigedMain implements MessagebusListener {
 	private void initData() {
 		dependenciesModel = new DependenciesModel();
 		generalDataChangedKeeper = new GeneralDataChangedKeeper(this);
-		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper();
+		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper(this, hostInfo);
 		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper(this);
 
 		initMessagebus();
@@ -1437,84 +1434,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public ClientInfoDataChangedKeeper getClientInfoDataChangedKeeper() {
 		return clientInfoDataChangedKeeper;
-	}
-
-	/*
-	 * ============================================
-	 * inner class ClientInfoDataChangedKeeper
-	 */
-	public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
-		Map<?, ?> source;
-
-		// we use this, but it would not override, therefore we perform a cast
-		// it does not guarantee that the values of the map are maps!
-
-		@Override
-		public void dataHaveChanged(Object source1) {
-			this.source = (Map<?, ?>) source1;
-
-			Logging.debug(this, "dataHaveChanged source ", source);
-
-			if (source == null) {
-				Logging.info(this, "dataHaveChanged null");
-			} else {
-				for (Entry<?, ?> clientEntry : source.entrySet()) {
-					Logging.debug(this, "dataHaveChanged for client ", clientEntry.getKey(), " with values",
-							clientEntry.getValue());
-				}
-			}
-
-			super.dataHaveChanged(source);
-
-			Logging.debug(this, "dataHaveChanged dataChanged ", dataChanged);
-
-			setDataChanged(super.isDataChanged());
-
-			Logging.debug(this, "dataHaveChanged dataChanged ", dataChanged);
-
-			// anyDataChanged in ConfigedMain
-
-			Logging.info(this, "dataHaveChanged dataChanged ", dataChanged);
-		}
-
-		public boolean askSave() {
-			boolean result = false;
-			if (this.dataChanged) {
-				if (fAskSaveChangedText == null) {
-					fAskSaveChangedText = new FTextArea(mainFrame, Globals.APPNAME, true, new String[] {
-							Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-					fAskSaveChangedText.setMessage(Configed.getResourceValue("MainFrame.SaveChangedValue"));
-					fAskSaveChangedText.setSize(new Dimension(300, 220));
-				}
-
-				fAskSaveChangedText.setLocationRelativeTo(mainFrame);
-				fAskSaveChangedText.setVisible(true);
-				result = fAskSaveChangedText.getResult() == 2;
-
-				fAskSaveChangedText.setVisible(false);
-			}
-
-			return result;
-		}
-
-		public void save() {
-			Logging.info(this, "save , dataChanged ", dataChanged, " source ", source);
-			if (this.dataChanged && source != null && selectedClients != null) {
-				Logging.info(this, "save for clients ", selectedClients.size());
-
-				for (String client : selectedClients) {
-					hostInfo.showAndSaveInternally(clientTable, client, (Map<?, ?>) source.get(client));
-				}
-				persistenceController.getHostDataService().updateHosts();
-
-				source.clear();
-				// we have to clear the map instead of nulling,
-				// since otherwise changedClientInfo in MainFrame keep its value
-				// such producing wrong values for other clients
-			}
-
-			this.dataChanged = false;
-		}
 	}
 
 	/* ============================================ */
