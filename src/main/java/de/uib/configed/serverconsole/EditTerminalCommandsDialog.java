@@ -41,7 +41,7 @@ import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 
-public final class CommandControlDialog extends FGeneralDialog {
+public final class EditTerminalCommandsDialog extends FGeneralDialog {
 	private static final int FRAME_WIDTH = 850;
 	private static final int FRAME_HEIGHT = 600;
 
@@ -59,7 +59,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 	private ConfigedMain configedMain;
 	private final CommandFactory factory;
 
-	public CommandControlDialog(ConfigedMain configedMain) {
+	public EditTerminalCommandsDialog(ConfigedMain configedMain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		this.configedMain = configedMain;
 		factory = CommandFactory.getInstance();
@@ -85,7 +85,7 @@ public final class CommandControlDialog extends FGeneralDialog {
 		repaint();
 		revalidate();
 
-		final CommandControlDialog caller = this;
+		final EditTerminalCommandsDialog caller = this;
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			((CommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(

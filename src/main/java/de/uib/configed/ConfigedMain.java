@@ -66,7 +66,6 @@ import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productaction.FCompleteWinProducts;
-import de.uib.configed.serverconsole.CommandControlDialog;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
@@ -169,8 +168,6 @@ public class ConfigedMain implements MessagebusListener {
 	private Messagebus messagebus;
 
 	private Set<String> connectedHostsByMessagebus;
-
-	private CommandControlDialog commandControlDialog;
 
 	private InitialDataLoader initialDataLoader;
 
@@ -2056,13 +2053,6 @@ public class ConfigedMain implements MessagebusListener {
 						seconds);
 			}
 		}.start();
-	}
-
-	public void startControlDialog() {
-		if (commandControlDialog == null) {
-			commandControlDialog = new CommandControlDialog(this);
-		}
-		commandControlDialog.setVisible(true);
 	}
 
 	private boolean confirmActionForSelectedClients(String confirmInfo) {

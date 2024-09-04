@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import de.uib.configed.gui.ClientSelectionDialog;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
+import de.uib.configed.serverconsole.EditTerminalCommandsDialog;
 import de.uib.utils.logging.Logging;
 
 /**
@@ -23,6 +24,8 @@ public final class ExtraFrameController {
 	private static SavedSearchesDialog savedSearchesDialog;
 	private static ClientSelectionDialog clientSelectionDialog;
 	private static NewClientDialog newClientDialog;
+
+	private static EditTerminalCommandsDialog commandControlDialog;
 
 	// We have a private empty constructor to prevent instantiation
 	private ExtraFrameController() {
@@ -84,5 +87,14 @@ public final class ExtraFrameController {
 		newClientDialog.setDefaultValues();
 		newClientDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		newClientDialog.setVisible(true);
+	}
+
+	public static void startEditTerminalCommandsDialog(ConfigedMain configedMain) {
+		Logging.debug("start editing terminal commmands dialog");
+
+		if (commandControlDialog == null) {
+			commandControlDialog = new EditTerminalCommandsDialog(configedMain);
+		}
+		commandControlDialog.setVisible(true);
 	}
 }

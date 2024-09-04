@@ -283,7 +283,8 @@ public class MainFrame extends JFrame {
 	private void setupMenuServerConsole() {
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
-		jMenuCommandControl.addActionListener(actionEvent -> startControlAction());
+		jMenuCommandControl
+				.addActionListener(actionEvent -> ExtraFrameController.startEditTerminalCommandsDialog(configedMain));
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
 
@@ -611,11 +612,6 @@ public class MainFrame extends JFrame {
 
 		jMenuFileSaveConfigurations.setEnabled(b);
 		leftControlBar.enableSaveButton(b);
-	}
-
-	private void startControlAction() {
-		Logging.debug(this, "jMenuControlAction");
-		configedMain.startControlDialog();
 	}
 
 	private void groupByNotCurrentProductVersion() {
