@@ -140,8 +140,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private Map<String, String> sessionInfo = new HashMap<>();
 
-	private Map<String, String> logfiles = new HashMap<>();
-
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, HEALTH_CHECK, LICENSE_MANAGEMENT
 	}
@@ -1289,26 +1287,6 @@ public class ConfigedMain implements MessagebusListener {
 		} else {
 			return persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
 		}
-	}
-
-	public boolean logfileExists(String logtype) {
-		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).isEmpty()
-				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-	}
-
-	public Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {
-		Logging.info(this, "getLogfilesUpdating ", logtypeToUpdate);
-
-		if (selectedClients.size() == 1) {
-			logfiles = persistenceController.getLogDataService().getLogfile(selectedClients.get(0), logtypeToUpdate);
-			Logging.debug(this, "log pages set");
-		} else {
-			for (String logType : Utils.getLogTypes()) {
-				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-			}
-		}
-
-		return logfiles;
 	}
 
 	public List<String> getSelectedDepots() {

@@ -66,6 +66,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private JPopupMenu popupClients;
 
+	private Map<String, String> logfiles = new HashMap<>();
+
 	private ProductPageManager productPageManager;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -172,7 +174,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
 
 			// logfile empty?
-			if (!configedMain.logfileExists(logtype)) {
+			if (!logfileExists(logtype)) {
 				setLogFileTab(logtype);
 			}
 		});
@@ -196,8 +198,29 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public void setLogFileTab(String logtype) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
 		setComponentAt(getSelectedIndex(), showLogfiles);
-		showLogfiles.setDocuments(configedMain.getLogfilesUpdating(logtype),
+		showLogfiles.setDocuments(getLogfilesUpdating(logtype),
 				mainFrame.getHostsStatusPanel().getSelectedClientNames());
+	}
+
+	public boolean logfileExists(String logtype) {
+		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).isEmpty()
+				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+	}
+
+	public Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {
+		Logging.info(this, "getLogfilesUpdating ", logtypeToUpdate);
+
+		if (configedMain.getSelectedClients().size() == 1) {
+			logfiles = persistenceController.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0),
+					logtypeToUpdate);
+			Logging.debug(this, "log pages set");
+		} else {
+			for (String logType : Utils.getLogTypes()) {
+				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			}
+		}
+
+		return logfiles;
 	}
 
 	private void setLogview(String logtype) {
