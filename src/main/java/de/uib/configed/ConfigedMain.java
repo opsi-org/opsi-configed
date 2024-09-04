@@ -6,7 +6,6 @@
 
 package de.uib.configed;
 
-import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.File;
 import java.sql.Timestamp;
@@ -51,7 +50,6 @@ import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.gui.ClientTable;
 import de.uib.configed.gui.DepotsList;
-import de.uib.configed.gui.FShowListWithComboSelect;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.configed.gui.LoginDialog;
@@ -76,7 +74,6 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
 
@@ -1281,7 +1278,7 @@ public class ConfigedMain implements MessagebusListener {
 		return allowedClients;
 	}
 
-	private String[] getDepotArray() {
+	public String[] getDepotArray() {
 		if (depots == null) {
 			return new String[] {};
 		}
@@ -1416,106 +1413,6 @@ public class ConfigedMain implements MessagebusListener {
 		this.sessionInfo = sessionInfo;
 	}
 
-	public void callChangeClientIDDialog() {
-		if (selectedClients.size() != 1) {
-			return;
-		}
-
-		FEditText fEdit = new FEditText(selectedClients.get(0)) {
-			@Override
-			protected void commit() {
-				super.commit();
-
-				String newID = getText();
-
-				if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newID)) {
-					showInformationHostExistsAlready(newID);
-				}
-
-				Logging.debug(this, "new name ", newID);
-
-				persistenceController.getHostDataService().renameClient(selectedClients.get(0), newID);
-
-				refreshClientListActivateALL();
-				Logging.debug(this, "set client refreshClientList");
-				setClient(newID);
-			}
-		};
-
-		fEdit.init();
-		fEdit.setTitle(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
-		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
-		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fEdit.setSingleLine(true);
-		fEdit.setModal(true);
-		fEdit.setAlwaysOnTop(true);
-		fEdit.setVisible(true);
-	}
-
-	private static void showInformationHostExistsAlready(String clientId) {
-		FTextArea fHostExistsInfo = new FTextArea(getMainFrame(),
-				Configed.getResourceValue("FGeneralDialog.title.information"), true,
-				new String[] { Configed.getResourceValue("buttonClose") });
-
-		StringBuilder message = new StringBuilder();
-		message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
-		message.append(" \"");
-		message.append(clientId);
-		message.append("\" \n");
-
-		fHostExistsInfo.setMessage(message.toString());
-		fHostExistsInfo.setLocationRelativeTo(getMainFrame());
-		fHostExistsInfo.setAlwaysOnTop(true);
-		fHostExistsInfo.setVisible(true);
-	}
-
-	public void callChangeDepotDialog() {
-		if (selectedClients.isEmpty()) {
-			return;
-		}
-
-		FShowListWithComboSelect fChangeDepotForClients = new FShowListWithComboSelect(mainFrame,
-				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
-				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), getDepotArray(),
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") });
-
-		fChangeDepotForClients.setLineWrap(false);
-
-		StringBuilder messageBuffer = new StringBuilder(
-				"\n" + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving") + ": \n\n");
-
-		for (String selectedClient : selectedClients) {
-			messageBuffer.append(selectedClient);
-			messageBuffer.append("     (from: ");
-			messageBuffer.append(
-					persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient));
-
-			messageBuffer.append(") ");
-
-			messageBuffer.append("\n");
-		}
-
-		fChangeDepotForClients.setSize(new Dimension(400, 250));
-		fChangeDepotForClients.setMessage(messageBuffer.toString());
-
-		fChangeDepotForClients.setVisible(true);
-
-		if (fChangeDepotForClients.getResult() != 2) {
-			return;
-		}
-
-		final String targetDepot = (String) fChangeDepotForClients.getChoice();
-
-		if (targetDepot == null || targetDepot.isEmpty()) {
-			return;
-		}
-
-		Logging.debug(this, " start moving to another depot");
-		persistenceController.getHostInfoCollections().setDepotForClients(selectedClients, targetDepot);
-		Logging.checkErrorList();
-		refreshClientListKeepingGroup();
-	}
-
 	private void initialTreeActivation() {
 		Logging.info(this, "initialTreeActivation");
 
@@ -1536,7 +1433,7 @@ public class ConfigedMain implements MessagebusListener {
 		clientTree.setSelectionPath(pathToSelect);
 	}
 
-	private void refreshClientListActivateALL() {
+	public void refreshClientListActivateALL() {
 		Logging.info(this, "refreshClientListActivateALL");
 		setRebuiltClientListTableModel(true);
 		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);

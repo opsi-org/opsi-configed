@@ -51,8 +51,6 @@ import de.uib.utils.table.ExporterToPDF;
 
 @SuppressWarnings({ "java:S1200" })
 public final class ClientMenuManager implements MenuListener {
-	private static ClientMenuManager instance;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -98,12 +96,7 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
-		instance = new ClientMenuManager(configedMain, mainFrame);
-		return instance;
-	}
-
-	public static ClientMenuManager getInstance() {
-		return instance;
+		return new ClientMenuManager(configedMain, mainFrame);
 	}
 
 	public JMenu getJMenu() {
@@ -113,8 +106,8 @@ public final class ClientMenuManager implements MenuListener {
 	private void initJMenu() {
 		jMenuClients.addMenuListener(this);
 
-		jMenuChangeDepot.addActionListener(event -> configedMain.callChangeDepotDialog());
-		jMenuChangeClientID.addActionListener(event -> configedMain.callChangeClientIDDialog());
+		jMenuChangeDepot.addActionListener(event -> ServerActionManager.callChangeDepotDialog());
+		jMenuChangeClientID.addActionListener(event -> ServerActionManager.callChangeClientIDDialog());
 
 		JMenuItem jMenuSelectionGetGroup = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));

@@ -6,6 +6,7 @@
 
 package de.uib.configed;
 
+import java.awt.Dimension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.uib.configed.gui.FShowList;
+import de.uib.configed.gui.FShowListWithComboSelect;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
@@ -29,6 +31,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
+import de.uib.utils.swing.FEditText;
 
 public final class ServerActionManager {
 	private static ConfigedMain configedMain;
@@ -382,5 +385,107 @@ public final class ServerActionManager {
 		}
 
 		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenseUsage();
+	}
+
+	public static void callChangeClientIDDialog() {
+		if (configedMain.getSelectedClients().size() != 1) {
+			return;
+		}
+
+		FEditText fEdit = new FEditText(configedMain.getSelectedClients().get(0)) {
+			@Override
+			protected void commit() {
+				super.commit();
+
+				String newID = getText();
+
+				if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newID)) {
+					showInformationHostExistsAlready(newID);
+				}
+
+				Logging.debug(this, "new name ", newID);
+
+				persistenceController.getHostDataService().renameClient(configedMain.getSelectedClients().get(0),
+						newID);
+
+				configedMain.refreshClientListActivateALL();
+				Logging.debug(this, "set client refreshClientList");
+				configedMain.setClient(newID);
+			}
+		};
+
+		fEdit.init();
+		fEdit.setTitle(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
+		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
+		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		fEdit.setSingleLine(true);
+		fEdit.setModal(true);
+		fEdit.setAlwaysOnTop(true);
+		fEdit.setVisible(true);
+	}
+
+	private static void showInformationHostExistsAlready(String clientId) {
+		FTextArea fHostExistsInfo = new FTextArea(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("FGeneralDialog.title.information"), true,
+				new String[] { Configed.getResourceValue("buttonClose") });
+
+		StringBuilder message = new StringBuilder();
+		message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
+		message.append(" \"");
+		message.append(clientId);
+		message.append("\" \n");
+
+		fHostExistsInfo.setMessage(message.toString());
+		fHostExistsInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		fHostExistsInfo.setAlwaysOnTop(true);
+		fHostExistsInfo.setVisible(true);
+	}
+
+	public static void callChangeDepotDialog() {
+		if (configedMain.getSelectedClients().isEmpty()) {
+			return;
+		}
+
+		FShowListWithComboSelect fChangeDepotForClients = new FShowListWithComboSelect(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
+				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), configedMain.getDepotArray(),
+				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") });
+
+		fChangeDepotForClients.setLineWrap(false);
+
+		StringBuilder messageBuffer = new StringBuilder(
+				"\n" + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving") + ": \n\n");
+
+		for (String selectedClient : configedMain.getSelectedClients()) {
+			messageBuffer.append(selectedClient);
+			messageBuffer.append("     (from: ");
+			messageBuffer.append(
+					persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient));
+
+			messageBuffer.append(") ");
+
+			messageBuffer.append("\n");
+		}
+
+		fChangeDepotForClients.setSize(new Dimension(400, 250));
+		fChangeDepotForClients.setMessage(messageBuffer.toString());
+
+		fChangeDepotForClients.setVisible(true);
+
+		if (fChangeDepotForClients.getResult() != 2) {
+			return;
+		}
+
+		final String targetDepot = (String) fChangeDepotForClients.getChoice();
+
+		if (targetDepot == null || targetDepot.isEmpty()) {
+			return;
+		}
+
+		Logging.debug(" start moving to another depot");
+		persistenceController.getHostInfoCollections().setDepotForClients(configedMain.getSelectedClients(),
+				targetDepot);
+		Logging.checkErrorList();
+		configedMain.refreshClientListKeepingGroup();
 	}
 }

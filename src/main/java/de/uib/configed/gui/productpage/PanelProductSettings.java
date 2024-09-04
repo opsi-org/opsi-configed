@@ -221,12 +221,11 @@ public class PanelProductSettings extends JSplitPane {
 
 		popup.addSeparator();
 
-		ClientMenuManager clientMenuManager = ClientMenuManager.getInstance();
 		JMenu resetProductsMenu;
 		if (type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS) {
-			resetProductsMenu = clientMenuManager.createResetLocalbootProductsMenuItemsTo();
+			resetProductsMenu = ClientMenuManager.createResetLocalbootProductsMenuItemsTo();
 		} else {
-			resetProductsMenu = clientMenuManager.createResetNetbootProductsMenuItemsTo();
+			resetProductsMenu = ClientMenuManager.createResetNetbootProductsMenuItemsTo();
 		}
 		popup.add(resetProductsMenu);
 
