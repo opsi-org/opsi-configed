@@ -65,7 +65,6 @@ import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
@@ -145,10 +144,7 @@ public class ConfigedMain implements MessagebusListener {
 	private Map<String, Map<String, Object>> depots;
 	private String depotRepresentative;
 
-	private List<JFrame> allFrames;
-
 	private FGroupActions groupActionFrame;
-	private FCompleteWinProducts productActionFrame;
 
 	private int clientCount;
 
@@ -205,8 +201,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		initDepots();
 		initTree();
-
-		allFrames = new ArrayList<>();
 
 		// create client selection panel
 		clientTable = new ClientTable(this);
@@ -478,23 +472,9 @@ public class ConfigedMain implements MessagebusListener {
 			groupActionFrame = new FGroupActions(this);
 			groupActionFrame.setSize(1000, 300);
 			groupActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-			allFrames.add(groupActionFrame);
 		}
 
 		groupActionFrame.start();
-	}
-
-	public void startProductActionFrame() {
-		Logging.info(this, "startProductActionFrame ");
-
-		if (productActionFrame == null) {
-			productActionFrame = new FCompleteWinProducts();
-			productActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
-			allFrames.add(productActionFrame);
-		}
-
-		productActionFrame.start();
 	}
 
 	public void setEditingTarget(EditingTarget newEditingTarget) {
@@ -2316,30 +2296,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.info(this, "selected: ", result);
 		clientTable.setSelectedValues(result);
-	}
-
-	public void logEventOccurred() {
-		if (allFrames == null) {
-			return;
-		}
-
-		boolean found = false;
-
-		for (JFrame f : allFrames) {
-			if (f != null) {
-				Logging.debug(this, "log event occurred in frame f , is focused ", f.isFocused(), " ", f);
-
-				Logging.checkErrorList(f);
-				found = true;
-				break;
-			} else {
-				Logging.warning(this, "a frame is null here");
-			}
-		}
-
-		if (!found) {
-			Logging.checkErrorList(mainFrame);
-		}
 	}
 
 	public static JFrame getFrame() {

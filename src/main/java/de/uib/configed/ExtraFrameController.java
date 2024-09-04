@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import de.uib.configed.gui.ClientSelectionDialog;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
+import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.serverconsole.EditTerminalCommandsDialog;
 import de.uib.utils.logging.Logging;
 
@@ -24,8 +25,8 @@ public final class ExtraFrameController {
 	private static SavedSearchesDialog savedSearchesDialog;
 	private static ClientSelectionDialog clientSelectionDialog;
 	private static NewClientDialog newClientDialog;
-
 	private static EditTerminalCommandsDialog commandControlDialog;
+	private static FCompleteWinProducts productActionFrame;
 
 	// We have a private empty constructor to prevent instantiation
 	private ExtraFrameController() {
@@ -96,5 +97,16 @@ public final class ExtraFrameController {
 			commandControlDialog = new EditTerminalCommandsDialog(configedMain);
 		}
 		commandControlDialog.setVisible(true);
+	}
+
+	public static void startProductActionFrame(ConfigedMain configedMain) {
+		Logging.info("startProductActionFrame ");
+
+		if (productActionFrame == null) {
+			productActionFrame = new FCompleteWinProducts();
+			productActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		}
+
+		productActionFrame.start();
 	}
 }

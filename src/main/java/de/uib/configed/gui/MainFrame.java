@@ -453,7 +453,7 @@ public class MainFrame extends JFrame {
 		jMenuWorkOnGroups.addActionListener(event -> configedMain.handleGroupActionRequest());
 
 		JMenuItem jMenuWorkOnProducts = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWorkOnProducts"));
-		jMenuWorkOnProducts.addActionListener(event -> configedMain.startProductActionFrame());
+		jMenuWorkOnProducts.addActionListener(event -> ExtraFrameController.startProductActionFrame(configedMain));
 
 		jMenuShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
