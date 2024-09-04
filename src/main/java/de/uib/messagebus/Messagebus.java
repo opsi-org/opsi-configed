@@ -324,7 +324,7 @@ public class Messagebus implements MessagebusListener {
 				return;
 			}
 			List<?> channels = (List<?>) message.get("subscribed_channels");
-			if (channels.stream().anyMatch((Object channel) -> channel.toString().equals(channelSessionTerminalId))) {
+			if (channels.stream().anyMatch(channel -> channel.toString().equals(channelSessionTerminalId))) {
 				// check if the subscripted_channels in response contains the requested channel
 				// ensures that we send terminalOpenRequest only after we subscribed the correct channel
 				channelSessionTerminalId = null;

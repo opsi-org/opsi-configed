@@ -8,7 +8,6 @@ package de.uib.configed.serverconsole;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -116,7 +115,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		jLabelIgnorePing.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.ignorePing"));
 		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
 		jCheckBoxIgnorePing.setEnabled(!isGlobalReadOnly);
-		jCheckBoxIgnorePing.addItemListener((ItemEvent itemEvent) -> commandDeployClientAgent.togglePingIsRequired());
+		jCheckBoxIgnorePing.addItemListener(itemEvent -> commandDeployClientAgent.togglePingIsRequired());
 
 		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
 		jCheckBoxLoglevel = new JComboBox<>();
