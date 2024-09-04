@@ -133,7 +133,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuCreatePdf.addActionListener(event -> createPdf());
 
 		Icons.addIntellijIconToMenuItem(jMenuAddClient, "add");
-		jMenuAddClient.addActionListener(event -> configedMain.callNewClientDialog());
+		jMenuAddClient.addActionListener(event -> ExtraFrameController.callNewClientDialog(configedMain));
 
 		jMenuDeletePackageCaches.addActionListener(event -> configedMain.deletePackageCachesOfSelectedClients());
 

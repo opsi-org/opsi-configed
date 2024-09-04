@@ -9,6 +9,7 @@ package de.uib.configed;
 import java.awt.Dimension;
 
 import de.uib.configed.gui.ClientSelectionDialog;
+import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.utils.logging.Logging;
 
@@ -21,6 +22,7 @@ import de.uib.utils.logging.Logging;
 public final class ExtraFrameController {
 	private static SavedSearchesDialog savedSearchesDialog;
 	private static ClientSelectionDialog clientSelectionDialog;
+	private static NewClientDialog newClientDialog;
 
 	// We have a private empty constructor to prevent instantiation
 	private ExtraFrameController() {
@@ -72,5 +74,15 @@ public final class ExtraFrameController {
 		if (savedSearchesDialog != null) {
 			savedSearchesDialog.resetModel();
 		}
+	}
+
+	public static void callNewClientDialog(ConfigedMain configedMain) {
+		if (newClientDialog == null) {
+			newClientDialog = new NewClientDialog(configedMain);
+		}
+
+		newClientDialog.setDefaultValues();
+		newClientDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		newClientDialog.setVisible(true);
 	}
 }

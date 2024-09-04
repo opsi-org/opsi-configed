@@ -63,7 +63,6 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
-import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productaction.FCompleteWinProducts;
@@ -172,7 +171,6 @@ public class ConfigedMain implements MessagebusListener {
 	private Set<String> connectedHostsByMessagebus;
 
 	private CommandControlDialog commandControlDialog;
-	private NewClientDialog newClientDialog;
 
 	private InitialDataLoader initialDataLoader;
 
@@ -1809,16 +1807,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		return persistenceController.getLicenseDataService().executeCollectedDeletionsLicenseUsage();
-	}
-
-	public void callNewClientDialog() {
-		if (newClientDialog == null) {
-			newClientDialog = new NewClientDialog(this);
-		}
-
-		newClientDialog.setDefaultValues();
-		newClientDialog.setLocationRelativeTo(getMainFrame());
-		newClientDialog.setVisible(true);
 	}
 
 	public void callChangeClientIDDialog() {
