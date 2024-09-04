@@ -2438,6 +2438,9 @@ public class ConfigedMain implements MessagebusListener {
 			} else {
 				// Do when closing without option
 			}
+
+			// We set editing target because after restarting the configed, we will show this panel!
+			editingTarget = EditingTarget.CLIENTS;
 		}
 
 		boolean result = true;
