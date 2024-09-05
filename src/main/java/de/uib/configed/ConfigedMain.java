@@ -441,6 +441,7 @@ public class ConfigedMain implements MessagebusListener {
 		case CLIENTS:
 			mainFrame.showClientConfiguration();
 			break;
+
 		case DEPOTS:
 			mainFrame.showDepotConfiguration();
 			break;
@@ -759,7 +760,7 @@ public class ConfigedMain implements MessagebusListener {
 
 			String sessionValue = "";
 			if (sessionInfo.get(clientId) != null) {
-				sessionValue = "" + sessionInfo.get(clientId);
+				sessionValue = sessionInfo.get(clientId);
 			}
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
@@ -883,11 +884,8 @@ public class ConfigedMain implements MessagebusListener {
 
 		clientTree.produceActiveParents();
 
-		// With a new client the view should be updated, but only when we are in the Client configuration
-		if (editingTarget == EditingTarget.CLIENTS) {
-			// change in selection not via clientpage (i.e. via tree)
-			mainFrame.getClientConfiguration().stateChanged(null);
-		}
+		// change in selection not via clientpage (i.e. via tree)
+		mainFrame.getClientConfiguration().stateChanged(null);
 	}
 
 	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
