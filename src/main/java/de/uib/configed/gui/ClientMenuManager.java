@@ -154,8 +154,8 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuCopyClient.addActionListener(event -> ServerActionManager.copySelectedClient());
 		jMenuFreeLicenses.addActionListener(event -> ServerActionManager.freeAllPossibleLicensesForSelectedClients());
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
-		jMenuRemoteControl
-				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
+		jMenuRemoteControl.addActionListener(
+				event -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
 		Icons.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());

@@ -7,14 +7,26 @@
 package de.uib.configed;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.swing.DefaultComboBoxModel;
 
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
+import de.uib.configed.gui.FDialogRemoteControl;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.serverconsole.EditTerminalCommandsDialog;
+import de.uib.configed.type.RemoteControl;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.list.ListCellRendererByIndex;
 
 /**
  * This class should contain control all these control frames that we have in
@@ -29,6 +41,8 @@ public final class ExtraFrameController {
 	private static EditTerminalCommandsDialog commandControlDialog;
 	private static FCompleteWinProducts productActionFrame;
 	private static FGroupActions groupActionFrame;
+	private static FDialogRemoteControl dialogRemoteControl;
+	private static Map<String, RemoteControl> remoteControls;
 
 	// We have a private empty constructor to prevent instantiation
 	private ExtraFrameController() {
@@ -120,5 +134,58 @@ public final class ExtraFrameController {
 
 		groupActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		groupActionFrame.start();
+	}
+
+	public static void startRemoteControlFrame(ConfigedMain configedMain,
+			OpsiServiceNOMPersistenceController persistenceController) {
+		if (dialogRemoteControl == null) {
+			dialogRemoteControl = new FDialogRemoteControl(configedMain);
+		}
+
+		if (remoteControls == null
+				|| !remoteControls.equals(persistenceController.getConfigDataService().getRemoteControlsPD())) {
+			remoteControls = persistenceController.getConfigDataService().getRemoteControlsPD();
+
+			Logging.debug("remoteControls ", remoteControls);
+
+			Map<String, String> tooltips = new HashMap<>();
+			Map<String, String> rcCommands = new HashMap<>();
+			Map<String, Boolean> commandsEditable = new HashMap<>();
+
+			for (Entry<String, RemoteControl> entry : remoteControls.entrySet()) {
+				RemoteControl rc = entry.getValue();
+				if (rc.getDescription() != null && rc.getDescription().length() > 0) {
+					tooltips.put(entry.getKey(), rc.getDescription());
+				} else {
+					tooltips.put(entry.getKey(), rc.getCommand());
+				}
+				rcCommands.put(entry.getKey(), rc.getCommand());
+				Boolean editable = Boolean.valueOf(rc.getEditable());
+
+				commandsEditable.put(entry.getKey(), editable);
+			}
+
+			dialogRemoteControl.setMeanings(rcCommands);
+			dialogRemoteControl.setEditableFields(commandsEditable);
+
+			// we want to present a sorted list of the keys
+			List<String> sortedKeys = new ArrayList<>(remoteControls.keySet());
+			sortedKeys.sort(Comparator.comparing(String::toString));
+			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
+
+			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(tooltips));
+
+			dialogRemoteControl.setTitle(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
+			dialogRemoteControl.setModal(false);
+			dialogRemoteControl.init();
+		}
+
+		dialogRemoteControl.resetValue();
+
+		dialogRemoteControl.setSize(800, ConfigedMain.getMainFrame().getHeight() / 2);
+		dialogRemoteControl.setLocationRelativeTo(ConfigedMain.getMainFrame());
+
+		dialogRemoteControl.setVisible(true);
+		dialogRemoteControl.setDividerLocation(0.8);
 	}
 }

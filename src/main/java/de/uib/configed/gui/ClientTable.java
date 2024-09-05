@@ -14,14 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -41,26 +37,20 @@ import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.SearchTargetModelFromClientTable;
-import de.uib.configed.type.RemoteControl;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.list.ListCellRendererByIndex;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ClientTable extends JPanel implements ListSelectionListener, KeyListener {
-	public static final int REMOTE_CONTROL_FRAME_WIDTH = 800;
-
 	private JScrollPane scrollpane;
 
 	private TableSearchPane searchPane;
-
-	private FDialogRemoteControl dialogRemoteControl;
-	private Map<String, RemoteControl> remoteControls;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -364,63 +354,11 @@ public class ClientTable extends JPanel implements ListSelectionListener, KeyLis
 		return result;
 	}
 
-	public void startRemoteControlForSelectedClients() {
-		if (dialogRemoteControl == null) {
-			dialogRemoteControl = new FDialogRemoteControl(configedMain);
-		}
-
-		if (remoteControls == null
-				|| !remoteControls.equals(persistenceController.getConfigDataService().getRemoteControlsPD())) {
-			remoteControls = persistenceController.getConfigDataService().getRemoteControlsPD();
-
-			Logging.debug(this, "remoteControls ", remoteControls);
-
-			Map<String, String> tooltips = new HashMap<>();
-			Map<String, String> rcCommands = new HashMap<>();
-			Map<String, Boolean> commandsEditable = new HashMap<>();
-
-			for (Entry<String, RemoteControl> entry : remoteControls.entrySet()) {
-				RemoteControl rc = entry.getValue();
-				if (rc.getDescription() != null && rc.getDescription().length() > 0) {
-					tooltips.put(entry.getKey(), rc.getDescription());
-				} else {
-					tooltips.put(entry.getKey(), rc.getCommand());
-				}
-				rcCommands.put(entry.getKey(), rc.getCommand());
-				Boolean editable = Boolean.valueOf(rc.getEditable());
-
-				commandsEditable.put(entry.getKey(), editable);
-			}
-
-			dialogRemoteControl.setMeanings(rcCommands);
-			dialogRemoteControl.setEditableFields(commandsEditable);
-
-			// we want to present a sorted list of the keys
-			List<String> sortedKeys = new ArrayList<>(remoteControls.keySet());
-			sortedKeys.sort(Comparator.comparing(String::toString));
-			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
-
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(tooltips));
-
-			dialogRemoteControl.setTitle(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
-			dialogRemoteControl.setModal(false);
-			dialogRemoteControl.init();
-		}
-
-		dialogRemoteControl.resetValue();
-
-		dialogRemoteControl.setSize(REMOTE_CONTROL_FRAME_WIDTH, ConfigedMain.getMainFrame().getHeight() / 2);
-		dialogRemoteControl.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		dialogRemoteControl.setVisible(true);
-		dialogRemoteControl.setDividerLocation(0.8);
-	}
-
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			startRemoteControlForSelectedClients();
+			ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController);
 		} else if (e.getKeyCode() == KeyEvent.VK_F10) {
 			Logging.debug(this, "keypressed: f10");
 			ConfigedMain.getMainFrame().getClientConfiguration().showPopupClients();
