@@ -342,7 +342,7 @@ public final class ServerActionManager {
 				resetLocalbootProducts ? OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING
 						: OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
-		configedMain.requestReloadStatesAndActions();
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
 		ConfigedMain.getMainFrame().getClientConfiguration().updateProductTab();
 

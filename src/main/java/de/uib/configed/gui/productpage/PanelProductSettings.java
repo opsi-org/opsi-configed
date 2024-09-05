@@ -52,6 +52,7 @@ import de.uib.configed.productgroup.ProductActionPanel;
 import de.uib.configed.tree.ProductTree;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
@@ -195,7 +196,7 @@ public class PanelProductSettings extends JSplitPane {
 		save.addActionListener((ActionEvent e) -> {
 			Logging.debug(this, "actionevent on save-menue");
 			ChangedDataManager.checkSaveAll(false);
-			configedMain.requestReloadStatesAndActions();
+			persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 		});
 
 		popup.add(save);
@@ -265,7 +266,7 @@ public class PanelProductSettings extends JSplitPane {
 			item.addItemListener((ItemEvent e) -> {
 				boolean oldstate = productDisplayField.getValue();
 				getProductDisplayFieldsBasedOnType(type).put(productDisplayField.getKey(), !oldstate);
-				configedMain.requestReloadStatesAndActions();
+				persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
 				// We need to rebuild the shown page in the client configuration to make changes effective
 				ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
@@ -394,7 +395,7 @@ public class PanelProductSettings extends JSplitPane {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
-		configedMain.requestReloadStatesAndActions();
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
 		// We want to rebuild the shown page in the client configuration after reload
 		ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);
@@ -406,7 +407,7 @@ public class PanelProductSettings extends JSplitPane {
 	protected void saveAndExecuteAction() {
 		Logging.info(this, "saveAndExecuteAction");
 		ChangedDataManager.checkSaveAll(false);
-		configedMain.requestReloadStatesAndActions();
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 		ServerActionManager.processActionRequestsAllProducts();
 	}
 

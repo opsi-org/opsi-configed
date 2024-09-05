@@ -832,11 +832,6 @@ public class ConfigedMain implements MessagebusListener {
 		clientTable.setSelectedValues(clientsFilteredByTree);
 	}
 
-	public void requestReloadStatesAndActions() {
-		Logging.info(this, "requestReloadStatesAndActions");
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
-	}
-
 	public List<String> getSelectedClients() {
 		return selectedClients;
 	}
@@ -850,7 +845,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		saveSelectedClients = clientNames;
 
-		requestReloadStatesAndActions();
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
 		Logging.info(this, "setSelectedClientsArray ", clientNames.size());
 		Logging.info(this, "selectedClients was before ", selectedClients.size());
@@ -1311,7 +1306,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		mainFrame.resetData();
 
-		requestReloadStatesAndActions();
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 
