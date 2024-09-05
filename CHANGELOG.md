@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.3.x] - 2024-xx-xx
+## [4.3.3.14] - 2024-09-05
 ### Fixed
 - Show correctly the new lines ("\n") in tooltips
 - Correct support page in help menu
