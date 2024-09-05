@@ -131,8 +131,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	private int reloadCounter;
 
-	private Messagebus messagebus;
-
 	private Set<String> connectedHostsByMessagebus;
 
 	private InitialDataLoader initialDataLoader;
@@ -184,10 +182,10 @@ public class ConfigedMain implements MessagebusListener {
 
 		initialTreeActivation();
 
-		messagebus.getWebSocket().registerListener(this);
-		messagebus.getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
+		Messagebus.getInstance().getWebSocket().registerListener(this);
+		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
 
-		if (messagebus.getWebSocket().isOpen()) {
+		if (Messagebus.getInstance().getWebSocket().isOpen()) {
 			// Fake opening event on registering listener since this listener
 			// does not know yet if it's open
 			mainFrame.getHostsStatusPanel().onOpen(null);
@@ -253,28 +251,6 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "readLocallySavedServerNames  result ", result);
 
 		return result;
-	}
-
-	public boolean initMessagebus() {
-		if (messagebus == null) {
-			messagebus = new Messagebus(this);
-		}
-
-		if (!messagebus.isConnected()) {
-			try {
-				Logging.info(this, "connecting to messagebus");
-				messagebus.connect();
-				Logging.info(this, "connected to messagebus");
-			} catch (InterruptedException e) {
-				Logging.error(this, e, "could not connect to messagebus");
-				Thread.currentThread().interrupt();
-			}
-		}
-		return messagebus.isConnected();
-	}
-
-	public Messagebus getMessagebus() {
-		return messagebus;
 	}
 
 	public void addClientToTable(String clientId) {
@@ -348,8 +324,7 @@ public class ConfigedMain implements MessagebusListener {
 		// Init data for these manager classes so they can work
 		ChangedDataManager.initData(this, hostInfo);
 		ServerActionManager.initData(this);
-
-		initMessagebus();
+		Messagebus.initMessagebus(this);
 	}
 
 	protected void preloadData() {
@@ -1475,7 +1450,7 @@ public class ConfigedMain implements MessagebusListener {
 			return;
 		}
 		TerminalFrame terminalFrame = new TerminalFrame(this);
-		terminalFrame.setMessagebus(messagebus);
+		terminalFrame.setMessagebus(Messagebus.getInstance());
 		terminalFrame.setSession(connectToHost);
 		terminalFrame.display();
 	}

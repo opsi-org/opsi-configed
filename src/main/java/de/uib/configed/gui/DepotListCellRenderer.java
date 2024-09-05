@@ -18,6 +18,7 @@ import javax.swing.UIManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.messagebus.Messagebus;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
@@ -81,7 +82,7 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 		if (configedMain.getConnectedClientsByMessagebus().contains(value)) {
 			setIcon(connectedIcon);
 		} else if (value != null && value.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
-			if (configedMain.getMessagebus().isConnected()) {
+			if (Messagebus.getInstance().isConnected()) {
 				setIcon(configServerConnectedIcon);
 			} else {
 				setIcon(configServerDisconnectedIcon);

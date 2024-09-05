@@ -40,6 +40,8 @@ import de.uib.utils.logging.Logging;
 public class Messagebus implements MessagebusListener {
 	public static final String CONNECTION_USER_CHANNEL = "@";
 
+	private static Messagebus instance;
+
 	private WebSocketClientEndpoint messagebusWebSocket;
 	private int reconnectWaitMillis = 15000;
 	private boolean connected;
@@ -244,6 +246,27 @@ public class Messagebus implements MessagebusListener {
 
 	public boolean isConnected() {
 		return connected;
+	}
+
+	public static void initMessagebus(ConfigedMain configedMain) {
+		if (instance == null) {
+			instance = new Messagebus(configedMain);
+		}
+
+		if (!instance.isConnected()) {
+			try {
+				Logging.info("connecting to messagebus");
+				instance.connect();
+				Logging.info("connected to messagebus");
+			} catch (InterruptedException e) {
+				Logging.error(e, "could not connect to messagebus");
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	public static Messagebus getInstance() {
+		return instance;
 	}
 
 	public void disconnect() throws InterruptedException {

@@ -51,6 +51,7 @@ import de.uib.configed.serverconsole.command.SingleCommand;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
+import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
@@ -327,9 +328,9 @@ public class MainFrame extends JFrame {
 			Logging.info(this, "setupMenuServerConsole forbiddenConfigServer ", forbiddenConfigServer,
 					" forbiddenDepots ", forbiddenDepots, " forbiddenClients ", forbiddenClients);
 			jMenuTerminal.addActionListener((ActionEvent e) -> {
-				configedMain.initMessagebus();
+				Messagebus.initMessagebus(configedMain);
 				TerminalFrame terminal = new TerminalFrame(configedMain);
-				terminal.setMessagebus(configedMain.getMessagebus());
+				terminal.setMessagebus(Messagebus.getInstance());
 				terminal.display();
 			});
 		}

@@ -28,6 +28,7 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateUpdateManager;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.OpsiPackage;
+import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
@@ -78,7 +79,7 @@ public class ProductPageManager implements MessagebusListener {
 		possibleActions = persistenceController.getProductDataService()
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
 
-		configedMain.getMessagebus().getWebSocket().registerListener(this);
+		Messagebus.getInstance().getWebSocket().registerListener(this);
 	}
 
 	public void setLocalbootProductsPage() {

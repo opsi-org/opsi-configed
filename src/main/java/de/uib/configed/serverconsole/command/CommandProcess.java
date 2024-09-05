@@ -15,7 +15,6 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
@@ -26,14 +25,12 @@ public class CommandProcess {
 	private String id;
 	private StringBuilder result;
 	private ThreadLocker locker;
-	private ConfigedMain configedMain;
 	private String command;
 	private int exitCode;
 	private boolean errorEncounteredOnStart;
 	private boolean finished;
 
-	public CommandProcess(ConfigedMain configedMain, ThreadLocker locker, String command) {
-		this.configedMain = configedMain;
+	public CommandProcess(ThreadLocker locker, String command) {
 		this.locker = locker;
 		this.command = command;
 		this.result = new StringBuilder();
@@ -65,7 +62,7 @@ public class CommandProcess {
 		data.put("command", command.split(" "));
 		data.put("shell", true);
 		Logging.debug(this, "Request data ", data);
-		configedMain.getMessagebus().sendMessage(data);
+		Messagebus.getInstance().sendMessage(data);
 		Logging.info(this, "Request sent");
 		locker.lock();
 	}
@@ -81,7 +78,7 @@ public class CommandProcess {
 		data.put("created", System.currentTimeMillis());
 		data.put("expires", System.currentTimeMillis() + 10000);
 		Logging.debug(this, "Request data ", data);
-		configedMain.getMessagebus().sendMessage(data);
+		Messagebus.getInstance().sendMessage(data);
 		Logging.info(this, "Request sent");
 	}
 
