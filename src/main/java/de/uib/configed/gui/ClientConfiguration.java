@@ -98,10 +98,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		return productPageManager;
 	}
 
-	public PanelHostConfig getPanelHostConfig() {
-		return panelHostConfig;
-	}
-
 	public ClientInfoPanel getClientInfoPanel() {
 		return clientInfoPanel;
 	}
