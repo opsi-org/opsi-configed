@@ -43,7 +43,6 @@ public class Messagebus implements MessagebusListener {
 	private static Messagebus instance;
 
 	private WebSocketClientEndpoint messagebusWebSocket;
-	private int reconnectWaitMillis = 15000;
 	private boolean connected;
 	private boolean disconnecting;
 	private boolean reconnecting;
@@ -279,6 +278,10 @@ public class Messagebus implements MessagebusListener {
 		}
 	}
 
+	public void setReconnecting(boolean reconnecting) {
+		this.reconnecting = reconnecting;
+	}
+
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
 		// Not needed
@@ -295,39 +298,7 @@ public class Messagebus implements MessagebusListener {
 		boolean authenticationError = reason != null && reason.toLowerCase(Locale.ROOT).contains("authentication");
 
 		if (!wasDisconnecting && !reconnecting) {
-			new RetryConnectingThread(authenticationError).start();
-		}
-	}
-
-	private class RetryConnectingThread extends Thread {
-		private boolean authenticationError;
-
-		public RetryConnectingThread(boolean authenticationError) {
-			this.authenticationError = authenticationError;
-		}
-
-		@Override
-		public void run() {
-			reconnecting = true;
-			while (!isConnected()) {
-				int waitMillis = reconnectWaitMillis;
-				if (authenticationError) {
-					Logging.notice(this, "Connection to messagebus lost, authentication error");
-					persistenceController.makeConnection();
-					waitMillis = 1000;
-				} else {
-					Logging.notice(this, "Connection to messagebus lost, reconnecting in ", reconnectWaitMillis, " ms");
-				}
-				try {
-					Thread.sleep(waitMillis);
-					if (connect()) {
-						break;
-					}
-				} catch (InterruptedException ie) {
-					Thread.currentThread().interrupt();
-				}
-			}
-			reconnecting = false;
+			new RetryConnectingThread(authenticationError, this).start();
 		}
 	}
 
