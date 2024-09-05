@@ -7,17 +7,14 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -31,7 +28,6 @@ import javax.swing.event.PopupMenuListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
-import de.uib.configed.Globals;
 import de.uib.configed.ServerActionManager;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -394,27 +390,6 @@ public final class ClientMenuManager implements MenuListener {
 		fText.init();
 		fText.setLocationRelativeTo(mainFrame);
 		fText.setVisible(true);
-	}
-
-	private static void arrangeWs(Set<JDialog> frames) {
-		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
-		// Can iconify, but not deiconify a modal JDialog
-
-		if (frames == null) {
-			return;
-		}
-
-		MainFrame mainFrame = ConfigedMain.getMainFrame();
-		int transpose = 20;
-
-		for (Window f : frames) {
-			transpose = transpose + Globals.LINE_HEIGHT;
-
-			if (f != null) {
-				f.setVisible(true);
-				f.setLocation(mainFrame.getLocation().x + transpose, mainFrame.getLocation().y + transpose);
-			}
-		}
 	}
 
 	private static void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
