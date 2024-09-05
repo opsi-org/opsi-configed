@@ -75,11 +75,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		});
 	}
 
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return true;
-	}
-
 	public void setTableModel(GenTableModel model) {
 		panelGlobalSoftware.setTableModel(model);
 	}

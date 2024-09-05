@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
@@ -88,8 +87,6 @@ public class MainFrame extends JFrame {
 
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
-
-	private JMenuItem jMenuShowDialogs;
 
 	private ClientTable clientTable;
 
@@ -457,12 +454,8 @@ public class MainFrame extends JFrame {
 		JMenuItem jMenuWorkOnProducts = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWorkOnProducts"));
 		jMenuWorkOnProducts.addActionListener(event -> ExtraFrameController.startProductActionFrame());
 
-		jMenuShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
-
 		jMenuExtras.add(jMenuWorkOnGroups);
 		jMenuExtras.add(jMenuWorkOnProducts);
-		jMenuExtras.addSeparator();
-		jMenuExtras.add(jMenuShowDialogs);
 
 		return jMenuExtras;
 	}
@@ -789,11 +782,5 @@ public class MainFrame extends JFrame {
 		} else {
 			licenseDisplayer.display();
 		}
-	}
-
-	public void instancesChanged(Set<?> instances) {
-		boolean existJDialogInstances = instances != null && !instances.isEmpty();
-
-		jMenuShowDialogs.setEnabled(existJDialogInstances);
 	}
 }

@@ -30,11 +30,6 @@ public final class FOpsiLicenseMissingText extends FTextArea {
 		return instance;
 	}
 
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return true;
-	}
-
 	public static void callInstanceWith(String message) {
 		if (messages.isEmpty()) {
 			messages.add(Configed.getResourceValue("Permission.modules.infoheader"));

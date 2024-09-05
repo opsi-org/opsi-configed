@@ -37,12 +37,10 @@ public class RunningInstances<T> {
 
 	public void add(T instance, String description) {
 		instances.put(instance, description);
-		sendChangeEvent();
 	}
 
 	public void forget(T instance) {
 		instances.remove(instance);
-		sendChangeEvent();
 	}
 
 	public Set<T> getAll() {
@@ -70,12 +68,5 @@ public class RunningInstances<T> {
 	@Override
 	public String toString() {
 		return instances.toString();
-	}
-
-	private void sendChangeEvent() {
-		Logging.debug(this, "sendChangeEvent to mainFrame");
-		if (ConfigedMain.getMainFrame() != null) {
-			ConfigedMain.getMainFrame().instancesChanged(getAll());
-		}
 	}
 }

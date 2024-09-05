@@ -27,7 +27,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditObject;
 
 public class FGeneralDialog extends JDialog {
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;
@@ -65,7 +64,6 @@ public class FGeneralDialog extends JDialog {
 		super(owner, false);
 
 		Logging.info(this, "created by constructor 1, owner ", owner);
-		registerWithRunningInstances();
 		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(title);
 
@@ -77,7 +75,6 @@ public class FGeneralDialog extends JDialog {
 		super(owner, modal);
 
 		Logging.info(this, "created by constructor 2, owner ", owner);
-		registerWithRunningInstances();
 		super.setTitle(title);
 
 		super.setIconImage(Icons.getMainIcon());
@@ -119,26 +116,12 @@ public class FGeneralDialog extends JDialog {
 		initFGeneralDialog(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
 	}
 
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return true;
-	}
-
 	public void setDefaultResult(int d) {
 		defaultResult = d;
 	}
 
-	private void registerWithRunningInstances() {
-		Logging.info(this, "registerWithRunningInstances ", wantToBeRegisteredWithRunningInstances());
-		if (wantToBeRegisteredWithRunningInstances()) {
-			FEditObject.runningInstances.add(this, "");
-		}
-		Logging.info(this, "running instances ", FEditObject.runningInstances.size());
-	}
-
 	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
 			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
-		registerWithRunningInstances();
-
 		setIconImage(Icons.getMainIcon());
 
 		if (lastButtonNo > -1) {
@@ -380,7 +363,6 @@ public class FGeneralDialog extends JDialog {
 		setVisible(false);
 
 		dispose();
-		FEditObject.runningInstances.forget(this);
 	}
 
 	public void setButtonsEnabled(boolean b) {

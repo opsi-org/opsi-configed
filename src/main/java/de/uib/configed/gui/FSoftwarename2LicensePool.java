@@ -288,11 +288,6 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		super.setupLayout();
 	}
 
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return true;
-	}
-
 	private void initDataStructure() {
 		columnNames = new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS);
 

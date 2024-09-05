@@ -122,11 +122,6 @@ public class FSelectionList extends FGeneralDialog {
 		return southPanel;
 	}
 
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return false;
-	}
-
 	public void setListData(List<String> v) {
 		jList.setListData(v.toArray(String[]::new));
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, v, v);

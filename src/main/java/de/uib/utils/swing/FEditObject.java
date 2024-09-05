@@ -41,12 +41,8 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.observer.RunningInstances;
 
 public class FEditObject extends JDialog implements ActionListener, KeyListener, DocumentListener {
-	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
-			"leaving dialog");
-
 	protected static final int BUTTON_WIDTH = 30;
 
 	private Object initialValue = "";
@@ -272,16 +268,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		Logging.debug("forbidEditing ", forbidEditing);
 
 		return forbidEditing;
-	}
-
-	@Override
-	public void setVisible(boolean b) {
-		if (b) {
-			runningInstances.add(this, "");
-		} else {
-			runningInstances.forget(this);
-		}
-		super.setVisible(b);
 	}
 
 	@Override

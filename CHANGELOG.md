@@ -1,4 +1,9 @@
 # Changelog
+## [4.4.0.6] - 2024-xx-xx
+### Changed
+- Remove unnecessary feature to arrange dialogs
+
+
 ## [4.4.0.6] - 2024-09-05
 ### Fixed
 - Show correctly the new lines ("\n") in tooltips

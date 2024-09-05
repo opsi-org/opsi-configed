@@ -42,7 +42,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditObject;
 import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.AbstractExportTable;
 import de.uib.utils.table.ClientTableExporterToCSV;
@@ -224,15 +223,6 @@ public final class ClientMenuManager implements MenuListener {
 
 	public static JMenu createResetNetbootProductsMenuItemsTo() {
 		return createResetProductsMenuItemsTo(false, true, false);
-	}
-
-	public static JMenuItem createArrangeWindowsMenuItem() {
-		JMenuItem jMenuShowScheduledWOL = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
-		jMenuShowScheduledWOL.setEnabled(false);
-		jMenuShowScheduledWOL.addActionListener(event -> arrangeWs(FEditObject.runningInstances.getAll()));
-
-		return jMenuShowScheduledWOL;
 	}
 
 	private static JMenu createResetProductsMenuItemsTo(boolean includeResetOptionForLocalbootProducts,
