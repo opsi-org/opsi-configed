@@ -1505,7 +1505,9 @@ public class ProductDataService {
 		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
 		Logging.debug(this, "getProductOnClientsDisplayFields() ", configOptions.get(key));
 
-		List<String> configuredByService = Utils.takeAsStringList(serverPropertyMap.get(key));
+		List<String> configuredByService = POJOReMapper.remap(serverPropertyMap.get(key),
+				new TypeReference<List<String>>() {
+				});
 		List<?> possibleValuesAccordingToService = new ArrayList<>();
 		if (configOptions.get(key) != null) {
 			possibleValuesAccordingToService = (List<?>) configOptions.get(key).get("possibleValues");

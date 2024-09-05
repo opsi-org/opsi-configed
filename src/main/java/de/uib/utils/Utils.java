@@ -250,21 +250,6 @@ public final class Utils {
 		return sb.toString();
 	}
 
-	// TODO replace with Jackson something?
-	public static List<String> takeAsStringList(List<Object> list) {
-		List<String> result = new ArrayList<>();
-
-		if (list == null) {
-			return result;
-		}
-
-		for (Object val : list) {
-			result.add((String) val);
-		}
-
-		return result;
-	}
-
 	public static Map<String, Object> createNOMConfig(ConfigOption.TYPE type, String key, String description,
 			boolean editable, boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
 		Map<String, Object> item = createNOMitem(type.toString());

@@ -25,6 +25,8 @@ import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FSoftwarename2LicensePool;
@@ -39,6 +41,7 @@ import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -896,8 +899,10 @@ public class SoftwareDataService {
 		Map<String, LicensepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-		List<String> extraHostFields = Utils.takeAsStringList(configDefaultValues.get(
-				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION));
+		List<String> extraHostFields = POJOReMapper.remap(configDefaultValues
+				.get(OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION),
+				new TypeReference<List<String>>() {
+				});
 		Map<String, HostInfo> clientMap = hostInfoCollections.getMapOfAllPCInfoMaps();
 		for (Entry<String, HostInfo> clientEntry : clientMap.entrySet()) {
 			for (String pool : licensePools.keySet()) {

@@ -666,7 +666,10 @@ public class ConfigDataService {
 		}
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-		return Utils.takeAsStringList(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
+
+		return POJOReMapper.remap(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS),
+				new TypeReference<List<String>>() {
+				});
 	}
 
 	public List<String> getOpsiclientdExtraEvents() {
@@ -683,7 +686,9 @@ public class ConfigDataService {
 					KEY_OPSICLIENTD_EXTRA_EVENTS);
 		}
 
-		List<String> result = Utils.takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
+		List<String> result = POJOReMapper.remap(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS),
+				new TypeReference<List<String>>() {
+				});
 		Logging.debug(this, "getOpsiclientdExtraEvents() ", result);
 		return result;
 	}
@@ -1121,7 +1126,8 @@ public class ConfigDataService {
 
 	public List<String> getServerConfigStrings(String key) {
 		retrieveConfigOptionsPD();
-		return Utils.takeAsStringList(getConfigDefaultValuesPD().get(key));
+		return POJOReMapper.remap(getConfigDefaultValuesPD().get(key), new TypeReference<List<String>>() {
+		});
 	}
 
 	public List<String> getDomains() {

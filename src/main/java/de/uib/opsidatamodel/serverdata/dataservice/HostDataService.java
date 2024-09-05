@@ -571,7 +571,9 @@ public class HostDataService {
 			return;
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
-		List<String> configuredByService = Utils.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
+		List<String> configuredByService = POJOReMapper.remap(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS),
+				new TypeReference<List<String>>() {
+				});
 		// check if have to initialize the server property
 		configuredByService = produceHostDisplayFields(configuredByService);
 
