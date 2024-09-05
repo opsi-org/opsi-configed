@@ -1,9 +1,18 @@
 # Changelog
+## [4.4.0.6] - 2024-09-05
+### Fixed
+- Show correctly the new lines ("\n") in tooltips
+- Correct support page in help menu
+
+### Changed
+- Small change in Layout in Dialogs
+- Rework GUI design, put View change to the left, etc.
+
+
 ## [4.4.0.5] - 2024-08-15
 
 ### Changed
 - Keep connection and certificate validators so that they don't have to be recreated with every server request to improve performance
-- Rework GUI design, put View change to the left, etc.
 
 ## [4.4.0.4] - 2024-08-14
 

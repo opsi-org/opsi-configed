@@ -20,7 +20,7 @@ import javax.swing.UIManager;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2024-08-15";
+	public static final String VERDATE = "2024-09-05";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
@@ -32,7 +32,7 @@ public final class Globals {
 	public static final String ICON_LOGVIEWER = "opsilogos/opsi-logviewer.png";
 
 	public static final String OPSI_DOC_PAGE = "http://www.opsi.org";
-	public static final String OPSI_SUPPORT_PAGE = "http://opsi.org/support";
+	public static final String UIB_PAGE = "https://www.uib.de/";
 	public static final String OPSI_FORUM_PAGE = "http://forum.opsi.org";
 
 	public static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";

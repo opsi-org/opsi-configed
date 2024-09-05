@@ -335,21 +335,22 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private String generateTooltip(int row) {
 		String propertyName = names.get(row);
 
-		String tooltip = "";
+		StringBuilder tooltip = new StringBuilder();
 
 		if (propertyName != null) {
 			if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-				tooltip = "default: ";
+				tooltip.append("default: ");
 
 				if (Utils.isKeyForSecretValue(propertyName)) {
-					tooltip = tooltip + Globals.STARRED_STRING;
+					tooltip.append(Globals.STARRED_STRING);
 				} else {
-					tooltip = tooltip + defaultsMap.get(propertyName);
+					tooltip.append(defaultsMap.get(propertyName));
 				}
 			}
 
 			if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-				tooltip = tooltip + "<br/><br/>" + descriptionsMap.get(propertyName);
+				// We want to have new lines in the html form "<br>" so they'll be shown correctly in the tooltip
+				tooltip.append("<br/><br/>").append(descriptionsMap.get(propertyName).replace("\n", "<br>"));
 			}
 		}
 
