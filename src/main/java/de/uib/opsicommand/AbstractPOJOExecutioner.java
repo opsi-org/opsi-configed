@@ -258,8 +258,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<String>() {
-			});
+			result = (String) response.get("result");
 		}
 
 		return result;
@@ -270,8 +269,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<Boolean>() {
-			});
+			result = (Boolean) response.get("result");
 		}
 
 		return Boolean.TRUE.equals(result);
