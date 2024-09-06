@@ -276,14 +276,4 @@ public abstract class AbstractPOJOExecutioner {
 
 		return Boolean.TRUE.equals(result);
 	}
-
-	public Map<String, Object> getMapFromItem(Object item) {
-		return POJOReMapper.remap(item, new TypeReference<Map<String, Object>>() {
-		});
-	}
-
-	public List<Object> getListFromItem(String item) {
-		return POJOReMapper.remap(item, new TypeReference<List<Object>>() {
-		});
-	}
 }

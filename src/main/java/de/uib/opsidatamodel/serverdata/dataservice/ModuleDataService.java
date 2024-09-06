@@ -178,14 +178,20 @@ public class ModuleDataService {
 
 		Map<String, Object> opsiInformation = produceOpsiInformationPD();
 		// prepare the user info
-		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
+		Map<String, Object> opsiModulesInfo = POJOReMapper.remap(opsiInformation.get("modules"),
+				new TypeReference<Map<String, Object>>() {
+				});
 		Logging.info(this, "opsi module information ", opsiModulesInfo);
 
 		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
 		// analyse the real module info
-		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
-		opsiCountModules.keySet().removeAll(exec.getListFromItem(opsiInformation.get("obsolete_modules") + ""));
+		Map<String, Object> opsiCountModules = POJOReMapper.remap(opsiInformation.get("modules"),
+				new TypeReference<Map<String, Object>>() {
+				});
+		opsiCountModules.keySet().removeAll(
+				POJOReMapper.remap(opsiInformation.get("obsolete_modules") + "", new TypeReference<List<Object>>() {
+				}));
 		hostInfoCollections.retrieveOpsiHostsPD();
 
 		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
