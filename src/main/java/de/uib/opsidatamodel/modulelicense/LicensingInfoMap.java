@@ -385,9 +385,7 @@ public final class LicensingInfoMap {
 			Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
 			// iterate over date entries
-			Map<String, Object> moduleToDate = POJOReMapper.remap(dates.get(key).get(MODULES),
-					new TypeReference<Map<String, Object>>() {
-					});
+			Map<String, Object> moduleToDate = dates.get(key).get(MODULES);
 			// iterate over module entries to every date entry
 
 			// also warning state should be none

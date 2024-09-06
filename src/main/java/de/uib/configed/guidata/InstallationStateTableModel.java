@@ -24,14 +24,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
-import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -206,9 +203,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		List<Map<String, String>> productInfos = persistenceController.getProductDataService()
 				.getProductInfos(productIds, clientId, attributes);
 		for (Map<String, String> productInfo : productInfos) {
-			allClientsProductStates.get(clientId).put(productInfo.get("productId"),
-					POJOReMapper.remap(productInfo, new TypeReference<>() {
-					}));
+			allClientsProductStates.get(clientId).put(productInfo.get("productId"), productInfo);
 		}
 
 		produceVisualStatesFromExistingEntries();
@@ -233,9 +228,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				attributes);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, String> productInfo : productInfos) {
-				allClientsProductStates.get(clientId).put(productInfo.get("productId"),
-						POJOReMapper.remap(productInfo, new TypeReference<>() {
-						}));
+				allClientsProductStates.get(clientId).put(productInfo.get("productId"), productInfo);
 			}
 		} else {
 			allClientsProductStates.get(clientId).clear();
