@@ -260,11 +260,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		if (contentType.contains("application/json")) {
 			ObjectMapper mapper = new ObjectMapper();
-			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
 		} else if (contentType.contains("application/msgpack")) {
 			ObjectMapper mapper = new MessagePackMapper();
-			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
 		} else {
 			Logging.error(this, "Unsupported Content-Type: ", contentType);

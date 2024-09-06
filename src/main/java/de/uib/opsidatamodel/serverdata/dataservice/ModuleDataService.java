@@ -179,7 +179,7 @@ public class ModuleDataService {
 		Map<String, Object> opsiInformation = produceOpsiInformationPD();
 		// prepare the user info
 		Map<String, Object> opsiModulesInfo = POJOReMapper.remap(opsiInformation.get("modules"),
-				new TypeReference<Map<String, Object>>() {
+				new TypeReference<HashMap<String, Object>>() {
 				});
 		Logging.info(this, "opsi module information ", opsiModulesInfo);
 
@@ -187,7 +187,7 @@ public class ModuleDataService {
 
 		// analyse the real module info
 		Map<String, Object> opsiCountModules = POJOReMapper.remap(opsiInformation.get("modules"),
-				new TypeReference<Map<String, Object>>() {
+				new TypeReference<HashMap<String, Object>>() {
 				});
 		opsiCountModules.keySet().removeAll(
 				POJOReMapper.remap(opsiInformation.get("obsolete_modules") + "", new TypeReference<List<Object>>() {
@@ -206,7 +206,7 @@ public class ModuleDataService {
 		for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
 			Logging.info(this, "module from opsiModulesInfo, key ", opsiModuleInfo);
 			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue(),
-					new TypeReference<Map<String, Object>>() {
+					new TypeReference<HashMap<String, Object>>() {
 					});
 			ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
 					validUntil);
@@ -230,7 +230,7 @@ public class ModuleDataService {
 			ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
 			Logging.info(this, "handle modules key ", opsiCountModule.getKey(), " permission was ", modulePermission);
 			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue(),
-					new TypeReference<Map<String, Object>>() {
+					new TypeReference<HashMap<String, Object>>() {
 					});
 
 			if ("free".equals(opsiModuleData.get("state"))) {
@@ -503,7 +503,7 @@ public class ModuleDataService {
 		Map<String, Object> producedLicencingInfo;
 		if (isOpsiUserAdminPD() && getOpsiLicensingInfoOpsiAdminPD() != null) {
 			producedLicencingInfo = POJOReMapper.remap(getOpsiLicensingInfoOpsiAdminPD().get("result"),
-					new TypeReference<Map<String, Object>>() {
+					new TypeReference<HashMap<String, Object>>() {
 					});
 		} else {
 			producedLicencingInfo = getOpsiLicensingInfoNoOpsiAdminPD();
@@ -515,7 +515,7 @@ public class ModuleDataService {
 		Logging.info(this, "getInstalledOsOverview");
 		Map<String, Object> producedLicencingInfo = retrieveProducedLicensingInfo();
 		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"),
-				new TypeReference<Map<String, Integer>>() {
+				new TypeReference<HashMap<String, Integer>>() {
 				});
 	}
 }

@@ -127,8 +127,9 @@ public class CommandProcess {
 			finished = true;
 			locker.unlock();
 		}
-		Map<String, Object> error = POJOReMapper.remap(message.get("error"), new TypeReference<Map<String, Object>>() {
-		});
+		Map<String, Object> error = POJOReMapper.remap(message.get("error"),
+				new TypeReference<HashMap<String, Object>>() {
+				});
 		Logging.warning(this, "Command execution failed: ", error.get("code"), " - ", error.get("message"), ": ",
 				error.get("details"));
 		return (String) error.get("message");

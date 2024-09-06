@@ -1620,7 +1620,7 @@ public class ConfigedMain implements MessagebusListener {
 		String eventType = (String) message.get("event");
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
-				new TypeReference<Map<String, Object>>() {
+				new TypeReference<HashMap<String, Object>>() {
 				});
 
 		if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {

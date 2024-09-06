@@ -90,7 +90,7 @@ public abstract class AbstractPOJOExecutioner {
 		if (retrieved.containsKey("error") && retrieved.get("error") != null) {
 			if (retrieved.get("error") instanceof Map) {
 				Map<String, Object> error = POJOReMapper.remap(retrieved.get("error"),
-						new TypeReference<Map<String, Object>>() {
+						new TypeReference<HashMap<String, Object>>() {
 						});
 
 				if (error != null && error.get("class") != null && error.get("message") != null) {
@@ -107,12 +107,12 @@ public abstract class AbstractPOJOExecutioner {
 	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> responses = POJOReMapper.remap(retrieved.get("result"),
-				new TypeReference<Map<String, Object>>() {
+				new TypeReference<HashMap<String, Object>>() {
 				});
 
 		for (Entry<String, Object> entry : responses.entrySet()) {
 			Map<String, Object> response = POJOReMapper.remap(entry.getValue(),
-					new TypeReference<Map<String, Object>>() {
+					new TypeReference<HashMap<String, Object>>() {
 					});
 
 			if (response.get("error") == null) {
@@ -167,7 +167,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Map<String, String>> result = new TreeMap<>();
 
 		for (Object object : objects) {
-			Map<String, String> originalMap = POJOReMapper.remap(object, new TypeReference<Map<String, String>>() {
+			Map<String, String> originalMap = POJOReMapper.remap(object, new TypeReference<HashMap<String, String>>() {
 			});
 
 			if (originalMap.get(key) == null) {

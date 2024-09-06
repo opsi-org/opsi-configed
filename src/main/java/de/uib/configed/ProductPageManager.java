@@ -369,7 +369,7 @@ public class ProductPageManager implements MessagebusListener {
 		String eventType = (String) message.get("event");
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
-				new TypeReference<Map<String, Object>>() {
+				new TypeReference<HashMap<String, Object>>() {
 				});
 
 		if (WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString().equals(eventType)

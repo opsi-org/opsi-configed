@@ -292,7 +292,7 @@ public class ConfigDataService {
 				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostConfig.getKey(),
 						arg -> new HashMap<>());
 				Map<String, Object> configs = POJOReMapper.remap(hostConfig.getValue(),
-						new TypeReference<Map<String, Object>>() {
+						new TypeReference<HashMap<String, Object>>() {
 						});
 
 				Logging.debug(this, "retrieveHostConfigs objectId,  element ", hostConfig.getKey(), ": ", hostConfig);
@@ -709,7 +709,7 @@ public class ConfigDataService {
 		Map<String, Object> retrieved = exec.getMapResult(omc);
 		for (Entry<String, Object> entry : retrieved.entrySet()) {
 			Map<String, Object> configs = POJOReMapper.remap(entry.getValue(),
-					new TypeReference<Map<String, Object>>() {
+					new TypeReference<HashMap<String, Object>>() {
 					});
 			result.add(new ConfigName2ConfigValue(configs, getConfigOptionsPD()));
 		}

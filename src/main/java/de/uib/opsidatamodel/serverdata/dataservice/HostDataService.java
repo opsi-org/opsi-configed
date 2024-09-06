@@ -509,7 +509,7 @@ public class HostDataService {
 	private static String createSessionInfoForList(List<?> sessionlist) {
 		StringBuilder value = new StringBuilder();
 		for (Object element : sessionlist) {
-			Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<Map<String, Object>>() {
+			Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<HashMap<String, Object>>() {
 			});
 
 			String username = "" + session.get("UserName");
