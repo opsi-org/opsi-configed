@@ -17,12 +17,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public final class POJOReMapper {
 
 	// We instantiate the ObjectMapper here because we need this object many times
-	private static ObjectMapper mapper = new ObjectMapper();
-	static {
-		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
-		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-	}
+	private static ObjectMapper mapper = new ObjectMapper()
+			.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
+			.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+			.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 
 	private POJOReMapper() {
 	}
