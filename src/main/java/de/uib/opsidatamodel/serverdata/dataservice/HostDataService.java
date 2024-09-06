@@ -17,8 +17,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
@@ -509,8 +507,7 @@ public class HostDataService {
 	private static String createSessionInfoForList(List<?> sessionlist) {
 		StringBuilder value = new StringBuilder();
 		for (Object element : sessionlist) {
-			Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<HashMap<String, Object>>() {
-			});
+			Map<String, Object> session = POJOReMapper.remap(element);
 
 			String username = "" + session.get("UserName");
 			String logondomain = "" + session.get("LogonDomain");
@@ -571,9 +568,7 @@ public class HostDataService {
 			return;
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
-		List<String> configuredByService = POJOReMapper.remap(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS),
-				new TypeReference<List<String>>() {
-				});
+		List<String> configuredByService = POJOReMapper.remap(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
 		// check if have to initialize the server property
 		configuredByService = produceHostDisplayFields(configuredByService);
 

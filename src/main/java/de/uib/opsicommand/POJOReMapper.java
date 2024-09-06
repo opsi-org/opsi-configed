@@ -29,6 +29,11 @@ public final class POJOReMapper {
 		return mapper.convertValue(obj, typeRef);
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T remap(Object obj) {
+		return (T) obj;
+	}
+
 	public static boolean equalsNull(String ob) {
 		return ob == null || "null".equalsIgnoreCase(ob);
 	}

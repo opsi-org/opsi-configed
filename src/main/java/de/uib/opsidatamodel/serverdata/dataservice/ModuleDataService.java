@@ -178,17 +178,13 @@ public class ModuleDataService {
 
 		Map<String, Object> opsiInformation = produceOpsiInformationPD();
 		// prepare the user info
-		Map<String, Object> opsiModulesInfo = POJOReMapper.remap(opsiInformation.get("modules"),
-				new TypeReference<HashMap<String, Object>>() {
-				});
+		Map<String, Object> opsiModulesInfo = POJOReMapper.remap(opsiInformation.get("modules"));
 		Logging.info(this, "opsi module information ", opsiModulesInfo);
 
 		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
 		// analyse the real module info
-		Map<String, Object> opsiCountModules = POJOReMapper.remap(opsiInformation.get("modules"),
-				new TypeReference<HashMap<String, Object>>() {
-				});
+		Map<String, Object> opsiCountModules = POJOReMapper.remap(opsiInformation.get("modules"));
 		opsiCountModules.keySet().removeAll(
 				POJOReMapper.remap(opsiInformation.get("obsolete_modules") + "", new TypeReference<List<Object>>() {
 				}));
@@ -205,9 +201,7 @@ public class ModuleDataService {
 		// read in modules
 		for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
 			Logging.info(this, "module from opsiModulesInfo, key ", opsiModuleInfo);
-			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue(),
-					new TypeReference<HashMap<String, Object>>() {
-					});
+			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue());
 			ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
 					validUntil);
 
@@ -229,9 +223,7 @@ public class ModuleDataService {
 		for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
 			ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
 			Logging.info(this, "handle modules key ", opsiCountModule.getKey(), " permission was ", modulePermission);
-			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue(),
-					new TypeReference<HashMap<String, Object>>() {
-					});
+			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue());
 
 			if ("free".equals(opsiModuleData.get("state"))) {
 				continue;
@@ -494,17 +486,13 @@ public class ModuleDataService {
 	public List<Map<String, Object>> getModules() {
 		Logging.info(this, "getModules");
 		Map<String, Object> producedLicencingInfo = retrieveProducedLicensingInfo();
-		return POJOReMapper.remap(producedLicencingInfo.get("licenses"),
-				new TypeReference<List<Map<String, Object>>>() {
-				});
+		return POJOReMapper.remap(producedLicencingInfo.get("licenses"));
 	}
 
 	private Map<String, Object> retrieveProducedLicensingInfo() {
 		Map<String, Object> producedLicencingInfo;
 		if (isOpsiUserAdminPD() && getOpsiLicensingInfoOpsiAdminPD() != null) {
-			producedLicencingInfo = POJOReMapper.remap(getOpsiLicensingInfoOpsiAdminPD().get("result"),
-					new TypeReference<HashMap<String, Object>>() {
-					});
+			producedLicencingInfo = POJOReMapper.remap(getOpsiLicensingInfoOpsiAdminPD().get("result"));
 		} else {
 			producedLicencingInfo = getOpsiLicensingInfoNoOpsiAdminPD();
 		}
@@ -514,8 +502,6 @@ public class ModuleDataService {
 	public Map<String, Integer> getInstalledOsOverview() {
 		Logging.info(this, "getInstalledOsOverview");
 		Map<String, Object> producedLicencingInfo = retrieveProducedLicensingInfo();
-		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"),
-				new TypeReference<HashMap<String, Integer>>() {
-				});
+		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"));
 	}
 }

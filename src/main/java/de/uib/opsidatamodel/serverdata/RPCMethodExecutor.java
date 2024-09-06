@@ -8,13 +8,10 @@ package de.uib.opsidatamodel.serverdata;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -118,9 +115,7 @@ public class RPCMethodExecutor {
 		List<String> errors = new ArrayList<>();
 
 		for (Entry<String, Object> response : responses.entrySet()) {
-			Map<String, Object> jO = POJOReMapper.remap(response.getValue(),
-					new TypeReference<HashMap<String, Object>>() {
-					});
+			Map<String, Object> jO = POJOReMapper.remap(response.getValue());
 			String error = exec.getErrorFromResponse(jO);
 
 			if (error != null) {

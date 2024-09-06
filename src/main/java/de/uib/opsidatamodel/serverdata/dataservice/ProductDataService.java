@@ -21,8 +21,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiPackage;
@@ -741,9 +739,7 @@ public class ProductDataService {
 			Map<String, Object> properties = productproperties1Client.computeIfAbsent((String) map.get("productId"),
 					s -> new HashMap<>());
 
-			properties.put((String) map.get("propertyId"),
-					POJOReMapper.remap(map.get("values"), new TypeReference<List<Object>>() {
-					}));
+			properties.put((String) map.get("propertyId"), POJOReMapper.remap(map.get("values")));
 		}
 
 		Logging.info(this, " retrieveProductproperties  productsWithProductPropertyStates ",
@@ -1505,9 +1501,7 @@ public class ProductDataService {
 		Map<String, ConfigOption> configOptions = configDataService.getConfigOptionsPD();
 		Logging.debug(this, "getProductOnClientsDisplayFields() ", configOptions.get(key));
 
-		List<String> configuredByService = POJOReMapper.remap(serverPropertyMap.get(key),
-				new TypeReference<List<String>>() {
-				});
+		List<String> configuredByService = POJOReMapper.remap(serverPropertyMap.get(key));
 		List<?> possibleValuesAccordingToService = new ArrayList<>();
 		if (configOptions.get(key) != null) {
 			possibleValuesAccordingToService = (List<?>) configOptions.get(key).get("possibleValues");

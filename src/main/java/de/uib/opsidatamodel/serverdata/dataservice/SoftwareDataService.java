@@ -25,8 +25,6 @@ import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FSoftwarename2LicensePool;
@@ -899,10 +897,8 @@ public class SoftwareDataService {
 		Map<String, LicensepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-		List<String> extraHostFields = POJOReMapper.remap(configDefaultValues
-				.get(OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION),
-				new TypeReference<List<String>>() {
-				});
+		List<String> extraHostFields = POJOReMapper.remap(configDefaultValues.get(
+				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION));
 		Map<String, HostInfo> clientMap = hostInfoCollections.getMapOfAllPCInfoMaps();
 		for (Entry<String, HostInfo> clientEntry : clientMap.entrySet()) {
 			for (String pool : licensePools.keySet()) {

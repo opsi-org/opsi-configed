@@ -16,8 +16,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
@@ -291,9 +289,7 @@ public class ConfigDataService {
 			if (hostConfig.getKey() != null && !"".equals(hostConfig.getKey())) {
 				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostConfig.getKey(),
 						arg -> new HashMap<>());
-				Map<String, Object> configs = POJOReMapper.remap(hostConfig.getValue(),
-						new TypeReference<HashMap<String, Object>>() {
-						});
+				Map<String, Object> configs = POJOReMapper.remap(hostConfig.getValue());
 
 				Logging.debug(this, "retrieveHostConfigs objectId,  element ", hostConfig.getKey(), ": ", hostConfig);
 
@@ -667,9 +663,7 @@ public class ConfigDataService {
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 
-		return POJOReMapper.remap(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS),
-				new TypeReference<List<String>>() {
-				});
+		return POJOReMapper.remap(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
 	}
 
 	public List<String> getOpsiclientdExtraEvents() {
@@ -686,9 +680,7 @@ public class ConfigDataService {
 					KEY_OPSICLIENTD_EXTRA_EVENTS);
 		}
 
-		List<String> result = POJOReMapper.remap(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS),
-				new TypeReference<List<String>>() {
-				});
+		List<String> result = POJOReMapper.remap(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
 		Logging.debug(this, "getOpsiclientdExtraEvents() ", result);
 		return result;
 	}
@@ -708,9 +700,7 @@ public class ConfigDataService {
 				new Object[] { configIds, objectIds, true });
 		Map<String, Object> retrieved = exec.getMapResult(omc);
 		for (Entry<String, Object> entry : retrieved.entrySet()) {
-			Map<String, Object> configs = POJOReMapper.remap(entry.getValue(),
-					new TypeReference<HashMap<String, Object>>() {
-					});
+			Map<String, Object> configs = POJOReMapper.remap(entry.getValue());
 			result.add(new ConfigName2ConfigValue(configs, getConfigOptionsPD()));
 		}
 		return result;
@@ -1126,8 +1116,7 @@ public class ConfigDataService {
 
 	public List<String> getServerConfigStrings(String key) {
 		retrieveConfigOptionsPD();
-		return POJOReMapper.remap(getConfigDefaultValuesPD().get(key), new TypeReference<List<String>>() {
-		});
+		return POJOReMapper.remap(getConfigDefaultValuesPD().get(key));
 	}
 
 	public List<String> getDomains() {

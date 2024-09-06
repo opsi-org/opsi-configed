@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
@@ -127,9 +125,7 @@ public class CommandProcess {
 			finished = true;
 			locker.unlock();
 		}
-		Map<String, Object> error = POJOReMapper.remap(message.get("error"),
-				new TypeReference<HashMap<String, Object>>() {
-				});
+		Map<String, Object> error = POJOReMapper.remap(message.get("error"));
 		Logging.warning(this, "Command execution failed: ", error.get("code"), " - ", error.get("message"), ": ",
 				error.get("details"));
 		return (String) error.get("message");
