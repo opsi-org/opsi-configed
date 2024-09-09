@@ -62,4 +62,19 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 		}
 		ConfigedMain.getMainFrame().setCursor(null);
 	}
+
+	public static void retrieveSessionInfo(ConfigedMain configedMain) {
+		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+		boolean visible = PersistenceControllerFactory.getPersistenceController().getHostDataService()
+				.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		if (!visible) {
+			configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		}
+
+		Logging.info("setColumnSessionInfo ", visible);
+
+		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(configedMain);
+		infoRetriever.setOnlySelectedClients(!configedMain.getSelectedClients().isEmpty());
+		infoRetriever.execute();
+	}
 }

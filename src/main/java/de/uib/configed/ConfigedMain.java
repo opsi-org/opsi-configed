@@ -364,16 +364,6 @@ public class ConfigedMain implements MessagebusListener {
 		}
 	}
 
-	private void setColumnSessionInfo(boolean b) {
-		boolean visible = persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-		if (visible != b) {
-			toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-		}
-
-		Logging.info(this, "setColumnSessionInfo ", b);
-	}
-
 	public void toggleColumn(String column) {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
 		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
@@ -1361,14 +1351,6 @@ public class ConfigedMain implements MessagebusListener {
 			}
 		}
 		Logging.info(this, "could not update connectionStatus for client ", clientName, ": not in list of shown table");
-	}
-
-	public void getSessionInfo() {
-		mainFrame.setCursor(Globals.WAIT_CURSOR);
-		setColumnSessionInfo(true);
-		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(this);
-		infoRetriever.setOnlySelectedClients(!selectedClients.isEmpty());
-		infoRetriever.execute();
 	}
 
 	public ClientTable getClientTable() {

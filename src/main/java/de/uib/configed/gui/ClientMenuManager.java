@@ -29,6 +29,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.ServerActionManager;
+import de.uib.configed.SessionInfoRetriever;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
@@ -139,7 +140,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		jMenuShowPopupMessage.addActionListener(event -> showPopupOnClientsAction());
 		jMenuShutdownClient.addActionListener(event -> ServerActionManager.shutdownSelectedClients());
-		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
+		jMenuRequestSessionInfo.addActionListener(event -> SessionInfoRetriever.retrieveSessionInfo(configedMain));
 		Icons.addThemeIconInvertedToMenuItem(jMenuRequestSessionInfo, "user");
 		jMenuRebootClient.addActionListener(event -> ServerActionManager.rebootSelectedClients());
 
