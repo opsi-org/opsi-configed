@@ -207,10 +207,6 @@ public class Main {
 			// enable custom window decorations
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JDialog.setDefaultLookAndFeelDecorated(true);
-		} else if (SystemInfo.isMacOS) {
-			System.setProperty("flatlaf.useNativeLibrary", "false");
-		} else {
-			// Do nothing for other operating systems
 		}
 	}
 
