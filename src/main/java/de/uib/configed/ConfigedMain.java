@@ -345,23 +345,11 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getGroupDataService().retrieveAllGroupsPD();
 		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
 
-		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
-				.getProductGroupsPD();
-		fillterPermittedProductGroups(productGroups.keySet());
-
 		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
 
 		connectedHostsByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
-	}
-
-	private void fillterPermittedProductGroups(Set<String> productGroups) {
-		if (!persistenceController.getUserRolesConfigDataService().hasProductGroupsFullPermissionPD()) {
-			Set<String> permittedProductGroups = persistenceController.getUserRolesConfigDataService()
-					.getPermittedProductGroupsPD();
-			productGroups.retainAll(permittedProductGroups);
-		}
 	}
 
 	public void toggleColumn(String column) {

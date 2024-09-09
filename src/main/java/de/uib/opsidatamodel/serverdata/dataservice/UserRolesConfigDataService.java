@@ -113,10 +113,6 @@ public class UserRolesConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
 	}
 
-	public Set<String> getPermittedProductGroupsPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, Set.class);
-	}
-
 	public boolean hasProductGroupsFullPermissionPD() {
 		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class);
 	}
@@ -480,7 +476,6 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
 		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
 
 		if (!productgroupsFullPermission) {
