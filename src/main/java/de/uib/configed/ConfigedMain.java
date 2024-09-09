@@ -42,9 +42,6 @@ import javax.swing.tree.TreePath;
 
 import org.java_websocket.handshake.ServerHandshake;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.groupaction.ActivatedGroupModel;
@@ -65,6 +62,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -1618,10 +1616,8 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		String eventType = (String) message.get("event");
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
-				new TypeReference<HashMap<String, Object>>() {
-				});
+
+		Map<String, Object> eventData = POJOReMapper.remap(message.get("data"));
 
 		if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
 			addClientToConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
