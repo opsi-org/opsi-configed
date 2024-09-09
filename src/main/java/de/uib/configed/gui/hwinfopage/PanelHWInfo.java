@@ -304,62 +304,54 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
 		List<String[]> data = new ArrayList<>();
-		if (values != null) {
-			for (Map<String, Object> value : values) {
-				String opsi = (String) value.get("Opsi");
-				Logging.debug(this, "opsi ", opsi);
+		for (Map<String, Object> value : values) {
+			String opsi = (String) value.get("Opsi");
+			Logging.debug(this, "opsi ", opsi);
 
-				// table row keys //no encoding needed
-				String ui = (String) value.get("UI");
-				String unit = null;
-				if (value.containsKey("Unit")) {
-					unit = (String) value.get("Unit");
-					Logging.debug(this, "unit  ", unit);
-				}
-
-				for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
-					if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
-						String cv = "" + deviceInfoEntry.getValue();
-
-						if (reduceScanToByAuditClasses && hwClass != null) {
-							Logging.debug(this, "key ", opsi);
-
-							if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
-								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
-									vendorStringComputerSystem = cv;
-								} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
-									modelString = cv;
-								} else {
-									// Not needed, since other values not used for Description on top
-								}
-							} else if (hwClass.equals(CLASS_BASE_BOARD)) {
-								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
-									vendorStringBaseBoard = cv;
-								} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
-									productString = cv;
-								} else {
-									// Not needed, since other values not used for Description on top
-								}
-							} else {
-								Logging.warning(this, "unexpected value for hwclass: ", hwClass);
-							}
-						}
-
-						if (unit != null) {
-							cv = addUnit(cv, unit);
-						}
-						String[] row = { ui, cv };
-						data.add(row);
-						Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", Arrays.toString(row));
-						break;
-					}
-				}
+			// table row keys //no encoding needed
+			String ui = (String) value.get("UI");
+			String unit = null;
+			if (value.containsKey("Unit")) {
+				unit = (String) value.get("Unit");
+				Logging.debug(this, "unit  ", unit);
 			}
-		} else {
-			for (Entry<String, Object> info : deviceInfo.entrySet()) {
-				String[] row = { info.getKey(), (String) info.getValue() };
-				data.add(row);
-				Logging.debug(this, "hwClass row  ", hwClass, ": ", Arrays.toString(row));
+
+			for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
+				if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
+					String cv = "" + deviceInfoEntry.getValue();
+
+					if (reduceScanToByAuditClasses && hwClass != null) {
+						Logging.debug(this, "key ", opsi);
+
+						if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
+							if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
+								vendorStringComputerSystem = cv;
+							} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
+								modelString = cv;
+							} else {
+								// Not needed, since other values not used for Description on top
+							}
+						} else if (hwClass.equals(CLASS_BASE_BOARD)) {
+							if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
+								vendorStringBaseBoard = cv;
+							} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
+								productString = cv;
+							} else {
+								// Not needed, since other values not used for Description on top
+							}
+						} else {
+							Logging.warning(this, "unexpected value for hwclass: ", hwClass);
+						}
+					}
+
+					if (unit != null) {
+						cv = addUnit(cv, unit);
+					}
+					String[] row = { ui, cv };
+					data.add(row);
+					Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", Arrays.toString(row));
+					break;
+				}
 			}
 		}
 
