@@ -19,9 +19,6 @@ import javax.swing.RowSorter.SortKey;
 
 import org.java_websocket.handshake.ServerHandshake;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.InstallationStateTableModel;
@@ -31,6 +28,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -367,15 +365,11 @@ public class ProductPageManager implements MessagebusListener {
 		}
 
 		String eventType = (String) message.get("event");
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"),
-				new TypeReference<HashMap<String, Object>>() {
-				});
 
 		if (WebSocketEvent.PRODUCT_ON_CLIENT_CREATED.toString().equals(eventType)
 				|| WebSocketEvent.PRODUCT_ON_CLIENT_UPDATED.toString().equals(eventType)
 				|| WebSocketEvent.PRODUCT_ON_CLIENT_DELETED.toString().equals(eventType)) {
-			updateManager.updateProduct(eventData);
+			updateManager.updateProduct(POJOReMapper.remap(message.get("data")));
 		}
 	}
 }
