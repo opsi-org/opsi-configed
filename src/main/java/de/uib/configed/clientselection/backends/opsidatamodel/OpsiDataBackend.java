@@ -485,41 +485,15 @@ public final class OpsiDataBackend {
 		return clients;
 	}
 
-	public Map<String, List<AbstractSelectElement>> getHardwareList() {
-		Map<String, List<AbstractSelectElement>> result = new HashMap<>();
-
-		for (int i = 0; i < hwConfig.size(); i++) {
-			Map<String, Object> hardwareMap = hwConfig.get(i);
-			Map<String, Object> hardwareMapLocalized = hwConfigLocalized.get(i);
-			String hardwareName = (String) Map.class.cast(hardwareMap.get("Class")).get("UI");
-			String hardwareNameLocalized = (String) Map.class.cast(hardwareMapLocalized.get("Class")).get("UI");
-			List<AbstractSelectElement> elementList = new LinkedList<>();
-			List<Map<String, Object>> values = POJOReMapper.remap(hardwareMap.get("Values"));
-			List<Map<String, Object>> valuesLocalized = POJOReMapper.remap(hardwareMapLocalized.get("Values"));
-			for (int j = 0; j < values.size(); j++) {
-				Map<String, Object> valuesMap = values.get(j);
-				String type = (String) valuesMap.get("Type");
-				String name = (String) valuesMap.get("UI");
-				String localizedName = (String) valuesLocalized.get(j).get("UI");
-				if ("int".equals(type) || "tinyint".equals(type)) {
-					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
-							hardwareNameLocalized, localizedName));
-				} else if ("bigint".equals(type)) {
-					elementList.add(new GenericBigIntegerElement(new String[] { hardwareName, name },
-							hardwareNameLocalized, localizedName));
-				} else {
-					elementList.add(new GenericTextElement(new String[] { hardwareName, name }, hardwareNameLocalized,
-							localizedName));
-				}
-			}
-			result.put(hardwareName, elementList);
-
-			Logging.debug(this, "", elementList);
-		}
-		return result;
+	public Map<String, List<AbstractSelectElement>> getLocalizedHardwareList() {
+		return getHardwareList(true);
 	}
 
-	public Map<String, List<AbstractSelectElement>> getLocalizedHardwareList() {
+	public Map<String, List<AbstractSelectElement>> getHardwareList() {
+		return getHardwareList(false);
+	}
+
+	private Map<String, List<AbstractSelectElement>> getHardwareList(boolean localized) {
 		Map<String, List<AbstractSelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
@@ -546,7 +520,11 @@ public final class OpsiDataBackend {
 							localizedName));
 				}
 			}
-			result.put(hardwareNameLocalized, elementList);
+			if (localized) {
+				result.put(hardwareNameLocalized, elementList);
+			} else {
+				result.put(hardwareName, elementList);
+			}
 
 			Logging.debug(this, "", elementList);
 		}
