@@ -39,6 +39,7 @@ import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.messages.Messages;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
@@ -70,7 +71,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private Map<String, List<Map<String, Object>>> hwInfo;
 	private Map<String, Map<String, Object>> devicesInfo;
 	private String treeRootTitle;
-	private List<Map<String, List<Map<String, Object>>>> hwConfig;
+	private List<Map<String, Object>> hwConfig;
 
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
@@ -277,15 +278,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private List<Map<String, Object>> getValuesFromHwClass(String hwClass) {
 		List<Map<String, Object>> values = null;
-		for (Map<String, List<Map<String, Object>>> whc : hwConfig) {
-			if (whc != null) {
-				Map<String, Object> whcClass = whc.get("Class").get(0);
-				if (whcClass.get("Opsi").equals(hwClass)) {
-					values = whc.get("Values");
-					break;
-				}
-			} else {
-				Logging.error(this, "hwConfig element is null");
+		for (Map<String, Object> whc : hwConfig) {
+			Map<String, Object> whcClass = POJOReMapper.remap(whc.get("Class"));
+			if (whcClass.get("Opsi").equals(hwClass)) {
+				values = POJOReMapper.remap(whc.get("Values"));
+				break;
 			}
 		}
 
@@ -444,9 +441,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
 		for (int i = 0; i < hwConfig.size(); i++) {
-			Map<String, List<Map<String, Object>>> whc = hwConfig.get(i);
-			hwClassesUI[i] = (String) whc.get("Class").get(0).get("UI");
-			hwClassMapping.put(hwClassesUI[i], whc.get("Class").get(0).get("Opsi"));
+			Map<String, Object> whc = hwConfig.get(i);
+			hwClassesUI[i] = (String) Map.class.cast(whc.get("Class")).get("UI");
+			hwClassMapping.put(hwClassesUI[i], Map.class.cast(whc.get("Class")).get("Opsi"));
 		}
 
 		Arrays.sort(hwClassesUI);
@@ -541,8 +538,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private void getLocalizedHashMap() {
 		hwOpsiToUI = new HashMap<>();
 
-		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
-			List<Map<String, Object>> values = hardwareMap.get("Values");
+		for (Map<String, Object> hardwareMap : hwConfig) {
+			List<Map<String, Object>> values = POJOReMapper.remap(hardwareMap.get("Values"));
 			for (Map<String, Object> valuesMap : values) {
 				String type = (String) valuesMap.get("Opsi");
 				String name = (String) valuesMap.get("UI");
@@ -550,9 +547,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			}
 		}
 
-		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
-			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
-			String hardwareOpsi = (String) hardwareMap.get("Class").get(0).get("Opsi");
+		for (Map<String, Object> hardwareMap : hwConfig) {
+			String hardwareName = (String) Map.class.cast(hardwareMap.get("Class")).get("UI");
+			String hardwareOpsi = (String) Map.class.cast(hardwareMap.get("Class")).get("Opsi");
 
 			hwOpsiToUI.putIfAbsent(hardwareOpsi, hardwareName);
 		}

@@ -225,17 +225,6 @@ public abstract class AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
-		List<Map<String, List<Map<String, Object>>>> result = new ArrayList<>();
-		Map<String, Object> response = retrieveResponse(omc);
-
-		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"));
-		}
-
-		return result;
-	}
-
 	public String getStringResult(OpsiMethodCall omc) {
 		String result = "";
 		Map<String, Object> response = retrieveResponse(omc);
