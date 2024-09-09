@@ -1,7 +1,7 @@
-# Changelog
-## [4.4.0.6] - 2024-xx-xx
+## [4.4.x.x] - 2024-xx-xx
 ### Changed
 - Remove unnecessary feature to arrange dialogs
+- Cast Maps/Lists instead of remapping them always, better for performance
 
 
 ## [4.4.0.6] - 2024-09-05
