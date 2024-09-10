@@ -3,6 +3,8 @@
 - Remove unnecessary feature to arrange dialogs
 - Cast Maps/Lists instead of remapping them always, better for performance
 
+### Fixed
+- Show correct client in HostStatusPanel after full reload
 
 ## [4.4.0.6] - 2024-09-05
 ### Fixed
