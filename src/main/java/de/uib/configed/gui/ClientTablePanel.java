@@ -213,7 +213,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 			clientTable.moveToFirstSelected();
 
-			Logging.info(this, "setSelectedValues  produced ", clientTable.getSelectedList().size());
+			Logging.info(this, "setSelectedValues  produced ", clientTable.getSelectedRowCount());
 		}
 	}
 

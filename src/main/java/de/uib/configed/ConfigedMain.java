@@ -425,9 +425,6 @@ public class ConfigedMain implements MessagebusListener {
 		ChangedDataManager.checkSaveAll(true);
 		Logging.checkErrorList();
 
-		Logging.info(this, "selectionPanel.getSelectedValues().size(): ",
-				clientTablePanel.getClientTable().getSelectedList().size());
-
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
 				clientTablePanel.getClientTable().getSelectedRowCount());
 
@@ -470,7 +467,7 @@ public class ConfigedMain implements MessagebusListener {
 		hostInfo.resetGui();
 
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
-				" as well as ", clientTablePanel.getClientTable().getSelectedList().size());
+				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
 
 		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients.size(),
 				Utils.getListStringRepresentation(selectedClients, HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD),
@@ -940,11 +937,11 @@ public class ConfigedMain implements MessagebusListener {
 		List<? extends SortKey> saveSortKeys = clientTablePanel.getClientTable().getRowSorter().getSortKeys();
 
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected ",
-				clientTablePanel.getClientTable().getSelectedList().size());
+				clientTablePanel.getClientTable().getSelectedRowCount());
 
 		TableModel tm = buildClientListTableModel(rebuildTree);
 		Logging.info(this, "setRebuiltClientListTableModel --- got model selected ",
-				clientTablePanel.getClientTable().getSelectedList().size());
+				clientTablePanel.getClientTable().getSelectedRowCount());
 
 		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
 
@@ -970,7 +967,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() ",
 				Logging.getSize(selectValues));
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel",
-				Logging.getSize(clientTablePanel.getClientTable().getSelectedList()));
+				clientTablePanel.getClientTable().getSelectedRowCount());
 
 		// did lose the selection since last setting
 		clientTablePanel.setSelectedValues(selectValues);
