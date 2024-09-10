@@ -6,10 +6,7 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -33,11 +30,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.text.BadLocationException;
 
 import org.apache.commons.csv.CSVFormat;
 
@@ -58,7 +52,7 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.SeparatedDocument;
 
-public final class NewClientDialog extends FGeneralDialog implements KeyListener {
+public final class NewClientDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
 
 	private JComboBox<String> jComboDomain;
@@ -165,42 +159,10 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		JLabel jLabelNotes = new JLabel(Configed.getResourceValue("NewClientDialog.notes"));
 
 		jTextNotes = new JTextArea();
-		jTextNotes.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				// remove tab at end of text, inserted by navigating while in the panel
-				jTextNotes.setText(jTextNotes.getText().trim());
-			}
 
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				/* Not needed */}
-		});
-
-		jTextNotes.addKeyListener(this);
-		jTextNotes.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				try {
-					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
-					Logging.debug(this, "newPiece: '", newPiece, "'");
-
-					if ("\t".equals(newPiece)) {
-						systemUUIDField.requestFocus();
-					}
-				} catch (BadLocationException ex) {
-					Logging.warning(this, ex, "BadLocationException thrown: ");
-				}
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				/* Not needed */}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				/* Not needed */}
-		});
+		// This will cause the focus to go to the next (or last) component when pressing the tab (with shift)
+		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
+		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
 
 		jTextNotes.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 
@@ -768,19 +730,4 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, systemUUID,
 				macaddress, shutdownInstall, uefiboot, wanConfig, groups, netbootProduct);
 	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
-			jTextInventoryNumber.requestFocusInWindow();
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
 }
