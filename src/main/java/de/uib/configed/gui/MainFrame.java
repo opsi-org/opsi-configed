@@ -14,7 +14,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -81,9 +80,6 @@ public class MainFrame extends JFrame {
 
 	// Inititalize it here so that we keep the reference throughout a full reload
 	private JMenu jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
-
-	private Map<String, String> searchedTimeSpans;
-	private Map<String, String> searchedTimeSpansText;
 
 	private ClientTablePanel clientTablePanel;
 
@@ -244,33 +240,6 @@ public class MainFrame extends JFrame {
 		}.start();
 	}
 
-	private void initMenuData() {
-		searchedTimeSpans = new LinkedHashMap<>();
-
-		final String TODAY = "today";
-		final String SINCE_YESTERDAY = "since yesterday";
-		final String LAST_3_DAYS = "last 3 days";
-		final String LAST_7_DAYS = "last 7 days";
-		final String LAST_MONTH = "last month";
-		final String ANY_TIME = "at any time";
-
-		searchedTimeSpans.put(TODAY, "%minus0%");
-		searchedTimeSpans.put(SINCE_YESTERDAY, "%minus1%");
-		searchedTimeSpans.put(LAST_3_DAYS, "%minus2%");
-		searchedTimeSpans.put(LAST_7_DAYS, "%minus7%");
-		searchedTimeSpans.put(LAST_MONTH, "%minus31%");
-		searchedTimeSpans.put(ANY_TIME, "");
-
-		searchedTimeSpansText = new LinkedHashMap<>();
-
-		searchedTimeSpansText.put(TODAY, Configed.getResourceValue("MainFrame.TODAY"));
-		searchedTimeSpansText.put(SINCE_YESTERDAY, Configed.getResourceValue("MainFrame.SINCE_YESTERDAY"));
-		searchedTimeSpansText.put(LAST_3_DAYS, Configed.getResourceValue("MainFrame.LAST_3_DAYS"));
-		searchedTimeSpansText.put(LAST_7_DAYS, Configed.getResourceValue("MainFrame.LAST_7_DAYS"));
-		searchedTimeSpansText.put(LAST_MONTH, Configed.getResourceValue("MainFrame.LAST_MONTH"));
-		searchedTimeSpansText.put(ANY_TIME, Configed.getResourceValue("MainFrame.ANY_TIME"));
-	}
-
 	public void reloadServerConsoleMenu() {
 		jMenuServerConsole.removeAll();
 		setupMenuServerConsole();
@@ -420,14 +389,7 @@ public class MainFrame extends JFrame {
 		JMenu jMenuClientselectionFailedInPeriod = new JMenu(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
 
-		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
-			JMenuItem item = new JMenuItem(entry.getValue());
-
-			item.addActionListener(actionEvent -> configedMain.getClientSearch()
-					.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
-
-			jMenuClientselectionFailedInPeriod.add(item);
-		}
+		configedMain.getClientSearch().addSearchSpansToJMenu(jMenuClientselectionFailedInPeriod);
 
 		jMenuClientselection.add(jMenuClientselectionGetGroup);
 		jMenuClientselection.add(jMenuClientselectionGetSavedSearch);
@@ -577,8 +539,6 @@ public class MainFrame extends JFrame {
 	}
 
 	private JMenuBar initMenuBar() {
-		initMenuData();
-
 		clientMenu = ClientMenuManager.getNewInstance(configedMain, this);
 		setupMenuServerConsole();
 

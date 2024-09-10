@@ -7,10 +7,15 @@
 package de.uib.configed;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import javax.swing.Icon;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.gui.FSelectionList;
@@ -24,11 +29,54 @@ import de.uib.utils.logging.Logging;
 public class ClientSearch {
 	private ConfigedMain configedMain;
 
+	private Map<String, String> searchedTimeSpans;
+	private Map<String, String> searchedTimeSpansText;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public ClientSearch(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
+
+		initMenuData();
+	}
+
+	private void initMenuData() {
+		searchedTimeSpans = new LinkedHashMap<>();
+
+		final String TODAY = "today";
+		final String SINCE_YESTERDAY = "since yesterday";
+		final String LAST_3_DAYS = "last 3 days";
+		final String LAST_7_DAYS = "last 7 days";
+		final String LAST_MONTH = "last month";
+		final String ANY_TIME = "at any time";
+
+		searchedTimeSpans.put(TODAY, "%minus0%");
+		searchedTimeSpans.put(SINCE_YESTERDAY, "%minus1%");
+		searchedTimeSpans.put(LAST_3_DAYS, "%minus2%");
+		searchedTimeSpans.put(LAST_7_DAYS, "%minus7%");
+		searchedTimeSpans.put(LAST_MONTH, "%minus31%");
+		searchedTimeSpans.put(ANY_TIME, "");
+
+		searchedTimeSpansText = new LinkedHashMap<>();
+
+		searchedTimeSpansText.put(TODAY, Configed.getResourceValue("MainFrame.TODAY"));
+		searchedTimeSpansText.put(SINCE_YESTERDAY, Configed.getResourceValue("MainFrame.SINCE_YESTERDAY"));
+		searchedTimeSpansText.put(LAST_3_DAYS, Configed.getResourceValue("MainFrame.LAST_3_DAYS"));
+		searchedTimeSpansText.put(LAST_7_DAYS, Configed.getResourceValue("MainFrame.LAST_7_DAYS"));
+		searchedTimeSpansText.put(LAST_MONTH, Configed.getResourceValue("MainFrame.LAST_MONTH"));
+		searchedTimeSpansText.put(ANY_TIME, Configed.getResourceValue("MainFrame.ANY_TIME"));
+	}
+
+	public void addSearchSpansToJMenu(JMenu jMenu) {
+		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
+			JMenuItem item = new JMenuItem(entry.getValue());
+
+			item.addActionListener(actionEvent -> configedMain.getClientSearch()
+					.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
+
+			jMenu.add(item);
+		}
 	}
 
 	public void groupByNotCurrentProductVersion() {
