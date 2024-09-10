@@ -406,7 +406,6 @@ public class HostInfo {
 		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot();
 		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig(clientWanConfig);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setShutdownInstall(clientShutdownInstall);
-
 		mainFrame.getClientConfiguration().getClientInfoPanel().setOpsiHostKey(hostKey);
 	}
 

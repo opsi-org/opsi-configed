@@ -44,7 +44,6 @@ import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.gui.ClientTablePanel;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.DependenciesModel;
@@ -90,7 +89,7 @@ public class ConfigedMain {
 	private Set<String> clientsFilteredByTree = new HashSet<>();
 	private ActivatedGroupModel activatedGroupModel;
 
-	private String clientInDepot;
+	private String clientInDepot = "";
 	private HostInfo hostInfo = new HostInfo();
 
 	private Set<String> allowedClients;
@@ -440,9 +439,7 @@ public class ConfigedMain {
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
 				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients.size(),
-				Utils.getListStringRepresentation(selectedClients, HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD),
-				clientInDepot);
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
 
 		activatedGroupModel.setActive(selectedClients.isEmpty());
 
@@ -588,7 +585,7 @@ public class ConfigedMain {
 		clientCount = m.size();
 
 		if (mainFrame != null) {
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, null, null, null);
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
 			clientTablePanel.updateTable();
 		}
 
@@ -963,8 +960,7 @@ public class ConfigedMain {
 		if (selTreePaths == null) {
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 			mainFrame.getHostsStatusPanel().setGroupName("");
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients.size(),
-					Utils.getListStringRepresentation(selectedClients, null), clientInDepot);
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
 		} else if (selTreePaths.length == 1) {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
@@ -995,8 +991,7 @@ public class ConfigedMain {
 
 		setGroupNameForNode(selectedNode);
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients.size(),
-				Utils.getListStringRepresentation(selectedClients, null), clientInDepot);
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
 	}
 
 	private void activateClientByTree(TreePath pathToNode) {
