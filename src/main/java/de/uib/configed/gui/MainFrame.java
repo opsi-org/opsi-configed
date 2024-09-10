@@ -88,18 +88,18 @@ public class MainFrame extends JFrame {
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
-	private ClientTable clientTable;
+	private ClientTablePanel clientTablePanel;
 
 	private GlassPane glassPane;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public MainFrame(ConfigedMain configedMain, ClientTable clientTable, DepotsList depotsList, ClientTree clientTree,
-			ProductTree productTree) {
+	public MainFrame(ConfigedMain configedMain, ClientTablePanel clientTablePanel, DepotsList depotsList,
+			ClientTree clientTree, ProductTree productTree) {
 		// we handle it in the window listener method
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		this.clientTable = clientTable;
+		this.clientTablePanel = clientTablePanel;
 		this.configedMain = configedMain;
 
 		guiInit(depotsList, clientTree, productTree);
@@ -128,8 +128,8 @@ public class MainFrame extends JFrame {
 		setGlassPane(glassPane);
 	}
 
-	public ClientTable getClientTable() {
-		return clientTable;
+	public ClientTablePanel getClientTablePanel() {
+		return clientTablePanel;
 	}
 
 	public ClientMenuManager getClientMenu() {

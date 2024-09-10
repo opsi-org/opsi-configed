@@ -48,7 +48,7 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 		// update column
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
-			AbstractTableModel model = configedMain.getClientTable().getTableModel();
+			AbstractTableModel model = configedMain.getClientTablePanel().getTableModel();
 
 			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
 

@@ -194,11 +194,11 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(jMenuRebuildClientList);
 		jMenuClients.add(jMenuCreatePdf);
 
-		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTable().getTable());
+		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTablePanel().getClientTable());
 		exportTable.addMenuItemsTo(jMenuClients);
 
 		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
-				mainFrame.getClientTable().getTable());
+				mainFrame.getClientTablePanel().getClientTable());
 		clientTableExporter.addMenuItemsTo(jMenuClients);
 
 		jMenuClients.addSeparator();
@@ -366,7 +366,7 @@ public final class ClientMenuManager implements MenuListener {
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", "");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTable().getTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTablePanel().getClientTable());
 
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();

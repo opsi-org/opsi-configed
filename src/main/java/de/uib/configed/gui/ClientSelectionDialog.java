@@ -111,7 +111,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private LinkedList<ComplexGroup> complexElements;
 
 	private SelectionManager manager;
-	private ClientTable selectionPanel;
+	private ClientTablePanel clientTablePanel;
 	private SavedSearchesDialog savedSearchesDialog;
 
 	private ConfigedMain configedMain;
@@ -119,7 +119,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ClientSelectionDialog(ConfigedMain configedMain, ClientTable selectionPanel,
+	public ClientSelectionDialog(ConfigedMain configedMain, ClientTablePanel clientTablePanel,
 			SavedSearchesDialog savedSearchesDialog) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"), false,
 				new String[] { Configed.getResourceValue("buttonClose"),
@@ -128,7 +128,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				FRAME_WIDTH, FRAME_HEIGHT);
 
 		this.configedMain = configedMain;
-		this.selectionPanel = selectionPanel;
+		this.clientTablePanel = clientTablePanel;
 		this.savedSearchesDialog = savedSearchesDialog;
 		super.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		manager = new SelectionManager("OpsiData");
@@ -159,7 +159,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		List<String> clients = manager.selectClients();
 
 		Logging.debug(this, "", clients);
-		selectionPanel.setSelectedValues(clients);
+		clientTablePanel.setSelectedValues(clients);
 	}
 
 	@Override

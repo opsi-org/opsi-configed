@@ -104,10 +104,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	private void init() {
 		popupClients = mainFrame.getClientMenu().getPopupMenuClone();
-		mainFrame.getClientTable().addMouseListener(new PopupMouseListener(popupClients));
+		mainFrame.getClientTablePanel().addMouseListener(new PopupMouseListener(popupClients));
 
 		clientInfoPanel = new ClientInfoPanel(configedMain);
-		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTable(), clientInfoPanel);
+		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
+				clientInfoPanel);
 		panelClientSelection.setResizeWeight(1.0);
 
 		panelLocalbootProductSettings = new PanelProductSettings(
@@ -230,7 +231,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	public void showPopupClients() {
-		popupClients.show(mainFrame.getClientTable(), -1, -1);
+		popupClients.show(mainFrame.getClientTablePanel(), -1, -1);
 	}
 
 	public void initSplitPanes() {

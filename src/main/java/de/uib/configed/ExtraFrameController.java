@@ -60,7 +60,7 @@ public final class ExtraFrameController {
 		initSavedSearchesDialog(configedMain);
 
 		if (clientSelectionDialog == null) {
-			clientSelectionDialog = new ClientSelectionDialog(configedMain, configedMain.getClientTable(),
+			clientSelectionDialog = new ClientSelectionDialog(configedMain, configedMain.getClientTablePanel(),
 					savedSearchesDialog);
 		}
 
@@ -76,7 +76,7 @@ public final class ExtraFrameController {
 	private static void initSavedSearchesDialog(ConfigedMain configedMain) {
 		if (savedSearchesDialog == null) {
 			Logging.debug("create SavedSearchesDialog");
-			savedSearchesDialog = new SavedSearchesDialog(configedMain.getClientTable(), configedMain);
+			savedSearchesDialog = new SavedSearchesDialog(configedMain.getClientTablePanel(), configedMain);
 			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
 			savedSearchesDialog.init();
 		}

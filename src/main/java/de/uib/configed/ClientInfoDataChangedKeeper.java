@@ -86,7 +86,8 @@ public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 			Logging.info(this, "save for clients ", configedMain.getSelectedClients().size());
 
 			for (String client : configedMain.getSelectedClients()) {
-				hostInfo.showAndSaveInternally(configedMain.getClientTable(), client, (Map<?, ?>) source.get(client));
+				hostInfo.showAndSaveInternally(configedMain.getClientTablePanel(), client,
+						(Map<?, ?>) source.get(client));
 			}
 			persistenceController.getHostDataService().updateHosts();
 

@@ -7,371 +7,78 @@
 package de.uib.configed.gui;
 
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ExtraFrameController;
-import de.uib.configed.Globals;
-import de.uib.configed.guidata.SearchTargetModelFromClientTable;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
-import de.uib.utils.table.gui.TableSearchPane;
 
-public class ClientTable extends JPanel implements ListSelectionListener, KeyListener {
-	private JScrollPane scrollpane;
-
-	private TableSearchPane searchPane;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
-
-	// we put a JTable on a standard JScrollPane
-	private JTable table;
-
-	private DefaultListSelectionModel selectionModel;
-	private ConfigedMain configedMain;
+public class ClientTable extends JTable {
 	private List<SortKey> primaryOrderingKeys;
 
-	public ClientTable(ConfigedMain configedMain) {
-		super();
-		this.configedMain = configedMain;
-		initComponents();
-	}
+	public ClientTable() {
+		super.setDragEnabled(true);
+		super.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
+		super.setAutoCreateRowSorter(true);
+		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		super.getTableHeader().setReorderingAllowed(false);
 
-	private void initComponents() {
-		scrollpane = new JScrollPane();
-
-		table = new JTable();
-
-		table.setDragEnabled(true);
-
-		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
-
-		table.setAutoCreateRowSorter(true);
+		// true destroys setSelectedRow etc
+		super.setColumnSelectionAllowed(false);
 
 		primaryOrderingKeys = new ArrayList<>();
 		primaryOrderingKeys.add(new SortKey(0, SortOrder.ASCENDING));
-
-		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		table.getTableHeader().setReorderingAllowed(false);
-		// Ask to be notified of selection changes.
-		selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
-		// the default implementation in JTable yields this type
-
-		table.setColumnSelectionAllowed(false);
-		// true destroys setSelectedRow etc
-
-		activateListSelectionListener();
-
-		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, table), true);
-		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_WITH_ALTERNATIVES_SEARCH);
-		searchPane.setFiltering();
-
-		table.addKeyListener(searchPane);
-		table.addKeyListener(this);
-
-		GroupLayout layoutLeftPane = new GroupLayout(this);
-		this.setLayout(layoutLeftPane);
-
-		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(scrollpane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-	}
-
-	public void updateTable() {
-		if (scrollpane.getViewport().getView() == table) {
-			// Do nothing if we already set the table as view
-			return;
-		}
-
-		if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
-			setMissingDataPanel();
-		} else {
-			scrollpane.getViewport().setView(table);
-		}
-	}
-
-	public void activateListSelectionListener() {
-		// We want to prevent, that the listSelectionListener is added more than once
-		if (!Arrays.asList(selectionModel.getListSelectionListeners()).contains(this)) {
-			selectionModel.addListSelectionListener(this);
-		}
-	}
-
-	// This returns if the selectionListener was actually deactivated
-	// if the list only contains one listener, it's only the JTable itself
-	// that is listening, but not our other listener
-	public boolean deactivateListSelectionListener() {
-		if (selectionModel.getListSelectionListeners().length == 1) {
-			return false;
-		} else {
-			selectionModel.removeListSelectionListener(this);
-			return true;
-		}
-	}
-
-	public boolean isFilteredMode() {
-		return searchPane.isFilteredMode();
-	}
-
-	public JTable getTable() {
-		return table;
-	}
-
-	// ListSelectionListener for client list
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-			configedMain.actOnListSelection();
-		}
-	}
-
-	public void setMissingDataPanel() {
-		JLabel missingData0 = new JLabel(Icons.createImageIcon(Globals.ICON_CONFIGED, ""));
-		JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
-		JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
-		JPanel mdPanel = new JPanel();
-
-		GroupLayout mdLayout = new GroupLayout(mdPanel);
-		mdPanel.setLayout(mdLayout);
-
-		mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(missingData2, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE));
-		mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(0, Globals.GAP_SIZE, Short.MAX_VALUE));
-
-		scrollpane.getViewport().setView(mdPanel);
-	}
-
-	@Override
-	public synchronized void addMouseListener(MouseListener l) {
-		scrollpane.addMouseListener(l);
-		table.addMouseListener(l);
-	}
-
-	public void setFilterMark(boolean selected) {
-		searchPane.setFilterMark(selected);
-	}
-
-	public boolean isSelectionEmpty() {
-		return table.getSelectedRowCount() == 0;
 	}
 
 	public Set<String> getSelectedSet() {
-		Set<String> result = new HashSet<>();
+		Set<String> result = new HashSet<>(getSelectedRowCount());
 
-		for (int i : table.getSelectedRows()) {
-			result.add((String) table.getValueAt(i, 0));
+		for (int i : getSelectedRows()) {
+			result.add((String) getValueAt(i, 0));
 		}
 
 		return result;
 	}
 
-	public void initColumnNames() {
-		// New code
-		searchPane.setSearchFieldsAll();
-	}
-
 	public List<String> getSelectedValues() {
-		List<String> valuesList = new ArrayList<>(table.getSelectedRowCount());
+		List<String> valuesList = new ArrayList<>(getSelectedRowCount());
 
-		for (int i : table.getSelectedRows()) {
-			valuesList.add((String) table.getValueAt(i, 0));
+		for (int i : getSelectedRows()) {
+			valuesList.add((String) getValueAt(i, 0));
 		}
 
 		return valuesList;
 	}
 
-	public void clearSelection() {
-		table.clearSelection();
+	public void initSortKeys() {
+		getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
 
-	public void setSelectedValues(Collection<String> clientsToSelect) {
-		String valuesListS = null;
-		if (clientsToSelect != null) {
-			valuesListS = "" + clientsToSelect.size();
-		}
+	public void updateModel(TableModel tableModel) {
+		Logging.info(this, "set model with column count ", tableModel.getColumnCount());
 
-		Logging.info(this, "setSelectedValues ", valuesListS);
+		Logging.info(this, " [JTableSelectionPanel] setModel with row count ", tableModel.getRowCount());
 
-		if (clientsToSelect == null) {
-			// Clear selection when empty
-			selectionModel.clearSelection();
-		} else if (clientsToSelect.isEmpty() && selectionModel.isSelectionEmpty()) {
-			// Also act on list selection when there is no client to select.
-			// For example when the last client is unselected in the client list, 
-			// this method is not called automatically by the selection listener,
-			// so we do it manually
-			configedMain.actOnListSelection();
-		} else {
-			// because of ordering , we create a TreeSet view of the list
-			selectionModel.setValueIsAdjusting(true);
-			selectionModel.clearSelection();
-			for (int i = 0; i < table.getRowCount(); i++) {
-				Logging.debug(this, "setSelectedValues checkValue for i ", i, ": ", table.getValueAt(i, 0));
+		tableModel.addTableModelListener(this);
 
-				if (clientsToSelect.contains(table.getValueAt(i, 0))) {
-					selectionModel.addSelectionInterval(i, i);
-					Logging.debug(this, "setSelectedValues add interval ", i);
-				}
-			}
-
-			selectionModel.setValueIsAdjusting(false);
-
-			moveToFirstSelected();
-
-			Logging.info(this, "setSelectedValues  produced ", getSelectedValues().size());
-		}
+		setModel(tableModel);
+		((TableRowSorter<?>) getRowSorter()).setComparator(0, Comparator.comparing(String::toString));
 	}
 
 	public void moveToFirstSelected() {
-		if (table.getSelectedRow() != -1) {
-			Rectangle selectedRectangle = table.getCellRect(table.getSelectedRow(), 0, true);
-			table.scrollRectToVisible(selectedRectangle);
+		if (getSelectedRow() != -1) {
+			Rectangle selectedRectangle = getCellRect(getSelectedRow(), 0, true);
+			scrollRectToVisible(selectedRectangle);
 		}
 	}
-
-	public void initSortKeys() {
-		table.getRowSorter().setSortKeys(primaryOrderingKeys);
-	}
-
-	@SuppressWarnings("java:S1452")
-	public List<? extends SortKey> getSortKeys() {
-		return table.getRowSorter().getSortKeys();
-	}
-
-	public void setSortKeys(List<? extends SortKey> orderingKeys) {
-		table.getRowSorter().setSortKeys(orderingKeys);
-	}
-
-	public Set<String> getColumnValues(int col) {
-		Set<String> result = new HashSet<>();
-		if (table.getModel() == null || table.getColumnCount() <= col) {
-			return result;
-		}
-
-		for (int i = 0; i < table.getRowCount(); i++) {
-			result.add("" + table.getValueAt(i, col));
-		}
-
-		return result;
-	}
-
-	public void setModel(TableModel tm) {
-		Logging.info(this, "set model with column count ", tm.getColumnCount());
-
-		Logging.info(this, " [JTableSelectionPanel] setModel with row count ", tm.getRowCount());
-
-		tm.addTableModelListener(table);
-
-		table.setModel(tm);
-		((TableRowSorter<?>) table.getRowSorter()).setComparator(0, Comparator.comparing(String::toString));
-	}
-
-	public DefaultTableModel getTableModel() {
-		return (DefaultTableModel) table.getModel();
-	}
-
-	public TableColumnModel getColumnModel() {
-		return table.getColumnModel();
-	}
-
-	public int findModelRowFromValue(Object value) {
-		int result = -1;
-
-		if (value == null) {
-			return result;
-		}
-
-		boolean found = false;
-		int row = 0;
-
-		while (!found && row < getTableModel().getRowCount()) {
-			Object compareValue = getTableModel().getValueAt(row, 0);
-
-			String compareVal = compareValue.toString();
-			String val = value.toString();
-
-			if (val.equals(compareVal)) {
-				found = true;
-				result = row;
-			}
-
-			if (!found) {
-				row++;
-			}
-		}
-
-		return result;
-	}
-
-	// KeyListener interface
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController);
-		} else if (e.getKeyCode() == KeyEvent.VK_F10) {
-			Logging.debug(this, "keypressed: f10");
-			ConfigedMain.getMainFrame().getClientConfiguration().showPopupClients();
-		} else {
-			// Nothing to do for all the other keys
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
 }

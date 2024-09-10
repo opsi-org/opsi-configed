@@ -45,7 +45,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	private List<String> result;
 	private DefaultListModel<String> model;
 
-	private ClientTable selectionPanel;
+	private ClientTablePanel clientTablePanel;
 	private ConfigedMain configedMain;
 
 	private TableSearchPane searchPane;
@@ -53,8 +53,8 @@ public class SavedSearchesDialog extends FEditStringList {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SavedSearchesDialog(ClientTable selectionPanel, ConfigedMain configedMain) {
-		this.selectionPanel = selectionPanel;
+	public SavedSearchesDialog(ClientTablePanel clientTablePanel, ConfigedMain configedMain) {
+		this.clientTablePanel = clientTablePanel;
 		this.configedMain = configedMain;
 
 		initDialog();
@@ -194,7 +194,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		Logging.info(this, "commit result == null ", result == null);
 		if (result != null) {
 			Logging.info(this, "result size ", result.size());
-			selectionPanel.setSelectedValues(result);
+			clientTablePanel.setSelectedValues(result);
 		}
 	}
 
