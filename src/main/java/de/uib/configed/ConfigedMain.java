@@ -260,7 +260,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(() -> {
-			List<String> selectedValues = clientTablePanel.getClientTable().getSelectedValues();
+			List<String> selectedValues = clientTablePanel.getClientTable().getSelectedList();
 			clientTablePanel.getClientTable().clearSelection();
 			refreshClientListKeepingGroup();
 			setClients(selectedValues);
@@ -426,12 +426,12 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.checkErrorList();
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): ",
-				clientTablePanel.getClientTable().getSelectedValues().size());
+				clientTablePanel.getClientTable().getSelectedList().size());
 
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
 				clientTablePanel.getClientTable().getSelectedRowCount());
 
-		setSelectedClients(clientTablePanel.getClientTable().getSelectedValues());
+		setSelectedClients(clientTablePanel.getClientTable().getSelectedList());
 
 		clientInDepot = "";
 
@@ -470,7 +470,7 @@ public class ConfigedMain implements MessagebusListener {
 		hostInfo.resetGui();
 
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
-				" as well as ", clientTablePanel.getClientTable().getSelectedValues().size());
+				" as well as ", clientTablePanel.getClientTable().getSelectedList().size());
 
 		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients.size(),
 				Utils.getListStringRepresentation(selectedClients, HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD),
@@ -940,11 +940,11 @@ public class ConfigedMain implements MessagebusListener {
 		List<? extends SortKey> saveSortKeys = clientTablePanel.getClientTable().getRowSorter().getSortKeys();
 
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected ",
-				clientTablePanel.getClientTable().getSelectedValues().size());
+				clientTablePanel.getClientTable().getSelectedList().size());
 
 		TableModel tm = buildClientListTableModel(rebuildTree);
 		Logging.info(this, "setRebuiltClientListTableModel --- got model selected ",
-				clientTablePanel.getClientTable().getSelectedValues().size());
+				clientTablePanel.getClientTable().getSelectedList().size());
 
 		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
 
@@ -970,13 +970,13 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() ",
 				Logging.getSize(selectValues));
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel",
-				Logging.getSize(clientTablePanel.getClientTable().getSelectedValues()));
+				Logging.getSize(clientTablePanel.getClientTable().getSelectedList()));
 
 		// did lose the selection since last setting
 		clientTablePanel.setSelectedValues(selectValues);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel ",
-				Logging.getSize(clientTablePanel.getClientTable().getSelectedValues()));
+				Logging.getSize(clientTablePanel.getClientTable().getSelectedList()));
 
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter ", reloadCounter);
@@ -1270,7 +1270,7 @@ public class ConfigedMain implements MessagebusListener {
 	private void reloadData() {
 		ChangedDataManager.checkSaveAll(true);
 
-		List<String> selValuesList = clientTablePanel.getClientTable().getSelectedValues();
+		List<String> selValuesList = clientTablePanel.getClientTable().getSelectedList();
 		Logging.info(this, "reloadData, selValuesList.size ", selValuesList.size());
 
 		clientTablePanel.deactivateListSelectionListener();

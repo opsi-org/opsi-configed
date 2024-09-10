@@ -50,13 +50,15 @@ public class ClientTable extends JTable {
 		return result;
 	}
 
-	public List<String> getSelectedValues() {
+	public List<String> getSelectedList() {
+		long start = System.nanoTime();
 		List<String> valuesList = new ArrayList<>(getSelectedRowCount());
 
 		for (int i : getSelectedRows()) {
 			valuesList.add((String) getValueAt(i, 0));
 		}
 
+		Logging.devel("", System.nanoTime() - start);
 		return valuesList;
 	}
 
