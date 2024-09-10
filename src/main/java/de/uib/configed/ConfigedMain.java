@@ -1435,11 +1435,6 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found globally ", clientsToSelect.size());
 
-		clientsToSelect.retainAll(clientTablePanel.getColumnValues(0));
-
-		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found for displayed client list ",
-				clientsToSelect.size());
-
 		clientTablePanel.setSelectedValues(clientsToSelect);
 	}
 

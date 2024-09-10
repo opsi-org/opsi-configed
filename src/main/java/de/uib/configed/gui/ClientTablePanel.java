@@ -11,8 +11,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.GroupLayout;
@@ -192,7 +190,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 			selectionModel.clearSelection();
 		} else if (clientsToSelect.isEmpty() && selectionModel.isSelectionEmpty()) {
 			// Also act on list selection when there is no client to select.
-			// For example when the last client is unselected in the client list, 
+			// For example when the last client is unselected in the client list,
 			// this method is not called automatically by the selection listener,
 			// so we do it manually
 			configedMain.actOnListSelection();
@@ -215,19 +213,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 			Logging.info(this, "setSelectedValues  produced ", clientTable.getSelectedRowCount());
 		}
-	}
-
-	public Set<String> getColumnValues(int col) {
-		Set<String> result = new HashSet<>();
-		if (clientTable.getModel() == null || clientTable.getColumnCount() <= col) {
-			return result;
-		}
-
-		for (int i = 0; i < clientTable.getRowCount(); i++) {
-			result.add("" + clientTable.getValueAt(i, col));
-		}
-
-		return result;
 	}
 
 	public DefaultTableModel getTableModel() {
