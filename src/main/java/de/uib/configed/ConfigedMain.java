@@ -124,10 +124,6 @@ public class ConfigedMain implements MessagebusListener {
 	}
 	// with this enum type we build a state model, which target shall be edited
 
-	private int buildPclistTableModelCounter;
-
-	private int reloadCounter;
-
 	private Set<String> connectedHostsByMessagebus;
 
 	private InitialDataLoader initialDataLoader;
@@ -643,9 +639,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Logging.debug(this, " unfilteredList ");
 
-		buildPclistTableModelCounter++;
-		Logging.info(this, "buildPclistTableModel, counter ", buildPclistTableModelCounter, "   rebuildTree  ",
-				rebuildTree);
+		Logging.info(this, "buildPclistTableModel, rebuildTree  ", rebuildTree);
 
 		Set<String> permittedHostGroups = null;
 		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
@@ -663,9 +657,7 @@ public class ConfigedMain implements MessagebusListener {
 
 			Logging.info(this, " clientsForTableModel ", clientsForTableModel.size());
 
-			buildPclistTableModelCounter++;
-			Logging.info(this, "buildPclistTableModel, counter ", buildPclistTableModelCounter, "   rebuildTree  ",
-					rebuildTree);
+			Logging.info(this, "buildPclistTableModel, rebuildTree  ", rebuildTree);
 
 			if (rebuildTree) {
 				rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
@@ -965,8 +957,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel ",
 				Logging.getSize(clientTablePanel.getClientTable().getSelectedSet()));
 
-		reloadCounter++;
-		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter ", reloadCounter);
+		Logging.info(this, "setRebuiltClientListTableModel");
 	}
 
 	private Set<String> getDepotsOfSelectedClients() {
