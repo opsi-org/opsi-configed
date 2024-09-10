@@ -176,6 +176,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		Messagebus.getInstance().getWebSocket().registerListener(this);
 		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
+		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
 
 		if (Messagebus.getInstance().getWebSocket().isOpen()) {
 			// Fake opening event on registering listener since this listener
@@ -243,33 +244,6 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "readLocallySavedServerNames  result ", result);
 
 		return result;
-	}
-
-	public void addClientToTable(String clientId) {
-		if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| mainFrame.getClientConfiguration().getSelectedIndex() != 0) {
-			return;
-		}
-
-		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-
-		SwingUtilities.invokeLater(() -> {
-			Set<String> selectedValues = clientTablePanel.getClientTable().getSelectedSet();
-			clientTablePanel.getClientTable().clearSelection();
-			refreshClientListKeepingGroup();
-			setClients(selectedValues);
-		});
-	}
-
-	public void removeClientFromTable(String clientId) {
-		if (!persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| mainFrame.getClientConfiguration().getSelectedIndex() != 0) {
-			return;
-		}
-
-		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
-
-		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
 	public ClientSearch getClientSearch() {
@@ -1510,10 +1484,6 @@ public class ConfigedMain implements MessagebusListener {
 			addClientToConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
 		} else if (WebSocketEvent.HOST_DISCONNECTED.toString().equals(eventType)) {
 			removeClientFromConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
-		} else if (WebSocketEvent.HOST_CREATED.toString().equals(eventType)) {
-			addClientToTable((String) eventData.get("id"));
-		} else if (WebSocketEvent.HOST_DELETED.toString().equals(eventType)) {
-			removeClientFromTable((String) eventData.get("id"));
 		} else {
 			// Other events are handled by other listeners.
 		}
