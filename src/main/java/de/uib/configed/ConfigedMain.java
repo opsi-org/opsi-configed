@@ -260,7 +260,7 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(() -> {
-			List<String> selectedValues = clientTablePanel.getClientTable().getSelectedList();
+			Set<String> selectedValues = clientTablePanel.getClientTable().getSelectedSet();
 			clientTablePanel.getClientTable().clearSelection();
 			refreshClientListKeepingGroup();
 			setClients(selectedValues);
@@ -428,7 +428,7 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
 				clientTablePanel.getClientTable().getSelectedRowCount());
 
-		setSelectedClients(clientTablePanel.getClientTable().getSelectedList());
+		setSelectedClients(clientTablePanel.getClientTable().getSelectedSet());
 
 		clientInDepot = "";
 
@@ -754,13 +754,13 @@ public class ConfigedMain implements MessagebusListener {
 	}
 
 	public void setClient(String clientName) {
-		setClients(Collections.singletonList(clientName));
+		setClients(Collections.singleton(clientName));
 	}
 
-	public void setClients(List<String> clientNames) {
+	public void setClients(Collection<String> clientNames) {
 		Logging.info(this, "setClients ", clientNames);
 		if (clientNames == null) {
-			clientTablePanel.setSelectedValues(new ArrayList<>());
+			clientTablePanel.setSelectedValues(Collections.emptySet());
 		} else {
 			clientTablePanel.setSelectedValues(clientNames);
 		}
@@ -973,7 +973,7 @@ public class ConfigedMain implements MessagebusListener {
 		clientTablePanel.setSelectedValues(selectValues);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel ",
-				Logging.getSize(clientTablePanel.getClientTable().getSelectedList()));
+				Logging.getSize(clientTablePanel.getClientTable().getSelectedSet()));
 
 		reloadCounter++;
 		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter ", reloadCounter);
@@ -1267,8 +1267,8 @@ public class ConfigedMain implements MessagebusListener {
 	private void reloadData() {
 		ChangedDataManager.checkSaveAll(true);
 
-		List<String> selValuesList = clientTablePanel.getClientTable().getSelectedList();
-		Logging.info(this, "reloadData, selValuesList.size ", selValuesList.size());
+		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
+		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
 		clientTablePanel.deactivateListSelectionListener();
 		allowedClients = null;

@@ -50,16 +50,6 @@ public class ClientTable extends JTable {
 		return result;
 	}
 
-	public List<String> getSelectedList() {
-		List<String> valuesList = new ArrayList<>(getSelectedRowCount());
-
-		for (int i : getSelectedRows()) {
-			valuesList.add((String) getValueAt(i, 0));
-		}
-
-		return valuesList;
-	}
-
 	public void initSortKeys() {
 		getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
