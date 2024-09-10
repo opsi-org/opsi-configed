@@ -95,7 +95,6 @@ public class ConfigedMain implements MessagebusListener {
 	private DependenciesModel dependenciesModel;
 
 	private List<String> selectedClients = new ArrayList<>();
-	private List<String> saveSelectedClients;
 
 	private Set<String> clientsFilteredByTree = new HashSet<>();
 	private ActivatedGroupModel activatedGroupModel;
@@ -428,7 +427,20 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.info(this, "ListSelectionListener valueChanged getSelectedRowCount() ",
 				clientTablePanel.getClientTable().getSelectedRowCount());
 
-		setSelectedClients(clientTablePanel.getClientTable().getSelectedSet());
+		Set<String> clientsSelectedInTable = clientTablePanel.getClientTable().getSelectedSet();
+		Logging.info(this, "setSelectedClients clientNames size ", clientsSelectedInTable.size());
+
+		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+
+		Logging.info(this, "setSelectedClientsArray ", clientsSelectedInTable.size());
+		Logging.info(this, "selectedClients was before ", selectedClients.size());
+
+		selectedClients = new ArrayList<>(clientsSelectedInTable);
+
+		clientTree.produceActiveParents();
+
+		// change in selection not via clientpage (i.e. via tree)
+		mainFrame.getClientConfiguration().stateChanged(null);
 
 		clientInDepot = "";
 
@@ -809,28 +821,6 @@ public class ConfigedMain implements MessagebusListener {
 
 	public List<String> getSelectedClients() {
 		return selectedClients;
-	}
-
-	private void setSelectedClients(List<String> clientNames) {
-		Logging.info(this, "setSelectedClients clientNames size ", clientNames.size());
-
-		if (clientNames.equals(saveSelectedClients)) {
-			Logging.info(this, "setSelectedClients clientNames.equals(saveSelectedClients)");
-		}
-
-		saveSelectedClients = clientNames;
-
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
-
-		Logging.info(this, "setSelectedClientsArray ", clientNames.size());
-		Logging.info(this, "selectedClients was before ", selectedClients.size());
-
-		selectedClients = new ArrayList<>(clientNames);
-
-		clientTree.produceActiveParents();
-
-		// change in selection not via clientpage (i.e. via tree)
-		mainFrame.getClientConfiguration().stateChanged(null);
 	}
 
 	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
