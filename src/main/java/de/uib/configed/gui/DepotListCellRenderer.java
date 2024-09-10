@@ -51,21 +51,16 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
 		String tooltipText = null;
-
-		String key = "";
-
-		if (value != null) {
-			key = "" + value;
-		}
-
-		if (extendedInfo != null && extendedInfo.get(key) != null && extendedInfo.get(key).get("description") != null
-				&& !("" + extendedInfo.get(key).get("description")).isEmpty()) {
-			tooltipText = "" + extendedInfo.get(value).get("description");
-		}
-
-		setConnectionIcon(value);
-
 		String depot = (String) value;
+
+		if (extendedInfo != null && extendedInfo.get(depot) != null
+				&& extendedInfo.get(depot).get("description") != null
+				&& !("" + extendedInfo.get(depot).get("description")).isEmpty()) {
+			tooltipText = extendedInfo.get(depot).get("description").toString();
+		}
+
+		setConnectionIcon(depot);
+
 		if (!persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
 			setEnabled(false);
 			setBackground(UIManager.getColor("List.background"));
@@ -78,10 +73,10 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 		return this;
 	}
 
-	private void setConnectionIcon(Object value) {
-		if (configedMain.getConnectedClientsByMessagebus().contains(value)) {
+	private void setConnectionIcon(String depot) {
+		if (configedMain.isHostConnected(depot)) {
 			setIcon(connectedIcon);
-		} else if (value != null && value.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
+		} else if (depot != null && depot.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
 			if (Messagebus.getInstance().isConnected()) {
 				setIcon(configServerConnectedIcon);
 			} else {

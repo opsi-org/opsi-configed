@@ -32,15 +32,12 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-
-import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.Main;
 import de.uib.configed.groupaction.ActivatedGroupModel;
@@ -58,9 +55,6 @@ import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.Messagebus;
-import de.uib.messagebus.MessagebusListener;
-import de.uib.messagebus.WebSocketEvent;
-import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -72,7 +66,7 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
 
-public class ConfigedMain implements MessagebusListener {
+public class ConfigedMain {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int ICON_COLUMN_MAX_WIDTH = 100;
@@ -123,7 +117,7 @@ public class ConfigedMain implements MessagebusListener {
 	}
 	// with this enum type we build a state model, which target shall be edited
 
-	private Set<String> connectedHostsByMessagebus;
+	private ConnectedHostsManager connectedHostsManager;
 
 	private InitialDataLoader initialDataLoader;
 
@@ -156,6 +150,7 @@ public class ConfigedMain implements MessagebusListener {
 
 	protected void initGui() {
 		Logging.info(this, "initGui");
+		connectedHostsManager = new ConnectedHostsManager(this);
 
 		initDepots();
 		initTree();
@@ -174,9 +169,7 @@ public class ConfigedMain implements MessagebusListener {
 
 		initialTreeActivation();
 
-		Messagebus.getInstance().getWebSocket().registerListener(this);
-		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
-		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
+		registerMessagebusListeners();
 
 		if (Messagebus.getInstance().getWebSocket().isOpen()) {
 			// Fake opening event on registering listener since this listener
@@ -189,6 +182,12 @@ public class ConfigedMain implements MessagebusListener {
 		Logging.debug(this, "initialTreeActivation");
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+	}
+
+	public void registerMessagebusListeners() {
+		Messagebus.getInstance().getWebSocket().registerListener(connectedHostsManager);
+		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
+		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
 	}
 
 	private List<String> readLocallySavedServerNames() {
@@ -250,18 +249,8 @@ public class ConfigedMain implements MessagebusListener {
 		return clientSearch;
 	}
 
-	public Set<String> getConnectedClientsByMessagebus() {
-		return connectedHostsByMessagebus;
-	}
-
-	public void addClientToConnectedList(String clientId) {
-		connectedHostsByMessagebus.add(clientId);
-		updateConnectionStatusInTable(clientId);
-	}
-
-	public void removeClientFromConnectedList(String clientId) {
-		connectedHostsByMessagebus.remove(clientId);
-		updateConnectionStatusInTable(clientId);
+	public boolean isHostConnected(String hostId) {
+		return connectedHostsManager.isHostConnected(hostId);
 	}
 
 	public void loadDataAndGo() {
@@ -319,8 +308,6 @@ public class ConfigedMain implements MessagebusListener {
 		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
 		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
 		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
-
-		connectedHostsByMessagebus = persistenceController.getHostDataService().getMessagebusConnectedClients();
 	}
 
 	public void toggleColumn(String column) {
@@ -694,7 +681,7 @@ public class ConfigedMain implements MessagebusListener {
 			}
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
-			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, connectedHostsByMessagebus.contains(clientId));
+			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
 
 			List<Object> rowItems = new ArrayList<>();
 
@@ -1280,24 +1267,6 @@ public class ConfigedMain implements MessagebusListener {
 		setEditingTarget(t);
 	}
 
-	private void updateConnectionStatusInTable(String clientName) {
-		AbstractTableModel model = clientTablePanel.getTableModel();
-
-		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-
-		for (int row = 0; row < model.getRowCount(); row++) {
-			if (model.getValueAt(row, 0).equals(clientName)) {
-				model.setValueAt(connectedHostsByMessagebus.contains(clientName), row, col);
-
-				model.fireTableCellUpdated(row, col);
-
-				Logging.info(this, "connectionStatus for client ", clientName, " updated in table");
-				return;
-			}
-		}
-		Logging.info(this, "could not update connectionStatus for client ", clientName, ": not in list of shown table");
-	}
-
 	public ClientTablePanel getClientTablePanel() {
 		return clientTablePanel;
 	}
@@ -1363,7 +1332,7 @@ public class ConfigedMain implements MessagebusListener {
 			connectToHost = "Configserver";
 		}
 
-		if (!getConnectedClientsByMessagebus().contains(connectToHost) && !"Configserver".equals(connectToHost)) {
+		if (!isHostConnected(connectToHost) && !"Configserver".equals(connectToHost)) {
 			Logging.info(this, type, " shell access feature is only supported for clients connected with messagebus");
 			JOptionPane.showMessageDialog(mainFrame,
 					Configed.getResourceValue("ConfigedMain.openTerminalOn" + type + "Feature.message"));
@@ -1450,42 +1419,5 @@ public class ConfigedMain implements MessagebusListener {
 
 	public static void setOTP(String otp) {
 		ConfigedMain.otp = otp;
-	}
-
-	@Override
-	public void onOpen(ServerHandshake handshakeData) {
-		// Not required to implement.
-	}
-
-	@Override
-	public void onClose(int code, String reason, boolean remote) {
-		// Not required to implement.
-	}
-
-	@Override
-	public void onError(Exception ex) {
-		// Not required to implement.
-	}
-
-	@Override
-	public void onMessageReceived(Map<String, Object> message) {
-		// Sleep for a little because otherwise we cannot get the needed data from the server.
-		Utils.threadSleep(this, 5);
-
-		if (!WebSocketEvent.GENERAL_EVENT.toString().equals(message.get("type")) && !message.containsKey("event")) {
-			return;
-		}
-
-		String eventType = (String) message.get("event");
-
-		Map<String, Object> eventData = POJOReMapper.remap(message.get("data"));
-
-		if (WebSocketEvent.HOST_CONNECTED.toString().equals(eventType)) {
-			addClientToConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
-		} else if (WebSocketEvent.HOST_DISCONNECTED.toString().equals(eventType)) {
-			removeClientFromConnectedList((String) ((Map<?, ?>) eventData.get("host")).get("id"));
-		} else {
-			// Other events are handled by other listeners.
-		}
 	}
 }

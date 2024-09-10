@@ -83,8 +83,7 @@ public class Messagebus implements MessagebusListener {
 		messagebusWebSocket.registerListener(this);
 
 		if (ConfigedMain.getMainFrame() != null) {
-			messagebusWebSocket.registerListener(ConfigedMain.getMainFrame().getHostsStatusPanel());
-			messagebusWebSocket.registerListener(configedMain);
+			configedMain.registerMessagebusListeners();
 		}
 
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
