@@ -1260,6 +1260,12 @@ public class ConfigedMain {
 		EditingTarget t = editingTarget;
 		editingTarget = null;
 		setEditingTarget(t);
+
+		// We need to update the client configuration since it will not be done
+		// automatically in the method setEditingTarget!
+		if (t == EditingTarget.CLIENTS) {
+			mainFrame.getClientConfiguration().stateChanged(null);
+		}
 	}
 
 	public ClientTablePanel getClientTablePanel() {
