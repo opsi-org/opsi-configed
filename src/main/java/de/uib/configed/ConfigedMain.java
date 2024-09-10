@@ -43,7 +43,6 @@ import javax.swing.tree.TreePath;
 import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.Main;
-import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.gui.ClientTablePanel;
 import de.uib.configed.gui.DepotsList;
@@ -57,13 +56,11 @@ import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
-import de.uib.configed.type.DateExtendedByVars;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
-import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -107,6 +104,8 @@ public class ConfigedMain implements MessagebusListener {
 	// collection of retrieved software audit and hardware maps
 
 	private ClientTablePanel clientTablePanel;
+
+	private ClientSearch clientSearch;
 
 	private ClientTree clientTree;
 	private ProductTree productTree;
@@ -273,6 +272,10 @@ public class ConfigedMain implements MessagebusListener {
 		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
+	public ClientSearch getClientSearch() {
+		return clientSearch;
+	}
+
 	public Set<String> getConnectedClientsByMessagebus() {
 		return connectedHostsByMessagebus;
 	}
@@ -292,8 +295,16 @@ public class ConfigedMain implements MessagebusListener {
 
 		// errors are already handled in login
 		Logging.info(this, " we got persist ", persistenceController);
-		Logging.info(this, "call initData");
-		initData();
+		Logging.info(this, "initialize the data");
+
+		dependenciesModel = new DependenciesModel();
+
+		// Init data for these manager classes so they can work
+		ChangedDataManager.initData(this, hostInfo);
+		ServerActionManager.initData(this);
+		Messagebus.initMessagebus(this);
+
+		clientSearch = new ClientSearch(this);
 
 		initialDataLoader = new InitialDataLoader(this);
 		initialDataLoader.execute();
@@ -309,15 +320,6 @@ public class ConfigedMain implements MessagebusListener {
 		List<String> savedServers = readLocallySavedServerNames();
 
 		setupLoginDialog(savedServers);
-	}
-
-	private void initData() {
-		dependenciesModel = new DependenciesModel();
-
-		// Init data for these manager classes so they can work
-		ChangedDataManager.initData(this, hostInfo);
-		ServerActionManager.initData(this);
-		Messagebus.initMessagebus(this);
 	}
 
 	protected void preloadData() {
@@ -1397,63 +1399,6 @@ public class ConfigedMain implements MessagebusListener {
 		terminalFrame.setMessagebus(Messagebus.getInstance());
 		terminalFrame.setSession(connectToHost);
 		terminalFrame.display();
-	}
-
-	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
-		SelectionManager manager = new SelectionManager(null);
-
-		if (arg == null || arg.isEmpty()) {
-			manager.setSearch(SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
-		} else {
-			String timeAgo = DateExtendedByVars.interpretVar(arg);
-			String test = String.format(SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
-
-			Logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test ", test);
-			manager.setSearch(test);
-		}
-
-		List<String> result = manager.selectClients();
-
-		clientTablePanel.setSelectedValues(result);
-	}
-
-	public void selectClientsNotCurrentProductInstalled(String selectedProduct,
-			boolean includeClientsWithBrokenInstallation) {
-		Logging.debug(this, "selectClientsNotCurrentProductInstalled, products ", selectedProduct);
-		if (selectedProduct == null || selectedProduct.isEmpty()) {
-			return;
-		}
-
-		String productVersion = persistenceController.getProductDataService().getProductVersion(selectedProduct);
-		String packageVersion = persistenceController.getProductDataService().getProductPackageVersion(selectedProduct);
-
-		Logging.debug(this, "selectClientsNotCurrentProductInstalled product ", selectedProduct, ", ", productVersion,
-				", ", packageVersion);
-
-		List<String> clientsToSelect = persistenceController.getHostDataService().getClientsWithOtherProductVersion(
-				selectedProduct, productVersion, packageVersion, includeClientsWithBrokenInstallation);
-
-		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found globally ", clientsToSelect.size());
-
-		clientTablePanel.setSelectedValues(clientsToSelect);
-	}
-
-	public void selectClientsWithFailedProduct(String selectedProduct) {
-		Logging.debug(this, "selectClientsWithFailedProduct, products ", selectedProduct);
-		if (selectedProduct == null || selectedProduct.isEmpty()) {
-			return;
-		}
-
-		SelectionManager manager = new SelectionManager(null);
-
-		String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProduct);
-
-		manager.setSearch(test);
-
-		List<String> result = manager.selectClients();
-
-		Logging.info(this, "selected: ", result);
-		clientTablePanel.setSelectedValues(result);
 	}
 
 	public static JFrame getFrame() {

@@ -14,17 +14,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeSet;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -407,16 +404,18 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuClientselectionProductNotUptodate = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersion"));
-		jMenuClientselectionProductNotUptodate.addActionListener(actionEvent -> groupByNotCurrentProductVersion());
+		jMenuClientselectionProductNotUptodate
+				.addActionListener(actionEvent -> configedMain.getClientSearch().groupByNotCurrentProductVersion());
 
 		JMenuItem jMenuClientselectionProductNotUptodateOrBroken = new JMenuItem(Configed
 				.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersionOrUnknownState"));
-		jMenuClientselectionProductNotUptodateOrBroken
-				.addActionListener(actionEvent -> groupByNotCurrentProductVersionOrBrokenInstallation());
+		jMenuClientselectionProductNotUptodateOrBroken.addActionListener(
+				actionEvent -> configedMain.getClientSearch().groupByNotCurrentProductVersionOrBrokenInstallation());
 
 		JMenuItem jMenuClientselectionFailedProduct = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedForProduct"));
-		jMenuClientselectionFailedProduct.addActionListener(actionEvent -> groupByFailedProduct());
+		jMenuClientselectionFailedProduct
+				.addActionListener(actionEvent -> configedMain.getClientSearch().groupByFailedProduct());
 
 		JMenu jMenuClientselectionFailedInPeriod = new JMenu(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
@@ -424,7 +423,7 @@ public class MainFrame extends JFrame {
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItem(entry.getValue());
 
-			item.addActionListener(actionEvent -> configedMain
+			item.addActionListener(actionEvent -> configedMain.getClientSearch()
 					.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
 
 			jMenuClientselectionFailedInPeriod.add(item);
@@ -610,31 +609,6 @@ public class MainFrame extends JFrame {
 
 		jMenuFileSaveConfigurations.setEnabled(b);
 		leftControlBar.enableSaveButton(b);
-	}
-
-	private void groupByNotCurrentProductVersion() {
-		String products = getLocalbootProductsFromSelection();
-		configedMain.selectClientsNotCurrentProductInstalled(products, false);
-	}
-
-	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		String products = getLocalbootProductsFromSelection();
-		configedMain.selectClientsNotCurrentProductInstalled(products, true);
-	}
-
-	private void groupByFailedProduct() {
-		String products = getLocalbootProductsFromSelection();
-		configedMain.selectClientsWithFailedProduct(products);
-	}
-
-	private String getLocalbootProductsFromSelection() {
-		FSelectionList fProductSelectionList = new FSelectionList(this,
-				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" },
-				new Icon[] { Icons.getIntellijIcon("close"), Icons.getIntellijIcon("checkmark") }, 400, 600);
-		fProductSelectionList.setListData(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
-		fProductSelectionList.setVisible(true);
-		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
 	}
 
 	public void activateLoadingPane(String infoText) {
