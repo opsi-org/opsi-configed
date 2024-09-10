@@ -58,7 +58,7 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 			}
 
 			model.fireTableDataChanged();
-			configedMain.setSelectedClients(configedMain.getSelectedClients());
+			configedMain.getClientTablePanel().setSelectedValues(sessionInfo.keySet());
 		}
 		ConfigedMain.getMainFrame().setCursor(null);
 	}

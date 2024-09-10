@@ -1408,10 +1408,6 @@ public class ConfigedMain implements MessagebusListener {
 		terminalFrame.display();
 	}
 
-	public void setSelectedClients(Collection<String> clientsToSelect) {
-		clientTablePanel.setSelectedValues(clientsToSelect);
-	}
-
 	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
 		SelectionManager manager = new SelectionManager(null);
 
