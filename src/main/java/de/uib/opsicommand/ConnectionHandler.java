@@ -189,7 +189,7 @@ public class ConnectionHandler {
 				conStat = reporter.getConnectionState();
 			} else {
 				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-				Logging.error(ex, "Exception on connecting, ");
+				Logging.warning(ex, "Exception on connecting");
 			}
 
 			connection = null;

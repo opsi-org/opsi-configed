@@ -98,7 +98,7 @@ public class OpsiServerVersionRetriever {
 		String server = connection.getHeaderField("Server");
 
 		if (server == null) {
-			Logging.error("error in getting server version, Headerfield is null");
+			Logging.warning("error in getting server version, Headerfield is null");
 			setServerVersionNotFound();
 			return;
 		}
