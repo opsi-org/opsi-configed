@@ -859,7 +859,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.debug(this, "---- stateAndAction ", stateAndAction);
 
 			if (stateAndAction == null) {
-				stateAndAction = new ProductState(null);
+				stateAndAction = ProductState.createDefaultProductState();
 			}
 
 			String actionRequestForRequiredProduct = stateAndAction.get(ActionRequest.KEY);

@@ -659,7 +659,7 @@ public class ProductDataService {
 
 		for (String productId : getProduct2VersionInfo2InfosPD().keySet()) {
 			productIds.add(productId);
-			ProductState productDefault = new ProductState(null);
+			Map<String, String> productDefault = ProductState.createDefaultProductState();
 			productDefault.put("productId", productId);
 			productDefaultStates.put(productId, productDefault);
 		}
@@ -933,7 +933,7 @@ public class ProductDataService {
 		List<Map<String, String>> result = new ArrayList<>();
 
 		for (Map<String, Object> m : exec.getListOfMaps(omc)) {
-			result.add(new ProductState(POJOReMapper.giveEmptyForNull(m)));
+			result.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 
 		return result;
@@ -962,8 +962,7 @@ public class ProductDataService {
 		for (Map<String, Object> m : productOnClients) {
 			String client = (String) m.get("clientId");
 			List<Map<String, String>> states1Client = result.computeIfAbsent(client, arg -> new ArrayList<>());
-			Map<String, String> aState = new ProductState(POJOReMapper.giveEmptyForNull(m));
-			states1Client.add(aState);
+			states1Client.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 
 		return result;
@@ -990,7 +989,7 @@ public class ProductDataService {
 			String client = (String) m.get("clientId");
 
 			result.computeIfAbsent(client, arg -> new ArrayList<>())
-					.add(new ProductState(POJOReMapper.giveEmptyForNull(m)));
+					.add(ProductState.transform(POJOReMapper.giveEmptyForNull(m)));
 		}
 		return result;
 	}
