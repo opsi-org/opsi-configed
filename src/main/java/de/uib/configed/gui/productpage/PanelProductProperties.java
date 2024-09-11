@@ -212,12 +212,12 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 	@Override
 	public void ancestorAdded(AncestorEvent event) {
-		// Not needed for this here
+		setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
 	}
 
 	@Override
 	public void ancestorMoved(AncestorEvent event) {
-		setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
+		// Not needed for this here
 	}
 
 	@Override
