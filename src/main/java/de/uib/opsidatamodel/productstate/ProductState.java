@@ -49,7 +49,7 @@ public class ProductState extends HashMap<String, String> {
 
 	private final Map<String, String> retrieved;
 
-	public ProductState(Map<String, String> retrievedState, boolean transform) {
+	public ProductState(Map<String, String> retrievedState) {
 		super();
 		this.retrieved = retrievedState;
 		if (retrieved == null) {
@@ -58,13 +58,7 @@ public class ProductState extends HashMap<String, String> {
 			readRetrieved();
 		}
 
-		if (transform) {
-			setTransforms();
-		}
-	}
-
-	public ProductState(Map<String, String> retrievedState) {
-		this(retrievedState, true);
+		setTransforms();
 	}
 
 	public static ProductState getDefaultProductState() {
