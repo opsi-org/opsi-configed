@@ -12,7 +12,7 @@ import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 
-public class ProductState {
+public final class ProductState {
 	private static Map<String, String> defaultProductState;
 
 	// directly taken values
