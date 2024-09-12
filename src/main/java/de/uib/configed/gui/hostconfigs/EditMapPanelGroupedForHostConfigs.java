@@ -63,9 +63,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private boolean keylistExtendible;
-	private boolean keylistEditable;
-
 	private PopupMenuTrait popupForUserpath;
 	private PopupMenuTrait popupForUserpathes;
 	private PopupMenuTrait popupForRolepath;
@@ -87,12 +84,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
 
-	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable, final DefaultEditMapPanel.Actor actor) {
+	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer,
+			final DefaultEditMapPanel.Actor actor) {
 		super(tableCellRenderer, true);
-
-		this.keylistExtendible = keylistExtendible;
-		this.keylistEditable = keylistEditable;
 
 		buildPanel();
 		this.actor = actor;
@@ -461,8 +455,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, keylistExtendible,
-					keylistEditable, reloadable, tree, includeAdditionalTooltipText);
+			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, reloadable, tree,
+					includeAdditionalTooltipText);
 
 			editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 			editMapPanel.setActor(actor);

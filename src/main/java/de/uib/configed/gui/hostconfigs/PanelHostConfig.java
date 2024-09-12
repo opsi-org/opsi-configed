@@ -102,7 +102,7 @@ public class PanelHostConfig extends JPanel {
 	private void buildPanel() {
 		putUsersToPropertyclassesTreeMap();
 
-		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(), true, true,
+		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(),
 				new DefaultEditMapPanel.Actor() {
 					@Override
 					public void reloadData() {
