@@ -63,6 +63,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
+	private boolean keylistExtendible;
+	private boolean keylistEditable;
+
 	private PopupMenuTrait popupForUserpath;
 	private PopupMenuTrait popupForUserpathes;
 	private PopupMenuTrait popupForRolepath;
@@ -86,7 +89,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
 			boolean keylistEditable, final DefaultEditMapPanel.Actor actor) {
-		super(tableCellRenderer, keylistExtendible, keylistEditable, true);
+		super(tableCellRenderer, true);
+
+		this.keylistExtendible = keylistExtendible;
+		this.keylistEditable = keylistEditable;
 
 		buildPanel();
 		this.actor = actor;

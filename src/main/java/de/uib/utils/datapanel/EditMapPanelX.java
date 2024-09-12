@@ -113,7 +113,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
 			boolean reloadable) {
-		super(tableCellRenderer, keylistExtendible, entryRemovable, reloadable);
+		super(tableCellRenderer, reloadable);
 		objectCounter++;
 
 		Logging.debug(this, " created EditMapPanelX instance No ", objectCounter, "::", keylistExtendible, ",  ",

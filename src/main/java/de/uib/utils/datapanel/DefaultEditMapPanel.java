@@ -32,9 +32,6 @@ public class DefaultEditMapPanel extends JPanel {
 	protected boolean reloadable;
 	protected boolean showToolTip = true;
 
-	protected boolean keylistExtendible;
-	protected boolean keylistEditable = true;
-
 	protected Actor actor;
 
 	protected JPopupMenu popupmenuAtRow;
@@ -87,16 +84,13 @@ public class DefaultEditMapPanel extends JPanel {
 
 	protected final AbstractPropertyHandler defaultPropertyHandler;
 
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable) {
+	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean reloadable) {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
-		this.keylistExtendible = keylistExtendible;
-		this.keylistEditable = keylistEditable;
 		this.reloadable = reloadable;
 
 		this.tableCellRenderer = tableCellRenderer;
-		Logging.debug(this, "DefaultEditMapPanel ", keylistExtendible, ",  ", keylistEditable, ",  ", reloadable);
+		Logging.debug(this, "DefaultEditMapPanel reloadable:", reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
