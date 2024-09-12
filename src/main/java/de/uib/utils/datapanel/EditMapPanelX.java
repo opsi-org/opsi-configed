@@ -545,13 +545,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	@Override
 	public void setOptionsEditable(boolean b) {
-		Logging.debug(this, "setOptionsEditable ", b);
-
-		if (b) {
-			popupmenuAtRow = popupEditOptions;
-		} else {
-			popupmenuAtRow = popupNoEditOptions;
-		}
+		super.setOptionsEditable(b);
 
 		MouseListener popupListener = new PopupMouseListener(popupmenuAtRow);
 		table.addMouseListener(popupListener);
