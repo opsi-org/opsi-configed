@@ -45,6 +45,10 @@ public final class InstallationStatus {
 	private static Set<String> labels;
 	private static String[] choiceLabels;
 
+	// Empty constructor to prevent instantiation
+	private InstallationStatus() {
+	}
+
 	private static void checkCollections() {
 		if (labels != null) {
 			return;
