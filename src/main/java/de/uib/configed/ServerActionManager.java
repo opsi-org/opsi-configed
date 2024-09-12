@@ -338,9 +338,15 @@ public final class ServerActionManager {
 
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
-		persistenceController.getProductDataService().resetProducts(configedMain.getSelectedClients(), withDependencies,
-				resetLocalbootProducts ? OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING
-						: OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+		if (resetLocalbootProducts) {
+			persistenceController.getProductDataService().resetProducts(configedMain.getSelectedClients(),
+					withDependencies, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
+		}
+
+		if (resetNetbootProducts) {
+			persistenceController.getProductDataService().resetProducts(configedMain.getSelectedClients(),
+					withDependencies, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+		}
 
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
 
