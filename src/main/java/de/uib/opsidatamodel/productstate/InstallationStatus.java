@@ -130,6 +130,6 @@ public final class InstallationStatus {
 			return getLabel(INVALID);
 		}
 
-		return getLabel(getVal(label));
+		return label;
 	}
 }

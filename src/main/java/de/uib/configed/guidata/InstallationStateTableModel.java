@@ -939,8 +939,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		List<String> actionsForProduct = new ArrayList<>();
 		if (possibleActions != null) {
 			for (String label : possibleActions.get(actualProduct)) {
-				ActionRequest ar = ActionRequest.produceFromLabel(label);
-				actionsForProduct.add(ActionRequest.getLabel(ar.getVal()));
+				actionsForProduct.add(ActionRequest.produceFromLabel(label));
 			}
 
 			// Add in values in correct ordering
@@ -1133,9 +1132,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
 
 		case 8:
-			ActionRequest ar = ActionRequest
+			return ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
-			return ActionRequest.getLabel(ar.getVal());
 
 		case 10:
 			return getDisplayLabelForPosition();
@@ -1236,7 +1234,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			// change recursively visible action changes and collect the changes for saving
 
 			initCollectiveChange();
-			collectiveChangeActionRequest(actualProduct, ActionRequest.produceFromLabel((String) value));
+			collectiveChangeActionRequest(actualProduct, ActionRequest.produceActionRequestFromLabel((String) value));
 			finishCollectiveChange();
 		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 			if (value.equals(NONE_DISPLAY_STRING)) {

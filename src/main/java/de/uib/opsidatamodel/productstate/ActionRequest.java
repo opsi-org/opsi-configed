@@ -186,7 +186,22 @@ public class ActionRequest {
 		return getLabel(state);
 	}
 
-	public static ActionRequest produceFromLabel(String label) {
+	public static String produceFromLabel(String label) {
+		checkCollections();
+
+		if (label == null) {
+			return getLabel(NONE);
+		}
+
+		if (!labels.contains(label)) {
+			return getLabel(INVALID);
+		}
+
+		return label;
+
+	}
+
+	public static ActionRequest produceActionRequestFromLabel(String label) {
 		checkCollections();
 
 		if (label == null) {
