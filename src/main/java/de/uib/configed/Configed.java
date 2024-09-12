@@ -315,6 +315,8 @@ public final class Configed {
 	public static void main(CommandLine cmd) {
 		processArgs(cmd);
 
+		// Set timeout for login
+		System.setProperty("sun.net.client.defaultConnectTimeout", "5000");
 		Logging.debug("configed: args recognized");
 
 		initLogging();

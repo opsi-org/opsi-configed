@@ -283,10 +283,6 @@ public class LoginDialog extends JFrame {
 		setVisible(true);
 	}
 
-	private boolean timeouReached() {
-		return false;
-	}
-
 	public void actAfterWaiting() {
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
@@ -308,7 +304,7 @@ public class LoginDialog extends JFrame {
 
 				String message;
 
-				if (timeouReached()) {
+				if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.TIMEOUT) {
 					message = Configed.getResourceValue("LoginDialog.timeoutReached");
 				} else if (!ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 					message = Configed.getResourceValue("LoginDialog.oldServerVersion");

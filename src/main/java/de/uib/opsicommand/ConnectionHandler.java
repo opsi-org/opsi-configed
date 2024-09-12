@@ -7,6 +7,7 @@
 package de.uib.opsicommand;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -185,7 +186,12 @@ public class ConnectionHandler {
 			// so that new validators can be created on the next try
 			CertificateValidatorFactory.resetCertificateValidators();
 		} catch (IOException ex) {
-			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
+			if (ex instanceof SocketTimeoutException) {
+				conStat = new ConnectionState(ConnectionState.TIMEOUT, ex.toString());
+				Logging.warning(ex, "Timeout exception reached, we have a set timeout of",
+						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
+
+			} else if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				conStat = reporter.getConnectionState();
 			} else {
 				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());

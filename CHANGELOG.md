@@ -3,6 +3,7 @@
 - Remove unnecessary feature to arrange dialogs
 - Cast Maps/Lists instead of remapping them always, better for performance
 - Remove waiting loop in when loading data in login. Will save up to 500ms every login.
+- Find a better way to get a timeout. Timeout is set at 5000ms now.
 
 ### Fixed
 - Show correct client in HostStatusPanel after full reload
