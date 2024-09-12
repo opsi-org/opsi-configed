@@ -183,7 +183,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(this::setHostParameterPage);
+		panelHostConfig = new PanelHostConfig(this::setHostConfigPage);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}
@@ -269,7 +269,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		case 3:
 			initHostConfigTab();
-			setHostParameterPage();
+			setHostConfigPage();
 			break;
 
 		case 4:
@@ -295,7 +295,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		mainFrame.deactivateLoadingCursor();
 	}
 
-	public void setHostParameterPage() {
+	public void setHostConfigPage() {
 		Logging.info(this, "setNetworkconfigurationPage ");
 		Logging.info(this, "setNetworkconfigurationPage  selectedClients ", configedMain.getSelectedClients());
 

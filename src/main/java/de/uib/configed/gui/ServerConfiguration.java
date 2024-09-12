@@ -28,14 +28,14 @@ public class ServerConfiguration extends JTabbedPane {
 			.getPersistenceController();
 
 	public ServerConfiguration() {
-		panelHostConfig = new PanelHostConfig(this::setHostParameterPage);
+		panelHostConfig = new PanelHostConfig(this::setHostConfigTab);
 
-		setHostParameterPage();
+		setHostConfigTab();
 
 		super.addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
 	}
 
-	private void setHostParameterPage() {
+	private void setHostConfigTab() {
 		Logging.info(this, "setNetworkconfigurationPage for server");
 		ConfigUpdateCollection configUpdateCollection = new ConfigUpdateCollection(
 				Collections.singletonList(persistenceController.getHostInfoCollections().getConfigServer()));

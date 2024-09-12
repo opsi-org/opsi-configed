@@ -2,10 +2,12 @@
 ### Changed
 - Remove unnecessary feature to arrange dialogs
 - Cast Maps/Lists instead of remapping them always, better for performance
+- Remove waiting loop in when loading data in login. Will save up to 500ms every login.
 
 ### Fixed
 - Show correct client in HostStatusPanel after full reload
 - Correctly refresh client configuration page after full reload
+- Nullpointer Exception when reloading host configs of a depot
 
 ## [4.4.0.6] - 2024-09-05
 ### Fixed
