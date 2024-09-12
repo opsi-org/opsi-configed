@@ -51,6 +51,6 @@ public class ServerConfiguration extends JTabbedPane {
 				"  " + persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
 				additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 				additionalConfigs, configUpdateCollection, true,
-				OpsiServiceNOMPersistenceController.getPropertyClassesServer());
+				OpsiServiceNOMPersistenceController.getPropertyClassesServer(), null, false);
 	}
 }
