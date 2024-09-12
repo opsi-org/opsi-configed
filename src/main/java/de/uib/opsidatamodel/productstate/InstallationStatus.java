@@ -69,7 +69,6 @@ public final class InstallationStatus {
 		state2label.put(UNDEFINED, "undefined");
 		state2label.put(INSTALLED, InstallationStatus.KEY_INSTALLED);
 		state2label.put(NOT_INSTALLED, InstallationStatus.KEY_NOT_INSTALLED);
-
 		state2label.put(UNKNOWN, "unknown");
 
 		label2state = new HashMap<>();
@@ -78,7 +77,6 @@ public final class InstallationStatus {
 		label2state.put("undefined", UNDEFINED);
 		label2state.put(InstallationStatus.KEY_INSTALLED, INSTALLED);
 		label2state.put(InstallationStatus.KEY_NOT_INSTALLED, NOT_INSTALLED);
-
 		label2state.put("unknown", UNKNOWN);
 
 		choiceLabels = new String[] { InstallationStatus.KEY_NOT_INSTALLED, InstallationStatus.KEY_INSTALLED,
@@ -119,12 +117,6 @@ public final class InstallationStatus {
 		return label2state.get(label);
 	}
 
-	public static String getDisplayLabel(int state) {
-		checkCollections();
-
-		return getLabel(state);
-	}
-
 	public static String[] getDisplayLabelsForChoice() {
 		checkCollections();
 
@@ -135,9 +127,9 @@ public final class InstallationStatus {
 		checkCollections();
 
 		if (label == null || !labels.contains(label)) {
-			return getDisplayLabel(INVALID);
+			return getLabel(INVALID);
 		}
 
-		return getDisplayLabel(getVal(label));
+		return getLabel(getVal(label));
 	}
 }

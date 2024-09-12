@@ -91,7 +91,7 @@ public final class ProductState {
 			installationInfo.append(productState.get(KEY_ACTION_PROGRESS));
 			installationInfo.append(" ( ");
 			if (lastAction.getVal() > 0) {
-				installationInfo.append(ActionRequest.getDisplayLabel(lastAction.getVal()));
+				installationInfo.append(ActionRequest.getLabel(lastAction.getVal()));
 			}
 
 			installationInfo.append(" ) ");
@@ -110,7 +110,7 @@ public final class ProductState {
 
 			if (lastAction.getVal() > 0) {
 				installationInfo.append(" (");
-				installationInfo.append(ActionRequest.getDisplayLabel(lastAction.getVal()));
+				installationInfo.append(ActionRequest.getLabel(lastAction.getVal()));
 				installationInfo.append(")");
 			}
 		}

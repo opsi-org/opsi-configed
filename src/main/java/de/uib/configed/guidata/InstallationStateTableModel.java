@@ -878,7 +878,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 			int requiredIS = InstallationStatus.getVal(requiredState);
 
-			Logging.debug(this, " requiredInstallationsStatus ", InstallationStatus.getDisplayLabel(requiredIS));
+			Logging.debug(this, " requiredInstallationsStatus ", InstallationStatus.getLabel(requiredIS));
 
 			// handle state requests
 			if ((requiredIS == InstallationStatus.INSTALLED || requiredIS == InstallationStatus.NOT_INSTALLED)
@@ -940,7 +940,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		if (possibleActions != null) {
 			for (String label : possibleActions.get(actualProduct)) {
 				ActionRequest ar = ActionRequest.produceFromLabel(label);
-				actionsForProduct.add(ActionRequest.getDisplayLabel(ar.getVal()));
+				actionsForProduct.add(ActionRequest.getLabel(ar.getVal()));
 			}
 
 			// Add in values in correct ordering
@@ -1135,7 +1135,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		case 8:
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
-			return ActionRequest.getDisplayLabel(ar.getVal());
+			return ActionRequest.getLabel(ar.getVal());
 
 		case 10:
 			return getDisplayLabelForPosition();
