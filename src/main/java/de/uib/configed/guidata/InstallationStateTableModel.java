@@ -1120,30 +1120,23 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		int col = indexPreparedColumns[displayCol];
 
-		switch (col) {
-		case 0:
-			return actualProduct;
+		return switch (col) {
+		case 0 -> actualProduct;
 
-		case 1:
-			return globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
+		case 1 -> globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 
-		case 3:
-			return InstallationStatus.produceFromLabel(
-					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
+		case 3 -> InstallationStatus
+				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
 
-		case 8:
-			return ActionRequest
-					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
+		case 8 -> ActionRequest
+				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 
-		case 10:
-			return getDisplayLabelForPosition();
+		case 10 -> getDisplayLabelForPosition();
 
-		case 11:
-			return actualProductVersion();
+		case 11 -> actualProductVersion();
 
-		default:
-			return combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
-		}
+		default -> combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
+		};
 	}
 
 	private Object getDisplayLabelForPosition() {
