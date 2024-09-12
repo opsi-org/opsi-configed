@@ -23,7 +23,7 @@ public final class ProductState {
 	public static final String KEY_LAST_ACTION = LastAction.KEY;
 	public static final String KEY_INSTALLATION_STATUS = InstallationStatus.KEY;
 	public static final String KEY_ACTION_REQUEST = ActionRequest.KEY;
-	public static final String KEY_ACTION_PROGRESS = ActionProgress.KEY;
+	public static final String KEY_ACTION_PROGRESS = "actionProgress";
 	public static final String KEY_ACTION_RESULT = ActionResult.KEY;
 	public static final String KEY_PRODUCT_ID = "productId";
 
