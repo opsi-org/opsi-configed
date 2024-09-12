@@ -16,8 +16,6 @@ import java.util.Map.Entry;
 
 import javax.swing.SwingUtilities;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.Configed;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -185,9 +183,8 @@ public class ModuleDataService {
 
 		// analyse the real module info
 		Map<String, Object> opsiCountModules = POJOReMapper.remap(opsiInformation.get("modules"));
-		opsiCountModules.keySet().removeAll(
-				POJOReMapper.remap(opsiInformation.get("obsolete_modules") + "", new TypeReference<List<Object>>() {
-				}));
+
+		opsiCountModules.keySet().removeAll(POJOReMapper.remap(opsiInformation.get("obsolete_modules")));
 		hostInfoCollections.retrieveOpsiHostsPD();
 
 		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
@@ -394,6 +391,7 @@ public class ModuleDataService {
 		Logging.info(this, "retrieveOpsiModules opsiCountModules ", opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions ", opsiModulesPermissions);
 		Logging.info(this, "retrieveOpsiModules opsiModules ", opsiModules);
+		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
 	}
 
 	private void callOpsiLicenseMissingModules(List<String> missingModulesPermissionInfo) {
