@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.3.x.x] - 2024-xx-xx
+### Fixed
+- Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
+
 ## [4.3.3.14] - 2024-09-05
 ### Fixed
 - Show correctly the new lines ("\n") in tooltips
