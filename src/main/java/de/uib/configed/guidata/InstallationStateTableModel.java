@@ -1129,9 +1129,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			return globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 
 		case 3:
-			InstallationStatus is = InstallationStatus.produceFromLabel(
+			return InstallationStatus.produceFromLabel(
 					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
-			return InstallationStatus.getDisplayLabel(is.getVal());
 
 		case 8:
 			ActionRequest ar = ActionRequest
