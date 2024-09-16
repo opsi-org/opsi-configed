@@ -62,8 +62,8 @@ public class SecureCertificateValidator implements CertificateValidator {
 		SSLSocketFactory sslFactory = null;
 
 		try {
-			if (CertificateDownloader.getDownloadedCertificateFile() != null) {
-				CertificateManager.loadCertificateToKeyStore(CertificateDownloader.getDownloadedCertificateFile());
+			if (CertificateManager.getDownloadedCertificateFile() != null) {
+				CertificateManager.loadCertificateToKeyStore(CertificateManager.getDownloadedCertificateFile());
 			} else {
 				CertificateManager.loadCertificatesToKeyStore();
 			}
