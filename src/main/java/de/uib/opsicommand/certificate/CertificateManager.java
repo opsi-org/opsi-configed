@@ -27,9 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -192,9 +190,11 @@ public final class CertificateManager {
 	}
 
 	public static void loadCertificatesToKeyStore() {
-		List<File> certificates = CertificateManager.getCertificates();
+		File certificateFile = CertificateManager.getCertificates();
 
-		certificates.forEach(CertificateManager::loadCertificateToKeyStore);
+		if (certificateFile != null) {
+			loadCertificateToKeyStore(certificateFile);
+		}
 	}
 
 	public static void loadCertificateToKeyStore(File certificateFile) {
@@ -207,13 +207,13 @@ public final class CertificateManager {
 		}
 	}
 
-	public static List<File> getCertificates() {
+	public static File getCertificates() {
 		File file = new File(getPathToCACerts(), Globals.CERTIFICATE_FILE);
 
 		if (file.exists()) {
-			return Collections.singletonList(file);
+			return file;
 		} else {
-			return Collections.emptyList();
+			return null;
 		}
 	}
 
@@ -234,18 +234,16 @@ public final class CertificateManager {
 	}
 
 	public static void updateCertificate() {
-		List<File> certificateFiles = getCertificates();
+		File certificateFile = getCertificates();
 
-		if (!certificateFiles.isEmpty()) {
+		if (certificateFile != null) {
 			String certificateContent = PersistenceControllerFactory.getPersistenceController().getUserDataService()
 					.getOpsiCACert();
 			X509Certificate tmpCertificate = createTmpCertificate(certificateContent);
 
-			for (File certificateFile : certificateFiles) {
-				X509Certificate localCertificate = instantiateCertificate(certificateFile);
-				if (localCertificate != null && localCertificate.equals(tmpCertificate)) {
-					writeToCertificate(certificateFile, certificateContent);
-				}
+			X509Certificate localCertificate = instantiateCertificate(certificateFile);
+			if (localCertificate != null && localCertificate.equals(tmpCertificate)) {
+				writeToCertificate(certificateFile, certificateContent);
 			}
 		}
 	}

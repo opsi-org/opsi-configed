@@ -206,16 +206,14 @@ public class SecureCertificateValidator implements CertificateValidator {
 
 		@Override
 		public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
-			List<File> certificateFiles = CertificateManager.getCertificates();
+			File certificateFile = CertificateManager.getCertificates();
 			for (X509Certificate certificate : certificates) {
-				certificateFiles.forEach((File certificateFile) -> {
-					if (certificate.equals(CertificateManager.instantiateCertificate(certificateFile))) {
-						certificateExists = true;
-						return;
-					} else {
-						certificateExists = false;
-					}
-				});
+				if (certificate.equals(CertificateManager.instantiateCertificate(certificateFile))) {
+					certificateExists = true;
+					return;
+				} else {
+					certificateExists = false;
+				}
 			}
 			delegate.checkServerTrusted(certificates, authType);
 		}
