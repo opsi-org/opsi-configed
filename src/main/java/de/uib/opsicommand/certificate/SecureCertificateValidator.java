@@ -211,7 +211,6 @@ public class SecureCertificateValidator implements CertificateValidator {
 				for (Certificate localCertificate : CertificateManager.instantiateCertificate(certificateFile)) {
 					if (certificate.equals(localCertificate)) {
 						certificateExists = true;
-						Logging.devel("exists");
 						return;
 					} else {
 						certificateExists = false;
