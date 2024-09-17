@@ -174,6 +174,7 @@ public class ConnectionHandler {
 			connection.connect();
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: " + ex);
+			Logging.devel(this, ex.toString());
 
 			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED) {
 				reporter.notify(produceCertificateWarningMessage(certValidator),

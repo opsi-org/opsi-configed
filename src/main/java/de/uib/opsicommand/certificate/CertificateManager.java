@@ -27,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -182,7 +183,7 @@ public final class CertificateManager {
 		try {
 			Collection<? extends Certificate> certificates = CertificateManager.instantiateCertificate(certificateFile);
 			for (Certificate certificate : certificates) {
-				ks.setCertificateEntry("1", certificate);
+				ks.setCertificateEntry(((X509Certificate) certificate).getSerialNumber().toString(), certificate);
 			}
 		} catch (KeyStoreException e) {
 			Logging.error("unable to load certificate into a keystore", e);
