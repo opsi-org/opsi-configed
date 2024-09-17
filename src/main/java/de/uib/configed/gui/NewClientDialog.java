@@ -120,7 +120,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 	public void setDefaultValues() {
 		jCheckWan.setSelected(persistenceController.getConfigDataService()
-				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
+				.isWanConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
 		jCheckShutdownInstall.setSelected(persistenceController.getConfigDataService()
 				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
 	}
