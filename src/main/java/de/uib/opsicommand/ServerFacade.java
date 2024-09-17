@@ -98,8 +98,16 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.otp = otp;
 		conStat = new ConnectionState();
 
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		checkServerVersion();
+
+		if (versionRetriever.isServerVersionAtLeast("4.3.18.15")) {
+			CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+		} else {
+			CertificateManager.init(
+					produceBaseURL(
+							"/ssl/" + Globals.OPSI_CERTIFICATE_FILE_NAME + "." + Globals.CERTIFICATE_FILE_EXTENSION),
+					host + "_" + portHTTPS);
+		}
 	}
 
 	private synchronized void checkServerVersion() {
