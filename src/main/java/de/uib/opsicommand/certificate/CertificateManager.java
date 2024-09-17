@@ -24,11 +24,11 @@ import java.nio.file.StandardCopyOption;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -48,7 +48,6 @@ public final class CertificateManager {
 	private static String caFolderName;
 
 	private static KeyStore ks;
-	private static Set<String> invalidCertificates = new HashSet<>();
 
 	private CertificateManager() {
 	}
@@ -134,40 +133,22 @@ public final class CertificateManager {
 		return downloadedCertificateFile;
 	}
 
-	public static X509Certificate instantiateCertificate(File certificateFile) {
-		if (invalidCertificates.contains(certificateFile.getAbsolutePath())) {
-			return null;
-		}
+	public static Collection<? extends Certificate> instantiateCertificate(File certificateFile) {
 
-		X509Certificate cert = null;
+		Collection<? extends Certificate> certificates = new HashSet<>();
 
 		try (FileInputStream is = new FileInputStream(certificateFile)) {
 			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-			cert = (X509Certificate) certFactory.generateCertificate(is);
+			certificates = certFactory.generateCertificates(is);
 		} catch (CertificateException e) {
 			Logging.warning("unable to parse certificate (format is inavlid): " + certificateFile.getAbsolutePath(), e);
-			removeCertificateFromKeyStore(certificateFile);
-			invalidCertificates.add(certificateFile.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			Logging.warning("unable to find certificate: " + certificateFile.getAbsolutePath(), e);
 		} catch (IOException e) {
 			Logging.warning("unable to close certificate: " + certificateFile.getAbsolutePath(), e);
 		}
 
-		return cert;
-	}
-
-	private static void removeCertificateFromKeyStore(File certificateFile) {
-		try {
-			if (ks.isCertificateEntry(certificateFile.getParentFile().getName())) {
-				Logging.info("removing certificate from keystore, since it is invalid certificate: "
-						+ certificateFile.getAbsolutePath());
-				ks.deleteEntry(certificateFile.getParentFile().getName());
-			}
-		} catch (KeyStoreException e) {
-			Logging.warning(
-					"unable to remove certificate " + certificateFile.getAbsolutePath() + " from the keystore: ", e);
-		}
+		return certificates;
 	}
 
 	public static KeyStore initializeKeyStore() {
@@ -199,9 +180,10 @@ public final class CertificateManager {
 
 	public static void loadCertificateToKeyStore(File certificateFile) {
 		try {
-			X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
-			String alias = certificateFile.getParentFile().getName();
-			ks.setCertificateEntry(alias, certificate);
+			Collection<? extends Certificate> certificates = CertificateManager.instantiateCertificate(certificateFile);
+			for (Certificate certificate : certificates) {
+				ks.setCertificateEntry("1", certificate);
+			}
 		} catch (KeyStoreException e) {
 			Logging.error("unable to load certificate into a keystore", e);
 		}
@@ -238,17 +220,18 @@ public final class CertificateManager {
 
 		if (certificateFile != null) {
 			String certificateContent = PersistenceControllerFactory.getPersistenceController().getUserDataService()
-					.getOpsiCACert();
-			X509Certificate tmpCertificate = createTmpCertificate(certificateContent);
+					.getCACerts();
 
-			X509Certificate localCertificate = instantiateCertificate(certificateFile);
-			if (localCertificate != null && localCertificate.equals(tmpCertificate)) {
+			Collection<? extends Certificate> tmpCertificates = createTmpCertificate(certificateContent);
+			Collection<? extends Certificate> localCertificates = instantiateCertificate(certificateFile);
+
+			if (!localCertificates.equals(tmpCertificates)) {
 				writeToCertificate(certificateFile, certificateContent);
 			}
 		}
 	}
 
-	private static X509Certificate createTmpCertificate(String certificateContent) {
+	private static Collection<? extends Certificate> createTmpCertificate(String certificateContent) {
 		File certificateFile = null;
 		try {
 			certificateFile = Files
@@ -260,7 +243,7 @@ public final class CertificateManager {
 		}
 
 		if (certificateFile == null) {
-			return null;
+			return new HashSet<>();
 		}
 
 		return instantiateCertificate(certificateFile);
