@@ -4,6 +4,10 @@
 ### Fixed
 - Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
 
+### Changed
+- Download all CA certificats instead of only the opsi CA certificate
+- Use path <user-config-dir>/opsi/services/<service_host>_<service_port>/ca-certs.pem for CA certificats, which is also used by opsi-cli
+
 ## [4.3.3.14] - 2024-09-05
 ### Fixed
 - Show correctly the new lines ("\n") in tooltips
