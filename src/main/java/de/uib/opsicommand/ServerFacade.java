@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsicommand.certificate.CertificateDownloader;
+import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
@@ -98,8 +98,16 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.otp = otp;
 		conStat = new ConnectionState();
 
-		CertificateDownloader.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
 		checkServerVersion();
+
+		if (versionRetriever.isServerVersionAtLeast("4.3.18.15")) {
+			CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+		} else {
+			CertificateManager.init(
+					produceBaseURL(
+							"/ssl/" + Globals.OPSI_CERTIFICATE_FILE_NAME + "." + Globals.CERTIFICATE_FILE_EXTENSION),
+					host + "_" + portHTTPS);
+		}
 	}
 
 	private synchronized void checkServerVersion() {

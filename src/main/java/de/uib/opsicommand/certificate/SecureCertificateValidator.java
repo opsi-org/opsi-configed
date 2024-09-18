@@ -62,8 +62,8 @@ public class SecureCertificateValidator implements CertificateValidator {
 		SSLSocketFactory sslFactory = null;
 
 		try {
-			if (CertificateDownloader.getDownloadedCertificateFile() != null) {
-				CertificateManager.loadCertificateToKeyStore(CertificateDownloader.getDownloadedCertificateFile());
+			if (CertificateManager.getDownloadedCertificateFile() != null) {
+				CertificateManager.loadCertificateToKeyStore(CertificateManager.getDownloadedCertificateFile());
 			} else {
 				CertificateManager.loadCertificatesToKeyStore();
 			}
@@ -206,16 +206,16 @@ public class SecureCertificateValidator implements CertificateValidator {
 
 		@Override
 		public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
-			List<File> certificateFiles = CertificateManager.getCertificates();
+			File certificateFile = CertificateManager.getCertificates();
 			for (X509Certificate certificate : certificates) {
-				certificateFiles.forEach((File certificateFile) -> {
-					if (certificate.equals(CertificateManager.instantiateCertificate(certificateFile))) {
+				for (Certificate localCertificate : CertificateManager.instantiateCertificate(certificateFile)) {
+					if (certificate.equals(localCertificate)) {
 						certificateExists = true;
 						return;
 					} else {
 						certificateExists = false;
 					}
-				});
+				}
 			}
 			delegate.checkServerTrusted(certificates, authType);
 		}
