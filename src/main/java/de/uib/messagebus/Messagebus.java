@@ -154,7 +154,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private ServerFacade getServerFacadeExecutor() {
-		return (ServerFacade) persistenceController.getExecutioner();
+		return persistenceController.getExecutioner();
 	}
 
 	private String createEncBasicAuth() {
