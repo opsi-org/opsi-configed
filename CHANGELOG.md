@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.3.15] - 2024-09-18
 ### Fixed
 - Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
 
