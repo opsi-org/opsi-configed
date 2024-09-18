@@ -132,7 +132,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	private String user;
 
-	private AbstractPOJOExecutioner exec;
+	private ServerFacade exec;
 
 	private HostInfoCollections hostInfoCollections;
 
@@ -442,7 +442,7 @@ public class OpsiServiceNOMPersistenceController {
 		return exec.getConnectionState();
 	}
 
-	public AbstractPOJOExecutioner getExecutioner() {
+	public ServerFacade getExecutioner() {
 		return exec;
 	}
 

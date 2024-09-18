@@ -105,6 +105,8 @@ public enum RPCMethodName {
 
 	GET_OPSI_CA_CERT("getOpsiCACert"),
 
+	GET_CA_CERTS("getCACerts"),
+
 	GET_DOMAIN("getDomain"),
 
 	SET_RIGHTS("setRights"),

@@ -4,11 +4,14 @@
 - Cast Maps/Lists instead of remapping them always, better for performance
 - Remove waiting loop in when loading data in login. Will save up to 500ms every login.
 - Find a better way to get a timeout. Timeout is set at 5000ms now.
+- Download all CA certificats instead of only the opsi CA certificate
+- Use path <user-config-dir>/opsi/services/<service_host>_<service_port>/ca-certs.pem for CA certificats, which is also used by opsi-cli
 
 ### Fixed
 - Show correct client in HostStatusPanel after full reload
 - Correctly refresh client configuration page after full reload
 - Nullpointer Exception when reloading host configs of a depot
+- Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
 - Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
 
 ## [4.4.0.6] - 2024-09-05

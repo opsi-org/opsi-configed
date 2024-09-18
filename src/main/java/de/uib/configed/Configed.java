@@ -445,10 +445,6 @@ public final class Configed {
 		return locationName + File.separator + host.replace(":", "_");
 	}
 
-	public static String getHost() {
-		return host;
-	}
-
 	public static void setHost(String host) {
 		Configed.host = host;
 	}

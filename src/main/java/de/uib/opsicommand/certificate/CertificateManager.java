@@ -9,76 +9,147 @@ package de.uib.opsicommand.certificate;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import com.formdev.flatlaf.util.SystemInfo;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.opsicommand.ConnectionErrorReporter;
+import de.uib.opsicommand.ConnectionErrorType;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public final class CertificateManager {
+	private static File downloadedCertificateFile;
+	private static String urlPath;
+	private static String caFolderName;
+
 	private static KeyStore ks;
-	private static Set<String> invalidCertificates = new HashSet<>();
 
 	private CertificateManager() {
 	}
 
-	public static X509Certificate instantiateCertificate(File certificateFile) {
-		if (invalidCertificates.contains(certificateFile.getAbsolutePath())) {
-			return null;
+	/**
+	 * Initializes URL path to use for downloaded certificate file.
+	 * 
+	 * @param urlPath from which to download certificate.
+	 */
+	public static void init(String urlPath, String caFolderName) {
+		CertificateManager.urlPath = urlPath;
+		CertificateManager.caFolderName = caFolderName;
+	}
+
+	/**
+	 * Downloades certificate from the specified URL path (in the
+	 * {@link #init(String)} method).
+	 */
+	public static void downloadCertificateFile() {
+		if (urlPath == null) {
+			Logging.error("CertificateDownloader wasn't initialized");
+			return;
 		}
 
-		X509Certificate cert = null;
+		CertificateValidator validator = CertificateValidatorFactory.getInsecure();
+		HttpsURLConnection.setDefaultSSLSocketFactory(validator.getSSLSocketFactory());
+		HttpsURLConnection.setDefaultHostnameVerifier(validator.getHostnameVerifier());
+
+		URL url = null;
+
+		try {
+			url = new URI(urlPath).toURL();
+		} catch (URISyntaxException | MalformedURLException e) {
+			Logging.error(e, "url is malformed: ", url);
+		}
+
+		if (url == null) {
+			return;
+		}
+
+		File tmpCertFile = null;
+
+		try {
+			tmpCertFile = Files.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION)
+					.toFile();
+			Utils.restrictAccessToFile(tmpCertFile);
+		} catch (IOException e) {
+			Logging.error(e, "unable to create tmp certificate file");
+		}
+
+		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+				FileOutputStream fos = new FileOutputStream(tmpCertFile)) {
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		} catch (IOException e) {
+			if (ConnectionErrorReporter.getInstance() != null) {
+				ConnectionErrorReporter.getInstance().notify(
+						Configed.getResourceValue("CertificateDownloader.unableToDownloadCertificate") + " " + url,
+						ConnectionErrorType.FAILED_CERTIFICATE_DOWNLOAD_ERROR);
+			}
+			Logging.error(e, "unable to download certificate from specified url: ", url);
+		}
+
+		if (tmpCertFile != null && tmpCertFile.length() != 0) {
+			downloadedCertificateFile = tmpCertFile;
+		}
+	}
+
+	private static String getPathToCACerts() {
+		if (SystemInfo.isWindows) {
+			return System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + "/opsi/services/" + caFolderName;
+		} else {
+			return System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY) + "/.config/opsi/services/"
+					+ caFolderName;
+		}
+	}
+
+	/**
+	 * Retrieves downloaded certificate.
+	 * 
+	 * @return downloaded certificate.
+	 */
+	public static File getDownloadedCertificateFile() {
+		return downloadedCertificateFile;
+	}
+
+	public static Collection<? extends Certificate> instantiateCertificate(File certificateFile) {
+
+		Collection<? extends Certificate> certificates = new HashSet<>();
 
 		try (FileInputStream is = new FileInputStream(certificateFile)) {
 			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-			cert = (X509Certificate) certFactory.generateCertificate(is);
+			certificates = certFactory.generateCertificates(is);
 		} catch (CertificateException e) {
 			Logging.warning(e, "unable to parse certificate (format is inavlid): ", certificateFile.getAbsolutePath());
-			removeCertificateFromKeyStore(certificateFile);
-			invalidCertificates.add(certificateFile.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			Logging.warning(e, "unable to find certificate: ", certificateFile.getAbsolutePath());
 		} catch (IOException e) {
 			Logging.warning(e, "unable to close certificate: ", certificateFile.getAbsolutePath());
 		}
 
-		return cert;
-	}
-
-	private static void removeCertificateFromKeyStore(File certificateFile) {
-		try {
-			if (ks.isCertificateEntry(certificateFile.getParentFile().getName())) {
-				Logging.info("removing certificate from keystore, since it is invalid certificate: ",
-						certificateFile.getAbsolutePath());
-				ks.deleteEntry(certificateFile.getParentFile().getName());
-			}
-		} catch (KeyStoreException e) {
-			Logging.warning(e, "unable to remove certificate ", certificateFile.getAbsolutePath(),
-					" from the keystore: ");
-		}
+		return certificates;
 	}
 
 	public static KeyStore initializeKeyStore() {
@@ -101,64 +172,66 @@ public final class CertificateManager {
 	}
 
 	public static void loadCertificatesToKeyStore() {
-		List<File> certificates = CertificateManager.getCertificates();
+		File certificateFile = CertificateManager.getCertificates();
 
-		certificates.forEach(CertificateManager::loadCertificateToKeyStore);
+		if (certificateFile != null) {
+			loadCertificateToKeyStore(certificateFile);
+		}
 	}
 
 	public static void loadCertificateToKeyStore(File certificateFile) {
 		try {
-			X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
-			String alias = certificateFile.getParentFile().getName();
-			ks.setCertificateEntry(alias, certificate);
+			Collection<? extends Certificate> certificates = CertificateManager.instantiateCertificate(certificateFile);
+			for (Certificate certificate : certificates) {
+				ks.setCertificateEntry(((X509Certificate) certificate).getSerialNumber().toString(), certificate);
+			}
 		} catch (KeyStoreException e) {
 			Logging.error(e, "unable to load certificate into a keystore");
 		}
 	}
 
-	public static List<File> getCertificates() {
-		if (Configed.getSavedStatesLocationName() == null) {
-			return new ArrayList<>();
+	public static File getCertificates() {
+		copyCertificateFromOldFolderIfExists();
+		File file = new File(getPathToCACerts(), Globals.CERTIFICATE_FILE);
+
+		if (file.exists()) {
+			return file;
+		} else {
+			return null;
 		}
-
-		final PathMatcher matcher = FileSystems.getDefault()
-				.getPathMatcher("glob:**." + Globals.CERTIFICATE_FILE_EXTENSION);
-		final List<File> certificateFiles = new ArrayList<>();
-
-		try {
-			Files.walkFileTree(Paths.get(Configed.getSavedStatesLocationName()), new SimpleFileVisitor<Path>() {
-				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-					if (matcher.matches(file)) {
-						certificateFiles.add(file.toFile());
-					}
-					return FileVisitResult.CONTINUE;
-				}
-			});
-		} catch (IOException ex) {
-			Logging.warning(ex, "error on getting certificate");
-		}
-
-		return certificateFiles;
 	}
 
-	public static void saveCertificate(File certificateFile) {
-		try {
-			String dirname = Configed.getHost();
+	private static void copyCertificateFromOldFolderIfExists() {
+		File newCertificateFile = new File(getPathToCACerts(), Globals.CERTIFICATE_FILE);
 
-			if (dirname.contains(":")) {
-				dirname = dirname.replace(":", "_");
+		Logging.info("Does a certificate file already exist? ", newCertificateFile.exists());
+		if (!newCertificateFile.exists()) {
+			File oldCertificateFile = new File(Utils.getSavedStatesDefaultLocation(),
+					caFolderName.substring(0, caFolderName.indexOf("_")) + File.separator
+							+ Globals.OPSI_CERTIFICATE_FILE_NAME + "." + Globals.CERTIFICATE_FILE_EXTENSION);
+			Logging.info("do we already have a certificate in the old Path? ", newCertificateFile.exists());
+			if (oldCertificateFile.exists()) {
+				Logging.info("Copy certificate from old path to new path");
+				try {
+					Files.copy(oldCertificateFile.toPath(), newCertificateFile.toPath(),
+							StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					Logging.warning(e, "Could not copy certificate from old path to new path");
+				}
 			}
+		}
+	}
 
-			File dirFile = new File(Configed.getSavedStatesLocationName(), dirname);
+	public static void saveCertificate() {
+		try {
+			File dirFile = new File(getPathToCACerts());
 
 			if (!dirFile.exists()) {
 				dirFile.mkdir();
 			}
 
-			Files.copy(certificateFile.toPath(),
-					new File(Configed.getSavedStatesLocationName(), dirname + File.separator + Globals.CERTIFICATE_FILE)
-							.toPath(),
+			Files.copy(downloadedCertificateFile.toPath(),
+					new File(getPathToCACerts() + File.separator + Globals.CERTIFICATE_FILE).toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			Logging.error(e, "unable to save certificate");
@@ -166,23 +239,22 @@ public final class CertificateManager {
 	}
 
 	public static void updateCertificate() {
-		List<File> certificateFiles = getCertificates();
+		File certificateFile = getCertificates();
 
-		if (!certificateFiles.isEmpty()) {
+		if (certificateFile != null) {
 			String certificateContent = PersistenceControllerFactory.getPersistenceController().getUserDataService()
-					.getOpsiCACert();
-			X509Certificate tmpCertificate = createTmpCertificate(certificateContent);
+					.getCACerts();
 
-			for (File certificateFile : certificateFiles) {
-				X509Certificate localCertificate = instantiateCertificate(certificateFile);
-				if (localCertificate != null && localCertificate.equals(tmpCertificate)) {
-					writeToCertificate(certificateFile, certificateContent);
-				}
+			Collection<? extends Certificate> tmpCertificates = createTmpCertificate(certificateContent);
+			Collection<? extends Certificate> localCertificates = instantiateCertificate(certificateFile);
+
+			if (!localCertificates.equals(tmpCertificates)) {
+				writeToCertificate(certificateFile, certificateContent);
 			}
 		}
 	}
 
-	private static X509Certificate createTmpCertificate(String certificateContent) {
+	private static Collection<? extends Certificate> createTmpCertificate(String certificateContent) {
 		File certificateFile = null;
 		try {
 			certificateFile = Files
@@ -194,7 +266,7 @@ public final class CertificateManager {
 		}
 
 		if (certificateFile == null) {
-			return null;
+			return new HashSet<>();
 		}
 
 		return instantiateCertificate(certificateFile);
