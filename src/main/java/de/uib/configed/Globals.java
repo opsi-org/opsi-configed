@@ -36,7 +36,6 @@ public final class Globals {
 	public static final String OPSI_FORUM_PAGE = "http://forum.opsi.org";
 
 	public static final String CERTIFICATE_FILE_NAME = "ca-certs";
-	public static final String OPSI_CERTIFICATE_FILE_NAME = "opsi-ca-cert";
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";
 	public static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
 

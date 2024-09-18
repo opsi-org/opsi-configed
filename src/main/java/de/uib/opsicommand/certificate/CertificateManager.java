@@ -191,34 +191,12 @@ public final class CertificateManager {
 	}
 
 	public static File getCertificates() {
-		copyCertificateFromOldFolderIfExists();
 		File file = new File(getPathToCACerts(), Globals.CERTIFICATE_FILE);
 
 		if (file.exists()) {
 			return file;
 		} else {
 			return null;
-		}
-	}
-
-	private static void copyCertificateFromOldFolderIfExists() {
-		File newCertificateFile = new File(getPathToCACerts(), Globals.CERTIFICATE_FILE);
-
-		Logging.info("Does a certificate file already exist? ", newCertificateFile.exists());
-		if (!newCertificateFile.exists()) {
-			File oldCertificateFile = new File(Utils.getSavedStatesDefaultLocation(),
-					caFolderName.substring(0, caFolderName.indexOf("_")) + File.separator
-							+ Globals.OPSI_CERTIFICATE_FILE_NAME + "." + Globals.CERTIFICATE_FILE_EXTENSION);
-			Logging.info("do we already have a certificate in the old Path? ", newCertificateFile.exists());
-			if (oldCertificateFile.exists()) {
-				Logging.info("Copy certificate from old path to new path");
-				try {
-					Files.copy(oldCertificateFile.toPath(), newCertificateFile.toPath(),
-							StandardCopyOption.REPLACE_EXISTING);
-				} catch (IOException e) {
-					Logging.warning(e, "Could not copy certificate from old path to new path");
-				}
-			}
 		}
 	}
 
