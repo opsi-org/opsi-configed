@@ -1,4 +1,4 @@
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.7] - 2024-09-18
 ### Changed
 - Remove unnecessary feature to arrange dialogs
 - Cast Maps/Lists instead of remapping them always, better for performance
@@ -11,7 +11,6 @@
 - Show correct client in HostStatusPanel after full reload
 - Correctly refresh client configuration page after full reload
 - Nullpointer Exception when reloading host configs of a depot
-- Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
 - Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
 
 ## [4.4.0.6] - 2024-09-05
