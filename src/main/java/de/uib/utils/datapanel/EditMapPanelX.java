@@ -48,7 +48,6 @@ import de.uib.utils.table.gui.SensitiveCellEditor;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel {
-	private static int objectCounter;
 	protected JScrollPane jScrollPane;
 	protected JTable table;
 
@@ -112,10 +111,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
 			boolean reloadable) {
 		super(tableCellRenderer, reloadable);
-		objectCounter++;
 
-		Logging.debug(this, " created EditMapPanelX instance No ", objectCounter, "::", keylistExtendible, ",  ",
-				entryRemovable, ",  ", reloadable);
+		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable, ",  ", reloadable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);
@@ -502,13 +499,11 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	 * @param String key - the key to delete
 	 */
 	public void removeProperty(String key) {
-		Logging.info(this, " EditMapPanelX instance No ", objectCounter, "::", " removeProperty for key ", key,
-				" via  handler ", propertyHandler);
+		Logging.info(this, " EditMapPanelX, removeProperty for key ", key, " via  handler ", propertyHandler);
 
 		propertyHandler.removeValue(key);
 
-		Logging.info(this, " EditMapPanelX instance No ", objectCounter, "::", " handled removeProperty for key ", key,
-				" options ", optionsMap.get(key));
+		Logging.info(this, " EditMapPanelX, handled removeProperty for key ", key, " options ", optionsMap.get(key));
 
 		Object defaultValue = defaultsMap.get(key);
 
