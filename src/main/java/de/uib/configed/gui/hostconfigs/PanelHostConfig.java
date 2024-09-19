@@ -124,7 +124,7 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
-			Collection collectionConfigStored, ConfigUpdateCollection configUpdateCollection, boolean optionsEditable,
+			Collection collectionConfigStored, ConfigUpdateCollection configUpdateCollection,
 			NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
 			boolean includeAdditionalTooltipText) {
 		Logging.info(this, "initEditing, label:", labeltext);

@@ -198,7 +198,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 				.getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null),
 				mergedVisualMap, persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
-				additionalConfigs, configUpdateCollection, false,
+				additionalConfigs, configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
 	}
 }
