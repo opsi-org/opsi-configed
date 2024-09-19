@@ -10,8 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +47,7 @@ import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.SensitiveCellEditor;
 
 // works on a map of pairs of type String - List
-public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
+public class EditMapPanelX extends DefaultEditMapPanel {
 	private static int objectCounter;
 	protected JScrollPane jScrollPane;
 	protected JTable table;
@@ -524,22 +522,4 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		names = mapTableModel.getKeys();
 		Logging.info(this, "removeProperty names left: ", names);
 	}
-
-	private void stopEditing() {
-		// we prefer not to cancel cell editing
-		if (table.isEditing()) {
-			table.getCellEditor().stopCellEditing();
-		}
-	}
-
-	// FocusListener
-
-	@Override
-	public void focusLost(FocusEvent e) {
-		stopEditing();
-	}
-
-	@Override
-	public void focusGained(FocusEvent e) {
-		/* Not needed */}
 }
