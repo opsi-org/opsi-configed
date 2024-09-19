@@ -33,6 +33,7 @@ import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.tree.ProductTree;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -321,7 +322,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 					.getHostsConfigsWithDefaults(depotIds).get(0);
 			for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
 				configListCellOptions.get(entry.getKey())
-						.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
+						.setDefaultValues(POJOReMapper.remap(defaultValues.get(entry.getKey())));
 			}
 		}
 		Map<String, Object> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController.getConfigDataService()

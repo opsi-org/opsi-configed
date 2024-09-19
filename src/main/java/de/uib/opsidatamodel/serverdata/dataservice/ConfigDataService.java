@@ -698,10 +698,9 @@ public class ConfigDataService {
 		Set<String> configIds = new HashSet<>();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES,
 				new Object[] { configIds, objectIds, true });
-		Map<String, Object> retrieved = exec.getMapResult(omc);
-		for (Entry<String, Object> entry : retrieved.entrySet()) {
-			Map<String, Object> configs = POJOReMapper.remap(entry.getValue());
-			result.add(new ConfigName2ConfigValue(configs, getConfigOptionsPD()));
+		Map<String, Map<String, Object>> retrieved = exec.getMapOfMaps(omc);
+		for (Entry<String, Map<String, Object>> entry : retrieved.entrySet()) {
+			result.add(new ConfigName2ConfigValue(entry.getValue(), getConfigOptionsPD()));
 		}
 		return result;
 	}
