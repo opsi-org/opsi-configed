@@ -694,6 +694,12 @@ public class ConfigDataService {
 	}
 
 	public List<Map<String, Object>> getHostsConfigsWithDefaults(List<String> objectIds) {
+		Logging.info(this, "getHostsConfigsWithDefaults for ", objectIds);
+
+		if (objectIds == null || objectIds.isEmpty()) {
+			return new ArrayList<>();
+		}
+
 		List<Map<String, Object>> result = new ArrayList<>();
 		Set<String> configIds = new HashSet<>();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES,

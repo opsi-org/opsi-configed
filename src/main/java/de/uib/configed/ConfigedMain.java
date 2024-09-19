@@ -1143,16 +1143,6 @@ public class ConfigedMain {
 		return depotRepresentative;
 	}
 
-	public List<Map<String, Object>> produceAdditionalConfigs(List<String> list) {
-		Logging.info(this, "additionalConfig fetch for ", list);
-
-		if (list.isEmpty()) {
-			return new ArrayList<>();
-		} else {
-			return persistenceController.getConfigDataService().getHostsConfigsWithDefaults(list);
-		}
-	}
-
 	public List<String> getSelectedDepots() {
 		return depotsList.getSelectedValuesList();
 	}

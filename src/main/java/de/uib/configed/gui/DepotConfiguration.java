@@ -189,8 +189,8 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		List<Map<String, Object>> additionalConfigs = configedMain
-				.produceAdditionalConfigs(depotsList.getSelectedValuesList());
+		List<Map<String, Object>> additionalConfigs = persistenceController.getConfigDataService()
+				.getHostsConfigsWithDefaults(depotsList.getSelectedValuesList());
 		Map<String, Object> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
 		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());

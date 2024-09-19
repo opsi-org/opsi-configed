@@ -307,8 +307,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		configUpdateCollection = new ConfigUpdateCollection(configedMain.getSelectedClients());
 		UpdateCollectionManager.addToGlobalUpdateCollection(configUpdateCollection);
 
-		List<Map<String, Object>> additionalConfigs = configedMain
-				.produceAdditionalConfigs(configedMain.getSelectedClients());
+		List<Map<String, Object>> additionalConfigs = persistenceController.getConfigDataService()
+				.getHostsConfigsWithDefaults(configedMain.getSelectedClients());
 		Map<String, Object> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
 		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
