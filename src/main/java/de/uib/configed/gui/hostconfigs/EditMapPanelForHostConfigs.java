@@ -43,8 +43,8 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	private JTree tree;
 
 	public EditMapPanelForHostConfigs(TableCellRenderer tableCellRenderer, boolean reloadable, JTree tree,
-			boolean includeAdditionalTooltipText) {
-		super(tableCellRenderer, true, true, reloadable);
+			boolean configStatesEditable, boolean includeAdditionalTooltipText) {
+		super(tableCellRenderer, true, configStatesEditable, reloadable);
 
 		this.tree = tree;
 		this.includeAdditionalTooltipText = includeAdditionalTooltipText;

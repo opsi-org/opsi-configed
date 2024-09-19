@@ -34,9 +34,7 @@ public class DefaultEditMapPanel extends JPanel {
 
 	protected Actor actor;
 
-	protected JPopupMenu popupmenuAtRow;
-	protected JPopupMenu popupEditOptions;
-	protected JPopupMenu popupNoEditOptions;
+	protected JPopupMenu popupMenu;
 
 	protected List<String> names;
 	protected Map<String, ListCellOptions> optionsMap;
@@ -218,19 +216,9 @@ public class DefaultEditMapPanel extends JPanel {
 	}
 
 	protected void logPopupElements() {
-		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
+		MenuElement[] popupElements = popupMenu.getSubElements();
 		int size = popupElements.length;
 		Logging.debug(this, "logPopupElements ", size);
-	}
-
-	public void setOptionsEditable(boolean b) {
-		Logging.debug(this, "DefaultEditMapPanel.setOptionsEditable ", b);
-
-		if (b) {
-			popupmenuAtRow = popupEditOptions;
-		} else {
-			popupmenuAtRow = popupNoEditOptions;
-		}
 	}
 
 	public MapTableModel getMapTableModel() {

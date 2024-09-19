@@ -129,7 +129,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			return;
 		}
 
-		panelHostConfig = new PanelHostConfig(this::setHostConfigTab);
+		panelHostConfig = new PanelHostConfig(this::setHostConfigTab, true);
 
 		setComponentAt(getSelectedIndex(), panelHostConfig);
 	}

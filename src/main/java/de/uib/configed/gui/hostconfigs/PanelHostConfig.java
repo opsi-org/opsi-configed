@@ -39,12 +39,11 @@ public class PanelHostConfig extends JPanel {
 
 	private Runnable configUpdater;
 
-	public PanelHostConfig(Runnable configUpdater) {
+	public PanelHostConfig(Runnable configUpdater, boolean configStatesEditable) {
 		this.configUpdater = configUpdater;
 
-		buildPanel();
-
-		editMapPanel.registerDataChangedObserver(ChangedDataManager.getHostConfigsDataChangedKeeper());
+		putUsersToPropertyclassesTreeMap();
+		buildPanel(configStatesEditable);
 	}
 
 	private void reloadHostConfig() {
@@ -99,9 +98,7 @@ public class PanelHostConfig extends JPanel {
 		}
 	}
 
-	private void buildPanel() {
-		putUsersToPropertyclassesTreeMap();
-
+	private void buildPanel(boolean configStatesEditable) {
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(),
 				new DefaultEditMapPanel.Actor() {
 					@Override
@@ -113,7 +110,9 @@ public class PanelHostConfig extends JPanel {
 					public void saveData() {
 						saveHostConfig();
 					}
-				});
+				}, configStatesEditable);
+
+		editMapPanel.registerDataChangedObserver(ChangedDataManager.getHostConfigsDataChangedKeeper());
 
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
@@ -128,7 +127,7 @@ public class PanelHostConfig extends JPanel {
 			Collection collectionConfigStored, ConfigUpdateCollection configUpdateCollection, boolean optionsEditable,
 			NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
 			boolean includeAdditionalTooltipText) {
-		Logging.info(this, "initEditing  optionsEditable ", optionsEditable);
+		Logging.info(this, "initEditing, label:", labeltext);
 		editMapPanel.setSubpanelClasses(classesMap);
 		if (originalMap != null) {
 			editMapPanel.setOriginalMap(originalMap);
@@ -138,6 +137,5 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.setStoreData(collectionConfigStored);
 		editMapPanel.setUpdateCollection(configUpdateCollection);
 		editMapPanel.setLabel(labeltext);
-		editMapPanel.setOptionsEditable(optionsEditable);
 	}
 }

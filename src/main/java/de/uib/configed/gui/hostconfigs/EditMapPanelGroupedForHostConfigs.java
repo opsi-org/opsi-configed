@@ -70,6 +70,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private List<String> theRoles;
 
+	private boolean configStatesEditable;
+
 	private JSplitPane splitPane;
 	protected XTree tree;
 	private JPanel emptyRightPane;
@@ -84,12 +86,14 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
 
-	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer,
-			final DefaultEditMapPanel.Actor actor) {
+	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, final DefaultEditMapPanel.Actor actor,
+			boolean configStatesEditable) {
 		super(tableCellRenderer, true);
 
-		buildPanel();
 		this.actor = actor;
+		this.configStatesEditable = configStatesEditable;
+
+		buildPanel();
 
 		setupPopups();
 		setupPopupTexts();
@@ -97,7 +101,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupPopups() {
-		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
+		popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			@Override
 			public void action(int p) {
 				Logging.debug(this, "( EditMapPanelGrouped ) popup ", p);
@@ -373,16 +377,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// apply method of superclass for all partial maps
 	@Override
-	public void setOptionsEditable(boolean b) {
-		super.setOptionsEditable(b);
-
-		for (String key : keyclasses) {
-			partialPanels.get(key).setOptionsEditable(b);
-		}
-	}
-
-	// apply method of superclass for all partial maps
-	@Override
 	public void setStoreData(Collection<Map<String, Object>> data) {
 		super.setStoreData(data);
 
@@ -456,7 +450,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 		for (String key : keyclasses) {
 			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, reloadable, tree,
-					includeAdditionalTooltipText);
+					configStatesEditable, includeAdditionalTooltipText);
 
 			editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 			editMapPanel.setActor(actor);
