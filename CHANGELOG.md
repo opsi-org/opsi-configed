@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.3.3.16] - 2024-09-18
+### Fixed
+- Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"
+
+
 ## [4.3.3.15] - 2024-09-18
 ### Fixed
 - Also reset netboot product states when the user wants to reset Localboot AND Netboot product states

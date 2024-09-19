@@ -477,7 +477,11 @@ public final class ClientMenuManager implements MenuListener {
 			for (String menuActionType : disabledClientMenuEntries) {
 				JMenuItem menuItem = menuItemsHost.get(menuActionType);
 				Logging.debug("disable " + menuActionType + ", " + menuItem);
-				menuItem.setEnabled(false);
+				if (menuItem != null) {
+					menuItem.setEnabled(false);
+				} else {
+					Logging.warning(this, "Cannot disable menuItem " + menuActionType + ", it does not exist");
+				}
 			}
 
 			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()) {
