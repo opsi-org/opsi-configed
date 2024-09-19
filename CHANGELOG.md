@@ -1,8 +1,9 @@
 # Changelog
 
-## [4.3.3.16] - 2024-09-18
+## [4.3.3.16] - 2024-09-19
 ### Fixed
 - Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"
+- Create whole path of folders for CA-Certificate if folders don't exist yet
 
 
 ## [4.3.3.15] - 2024-09-18
