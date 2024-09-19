@@ -1,4 +1,7 @@
 ## [4.4.x.x] - 2024-xx-xx
+### Changed
+- Make it possible to delete/create configs in config state editing for depots and clients
+
 ### Fixed
 - Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"
 - Create whole path of folders for CA-Certificate if folders don't exist yet
