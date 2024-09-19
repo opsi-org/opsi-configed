@@ -205,7 +205,7 @@ public final class CertificateManager {
 			File dirFile = new File(getPathToCACerts());
 
 			if (!dirFile.exists()) {
-				dirFile.mkdir();
+				dirFile.mkdirs();
 			}
 
 			Files.copy(downloadedCertificateFile.toPath(),

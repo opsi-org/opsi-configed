@@ -1,3 +1,9 @@
+## [4.4.x.x] - 2024-xx-xx
+### Fixed
+- Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"
+- Create whole path of folders for CA-Certificate if folders don't exist yet
+
+
 ## [4.4.0.7] - 2024-09-18
 ### Changed
 - Remove unnecessary feature to arrange dialogs
