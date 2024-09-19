@@ -685,6 +685,7 @@ public class ConfigDataService {
 		return result;
 	}
 
+	// TODO is this needed?
 	public Map<String, Object> getHostConfig(String objectId) {
 		Map<String, Object> hostConfig = new HashMap<>();
 		if (getHostConfigsPD().get(objectId) != null) {
@@ -995,7 +996,7 @@ public class ConfigDataService {
 			if (configuration.getValue() == null) {
 				Logging.info(this, "We encountered non BOOL_CONFIG option ", configuration.getKey(), "; We skip it");
 			} else {
-				tested = valueFromConfigStateAsExpected(getHostConfig(host), configuration.getKey(),
+				tested = valueFromConfigStateAsExpected(getHostConfigsPD().get(host), configuration.getKey(),
 						(Boolean) (configuration.getValue().get(0)));
 				if (!tested) {
 					break;

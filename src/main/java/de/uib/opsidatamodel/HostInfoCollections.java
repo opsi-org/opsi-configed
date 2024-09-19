@@ -314,13 +314,10 @@ public class HostInfoCollections {
 			host.put(HostInfo.CLIENT_UEFI_BOOT_KEY,
 					persistenceController.getConfigDataService().isUefiConfigured(name));
 
-			if (persistenceController.getConfigDataService().getHostConfig(name) != null) {
-				boolean result = persistenceController.getConfigDataService()
-						.findBooleanConfigurationComparingToDefaults(name,
-								persistenceController.getConfigDataService().getWanConfigurationPD());
-				Logging.debug(this, "host ", name, " wan config ", result);
-				host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
-			}
+			boolean result = persistenceController.getConfigDataService().findBooleanConfigurationComparingToDefaults(
+					name, persistenceController.getConfigDataService().getWanConfigurationPD());
+			Logging.debug(this, "host ", name, " wan config ", result);
+			host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
 
 			HostInfo hostInfo = null;
 			String myDepot = null;
