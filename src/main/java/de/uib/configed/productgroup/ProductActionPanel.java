@@ -21,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
@@ -38,17 +37,15 @@ import de.uib.utils.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
 	private TableSearchPane searchPane;
-	private JTable tableProducts;
 
 	private JButton buttonReloadProductStates;
 
 	private JButton buttonExecuteNow;
 
-	private PanelProductSettings associate;
+	private PanelProductSettings panelProductSettings;
 
-	public ProductActionPanel(PanelProductSettings associate, JTable table) {
-		this.associate = associate;
-		this.tableProducts = table;
+	public ProductActionPanel(PanelProductSettings panelProductSettings) {
+		this.panelProductSettings = panelProductSettings;
 
 		initData();
 
@@ -72,8 +69,7 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initData() {
-		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
-				true);
+		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(panelProductSettings), true);
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setFiltering();
 	}
@@ -117,7 +113,8 @@ public class ProductActionPanel extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 				if (e.getClickCount() > 1) {
 					String s = listChooseAction.getSelectedValue();
-					handleCollectiveAction(s, (InstallationStateTableModel) tableProducts.getModel());
+					handleCollectiveAction(s,
+							(InstallationStateTableModel) panelProductSettings.getProductTable().getModel());
 				}
 			}
 		});
@@ -170,10 +167,10 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void handleCollectiveAction(String selected, InstallationStateTableModel insTableModel) {
-		Set<String> saveSelectedProducts = associate.getProductTable().getSelectedIDs();
+		Set<String> saveSelectedProducts = panelProductSettings.getProductTable().getSelectedIDs();
 
 		Logging.info(this, "handleCollectiveAction, selected products ",
-				associate.getProductTable().getSelectedRowsInModelTerms());
+				panelProductSettings.getProductTable().getSelectedRowsInModelTerms());
 		Logging.info(this, "handleCollectiveAction, selected products ", saveSelectedProducts);
 
 		if (!insTableModel.infoIfNoClientsSelected()) {
@@ -192,7 +189,7 @@ public class ProductActionPanel extends JPanel {
 			}
 
 			if (actionType != ActionRequest.INVALID) {
-				associate.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
+				panelProductSettings.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
 					Logging.info(" row id ", x, " product ", insTableModel.getValueAt(x, 0));
 					insTableModel.collectiveChangeActionRequest((String) insTableModel.getValueAt(x, 0),
 							new ActionRequest(actionType));
@@ -202,7 +199,7 @@ public class ProductActionPanel extends JPanel {
 			insTableModel.finishCollectiveChange();
 		}
 
-		associate.getProductTable().setSelection(new HashSet<>(saveSelectedProducts));
+		panelProductSettings.getProductTable().setSelection(new HashSet<>(saveSelectedProducts));
 	}
 
 	public void setFilterMark(boolean selected) {

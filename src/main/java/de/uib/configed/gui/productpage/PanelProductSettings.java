@@ -103,7 +103,7 @@ public class PanelProductSettings extends JSplitPane {
 	private void initTopPane() {
 		productTable = new ProductTable();
 
-		groupPanel = new ProductActionPanel(this, productTable);
+		groupPanel = new ProductActionPanel(this);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
 			Logging.info(this, " in top pane we got event reloadAction ", ae);
 			reloadAction();
