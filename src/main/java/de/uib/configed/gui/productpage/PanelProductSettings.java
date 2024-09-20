@@ -10,12 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -29,12 +26,10 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -48,7 +43,6 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductActionPanel;
 import de.uib.configed.tree.ProductTree;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
-import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -281,7 +275,7 @@ public class PanelProductSettings extends JSplitPane {
 		metaData.put("keywords", "product settings");
 
 		// only relevent rows
-		ExporterToPDF pdfExportTable = new ExporterToPDF(strippTable(productTable));
+		ExporterToPDF pdfExportTable = new ExporterToPDF(productTable.getStrippedTable());
 
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
@@ -313,58 +307,6 @@ public class PanelProductSettings extends JSplitPane {
 		productTree.produceActiveParents();
 
 		productTree.updateSelectedObjectsInTable();
-	}
-
-	private JTable strippTable(JTable jTable) {
-		boolean strippIt;
-		List<String[]> data = new ArrayList<>();
-		String[] headers = new String[jTable.getColumnCount()];
-		for (int i = 0; i < jTable.getColumnCount(); i++) {
-			headers[i] = jTable.getColumnName(i);
-		}
-
-		for (int j = 0; j < jTable.getRowCount(); j++) {
-			strippIt = true;
-			String[] actCol = new String[jTable.getColumnCount()];
-			for (int i = 0; i < jTable.getColumnCount(); i++) {
-				Object cellValue = jTable.getValueAt(j, i);
-				String cellValueString = cellValue == null ? "" : cellValue.toString();
-				actCol[i] = cellValueString;
-				strippIt = shouldStrippIt(jTable.getColumnName(i), cellValueString, strippIt);
-			}
-
-			if (!strippIt) {
-				data.add(actCol);
-			}
-		}
-
-		// create jTable with selected rows
-		int rows = data.size();
-		int cols = jTable.getColumnCount();
-		String[][] strippedData = new String[rows][cols];
-		for (int i = 0; i < data.size(); i++) {
-			strippedData[i] = data.get(i);
-		}
-		return new JTable(strippedData, headers);
-	}
-
-	private boolean shouldStrippIt(String columnName, String cellValueString, boolean previuosValue) {
-		boolean strippIt = previuosValue;
-
-		if (Configed.getResourceValue("InstallationStateTableModel.installationStatus").equals(columnName)
-				&& !InstallationStatus.KEY_NOT_INSTALLED.equals(cellValueString)) {
-			strippIt = false;
-		} else if (Configed.getResourceValue("InstallationStateTableModel.report").equals(columnName)
-				&& (cellValueString != null && !cellValueString.isEmpty())) {
-			strippIt = false;
-		} else if (Configed.getResourceValue("InstallationStateTableModel.actionRequest").equals(columnName)
-				&& !"none".equals(cellValueString)) {
-			strippIt = false;
-		} else {
-			Logging.warning(this, "no case found for columnName in jTable");
-		}
-
-		return strippIt;
 	}
 
 	protected void reloadAction() {
@@ -428,11 +370,6 @@ public class PanelProductSettings extends JSplitPane {
 		}
 
 		Logging.debug(this, " tableProducts columns  count ", productTable.getColumnCount());
-		Enumeration<TableColumn> enumer = productTable.getColumnModel().getColumns();
-
-		while (enumer.hasMoreElements()) {
-			Logging.debug(this, " tableProducts column  ", enumer.nextElement().getHeaderValue());
-		}
 	}
 
 	public void initEditing(String productID, Collection<Map<String, Object>> storableProductProperties,

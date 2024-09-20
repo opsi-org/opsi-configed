@@ -18,8 +18,10 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import de.uib.configed.Configed;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.tree.ProductTree;
+import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utils.logging.Logging;
 
 public class ProductTable extends JTable {
@@ -124,5 +126,57 @@ public class ProductTable extends JTable {
 		}
 
 		return selectionInModelTerms;
+	}
+
+	public JTable getStrippedTable() {
+		boolean strippIt;
+		List<String[]> data = new ArrayList<>();
+		String[] headers = new String[getColumnCount()];
+		for (int i = 0; i < getColumnCount(); i++) {
+			headers[i] = getColumnName(i);
+		}
+
+		for (int j = 0; j < getRowCount(); j++) {
+			strippIt = true;
+			String[] actCol = new String[getColumnCount()];
+			for (int i = 0; i < getColumnCount(); i++) {
+				Object cellValue = getValueAt(j, i);
+				String cellValueString = cellValue == null ? "" : cellValue.toString();
+				actCol[i] = cellValueString;
+				strippIt = shouldStrippIt(getColumnName(i), cellValueString, strippIt);
+			}
+
+			if (!strippIt) {
+				data.add(actCol);
+			}
+		}
+
+		// create jTable with selected rows
+		int rows = data.size();
+		int cols = getColumnCount();
+		String[][] strippedData = new String[rows][cols];
+		for (int i = 0; i < data.size(); i++) {
+			strippedData[i] = data.get(i);
+		}
+		return new JTable(strippedData, headers);
+	}
+
+	private boolean shouldStrippIt(String columnName, String cellValueString, boolean previuosValue) {
+		boolean strippIt = previuosValue;
+
+		if (Configed.getResourceValue("InstallationStateTableModel.installationStatus").equals(columnName)
+				&& !InstallationStatus.KEY_NOT_INSTALLED.equals(cellValueString)) {
+			strippIt = false;
+		} else if (Configed.getResourceValue("InstallationStateTableModel.report").equals(columnName)
+				&& (cellValueString != null && !cellValueString.isEmpty())) {
+			strippIt = false;
+		} else if (Configed.getResourceValue("InstallationStateTableModel.actionRequest").equals(columnName)
+				&& !"none".equals(cellValueString)) {
+			strippIt = false;
+		} else {
+			Logging.warning(this, "no case found for columnName in jTable");
+		}
+
+		return strippIt;
 	}
 }
