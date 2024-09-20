@@ -71,8 +71,8 @@ public class ProductPageManager implements MessagebusListener {
 		this.clientConfiguration = clientConfiguration;
 
 		updateManager = new InstallationStateUpdateManager(configedMain,
-				clientConfiguration.getPanelLocalbootProductSettings().getTableProducts(),
-				clientConfiguration.getPanelNetbootProductSettings().getTableProducts());
+				clientConfiguration.getPanelLocalbootProductSettings().getProductTable(),
+				clientConfiguration.getPanelNetbootProductSettings().getProductTable());
 
 		possibleActions = persistenceController.getProductDataService()
 				.getPossibleActionsPD(configedMain.getDepotRepresentative());
@@ -122,8 +122,8 @@ public class ProductPageManager implements MessagebusListener {
 		persistenceController.getProductDataService()
 				.retrieveProductPropertiesPD(configedMain.getClientTablePanel().getClientTable().getSelectedSet());
 
-		Set<String> oldProductSelection = panelProductSettings.getSelectedIDs();
-		List<? extends SortKey> currentSortKeysProducts = panelProductSettings.getSortKeys();
+		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
+		List<? extends SortKey> currentSortKeysProducts = panelProductSettings.getProductTable().getSortKeys();
 		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
 		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
 
@@ -146,17 +146,17 @@ public class ProductPageManager implements MessagebusListener {
 				displayFields);
 		panelProductSettings.setTableModel(istmForSelectedClients);
 
-		panelProductSettings.setSortKeys(currentSortKeysProducts);
+		panelProductSettings.getProductTable().setSortKeys(currentSortKeysProducts);
 
-		panelProductSettings.setSelection(oldProductSelection);
+		panelProductSettings.getProductTable().setSelection(oldProductSelection);
 		if (panelProductSettings.isFilteredMode()) {
-			panelProductSettings.reduceToSelected();
+			panelProductSettings.getProductTable().reduceToSelected();
 		}
 
 		panelProductSettings.updateSearchFields();
 
-		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(panelProductSettings.getTableProducts());
-		ConfigedUtilityMethods.setTableColumnWidths(panelProductSettings.getTableProducts(), columnWidths);
+		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(panelProductSettings.getProductTable());
+		ConfigedUtilityMethods.setTableColumnWidths(panelProductSettings.getProductTable(), columnWidths);
 	}
 
 	private List<String> getLocalbootStateAndActionsAttributes() {

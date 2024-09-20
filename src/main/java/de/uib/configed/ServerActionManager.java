@@ -127,7 +127,7 @@ public final class ServerActionManager {
 
 	public static void processActionRequestsSelectedProducts() {
 		processActionRequests(ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings()
-				.getSelectedIDs());
+				.getProductTable().getSelectedIDs());
 	}
 
 	private static void processActionRequests(Set<String> products) {

@@ -1,0 +1,128 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.configed.gui.productpage;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import de.uib.configed.guidata.InstallationStateTableModel;
+import de.uib.configed.tree.ProductTree;
+import de.uib.utils.logging.Logging;
+
+public class ProductTable extends JTable {
+
+	public ProductTable() {
+		super.setDragEnabled(true);
+		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+	}
+
+	@Override
+	public void setValueAt(Object value, int row, int column) {
+		Set<String> saveSelectedProducts = getSelectedIDs();
+		// only in case of setting ActionRequest needed, since we there call
+		// fireTableDataChanged
+		super.setValueAt(value, row, column);
+		setSelection(saveSelectedProducts);
+	}
+
+	public void setSelection(Set<String> selectedIDs) {
+		getSelectionModel().setValueIsAdjusting(true);
+
+		clearSelection();
+
+		if (selectedIDs == null || selectedIDs.isEmpty()) {
+			Logging.info("selectedIds is null or empty");
+		} else {
+			for (int row = 0; row < getRowCount(); row++) {
+				Object productId = getValueAt(row, 0);
+				if (selectedIDs.contains(productId)) {
+					addRowSelectionInterval(row, row);
+				}
+			}
+		}
+
+		getSelectionModel().setValueIsAdjusting(false);
+	}
+
+	private void reduceToSet(Set<String> filter) {
+		InstallationStateTableModel tModel = (InstallationStateTableModel) getModel();
+		tModel.setFilterFrom(filter);
+
+		Logging.info(this, "reduceToSet  ", filter);
+
+		revalidate();
+	}
+
+	public void reduceToSelected() {
+		Set<String> selection = getSelectedIDs();
+		Logging.debug(this, "reduceToSelected: selectedIds  ", selection);
+		reduceToSet(selection);
+		setSelection(selection);
+	}
+
+	public void nodeSelection(DefaultMutableTreeNode node) {
+		if (node.getAllowsChildren()) {
+			Set<String> productIds = ProductTree.getChildrenRecursively(node);
+			setFilter(productIds);
+		} else {
+			Set<String> productIds = Collections.singleton(node.toString());
+			setFilter(productIds);
+			setSelection(productIds);
+		}
+	}
+
+	public void setFilter(Set<String> filter) {
+		if (getModel() instanceof InstallationStateTableModel installationStateTableModel) {
+			installationStateTableModel.setFilterFrom(filter);
+		}
+	}
+
+	public Set<String> getSelectedIDs() {
+		Set<String> result = new HashSet<>();
+
+		for (int selectionElement : getSelectedRows()) {
+			result.add((String) getValueAt(selectionElement, 0));
+		}
+
+		return result;
+	}
+
+	@SuppressWarnings("java:S1452")
+	public List<? extends SortKey> getSortKeys() {
+		if (getRowSorter() != null) {
+			return getRowSorter().getSortKeys();
+		} else {
+			return Collections.singletonList(new SortKey(0, SortOrder.ASCENDING));
+		}
+	}
+
+	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
+		Logging.info(this, "setSortKeys : ", currentSortKeys);
+		if (getRowSorter() != null) {
+			getRowSorter().setSortKeys(currentSortKeys);
+		}
+	}
+
+	public List<Integer> getSelectedRowsInModelTerms() {
+		int[] selection = getSelectedRows();
+		List<Integer> selectionInModelTerms = new ArrayList<>(selection.length);
+		for (int selectionElement : selection) {
+			selectionInModelTerms.add(convertRowIndexToModel(selectionElement));
+		}
+
+		return selectionInModelTerms;
+	}
+}

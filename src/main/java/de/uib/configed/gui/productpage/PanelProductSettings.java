@@ -12,7 +12,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,9 +32,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -72,15 +69,13 @@ public class PanelProductSettings extends JSplitPane {
 
 	private static final int HEIGHT_MIN = 200;
 
-	private JTable tableProducts;
+	private ProductTable productTable;
 	private ProductSettingsTableModel productSettingsTableModel;
 
 	private ProductActionPanel groupPanel;
 
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
-
-	private JMenuItem itemOnDemand;
 
 	private String title;
 
@@ -106,20 +101,9 @@ public class PanelProductSettings extends JSplitPane {
 	}
 
 	private void initTopPane() {
-		tableProducts = new JTable() {
-			@Override
-			public void setValueAt(Object value, int row, int column) {
-				Set<String> saveSelectedProducts = getSelectedIDs();
-				// only in case of setting ActionRequest needed, since we there call
-				// fireTableDataChanged
-				super.setValueAt(value, row, column);
-				setSelection(saveSelectedProducts);
-			}
-		};
+		productTable = new ProductTable();
 
-		tableProducts.setDragEnabled(true);
-
-		groupPanel = new ProductActionPanel(this, tableProducts);
+		groupPanel = new ProductActionPanel(this, productTable);
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
 			Logging.info(this, " in top pane we got event reloadAction ", ae);
 			reloadAction();
@@ -138,14 +122,12 @@ public class PanelProductSettings extends JSplitPane {
 
 		JScrollPane paneProducts = new JScrollPane();
 
-		paneProducts.getViewport().add(tableProducts);
+		paneProducts.getViewport().add(productTable);
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		tableProducts.getSelectionModel().addListSelectionListener(this::applyChangedValue);
+		productTable.getSelectionModel().addListSelectionListener(this::applyChangedValue);
 
-		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		productSettingsTableModel = new ProductSettingsTableModel(tableProducts);
+		productSettingsTableModel = new ProductSettingsTableModel(productTable);
 
 		JPanel leftPane = new JPanel();
 		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
@@ -176,9 +158,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		PopupMouseListener popupMouseListener = new PopupMouseListener(producePopupMenu());
 		paneProducts.addMouseListener(popupMouseListener);
-		tableProducts.addMouseListener(popupMouseListener);
-
-		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		productTable.addMouseListener(popupMouseListener);
 	}
 
 	public void updateSearchFields() {
@@ -201,7 +181,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		popup.add(save);
 
-		itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
+		JMenuItem itemOnDemand = new JMenuItem(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 		Icons.addIntellijIconToMenuItem(itemOnDemand, "run");
 		itemOnDemand.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		itemOnDemand.addActionListener(actionEvent -> saveAndExecuteAction());
@@ -232,8 +212,6 @@ public class PanelProductSettings extends JSplitPane {
 
 		popup.addSeparator();
 
-		showPopupOpsiclientdEvent(true);
-
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		Icons.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener((ActionEvent e) -> {
@@ -247,7 +225,7 @@ public class PanelProductSettings extends JSplitPane {
 		createReport.addActionListener(actionEvent -> createReport());
 		popup.add(createReport);
 
-		ExporterToCSV exportTable = new ExporterToCSV(tableProducts);
+		ExporterToCSV exportTable = new ExporterToCSV(productTable);
 		exportTable.addMenuItemsTo(popup);
 
 		JMenu jMenuVisibleColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
@@ -305,7 +283,7 @@ public class PanelProductSettings extends JSplitPane {
 		metaData.put("keywords", "product settings");
 
 		// only relevent rows
-		ExporterToPDF pdfExportTable = new ExporterToPDF(strippTable(tableProducts));
+		ExporterToPDF pdfExportTable = new ExporterToPDF(strippTable(productTable));
 
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
@@ -326,11 +304,11 @@ public class PanelProductSettings extends JSplitPane {
 		} else {
 			int selectedRow = lsm.getMinSelectionIndex();
 			Logging.debug(this, "selected ", selectedRow);
-			Logging.debug(this, "selected modelIndex ", tableProducts.convertRowIndexToModel(selectedRow));
+			Logging.debug(this, "selected modelIndex ", productTable.convertRowIndexToModel(selectedRow));
 			Logging.debug(this, "selected  value at ",
-					tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0));
+					productTable.getModel().getValueAt(productTable.convertRowIndexToModel(selectedRow), 0));
 			ConfigedMain.getMainFrame().getClientConfiguration().getProductPageManager().setProductEdited(
-					(String) tableProducts.getModel().getValueAt(tableProducts.convertRowIndexToModel(selectedRow), 0),
+					(String) productTable.getModel().getValueAt(productTable.convertRowIndexToModel(selectedRow), 0),
 					this);
 		}
 
@@ -411,89 +389,8 @@ public class PanelProductSettings extends JSplitPane {
 		ServerActionManager.processActionRequestsAllProducts();
 	}
 
-	@SuppressWarnings("java:S1452")
-	public List<? extends SortKey> getSortKeys() {
-		if (tableProducts.getRowSorter() != null) {
-			return tableProducts.getRowSorter().getSortKeys();
-		} else {
-			return Collections.singletonList(new SortKey(0, SortOrder.ASCENDING));
-		}
-	}
-
-	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
-		Logging.info(this, "setSortKeys : ", currentSortKeys);
-		if (tableProducts.getRowSorter() != null) {
-			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
-		}
-	}
-
-	private void showPopupOpsiclientdEvent(boolean visible) {
-		itemOnDemand.setVisible(visible);
-	}
-
-	public void setSelection(Set<String> selectedIDs) {
-		tableProducts.getSelectionModel().setValueIsAdjusting(true);
-
-		tableProducts.clearSelection();
-
-		if (selectedIDs == null || selectedIDs.isEmpty()) {
-			Logging.info("selectedIds is null or empty");
-		} else {
-			for (int row = 0; row < tableProducts.getRowCount(); row++) {
-				Object productId = tableProducts.getValueAt(row, 0);
-				if (selectedIDs.contains(productId)) {
-					tableProducts.addRowSelectionInterval(row, row);
-				}
-			}
-		}
-
-		tableProducts.getSelectionModel().setValueIsAdjusting(false);
-	}
-
-	public Set<String> getSelectedIDs() {
-		Set<String> result = new HashSet<>();
-
-		for (int selectionElement : tableProducts.getSelectedRows()) {
-			result.add((String) tableProducts.getValueAt(selectionElement, 0));
-		}
-
-		return result;
-	}
-
-	public List<Integer> getSelectedRowsInModelTerms() {
-		int[] selection = tableProducts.getSelectedRows();
-		List<Integer> selectionInModelTerms = new ArrayList<>(selection.length);
-		for (int selectionElement : selection) {
-			selectionInModelTerms.add(tableProducts.convertRowIndexToModel(selectionElement));
-		}
-
-		return selectionInModelTerms;
-	}
-
 	public boolean isFilteredMode() {
 		return groupPanel.isFilteredMode();
-	}
-
-	public void reduceToSet(Set<String> filter) {
-		InstallationStateTableModel tModel = (InstallationStateTableModel) tableProducts.getModel();
-		tModel.setFilterFrom(filter);
-
-		Logging.info(this, "reduceToSet  ", filter);
-
-		tableProducts.revalidate();
-	}
-
-	public void reduceToSelected() {
-		Set<String> selection = getSelectedIDs();
-		Logging.debug(this, "reduceToSelected: selectedIds  ", selection);
-		reduceToSet(selection);
-		setSelection(selection);
-	}
-
-	public void setFilter(Set<String> filter) {
-		if (tableProducts.getModel() instanceof InstallationStateTableModel installationStateTableModel) {
-			installationStateTableModel.setFilterFrom(filter);
-		}
 	}
 
 	public void valueChanged(boolean doSelection) {
@@ -503,9 +400,9 @@ public class PanelProductSettings extends JSplitPane {
 		TreePath[] selectionPaths = productTree.getSelectionPaths();
 
 		if (selectionPaths == null) {
-			setFilter(null);
+			productTable.setFilter(null);
 		} else if (selectionPaths.length == 1) {
-			nodeSelection((DefaultMutableTreeNode) selectionPaths[0].getLastPathComponent());
+			productTable.nodeSelection((DefaultMutableTreeNode) selectionPaths[0].getLastPathComponent());
 		} else {
 			Set<String> productIds = new HashSet<>();
 			for (TreePath path : selectionPaths) {
@@ -514,28 +411,17 @@ public class PanelProductSettings extends JSplitPane {
 					productIds.add(node.getUserObject().toString());
 				}
 			}
-			setFilter(productIds);
+			productTable.setFilter(productIds);
 
 			if (doSelection) {
-				setSelection(productIds);
+				productTable.setSelection(productIds);
 			}
-		}
-	}
-
-	private void nodeSelection(DefaultMutableTreeNode node) {
-		if (node.getAllowsChildren()) {
-			Set<String> productIds = ProductTree.getChildrenRecursively(node);
-			setFilter(productIds);
-		} else {
-			Set<String> productIds = Collections.singleton(node.toString());
-			setFilter(productIds);
-			setSelection(productIds);
 		}
 	}
 
 	public void setTableModel(InstallationStateTableModel istm) {
 		// delete old row sorter before setting new model
-		tableProducts.setModel(istm);
+		productTable.setModel(istm);
 		productSettingsTableModel.setRenderer(istm);
 
 		// We don't want to call setSelection here, since it will be called after this method
@@ -543,8 +429,8 @@ public class PanelProductSettings extends JSplitPane {
 			valueChanged(false);
 		}
 
-		Logging.debug(this, " tableProducts columns  count ", tableProducts.getColumnCount());
-		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
+		Logging.debug(this, " tableProducts columns  count ", productTable.getColumnCount());
+		Enumeration<TableColumn> enumer = productTable.getColumnModel().getColumns();
 
 		while (enumer.hasMoreElements()) {
 			Logging.debug(this, " tableProducts column  ", enumer.nextElement().getHeaderValue());
@@ -580,7 +466,7 @@ public class PanelProductSettings extends JSplitPane {
 		infoPane.clearEditing();
 	}
 
-	public JTable getTableProducts() {
-		return tableProducts;
+	public ProductTable getProductTable() {
+		return productTable;
 	}
 }

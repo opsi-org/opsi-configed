@@ -135,8 +135,8 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public Set<String> getSelectedObjectsInTable() {
-		Set<String> selectedProducts = localbootPanel.getSelectedIDs();
-		selectedProducts.addAll(netbootPanel.getSelectedIDs());
+		Set<String> selectedProducts = localbootPanel.getProductTable().getSelectedIDs();
+		selectedProducts.addAll(netbootPanel.getProductTable().getSelectedIDs());
 		return selectedProducts;
 	}
 
@@ -159,8 +159,8 @@ public class ProductTree extends AbstractGroupTree {
 	public void setGroupAndSelect(DefaultMutableTreeNode groupNode) {
 		Set<String> productIds = getChildrenRecursively(groupNode);
 		setFilter(productIds);
-		localbootPanel.setSelection(productIds);
-		netbootPanel.setSelection(productIds);
+		localbootPanel.getProductTable().setSelection(productIds);
+		netbootPanel.getProductTable().setSelection(productIds);
 	}
 
 	public static Set<String> getChildrenRecursively(TreeNode groupNode) {
@@ -184,8 +184,8 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	private void setFilter(Set<String> productIds) {
-		localbootPanel.setFilter(productIds);
-		netbootPanel.setFilter(productIds);
+		localbootPanel.getProductTable().setFilter(productIds);
+		netbootPanel.getProductTable().setFilter(productIds);
 	}
 
 	@Override

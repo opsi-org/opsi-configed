@@ -170,9 +170,10 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void handleCollectiveAction(String selected, InstallationStateTableModel insTableModel) {
-		Set<String> saveSelectedProducts = associate.getSelectedIDs();
+		Set<String> saveSelectedProducts = associate.getProductTable().getSelectedIDs();
 
-		Logging.info(this, "handleCollectiveAction, selected products ", associate.getSelectedRowsInModelTerms());
+		Logging.info(this, "handleCollectiveAction, selected products ",
+				associate.getProductTable().getSelectedRowsInModelTerms());
 		Logging.info(this, "handleCollectiveAction, selected products ", saveSelectedProducts);
 
 		if (!insTableModel.infoIfNoClientsSelected()) {
@@ -191,7 +192,7 @@ public class ProductActionPanel extends JPanel {
 			}
 
 			if (actionType != ActionRequest.INVALID) {
-				associate.getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
+				associate.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
 					Logging.info(" row id ", x, " product ", insTableModel.getValueAt(x, 0));
 					insTableModel.collectiveChangeActionRequest((String) insTableModel.getValueAt(x, 0),
 							new ActionRequest(actionType));
@@ -201,7 +202,7 @@ public class ProductActionPanel extends JPanel {
 			insTableModel.finishCollectiveChange();
 		}
 
-		associate.setSelection(new HashSet<>(saveSelectedProducts));
+		associate.getProductTable().setSelection(new HashSet<>(saveSelectedProducts));
 	}
 
 	public void setFilterMark(boolean selected) {
