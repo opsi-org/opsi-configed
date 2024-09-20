@@ -12,10 +12,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -30,8 +28,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
@@ -336,27 +332,7 @@ public class PanelProductSettings extends JSplitPane {
 	public void valueChanged(boolean doSelection) {
 		// We want to deactivate filter before changing something
 		groupPanel.setFilterMark(false);
-
-		TreePath[] selectionPaths = productTree.getSelectionPaths();
-
-		if (selectionPaths == null) {
-			productTable.setFilter(null);
-		} else if (selectionPaths.length == 1) {
-			productTable.nodeSelection((DefaultMutableTreeNode) selectionPaths[0].getLastPathComponent());
-		} else {
-			Set<String> productIds = new HashSet<>();
-			for (TreePath path : selectionPaths) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-				if (!node.getAllowsChildren()) {
-					productIds.add(node.getUserObject().toString());
-				}
-			}
-			productTable.setFilter(productIds);
-
-			if (doSelection) {
-				productTable.setSelection(productIds);
-			}
-		}
+		productTable.valueChanged(doSelection, productTree.getSelectionPaths());
 	}
 
 	public void setTableModel(InstallationStateTableModel istm) {

@@ -17,6 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.guidata.InstallationStateTableModel;
@@ -178,5 +179,26 @@ public class ProductTable extends JTable {
 		}
 
 		return strippIt;
+	}
+
+	public void valueChanged(boolean doSelection, TreePath[] selectionPaths) {
+		if (selectionPaths == null) {
+			setFilter(null);
+		} else if (selectionPaths.length == 1) {
+			nodeSelection((DefaultMutableTreeNode) selectionPaths[0].getLastPathComponent());
+		} else {
+			Set<String> productIds = new HashSet<>();
+			for (TreePath path : selectionPaths) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+				if (!node.getAllowsChildren()) {
+					productIds.add(node.getUserObject().toString());
+				}
+			}
+			setFilter(productIds);
+
+			if (doSelection) {
+				setSelection(productIds);
+			}
+		}
 	}
 }
