@@ -48,7 +48,6 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ListCellOptions;
@@ -452,7 +451,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, reloadable, tree,
 					configStatesEditable, includeAdditionalTooltipText);
 
-			editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 			editMapPanel.setActor(actor);
 			editMapPanel.setOriginalMap(originalMap);
 

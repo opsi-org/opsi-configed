@@ -57,7 +57,6 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ExporterToCSV;
 import de.uib.utils.table.ExporterToPDF;
@@ -146,7 +145,6 @@ public class PanelProductSettings extends JSplitPane {
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(propertiesPanel);

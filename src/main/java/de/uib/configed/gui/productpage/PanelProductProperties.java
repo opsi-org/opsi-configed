@@ -30,7 +30,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.PanelGenEditTable;
@@ -63,7 +62,6 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		EditMapPanelX propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);

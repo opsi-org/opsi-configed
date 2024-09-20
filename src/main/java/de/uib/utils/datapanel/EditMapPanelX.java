@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -53,7 +51,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	private TableColumn editableColumn;
 	private TableCellEditor theCellEditor;
-	private JComboBox<?> editorfield;
 
 	private ListModelProducer<String> modelProducer;
 
@@ -121,11 +118,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		buildPanel();
 
-		editableColumn = table.getColumnModel().getColumn(1);
+		theCellEditor = new SensitiveCellEditorForDataPanel();
 
-		editorfield = new JComboBox<>();
-		editorfield.setEditable(true);
-		theCellEditor = new DefaultCellEditor(editorfield);
+		editableColumn = table.getColumnModel().getColumn(1);
 
 		if (tableCellRenderer == null) {
 			editableColumn.setCellRenderer(new ColorTableCellRenderer());
@@ -355,17 +350,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	@Override
 	public void init() {
 		setEditableMap(null, null);
-	}
-
-	/**
-	 * setting all data for displaying and editing <br />
-	 *
-	 * @param Map visualdata - the source for the table model
-	 * @param Map optionsMap - the description for producing cell editors
-	 */
-
-	public void setCellEditor(SensitiveCellEditor cellEditor) {
-		theCellEditor = cellEditor;
 	}
 
 	@Override
