@@ -25,7 +25,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 
 public class PanelHostConfig extends JPanel {
 	// delegate
@@ -84,16 +83,17 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	public void initEditing(String labeltext, Map<String, List<Object>> configVisualMap,
-			Map<String, ListCellOptions> configOptions, Collection<Map<String, Object>> collectionConfigStored,
-			ConfigUpdateCollection configUpdateCollection, NavigableMap<String, String> classesMap,
-			Map<String, List<Object>> originalMap, boolean includeAdditionalTooltipText) {
+			Collection<Map<String, Object>> collectionConfigStored, ConfigUpdateCollection configUpdateCollection,
+			NavigableMap<String, String> classesMap, Map<String, List<Object>> originalMap,
+			boolean includeAdditionalTooltipText) {
 		Logging.info(this, "initEditing, label:", labeltext);
 		editMapPanel.setSubpanelClasses(classesMap);
 		if (originalMap != null) {
 			editMapPanel.setOriginalMap(POJOReMapper.remap(originalMap));
 		}
 		editMapPanel.includeAdditionalTooltipText(includeAdditionalTooltipText);
-		editMapPanel.setEditableMap(POJOReMapper.remap(configVisualMap), configOptions);
+		editMapPanel.setEditableMap(POJOReMapper.remap(configVisualMap),
+				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
 		editMapPanel.setStoreData(collectionConfigStored);
 		editMapPanel.setUpdateCollection(POJOReMapper.remap(configUpdateCollection));
 		editMapPanel.setLabel(labeltext);

@@ -50,8 +50,7 @@ public class ServerConfiguration extends JTabbedPane {
 		configUpdateCollection.setMasterConfig(true);
 		panelHostConfig.initEditing(
 				persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
-				additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
-				POJOReMapper.remap(additionalConfigs), configUpdateCollection,
+				additionalConfigs.get(0), POJOReMapper.remap(additionalConfigs), configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesServer(), null, false);
 	}
 }
