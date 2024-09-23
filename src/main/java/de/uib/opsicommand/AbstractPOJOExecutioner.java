@@ -109,16 +109,15 @@ public abstract class AbstractPOJOExecutioner {
 
 	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
 		Map<String, Object> result = new HashMap<>();
-		Map<String, Object> responses = POJOReMapper.remap(retrieved.get("result"));
+		Map<String, Map<String, Object>> responses = POJOReMapper.remap(retrieved.get("result"));
 
-		for (Entry<String, Object> entry : responses.entrySet()) {
-			Map<String, Object> response = POJOReMapper.remap(entry.getValue());
+		for (Entry<String, Map<String, Object>> entry : responses.entrySet()) {
 
-			if (response.get("error") == null) {
-				List<Object> list = POJOReMapper.remap(response.get("result"));
+			if (entry.getValue().get("error") == null) {
+				List<Object> list = POJOReMapper.remap(entry.getValue().get("result"));
 				result.put(entry.getKey(), list);
 			} else {
-				String str = "" + response.get("error");
+				String str = "" + entry.getValue().get("error");
 				result.put(entry.getKey(), str);
 			}
 		}

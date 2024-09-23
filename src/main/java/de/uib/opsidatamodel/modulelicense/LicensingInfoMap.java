@@ -180,11 +180,10 @@ public final class LicensingInfoMap {
 	private Map<String, Map<String, Object>> produceLicenses() {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
-		List<Object> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID));
+		List<Map<String, Object>> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID));
 
-		for (Object producedLicense : producedLicenses) {
+		for (Map<String, Object> originalMap : producedLicenses) {
 			Map<String, Object> tmp = new HashMap<>();
-			Map<String, Object> originalMap = POJOReMapper.remap(producedLicense);
 
 			tmp.put(MODULE_ID, originalMap.get(MODULE_ID));
 			tmp.put(VALID_UNTIL, originalMap.get(VALID_UNTIL));
@@ -198,10 +197,9 @@ public final class LicensingInfoMap {
 	private Set<String> produceCustomerNameSet() {
 		Set<String> producedCustomerNames = new LinkedHashSet<>();
 
-		List<Object> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID));
+		List<Map<String, Object>> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID));
 
-		for (Object producedLicense : producedLicenses) {
-			Map<String, Object> originalMap = POJOReMapper.remap(producedLicense);
+		for (Map<String, Object> originalMap : producedLicenses) {
 			String customerName = String.valueOf(originalMap.get(CUSTOMER_NAME));
 
 			if (originalMap.get(CUSTOMER_UNIT) != null) {
