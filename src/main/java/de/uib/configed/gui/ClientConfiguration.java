@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import java.util.Map.Entry;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -38,7 +36,6 @@ import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ListCellOptions;
@@ -63,13 +60,9 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	private PanelHWInfo panelHWInfo;
 	private JPanel showHardwareLogNotFoundPanel;
 
-	private TabbedLogPane showLogfiles;
+	private TabbedLogPane tabbedLogPane;
 	private JSplitPane panelClientSelection;
 	private ClientInfoPanel clientInfoPanel;
-
-	private JPopupMenu popupClients;
-
-	private Map<String, String> logfiles = new HashMap<>();
 
 	private ProductPageManager productPageManager;
 
@@ -105,9 +98,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	private void init() {
-		popupClients = mainFrame.getClientMenu().getPopupMenuClone();
-		mainFrame.getClientTablePanel().addMouseListener(new PopupMouseListener(popupClients));
-
 		clientInfoPanel = new ClientInfoPanel(configedMain);
 		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainFrame.getClientTablePanel(),
 				clientInfoPanel);
@@ -132,7 +122,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		addTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"), showSoftwareLogNotFound);
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), showLogfiles);
+		addTab(Configed.getResourceValue("MainFrame.jPanel_logfiles"), tabbedLogPane);
 	}
 
 	private void initSoftWareInfoTab() {
@@ -160,22 +150,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	}
 
 	private void initLogTab() {
-		if (showLogfiles != null) {
+		if (tabbedLogPane != null) {
 			return;
 		}
 
-		showLogfiles = new TabbedLogPane(configedMain);
-
-		showLogfiles.addChangeListener((ChangeEvent e) -> {
-			Logging.debug(this, " new logfiles tabindex ", showLogfiles.getSelectedIndex());
-
-			String logtype = Utils.getLogType(showLogfiles.getSelectedIndex());
-
-			// logfile empty?
-			if (!logfileExists(logtype)) {
-				setLogFileTab(logtype);
-			}
-		});
+		tabbedLogPane = new TabbedLogPane(configedMain);
 	}
 
 	private void initHostConfigTab() {
@@ -195,43 +174,8 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 	public void setLogFileTab(String logtype) {
 		Logging.info(this, "setUpdatedLogfilePanel ", logtype);
-		setComponentAt(getSelectedIndex(), showLogfiles);
-		showLogfiles.setDocuments(getLogfilesUpdating(logtype),
-				mainFrame.getHostsStatusPanel().getSelectedClientNames());
-	}
-
-	private boolean logfileExists(String logtype) {
-		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).isEmpty()
-				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-	}
-
-	private Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {
-		Logging.info(this, "getLogfilesUpdating ", logtypeToUpdate);
-
-		if (configedMain.getSelectedClients().size() == 1) {
-			logfiles = persistenceController.getLogDataService().getLogfile(configedMain.getSelectedClients().get(0),
-					logtypeToUpdate);
-			Logging.debug(this, "log pages set");
-		} else {
-			for (String logType : Utils.getLogTypes()) {
-				logfiles.put(logType, Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
-			}
-		}
-
-		return logfiles;
-	}
-
-	private void setLogview(String logtype) {
-		int i = Arrays.asList(Utils.getLogTypes()).indexOf(logtype);
-		if (i < 0) {
-			return;
-		}
-
-		showLogfiles.setSelectedIndex(i);
-	}
-
-	public void showPopupClients() {
-		popupClients.show(mainFrame.getClientTablePanel(), -1, -1);
+		setComponentAt(getSelectedIndex(), tabbedLogPane);
+		tabbedLogPane.setDocuments(logtype);
 	}
 
 	public void initSplitPanes() {
@@ -252,7 +196,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		ChangedDataManager.checkSaveAll(true);
 
-		mainFrame.activateLoadingCursor();
+		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		switch (getSelectedIndex()) {
 		case 0:
@@ -292,7 +236,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 			break;
 		}
 
-		mainFrame.deactivateLoadingCursor();
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	public void setHostConfigPage() {
@@ -394,6 +338,6 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	private void setLogPage() {
 		Logging.debug(this, "setLogPage");
 		setLogFileTab("instlog");
-		setLogview("instlog");
+		tabbedLogPane.setLogview("instlog");
 	}
 }

@@ -50,6 +50,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	public ClientTablePanel(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
+
 		initComponents();
 	}
 
@@ -253,11 +254,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController);
-		} else if (e.getKeyCode() == KeyEvent.VK_F10) {
-			Logging.debug(this, "keypressed: f10");
-			ConfigedMain.getMainFrame().getClientConfiguration().showPopupClients();
-		} else {
-			// Nothing to do for all the other keys
 		}
 	}
 

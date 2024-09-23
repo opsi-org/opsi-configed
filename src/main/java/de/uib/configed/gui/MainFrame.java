@@ -58,6 +58,7 @@ import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
+import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.userprefs.ThemeManager;
@@ -96,6 +97,9 @@ public class MainFrame extends JFrame {
 		this.configedMain = configedMain;
 
 		guiInit(depotsList, clientTree, productTree);
+
+		// We can add this listener as soon as the clientMenu has been created
+		clientTablePanel.addMouseListener(new PopupMouseListener(clientMenu.getPopupMenuClone()));
 	}
 
 	private void guiInit(DepotsList depotsList, ClientTree clientTree, ProductTree productTree) {
