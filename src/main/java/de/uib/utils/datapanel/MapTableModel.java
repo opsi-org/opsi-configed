@@ -31,7 +31,7 @@ public class MapTableModel extends AbstractTableModel {
 
 	private List<DataChangedObserver> observers;
 
-	private Collection updateCollection;
+	private Collection<Map<String, Object>> updateCollection;
 	private Collection<Map<String, Object>> storeData;
 	private boolean datachanged;
 
@@ -146,7 +146,7 @@ public class MapTableModel extends AbstractTableModel {
 	 * 
 	 * @param Collection updateCollection
 	 */
-	public void setUpdateCollection(Collection updateCollection) {
+	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
 		this.updateCollection = updateCollection;
 	}
 

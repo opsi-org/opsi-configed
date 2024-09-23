@@ -23,6 +23,7 @@ import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.configed.type.licenses.LicensepoolEntry;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -90,7 +91,7 @@ public class LicenseDataService {
 					new Object[] { new Object[0], new HashMap<>() });
 			List<Map<String, Object>> retrieved = exec.getListOfMaps(omc);
 			for (Map<String, Object> importedEntry : retrieved) {
-				LicensepoolEntry entry = new LicensepoolEntry(importedEntry);
+				LicensepoolEntry entry = new LicensepoolEntry(POJOReMapper.remap(importedEntry));
 				licensePools.put(entry.getLicensepoolId(), entry);
 				licensePoolXOpsiProduct.integrateRawFromService(importedEntry);
 			}

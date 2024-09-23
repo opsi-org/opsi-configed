@@ -267,7 +267,7 @@ public class ProductPageManager implements MessagebusListener {
 		Logging.debug(this, "setProductEdited ", productname, " client specific properties ",
 				persistenceController.getProductDataService().hasClientSpecificProperties(productname));
 
-		sourcePanel.initEditing(productname, productProperties, mergedProductProperties,
+		sourcePanel.initEditing(productname, productProperties, POJOReMapper.remap(mergedProductProperties),
 				clientProductpropertiesUpdateCollection);
 	}
 

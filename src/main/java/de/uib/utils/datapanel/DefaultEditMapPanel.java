@@ -203,7 +203,7 @@ public class DefaultEditMapPanel extends JPanel {
 	 * 
 	 * @param Collection updateCollection
 	 */
-	public void setUpdateCollection(Collection updateCollection) {
+	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
 		mapTableModel.setUpdateCollection(updateCollection);
 	}
 

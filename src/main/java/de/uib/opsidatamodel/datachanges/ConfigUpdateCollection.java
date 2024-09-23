@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
@@ -44,7 +45,7 @@ public class ConfigUpdateCollection extends UpdateCollection {
 		// TODO Sometimes these are not updatecommands?!?
 		for (Object updateCommand : (Collection<?>) c) {
 			if (updateCommand instanceof Map) {
-				Map<?, ?> map = (Map<?, ?>) updateCommand;
+				Map<String, List<Object>> map = POJOReMapper.remap(updateCommand);
 
 				Logging.debug(this, "addAll for one obj, map ", map);
 

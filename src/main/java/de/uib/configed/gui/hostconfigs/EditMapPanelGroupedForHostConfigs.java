@@ -386,7 +386,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// apply method of superclass for all partial maps
 	@Override
-	public void setUpdateCollection(Collection updateCollection) {
+	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
 		super.setUpdateCollection(updateCollection);
 
 		for (String key : keyclasses) {
