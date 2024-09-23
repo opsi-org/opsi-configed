@@ -129,19 +129,15 @@ public class DefaultEditMapPanel extends JPanel {
 		descriptionsMap = new HashMap<>();
 		defaultsMap = new HashMap<>();
 
-		if (optionsMap != null) {
-			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
-				String description = option.getValue().getDescription();
-				Object defaultvalue = option.getValue().getDefaultValues();
+		for (Entry<String, ListCellOptions> option : this.optionsMap.entrySet()) {
+			String description = option.getValue().getDescription();
+			Object defaultvalue = option.getValue().getDefaultValues();
 
-				descriptionsMap.put(option.getKey(), description);
-				defaultsMap.put(option.getKey(), defaultvalue);
-			}
+			descriptionsMap.put(option.getKey(), description);
+			defaultsMap.put(option.getKey(), defaultvalue);
 		}
 
-		mapTableModel.setOptions(optionsMap,
-				// for convenience we deliver defaultsMap
-				defaultsMap);
+		mapTableModel.setOptions(optionsMap, defaultsMap);
 	}
 
 	public void setActor(Actor actor) {
