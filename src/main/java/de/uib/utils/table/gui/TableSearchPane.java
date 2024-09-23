@@ -571,18 +571,18 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private int findViewRowFromValue(int startviewrow, String value, Set<Integer> colIndices) {
-		String valueLower = value.toLowerCase(Locale.ROOT);
 		Pattern regexPattern = null;
-		SearchMode mode = getSearchMode(comboSearchFieldsMode.getSelectedIndex());
-		if (mode == SearchMode.REGEX_SEARCH) {
-			regexPattern = Pattern.compile(valueLower);
+
+		if (regexActive.isSelected()) {
+			regexPattern = Pattern.compile(".*" + value + ".*",
+					respectCase.isSelected() ? 0 : Pattern.CASE_INSENSITIVE);
 		}
 
 		int viewrow = Math.max(0, startviewrow);
 		boolean found = false;
 
 		while (!found && viewrow < targetModel.getRowCount()) {
-			found = searchForStringInColumns(viewrow, colIndices, valueLower, regexPattern, mode);
+			found = searchForStringInColumns(viewrow, colIndices, value, regexPattern);
 			if (!found) {
 				viewrow++;
 			}
@@ -591,18 +591,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return found ? viewrow : -1;
 	}
 
-	private static SearchMode getSearchMode(int i) {
-		for (SearchMode mode : SearchMode.values()) {
-			if (mode.ordinal() == i) {
-				return mode;
-			}
-		}
-		return null;
-	}
-
 	@SuppressWarnings("java:S135")
-	private boolean searchForStringInColumns(int viewrow, Set<Integer> colIndices, String valueLower,
-			Pattern regexPattern, SearchMode mode) {
+	private boolean searchForStringInColumns(int viewrow, Set<Integer> colIndices, String value, Pattern regexPattern) {
 		boolean found = false;
 		for (int j = 0; j < targetModel.getColumnCount(); j++) {
 			// we dont compare all values (comparing all values is default)
@@ -610,12 +600,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				continue;
 			}
 
-			Object compareValue = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow),
-					targetModel.getColForVisualCol(j));
+			Object compareValue = targetModel
+					.getValueAt(targetModel.getRowForVisualRow(viewrow), targetModel.getColForVisualCol(j)).toString();
 
 			if (compareValue != null) {
-				String compareValueLower = compareValue.toString().toLowerCase(Locale.ROOT);
-				found = searchForStringBasedOnSearchMode(compareValueLower, valueLower, regexPattern, mode);
+				found = searchForStringBasedOnSearchMode(compareValue.toString(), value, regexPattern);
 			}
 
 			if (found) {
@@ -623,6 +612,19 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			}
 		}
 		return found;
+	}
+
+	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern, Pattern regexPattern) {
+		if (regexActive.isSelected()) {
+			return regexPattern.matcher(searchString).matches();
+		} else {
+			if (!respectCase.isSelected()) {
+				searchString = searchString.toLowerCase(Locale.ROOT);
+				searchPattern = searchPattern.toLowerCase(Locale.ROOT);
+			}
+
+			return stringContainsParts(searchString, searchPattern.split(" ")).success;
+		}
 	}
 
 	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern, Pattern regexPattern,
