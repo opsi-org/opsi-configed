@@ -47,9 +47,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		build();
 	}
 
-	private ConfigOption() {
-	}
-
 	@Override
 	protected void build() {
 		// overwrite values
