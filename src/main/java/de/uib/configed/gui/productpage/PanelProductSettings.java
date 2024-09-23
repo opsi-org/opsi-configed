@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -93,15 +92,9 @@ public class PanelProductSettings extends JSplitPane {
 		productTable = new ProductTable();
 
 		groupPanel = new ProductActionPanel(this);
-		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event reloadAction ", ae);
-			reloadAction();
-		});
+		groupPanel.setReloadActionHandler(actionEvent -> reloadAction());
 
-		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
-			Logging.info(this, " in top pane we got event saveAndExecuteAction ", ae);
-			saveAndExecuteAction();
-		});
+		groupPanel.setSaveAndExecuteActionHandler(actionEvent -> saveAndExecuteAction());
 
 		groupPanel.setVisible(true);
 	}
@@ -161,11 +154,7 @@ public class PanelProductSettings extends JSplitPane {
 		save.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 
-		save.addActionListener((ActionEvent e) -> {
-			Logging.debug(this, "actionevent on save-menue");
-			ChangedDataManager.checkSaveAll(false);
-			persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
-		});
+		save.addActionListener(actionEvent -> ChangedDataManager.checkSaveAll(false));
 
 		popup.add(save);
 
@@ -202,10 +191,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		Icons.addIntellijIconToMenuItem(reload, "refresh");
-		reload.addActionListener((ActionEvent e) -> {
-			Logging.info(this, "reload action");
-			reloadAction();
-		});
+		reload.addActionListener(actionEvent -> reloadAction());
 		popup.add(reload);
 
 		JMenuItem createReport = new JMenuItem(Configed.getResourceValue("PanelProductSettings.pdf"));
