@@ -113,10 +113,6 @@ public class UserRolesConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
 	}
 
-	public boolean hasProductGroupsFullPermissionPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class);
-	}
-
 	public Set<String> getHostGroupsPermitted() {
 		Set<String> result = null;
 		if (!isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
@@ -144,7 +140,6 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, isUserRegisterActivated());
 
@@ -475,8 +470,6 @@ public class UserRolesConfigDataService {
 				productGroupsPermitted.add(groupEntry.getKey());
 			}
 		}
-
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
 
 		if (!productgroupsFullPermission) {
 			setProductsPermitted(productGroupsPermitted);

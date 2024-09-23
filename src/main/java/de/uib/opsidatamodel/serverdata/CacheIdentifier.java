@@ -270,11 +270,6 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code boolean}
 	 */
-	PRODUCT_GROUPS_FULL_PERMISSION("product_groups_full_permission"),
-
-	/**
-	 * return type {@code boolean}
-	 */
 	CREATE_CLIENT_PERMISSION("create_client_permission"),
 
 	/**
