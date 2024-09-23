@@ -72,7 +72,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JMenuItem popupMarkAndFilter;
 	private JMenuItem popupEmptySearchfield;
 
-	private boolean withRegEx = true;
 	private boolean selectMode = true;
 
 	private int foundrow = -1;
@@ -84,20 +83,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	/**
 	 * Provides search functionality for tables.
 	 * 
-	 * @param SearchTargetModel the model for delivering data and selecting
+	 * @param targetModel the model for delivering data and selecting
 	 */
 	public TableSearchPane(SearchTargetModel targetModel) {
-		this(targetModel, false);
-	}
-
-	/**
-	 * Provides search functionality for tables.
-	 * 
-	 * @param targetModel the model for delivering data and selecting
-	 * @param withRegex   modifies the search function
-	 */
-	public TableSearchPane(SearchTargetModel targetModel, boolean withRegEx) {
-		this(null, targetModel, withRegEx);
+		this(null, targetModel);
 	}
 
 	/**
@@ -105,16 +94,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * 
 	 * @param thePanel    the model for delivering data and selecting
 	 * @param targetModel the model for delivering data and selecting
-	 * @param withRegex   modifies the search function
 	 */
-	public TableSearchPane(PanelGenEditTable thePanel, boolean withRegEx) {
-		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx);
+	public TableSearchPane(PanelGenEditTable thePanel) {
+		this(thePanel, new SearchTargetModelFromTable(thePanel));
 	}
 
-	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx) {
+	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel) {
 		associatedPanel = thePanel;
 		this.targetModel = targetModel;
-		this.withRegEx = withRegEx;
 
 		comparator = getCollator();
 
@@ -230,10 +217,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives.tooltip"));
 		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"),
 				Configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
-		if (withRegEx) {
-			tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.regex"),
-					Configed.getResourceValue("SearchPane.mode.regex.tooltip"));
-		}
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.regex"),
+				Configed.getResourceValue("SearchPane.mode.regex.tooltip"));
 
 		comboSearchFieldsMode = new JComboBox<>();
 		for (String key : tooltipsMap.keySet()) {
@@ -477,10 +462,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setSearchMode(SearchMode mode) {
-		if (mode == SearchMode.REGEX_SEARCH && !withRegEx) {
-			return;
-		}
-
 		comboSearchFieldsMode.setSelectedIndex(mode.ordinal());
 	}
 

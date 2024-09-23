@@ -65,7 +65,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 		activateListSelectionListener();
 
-		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, clientTable), true);
+		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, clientTable));
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_WITH_ALTERNATIVES_SEARCH);
 		searchPane.setFiltering();
 

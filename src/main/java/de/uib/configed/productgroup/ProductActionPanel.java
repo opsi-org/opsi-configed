@@ -69,7 +69,7 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initData() {
-		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(panelProductSettings), true);
+		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(panelProductSettings));
 		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setFiltering();
 	}
