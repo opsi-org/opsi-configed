@@ -65,8 +65,6 @@ public class PanelProductSettings extends JSplitPane {
 	private ProductInfoPane infoPane;
 	private EditMapPanelX propertiesPanel;
 
-	private String title;
-
 	private ProductTree productTree;
 
 	private ConfigedMain configedMain;
@@ -76,19 +74,18 @@ public class PanelProductSettings extends JSplitPane {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelProductSettings(String title, ConfigedMain configedMain, ProductTree productTree,
-			ProductSettingsType type) {
+	public PanelProductSettings(ConfigedMain configedMain, ProductTree productTree, ProductSettingsType type) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		this.title = title;
 		this.productTree = productTree;
 		this.configedMain = configedMain;
 		this.type = type;
+
 		init();
 
 		super.setResizeWeight(1.0);
 	}
 
-	private void initTopPane() {
+	private void init() {
 		productTable = new ProductTable();
 
 		groupPanel = new ProductActionPanel(this);
@@ -97,13 +94,8 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.setSaveAndExecuteActionHandler(actionEvent -> saveAndExecuteAction());
 
 		groupPanel.setVisible(true);
-	}
-
-	private void init() {
-		initTopPane();
 
 		JScrollPane paneProducts = new JScrollPane();
-
 		paneProducts.getViewport().add(productTable);
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -239,10 +231,16 @@ public class PanelProductSettings extends JSplitPane {
 		Logging.info(this, "create report");
 		Map<String, String> metaData = new HashMap<>();
 
+		String title;
+
+		if (type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS) {
+			title = Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings");
+		} else {
+			title = Configed.getResourceValue("MainFrame.panel_NetbootProductsettings");
+		}
 		// display, if filter is active,
 		// display selected productgroup
 		// depot server, selected clients out of statusPane
-
 		metaData.put("header", title);
 		metaData.put("subject", title);
 

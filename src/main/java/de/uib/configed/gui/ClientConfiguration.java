@@ -30,6 +30,7 @@ import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.productpage.PanelProductSettings;
+import de.uib.configed.gui.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.tree.ProductTree;
@@ -112,13 +113,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 				clientInfoPanel);
 		panelClientSelection.setResizeWeight(1.0);
 
-		panelLocalbootProductSettings = new PanelProductSettings(
-				Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), configedMain, productTree,
-				PanelProductSettings.ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
+		panelLocalbootProductSettings = new PanelProductSettings(configedMain, productTree,
+				ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS);
 
-		panelNetbootProductSettings = new PanelProductSettings(
-				Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), configedMain, productTree,
-				PanelProductSettings.ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
+		panelNetbootProductSettings = new PanelProductSettings(configedMain, productTree,
+				ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 		productTree.setPanels(panelLocalbootProductSettings, panelNetbootProductSettings);
 
 		addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), panelClientSelection);
