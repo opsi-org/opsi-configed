@@ -7,7 +7,6 @@
 package de.uib.configed.serverconsole;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,12 +65,8 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 		JButton jButtonDoAction = new JButton(Configed.getResourceValue("buttonExecute"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-
 				.isGlobalReadOnly()) {
-			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
-				Logging.info(this, "btn_doAction pressed");
-				doAction2();
-			});
+			jButtonDoAction.addActionListener(actionEvent -> doAction2());
 		}
 
 		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));

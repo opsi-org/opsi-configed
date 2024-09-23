@@ -282,11 +282,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
-			jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
-				if (configedMain != null) {
-					new PackageManagerInstallParameterDialog(configedMain, filename);
-				}
-			});
+			jButtonToPackageManager
+					.addActionListener(actionEvent -> new PackageManagerInstallParameterDialog(configedMain, filename));
 		}
 
 		jButtonExec = new JButton(Configed.getResourceValue("buttonExecute"));

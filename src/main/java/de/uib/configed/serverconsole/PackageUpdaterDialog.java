@@ -7,7 +7,6 @@
 package de.uib.configed.serverconsole;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,10 +92,7 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
-			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
-				Logging.info(this, "btn_doAction pressed");
-				doAction2();
-			});
+			jButtonDoAction.addActionListener(actionEvent -> doAction2());
 		}
 
 		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));

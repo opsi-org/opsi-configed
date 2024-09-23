@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -104,17 +103,11 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		Icons.addIntellijIconToMenuItem(reload, "refresh");
-		reload.addActionListener((ActionEvent e) -> {
-			Logging.debug(this, "reload action");
-			reloadAction();
-		});
+		reload.addActionListener(actionEvent -> reloadAction());
 
 		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveSearch"));
 		Icons.addIntellijIconToMenuItem(remove, "remove");
-		remove.addActionListener((ActionEvent actionEvent) -> {
-			Logging.debug(this, "remove action");
-			removeSelectedEntry();
-		});
+		remove.addActionListener(actionEvent -> removeSelectedEntry());
 
 		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		Icons.addIntellijIconToMenuItem(edit, "edit");
@@ -132,12 +125,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		jPopupMenu.add(add);
 
 		visibleList.setComponentPopupMenu(jPopupMenu);
-	}
-
-	@Override
-	public void setVisible(boolean b) {
-		Logging.debug(this, "setVisible ", b);
-		super.setVisible(b);
 	}
 
 	@Override

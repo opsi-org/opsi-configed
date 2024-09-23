@@ -261,13 +261,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 
 		buttonCallExecute.setEnabled(false);
 
-		buttonCallExecute.addActionListener((ActionEvent e) -> {
-			Logging.debug(this,
-					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct ",
-					fieldPathWinPE.getText(), ", ", fieldPathInstallFiles.getText(), ", ", fieldProductKey.getText(),
-					", ", comboChooseWinProduct.getSelectedItem());
-			execute();
-		});
+		buttonCallExecute.addActionListener(actionEvent -> execute());
 	}
 
 	private void execute() {

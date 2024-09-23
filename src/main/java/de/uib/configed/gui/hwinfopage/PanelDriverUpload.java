@@ -224,10 +224,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		comboChooseDepot.setEnabled(false);
 
-		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
-			selectedDepot = (String) comboChooseDepot.getSelectedItem();
-			Logging.info(this, "actionPerformed  depot selected ", selectedDepot);
-		});
+		comboChooseDepot.addActionListener(actionEvent -> selectedDepot = (String) comboChooseDepot.getSelectedItem());
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.setSize(Globals.TEXT_FIELD_DIMENSION);
@@ -439,12 +436,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.upload"));
 		buttonUploadDrivers.setEnabled(false);
 
-		buttonUploadDrivers.addActionListener((ActionEvent actionEvent) -> {
-			Logging.info(this, "actionPerformed on buttonUploadDrivers from ", fieldDriverPath.getText(), " to ",
-					fieldServerPath.getText());
-
-			execute();
-		});
+		buttonUploadDrivers.addActionListener(actionEvent -> execute());
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
