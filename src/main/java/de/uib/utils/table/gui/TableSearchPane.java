@@ -33,6 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -60,6 +61,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JLabel labelSearch;
 	private JLabel labelSearchMode;
+
+	private JToggleButton respectCase;
+	private JToggleButton regexActive;
 	private JToggleButton filtermark;
 
 	private JToggleButton buttonShowHideExtraOptions;
@@ -239,13 +243,27 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
 		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
+		respectCase = new JToggleButton(Icons.getIntellijIcon("matchCase"));
+		respectCase.setSelectedIcon(Icons.getSelectedIntellijIcon("matchCase"));
+		respectCase.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
+
+		regexActive = new JToggleButton(Icons.getIntellijIcon("regex"));
+		regexActive.setSelectedIcon(Icons.getSelectedIntellijIcon("regex"));
+		regexActive.setToolTipText(Configed.getResourceValue("SearchPane.mode.regex"));
+
 		filtermark = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
 		filtermark.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addItemListener(event -> filtermarkEvent());
 		filtermark.setVisible(false);
 
-		flatTextFieldSearch.setTrailingComponent(filtermark);
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(respectCase);
+		jToolBar.add(regexActive);
+		jToolBar.addSeparator();
+		jToolBar.add(filtermark);
+
+		flatTextFieldSearch.setTrailingComponent(jToolBar);
 	}
 
 	private void initPopup() {
