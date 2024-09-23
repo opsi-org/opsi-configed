@@ -6,11 +6,8 @@
 
 package de.uib.configed.gui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,13 +29,11 @@ import de.uib.configed.gui.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.tree.ProductTree;
-import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public static final float DIVIDER_LOCATION = 0.8F;
@@ -255,33 +250,13 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 		Map<String, List<Object>> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
 		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-		Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
-				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
-		if (!configedMain.getSelectedClients().isEmpty()) {
-			List<String> depotIds = new ArrayList<>();
-			depotIds.add(persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps()
-					.get(configedMain.getSelectedClients().get(0)).getInDepot());
-			Map<String, Object> defaultValues = persistenceController.getConfigDataService()
-					.getHostsConfigsWithDefaults(depotIds).get(0);
-			for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
-				configListCellOptions.get(entry.getKey())
-						.setDefaultValues(POJOReMapper.remap(defaultValues.get(entry.getKey())));
-			}
-		}
+
 		Map<String, List<Object>> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController
 				.getConfigDataService().getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(configedMain.getSelectedClients()),
-				mergedVisualMap, configListCellOptions, additionalConfigs, configUpdateCollection,
+				mergedVisualMap, persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
+				additionalConfigs, configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);
-	}
-
-	private static Map<String, ListCellOptions> deepCopyConfigListCellOptions(
-			Map<String, ListCellOptions> originalMap) {
-		Map<String, ListCellOptions> copy = new HashMap<>();
-		for (Entry<String, ListCellOptions> entry : originalMap.entrySet()) {
-			copy.put(entry.getKey(), entry.getValue().deepCopy());
-		}
-		return copy;
 	}
 
 	public void setHardwareInfoPage() {

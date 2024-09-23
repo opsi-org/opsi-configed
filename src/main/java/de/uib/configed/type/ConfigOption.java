@@ -160,17 +160,4 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	public TYPE getType() {
 		return type;
 	}
-
-	@Override
-	public ListCellOptions deepCopy() {
-		ConfigOption configOption = new ConfigOption();
-		configOption.put("type", type);
-		configOption.put("description", get("description"));
-		configOption.put("possibleValues", get("possibleValues"));
-		configOption.put("defaultValues", get("defaultValues"));
-		configOption.put("editable", get("editable"));
-		configOption.put("selectionMode", get("selectionMode"));
-		configOption.put("nullable", get("nullable"));
-		return configOption;
-	}
 }
