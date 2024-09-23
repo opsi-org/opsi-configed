@@ -6,20 +6,15 @@
 
 package de.uib.utils.table.gui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -28,7 +23,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -37,7 +31,6 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
@@ -48,19 +41,11 @@ import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
-	private static final Pattern S_PLUS_PATTERN = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
-
-	public enum SearchMode {
-		FULL_TEXT_SEARCH, FULL_TEXT_WITH_ALTERNATIVES_SEARCH, START_TEXT_SEARCH, REGEX_SEARCH
-	}
-
 	private FlatTextField flatTextFieldSearch;
 
 	private JComboBox<String> comboSearchFields;
-	private JComboBox<String> comboSearchFieldsMode;
 
 	private JLabel labelSearch;
-	private JLabel labelSearchMode;
 
 	private JToggleButton respectCase;
 	private JToggleButton regexActive;
@@ -116,7 +101,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		initComponents();
 		initPopup();
 		setupLayout();
-
 		setSearchFieldsAll();
 	}
 
@@ -173,9 +157,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		comboSearchFields.setVisible(!narrow);
-		comboSearchFieldsMode.setVisible(!narrow);
 		labelSearch.setVisible(!narrow);
-		labelSearchMode.setVisible(!narrow);
 	}
 
 	public void setTargetModel(SearchTargetModel searchTargetModel) {
@@ -204,38 +186,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFields.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		setSearchFieldsAll();
-
-		labelSearchMode = new JLabel(Configed.getResourceValue("SearchPane.searchmode.searchmode"));
-
-		Map<String, String> tooltipsMap = new LinkedHashMap<>();
-
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.searchmode.fulltext"),
-				Configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives"),
-				Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives.tooltip"));
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"),
-				Configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.regex"),
-				Configed.getResourceValue("SearchPane.mode.regex.tooltip"));
-
-		comboSearchFieldsMode = new JComboBox<>();
-		for (String key : tooltipsMap.keySet()) {
-			comboSearchFieldsMode.addItem(key);
-		}
-		comboSearchFieldsMode.setRenderer(new BasicComboBoxRenderer() {
-			@Override
-			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-					boolean cellHasFocus) {
-				if (isSelected && -1 < index && index < tooltipsMap.size()) {
-					list.setToolTipText(new ArrayList<>(tooltipsMap.values()).get(index));
-				}
-
-				setText(value != null ? value.toString() : "");
-				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			}
-		});
-		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
-		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
 
 		respectCase = new JToggleButton(Icons.getIntellijIcon("matchCase"));
 		respectCase.setSelectedIcon(Icons.getSelectedIntellijIcon("matchCase"));
@@ -350,9 +300,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void showExtraOptions() {
 		comboSearchFields.setVisible(buttonShowHideExtraOptions.isSelected());
-		comboSearchFieldsMode.setVisible(buttonShowHideExtraOptions.isSelected());
 		labelSearch.setVisible(buttonShowHideExtraOptions.isSelected());
-		labelSearchMode.setVisible(buttonShowHideExtraOptions.isSelected());
 	}
 
 	private void setupNarrowLayout() {
@@ -382,12 +330,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(comboSearchFieldsMode, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addGap(Globals.GAP_SIZE));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
@@ -399,8 +342,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 	}
 
@@ -417,13 +358,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE,
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE));
 
@@ -433,10 +368,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(flatTextFieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
@@ -471,10 +402,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		comboSearchFields.setSelectedIndex(0);
-	}
-
-	public void setSearchMode(SearchMode mode) {
-		comboSearchFieldsMode.setSelectedIndex(mode.ordinal());
 	}
 
 	@Override
@@ -558,18 +485,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return result;
 	}
 
-	private boolean stringStartsWith(final String s, final String part) {
-		if (s == null || part == null || part.length() > s.length()) {
-			return false;
-		}
-
-		if (part.length() == 0) {
-			return true;
-		}
-
-		return comparator.compare(s.substring(0, part.length()), part) == 0;
-	}
-
 	private int findViewRowFromValue(int startviewrow, String value, Set<Integer> colIndices) {
 		Pattern regexPattern = null;
 
@@ -625,54 +540,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 			return stringContainsParts(searchString, searchPattern.split(" ")).success;
 		}
-	}
-
-	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern, Pattern regexPattern,
-			SearchMode mode) {
-		boolean found = false;
-		if (mode == null) {
-			return found;
-		}
-
-		switch (mode) {
-		case REGEX_SEARCH:
-			if (regexPattern.matcher(searchString).matches()) {
-				found = true;
-			}
-			break;
-		case FULL_TEXT_SEARCH:
-			found = stringContainsParts(searchString, searchPattern.split(" ")).success;
-			break;
-		case FULL_TEXT_WITH_ALTERNATIVES_SEARCH:
-			String valLower = searchPattern.toLowerCase(Locale.ROOT);
-			List<String> alternativeWords = getWords(valLower);
-			found = fullTextSearchingWithAlternatives(alternativeWords, searchString);
-			break;
-		default:
-			found = stringStartsWith(searchString, searchPattern);
-		}
-
-		return found;
-	}
-
-	private static List<String> getWords(String line) {
-		List<String> result = new ArrayList<>();
-		String[] splitted = S_PLUS_PATTERN.split(line);
-		for (String s : splitted) {
-			if (!" ".equals(s)) {
-				result.add(s);
-			}
-		}
-		return result;
-	}
-
-	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
-		for (String word : alternativeWords) {
-			if (compareVal.indexOf(word) >= 0) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**

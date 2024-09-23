@@ -83,7 +83,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
 				new ArrayList<>());
 		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 		editingArea.add(searchPane, BorderLayout.NORTH);
 

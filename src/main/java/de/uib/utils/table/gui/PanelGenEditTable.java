@@ -747,14 +747,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		searchPane.setSearchFieldsAll();
 	}
 
-	/**
-	 * set search mode possible values TablesearchPane.FULL_TEXT_SEARCH
-	 * TablesearchPane.START_TEXT_SEARCH = 1; TablesearchPane.REGEX_SEARCH
-	 */
-	public void setSearchMode(TableSearchPane.SearchMode mode) {
-		searchPane.setSearchMode(mode);
-	}
-
 	private void setModelFilteringBySelection() {
 		if (searchPane.isFiltering() && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {

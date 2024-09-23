@@ -47,7 +47,6 @@ import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.TableModelFilterCondition;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.PanelGenEditTable;
-import de.uib.utils.table.gui.TableSearchPane;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
@@ -151,7 +150,6 @@ public class PanelSWInfo extends JPanel {
 		panelTable = new PanelGenEditTable("", false, 0, new int[] {}, true);
 		panelTable.setColumnSelectionAllowed(false);
 		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		panelTable.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 
 		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
