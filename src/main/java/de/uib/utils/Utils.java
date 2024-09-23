@@ -321,15 +321,17 @@ public final class Utils {
 		return result;
 	}
 
-	public static String getListStringRepresentation(List<String> list, Integer max) {
+	public static String getListStringRepresentation(List<String> list) {
 		if (list == null || list.isEmpty()) {
 			return "";
 		}
 
+		final int MAX = 5;
+
 		StringBuilder result = new StringBuilder();
 		int stop = list.size();
-		if (max != null && stop > max) {
-			stop = max;
+		if (stop > MAX) {
+			stop = MAX;
 		}
 
 		for (int i = 0; i < stop - 1; i++) {
@@ -339,7 +341,7 @@ public final class Utils {
 
 		result.append(list.get(stop - 1));
 
-		if (max != null && list.size() > max) {
+		if (list.size() > MAX) {
 			result.append(" ... ");
 		}
 

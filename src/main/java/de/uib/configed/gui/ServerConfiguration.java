@@ -49,7 +49,7 @@ public class ServerConfiguration extends JTabbedPane {
 		additionalConfigs.add(defaultValuesMap);
 		configUpdateCollection.setMasterConfig(true);
 		panelHostConfig.initEditing(
-				"  " + persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
+				persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
 				additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 				POJOReMapper.remap(additionalConfigs), configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesServer(), null, false);

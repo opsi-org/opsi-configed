@@ -217,7 +217,7 @@ public final class ServerActionManager {
 				400);
 
 		fConfirmActionForClients.setMessage(confirmInfo + "\n\n"
-				+ Utils.getListStringRepresentation(configedMain.getSelectedClients(), null).replace(";", ""));
+				+ Utils.getListStringRepresentation(configedMain.getSelectedClients()).replace(";", ""));
 
 		fConfirmActionForClients.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		fConfirmActionForClients.setAlwaysOnTop(true);

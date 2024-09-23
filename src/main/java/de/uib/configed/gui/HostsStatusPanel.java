@@ -25,8 +25,6 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
-	private static final int MAX_CLIENT_NAMES_IN_FIELD = 10;
-
 	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
@@ -84,7 +82,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 		setFieldClientsCount(selectedClientsCount);
 
-		String selectedClientNames = Utils.getListStringRepresentation(selectedClients, MAX_CLIENT_NAMES_IN_FIELD);
+		String selectedClientNames = Utils.getListStringRepresentation(selectedClients);
 
 		fieldSelectedClientsNames.setText(selectedClientNames);
 

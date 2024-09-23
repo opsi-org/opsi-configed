@@ -375,7 +375,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		groupsSelectionDialog.setVisible(true);
 
 		if (groupsSelectionDialog.getResult() == 2) {
-			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues(), 5);
+			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues());
 			jTextGroupsSelection.setText(selectedGroups);
 			jTextGroupsSelection.setToolTipText(
 					"<html><body><p>" + selectedGroups.replace(";\n", "<br\\ >") + "</p></body></html>");

@@ -196,7 +196,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 		Map<String, List<Object>> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController
 				.getConfigDataService().getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
-		panelHostConfig.initEditing(Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null),
+		panelHostConfig.initEditing(Utils.getListStringRepresentation(depotsList.getSelectedValuesList()),
 				mergedVisualMap, persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 				additionalConfigs, configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, false);
