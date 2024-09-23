@@ -7,6 +7,7 @@
 package de.uib.configed.gui.hostconfigs;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -81,17 +83,17 @@ public class PanelHostConfig extends JPanel {
 				Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
-	public void initEditing(String labeltext, Map configVisualMap, Map<String, ListCellOptions> configOptions,
-			Collection collectionConfigStored, ConfigUpdateCollection configUpdateCollection,
-			NavigableMap<String, String> classesMap, Map<String, Object> originalMap,
-			boolean includeAdditionalTooltipText) {
+	public void initEditing(String labeltext, Map<String, List<Object>> configVisualMap,
+			Map<String, ListCellOptions> configOptions, Collection<Map<String, Object>> collectionConfigStored,
+			ConfigUpdateCollection configUpdateCollection, NavigableMap<String, String> classesMap,
+			Map<String, List<Object>> originalMap, boolean includeAdditionalTooltipText) {
 		Logging.info(this, "initEditing, label:", labeltext);
 		editMapPanel.setSubpanelClasses(classesMap);
 		if (originalMap != null) {
-			editMapPanel.setOriginalMap(originalMap);
+			editMapPanel.setOriginalMap(POJOReMapper.remap(originalMap));
 		}
 		editMapPanel.includeAdditionalTooltipText(includeAdditionalTooltipText);
-		editMapPanel.setEditableMap(configVisualMap, configOptions);
+		editMapPanel.setEditableMap(POJOReMapper.remap(configVisualMap), configOptions);
 		editMapPanel.setStoreData(collectionConfigStored);
 		editMapPanel.setUpdateCollection(configUpdateCollection);
 		editMapPanel.setLabel(labeltext);

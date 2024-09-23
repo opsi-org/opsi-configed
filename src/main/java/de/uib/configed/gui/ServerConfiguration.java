@@ -16,6 +16,7 @@ import javax.swing.JTabbedPane;
 import de.uib.configed.Configed;
 import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -50,7 +51,7 @@ public class ServerConfiguration extends JTabbedPane {
 		panelHostConfig.initEditing(
 				"  " + persistenceController.getHostInfoCollections().getConfigServer() + " (configuration server)",
 				additionalConfigs.get(0), persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
-				additionalConfigs, configUpdateCollection,
+				POJOReMapper.remap(additionalConfigs), configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesServer(), null, false);
 	}
 }

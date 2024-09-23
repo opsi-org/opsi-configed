@@ -47,8 +47,8 @@ public final class ConfigedUtilityMethods {
 		}
 	}
 
-	public static Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
-		Map<String, Object> mergedMap = new HashMap<>();
+	public static Map<String, List<Object>> mergeMaps(List<Map<String, Object>> collection) {
+		Map<String, List<Object>> mergedMap = new HashMap<>();
 		if (collection == null || collection.isEmpty()) {
 			return mergedMap;
 		}

@@ -191,11 +191,11 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 
 		List<Map<String, Object>> additionalConfigs = persistenceController.getConfigDataService()
 				.getHostsConfigsWithDefaults(depotsList.getSelectedValuesList());
-		Map<String, Object> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
+		Map<String, List<Object>> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
 		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
-		Map<String, Object> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController.getConfigDataService()
-				.getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
+		Map<String, List<Object>> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController
+				.getConfigDataService().getHostsConfigsWithoutDefaults(depotsList.getSelectedValuesList()));
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(depotsList.getSelectedValuesList(), null),
 				mergedVisualMap, persistenceController.getConfigDataService().getConfigListCellOptionsPD(),
 				additionalConfigs, configUpdateCollection,

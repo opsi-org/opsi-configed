@@ -32,6 +32,7 @@ import de.uib.configed.gui.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.tree.ProductTree;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -251,7 +252,7 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		List<Map<String, Object>> additionalConfigs = persistenceController.getConfigDataService()
 				.getHostsConfigsWithDefaults(configedMain.getSelectedClients());
-		Map<String, Object> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
+		Map<String, List<Object>> mergedVisualMap = ConfigedUtilityMethods.mergeMaps(additionalConfigs);
 		ConfigedUtilityMethods.removeKeysStartingWith(mergedVisualMap,
 				OpsiServiceNOMPersistenceController.getConfigKeyStartersNotForClients());
 		Map<String, ListCellOptions> configListCellOptions = deepCopyConfigListCellOptions(
@@ -264,11 +265,11 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 					.getHostsConfigsWithDefaults(depotIds).get(0);
 			for (Entry<String, ListCellOptions> entry : configListCellOptions.entrySet()) {
 				configListCellOptions.get(entry.getKey())
-						.setDefaultValues((List<Object>) defaultValues.get(entry.getKey()));
+						.setDefaultValues(POJOReMapper.remap(defaultValues.get(entry.getKey())));
 			}
 		}
-		Map<String, Object> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController.getConfigDataService()
-				.getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
+		Map<String, List<Object>> originalMap = ConfigedUtilityMethods.mergeMaps(persistenceController
+				.getConfigDataService().getHostsConfigsWithoutDefaults(configedMain.getSelectedClients()));
 		panelHostConfig.initEditing(Utils.getListStringRepresentation(configedMain.getSelectedClients(), null),
 				mergedVisualMap, configListCellOptions, additionalConfigs, configUpdateCollection,
 				OpsiServiceNOMPersistenceController.getPropertyClassesClient(), originalMap, true);

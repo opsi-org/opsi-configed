@@ -923,10 +923,10 @@ public class ConfigDataService {
 				result = true;
 			}
 		} else if (getConfigDefaultValuesPD().get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME) != null
-				&& !((List<?>) getConfigDefaultValuesPD()
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).isEmpty()) {
-			String configValue = (String) ((List<?>) getConfigDefaultValuesPD()
-					.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).get(0);
+				&& !getConfigDefaultValuesPD().get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)
+						.isEmpty()) {
+			String configValue = (String) getConfigDefaultValuesPD()
+					.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME).get(0);
 
 			if (configValue.indexOf(OpsiServiceNOMPersistenceController.EFI_STRING) >= 0) {
 				// something similar should work, but not this:
