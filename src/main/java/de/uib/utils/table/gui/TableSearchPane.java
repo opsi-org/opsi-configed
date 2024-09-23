@@ -146,12 +146,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		this.selectMode = selectMode;
 	}
 
-	@Override
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
-		flatTextFieldSearch.setEnabled(enabled);
-	}
-
 	/**
 	 * serve graphical filtermark
 	 */

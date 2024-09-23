@@ -41,8 +41,6 @@ public class DepotListPresenter extends JPanel {
 
 	private TableSearchPane searchPane;
 
-	private boolean multidepot;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -54,7 +52,6 @@ public class DepotListPresenter extends JPanel {
 	public DepotListPresenter(DepotsList depotsList, ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		this.depotslist = depotsList;
-		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
 		List<String> values = new ArrayList<>();
 		List<String> descriptions = new ArrayList<>();
@@ -91,7 +88,7 @@ public class DepotListPresenter extends JPanel {
 
 	private void buildPopup() {
 		JPopupMenu jPopupMenu = new JPopupMenu();
-		if (multidepot) {
+		if (persistenceController.getHostInfoCollections().getDepots().size() != 1) {
 			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 			selectAll.addActionListener(event -> depotslist.selectAll());
 			JMenuItem selectWithEqualProperties = new JMenuItem(
@@ -176,10 +173,6 @@ public class DepotListPresenter extends JPanel {
 	}
 
 	private void initComponents() {
-		if (!multidepot) {
-			searchPane.setEnabled(false);
-		}
-
 		searchPane.setNarrow(true);
 
 		// not visible in this panel
