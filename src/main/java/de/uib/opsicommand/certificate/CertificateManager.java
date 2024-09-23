@@ -134,6 +134,7 @@ public final class CertificateManager {
 		return downloadedCertificateFile;
 	}
 
+	@SuppressWarnings("java:S1452")
 	public static Collection<? extends Certificate> instantiateCertificate(File certificateFile) {
 
 		Collection<? extends Certificate> certificates = new HashSet<>();

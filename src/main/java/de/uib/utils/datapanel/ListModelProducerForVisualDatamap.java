@@ -16,6 +16,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.DefaultListCellOptions;
 import de.uib.utils.table.DefaultListModelProducer;
@@ -28,7 +29,7 @@ import de.uib.utils.table.ListCellOptions;
 */
 
 public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProducer<O> {
-	private Map<Integer, ListModel> listmodels = new HashMap<>();
+	private Map<Integer, ListModel<O>> listmodels = new HashMap<>();
 
 	private Map<String, ListCellOptions> optionsMap;
 	private Map<String, List<O>> currentData;
@@ -66,7 +67,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	}
 
 	@Override
-	public ListModel getListModel(int row, int column) {
+	public ListModel<O> getListModel(int row, int column) {
 		// column can be assumed to be 1
 
 		if (listmodels.get(row) != null) {
@@ -86,16 +87,16 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		Logging.info(this, "getListModel key ", key, " the option values ", values);
 		Logging.info(this, "getListModel key ", key, " options  ", options);
 
-		DefaultListModel<Object> model = new DefaultListModel<>();
+		DefaultListModel<O> model = new DefaultListModel<>();
 		Iterator<? extends Object> iter = values.iterator();
 		while (iter.hasNext()) {
-			model.addElement(iter.next());
+			model.addElement(POJOReMapper.remap(iter.next()));
 		}
 		if (currentData.get(key) instanceof List) {
 			iter = currentData.get(key).iterator();
 
 			while (iter.hasNext()) {
-				Object entry = iter.next();
+				O entry = POJOReMapper.remap(iter.next());
 				if (!model.contains(entry) && entry != null) {
 					model.addElement(entry);
 				}
