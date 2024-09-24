@@ -119,7 +119,7 @@ public class PanelGenEditTable extends JPanel
 
 	private boolean dataChanged;
 
-	private UpdateController myController;
+	private UpdateController updateController;
 
 	private boolean editing = true;
 
@@ -175,7 +175,8 @@ public class PanelGenEditTable extends JPanel
 
 		this.editing = editing;
 
-		if (!isServerFullPermission()) {
+		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.hasServerFullPermissionPD()) {
 			this.editing = false;
 		}
 
@@ -198,14 +199,6 @@ public class PanelGenEditTable extends JPanel
 		this("", true);
 	}
 
-	private static boolean isServerFullPermission() {
-		if (PersistenceControllerFactory.getPersistenceController() == null) {
-			return false;
-		}
-		return PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.hasServerFullPermissionPD();
-	}
-
 	private static final List<String> giveMenuitemNames(List<Integer> popups) {
 		List<String> result = new ArrayList<>();
 
@@ -225,8 +218,8 @@ public class PanelGenEditTable extends JPanel
 		}
 	}
 
-	public void setUpdateController(UpdateController c) {
-		myController = c;
+	public void setUpdateController(UpdateController updateController) {
+		this.updateController = updateController;
 	}
 
 	public void addListSelectionListener(ListSelectionListener l) {
@@ -765,21 +758,21 @@ public class PanelGenEditTable extends JPanel
 	public void commit() {
 		stopCellEditing();
 
-		if (myController == null) {
+		if (updateController == null) {
 			return;
 		}
 
-		if (myController.saveChanges()) {
+		if (updateController.saveChanges()) {
 			setDataChanged(false);
 		}
 	}
 
 	public void cancel() {
-		if (myController == null) {
+		if (updateController == null) {
 			return;
 		}
 
-		if (myController.cancelChanges()) {
+		if (updateController.cancelChanges()) {
 			setDataChanged(false);
 		}
 	}
