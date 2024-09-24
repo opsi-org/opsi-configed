@@ -190,7 +190,6 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 	private void initLayout() {
 		JButton buttonRemoveAllAssignments = new JButton(Icons.getIntellijIcon("remove"));
-		buttonRemoveAllAssignments.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		JLabel labelRemoveAllAssignments = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
@@ -198,7 +197,6 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
-		buttonSetAllAssignmentsToGloballySelectedPool.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		labelSetAllAssignmentsToGloballySelectedPool = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToGloballySelectedPool"));
 		buttonSetAllAssignmentsToGloballySelectedPool
@@ -206,7 +204,6 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
-		buttonSetAllAssignmentsToPoolFromSelectedRow.setPreferredSize(Globals.SHORT_BUTTON_DIMENSION);
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow")); // assign
 
@@ -220,15 +217,17 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		panelAction.setLayout(panelActionLayout);
 		panelActionLayout.setVerticalGroup(panelActionLayout.createSequentialGroup()
 				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-						.addComponent(buttonRemoveAllAssignments, 5, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelRemoveAllAssignments, 5, GroupLayout.PREFERRED_SIZE,
+						.addComponent(buttonRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-						.addComponent(buttonSetAllAssignmentsToGloballySelectedPool, 5, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSetAllAssignmentsToGloballySelectedPool, 5, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+						.addComponent(buttonSetAllAssignmentsToGloballySelectedPool, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSetAllAssignmentsToGloballySelectedPool, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
 				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
 						.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
