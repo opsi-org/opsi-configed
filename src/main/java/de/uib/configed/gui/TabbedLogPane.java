@@ -6,30 +6,18 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Icon;
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
-import javax.swing.plaf.synth.Region;
-import javax.swing.plaf.synth.SynthConstants;
-import javax.swing.plaf.synth.SynthContext;
-import javax.swing.plaf.synth.SynthLookAndFeel;
-import javax.swing.plaf.synth.SynthStyle;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.logpane.LogPane;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -51,6 +39,12 @@ public class TabbedLogPane extends JTabbedPane {
 	public TabbedLogPane(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
+		// We want all the tabs to have equal width
+		putClientProperty("JTabbedPane.tabWidthMode", "equal");
+
+		// We want a small gap on top, between the client tabs and the log tabs
+		super.setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE, 0, 0, 0));
+
 		identsList = Arrays.asList(idents);
 
 		textPanes = new LogPane[idents.length];
@@ -59,17 +53,8 @@ public class TabbedLogPane extends JTabbedPane {
 			initLogTabComponent(i, Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"));
 		}
 
-		super.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				initTabWidth();
-			}
-		});
-
 		super.addChangeListener((ChangeEvent e) -> {
 			Logging.debug(this, " new logfiles tabindex ", getSelectedIndex());
-
-			initTabWidth();
 
 			String logtype = Utils.getLogType(getSelectedIndex());
 
@@ -78,72 +63,6 @@ public class TabbedLogPane extends JTabbedPane {
 				setDocuments(logtype);
 			}
 		});
-	}
-
-	private void initTabWidth() {
-		Insets tabInsets = getTabInsets();
-		Insets tabAreaInsets = getTabAreaInsets();
-		Insets insets = getInsets();
-		int areaWidth = calcWidth() - tabAreaInsets.left - tabAreaInsets.right - insets.left - insets.right;
-		int tabCount = getTabCount();
-		int tabWidth = 0;
-		int gap = 0;
-
-		if (getTabPlacement() == LEFT || getTabPlacement() == RIGHT) {
-			tabWidth = areaWidth / 4;
-			gap = 0;
-		} else {
-			tabWidth = areaWidth / tabCount;
-			gap = areaWidth - (tabWidth * tabCount);
-		}
-
-		tabWidth = tabWidth - tabInsets.left - tabInsets.right - 3;
-		for (int i = 0; i < tabCount; i++) {
-			Component tabComponent = getTabComponentAt(i);
-			if (tabComponent == null) {
-				break;
-			}
-
-			if (i < gap) {
-				tabWidth = tabWidth + 1;
-			}
-			tabComponent.setPreferredSize(new Dimension(tabWidth, tabComponent.getPreferredSize().height));
-		}
-		revalidate();
-	}
-
-	private Insets getTabInsets() {
-		return getInsets("TabbedPane.tabInsets", Region.TABBED_PANE_TAB);
-	}
-
-	private Insets getTabAreaInsets() {
-		return getInsets("TabbedPane.tabAreaInsets", Region.TABBED_PANE_TAB_AREA);
-	}
-
-	private Insets getInsets(String insetsKey, Region insetsRegion) {
-		Insets insets = UIManager.getInsets(insetsKey);
-		if (insets == null) {
-			SynthStyle style = SynthLookAndFeel.getStyle(this, insetsRegion);
-			SynthContext context = new SynthContext(this, insetsRegion, style, SynthConstants.ENABLED);
-			insets = style.getInsets(context, null);
-		}
-		return insets;
-	}
-
-	private int calcWidth() {
-		double proportionOfTotalWidth = 0.5;
-		return (int) (getWidth() * proportionOfTotalWidth);
-	}
-
-	@Override
-	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
-		super.insertTab(title, icon, component, tip, index);
-		JLabel label = new JLabel(title, SwingConstants.CENTER);
-		Dimension dim = label.getPreferredSize();
-		Insets tabInsets = getTabInsets();
-		label.setPreferredSize(new Dimension(0, dim.height + tabInsets.top + tabInsets.bottom));
-		setTabComponentAt(index, label);
-		initTabWidth();
 	}
 
 	private void initLogTabComponent(int i, String defaultText) {
