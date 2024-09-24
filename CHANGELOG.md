@@ -1,6 +1,7 @@
 ## [4.4.x.x] - 2024-xx-xx
 ### Changed
 - Make it possible to delete/create configs in config state editing for depots and clients
+- Don't create unnecessary copies of configs when (re)loading -> better performance
 
 ### Fixed
 - Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"

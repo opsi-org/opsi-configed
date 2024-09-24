@@ -73,7 +73,6 @@ public class TabbedLogPane extends JTabbedPane {
 
 			String logtype = Utils.getLogType(getSelectedIndex());
 
-			Logging.devel(logtype, logfileExists(logtype));
 			// logfile empty?
 			if (!logfileExists(logtype)) {
 				setDocuments(logtype);
