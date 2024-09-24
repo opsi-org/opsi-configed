@@ -26,7 +26,7 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 	}
 
 	private void setMarkBoldHeaderCellRenderer() {
-		theTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+		jTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {
@@ -40,6 +40,6 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 			}
 		});
 
-		theTable.getTableHeader().setReorderingAllowed(true);
+		jTable.getTableHeader().setReorderingAllowed(true);
 	}
 }

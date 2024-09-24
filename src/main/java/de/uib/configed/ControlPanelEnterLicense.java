@@ -165,7 +165,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	private void initTreatmentOfColumns() {
 		TableColumn col;
 
-		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(2);
+		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(2);
 
 		FEditDate fedConclusionDate = new FEditDate("");
 
@@ -175,7 +175,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		fedConclusionDate.setServedCellEditor(cellEditorConclusionDate);
 		col.setCellEditor(cellEditorConclusionDate);
 
-		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(3);
+		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(3);
 		FEditDate fedNotificationDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorNotificationDate = new CellEditor4TableText(fedNotificationDate,
@@ -184,7 +184,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		fedNotificationDate.setServedCellEditor(cellEditorNotificationDate);
 		col.setCellEditor(cellEditorNotificationDate);
 
-		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(4);
+		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(4);
 		FEditDate fedExpirationDate = new FEditDate("");
 
 		CellEditor4TableText cellEditorExpirationDate = new CellEditor4TableText(fedExpirationDate,
@@ -193,7 +193,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 		fedExpirationDate.setServedCellEditor(cellEditorExpirationDate);
 		col.setCellEditor(cellEditorExpirationDate);
 
-		col = thePanel.getPanelLicenseContracts().getColumnModel().getColumn(5);
+		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(5);
 
 		FEditPane fedNotes = new FEditPane("", "Notes");
 

@@ -33,7 +33,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		super.reload();
 		Logging.info(this, "reload");
 		controller.setSoftwareIdsFromLicensePool();
-		saveRowSelection = theTable.getSelectedRows();
+		saveRowSelection = jTable.getSelectedRows();
 	}
 
 	@Override
@@ -90,11 +90,11 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	@Override
 	public void setSelectedValues(List<String> values, int col) {
 		super.setSelectedValues(values, col);
-		saveRowSelection = theTable.getSelectedRows();
+		saveRowSelection = jTable.getSelectedRows();
 	}
 
 	private boolean mouseInColumnOfMarkCursor(Point p) {
-		int mouseCol = theTable.columnAtPoint(p);
+		int mouseCol = jTable.columnAtPoint(p);
 
 		return mouseCol >= 0 && mouseCol == tableModel.getColMarkCursorRow();
 	}
@@ -102,10 +102,10 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Point mousePoint = e.getPoint();
-		int mouseRow = theTable.rowAtPoint(mousePoint);
+		int mouseRow = jTable.rowAtPoint(mousePoint);
 
 		if (mouseInColumnOfMarkCursor(mousePoint)) {
-			tableModel.setCursorRow(theTable.convertRowIndexToModel(mouseRow));
+			tableModel.setCursorRow(jTable.convertRowIndexToModel(mouseRow));
 		} else if (isAwareOfSelectionListener()) {
 			Logging.info(this, "mouse click in table. outside colMarkCursorRow, aware of selectionlistener");
 
@@ -132,7 +132,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 				super.setSelection(saveRowSelection);
 			}
 		} else {
-			saveRowSelection = theTable.getSelectedRows();
+			saveRowSelection = jTable.getSelectedRows();
 			Logging.info(this, "mouseReleased set new saveRowSelection ");
 		}
 	}
@@ -140,7 +140,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	@Override
 	public void setDataChanged(boolean b) {
 		if (b && controller.acknowledgeChangeForSWList()) {
-			int col = theTable.getEditingColumn();
+			int col = jTable.getEditingColumn();
 			Logging.info(this, "setDataChanged col ", col);
 			if (tableModel.gotMarkCursorRow() && col != tableModel.getColMarkCursorRow()) {
 				super.setDataChanged(true);

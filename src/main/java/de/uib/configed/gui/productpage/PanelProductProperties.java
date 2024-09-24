@@ -104,7 +104,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 	public void setProductProperties() {
 		paneProducts.setTableModel(createTableModel());
-		int saveSelectedRow = paneProducts.getSelectedRow();
+		int saveSelectedRow = paneProducts.getJTable().getSelectedRow();
 		paneProducts.reset();
 
 		if (paneProducts.getTableModel().getRowCount() > 0) {
@@ -172,17 +172,17 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 			if (row == -1) {
 				depotsOfPackage.clear();
 			} else {
-				String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
+				String productEdited = "" + jTable.getValueAt(row, columnNames.indexOf("productId"));
 
 				Logging.info(this, "selected  product: ", productEdited);
 
 				String versionInfo = OpsiPackage.produceVersionInfo(
-						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-						"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
+						"" + jTable.getValueAt(row, columnNames.indexOf("productVersion")),
+						"" + jTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
 				List<String> depotsOfPackageAsRetrieved = persistenceController.getProductDataService()
-						.getProduct2VersionInfo2DepotsPD()
-						.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
+						.getProduct2VersionInfo2DepotsPD().get(jTable.getValueAt(row, columnNames.indexOf("productId")))
+						.get(versionInfo);
 
 				Logging.info(this, "valueChanged  versionInfo ", versionInfo);
 
@@ -198,9 +198,8 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 				if (!depotsOfPackage.isEmpty()) {
 					infoPane.setEditValues(productEdited,
-							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
-							depotsOfPackage.get(0));
+							"" + jTable.getValueAt(row, columnNames.indexOf("productVersion")),
+							"" + jTable.getValueAt(row, columnNames.indexOf("packageVersion")), depotsOfPackage.get(0));
 				}
 
 				panelEditProperties.setDepotListData(depotsOfPackage, productEdited);

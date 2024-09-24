@@ -171,15 +171,16 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 			}
 
 			Object val = null;
-			int selRow = getSelectedRow();
+			int selRow = jTable.getSelectedRow();
 			if (selRow > -1) {
 				val = getValueAt(selRow, 1);
 			}
 
-			if (val != null && getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
+			if (val != null && jTable.getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
 					&& !((String) val).equals(VALUE_NO_LICENSE_POOL)) {
 				buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
-				labelSetAllAssignmentsToPoolFromSelectedRow.setText(labelText + " " + getValueAt(getSelectedRow(), 1));
+				labelSetAllAssignmentsToPoolFromSelectedRow
+						.setText(labelText + " " + getValueAt(jTable.getSelectedRow(), 1));
 			} else {
 				buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 				labelSetAllAssignmentsToPoolFromSelectedRow.setText(labelText);
@@ -210,8 +211,8 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow")); // assign
 
 		buttonSetAllAssignmentsToPoolFromSelectedRow
-				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(
-						setSWxColTo((String) panelSWxLicensepool.getValueAt(panelSWxLicensepool.getSelectedRow(), 1))));
+				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(
+						(String) panelSWxLicensepool.getValueAt(panelSWxLicensepool.getJTable().getSelectedRow(), 1))));
 
 		JPanel panelAction = new JPanel();
 
@@ -325,10 +326,10 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
 			if (!e.getValueIsAdjusting() && isVisible()) {
-				Logging.info(this, "selectedRow ", panelSWnames.getSelectedRow());
+				Logging.info(this, "selectedRow ", panelSWnames.getJTable().getSelectedRow());
 
-				if (panelSWnames.getSelectedRow() >= 0) {
-					String swName = (String) panelSWnames.getValueAt(panelSWnames.getSelectedRow(), 0);
+				if (panelSWnames.getJTable().getSelectedRow() >= 0) {
+					String swName = (String) panelSWnames.getValueAt(panelSWnames.getJTable().getSelectedRow(), 0);
 
 					Logging.info(this, " setTableModelSWxLicensepool for ", swName);
 
