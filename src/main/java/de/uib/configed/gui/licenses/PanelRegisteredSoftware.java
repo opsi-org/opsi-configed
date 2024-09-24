@@ -8,6 +8,7 @@ package de.uib.configed.gui.licenses;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import de.uib.configed.ControlPanelAssignToLPools;
@@ -17,7 +18,7 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
-public class PanelRegisteredSoftware extends PanelGenEditTable {
+public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseListener {
 	private ControlPanelAssignToLPools controller;
 
 	private int[] saveRowSelection;
@@ -26,6 +27,9 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		super("", true, 2, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 		this.controller = controller;
 		tableSearchPane.showNavPane();
+
+		jTable.addMouseListener(this);
+		jTable.getTableHeader().addMouseListener(this);
 	}
 
 	@Override
@@ -129,6 +133,21 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 			saveRowSelection = jTable.getSelectedRows();
 			Logging.info(this, "mouseReleased set new saveRowSelection ");
 		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// Not needed here
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// Not needed here
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// Not needed here
 	}
 
 	@Override

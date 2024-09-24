@@ -10,8 +10,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,8 +64,8 @@ import de.uib.utils.table.RowNoTableModelFilterCondition;
 import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.updates.UpdateController;
 
-public class PanelGenEditTable extends JPanel implements TableModelListener, ListSelectionListener, KeyListener,
-		MouseListener, ComponentListener, CursorrowObserver {
+public class PanelGenEditTable extends JPanel
+		implements TableModelListener, ListSelectionListener, KeyListener, ComponentListener, CursorrowObserver {
 	public static final int POPUP_SEPARATOR = PopupMenuTrait.POPUP_SEPARATOR; // 0
 	public static final int POPUP_DELETE_ROW = 1;
 
@@ -256,16 +254,12 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		tableSearchPane.setVisible(withTablesearchPane);
 
-		jTable.getTableHeader().addMouseListener(this);
-
 		// add the popup to the scrollpane for the case that the table is empty
 		scrollpane = new JScrollPane();
 
 		// NOT WORK
 
 		jTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
-
-		jTable.addMouseListener(this);
 
 		// we prefer the simple behaviour:
 		jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1107,27 +1101,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			menuItemDeleteRelation.setEnabled(!lsm.isSelectionEmpty());
 		}
 	}
-
-	// MouseListener, hook for subclasses
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		/* For implementation in subclass */}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		/* For implementation in subclass */}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		/* For implementation in subclass */}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		/* For implementation in subclass */}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		/* For implementation in subclass */}
 
 	// ComponentListener for table
 
