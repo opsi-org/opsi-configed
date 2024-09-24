@@ -6,7 +6,6 @@
 
 package de.uib.utils.table.gui;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -133,7 +132,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private boolean withTablesearchPane;
 
-	protected TableSearchPane searchPane;
+	protected TableSearchPane tableSearchPane;
 
 	private String title = "";
 
@@ -224,7 +223,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		jTable.requestFocus();
 
 		if (withTablesearchPane) {
-			searchPane.requestFocus();
+			tableSearchPane.requestFocus();
 		}
 	}
 
@@ -253,9 +252,9 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		exportTable = new ExporterToCSV(jTable);
 
-		searchPane = new TableSearchPane(this);
+		tableSearchPane = new TableSearchPane(this);
 
-		searchPane.setVisible(withTablesearchPane);
+		tableSearchPane.setVisible(withTablesearchPane);
 
 		jTable.getTableHeader().addMouseListener(this);
 
@@ -292,7 +291,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelTitle,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(tableSearchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE).addComponent(controlPanel,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
@@ -300,7 +299,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(tableSearchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
 
@@ -352,14 +351,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		return controlPanel;
 	}
 
-	public void setColumnSelectionAllowed(boolean b) {
-		// destroys search function
-
-		jTable.setColumnSelectionAllowed(b);
-	}
-
-	public void setDeleteAllowed(boolean b) {
-		deleteAllowed = b;
+	public void setDeleteAllowed(boolean deleteAllowed) {
+		this.deleteAllowed = deleteAllowed;
 	}
 
 	private void sortAgainAsConfigured() {
@@ -387,18 +380,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				setSelectedRow(viewRow);
 			}
 		}
-	}
-
-	public void requestReload() {
-		tableModel.requestReload();
-	}
-
-	/*
-	 * reproduces data from source
-	 * if reload is requested data are loaded completely new
-	 */
-	public void reset() {
-		tableModel.reset();
 	}
 
 	public void reload() {
@@ -728,7 +709,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		searchPane.setSearchFields(cols);
+		tableSearchPane.setSearchFields(cols);
 	}
 
 	/**
@@ -741,57 +722,17 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		searchPane.setSearchFieldsAll();
-	}
-
-	/**
-	 * set search mode possible values TablesearchPane.FULL_TEXT_SEARCH
-	 * TablesearchPane.START_TEXT_SEARCH = 1; TablesearchPane.REGEX_SEARCH
-	 */
-	public void setSearchMode(TableSearchPane.SearchMode mode) {
-		searchPane.setSearchMode(mode);
+		tableSearchPane.setSearchFieldsAll();
 	}
 
 	private void setModelFilteringBySelection() {
-		if (searchPane.isFiltering() && tableModel != null
+		if (tableSearchPane.isFiltering() && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
 			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
 
 			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
 		}
-	}
-
-	/**
-	 * activates popupMark or this as well as popupMarkAndFilter in context menu
-	 *
-	 * @parameter boolean
-	 */
-	public void setFiltering() {
-		searchPane.setFiltering();
-	}
-
-	/**
-	 * sets an alternative ActionListener
-	 *
-	 * @parameter ActionListener
-	 */
-	public void setFiltermarkActionListener(ActionListener li) {
-		searchPane.setFiltermarkActionListener(li);
-	}
-
-	/**
-	 * sets the filter symbol to filtered/not filtered @ parameter boolean
-	 */
-	public void showFiltered(boolean b) {
-		searchPane.setFilterMark(b);
-	}
-
-	/**
-	 * set if a search results in a new selection
-	 */
-	public void setSearchSelectMode(boolean select) {
-		searchPane.setSelectMode(select);
 	}
 
 	public void setDataChanged(boolean b) {
@@ -867,17 +808,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		return tableModel;
 	}
 
-	public TableSearchPane getTheSearchpane() {
-		return searchPane;
-	}
-
-	/**
-	 * set the selection model for the table conceived as a list the usage of
-	 * any other model than the default ListSelectionModel.SINGLE_SELECTION may
-	 * be not fully supported
-	 */
-	public void setListSelectionMode(int selectionMode) {
-		jTable.setSelectionMode(selectionMode);
+	public TableSearchPane getTableSearchPane() {
+		return tableSearchPane;
 	}
 
 	public void setSelectedRow(int row) {
@@ -913,10 +845,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		return tableModel.getValueAt(jTable.convertRowIndexToModel(row), jTable.convertColumnIndexToModel(col));
 	}
 
-	public void setAwareOfSelectionListener(boolean b) {
-		Logging.debug(this, "setAwareOfSelectionListener  ", b);
+	public void setAwareOfSelectionListener(boolean awareOfSelectionListener) {
+		Logging.debug(this, "setAwareOfSelectionListener  ", awareOfSelectionListener);
 
-		awareOfSelectionListener = b;
+		this.awareOfSelectionListener = awareOfSelectionListener;
 	}
 
 	public boolean isAwareOfSelectionListener() {
@@ -962,7 +894,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		jTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		Iterator<String> iter = values.iterator();
 

@@ -66,7 +66,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 			columnNames.add(key);
 		}
 
-		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelGlobalSoftware.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelGlobalSoftware.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
 			if (!listSelectionEvent.getValueIsAdjusting()) {

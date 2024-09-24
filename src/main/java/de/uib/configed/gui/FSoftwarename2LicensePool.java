@@ -322,7 +322,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 			}
 		};
 
-		panelSWnames.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		panelSWnames.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
 			if (!e.getValueIsAdjusting() && isVisible()) {

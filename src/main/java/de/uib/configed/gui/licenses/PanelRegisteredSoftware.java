@@ -25,7 +25,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
 		super("", true, 2, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 		this.controller = controller;
-		searchPane.showNavPane();
+		tableSearchPane.showNavPane();
 	}
 
 	@Override
@@ -37,24 +37,18 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	}
 
 	@Override
-	public void reset() {
-		Logging.info(this, "reset");
-		super.reset();
-	}
-
-	@Override
 	public void commit() {
 		Logging.info(this, "commit");
 		super.commit();
 		PersistenceControllerFactory.getPersistenceController()
 				.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
-		super.reset();
+		tableModel.reset();
 
 		if (controller.getTabClient().getFSoftwarename2LicensePool() != null) {
 			Logging.info(this, "Panel.fSoftwarename2LicensePool.panelSWnames.reset");
 
 			// does not solve the task
-			controller.getTabClient().getFSoftwarename2LicensePool().getPanelSWnames().reset();
+			controller.getTabClient().getFSoftwarename2LicensePool().getPanelSWnames().getTableModel().reset();
 		}
 	}
 

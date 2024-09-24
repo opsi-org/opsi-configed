@@ -104,9 +104,9 @@ public class PanelLicensesUsage extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true);
 
-		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelUsage.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panelUsage.setFiltering();
+		panelUsage.getTableSearchPane().setFiltering();
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 

@@ -69,7 +69,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
 		paneProducts = new PaneProducts(columnNames, panelEditProperties, propertiesPanel);
 		paneProducts.setTableModel(model);
-		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paneProducts.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING);
@@ -105,7 +105,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 	public void setProductProperties() {
 		paneProducts.setTableModel(createTableModel());
 		int saveSelectedRow = paneProducts.getJTable().getSelectedRow();
-		paneProducts.reset();
+		paneProducts.getTableModel().reset();
 
 		if (paneProducts.getTableModel().getRowCount() > 0) {
 			if (saveSelectedRow == -1 || paneProducts.getTableModel().getRowCount() <= saveSelectedRow) {

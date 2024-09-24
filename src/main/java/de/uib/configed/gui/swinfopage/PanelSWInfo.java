@@ -149,9 +149,9 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle = new JLabel();
 
 		panelTable = new PanelGenEditTable("", false, 0, new int[] {}, true);
-		panelTable.setColumnSelectionAllowed(false);
-		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		panelTable.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
+		panelTable.getJTable().setColumnSelectionAllowed(false);
+		panelTable.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelTable.getTableSearchPane().setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 
 		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
