@@ -102,7 +102,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private void defineListeners() {
-		panelLicenseContracts.getListSelectionModel().addListSelectionListener(this::selectPanelLicenseContracts);
+		panelLicenseContracts.getJTable().getSelectionModel()
+				.addListSelectionListener(this::selectPanelLicenseContracts);
 
 		panelLicensePools.addListSelectionListener(this::selectPanelLicensePools);
 	}
@@ -129,7 +130,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 			return;
 		}
 
-		int i = panelLicensePools.getSelectedRow();
+		int i = panelLicensePools.getJTable().getSelectedRow();
 
 		selectedLicensePool = "";
 
@@ -153,14 +154,14 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private boolean checkAndStart() {
-		if (panelLicensePools.getSelectedRow() == -1) {
+		if (panelLicensePools.getJTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectLicensepool"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
-		if (panelLicenseContracts.getSelectedRow() == -1) {
+		if (panelLicenseContracts.getJTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectLicensecontract"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
@@ -174,7 +175,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		jTextFieldEndOfLicense.setText("");
 		jTextFieldLicenseContract.setEnabled(true);
 		jTextFieldLicenseContract
-				.setText("" + panelLicenseContracts.getValueAt(panelLicenseContracts.getSelectedRow(), 0));
+				.setText("" + panelLicenseContracts.getValueAt(panelLicenseContracts.getJTable().getSelectedRow(), 0));
 		jTextFieldLicenseContract.setEditable(false);
 
 		jTextFieldLKey.setEnabled(true);
@@ -550,7 +551,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		m.put("licenseContractId", contractSendValue);
 
-		m.put("licensePoolId", panelLicensePools.getValueAt(panelLicensePools.getSelectedRow(), 0).toString());
+		m.put("licensePoolId",
+				panelLicensePools.getValueAt(panelLicensePools.getJTable().getSelectedRow(), 0).toString());
 		m.put("licenseKey", jTextFieldLKey.getText());
 
 		enterLicenseController.saveNewLicense(m);

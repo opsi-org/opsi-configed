@@ -148,8 +148,8 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle = new JLabel();
 
 		panelTable = new PanelGenEditTable("", false, 0, new int[] {}, true);
-		panelTable.setColumnSelectionAllowed(false);
-		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelTable.getJTable().setColumnSelectionAllowed(false);
+		panelTable.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
@@ -237,11 +237,11 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
 
-		panelTable.getColumnModel().getColumn(0).setPreferredWidth(400);
-		panelTable.getColumnModel().getColumn(1).setPreferredWidth(200);
-		panelTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+		panelTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(400);
+		panelTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(200);
+		panelTable.getJTable().getColumnModel().getColumn(2).setPreferredWidth(100);
 
-		csvExportTable = new ExporterToCSV(panelTable.getTheTable());
+		csvExportTable = new ExporterToCSV(panelTable.getJTable());
 	}
 
 	private void buildPanel() {
@@ -285,7 +285,7 @@ public class PanelSWInfo extends JPanel {
 				}
 			};
 
-			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getTheTable(),
+			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getJTable(),
 					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
 		}
 	}
@@ -423,7 +423,7 @@ public class PanelSWInfo extends JPanel {
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", "software inventory");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable.getTheTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable.getJTable());
 		pdfExportTable.setClient(hostId);
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();

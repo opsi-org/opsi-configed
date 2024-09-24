@@ -66,11 +66,11 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 			columnNames.add(key);
 		}
 
-		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelGlobalSoftware.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelGlobalSoftware.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
 			if (!listSelectionEvent.getValueIsAdjusting()) {
-				jButton1.setEnabled(panelGlobalSoftware.getTheTable().getSelectedRowCount() > 0);
+				jButton1.setEnabled(panelGlobalSoftware.getJTable().getSelectedRowCount() > 0);
 			}
 		});
 	}
@@ -101,10 +101,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {
 				int row = panelGlobalSoftware.findViewRowFromValue(key, keyCol);
 				Logging.info(this, "doAction2 key, ", key, ", row ", row);
-				Logging.info(this, "doAction2 model row ",
-						panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
+				Logging.info(this, "doAction2 model row ", panelGlobalSoftware.getJTable().convertRowIndexToModel(row));
 				panelGlobalSoftware.getTableModel()
-						.deleteRow(panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
+						.deleteRow(panelGlobalSoftware.getJTable().convertRowIndexToModel(row));
 			}
 			result = 2;
 		}

@@ -6,13 +6,10 @@
 
 package de.uib.utils.table.gui;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +42,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -68,8 +64,8 @@ import de.uib.utils.table.RowNoTableModelFilterCondition;
 import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.updates.UpdateController;
 
-public class PanelGenEditTable extends JPanel implements TableModelListener, ListSelectionListener, KeyListener,
-		MouseListener, ComponentListener, CursorrowObserver {
+public class PanelGenEditTable extends JPanel
+		implements TableModelListener, ListSelectionListener, KeyListener, ComponentListener, CursorrowObserver {
 	public static final int POPUP_SEPARATOR = PopupMenuTrait.POPUP_SEPARATOR; // 0
 	public static final int POPUP_DELETE_ROW = 1;
 
@@ -112,7 +108,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	private JMenuItem menuItemCancel;
 
 	private JScrollPane scrollpane;
-	protected JTable theTable;
+	protected JTable jTable;
 	protected GenTableModel tableModel;
 
 	private JButton buttonCommit;
@@ -134,7 +130,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private boolean withTablesearchPane;
 
-	protected TableSearchPane searchPane;
+	protected TableSearchPane tableSearchPane;
 
 	private String title = "";
 
@@ -222,12 +218,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	@Override
 	public void requestFocus() {
-		if (theTable != null) {
-			theTable.requestFocus();
-		}
+		jTable.requestFocus();
 
 		if (withTablesearchPane) {
-			searchPane.requestFocus();
+			tableSearchPane.requestFocus();
 		}
 	}
 
@@ -236,11 +230,11 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void addListSelectionListener(ListSelectionListener l) {
-		getListSelectionModel().addListSelectionListener(l);
+		jTable.getSelectionModel().addListSelectionListener(l);
 	}
 
 	public void removeListSelectionListener(ListSelectionListener l) {
-		getListSelectionModel().removeListSelectionListener(l);
+		jTable.getSelectionModel().removeListSelectionListener(l);
 	}
 
 	private void initComponents() {
@@ -252,40 +246,36 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			jLabelTitle.setVisible(false);
 		}
 
-		theTable = new JTable();
+		jTable = new JTable();
 
-		exportTable = new ExporterToCSV(theTable);
+		exportTable = new ExporterToCSV(jTable);
 
-		searchPane = new TableSearchPane(this);
+		tableSearchPane = new TableSearchPane(this);
 
-		searchPane.setVisible(withTablesearchPane);
-
-		theTable.getTableHeader().addMouseListener(this);
+		tableSearchPane.setVisible(withTablesearchPane);
 
 		// add the popup to the scrollpane for the case that the table is empty
 		scrollpane = new JScrollPane();
 
 		// NOT WORK
 
-		theTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
-
-		theTable.addMouseListener(this);
+		jTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 
 		// we prefer the simple behaviour:
-		theTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		theTable.getTableHeader().setReorderingAllowed(false);
+		jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jTable.getTableHeader().setReorderingAllowed(false);
 
-		theTable.addKeyListener(this);
+		jTable.addKeyListener(this);
 
-		getListSelectionModel().addListSelectionListener(this);
+		jTable.getSelectionModel().addListSelectionListener(this);
 
-		theTable.setDragEnabled(true);
-		theTable.setDropMode(DropMode.ON);
+		jTable.setDragEnabled(true);
+		jTable.setDropMode(DropMode.ON);
 
-		theTable.setAutoCreateRowSorter(false);
+		jTable.setAutoCreateRowSorter(false);
 
 		scrollpane = new JScrollPane();
-		scrollpane.setViewportView(theTable);
+		scrollpane.setViewportView(jTable);
 
 		JPanel controlPanel = initControlPanel();
 
@@ -295,7 +285,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelTitle,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(tableSearchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE).addComponent(controlPanel,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
@@ -303,7 +293,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(tableSearchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
 
@@ -355,14 +345,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		return controlPanel;
 	}
 
-	public void setColumnSelectionAllowed(boolean b) {
-		// destroys search function
-
-		theTable.setColumnSelectionAllowed(b);
-	}
-
-	public void setDeleteAllowed(boolean b) {
-		deleteAllowed = b;
+	public void setDeleteAllowed(boolean deleteAllowed) {
+		this.deleteAllowed = deleteAllowed;
 	}
 
 	private void sortAgainAsConfigured() {
@@ -373,15 +357,15 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		}
 
 		if (sortDescriptor != null && !sortDescriptor.isEmpty()) {
-			int selRow = getSelectedRow();
+			int selRow = jTable.getSelectedRow();
 
 			Object selVal = null;
 			if (selRow > -1 && tableModel.getKeyCol() > -1) {
-				selVal = tableModel.getValueAt(theTable.convertRowIndexToModel(selRow), tableModel.getKeyCol());
+				selVal = tableModel.getValueAt(jTable.convertRowIndexToModel(selRow), tableModel.getKeyCol());
 			}
 
 			setSortOrder(sortDescriptor);
-			((DefaultRowSorter<?, ?>) theTable.getRowSorter()).sort();
+			((DefaultRowSorter<?, ?>) jTable.getRowSorter()).sort();
 			setSorter();
 
 			if (selVal != null) {
@@ -390,18 +374,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 				setSelectedRow(viewRow);
 			}
 		}
-	}
-
-	public void requestReload() {
-		tableModel.requestReload();
-	}
-
-	/*
-	 * reproduces data from source
-	 * if reload is requested data are loaded completely new
-	 */
-	public void reset() {
-		tableModel.reset();
 	}
 
 	public void reload() {
@@ -573,14 +545,14 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	private void print() {
 		try {
-			theTable.print();
+			jTable.print();
 		} catch (PrinterException ex) {
 			Logging.error(ex, "Printing error ");
 		}
 	}
 
 	private void deleteRelation() {
-		if (getSelectedRowCount() == 0) {
+		if (jTable.getSelectedRowCount() == 0) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
@@ -597,7 +569,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", "");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
+		ExporterToPDF pdfExportTable = new ExporterToPDF(jTable);
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
 		pdfExportTable.execute(null, false);
@@ -607,7 +579,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		if (popupMenu == null) {
 			// for the first item, we create the menu
 			popupMenu = new JPopupMenu();
-			theTable.addMouseListener(new PopupMouseListener(popupMenu));
+			jTable.addMouseListener(new PopupMouseListener(popupMenu));
 
 			// add the popup to the scrollpane if the table is empty
 			scrollpane.addMouseListener(new PopupMouseListener(popupMenu));
@@ -685,14 +657,14 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			sorter.setSortKeys(sortKeys);
 		}
 
-		theTable.setRowSorter(sorter);
+		jTable.setRowSorter(sorter);
 	}
 
 	public void setTableModel(GenTableModel m) {
-		theTable.setRowSorter(null);
+		jTable.setRowSorter(null);
 		// just in case there was one
 
-		theTable.setModel(m);
+		jTable.setModel(m);
 		tableModel = m;
 		tableModel.addCursorrowObserver(this);
 
@@ -714,7 +686,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			Logging.warning(this, "invalid column name");
 			return;
 		}
-		DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>) theTable.getRowSorter();
+		DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>) jTable.getRowSorter();
 		if (sorter == null) {
 			Logging.warning(this, "no sorter");
 		} else {
@@ -731,7 +703,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		searchPane.setSearchFields(cols);
+		tableSearchPane.setSearchFields(cols);
 	}
 
 	/**
@@ -744,49 +716,17 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		searchPane.setSearchFieldsAll();
+		tableSearchPane.setSearchFieldsAll();
 	}
 
 	private void setModelFilteringBySelection() {
-		if (searchPane.isFiltering() && tableModel != null
+		if (tableSearchPane.isFiltering() && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
 			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
 
 			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
 		}
-	}
-
-	/**
-	 * activates popupMark or this as well as popupMarkAndFilter in context menu
-	 *
-	 * @parameter boolean
-	 */
-	public void setFiltering() {
-		searchPane.setFiltering();
-	}
-
-	/**
-	 * sets an alternative ActionListener
-	 *
-	 * @parameter ActionListener
-	 */
-	public void setFiltermarkActionListener(ActionListener li) {
-		searchPane.setFiltermarkActionListener(li);
-	}
-
-	/**
-	 * sets the filter symbol to filtered/not filtered @ parameter boolean
-	 */
-	public void showFiltered(boolean b) {
-		searchPane.setFilterMark(b);
-	}
-
-	/**
-	 * set if a search results in a new selection
-	 */
-	public void setSearchSelectMode(boolean select) {
-		searchPane.setSelectMode(select);
 	}
 
 	public void setDataChanged(boolean b) {
@@ -813,10 +753,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void stopCellEditing() {
-		if (theTable.getCellEditor() != null) {
+		if (jTable.getCellEditor() != null) {
 			// we are editing
 			Logging.info(this, "we are editing a cell");
-			theTable.getCellEditor().stopCellEditing();
+			jTable.getCellEditor().stopCellEditing();
 		} else {
 			Logging.info(this, "no cell editing");
 		}
@@ -849,85 +789,60 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		if (getSelectedRowCount() > 0) {
+		if (jTable.getSelectedRowCount() > 0) {
 			tableModel.deleteRow(getSelectedRowInModelTerms());
 		}
 	}
 
-	public JTable getTheTable() {
-		return theTable;
+	public JTable getJTable() {
+		return jTable;
 	}
 
 	public GenTableModel getTableModel() {
 		return tableModel;
 	}
 
-	public TableColumnModel getColumnModel() {
-		return theTable.getColumnModel();
-	}
-
-	public ListSelectionModel getListSelectionModel() {
-		return theTable.getSelectionModel();
-	}
-
-	public TableSearchPane getTheSearchpane() {
-		return searchPane;
-	}
-
-	/**
-	 * set the selection model for the table conceived as a list the usage of
-	 * any other model than the default ListSelectionModel.SINGLE_SELECTION may
-	 * be not fully supported
-	 */
-	public void setListSelectionMode(int selectionMode) {
-		theTable.setSelectionMode(selectionMode);
-	}
-
-	public int getSelectedRowCount() {
-		return theTable.getSelectedRowCount();
-	}
-
-	public int getSelectedRow() {
-		return theTable.getSelectedRow();
+	public TableSearchPane getTableSearchPane() {
+		return tableSearchPane;
 	}
 
 	public void setSelectedRow(int row) {
-		theTable.setRowSelectionInterval(row, row);
+		jTable.setRowSelectionInterval(row, row);
 
 		showSelectedRow();
 	}
 
 	public void setSelection(int[] selection) {
 		Logging.info(this, "setSelection --- ", Arrays.toString(selection));
-		theTable.getSelectionModel().clearSelection();
+		jTable.getSelectionModel().clearSelection();
 		for (int i = 0; i < selection.length; i++) {
-			theTable.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
+			jTable.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
 		}
 	}
 
 	public void showSelectedRow() {
-		int row = getSelectedRow();
+		int row = jTable.getSelectedRow();
 		if (row != -1) {
-			theTable.scrollRectToVisible(theTable.getCellRect(row, 0, false));
+			jTable.scrollRectToVisible(jTable.getCellRect(row, 0, false));
 		}
 	}
 
 	public int getSelectedRowInModelTerms() {
-		return theTable.convertRowIndexToModel(theTable.getSelectedRow());
+		return jTable.convertRowIndexToModel(jTable.getSelectedRow());
 	}
 
 	public void setValueAt(Object value, int row, int col) {
-		tableModel.setValueAt(value, theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
+		tableModel.setValueAt(value, jTable.convertRowIndexToModel(row), jTable.convertColumnIndexToModel(col));
 	}
 
 	public Object getValueAt(int row, int col) {
-		return tableModel.getValueAt(theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
+		return tableModel.getValueAt(jTable.convertRowIndexToModel(row), jTable.convertColumnIndexToModel(col));
 	}
 
-	public void setAwareOfSelectionListener(boolean b) {
-		Logging.debug(this, "setAwareOfSelectionListener  ", b);
+	public void setAwareOfSelectionListener(boolean awareOfSelectionListener) {
+		Logging.debug(this, "setAwareOfSelectionListener  ", awareOfSelectionListener);
 
-		awareOfSelectionListener = b;
+		this.awareOfSelectionListener = awareOfSelectionListener;
 	}
 
 	public boolean isAwareOfSelectionListener() {
@@ -953,13 +868,13 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 		if (tableModel.isUsingFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION)) {
 			for (int i = 0; i < tableModel.getRowCount(); i++) {
-				result.add(
-						tableModel.getValueAt(theTable.convertRowIndexToModel(i), tableModel.getKeyCol()).toString());
+				result.add(tableModel.getValueAt(jTable.convertRowIndexToModel(i), tableModel.getKeyCol()).toString());
 			}
 		} else {
-			for (int i = 0; i < theTable.getSelectedRowCount(); i++) {
-				result.add(tableModel.getValueAt(theTable.convertRowIndexToModel(theTable.getSelectedRows()[i]),
-						tableModel.getKeyCol()).toString());
+			for (int i = 0; i < jTable.getSelectedRowCount(); i++) {
+				result.add(tableModel
+						.getValueAt(jTable.convertRowIndexToModel(jTable.getSelectedRows()[i]), tableModel.getKeyCol())
+						.toString());
 			}
 		}
 
@@ -967,20 +882,20 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	}
 
 	public void setSelectedValues(List<String> values, int col) {
-		getListSelectionModel().clearSelection();
+		jTable.clearSelection();
 
 		if (values == null || values.isEmpty()) {
 			return;
 		}
 
-		setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		jTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		Iterator<String> iter = values.iterator();
 
 		while (iter.hasNext()) {
 			int viewRow = findViewRowFromValue(iter.next(), col);
 
-			getListSelectionModel().addSelectionInterval(viewRow, viewRow);
+			jTable.getSelectionModel().addSelectionInterval(viewRow, viewRow);
 		}
 	}
 
@@ -994,7 +909,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		String val = value.toString();
 
 		for (int viewrow = 0; viewrow < tableModel.getRowCount(); viewrow++) {
-			Object compareValue = tableModel.getValueAt(theTable.convertRowIndexToModel(viewrow), col);
+			Object compareValue = tableModel.getValueAt(jTable.convertRowIndexToModel(viewrow), col);
 
 			if ((compareValue == null && val.isEmpty())
 					|| (compareValue != null && val.equals(compareValue.toString()))) {
@@ -1013,10 +928,10 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 		Logging.info(this, "moveToValue ", value, " col ", col, " selecting ", selecting);
 		int viewrow = findViewRowFromValue(value, col);
 		if (viewrow > -1) {
-			tableModel.setCursorRow(theTable.convertRowIndexToModel(viewrow));
+			tableModel.setCursorRow(jTable.convertRowIndexToModel(viewrow));
 		}
 
-		theTable.scrollRectToVisible(theTable.getCellRect(viewrow, col, false));
+		jTable.scrollRectToVisible(jTable.getCellRect(viewrow, col, false));
 
 		if (viewrow == -1) {
 			return false;
@@ -1047,7 +962,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 				for (int j = 0; j < tableModel.getFinalCols().size(); j++) {
 					partialkeys[j] = tableModel
-							.getValueAt(theTable.convertRowIndexToModel(viewrow), tableModel.getFinalCols().get(j))
+							.getValueAt(jTable.convertRowIndexToModel(viewrow), tableModel.getFinalCols().get(j))
 							.toString();
 				}
 
@@ -1075,23 +990,23 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			return;
 		}
 
-		if (getSelectedRowCount() != 1) {
+		if (jTable.getSelectedRowCount() != 1) {
 			return;
 		}
 
-		if (n < 0 || n >= theTable.getRowCount()) {
+		if (n < 0 || n >= jTable.getRowCount()) {
 			return;
 		}
 
-		theTable.scrollRectToVisible(theTable.getCellRect(n, 0, true));
-		theTable.setRowSelectionInterval(n, n);
-		tableModel.setCursorRow(theTable.convertRowIndexToModel(n));
+		jTable.scrollRectToVisible(jTable.getCellRect(n, 0, true));
+		jTable.setRowSelectionInterval(n, n);
+		tableModel.setCursorRow(jTable.convertRowIndexToModel(n));
 	}
 
 	public boolean setCursorToFirstRow() {
 		if (tableModel.getRowCount() > 0) {
-			tableModel.setCursorRow(theTable.convertRowIndexToModel(0));
-			theTable.scrollRectToVisible(theTable.getCellRect(0, 0, true));
+			tableModel.setCursorRow(jTable.convertRowIndexToModel(0));
+			jTable.scrollRectToVisible(jTable.getCellRect(0, 0, true));
 		}
 
 		return true;
@@ -1099,8 +1014,8 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 
 	public boolean setCursorToLastRow() {
 		if (tableModel.getRowCount() > 0) {
-			tableModel.setCursorRow(theTable.convertRowIndexToModel(tableModel.getRowCount() - 1));
-			theTable.scrollRectToVisible(theTable.getCellRect(tableModel.getRowCount() - 1, 0, true));
+			tableModel.setCursorRow(jTable.convertRowIndexToModel(tableModel.getRowCount() - 1));
+			jTable.scrollRectToVisible(jTable.getCellRect(tableModel.getRowCount() - 1, 0, true));
 		}
 		return true;
 	}
@@ -1108,17 +1023,17 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	public boolean advanceCursor(int d) {
 		int viewCursorRow = -1;
 		if (tableModel.getCursorRow() > -1) {
-			viewCursorRow = theTable.convertRowIndexToView(tableModel.getCursorRow());
+			viewCursorRow = jTable.convertRowIndexToView(tableModel.getCursorRow());
 		}
 
 		Logging.info(this, "advanceCursor from ", viewCursorRow);
 		int nextViewCursorRow = viewCursorRow + d;
 		Logging.info(this, "advanceCursor to ", nextViewCursorRow);
 		if (nextViewCursorRow < tableModel.getRowCount() && nextViewCursorRow >= 0) {
-			tableModel.setCursorRow(theTable.convertRowIndexToModel(nextViewCursorRow));
+			tableModel.setCursorRow(jTable.convertRowIndexToModel(nextViewCursorRow));
 		}
 
-		theTable.scrollRectToVisible(theTable.getCellRect(nextViewCursorRow, 0, true));
+		jTable.scrollRectToVisible(jTable.getCellRect(nextViewCursorRow, 0, true));
 
 		return true;
 	}
@@ -1149,7 +1064,7 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == theTable && e.getKeyCode() == KeyEvent.VK_DELETE) {
+		if (e.getSource() == jTable && e.getKeyCode() == KeyEvent.VK_DELETE) {
 			deleteCurrentRow();
 		}
 	}
@@ -1186,27 +1101,6 @@ public class PanelGenEditTable extends JPanel implements TableModelListener, Lis
 			menuItemDeleteRelation.setEnabled(!lsm.isSelectionEmpty());
 		}
 	}
-
-	// MouseListener, hook for subclasses
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		/* For implementation in subclass */}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		/* For implementation in subclass */}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		/* For implementation in subclass */}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		/* For implementation in subclass */}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		/* For implementation in subclass */}
 
 	// ComponentListener for table
 

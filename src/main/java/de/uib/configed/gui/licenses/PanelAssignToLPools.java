@@ -395,7 +395,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				true);
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
-		panelRegisteredSoftware.setFiltering();
+		panelRegisteredSoftware.getTableSearchPane().setFiltering();
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
@@ -473,7 +473,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		Logging.info(this, " stateChanged ", e);
 		Logging.info(this, " stateChanged modelSWnames filterinfo ",
 				fSoftwarename2LicensePool.getModelSWnames().getFilterInfo());
-		int selectedRow = panelRegisteredSoftware.getSelectedRow();
+		int selectedRow = panelRegisteredSoftware.getJTable().getSelectedRow();
 		int columnNameIndex = panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME);
 		if (selectedRow == -1 || columnNameIndex == -1) {
 			Logging.warning(this, selectedRow == -1 ? "No software is selected" : "SWAuditEntry name column not found");

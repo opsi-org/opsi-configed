@@ -34,10 +34,10 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 	private void initComponents() {
 		panelReconciliation = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleReconciliation"), false, 0, null, true);
-		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelReconciliation.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelReconciliation.setFiltering();
+		panelReconciliation.getTableSearchPane().setFiltering();
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
