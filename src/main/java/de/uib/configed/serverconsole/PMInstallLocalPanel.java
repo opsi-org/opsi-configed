@@ -59,7 +59,6 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		jFileChooser.setFileFilter(filter);
 
 		jButtonFileChooser = new JButton(Icons.getIntellijIcon("open"));
-		jButtonFileChooser.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		jButtonFileChooser.setToolTipText(Configed.getResourceValue("PMInstallLocalPanel.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = jFileChooser.showOpenDialog(this);

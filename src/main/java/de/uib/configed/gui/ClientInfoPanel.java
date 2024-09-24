@@ -91,10 +91,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		labelClientDescription = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
-		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);
 		labelClientInventoryNumber = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
-		labelClientInventoryNumber.setPreferredSize(Globals.BUTTON_DIMENSION);
 		labelClientNotes = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.notes"));
 		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
 		labelClientMacAddress = new JLabel(

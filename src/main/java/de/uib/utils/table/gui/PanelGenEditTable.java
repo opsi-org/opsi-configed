@@ -310,11 +310,10 @@ public class PanelGenEditTable extends JPanel
 
 		buttonCommit = new JButton(Icons.getIntellijIcon("checkmark"));
 		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
-		buttonCommit.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
 		buttonCommit.addActionListener(action -> commit());
 
 		buttonCancel = new JButton(Icons.getIntellijIcon("close"));
-		buttonCancel.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
+		buttonCancel.setToolTipText(Configed.getResourceValue("buttonClose"));
 		buttonCancel.addActionListener(action -> cancel());
 
 		GroupLayout layout = new GroupLayout(controlPanel);
