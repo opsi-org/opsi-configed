@@ -290,7 +290,7 @@ public class PanelProductSettings extends JSplitPane {
 		productTree.updateSelectedObjectsInTable();
 	}
 
-	protected void reloadAction() {
+	private void reloadAction() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
@@ -303,7 +303,7 @@ public class PanelProductSettings extends JSplitPane {
 		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
-	protected void saveAndExecuteAction() {
+	private void saveAndExecuteAction() {
 		Logging.info(this, "saveAndExecuteAction");
 		ChangedDataManager.checkSaveAll(false);
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
