@@ -172,7 +172,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		searchPane.setFilterMark(selected);
 	}
 
-	public void initColumnNames() {
+	public final void initColumnNames() {
 		// New code
 		searchPane.setSearchFieldsAll();
 	}

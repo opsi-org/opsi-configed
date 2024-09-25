@@ -180,9 +180,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		flatTextFieldSearch.addActionListener(actionEvent -> searchNextRow(selectMode));
 
-		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
-
-		setSearchFieldsAll();
+		comboSearchFields = new JComboBox<>();
 
 		respectCase = new JToggleButton(Icons.getIntellijIcon("matchCase"));
 		respectCase.setSelectedIcon(Icons.getSelectedIntellijIcon("matchCase"));

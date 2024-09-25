@@ -157,7 +157,10 @@ public class ConfigedMain {
 		// create client selection panel
 		clientTablePanel = new ClientTablePanel(this);
 
+		// set table model and update the column selection in search accordingly
 		clientTablePanel.getClientTable().updateModel(buildClientListTableModel(true));
+		clientTablePanel.initColumnNames();
+
 		setSelectionPanelCols();
 
 		clientTablePanel.getClientTable().initSortKeys();
@@ -318,6 +321,8 @@ public class ConfigedMain {
 
 		// We need to make first selected visible again after resetting sortKeys
 		clientTablePanel.getClientTable().moveToFirstSelected();
+
+		clientTablePanel.initColumnNames();
 	}
 
 	public void handleGroupActionRequest() {
@@ -878,7 +883,6 @@ public class ConfigedMain {
 
 		ConfigedUtilityMethods.setTableColumnWidths(clientTablePanel.getClientTable(), columnWidths);
 
-		clientTablePanel.initColumnNames();
 		Logging.debug(this, " --- model set  ");
 
 		setSelectionPanelCols();
