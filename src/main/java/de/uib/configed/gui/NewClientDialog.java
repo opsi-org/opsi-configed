@@ -466,19 +466,19 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private void createClient(final String hostname, final String selectedDomain, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
-			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
-			final boolean wanConfig, final String[] groups, final String netbootProduct) {
+			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean wanConfig,
+			final String[] groups, final String netbootProduct) {
 		if (checkClientCorrectness(hostname, selectedDomain)) {
 			Logging.debug(this, "createClient ", hostname, ", ", selectedDomain, ", ", depotID, ", ", description, ", ",
-					inventorynumber, ", ", notes, shutdownInstall, ", ", uefiboot, ", ", wanConfig, ", ",
-					Arrays.toString(groups), ", ", netbootProduct);
+					inventorynumber, ", ", notes, shutdownInstall, ", ", wanConfig, ", ", Arrays.toString(groups), ", ",
+					netbootProduct);
 
 			String newClientID = hostname + "." + selectedDomain;
 
 			persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
 			if (persistenceController.getHostDataService().createClient(hostname, selectedDomain, depotID, description,
-					inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig,
-					groups, netbootProduct)) {
+					inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, wanConfig, groups,
+					netbootProduct)) {
 				ServerActionManager.createClient(newClientID, groups);
 			} else {
 				persistenceController.getHostInfoCollections().removeOpsiHostName(newClientID);
@@ -722,12 +722,11 @@ public final class NewClientDialog extends FGeneralDialog {
 		}
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 
-		boolean uefiboot = false;
 		boolean wanConfig = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)
 				&& jCheckWan.getSelectedObjects() != null;
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, systemUUID,
-				macaddress, shutdownInstall, uefiboot, wanConfig, groups, netbootProduct);
+				macaddress, shutdownInstall, wanConfig, groups, netbootProduct);
 	}
 }

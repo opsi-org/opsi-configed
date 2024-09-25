@@ -906,7 +906,7 @@ public class ConfigDataService {
 		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
 
-	public Boolean isUefiConfigured(String hostname) {
+	private Boolean isUefiConfigured(String hostname) {
 		Boolean result = false;
 
 		if (getHostConfigsPD().get(hostname) != null
@@ -1033,7 +1033,7 @@ public class ConfigDataService {
 		return result;
 	}
 
-	public boolean configureUefiBoot(String clientId, boolean uefiBoot) {
+	private boolean configureUefiBoot(String clientId, boolean uefiBoot) {
 		boolean result = false;
 
 		Logging.info(this, "configureUefiBoot, clientId ", clientId, " ", uefiBoot);

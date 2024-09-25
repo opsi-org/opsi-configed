@@ -311,8 +311,6 @@ public class HostInfoCollections {
 
 			host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
 					persistenceController.getConfigDataService().isInstallByShutdownConfigured(name));
-			host.put(HostInfo.CLIENT_UEFI_BOOT_KEY,
-					persistenceController.getConfigDataService().isUefiConfigured(name));
 
 			boolean result = persistenceController.getConfigDataService().findBooleanConfigurationComparingToDefaults(
 					name, persistenceController.getConfigDataService().getWanConfigurationPD());

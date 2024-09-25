@@ -162,7 +162,6 @@ public class HostDataService {
 				depotId = hostInfoCollections.getConfigServer();
 			}
 			hostInfo.setInDepot(depotId);
-			hostInfo.setUefiBoot(uefiBoot);
 			hostInfo.setWanConfig(wanConfig);
 			hostInfo.setShutdownInstall(shutdownInstall);
 
@@ -223,7 +222,7 @@ public class HostDataService {
 
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
-			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String[] groups, String productNetboot) {
+			boolean shutdownInstall, boolean wanConfig, String[] groups, String productNetboot) {
 		if (!userRolesConfigDataService.hasDepotPermission(depotId)) {
 			return false;
 		}
@@ -244,7 +243,7 @@ public class HostDataService {
 		result = exec.doCall(omc);
 
 		if (result) {
-			result = updateConfigsForClient(depotId, newClientId, uefiBoot, wanConfig, shutdownInstall);
+			result = updateConfigsForClient(depotId, newClientId, wanConfig, shutdownInstall);
 		}
 
 		if (result) {
@@ -270,7 +269,6 @@ public class HostDataService {
 			}
 			HostInfo hostInfo = new HostInfo(hostItem);
 			hostInfo.setInDepot(depotId);
-			hostInfo.setUefiBoot(uefiBoot);
 			hostInfo.setWanConfig(wanConfig);
 			hostInfo.setShutdownInstall(shutdownInstall);
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
@@ -281,7 +279,7 @@ public class HostDataService {
 		return result;
 	}
 
-	private boolean updateConfigsForClient(String depotId, String newClientId, boolean uefiBoot, boolean wanConfig,
+	private boolean updateConfigsForClient(String depotId, String newClientId, boolean wanConfig,
 			boolean shutdownInstall) {
 		List<Map<String, Object>> jsonObjects = new ArrayList<>();
 
@@ -294,11 +292,6 @@ public class HostDataService {
 				OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 
 		jsonObjects.add(itemDepot);
-
-		if (uefiBoot) {
-			jsonObjects
-					.add(Utils.createUefiNOMEntry(newClientId, OpsiServiceNOMPersistenceController.EFI_DHCPD_FILENAME));
-		}
 
 		if (wanConfig) {
 			jsonObjects = configDataService.addWANConfigStates(newClientId, jsonObjects);
@@ -605,7 +598,6 @@ public class HostDataService {
 		possibleValues.add(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);

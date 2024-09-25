@@ -34,7 +34,6 @@ public class HostInfo {
 	public static final String HOST_KEY_KEY = "opsiHostKey";
 	public static final String HOST_TYPE_KEY = "type";
 	public static final String CLIENT_IP_ADDRESS_KEY = "ipAddress";
-	public static final String CLIENT_UEFI_BOOT_KEY = "uefiBoot";
 	public static final String CLIENT_WAN_CONFIG_KEY = "wanConfig";
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "clientShutdownInstall";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
@@ -50,7 +49,6 @@ public class HostInfo {
 	public static final String HOST_NAME_DISPLAY_FIELD_LABEL = "clientName";
 
 	public static final String CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL = "clientIPAddress";
-	public static final String CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL = "UEFIboot";
 	public static final String CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL = "WANmode";
 	public static final String CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL = "clientSessionInfo";
 
@@ -61,9 +59,8 @@ public class HostInfo {
 			CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL,
 			CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, LAST_SEEN_DISPLAY_FIELD_LABEL, CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL,
 			CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL,
-			CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL,
-			CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, CREATED_DISPLAY_FIELD_LABEL,
-			CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
+			CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
+			CREATED_DISPLAY_FIELD_LABEL, CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
 
 	public static final String IS_MASTER_DEPOT_KEY = "isMasterDepot";
 
@@ -89,7 +86,6 @@ public class HostInfo {
 
 	private String hostType;
 	private String clientIpAddress;
-	private Boolean clientUefiBoot;
 	private Boolean clientWanConfig;
 
 	private Boolean clientShutdownInstall;
@@ -128,7 +124,6 @@ public class HostInfo {
 		unordered.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, clientIpAddress);
 		unordered.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, clientSystemUUID);
 		unordered.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, clientMacAddress);
-		unordered.put(CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL, clientUefiBoot);
 		unordered.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, clientShutdownInstall);
 
 		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
@@ -157,7 +152,6 @@ public class HostInfo {
 
 		unordered.put(HOST_TYPE_KEY, hostType);
 		unordered.put(CLIENT_IP_ADDRESS_KEY, clientIpAddress);
-		unordered.put(CLIENT_UEFI_BOOT_KEY, clientUefiBoot);
 		unordered.put(CLIENT_WAN_CONFIG_KEY, clientWanConfig);
 
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
@@ -180,7 +174,6 @@ public class HostInfo {
 		keys.add(CLIENT_IP_ADDRESS_KEY);
 		keys.add("groups");
 		keys.add(CLIENT_WAN_CONFIG_KEY);
-		keys.add(CLIENT_UEFI_BOOT_KEY);
 		keys.add(CLIENT_SHUTDOWN_INSTALL_KEY);
 		keys.add(HOST_KEY_KEY);
 		return Collections.unmodifiableList(keys);
@@ -230,10 +223,6 @@ public class HostInfo {
 
 		case LAST_SEEN_KEY:
 			lastSeen = "" + value;
-			break;
-
-		case CLIENT_UEFI_BOOT_KEY:
-			clientUefiBoot = (Boolean) value;
 			break;
 
 		case CLIENT_WAN_CONFIG_KEY:
@@ -286,20 +275,12 @@ public class HostInfo {
 		return clientIpAddress;
 	}
 
-	public Boolean getUefiBoot() {
-		return clientUefiBoot;
-	}
-
 	public Boolean getWanConfig() {
 		return clientWanConfig;
 	}
 
 	public Boolean getShutdownInstall() {
 		return clientShutdownInstall;
-	}
-
-	public void setUefiBoot(boolean b) {
-		clientUefiBoot = b;
 	}
 
 	public void setShutdownInstall(boolean b) {
@@ -351,7 +332,6 @@ public class HostInfo {
 
 		depotOfClient = showValue((String) pcInfo.get(DEPOT_OF_CLIENT_KEY));
 
-		clientUefiBoot = showValue((Boolean) pcInfo.get(CLIENT_UEFI_BOOT_KEY));
 		clientWanConfig = showValue((Boolean) pcInfo.get(CLIENT_WAN_CONFIG_KEY));
 
 		clientShutdownInstall = showValue((Boolean) pcInfo.get(CLIENT_SHUTDOWN_INSTALL_KEY));
@@ -364,7 +344,6 @@ public class HostInfo {
 
 		// save values which could be mixed
 		Boolean clientWanConfigSave = clientWanConfig;
-		Boolean clientUefiBootSave = clientUefiBoot;
 		Boolean clientShutdownInstallSave = clientShutdownInstall;
 
 		// empty everything
@@ -374,12 +353,6 @@ public class HostInfo {
 			clientWanConfig = null;
 		} else {
 			clientWanConfig = clientWanConfigSave;
-		}
-
-		if (!secondInfo.clientUefiBoot.equals(clientUefiBootSave)) {
-			clientUefiBoot = null;
-		} else {
-			clientUefiBoot = clientUefiBootSave;
 		}
 
 		if (!secondInfo.clientShutdownInstall.equals(clientShutdownInstallSave)) {
@@ -578,30 +551,6 @@ public class HostInfo {
 		}
 	}
 
-	private static void setClientUEFIBoot(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
-			int row) {
-		if (sourceOfChanges.get(CLIENT_UEFI_BOOT_KEY) != null) {
-			boolean uefiboot = false;
-
-			if ("true".equals(sourceOfChanges.get(CLIENT_UEFI_BOOT_KEY))) {
-				uefiboot = true;
-			}
-
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
-					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
-
-			if (col > -1) {
-				// write it into the visible table
-				clientTablePanel.getTableModel().setValueAt(uefiboot, row, col);
-			}
-
-			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getPersistenceController();
-			persistenceController.getConfigDataService().configureUefiBoot(client, uefiboot);
-			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_UEFI_BOOT_KEY, uefiboot);
-		}
-	}
-
 	private void setClientWANConfig(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
 		if (sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY) != null) {
@@ -662,8 +611,6 @@ public class HostInfo {
 
 		setClientShutdownInstall(clientTablePanel, client, sourceOfChanges, row);
 
-		setClientUEFIBoot(clientTablePanel, client, sourceOfChanges, row);
-
 		setClientWANConfig(clientTablePanel, client, sourceOfChanges, row);
 	}
 
@@ -671,8 +618,8 @@ public class HostInfo {
 	public String toString() {
 		return "(" + clientName + ";" + depotOfClient + ";" + clientDescription + ";" + clientInventoryNumber + ";"
 				+ clientOneTimePassword + ";" + clientNotes + ";" + clientSystemUUID + ";" + clientMacAddress + ";"
-				+ clientIpAddress + ";" + lastSeen + ";" + created + ";" + clientUefiBoot + ";" + clientWanConfig + ";"
-				+ clientShutdownInstall + ")";
+				+ clientIpAddress + ";" + lastSeen + ";" + created + ";" + clientWanConfig + ";" + clientShutdownInstall
+				+ ")";
 	}
 
 	public void initialize() {
@@ -691,7 +638,6 @@ public class HostInfo {
 
 		hostType = "";
 		clientIpAddress = "";
-		clientUefiBoot = false;
 		clientWanConfig = false;
 		clientShutdownInstall = false;
 	}

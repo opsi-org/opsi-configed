@@ -800,25 +800,6 @@ public class ConfigedMain {
 		}
 
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
-			List<String> columns = new ArrayList<>();
-			for (int i = 0; i < clientTablePanel.getTableModel().getColumnCount(); i++) {
-				columns.add(clientTablePanel.getTableModel().getColumnName(i));
-			}
-			Logging.info(this, "showAndSave columns are ", columns, ", search for ",
-					HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
-
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
-					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
-
-			Logging.info(this, "setSelectionPanelCols ,  found col ", col);
-
-			Logging.info(this, "showAndSave found col ", col);
-
-			initSelectionPanelColumn(col);
-		}
-
-		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL))) {
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < clientTablePanel.getTableModel().getColumnCount(); i++) {

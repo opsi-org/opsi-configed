@@ -92,7 +92,7 @@ public class CopyClient {
 		persistenceController.getHostDataService().createClient(newClientName,
 				Utils.getDomainFromClientName(clientToCopy.getName()), clientToCopy.getInDepot(), newDescription,
 				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
-				clientToCopy.getShutdownInstall(), clientToCopy.getUefiBoot(), clientToCopy.getWanConfig(), null, "");
+				clientToCopy.getShutdownInstall(), clientToCopy.getWanConfig(), null, "");
 	}
 
 	private void copyGroups() {

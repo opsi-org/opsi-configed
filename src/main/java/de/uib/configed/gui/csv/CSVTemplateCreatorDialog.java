@@ -305,10 +305,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		JCheckBox headerCheckBox = new JCheckBox(header);
 		headerCheckBox.setActionCommand(header);
 
-		if (HostInfo.CLIENT_UEFI_BOOT_KEY.equals(header)) {
-			return;
-		}
-
 		if (isImportantHeader(header)) {
 			headerCheckBox.setSelected(true);
 			headerCheckBox.setEnabled(false);
