@@ -86,7 +86,7 @@ public class UserConfigProducing {
 				if (roleName != null) {
 					Logging.info(this, "role branch with rolename ", roleName);
 					roleNames.add(roleName);
-					createPropertySubclass(roleName, UserConfig.ROLE);
+					createPropertySubclass(roleName, UserConfig.KEY_USER_ROLE_ROOT);
 				}
 			} else if (key.startsWith(UserConfig.ALL_USER_KEY_START)) {
 				Logging.info(this, "not delivered in this collection ", key);
@@ -128,7 +128,7 @@ public class UserConfigProducing {
 	}
 
 	private void createPropertySubclass(String property, String propertyType) {
-		final String propertyclass = UserConfig.START_USER_KEY + property + '}';
+		final String propertyclass = propertyType + ".{" + property + '}';
 		OpsiServiceNOMPersistenceController.getPropertyClassesServer().computeIfAbsent(propertyclass, (String arg) -> {
 			Logging.info(this, "createPropertySubclass for ", propertyType, " ", property);
 			return "";
