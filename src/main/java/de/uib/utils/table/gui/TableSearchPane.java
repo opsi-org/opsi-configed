@@ -485,18 +485,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private int findViewRowFromValue(int startviewrow, String value, Set<Integer> colIndices) {
-		Pattern regexPattern = null;
-
-		if (regexActive.isSelected()) {
-			regexPattern = Pattern.compile(".*" + value + ".*",
-					respectCase.isSelected() ? 0 : Pattern.CASE_INSENSITIVE);
-		}
-
 		int viewrow = Math.max(0, startviewrow);
 		boolean found = false;
 
 		while (!found && viewrow < targetModel.getRowCount()) {
-			found = searchForStringInColumns(viewrow, colIndices, value, regexPattern);
+			found = searchForStringInColumns(viewrow, colIndices, value);
 			if (!found) {
 				viewrow++;
 			}
@@ -506,8 +499,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	@SuppressWarnings("java:S135")
-	private boolean searchForStringInColumns(int viewrow, Set<Integer> colIndices, String value, Pattern regexPattern) {
-		boolean found = false;
+	private boolean searchForStringInColumns(int viewrow, Set<Integer> colIndices, String value) {
 		for (int j = 0; j < targetModel.getColumnCount(); j++) {
 			// we dont compare all values (comparing all values is default)
 			if (colIndices != null && !colIndices.contains(j)) {
@@ -517,19 +509,20 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			Object compareValue = targetModel
 					.getValueAt(targetModel.getRowForVisualRow(viewrow), targetModel.getColForVisualCol(j)).toString();
 
-			if (compareValue != null) {
-				found = searchForStringBasedOnSearchMode(compareValue.toString(), value, regexPattern);
+			if (compareValue != null && searchForStringBasedOnSearchMode(compareValue.toString(), value)) {
+				// We found the value
+				return true;
 			}
 
-			if (found) {
-				break;
-			}
 		}
-		return found;
+
+		return false;
 	}
 
-	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern, Pattern regexPattern) {
+	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern) {
 		if (regexActive.isSelected()) {
+			Pattern regexPattern = Pattern.compile(".*" + searchPattern + ".*",
+					respectCase.isSelected() ? 0 : Pattern.CASE_INSENSITIVE);
 			return regexPattern.matcher(searchString).matches();
 		} else {
 			if (!respectCase.isSelected()) {
