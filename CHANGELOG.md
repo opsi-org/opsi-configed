@@ -2,6 +2,8 @@
 ### Changed
 - Make it possible to delete/create configs in config state editing for depots and clients
 - Don't create unnecessary copies of configs when (re)loading -> better performance
+- Rotate up to 10 logfiles
+- Make the logfile name independent from the user name
 
 ### Fixed
 - Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"
