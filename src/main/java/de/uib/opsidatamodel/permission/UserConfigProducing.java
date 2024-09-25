@@ -108,8 +108,7 @@ public class UserConfigProducing {
 
 	private String produceRolePart(String roleKey) {
 		final String startRoleKey = UserConfig.KEY_USER_ROLE_ROOT + ".{";
-		final String roleNameBefore = roleKey.substring(0, startRoleKey.length());
-		String roleName = roleKey.substring(roleNameBefore.length());
+		String roleName = roleKey.substring(startRoleKey.length());
 		final int lenOfRoleName = roleName.indexOf("}");
 
 		if (lenOfRoleName > 0) {
