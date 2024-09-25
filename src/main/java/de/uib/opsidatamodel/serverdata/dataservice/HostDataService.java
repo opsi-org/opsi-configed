@@ -100,8 +100,7 @@ public class HostDataService {
 			String ipaddress = ((String) client.get(8)).trim();
 
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
-			boolean uefiBoot = Boolean.parseBoolean((String) client.get(11));
-			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(12));
+			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(11));
 
 			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
 			String opsiHostKey = ((String) client.get(13)).isBlank() ? null : ((String) client.get(13)).trim();
@@ -129,11 +128,6 @@ public class HostDataService {
 					OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 
 			configStatesJsonObject.add(itemDepot);
-
-			if (uefiBoot) {
-				configStatesJsonObject.add(
-						Utils.createUefiNOMEntry(newClientId, OpsiServiceNOMPersistenceController.EFI_DHCPD_FILENAME));
-			}
 
 			if (wanConfig) {
 				configStatesJsonObject = configDataService.addWANConfigStates(newClientId, configStatesJsonObject);

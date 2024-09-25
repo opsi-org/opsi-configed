@@ -29,7 +29,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import javafx.application.Application;
@@ -270,16 +269,6 @@ public final class Utils {
 		possibleValues.add(false);
 		return createNOMConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
 				possibleValues);
-	}
-
-	public static Map<String, Object> createUefiNOMEntry(String clientId, String val) {
-		Map<String, Object> item = createNOMitem("ConfigState");
-		List<String> values = new ArrayList<>();
-		values.add(val);
-		item.put("objectId", clientId);
-		item.put("values", values);
-		item.put("configId", OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME);
-		return item;
 	}
 
 	public static Map<String, Object> createNOMitem(String type) {

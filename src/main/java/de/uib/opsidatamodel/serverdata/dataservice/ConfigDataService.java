@@ -906,51 +906,13 @@ public class ConfigDataService {
 		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
 
-	private Boolean isUefiConfigured(String hostname) {
-		Boolean result = false;
-
-		if (getHostConfigsPD().get(hostname) != null
-				&& getHostConfigsPD().get(hostname)
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME) != null
-				&& !((List<?>) getHostConfigsPD().get(hostname)
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).isEmpty()) {
-			String configValue = (String) ((List<?>) getHostConfigsPD().get(hostname)
-					.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).get(0);
-
-			if (configValue.indexOf(OpsiServiceNOMPersistenceController.EFI_STRING) >= 0) {
-				// something similar should work, but not this:
-
-				result = true;
-			}
-		} else if (getConfigDefaultValuesPD().get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME) != null
-				&& !getConfigDefaultValuesPD().get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)
-						.isEmpty()) {
-			String configValue = (String) getConfigDefaultValuesPD()
-					.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME).get(0);
-
-			if (configValue.indexOf(OpsiServiceNOMPersistenceController.EFI_STRING) >= 0) {
-				// something similar should work, but not this:
-				result = true;
-			}
-		} else {
-			// No UEFI configuration
-		}
-
-		return result;
-	}
-
 	/**
 	 * Checks if the given clients have an entry for UEFI boot. That means, the
 	 * client has a client config with an entry
 	 * {@code clientconfig.uefinetbootlabel}.
-	 * <p>
-	 * Should only be used in opsi 4.3 (or later) since in opsi 4.3
-	 * {@code clientconfig.dhcpd.filename} entry has been replaced by
-	 * {@code clientconfig.uefinetbootlabel} entry and is no longer editable.
 	 *
 	 * @param clients for which to check the existence of UEFI boot entry
 	 * @return null if clients have different values or if client list is empty
-	 * @see #isUefiConfigured(String)
 	 */
 	@SuppressWarnings({ "java:S2447" })
 	public Boolean isUEFI43(Iterable<String> clients) {
@@ -1030,47 +992,6 @@ public class ConfigDataService {
 
 			Logging.debug(this, "valueFromConfigStateAsExpected ", result);
 		}
-		return result;
-	}
-
-	private boolean configureUefiBoot(String clientId, boolean uefiBoot) {
-		boolean result = false;
-
-		Logging.info(this, "configureUefiBoot, clientId ", clientId, " ", uefiBoot);
-
-		List<String> values = new ArrayList<>();
-
-		if (uefiBoot) {
-			values.add(OpsiServiceNOMPersistenceController.EFI_DHCPD_FILENAME);
-
-			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			jsonObjects.add(Utils.createUefiNOMEntry(clientId, OpsiServiceNOMPersistenceController.EFI_DHCPD_FILENAME));
-
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-					new Object[] { jsonObjects });
-			result = exec.doCall(omc);
-		} else {
-			values.add(OpsiServiceNOMPersistenceController.EFI_DHCPD_NOT);
-
-			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			jsonObjects.add(Utils.createUefiNOMEntry(clientId, OpsiServiceNOMPersistenceController.EFI_DHCPD_NOT));
-
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-					new Object[] { jsonObjects });
-			result = exec.doCall(omc);
-		}
-
-		// locally
-		if (result) {
-			if (getHostConfigsPD().get(clientId) == null) {
-				getHostConfigsPD().put(clientId, new HashMap<>());
-			}
-
-			Logging.info(this, "configureUefiBoot, configs for clientId ", clientId, " ",
-					getHostConfigsPD().get(clientId));
-			getHostConfigsPD().get(clientId).put(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME, values);
-		}
-
 		return result;
 	}
 

@@ -97,16 +97,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
-	public static final String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";
-	public static final String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
-	// the current real value, but it is not necessary to configure it:
-
-	// not more used:
-
-	public static final String EFI_DHCPD_NOT = "";
-
-	public static final String EFI_STRING = "efi";
-
 	public static final String KEY_USER_ROOT = "user";
 
 	public static final String KEY_USER_ROLE_ROOT = KEY_USER_ROOT + "." + "role";// UserConfig.

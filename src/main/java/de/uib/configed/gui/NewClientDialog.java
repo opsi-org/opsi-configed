@@ -436,8 +436,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		while (iter.hasNext()) {
 			List<Object> client = iter.next();
 
-			if (!isBoolean((String) client.get(10)) || !isBoolean((String) client.get(11))
-					|| !isBoolean((String) client.get(12))) {
+			if (!isBoolean((String) client.get(10)) || !isBoolean((String) client.get(11))) {
 				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"), false,
 						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
