@@ -13,9 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
@@ -484,11 +482,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return result;
 	}
 
-	private int findViewRowFromValue(int startviewrow, String value, Set<Integer> colIndices) {
+	private int findViewRowFromValue(int startviewrow, String value) {
 		int viewrow = Math.max(0, startviewrow);
 
+		int column = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
+
 		while (viewrow < targetModel.getRowCount()) {
-			if (searchForStringInColumns(viewrow, colIndices, value)) {
+			if (searchForStringInColumns(viewrow, value, column)) {
 				return viewrow;
 			} else {
 				viewrow++;
@@ -499,17 +499,15 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	@SuppressWarnings("java:S135")
-	private boolean searchForStringInColumns(int viewrow, Set<Integer> colIndices, String value) {
+	private boolean searchForStringInColumns(int viewrow, String value, int column) {
+		if (column != -1) {
+			// search in that column
+			return searchForStringBasedOnSearchMode(value, column, viewrow);
+		}
+
+		// Search in all columns
 		for (int j = 0; j < targetModel.getColumnCount(); j++) {
-			// we dont compare all values (comparing all values is default)
-			if (colIndices != null && !colIndices.contains(j)) {
-				continue;
-			}
-
-			Object compareValue = targetModel
-					.getValueAt(targetModel.getRowForVisualRow(viewrow), targetModel.getColForVisualCol(j)).toString();
-
-			if (compareValue != null && searchForStringBasedOnSearchMode(compareValue.toString(), value)) {
+			if (searchForStringBasedOnSearchMode(value, j, viewrow)) {
 				// We found the value
 				return true;
 			}
@@ -519,18 +517,26 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return false;
 	}
 
-	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern) {
+	private boolean searchForStringBasedOnSearchMode(String searchPattern, int column, int row) {
+		Object cellValue = targetModel.getValueAt(targetModel.getRowForVisualRow(row),
+				targetModel.getColForVisualCol(column));
+		if (cellValue == null) {
+			return false;
+		}
+
+		String cellString = cellValue.toString();
+
 		if (regexActive.isSelected()) {
 			Pattern regexPattern = Pattern.compile(".*" + searchPattern + ".*",
 					respectCase.isSelected() ? 0 : Pattern.CASE_INSENSITIVE);
-			return regexPattern.matcher(searchString).matches();
+			return regexPattern.matcher(cellString).matches();
 		} else {
 			if (!respectCase.isSelected()) {
-				searchString = searchString.toLowerCase(Locale.ROOT);
+				cellString = cellString.toLowerCase(Locale.ROOT);
 				searchPattern = searchPattern.toLowerCase(Locale.ROOT);
 			}
 
-			return stringContainsParts(searchString, searchPattern.split(" ")).success;
+			return stringContainsParts(cellString, searchPattern.split(" ")).success;
 		}
 	}
 
@@ -622,22 +628,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
 		final String value = flatTextFieldSearch.getText();
 
-		Set<Integer> selectedCols0 = null;
-
-		if (comboSearchFields.getSelectedIndex() > 0) {
-			selectedCols0 = new HashSet<>();
-			selectedCols0.add(targetModel.findColumn((String) comboSearchFields.getSelectedItem()));
-		}
-
-		final Set<Integer> selectedCols = selectedCols0;
-
 		flatTextFieldSearch.getCaret().setVisible(false);
 
 		// Search only for value longer than one digit
 		if (value.length() < 2) {
 			setRow(0, false, select);
 		} else {
-			foundrow = findViewRowFromValue(startrow, value, selectedCols);
+			foundrow = findViewRowFromValue(startrow, value);
 
 			if (foundrow > -1) {
 				setRow(foundrow, addSelection, select);
