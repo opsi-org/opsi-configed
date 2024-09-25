@@ -9,7 +9,6 @@ package de.uib.configed;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.text.DateFormat;
 
 import javax.swing.UIManager;
 
@@ -153,15 +152,7 @@ public final class Globals {
 
 	public static final int COMBOBOX_ROW_COUNT = 20;
 
-	public static final int WIDTH_FRAME_RENAME_CLIENT = 350;
-	public static final int HEIGHT_FRAME_RENAME_CLIENT = 200;
-
-	public static final int WIDTH_INFO_LOG_FILE = 400;
-	public static final int HEIGHT_INFO_LOG_FILE = 200;
-
 	public static final Dimension GRAPHIC_BUTTON_DIMENSION = new Dimension(GRAPHIC_BUTTON_SIZE, GRAPHIC_BUTTON_SIZE);
-
-	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;
 
 	// action form constants
 	public static final int HFIRST_GAP = GAP_SIZE * 3;
@@ -175,9 +166,6 @@ public final class Globals {
 	public static final String PSEUDO_KEY_SEPARATOR = ";";
 
 	public static final Dimension HELPER_FORM_DIMENSION = new Dimension(1100, 600);
-
-	public static final int DIALOG_FRAME_DEFAULT_HEIGHT = 400;
-	public static final int DIALOG_FRAME_DEFAULT_WIDTH = 800;
 
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
 

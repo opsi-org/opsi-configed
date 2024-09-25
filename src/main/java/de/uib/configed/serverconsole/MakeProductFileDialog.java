@@ -79,7 +79,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 	private void initFrame() {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
+		setSize(900, 500);
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		setVisible(true);
 	}

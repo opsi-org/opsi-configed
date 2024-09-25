@@ -616,7 +616,7 @@ public class MainFrame extends JFrame {
 				new String[] { Configed.getResourceValue("buttonClose"),
 						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						Configed.getResourceValue("MainFrame.showLogFileOpen") },
-				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
+				400, 200) {
 			@Override
 			public void doAction2() {
 				getTextComponent().copy();

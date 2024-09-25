@@ -422,7 +422,7 @@ public final class ServerActionManager {
 
 		fEdit.init();
 		fEdit.setTitle(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
-		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
+		fEdit.setSize(350, 250);
 		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		fEdit.setSingleLine(true);
 		fEdit.setModal(true);
