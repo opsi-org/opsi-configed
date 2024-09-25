@@ -79,10 +79,6 @@ public final class Logging {
 	private Logging() {
 	}
 
-	public static String levelText(int level) {
-		return LEVEL_TO_NAME.get(level);
-	}
-
 	public static synchronized Integer getLogLevelConsole() {
 		return logLevelConsole;
 	}
@@ -409,10 +405,6 @@ public final class Logging {
 		}
 
 		return result.toString();
-	}
-
-	public static String getLogDirectoryName() {
-		return logDirectoryName;
 	}
 
 	public static void setLogDirectoryName(String logDirectoryName) {

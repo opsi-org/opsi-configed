@@ -31,12 +31,10 @@ public final class Logviewer {
 		String imageHandled = "(we start image retrieving)";
 		Logging.info(this, imageHandled);
 
-		Logging.info(this, "--  wantedDirectory ", Logging.getLogDirectoryName());
+		Logging.info(" --  fileName ", fileName);
 
 		if (fileName != null) {
 			LogFrame.setFileName(fileName);
-		} else {
-			Logging.info(" --  fileName ", Logging.getLogDirectoryName());
 		}
 
 		SwingUtilities.invokeLater(Logviewer::init);

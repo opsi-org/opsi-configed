@@ -486,7 +486,7 @@ public class MainFrame extends JFrame {
 
 		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
 			rbLoglevelItems[i] = new JRadioButtonMenuItem(
-					"[" + i + "] " + Logging.levelText(i).toLowerCase(Locale.ROOT));
+					"[" + i + "] " + Logging.LEVEL_TO_NAME.get(i).toLowerCase(Locale.ROOT));
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
 			loglevelGroup.add(rbLoglevelItems[i]);
