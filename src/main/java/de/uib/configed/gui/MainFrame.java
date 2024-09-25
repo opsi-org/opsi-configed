@@ -155,6 +155,7 @@ public class MainFrame extends JFrame {
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
+		jMenuFileSaveConfigurations.setEnabled(false);
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		jMenuFileSaveConfigurations.addActionListener(actionEvent -> ChangedDataManager.checkSaveAll(false));
 
