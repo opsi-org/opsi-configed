@@ -1,4 +1,4 @@
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.8] - 2024-09-25
 ### Changed
 - Make it possible to delete/create configs in config state editing for depots and clients
 - Don't create unnecessary copies of configs when (re)loading -> better performance
