@@ -486,16 +486,16 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private int findViewRowFromValue(int startviewrow, String value, Set<Integer> colIndices) {
 		int viewrow = Math.max(0, startviewrow);
-		boolean found = false;
 
-		while (!found && viewrow < targetModel.getRowCount()) {
-			found = searchForStringInColumns(viewrow, colIndices, value);
-			if (!found) {
+		while (viewrow < targetModel.getRowCount()) {
+			if (searchForStringInColumns(viewrow, colIndices, value)) {
+				return viewrow;
+			} else {
 				viewrow++;
 			}
 		}
 
-		return found ? viewrow : -1;
+		return -1;
 	}
 
 	@SuppressWarnings("java:S135")
