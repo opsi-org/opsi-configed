@@ -304,7 +304,6 @@ public final class Configed {
 	}
 
 	private static void initLogging() {
-		Logging.setLogfileMarker(host);
 		Logging.initLogFile();
 		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {

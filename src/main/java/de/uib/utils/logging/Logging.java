@@ -28,8 +28,7 @@ public final class Logging {
 	private static String logDirectoryName;
 	private static String logFilenameInUse;
 
-	private static String logfileDelimiter = "configed";
-	private static String logfileMarker;
+	private static final String LOG_FILE_DELIMITER = "configed";
 	public static final String WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY = "APPDATA";
 	public static final String ENV_VARIABLE_FOR_USER_DIRECTORY = "user.home";
 	private static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
@@ -67,7 +66,7 @@ public final class Logging {
 
 	private static final int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
 
-	private static int numberOfKeptLogFiles = 3;
+	private static final int NUMBER_OF_LOG_FILES = 10;
 	private static PrintWriter logFileWriter;
 	private static boolean logFileInitialized;
 
@@ -113,19 +112,6 @@ public final class Logging {
 		setLogLevelFile(newLevel);
 	}
 
-	public static synchronized void setLogfileMarker(String marker) {
-		if (logfileMarker != null) {
-			debug("logfileMarker already set");
-			return;
-		}
-
-		if (marker == null || marker.length() == 0) {
-			logfileMarker = "";
-		} else {
-			logfileMarker = "__" + marker.replace('.', '_').replace(":", "__");
-		}
-	}
-
 	public static synchronized void initLogFile() {
 		// Try to initialize only once!
 		logFileInitialized = true;
@@ -153,11 +139,10 @@ public final class Logging {
 
 			logDirectory.mkdirs();
 
-			logFilename = logDirectory.getAbsolutePath() + File.separator + logfileDelimiter + logfileMarker
-					+ extension;
+			logFilename = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + extension;
 			logFilename = new File(logFilename).getAbsolutePath();
 
-			if (numberOfKeptLogFiles > 0) {
+			if (NUMBER_OF_LOG_FILES > 0) {
 				treatOtherLogFiles(logFilename, logDirectory);
 			}
 
@@ -172,16 +157,16 @@ public final class Logging {
 	// Renames the other existing logfiles
 	private static void treatOtherLogFiles(String logFilename, File logDirectory) {
 		File logFile = new File(logFilename);
-		String[] logFilenames = new String[numberOfKeptLogFiles];
-		File[] logFiles = new File[numberOfKeptLogFiles];
+		String[] logFilenames = new String[NUMBER_OF_LOG_FILES];
+		File[] logFiles = new File[NUMBER_OF_LOG_FILES];
 
-		for (int i = 0; i < numberOfKeptLogFiles; i++) {
-			logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + logfileDelimiter + logfileMarker + "___"
-					+ i + extension;
+		for (int i = 0; i < NUMBER_OF_LOG_FILES; i++) {
+			logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_" + i
+					+ extension;
 			logFiles[i] = new File(logFilenames[i]);
 		}
 
-		for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
+		for (int i = NUMBER_OF_LOG_FILES - 1; i > 0; i--) {
 			if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i])) {
 				Logging.warning("renaming logfile failed for file: ", logFiles[i - 1]);
 			}
