@@ -120,8 +120,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	private FCompleteWinProducts panelCompleteWinProducts;
 
-	private String user;
-
 	private ServerFacade exec;
 
 	private HostInfoCollections hostInfoCollections;
@@ -147,8 +145,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
 		Logging.info(this, "start construction, \nconnect to ", server, " as ", user);
-		this.user = user;
-
 		Logging.debug(this, "create");
 
 		init();
@@ -272,7 +268,7 @@ public class OpsiServiceNOMPersistenceController {
 		return rpcMethodExecutor;
 	}
 
-	@SuppressWarnings({ "java:S103", "java:S138" })
+	@SuppressWarnings({ "java:S103" })
 	private void registerReloadHandlers() {
 		reloadDispatcher = new ReloadDispatcher();
 
@@ -434,10 +430,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	public ServerFacade getExecutioner() {
 		return exec;
-	}
-
-	public String getUser() {
-		return user;
 	}
 
 	public static NavigableMap<String, String> getPropertyClassesServer() {
