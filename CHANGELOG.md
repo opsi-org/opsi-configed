@@ -3,6 +3,7 @@
 ## [4.3.3.17] - 2024-09-26
 ### Fixed
 - Correct path for saving certificates when entering port in login dialog
+- Start configed when trusting the certificate once
 
 
 ## [4.3.3.16] - 2024-09-19

@@ -135,8 +135,12 @@ public final class CertificateManager {
 	}
 
 	public static Collection<? extends Certificate> instantiateCertificate(File certificateFile) {
-
 		Collection<? extends Certificate> certificates = new HashSet<>();
+
+		if (certificateFile == null) {
+			Logging.info("the certificate file is null so we return an empty Set of certificates");
+			return certificates;
+		}
 
 		try (FileInputStream is = new FileInputStream(certificateFile)) {
 			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
