@@ -65,7 +65,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	private JCheckBox jCheckShutdownInstall;
 
 	private List<String> domains;
-	private List<String> newDomainsList;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -88,7 +87,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	 * @since 4.0.7.6.11
 	 */
 	public void setDomains() {
-		this.domains = newDomainsList;
 		jComboDomain.setModel(new DefaultComboBoxModel<>(domains.toArray(new String[0])));
 	}
 
@@ -112,9 +110,10 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private void init() {
 		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("NewClientDialog.hostname"));
-		jTextHostname = new JTextField(new CheckedDocument(/* allowedChars */ new char[] { '-', '0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-				'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }, -1), "", 17);
+		jTextHostname = new JTextField(new CheckedDocument(
+				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
+				-1), "", 17);
 		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
 
 		JLabel jLabelDomainname = new JLabel(Configed.getResourceValue("NewClientDialog.domain"));
@@ -167,20 +166,21 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel jLabelSystemUUID = new JLabel(Configed.getResourceValue("NewClientDialog.SystemUUID"));
 
-		systemUUIDField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
-				36);
+		systemUUIDField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
+				Character.MIN_VALUE, 36, true), "", 36);
 
 		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
 
-		macAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
+		macAddressField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
+				2, true), "", 17);
 
 		JLabel jLabelIpAddress = new JLabel(Configed.getResourceValue("NewClientDialog.IpAddress"));
 
-		ipAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
-				"", 24);
+		ipAddressField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
+				28, Character.MIN_VALUE, 4, false), "", 24);
 
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
@@ -378,7 +378,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private void initComboDomain() {
-		newDomainsList = persistenceController.getConfigDataService().getDomains();
+		domains = persistenceController.getConfigDataService().getDomains();
 
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
@@ -505,7 +505,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		Logging.debug(this, "createClient editableDomains ", editableDomains);
 
-		newDomainsList = editableDomains;
+		domains = editableDomains;
 
 		setDomains();
 
