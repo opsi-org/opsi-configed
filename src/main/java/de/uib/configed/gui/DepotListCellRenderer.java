@@ -78,6 +78,11 @@ public class DepotListCellRenderer extends DefaultListCellRenderer {
 	}
 
 	private void setConnectionIcon(Object value) {
+		if (configedMain.getConnectedClientsByMessagebus() == null) {
+			BufferedImage emptyImage = new BufferedImage(connectedIcon.getIconWidth(), 1, BufferedImage.TYPE_INT_ARGB);
+			setIcon(new ImageIcon(emptyImage));
+			return;
+		}
 		if (configedMain.getConnectedClientsByMessagebus().contains(value)) {
 			setIcon(connectedIcon);
 		} else if (value != null && value.equals(persistenceController.getHostInfoCollections().getConfigServer())) {

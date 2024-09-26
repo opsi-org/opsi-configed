@@ -275,8 +275,12 @@ public class MainFrame extends JFrame {
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
 		Utils.addOpsiIconToMenuItem(menuOpsi);
-		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
-				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
+		boolean commandsAreDeactivated = !PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
+				&& !PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.terminalCommandsIsActive();
+		// boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
+		// 		.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
 		Logging.info(this, "setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
@@ -285,18 +289,24 @@ public class MainFrame extends JFrame {
 			menuOpsi.addSeparator();
 		}
 		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
+		// PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+		// 				.terminalMenuIsActive()
 
 		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+				&& PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.terminalMenuIsActive());
+		// && UserConfig.getCurrentUserConfig()
+		// 		.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
 		JMenuItem jMenuFrameTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
 		Utils.addIntellijIconToMenuItem(jMenuFrameTerminal, "terminal");
 
 		// check terminal access rights defined by user roles
-		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
-				.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
+		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().terminalsForbidden();
+		// List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
+		// 		.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
 		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
 		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);

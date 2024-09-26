@@ -140,6 +140,7 @@ public class ConfigedMain implements MessagebusListener {
 	private static String user;
 	private static String password;
 	private static String otp;
+	private static boolean useSSO = false;
 
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
@@ -266,7 +267,7 @@ public class ConfigedMain implements MessagebusListener {
 	private InitialDataLoader initialDataLoader;
 	private LicenseDisplayer licenseDisplayer;
 
-	public ConfigedMain(String host, String user, String password, String otp) {
+	public ConfigedMain(String host, String user, String password, String otp, boolean useSSO) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
 		}
@@ -278,6 +279,9 @@ public class ConfigedMain implements MessagebusListener {
 		}
 		if (ConfigedMain.otp == null) {
 			setOTP(otp);
+		}
+		if (!ConfigedMain.useSSO) {
+			setUseSSO(useSSO);
 		}
 
 		Logging.registerConfigedMain(this);
@@ -1098,11 +1102,15 @@ public class ConfigedMain implements MessagebusListener {
 
 		// This must be called last, so that loading frame for connection is called last
 		// and on top of the login-frame
-		if (host != null && user != null && password != null) {
+		if (host != null && useSSO) {
+			// Auto login
+			Logging.info(this, "start with SSO / SAML");
+			loginDialog.tryConnecting(true);
+		} else if (host != null && user != null && password != null) {
 			// Auto login
 			Logging.info(this, "start with given credentials");
-
-			loginDialog.tryConnecting();
+			loginDialog.tryConnecting(false);
+		} else {
 		}
 	}
 
@@ -3277,7 +3285,8 @@ public class ConfigedMain implements MessagebusListener {
 			connectToHost = "Configserver";
 		}
 
-		if (!getConnectedClientsByMessagebus().contains(connectToHost) && !"Configserver".equals(connectToHost)) {
+		if (getConnectedClientsByMessagebus() != null && !getConnectedClientsByMessagebus().contains(connectToHost)
+				&& !"Configserver".equals(connectToHost)) {
 			Logging.info(this, type, " shell access feature is only supported for clients connected with messagebus");
 			JOptionPane.showMessageDialog(mainFrame,
 					Configed.getResourceValue("ConfigedMain.openTerminalOn" + type + "Feature.message"));
@@ -3527,6 +3536,10 @@ public class ConfigedMain implements MessagebusListener {
 
 	public static void setOTP(String otp) {
 		ConfigedMain.otp = otp;
+	}
+
+	public static void setUseSSO(boolean useSSO) {
+		ConfigedMain.useSSO = useSSO;
 	}
 
 	@Override

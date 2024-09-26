@@ -6,6 +6,7 @@
 
 package de.uib.opsicommand;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,12 +21,14 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.json.JSONObject;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -68,6 +71,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String otp;
 	private String sessionId;
 	private int portHTTPS = Globals.DEFAULT_PORT;
+	public boolean useSAML = false;
+
+	public ServerFacade(String host) {
+		if (host == null) {
+			throw new IllegalArgumentException("All or some parameters are null");
+		}
+		connect(host, null, null, null, true);
+	}
 
 	/**
 	 * Constructs {@code ServerFacade} object with provided information.
@@ -80,7 +91,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		if (host == null || username == null || password == null) {
 			throw new IllegalArgumentException("All or some parameters are null");
 		}
+		connect(host, username, password, otp, false);
+	}
 
+	private synchronized void connect(String host, String username, String password, String otp, boolean useSAML) {
+		this.useSAML = useSAML;
 		this.host = host;
 		int idx = -1;
 		if (host.contains("[") && host.contains("]")) {
@@ -96,14 +111,104 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.username = username;
 		this.password = password;
 		this.otp = otp;
+
 		conStat = new ConnectionState();
 
 		CertificateDownloader.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
+		if (useSAML && !connectSAML()) {
+			throw new RuntimeException("SAML connection failed");
+		}
 		checkServerVersion();
 	}
 
+	private synchronized boolean connectSAML() {
+		Map<String, String> requestProperties = new HashMap<>();
+		Map<String, Object> jsonProperties = null;
+		requestProperties.put("Accept", "application/json");
+		String localKeySID = "respondSessionId";
+		//////// register and get new session id
+		URL url_get_sid = makeURL("/auth/session_id");
+		Logging.warning("connectSAML 1 ", url_get_sid);
+		Map<String, Object> result = retrieveResponse(url_get_sid, "GET", requestProperties, jsonProperties,
+				localKeySID);
+		if (result == null || result.isEmpty() || !result.containsKey(localKeySID)) {
+			Logging.warning("connectSAML no sessionId received");
+			return false;
+		}
+		String sid = (String) result.get(localKeySID);
+		if (!sid.contains("=")) {
+			sessionId = "opsiconfd-session=" + sid;
+		}
+		Logging.warning("connectSAML result ", result, " sessionId ", sid, " <=> ", sessionId);
+
+		/////// open browser
+		String urlBrowserSaml = "/auth/saml/login?session_id=" + sid + "&redirect=close_window";
+		Logging.warning("connectSAML2 ", urlBrowserSaml);
+		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				URL murl = makeURL(urlBrowserSaml);
+				if (murl == null) {
+					Logging.error("Error creating URL");
+					return false;
+				}
+				desktop.browse(murl.toURI());
+			} catch (IOException | URISyntaxException | UnsupportedOperationException e) {
+				Logging.error(e, "Error opening browser");
+				return false;
+			}
+		} else {
+			Logging.error("Desktop is not supported");
+			return false;
+		}
+
+		/////// check if authenticated
+		URL url_authenticated = makeURL("/auth/wait_authenticated");
+		Logging.warning("connectSAML3 ", url_authenticated);
+		requestProperties.clear();
+		requestProperties.put("Accept", "application/json");
+		requestProperties.put("Cookie", sessionId);
+		jsonProperties = new HashMap<>();
+		jsonProperties.put("wait_time", 60);
+		HashMap<String, Object> responseHeader = new HashMap<>();
+		result = retrieveResponse(url_authenticated, "POST", requestProperties, jsonProperties, "authenticated",
+				responseHeader);
+
+		if (result == null || result.isEmpty() || !result.containsKey("authenticated")) {
+			throw new RuntimeException("authenticated not received");
+		} else {
+			Logging.warning("connectSAML GOT RESULT ", result);
+		}
+		if (responseHeader.isEmpty()) {
+			throw new RuntimeException("responseHeader not received");
+		}
+
+		boolean authenticated = (boolean) result.get("authenticated");
+		Logging.warning("connectSAML result (should be authenticated)", result.get("authenticated"), " <=> ",
+				authenticated);
+
+		Logging.warning("connectSAML GOT responseHeader ", responseHeader);
+		Logging.warning("connectSAML GOT responseHeader keys", responseHeader.keySet());
+
+		String uname = (String) responseHeader.get("x-opsi-user-id");
+		Logging.warning("connectSAML GOT username0 ", uname);
+		if (uname == null) {
+			throw new RuntimeException("username not received");
+		}
+		username = uname.split("user:")[1];
+		Logging.warning("connectSAML GOT username2 ", this.username);
+		return authenticated;
+	}
+
 	private synchronized void checkServerVersion() {
-		versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), username, password);
+		Logging.warning("checkServerVersion started");
+		if (useSAML) {
+			Logging.warning("checkServerVersion started with SAML");
+			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), sessionId);
+		} else {
+			Logging.warning("checkServerVersion started with username/password");
+			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), username, password);
+		}
 		versionRetriever.checkServerVersion();
 	}
 
@@ -113,10 +218,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private Map<String, String> produceGeneralRequestProperties(OpsiMethodCall omc) {
 		Map<String, String> requestProperties = new HashMap<>();
-
-		String authorization = Base64.getEncoder()
-				.encodeToString((username + ":" + password + otp).getBytes(StandardCharsets.UTF_8));
-		requestProperties.put("Authorization", "Basic " + authorization);
+		if (!useSAML) { // cookie is used for SAML
+			String authorization = Base64.getEncoder()
+					.encodeToString((username + ":" + password + otp).getBytes(StandardCharsets.UTF_8));
+			requestProperties.put("Authorization", "Basic " + authorization);
+		}
 
 		// has to be value between 1 and 43300 [sec]
 		requestProperties.put("X-opsi-session-lifetime", "900");
@@ -133,6 +239,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		if (sessionId != null) {
 			requestProperties.put("Cookie", sessionId);
+			// Logging.warning("IDEAL SESSION ID ", sessionId);
 		}
 
 		return requestProperties;
@@ -143,8 +250,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private URL makeURL() {
+		return makeURL("/rpc");
+	}
+
+	private URL makeURL(String urlpath) {
 		URL serviceURL = null;
-		String baseURL = produceBaseURL("/rpc");
+		String baseURL = produceBaseURL(urlpath);
 
 		try {
 			serviceURL = new URI(baseURL).toURL();
@@ -227,6 +338,74 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
+	// public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
+	// 		Map<String, String> requestProperties) {
+	// 	return retrieveResponse(url, requestMethod, requestProperties, "result");
+	// }
+
+	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
+			Map<String, String> requestProperties, Map<String, Object> json, String resultkey) {
+		return retrieveResponse(url, requestMethod, requestProperties, json, resultkey, null);
+	}
+
+	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
+			Map<String, String> requestProperties, Map<String, Object> json, String resultkey,
+			Map<String, Object> responseHeader) {
+		Logging.info(this, "MY retrieveResponse started");
+
+		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
+
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + url);
+		timeCheck.start();
+
+		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
+		handler.setRequestMethod(requestMethod);
+		HttpsURLConnection connection = handler.establishConnection(true);
+		conStat = handler.getConnectionState();
+		if (connection == null) {
+			return new HashMap<>();
+		}
+		// sending data
+		if (json != null) {
+			String jsonStr = new JSONObject(json).toString();
+			Logging.warning("send ", requestMethod, "jsonStr ", jsonStr);
+			try (OutputStream writer = getOutputStreamWriterForConnection(connection, jsonStr.length())) {
+				writer.write(jsonStr.getBytes(StandardCharsets.UTF_8));
+				writer.flush();
+			} catch (IOException iox) {
+				Logging.info(this, "exception on writing json request ", iox);
+			}
+
+		}
+
+		Logging.info(this, "connection cipher suite ", (connection).getCipherSuite());
+		Map<String, Object> result = new HashMap<>();
+		// receiving data
+
+		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
+			try {
+				handleResponseCode(connection);
+
+				InputStream stream = getInputStreamBasedOnEncoding(connection);
+				Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
+
+				result = retrieveResponseBasedOnContentTypeToObject(connection.getContentType(), stream, resultkey);
+				if (responseHeader != null) {
+					for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet()) {
+						responseHeader.put(entry.getKey(), entry.getValue().get(0));
+					}
+					// responseHeader.putAll(connection.getHeaderFields());
+				}
+				Logging.warning(this, "Connection state after communication: ", conStat);
+			} catch (IOException ex) {
+				Logging.error(this, ex, "Exception while data reading");
+				return null;
+			}
+		}
+
+		return result;
+	}
+
 	private void sendPostRequest(HttpsURLConnection connection, OpsiMethodCall omc) {
 		if (connection == null) {
 			return;
@@ -270,6 +449,63 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.error(this, "Unsupported Content-Type: ", contentType);
 		}
 
+		return result;
+	}
+
+	private String readInputStream(InputStream fis) {
+		StringBuilder sb = new StringBuilder();
+
+		String thisLine = null;
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+			while ((thisLine = br.readLine()) != null) {
+				sb.append(thisLine);
+				sb.append("\n");
+			}
+			br.close();
+		} catch (IOException ex) {
+			Logging.error(ex, "Error reading input stream");
+		}
+		return sb.toString();
+	}
+
+	private Map<String, Object> retrieveResponseBasedOnContentTypeToObject(String contentType, InputStream stream,
+			String resultKey) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		String resultStr = readInputStream(stream).strip();
+		Logging.info("retrieveResponseBasedOnContentType ", contentType, ": ", resultStr);
+
+		Map<String, Object> result = new HashMap<>();
+		if (contentType.contains("application/json")) {
+			if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("{")) {
+				result = mapper.readValue(resultStr, new TypeReference<Map<String, Object>>() {
+				});
+			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("[")) {
+				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object[]>() {
+				}));
+			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("\"")) {
+				Logging.info("retrieveResponseBasedOnContentType ", contentType, " is string ", resultStr);
+				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
+				}));
+			} else if (resultStr != null && (resultStr.equals("true") || resultStr.equals("\"true\""))) {
+				result.put(resultKey, true);
+			} else if (resultStr != null && (resultStr.equals("false") || resultStr.equals("\"false\""))) {
+				result.put(resultKey, false);
+
+			} else if (resultStr == null || resultStr.equals("null") || resultStr.equals("\"null\"")) {
+				result.put(resultKey, null);
+			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.contains(".")) {
+				result.put(resultKey, Float.parseFloat(resultStr));
+			} else {
+				result.put(resultKey, Integer.parseInt(resultStr));
+			}
+
+		} else if (contentType.contains("application/msgpack")) {
+			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			});
+		} else {
+			Logging.error(this, "Unsupported Content-Type: ", contentType);
+		}
 		return result;
 	}
 
@@ -337,7 +573,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			gzipped = "gzip".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 			Logging.debug(this, "gzipped ", gzipped);
 			deflated = "deflate".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
-			Logging.debug(this, "deflated ", deflated);
+			Logging.debug(this, "deflated\r\n" + //
+					"\t\t\t\t ", deflated);
 			lz4compressed = "lz4".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 
 			Logging.debug(this, "lz4compressed ", lz4compressed);

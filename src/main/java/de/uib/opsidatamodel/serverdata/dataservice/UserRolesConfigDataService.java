@@ -374,11 +374,30 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverActionPermission);
 	}
 
+	private void checkKeyPermission(Map<String, List<Object>> serverPropertyMap, String configKey,
+			CacheIdentifier cacheIdentifier) {
+		if (serverPropertyMap.get(configKey) != null
+				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+
+			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
+			List<Object> items = serverPropertyMap.get(configKey);
+			cacheManager.setCachedData(cacheIdentifier, items.get(0));
+		}
+	}
+
 	private void checkTerminalPermissions() {
+		Logging.warning(this, " checkTerminalPermissions");
+
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
-		String configKey = userPartPD() + UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
 
+		checkKeyPermission(serverPropertyMap, userPartPD() + UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE,
+				CacheIdentifier.TERMINAL_MENU_ACTIVE);
+		checkKeyPermission(serverPropertyMap, userPartPD() + UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE,
+				CacheIdentifier.TERMINAL_COMMANDS_ACTIVE);
+
+		String configKey = userPartPD() + UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
+		cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, Collections.emptyList());
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 
@@ -1092,5 +1111,26 @@ public class UserRolesConfigDataService {
 		Set<String> depotsPermitted = cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
 
 		return depotsPermitted != null && depotsPermitted.contains(depotId);
+	}
+
+	public boolean terminalMenuIsActive() {
+		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_MENU_ACTIVE, Boolean.class) == null) {
+			checkTerminalPermissions();
+		}
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_MENU_ACTIVE, Boolean.class));
+	}
+
+	public boolean terminalCommandsIsActive() {
+		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class) == null) {
+			checkTerminalPermissions();
+		}
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class));
+	}
+
+	public List<Object> terminalsForbidden() {
+		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class) == null) {
+			checkTerminalPermissions();
+		}
+		return cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class);
 	}
 }

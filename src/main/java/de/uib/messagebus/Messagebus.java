@@ -86,9 +86,11 @@ public class Messagebus implements MessagebusListener {
 			messagebusWebSocket.registerListener(configedMain);
 		}
 
-		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
+		if (basicAuthEnc != null) {
+			messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
+		}
 		if (exec.getSessionId() != null) {
-			Logging.debug("Adding cookie header");
+			Logging.warning("Adding cookie header");
 			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 
@@ -159,6 +161,9 @@ public class Messagebus implements MessagebusListener {
 
 	private String createEncBasicAuth() {
 		ServerFacade exec = getServerFacadeExecutor();
+		if (exec.useSAML) {
+			return null;
+		}
 		String basicAuth = String.format("%s:%s", exec.getUsername(), exec.getPassword());
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}

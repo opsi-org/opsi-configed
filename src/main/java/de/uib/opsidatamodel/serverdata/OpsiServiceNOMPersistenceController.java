@@ -155,15 +155,44 @@ public class OpsiServiceNOMPersistenceController {
 
 	private String triggeredEvent;
 
-	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
-		Logging.info(this, "start construction, \nconnect to ", server, " as ", user);
-		this.user = user;
+	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp, boolean useSSO) {
+		Logging.info(this, "OSNOM start construction, \nOSNOM connect to ", server, " as ", user, " or sso ", useSSO);
+
+		if (server == null || server.isEmpty()) {
+			Logging.error(this.getClass(), "no server given");
+			return;
+		}
+
+		if (useSSO) {
+			Logging.warning(this.getClass(), "OSNOM no user or password given. try sso/saml");
+		} else if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
+			Logging.error(this.getClass(), "no user or password given");
+			return;
+		}
+		this.user = user; // could be overwritten by sso
 
 		Logging.debug(this, "create");
 
+		Logging.info(this, "OSNOM start init");
 		init();
-
-		exec = new ServerFacade(server, user, password, otp);
+		Logging.info(this, "OSNOM useSSO ", useSSO);
+		if (useSSO) {
+			Logging.info(this, "OSNOM 0try sso");
+			try {
+				ServerFacade sf = new ServerFacade(server);
+				this.user = sf.getUsername();
+				exec = sf;
+			} catch (Exception ex) {
+				Logging.error(this, "OSNOM 0error in sso", ex);
+				return;
+			}
+			Logging.info(this, "OSNOM 0sso exec is ", exec, " connection state ", exec.getConnectionState());
+		} else {
+			Logging.info(this, "OSNOM 1try normal");
+			exec = new ServerFacade(server, user, password, otp);
+			Logging.info(this, "OSNOM 1exec is ", exec, " connection state ", exec.getConnectionState());
+		}
+		Logging.info(this, "OSNOM start getting data services");
 		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);

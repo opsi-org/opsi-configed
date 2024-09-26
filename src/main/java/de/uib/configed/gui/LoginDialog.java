@@ -80,6 +80,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private JButton jButtonCancel;
 	private JButton jButtonCommit;
+	private JButton jButtonSSO;
 
 	private KeyListener newKeyListener = new KeyAdapter() {
 		@Override
@@ -200,6 +201,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
 		jButtonCommit.addActionListener((ActionEvent e) -> tryConnecting());
+		jButtonSSO = new JButton(Configed.getResourceValue("LoginDialog.jButtonSSO"));
+		jButtonSSO.addActionListener((ActionEvent e) -> tryConnecting(true));
 	}
 
 	private void showOTPField(boolean show) {
@@ -250,6 +253,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 						.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)));
 
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
@@ -279,7 +284,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
-						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE)));
+						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE)
+						.addComponent(jButtonSSO, 120, 120, 120).addGap(Globals.GAP_SIZE)));
 	}
 
 	private void finishAndMakeVisible() {
@@ -298,6 +304,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	@Override
 	public void actAfterWaiting() {
+		Logging.warning(this, "actAfterWaiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
@@ -314,7 +321,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				// return to password dialog
 				Logging.info(this, "interrupted");
 			} else {
-				Logging.info(this, "not connected, timeout or not authorized");
+				Logging.info(this, "not connected, timeout or not authorized. state: ",
+						PersistenceControllerFactory.getConnectionState().getState());
+				Logging.info(this, "serverVersion ", ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
 
 				String message;
 
@@ -377,16 +386,22 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	}
 
 	public void tryConnecting() {
+		tryConnecting(false);
+	}
+
+	public void tryConnecting(boolean useSSO) {
 		Logging.info(this, "started  tryConnecting");
 		setActivated(false);
-
-		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
 		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
-		ConfigedMain.setUser(user);
-		ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
-		Logging.info(this, "invoking PersistenceControllerFactory host, user, ", fieldHost.getSelectedItem(), ", ",
-				user);
-
+		if (useSSO) {
+			ConfigedMain.setUseSSO(useSSO);
+		} else {
+			ConfigedMain.setHost((String) fieldHost.getSelectedItem());
+			ConfigedMain.setUser(user);
+			ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
+			Logging.info(this, "invoking PersistenceControllerFactory host, user, ", fieldHost.getSelectedItem(), ", ",
+					user);
+		}
 		Configed.setHost((String) fieldHost.getSelectedItem());
 		Configed.initSavedStates();
 		if (waitingWorker != null && !waitingWorker.isReady()) {
@@ -406,7 +421,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				Logging.info(this, "get persis");
 				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
 						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()),
-						String.valueOf(fieldOTP.getPassword()));
+						String.valueOf(fieldOTP.getPassword()), useSSO);
 
 				Logging.info(this, "got persis, == null ", persistenceController == null);
 
@@ -415,6 +430,44 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 			}
 		}.start();
 	}
+
+	// public void tryConnectingSSO() {
+	// 	Logging.info(this, "started  tryConnectingSSO");
+	// 	// if ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")
+
+	// 	setActivated(false);
+	// 	ConfigedMain.setHost((String) fieldHost.getSelectedItem());
+	// 	Configed.setHost((String) fieldHost.getSelectedItem());
+
+	// 	// String session_id = ServerFacade.getSSOSessionID(url_get_sid);
+
+	// 	// endProgram();
+	// 	Configed.initSavedStates();
+	// 	if (waitingWorker != null && !waitingWorker.isReady()) {
+	// 		Logging.info(this, "old waiting task not ready");
+	// 		return;
+	// 	}
+
+	// 	Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());
+	// 	Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
+	// 	Logging.info(this, "start WaitingWorker");
+	// 	waitingWorker = new WaitingWorker(this);
+	// 	waitingWorker.execute();
+
+	// 	new Thread() {
+	// 		@Override
+	// 		public void run() {
+	// 			Logging.info(this, "get persis");
+	// 			persistenceController = PersistenceControllerFactory
+	// 					.getNewPersistenceController((String) fieldHost.getSelectedItem());
+
+	// 			Logging.info(this, "got persis, == null ", persistenceController == null);
+
+	// 			Logging.info(this, "waitingTask can be set to ready");
+	// 			waitingWorker.setReady();
+	// 		}
+	// 	}.start();
+	// }
 
 	private void endProgram() {
 		configedMain.finishApp(false, 0);

@@ -26,6 +26,7 @@ RUN set -ex; \
     time \
     iputils-ping \
     maven \
+    xdg-utils \
     openjdk-21-jdk; \
     # Installing current Node.js runtime LTS version from NodeSource
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash && \
