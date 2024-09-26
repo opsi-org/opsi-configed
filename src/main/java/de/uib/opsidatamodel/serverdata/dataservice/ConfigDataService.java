@@ -137,7 +137,6 @@ public class ConfigDataService {
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_GET_OBJECTS, new Object[0]);
 		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
-		long total = 0;
 		Logging.info(this, "configOptions retrieved ");
 		for (Map<String, Object> configItem : retrievedList) {
 			String key = (String) configItem.get("ident");
@@ -162,8 +161,6 @@ public class ConfigDataService {
 
 			ConfigOption configOption = new ConfigOption(configItem);
 			configOptions.put(key, configOption);
-			long start = System.nanoTime();
-			total += System.nanoTime() - start;
 			configDefaultValues.put(key, configOption.getDefaultValues());
 
 			if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
@@ -171,7 +168,7 @@ public class ConfigDataService {
 				savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
 			}
 		}
-		Logging.devel("", total);
+
 		cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
 		cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
