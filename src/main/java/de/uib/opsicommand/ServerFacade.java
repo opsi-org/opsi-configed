@@ -101,12 +101,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		checkServerVersion();
 
 		if (versionRetriever.isServerVersionAtLeast("4.3.18.15")) {
-			CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+			CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), this.host + "_" + portHTTPS);
 		} else {
 			CertificateManager.init(
 					produceBaseURL(
 							"/ssl/" + Globals.OPSI_CERTIFICATE_FILE_NAME + "." + Globals.CERTIFICATE_FILE_EXTENSION),
-					host + "_" + portHTTPS);
+					this.host + "_" + portHTTPS);
 		}
 	}
 

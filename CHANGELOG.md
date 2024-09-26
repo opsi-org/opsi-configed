@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.3.3.17] - 2024-09-26
+### Fixed
+- Correct path for saving certificates when entering port in login dialog
+
+
 ## [4.3.3.16] - 2024-09-19
 ### Fixed
 - Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"
