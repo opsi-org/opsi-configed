@@ -39,7 +39,6 @@ import de.uib.configed.ServerActionManager;
 import de.uib.configed.gui.csv.CSVImportDataDialog;
 import de.uib.configed.gui.csv.CSVImportDataModifier;
 import de.uib.configed.gui.csv.CSVTemplateCreatorDialog;
-import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -389,7 +388,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	private void createNorthPanel() {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
-		jCSVTemplateButton.addActionListener(actionEvent -> displayCSVTemplateDialog());
+		jCSVTemplateButton.addActionListener(actionEvent -> CSVTemplateCreatorDialog.displayCSVTemplateDialog());
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
@@ -635,16 +634,6 @@ public final class NewClientDialog extends FGeneralDialog {
 				createClients(rows);
 			}
 		}
-	}
-
-	private static void displayCSVTemplateDialog() {
-		List<String> columnNames = HostInfo.getKeysForCSV();
-		CSVTemplateCreatorDialog dialog = new CSVTemplateCreatorDialog(columnNames);
-		JPanel centerPanel = dialog.initPanel();
-		dialog.setCenterPaneInScrollpane(centerPanel);
-		dialog.setupLayout();
-		dialog.setSize(1000, 420);
-		dialog.setVisible(true);
 	}
 
 	@Override

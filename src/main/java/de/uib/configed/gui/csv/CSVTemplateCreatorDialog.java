@@ -393,4 +393,14 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			Logging.error(this, e, "Unable to write to file");
 		}
 	}
+
+	public static void displayCSVTemplateDialog() {
+		List<String> columnNames = HostInfo.getKeysForCSV();
+		CSVTemplateCreatorDialog dialog = new CSVTemplateCreatorDialog(columnNames);
+		JPanel centerPanel = dialog.initPanel();
+		dialog.setCenterPaneInScrollpane(centerPanel);
+		dialog.setupLayout();
+		dialog.setSize(1000, 420);
+		dialog.setVisible(true);
+	}
 }
