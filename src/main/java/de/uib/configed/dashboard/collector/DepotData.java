@@ -23,7 +23,7 @@ public final class DepotData {
 	}
 
 	public static Map<String, Map<String, Object>> getDepots() {
-		return new HashMap<>(depots);
+		return depots;
 	}
 
 	private static void retrieveDepots() {

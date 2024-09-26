@@ -119,9 +119,4 @@ public class DefaultListCellOptions implements ListCellOptions {
 		return "DefaultListCellOptions,  possibleValues: " + possibleValues + "; defaultValues: " + defaultValues
 				+ "; selectionMode: " + selectionMode + "; editable: " + editable + "; nullable: " + nullable;
 	}
-
-	@Override
-	public ListCellOptions deepCopy() {
-		return new DefaultListCellOptions();
-	}
 }

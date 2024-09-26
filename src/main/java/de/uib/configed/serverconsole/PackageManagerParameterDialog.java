@@ -16,7 +16,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class PackageManagerParameterDialog extends FGeneralDialog {
@@ -30,7 +30,7 @@ public class PackageManagerParameterDialog extends FGeneralDialog {
 		super(ConfigedMain.getMainFrame(), title);
 
 		super.setTitle(title);
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}

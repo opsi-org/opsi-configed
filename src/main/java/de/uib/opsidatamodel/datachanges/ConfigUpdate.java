@@ -6,6 +6,7 @@
 
 package de.uib.opsidatamodel.datachanges;
 
+import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -13,12 +14,12 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class ConfigUpdate implements UpdateCommand {
-	private Map newdata;
+	private Map<String, List<Object>> newdata;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ConfigUpdate(Map newdata) {
+	public ConfigUpdate(Map<String, List<Object>> newdata) {
 		this.newdata = newdata;
 	}
 

@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.productstate;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,6 @@ public class ActionRequest {
 	private static Map<String, Integer> label2state;
 	private static Map<String, Color> label2textColor;
 
-	private static Set<Integer> states;
 	private static Set<String> labels;
 	private static String[] choiceLabels;
 	private static List<String> scriptKeys;
@@ -55,29 +53,13 @@ public class ActionRequest {
 	private int state = INVALID;
 
 	public ActionRequest(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = NOT_AVAILABLE;
-		}
+		state = t;
 	}
 
 	private static void checkCollections() {
-		if (states != null) {
+		if (labels != null) {
 			return;
 		}
-
-		states = new HashSet<>();
-		states.add(CONFLICT);
-		states.add(INVALID);
-		states.add(NOT_AVAILABLE);
-		states.add(NONE);
-		states.add(SETUP);
-		states.add(UPDATE);
-		states.add(UNINSTALL);
-		states.add(ALWAYS);
-		states.add(ONCE);
-		states.add(CUSTOM);
 
 		labels = new LinkedHashSet<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
@@ -166,24 +148,8 @@ public class ActionRequest {
 		return label2textColor;
 	}
 
-	private static boolean existsState(int state) {
-		checkCollections();
-
-		return states.contains(state);
-	}
-
-	private static boolean existsLabel(String label) {
-		checkCollections();
-
-		return labels.contains(label);
-	}
-
 	public static String getLabel(int state) {
 		checkCollections();
-
-		if (!existsState(state)) {
-			return null;
-		}
 
 		return state2label.get(state);
 	}
@@ -201,17 +167,7 @@ public class ActionRequest {
 			return NONE;
 		}
 
-		if (!existsLabel(label)) {
-			return null;
-		}
-
 		return label2state.get(label);
-	}
-
-	public static String getDisplayLabel(int state) {
-		checkCollections();
-
-		return getLabel(state);
 	}
 
 	public static String[] getDisplayLabelsForChoice() {
@@ -230,7 +186,22 @@ public class ActionRequest {
 		return getLabel(state);
 	}
 
-	public static ActionRequest produceFromLabel(String label) {
+	public static String produceFromLabel(String label) {
+		checkCollections();
+
+		if (label == null) {
+			return getLabel(NONE);
+		}
+
+		if (!labels.contains(label)) {
+			return getLabel(INVALID);
+		}
+
+		return label;
+
+	}
+
+	public static ActionRequest produceActionRequestFromLabel(String label) {
 		checkCollections();
 
 		if (label == null) {

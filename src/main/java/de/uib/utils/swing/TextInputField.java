@@ -26,22 +26,16 @@ public class TextInputField extends JPanel {
 
 	private boolean isValueList;
 
-	public TextInputField(String initialValue) {
-		this(initialValue, null);
+	public TextInputField() {
+		this(null);
 	}
 
-	public TextInputField(String initialValue, final List<String> proposedValues) {
+	public TextInputField(final List<String> proposedValues) {
 		super(new BorderLayout());
-
-		String initValue = initialValue;
 
 		if (proposedValues == null) {
 			this.proposedValues = new ArrayList<>();
 			isValueList = false;
-
-			if (initialValue == null) {
-				initValue = "";
-			}
 		} else {
 			this.proposedValues = proposedValues;
 			proposedValues.add(0, "");
@@ -66,7 +60,7 @@ public class TextInputField extends JPanel {
 			}
 		}
 
-		textfield = new JTextField(initValue);
+		textfield = new JTextField();
 
 		combo = new AutoCompletionComboBox<>();
 		combo.setModel(new DefaultComboBoxModel<>(this.proposedValues.toArray(new String[0])));

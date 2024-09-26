@@ -10,20 +10,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 /**
 */
-public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
+public class ConfigUpdateCollection extends UpdateCollection {
 	private List<String> objectIds;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private boolean masterConfig;
 
-	public AdditionalconfigurationUpdateCollection(List<String> objectIds) {
+	public ConfigUpdateCollection(List<String> objectIds) {
 		super();
 		this.objectIds = objectIds;
 	}
@@ -44,7 +45,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		// TODO Sometimes these are not updatecommands?!?
 		for (Object updateCommand : (Collection<?>) c) {
 			if (updateCommand instanceof Map) {
-				Map<?, ?> map = (Map<?, ?>) updateCommand;
+				Map<String, List<Object>> map = POJOReMapper.remap(updateCommand);
 
 				Logging.debug(this, "addAll for one obj, map ", map);
 
@@ -53,7 +54,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 					result = add(new ConfigUpdate(map));
 				} else {
 					Logging.debug(this, "adding AdditionalconfigurationUpdate");
-					result = add(new AdditionalconfigurationUpdate(objectIds.get(i), map));
+					result = add(new ConfigUpdateCommand(objectIds.get(i), map));
 				}
 				i++;
 			}
@@ -75,7 +76,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		if (masterConfig) {
 			persistenceController.getConfigDataService().setConfig();
 		} else {
-			persistenceController.getConfigDataService().setAdditionalConfiguration();
+			persistenceController.getConfigDataService().setConfg();
 		}
 		clear();
 	}

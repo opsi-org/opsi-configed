@@ -83,7 +83,6 @@ public class FSelectionList extends FGeneralDialog {
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, new ArrayList<>(),
 				new ArrayList<>());
 		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 
 		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()
@@ -120,11 +119,6 @@ public class FSelectionList extends FGeneralDialog {
 				.addGap(Globals.MIN_GAP_SIZE));
 
 		return southPanel;
-	}
-
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return false;
 	}
 
 	public void setListData(List<String> v) {

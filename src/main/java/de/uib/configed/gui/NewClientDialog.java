@@ -6,11 +6,7 @@
 
 package de.uib.configed.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -34,17 +30,15 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.text.BadLocationException;
 
 import org.apache.commons.csv.CSVFormat;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.ServerActionManager;
 import de.uib.configed.gui.csv.CSVFormatDetector;
 import de.uib.configed.gui.csv.CSVImportDataDialog;
 import de.uib.configed.gui.csv.CSVImportDataModifier;
@@ -58,10 +52,8 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.SeparatedDocument;
 
-public final class NewClientDialog extends FGeneralDialog implements KeyListener {
+public final class NewClientDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
-
-	private ConfigedMain configedMain;
 
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
@@ -83,14 +75,12 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public NewClientDialog(ConfigedMain configedMain) {
+	public NewClientDialog() {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.title"), false, new String[] {
 				Configed.getResourceValue("buttonClose"), Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				730, 670);
 
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-
-		this.configedMain = configedMain;
 
 		init();
 	}
@@ -120,7 +110,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 	public void setDefaultValues() {
 		jCheckWan.setSelected(persistenceController.getConfigDataService()
-				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
+				.isWanConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
 		jCheckShutdownInstall.setSelected(persistenceController.getConfigDataService()
 				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
 	}
@@ -169,42 +159,10 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		JLabel jLabelNotes = new JLabel(Configed.getResourceValue("NewClientDialog.notes"));
 
 		jTextNotes = new JTextArea();
-		jTextNotes.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				// remove tab at end of text, inserted by navigating while in the panel
-				jTextNotes.setText(jTextNotes.getText().trim());
-			}
 
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				/* Not needed */}
-		});
-
-		jTextNotes.addKeyListener(this);
-		jTextNotes.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				try {
-					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
-					Logging.debug(this, "newPiece: '", newPiece, "'");
-
-					if ("\t".equals(newPiece)) {
-						systemUUIDField.requestFocus();
-					}
-				} catch (BadLocationException ex) {
-					Logging.warning(this, ex, "BadLocationException thrown: ");
-				}
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				/* Not needed */}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				/* Not needed */}
-		});
+		// This will cause the focus to go to the next (or last) component when pressing the tab (with shift)
+		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
+		jTextNotes.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
 
 		jTextNotes.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 
@@ -417,7 +375,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		groupsSelectionDialog.setVisible(true);
 
 		if (groupsSelectionDialog.getResult() == 2) {
-			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues(), 5);
+			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues());
 			jTextGroupsSelection.setText(selectedGroups);
 			jTextGroupsSelection.setToolTipText(
 					"<html><body><p>" + selectedGroups.replace(";\n", "<br\\ >") + "</p></body></html>");
@@ -435,11 +393,11 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 	private void createNorthPanel() {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
-		jCSVTemplateButton.addActionListener((ActionEvent e) -> displayCSVTemplateDialog());
+		jCSVTemplateButton.addActionListener(actionEvent -> displayCSVTemplateDialog());
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
-		jImportButton.addActionListener((ActionEvent e) -> importCSV());
+		jImportButton.addActionListener(actionEvent -> importCSV());
 
 		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
@@ -478,8 +436,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		while (iter.hasNext()) {
 			List<Object> client = iter.next();
 
-			if (!isBoolean((String) client.get(10)) || !isBoolean((String) client.get(11))
-					|| !isBoolean((String) client.get(12))) {
+			if (!isBoolean((String) client.get(10)) || !isBoolean((String) client.get(11))) {
 				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"), false,
 						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
@@ -498,7 +455,7 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 			}
 		}
 
-		configedMain.createClients(modifiedClients);
+		ServerActionManager.createClients(modifiedClients);
 	}
 
 	private static boolean isBoolean(String bool) {
@@ -508,20 +465,20 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 
 	private void createClient(final String hostname, final String selectedDomain, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
-			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
-			final boolean wanConfig, final String[] groups, final String netbootProduct) {
+			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean wanConfig,
+			final String[] groups, final String netbootProduct) {
 		if (checkClientCorrectness(hostname, selectedDomain)) {
 			Logging.debug(this, "createClient ", hostname, ", ", selectedDomain, ", ", depotID, ", ", description, ", ",
-					inventorynumber, ", ", notes, shutdownInstall, ", ", uefiboot, ", ", wanConfig, ", ",
-					Arrays.toString(groups), ", ", netbootProduct);
+					inventorynumber, ", ", notes, shutdownInstall, ", ", wanConfig, ", ", Arrays.toString(groups), ", ",
+					netbootProduct);
 
 			String newClientID = hostname + "." + selectedDomain;
 
 			persistenceController.getHostInfoCollections().addOpsiHostName(newClientID);
 			if (persistenceController.getHostDataService().createClient(hostname, selectedDomain, depotID, description,
-					inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig,
-					groups, netbootProduct)) {
-				configedMain.createClient(newClientID, groups);
+					inventorynumber, notes, ipaddress, systemUUID, macaddress, shutdownInstall, wanConfig, groups,
+					netbootProduct)) {
+				ServerActionManager.createClient(newClientID, groups);
 			} else {
 				persistenceController.getHostInfoCollections().removeOpsiHostName(newClientID);
 			}
@@ -764,27 +721,11 @@ public final class NewClientDialog extends FGeneralDialog implements KeyListener
 		}
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 
-		boolean uefiboot = false;
 		boolean wanConfig = persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)
 				&& jCheckWan.getSelectedObjects() != null;
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, systemUUID,
-				macaddress, shutdownInstall, uefiboot, wanConfig, groups, netbootProduct);
+				macaddress, shutdownInstall, wanConfig, groups, netbootProduct);
 	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_TAB) {
-			jTextInventoryNumber.requestFocusInWindow();
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		/* Not needed */}
 }

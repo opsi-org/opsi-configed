@@ -15,7 +15,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditStringList;
 
@@ -49,7 +49,7 @@ public class FDialogRemoteControl extends FEditStringList {
 		super.initComponents();
 
 		// Change tooltips to run and cancel action
-		buttonCommit.setIcon(Utils.getIntellijIcon("run"));
+		buttonCommit.setIcon(Icons.getIntellijIcon("run"));
 		buttonCommit.setToolTipText(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"));
 
 		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));

@@ -97,16 +97,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
-	public static final String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";
-	public static final String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
-	// the current real value, but it is not necessary to configure it:
-
-	// not more used:
-
-	public static final String EFI_DHCPD_NOT = "";
-
-	public static final String EFI_STRING = "efi";
-
 	public static final String KEY_USER_ROOT = "user";
 
 	public static final String KEY_USER_ROLE_ROOT = KEY_USER_ROOT + "." + "role";// UserConfig.
@@ -130,9 +120,7 @@ public class OpsiServiceNOMPersistenceController {
 
 	private FCompleteWinProducts panelCompleteWinProducts;
 
-	private String user;
-
-	private AbstractPOJOExecutioner exec;
+	private ServerFacade exec;
 
 	private HostInfoCollections hostInfoCollections;
 
@@ -156,7 +144,7 @@ public class OpsiServiceNOMPersistenceController {
 	private String triggeredEvent;
 
 	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp, boolean useSSO) {
-		Logging.info(this, "OSNOM start construction, \nOSNOM connect to ", server, " as ", user, " or sso ", useSSO);
+		Logging.info(this, "start construction, \nconnect to ", server, " as ", user);
 
 		if (server == null || server.isEmpty()) {
 			Logging.error(this.getClass(), "no server given");
@@ -169,7 +157,7 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.error(this.getClass(), "no user or password given");
 			return;
 		}
-		this.user = user; // could be overwritten by sso
+		// this.user = user; // could be overwritten by sso
 
 		Logging.debug(this, "create");
 
@@ -180,7 +168,7 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.info(this, "OSNOM 0try sso");
 			try {
 				ServerFacade sf = new ServerFacade(server);
-				this.user = sf.getUsername();
+				// this.user = sf.getUsername();
 				exec = sf;
 			} catch (Exception ex) {
 				Logging.error(this, "OSNOM 0error in sso", ex);
@@ -311,7 +299,7 @@ public class OpsiServiceNOMPersistenceController {
 		return rpcMethodExecutor;
 	}
 
-	@SuppressWarnings({ "java:S103", "java:S138" })
+	@SuppressWarnings({ "java:S103" })
 	private void registerReloadHandlers() {
 		reloadDispatcher = new ReloadDispatcher();
 
@@ -471,12 +459,8 @@ public class OpsiServiceNOMPersistenceController {
 		return exec.getConnectionState();
 	}
 
-	public AbstractPOJOExecutioner getExecutioner() {
+	public ServerFacade getExecutioner() {
 		return exec;
-	}
-
-	public String getUser() {
-		return user;
 	}
 
 	public static NavigableMap<String, String> getPropertyClassesServer() {

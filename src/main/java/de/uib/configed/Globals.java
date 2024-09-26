@@ -9,7 +9,6 @@ package de.uib.configed;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.text.DateFormat;
 
 import javax.swing.UIManager;
 
@@ -20,7 +19,7 @@ import javax.swing.UIManager;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2024-08-08";
+	public static final String VERDATE = "2024-09-25";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
@@ -32,10 +31,10 @@ public final class Globals {
 	public static final String ICON_LOGVIEWER = "opsilogos/opsi-logviewer.png";
 
 	public static final String OPSI_DOC_PAGE = "http://www.opsi.org";
-	public static final String OPSI_SUPPORT_PAGE = "http://opsi.org/support";
+	public static final String UIB_PAGE = "https://www.uib.de/";
 	public static final String OPSI_FORUM_PAGE = "http://forum.opsi.org";
 
-	public static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";
+	public static final String CERTIFICATE_FILE_NAME = "ca-certs";
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";
 	public static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
 
@@ -141,14 +140,10 @@ public final class Globals {
 	public static final int ICON_WIDTH = 60;
 	public static final int LABEL_WIDTH = 80;
 
-	public static final Dimension BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
-	public static final Dimension SMALL_BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
-	public static final Dimension SHORT_BUTTON_DIMENSION = new Dimension(BUTTON_WIDTH / 4, BUTTON_HEIGHT);
 	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
 	public static final Dimension SHORT_LABEL_DIMENSION = new Dimension(60, LINE_HEIGHT);
 	public static final int COUNTERFIELD_WIDTH = 160;
 	public static final Dimension COUTNER_FIELD_DIMENSION = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
-	public static final Dimension NEW_SMALL_BUTTON = new Dimension(30, 30);
 
 	// Make width long enough so that it will be not too small for the whole text
 	public static final Dimension LABEL_SIZE_OF_JTREE = new Dimension(500, 20);
@@ -157,15 +152,7 @@ public final class Globals {
 
 	public static final int COMBOBOX_ROW_COUNT = 20;
 
-	public static final int WIDTH_FRAME_RENAME_CLIENT = 350;
-	public static final int HEIGHT_FRAME_RENAME_CLIENT = 200;
-
-	public static final int WIDTH_INFO_LOG_FILE = 400;
-	public static final int HEIGHT_INFO_LOG_FILE = 200;
-
 	public static final Dimension GRAPHIC_BUTTON_DIMENSION = new Dimension(GRAPHIC_BUTTON_SIZE, GRAPHIC_BUTTON_SIZE);
-
-	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;
 
 	// action form constants
 	public static final int HFIRST_GAP = GAP_SIZE * 3;
@@ -179,9 +166,6 @@ public final class Globals {
 	public static final String PSEUDO_KEY_SEPARATOR = ";";
 
 	public static final Dimension HELPER_FORM_DIMENSION = new Dimension(1100, 600);
-
-	public static final int DIALOG_FRAME_DEFAULT_HEIGHT = 400;
-	public static final int DIALOG_FRAME_DEFAULT_WIDTH = 800;
 
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
 

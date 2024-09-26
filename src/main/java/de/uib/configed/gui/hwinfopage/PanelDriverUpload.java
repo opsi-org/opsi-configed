@@ -42,8 +42,8 @@ import de.uib.configed.serverconsole.command.SingleCommandTemplate;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FLoadingWaiter;
 import de.uib.utils.swing.SecondaryFrame;
@@ -224,10 +224,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		comboChooseDepot.setEnabled(false);
 
-		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
-			selectedDepot = (String) comboChooseDepot.getSelectedItem();
-			Logging.info(this, "actionPerformed  depot selected ", selectedDepot);
-		});
+		comboChooseDepot.addActionListener(actionEvent -> selectedDepot = (String) comboChooseDepot.getSelectedItem());
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.setSize(Globals.TEXT_FIELD_DIMENSION);
@@ -293,7 +290,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		JLabel jLabelDepotServer = new JLabel(Configed.getResourceValue("PanelDriverUpload.DepotServer"));
 		JLabel jLabelWinProduct = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
 
-		JButton buttonCallSelectDriverFiles = new JButton(Utils.getIntellijIcon("open"));
+		JButton buttonCallSelectDriverFiles = new JButton(Icons.getIntellijIcon("open"));
 		buttonCallSelectDriverFiles.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectDriverFiles
 				.setToolTipText(Configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
@@ -302,19 +299,19 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		fieldServerPath.setEditable(true);
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
-		JButton buttonCallChooserServerpath = new JButton(Utils.getIntellijIcon("open"));
+		JButton buttonCallChooserServerpath = new JButton(Icons.getIntellijIcon("open"));
 		buttonCallChooserServerpath.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("PanelDriverUpload.determineServerPath"));
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
-		JButton buttonShowDrivers = new JButton(Utils.getIntellijIcon("run"));
+		JButton buttonShowDrivers = new JButton(Icons.getIntellijIcon("run"));
 		buttonShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
 		buttonShowDrivers.addActionListener(actionEvent -> showDrivers());
 
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
-		JButton btnCreateDrivers = new JButton(Utils.getIntellijIcon("run"));
+		JButton btnCreateDrivers = new JButton(Icons.getIntellijIcon("run"));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener((ActionEvent actionEvent) -> {
 			CommandExecutor executor = new CommandExecutor(configedMain,
@@ -439,12 +436,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.upload"));
 		buttonUploadDrivers.setEnabled(false);
 
-		buttonUploadDrivers.addActionListener((ActionEvent actionEvent) -> {
-			Logging.info(this, "actionPerformed on buttonUploadDrivers from ", fieldDriverPath.getText(), " to ",
-					fieldServerPath.getText());
-
-			execute();
-		});
+		buttonUploadDrivers.addActionListener(actionEvent -> execute());
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);

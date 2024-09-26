@@ -21,7 +21,6 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 
 public class UserConfigProducing {
 	private boolean notUsingDefaultUser;
@@ -32,13 +31,13 @@ public class UserConfigProducing {
 	private Collection<String> existingProductgroups;
 
 	private Map<String, List<Object>> serverconfigValuesMap;
-	private Map<String, ListCellOptions> configOptionsMap;
+	private Map<String, ConfigOption> configOptionsMap;
 
 	private List<Object> readyObjects;
 
 	public UserConfigProducing(boolean notUsingDefaultUser, String configserver, Collection<String> existingDepots,
 			Collection<String> existingHostgroups, Collection<String> existingProductgroups,
-			Map<String, List<Object>> serverconfigValuesMap, Map<String, ListCellOptions> configOptionsMap) {
+			Map<String, List<Object>> serverconfigValuesMap, Map<String, ConfigOption> configOptionsMap) {
 		this.notUsingDefaultUser = notUsingDefaultUser;
 		this.configserver = configserver;
 		this.existingDepots = existingDepots;
@@ -86,7 +85,7 @@ public class UserConfigProducing {
 				if (roleName != null) {
 					Logging.info(this, "role branch with rolename ", roleName);
 					roleNames.add(roleName);
-					createPropertySubclass(roleName, UserConfig.ROLE);
+					createPropertySubclass(roleName, UserConfig.KEY_USER_ROLE_ROOT);
 				}
 			} else if (key.startsWith(UserConfig.ALL_USER_KEY_START)) {
 				Logging.info(this, "not delivered in this collection ", key);
@@ -108,8 +107,7 @@ public class UserConfigProducing {
 
 	private String produceRolePart(String roleKey) {
 		final String startRoleKey = UserConfig.KEY_USER_ROLE_ROOT + ".{";
-		final String roleNameBefore = roleKey.substring(0, startRoleKey.length());
-		String roleName = roleKey.substring(roleNameBefore.length());
+		String roleName = roleKey.substring(startRoleKey.length());
 		final int lenOfRoleName = roleName.indexOf("}");
 
 		if (lenOfRoleName > 0) {
@@ -128,7 +126,7 @@ public class UserConfigProducing {
 	}
 
 	private void createPropertySubclass(String property, String propertyType) {
-		final String propertyclass = UserConfig.START_USER_KEY + property + '}';
+		final String propertyclass = propertyType + ".{" + property + '}';
 		OpsiServiceNOMPersistenceController.getPropertyClassesServer().computeIfAbsent(propertyclass, (String arg) -> {
 			Logging.info(this, "createPropertySubclass for ", propertyType, " ", property);
 			return "";

@@ -34,13 +34,15 @@ import javax.swing.tree.TreePath;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.messages.Messages;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ExporterToPDF;
@@ -69,7 +71,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private Map<String, List<Map<String, Object>>> hwInfo;
 	private Map<String, Map<String, Object>> devicesInfo;
 	private String treeRootTitle;
-	private List<Map<String, List<Map<String, Object>>>> hwConfig;
+	private List<Map<String, Object>> hwConfig;
 
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
@@ -91,17 +93,16 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private boolean withPopup;
 
 	private ConfigedMain configedMain;
+	private ClientConfiguration clientConfiguration;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelHWInfo(ConfigedMain configedMain) {
-		this(true, configedMain);
-	}
-
-	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain) {
+	public PanelHWInfo(boolean withPopup, ConfigedMain configedMain, ClientConfiguration clientConfiguration) {
 		this.withPopup = withPopup;
 		this.configedMain = configedMain;
+		this.clientConfiguration = clientConfiguration;
+
 		buildPanel();
 	}
 
@@ -189,20 +190,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	/** overwrite in subclasses */
 	protected void reload() {
-		Logging.debug(this, "reload action");
+		Logging.debug(this, "reload hardware info");
+		clientConfiguration.setHardwareInfoPage();
 	}
 
 	private void floatExternal() {
-		PanelHWInfo copyOfMe;
-		GeneralFrame externalView;
-
-		copyOfMe = new PanelHWInfo(false, configedMain);
+		PanelHWInfo copyOfMe = new PanelHWInfo(false, configedMain, clientConfiguration);
 		copyOfMe.setHardwareInfo(hwInfo);
 
 		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());
 
-		externalView = new GeneralFrame(null, treeRootTitle, false);
+		GeneralFrame externalView = new GeneralFrame(null, treeRootTitle, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setSize(this.getSize());
 		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -212,10 +211,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static Icon createImageIcon(String hwClass) {
-		Icon classIcon = Utils.createImageIcon("hwinfo_images/" + hwClass + ".png", "");
+		Icon classIcon = Icons.createImageIcon("hwinfo_images/" + hwClass + ".png", "");
 
 		if (classIcon == null) {
-			classIcon = Utils.createImageIcon("hwinfo_images/DEVICE.png", "");
+			classIcon = Icons.createImageIcon("hwinfo_images/DEVICE.png", "");
 		}
 
 		return classIcon;
@@ -279,15 +278,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private List<Map<String, Object>> getValuesFromHwClass(String hwClass) {
 		List<Map<String, Object>> values = null;
-		for (Map<String, List<Map<String, Object>>> whc : hwConfig) {
-			if (whc != null) {
-				Map<String, Object> whcClass = whc.get("Class").get(0);
-				if (whcClass.get("Opsi").equals(hwClass)) {
-					values = whc.get("Values");
-					break;
-				}
-			} else {
-				Logging.error(this, "hwConfig element is null");
+		for (Map<String, Object> whc : hwConfig) {
+			Map<String, Object> whcClass = POJOReMapper.remap(whc.get("Class"));
+			if (whcClass.get("Opsi").equals(hwClass)) {
+				values = POJOReMapper.remap(whc.get("Values"));
+				break;
 			}
 		}
 
@@ -309,62 +304,54 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		List<Map<String, Object>> values = getValuesFromHwClass(hwClass);
 
 		List<String[]> data = new ArrayList<>();
-		if (values != null) {
-			for (Map<String, Object> value : values) {
-				String opsi = (String) value.get("Opsi");
-				Logging.debug(this, "opsi ", opsi);
+		for (Map<String, Object> value : values) {
+			String opsi = (String) value.get("Opsi");
+			Logging.debug(this, "opsi ", opsi);
 
-				// table row keys //no encoding needed
-				String ui = (String) value.get("UI");
-				String unit = null;
-				if (value.containsKey("Unit")) {
-					unit = (String) value.get("Unit");
-					Logging.debug(this, "unit  ", unit);
-				}
-
-				for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
-					if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
-						String cv = "" + deviceInfoEntry.getValue();
-
-						if (reduceScanToByAuditClasses && hwClass != null) {
-							Logging.debug(this, "key ", opsi);
-
-							if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
-								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
-									vendorStringComputerSystem = cv;
-								} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
-									modelString = cv;
-								} else {
-									// Not needed, since other values not used for Description on top
-								}
-							} else if (hwClass.equals(CLASS_BASE_BOARD)) {
-								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
-									vendorStringBaseBoard = cv;
-								} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
-									productString = cv;
-								} else {
-									// Not needed, since other values not used for Description on top
-								}
-							} else {
-								Logging.warning(this, "unexpected value for hwclass: ", hwClass);
-							}
-						}
-
-						if (unit != null) {
-							cv = addUnit(cv, unit);
-						}
-						String[] row = { ui, cv };
-						data.add(row);
-						Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", Arrays.toString(row));
-						break;
-					}
-				}
+			// table row keys //no encoding needed
+			String ui = (String) value.get("UI");
+			String unit = null;
+			if (value.containsKey("Unit")) {
+				unit = (String) value.get("Unit");
+				Logging.debug(this, "unit  ", unit);
 			}
-		} else {
-			for (Entry<String, Object> info : deviceInfo.entrySet()) {
-				String[] row = { info.getKey(), (String) info.getValue() };
-				data.add(row);
-				Logging.debug(this, "hwClass row  ", hwClass, ": ", Arrays.toString(row));
+
+			for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
+				if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
+					String cv = "" + deviceInfoEntry.getValue();
+
+					if (reduceScanToByAuditClasses && hwClass != null) {
+						Logging.debug(this, "key ", opsi);
+
+						if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
+							if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
+								vendorStringComputerSystem = cv;
+							} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
+								modelString = cv;
+							} else {
+								// Not needed, since other values not used for Description on top
+							}
+						} else if (hwClass.equals(CLASS_BASE_BOARD)) {
+							if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
+								vendorStringBaseBoard = cv;
+							} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
+								productString = cv;
+							} else {
+								// Not needed, since other values not used for Description on top
+							}
+						} else {
+							Logging.warning(this, "unexpected value for hwclass: ", hwClass);
+						}
+					}
+
+					if (unit != null) {
+						cv = addUnit(cv, unit);
+					}
+					String[] row = { ui, cv };
+					data.add(row);
+					Logging.debug(this, "hwClass row  version 1 ", hwClass, ": ", Arrays.toString(row));
+					break;
+				}
 			}
 		}
 
@@ -446,9 +433,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
 		for (int i = 0; i < hwConfig.size(); i++) {
-			Map<String, List<Map<String, Object>>> whc = hwConfig.get(i);
-			hwClassesUI[i] = (String) whc.get("Class").get(0).get("UI");
-			hwClassMapping.put(hwClassesUI[i], whc.get("Class").get(0).get("Opsi"));
+			Map<String, Object> whc = hwConfig.get(i);
+			hwClassesUI[i] = (String) Map.class.cast(whc.get("Class")).get("UI");
+			hwClassMapping.put(hwClassesUI[i], Map.class.cast(whc.get("Class")).get("Opsi"));
 		}
 
 		Arrays.sort(hwClassesUI);
@@ -543,8 +530,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private void getLocalizedHashMap() {
 		hwOpsiToUI = new HashMap<>();
 
-		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
-			List<Map<String, Object>> values = hardwareMap.get("Values");
+		for (Map<String, Object> hardwareMap : hwConfig) {
+			List<Map<String, Object>> values = POJOReMapper.remap(hardwareMap.get("Values"));
 			for (Map<String, Object> valuesMap : values) {
 				String type = (String) valuesMap.get("Opsi");
 				String name = (String) valuesMap.get("UI");
@@ -552,9 +539,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			}
 		}
 
-		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
-			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
-			String hardwareOpsi = (String) hardwareMap.get("Class").get(0).get("Opsi");
+		for (Map<String, Object> hardwareMap : hwConfig) {
+			String hardwareName = (String) Map.class.cast(hardwareMap.get("Class")).get("UI");
+			String hardwareOpsi = (String) Map.class.cast(hardwareMap.get("Class")).get("Opsi");
 
 			hwOpsiToUI.putIfAbsent(hardwareOpsi, hardwareName);
 		}

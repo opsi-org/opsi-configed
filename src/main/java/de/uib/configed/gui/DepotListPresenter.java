@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -25,7 +27,7 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModel;
 import de.uib.utils.table.gui.SearchTargetModelFromJList;
@@ -38,8 +40,6 @@ public class DepotListPresenter extends JPanel {
 
 	private TableSearchPane searchPane;
 
-	private boolean multidepot;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -51,7 +51,6 @@ public class DepotListPresenter extends JPanel {
 	public DepotListPresenter(DepotsList depotsList, ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		this.depotslist = depotsList;
-		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
 		List<String> values = new ArrayList<>();
 		List<String> descriptions = new ArrayList<>();
@@ -69,7 +68,6 @@ public class DepotListPresenter extends JPanel {
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
 
 		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
 
 		initComponents();
@@ -86,14 +84,9 @@ public class DepotListPresenter extends JPanel {
 		return scrollpaneDepotslist;
 	}
 
-	/***
-	 * Rebuild popup window (context menu) for depotslist This is needed to
-	 * update the selected depot (e.g. open terminal on the selected depot)
-	 * after the depotslist has been updated
-	 */
-	public void rebuildPopup() {
+	private void buildPopup() {
 		JPopupMenu jPopupMenu = new JPopupMenu();
-		if (multidepot) {
+		if (persistenceController.getHostInfoCollections().getDepots().size() != 1) {
 			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 			selectAll.addActionListener(event -> depotslist.selectAll());
 			JMenuItem selectWithEqualProperties = new JMenuItem(
@@ -101,13 +94,38 @@ public class DepotListPresenter extends JPanel {
 			selectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
 			jPopupMenu.add(selectAll);
 			jPopupMenu.add(selectWithEqualProperties);
-
 		}
 
 		JMenuItem showShell = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuOpenTerminalOnDepot"));
-		Utils.addIntellijIconToMenuItem(showShell, "terminal");
+		Icons.addIntellijIconToMenuItem(showShell, "terminal");
 		jPopupMenu.add(showShell);
 
+		jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent event) {
+				// We don't need this action here
+			}
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent popupMenuEvent) {
+				updatePopupMenuItem(showShell);
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
+				// We don't need this action here
+			}
+		});
+
+		depotslist.setComponentPopupMenu(jPopupMenu);
+	}
+
+	/***
+	 * Rebuild popup window (context menu) for depotslist This is needed to
+	 * update the selected depot (e.g. open terminal on the selected depot)
+	 * after the depotslist has been updated
+	 */
+	private void updatePopupMenuItem(JMenuItem showShell) {
 		if (depotslist.getSelectedValuesList().isEmpty() || depotslist.getSelectedValuesList().size() > 1) {
 			// Disable the button if no depots selected or more than one depot
 			showShell.setEnabled(false);
@@ -125,7 +143,6 @@ public class DepotListPresenter extends JPanel {
 			}
 			showShell.addActionListener(event -> configedMain.openTerminalOnDepot());
 		}
-		depotslist.setComponentPopupMenu(jPopupMenu);
 	}
 
 	/**
@@ -162,10 +179,6 @@ public class DepotListPresenter extends JPanel {
 	}
 
 	private void initComponents() {
-		if (!multidepot) {
-			searchPane.setEnabled(false);
-		}
-
 		searchPane.setNarrow(true);
 
 		// not visible in this panel
@@ -176,7 +189,7 @@ public class DepotListPresenter extends JPanel {
 		scrollpaneDepotslist.getViewport().add(depotslist);
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
-		rebuildPopup();
+		buildPopup();
 	}
 
 	private void layouting() {

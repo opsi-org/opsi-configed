@@ -6,49 +6,35 @@
 
 package de.uib.opsidatamodel.productstate;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import de.uib.configed.Globals;
-
-public class TargetConfiguration {
+public final class TargetConfiguration {
 	public static final String KEY = "targetConfiguration";
 
-	private static Set<String> labels;
+	private static String[] labels;
 	private static String[] choiceLabels;
+
+	// private class to prevent instantiation
+	private TargetConfiguration() {
+	}
 
 	private static void checkCollections() {
 		if (labels != null) {
 			return;
 		}
 
-		labels = new LinkedHashSet<>();
-		labels.add("undefined");
-		labels.add(InstallationStatus.KEY_INSTALLED);
-		labels.add("always");
-		labels.add("forbidden");
+		labels = new String[] { "undefined", InstallationStatus.KEY_INSTALLED, "always", "forbidden" };
 
 		choiceLabels = new String[] { "undefined", InstallationStatus.KEY_INSTALLED, "always", "forbidden" };
 	}
 
-	public static List<String> getLabels() {
+	public static String[] getLabels() {
 		checkCollections();
 
-		return new ArrayList<>(labels);
+		return labels;
 	}
 
-	public static final String[] getDisplayLabelsForChoice() {
+	public static String[] getDisplayLabelsForChoice() {
 		checkCollections();
 
 		return choiceLabels;
-	}
-
-	// instance methods
-
-	@Override
-	public String toString() {
-		return Globals.NO_VALID_STATE_STRING;
 	}
 }

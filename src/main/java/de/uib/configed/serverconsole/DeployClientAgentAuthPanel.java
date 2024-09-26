@@ -22,6 +22,7 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
+import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
@@ -30,8 +31,6 @@ import de.uib.utils.logging.Logging;
 public class DeployClientAgentAuthPanel extends JPanel {
 	private FlatTextField flatTextFieldUser;
 	private FlatPasswordField flatPasswordField;
-
-	private String defaultUser;
 
 	private SingleCommandDeployClientAgent commandDeployClientAgent;
 
@@ -46,10 +45,8 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	}
 
 	private void init() {
-		getDefaultAuthData();
 		setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 2, true));
 		flatTextFieldUser = new FlatTextField();
-		flatTextFieldUser.setText(defaultUser);
 		flatTextFieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		flatTextFieldUser.setEnabled(!isGlobalReadOnly);
 		flatTextFieldUser.setEditable(!isGlobalReadOnly);
@@ -92,49 +89,43 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
+		getDefaultAuthData();
+
 		initLayout();
 	}
 
 	@SuppressWarnings("unchecked")
 	private void getDefaultAuthData() {
-		Map<String, Object> configs = persistenceController.getConfigDataService()
-				.getHostConfig(persistenceController.getHostInfoCollections().getConfigServer());
+		Map<String, ConfigOption> configs = persistenceController.getConfigDataService().getConfigOptionsPD();
 
 		List<Object> resultConfigList = (List<Object>) configs
-				.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
+				.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER).get("defaultValues");
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER not existing");
-
 			// the config will be created in this run of configed
 		} else {
-			defaultUser = (String) resultConfigList.get(0);
+			flatTextFieldUser.setText((String) resultConfigList.get(0));
 			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER ", resultConfigList.get(0));
 		}
 
-		resultConfigList = (List<Object>) configs.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
+		resultConfigList = (List<Object>) configs.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW)
+				.get("defaultValues");
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW not existing");
 
 			// the config will be created in this run of configed
 		} else {
-			if (flatPasswordField == null) {
-				flatPasswordField = new FlatPasswordField();
-			}
 			flatPasswordField.setText((String) resultConfigList.get(0));
 			Logging.info(this, "key_ssh_shell_active ***confidential***");
 		}
 	}
 
 	public void changeUser() {
-		if (!(flatTextFieldUser.getText().equals(defaultUser))) {
-			commandDeployClientAgent.setUser(flatTextFieldUser.getText().trim());
-		} else {
-			commandDeployClientAgent.setUser("");
-		}
+		commandDeployClientAgent.setUser(flatTextFieldUser.getText().trim());
 	}
 
 	public void changePassw() {
-		commandDeployClientAgent.setPassword(new String(flatPasswordField.getPassword()).trim());
+		commandDeployClientAgent.setPassword(new String(flatPasswordField.getPassword()));
 	}
 
 	private void initLayout() {

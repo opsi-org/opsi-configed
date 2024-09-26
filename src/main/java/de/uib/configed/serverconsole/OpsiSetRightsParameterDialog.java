@@ -7,7 +7,6 @@
 package de.uib.configed.serverconsole;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,6 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonSearchDir;
 
-	private JButton jButtonDoAction;
 	private SingleCommandOpsiSetRights commandOpsiSetRights;
 	private List<String> additionalDefaultPaths = new ArrayList<>();
 	private CompletionComboButton completion;
@@ -64,15 +62,11 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		jLabelInfo = new JLabel(Configed.getResourceValue("SingleCommandOpsiSetRights.additionalPath"));
 		inputPanel.add(jLabelInfo);
-		jButtonDoAction = new JButton(Configed.getResourceValue("buttonExecute"));
+		JButton jButtonDoAction = new JButton(Configed.getResourceValue("buttonExecute"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-
 				.isGlobalReadOnly()) {
-			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
-				Logging.info(this, "btn_doAction pressed");
-				doAction2();
-			});
+			jButtonDoAction.addActionListener(actionEvent -> doAction2());
 		}
 
 		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
@@ -82,8 +76,8 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 		buttonPanel.add(jButtonClose);
 		buttonPanel.add(jButtonDoAction);
 
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
+		jButtonDoAction.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		jButtonSearchDir = completion.getButton();
 		jComboBoxAutoCompletion = completion.getCombobox();
@@ -93,10 +87,6 @@ public class OpsiSetRightsParameterDialog extends FGeneralDialog {
 		jComboBoxAutoCompletion.setSelectedItem("");
 		inputPanel.add(jComboBoxAutoCompletion);
 		inputPanel.add(jButtonSearchDir);
-	}
-
-	private void setComponentsEnabled(boolean value) {
-		jButtonDoAction.setEnabled(value);
 	}
 
 	@Override

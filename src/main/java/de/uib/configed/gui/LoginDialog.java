@@ -8,11 +8,9 @@ package de.uib.configed.gui;
 
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.List;
@@ -27,7 +25,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
@@ -43,27 +40,16 @@ import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
-import de.uib.utils.thread.WaitingSleeper;
-import de.uib.utils.thread.WaitingWorker;
 import de.uib.utils.userprefs.UserPreferences;
 
-public class LoginDialog extends JFrame implements WaitingSleeper {
-	private static final int SECS_WAIT_FOR_CONNECTION = 100;
-
-	// 5000 reproduceable error
-	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000L;
-
-	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
-
+public class LoginDialog extends JFrame {
 	private ConfigedMain configedMain;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
 	private GlassPane glassPane;
-
-	private WaitingWorker waitingWorker;
 
 	private JLabel jLabelTitle;
 	private JLabel jLabelVersion;
@@ -82,7 +68,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 	private JButton jButtonCommit;
 	private JButton jButtonSSO;
 
-	private KeyListener newKeyListener = new KeyAdapter() {
+	private KeyAdapter newKeyListener = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -160,9 +146,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private void initGuiElements() {
 		setTitle(Configed.getResourceValue("LoginDialog.title"));
-		setIconImage(Utils.getMainIcon());
+		setIconImage(Icons.getMainIcon());
 
-		jLabelLogo = new JLabel(Utils.getOpsiLogoWide());
+		jLabelLogo = new JLabel(Icons.getOpsiLogoWide());
 
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
@@ -197,12 +183,12 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
-		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
+		jButtonCancel.addActionListener(actionEvent -> endProgram());
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
-		jButtonCommit.addActionListener((ActionEvent e) -> tryConnecting());
+		jButtonCommit.addActionListener(actionEvent -> tryConnecting());
 		jButtonSSO = new JButton(Configed.getResourceValue("LoginDialog.jButtonSSO"));
-		jButtonSSO.addActionListener((ActionEvent e) -> tryConnecting(true));
+		jButtonSSO.addActionListener(actionEvent -> tryConnecting(true));
 	}
 
 	private void showOTPField(boolean show) {
@@ -302,7 +288,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		setVisible(true);
 	}
 
-	@Override
 	public void actAfterWaiting() {
 		Logging.warning(this, "actAfterWaiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
@@ -327,7 +312,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 				String message;
 
-				if (waitingWorker != null && waitingWorker.isTimeoutReached()) {
+				if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.TIMEOUT) {
 					message = Configed.getResourceValue("LoginDialog.timeoutReached");
 				} else if (!ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 					message = Configed.getResourceValue("LoginDialog.oldServerVersion");
@@ -355,36 +340,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		}
 	}
 
-	@Override
-	public JProgressBar getProgressBar() {
-		return new JProgressBar();
-	}
-
-	@Override
-	public JLabel getLabel() {
-		return new JLabel();
-	}
-
-	@Override
-	public long getStartActionMillis() {
-		return System.currentTimeMillis();
-	}
-
-	@Override
-	public long getWaitingMillis() {
-		return TIMEOUT_MS;
-	}
-
-	@Override
-	public long getOneProgressBarLengthWaitingMillis() {
-		return ESTIMATED_TOTAL_WAIT_MILLIS;
-	}
-
-	@Override
-	public String setLabellingStrategy(long millisLevel) {
-		return "";
-	}
-
 	public void tryConnecting() {
 		tryConnecting(false);
 	}
@@ -404,16 +359,10 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		}
 		Configed.setHost((String) fieldHost.getSelectedItem());
 		Configed.initSavedStates();
-		if (waitingWorker != null && !waitingWorker.isReady()) {
-			Logging.info(this, "old waiting task not ready");
-			return;
-		}
 
 		Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());
 		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
-		Logging.info(this, "start WaitingWorker");
-		waitingWorker = new WaitingWorker(this);
-		waitingWorker.execute();
+		Logging.info(this, "starting thread");
 
 		new Thread() {
 			@Override
@@ -426,51 +375,13 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 				Logging.info(this, "got persis, == null ", persistenceController == null);
 
 				Logging.info(this, "waitingTask can be set to ready");
-				waitingWorker.setReady();
+				actAfterWaiting();
 			}
 		}.start();
 	}
 
-	// public void tryConnectingSSO() {
-	// 	Logging.info(this, "started  tryConnectingSSO");
-	// 	// if ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")
-
-	// 	setActivated(false);
-	// 	ConfigedMain.setHost((String) fieldHost.getSelectedItem());
-	// 	Configed.setHost((String) fieldHost.getSelectedItem());
-
-	// 	// String session_id = ServerFacade.getSSOSessionID(url_get_sid);
-
-	// 	// endProgram();
-	// 	Configed.initSavedStates();
-	// 	if (waitingWorker != null && !waitingWorker.isReady()) {
-	// 		Logging.info(this, "old waiting task not ready");
-	// 		return;
-	// 	}
-
-	// 	Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());
-	// 	Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
-	// 	Logging.info(this, "start WaitingWorker");
-	// 	waitingWorker = new WaitingWorker(this);
-	// 	waitingWorker.execute();
-
-	// 	new Thread() {
-	// 		@Override
-	// 		public void run() {
-	// 			Logging.info(this, "get persis");
-	// 			persistenceController = PersistenceControllerFactory
-	// 					.getNewPersistenceController((String) fieldHost.getSelectedItem());
-
-	// 			Logging.info(this, "got persis, == null ", persistenceController == null);
-
-	// 			Logging.info(this, "waitingTask can be set to ready");
-	// 			waitingWorker.setReady();
-	// 		}
-	// 	}.start();
-	// }
-
-	private void endProgram() {
-		configedMain.finishApp(false, 0);
+	private static void endProgram() {
+		ConfigedMain.finishApp(false, 0);
 	}
 
 	@Override

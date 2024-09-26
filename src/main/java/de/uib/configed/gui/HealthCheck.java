@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -53,10 +52,10 @@ import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
-public class HealthCheckDialog extends FGeneralDialog {
+public class HealthCheck extends JPanel {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
 
@@ -71,45 +70,28 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private Map<String, Map<String, Object>> healthData;
 
-	public HealthCheckDialog() {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"), false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 500, true);
+	public HealthCheck() {
 		saveHealthDataToFile();
+
+		initLayout();
 	}
 
-	@Override
-	protected void allLayout() {
+	private void initLayout() {
 		Logging.info(this, "start allLayout");
 
-		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+		JPanel northPanel = createNorthPanel();
+		JPanel centerPanel = createCenterPanel();
 
-		northPanel = createNorthPanel();
-		centerPanel = createCenterPanel();
-		southPanel = createSouthPanel();
-
-		GroupLayout allLayout = new GroupLayout(allpane);
-		allpane.setLayout(allLayout);
+		GroupLayout allLayout = new GroupLayout(this);
+		this.setLayout(allLayout);
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-				.addComponent(centerPanel).addGap(Globals.GAP_SIZE).addComponent(southPanel, 2 * Globals.LINE_HEIGHT,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
+				.addComponent(centerPanel).addGap(Globals.GAP_SIZE));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-						.addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
+				.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	private JPanel createNorthPanel() {
@@ -206,15 +188,15 @@ public class HealthCheckDialog extends FGeneralDialog {
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem popupSaveAsZip = new JMenuItem(Configed.getResourceValue("download"));
-		Utils.addIntellijIconToMenuItem(popupSaveAsZip, "download");
+		Icons.addIntellijIconToMenuItem(popupSaveAsZip, "download");
 
-		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
+		popupSaveAsZip.addActionListener(actionEvent -> saveAsZip());
 		popupMenu.add(popupSaveAsZip);
 
 		return popupMenu;
 	}
 
-	private void saveAsZip() {
+	public void saveAsZip() {
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Zip file (.zip)", "zip");
 		jFileChooser.addChoosableFileFilter(fileFilter);
@@ -385,31 +367,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 		return centerPanel;
 	}
 
-	private JPanel createSouthPanel() {
-		southPanel = new JPanel();
-
-		GroupLayout southLayout = new GroupLayout(southPanel);
-		southPanel.setLayout(southLayout);
-
-		southLayout.setHorizontalGroup(southLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
-
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		return southPanel;
-	}
-
 	private void setMessage(Map<String, Map<String, Object>> message) {
 		try {
 			styledDocument.remove(0, styledDocument.getLength());
@@ -419,7 +376,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 				if (!((String) healthInfo.get("details")).isBlank()) {
 					Style iconStyle = styledDocument.addStyle("iconStyle", null);
 					String imagePath = (boolean) healthInfo.get("showDetails") ? "arrowDown" : "arrowRight";
-					StyleConstants.setIcon(iconStyle, Utils.getIntellijIcon(imagePath));
+					StyleConstants.setIcon(iconStyle, Icons.getIntellijIcon(imagePath));
 					styledDocument.insertString(getMessageStartOffset((String) healthInfo.get("message")), " ",
 							iconStyle);
 				} else {

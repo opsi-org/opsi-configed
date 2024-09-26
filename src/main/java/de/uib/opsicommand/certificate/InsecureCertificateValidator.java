@@ -36,29 +36,35 @@ import de.uib.utils.logging.Logging;
  * certificate from the server for the first time.
  */
 public class InsecureCertificateValidator implements CertificateValidator {
+	private HostnameVerifier hostnameVerifier;
+	private SSLSocketFactory sslSocketFactory;
+
 	InsecureCertificateValidator() {
+		hostnameVerifier = new InsecureHostnameVerifier();
+		createSSLSocketFactory();
 	}
 
 	@Override
-	public SSLSocketFactory createSSLSocketFactory() {
-		SSLSocketFactory sslFactory = null;
+	public SSLSocketFactory getSSLSocketFactory() {
+		return sslSocketFactory;
+	}
 
+	private void createSSLSocketFactory() {
 		try {
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(null, new TrustManager[] { new InsecureX509TrustManager() }, new SecureRandom());
-			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
+			sslSocketFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(),
+					new MyHandshakeCompletedListener());
 		} catch (NoSuchAlgorithmException e) {
 			Logging.error(this, e, "provider doesn't support algorithm");
 		} catch (KeyManagementException e) {
 			Logging.error(this, e, "failed to initialize SSL context");
 		}
-
-		return sslFactory;
 	}
 
 	@Override
-	public HostnameVerifier createHostnameVerifier() {
-		return new InsecureHostnameVerifier();
+	public HostnameVerifier getHostnameVerifier() {
+		return hostnameVerifier;
 	}
 
 	@Override

@@ -69,8 +69,8 @@ public class UserDataService {
 		return otpSecret;
 	}
 
-	public String getOpsiCACert() {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_OPSI_CA_CERT, new Object[0]);
+	public String getCACerts() {
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.GET_CA_CERTS, new Object[0]);
 		return exec.getStringResult(omc);
 	}
 }

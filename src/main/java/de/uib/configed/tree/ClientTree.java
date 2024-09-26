@@ -568,6 +568,6 @@ public class ClientTree extends AbstractGroupTree {
 
 	@Override
 	public Set<String> getSelectedObjectsInTable() {
-		return configedMain.getClientTable().getSelectedSet();
+		return configedMain.getClientTablePanel().getClientTable().getSelectedSet();
 	}
 }

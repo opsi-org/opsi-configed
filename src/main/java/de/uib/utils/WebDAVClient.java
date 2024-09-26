@@ -37,8 +37,7 @@ public class WebDAVClient {
 		sardine = new SardineImpl() {
 			@Override
 			protected ConnectionSocketFactory createDefaultSecureSocketFactory() {
-				return new SSLSocketFactoryWrapper(
-						CertificateValidatorFactory.createValidator().createSSLSocketFactory());
+				return new SSLSocketFactoryWrapper(CertificateValidatorFactory.getValidator().getSSLSocketFactory());
 			}
 		};
 		int port = getPortFromHost(ConfigedMain.getHost());

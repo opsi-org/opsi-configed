@@ -11,7 +11,7 @@ import javax.swing.GroupLayout;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.swing.SecondaryFrame;
 
 public class FDriverUpload extends SecondaryFrame {
@@ -26,7 +26,7 @@ public class FDriverUpload extends SecondaryFrame {
 
 		init();
 
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(Configed.getResourceValue("FDriverUpload.title"));
 	}
 
@@ -49,7 +49,7 @@ public class FDriverUpload extends SecondaryFrame {
 
 		String clientName;
 
-		if (configedMain.getSelectedClients() != null && configedMain.getSelectedClients().size() == 1) {
+		if (configedMain.getSelectedClients().size() == 1) {
 			clientName = configedMain.getSelectedClients().get(0);
 		} else {
 			clientName = "";

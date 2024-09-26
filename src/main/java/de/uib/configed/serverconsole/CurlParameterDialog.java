@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -68,7 +67,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 
 		init();
 		initLayout();
-		super.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, 320);
+		super.setSize(800, 320);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
@@ -131,8 +130,8 @@ public class CurlParameterDialog extends FGeneralDialog {
 		}
 
 		jComboBoxLoglevel.setSelectedItem(4);
-		jComboBoxLoglevel.addItemListener(
-				(ItemEvent itemEvent) -> commandCurl.setLoglevel((int) jComboBoxLoglevel.getSelectedItem()));
+		jComboBoxLoglevel
+				.addItemListener(itemEvent -> commandCurl.setLoglevel((int) jComboBoxLoglevel.getSelectedItem()));
 
 		jLabelFreeInput.setText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput"));
 		jTextFieldFreeInput = new JTextField();

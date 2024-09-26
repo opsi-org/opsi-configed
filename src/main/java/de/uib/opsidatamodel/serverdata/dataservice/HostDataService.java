@@ -17,8 +17,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HostInfo;
@@ -102,8 +100,7 @@ public class HostDataService {
 			String ipaddress = ((String) client.get(8)).trim();
 
 			boolean wanConfig = Boolean.parseBoolean((String) client.get(10));
-			boolean uefiBoot = Boolean.parseBoolean((String) client.get(11));
-			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(12));
+			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(11));
 
 			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
 			String opsiHostKey = ((String) client.get(13)).isBlank() ? null : ((String) client.get(13)).trim();
@@ -132,11 +129,6 @@ public class HostDataService {
 
 			configStatesJsonObject.add(itemDepot);
 
-			if (uefiBoot) {
-				configStatesJsonObject.add(
-						Utils.createUefiNOMEntry(newClientId, OpsiServiceNOMPersistenceController.EFI_DHCPD_FILENAME));
-			}
-
 			if (wanConfig) {
 				configStatesJsonObject = configDataService.addWANConfigStates(newClientId, configStatesJsonObject);
 			}
@@ -164,7 +156,6 @@ public class HostDataService {
 				depotId = hostInfoCollections.getConfigServer();
 			}
 			hostInfo.setInDepot(depotId);
-			hostInfo.setUefiBoot(uefiBoot);
 			hostInfo.setWanConfig(wanConfig);
 			hostInfo.setShutdownInstall(shutdownInstall);
 
@@ -225,7 +216,7 @@ public class HostDataService {
 
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
-			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String[] groups, String productNetboot) {
+			boolean shutdownInstall, boolean wanConfig, String[] groups, String productNetboot) {
 		if (!userRolesConfigDataService.hasDepotPermission(depotId)) {
 			return false;
 		}
@@ -246,7 +237,7 @@ public class HostDataService {
 		result = exec.doCall(omc);
 
 		if (result) {
-			result = updateConfigsForClient(depotId, newClientId, uefiBoot, wanConfig, shutdownInstall);
+			result = updateConfigsForClient(depotId, newClientId, wanConfig, shutdownInstall);
 		}
 
 		if (result) {
@@ -272,7 +263,6 @@ public class HostDataService {
 			}
 			HostInfo hostInfo = new HostInfo(hostItem);
 			hostInfo.setInDepot(depotId);
-			hostInfo.setUefiBoot(uefiBoot);
 			hostInfo.setWanConfig(wanConfig);
 			hostInfo.setShutdownInstall(shutdownInstall);
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
@@ -283,7 +273,7 @@ public class HostDataService {
 		return result;
 	}
 
-	private boolean updateConfigsForClient(String depotId, String newClientId, boolean uefiBoot, boolean wanConfig,
+	private boolean updateConfigsForClient(String depotId, String newClientId, boolean wanConfig,
 			boolean shutdownInstall) {
 		List<Map<String, Object>> jsonObjects = new ArrayList<>();
 
@@ -296,11 +286,6 @@ public class HostDataService {
 				OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 
 		jsonObjects.add(itemDepot);
-
-		if (uefiBoot) {
-			jsonObjects
-					.add(Utils.createUefiNOMEntry(newClientId, OpsiServiceNOMPersistenceController.EFI_DHCPD_FILENAME));
-		}
 
 		if (wanConfig) {
 			jsonObjects = configDataService.addWANConfigStates(newClientId, jsonObjects);
@@ -509,8 +494,7 @@ public class HostDataService {
 	private static String createSessionInfoForList(List<?> sessionlist) {
 		StringBuilder value = new StringBuilder();
 		for (Object element : sessionlist) {
-			Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<Map<String, Object>>() {
-			});
+			Map<String, Object> session = POJOReMapper.remap(element);
 
 			String username = "" + session.get("UserName");
 			String logondomain = "" + session.get("LogonDomain");
@@ -571,7 +555,7 @@ public class HostDataService {
 			return;
 		}
 		Map<String, List<Object>> serverPropertyMap = configDataService.getConfigDefaultValuesPD();
-		List<String> configuredByService = Utils.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
+		List<String> configuredByService = POJOReMapper.remap(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
 		// check if have to initialize the server property
 		configuredByService = produceHostDisplayFields(configuredByService);
 
@@ -608,7 +592,6 @@ public class HostDataService {
 		possibleValues.add(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);

@@ -40,8 +40,9 @@ import de.uib.utils.logging.Logging;
 public class Messagebus implements MessagebusListener {
 	public static final String CONNECTION_USER_CHANNEL = "@";
 
+	private static Messagebus instance;
+
 	private WebSocketClientEndpoint messagebusWebSocket;
-	private int reconnectWaitMillis = 15000;
 	private boolean connected;
 	private boolean disconnecting;
 	private boolean reconnecting;
@@ -82,8 +83,7 @@ public class Messagebus implements MessagebusListener {
 		messagebusWebSocket.registerListener(this);
 
 		if (ConfigedMain.getMainFrame() != null) {
-			messagebusWebSocket.registerListener(ConfigedMain.getMainFrame().getHostsStatusPanel());
-			messagebusWebSocket.registerListener(configedMain);
+			configedMain.registerMessagebusListeners();
 		}
 
 		if (basicAuthEnc != null) {
@@ -94,8 +94,8 @@ public class Messagebus implements MessagebusListener {
 			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 
-		CertificateValidator certValidator = CertificateValidatorFactory.createValidator();
-		messagebusWebSocket.setSocketFactory(certValidator.createSSLSocketFactory());
+		CertificateValidator certValidator = CertificateValidatorFactory.getValidator();
+		messagebusWebSocket.setSocketFactory(certValidator.getSSLSocketFactory());
 		messagebusWebSocket.setReuseAddr(true);
 		messagebusWebSocket.setTcpNoDelay(true);
 
@@ -156,7 +156,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private ServerFacade getServerFacadeExecutor() {
-		return (ServerFacade) persistenceController.getExecutioner();
+		return persistenceController.getExecutioner();
 	}
 
 	private String createEncBasicAuth() {
@@ -251,6 +251,27 @@ public class Messagebus implements MessagebusListener {
 		return connected;
 	}
 
+	public static void initMessagebus(ConfigedMain configedMain) {
+		if (instance == null) {
+			instance = new Messagebus(configedMain);
+		}
+
+		if (!instance.isConnected()) {
+			try {
+				Logging.info("connecting to messagebus");
+				instance.connect();
+				Logging.info("connected to messagebus");
+			} catch (InterruptedException e) {
+				Logging.error(e, "could not connect to messagebus");
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	public static Messagebus getInstance() {
+		return instance;
+	}
+
 	public void disconnect() throws InterruptedException {
 		if (messagebusWebSocket != null && isConnected()) {
 			disconnecting = true;
@@ -259,6 +280,10 @@ public class Messagebus implements MessagebusListener {
 		} else {
 			Logging.info(this, "Messagebus not connected");
 		}
+	}
+
+	public void setReconnecting(boolean reconnecting) {
+		this.reconnecting = reconnecting;
 	}
 
 	@Override
@@ -277,39 +302,7 @@ public class Messagebus implements MessagebusListener {
 		boolean authenticationError = reason != null && reason.toLowerCase(Locale.ROOT).contains("authentication");
 
 		if (!wasDisconnecting && !reconnecting) {
-			new RetryConnectingThread(authenticationError).start();
-		}
-	}
-
-	private class RetryConnectingThread extends Thread {
-		private boolean authenticationError;
-
-		public RetryConnectingThread(boolean authenticationError) {
-			this.authenticationError = authenticationError;
-		}
-
-		@Override
-		public void run() {
-			reconnecting = true;
-			while (!isConnected()) {
-				int waitMillis = reconnectWaitMillis;
-				if (authenticationError) {
-					Logging.notice(this, "Connection to messagebus lost, authentication error");
-					persistenceController.makeConnection();
-					waitMillis = 1000;
-				} else {
-					Logging.notice(this, "Connection to messagebus lost, reconnecting in ", reconnectWaitMillis, " ms");
-				}
-				try {
-					Thread.sleep(waitMillis);
-					if (connect()) {
-						break;
-					}
-				} catch (InterruptedException ie) {
-					Thread.currentThread().interrupt();
-				}
-			}
-			reconnecting = false;
+			new RetryConnectingThread(authenticationError, this).start();
 		}
 	}
 
@@ -329,7 +322,7 @@ public class Messagebus implements MessagebusListener {
 				return;
 			}
 			List<?> channels = (List<?>) message.get("subscribed_channels");
-			if (channels.stream().anyMatch((Object channel) -> channel.toString().equals(channelSessionTerminalId))) {
+			if (channels.stream().anyMatch(channel -> channel.toString().equals(channelSessionTerminalId))) {
 				// check if the subscripted_channels in response contains the requested channel
 				// ensures that we send terminalOpenRequest only after we subscribed the correct channel
 				channelSessionTerminalId = null;

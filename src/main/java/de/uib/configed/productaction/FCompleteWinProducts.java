@@ -35,8 +35,8 @@ import de.uib.configed.Globals;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SecondaryFrame;
 
@@ -71,7 +71,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			.getPersistenceController();
 
 	public FCompleteWinProducts() {
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(Configed.getResourceValue("FProductAction.title"));
 
 		defineChoosers();
@@ -220,7 +220,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 		fieldProductKey = new JTextField();
 		fieldProductKey.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
-		buttonCallSelectFolderWinPE = new JButton(Utils.getIntellijIcon("open"));
+		buttonCallSelectFolderWinPE = new JButton(Icons.getIntellijIcon("open"));
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
@@ -236,7 +236,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 		});
 
-		buttonCallSelectFolderInstallFiles = new JButton(Utils.getIntellijIcon("open"));
+		buttonCallSelectFolderInstallFiles = new JButton(Icons.getIntellijIcon("open"));
 		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderInstallFiles
 				.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));
@@ -255,19 +255,13 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 			}
 		});
 
-		buttonCallExecute = new JButton(Utils.getIntellijIcon("upload"));
+		buttonCallExecute = new JButton(Icons.getIntellijIcon("upload"));
 		buttonCallExecute.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));
 
 		buttonCallExecute.setEnabled(false);
 
-		buttonCallExecute.addActionListener((ActionEvent e) -> {
-			Logging.debug(this,
-					"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct ",
-					fieldPathWinPE.getText(), ", ", fieldPathInstallFiles.getText(), ", ", fieldProductKey.getText(),
-					", ", comboChooseWinProduct.getSelectedItem());
-			execute();
-		});
+		buttonCallExecute.addActionListener(actionEvent -> execute());
 	}
 
 	private void execute() {

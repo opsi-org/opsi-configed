@@ -16,16 +16,14 @@ import java.util.Map.Entry;
 
 import javax.swing.SwingUtilities;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.Configed;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.permission.ModulePermissionValue;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -141,7 +139,7 @@ public class ModuleDataService {
 						.getCurrentOverLimitModuleList());
 
 		LicensingInfoMap licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfoOpsiAdminPD(),
-				configDefaultValues, !LicensingInfoDialog.isExtendedView());
+				configDefaultValues, !OpsiLicensing.isExtendedView());
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
 
@@ -178,14 +176,15 @@ public class ModuleDataService {
 
 		Map<String, Object> opsiInformation = produceOpsiInformationPD();
 		// prepare the user info
-		Map<String, Object> opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
+		Map<String, Object> opsiModulesInfo = POJOReMapper.remap(opsiInformation.get("modules"));
 		Logging.info(this, "opsi module information ", opsiModulesInfo);
 
 		ExtendedDate validUntil = ExtendedDate.INFINITE;
 
 		// analyse the real module info
-		Map<String, Object> opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
-		opsiCountModules.keySet().removeAll(exec.getListFromItem(opsiInformation.get("obsolete_modules") + ""));
+		Map<String, Object> opsiCountModules = POJOReMapper.remap(opsiInformation.get("modules"));
+
+		opsiCountModules.keySet().removeAll(POJOReMapper.remap(opsiInformation.get("obsolete_modules")));
 		hostInfoCollections.retrieveOpsiHostsPD();
 
 		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
@@ -199,9 +198,7 @@ public class ModuleDataService {
 		// read in modules
 		for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
 			Logging.info(this, "module from opsiModulesInfo, key ", opsiModuleInfo);
-			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue(),
-					new TypeReference<Map<String, Object>>() {
-					});
+			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue());
 			ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
 					validUntil);
 
@@ -223,9 +220,7 @@ public class ModuleDataService {
 		for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
 			ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
 			Logging.info(this, "handle modules key ", opsiCountModule.getKey(), " permission was ", modulePermission);
-			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue(),
-					new TypeReference<Map<String, Object>>() {
-					});
+			Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue());
 
 			if ("free".equals(opsiModuleData.get("state"))) {
 				continue;
@@ -396,6 +391,7 @@ public class ModuleDataService {
 		Logging.info(this, "retrieveOpsiModules opsiCountModules ", opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions ", opsiModulesPermissions);
 		Logging.info(this, "retrieveOpsiModules opsiModules ", opsiModules);
+		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
 	}
 
 	private void callOpsiLicenseMissingModules(List<String> missingModulesPermissionInfo) {
@@ -488,17 +484,13 @@ public class ModuleDataService {
 	public List<Map<String, Object>> getModules() {
 		Logging.info(this, "getModules");
 		Map<String, Object> producedLicencingInfo = retrieveProducedLicensingInfo();
-		return POJOReMapper.remap(producedLicencingInfo.get("licenses"),
-				new TypeReference<List<Map<String, Object>>>() {
-				});
+		return POJOReMapper.remap(producedLicencingInfo.get("licenses"));
 	}
 
 	private Map<String, Object> retrieveProducedLicensingInfo() {
 		Map<String, Object> producedLicencingInfo;
 		if (isOpsiUserAdminPD() && getOpsiLicensingInfoOpsiAdminPD() != null) {
-			producedLicencingInfo = POJOReMapper.remap(getOpsiLicensingInfoOpsiAdminPD().get("result"),
-					new TypeReference<Map<String, Object>>() {
-					});
+			producedLicencingInfo = POJOReMapper.remap(getOpsiLicensingInfoOpsiAdminPD().get("result"));
 		} else {
 			producedLicencingInfo = getOpsiLicensingInfoNoOpsiAdminPD();
 		}
@@ -508,8 +500,6 @@ public class ModuleDataService {
 	public Map<String, Integer> getInstalledOsOverview() {
 		Logging.info(this, "getInstalledOsOverview");
 		Map<String, Object> producedLicencingInfo = retrieveProducedLicensingInfo();
-		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"),
-				new TypeReference<Map<String, Integer>>() {
-				});
+		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"));
 	}
 }

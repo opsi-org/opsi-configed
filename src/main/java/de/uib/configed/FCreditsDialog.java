@@ -53,9 +53,4 @@ public final class FCreditsDialog extends FGeneralDialog {
 		FCreditsDialog fCredits = new FCreditsDialog(owner);
 		fCredits.setVisible(true);
 	}
-
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return false;
-	}
 }

@@ -11,14 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
-import de.uib.utils.logging.Logging;
 
-public class ProductState extends HashMap<String, String> {
-	private static ProductState defaultProductState;
-
-	private static final List<String> SERVICE_KEYS = List.of("modificationTime", "productId", "productVersion",
-			"packageVersion", "targetConfiguration", "lastAction", "installationStatus", "actionRequest",
-			"actionProgress", "actionResult", "priority", "actionSequence");
+public final class ProductState {
+	private static Map<String, String> defaultProductState;
 
 	// directly taken values
 	public static final String KEY_LAST_STATE_CHANGE = "modificationTime";
@@ -28,7 +23,7 @@ public class ProductState extends HashMap<String, String> {
 	public static final String KEY_LAST_ACTION = LastAction.KEY;
 	public static final String KEY_INSTALLATION_STATUS = InstallationStatus.KEY;
 	public static final String KEY_ACTION_REQUEST = ActionRequest.KEY;
-	public static final String KEY_ACTION_PROGRESS = ActionProgress.KEY;
+	public static final String KEY_ACTION_PROGRESS = "actionProgress";
 	public static final String KEY_ACTION_RESULT = ActionResult.KEY;
 	public static final String KEY_PRODUCT_ID = "productId";
 
@@ -47,84 +42,56 @@ public class ProductState extends HashMap<String, String> {
 			KEY_PRODUCT_PRIORITY, KEY_ACTION_SEQUENCE, KEY_ACTION_REQUEST, KEY_VERSION_INFO, KEY_PRODUCT_VERSION,
 			KEY_PACKAGE_VERSION, KEY_LAST_STATE_CHANGE);
 
-	private final Map<String, String> retrieved;
-
-	public ProductState(Map<String, String> retrievedState, boolean transform) {
-		super();
-		this.retrieved = retrievedState;
-		if (retrieved == null) {
-			setDefaultValues();
-		} else {
-			readRetrieved();
-		}
-
-		if (transform) {
-			setTransforms();
-		}
+	// Empty constructor to prevent instantiation
+	private ProductState() {
 	}
 
-	public ProductState(Map<String, String> retrievedState) {
-		this(retrievedState, true);
+	public static Map<String, String> createDefaultProductState() {
+		Map<String, String> productState = new HashMap<>();
+		productState.put(KEY_PRODUCT_ID, "");
+		productState.put(KEY_PRODUCT_NAME, "");
+
+		productState.put(KEY_TARGET_CONFIGURATION, "undefined");
+		productState.put(KEY_INSTALLATION_STATUS, InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED));
+
+		productState.put(KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+		productState.put(KEY_ACTION_PROGRESS, "");
+		productState.put(KEY_LAST_ACTION, LastAction.getLabel(LastAction.NONE));
+
+		productState.put(KEY_ACTION_REQUEST, ActionRequest.getLabel(ActionRequest.NONE));
+
+		productState.put(KEY_PRODUCT_PRIORITY, "");
+		productState.put(KEY_ACTION_SEQUENCE, "");
+
+		productState.put(KEY_PRODUCT_VERSION, "");
+		productState.put(KEY_PACKAGE_VERSION, "");
+
+		productState.put(KEY_LAST_STATE_CHANGE, "");
+
+		transform(productState);
+
+		return productState;
 	}
 
-	public static ProductState getDefaultProductState() {
-		if (defaultProductState == null) {
-			defaultProductState = new ProductState(null);
-		}
-
-		return defaultProductState;
-	}
-
-	private void readRetrieved() {
-		put(KEY_PRODUCT_ID, getRetrievedValue(KEY_PRODUCT_ID));
-
-		put(KEY_TARGET_CONFIGURATION, getRetrievedValue(KEY_TARGET_CONFIGURATION));
-		put(KEY_INSTALLATION_STATUS, getRetrievedValue(KEY_INSTALLATION_STATUS));
-
-		put(KEY_ACTION_RESULT, getRetrievedValue(KEY_ACTION_RESULT));
-		put(KEY_ACTION_PROGRESS, getRetrievedValue(KEY_ACTION_PROGRESS));
-		put(KEY_LAST_ACTION, getRetrievedValue(KEY_LAST_ACTION));
-
-		put(KEY_ACTION_REQUEST, getRetrievedValue(KEY_ACTION_REQUEST));
-
-		put(KEY_PRODUCT_PRIORITY, getRetrievedValue(KEY_PRODUCT_PRIORITY));
-		put(KEY_ACTION_SEQUENCE, getRetrievedValue(KEY_ACTION_SEQUENCE));
-
-		put(KEY_PRODUCT_VERSION, getRetrievedValue(KEY_PRODUCT_VERSION));
-		put(KEY_PACKAGE_VERSION, getRetrievedValue(KEY_PACKAGE_VERSION));
-
-		put(KEY_LAST_STATE_CHANGE, getRetrievedValue(KEY_LAST_STATE_CHANGE));
-	}
-
-	@Override
-	public String put(String key, String value) {
-		if (KEYS.indexOf(key) < 0) {
-			Logging.error(this, "key ", key, " not known, value was ", value, " , ", KEYS);
-			return null;
-		} else {
-			return super.put(key, value);
-		}
-	}
-
-	private void setTransforms() {
+	public static Map<String, String> transform(Map<String, String> productState) {
 		// transformed values
 		StringBuilder installationInfo = new StringBuilder();
 		// the reverse will be found in in setInstallationInfo in
 		// InstallationStateTableModel
 
-		LastAction lastAction = LastAction.produceFromLabel(get(KEY_LAST_ACTION));
+		LastAction lastAction = LastAction.produceFromLabel(productState.get(KEY_LAST_ACTION));
 
-		if (!get(KEY_ACTION_PROGRESS).isEmpty()) {
-			ActionResult result = ActionResult.produceFromLabel(get(KEY_ACTION_RESULT));
+		if (!productState.get(KEY_ACTION_PROGRESS).isEmpty()) {
+			ActionResult result = ActionResult.produceFromLabel(productState.get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.FAILED) {
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
 				installationInfo.append(": ");
 			}
 
-			installationInfo.append(get(KEY_ACTION_PROGRESS));
+			installationInfo.append(productState.get(KEY_ACTION_PROGRESS));
 			installationInfo.append(" ( ");
 			if (lastAction.getVal() > 0) {
-				installationInfo.append(ActionRequest.getDisplayLabel(lastAction.getVal()));
+				installationInfo.append(ActionRequest.getLabel(lastAction.getVal()));
 			}
 
 			installationInfo.append(" ) ");
@@ -134,7 +101,7 @@ public class ProductState extends HashMap<String, String> {
 				installationInfo.append(" ");
 			}
 		} else {
-			ActionResult result = ActionResult.produceFromLabel(get(KEY_ACTION_RESULT));
+			ActionResult result = ActionResult.produceFromLabel(productState.get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.SUCCESSFUL || result.getVal() == ActionResult.FAILED) {
 				installationInfo.append("");
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
@@ -143,54 +110,30 @@ public class ProductState extends HashMap<String, String> {
 
 			if (lastAction.getVal() > 0) {
 				installationInfo.append(" (");
-				installationInfo.append(ActionRequest.getDisplayLabel(lastAction.getVal()));
+				installationInfo.append(ActionRequest.getLabel(lastAction.getVal()));
 				installationInfo.append(")");
 			}
 		}
 
-		put(KEY_INSTALLATION_INFO, installationInfo.toString());
+		productState.put(KEY_INSTALLATION_INFO, installationInfo.toString());
 
 		String versionInfo = "";
 
-		if (!get(KEY_PRODUCT_VERSION).isEmpty()) {
-			versionInfo = get(KEY_PRODUCT_VERSION) + ProductDataService.FOR_DISPLAY + get(KEY_PACKAGE_VERSION);
+		if (!productState.get(KEY_PRODUCT_VERSION).isEmpty()) {
+			versionInfo = productState.get(KEY_PRODUCT_VERSION) + ProductDataService.FOR_DISPLAY
+					+ productState.get(KEY_PACKAGE_VERSION);
 		}
 
-		put(KEY_VERSION_INFO, versionInfo);
+		productState.put(KEY_VERSION_INFO, versionInfo);
+
+		return productState;
 	}
 
-	private void setDefaultValues() {
-		put(KEY_PRODUCT_ID, "");
-		put(KEY_PRODUCT_NAME, "");
-
-		put(KEY_TARGET_CONFIGURATION, "undefined");
-		put(KEY_INSTALLATION_STATUS, InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED));
-
-		put(KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
-		put(KEY_ACTION_PROGRESS, "");
-		put(KEY_LAST_ACTION, LastAction.getLabel(LastAction.NONE));
-
-		put(KEY_ACTION_REQUEST, ActionRequest.getLabel(ActionRequest.NONE));
-
-		put(KEY_PRODUCT_PRIORITY, "");
-		put(KEY_ACTION_SEQUENCE, "");
-
-		put(KEY_PRODUCT_VERSION, "");
-		put(KEY_PACKAGE_VERSION, "");
-
-		put(KEY_LAST_STATE_CHANGE, "");
-	}
-
-	private String getRetrievedValue(String key) {
-		if (SERVICE_KEYS.indexOf(key) < 0) {
-			Logging.warning("service key ", key, " not known");
-			return "";
+	public static Map<String, String> getDefaultProductState() {
+		if (defaultProductState == null) {
+			defaultProductState = createDefaultProductState();
 		}
 
-		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && "null".equals(retrieved.get(key)))) {
-			return "";
-		}
-
-		return retrieved.get(key);
+		return defaultProductState;
 	}
 }

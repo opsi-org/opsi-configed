@@ -311,16 +311,11 @@ public class HostInfoCollections {
 
 			host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
 					persistenceController.getConfigDataService().isInstallByShutdownConfigured(name));
-			host.put(HostInfo.CLIENT_UEFI_BOOT_KEY,
-					persistenceController.getConfigDataService().isUefiConfigured(name));
 
-			if (persistenceController.getConfigDataService().getHostConfig(name) != null) {
-				boolean result = persistenceController.getConfigDataService()
-						.findBooleanConfigurationComparingToDefaults(name,
-								persistenceController.getConfigDataService().getWanConfigurationPD());
-				Logging.debug(this, "host ", name, " wan config ", result);
-				host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
-			}
+			boolean result = persistenceController.getConfigDataService().findBooleanConfigurationComparingToDefaults(
+					name, persistenceController.getConfigDataService().getWanConfigurationPD());
+			Logging.debug(this, "host ", name, " wan config ", result);
+			host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
 
 			HostInfo hostInfo = null;
 			String myDepot = null;
@@ -453,10 +448,10 @@ public class HostInfoCollections {
 		for (String client : clients) {
 			setDepot(client, depotId);
 			// collect data
-			persistenceController.getConfigDataService().setAdditionalConfiguration(client, config);
+			persistenceController.getConfigDataService().setConfiguration(client, config);
 		}
 		// send data
-		persistenceController.getConfigDataService().setAdditionalConfiguration();
+		persistenceController.getConfigDataService().setConfg();
 	}
 
 	// update derived data (caution!), does not create a HostInfo

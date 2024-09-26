@@ -113,14 +113,6 @@ public class UserRolesConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
 	}
 
-	public Set<String> getPermittedProductGroupsPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, Set.class);
-	}
-
-	public boolean hasProductGroupsFullPermissionPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class);
-	}
-
 	public Set<String> getHostGroupsPermitted() {
 		Set<String> result = null;
 		if (!isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
@@ -148,7 +140,6 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, isUserRegisterActivated());
 
@@ -190,7 +181,7 @@ public class UserRolesConfigDataService {
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigListCellOptionsPD()).produce();
+				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
 
 		if (readyConfigObjects == null) {
 			Logging.warning(this, "readyObjects for userparts null");
@@ -499,9 +490,6 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
-
 		if (!productgroupsFullPermission) {
 			setProductsPermitted(productGroupsPermitted);
 		}
@@ -533,8 +521,7 @@ public class UserRolesConfigDataService {
 		}
 
 		if (applyUserSpecializedConfigPD()) {
-			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + persistenceController.getUser()
-					+ "}.";
+			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + ConfigedMain.getUser() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}
@@ -941,7 +928,7 @@ public class UserRolesConfigDataService {
 
 	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
-		boolean result = persistenceController.getConfigDataService().getConfigListCellOptionsPD() != null;
+		boolean result = persistenceController.getConfigDataService().getConfigOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there ", result);
 
 		if (!result) {

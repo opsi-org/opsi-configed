@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,6 +23,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.opsidatamodel.SavedSearches;
@@ -31,7 +31,7 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditStringList;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
@@ -44,7 +44,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	private List<String> result;
 	private DefaultListModel<String> model;
 
-	private ClientTable selectionPanel;
+	private ClientTablePanel clientTablePanel;
 	private ConfigedMain configedMain;
 
 	private TableSearchPane searchPane;
@@ -52,8 +52,8 @@ public class SavedSearchesDialog extends FEditStringList {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SavedSearchesDialog(ClientTable selectionPanel, ConfigedMain configedMain) {
-		this.selectionPanel = selectionPanel;
+	public SavedSearchesDialog(ClientTablePanel clientTablePanel, ConfigedMain configedMain) {
+		this.clientTablePanel = clientTablePanel;
 		this.configedMain = configedMain;
 
 		initDialog();
@@ -83,13 +83,12 @@ public class SavedSearchesDialog extends FEditStringList {
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
 				new ArrayList<>());
 		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
 		searchPane.setNarrow(true);
 		editingArea.add(searchPane, BorderLayout.NORTH);
 
 		// redefine buttonCommit
 		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
-		buttonCommit.setIcon(Utils.getIntellijIcon("run"));
+		buttonCommit.setIcon(Icons.getIntellijIcon("run"));
 		buttonCommit.setSelectedIcon(null);
 		buttonCommit.setDisabledIcon(null);
 		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
@@ -102,26 +101,21 @@ public class SavedSearchesDialog extends FEditStringList {
 		super.initComponents();
 
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
-		Utils.addIntellijIconToMenuItem(reload, "refresh");
-		reload.addActionListener((ActionEvent e) -> {
-			Logging.debug(this, "reload action");
-			reloadAction();
-		});
+		Icons.addIntellijIconToMenuItem(reload, "refresh");
+		reload.addActionListener(actionEvent -> reloadAction());
 
 		JMenuItem remove = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.RemoveSearch"));
-		Utils.addIntellijIconToMenuItem(remove, "remove");
-		remove.addActionListener((ActionEvent actionEvent) -> {
-			Logging.debug(this, "remove action");
-			removeSelectedEntry();
-		});
+		Icons.addIntellijIconToMenuItem(remove, "remove");
+		remove.addActionListener(actionEvent -> removeSelectedEntry());
 
 		JMenuItem edit = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
-		Utils.addIntellijIconToMenuItem(edit, "edit");
-		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
+		Icons.addIntellijIconToMenuItem(edit, "edit");
+		edit.addActionListener(
+				actionEvent -> ExtraFrameController.editClientSearch(configedMain, visibleList.getSelectedValue()));
 
 		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
-		Utils.addIntellijIconToMenuItem(add, "add");
-		add.addActionListener(event -> addElement());
+		Icons.addIntellijIconToMenuItem(add, "add");
+		add.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		jPopupMenu.add(reload);
@@ -130,12 +124,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		jPopupMenu.add(add);
 
 		visibleList.setComponentPopupMenu(jPopupMenu);
-	}
-
-	@Override
-	public void setVisible(boolean b) {
-		Logging.debug(this, "setVisible ", b);
-		super.setVisible(b);
 	}
 
 	@Override
@@ -192,7 +180,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		Logging.info(this, "commit result == null ", result == null);
 		if (result != null) {
 			Logging.info(this, "result size ", result.size());
-			selectionPanel.setSelectedValues(result);
+			clientTablePanel.setSelectedValues(result);
 		}
 	}
 
@@ -228,17 +216,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		persistenceController.reloadData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST.toString());
 		resetModel();
-	}
-
-	// overwrite to implement
-	private void addElement() {
-		configedMain.callClientSelectionDialog();
-	}
-
-	// overwrite to implement
-	private void editSearch(String name) {
-		configedMain.callClientSelectionDialog();
-		configedMain.loadSearch(name);
 	}
 
 	public void resetModel() {

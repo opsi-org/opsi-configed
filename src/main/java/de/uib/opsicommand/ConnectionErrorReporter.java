@@ -18,7 +18,6 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
-import de.uib.opsicommand.certificate.CertificateDownloader;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditRecord;
@@ -39,7 +38,7 @@ public final class ConnectionErrorReporter {
 	}
 
 	/**
-	 * Constructs new instnace of {@link ConnectionErrorReporter} with provided
+	 * Constructs new instance of {@link ConnectionErrorReporter} with provided
 	 * information.
 	 * <p>
 	 * {@link ConnectionState} is used to indicate the connection state. The
@@ -111,13 +110,13 @@ public final class ConnectionErrorReporter {
 		if (choice == 1) {
 			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 		} else if (choice == 2) {
-			CertificateDownloader.downloadCertificateFile();
-			CertificateManager.saveCertificate(CertificateDownloader.getDownloadedCertificateFile());
+			CertificateManager.downloadCertificateFile();
+			CertificateManager.saveCertificate();
 			if (conStat.getState() != ConnectionState.INTERRUPTED) {
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
 		} else if (choice == 3) {
-			CertificateDownloader.downloadCertificateFile();
+			CertificateManager.downloadCertificateFile();
 			if (conStat.getState() != ConnectionState.INTERRUPTED) {
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}

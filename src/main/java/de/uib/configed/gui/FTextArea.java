@@ -65,11 +65,6 @@ public class FTextArea extends FGeneralDialog {
 		initFTextArea(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT);
 	}
 
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return false;
-	}
-
 	private void initFTextArea(int preferredWidth, int preferredHeight) {
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 

@@ -16,7 +16,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 	// this is the normal preferred height for components with content.
 	// We want this height also for empty components
 	private static final int CELL_HEIGHT = 20;
-	protected static final int FILL_LENGTH = 20;
 
 	public StandardListCellRenderer() {
 		super();

@@ -48,7 +48,6 @@ import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ListCellOptions;
@@ -70,6 +69,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private List<String> theRoles;
 
+	private boolean configStatesEditable;
+
 	private JSplitPane splitPane;
 	protected XTree tree;
 	private JPanel emptyRightPane;
@@ -84,12 +85,14 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
 
-	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable, final DefaultEditMapPanel.Actor actor) {
-		super(tableCellRenderer, keylistExtendible, keylistEditable, true);
+	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, final DefaultEditMapPanel.Actor actor,
+			boolean configStatesEditable) {
+		super(tableCellRenderer, true);
+
+		this.actor = actor;
+		this.configStatesEditable = configStatesEditable;
 
 		buildPanel();
-		this.actor = actor;
 
 		setupPopups();
 		setupPopupTexts();
@@ -97,7 +100,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupPopups() {
-		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
+		popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			@Override
 			public void action(int p) {
 				Logging.debug(this, "( EditMapPanelGrouped ) popup ", p);
@@ -373,16 +376,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// apply method of superclass for all partial maps
 	@Override
-	public void setOptionsEditable(boolean b) {
-		super.setOptionsEditable(b);
-
-		for (String key : keyclasses) {
-			partialPanels.get(key).setOptionsEditable(b);
-		}
-	}
-
-	// apply method of superclass for all partial maps
-	@Override
 	public void setStoreData(Collection<Map<String, Object>> data) {
 		super.setStoreData(data);
 
@@ -393,7 +386,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// apply method of superclass for all partial maps
 	@Override
-	public void setUpdateCollection(Collection updateCollection) {
+	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
 		super.setUpdateCollection(updateCollection);
 
 		for (String key : keyclasses) {
@@ -455,10 +448,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, keylistExtendible,
-					keylistEditable, reloadable, tree, includeAdditionalTooltipText);
+			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, reloadable, tree,
+					configStatesEditable, includeAdditionalTooltipText);
 
-			editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 			editMapPanel.setActor(actor);
 			editMapPanel.setOriginalMap(originalMap);
 
@@ -685,7 +677,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
+				persistenceController.getConfigDataService().getConfigOptionsPD());
 
 		List<Object> newData = up.produce();
 

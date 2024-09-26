@@ -32,14 +32,9 @@ public class DefaultEditMapPanel extends JPanel {
 	protected boolean reloadable;
 	protected boolean showToolTip = true;
 
-	protected boolean keylistExtendible;
-	protected boolean keylistEditable = true;
-
 	protected Actor actor;
 
-	protected JPopupMenu popupmenuAtRow;
-	protected JPopupMenu popupEditOptions;
-	protected JPopupMenu popupNoEditOptions;
+	protected JPopupMenu popupMenu;
 
 	protected List<String> names;
 	protected Map<String, ListCellOptions> optionsMap;
@@ -87,16 +82,13 @@ public class DefaultEditMapPanel extends JPanel {
 
 	protected final AbstractPropertyHandler defaultPropertyHandler;
 
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable) {
+	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean reloadable) {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
-		this.keylistExtendible = keylistExtendible;
-		this.keylistEditable = keylistEditable;
 		this.reloadable = reloadable;
 
 		this.tableCellRenderer = tableCellRenderer;
-		Logging.debug(this, "DefaultEditMapPanel ", keylistExtendible, ",  ", keylistEditable, ",  ", reloadable);
+		Logging.debug(this, "DefaultEditMapPanel reloadable:", reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
@@ -137,19 +129,15 @@ public class DefaultEditMapPanel extends JPanel {
 		descriptionsMap = new HashMap<>();
 		defaultsMap = new HashMap<>();
 
-		if (optionsMap != null) {
-			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
-				String description = option.getValue().getDescription();
-				Object defaultvalue = option.getValue().getDefaultValues();
+		for (Entry<String, ListCellOptions> option : this.optionsMap.entrySet()) {
+			String description = option.getValue().getDescription();
+			Object defaultvalue = option.getValue().getDefaultValues();
 
-				descriptionsMap.put(option.getKey(), description);
-				defaultsMap.put(option.getKey(), defaultvalue);
-			}
+			descriptionsMap.put(option.getKey(), description);
+			defaultsMap.put(option.getKey(), defaultvalue);
 		}
 
-		mapTableModel.setOptions(optionsMap,
-				// for convenience we deliver defaultsMap
-				defaultsMap);
+		mapTableModel.setOptions(optionsMap, defaultsMap);
 	}
 
 	public void setActor(Actor actor) {
@@ -211,7 +199,7 @@ public class DefaultEditMapPanel extends JPanel {
 	 * 
 	 * @param Collection updateCollection
 	 */
-	public void setUpdateCollection(Collection updateCollection) {
+	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
 		mapTableModel.setUpdateCollection(updateCollection);
 	}
 
@@ -224,19 +212,9 @@ public class DefaultEditMapPanel extends JPanel {
 	}
 
 	protected void logPopupElements() {
-		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
+		MenuElement[] popupElements = popupMenu.getSubElements();
 		int size = popupElements.length;
 		Logging.debug(this, "logPopupElements ", size);
-	}
-
-	public void setOptionsEditable(boolean b) {
-		Logging.debug(this, "DefaultEditMapPanel.setOptionsEditable ", b);
-
-		if (b) {
-			popupmenuAtRow = popupEditOptions;
-		} else {
-			popupmenuAtRow = popupNoEditOptions;
-		}
 	}
 
 	public MapTableModel getMapTableModel() {

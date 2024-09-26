@@ -6,7 +6,6 @@
 
 package de.uib.opsidatamodel.modulelicense;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,20 +14,15 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.LicensingInfoPanelGenEditTable;
@@ -39,11 +33,11 @@ import de.uib.utils.table.provider.MapSource;
 import de.uib.utils.table.provider.TableSource;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 
-public class LicensingInfoDialog extends FGeneralDialog {
+public class OpsiLicensing extends JPanel {
 	private static boolean extendedView;
 	private static boolean showOnlyAvailableModules = true;
 
-	private LicensingInfoPanelGenEditTable thePanel;
+	private LicensingInfoPanelGenEditTable licensingTable;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private LicensingInfoMap licenseMap;
@@ -53,67 +47,19 @@ public class LicensingInfoDialog extends FGeneralDialog {
 	private List<String> columnNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
-	public LicensingInfoDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
-			int preferredWidth, int preferredHeight, boolean lazyLayout) {
-		super(owner, title, modal, buttonList, lastButtonNo, preferredWidth, preferredHeight, lazyLayout);
+	public OpsiLicensing() {
 
-		super.setCenterPaneInScrollpane(initMainPanel());
-		super.setAdditionalPane(initClientInfo());
+		PanelGenEditTable mainPanel = initLicensingInfoPanel();
+		JPanel clientInfo = initClientInfo();
 
-		super.setupLayout();
-		super.setVisible(true);
-	}
+		GroupLayout groupLayout = new GroupLayout(this);
+		super.setLayout(groupLayout);
 
-	@Override
-	protected void allLayout() {
-		// we could design an adapted layout and infuse it in guiInit
+		groupLayout
+				.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(mainPanel).addComponent(clientInfo));
 
-		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-
-		if (centerPanel == null) {
-			centerPanel = new JPanel();
-		}
-
-		southPanel = new JPanel();
-
-		GroupLayout southLayout = new GroupLayout(southPanel);
-		southPanel.setLayout(southLayout);
-
-		southLayout.setHorizontalGroup(southLayout.createParallelGroup(Alignment.LEADING).addGroup(southLayout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
-
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-
-				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		GroupLayout allLayout = new GroupLayout(allpane);
-		allpane.setLayout(allLayout);
-
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(centerPanel, 200, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-
-				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
-
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
+		groupLayout
+				.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(mainPanel).addComponent(clientInfo));
 	}
 
 	private void retrieveData() {
@@ -124,24 +70,20 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		theSourceMap = licenseMap.getTableMap();
 	}
 
-	private PanelGenEditTable initMainPanel() {
+	private PanelGenEditTable initLicensingInfoPanel() {
 		retrieveData();
 
-		thePanel = new LicensingInfoPanelGenEditTable("opsi Modules Validation", false, 0,
-				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
-						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
-						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
-				false) {
+		licensingTable = new LicensingInfoPanelGenEditTable() {
 			@Override
 			public void reload() {
-				Logging.info(this, " LicInfoPanelGenTable reload, reduced ", !LicensingInfoDialog.extendedView);
+				Logging.info(this, " LicInfoPanelGenTable reload, reduced ", !OpsiLicensing.extendedView);
 				persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 				persistenceController.reloadData(ReloadEvent.OPSI_LICENSE_RELOAD.toString());
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(
 						persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
 						persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-						!LicensingInfoDialog.extendedView);
+						!OpsiLicensing.extendedView);
 				retrieveData();
 				tableSource = new MapSource(columnNames, theSourceMap, false);
 				buildModel();
@@ -153,10 +95,10 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		buildModel();
 
-		thePanel.getColumnModel().getColumn(0).setPreferredWidth(150);
-		thePanel.getColumnModel().getColumn(1).setPreferredWidth(60);
+		licensingTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(150);
+		licensingTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(60);
 
-		return thePanel;
+		return licensingTable;
 	}
 
 	private JPanel initClientInfo() {
@@ -212,7 +154,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		checkExtendedView.addActionListener((ActionEvent actionEvent) -> {
 			setExtendedView(checkExtendedView.isSelected());
-			thePanel.reload();
+			licensingTable.reload();
 		});
 
 		JCheckBox checkShowOnlyAvailableModules = new JCheckBox(
@@ -220,16 +162,7 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		checkShowOnlyAvailableModules.addActionListener((ActionEvent actionEvent) -> {
 			showOnlyAvailableModules(checkShowOnlyAvailableModules.isSelected());
-			thePanel.reload();
-		});
-
-		JButton buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
-		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
-		buttonReload.setPreferredSize(Globals.NEW_SMALL_BUTTON);
-
-		buttonReload.addActionListener((ActionEvent actionEvent) -> {
-			LicensingInfoMap.requestRefresh();
-			thePanel.reload();
+			licensingTable.reload();
 		});
 
 		JPanel panel = new JPanel();
@@ -241,21 +174,15 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 		gLayout.setHorizontalGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(gLayout.createSequentialGroup()
-						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(50)
 						.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gLayout.createSequentialGroup().addComponent(redWarningColor, 10, 10, 10)
-						.addComponent(redWarningLabel).addGap(0, 0, Short.MAX_VALUE).addComponent(orangeWarningColor,
-								10, 10, 10)
-						.addComponent(orangeWarningLabel))
-				.addGroup(
-						gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15).addComponent(
-								warningLevelPercent).addGap(15).addComponent(
-										warningLevelDays))
+						.addComponent(redWarningLabel).addGap(0, 0, Short.MAX_VALUE)
+						.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
+				.addGroup(gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15)
+						.addComponent(warningLevelPercent).addGap(15).addComponent(warningLevelDays))
 				.addGroup(gLayout
 						.createSequentialGroup().addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 
@@ -271,46 +198,48 @@ public class LicensingInfoDialog extends FGeneralDialog {
 						.addGap(60).addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(customerTitle).addComponent(customerNames))));
 
-		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(redWarningColor, 10, 10, 10).addComponent(redWarningLabel)
-						.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
-				.addGap(15)
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
-						.addComponent(warningLevelPercent).addComponent(warningLevelDays))
-				.addGap(25)
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(clientTitle)
-						.addGap(30).addComponent(customerTitle))
-				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(gLayout
-						.createSequentialGroup()
+		gLayout.setVerticalGroup(
+				gLayout.createSequentialGroup()
+						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(checkExtendedView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(checkShowOnlyAvailableModules, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(redWarningColor, 10, 10, 10).addComponent(redWarningLabel)
+								.addComponent(orangeWarningColor, 10, 10, 10).addComponent(orangeWarningLabel))
+						.addGap(15)
+						.addGroup(gLayout
+								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(warningLevelAbsolute)
+								.addComponent(warningLevelPercent).addComponent(warningLevelDays))
+						.addGap(25)
+						.addGroup(gLayout
+								.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(clientTitle).addGap(30)
+								.addComponent(customerTitle))
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addGroup(gLayout.createSequentialGroup().addComponent(allClient).addComponent(macos)
-										.addComponent(linux).addComponent(windows))
-								.addGroup(gLayout.createSequentialGroup().addComponent(allClientNum)
-										.addComponent(macosNum).addComponent(linuxNum).addComponent(windowsNum)))
-						.addGap(30).addComponent(checksumTitle).addComponent(checksum)).addGap(30)
-						.addComponent(customerNames)));
+								.addGroup(gLayout.createSequentialGroup()
+										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addGroup(gLayout.createSequentialGroup().addComponent(allClient)
+														.addComponent(macos).addComponent(linux).addComponent(windows))
+												.addGroup(gLayout.createSequentialGroup().addComponent(allClientNum)
+														.addComponent(macosNum).addComponent(linuxNum)
+														.addComponent(windowsNum)))
+										.addGap(30).addComponent(checksumTitle).addComponent(checksum))
+								.addGap(30).addComponent(customerNames)));
 
 		return panel;
 	}
 
 	private static void setExtendedView(boolean isExtendedView) {
-		LicensingInfoDialog.extendedView = isExtendedView;
+		OpsiLicensing.extendedView = isExtendedView;
 		Logging.info("extendedView ", extendedView, ", i.e. reduced ", !extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		LicensingInfoMap.requestRefresh();
 	}
 
 	private static void showOnlyAvailableModules(boolean showOnlyAvailableModules) {
-		LicensingInfoDialog.showOnlyAvailableModules = showOnlyAvailableModules;
+		OpsiLicensing.showOnlyAvailableModules = showOnlyAvailableModules;
 		LicensingInfoMap.requestRefresh();
 	}
 
@@ -318,20 +247,16 @@ public class LicensingInfoDialog extends FGeneralDialog {
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 
 		GenTableModel theModel = new GenTableModel(null, new DefaultTableProvider(tableSource), 0, new int[] {},
-				thePanel, updateCollection);
+				licensingTable, updateCollection);
 
 		theModel.reset();
 
 		columnNames = theModel.getColumnNames();
 
-		thePanel.setTableModel(theModel);
+		licensingTable.setTableModel(theModel);
 
-		thePanel.getTheTable().setDefaultRenderer(Object.class,
+		licensingTable.getJTable().setDefaultRenderer(Object.class,
 				new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
-	}
-
-	public void reload() {
-		thePanel.reload();
 	}
 
 	public static boolean isExtendedView() {
@@ -340,5 +265,9 @@ public class LicensingInfoDialog extends FGeneralDialog {
 
 	public static boolean isShowOnlyAvailableModules() {
 		return showOnlyAvailableModules;
+	}
+
+	public void reload() {
+		licensingTable.reload();
 	}
 }

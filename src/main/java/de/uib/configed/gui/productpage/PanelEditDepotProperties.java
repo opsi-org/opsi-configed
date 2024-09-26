@@ -35,13 +35,15 @@ import javax.swing.event.ListSelectionListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.DepotListCellRenderer;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.logging.Logging;
 
@@ -60,12 +62,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			.getPersistenceController();
 
 	public PanelEditDepotProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
-		super(configedMain, productPropertiesPanel);
-		initComponents();
+		super(productPropertiesPanel);
+		initComponents(configedMain);
 		initTitlePanel();
 	}
 
-	private void initComponents() {
+	private void initComponents(ConfigedMain configedMain) {
 		listDepots = new JList<>();
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);
@@ -94,7 +96,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
 
-		JButton buttonSetValuesFromPackage = new JButton(Utils.getIntellijIcon("remove"));
+		JButton buttonSetValuesFromPackage = new JButton(Icons.getIntellijIcon("remove"));
 		buttonSetValuesFromPackage
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"));
 		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
@@ -104,12 +106,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		panelTop.setLayout(layoutEditProperties);
 
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(scrollpaneDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpaneDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
 		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
-				.addComponent(scrollpaneDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpaneDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
@@ -121,7 +123,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		GroupLayout layoutAll = new GroupLayout(this);
 		setLayout(layoutAll);
 
-		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, minHSize,
+		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, MIN_WIDTH,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, Globals.MIN_TABLE_V_SIZE,
@@ -135,7 +137,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		titlePanel.setLayout(titleLayout);
 
 		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
-				minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		titleLayout.setVerticalGroup(titleLayout
 				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelEditDepotProductProperties,
@@ -212,8 +214,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
 					listDepots.getSelectedValuesList(), productEdited);
-			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
-			configedMain.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
+			productPropertiesPanel.setUpdateCollection(POJOReMapper.remap(depotProductpropertiesUpdateCollection));
+			UpdateCollectionManager.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}
 	}
 

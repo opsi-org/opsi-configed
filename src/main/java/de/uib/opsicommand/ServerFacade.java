@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsicommand.certificate.CertificateDownloader;
+import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
@@ -114,11 +114,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		conStat = new ConnectionState();
 
-		CertificateDownloader.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
 		if (useSAML && !connectSAML()) {
-			throw new RuntimeException("SAML connection failed");
+			Logging.error("SAML connection failed");
+			return;
+			// throw new RuntimeException("SAML connection failed");
 		}
 		checkServerVersion();
+
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 	}
 
 	private synchronized boolean connectSAML() {
@@ -439,11 +442,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		if (contentType.contains("application/json")) {
 			ObjectMapper mapper = new ObjectMapper();
-			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
 		} else if (contentType.contains("application/msgpack")) {
 			ObjectMapper mapper = new MessagePackMapper();
-			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
 		} else {
 			Logging.error(this, "Unsupported Content-Type: ", contentType);

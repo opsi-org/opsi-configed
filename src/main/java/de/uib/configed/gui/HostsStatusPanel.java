@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -19,12 +20,11 @@ import org.java_websocket.handshake.ServerHandshake;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.messagebus.MessagebusListener;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
-	public static final int MAX_CLIENT_NAMES_IN_FIELD = 10;
-
 	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
@@ -72,10 +72,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		return fieldGroupActivated.getText();
 	}
 
-	public void updateValues(Integer clientsCount, Integer selectedClientsCount, String selectedClientNames,
-			String involvedDepots) {
-		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
-				selectedClientsCount);
+	public void updateValues(Integer clientsCount, List<String> selectedClients, String depot) {
+		int selectedClientsCount = selectedClients.size();
+
 		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
 				selectedClientsCount);
 
@@ -83,21 +82,15 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 		setFieldClientsCount(selectedClientsCount);
 
-		if (selectedClientNames == null) {
-			fieldSelectedClientsNames.setText("");
-			fieldSelectedClientsNames.setToolTipText(null);
-		} else {
-			fieldSelectedClientsNames.setText(selectedClientNames);
+		String selectedClientNames = Utils.getListStringRepresentation(selectedClients);
 
-			fieldSelectedClientsNames.setToolTipText(
-					"<html><body><p>" + selectedClientNames.replace(";\n", "<br\\ >") + "</p></body></html>");
-		}
+		fieldSelectedClientsNames.setText(selectedClientNames);
 
-		if (involvedDepots != null) {
-			fieldInvolvedDepots.setText(involvedDepots);
-			fieldInvolvedDepots.setToolTipText(
-					"<html><body><p>" + involvedDepots.replace(";\n", "<br\\ >") + "</p></body></html>");
-		}
+		fieldSelectedClientsNames.setToolTipText(
+				"<html><body><p>" + selectedClientNames.replace(";\n", "<br\\ >") + "</p></body></html>");
+
+		fieldInvolvedDepots.setText(depot);
+		fieldInvolvedDepots.setToolTipText("<html><body><p>" + depot.replace(";\n", "<br\\ >") + "</p></body></html>");
 	}
 
 	public void setGroupClientsCount(int n) {
@@ -158,8 +151,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Utils.getSelectedIntellijIcon("circle_checkmark", 24);
-		disconnectedIcon = Utils.getSelectedIntellijIcon("circle", 24);
+		connectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
+		disconnectedIcon = Icons.getSelectedIntellijIcon("circle", 24);
 
 		connectionStateLabel = new JLabel();
 	}

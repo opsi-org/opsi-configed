@@ -24,7 +24,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane {
@@ -97,14 +97,14 @@ public class ProductInfoPane extends JSplitPane {
 		productSplitPane.setDividerLocation(Globals.PREF_VSIZE);
 		productSplitPane.setResizeWeight(0.5);
 
-		dependenciesActivateButton = new JToggleButton(Utils.getIntellijIcon("arrowRight"));
-		dependenciesActivateButton.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
+		dependenciesActivateButton = new JToggleButton(Icons.getIntellijIcon("arrowRight"));
+		dependenciesActivateButton.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
 		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
 		dependenciesActivateButton.setFocusable(false);
 		panelProductDependencies.setVisible(false);
 
-		propertiesActivateButton = new JToggleButton(Utils.getIntellijIcon("arrowRight"), true);
-		propertiesActivateButton.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
+		propertiesActivateButton = new JToggleButton(Icons.getIntellijIcon("arrowRight"), true);
+		propertiesActivateButton.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
 		propertiesActivateButton.addActionListener(event -> togglePropertiesActive());
 		propertiesActivateButton.setFocusable(false);
 	}

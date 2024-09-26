@@ -12,13 +12,13 @@ import java.awt.event.WindowEvent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 
 public class GeneralFrame extends JDialog {
 	public GeneralFrame(Frame owner, String title, boolean modal) {
 		super(owner, modal);
 		super.setTitle(title);
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 	}
 
 	public void addPanel(JPanel pane) {

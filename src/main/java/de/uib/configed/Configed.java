@@ -313,7 +313,6 @@ public final class Configed {
 	}
 
 	private static void initLogging() {
-		Logging.setLogfileMarker(host);
 		Logging.initLogFile();
 		Logging.essential("Configed version ", Globals.VERSION, " (", Globals.VERDATE, ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
@@ -324,6 +323,8 @@ public final class Configed {
 	public static void main(CommandLine cmd) {
 		processArgs(cmd);
 
+		// Set timeout for login
+		System.setProperty("sun.net.client.defaultConnectTimeout", "5000");
 		Logging.debug("configed: args recognized");
 
 		initLogging();
@@ -383,7 +384,7 @@ public final class Configed {
 					persistenceController.getGroupDataService().getHostGroupIds(),
 					persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
+					persistenceController.getConfigDataService().getConfigOptionsPD());
 
 			List<Object> newData = up.produce();
 			Logging.debug("UserConfigProducing: newData ", newData);
@@ -450,10 +451,6 @@ public final class Configed {
 
 	private static String getSavedStatesDirectoryName(String locationName) {
 		return locationName + File.separator + host.replace(":", "_");
-	}
-
-	public static String getHost() {
-		return host;
 	}
 
 	public static void setHost(String host) {

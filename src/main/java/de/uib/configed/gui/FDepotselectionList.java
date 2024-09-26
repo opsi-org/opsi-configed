@@ -32,11 +32,6 @@ public class FDepotselectionList extends FGeneralDialog {
 		masterWindow.setVisible(true);
 	}
 
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return false;
-	}
-
 	public void setListData(List<String> v) {
 		depotsList.setListData(v);
 	}

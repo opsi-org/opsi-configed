@@ -10,16 +10,12 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -36,6 +32,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
+import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -48,14 +45,12 @@ import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.SensitiveCellEditor;
 
 // works on a map of pairs of type String - List
-public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
-	private static int objectCounter;
+public class EditMapPanelX extends DefaultEditMapPanel {
 	protected JScrollPane jScrollPane;
 	protected JTable table;
 
 	private TableColumn editableColumn;
 	private TableCellEditor theCellEditor;
-	private JComboBox<?> editorfield;
 
 	private ListModelProducer<String> modelProducer;
 
@@ -112,11 +107,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
 			boolean reloadable) {
-		super(tableCellRenderer, keylistExtendible, entryRemovable, reloadable);
-		objectCounter++;
+		super(tableCellRenderer, reloadable);
 
-		Logging.debug(this, " created EditMapPanelX instance No ", objectCounter, "::", keylistExtendible, ",  ",
-				entryRemovable, ",  ", reloadable);
+		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable, ",  ", reloadable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
 		ttm.setInitialDelay(Globals.TOOLTIP_INITIAL_DELAY_MS);
@@ -125,11 +118,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		buildPanel();
 
-		editableColumn = table.getColumnModel().getColumn(1);
+		theCellEditor = new SensitiveCellEditorForDataPanel();
 
-		editorfield = new JComboBox<>();
-		editorfield.setEditable(true);
-		theCellEditor = new DefaultCellEditor(editorfield);
+		editableColumn = table.getColumnModel().getColumn(1);
 
 		if (tableCellRenderer == null) {
 			editableColumn.setCellRenderer(new ColorTableCellRenderer());
@@ -137,68 +128,68 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			editableColumn.setCellRenderer(tableCellRenderer);
 		}
 
-		popupEditOptions = definePopup();
-		popupNoEditOptions = definePopup();
-		popupmenuAtRow = popupEditOptions;
+		popupMenu = definePopup();
 
 		super.logPopupElements();
 
-		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupNoEditOptions);
+		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu);
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
-		if (keylistExtendible || entryRemovable) {
-			popupEditOptions.addSeparator();
-
-			table.getTableHeader().setToolTipText(Configed.getResourceValue("EditMapPanel.PopupMenu.EditableToolTip"));
-
-			if (keylistExtendible) {
-				popupItemAddStringListEntry = new JMenuItem(
-						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
-				Utils.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
-				popupEditOptions.add(popupItemAddStringListEntry);
-
-				popupItemAddStringListEntry = new JMenuItem(
-						Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
-				Utils.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
-				popupEditOptions.add(popupItemAddStringListEntry);
-
-				popupItemAddBooleanListEntry = new JMenuItem(
-						Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
-				Utils.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
-				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean"));
-				popupEditOptions.add(popupItemAddBooleanListEntry);
+		if (keylistExtendible) {
+			if (popupMenu.getComponentCount() > 0) {
+				popupMenu.addSeparator();
 			}
 
-			if (entryRemovable) {
-				popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
-				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
-				popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
+			popupItemAddStringListEntry = new JMenuItem(
+					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
+			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
+			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
+			popupMenu.add(popupItemAddStringListEntry);
 
-				popupEditOptions.add(popupItemDeleteEntry0);
-				// the menu item seems to work only for one menu
+			popupItemAddStringListEntry = new JMenuItem(
+					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
+			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
+			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
+			popupMenu.add(popupItemAddStringListEntry);
 
-				// initialize special property handlers
-				removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
-				removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
+			popupItemAddBooleanListEntry = new JMenuItem(
+					Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
+			Icons.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
+			popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean", false));
+			popupMenu.add(popupItemAddBooleanListEntry);
 
-				settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
-				settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
+			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
+			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
+			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
 
-				popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
-				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry1, "remove");
-				popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
+			popupMenu.add(popupItemDeleteEntry0);
+			// the menu item seems to work only for one menu
+		}
 
-				popupNoEditOptions.add(popupItemDeleteEntry1);
-
-				popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
-				Utils.addIntellijIconToMenuItem(popupItemDeleteEntry2, "locked");
-				popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
-
-				popupNoEditOptions.add(popupItemDeleteEntry2);
+		if (entryRemovable) {
+			if (popupMenu.getComponentCount() > 0) {
+				popupMenu.addSeparator();
 			}
+
+			// initialize special property handlers
+			removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
+			removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
+
+			settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
+			settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
+
+			popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
+			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry1, "remove");
+			popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
+
+			popupMenu.add(popupItemDeleteEntry1);
+
+			popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
+			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry2, "locked");
+			popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
+
+			popupMenu.add(popupItemDeleteEntry2);
 		}
 
 		propertyHandler.setMapTableModel(mapTableModel);
@@ -334,21 +325,22 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private String generateTooltip(int row) {
 		String propertyName = names.get(row);
 
-		String tooltip = "";
+		StringBuilder tooltip = new StringBuilder();
 
 		if (propertyName != null) {
 			if (defaultsMap != null && defaultsMap.get(propertyName) != null) {
-				tooltip = "default: ";
+				tooltip.append("default: ");
 
 				if (Utils.isKeyForSecretValue(propertyName)) {
-					tooltip = tooltip + Globals.STARRED_STRING;
+					tooltip.append(Globals.STARRED_STRING);
 				} else {
-					tooltip = tooltip + defaultsMap.get(propertyName);
+					tooltip.append(defaultsMap.get(propertyName));
 				}
 			}
 
 			if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-				tooltip = tooltip + "<br/><br/>" + descriptionsMap.get(propertyName);
+				// We want to have new lines in the html form "<br>" so they'll be shown correctly in the tooltip
+				tooltip.append("<br/><br/>").append(descriptionsMap.get(propertyName).replace("\n", "<br>"));
 			}
 		}
 
@@ -358,17 +350,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	@Override
 	public void init() {
 		setEditableMap(null, null);
-	}
-
-	/**
-	 * setting all data for displaying and editing <br />
-	 *
-	 * @param Map visualdata - the source for the table model
-	 * @param Map optionsMap - the description for producing cell editors
-	 */
-
-	public void setCellEditor(SensitiveCellEditor cellEditor) {
-		theCellEditor = cellEditor;
 	}
 
 	@Override
@@ -419,10 +400,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 
 		return ok;
-	}
-
-	private void addEntryFor(final String classname) {
-		addEntryFor(classname, false);
 	}
 
 	private void addEntryFor(final String classname, final boolean multiselection) {
@@ -506,13 +483,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	 * @param String key - the key to delete
 	 */
 	public void removeProperty(String key) {
-		Logging.info(this, " EditMapPanelX instance No ", objectCounter, "::", " removeProperty for key ", key,
-				" via  handler ", propertyHandler);
+		Logging.info(this, " EditMapPanelX, removeProperty for key ", key, " via  handler ", propertyHandler);
 
 		propertyHandler.removeValue(key);
 
-		Logging.info(this, " EditMapPanelX instance No ", objectCounter, "::", " handled removeProperty for key ", key,
-				" options ", optionsMap.get(key));
+		Logging.info(this, " EditMapPanelX, handled removeProperty for key ", key, " options ", optionsMap.get(key));
 
 		Object defaultValue = defaultsMap.get(key);
 
@@ -525,38 +500,5 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		names = mapTableModel.getKeys();
 		Logging.info(this, "removeProperty names left: ", names);
-	}
-
-	private void stopEditing() {
-		// we prefer not to cancel cell editing
-		if (table.isEditing()) {
-			table.getCellEditor().stopCellEditing();
-		}
-	}
-
-	// FocusListener
-
-	@Override
-	public void focusLost(FocusEvent e) {
-		stopEditing();
-	}
-
-	@Override
-	public void focusGained(FocusEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void setOptionsEditable(boolean b) {
-		Logging.debug(this, "setOptionsEditable ", b);
-
-		if (b) {
-			popupmenuAtRow = popupEditOptions;
-		} else {
-			popupmenuAtRow = popupNoEditOptions;
-		}
-
-		MouseListener popupListener = new PopupMouseListener(popupmenuAtRow);
-		table.addMouseListener(popupListener);
-		jScrollPane.getViewport().addMouseListener(popupListener);
 	}
 }

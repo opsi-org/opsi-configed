@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
@@ -78,9 +76,7 @@ public class HealthDataService {
 		List<Map<String, Object>> result = new ArrayList<>();
 		for (Map<String, Object> data : checkHealthPD()) {
 			if (((String) data.get("check_id")).equals(checkId)) {
-				result = POJOReMapper.remap(data.get("partial_results"),
-						new TypeReference<List<Map<String, Object>>>() {
-						});
+				result = POJOReMapper.remap(data.get("partial_results"));
 				break;
 			}
 		}

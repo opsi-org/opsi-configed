@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 
 public class PMInstallLocalPanel extends PMInstallPanel {
 	private JLabel jLabelUploadFrom;
@@ -58,8 +58,7 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
 		jFileChooser.setFileFilter(filter);
 
-		jButtonFileChooser = new JButton(Utils.getIntellijIcon("open"));
-		jButtonFileChooser.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
+		jButtonFileChooser = new JButton(Icons.getIntellijIcon("open"));
 		jButtonFileChooser.setToolTipText(Configed.getResourceValue("PMInstallLocalPanel.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = jFileChooser.showOpenDialog(this);

@@ -23,7 +23,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public final class ThemeManager {
@@ -57,11 +57,11 @@ public final class ThemeManager {
 	public static void setThemeIcon(AbstractButton abstractButton, String theme) {
 		switch (theme) {
 		case THEME_LIGHT:
-			Utils.addIntellijIconToMenuItem(abstractButton, "lightTheme");
+			Icons.addIntellijIconToMenuItem(abstractButton, "lightTheme");
 			break;
 
 		case THEME_DARK:
-			Utils.addIntellijIconToMenuItem(abstractButton, "darkTheme");
+			Icons.addIntellijIconToMenuItem(abstractButton, "darkTheme");
 			break;
 
 		default:

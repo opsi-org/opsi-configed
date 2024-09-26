@@ -124,7 +124,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 
 		buttonShowAssignedNotExisting.addActionListener((ActionEvent actionEvent) -> {
-			fMissingSoftwareInfo.setLocationRelativeTo(ConfigedMain.getLicensesFrame());
+			fMissingSoftwareInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			fMissingSoftwareInfo.setVisible(true);
 		});
 
@@ -139,7 +139,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		buttonSupplementSimilar.setToolTipText(
 				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries.tooltip"));
 
-		buttonSupplementSimilar.addActionListener((ActionEvent e) -> buttonSupplementSimilarAction());
+		buttonSupplementSimilar.addActionListener(actionEvents -> buttonSupplementSimilarAction());
 
 		jCheckBoxSimilarEntriesExist = new JCheckBox();
 		jCheckBoxSimilarEntriesExist.setEnabled(false);
@@ -395,7 +395,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				true);
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
-		panelRegisteredSoftware.setFiltering();
+		panelRegisteredSoftware.getTableSearchPane().setFiltering();
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
@@ -442,7 +442,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	private void buttonSupplementSimilarAction() {
 		if (!fSoftwarename2LicensePool.isVisible()) {
-			fSoftwarename2LicensePool.setLocationRelativeTo(ConfigedMain.getLicensesFrame());
+			fSoftwarename2LicensePool.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		}
 
 		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected ",
@@ -473,7 +473,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		Logging.info(this, " stateChanged ", e);
 		Logging.info(this, " stateChanged modelSWnames filterinfo ",
 				fSoftwarename2LicensePool.getModelSWnames().getFilterInfo());
-		int selectedRow = panelRegisteredSoftware.getSelectedRow();
+		int selectedRow = panelRegisteredSoftware.getJTable().getSelectedRow();
 		int columnNameIndex = panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME);
 		if (selectedRow == -1 || columnNameIndex == -1) {
 			Logging.warning(this, selectedRow == -1 ? "No software is selected" : "SWAuditEntry name column not found");

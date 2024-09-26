@@ -25,7 +25,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.CommandParameterParser;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class CommandControlParameterMethodsPanel extends JPanel {
@@ -87,11 +87,11 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 			jComboBoxParameterFormats.setEnabled(enabled);
 		});
 
-		jButtonTestParam = new JButton(Utils.getIntellijIcon("run"));
+		jButtonTestParam = new JButton(Icons.getIntellijIcon("run"));
 		jButtonTestParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"));
 		jButtonTestParam.setPreferredSize(jButtonDim);
 
-		jButtonAddParam = new JButton(Utils.getIntellijIcon("add"));
+		jButtonAddParam = new JButton(Icons.getIntellijIcon("add"));
 		jButtonAddParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnAddParamMethod"));
 		jButtonAddParam.setSize(jButtonDim);
 		jButtonAddParam.setPreferredSize(jButtonDim);

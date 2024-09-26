@@ -24,6 +24,4 @@ public interface ListCellOptions {
 	boolean isNullable();
 
 	String getDescription();
-
-	ListCellOptions deepCopy();
 }

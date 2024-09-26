@@ -6,14 +6,9 @@
 
 package de.uib.utils;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -26,24 +21,14 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
-
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import javafx.application.Application;
@@ -59,7 +44,6 @@ public final class Utils {
 			8 * KIBI_BYTE * KIBI_BYTE, 0, 1 * KIBI_BYTE * KIBI_BYTE };
 
 	private static JFrame masterFrame;
-	private static Image mainIcon;
 	private static boolean disableCertificateVerification;
 	private static boolean isMultiFactorAuthenticationEnabled;
 
@@ -102,216 +86,6 @@ public final class Utils {
 			return -1;
 		}
 		return MAX_LOG_SIZES[index];
-	}
-
-	private static FlatSVGIcon getThemeIconForThemeMenu(boolean dark, String iconName) {
-		ColorFilter filter = new ColorFilter();
-		if (dark) {
-			iconName = iconName + "_dark";
-			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_LIGHT);
-		} else {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
-	}
-
-	public static void addThemeIconInvertedToMenuItem(AbstractButton abstractButton, String iconName) {
-		abstractButton.setIcon(getThemeIconForThemeMenu(!FlatLaf.isLafDark(), iconName));
-		if (!FlatLaf.isLafDark()) {
-			abstractButton.setSelectedIcon(getThemeIconForThemeMenu(false, iconName));
-		}
-	}
-
-	public static void addThemeIconToMenuItem(AbstractButton abstractButton, String iconName) {
-		abstractButton.setIcon(getThemeIcon(iconName, 16));
-		abstractButton.setSelectedIcon(
-				getThemeIcon(iconName, 16).setColorFilter(new ColorFilter(color -> Globals.OPSI_FOREGROUND_DARK)));
-	}
-
-	public static FlatSVGIcon getThemeIcon(String iconName, int size) {
-		ColorFilter filter = new ColorFilter();
-		if (FlatLaf.isLafDark()) {
-			iconName = iconName + "_dark";
-			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_DARK);
-		} else {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_LIGHT);
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter).derive(size,
-				size);
-	}
-
-	public static FlatSVGIcon getThemeFilledIcon(String iconName, int size) {
-		FlatSVGIcon icon = getThemeIcon(iconName, size);
-
-		ColorFilter filter = icon.getColorFilter();
-		if (FlatLaf.isLafDark()) {
-			filter.add(new Color(67, 69, 74), Globals.OPSI_FOREGROUND_DARK);
-		} else {
-			filter.add(new Color(235, 236, 240), Globals.OPSI_FOREGROUND_LIGHT);
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
-	}
-
-	private static FlatSVGIcon getOpsiModulesIcon() {
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-
-		Color iconColor = null;
-		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
-			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!LicensingInfoDialog.isExtendedView());
-
-			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				iconColor = Globals.OPSI_ERROR;
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				iconColor = Globals.OPSI_WARNING;
-				break;
-
-			case LicensingInfoMap.STATE_OKAY:
-				iconColor = Globals.OPSI_OK;
-				break;
-
-			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
-				break;
-			}
-		}
-
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-		final Color color = iconColor;
-		icon.setColorFilter(new ColorFilter(arg -> color));
-
-		return icon;
-	}
-
-	public static void addOpsiModulesIconToMenuItem(AbstractButton abstractButton) {
-		abstractButton.setIcon(getOpsiModulesIcon(16));
-
-		// Create filter for selected icon
-		ColorFilter filter = new ColorFilter();
-		filter.add(Globals.OPSI_MAGENTA, Globals.OPSI_FOREGROUND_DARK);
-
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-		icon = icon.derive(16, 16);
-		icon.setColorFilter(filter);
-		abstractButton.setSelectedIcon(icon);
-	}
-
-	public static FlatSVGIcon getOpsiModulesIcon(int size) {
-		return getOpsiModulesIcon().derive(size, size);
-	}
-
-	public static ImageIcon getReloadLicensingIcon() {
-		ImageIcon refreshIcon = getIntellijIcon("refresh", 32);
-		ImageIcon licenseIcon = getIntellijIcon("scriptingScript");
-
-		Image refreshImage = refreshIcon.getImage();
-		Image licenseImage = licenseIcon.getImage();
-		int w = Math.max(refreshImage.getWidth(null), licenseImage.getWidth(null));
-		int h = Math.max(refreshImage.getHeight(null), licenseImage.getHeight(null));
-		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics g2 = image.getGraphics();
-		g2.drawImage(refreshImage, 0, 0, null);
-		g2.drawImage(licenseImage, 8, 8, null);
-		g2.dispose();
-		return new ImageIcon(image);
-	}
-
-	public static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
-		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
-
-		ColorFilter filter = new ColorFilter();
-
-		filter.add(new Color(108, 112, 126), color);
-		FlatSVGIcon icon = new FlatSVGIcon(path);
-		icon.setColorFilter(filter);
-		return icon;
-	}
-
-	public static FlatSVGIcon getIntellijIcon(String iconName, int size) {
-		return getIntellijIcon(iconName).derive(size, size);
-	}
-
-	public static FlatSVGIcon getIntellijIcon(String iconName, Color color, int size) {
-		return getIntellijIcon(iconName, color).derive(size, size);
-	}
-
-	public static void addIntellijIconToMenuItem(AbstractButton abstractButton, String name) {
-		abstractButton.setIcon(getIntellijIcon(name));
-
-		FlatSVGIcon selectedIcon = new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + name + ".svg");
-		selectedIcon.setColorFilter(new ColorFilter(color -> Globals.OPSI_FOREGROUND_DARK));
-		abstractButton.setSelectedIcon(selectedIcon);
-	}
-
-	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-
-		// set normal icon
-		abstractButton.setIcon(icon.derive(16, 16));
-
-		// Create filter for selected icon
-		ColorFilter filter = new ColorFilter();
-		filter.add(Globals.OPSI_MAGENTA, Globals.OPSI_FOREGROUND_DARK);
-		icon = icon.derive(16, 16);
-		icon.setColorFilter(filter);
-		abstractButton.setSelectedIcon(icon);
-	}
-
-	public static FlatSVGIcon getSelectedIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT);
-	}
-
-	public static FlatSVGIcon getSelectedIntellijIcon(String iconName, int size) {
-		return getSelectedIntellijIcon(iconName).derive(size, size);
-	}
-
-	public static FlatSVGIcon getSelectedThemeIntelljIcon(String iconName, int size) {
-		ColorFilter filter = new ColorFilter();
-		if (FlatLaf.isLafDark()) {
-			iconName += "_dark";
-			filter.add(new Color(206, 208, 214), Globals.ICON_ACTIVE_DARK);
-		} else {
-			filter.add(new Color(108, 112, 126), Globals.ICON_ACTIVE_LIGHT);
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter).derive(size,
-				size);
-	}
-
-	public static FlatSVGIcon getIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName,
-				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
-	}
-
-	public static ImageIcon createImageIcon(String path, String description) {
-		String xPath = Globals.IMAGE_BASE + path;
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		URL imgURL = cl.getResource(xPath);
-
-		// should have the same result (but seems not to have)
-		if (imgURL != null) {
-			return new ImageIcon(imgURL, description);
-		} else {
-			Logging.info("Couldn't find file: ", path);
-			return null;
-		}
-	}
-
-	public static FlatSVGIcon getOpsiLogoWide() {
-		String iconName = "opsi_logo_wide";
-		if (FlatLaf.isLafDark()) {
-			iconName += "_dark";
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/" + iconName + ".svg").derive(139, 50);
 	}
 
 	public static void threadSleep(Object caller, long millis) {
@@ -432,25 +206,6 @@ public final class Utils {
 		return masterFrame;
 	}
 
-	public static Image getMainIcon() {
-		if (mainIcon == null) {
-			mainIcon = createMainIcon();
-		}
-		return mainIcon;
-	}
-
-	private static Image createMainIcon() {
-		String iconPath = (Main.isLogviewer() ? Globals.ICON_LOGVIEWER : Globals.ICON_CONFIGED);
-		ImageIcon icon = createImageIcon(iconPath, "");
-
-		if (icon != null) {
-			return icon.getImage();
-		} else {
-			Logging.warning(Utils.class, "cannot create main icon, icon ", iconPath, "not found");
-			return null;
-		}
-	}
-
 	public static void setDisableCertificateVerification(boolean disable) {
 		disableCertificateVerification = disable;
 	}
@@ -494,20 +249,6 @@ public final class Utils {
 		return sb.toString();
 	}
 
-	public static List<String> takeAsStringList(List<Object> list) {
-		List<String> result = new ArrayList<>();
-
-		if (list == null) {
-			return result;
-		}
-
-		for (Object val : list) {
-			result.add((String) val);
-		}
-
-		return result;
-	}
-
 	public static Map<String, Object> createNOMConfig(ConfigOption.TYPE type, String key, String description,
 			boolean editable, boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
 		Map<String, Object> item = createNOMitem(type.toString());
@@ -528,16 +269,6 @@ public final class Utils {
 		possibleValues.add(false);
 		return createNOMConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
 				possibleValues);
-	}
-
-	public static Map<String, Object> createUefiNOMEntry(String clientId, String val) {
-		Map<String, Object> item = createNOMitem("ConfigState");
-		List<String> values = new ArrayList<>();
-		values.add(val);
-		item.put("objectId", clientId);
-		item.put("values", values);
-		item.put("configId", OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME);
-		return item;
 	}
 
 	public static Map<String, Object> createNOMitem(String type) {
@@ -579,15 +310,17 @@ public final class Utils {
 		return result;
 	}
 
-	public static String getListStringRepresentation(List<String> list, Integer max) {
+	public static String getListStringRepresentation(List<String> list) {
 		if (list == null || list.isEmpty()) {
 			return "";
 		}
 
+		final int MAX = 5;
+
 		StringBuilder result = new StringBuilder();
 		int stop = list.size();
-		if (max != null && stop > max) {
-			stop = max;
+		if (stop > MAX) {
+			stop = MAX;
 		}
 
 		for (int i = 0; i < stop - 1; i++) {
@@ -597,7 +330,7 @@ public final class Utils {
 
 		result.append(list.get(stop - 1));
 
-		if (max != null && list.size() > max) {
+		if (list.size() > MAX) {
 			result.append(" ... ");
 		}
 

@@ -19,8 +19,10 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.TabbedConfigPanes;
+import de.uib.configed.gui.ClientConfiguration;
+import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -28,7 +30,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.PanelGenEditTable;
@@ -40,13 +41,16 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 	private PanelGenEditTable paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
+	private DepotsList depotsList;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelProductProperties(ConfigedMain configedMain) {
+	public PanelProductProperties(ConfigedMain configedMain, DepotsList depotsList) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.configedMain = configedMain;
+		this.depotsList = depotsList;
+
 		super.addAncestorListener(this);
 
 		init();
@@ -58,15 +62,14 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		EditMapPanelX propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
-		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
+		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
 
 		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
 		paneProducts = new PaneProducts(columnNames, panelEditProperties, propertiesPanel);
 		paneProducts.setTableModel(model);
-		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paneProducts.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING);
@@ -95,14 +98,14 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		return new GenTableModel(null,
-				new DefaultTableProvider(new ExternalSource(columnNames, configedMain.getSelectedDepots())), -1,
+				new DefaultTableProvider(new ExternalSource(columnNames, depotsList.getSelectedValuesList())), -1,
 				paneProducts, updateCollection);
 	}
 
 	public void setProductProperties() {
 		paneProducts.setTableModel(createTableModel());
-		int saveSelectedRow = paneProducts.getSelectedRow();
-		paneProducts.reset();
+		int saveSelectedRow = paneProducts.getJTable().getSelectedRow();
+		paneProducts.getTableModel().reset();
 
 		if (paneProducts.getTableModel().getRowCount() > 0) {
 			if (saveSelectedRow == -1 || paneProducts.getTableModel().getRowCount() <= saveSelectedRow) {
@@ -111,10 +114,6 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 				paneProducts.setSelectedRow(saveSelectedRow);
 			}
 		}
-	}
-
-	public void reload() {
-		paneProducts.reload();
 	}
 
 	@SuppressWarnings({ "java:S2972" })
@@ -173,17 +172,17 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 			if (row == -1) {
 				depotsOfPackage.clear();
 			} else {
-				String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
+				String productEdited = "" + jTable.getValueAt(row, columnNames.indexOf("productId"));
 
 				Logging.info(this, "selected  product: ", productEdited);
 
 				String versionInfo = OpsiPackage.produceVersionInfo(
-						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-						"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
+						"" + jTable.getValueAt(row, columnNames.indexOf("productVersion")),
+						"" + jTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
 				List<String> depotsOfPackageAsRetrieved = persistenceController.getProductDataService()
-						.getProduct2VersionInfo2DepotsPD()
-						.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
+						.getProduct2VersionInfo2DepotsPD().get(jTable.getValueAt(row, columnNames.indexOf("productId")))
+						.get(versionInfo);
 
 				Logging.info(this, "valueChanged  versionInfo ", versionInfo);
 
@@ -199,9 +198,8 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 				if (!depotsOfPackage.isEmpty()) {
 					infoPane.setEditValues(productEdited,
-							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
-							depotsOfPackage.get(0));
+							"" + jTable.getValueAt(row, columnNames.indexOf("productVersion")),
+							"" + jTable.getValueAt(row, columnNames.indexOf("packageVersion")), depotsOfPackage.get(0));
 				}
 
 				panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
@@ -211,12 +209,12 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 	@Override
 	public void ancestorAdded(AncestorEvent event) {
-		// Not needed for this here
+		setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
 	}
 
 	@Override
 	public void ancestorMoved(AncestorEvent event) {
-		setDividerLocation(TabbedConfigPanes.DIVIDER_LOCATION);
+		// Not needed for this here
 	}
 
 	@Override

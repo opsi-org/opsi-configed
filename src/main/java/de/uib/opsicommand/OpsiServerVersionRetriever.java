@@ -111,9 +111,9 @@ public class OpsiServerVersionRetriever {
 
 			Logging.warning("connection to ", serviceURL, " with authentication ", authorization);
 
-			CertificateValidator certValidator = CertificateValidatorFactory.createInsecure();
-			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
-			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
+			CertificateValidator certValidator = CertificateValidatorFactory.getInsecure();
+			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
+			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
 			connection.setRequestMethod("HEAD");
 		} catch (URISyntaxException e) {
 			Logging.warning(this, e, "cannot create URI from ", serviceURL);
@@ -126,7 +126,7 @@ public class OpsiServerVersionRetriever {
 		String server = connection.getHeaderField("Server");
 
 		if (server == null) {
-			Logging.error("error in getting server version, Headerfield is null");
+			Logging.warning("error in getting server version, Headerfield is null");
 			setServerVersionNotFound();
 			return;
 		}

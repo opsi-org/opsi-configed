@@ -28,6 +28,7 @@ import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -35,7 +36,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 
@@ -90,10 +91,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		labelClientDescription = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
-		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);
 		labelClientInventoryNumber = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
-		labelClientInventoryNumber.setPreferredSize(Globals.BUTTON_DIMENSION);
 		labelClientNotes = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.notes"));
 		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
 		labelClientMacAddress = new JLabel(
@@ -165,7 +164,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		hostKeyField.setEditable(false);
 
 		// This button copies the hostKey into the clipboard
-		JButton jButtonCopyHostKey = new JButton(Utils.getIntellijIcon("copy"));
+		JButton jButtonCopyHostKey = new JButton(Icons.getIntellijIcon("copy"));
 		jButtonCopyHostKey.setToolTipText(Configed.getResourceValue("MainFrame.copyHostKey"));
 		jButtonCopyHostKey.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(new String(hostKeyField.getPassword())), null));
@@ -386,7 +385,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		for (String client : configedMain.getSelectedClients()) {
 			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 			changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(checkBoxWANConfig.isSelected()));
-			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+			ChangedDataManager.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 		}
 	}
 
@@ -397,7 +396,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 			changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
 					Boolean.toString(checkBoxInstallByShutdown.isSelected()));
-			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+			ChangedDataManager.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 		}
 	}
 
@@ -431,7 +430,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		String client = configedMain.getSelectedClients().get(0);
 		Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 		changedClientInfo.put(key, editorField.getText());
-		configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+		ChangedDataManager.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 
 	}
 

@@ -9,7 +9,6 @@ package de.uib.opsidatamodel.productstate;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -43,34 +42,17 @@ public final class InstallationStatus {
 	private static Map<String, Integer> label2state;
 	private static Map<String, Color> label2textColor;
 
-	private static Set<Integer> states;
 	private static Set<String> labels;
 	private static String[] choiceLabels;
 
-	// instance variable
-	private int state = INVALID;
-
-	private InstallationStatus(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = INVALID;
-		}
+	// Empty constructor to prevent instantiation
+	private InstallationStatus() {
 	}
 
 	private static void checkCollections() {
-		if (states != null) {
+		if (labels != null) {
 			return;
 		}
-
-		states = new HashSet<>();
-		states.add(CONFLICT);
-		states.add(INVALID);
-		states.add(UNDEFINED);
-		states.add(INSTALLED);
-		states.add(NOT_INSTALLED);
-
-		states.add(UNKNOWN);
 
 		labels = new LinkedHashSet<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
@@ -87,7 +69,6 @@ public final class InstallationStatus {
 		state2label.put(UNDEFINED, "undefined");
 		state2label.put(INSTALLED, InstallationStatus.KEY_INSTALLED);
 		state2label.put(NOT_INSTALLED, InstallationStatus.KEY_NOT_INSTALLED);
-
 		state2label.put(UNKNOWN, "unknown");
 
 		label2state = new HashMap<>();
@@ -96,7 +77,6 @@ public final class InstallationStatus {
 		label2state.put("undefined", UNDEFINED);
 		label2state.put(InstallationStatus.KEY_INSTALLED, INSTALLED);
 		label2state.put(InstallationStatus.KEY_NOT_INSTALLED, NOT_INSTALLED);
-
 		label2state.put("unknown", UNKNOWN);
 
 		choiceLabels = new String[] { InstallationStatus.KEY_NOT_INSTALLED, InstallationStatus.KEY_INSTALLED,
@@ -114,24 +94,8 @@ public final class InstallationStatus {
 		return label2textColor;
 	}
 
-	private static boolean existsState(int state) {
-		checkCollections();
-
-		return states.contains(state);
-	}
-
-	private static boolean existsLabel(String label) {
-		checkCollections();
-
-		return labels.contains(label);
-	}
-
 	public static String getLabel(int state) {
 		checkCollections();
-
-		if (!existsState(state)) {
-			return null;
-		}
 
 		return state2label.get(state);
 	}
@@ -150,17 +114,7 @@ public final class InstallationStatus {
 			return UNKNOWN;
 		}
 
-		if (!existsLabel(label)) {
-			return null;
-		}
-
 		return label2state.get(label);
-	}
-
-	public static String getDisplayLabel(int state) {
-		checkCollections();
-
-		return getLabel(state);
 	}
 
 	public static String[] getDisplayLabelsForChoice() {
@@ -169,28 +123,13 @@ public final class InstallationStatus {
 		return choiceLabels;
 	}
 
-	// instance methods
-
-	public int getVal() {
-		return state;
-	}
-
-	@Override
-	public String toString() {
-		return getLabel(state);
-	}
-
-	public static InstallationStatus produceFromLabel(String label) {
+	public static String produceFromLabel(String label) {
 		checkCollections();
 
-		if (label == null) {
-			return new InstallationStatus(INVALID);
+		if (label == null || !labels.contains(label)) {
+			return getLabel(INVALID);
 		}
 
-		if (!labels.contains(label)) {
-			return new InstallationStatus(INVALID);
-		}
-
-		return new InstallationStatus(getVal(label));
+		return label;
 	}
 }

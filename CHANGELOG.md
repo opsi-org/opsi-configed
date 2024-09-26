@@ -1,4 +1,54 @@
-# Changelog
+## [4.4.0.8] - 2024-09-25
+### Changed
+- Make it possible to delete/create configs in config state editing for depots and clients
+- Don't create unnecessary copies of configs when (re)loading -> better performance
+- Rotate up to 10 logfiles
+- Make the logfile name independent from the user name
+
+### Fixed
+- Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"
+- Create whole path of folders for CA-Certificate if folders don't exist yet
+
+
+## [4.4.0.7] - 2024-09-18
+### Changed
+- Remove unnecessary feature to arrange dialogs
+- Cast Maps/Lists instead of remapping them always, better for performance
+- Remove waiting loop in when loading data in login. Will save up to 500ms every login.
+- Find a better way to get a timeout. Timeout is set at 5000ms now.
+- Download all CA certificats instead of only the opsi CA certificate
+- Use path <user-config-dir>/opsi/services/<service_host>_<service_port>/ca-certs.pem for CA certificats, which is also used by opsi-cli
+
+### Fixed
+- Show correct client in HostStatusPanel after full reload
+- Correctly refresh client configuration page after full reload
+- Nullpointer Exception when reloading host configs of a depot
+- Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
+
+## [4.4.0.6] - 2024-09-05
+### Fixed
+- Show correctly the new lines ("\n") in tooltips
+- Correct support page in help menu
+
+### Changed
+- Small change in Layout in Dialogs
+- Rework GUI design, put View change to the left, etc.
+
+
+## [4.4.0.5] - 2024-08-15
+
+### Changed
+- Keep connection and certificate validators so that they don't have to be recreated with every server request to improve performance
+
+## [4.4.0.4] - 2024-08-14
+
+### Changed
+- Show licenses management, opsi licensing info, health check and the dashboard in MainFrame
+
+### Fixed
+- Space between options in command for uninstalling opsi products
+
+
 ## [4.4.0.3] - 2024-08-08
 
 ### Changed

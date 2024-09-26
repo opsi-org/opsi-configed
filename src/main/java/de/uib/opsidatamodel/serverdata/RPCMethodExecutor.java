@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
@@ -117,8 +115,7 @@ public class RPCMethodExecutor {
 		List<String> errors = new ArrayList<>();
 
 		for (Entry<String, Object> response : responses.entrySet()) {
-			Map<String, Object> jO = POJOReMapper.remap(response.getValue(), new TypeReference<Map<String, Object>>() {
-			});
+			Map<String, Object> jO = POJOReMapper.remap(response.getValue());
 			String error = exec.getErrorFromResponse(jO);
 
 			if (error != null) {
