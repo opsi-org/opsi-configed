@@ -375,7 +375,7 @@ public final class Configed {
 					persistenceController.getGroupDataService().getHostGroupIds(),
 					persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					persistenceController.getConfigDataService().getConfigListCellOptionsPD());
+					persistenceController.getConfigDataService().getConfigOptionsPD());
 
 			List<Object> newData = up.produce();
 			Logging.debug("UserConfigProducing: newData ", newData);

@@ -181,7 +181,7 @@ public class UserRolesConfigDataService {
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigListCellOptionsPD()).produce();
+				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
 
 		if (readyConfigObjects == null) {
 			Logging.warning(this, "readyObjects for userparts null");
@@ -909,7 +909,7 @@ public class UserRolesConfigDataService {
 
 	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
-		boolean result = persistenceController.getConfigDataService().getConfigListCellOptionsPD() != null;
+		boolean result = persistenceController.getConfigDataService().getConfigOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there ", result);
 
 		if (!result) {

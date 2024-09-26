@@ -62,11 +62,6 @@ public enum CacheIdentifier {
 	PERMITTED_PRODUCTS("permitted_products"),
 
 	/**
-	 * return type {@code Map<String, ListCellOptions>}
-	 */
-	CONFIG_LIST_CELL_OPTIONS("config_list_cell_options"),
-
-	/**
 	 * return type {@code Map<String, ConfigOption>}
 	 */
 	CONFIG_OPTIONS("config_options"),

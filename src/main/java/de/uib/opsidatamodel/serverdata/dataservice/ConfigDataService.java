@@ -7,7 +7,6 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +34,6 @@ import de.uib.utils.Utils;
 import de.uib.utils.datapanel.MapTableModel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
-import de.uib.utils.table.ListCellOptions;
 
 /**
  * Provides methods for working with configuration data on the server.
@@ -119,14 +117,8 @@ public class ConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
 	}
 
-	public Map<String, ListCellOptions> getConfigListCellOptionsPD() {
-		retrieveConfigOptionsPD();
-		return cacheManager.getCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, Map.class);
-	}
-
 	public void retrieveConfigOptionsPD() {
-		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS,
-				CacheIdentifier.CONFIG_OPTIONS, CacheIdentifier.CONFIG_DEFAULT_VALUES))) {
+		if (cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			return;
 		}
 
@@ -135,7 +127,6 @@ public class ConfigDataService {
 		List<Map<String, Object>> deleteItems = new ArrayList<>();
 
 		Map<String, ConfigOption> configOptions = new HashMap<>();
-		Map<String, ListCellOptions> configListCellOptions = new HashMap<>();
 		Map<String, List<Object>> configDefaultValues = new HashMap<>();
 
 		RemoteControls remoteControls = new RemoteControls();
@@ -146,7 +137,7 @@ public class ConfigDataService {
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_GET_OBJECTS, new Object[0]);
 		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
-
+		long total = 0;
 		Logging.info(this, "configOptions retrieved ");
 		for (Map<String, Object> configItem : retrievedList) {
 			String key = (String) configItem.get("ident");
@@ -171,7 +162,8 @@ public class ConfigDataService {
 
 			ConfigOption configOption = new ConfigOption(configItem);
 			configOptions.put(key, configOption);
-			configListCellOptions.put(key, configOption);
+			long start = System.nanoTime();
+			total += System.nanoTime() - start;
 			configDefaultValues.put(key, configOption.getDefaultValues());
 
 			if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
@@ -179,10 +171,9 @@ public class ConfigDataService {
 				savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
 			}
 		}
-
+		Logging.devel("", total);
 		cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
 		cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
-		cacheManager.setCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, configListCellOptions);
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 
@@ -1017,7 +1008,7 @@ public class ConfigDataService {
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
 		Boolean val = defaultVal;
-		Object obj = getConfigListCellOptionsPD().get(key);
+		Object obj = getConfigOptionsPD().get(key);
 
 		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "'='", obj, "'");
 		if (obj == null) {

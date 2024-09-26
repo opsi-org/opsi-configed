@@ -677,7 +677,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
+				persistenceController.getConfigDataService().getConfigOptionsPD());
 
 		List<Object> newData = up.produce();
 
