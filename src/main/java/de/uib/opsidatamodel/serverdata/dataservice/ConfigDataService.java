@@ -594,9 +594,10 @@ public class ConfigDataService {
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS, new Object[] { readyObjects });
 
-		exec.doCall(omc);
-		savedSearches.remove(name);
-		cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
+		if (exec.doCall(omc)) {
+			savedSearches.remove(name);
+			cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
+		}
 	}
 
 	public void saveSearch(SavedSearch ob) {
