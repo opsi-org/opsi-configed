@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -33,13 +32,10 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import org.apache.commons.csv.CSVFormat;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.ServerActionManager;
-import de.uib.configed.gui.csv.CSVFormatDetector;
 import de.uib.configed.gui.csv.CSVImportDataDialog;
 import de.uib.configed.gui.csv.CSVImportDataModifier;
 import de.uib.configed.gui.csv.CSVTemplateCreatorDialog;
@@ -626,7 +622,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
 			}
-			CSVImportDataDialog csvImportDataDialog = createCSVImportDataDialog(csvFile);
+			CSVImportDataDialog csvImportDataDialog = CSVImportDataDialog.createCSVImportDataDialog(csvFile);
 
 			if (csvImportDataDialog == null) {
 				return;
@@ -639,47 +635,6 @@ public final class NewClientDialog extends FGeneralDialog {
 				createClients(rows);
 			}
 		}
-	}
-
-	private static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
-		Logging.info("createCSVImportDataDialog for file ", csvFile);
-		List<String> columnNames = HostInfo.getKeysForCSV();
-		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
-		try {
-			csvFormatDetector.detectFormat(csvFile);
-			if (csvFormatDetector.hasHeader() && !csvFormatDetector.hasExpectedHeaderNames(columnNames)) {
-				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
-						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
-								+ columnNames.toString().replace("[", "").replace("]", ""));
-				return null;
-			}
-		} catch (IOException e) {
-			Logging.error(e, "Unable to detect format of CSV file");
-		}
-
-		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
-				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().build();
-		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
-		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
-		JPanel centerPanel = csvImportDataDialog.initPanel();
-
-		if (centerPanel == null) {
-			return null;
-		}
-
-		csvImportDataDialog.setCenterPaneInScrollpane(centerPanel);
-		csvImportDataDialog.setupLayout();
-		csvImportDataDialog.setDetectedOptions();
-
-		return csvImportDataDialog;
-	}
-
-	private static void displayInfoDialog(String title, String message) {
-		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title, false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-		fInfo.setMessage(message);
-		fInfo.setAlwaysOnTop(true);
-		fInfo.setVisible(true);
 	}
 
 	private static void displayCSVTemplateDialog() {
