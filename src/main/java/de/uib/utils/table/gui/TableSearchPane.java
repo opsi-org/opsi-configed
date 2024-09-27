@@ -404,80 +404,28 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.requestFocusInWindow();
 	}
 
-	private static class Finding {
-		boolean success;
-		int endChar = -1;
-	}
-
-	private Finding stringContainsParts(final String s, String[] parts) {
-		Finding result = new Finding();
-
-		if (s == null || parts == null) {
-			return result;
-		}
-
-		int len = parts.length;
-		if (len == 0) {
-			result.success = true;
-			return result;
-		}
-
-		int i = 0;
-		boolean searching = true;
-		Finding partSearch;
-
-		String remainder = s;
-
-		while (searching) {
-			partSearch = stringContains(remainder, parts[i]);
-			if (partSearch.success) {
-				i++;
-				// look for the next part?
-				if (i >= len) {
-					// all parts found
-					result.success = true;
-					result.endChar = partSearch.endChar;
-					searching = false;
-				} else if (remainder.length() > 0) {
-					remainder = remainder.substring(partSearch.endChar);
-				} else {
-					result.success = false;
-				}
-			} else {
-				result.success = false;
-				searching = false;
-			}
-		}
-
-		return result;
-	}
-
-	private Finding stringContains(final String s, final String part) {
-		Finding result = new Finding();
+	private boolean stringContains(final String s, final String part) {
 
 		if (s == null || part == null || part.length() > s.length()) {
-			return result;
+			return false;
 		}
 
 		if (part.length() == 0) {
-			result.success = true;
-			result.endChar = 0;
-			return result;
+			return true;
 		}
 
-		result.success = false;
+		boolean success = false;
 
 		int i = 0;
 
 		int end = s.length() - part.length() + 1;
 
-		while (!result.success && i < end) {
-			result.success = comparator.compare(s.substring(i, i + part.length()), part) == 0;
-			result.endChar = i + part.length() - 1;
+		while (!success && i < end) {
+			success = comparator.compare(s.substring(i, i + part.length()), part) == 0;
 			i++;
 		}
 
-		return result;
+		return success;
 	}
 
 	private int findViewRowFromValue(int startviewrow, String value) {
@@ -534,7 +482,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				searchPattern = searchPattern.toLowerCase(Locale.ROOT);
 			}
 
-			return stringContainsParts(cellString, searchPattern.split(" ")).success;
+			return stringContains(cellString, searchPattern);
 		}
 	}
 
