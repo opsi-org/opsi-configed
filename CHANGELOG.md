@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.3.3.18] - 2024-09-27
+### Fixed
+- Nullpointerexception when user is not in group opsi admin
+
 ## [4.3.3.17] - 2024-09-26
 ### Fixed
 - Correct path for saving certificates when entering port in login dialog

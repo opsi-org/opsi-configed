@@ -406,6 +406,7 @@ public class ModuleDataService {
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
 		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
+		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES, opsiModules);
 	}
 
 	private void callOpsiLicenseMissingModules(List<String> missingModulesPermissionInfo) {
