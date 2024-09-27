@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
-import java.util.Comparator;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -65,7 +64,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private SearchTargetModel targetModel;
 
-	private final Comparator<Object> comparator;
+	private final Collator comparator;
 
 	/**
 	 * Provides search functionality for tables.
@@ -416,13 +415,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		boolean success = false;
 
-		int i = 0;
-
 		int end = s.length() - part.length() + 1;
 
-		while (!success && i < end) {
+		for (int i = 0; !success && i < end; i++) {
 			success = comparator.compare(s.substring(i, i + part.length()), part) == 0;
-			i++;
 		}
 
 		return success;
@@ -444,7 +440,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		return -1;
 	}
 
-	@SuppressWarnings("java:S135")
 	private boolean searchForStringInColumns(int viewrow, String value, int column) {
 		if (column != -1) {
 			// search in that column
