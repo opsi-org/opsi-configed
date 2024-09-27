@@ -72,8 +72,8 @@ public class ClientSearch {
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItem(entry.getValue());
 
-			item.addActionListener(actionEvent -> configedMain.getClientSearch()
-					.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
+			item.addActionListener(
+					actionEvent -> selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
 
 			jMenu.add(item);
 		}

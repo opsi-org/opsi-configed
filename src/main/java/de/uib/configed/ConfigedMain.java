@@ -7,13 +7,10 @@
 package de.uib.configed;
 
 import java.awt.Rectangle;
-import java.io.File;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -192,61 +188,6 @@ public class ConfigedMain {
 		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
 	}
 
-	private List<String> readLocallySavedServerNames() {
-		List<String> result = new ArrayList<>();
-		TreeMap<Timestamp, String> sortingmap = new TreeMap<>();
-		File savedStatesLocation = null;
-		// the following is nearly a double of initSavedStates
-
-		boolean success = true;
-
-		if (Configed.getSavedStatesLocationName() != null) {
-			Logging.info(this, "trying to find saved states in ", Configed.getSavedStatesLocationName());
-
-			savedStatesLocation = new File(Configed.getSavedStatesLocationName());
-			savedStatesLocation.mkdirs();
-			success = savedStatesLocation.setReadable(true);
-		}
-
-		if (!success) {
-			Logging.warning(this, "cannot not find saved states in ", Configed.getSavedStatesLocationName());
-		}
-
-		if (Configed.getSavedStatesLocationName() == null || !success) {
-			Logging.info(this, "searching saved states in ", Utils.getSavedStatesDefaultLocation());
-			savedStatesLocation = new File(Utils.getSavedStatesDefaultLocation());
-			savedStatesLocation.mkdirs();
-		}
-
-		Logging.info(this, "saved states location ", savedStatesLocation);
-
-		File[] subdirs = null;
-
-		if (savedStatesLocation != null) {
-			subdirs = savedStatesLocation.listFiles(File::isDirectory);
-
-			for (File folder : subdirs) {
-				File checkFile = new File(folder + File.separator + Configed.SAVED_STATES_FILENAME);
-				String folderPath = folder.getPath();
-				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
-
-				if (elementname.lastIndexOf("_") > -1) {
-					elementname = elementname.replace("_", ":");
-				}
-
-				sortingmap.put(new Timestamp(checkFile.lastModified()), elementname);
-			}
-		}
-
-		for (Date date : sortingmap.descendingKeySet()) {
-			result.add(sortingmap.get(date));
-		}
-
-		Logging.info(this, "readLocallySavedServerNames  result ", result);
-
-		return result;
-	}
-
 	public ClientSearch getClientSearch() {
 		return clientSearch;
 	}
@@ -282,9 +223,7 @@ public class ConfigedMain {
 
 		InstallationStateTableModel.restartColumnDict();
 
-		List<String> savedServers = readLocallySavedServerNames();
-
-		setupLoginDialog(savedServers);
+		setupLoginDialog();
 	}
 
 	protected void preloadData() {
@@ -533,14 +472,9 @@ public class ConfigedMain {
 	}
 
 	// returns true if we have a PersistenceController and are connected
-	private void setupLoginDialog(List<String> savedServers) {
+	private void setupLoginDialog() {
 		Logging.debug(this, " create password dialog ");
 		loginDialog = new LoginDialog(this);
-
-		// set list of saved servers
-		if (!savedServers.isEmpty()) {
-			loginDialog.setServers(savedServers);
-		}
 
 		// check if we started with preferred values
 		if (host != null && !host.isEmpty()) {

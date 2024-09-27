@@ -13,9 +13,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -42,6 +45,7 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.userprefs.UserPreferences;
@@ -86,6 +90,8 @@ public class LoginDialog extends JFrame {
 		this.configedMain = configedMain;
 		initGuiElements();
 		setupLayout();
+		setServers();
+
 		finishAndMakeVisible();
 
 		initGlassPane();
@@ -105,8 +111,10 @@ public class LoginDialog extends JFrame {
 		fieldUser.requestFocus();
 	}
 
-	public void setServers(List<String> hosts) {
-		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray(new String[0])));
+	private void setServers() {
+		List<String> savedServers = readLocallySavedServerNames();
+
+		fieldHost.setModel(new DefaultComboBoxModel<>(savedServers.toArray(new String[0])));
 	}
 
 	public void setUser(String user) {
@@ -368,6 +376,62 @@ public class LoginDialog extends JFrame {
 
 	private static void endProgram() {
 		ConfigedMain.finishApp(false, 0);
+	}
+
+	private List<String> readLocallySavedServerNames() {
+		TreeMap<Long, String> sortingmap = new TreeMap<>();
+		File savedStatesLocation = null;
+		// the following is nearly a double of initSavedStates
+
+		boolean success = true;
+
+		if (Configed.getSavedStatesLocationName() != null) {
+			Logging.info(this, "trying to find saved states in ", Configed.getSavedStatesLocationName());
+
+			savedStatesLocation = new File(Configed.getSavedStatesLocationName());
+			savedStatesLocation.mkdirs();
+			success = savedStatesLocation.setReadable(true);
+		}
+
+		if (!success) {
+			Logging.warning(this, "cannot not find saved states in ", Configed.getSavedStatesLocationName());
+		}
+
+		if (Configed.getSavedStatesLocationName() == null || !success) {
+			Logging.info(this, "searching saved states in ", Utils.getSavedStatesDefaultLocation());
+			savedStatesLocation = new File(Utils.getSavedStatesDefaultLocation());
+			savedStatesLocation.mkdirs();
+		}
+
+		Logging.info(this, "saved states location ", savedStatesLocation);
+
+		File[] subdirs = null;
+
+		if (savedStatesLocation != null) {
+			subdirs = savedStatesLocation.listFiles(File::isDirectory);
+
+			for (File folder : subdirs) {
+				File checkFile = new File(folder + File.separator + Configed.SAVED_STATES_FILENAME);
+				String folderPath = folder.getPath();
+				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
+
+				if (elementname.lastIndexOf("_") > -1) {
+					elementname = elementname.replace("_", ":");
+				}
+
+				sortingmap.put(checkFile.lastModified(), elementname);
+			}
+		}
+
+		List<String> result = new ArrayList<>();
+
+		for (Long l : sortingmap.descendingKeySet()) {
+			result.add(sortingmap.get(l));
+		}
+
+		Logging.info(this, "readLocallySavedServerNames  result ", result);
+
+		return result;
 	}
 
 	@Override
