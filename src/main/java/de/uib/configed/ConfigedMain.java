@@ -714,14 +714,6 @@ public class ConfigedMain {
 		return selectedClients;
 	}
 
-	public void toggleFilterClientList(boolean rebuildClientListTableModel) {
-		Logging.info(this, "toggleFilterClientList, rebuild client list table model ", rebuildClientListTableModel);
-
-		if (rebuildClientListTableModel) {
-			setRebuiltClientListTableModel(true, false, clientTablePanel.getClientTable().getSelectedSet());
-		}
-	}
-
 	private void setSelectionPanelCols() {
 		Logging.info(this, "setSelectionPanelCols ");
 
@@ -862,7 +854,11 @@ public class ConfigedMain {
 			activateGroupByTree(false, selectedNode);
 			clientTree.updateSelectedObjectsInTable();
 		} else {
-			setClientByTree(selectedNode, newSelectedPath);
+			// Activate client
+			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+			setGroupNameForNode(selectedNode);
+			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
+
 		}
 	}
 
@@ -904,24 +900,6 @@ public class ConfigedMain {
 		persistenceController.getHostInfoCollections().setTree(clientTree);
 	}
 
-	private void setClientByTree(DefaultMutableTreeNode selectedNode, TreePath pathToNode) {
-		activateClientByTree(pathToNode);
-		setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-
-		setGroupNameForNode(selectedNode);
-
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
-	}
-
-	private void activateClientByTree(TreePath pathToNode) {
-		Logging.info(this, "activateClientByTree, pathToNode: ", pathToNode);
-
-		// since we select based on the tree view we disable the filter
-		if (clientTablePanel.isFilteredMode()) {
-			toggleFilterClientList(false);
-		}
-	}
-
 	private void setGroupByTree(DefaultMutableTreeNode node) {
 		Logging.info(this, "setGroupByTree, node ", node);
 
@@ -961,8 +939,13 @@ public class ConfigedMain {
 		activatedGroupModel.setActive(true);
 
 		// since we select based on the tree view we disable the filter
+		deactivateFilter();
+	}
+
+	public void deactivateFilter() {
+		Logging.info(this, "deactivate filter", clientTablePanel.isFilteredMode());
 		if (clientTablePanel.isFilteredMode()) {
-			toggleFilterClientList(true);
+			setRebuiltClientListTableModel(true, false, clientTablePanel.getClientTable().getSelectedSet());
 		}
 	}
 
