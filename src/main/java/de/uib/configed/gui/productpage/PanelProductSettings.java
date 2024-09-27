@@ -343,7 +343,7 @@ public class PanelProductSettings extends JSplitPane {
 				+ persistenceController.getProductDataService().getProductPackageVersion(productID) + "   "
 				+ persistenceController.getProductDataService().getProductLockedInfo(productID));
 
-		infoPane.setProductAdvice(persistenceController.getProductDataService().getProductHint(productID));
+		infoPane.setProductAdvice(persistenceController.getProductDataService().getProductAdvice(productID));
 
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));

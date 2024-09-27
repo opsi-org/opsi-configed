@@ -1366,7 +1366,7 @@ public class ProductDataService {
 		return result;
 	}
 
-	public String getProductHint(String product) {
+	public String getProductAdvice(String product) {
 		Map<String, Map<String, Object>> productGlobalInfos = getProductGlobalInfosPD(depotDataService.getDepot());
 		return (String) productGlobalInfos.get(product).get(OpsiProductInfo.SERVICE_KEY_PRODUCT_ADVICE);
 	}
