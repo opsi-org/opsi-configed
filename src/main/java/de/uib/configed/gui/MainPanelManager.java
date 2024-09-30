@@ -249,7 +249,7 @@ public class MainPanelManager {
 		depotConfigurationSplitPane = null;
 		serverConfiguration = null;
 
-		if (dashboard != null) {
+		if (dashboardPanel != null) {
 			// We need to clear all data, otherwise they will be kept
 			dashboard.clearAllData();
 			dashboardPanel = null;
@@ -258,7 +258,7 @@ public class MainPanelManager {
 		licensingInfoPanel = null;
 		healthCheckPanel = null;
 
-		licenseManagement = null;
+		licenseManagementPanel = null;
 	}
 
 	public void reloadLicensesAction() {
@@ -268,7 +268,7 @@ public class MainPanelManager {
 			@Override
 			public void run() {
 				persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
-				licenseManagement = null;
+				licenseManagementPanel = null;
 				ConfigedMain.getMainFrame().startLicensingManagement();
 				ConfigedMain.getMainFrame().deactivateLoadingPane();
 			}
