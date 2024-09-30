@@ -104,15 +104,16 @@ public class LoginDialog extends JFrame {
 	}
 
 	public void setHost(String host) {
-		if (host == null) {
-			host = "";
-		}
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
 	}
 
 	private void setServers() {
 		List<String> savedServers = readLocallySavedServerNames();
+
+		if (savedServers.isEmpty()) {
+			savedServers.add("localhost");
+		}
 
 		fieldHost.setModel(new DefaultComboBoxModel<>(savedServers.toArray(new String[0])));
 	}
@@ -282,7 +283,6 @@ public class LoginDialog extends JFrame {
 		String osVersion = System.getProperty("os.version");
 		Logging.notice(" OS ", strOS, "  Version ", osVersion);
 
-		setHost("localhost");
 		fieldHost.requestFocus();
 
 		// Sets the window on the main screen
@@ -424,7 +424,6 @@ public class LoginDialog extends JFrame {
 		}
 
 		List<String> result = new ArrayList<>();
-
 		for (Long l : sortingmap.descendingKeySet()) {
 			result.add(sortingmap.get(l));
 		}
