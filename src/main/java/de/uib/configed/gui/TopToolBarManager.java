@@ -17,6 +17,7 @@ import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -39,7 +40,7 @@ public class TopToolBarManager {
 		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jButtonReload.addActionListener(event -> configedMain.reload());
 
-		JButton jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save"));
+		JButton jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save", Globals.OPSI_ERROR));
 		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener(event -> ChangedDataManager.checkSaveAll(false));
