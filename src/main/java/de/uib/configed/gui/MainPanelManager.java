@@ -218,20 +218,22 @@ public class MainPanelManager {
 		return licenseManagementPanel;
 	}
 
-	private static JPanel createPanel(JComponent component, JToolBar toolBar, String title) {
+	private JPanel createPanel(JComponent component, JToolBar toolBar, String title) {
 		JLabel titleLabel = new JLabel(title);
+		JToolBar generalToolBar = topToolBarManager.createGeneralToolBar();
 
 		JPanel panel = new JPanel();
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(toolBar).addComponent(titleLabel))
+		layout.setVerticalGroup(layout
+				.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(generalToolBar).addComponent(titleLabel).addComponent(toolBar))
 				.addComponent(component));
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addComponent(toolBar)
+				.addGroup(layout.createSequentialGroup().addComponent(generalToolBar)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(titleLabel)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(toolBar))
 				.addComponent(component));
 
 		return panel;

@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
@@ -16,7 +15,6 @@ import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
@@ -24,8 +22,6 @@ import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 
 public class LeftControlBar extends JToolBar {
-	private JButton jButtonSaveConfiguration;
-
 	private ConfigedMain configedMain;
 
 	public LeftControlBar(ConfigedMain configedMain) {
@@ -33,7 +29,6 @@ public class LeftControlBar extends JToolBar {
 
 		this.configedMain = configedMain;
 		initOpsiIcon();
-		initActionIcons();
 		initControlIcons();
 	}
 
@@ -44,21 +39,6 @@ public class LeftControlBar extends JToolBar {
 		// We need here exactly 5 Pixels border so that the icon will be centered in the JToolBar
 		opsiIconLabel.setBorder(new EmptyBorder(0, 5, 0, 0));
 		add(opsiIconLabel);
-	}
-
-	private void initActionIcons() {
-		JButton jButtonReload = new JButton(Icons.getIntellijIcon("refresh", 32));
-		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
-		jButtonReload.addActionListener(event -> configedMain.reload());
-
-		jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save", 32));
-		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
-		jButtonSaveConfiguration.setEnabled(false);
-		jButtonSaveConfiguration.addActionListener(event -> ChangedDataManager.checkSaveAll(false));
-
-		addSeparator();
-		add(jButtonReload);
-		add(jButtonSaveConfiguration);
 	}
 
 	private void initControlIcons() {

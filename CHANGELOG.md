@@ -3,6 +3,9 @@
 - Correct path for saving certificates when entering port in login dialog
 - Start configed when trusting the certificate once
 
+### Changed
+- Move reload and save buttons to top toolbar
+
 
 ## [4.4.0.8] - 2024-09-25
 ### Changed

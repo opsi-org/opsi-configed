@@ -10,7 +10,10 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
@@ -29,6 +32,42 @@ public class TopToolBarManager {
 
 	public TopToolBarManager(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
+	}
+
+	public JToolBar createGeneralToolBar() {
+		JButton jButtonReload = new JButton(Icons.getIntellijIcon("refresh"));
+		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		jButtonReload.addActionListener(event -> configedMain.reload());
+
+		JButton jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save"));
+		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
+		jButtonSaveConfiguration.setEnabled(false);
+		jButtonSaveConfiguration.addActionListener(event -> ChangedDataManager.checkSaveAll(false));
+		jButtonSaveConfiguration.addAncestorListener(new AncestorListener() {
+
+			@Override
+			public void ancestorAdded(AncestorEvent event) {
+				// This method is called, when an ancestor of this button is shown.
+				// So we set this button as the shown save button
+				ChangedDataManager.setShownSaveButton(jButtonSaveConfiguration);
+			}
+
+			@Override
+			public void ancestorMoved(AncestorEvent event) {
+				// We don't need this here
+			}
+
+			@Override
+			public void ancestorRemoved(AncestorEvent event) {
+				// We don't need this here
+			}
+		});
+
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(jButtonReload);
+		jToolBar.add(jButtonSaveConfiguration);
+
+		return jToolBar;
 	}
 
 	public JToolBar getOpsiLicensingToolBar(OpsiLicensing opsiLicensing) {

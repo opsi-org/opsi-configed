@@ -6,6 +6,8 @@
 
 package de.uib.configed;
 
+import java.awt.Component;
+
 import javax.swing.JOptionPane;
 
 import de.uib.configed.type.HostInfo;
@@ -19,6 +21,9 @@ public final class ChangedDataManager {
 	private static boolean anyDataChanged;
 
 	private static HostInfo hostInfo;
+
+	// This is the save button that is shown in the top toolbar
+	private static Component shownSaveButton;
 
 	// Private constructor to prevent instantiation of this class
 	private ChangedDataManager() {
@@ -58,7 +63,13 @@ public final class ChangedDataManager {
 
 		if (show) {
 			ConfigedMain.getMainFrame().saveConfigurationsSetEnabled(anyDataChanged);
+			shownSaveButton.setEnabled(anyDataChanged);
 		}
+	}
+
+	public static void setShownSaveButton(Component shownSaveButton) {
+		shownSaveButton.setEnabled(anyDataChanged);
+		ChangedDataManager.shownSaveButton = shownSaveButton;
 	}
 
 	public static void cancelChanges() {
