@@ -50,7 +50,6 @@ public class MainPanelManager {
 	private JPanel licensingInfoPanel;
 
 	private JPanel healthCheckPanel;
-	private HealthCheck healthCheck;
 
 	private JPanel licenseManagementPanel;
 	private LicenseManagement licenseManagement;
@@ -191,9 +190,9 @@ public class MainPanelManager {
 	}
 
 	public JPanel getHealthCheckPanel() {
-		Logging.info(this, "init health check ", healthCheck);
+		Logging.info(this, "init health check panel", healthCheckPanel);
 		if (healthCheckPanel == null) {
-			healthCheck = new HealthCheck();
+			HealthCheck healthCheck = new HealthCheck();
 			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckToolBar(healthCheck),
 					Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		}
@@ -202,7 +201,7 @@ public class MainPanelManager {
 	}
 
 	public JPanel getLicenseManagementPanel() {
-		if (licenseManagement == null) {
+		if (licenseManagementPanel == null) {
 			// show Loading pane only when something needs to be loaded from server
 			ConfigedMain.getMainFrame().activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
 			long startmillis = System.currentTimeMillis();
@@ -257,7 +256,7 @@ public class MainPanelManager {
 		}
 
 		licensingInfoPanel = null;
-		healthCheck = null;
+		healthCheckPanel = null;
 
 		licenseManagement = null;
 	}
