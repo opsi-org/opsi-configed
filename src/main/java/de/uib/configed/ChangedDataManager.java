@@ -52,12 +52,12 @@ public final class ChangedDataManager {
 		setDataChanged(b, true);
 	}
 
-	private static void setDataChanged(boolean b, boolean show) {
-		Logging.info("setDataChanged ", b, ", showing ", show);
-		anyDataChanged = b;
+	private static void setDataChanged(boolean anyDataChanged, boolean show) {
+		Logging.info("setDataChanged ", anyDataChanged, ", showing ", show);
+		ChangedDataManager.anyDataChanged = anyDataChanged;
 
-		if (show && ConfigedMain.getMainFrame() != null) {
-			ConfigedMain.getMainFrame().saveConfigurationsSetEnabled(b);
+		if (show) {
+			ConfigedMain.getMainFrame().saveConfigurationsSetEnabled(anyDataChanged);
 		}
 	}
 

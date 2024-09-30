@@ -117,8 +117,4 @@ public class LeftControlBar extends JToolBar {
 		add(jButtonHealthCheck);
 		add(jButtonLicenses);
 	}
-
-	public void enableSaveButton(boolean enable) {
-		jButtonSaveConfiguration.setEnabled(enable);
-	}
 }

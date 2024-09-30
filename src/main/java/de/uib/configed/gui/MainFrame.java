@@ -573,7 +573,6 @@ public class MainFrame extends JFrame {
 		Logging.debug(this, "saveConfigurationsSetEnabled ", b);
 
 		jMenuFileSaveConfigurations.setEnabled(b);
-		leftControlBar.enableSaveButton(b);
 	}
 
 	public void activateLoadingPane(String infoText) {
