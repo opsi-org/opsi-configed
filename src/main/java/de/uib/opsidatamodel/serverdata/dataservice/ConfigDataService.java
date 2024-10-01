@@ -34,7 +34,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Utils;
-import de.uib.utils.datapanel.MapTableModel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
 import de.uib.utils.table.ListCellOptions;
@@ -438,7 +437,7 @@ public class ConfigDataService {
 		List<Map<String, Object>> callsConfigDeleteCollection = new ArrayList<>();
 
 		for (Map<String, Object> callConfig : configCollection) {
-			if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
+			if (callConfig.get("defaultValues") == null) {
 				callsConfigDeleteCollection.add(callConfig);
 			} else if (!restrictToMissing || usedConfigIds.contains(callConfig.get("ident"))) {
 				callConfig.put("defaultValues", callConfig.get("defaultValues"));
@@ -803,19 +802,17 @@ public class ConfigDataService {
 
 			List<?> valueList = (List<?>) configState.get("values");
 
-			if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
-				typesOfUsedConfigIds.put(ident, "BoolConfig");
-			} else {
-				typesOfUsedConfigIds.put(ident, "UnicodeConfig");
-			}
-
-			if (valueList.equals(MapTableModel.nullLIST)) {
+			if (valueList == null) {
 				Map<String, Object> item = Utils.createNOMitem("ConfigState");
 				item.put("objectId", configState.get("objectId"));
 				item.put("configId", configState.get("configId"));
 
 				deleteConfigStateItems.add(item);
 				doneList.add(configState);
+			} else if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
+				typesOfUsedConfigIds.put(ident, "BoolConfig");
+			} else {
+				typesOfUsedConfigIds.put(ident, "UnicodeConfig");
 			}
 		}
 

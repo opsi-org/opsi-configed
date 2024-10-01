@@ -41,7 +41,6 @@ import de.uib.opsidatamodel.serverdata.Object2Product2VersionList;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
-import de.uib.utils.datapanel.MapTableModel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.userprefs.UserPreferences;
@@ -1215,7 +1214,7 @@ public class ProductDataService {
 				state.put("productId", productname);
 				state.put("propertyId", propertyId);
 
-				if (newValue == null || newValue.equals(MapTableModel.nullLIST)) {
+				if (newValue == null) {
 					Logging.debug(this, "setProductProperties,  requested deletion " + newValue);
 					deleteState(state, deleteCollection, retrievedConfig, propertyId);
 				} else {
