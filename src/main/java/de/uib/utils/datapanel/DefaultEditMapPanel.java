@@ -6,7 +6,6 @@
 
 package de.uib.utils.datapanel;
 
-import java.awt.BorderLayout;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -93,10 +92,6 @@ public class DefaultEditMapPanel extends JPanel {
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
 		propertyHandler = defaultPropertyHandler;
-	}
-
-	protected void buildPanel() {
-		setLayout(new BorderLayout());
 	}
 
 	public void init() {

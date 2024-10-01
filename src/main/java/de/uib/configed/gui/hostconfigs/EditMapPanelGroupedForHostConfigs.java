@@ -92,7 +92,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		this.actor = actor;
 		this.configStatesEditable = configStatesEditable;
 
-		buildPanel();
+		setupLayout();
 
 		setupPopups();
 		setupPopupTexts();
@@ -313,8 +313,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		givenClasses.remove(key);
 	}
 
-	@Override
-	protected void buildPanel() {
+	private void setupLayout() {
 		splitPane = new JSplitPane();
 
 		tree = new XTree();

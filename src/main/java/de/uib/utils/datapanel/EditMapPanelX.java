@@ -270,7 +270,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	@Override
 	protected void buildPanel() {
 		setLayout(new BorderLayout());
 
