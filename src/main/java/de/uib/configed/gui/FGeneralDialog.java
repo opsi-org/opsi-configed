@@ -180,7 +180,7 @@ public class FGeneralDialog extends JDialog {
 		additionalPane = p;
 	}
 
-	public void checkAdditionalPane() {
+	private void checkAdditionalPane() {
 		if (additionalPane == null) {
 			additionalPane = new JPanel();
 			additionalPane.setVisible(false);
