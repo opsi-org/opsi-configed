@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.gui.licenses.LicenseManagement;
@@ -278,6 +279,14 @@ public class MainPanelManager {
 	}
 
 	public boolean checkSavedLicenses() {
-		return licenseManagement == null || licenseManagement.checkSavedLicensesPane();
+		boolean checkSavedLicensesFrame = licenseManagement == null || licenseManagement.checkSavedLicensesPane();
+
+		if (!checkSavedLicensesFrame) {
+			configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
+		}
+
+		Logging.info(this, "close instance result ", checkSavedLicensesFrame);
+
+		return checkSavedLicensesFrame;
 	}
 }
