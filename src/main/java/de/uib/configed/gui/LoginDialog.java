@@ -7,17 +7,12 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -49,7 +44,7 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.userprefs.UserPreferences;
 
-public class LoginDialog extends JFrame {
+public class LoginDialog extends JFrame implements KeyListener {
 	private ConfigedMain configedMain;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
@@ -70,19 +65,6 @@ public class LoginDialog extends JFrame {
 
 	private JButton jButtonCancel;
 	private JButton jButtonCommit;
-
-	private KeyListener newKeyListener = new KeyAdapter() {
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				tryConnecting();
-			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				endProgram();
-			} else {
-				// Do nothing with other keys
-			}
-		}
-	};
 
 	public LoginDialog(ConfigedMain configedMain) {
 		super();
@@ -108,7 +90,7 @@ public class LoginDialog extends JFrame {
 	}
 
 	private void setServers() {
-		List<String> savedServers = readLocallySavedServerNames();
+		List<String> savedServers = Utils.readLocallySavedServerNames();
 
 		if (savedServers.isEmpty()) {
 			savedServers.add("localhost");
@@ -165,27 +147,24 @@ public class LoginDialog extends JFrame {
 		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
-		fieldHost.getEditor().getEditorComponent().addKeyListener(newKeyListener);
+		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
-		fieldUser.addKeyListener(newKeyListener);
+		fieldUser.addKeyListener(this);
 
 		passwordField.setPlaceholderText(Configed.getResourceValue("password"));
-		passwordField.addKeyListener(newKeyListener);
+		passwordField.addKeyListener(this);
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, true));
 		fieldOTP.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderOTP"));
-		fieldOTP.addKeyListener(newKeyListener);
+		fieldOTP.addKeyListener(this);
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
 		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
 		checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
-		checkUseOTP.addItemListener((ItemEvent event) -> {
-			showOTPField(checkUseOTP.isSelected());
-			UserPreferences.setBoolean(UserPreferences.OTP, checkUseOTP.isSelected());
-		});
+		checkUseOTP.addItemListener(itemEvent -> showOTPField(checkUseOTP.isSelected()));
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
@@ -205,6 +184,8 @@ public class LoginDialog extends JFrame {
 			fieldOTP.setPreferredSize(new Dimension(0, 0));
 			setSize(getPreferredSize());
 		}
+
+		UserPreferences.setBoolean(UserPreferences.OTP, show);
 	}
 
 	private void setupLayout() {
@@ -375,66 +356,32 @@ public class LoginDialog extends JFrame {
 		ConfigedMain.finishApp(false, 0);
 	}
 
-	private List<String> readLocallySavedServerNames() {
-		TreeMap<Long, String> sortingmap = new TreeMap<>();
-		File savedStatesLocation = null;
-		// the following is nearly a double of initSavedStates
-
-		boolean success = true;
-
-		if (Configed.getSavedStatesLocationName() != null) {
-			Logging.info(this, "trying to find saved states in ", Configed.getSavedStatesLocationName());
-
-			savedStatesLocation = new File(Configed.getSavedStatesLocationName());
-			savedStatesLocation.mkdirs();
-			success = savedStatesLocation.setReadable(true);
-		}
-
-		if (!success) {
-			Logging.warning(this, "cannot not find saved states in ", Configed.getSavedStatesLocationName());
-		}
-
-		if (Configed.getSavedStatesLocationName() == null || !success) {
-			Logging.info(this, "searching saved states in ", Utils.getSavedStatesDefaultLocation());
-			savedStatesLocation = new File(Utils.getSavedStatesDefaultLocation());
-			savedStatesLocation.mkdirs();
-		}
-
-		Logging.info(this, "saved states location ", savedStatesLocation);
-
-		File[] subdirs = null;
-
-		if (savedStatesLocation != null) {
-			subdirs = savedStatesLocation.listFiles(File::isDirectory);
-
-			for (File folder : subdirs) {
-				File checkFile = new File(folder + File.separator + Configed.SAVED_STATES_FILENAME);
-				String folderPath = folder.getPath();
-				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
-
-				if (elementname.lastIndexOf("_") > -1) {
-					elementname = elementname.replace("_", ":");
-				}
-
-				sortingmap.put(checkFile.lastModified(), elementname);
-			}
-		}
-
-		List<String> result = new ArrayList<>();
-		for (Long l : sortingmap.descendingKeySet()) {
-			result.add(sortingmap.get(l));
-		}
-
-		Logging.info(this, "readLocallySavedServerNames  result ", result);
-
-		return result;
-	}
-
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		super.processWindowEvent(e);
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			endProgram();
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			tryConnecting();
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			endProgram();
+		} else {
+			// Do nothing with other keys
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// Not needed here
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// Not needed here
 	}
 }

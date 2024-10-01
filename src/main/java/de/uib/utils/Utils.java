@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.JFrame;
 
@@ -70,6 +71,61 @@ public final class Utils {
 
 		info.setMessage(message.toString());
 		info.setVisible(true);
+	}
+
+	public static List<String> readLocallySavedServerNames() {
+		TreeMap<Long, String> sortingmap = new TreeMap<>();
+		File savedStatesLocation = null;
+		// the following is nearly a double of initSavedStates
+
+		boolean success = true;
+
+		if (Configed.getSavedStatesLocationName() != null) {
+			Logging.info("trying to find saved states in ", Configed.getSavedStatesLocationName());
+
+			savedStatesLocation = new File(Configed.getSavedStatesLocationName());
+			savedStatesLocation.mkdirs();
+			success = savedStatesLocation.setReadable(true);
+		}
+
+		if (!success) {
+			Logging.warning("cannot not find saved states in ", Configed.getSavedStatesLocationName());
+		}
+
+		if (Configed.getSavedStatesLocationName() == null || !success) {
+			Logging.info("searching saved states in ", Utils.getSavedStatesDefaultLocation());
+			savedStatesLocation = new File(Utils.getSavedStatesDefaultLocation());
+			savedStatesLocation.mkdirs();
+		}
+
+		Logging.info("saved states location ", savedStatesLocation);
+
+		File[] subdirs = null;
+
+		if (savedStatesLocation != null) {
+			subdirs = savedStatesLocation.listFiles(File::isDirectory);
+
+			for (File folder : subdirs) {
+				File checkFile = new File(folder + File.separator + Configed.SAVED_STATES_FILENAME);
+				String folderPath = folder.getPath();
+				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
+
+				if (elementname.lastIndexOf("_") > -1) {
+					elementname = elementname.replace("_", ":");
+				}
+
+				sortingmap.put(checkFile.lastModified(), elementname);
+			}
+		}
+
+		List<String> result = new ArrayList<>();
+		for (Long l : sortingmap.descendingKeySet()) {
+			result.add(sortingmap.get(l));
+		}
+
+		Logging.info("readLocallySavedServerNames  result ", result);
+
+		return result;
 	}
 
 	public static String[] getLogTypes() {
