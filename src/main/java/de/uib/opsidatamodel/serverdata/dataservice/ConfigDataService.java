@@ -860,19 +860,11 @@ public class ConfigDataService {
 			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		}
 
-		// build calls
-		List<Map<String, Object>> callsConfigName2ConfigValueCollection = new ArrayList<>();
-
-		for (Map<String, Object> state : configStateCollection) {
-			state.put("values", state.get("values"));
-			callsConfigName2ConfigValueCollection.add(state);
-		}
-
 		// do call
-		if (!callsConfigName2ConfigValueCollection.isEmpty()) {
+		if (!configStateCollection.isEmpty()) {
 			// now we can set the values and clear the collected update items
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-					new Object[] { callsConfigName2ConfigValueCollection }));
+					new Object[] { configStateCollection }));
 		}
 	}
 
