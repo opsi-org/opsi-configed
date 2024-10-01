@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -170,11 +169,9 @@ public class LoginDialog extends JFrame {
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(newKeyListener);
-		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		passwordField.setPlaceholderText(Configed.getResourceValue("password"));
 		passwordField.addKeyListener(newKeyListener);
-		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, true));
