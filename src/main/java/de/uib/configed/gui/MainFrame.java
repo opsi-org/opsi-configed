@@ -129,10 +129,6 @@ public class MainFrame extends JFrame {
 		return clientTablePanel;
 	}
 
-	public ClientMenuManager getClientMenu() {
-		return clientMenu;
-	}
-
 	public ClientConfiguration getClientConfiguration() {
 		return mainPanelManager.getClientConfiguration();
 	}
