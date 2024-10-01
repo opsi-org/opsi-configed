@@ -139,9 +139,6 @@ public class DefaultEditMapPanel extends JPanel {
 		this.actor = actor;
 	}
 
-	public void setLabel(String s) {
-		/* Not needed */}
-
 	public void setValues(Map<String, Object> data) {
 		if (data == null) {
 			return;

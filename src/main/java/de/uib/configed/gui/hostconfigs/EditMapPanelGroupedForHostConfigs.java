@@ -393,7 +393,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		}
 	}
 
-	@Override
 	public void setLabel(String s) {
 		if (treemodel == null) {
 			return;
