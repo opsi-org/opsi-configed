@@ -1592,19 +1592,19 @@ public class ConfigedMain implements MessagebusListener {
 			Map<String, Object> productPropertiesFor1Client = persistenceController.getProductDataService()
 					.getProductPropertiesPD(selectedClients.get(0), productEdited);
 
-			if (productPropertiesFor1Client != null) {
-				productProperties.add(productPropertiesFor1Client);
+			productProperties.add(productPropertiesFor1Client);
 
-				for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
+			for (Entry<String, Object> productProperty : productPropertiesFor1Client.entrySet()) {
+				if (productProperty.getValue() != null) {
 					// create a merger for product property
 					ListMerger merger = new ListMerger((List<?>) productProperty.getValue());
 
 					mergedProductProperties.put(productProperty.getKey(), merger);
 				}
-
-				// merge the other clients
-				mergeOtherClients(productEdited);
 			}
+
+			// merge the other clients
+			mergeOtherClients(productEdited);
 		}
 	}
 
