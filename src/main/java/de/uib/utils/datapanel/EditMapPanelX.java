@@ -43,7 +43,6 @@ import de.uib.utils.swing.FEditText;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.DefaultListCellOptions;
 import de.uib.utils.table.ListCellOptions;
-import de.uib.utils.table.ListModelProducer;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.SensitiveCellEditor;
 
@@ -57,7 +56,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private TableCellEditor theCellEditor;
 	private JComboBox<?> editorfield;
 
-	private ListModelProducer<String> modelProducer;
+	private ListModelProducerForVisualDatamap<String> modelProducer;
 
 	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupItemDeleteEntry1;
@@ -404,7 +403,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			Logging.debug(this, "setEditableMap test modelProducer " + modelProducer.getClass());
 		}
 
-		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
+		mapTableModel.setModelProducer(modelProducer);
 
 		if (theCellEditor instanceof SensitiveCellEditor sensitiveCellEditor) {
 			sensitiveCellEditor.setModelProducer(modelProducer);
