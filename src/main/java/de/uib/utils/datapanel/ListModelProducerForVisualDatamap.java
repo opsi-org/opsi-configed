@@ -107,12 +107,6 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	}
 
 	@Override
-	public List<O> getSelectedValues(int row, int column) {
-		String key = (String) table.getValueAt(row, 0);
-		return currentData.get(key);
-	}
-
-	@Override
 	public int getSelectionMode(int row, int column) {
 		String key = (String) table.getValueAt(row, 0);
 		return getListCellOptions(key).getSelectionMode();
