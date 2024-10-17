@@ -14,7 +14,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -352,19 +351,11 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		cancelOldCellEditing();
 
 		if (optionsMap != null) {
-			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
-				Logging.debug(this, " key ", option.getKey(), " is nullable ", option.getValue().isNullable());
-			}
-
 			modelProducer = new ListModelProducerForVisualDatamap<>(table, optionsMap, visualdata);
+			mapTableModel.setModelProducer(modelProducer);
 		}
 
 		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
-		if (modelProducer != null) {
-			Logging.debug(this, "setEditableMap test modelProducer ", modelProducer.getClass());
-		}
-
-		mapTableModel.setModelProducer(modelProducer);
 
 		if (theCellEditor instanceof SensitiveCellEditor sensitiveCellEditor) {
 			sensitiveCellEditor.setModelProducer(modelProducer);
