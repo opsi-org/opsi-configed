@@ -398,9 +398,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	private void addEntryFor(final String classname, final boolean multiselection) {
 		String initial = "";
-		int row = table.getSelectedRow();
-		if (row > -1) {
-			initial = (String) table.getValueAt(row, 0);
+		if (table.getSelectedRowCount() > 0) {
+			initial = (String) table.getValueAt(table.getSelectedRow(), 0);
 		}
 
 		FEditText fed = new FEditText(initial, Configed.getResourceValue("EditMapPanel.KeyToAdd")) {
