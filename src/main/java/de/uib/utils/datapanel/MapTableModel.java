@@ -27,8 +27,6 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ListCellOptions;
 
 public class MapTableModel extends AbstractTableModel {
-	public static final List<?> nullLIST = Collections.singletonList(null);
-
 	private List<DataChangedObserver> observers;
 
 	private Collection<Map<String, Object>> updateCollection;
@@ -300,7 +298,7 @@ public class MapTableModel extends AbstractTableModel {
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-				aStoreMap.put(myKey, nullLIST);
+				aStoreMap.put(myKey, null);
 			}
 
 			Logging.debug(this, "remove entry --  updateCollection: ", updateCollection, "  has size ",

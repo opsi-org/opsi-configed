@@ -2,6 +2,8 @@
 ### Fixed
 - Correct path for saving certificates when entering port in login dialog
 - Start configed when trusting the certificate once
+- Nullpointerexception when user is not in group opsi admin
+- Correctly fix default values as specific values for product property states on clients and depots
 
 ### Changed
 - Move reload and save buttons to top toolbar

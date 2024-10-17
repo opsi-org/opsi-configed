@@ -28,8 +28,9 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		if (newdata instanceof ConfigName2ConfigValue) {
-			persistenceController.getProductDataService().setProductProperties(pcname, productname, newdata);
+		if (newdata instanceof ConfigName2ConfigValue newConfigProperties) {
+			persistenceController.getProductDataService().setProductProperties(pcname, productname,
+					newConfigProperties);
 		}
 	}
 
