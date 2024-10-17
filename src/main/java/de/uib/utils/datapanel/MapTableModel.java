@@ -432,7 +432,7 @@ public class MapTableModel extends AbstractTableModel {
 	private void notifyChange() {
 		Logging.debug(this, "notifyChange, notify observers ", observers.size());
 		for (int i = 0; i < observers.size(); i++) {
-			(observers.get(i)).dataHaveChanged(this);
+			observers.get(i).dataHaveChanged(this);
 		}
 	}
 }
