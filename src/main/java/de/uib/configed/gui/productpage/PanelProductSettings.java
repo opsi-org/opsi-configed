@@ -33,7 +33,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ServerActionManager;
 import de.uib.configed.gui.ClientMenuManager;
-import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductActionPanel;
 import de.uib.configed.tree.ProductTree;
@@ -119,7 +118,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		setLeftComponent(leftPane);
 
-		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
+		propertiesPanel = new EditMapPanelX(false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 

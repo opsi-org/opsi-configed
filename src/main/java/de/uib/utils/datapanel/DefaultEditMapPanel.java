@@ -17,7 +17,6 @@ import java.util.function.Function;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
-import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.Configed;
 import de.uib.utils.DataChangedObserver;
@@ -39,8 +38,6 @@ public class DefaultEditMapPanel extends JPanel {
 	protected Map<String, ListCellOptions> optionsMap;
 	protected Map<String, String> descriptionsMap;
 	protected Map<String, Object> defaultsMap;
-
-	protected TableCellRenderer tableCellRenderer;
 
 	private static class DefaultPropertyHandler extends AbstractPropertyHandler {
 		@Override
@@ -81,12 +78,11 @@ public class DefaultEditMapPanel extends JPanel {
 
 	protected final AbstractPropertyHandler defaultPropertyHandler;
 
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean reloadable) {
+	public DefaultEditMapPanel(boolean reloadable) {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
 		this.reloadable = reloadable;
 
-		this.tableCellRenderer = tableCellRenderer;
 		Logging.debug(this, "DefaultEditMapPanel reloadable:", reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();

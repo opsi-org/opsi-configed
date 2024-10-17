@@ -32,6 +32,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
@@ -104,9 +105,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private AbstractPropertyHandler removingSpecificValuesPropertyHandler;
 	private AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
-	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
-			boolean reloadable) {
-		super(tableCellRenderer, reloadable);
+	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable, boolean reloadable) {
+		super(reloadable);
 
 		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable, ",  ", reloadable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
@@ -121,11 +121,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
-		if (tableCellRenderer == null) {
-			editableColumn.setCellRenderer(new ColorTableCellRenderer());
-		} else {
-			editableColumn.setCellRenderer(tableCellRenderer);
-		}
+		editableColumn.setCellRenderer(new PropertiesTableCellRenderer());
 
 		popupMenu = definePopup();
 

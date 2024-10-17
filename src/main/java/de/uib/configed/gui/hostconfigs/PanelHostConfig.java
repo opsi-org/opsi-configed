@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 
 import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -58,18 +57,17 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void buildPanel(boolean configStatesEditable) {
-		editMapPanel = new EditMapPanelGroupedForHostConfigs(new PropertiesTableCellRenderer(),
-				new DefaultEditMapPanel.Actor() {
-					@Override
-					public void reloadData() {
-						reloadHostConfig();
-					}
+		editMapPanel = new EditMapPanelGroupedForHostConfigs(new DefaultEditMapPanel.Actor() {
+			@Override
+			public void reloadData() {
+				reloadHostConfig();
+			}
 
-					@Override
-					public void saveData() {
-						saveHostConfig();
-					}
-				}, configStatesEditable);
+			@Override
+			public void saveData() {
+				saveHostConfig();
+			}
+		}, configStatesEditable);
 
 		editMapPanel.registerDataChangedObserver(ChangedDataManager.getHostConfigsDataChangedKeeper());
 
