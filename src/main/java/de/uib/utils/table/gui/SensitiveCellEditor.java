@@ -87,26 +87,21 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		// we use data panel :
-		if (column == 1) {
-			String key = "" + table.getValueAt(row, 0);
-			if (Utils.isKeyForSecretValue(key)) {
-				if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.isGlobalReadOnly()) {
-					Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
-					return null;
-				}
+		String key = (String) table.getValueAt(row, 0);
+		if (Utils.isKeyForSecretValue(key)) {
+			if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+					.isGlobalReadOnly()) {
+				Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
+				return null;
+			}
 
-				int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
-						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
-						JOptionPane.YES_NO_OPTION);
+			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
+					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"), JOptionPane.YES_NO_OPTION);
 
-				Logging.info(this, " getTableCellEditorComponent, celleditor working, returned option ",
-						returnedOption);
-				if (returnedOption != JOptionPane.YES_OPTION) {
-					return null;
-				}
+			Logging.info(this, " getTableCellEditorComponent, celleditor working, returned option ", returnedOption);
+			if (returnedOption != JOptionPane.YES_OPTION) {
+				return null;
 			}
 		}
 
