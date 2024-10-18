@@ -148,11 +148,6 @@ public class SavedSearchesDialog extends FEditStringList {
 	}
 
 	@Override
-	public Object getValue() {
-		return result;
-	}
-
-	@Override
 	protected void commit() {
 		setCursor(Globals.WAIT_CURSOR);
 
@@ -182,13 +177,6 @@ public class SavedSearchesDialog extends FEditStringList {
 			Logging.info(this, "result size ", result.size());
 			clientTablePanel.setSelectedValues(result);
 		}
-	}
-
-	@Override
-	protected void cancel() {
-		result = new LinkedList<>();
-
-		super.cancel();
 	}
 
 	private void removeSelectedEntry() {

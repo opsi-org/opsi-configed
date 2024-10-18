@@ -123,7 +123,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			listeditor.setEditable(modelProducer.isEditable(row, column));
 			listeditor.setNullable(modelProducer.isNullable(row, column));
 			listeditor.setSelectedValues(val);
-			listeditor.enter();
 
 			startListEditor();
 
@@ -134,7 +133,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			listeditor.setEditable(true);
 			listeditor.setSelectedValues(new ArrayList<>());
-			listeditor.enter();
 			listeditor.setStartValue("");
 
 			startListEditor();
@@ -151,36 +149,30 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public Object getCellEditorValue() {
 		Object result = null;
 
-		if (listeditor.getValue() == null) {
-			result = null;
-		} else if (listeditor.getValue() instanceof List) {
-			List<?> list = (List<?>) listeditor.getValue();
+		List<?> list = listeditor.getSelectedList();
 
-			if (list.isEmpty()) {
-				result = list;
-			} else if (List.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
-				result = list;
-			} else if (Integer.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
-				result = list.get(0);
-			} else if (Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
-				result = list.get(0);
-			} else {
-				StringBuilder buf = new StringBuilder();
-
-				for (int i = 0; i < list.size() - 1; i++) {
-					buf.append("" + list.get(i) + ",");
-				}
-
-				buf.append("" + list.get(list.size() - 1));
-
-				result = buf.toString();
-
-				if ("null".equalsIgnoreCase((String) result)) {
-					result = null;
-				}
-			}
+		if (list.isEmpty()) {
+			result = list;
+		} else if (List.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+			result = list;
+		} else if (Integer.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+			result = list.get(0);
+		} else if (Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+			result = list.get(0);
 		} else {
-			result = listeditor.getValue();
+			StringBuilder buf = new StringBuilder();
+
+			for (int i = 0; i < list.size() - 1; i++) {
+				buf.append("" + list.get(i) + ",");
+			}
+
+			buf.append("" + list.get(list.size() - 1));
+
+			result = buf.toString();
+
+			if ("null".equalsIgnoreCase((String) result)) {
+				result = null;
+			}
 		}
 
 		return result;
