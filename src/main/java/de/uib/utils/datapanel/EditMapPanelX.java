@@ -23,7 +23,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -49,7 +48,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	protected JTable table;
 
 	private TableColumn editableColumn;
-	private TableCellEditor theCellEditor;
+	private SensitiveCellEditor sensitiveCellEditor;
 
 	private ListModelProducerForVisualDatamap<String> modelProducer;
 
@@ -116,7 +115,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		buildPanel();
 
-		theCellEditor = new SensitiveCellEditorForDataPanel();
+		sensitiveCellEditor = new SensitiveCellEditor();
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
@@ -357,18 +356,14 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
 
-		if (theCellEditor instanceof SensitiveCellEditor sensitiveCellEditor) {
-			sensitiveCellEditor.setModelProducer(modelProducer);
-			sensitiveCellEditor.reInit();
-		}
+		sensitiveCellEditor.setModelProducer(modelProducer);
+		sensitiveCellEditor.reInit();
 
-		editableColumn.setCellEditor(theCellEditor);
+		editableColumn.setCellEditor(sensitiveCellEditor);
 	}
 
 	public void cancelOldCellEditing() {
-		if (theCellEditor instanceof SensitiveCellEditor sensitiveCellEditor) {
-			sensitiveCellEditor.hideListEditor();
-		}
+		sensitiveCellEditor.hideListEditor();
 	}
 
 	private boolean checkKey(String s) {

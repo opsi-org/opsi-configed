@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
@@ -20,7 +21,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditStringList;
 import de.uib.utils.table.DefaultListModelProducer;
@@ -83,6 +87,29 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+		// we use data panel :
+		if (column == 1) {
+			String key = "" + table.getValueAt(row, 0);
+			if (Utils.isKeyForSecretValue(key)) {
+				if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.isGlobalReadOnly()) {
+					Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
+					return null;
+				}
+
+				int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
+						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
+						JOptionPane.YES_NO_OPTION);
+
+				Logging.info(this, " getTableCellEditorComponent, celleditor working, returned option ",
+						returnedOption);
+				if (returnedOption != JOptionPane.YES_OPTION) {
+					return null;
+				}
+			}
+		}
+
 		Logging.debug(this, "  celleditor working in ", row, ", ", column, " with value ", value, ", class ",
 				value.getClass().getName());
 
