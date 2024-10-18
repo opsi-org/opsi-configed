@@ -115,40 +115,36 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		List<String> val = modelProducer.toList(value);
 
-		// is now always
-		if (val instanceof List) {
-			ListModel<String> model = modelProducer.getListModel(row, column);
-			Logging.debug(this, " try list editing, modelproducer tells nullable ",
-					modelProducer.isNullable(row, column));
-			listeditor.setVisible(false);
-			listeditor.setTitle(modelProducer.getCaption(row, column));
+		ListModel<String> model = modelProducer.getListModel(row, column);
+		Logging.debug(this, " try list editing, modelproducer tells nullable ", modelProducer.isNullable(row, column));
+		listeditor.setVisible(false);
+		listeditor.setTitle(modelProducer.getCaption(row, column));
 
-			if (model != null) {
-				Logging.debug(this, "Selected values: ", val);
+		if (model != null) {
+			Logging.debug(this, "Selected values: ", val);
 
-				listeditor.setListModel(model);
-				listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
-				listeditor.setEditable(modelProducer.isEditable(row, column));
-				listeditor.setNullable(modelProducer.isNullable(row, column));
-				listeditor.setSelectedValues(val);
-				listeditor.enter();
+			listeditor.setListModel(model);
+			listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
+			listeditor.setEditable(modelProducer.isEditable(row, column));
+			listeditor.setNullable(modelProducer.isNullable(row, column));
+			listeditor.setSelectedValues(val);
+			listeditor.enter();
 
-				startListEditor();
+			startListEditor();
 
-				editingRow = row;
-			} else {
-				model = new DefaultListModel<>();
-				listeditor.setListModel(model);
-				listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-				listeditor.setEditable(true);
-				listeditor.setSelectedValues(new ArrayList<>());
-				listeditor.enter();
-				listeditor.setStartValue("");
+			editingRow = row;
+		} else {
+			model = new DefaultListModel<>();
+			listeditor.setListModel(model);
+			listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			listeditor.setEditable(true);
+			listeditor.setSelectedValues(new ArrayList<>());
+			listeditor.enter();
+			listeditor.setStartValue("");
 
-				startListEditor();
+			startListEditor();
 
-				editingRow = -1;
-			}
+			editingRow = -1;
 		}
 
 		field.setText("" + value);
