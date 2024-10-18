@@ -137,19 +137,19 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			popupItemAddStringListEntry = new JMenuItem(
 					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
+			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor(false, false));
 			popupMenu.add(popupItemAddStringListEntry);
 
 			popupItemAddStringListEntry = new JMenuItem(
 					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
+			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor(false, true));
 			popupMenu.add(popupItemAddStringListEntry);
 
 			popupItemAddBooleanListEntry = new JMenuItem(
 					Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
-			popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean", false));
+			popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor(true, false));
 			popupMenu.add(popupItemAddBooleanListEntry);
 
 			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
@@ -382,7 +382,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		return ok;
 	}
 
-	private void addEntryFor(final String classname, final boolean multiselection) {
+	private void addEntryFor(final boolean isBoolean, final boolean multiselection) {
 		String initial = "";
 		if (table.getSelectedRowCount() > 0) {
 			initial = (String) table.getValueAt(table.getSelectedRow(), 0);
@@ -396,7 +396,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 				if (checkKey(s)) {
 					setVisible(false);
-					if ("java.lang.Boolean".equals(classname)) {
+					if (isBoolean) {
 						addBooleanProperty(s);
 					} else if (multiselection) {
 						addEmptyPropertyMultiSelection(s);
