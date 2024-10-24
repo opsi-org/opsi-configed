@@ -12,7 +12,6 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JTable;
 
 import de.uib.utils.ComboBoxModeller;
@@ -46,9 +45,8 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 		}
 
 		Component component = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-		if (component instanceof JComponent jComponent) {
-			jComponent.setToolTipText("" + value);
-		}
+
+		((JComboBox<?>) component).setToolTipText("" + value);
 
 		return component;
 	}

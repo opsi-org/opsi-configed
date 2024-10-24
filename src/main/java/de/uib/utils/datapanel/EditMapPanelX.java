@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -30,7 +31,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
@@ -40,7 +40,7 @@ import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.DefaultListCellOptions;
 import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
-import de.uib.utils.table.gui.SensitiveCellEditor;
+import de.uib.utils.table.gui.PropertiesCellEditorAndRenderer;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel {
@@ -48,7 +48,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	protected JTable table;
 
 	private TableColumn editableColumn;
-	private SensitiveCellEditor sensitiveCellEditor;
+	private PropertiesCellEditorAndRenderer propertiesCellEditorAndRenderer;
 
 	private ListModelProducerForVisualDatamap<String> modelProducer;
 
@@ -115,11 +115,12 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		buildPanel();
 
-		sensitiveCellEditor = new SensitiveCellEditor();
+		propertiesCellEditorAndRenderer = new PropertiesCellEditorAndRenderer();
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
-		editableColumn.setCellRenderer(new PropertiesTableCellRenderer());
+		editableColumn.setCellRenderer(propertiesCellEditorAndRenderer);
+		editableColumn.setCellEditor(propertiesCellEditorAndRenderer);
 
 		popupMenu = definePopup();
 
@@ -274,7 +275,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 					return c;
 				}
 
-				prepareRendererForJTable((JLabel) c, row, col);
+				prepareRendererForJTable((JComponent) c, row, col);
 				return c;
 			}
 		};
@@ -287,29 +288,32 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		add(jScrollPane, BorderLayout.CENTER);
 	}
 
-	private void prepareRendererForJTable(JLabel jLabel, int row, int col) {
-		jLabel.setToolTipText(generateTooltip(row));
+	private void prepareRendererForJTable(JComponent jComponent, int row, int col) {
+		jComponent.setToolTipText(generateTooltip(row));
 
 		// check equals with default
 		Object defaultValue;
+
+		jComponent.setFont(jComponent.getFont().deriveFont(Font.PLAIN));
 
 		if (defaultsMap == null) {
 			Logging.warning(this, "no default values available, defaultsMap is null");
 		} else if ((defaultValue = defaultsMap.get(table.getValueAt(row, 0))) == null) {
 			Logging.warning(this, "no default Value found");
 
-			jLabel.setForeground(Globals.OPSI_ERROR);
+			jComponent.setForeground(Globals.OPSI_ERROR);
 
-			jLabel.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
+			jComponent.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
-			jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
+			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
 		} else if (!defaultValue.equals(table.getValueAt(row, 1))) {
-			jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
+			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
 		} else {
 			// Do nothing when default equals real value
 		}
 
-		if (col == 1 && Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
+		if (col == 1 && jComponent instanceof JLabel jLabel
+				&& Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
 	}
@@ -347,7 +351,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	@Override
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
 		super.setEditableMap(visualdata, optionsMap);
-		cancelOldCellEditing();
 
 		if (optionsMap != null) {
 			modelProducer = new ListModelProducerForVisualDatamap<>(table, optionsMap, visualdata);
@@ -356,14 +359,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
 
-		sensitiveCellEditor.setModelProducer(modelProducer);
-		sensitiveCellEditor.reInit();
-
-		editableColumn.setCellEditor(sensitiveCellEditor);
-	}
-
-	public void cancelOldCellEditing() {
-		sensitiveCellEditor.hideListEditor();
+		propertiesCellEditorAndRenderer.setModelProducer(modelProducer);
 	}
 
 	private boolean checkKey(String s) {

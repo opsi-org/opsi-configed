@@ -1,0 +1,257 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.utils.table.gui;
+
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.util.Collections;
+import java.util.List;
+
+import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+
+import com.formdev.flatlaf.extras.components.FlatTextField;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+
+import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.FSelectionList;
+import de.uib.configed.type.ConfigOption.TYPE;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
+import de.uib.utils.Utils;
+import de.uib.utils.logging.Logging;
+import de.uib.utils.table.DefaultListModelProducer;
+
+public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implements TableCellEditor, TableCellRenderer {
+	private static final int BOOLEAN = 0;
+	private static final int SINGLE_SELECTION = 1;
+	private static final int MULTI_SELECTION = 2;
+
+	// Components for the renderer
+	private FlatTriStateCheckBox rendererCheckBox;
+	private JLabel rendererLabel;
+
+	// Components for the editor
+	private JLabel unusedfield;
+
+	private FlatTriStateCheckBox checkBox;
+	private JComboBox<String> comboBox;
+
+	private FSelectionList groupsSelectionDialog;
+	private JPanel addValuesPanel;
+	private FlatTextField addValuesTextField;
+
+	private int selectionMode;
+
+	private DefaultListModelProducer<String> modelProducer;
+
+	public PropertiesCellEditorAndRenderer() {
+		super();
+
+		// The components for the renderer
+		rendererCheckBox = new FlatTriStateCheckBox();
+		rendererCheckBox.setAllowIndeterminate(false);
+
+		rendererLabel = new JLabel();
+		rendererLabel.setOpaque(true);
+
+		// The components for the editor
+		checkBox = new FlatTriStateCheckBox();
+		checkBox.setAllowIndeterminate(false);
+
+		checkBox.addItemListener(itemEvent -> stopCellEditing());
+
+		comboBox = new JComboBox<>();
+
+		JTextField editorComponent = (JTextField) comboBox.getEditor().getEditorComponent();
+		editorComponent.addActionListener((ActionEvent e) -> {
+			String newItem = editorComponent.getText();
+			comboBox.addItem(newItem);
+			comboBox.setSelectedItem(newItem);
+
+			stopCellEditing();
+		});
+
+		comboBox.addItemListener(itemEvent -> stopCellEditing());
+
+		unusedfield = new JLabel();
+
+		addValuesTextField = new FlatTextField();
+		addValuesPanel = new JPanel();
+		GroupLayout layout = new GroupLayout(addValuesPanel);
+		addValuesPanel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createParallelGroup().addComponent(addValuesTextField));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(addValuesTextField));
+
+		groupsSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, true,
+				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 400,
+				500, addValuesPanel);
+
+		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
+		addValueButton.addActionListener(actionEvent -> groupsSelectionDialog.addItem(addValuesTextField.getText()));
+
+		addValuesTextField.setTrailingComponent(addValueButton);
+		addValuesTextField.setShowClearButton(true);
+		addValuesTextField
+				.addActionListener(actionEvent -> groupsSelectionDialog.addItem(addValuesTextField.getText()));
+	}
+
+	public void setModelProducer(DefaultListModelProducer<String> producer) {
+		this.modelProducer = producer == null ? new DefaultListModelProducer<>() : producer;
+	}
+
+	@Override
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+		String key = (String) table.getValueAt(row, 0);
+		if (Utils.isKeyForSecretValue(key)) {
+			if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+					.isGlobalReadOnly()) {
+				Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
+				return null;
+			}
+
+			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
+					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"), JOptionPane.YES_NO_OPTION);
+
+			Logging.info(this, " getTableCellEditorComponent, celleditor working, returned option ", returnedOption);
+			if (returnedOption != JOptionPane.YES_OPTION) {
+				return null;
+			}
+		}
+
+		Logging.debug(this, "  celleditor working in ", row, ", with value ", value, ", class ",
+				value.getClass().getName());
+
+		Component result;
+
+		if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
+			selectionMode = BOOLEAN;
+
+			// We want a checkbox
+			if (((List<?>) value).isEmpty()) {
+				checkBox.setIndeterminate(true);
+			} else {
+				checkBox.setChecked((Boolean) ((List<?>) value).get(0));
+			}
+
+			result = checkBox;
+		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.SINGLE_SELECTION) {
+			selectionMode = SINGLE_SELECTION;
+
+			comboBox.setModel(new DefaultComboBoxModel<>(
+					modelProducer.getListCellOptions(key).getPossibleValues().toArray(new String[0])));
+			if (((List<?>) value).isEmpty()) {
+				comboBox.setSelectedItem(null);
+			} else {
+				String listElement = (String) ((List<?>) value).get(0);
+
+				if (((DefaultComboBoxModel<String>) comboBox.getModel()).getIndexOf(listElement) == -1) {
+					comboBox.addItem(listElement);
+				}
+
+				comboBox.setSelectedItem(listElement);
+			}
+
+			comboBox.setEditable(modelProducer.isEditable(row));
+
+			result = comboBox;
+		} else {
+			selectionMode = MULTI_SELECTION;
+
+			groupsSelectionDialog.setTitle((String) table.getValueAt(row, 0));
+			groupsSelectionDialog.enableMultiSelection();
+			groupsSelectionDialog.setModel(modelProducer.getListModel(row));
+
+			groupsSelectionDialog.setPreviousSelectionValues(modelProducer.toList(value));
+			groupsSelectionDialog.setSize(400, 500);
+			groupsSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+			addValuesPanel.setVisible(modelProducer.isEditable(row));
+			addValuesTextField.setText(null);
+			groupsSelectionDialog.setVisible(true);
+
+			// We should put this code into invokeLater, because otherwise we will call stop 
+			// or cancel editing before it actually began. Editing would not have an effect
+			SwingUtilities.invokeLater(() -> {
+				if (groupsSelectionDialog.getResult() == 2) {
+					stopCellEditing();
+				} else {
+					cancelCellEditing();
+				}
+			});
+
+			// We cannot return null here, otherwise the editing is cancelled...
+			return unusedfield;
+		}
+
+		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
+		return result;
+	}
+
+	@Override
+	public Object getCellEditorValue() {
+		if (selectionMode == BOOLEAN) {
+			return Collections.singletonList(checkBox.getChecked());
+		} else if (selectionMode == SINGLE_SELECTION) {
+			return Collections.singletonList(comboBox.getSelectedItem());
+		} else {
+			return groupsSelectionDialog.getSelectedValues();
+		}
+	}
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
+		String key = (String) table.getValueAt(row, 0);
+
+		Component result;
+		if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
+			// We want a checkbox
+			if (((List<?>) value).isEmpty()) {
+				rendererCheckBox.setIndeterminate(true);
+			} else {
+				rendererCheckBox.setChecked((Boolean) ((List<?>) value).get(0));
+			}
+
+			result = rendererCheckBox;
+		} else {
+			rendererLabel.setText((String) formatList(value));
+
+			result = rendererLabel;
+		}
+
+		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
+
+		return result;
+	}
+
+	public static Object formatList(Object value) {
+		Object result = value;
+		if (value != null) {
+			String s = value.toString();
+			if (s.length() >= 2 && s.charAt(0) == '[' && s.charAt(s.length() - 1) == ']') {
+				result = s.substring(1, s.length() - 1);
+			}
+		}
+
+		return result;
+	}
+}

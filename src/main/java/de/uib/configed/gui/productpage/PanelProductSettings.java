@@ -350,10 +350,6 @@ public class PanelProductSettings extends JSplitPane {
 		propertiesPanel.setUpdateCollection(POJOReMapper.remap(updateCollection));
 	}
 
-	public void clearListEditors() {
-		propertiesPanel.cancelOldCellEditing();
-	}
-
 	public void clearEditing() {
 		propertiesPanel.setEditableMap(null, null);
 		propertiesPanel.setStoreData(null);

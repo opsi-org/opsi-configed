@@ -79,10 +79,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		} else {
 			put("editable", retrieved.get("editable"));
 		}
-
-		if (type != TYPE.BOOL_CONFIG) {
-			put("nullable", false);
-		}
 	}
 
 	private void buildType() {
@@ -139,12 +135,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	}
 
 	@Override
-	public boolean isNullable() {
-		// until we extend the data structure
-		return type != TYPE.BOOL_CONFIG;
-	}
-
-	@Override
 	public boolean isEditable() {
 		return (Boolean) get("editable");
 	}
@@ -154,6 +144,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		return (String) get("description");
 	}
 
+	@Override
 	public TYPE getType() {
 		return type;
 	}

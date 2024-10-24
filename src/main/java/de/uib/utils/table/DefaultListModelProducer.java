@@ -15,38 +15,26 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.utils.logging.Logging;
 
-public class DefaultListModelProducer<O> implements ListModelProducer<O> {
-	@Override
-	public ListModel<O> getListModel(int row, int column) {
+public class DefaultListModelProducer<O> {
+	private static DefaultListCellOptions defaultListCellOptions = new DefaultListCellOptions();
+
+	public ListModel<O> getListModel(int row) {
 		return null;
 	}
 
-	@Override
-	public int getSelectionMode(int row, int column) {
+	public int getSelectionMode(int row) {
 		return ListSelectionModel.SINGLE_SELECTION;
 	}
 
-	@Override
-	public boolean isNullable(int row, int column) {
-		return true;
-	}
-
-	@Override
-	public boolean isEditable(int row, int column) {
+	public boolean isEditable(int row) {
 		return false;
 	}
 
-	@Override
-	public String getCaption(int row, int column) {
-		return "";
+	public ListCellOptions getListCellOptions(String key) {
+		return defaultListCellOptions;
 	}
 
-	@Override
-	public Class<?> getClass(int row) {
-		return Object.class;
-	}
-
-	@Override
+	// TODO maybe this can go away, value should always be list
 	public List<O> toList(Object value) {
 		if (value == null) {
 			Logging.warning(this, "value is null");

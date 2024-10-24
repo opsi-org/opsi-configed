@@ -33,7 +33,6 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 
 	private Map<String, ListCellOptions> optionsMap;
 	private Map<String, List<O>> currentData;
-	private Map<String, Class<?>> originalTypes;
 	private JTable table;
 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,
@@ -52,30 +51,29 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		mapTypes(data);
 	}
 
-	private ListCellOptions getListCellOptions(String key) {
+	@Override
+	public ListCellOptions getListCellOptions(String key) {
 		return optionsMap.computeIfAbsent(key, arg -> new DefaultListCellOptions());
 	}
 
 	private void mapTypes(final Map<String, Object> data) {
 		currentData = new HashMap<>();
 		Logging.debug(this, "mapTypes  ", data);
-		originalTypes = new HashMap<>();
 		for (Entry<String, Object> dataEntry : data.entrySet()) {
-			originalTypes.put(dataEntry.getKey(), dataEntry.getValue().getClass());
 			currentData.put(dataEntry.getKey(), toList(dataEntry.getValue()));
 		}
 	}
 
 	@Override
-	public ListModel<O> getListModel(int row, int column) {
+	public ListModel<O> getListModel(int row) {
 		// column can be assumed to be 1
 
-		if (listmodels.get(row) != null) {
+		if (listmodels.containsKey(row)) {
 			// we already built a model
 			return listmodels.get(row);
 		}
 
-		Logging.info(this, "getListModel, row ", row, ", column ", column);
+		Logging.info(this, "getListModel, row ", row);
 
 		// build listmodel
 
@@ -108,31 +106,14 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	}
 
 	@Override
-	public int getSelectionMode(int row, int column) {
+	public int getSelectionMode(int row) {
 		String key = (String) table.getValueAt(row, 0);
 		return getListCellOptions(key).getSelectionMode();
 	}
 
 	@Override
-	public boolean isEditable(int row, int column) {
+	public boolean isEditable(int row) {
 		String key = (String) table.getValueAt(row, 0);
 		return getListCellOptions(key).isEditable();
-	}
-
-	@Override
-	public boolean isNullable(int row, int column) {
-		String key = (String) table.getValueAt(row, 0);
-		return getListCellOptions(key).isNullable();
-	}
-
-	@Override
-	public String getCaption(int row, int column) {
-		return (String) table.getValueAt(row, 0);
-	}
-
-	@Override
-	public Class<?> getClass(int row) {
-		String key = (String) table.getValueAt(row, 0);
-		return originalTypes.get(key);
 	}
 }

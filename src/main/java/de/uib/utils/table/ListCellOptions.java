@@ -8,6 +8,8 @@ package de.uib.utils.table;
 
 import java.util.List;
 
+import de.uib.configed.type.ConfigOption.TYPE;
+
 // may represent an Opsi 4.0 config
 // TODO make this class generic?
 public interface ListCellOptions {
@@ -21,7 +23,7 @@ public interface ListCellOptions {
 
 	boolean isEditable();
 
-	boolean isNullable();
-
 	String getDescription();
+
+	TYPE getType();
 }

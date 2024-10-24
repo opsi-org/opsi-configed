@@ -9,6 +9,8 @@ package de.uib.configed.type;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uib.configed.type.ConfigOption.TYPE;
+
 public class ConfigName2ConfigValue extends RetrievedMap {
 	private Map<String, ConfigOption> configOptions;
 
@@ -39,5 +41,9 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 				putIfAbsent(option.getKey(), defaultValues);
 			}
 		}
+	}
+
+	public TYPE getType(String key) {
+		return configOptions.get(key).getType();
 	}
 }

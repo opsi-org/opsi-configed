@@ -13,11 +13,13 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Globals;
@@ -29,6 +31,12 @@ import de.uib.utils.table.gui.TableSearchPane;
 public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
 	private TableSearchPane searchPane;
+
+	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
+			int preferredHeight, JPanel additionalPane) {
+		super(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight, false,
+				additionalPane);
+	}
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
@@ -127,6 +135,19 @@ public class FSelectionList extends FGeneralDialog {
 		searchPane.setTargetModel(searchTargetModel);
 	}
 
+	public void setModel(ListModel<String> model) {
+		jList.setModel(model);
+	}
+
+	public void addItem(String element) {
+		DefaultListModel<String> model = (DefaultListModel<String>) jList.getModel();
+		if (!model.contains(element)) {
+			model.addElement(element);
+			jList.addSelectionInterval(model.size() - 1, model.size() - 1);
+			jList.ensureIndexIsVisible(jList.getMaxSelectionIndex());
+		}
+	}
+
 	public String getSelectedValue() {
 		return jList.getSelectedValue();
 	}
@@ -138,6 +159,8 @@ public class FSelectionList extends FGeneralDialog {
 	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
 		int[] indices = getPreviouslySelectedIndicesFromValues(previouslySelectedValues);
 		jList.setSelectedIndices(indices);
+
+		jList.ensureIndexIsVisible(jList.getSelectedIndex());
 	}
 
 	private int[] getPreviouslySelectedIndicesFromValues(Collection<String> previouslySelectedValues) {
