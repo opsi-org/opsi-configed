@@ -479,17 +479,12 @@ public class ConfigDataService {
 			Logging.debug(this, "setConfig,  key, settings.get(key): ", setting.getKey(), ", ", setting.getValue());
 
 			Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): ",
-					setting.getValue(), " , ", setting.getValue().getClass().getName());
+					setting.getValue());
 
-			List<Object> oldValue = null;
+			Logging.info(this, "setConfig, key: ", setting.getKey());
 
-			if (configOptions.get(setting.getKey()) != null) {
-				oldValue = configOptions.get(setting.getKey()).getDefaultValues();
-			}
-
-			Logging.info(this, "setConfig, key, oldValue: ", setting.getKey(), ", ", oldValue);
-
-			if (!setting.getValue().equals(oldValue)) {
+			if (setting.getValue() == null
+					|| !setting.getValue().equals(configOptions.get(setting.getKey()).getDefaultValues())) {
 				Map<String, Object> config = new HashMap<>();
 
 				config.put("ident", setting.getKey());
@@ -499,6 +494,8 @@ public class ConfigDataService {
 				Logging.debug(this, "setConfig, key,  configOptions.get(key):  ", setting.getKey(), ", ",
 						configOptions.get(setting.getKey()));
 				if (configOptions.get(setting.getKey()) != null) {
+					config.put("multiValue", configOptions.get(setting.getKey()).get("multiValue"));
+
 					type = (String) configOptions.get(setting.getKey()).get("type");
 				} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
 					type = "BoolConfig";
@@ -533,9 +530,12 @@ public class ConfigDataService {
 			possibleValues = configOption.getPossibleValues();
 		}
 
-		for (Object item : defaultValues) {
-			if (!possibleValues.contains(item)) {
-				possibleValues.add(item);
+		// defaultValues is null when we delete a config
+		if (defaultValues != null) {
+			for (Object item : defaultValues) {
+				if (!possibleValues.contains(item)) {
+					possibleValues.add(item);
+				}
 			}
 		}
 

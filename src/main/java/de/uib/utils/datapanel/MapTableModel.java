@@ -20,11 +20,11 @@ import java.util.function.Function;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
+import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utils.DataChangedObserver;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 
 public class MapTableModel extends AbstractTableModel {
 	private List<DataChangedObserver> observers;
@@ -38,7 +38,7 @@ public class MapTableModel extends AbstractTableModel {
 
 	private Function<String, Boolean> isEditable;
 
-	private Map<String, ListCellOptions> optionsMap;
+	private Map<String, ConfigOption> optionsMap;
 
 	// shall be sorted
 	private Map<String, Object> data;
@@ -64,7 +64,7 @@ public class MapTableModel extends AbstractTableModel {
 		this.modelProducer = modelProducer;
 	}
 
-	public void setOptions(Map<String, ListCellOptions> optionsMap, Map<String, Object> defaultData) {
+	public void setOptions(Map<String, ConfigOption> optionsMap, Map<String, Object> defaultData) {
 		this.optionsMap = optionsMap;
 		this.defaultData = defaultData;
 	}

@@ -17,13 +17,13 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
+import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utils.DataChangedObserver;
 import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.DefaultListCellOptions;
-import de.uib.utils.table.ListCellOptions;
 
 public class PanelHostProperties extends JPanel {
 	// delegate
@@ -64,16 +64,16 @@ public class PanelHostProperties extends JPanel {
 		editMapPanel.registerDataChangedObserver(o);
 	}
 
-	private Map<String, ListCellOptions> deriveOptionsMap(Map<String, Object> m) {
-		Map<String, ListCellOptions> result = new HashMap<>();
+	private Map<String, ConfigOption> deriveOptionsMap(Map<String, Object> m) {
+		Map<String, ConfigOption> result = new HashMap<>();
 
 		for (Entry<String, Object> entry : m.entrySet()) {
-			ListCellOptions cellOptions = null;
+			ConfigOption cellOptions;
 
 			if ((entry.getValue()) instanceof Boolean) {
-				cellOptions = DefaultListCellOptions.getNewBooleanListCellOptions();
+				cellOptions = ConfigOption.createConfigOption(TYPE.BOOL_CONFIG, false, false);
 			} else {
-				cellOptions = DefaultListCellOptions.getNewEmptyListCellOptions();
+				cellOptions = ConfigOption.createConfigOption(TYPE.UNICODE_CONFIG, true, false);
 			}
 
 			Logging.debug(this, "cellOptions: ", cellOptions);

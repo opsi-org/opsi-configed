@@ -31,14 +31,14 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditText;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.DefaultListCellOptions;
-import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.PropertiesCellEditorAndRenderer;
 
@@ -349,7 +349,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	@Override
-	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
+	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
 		super.setEditableMap(visualdata, optionsMap);
 
 		if (optionsMap != null) {
@@ -418,7 +418,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		List<String> val = new ArrayList<>();
 		val.add("");
 		addProperty(key, val);
-		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptions());
+		optionsMap.put(key, ConfigOption.createConfigOption(TYPE.UNICODE_CONFIG, true, false));
 		mapTableModel.setMap(mapTableModel.getData());
 		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}
@@ -427,7 +427,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		List<String> val = new ArrayList<>();
 		val.add("");
 		addProperty(key, val);
-		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptionsMultiSelection());
+		optionsMap.put(key, ConfigOption.createConfigOption(TYPE.UNICODE_CONFIG, true, true));
 		mapTableModel.setMap(mapTableModel.getData());
 		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}
@@ -436,7 +436,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		List<Object> val = new ArrayList<>();
 		val.add(false);
 		addProperty(key, val);
-		optionsMap.put(key, DefaultListCellOptions.getNewBooleanListCellOptions());
+		optionsMap.put(key, ConfigOption.createConfigOption(TYPE.BOOL_CONFIG, false, false));
 		mapTableModel.setMap(mapTableModel.getData());
 		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}

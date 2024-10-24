@@ -13,10 +13,11 @@ import java.util.List;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.type.ConfigOption;
 import de.uib.utils.logging.Logging;
 
 public class DefaultListModelProducer<O> {
-	private static DefaultListCellOptions defaultListCellOptions = new DefaultListCellOptions();
+	private static ConfigOption defaultConfigOption = new ConfigOption();
 
 	public ListModel<O> getListModel(int row) {
 		return null;
@@ -30,8 +31,8 @@ public class DefaultListModelProducer<O> {
 		return false;
 	}
 
-	public ListCellOptions getListCellOptions(String key) {
-		return defaultListCellOptions;
+	public ConfigOption getListCellOptions(String key) {
+		return defaultConfigOption;
 	}
 
 	// TODO maybe this can go away, value should always be list

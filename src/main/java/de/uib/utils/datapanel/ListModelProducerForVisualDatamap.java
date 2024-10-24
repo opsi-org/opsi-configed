@@ -16,11 +16,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 
+import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.DefaultListCellOptions;
 import de.uib.utils.table.DefaultListModelProducer;
-import de.uib.utils.table.ListCellOptions;
 
 /*
 	private ListModelProducerForDatamap 
@@ -31,17 +30,17 @@ import de.uib.utils.table.ListCellOptions;
 public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProducer<O> {
 	private Map<Integer, ListModel<O>> listmodels = new HashMap<>();
 
-	private Map<String, ListCellOptions> optionsMap;
+	private Map<String, ConfigOption> optionsMap;
 	private Map<String, List<O>> currentData;
 	private JTable table;
 
-	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,
+	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ConfigOption> optionsMap,
 			Map<String, Object> currentData) {
 		this.table = tableVisualizingMap;
 		setData(optionsMap, currentData);
 	}
 
-	public final void setData(Map<String, ListCellOptions> optionsMap, Map<String, Object> currentData) {
+	public final void setData(Map<String, ConfigOption> optionsMap, Map<String, Object> currentData) {
 		this.optionsMap = optionsMap;
 
 		mapTypes(currentData);
@@ -52,8 +51,8 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	}
 
 	@Override
-	public ListCellOptions getListCellOptions(String key) {
-		return optionsMap.computeIfAbsent(key, arg -> new DefaultListCellOptions());
+	public ConfigOption getListCellOptions(String key) {
+		return optionsMap.get(key);
 	}
 
 	private void mapTypes(final Map<String, Object> data) {
@@ -79,7 +78,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 
 		String key = (String) table.getValueAt(row, 0);
 
-		ListCellOptions options = getListCellOptions(key);
+		ConfigOption options = getListCellOptions(key);
 
 		List<Object> values = options.getPossibleValues();
 		Logging.info(this, "getListModel key ", key, " the option values ", values);
