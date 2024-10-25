@@ -372,6 +372,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	private void addConfigurationEntry() {
 		JDialog dialog = new JDialog(ConfigedMain.getMainFrame(), true);
+		dialog.setTitle(Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 
 		JLabel labelConfigEntry = new JLabel(Configed.getResourceValue("EditMapPanelX.configName"));
 		labelConfigEntry.setFont(getFont().deriveFont(Font.BOLD));
