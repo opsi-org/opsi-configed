@@ -8,20 +8,27 @@ package de.uib.utils.datapanel;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
 import javax.swing.table.TableCellRenderer;
@@ -37,7 +44,6 @@ import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditText;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.PropertiesCellEditorAndRenderer;
@@ -56,7 +62,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private JMenuItem popupItemDeleteEntry1;
 	private JMenuItem popupItemDeleteEntry2;
 	private JMenuItem popupItemAddStringListEntry;
-	private JMenuItem popupItemAddBooleanListEntry;
 
 	protected Map<String, Object> originalMap;
 
@@ -135,27 +140,14 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 				popupMenu.addSeparator();
 			}
 
-			popupItemAddStringListEntry = new JMenuItem(
-					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
+			popupItemAddStringListEntry = new JMenuItem(Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor(false, false));
+			popupItemAddStringListEntry.addActionListener(actionEvent -> addConfigurationEntry());
 			popupMenu.add(popupItemAddStringListEntry);
-
-			popupItemAddStringListEntry = new JMenuItem(
-					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
-			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor(false, true));
-			popupMenu.add(popupItemAddStringListEntry);
-
-			popupItemAddBooleanListEntry = new JMenuItem(
-					Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
-			Icons.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
-			popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor(true, false));
-			popupMenu.add(popupItemAddBooleanListEntry);
 
 			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
-			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
+			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteConfigurationEntry());
 
 			popupMenu.add(popupItemDeleteEntry0);
 			// the menu item seems to work only for one menu
@@ -193,7 +185,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		this.originalMap = originalMap;
 	}
 
-	private void deleteEntry() {
+	private void deleteConfigurationEntry() {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
@@ -378,78 +370,92 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		return ok;
 	}
 
-	private void addEntryFor(final boolean isBoolean, final boolean multiselection) {
-		String initial = "";
-		if (table.getSelectedRowCount() > 0) {
-			initial = (String) table.getValueAt(table.getSelectedRow(), 0);
+	private void addConfigurationEntry() {
+		JDialog dialog = new JDialog(ConfigedMain.getMainFrame(), true);
+
+		JLabel labelConfigEntry = new JLabel("Name der config");
+		labelConfigEntry.setFont(getFont().deriveFont(Font.BOLD));
+
+		JTextField textFieldConfigEntry = new JTextField();
+
+		JLabel labelDescription = new JLabel("Beschreibung");
+		labelDescription.setFont(getFont().deriveFont(Font.BOLD));
+
+		JTextField textFieldDescription = new JTextField();
+
+		JCheckBox isBoolean = new JCheckBox("boolean");
+		JCheckBox isEditable = new JCheckBox("editable", true);
+		JCheckBox isMultiValue = new JCheckBox("multivalue");
+
+		isBoolean.addActionListener((ActionEvent event) -> {
+			isEditable.setEnabled(!isBoolean.isSelected());
+			isEditable.setSelected(!isBoolean.isSelected());
+
+			isMultiValue.setEnabled(!isBoolean.isSelected());
+			isMultiValue.setSelected(false);
+		});
+
+		JButton cancel = new JButton(Icons.getIntellijIcon("close"));
+		cancel.addActionListener(actionEvent -> dialog.dispose());
+
+		JButton accept = new JButton(Icons.getIntellijIcon("checkmark"));
+		accept.addActionListener((ActionEvent e) -> {
+			addEntry(textFieldConfigEntry.getText(), textFieldDescription.getText(), isBoolean.isSelected(),
+					isMultiValue.isSelected(), isEditable.isSelected());
+			dialog.dispose();
+		});
+
+		GroupLayout layout = new GroupLayout(dialog.getContentPane());
+		dialog.getContentPane().setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelConfigEntry)
+				.addComponent(textFieldConfigEntry).addGap(Globals.MIN_GAP_SIZE * 2).addComponent(labelDescription)
+				.addComponent(textFieldDescription).addComponent(isBoolean).addComponent(isEditable)
+				.addComponent(isMultiValue).addGap(Globals.MIN_GAP_SIZE * 4)
+				.addGroup(layout.createParallelGroup().addComponent(cancel).addComponent(accept)));
+
+		layout.setHorizontalGroup(
+				layout.createParallelGroup().addComponent(labelConfigEntry).addComponent(textFieldConfigEntry)
+						.addComponent(labelDescription).addComponent(textFieldDescription).addComponent(isBoolean)
+						.addComponent(isEditable).addComponent(isMultiValue).addGroup(layout.createSequentialGroup()
+								.addComponent(cancel).addGap(0, 0, Short.MAX_VALUE).addComponent(accept)));
+
+		((JPanel) dialog.getContentPane()).setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE * 2,
+				Globals.MIN_GAP_SIZE * 2, Globals.MIN_GAP_SIZE * 2, Globals.MIN_GAP_SIZE * 2));
+
+		dialog.pack();
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setResizable(false);
+		dialog.setVisible(true);
+	}
+
+	private void addEntry(String configName, String description, boolean bool, boolean multivalue, boolean editable) {
+		if (!checkKey(configName)) {
+			return;
 		}
 
-		FEditText fed = new FEditText(initial, Configed.getResourceValue("EditMapPanel.KeyToAdd")) {
-			@Override
-			protected void commit() {
-				super.commit();
-				String s = getText().strip();
+		Logging.info(this, "we create entry ", configName, " with values bool, multivalue, editable", bool, multivalue,
+				editable);
 
-				if (checkKey(s)) {
-					setVisible(false);
-					if (isBoolean) {
-						addBooleanProperty(s);
-					} else if (multiselection) {
-						addEmptyPropertyMultiSelection(s);
-					} else {
-						addEmptyProperty(s);
-					}
-				}
-			}
-		};
+		ConfigOption configOption = ConfigOption.createConfigOption(description,
+				bool ? TYPE.BOOL_CONFIG : TYPE.UNICODE_CONFIG, editable, multivalue);
 
-		fed.setModal(true);
-		fed.setSingleLine(true);
-		fed.select(0, initial.length());
-		fed.setTitle(Globals.APPNAME);
-		fed.init(new Dimension(300, 50));
+		// Unfortunately we need to put here another value so that the updater recognizes this as different
+		// and will write the changes to the server.
+		// TODO: Find a better more elegant solution for this
+		List<Object> startValues = new ArrayList<>();
+		if (bool) {
+			startValues.add(false);
+		} else {
+			startValues.add("");
+		}
 
-		Logging.info(this, "locate frame fed on center of mainFrame and then make it visible");
-		fed.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fed.setVisible(true);
-	}
-
-	private void addEmptyProperty(String key) {
-		List<String> val = new ArrayList<>();
-		val.add("");
-		addProperty(key, val);
-		optionsMap.put(key, ConfigOption.createConfigOption(TYPE.UNICODE_CONFIG, true, false));
-		mapTableModel.setMap(mapTableModel.getData());
-		modelProducer.setData(optionsMap, mapTableModel.getData());
-	}
-
-	private void addEmptyPropertyMultiSelection(String key) {
-		List<String> val = new ArrayList<>();
-		val.add("");
-		addProperty(key, val);
-		optionsMap.put(key, ConfigOption.createConfigOption(TYPE.UNICODE_CONFIG, true, true));
-		mapTableModel.setMap(mapTableModel.getData());
-		modelProducer.setData(optionsMap, mapTableModel.getData());
-	}
-
-	private void addBooleanProperty(String key) {
-		List<Object> val = new ArrayList<>();
-		val.add(false);
-		addProperty(key, val);
-		optionsMap.put(key, ConfigOption.createConfigOption(TYPE.BOOL_CONFIG, false, false));
-		mapTableModel.setMap(mapTableModel.getData());
-		modelProducer.setData(optionsMap, mapTableModel.getData());
-	}
-
-	/**
-	 * adding an entry to the table model and, finally, to the table
-	 *
-	 * @param String key
-	 * @param Object value (if null then an empty String is the value)
-	 */
-	private final void addProperty(String key, Object newval) {
-		mapTableModel.addEntry(key, newval);
+		mapTableModel.addEntry(configName, startValues, true);
 		names = mapTableModel.getKeys();
+
+		optionsMap.put(configName, configOption);
+		mapTableModel.setMap(mapTableModel.getData());
+		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}
 
 	/**

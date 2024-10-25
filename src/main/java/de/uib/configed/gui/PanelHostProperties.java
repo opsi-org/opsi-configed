@@ -71,9 +71,9 @@ public class PanelHostProperties extends JPanel {
 			ConfigOption cellOptions;
 
 			if ((entry.getValue()) instanceof Boolean) {
-				cellOptions = ConfigOption.createConfigOption(TYPE.BOOL_CONFIG, false, false);
+				cellOptions = ConfigOption.createConfigOption("", TYPE.BOOL_CONFIG, false, false);
 			} else {
-				cellOptions = ConfigOption.createConfigOption(TYPE.UNICODE_CONFIG, true, false);
+				cellOptions = ConfigOption.createConfigOption("", TYPE.UNICODE_CONFIG, true, false);
 			}
 
 			Logging.debug(this, "cellOptions: ", cellOptions);

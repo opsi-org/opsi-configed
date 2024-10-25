@@ -168,10 +168,6 @@ public class MapTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 	}
 
-	public void addEntry(String key, Object newval) {
-		addEntry(key, newval, true);
-	}
-
 	public void removeEntry(String key) {
 		data.remove(key);
 		oridata.remove(key);

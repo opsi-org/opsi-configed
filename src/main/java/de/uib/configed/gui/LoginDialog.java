@@ -266,6 +266,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		// Sets the window on the main screen
 		pack();
 		setLocationRelativeTo(null);
+		setResizable(false);
 		setVisible(true);
 	}
 
