@@ -373,12 +373,12 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private void addConfigurationEntry() {
 		JDialog dialog = new JDialog(ConfigedMain.getMainFrame(), true);
 
-		JLabel labelConfigEntry = new JLabel("Name der config");
+		JLabel labelConfigEntry = new JLabel(Configed.getResourceValue("EditMapPanelX.configName"));
 		labelConfigEntry.setFont(getFont().deriveFont(Font.BOLD));
 
 		JTextField textFieldConfigEntry = new JTextField();
 
-		JLabel labelDescription = new JLabel("Beschreibung");
+		JLabel labelDescription = new JLabel(Configed.getResourceValue("EditMapPanelX.description"));
 		labelDescription.setFont(getFont().deriveFont(Font.BOLD));
 
 		JTextField textFieldDescription = new JTextField();
@@ -434,8 +434,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			return;
 		}
 
-		Logging.info(this, "we create entry ", configName, " with values bool, multivalue, editable", bool, multivalue,
-				editable);
+		Logging.info(this, "we create configuration entry ", configName, " with values bool, multivalue, editable",
+				bool, multivalue, editable);
 
 		ConfigOption configOption = ConfigOption.createConfigOption(description,
 				bool ? TYPE.BOOL_CONFIG : TYPE.UNICODE_CONFIG, editable, multivalue);
