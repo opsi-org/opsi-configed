@@ -255,7 +255,7 @@ public class ConfigedMain {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
 		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
 
-		setRebuiltClientListTableModel(false);
+		setRebuiltClientListTableModel(false, true);
 		clientTablePanel.getClientTable().initSortKeys();
 
 		// We need to make first selected visible again after resetting sortKeys
@@ -775,11 +775,12 @@ public class ConfigedMain {
 		}
 	}
 
-	public void setRebuiltClientListTableModel(boolean restoreSortKeys) {
+	public void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree) {
 		Logging.info(this, "setRebuiltClientListTableModel, we have selected Set : ",
 				clientTablePanel.getClientTable().getSelectedSet());
 
-		setRebuiltClientListTableModel(restoreSortKeys, true, clientTablePanel.getClientTable().getSelectedSet());
+		setRebuiltClientListTableModel(restoreSortKeys, rebuildTree,
+				clientTablePanel.getClientTable().getSelectedSet());
 	}
 
 	private void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
@@ -945,7 +946,7 @@ public class ConfigedMain {
 	public void deactivateFilter() {
 		Logging.info(this, "deactivate filter", clientTablePanel.isFilteredMode());
 		if (clientTablePanel.isFilteredMode()) {
-			setRebuiltClientListTableModel(true, false, clientTablePanel.getClientTable().getSelectedSet());
+			setRebuiltClientListTableModel(true, false);
 		}
 	}
 
@@ -1086,7 +1087,7 @@ public class ConfigedMain {
 		String oldGroupSelection = activatedGroupModel.getGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection ", oldGroupSelection);
 
-		setRebuiltClientListTableModel(true, true, clientTablePanel.getClientTable().getSelectedSet());
+		setRebuiltClientListTableModel(true, true);
 		activateGroup(true, oldGroupSelection);
 	}
 
@@ -1190,7 +1191,7 @@ public class ConfigedMain {
 
 	public void refreshClientListActivateALL() {
 		Logging.info(this, "refreshClientListActivateALL");
-		setRebuiltClientListTableModel(true);
+		setRebuiltClientListTableModel(true, true);
 		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 	}
 

@@ -30,6 +30,6 @@ public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable
 
 	@Override
 	public void setFiltered(boolean b) {
-		configedMain.deactivateFilter();
+		configedMain.setRebuiltClientListTableModel(true, false);
 	}
 }
