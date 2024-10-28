@@ -57,7 +57,7 @@ public final class ServerActionManager {
 
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-			configedMain.setRebuiltClientListTableModel(true);
+			configedMain.setRebuiltClientListTableModel(true, true);
 			configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 			configedMain.setClients(createdClientNames);
 		} else {
@@ -69,7 +69,7 @@ public final class ServerActionManager {
 		Logging.checkErrorList();
 		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-		configedMain.setRebuiltClientListTableModel(true);
+		configedMain.setRebuiltClientListTableModel(true, true);
 
 		if (groups.length == 0 || groups.length > 1 || !configedMain.activateGroup(false, groups[0])) {
 			configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
@@ -298,7 +298,7 @@ public final class ServerActionManager {
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy();
 
-				configedMain.setRebuiltClientListTableModel(true);
+				configedMain.setRebuiltClientListTableModel(true, true);
 				configedMain.activateGroup(false, configedMain.getActivatedGroupModel().getGroupName());
 				configedMain.setClient(newClientNameWithDomain);
 			}
