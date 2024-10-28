@@ -289,7 +289,7 @@ public class FGeneralDialog extends JDialog {
 
 		jPanelButtonGrid.setLayout(new GridLayout());
 
-		jButton1.setMinimumSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
+		jButton1.setMinimumSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 		if (button1Text == null) {
 			jButton1.setText(Configed.getResourceValue("buttonClose"));
@@ -300,7 +300,7 @@ public class FGeneralDialog extends JDialog {
 		jPanelButtonGrid.add(jButton1, null);
 
 		if (noOfButtons > 1) {
-			jButton2.setMinimumSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
+			jButton2.setMinimumSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 			if (button2Text == null) {
 				jButton2.setText(Configed.getResourceValue("FGeneralDialog.ignore"));
@@ -311,7 +311,7 @@ public class FGeneralDialog extends JDialog {
 			jPanelButtonGrid.add(jButton2, null);
 		}
 		if (noOfButtons > 2) {
-			jButton3.setMinimumSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
+			jButton3.setMinimumSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 			if (button3Text == null) {
 				jButton3.setText("");
