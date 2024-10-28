@@ -31,6 +31,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -400,10 +402,29 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		cancel.addActionListener(actionEvent -> dialog.dispose());
 
 		JButton accept = new JButton(Icons.getIntellijIcon("checkmark"));
+		accept.setEnabled(false);
 		accept.addActionListener((ActionEvent e) -> {
-			addEntry(textFieldConfigEntry.getText(), textFieldDescription.getText(), isBoolean.isSelected(),
+			addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(), isBoolean.isSelected(),
 					isMultiValue.isSelected(), isEditable.isSelected());
 			dialog.dispose();
+		});
+
+		// We only want the accept button to be active, when the input for config name is not blank
+		textFieldConfigEntry.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Not needed here
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				accept.setEnabled(!textFieldConfigEntry.getText().isBlank());
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				accept.setEnabled(!textFieldConfigEntry.getText().isBlank());
+			}
 		});
 
 		GroupLayout layout = new GroupLayout(dialog.getContentPane());
@@ -411,8 +432,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelConfigEntry)
 				.addComponent(textFieldConfigEntry).addGap(Globals.MIN_GAP_SIZE * 2).addComponent(labelDescription)
-				.addComponent(textFieldDescription).addComponent(isBoolean).addComponent(isEditable)
-				.addComponent(isMultiValue).addGap(Globals.MIN_GAP_SIZE * 4)
+				.addComponent(textFieldDescription).addGap(Globals.MIN_GAP_SIZE).addComponent(isBoolean)
+				.addComponent(isEditable).addComponent(isMultiValue).addGap(Globals.MIN_GAP_SIZE * 4)
 				.addGroup(layout.createParallelGroup().addComponent(cancel).addComponent(accept)));
 
 		layout.setHorizontalGroup(
