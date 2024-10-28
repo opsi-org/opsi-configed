@@ -194,20 +194,17 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				/////// SYSTEM UUID
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-						Globals.FIRST_LABEL_WIDTH)
+				.addComponent(systemUUIDField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// MAC ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-						Globals.FIRST_LABEL_WIDTH)
+				.addComponent(macAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// IP ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-						Globals.FIRST_LABEL_WIDTH)
+				.addComponent(ipAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// INSTALL BY SHUTDOWN
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
