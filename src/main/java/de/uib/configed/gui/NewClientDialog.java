@@ -49,10 +49,11 @@ import de.uib.utils.swing.SeparatedDocument;
 
 public final class NewClientDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
+	private static final int WIDTH_INPUT_BOX = Globals.BUTTON_WIDTH * 2;
 
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
-	private JTextField jTextGroupsSelection;
+	private JTextField jTextGroupSelection;
 	private JComboBox<String> jComboNetboot;
 	private JTextField jTextHostname;
 	private JTextField jTextDescription;
@@ -133,10 +134,10 @@ public final class NewClientDialog extends FGeneralDialog {
 		jComboDepots = new JComboBox<>(
 				persistenceController.getHostInfoCollections().getDepotNamesList().toArray(new String[0]));
 
-		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
-		jTextGroupsSelection = new JTextField();
-		jTextGroupsSelection.setEditable(false);
-		jTextGroupsSelection.addMouseListener(new MouseAdapter() {
+		JLabel labelGroupSelection = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
+		jTextGroupSelection = new JTextField();
+		jTextGroupSelection.setEditable(false);
+		jTextGroupSelection.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				displayGroupSelectionDialog();
@@ -196,16 +197,16 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		gpl.setHorizontalGroup(gpl.createParallelGroup()
 				/////// HOSTNAME
-				.addGroup(gpl.createSequentialGroup()
-						.addGroup(gpl.createParallelGroup()
-								.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-										jLabelHostname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
-								.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-										jTextHostname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
+				.addGroup(gpl.createSequentialGroup().addGroup(gpl.createParallelGroup()
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelHostname,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jTextHostname,
+								Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
 						.addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(gpl.createParallelGroup()
 								.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-										jLabelDomainname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
+										jLabelDomainname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
 								.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
 										jComboDomain, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
 						.addGap(Globals.MIN_GAP_SIZE))
@@ -213,13 +214,13 @@ public final class NewClientDialog extends FGeneralDialog {
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelDescription, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jTextDescription, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelInventoryNumber, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jTextInventoryNumber, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				/////// NOTES
@@ -227,70 +228,68 @@ public final class NewClientDialog extends FGeneralDialog {
 						.addComponent(jLabelNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(
-						gpl.createSequentialGroup()
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-								.addComponent(jTextNotes, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(jTextNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE))
 				/////// SYSTEM UUID
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
+						.addComponent(systemUUIDField, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				/////// MAC-ADDRESS
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelInfoMac, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(labelInfoMac, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
+						.addComponent(macAddressField, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				/////// IP-ADDRESS
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelIpAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelInfoIP, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(labelInfoIP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
+						.addComponent(ipAddressField, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				/////// InstallByShutdown and WAN
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jCheckShutdownInstall, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCheckWan, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(
+						gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(jCheckShutdownInstall, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(0, 0, Short.MAX_VALUE)
+								.addComponent(jCheckWan, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(0, 0, Short.MAX_VALUE))
 				// depot
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelDepot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jComboDepots, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-								2 * Globals.BUTTON_WIDTH)
+						.addComponent(jComboDepots, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				// group
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelPrimaryGroup, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+						.addComponent(labelGroupSelection, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jTextGroupsSelection, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-								2 * Globals.BUTTON_WIDTH)
+						.addComponent(jTextGroupSelection, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				// netboot
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelNetboot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.GAP_SIZE).addComponent(jComboNetboot, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jComboNetboot, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE)));
+
 		gpl.setVerticalGroup(gpl.createSequentialGroup()
 				/////// HOSTNAME
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -340,12 +339,11 @@ public final class NewClientDialog extends FGeneralDialog {
 										Globals.BUTTON_HEIGHT))
 				/////// group
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(
-						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(labelPrimaryGroup, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT)
-								.addComponent(jTextGroupsSelection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
+				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(labelGroupSelection, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(jTextGroupSelection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				/////// netboot
 				.addGap(Globals.MIN_GAP_SIZE).addGroup(
 						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -367,14 +365,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		groupsSelectionDialog.enableMultiSelection();
 		groupsSelectionDialog.setListData(
 				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
-		groupsSelectionDialog.setPreviousSelectionValues(
-				Arrays.asList(jTextGroupsSelection.getText().replace("; ", ";").split(";")));
+		groupsSelectionDialog
+				.setPreviousSelectionValues(Arrays.asList(jTextGroupSelection.getText().replace("; ", ";").split(";")));
 		groupsSelectionDialog.setVisible(true);
 
 		if (groupsSelectionDialog.getResult() == 2) {
 			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues());
-			jTextGroupsSelection.setText(selectedGroups);
-			jTextGroupsSelection.setToolTipText(
+			jTextGroupSelection.setText(selectedGroups);
+			jTextGroupSelection.setToolTipText(
 					"<html><body><p>" + selectedGroups.replace(";\n", "<br\\ >") + "</p></body></html>");
 		}
 	}
@@ -404,14 +402,13 @@ public final class NewClientDialog extends FGeneralDialog {
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jCSVTemplateLabel)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCSVTemplateButton, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCSVTemplateButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH)
 						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(
-						northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jImportLabel)
-								.addGap(Globals.GAP_SIZE).addComponent(jImportButton, Globals.BUTTON_WIDTH,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)));
+				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jImportLabel)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jImportButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+						.addGap(Globals.MIN_GAP_SIZE)));
 
 		northLayout
 				.setVerticalGroup(
@@ -660,8 +657,8 @@ public final class NewClientDialog extends FGeneralDialog {
 		String macaddress = macAddressField.getText();
 		String ipaddress = ipAddressField.getText();
 		String[] groups;
-		if (!jTextGroupsSelection.getText().isEmpty()) {
-			groups = jTextGroupsSelection.getText().replace("; ", ";").split(";");
+		if (!jTextGroupSelection.getText().isEmpty()) {
+			groups = jTextGroupSelection.getText().replace("; ", ";").split(";");
 		} else {
 			groups = new String[] {};
 		}
