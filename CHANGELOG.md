@@ -8,6 +8,7 @@
 
 ### Changed
 - Move reload and save buttons to top toolbar
+- Some small changes in component and gap sizes
 
 
 ## [4.4.0.8] - 2024-09-25
