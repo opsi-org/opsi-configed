@@ -224,7 +224,7 @@ public class MainPanelManager {
 	private JPanel createPanel(JComponent component, JToolBar toolBar, String title) {
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(
-				titleLabel.getFont().deriveFont(Font.BOLD).deriveFont((float) (titleLabel.getFont().getSize() + 3)));
+				titleLabel.getFont().deriveFont(Font.BOLD).deriveFont((float) (titleLabel.getFont().getSize() + 2)));
 
 		JToolBar generalToolBar = topToolBarManager.createGeneralToolBar();
 
