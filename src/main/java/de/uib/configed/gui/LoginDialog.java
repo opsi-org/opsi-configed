@@ -6,8 +6,10 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -15,10 +17,13 @@ import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -27,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+// import javax.swing.event.ChangeListener;
 
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
@@ -68,6 +74,8 @@ public class LoginDialog extends JFrame {
 	private JButton jButtonCommit;
 	private JButton jButtonSSO;
 
+	private Boolean ssoActiveByServer;
+
 	private KeyAdapter newKeyListener = new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -80,11 +88,24 @@ public class LoginDialog extends JFrame {
 			}
 		}
 	};
+	private FocusListener focusListener = new FocusListener() {
+		@Override
+		public void focusGained(java.awt.event.FocusEvent e) {
+			((FlatTextField) e.getSource()).selectAll();
+		}
+
+		@Override
+		public void focusLost(java.awt.event.FocusEvent e) {
+			Logging.info(this, "focusLost");
+			initSSO();
+		}
+	};
 
 	public LoginDialog(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
 		initGuiElements();
+		initSSO();
 		setupLayout();
 		finishAndMakeVisible();
 
@@ -155,6 +176,7 @@ public class LoginDialog extends JFrame {
 				+ Globals.VERDATE + ") ");
 
 		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
+		fieldHost.addFocusListener(focusListener);
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.getEditor().getEditorComponent().addKeyListener(newKeyListener);
@@ -191,6 +213,24 @@ public class LoginDialog extends JFrame {
 		jButtonSSO.addActionListener(actionEvent -> tryConnecting(true));
 	}
 
+	private void initSSO() {
+		ssoActiveByServer = false;
+		if (!(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))) {
+			Logging.warning(this, "Desktop is not supported or browse action is not supported");
+			return;
+		}
+		ServerFacade serverFacade = new ServerFacade(ConfigedMain.getHost(), false);
+		Map<String, List<String>> headers = serverFacade.getHeaders();
+		if (headers.size() == 0) {
+			Logging.error(this, "Headers not found )even after retrying). Maybe connection problem.");
+		}
+		if (headers.containsKey("X-opsi-auth-methods")) {
+			String authMethods = headers.get("X-opsi-auth-methods").toString();
+			ssoActiveByServer = authMethods.contains("saml");
+		}
+		jButtonSSO.setVisible(ssoActiveByServer);
+	}
+
 	private void showOTPField(boolean show) {
 		if (show) {
 			fieldOTP.setVisible(true);
@@ -211,6 +251,25 @@ public class LoginDialog extends JFrame {
 
 		groupLayout.setHonorsVisibility(false);
 		getContentPane().setLayout(groupLayout);
+		ParallelGroup parGroup = groupLayout.createParallelGroup()
+				.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE);
+		SequentialGroup seqGroup = groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE);
+		if (ssoActiveByServer == null) {
+			initSSO();
+		}
+
+		if (ssoActiveByServer == null || !ssoActiveByServer) {
+			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
+		} else {
+			parGroup.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+					GroupLayout.PREFERRED_SIZE);
+			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
+			seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(Globals.GAP_SIZE);
+		}
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
 				.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -235,14 +294,7 @@ public class LoginDialog extends JFrame {
 
 				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
 
-				.addGroup(groupLayout.createParallelGroup()
-						.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
-
+				.addGroup(parGroup));
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE)
 						.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -268,10 +320,7 @@ public class LoginDialog extends JFrame {
 
 				.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
-						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE)
-						.addComponent(jButtonSSO, 120, 120, 120).addGap(Globals.GAP_SIZE)));
+				.addGroup(seqGroup));
 	}
 
 	private void finishAndMakeVisible() {
@@ -281,7 +330,6 @@ public class LoginDialog extends JFrame {
 
 		setHost("localhost");
 		fieldHost.requestFocus();
-
 		// Sets the window on the main screen
 		pack();
 		setLocationRelativeTo(null);
@@ -342,6 +390,19 @@ public class LoginDialog extends JFrame {
 
 	public void tryConnecting() {
 		tryConnecting(false);
+	}
+
+	public void tryConnectingDependOnServer(boolean requestSSO) {
+		if (ssoActiveByServer == null) {
+			ssoActiveByServer = false;
+			initSSO();
+		}
+
+		if ((ssoActiveByServer == null || !ssoActiveByServer) && requestSSO) {
+			Logging.error("SSO not available. Concider to remove parameter or activate sso for this server.");
+			return;
+		}
+		tryConnecting(true);
 	}
 
 	public void tryConnecting(boolean useSSO) {

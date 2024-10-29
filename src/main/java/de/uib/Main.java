@@ -75,7 +75,7 @@ public class Main {
 				One time password for authentication. DEFAULT: give interactive
 				OTP is a paid feature. Should be used when license is available and OTP is enabled for a user""");
 		options.addOption("sso", "single-sign-on", false, """
-				Enable single sign-on. DEFAULT: disabled
+				Try to connect automatically via single-sign-on (host have to be given). DEFAULT: disabled
 				""");
 		options.addOption("s", "savedstates", true,
 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");

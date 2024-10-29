@@ -74,10 +74,17 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public boolean useSAML = false;
 
 	public ServerFacade(String host) {
+		this(host, true);
+	}
+
+	public ServerFacade(String host, boolean connect) {
 		if (host == null) {
 			throw new IllegalArgumentException("All or some parameters are null");
 		}
-		connect(host, null, null, null, true);
+		this.host = host;
+		if (connect) {
+			connect(host, null, null, null, true);
+		}
 	}
 
 	/**
@@ -117,11 +124,35 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		if (useSAML && !connectSAML()) {
 			Logging.error("SAML connection failed");
 			return;
-			// throw new RuntimeException("SAML connection failed");
 		}
 		checkServerVersion();
 
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+	}
+
+	public Map<String, List<String>> getHeaders() {
+		Map<String, String> requestProperties = new HashMap<>();
+		requestProperties.put("Accept", "application/json");
+		if (sessionId != null) {
+			requestProperties.put("Cookie", sessionId);
+		}
+		URL url = makeURL("/auth/session_id");
+		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
+		HttpsURLConnection connection = handler.establishConnection(true);
+		conStat = handler.getConnectionState();
+		if (connection == null) {
+			Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
+					conStat.getState());
+			return new HashMap<>();
+		}
+		Map<String, List<String>> result = new HashMap<>();
+		try {
+			handleResponseCode(connection);
+			result = connection.getHeaderFields();
+		} catch (IOException ex) {
+			Logging.error(this, ex, "Exception while trying to get headers");
+		}
+		return result;
 	}
 
 	private synchronized boolean connectSAML() {
@@ -221,7 +252,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private Map<String, String> produceGeneralRequestProperties(OpsiMethodCall omc) {
 		Map<String, String> requestProperties = new HashMap<>();
-		if (!useSAML) { // cookie is used for SAML
+		if (!useSAML) {
 			String authorization = Base64.getEncoder()
 					.encodeToString((username + ":" + password + otp).getBytes(StandardCharsets.UTF_8));
 			requestProperties.put("Authorization", "Basic " + authorization);
@@ -249,7 +280,18 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private String produceBaseURL(String rpcPath) {
-		return "https://" + host + ":" + portHTTPS + rpcPath;
+		String url;
+		// if (host.contains("://") && host.contains(":")) {
+		// 	url = host + '/' + rpcPath;
+		// } else 
+		if (host.contains("://")) {
+			url = host + ":" + portHTTPS + rpcPath;
+		} else if (host.contains(":")) {
+			url = "https://" + host + rpcPath;
+		} else {
+			url = "https://" + host + ":" + portHTTPS + rpcPath;
+		}
+		return url;
 	}
 
 	private URL makeURL() {
@@ -259,6 +301,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private URL makeURL(String urlpath) {
 		URL serviceURL = null;
 		String baseURL = produceBaseURL(urlpath);
+		Logging.debug("baseURL ", baseURL);
 
 		try {
 			serviceURL = new URI(baseURL).toURL();

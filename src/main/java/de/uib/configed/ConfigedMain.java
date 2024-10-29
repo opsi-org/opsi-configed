@@ -567,14 +567,16 @@ public class ConfigedMain {
 
 		loginDialog.setVisible(true);
 
-		if (host == null)
+		if (host == null) {
 			throw new RuntimeException("host is null");
-		if (!useSSO && (user == null || password == null))
-			throw new RuntimeException("user or password is null");
-		// This must be called last, so that loading frame for connection is called last
-		// and on top of the login-frame
-		Logging.info(this, "loginDialog tryConnecting with sso ", useSSO);
-		loginDialog.tryConnecting(useSSO);
+		} else if (!useSSO && (user == null || password == null)) {
+			Logging.warning(this, "user or password not given (yet)");
+		} else {
+			// This must be called last, so that loading frame for connection is called last
+			// and on top of the login-frame
+			Logging.info(this, "loginDialog tryConnecting with sso ", useSSO);
+			loginDialog.tryConnectingDependOnServer(useSSO);
+		}
 	}
 
 	public void setPersistenceController(OpsiServiceNOMPersistenceController persistenceController) {
