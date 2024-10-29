@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
@@ -20,7 +21,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FEditStringList;
 import de.uib.utils.table.DefaultListModelProducer;
@@ -83,45 +87,57 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+		String key = (String) table.getValueAt(row, 0);
+		if (Utils.isKeyForSecretValue(key)) {
+			if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+					.isGlobalReadOnly()) {
+				Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
+				return null;
+			}
+
+			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
+					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"), JOptionPane.YES_NO_OPTION);
+
+			Logging.info(this, " getTableCellEditorComponent, celleditor working, returned option ", returnedOption);
+			if (returnedOption != JOptionPane.YES_OPTION) {
+				return null;
+			}
+		}
+
 		Logging.debug(this, "  celleditor working in ", row, ", ", column, " with value ", value, ", class ",
 				value.getClass().getName());
 
 		List<String> val = modelProducer.toList(value);
 
-		// is now always
-		if (val instanceof List) {
-			ListModel<String> model = modelProducer.getListModel(row, column);
-			Logging.debug(this, " try list editing, modelproducer tells nullable ",
-					modelProducer.isNullable(row, column));
-			listeditor.setVisible(false);
-			listeditor.setTitle(modelProducer.getCaption(row, column));
+		ListModel<String> model = modelProducer.getListModel(row, column);
+		Logging.debug(this, " try list editing, modelproducer tells nullable ", modelProducer.isNullable(row, column));
+		listeditor.setVisible(false);
+		listeditor.setTitle(modelProducer.getCaption(row, column));
 
-			if (model != null) {
-				Logging.debug(this, "Selected values: ", val);
+		if (model != null) {
+			Logging.debug(this, "Selected values: ", val);
 
-				listeditor.setListModel(model);
-				listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
-				listeditor.setEditable(modelProducer.isEditable(row, column));
-				listeditor.setNullable(modelProducer.isNullable(row, column));
-				listeditor.setSelectedValues(val);
-				listeditor.enter();
+			listeditor.setListModel(model);
+			listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
+			listeditor.setEditable(modelProducer.isEditable(row, column));
+			listeditor.setNullable(modelProducer.isNullable(row, column));
+			listeditor.setSelectedValues(val);
 
-				startListEditor();
+			startListEditor();
 
-				editingRow = row;
-			} else {
-				model = new DefaultListModel<>();
-				listeditor.setListModel(model);
-				listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-				listeditor.setEditable(true);
-				listeditor.setSelectedValues(new ArrayList<>());
-				listeditor.enter();
-				listeditor.setStartValue("");
+			editingRow = row;
+		} else {
+			model = new DefaultListModel<>();
+			listeditor.setListModel(model);
+			listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			listeditor.setEditable(true);
+			listeditor.setSelectedValues(new ArrayList<>());
+			listeditor.setStartValue("");
 
-				startListEditor();
+			startListEditor();
 
-				editingRow = -1;
-			}
+			editingRow = -1;
 		}
 
 		field.setText("" + value);
@@ -133,36 +149,30 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public Object getCellEditorValue() {
 		Object result = null;
 
-		if (listeditor.getValue() == null) {
-			result = null;
-		} else if (listeditor.getValue() instanceof List) {
-			List<?> list = (List<?>) listeditor.getValue();
+		List<?> list = listeditor.getSelectedList();
 
-			if (list.isEmpty()) {
-				result = list;
-			} else if (List.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
-				result = list;
-			} else if (Integer.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
-				result = list.get(0);
-			} else if (Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
-				result = list.get(0);
-			} else {
-				StringBuilder buf = new StringBuilder();
-
-				for (int i = 0; i < list.size() - 1; i++) {
-					buf.append("" + list.get(i) + ",");
-				}
-
-				buf.append("" + list.get(list.size() - 1));
-
-				result = buf.toString();
-
-				if ("null".equalsIgnoreCase((String) result)) {
-					result = null;
-				}
-			}
+		if (list.isEmpty()) {
+			result = list;
+		} else if (List.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+			result = list;
+		} else if (Integer.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+			result = list.get(0);
+		} else if (Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow))) {
+			result = list.get(0);
 		} else {
-			result = listeditor.getValue();
+			StringBuilder buf = new StringBuilder();
+
+			for (int i = 0; i < list.size() - 1; i++) {
+				buf.append("" + list.get(i) + ",");
+			}
+
+			buf.append("" + list.get(list.size() - 1));
+
+			result = buf.toString();
+
+			if ("null".equalsIgnoreCase((String) result)) {
+				result = null;
+			}
 		}
 
 		return result;

@@ -57,7 +57,7 @@ public final class ServerActionManager {
 
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-			configedMain.setRebuiltClientListTableModel(true);
+			configedMain.setRebuiltClientListTableModel(true, true);
 			configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 			configedMain.setClients(createdClientNames);
 		} else {
@@ -69,7 +69,7 @@ public final class ServerActionManager {
 		Logging.checkErrorList();
 		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-		configedMain.setRebuiltClientListTableModel(true);
+		configedMain.setRebuiltClientListTableModel(true, true);
 
 		if (groups.length == 0 || groups.length > 1 || !configedMain.activateGroup(false, groups[0])) {
 			configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
@@ -204,9 +204,7 @@ public final class ServerActionManager {
 
 		persistenceController.getHostDataService().deleteClients(configedMain.getSelectedClients());
 
-		if (configedMain.getClientTablePanel().isFilteredMode()) {
-			configedMain.toggleFilterClientList(true);
-		}
+		configedMain.deactivateFilter();
 
 		configedMain.refreshClientListKeepingGroup();
 	}
@@ -256,10 +254,8 @@ public final class ServerActionManager {
 				additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelHostname).addGap(Globals.GAP_SIZE).addComponent(jTextHostname));
 		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-				.addComponent(jLabelHostname)
-				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2)
-				.addComponent(jTextHostname));
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(jLabelHostname)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(jTextHostname));
 
 		FTextArea fAskCopyClient = new FTextArea(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuCopyClient"), true,
@@ -300,7 +296,7 @@ public final class ServerActionManager {
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
 				copyClient.copy();
 
-				configedMain.setRebuiltClientListTableModel(true);
+				configedMain.setRebuiltClientListTableModel(true, true);
 				configedMain.activateGroup(false, configedMain.getActivatedGroupModel().getGroupName());
 				configedMain.setClient(newClientNameWithDomain);
 			}

@@ -31,7 +31,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Utils;
-import de.uib.utils.datapanel.MapTableModel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
 
@@ -420,7 +419,7 @@ public class ConfigDataService {
 		List<Map<String, Object>> callsConfigDeleteCollection = new ArrayList<>();
 
 		for (Map<String, Object> callConfig : configCollection) {
-			if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
+			if (callConfig.get("defaultValues") == null) {
 				callsConfigDeleteCollection.add(callConfig);
 			} else if (!restrictToMissing || usedConfigIds.contains(callConfig.get("ident"))) {
 				callConfig.put("defaultValues", callConfig.get("defaultValues"));
@@ -791,19 +790,17 @@ public class ConfigDataService {
 
 			List<?> valueList = (List<?>) configState.get("values");
 
-			if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
-				typesOfUsedConfigIds.put(ident, "BoolConfig");
-			} else {
-				typesOfUsedConfigIds.put(ident, "UnicodeConfig");
-			}
-
-			if (valueList.equals(MapTableModel.nullLIST)) {
+			if (valueList == null) {
 				Map<String, Object> item = Utils.createNOMitem("ConfigState");
 				item.put("objectId", configState.get("objectId"));
 				item.put("configId", configState.get("configId"));
 
 				deleteConfigStateItems.add(item);
 				doneList.add(configState);
+			} else if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
+				typesOfUsedConfigIds.put(ident, "BoolConfig");
+			} else {
+				typesOfUsedConfigIds.put(ident, "UnicodeConfig");
 			}
 		}
 
@@ -848,19 +845,11 @@ public class ConfigDataService {
 			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		}
 
-		// build calls
-		List<Map<String, Object>> callsConfigName2ConfigValueCollection = new ArrayList<>();
-
-		for (Map<String, Object> state : configStateCollection) {
-			state.put("values", state.get("values"));
-			callsConfigName2ConfigValueCollection.add(state);
-		}
-
 		// do call
-		if (!callsConfigName2ConfigValueCollection.isEmpty()) {
+		if (!configStateCollection.isEmpty()) {
 			// now we can set the values and clear the collected update items
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-					new Object[] { callsConfigName2ConfigValueCollection }));
+					new Object[] { configStateCollection }));
 		}
 	}
 

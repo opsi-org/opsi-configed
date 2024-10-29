@@ -19,8 +19,6 @@ public interface ListModelProducer<O> {
 
 	boolean isEditable(int row, int column);
 
-	List<O> getSelectedValues(int row, int column);
-
 	String getCaption(int row, int column);
 
 	List<O> toList(Object value);

@@ -8,11 +8,9 @@ package de.uib.configed.gui;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.List;
@@ -47,11 +45,12 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.userprefs.UserPreferences;
 
-public class LoginDialog extends JFrame {
+public class LoginDialog extends JFrame implements KeyListener {
 	private ConfigedMain configedMain;
 	private OpsiServiceNOMPersistenceController persistenceController;
 
@@ -75,20 +74,7 @@ public class LoginDialog extends JFrame {
 	private JButton jButtonSSO;
 
 	private Boolean ssoActiveByServer;
-
-	private KeyAdapter newKeyListener = new KeyAdapter() {
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				tryConnecting();
-			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				endProgram();
-			} else {
-				// Do nothing with other keys
-			}
-		}
-	};
-	private FocusListener focusListener = new FocusListener() {
+	private FocusListener myFocusListener = new FocusListener() {
 		@Override
 		public void focusGained(java.awt.event.FocusEvent e) {
 			((FlatTextField) e.getSource()).selectAll();
@@ -107,6 +93,8 @@ public class LoginDialog extends JFrame {
 		initGuiElements();
 		initSSO();
 		setupLayout();
+		setServers();
+
 		finishAndMakeVisible();
 
 		initGlassPane();
@@ -119,15 +107,18 @@ public class LoginDialog extends JFrame {
 	}
 
 	public void setHost(String host) {
-		if (host == null) {
-			host = "";
-		}
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
 	}
 
-	public void setServers(List<String> hosts) {
-		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray(new String[0])));
+	private void setServers() {
+		List<String> savedServers = Utils.readLocallySavedServerNames();
+
+		if (savedServers.isEmpty()) {
+			savedServers.add("localhost");
+		}
+
+		fieldHost.setModel(new DefaultComboBoxModel<>(savedServers.toArray(new String[0])));
 	}
 
 	public void setUser(String user) {
@@ -176,32 +167,27 @@ public class LoginDialog extends JFrame {
 				+ Globals.VERDATE + ") ");
 
 		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
-		fieldHost.addFocusListener(focusListener);
+		fieldHost.addFocusListener(myFocusListener);
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
-		fieldHost.getEditor().getEditorComponent().addKeyListener(newKeyListener);
+		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
-		fieldUser.addKeyListener(newKeyListener);
-		fieldUser.setMargin(new Insets(0, 3, 0, 3));
+		fieldUser.addKeyListener(this);
 
 		passwordField.setPlaceholderText(Configed.getResourceValue("password"));
-		passwordField.addKeyListener(newKeyListener);
-		passwordField.setMargin(new Insets(0, 3, 0, 3));
+		passwordField.addKeyListener(this);
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, true));
 		fieldOTP.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderOTP"));
-		fieldOTP.addKeyListener(newKeyListener);
+		fieldOTP.addKeyListener(this);
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
 		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
 		checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
-		checkUseOTP.addItemListener((ItemEvent event) -> {
-			showOTPField(checkUseOTP.isSelected());
-			UserPreferences.setBoolean(UserPreferences.OTP, checkUseOTP.isSelected());
-		});
+		checkUseOTP.addItemListener(itemEvent -> showOTPField(checkUseOTP.isSelected()));
 		checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
 
 		jButtonCancel = new JButton(Configed.getResourceValue("LoginDialog.jButtonCancel"));
@@ -241,6 +227,8 @@ public class LoginDialog extends JFrame {
 			fieldOTP.setPreferredSize(new Dimension(0, 0));
 			setSize(getPreferredSize());
 		}
+
+		UserPreferences.setBoolean(UserPreferences.OTP, show);
 	}
 
 	private void setupLayout() {
@@ -328,7 +316,6 @@ public class LoginDialog extends JFrame {
 		String osVersion = System.getProperty("os.version");
 		Logging.notice(" OS ", strOS, "  Version ", osVersion);
 
-		setHost("localhost");
 		fieldHost.requestFocus();
 		// Sets the window on the main screen
 		pack();
@@ -451,5 +438,26 @@ public class LoginDialog extends JFrame {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			endProgram();
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			tryConnecting();
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			endProgram();
+		} else {
+			// Do nothing with other keys
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// Not needed here
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// Not needed here
 	}
 }

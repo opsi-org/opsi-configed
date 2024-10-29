@@ -31,7 +31,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
@@ -85,14 +84,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
 
-	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, final DefaultEditMapPanel.Actor actor,
-			boolean configStatesEditable) {
-		super(tableCellRenderer, true);
+	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean configStatesEditable) {
+		super(true);
 
 		this.actor = actor;
 		this.configStatesEditable = configStatesEditable;
 
-		buildPanel();
+		setupLayout();
 
 		setupPopups();
 		setupPopupTexts();
@@ -313,8 +311,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		givenClasses.remove(key);
 	}
 
-	@Override
-	protected void buildPanel() {
+	private void setupLayout() {
 		splitPane = new JSplitPane();
 
 		tree = new XTree();
@@ -394,7 +391,6 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		}
 	}
 
-	@Override
 	public void setLabel(String s) {
 		if (treemodel == null) {
 			return;
@@ -448,8 +444,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, reloadable, tree,
-					configStatesEditable, includeAdditionalTooltipText);
+			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(reloadable, tree, configStatesEditable,
+					includeAdditionalTooltipText);
 
 			editMapPanel.setActor(actor);
 			editMapPanel.setOriginalMap(originalMap);

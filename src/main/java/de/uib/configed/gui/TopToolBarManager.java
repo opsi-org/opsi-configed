@@ -10,10 +10,14 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -31,8 +35,44 @@ public class TopToolBarManager {
 		this.configedMain = configedMain;
 	}
 
+	public JToolBar createGeneralToolBar() {
+		JButton jButtonReload = new JButton(Icons.getIntellijIcon("refresh", 24));
+		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
+		jButtonReload.addActionListener(event -> configedMain.reload());
+
+		JButton jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save", Globals.OPSI_ERROR, 24));
+		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
+		jButtonSaveConfiguration.setEnabled(false);
+		jButtonSaveConfiguration.addActionListener(event -> ChangedDataManager.checkSaveAll(false));
+		jButtonSaveConfiguration.addAncestorListener(new AncestorListener() {
+
+			@Override
+			public void ancestorAdded(AncestorEvent event) {
+				// This method is called, when an ancestor of this button is shown.
+				// So we set this button as the shown save button
+				ChangedDataManager.setShownSaveButton(jButtonSaveConfiguration);
+			}
+
+			@Override
+			public void ancestorMoved(AncestorEvent event) {
+				// We don't need this here
+			}
+
+			@Override
+			public void ancestorRemoved(AncestorEvent event) {
+				// We don't need this here
+			}
+		});
+
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(jButtonReload);
+		jToolBar.add(jButtonSaveConfiguration);
+
+		return jToolBar;
+	}
+
 	public JToolBar getOpsiLicensingToolBar(OpsiLicensing opsiLicensing) {
-		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh"));
+		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
 		reloadButton.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
@@ -46,7 +86,7 @@ public class TopToolBarManager {
 	}
 
 	public JToolBar getHealthCheckToolBar(HealthCheck healthCheck) {
-		JButton downloadButton = new JButton(Icons.getIntellijIcon("download"));
+		JButton downloadButton = new JButton(Icons.getIntellijIcon("download", 24));
 		downloadButton.setToolTipText(Configed.getResourceValue("download"));
 		downloadButton.addActionListener(actionEvent -> healthCheck.saveAsZip());
 
@@ -57,13 +97,13 @@ public class TopToolBarManager {
 	}
 
 	public JToolBar getConfigurationToolBar() {
-		JButton addClientButton = new JButton(Icons.getIntellijIcon("add"));
+		JButton addClientButton = new JButton(Icons.getIntellijIcon("add", 24));
 		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
 		addClientButton.addActionListener(event -> ExtraFrameController.callNewClientDialog());
 		addClientButton.setEnabled(!persistenceController.getConfigDataService().getDisabledClientMenuEntries()
 				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT));
 
-		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search"));
+		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search", 24));
 		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		clientSearchButton.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
@@ -75,7 +115,7 @@ public class TopToolBarManager {
 	}
 
 	public JToolBar getLicensingManagementToolbar(MainPanelManager mainPanelManager) {
-		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh"));
+		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		reloadButton.addActionListener(event -> mainPanelManager.reloadLicensesAction());
 

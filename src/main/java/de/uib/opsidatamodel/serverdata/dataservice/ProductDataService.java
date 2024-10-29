@@ -25,7 +25,6 @@ import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
-import de.uib.configed.type.RetrievedMap;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -39,7 +38,6 @@ import de.uib.opsidatamodel.serverdata.Object2Product2VersionList;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
-import de.uib.utils.datapanel.MapTableModel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.userprefs.UserPreferences;
@@ -1186,31 +1184,26 @@ public class ProductDataService {
 	}
 
 	// collect productPropertyState updates and deletions
-	public void setProductProperties(String pcname, String productname, Map<?, ?> properties,
+	public void setProductProperties(String pcname, String productId, ConfigName2ConfigValue configProperties,
 			List<Map<String, Object>> updateCollection, List<Map<String, Object>> deleteCollection) {
-		if (!(properties instanceof ConfigName2ConfigValue)) {
-			Logging.warning(this, "! properties instanceof ConfigName2ConfigValue ");
-			return;
-		}
-
-		for (Entry<?, ?> propertyEntry : properties.entrySet()) {
+		for (Entry<?, ?> propertyEntry : configProperties.entrySet()) {
 			String propertyId = (String) propertyEntry.getKey();
 
 			List<?> newValue = (List<?>) propertyEntry.getValue();
 
-			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
+			Map<String, Object> retrievedConfig = configProperties.getRetrieved();
 			Object oldValue = retrievedConfig == null ? null : retrievedConfig.get(propertyId);
 
 			if (newValue != oldValue) {
 				Map<String, Object> state = new HashMap<>();
 				state.put("type", "ProductPropertyState");
 				state.put("objectId", pcname);
-				state.put("productId", productname);
+				state.put("productId", productId);
 				state.put("propertyId", propertyId);
 
-				if (newValue == null || newValue.equals(MapTableModel.nullLIST)) {
+				if (newValue == null) {
 					Logging.debug(this, "setProductProperties,  requested deletion ", newValue);
-					deleteState(state, deleteCollection, retrievedConfig, propertyId);
+					deleteState(state, deleteCollection, retrievedConfig, productId, propertyId, configProperties);
 				} else {
 					Logging.debug(this, "setProductProperties,  requested update ", newValue, " for oldValue ",
 							oldValue);
@@ -1222,13 +1215,17 @@ public class ProductDataService {
 		}
 	}
 
-	private static void deleteState(Map<String, Object> state, List<Map<String, Object>> deleteCollection,
-			Map<String, Object> retrievedConfig, String propertyId) {
+	private void deleteState(Map<String, Object> state, List<Map<String, Object>> deleteCollection,
+			Map<String, Object> retrievedConfig, String productId, String propertyId,
+			ConfigName2ConfigValue properties) {
 		deleteCollection.add(state);
+
+		Object defaultValue = getDefaultProductPropertiesPD(depotDataService.getDepot()).get(productId).get(propertyId);
+		properties.put(propertyId, defaultValue);
 
 		// we hope that the update works and directly update the retrievedConfig
 		if (retrievedConfig != null) {
-			retrievedConfig.remove(propertyId);
+			retrievedConfig.put(propertyId, defaultValue);
 		}
 	}
 
@@ -1244,7 +1241,7 @@ public class ProductDataService {
 	}
 
 	// collect productPropertyState updates and deletions in standard lists
-	public void setProductProperties(String pcname, String productname, Map<?, ?> properties) {
+	public void setProductProperties(String pcname, String productname, ConfigName2ConfigValue properties) {
 		// old version
 
 		if (productPropertyStateUpdateCollection == null) {
@@ -1293,7 +1290,7 @@ public class ProductDataService {
 
 		// collect updates for all clients
 		for (String client : clientNames) {
-			Map<String, Object> newdata = new ConfigName2ConfigValue(null);
+			ConfigName2ConfigValue newdata = new ConfigName2ConfigValue(null);
 
 			newdata.put(propertyName, values);
 
@@ -1366,7 +1363,7 @@ public class ProductDataService {
 		return result;
 	}
 
-	public String getProductHint(String product) {
+	public String getProductAdvice(String product) {
 		Map<String, Map<String, Object>> productGlobalInfos = getProductGlobalInfosPD(depotDataService.getDepot());
 		return (String) productGlobalInfos.get(product).get(OpsiProductInfo.SERVICE_KEY_PRODUCT_ADVICE);
 	}

@@ -33,7 +33,6 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
@@ -129,10 +128,6 @@ public class MainFrame extends JFrame {
 		return clientTablePanel;
 	}
 
-	public ClientMenuManager getClientMenu() {
-		return clientMenu;
-	}
-
 	public ClientConfiguration getClientConfiguration() {
 		return mainPanelManager.getClientConfiguration();
 	}
@@ -224,15 +219,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public boolean checkSaveLicenses() {
-		boolean checkSavedLicensesFrame = mainPanelManager.checkSavedLicenses();
-
-		if (!checkSavedLicensesFrame) {
-			configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
-		}
-
-		Logging.info(this, "close instance result ", checkSavedLicensesFrame);
-
-		return checkSavedLicensesFrame;
+		return mainPanelManager.checkSavedLicenses();
 	}
 
 	private static void restartConfiged() {
@@ -579,7 +566,6 @@ public class MainFrame extends JFrame {
 		Logging.debug(this, "saveConfigurationsSetEnabled ", b);
 
 		jMenuFileSaveConfigurations.setEnabled(b);
-		leftControlBar.enableSaveButton(b);
 	}
 
 	public void activateLoadingPane(String infoText) {

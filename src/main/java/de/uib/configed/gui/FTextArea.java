@@ -48,7 +48,6 @@ public class FTextArea extends FGeneralDialog {
 			int preferredHeight, JPanel addPane) {
 		super(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight, false,
 				addPane);
-		super.checkAdditionalPane();
 		initFTextArea(preferredWidth, preferredHeight);
 	}
 

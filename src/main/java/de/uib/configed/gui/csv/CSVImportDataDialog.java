@@ -7,9 +7,11 @@
 package de.uib.configed.gui.csv;
 
 import java.awt.event.ItemEvent;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -34,6 +36,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.FTextArea;
+import de.uib.configed.type.HostInfo;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
@@ -344,5 +348,46 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	public CSVImportDataModifier getModifier() {
 		return modifier;
+	}
+
+	public static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
+		Logging.info("createCSVImportDataDialog for file ", csvFile);
+		List<String> columnNames = HostInfo.getKeysForCSV();
+		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
+		try {
+			csvFormatDetector.detectFormat(csvFile);
+			if (csvFormatDetector.hasHeader() && !csvFormatDetector.hasExpectedHeaderNames(columnNames)) {
+				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
+						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
+								+ columnNames.toString().replace("[", "").replace("]", ""));
+				return null;
+			}
+		} catch (IOException e) {
+			Logging.error(e, "Unable to detect format of CSV file");
+		}
+
+		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
+				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().build();
+		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
+		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
+		JPanel centerPanel = csvImportDataDialog.initPanel();
+
+		if (centerPanel == null) {
+			return null;
+		}
+
+		csvImportDataDialog.setCenterPaneInScrollpane(centerPanel);
+		csvImportDataDialog.setupLayout();
+		csvImportDataDialog.setDetectedOptions();
+
+		return csvImportDataDialog;
+	}
+
+	private static void displayInfoDialog(String title, String message) {
+		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title, false,
+				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
+		fInfo.setMessage(message);
+		fInfo.setAlwaysOnTop(true);
+		fInfo.setVisible(true);
 	}
 }

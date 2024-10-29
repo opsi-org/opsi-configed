@@ -14,7 +14,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -24,7 +23,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -32,6 +30,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
@@ -40,7 +39,6 @@ import de.uib.utils.swing.FEditText;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.DefaultListCellOptions;
 import de.uib.utils.table.ListCellOptions;
-import de.uib.utils.table.ListModelProducer;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.SensitiveCellEditor;
 
@@ -50,9 +48,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	protected JTable table;
 
 	private TableColumn editableColumn;
-	private TableCellEditor theCellEditor;
+	private SensitiveCellEditor sensitiveCellEditor;
 
-	private ListModelProducer<String> modelProducer;
+	private ListModelProducerForVisualDatamap<String> modelProducer;
 
 	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupItemDeleteEntry1;
@@ -105,9 +103,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private AbstractPropertyHandler removingSpecificValuesPropertyHandler;
 	private AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
-	public EditMapPanelX(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean entryRemovable,
-			boolean reloadable) {
-		super(tableCellRenderer, reloadable);
+	public EditMapPanelX(boolean keylistExtendible, boolean entryRemovable, boolean reloadable) {
+		super(reloadable);
 
 		Logging.debug(this, " created EditMapPanelX", keylistExtendible, ",  ", entryRemovable, ",  ", reloadable);
 		ToolTipManager ttm = ToolTipManager.sharedInstance();
@@ -118,15 +115,11 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		buildPanel();
 
-		theCellEditor = new SensitiveCellEditorForDataPanel();
+		sensitiveCellEditor = new SensitiveCellEditor();
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
-		if (tableCellRenderer == null) {
-			editableColumn.setCellRenderer(new ColorTableCellRenderer());
-		} else {
-			editableColumn.setCellRenderer(tableCellRenderer);
-		}
+		editableColumn.setCellRenderer(new PropertiesTableCellRenderer());
 
 		popupMenu = definePopup();
 
@@ -144,19 +137,19 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			popupItemAddStringListEntry = new JMenuItem(
 					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
+			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor(false, false));
 			popupMenu.add(popupItemAddStringListEntry);
 
 			popupItemAddStringListEntry = new JMenuItem(
 					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
+			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor(false, true));
 			popupMenu.add(popupItemAddStringListEntry);
 
 			popupItemAddBooleanListEntry = new JMenuItem(
 					Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
-			popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean", false));
+			popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor(true, false));
 			popupMenu.add(popupItemAddBooleanListEntry);
 
 			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
@@ -270,7 +263,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	@Override
 	protected void buildPanel() {
 		setLayout(new BorderLayout());
 
@@ -358,32 +350,20 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		cancelOldCellEditing();
 
 		if (optionsMap != null) {
-			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
-				Logging.debug(this, " key ", option.getKey(), " is nullable ", option.getValue().isNullable());
-			}
-
 			modelProducer = new ListModelProducerForVisualDatamap<>(table, optionsMap, visualdata);
+			mapTableModel.setModelProducer(modelProducer);
 		}
 
 		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
-		if (modelProducer != null) {
-			Logging.debug(this, "setEditableMap test modelProducer ", modelProducer.getClass());
-		}
 
-		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
+		sensitiveCellEditor.setModelProducer(modelProducer);
+		sensitiveCellEditor.reInit();
 
-		if (theCellEditor instanceof SensitiveCellEditor sensitiveCellEditor) {
-			sensitiveCellEditor.setModelProducer(modelProducer);
-			sensitiveCellEditor.reInit();
-		}
-
-		editableColumn.setCellEditor(theCellEditor);
+		editableColumn.setCellEditor(sensitiveCellEditor);
 	}
 
 	public void cancelOldCellEditing() {
-		if (theCellEditor instanceof SensitiveCellEditor sensitiveCellEditor) {
-			sensitiveCellEditor.hideListEditor();
-		}
+		sensitiveCellEditor.hideListEditor();
 	}
 
 	private boolean checkKey(String s) {
@@ -402,11 +382,10 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		return ok;
 	}
 
-	private void addEntryFor(final String classname, final boolean multiselection) {
+	private void addEntryFor(final boolean isBoolean, final boolean multiselection) {
 		String initial = "";
-		int row = table.getSelectedRow();
-		if (row > -1) {
-			initial = (String) table.getValueAt(row, 0);
+		if (table.getSelectedRowCount() > 0) {
+			initial = (String) table.getValueAt(table.getSelectedRow(), 0);
 		}
 
 		FEditText fed = new FEditText(initial, Configed.getResourceValue("EditMapPanel.KeyToAdd")) {
@@ -417,7 +396,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 				if (checkKey(s)) {
 					setVisible(false);
-					if ("java.lang.Boolean".equals(classname)) {
+					if (isBoolean) {
 						addBooleanProperty(s);
 					} else if (multiselection) {
 						addEmptyPropertyMultiSelection(s);
@@ -445,7 +424,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		addProperty(key, val);
 		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptions());
 		mapTableModel.setMap(mapTableModel.getData());
-		((ListModelProducerForVisualDatamap<String>) modelProducer).setData(optionsMap, mapTableModel.getData());
+		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}
 
 	private void addEmptyPropertyMultiSelection(String key) {
@@ -454,7 +433,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		addProperty(key, val);
 		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptionsMultiSelection());
 		mapTableModel.setMap(mapTableModel.getData());
-		((ListModelProducerForVisualDatamap<String>) modelProducer).setData(optionsMap, mapTableModel.getData());
+		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}
 
 	private void addBooleanProperty(String key) {
@@ -463,7 +442,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		addProperty(key, val);
 		optionsMap.put(key, DefaultListCellOptions.getNewBooleanListCellOptions());
 		mapTableModel.setMap(mapTableModel.getData());
-		((ListModelProducerForVisualDatamap<String>) modelProducer).setData(optionsMap, mapTableModel.getData());
+		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}
 
 	/**

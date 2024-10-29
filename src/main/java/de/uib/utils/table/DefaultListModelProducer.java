@@ -37,11 +37,6 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 	}
 
 	@Override
-	public List<O> getSelectedValues(int row, int column) {
-		return new ArrayList<>();
-	}
-
-	@Override
 	public String getCaption(int row, int column) {
 		return "";
 	}

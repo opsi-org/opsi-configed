@@ -17,7 +17,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utils.DataChangedObserver;
@@ -37,7 +36,7 @@ public class PanelHostProperties extends JPanel {
 
 	private void buildPanel() {
 		Logging.info(this, "buildPanel, produce editMapPanel");
-		editMapPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
+		editMapPanel = new EditMapPanelX(false, false, false);
 		editMapPanel.setShowToolTip(false);
 
 		GroupLayout planeLayout = new GroupLayout(this);

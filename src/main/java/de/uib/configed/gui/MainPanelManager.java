@@ -18,8 +18,11 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.itextpdf.text.Font;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.gui.licenses.LicenseManagement;
@@ -50,7 +53,6 @@ public class MainPanelManager {
 	private JPanel licensingInfoPanel;
 
 	private JPanel healthCheckPanel;
-	private HealthCheck healthCheck;
 
 	private JPanel licenseManagementPanel;
 	private LicenseManagement licenseManagement;
@@ -191,9 +193,9 @@ public class MainPanelManager {
 	}
 
 	public JPanel getHealthCheckPanel() {
-		Logging.info(this, "init health check ", healthCheck);
+		Logging.info(this, "init health check panel", healthCheckPanel);
 		if (healthCheckPanel == null) {
-			healthCheck = new HealthCheck();
+			HealthCheck healthCheck = new HealthCheck();
 			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckToolBar(healthCheck),
 					Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		}
@@ -202,7 +204,7 @@ public class MainPanelManager {
 	}
 
 	public JPanel getLicenseManagementPanel() {
-		if (licenseManagement == null) {
+		if (licenseManagementPanel == null) {
 			// show Loading pane only when something needs to be loaded from server
 			ConfigedMain.getMainFrame().activateLoadingPane(Configed.getResourceValue("ConfigedMain.Licenses.Loading"));
 			long startmillis = System.currentTimeMillis();
@@ -219,20 +221,25 @@ public class MainPanelManager {
 		return licenseManagementPanel;
 	}
 
-	private static JPanel createPanel(JComponent component, JToolBar toolBar, String title) {
+	private JPanel createPanel(JComponent component, JToolBar toolBar, String title) {
 		JLabel titleLabel = new JLabel(title);
+		titleLabel.setFont(
+				titleLabel.getFont().deriveFont(Font.BOLD).deriveFont((float) (titleLabel.getFont().getSize() + 2)));
+
+		JToolBar generalToolBar = topToolBarManager.createGeneralToolBar();
 
 		JPanel panel = new JPanel();
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(toolBar).addComponent(titleLabel))
+		layout.setVerticalGroup(layout
+				.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(generalToolBar).addComponent(titleLabel).addComponent(toolBar))
 				.addComponent(component));
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addComponent(toolBar)
+				.addGroup(layout.createSequentialGroup().addComponent(generalToolBar)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(titleLabel)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(toolBar))
 				.addComponent(component));
 
 		return panel;
@@ -250,16 +257,16 @@ public class MainPanelManager {
 		depotConfigurationSplitPane = null;
 		serverConfiguration = null;
 
-		if (dashboard != null) {
+		if (dashboardPanel != null) {
 			// We need to clear all data, otherwise they will be kept
 			dashboard.clearAllData();
 			dashboardPanel = null;
 		}
 
 		licensingInfoPanel = null;
-		healthCheck = null;
+		healthCheckPanel = null;
 
-		licenseManagement = null;
+		licenseManagementPanel = null;
 	}
 
 	public void reloadLicensesAction() {
@@ -269,7 +276,7 @@ public class MainPanelManager {
 			@Override
 			public void run() {
 				persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
-				licenseManagement = null;
+				licenseManagementPanel = null;
 				ConfigedMain.getMainFrame().startLicensingManagement();
 				ConfigedMain.getMainFrame().deactivateLoadingPane();
 			}
@@ -277,6 +284,14 @@ public class MainPanelManager {
 	}
 
 	public boolean checkSavedLicenses() {
-		return licenseManagement == null || licenseManagement.checkSavedLicensesPane();
+		boolean checkSavedLicensesFrame = licenseManagement == null || licenseManagement.checkSavedLicensesPane();
+
+		if (!checkSavedLicensesFrame) {
+			configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
+		}
+
+		Logging.info(this, "close instance result ", checkSavedLicensesFrame);
+
+		return checkSavedLicensesFrame;
 	}
 }

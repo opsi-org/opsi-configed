@@ -23,7 +23,6 @@ import de.uib.configed.ChangedDataManager;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ClientConfiguration;
 import de.uib.configed.gui.DepotsList;
-import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -60,7 +59,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		GenTableModel model = createTableModel();
 		final List<String> columnNames = model.getColumnNames();
 
-		EditMapPanelX propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
+		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);

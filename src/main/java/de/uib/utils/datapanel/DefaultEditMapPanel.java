@@ -6,7 +6,6 @@
 
 package de.uib.utils.datapanel;
 
-import java.awt.BorderLayout;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.function.Function;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
-import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.Configed;
 import de.uib.utils.DataChangedObserver;
@@ -40,8 +38,6 @@ public class DefaultEditMapPanel extends JPanel {
 	protected Map<String, ListCellOptions> optionsMap;
 	protected Map<String, String> descriptionsMap;
 	protected Map<String, Object> defaultsMap;
-
-	protected TableCellRenderer tableCellRenderer;
 
 	private static class DefaultPropertyHandler extends AbstractPropertyHandler {
 		@Override
@@ -82,21 +78,16 @@ public class DefaultEditMapPanel extends JPanel {
 
 	protected final AbstractPropertyHandler defaultPropertyHandler;
 
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean reloadable) {
+	public DefaultEditMapPanel(boolean reloadable) {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
 		this.reloadable = reloadable;
 
-		this.tableCellRenderer = tableCellRenderer;
 		Logging.debug(this, "DefaultEditMapPanel reloadable:", reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
 		propertyHandler = defaultPropertyHandler;
-	}
-
-	protected void buildPanel() {
-		setLayout(new BorderLayout());
 	}
 
 	public void init() {
@@ -144,9 +135,6 @@ public class DefaultEditMapPanel extends JPanel {
 		this.actor = actor;
 	}
 
-	public void setLabel(String s) {
-		/* Not needed */}
-
 	public void setValues(Map<String, Object> data) {
 		if (data == null) {
 			return;
@@ -158,7 +146,13 @@ public class DefaultEditMapPanel extends JPanel {
 	}
 
 	public void resetDefaults() {
+		for (String key : names) {
+			mapTableModel.addEntry(key, defaultsMap.get(key), true);
+		}
+
+		mapTableModel.unsetWrite();
 		setValues(defaultsMap);
+		mapTableModel.setWrite();
 	}
 
 	public void setVoid() {

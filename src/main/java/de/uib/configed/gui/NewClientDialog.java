@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -33,17 +32,13 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import org.apache.commons.csv.CSVFormat;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.ServerActionManager;
-import de.uib.configed.gui.csv.CSVFormatDetector;
 import de.uib.configed.gui.csv.CSVImportDataDialog;
 import de.uib.configed.gui.csv.CSVImportDataModifier;
 import de.uib.configed.gui.csv.CSVTemplateCreatorDialog;
-import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -54,10 +49,11 @@ import de.uib.utils.swing.SeparatedDocument;
 
 public final class NewClientDialog extends FGeneralDialog {
 	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
+	private static final int WIDTH_INPUT_BOX = Globals.BUTTON_WIDTH * 2;
 
 	private JComboBox<String> jComboDomain;
 	private JComboBox<String> jComboDepots;
-	private JTextField jTextGroupsSelection;
+	private JTextField jTextGroupSelection;
 	private JComboBox<String> jComboNetboot;
 	private JTextField jTextHostname;
 	private JTextField jTextDescription;
@@ -70,7 +66,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	private JCheckBox jCheckShutdownInstall;
 
 	private List<String> domains;
-	private List<String> newDomainsList;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -93,7 +88,6 @@ public final class NewClientDialog extends FGeneralDialog {
 	 * @since 4.0.7.6.11
 	 */
 	public void setDomains() {
-		this.domains = newDomainsList;
 		jComboDomain.setModel(new DefaultComboBoxModel<>(domains.toArray(new String[0])));
 	}
 
@@ -117,9 +111,10 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private void init() {
 		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("NewClientDialog.hostname"));
-		jTextHostname = new JTextField(new CheckedDocument(/* allowedChars */ new char[] { '-', '0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-				'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }, -1), "", 17);
+		jTextHostname = new JTextField(new CheckedDocument(
+				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
+				-1), "", 17);
 		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
 
 		JLabel jLabelDomainname = new JLabel(Configed.getResourceValue("NewClientDialog.domain"));
@@ -139,10 +134,10 @@ public final class NewClientDialog extends FGeneralDialog {
 		jComboDepots = new JComboBox<>(
 				persistenceController.getHostInfoCollections().getDepotNamesList().toArray(new String[0]));
 
-		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
-		jTextGroupsSelection = new JTextField();
-		jTextGroupsSelection.setEditable(false);
-		jTextGroupsSelection.addMouseListener(new MouseAdapter() {
+		JLabel labelGroupSelection = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
+		jTextGroupSelection = new JTextField();
+		jTextGroupSelection.setEditable(false);
+		jTextGroupSelection.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				displayGroupSelectionDialog();
@@ -172,20 +167,21 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel jLabelSystemUUID = new JLabel(Configed.getResourceValue("NewClientDialog.SystemUUID"));
 
-		systemUUIDField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
-				36);
+		systemUUIDField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36,
+				Character.MIN_VALUE, 36, true), "", 36);
 
 		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
 
-		macAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
+		macAddressField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':',
+				2, true), "", 17);
 
 		JLabel jLabelIpAddress = new JLabel(Configed.getResourceValue("NewClientDialog.IpAddress"));
 
-		ipAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
-				"", 24);
+		ipAddressField = new JTextField(new SeparatedDocument(
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
+				28, Character.MIN_VALUE, 4, false), "", 24);
 
 		jCheckShutdownInstall = new JCheckBox(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
@@ -201,16 +197,16 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		gpl.setHorizontalGroup(gpl.createParallelGroup()
 				/////// HOSTNAME
-				.addGroup(gpl.createSequentialGroup()
-						.addGroup(gpl.createParallelGroup()
-								.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-										jLabelHostname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
-								.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-										jTextHostname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
+				.addGroup(gpl.createSequentialGroup().addGroup(gpl.createParallelGroup()
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jLabelHostname,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jTextHostname,
+								Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
 						.addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(gpl.createParallelGroup()
 								.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-										jLabelDomainname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
+										jLabelDomainname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
 								.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
 										jComboDomain, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
 						.addGap(Globals.MIN_GAP_SIZE))
@@ -218,13 +214,13 @@ public final class NewClientDialog extends FGeneralDialog {
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelDescription, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jTextDescription, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelInventoryNumber, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jTextInventoryNumber, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				/////// NOTES
@@ -232,68 +228,68 @@ public final class NewClientDialog extends FGeneralDialog {
 						.addComponent(jLabelNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.GAP_SIZE - 2, Globals.GAP_SIZE - 2, Globals.GAP_SIZE - 2)
-						.addComponent(jTextNotes, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE - 2, Globals.GAP_SIZE - 2, Globals.GAP_SIZE - 2))
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(jTextNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE))
 				/////// SYSTEM UUID
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
+						.addComponent(systemUUIDField, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				/////// MAC-ADDRESS
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelInfoMac, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(labelInfoMac, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
+						.addComponent(macAddressField, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				/////// IP-ADDRESS
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelIpAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelInfoIP, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(labelInfoIP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-								Globals.FIRST_LABEL_WIDTH)
+						.addComponent(ipAddressField, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				/////// InstallByShutdown and WAN
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jCheckShutdownInstall, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCheckWan, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(
+						gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(jCheckShutdownInstall, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(0, 0, Short.MAX_VALUE)
+								.addComponent(jCheckWan, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(0, 0, Short.MAX_VALUE))
 				// depot
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelDepot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jComboDepots, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-								2 * Globals.BUTTON_WIDTH)
+						.addComponent(jComboDepots, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				// group
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelPrimaryGroup, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+						.addComponent(labelGroupSelection, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jTextGroupsSelection, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-								2 * Globals.BUTTON_WIDTH)
+						.addComponent(jTextGroupSelection, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE))
 				// netboot
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelNetboot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.GAP_SIZE).addComponent(jComboNetboot, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jComboNetboot, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 						.addGap(Globals.MIN_GAP_SIZE)));
+
 		gpl.setVerticalGroup(gpl.createSequentialGroup()
 				/////// HOSTNAME
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -314,8 +310,8 @@ public final class NewClientDialog extends FGeneralDialog {
 						.addComponent(jTextInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT))
 				/////// NOTES
-				.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelNotes).addComponent(jTextNotes)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(jLabelNotes)
+				.addComponent(jTextNotes)
 				/////// SYSTEM UUID
 				.addGap(Globals.GAP_SIZE).addGroup(gpl.createParallelGroup().addComponent(jLabelSystemUUID))
 				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -343,12 +339,11 @@ public final class NewClientDialog extends FGeneralDialog {
 										Globals.BUTTON_HEIGHT))
 				/////// group
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(
-						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(labelPrimaryGroup, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT)
-								.addComponent(jTextGroupsSelection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
+				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(labelGroupSelection, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(jTextGroupSelection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				/////// netboot
 				.addGap(Globals.MIN_GAP_SIZE).addGroup(
 						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -370,20 +365,20 @@ public final class NewClientDialog extends FGeneralDialog {
 		groupsSelectionDialog.enableMultiSelection();
 		groupsSelectionDialog.setListData(
 				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
-		groupsSelectionDialog.setPreviousSelectionValues(
-				Arrays.asList(jTextGroupsSelection.getText().replace("; ", ";").split(";")));
+		groupsSelectionDialog
+				.setPreviousSelectionValues(Arrays.asList(jTextGroupSelection.getText().replace("; ", ";").split(";")));
 		groupsSelectionDialog.setVisible(true);
 
 		if (groupsSelectionDialog.getResult() == 2) {
 			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues());
-			jTextGroupsSelection.setText(selectedGroups);
-			jTextGroupsSelection.setToolTipText(
+			jTextGroupSelection.setText(selectedGroups);
+			jTextGroupSelection.setToolTipText(
 					"<html><body><p>" + selectedGroups.replace(";\n", "<br\\ >") + "</p></body></html>");
 		}
 	}
 
 	private void initComboDomain() {
-		newDomainsList = persistenceController.getConfigDataService().getDomains();
+		domains = persistenceController.getConfigDataService().getDomains();
 
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
@@ -393,7 +388,7 @@ public final class NewClientDialog extends FGeneralDialog {
 	private void createNorthPanel() {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
-		jCSVTemplateButton.addActionListener(actionEvent -> displayCSVTemplateDialog());
+		jCSVTemplateButton.addActionListener(actionEvent -> CSVTemplateCreatorDialog.displayCSVTemplateDialog());
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
@@ -407,14 +402,13 @@ public final class NewClientDialog extends FGeneralDialog {
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jCSVTemplateLabel)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCSVTemplateButton, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCSVTemplateButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH)
 						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(
-						northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jImportLabel)
-								.addGap(Globals.GAP_SIZE).addComponent(jImportButton, Globals.BUTTON_WIDTH,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)));
+				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jImportLabel)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jImportButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+						.addGap(Globals.MIN_GAP_SIZE)));
 
 		northLayout
 				.setVerticalGroup(
@@ -510,7 +504,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		Logging.debug(this, "createClient editableDomains ", editableDomains);
 
-		newDomainsList = editableDomains;
+		domains = editableDomains;
 
 		setDomains();
 
@@ -626,7 +620,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
 			}
-			CSVImportDataDialog csvImportDataDialog = createCSVImportDataDialog(csvFile);
+			CSVImportDataDialog csvImportDataDialog = CSVImportDataDialog.createCSVImportDataDialog(csvFile);
 
 			if (csvImportDataDialog == null) {
 				return;
@@ -639,57 +633,6 @@ public final class NewClientDialog extends FGeneralDialog {
 				createClients(rows);
 			}
 		}
-	}
-
-	private static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
-		Logging.info("createCSVImportDataDialog for file ", csvFile);
-		List<String> columnNames = HostInfo.getKeysForCSV();
-		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
-		try {
-			csvFormatDetector.detectFormat(csvFile);
-			if (csvFormatDetector.hasHeader() && !csvFormatDetector.hasExpectedHeaderNames(columnNames)) {
-				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
-						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
-								+ columnNames.toString().replace("[", "").replace("]", ""));
-				return null;
-			}
-		} catch (IOException e) {
-			Logging.error(e, "Unable to detect format of CSV file");
-		}
-
-		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
-				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().build();
-		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
-		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
-		JPanel centerPanel = csvImportDataDialog.initPanel();
-
-		if (centerPanel == null) {
-			return null;
-		}
-
-		csvImportDataDialog.setCenterPaneInScrollpane(centerPanel);
-		csvImportDataDialog.setupLayout();
-		csvImportDataDialog.setDetectedOptions();
-
-		return csvImportDataDialog;
-	}
-
-	private static void displayInfoDialog(String title, String message) {
-		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title, false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-		fInfo.setMessage(message);
-		fInfo.setAlwaysOnTop(true);
-		fInfo.setVisible(true);
-	}
-
-	private static void displayCSVTemplateDialog() {
-		List<String> columnNames = HostInfo.getKeysForCSV();
-		CSVTemplateCreatorDialog dialog = new CSVTemplateCreatorDialog(columnNames);
-		JPanel centerPanel = dialog.initPanel();
-		dialog.setCenterPaneInScrollpane(centerPanel);
-		dialog.setupLayout();
-		dialog.setSize(1000, 420);
-		dialog.setVisible(true);
 	}
 
 	@Override
@@ -714,8 +657,8 @@ public final class NewClientDialog extends FGeneralDialog {
 		String macaddress = macAddressField.getText();
 		String ipaddress = ipAddressField.getText();
 		String[] groups;
-		if (!jTextGroupsSelection.getText().isEmpty()) {
-			groups = jTextGroupsSelection.getText().replace("; ", ";").split(";");
+		if (!jTextGroupSelection.getText().isEmpty()) {
+			groups = jTextGroupSelection.getText().replace("; ", ";").split(";");
 		} else {
 			groups = new String[] {};
 		}
