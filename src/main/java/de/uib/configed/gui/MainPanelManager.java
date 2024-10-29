@@ -18,6 +18,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.itextpdf.text.Font;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
@@ -221,6 +223,9 @@ public class MainPanelManager {
 
 	private JPanel createPanel(JComponent component, JToolBar toolBar, String title) {
 		JLabel titleLabel = new JLabel(title);
+		titleLabel.setFont(
+				titleLabel.getFont().deriveFont(Font.BOLD).deriveFont((float) (titleLabel.getFont().getSize() + 3)));
+
 		JToolBar generalToolBar = topToolBarManager.createGeneralToolBar();
 
 		JPanel panel = new JPanel();

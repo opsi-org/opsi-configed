@@ -36,11 +36,11 @@ public class TopToolBarManager {
 	}
 
 	public JToolBar createGeneralToolBar() {
-		JButton jButtonReload = new JButton(Icons.getIntellijIcon("refresh"));
+		JButton jButtonReload = new JButton(Icons.getIntellijIcon("refresh", 24));
 		jButtonReload.setToolTipText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jButtonReload.addActionListener(event -> configedMain.reload());
 
-		JButton jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save", Globals.OPSI_ERROR));
+		JButton jButtonSaveConfiguration = new JButton(Icons.getIntellijIcon("save", Globals.OPSI_ERROR, 24));
 		jButtonSaveConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"));
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener(event -> ChangedDataManager.checkSaveAll(false));
@@ -72,7 +72,7 @@ public class TopToolBarManager {
 	}
 
 	public JToolBar getOpsiLicensingToolBar(OpsiLicensing opsiLicensing) {
-		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh"));
+		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
 		reloadButton.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
@@ -86,7 +86,7 @@ public class TopToolBarManager {
 	}
 
 	public JToolBar getHealthCheckToolBar(HealthCheck healthCheck) {
-		JButton downloadButton = new JButton(Icons.getIntellijIcon("download"));
+		JButton downloadButton = new JButton(Icons.getIntellijIcon("download", 24));
 		downloadButton.setToolTipText(Configed.getResourceValue("download"));
 		downloadButton.addActionListener(actionEvent -> healthCheck.saveAsZip());
 
@@ -97,13 +97,13 @@ public class TopToolBarManager {
 	}
 
 	public JToolBar getConfigurationToolBar() {
-		JButton addClientButton = new JButton(Icons.getIntellijIcon("add"));
+		JButton addClientButton = new JButton(Icons.getIntellijIcon("add", 24));
 		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
 		addClientButton.addActionListener(event -> ExtraFrameController.callNewClientDialog());
 		addClientButton.setEnabled(!persistenceController.getConfigDataService().getDisabledClientMenuEntries()
 				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT));
 
-		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search"));
+		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search", 24));
 		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		clientSearchButton.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
@@ -115,7 +115,7 @@ public class TopToolBarManager {
 	}
 
 	public JToolBar getLicensingManagementToolbar(MainPanelManager mainPanelManager) {
-		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh"));
+		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		reloadButton.addActionListener(event -> mainPanelManager.reloadLicensesAction());
 
