@@ -502,7 +502,7 @@ public class ConfigedMain {
 		loginDialog.setVisible(true);
 
 		if (host == null) {
-			throw new RuntimeException("host is null");
+			Logging.warning(this, "host is not set (yet)");
 		} else if (!useSSO && (user == null || password == null)) {
 			Logging.warning(this, "user or password not given (yet)");
 		} else {

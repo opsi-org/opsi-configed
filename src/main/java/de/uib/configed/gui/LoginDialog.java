@@ -77,12 +77,11 @@ public class LoginDialog extends JFrame implements KeyListener {
 	private FocusListener myFocusListener = new FocusListener() {
 		@Override
 		public void focusGained(java.awt.event.FocusEvent e) {
-			((FlatTextField) e.getSource()).selectAll();
+			fieldHost.getEditor().selectAll();
 		}
 
 		@Override
 		public void focusLost(java.awt.event.FocusEvent e) {
-			Logging.info(this, "focusLost");
 			initSSO();
 		}
 	};
@@ -91,9 +90,12 @@ public class LoginDialog extends JFrame implements KeyListener {
 		super();
 		this.configedMain = configedMain;
 		initGuiElements();
-		initSSO();
+		if (ConfigedMain.getHost() != null) {
+			initSSO();
+		}
 		setupLayout();
 		setServers();
+		initSSO();
 
 		finishAndMakeVisible();
 
@@ -109,6 +111,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	public void setHost(String host) {
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
+		initSSO();
 	}
 
 	private void setServers() {
@@ -167,10 +170,11 @@ public class LoginDialog extends JFrame implements KeyListener {
 				+ Globals.VERDATE + ") ");
 
 		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
-		fieldHost.addFocusListener(myFocusListener);
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
+		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
+		fieldHost.addActionListener(actionEvent -> initSSO());
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(this);
@@ -205,16 +209,18 @@ public class LoginDialog extends JFrame implements KeyListener {
 			Logging.warning(this, "Desktop is not supported or browse action is not supported");
 			return;
 		}
-		ServerFacade serverFacade = new ServerFacade(ConfigedMain.getHost(), false);
+		String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
+		Logging.info("get auth info for ", host);
+		ServerFacade serverFacade = new ServerFacade(host, false);
 		Map<String, List<String>> headers = serverFacade.getHeaders();
-		if (headers.size() == 0) {
-			Logging.error(this, "Headers not found )even after retrying). Maybe connection problem.");
-		}
+
 		if (headers.containsKey("X-opsi-auth-methods")) {
 			String authMethods = headers.get("X-opsi-auth-methods").toString();
 			ssoActiveByServer = authMethods.contains("saml");
+			Logging.debug("Authentication methods for host ", host, ": ", authMethods);
 		}
 		jButtonSSO.setVisible(ssoActiveByServer);
+		setupLayout();
 	}
 
 	private void showOTPField(boolean show) {
@@ -239,25 +245,21 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 		groupLayout.setHonorsVisibility(false);
 		getContentPane().setLayout(groupLayout);
-		ParallelGroup parGroup = groupLayout.createParallelGroup()
-				.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE);
+		ParallelGroup parGroup = groupLayout.createParallelGroup().addComponent(jButtonCancel,
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
 		SequentialGroup seqGroup = groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE);
-		if (ssoActiveByServer == null) {
-			initSSO();
-		}
 
 		if (ssoActiveByServer == null || !ssoActiveByServer) {
 			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
 		} else {
 			parGroup.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 					GroupLayout.PREFERRED_SIZE);
-			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
-			seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(Globals.GAP_SIZE);
+			seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
+			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
 		}
+		parGroup.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
 				.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

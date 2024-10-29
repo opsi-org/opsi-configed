@@ -79,7 +79,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	public ServerFacade(String host, boolean connect) {
 		if (host == null) {
-			throw new IllegalArgumentException("All or some parameters are null");
+			return;
+			// throw new IllegalArgumentException("All or some parameters are null");
 		}
 		this.host = host;
 		if (connect) {
@@ -102,6 +103,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private synchronized void connect(String host, String username, String password, String otp, boolean useSAML) {
+		Logging.warning("CALLING CONNECT ", host, " ", username, " ", password, " ", otp, " ", useSAML);
 		this.useSAML = useSAML;
 		this.host = host;
 		int idx = -1;
