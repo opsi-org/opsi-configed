@@ -4,6 +4,9 @@
 ### Fixed
 - Correctly fix default values as specific values for product property states on clients and depots
 
+### Changed
+- Health Check now works with new opsiconfd version
+
 ## [4.3.3.18] - 2024-09-27
 ### Fixed
 - Nullpointerexception when user is not in group opsi admin
