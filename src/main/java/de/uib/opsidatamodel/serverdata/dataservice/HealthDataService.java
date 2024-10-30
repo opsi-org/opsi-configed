@@ -75,7 +75,7 @@ public class HealthDataService {
 	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {
 		List<Map<String, Object>> result = new ArrayList<>();
 		for (Map<String, Object> data : checkHealthPD()) {
-			if (((String) data.get("check_id")).equals(checkId)) {
+			if (((Map<?, ?>) data.get("check")).get("id").equals(checkId)) {
 				result = POJOReMapper.remap(data.get("partial_results"));
 				break;
 			}

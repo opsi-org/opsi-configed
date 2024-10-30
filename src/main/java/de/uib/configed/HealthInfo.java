@@ -65,7 +65,7 @@ public final class HealthInfo {
 			info.put("message", produceMessages(data));
 			info.put("details", produceHealthDetails(data));
 			info.put("showDetails", includeDetailedInformation);
-			result.put((String) data.get("check_name"), info);
+			result.put((String) ((Map<?, ?>) data.get("check")).get("name"), info);
 		}
 
 		return result;
@@ -73,7 +73,7 @@ public final class HealthInfo {
 
 	private static String produceMessages(Map<String, Object> healthData) {
 		StringBuilder messageBuilder = new StringBuilder();
-		messageBuilder.append((String) healthData.get("check_name") + ": ");
+		messageBuilder.append((String) ((Map<?, ?>) healthData.get("check")).get("name") + ": ");
 		messageBuilder.append(((String) healthData.get("check_status")).toUpperCase(Locale.ROOT) + " ");
 		messageBuilder.append("\n\t");
 		messageBuilder.append((String) healthData.get("message"));
@@ -84,7 +84,8 @@ public final class HealthInfo {
 
 	private static String produceHealthDetails(Map<String, Object> healthData) {
 		List<Map<String, Object>> healthDetails = persistenceController.getHealthDataService()
-				.retrieveHealthDetails((String) healthData.get("check_id"));
+				.retrieveHealthDetails((String) ((Map<?, ?>) healthData.get("check")).get("id"));
+
 		if (healthDetails.isEmpty()) {
 			return "";
 		}
