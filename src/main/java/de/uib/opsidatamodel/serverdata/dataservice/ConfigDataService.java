@@ -860,7 +860,7 @@ public class ConfigDataService {
 
 		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
 		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
-			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
+			value = (Boolean) ((List<?>) hostConfig.get(key)).get(0);
 			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', value: ", value);
 			if (value != null) {
 				return value;
