@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.3.x.x] - 2024-xx-xx
+## [4.3.3.19] - 2024-10-30
 ### Fixed
 - Correctly fix default values as specific values for product property states on clients and depots
 
