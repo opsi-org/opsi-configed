@@ -77,7 +77,13 @@ public class HealthDataService {
 	public List<Map<String, Object>> retrieveHealthDetails(String checkId) {
 		List<Map<String, Object>> result = new ArrayList<>();
 		for (Map<String, Object> data : checkHealthPD()) {
-			if (((Map<?, ?>) data.get("check")).get("id").equals(checkId)) {
+			boolean equals;
+			if (data.containsKey("check")) {
+				equals = ((Map<?, ?>) data.get("check")).get("id").equals(checkId);
+			} else {
+				equals = data.get("check_id").equals(checkId);
+			}
+			if (equals) {
 				result = POJOReMapper.remap(data.get("partial_results"),
 						new TypeReference<List<Map<String, Object>>>() {
 						});
