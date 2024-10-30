@@ -554,11 +554,7 @@ public class HostInfo {
 	private void setClientWANConfig(ClientTablePanel clientTablePanel, String client, Map<?, ?> sourceOfChanges,
 			int row) {
 		if (sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY) != null) {
-			boolean wanStandard = false;
-
-			if ("true".equals(sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY))) {
-				wanStandard = true;
-			}
+			boolean wanStandard = "true".equals(sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY));
 
 			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
