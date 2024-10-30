@@ -860,7 +860,7 @@ public class ConfigDataService {
 
 		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
 		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
-			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
+			value = (Boolean) ((List<?>) hostConfig.get(key)).get(0);
 			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', value: ", value);
 			if (value != null) {
 				return value;
@@ -995,22 +995,21 @@ public class ConfigDataService {
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
 		Boolean val = defaultVal;
-		Object obj = getConfigOptionsPD().get(key);
+		ConfigOption configOption = getConfigOptionsPD().get(key);
 
-		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "'='", obj, "'");
-		if (obj == null) {
+		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "'='", configOption, "'");
+		if (configOption == null) {
 			Logging.warning(this, "getGlobalBooleanConfigValue '", key, "' is null, returning default value: ", val);
 			return val;
 		}
 
-		ConfigOption option = (ConfigOption) obj;
-		if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
+		if (configOption.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
 			Logging.warning(this, "getGlobalBooleanConfigValue type of '", key, "' should be boolean, but is ",
-					option.getType(), ", returning default value: ", val);
+					configOption.getType(), ", returning default value: ", val);
 			return val;
 		}
 
-		List<Object> values = option.getDefaultValues();
+		List<Object> values = configOption.getDefaultValues();
 		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "' defaultValues: ", values);
 		if (values != null && !values.isEmpty()) {
 			val = (Boolean) values.get(0);

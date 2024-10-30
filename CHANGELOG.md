@@ -1,4 +1,4 @@
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.9] - 2024-30-10
 ### Fixed
 - Correct path for saving certificates when entering port in login dialog
 - Start configed when trusting the certificate once
@@ -9,7 +9,7 @@
 ### Changed
 - Move reload and save buttons to top toolbar
 - Some small changes in component and gap sizes
-
+- Health Check now works with new opsiconfd version
 
 ## [4.4.0.8] - 2024-09-25
 ### Changed

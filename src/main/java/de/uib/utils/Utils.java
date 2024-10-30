@@ -333,26 +333,6 @@ public final class Utils {
 		return item;
 	}
 
-	public static Boolean interpretAsBoolean(Object ob, Boolean defaultValue) {
-		Boolean result = false;
-
-		if (ob == null) {
-			result = defaultValue;
-		} else if (ob instanceof Boolean b) {
-			result = b;
-		} else if (ob instanceof Integer integer) {
-			result = integer == 1;
-		} else if (ob instanceof String string) {
-			result = "1".equals(string);
-		} else {
-			/* Not foreseen value. */
-			Logging.warning("could not find boolean in interpretAsBoolean, returning false");
-			result = false;
-		}
-
-		return result;
-	}
-
 	public static String getSavedStatesDefaultLocation() {
 		String result;
 
