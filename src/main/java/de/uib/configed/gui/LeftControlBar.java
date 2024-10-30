@@ -7,11 +7,9 @@
 package de.uib.configed.gui;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -28,17 +26,7 @@ public class LeftControlBar extends JToolBar {
 		super(SwingConstants.VERTICAL);
 
 		this.configedMain = configedMain;
-		initOpsiIcon();
 		initControlIcons();
-	}
-
-	private void initOpsiIcon() {
-		JLabel opsiIconLabel = new JLabel(Icons.getOpsiIcon(32));
-		opsiIconLabel.setToolTipText(Globals.APPNAME + " " + Globals.VERSION + " (" + Globals.VERDATE + ")");
-
-		// We need here exactly 5 Pixels border so that the icon will be centered in the JToolBar
-		opsiIconLabel.setBorder(new EmptyBorder(0, 5, 0, 0));
-		add(opsiIconLabel);
 	}
 
 	private void initControlIcons() {
@@ -88,7 +76,6 @@ public class LeftControlBar extends JToolBar {
 		buttonGroup.add(jButtonHealthCheck);
 		buttonGroup.add(jButtonLicenses);
 
-		addSeparator();
 		add(jButtonClientsConfiguration);
 		add(jButtonDepotsConfiguration);
 		add(jButtonServerConfiguration);
