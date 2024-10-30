@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.9] - 2024-30-10
 ### Fixed
 - Correct path for saving certificates when entering port in login dialog
 - Start configed when trusting the certificate once
