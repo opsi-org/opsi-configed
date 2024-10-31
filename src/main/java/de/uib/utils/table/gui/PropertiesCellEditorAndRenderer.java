@@ -232,7 +232,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 			result = rendererCheckBox;
 		} else {
-			rendererLabel.setText((String) formatList(value));
+			rendererLabel.setText(formatList(value));
 
 			result = rendererLabel;
 		}
@@ -242,15 +242,8 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return result;
 	}
 
-	public static Object formatList(Object value) {
-		Object result = value;
-		if (value != null) {
-			String s = value.toString();
-			if (s.length() >= 2 && s.charAt(0) == '[' && s.charAt(s.length() - 1) == ']') {
-				result = s.substring(1, s.length() - 1);
-			}
-		}
-
-		return result;
+	public static String formatList(Object value) {
+		String s = value.toString();
+		return s.substring(1, s.length() - 1);
 	}
 }

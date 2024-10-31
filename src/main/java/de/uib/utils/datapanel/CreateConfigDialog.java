@@ -33,6 +33,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSelectionList;
 import de.uib.utils.Icons;
+import de.uib.utils.table.gui.PropertiesCellEditorAndRenderer;
 
 public class CreateConfigDialog extends JDialog {
 	private EditMapPanelX editMapPanelX;
@@ -67,7 +68,7 @@ public class CreateConfigDialog extends JDialog {
 
 		initPanel();
 
-		super.pack();
+		super.setSize(300, 300);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setResizable(false);
 		super.setVisible(true);
@@ -83,7 +84,9 @@ public class CreateConfigDialog extends JDialog {
 		GroupLayout layout = new GroupLayout(booleanDetailsPanel);
 		booleanDetailsPanel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createParallelGroup().addComponent(defaultLabel).addComponent(booleanDefault));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup().addComponent(defaultLabel).addComponent(booleanDefault))
+				.addGap(0, 0, Short.MAX_VALUE));
 		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(defaultLabel)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(booleanDefault));
 	}
@@ -100,15 +103,26 @@ public class CreateConfigDialog extends JDialog {
 		JTextField defaultValuesTextField = createTextFieldAssociated(defaultValuesSelectionDialog);
 		JTextField possibleValuesTextField = createTextFieldAssociated(possibleValuesSelectionDialog);
 
+		JLabel defaultValuesLabel = new JLabel("default values");
+		defaultValuesLabel.setFont(defaultValuesLabel.getFont().deriveFont(Font.BOLD));
+
+		JLabel possibleValuesLabel = new JLabel("possible values");
+		possibleValuesLabel.setFont(possibleValuesLabel.getFont().deriveFont(Font.BOLD));
+
 		unicodeDetailsPanel = new JPanel();
 		GroupLayout layout = new GroupLayout(unicodeDetailsPanel);
 		unicodeDetailsPanel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(isEditable).addComponent(isMultiValue)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(defaultValuesTextField).addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(possibleValuesTextField).addGap(0, 0, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(isEditable)
+				.addComponent(isMultiValue).addGap(Globals.MIN_GAP_SIZE).addComponent(defaultValuesLabel)
+				.addComponent(defaultValuesTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(possibleValuesLabel).addComponent(possibleValuesTextField,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(0, 0, Short.MAX_VALUE));
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(isEditable).addComponent(isMultiValue)
-				.addComponent(defaultValuesTextField).addComponent(possibleValuesTextField));
+				.addComponent(defaultValuesLabel).addComponent(defaultValuesTextField).addComponent(possibleValuesLabel)
+				.addComponent(possibleValuesTextField));
 	}
 
 	private JTextField createTextFieldAssociated(FSelectionList fSelectionList) {
@@ -125,14 +139,16 @@ public class CreateConfigDialog extends JDialog {
 	}
 
 	private void activateSelection(FSelectionList fSelectionList, JTextField jTextField) {
-		fSelectionList.setSize(400, 500);
+		fSelectionList.setSize(300, 400);
 		fSelectionList.setLocationRelativeTo(this);
-		fSelectionList.setVisible(true);
 
+		// We need to call this before setVisible
 		List<String> savedSelectedValues = fSelectionList.getSelectedValues();
 
-		if (fSelectionList.getResult() != 2) {
-			jTextField.setText(fSelectionList.getSelectedValues().toString());
+		fSelectionList.setVisible(true);
+
+		if (fSelectionList.getResult() == 2) {
+			jTextField.setText(PropertiesCellEditorAndRenderer.formatList(fSelectionList.getSelectedValues()));
 		} else {
 			DefaultListModel<String> model = new DefaultListModel<>();
 			model.addAll(savedSelectedValues);
@@ -189,9 +205,13 @@ public class CreateConfigDialog extends JDialog {
 		GroupLayout layout = new GroupLayout(generalPanel);
 		generalPanel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelConfigEntry)
-				.addComponent(textFieldConfigEntry).addGap(Globals.MIN_GAP_SIZE * 2).addComponent(labelDescription)
-				.addComponent(textFieldDescription).addGap(Globals.MIN_GAP_SIZE).addComponent(isBoolean));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(labelConfigEntry)
+				.addComponent(textFieldConfigEntry, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE * 2).addComponent(labelDescription).addComponent(textFieldDescription,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(isBoolean));
 
 		layout.setHorizontalGroup(
 				layout.createParallelGroup().addComponent(labelConfigEntry).addComponent(textFieldConfigEntry)
@@ -200,6 +220,8 @@ public class CreateConfigDialog extends JDialog {
 
 	private void initPanel() {
 		jTabbedPane = new JTabbedPane();
+		jTabbedPane.putClientProperty("JTabbedPane.tabAreaAlignment", "fill");
+		jTabbedPane.putClientProperty("JTabbedPane.tabWidthMode", "equal");
 		jTabbedPane.addTab("Allgemein", generalPanel);
 		jTabbedPane.addTab("Details", unicodeDetailsPanel);
 
@@ -234,7 +256,10 @@ public class CreateConfigDialog extends JDialog {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(jTabbedPane)
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(jTabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(0, 0, Short.MAX_VALUE)
 				.addGroup(layout.createParallelGroup().addComponent(cancel).addComponent(accept)));
 
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(jTabbedPane).addGroup(layout

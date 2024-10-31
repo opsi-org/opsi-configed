@@ -136,7 +136,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel labelGroupSelection = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		jTextGroupSelection = new JTextField();
-		jTextGroupSelection.setEditable(false);
+		jTextGroupSelection.setEnabled(false);
 		jTextGroupSelection.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
