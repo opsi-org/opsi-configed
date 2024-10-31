@@ -22,7 +22,6 @@ import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
@@ -143,14 +142,9 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	}
 
 	private static void setText(JComponent jComponent, JTable table, int vColIndex, int rowIndex) {
-		if (vColIndex == 1 && Utils.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))) {
-			if (jComponent instanceof JLabel jLabel) {
-				jLabel.setText(Globals.STARRED_STRING);
-			} else if (jComponent instanceof JTextComponent jTextComponent) {
-				jTextComponent.setText(Globals.STARRED_STRING);
-			} else {
-				// Do nothing
-			}
+		if (vColIndex == 1 && Utils.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))
+				&& jComponent instanceof JLabel jLabel) {
+			jLabel.setText(Globals.STARRED_STRING);
 		}
 	}
 
