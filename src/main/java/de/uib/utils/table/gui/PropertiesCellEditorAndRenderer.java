@@ -104,7 +104,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		listSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 400,
 				500, addValuesPanel);
-				listSelectionDialog.enableMultiSelection();
+		listSelectionDialog.enableMultiSelection();
 
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
 		addValueButton.addActionListener(actionEvent -> listSelectionDialog.addItem(addValuesTextField.getText()));
@@ -144,65 +144,77 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		Component result;
 
 		if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
-			selectionMode = BOOLEAN;
-
-			// We want a checkbox
-			if (((List<?>) value).isEmpty()) {
-				checkBox.setIndeterminate(true);
-			} else {
-				checkBox.setChecked((Boolean) ((List<?>) value).get(0));
-			}
-
-			result = checkBox;
+			result = getBooleanEditor(value);
 		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.SINGLE_SELECTION) {
-			selectionMode = SINGLE_SELECTION;
-
-			comboBox.setModel(new DefaultComboBoxModel<>(
-					modelProducer.getListCellOptions(key).getPossibleValues().toArray(new String[0])));
-			if (((List<?>) value).isEmpty()) {
-				comboBox.setSelectedItem(null);
-			} else {
-				String listElement = (String) ((List<?>) value).get(0);
-
-				if (((DefaultComboBoxModel<String>) comboBox.getModel()).getIndexOf(listElement) == -1) {
-					comboBox.addItem(listElement);
-				}
-
-				comboBox.setSelectedItem(listElement);
-			}
-
-			comboBox.setEditable(modelProducer.isEditable(row));
-
-			result = comboBox;
+			result = getSingleValueEditor(key, value, row);
 		} else {
-			selectionMode = MULTI_SELECTION;
-
-			listSelectionDialog.setTitle((String) table.getValueAt(row, 0));
-			listSelectionDialog.setModel(modelProducer.getListModel(row));
-
-			listSelectionDialog.setPreviousSelectionValues(modelProducer.toList(value));
-			listSelectionDialog.setSize(400, 500);
-			listSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-			addValuesPanel.setVisible(modelProducer.isEditable(row));
-			addValuesTextField.setText(null);
-			listSelectionDialog.setVisible(true);
-
-			// We should put this code into invokeLater, because otherwise we will call stop 
-			// or cancel editing before it actually began. Editing would not have an effect
-			SwingUtilities.invokeLater(() -> {
-				if (listSelectionDialog.getResult() == 2) {
-					stopCellEditing();
-				} else {
-					cancelCellEditing();
-				}
-			});
-
-			// We cannot return null here, otherwise the editing is cancelled...
-			return unusedfield;
+			result = getMultiValueEditor(table, value, row);
 		}
 
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 		return result;
+	}
+
+	private Component getBooleanEditor(Object value) {
+		selectionMode = BOOLEAN;
+
+		// We want a checkbox
+		if (((List<?>) value).isEmpty()) {
+			checkBox.setIndeterminate(true);
+		} else {
+			checkBox.setChecked((Boolean) ((List<?>) value).get(0));
+		}
+
+		return checkBox;
+	}
+
+	private Component getSingleValueEditor(String key, Object value, int row) {
+		selectionMode = SINGLE_SELECTION;
+
+		comboBox.setModel(new DefaultComboBoxModel<>(
+				modelProducer.getListCellOptions(key).getPossibleValues().toArray(new String[0])));
+		if (((List<?>) value).isEmpty()) {
+			comboBox.setSelectedItem(null);
+		} else {
+			String listElement = (String) ((List<?>) value).get(0);
+
+			if (((DefaultComboBoxModel<String>) comboBox.getModel()).getIndexOf(listElement) == -1) {
+				comboBox.addItem(listElement);
+			}
+
+			comboBox.setSelectedItem(listElement);
+		}
+
+		comboBox.setEditable(modelProducer.isEditable(row));
+
+		return comboBox;
+	}
+
+	private Component getMultiValueEditor(JTable table, Object value, int row) {
+		selectionMode = MULTI_SELECTION;
+
+		listSelectionDialog.setTitle((String) table.getValueAt(row, 0));
+		listSelectionDialog.setModel(modelProducer.getListModel(row));
+
+		listSelectionDialog.setPreviousSelectionValues(modelProducer.toList(value));
+		listSelectionDialog.setSize(400, 500);
+		listSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		addValuesPanel.setVisible(modelProducer.isEditable(row));
+		addValuesTextField.setText(null);
+		listSelectionDialog.setVisible(true);
+
+		// We should put this code into invokeLater, because otherwise we will call stop 
+		// or cancel editing before it actually began. Editing would not have an effect
+		SwingUtilities.invokeLater(() -> {
+			if (listSelectionDialog.getResult() == 2) {
+				stopCellEditing();
+			} else {
+				cancelCellEditing();
+			}
+		});
+
+		// We cannot return null here, otherwise the editing is cancelled...
+		return unusedfield;
 	}
 
 	@Override
