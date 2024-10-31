@@ -54,14 +54,14 @@ public class PanelHostProperties extends JPanel {
 
 		this.multipleMaps = multipleMaps;
 		editMapPanel.setUpdateCollection(POJOReMapper.remap(updateCollection));
-		editMapPanel.setReadOnlyEntries(keysOfReadOnlyEntries);
+		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
 
 		setMap(selectedDepot);
 	}
 
 	// delegated methods
 	public void registerDataChangedObserver(DataChangedObserver o) {
-		editMapPanel.registerDataChangedObserver(o);
+		editMapPanel.getMapTableModel().registerDataChangedObserver(o);
 	}
 
 	private Map<String, ListCellOptions> deriveOptionsMap(Map<String, Object> m) {
@@ -92,7 +92,7 @@ public class PanelHostProperties extends JPanel {
 			Logging.debug(this, "setMap ", multipleMaps.get(selectedDepot));
 			editMapPanel.setEditableMap(multipleMaps.get(selectedDepot),
 					deriveOptionsMap(multipleMaps.get(selectedDepot)));
-			editMapPanel.setStoreData(editedMaps);
+			editMapPanel.getMapTableModel().setStoreData(editedMaps);
 		}
 	}
 }

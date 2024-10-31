@@ -69,7 +69,8 @@ public class PanelHostConfig extends JPanel {
 			}
 		}, configStatesEditable);
 
-		editMapPanel.registerDataChangedObserver(ChangedDataManager.getHostConfigsDataChangedKeeper());
+		editMapPanel.getMapTableModel()
+				.registerDataChangedObserver(ChangedDataManager.getHostConfigsDataChangedKeeper());
 
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);

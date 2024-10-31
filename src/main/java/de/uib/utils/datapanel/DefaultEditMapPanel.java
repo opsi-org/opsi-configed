@@ -11,15 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.Function;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import de.uib.configed.Configed;
-import de.uib.utils.DataChangedObserver;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.ListCellOptions;
 
@@ -165,16 +162,8 @@ public class DefaultEditMapPanel extends JPanel {
 		mapTableModel.setWrite();
 	}
 
-	public List<String> getNames() {
-		return mapTableModel.getKeys();
-	}
-
-	public void setShowToolTip(boolean b) {
-		showToolTip = b;
-	}
-
-	public void registerDataChangedObserver(DataChangedObserver o) {
-		mapTableModel.registerDataChangedObserver(o);
+	public void setShowToolTip(boolean showToolTip) {
+		this.showToolTip = showToolTip;
 	}
 
 	/**
@@ -195,14 +184,6 @@ public class DefaultEditMapPanel extends JPanel {
 	 */
 	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
 		mapTableModel.setUpdateCollection(updateCollection);
-	}
-
-	public void setReadOnlyEntries(Set<String> keys) {
-		mapTableModel.setReadOnlyEntries(keys);
-	}
-
-	public void setEditableFunction(Function<String, Boolean> isEditable) {
-		mapTableModel.setIsEditable(isEditable);
 	}
 
 	protected void logPopupElements() {

@@ -120,7 +120,8 @@ public class PanelProductSettings extends JSplitPane {
 
 		propertiesPanel = new EditMapPanelX(false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
+		propertiesPanel.getMapTableModel()
+				.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
@@ -346,7 +347,7 @@ public class PanelProductSettings extends JSplitPane {
 
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));
-		propertiesPanel.setStoreData(storableProductProperties);
+		propertiesPanel.getMapTableModel().setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(POJOReMapper.remap(updateCollection));
 	}
 
@@ -356,7 +357,7 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void clearEditing() {
 		propertiesPanel.setEditableMap(null, null);
-		propertiesPanel.setStoreData(null);
+		propertiesPanel.getMapTableModel().setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
 		infoPane.clearEditing();
 	}
