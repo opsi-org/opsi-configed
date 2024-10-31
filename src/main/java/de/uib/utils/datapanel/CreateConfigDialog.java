@@ -8,25 +8,52 @@ package de.uib.utils.datapanel;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.FSelectionList;
 import de.uib.utils.Icons;
 
 public class CreateConfigDialog extends JDialog {
 	private EditMapPanelX editMapPanelX;
+
+	private JTextField textFieldConfigEntry;
+	private JTextField textFieldDescription;
+
+	private JCheckBox booleanDefault;
+
+	private FSelectionList defaultValuesSelectionDialog;
+	private FSelectionList possibleValuesSelectionDialog;
+
+	private JCheckBox isBoolean;
+	private JCheckBox isEditable;
+	private JCheckBox isMultiValue;
+
+	private JTabbedPane jTabbedPane;
+
+	private JPanel generalPanel;
+	private JPanel booleanDetailsPanel;
+	private JPanel unicodeDetailsPanel;
 
 	public CreateConfigDialog(EditMapPanelX editMapPanelX) {
 		super(ConfigedMain.getMainFrame(), true);
@@ -34,31 +61,147 @@ public class CreateConfigDialog extends JDialog {
 
 		this.editMapPanelX = editMapPanelX;
 
-		init();
+		initGeneralPanel();
+		initBooleanDetailsPanel();
+		initUnicodeDetailsPanel();
+
+		initPanel();
+
+		super.pack();
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		super.setResizable(false);
+		super.setVisible(true);
+
 	}
 
-	private void init() {
+	private void initBooleanDetailsPanel() {
+		JLabel defaultLabel = new JLabel("default value:");
+		booleanDefault = new JCheckBox();
+		booleanDefault.setHorizontalTextPosition(SwingConstants.LEADING);
+
+		booleanDetailsPanel = new JPanel();
+		GroupLayout layout = new GroupLayout(booleanDetailsPanel);
+		booleanDetailsPanel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createParallelGroup().addComponent(defaultLabel).addComponent(booleanDefault));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(defaultLabel)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(booleanDefault));
+	}
+
+	private void initUnicodeDetailsPanel() {
+		isEditable = new JCheckBox("editable", true);
+		isMultiValue = new JCheckBox("multivalue");
+
+		// These dialogs are there to 
+		defaultValuesSelectionDialog = createSelectionDialog("title1");
+		possibleValuesSelectionDialog = createSelectionDialog("title2");
+
+		// These textfields will show currently selected values in the dialog.
+		JTextField defaultValuesTextField = createTextFieldAssociated(defaultValuesSelectionDialog);
+		JTextField possibleValuesTextField = createTextFieldAssociated(possibleValuesSelectionDialog);
+
+		unicodeDetailsPanel = new JPanel();
+		GroupLayout layout = new GroupLayout(unicodeDetailsPanel);
+		unicodeDetailsPanel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(isEditable).addComponent(isMultiValue)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(defaultValuesTextField).addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(possibleValuesTextField).addGap(0, 0, Short.MAX_VALUE));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(isEditable).addComponent(isMultiValue)
+				.addComponent(defaultValuesTextField).addComponent(possibleValuesTextField));
+	}
+
+	private JTextField createTextFieldAssociated(FSelectionList fSelectionList) {
+		JTextField jTextField = new JTextField();
+		jTextField.setEnabled(false);
+		jTextField.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				activateSelection(fSelectionList, jTextField);
+			}
+		});
+
+		return jTextField;
+	}
+
+	private void activateSelection(FSelectionList fSelectionList, JTextField jTextField) {
+		fSelectionList.setSize(400, 500);
+		fSelectionList.setLocationRelativeTo(this);
+		fSelectionList.setVisible(true);
+
+		List<String> savedSelectedValues = fSelectionList.getSelectedValues();
+
+		if (fSelectionList.getResult() != 2) {
+			jTextField.setText(fSelectionList.getSelectedValues().toString());
+		} else {
+			DefaultListModel<String> model = new DefaultListModel<>();
+			model.addAll(savedSelectedValues);
+			fSelectionList.setModel(model);
+			fSelectionList.setPreviousSelectionValues(savedSelectedValues);
+		}
+	}
+
+	private static FSelectionList createSelectionDialog(String title) {
+		JPanel additionalPanel = new JPanel();
+
+		FSelectionList fSelectionList = new FSelectionList(ConfigedMain.getMainFrame(), title, true,
+				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 300,
+				400, additionalPanel);
+		fSelectionList.setModel(new DefaultListModel<>());
+
+		setupLayoutOfPanel(additionalPanel, fSelectionList);
+
+		return fSelectionList;
+	}
+
+	private static void setupLayoutOfPanel(JPanel jPanel, FSelectionList associatedList) {
+		FlatTextField addValuesTextField = new FlatTextField();
+
+		GroupLayout layout = new GroupLayout(jPanel);
+		jPanel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createParallelGroup().addComponent(addValuesTextField));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(addValuesTextField));
+
+		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
+		addValueButton.addActionListener(actionEvent -> associatedList.addItem(addValuesTextField.getText()));
+
+		addValuesTextField.setTrailingComponent(addValueButton);
+		addValuesTextField.setShowClearButton(true);
+		addValuesTextField.addActionListener(actionEvent -> associatedList.addItem(addValuesTextField.getText()));
+	}
+
+	private void initGeneralPanel() {
 		JLabel labelConfigEntry = new JLabel(Configed.getResourceValue("EditMapPanelX.configName"));
 		labelConfigEntry.setFont(getFont().deriveFont(Font.BOLD));
 
-		JTextField textFieldConfigEntry = new JTextField();
+		textFieldConfigEntry = new JTextField();
 
 		JLabel labelDescription = new JLabel(Configed.getResourceValue("EditMapPanelX.description"));
 		labelDescription.setFont(getFont().deriveFont(Font.BOLD));
 
-		JTextField textFieldDescription = new JTextField();
+		textFieldDescription = new JTextField();
 
-		JCheckBox isBoolean = new JCheckBox("boolean");
-		JCheckBox isEditable = new JCheckBox("editable", true);
-		JCheckBox isMultiValue = new JCheckBox("multivalue");
+		isBoolean = new JCheckBox("boolean");
+		isBoolean.addActionListener(event -> updateDetailsTab());
 
-		isBoolean.addActionListener((ActionEvent event) -> {
-			isEditable.setEnabled(!isBoolean.isSelected());
-			isEditable.setSelected(!isBoolean.isSelected());
+		generalPanel = new JPanel();
+		GroupLayout layout = new GroupLayout(generalPanel);
+		generalPanel.setLayout(layout);
 
-			isMultiValue.setEnabled(!isBoolean.isSelected());
-			isMultiValue.setSelected(false);
-		});
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelConfigEntry)
+				.addComponent(textFieldConfigEntry).addGap(Globals.MIN_GAP_SIZE * 2).addComponent(labelDescription)
+				.addComponent(textFieldDescription).addGap(Globals.MIN_GAP_SIZE).addComponent(isBoolean));
+
+		layout.setHorizontalGroup(
+				layout.createParallelGroup().addComponent(labelConfigEntry).addComponent(textFieldConfigEntry)
+						.addComponent(labelDescription).addComponent(textFieldDescription).addComponent(isBoolean));
+	}
+
+	private void initPanel() {
+		jTabbedPane = new JTabbedPane();
+		jTabbedPane.addTab("Allgemein", generalPanel);
+		jTabbedPane.addTab("Details", unicodeDetailsPanel);
 
 		JButton cancel = new JButton(Icons.getIntellijIcon("close"));
 		cancel.addActionListener(actionEvent -> dispose());
@@ -66,8 +209,7 @@ public class CreateConfigDialog extends JDialog {
 		JButton accept = new JButton(Icons.getIntellijIcon("checkmark"));
 		accept.setEnabled(false);
 		accept.addActionListener((ActionEvent e) -> {
-			editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
-					isBoolean.isSelected(), isMultiValue.isSelected(), isEditable.isSelected());
+			createConfig();
 			dispose();
 		});
 
@@ -92,24 +234,22 @@ public class CreateConfigDialog extends JDialog {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelConfigEntry)
-				.addComponent(textFieldConfigEntry).addGap(Globals.MIN_GAP_SIZE * 2).addComponent(labelDescription)
-				.addComponent(textFieldDescription).addGap(Globals.MIN_GAP_SIZE).addComponent(isBoolean)
-				.addComponent(isEditable).addComponent(isMultiValue).addGap(Globals.MIN_GAP_SIZE * 4)
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(jTabbedPane)
 				.addGroup(layout.createParallelGroup().addComponent(cancel).addComponent(accept)));
 
-		layout.setHorizontalGroup(
-				layout.createParallelGroup().addComponent(labelConfigEntry).addComponent(textFieldConfigEntry)
-						.addComponent(labelDescription).addComponent(textFieldDescription).addComponent(isBoolean)
-						.addComponent(isEditable).addComponent(isMultiValue).addGroup(layout.createSequentialGroup()
-								.addComponent(cancel).addGap(0, 0, Short.MAX_VALUE).addComponent(accept)));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(jTabbedPane).addGroup(layout
+				.createSequentialGroup().addComponent(cancel).addGap(0, 0, Short.MAX_VALUE).addComponent(accept)));
 
 		((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE * 2,
 				Globals.MIN_GAP_SIZE * 2, Globals.MIN_GAP_SIZE * 2, Globals.MIN_GAP_SIZE * 2));
+	}
 
-		pack();
-		setLocationRelativeTo(ConfigedMain.getMainFrame());
-		setResizable(false);
-		setVisible(true);
+	private void updateDetailsTab() {
+		jTabbedPane.setComponentAt(1, isBoolean.isSelected() ? booleanDetailsPanel : unicodeDetailsPanel);
+	}
+
+	private void createConfig() {
+		editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
+				isBoolean.isSelected(), isMultiValue.isSelected(), isEditable.isSelected());
 	}
 }

@@ -54,7 +54,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	private FlatTriStateCheckBox checkBox;
 	private JComboBox<String> comboBox;
 
-	private FSelectionList groupsSelectionDialog;
+	private FSelectionList listSelectionDialog;
 	private JPanel addValuesPanel;
 	private FlatTextField addValuesTextField;
 
@@ -101,17 +101,16 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		layout.setVerticalGroup(layout.createParallelGroup().addComponent(addValuesTextField));
 		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(addValuesTextField));
 
-		groupsSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, true,
+		listSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 400,
 				500, addValuesPanel);
 
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
-		addValueButton.addActionListener(actionEvent -> groupsSelectionDialog.addItem(addValuesTextField.getText()));
+		addValueButton.addActionListener(actionEvent -> listSelectionDialog.addItem(addValuesTextField.getText()));
 
 		addValuesTextField.setTrailingComponent(addValueButton);
 		addValuesTextField.setShowClearButton(true);
-		addValuesTextField
-				.addActionListener(actionEvent -> groupsSelectionDialog.addItem(addValuesTextField.getText()));
+		addValuesTextField.addActionListener(actionEvent -> listSelectionDialog.addItem(addValuesTextField.getText()));
 	}
 
 	public void setModelProducer(DefaultListModelProducer<String> producer) {
@@ -177,21 +176,21 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		} else {
 			selectionMode = MULTI_SELECTION;
 
-			groupsSelectionDialog.setTitle((String) table.getValueAt(row, 0));
-			groupsSelectionDialog.enableMultiSelection();
-			groupsSelectionDialog.setModel(modelProducer.getListModel(row));
+			listSelectionDialog.setTitle((String) table.getValueAt(row, 0));
+			listSelectionDialog.enableMultiSelection();
+			listSelectionDialog.setModel(modelProducer.getListModel(row));
 
-			groupsSelectionDialog.setPreviousSelectionValues(modelProducer.toList(value));
-			groupsSelectionDialog.setSize(400, 500);
-			groupsSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+			listSelectionDialog.setPreviousSelectionValues(modelProducer.toList(value));
+			listSelectionDialog.setSize(400, 500);
+			listSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			addValuesPanel.setVisible(modelProducer.isEditable(row));
 			addValuesTextField.setText(null);
-			groupsSelectionDialog.setVisible(true);
+			listSelectionDialog.setVisible(true);
 
 			// We should put this code into invokeLater, because otherwise we will call stop 
 			// or cancel editing before it actually began. Editing would not have an effect
 			SwingUtilities.invokeLater(() -> {
-				if (groupsSelectionDialog.getResult() == 2) {
+				if (listSelectionDialog.getResult() == 2) {
 					stopCellEditing();
 				} else {
 					cancelCellEditing();
@@ -213,7 +212,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		} else if (selectionMode == SINGLE_SELECTION) {
 			return Collections.singletonList(comboBox.getSelectedItem());
 		} else {
-			return groupsSelectionDialog.getSelectedValues();
+			return listSelectionDialog.getSelectedValues();
 		}
 	}
 
