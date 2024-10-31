@@ -104,6 +104,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		listSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 400,
 				500, addValuesPanel);
+				listSelectionDialog.enableMultiSelection();
 
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
 		addValueButton.addActionListener(actionEvent -> listSelectionDialog.addItem(addValuesTextField.getText()));
@@ -177,7 +178,6 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			selectionMode = MULTI_SELECTION;
 
 			listSelectionDialog.setTitle((String) table.getValueAt(row, 0));
-			listSelectionDialog.enableMultiSelection();
 			listSelectionDialog.setModel(modelProducer.getListModel(row));
 
 			listSelectionDialog.setPreviousSelectionValues(modelProducer.toList(value));

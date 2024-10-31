@@ -84,7 +84,7 @@ public class FSelectionList extends FGeneralDialog {
 		centerPanel.setLayout(centerLayout);
 
 		jList = new JList<>();
-		jList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jList.setVisible(true);
 		scrollpane.getViewport().add(jList);
 

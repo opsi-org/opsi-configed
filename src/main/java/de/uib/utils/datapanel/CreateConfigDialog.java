@@ -163,6 +163,7 @@ public class CreateConfigDialog extends JDialog {
 		FSelectionList fSelectionList = new FSelectionList(ConfigedMain.getMainFrame(), title, true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 300,
 				400, additionalPanel);
+		fSelectionList.enableMultiSelection();
 		fSelectionList.setModel(new DefaultListModel<>());
 
 		setupLayoutOfPanel(additionalPanel, fSelectionList);
