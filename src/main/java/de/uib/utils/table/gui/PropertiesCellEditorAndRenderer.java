@@ -13,12 +13,10 @@ import java.util.List;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -55,7 +53,6 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	private JComboBox<String> comboBox;
 
 	private FSelectionList listSelectionDialog;
-	private JPanel addValuesPanel;
 	private FlatTextField addValuesTextField;
 
 	private int selectionMode;
@@ -94,16 +91,10 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		unusedfield = new JLabel();
 
 		addValuesTextField = new FlatTextField();
-		addValuesPanel = new JPanel();
-		GroupLayout layout = new GroupLayout(addValuesPanel);
-		addValuesPanel.setLayout(layout);
-
-		layout.setVerticalGroup(layout.createParallelGroup().addComponent(addValuesTextField));
-		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(addValuesTextField));
 
 		listSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 400,
-				500, addValuesPanel);
+				500, addValuesTextField);
 		listSelectionDialog.enableMultiSelection();
 
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
@@ -199,7 +190,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		listSelectionDialog.setPreviousSelectionValues(modelProducer.toList(value));
 		listSelectionDialog.setSize(400, 500);
 		listSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		addValuesPanel.setVisible(modelProducer.isEditable(row));
+		addValuesTextField.setVisible(modelProducer.isEditable(row));
 		addValuesTextField.setText(null);
 		listSelectionDialog.setVisible(true);
 

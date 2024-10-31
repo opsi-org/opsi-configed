@@ -158,34 +158,22 @@ public class CreateConfigDialog extends JDialog {
 	}
 
 	private static FSelectionList createSelectionDialog(String title) {
-		JPanel additionalPanel = new JPanel();
+		FlatTextField addValuesTextField = new FlatTextField();
 
 		FSelectionList fSelectionList = new FSelectionList(ConfigedMain.getMainFrame(), title, true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 300,
-				400, additionalPanel);
+				400, addValuesTextField);
 		fSelectionList.enableMultiSelection();
 		fSelectionList.setModel(new DefaultListModel<>());
 
-		setupLayoutOfPanel(additionalPanel, fSelectionList);
-
-		return fSelectionList;
-	}
-
-	private static void setupLayoutOfPanel(JPanel jPanel, FSelectionList associatedList) {
-		FlatTextField addValuesTextField = new FlatTextField();
-
-		GroupLayout layout = new GroupLayout(jPanel);
-		jPanel.setLayout(layout);
-
-		layout.setVerticalGroup(layout.createParallelGroup().addComponent(addValuesTextField));
-		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(addValuesTextField));
-
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
-		addValueButton.addActionListener(actionEvent -> associatedList.addItem(addValuesTextField.getText()));
+		addValueButton.addActionListener(actionEvent -> fSelectionList.addItem(addValuesTextField.getText()));
 
 		addValuesTextField.setTrailingComponent(addValueButton);
 		addValuesTextField.setShowClearButton(true);
-		addValuesTextField.addActionListener(actionEvent -> associatedList.addItem(addValuesTextField.getText()));
+		addValuesTextField.addActionListener(actionEvent -> fSelectionList.addItem(addValuesTextField.getText()));
+
+		return fSelectionList;
 	}
 
 	private void initGeneralPanel() {

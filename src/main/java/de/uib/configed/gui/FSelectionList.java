@@ -16,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -33,9 +34,9 @@ public class FSelectionList extends FGeneralDialog {
 	private TableSearchPane searchPane;
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
-			int preferredHeight, JPanel additionalPane) {
+			int preferredHeight, JComponent additionalComponent) {
 		super(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight, false,
-				additionalPane);
+				additionalComponent);
 	}
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
@@ -117,10 +118,11 @@ public class FSelectionList extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(this.additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
+						.addComponent(this.additionalComponent, 50, 100, Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(this.additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
+				.addComponent(this.additionalComponent, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(jPanelButtonGrid, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
