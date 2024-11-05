@@ -501,10 +501,10 @@ public class ConfigedMain {
 		loginDialog.setVisible(true);
 
 		if (host == null) {
-			Logging.warning(this, "host is not set (yet)");
+			Logging.info(this, "host is not set (yet)");
 		}
 		if (!useSSO && (user == null || password == null)) {
-			Logging.warning(this, "user or password not given (yet)");
+			Logging.info(this, "user or password not given (yet)");
 		} else {
 			// This must be called last, so that loading frame for connection is called last
 			// and on top of the login-frame

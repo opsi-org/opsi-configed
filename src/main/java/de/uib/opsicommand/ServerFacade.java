@@ -131,37 +131,30 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public Map<String, List<String>> getHeaders() {
-		// lastValue = Utils.isDisableCertificateVerification();
-		// Utils.setDisableCertificateVerification(true);
-		// // conStat = new ConnectionState();
-		// Logging.notice("getHeaders started");
-		// Map<String, String> requestProperties = new HashMap<>();
-		// requestProperties.put("Accept", "application/json");
-		// if (sessionId != null) {
-		// 	requestProperties.put("Cookie", sessionId);
-		// }
-		// URL url = makeURL("/auth/session_id");
-		// CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
-		// ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
-		// // HttpsURLConnection connection = handler.establishConnection(true);
-		// HttpsURLConnection connection = handler.establishConnection(true, true);
-		// conStat = handler.getConnectionState();
-		// if (connection == null) {
-		// 	Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
-		// 			conStat.getState());
-		// 	return new HashMap<>();
-		// }
-		// Map<String, List<String>> result = new HashMap<>();
-		// try {
-		// 	handleResponseCode(connection);
-		// 	result = connection.getHeaderFields();
-		// } catch (IOException ex) {
-		// 	Logging.error(this, ex, "Exception while trying to get headers");
-		// }
+		Logging.info("getHeaders started");
+		Map<String, String> requestProperties = new HashMap<>();
+		requestProperties.put("Accept", "application/json");
+		if (sessionId != null) {
+			requestProperties.put("Cookie", sessionId);
+		}
+		URL url = makeURL("/auth/session_id");
+		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
+		HttpsURLConnection connection = handler.establishConnection(true, true);
+		conStat = handler.getConnectionState();
+		if (connection == null) {
+			Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
+					conStat.getState());
+			return new HashMap<>();
+		}
+		Map<String, List<String>> result = new HashMap<>();
+		try {
+			handleResponseCode(connection);
+			result = connection.getHeaderFields();
+		} catch (IOException ex) {
+			Logging.error(this, ex, "Exception while trying to get headers");
+		}
 		// CertificateManager.init(null, null);
-		// // Utils.setDisableCertificateVerification(lastValue);
-		// return result;
-		return null;
+		return result;
 	}
 
 	private synchronized boolean connectSAML() {
@@ -442,7 +435,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		// sending data
 		if (json != null) {
 			String jsonStr = new JSONObject(json).toString();
-			Logging.warning("send ", requestMethod, "jsonStr ", jsonStr);
+			Logging.debug("send ", requestMethod, "jsonStr ", jsonStr);
 			try (OutputStream writer = getOutputStreamWriterForConnection(connection, jsonStr.length())) {
 				writer.write(jsonStr.getBytes(StandardCharsets.UTF_8));
 				writer.flush();
@@ -476,6 +469,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				return null;
 			}
 		}
+		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
+		Logging.info(this, "retrieveResponse ready");
 
 		return result;
 	}
@@ -519,7 +514,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			ObjectMapper mapper = new MessagePackMapper();
 			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
-		} else {
+		} else
+
+		{
 			Logging.error(this, "Unsupported Content-Type: ", contentType);
 		}
 

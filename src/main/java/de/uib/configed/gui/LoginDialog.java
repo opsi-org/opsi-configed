@@ -221,6 +221,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		}
 		jLabelLoadingSSOState.setVisible(false);
 		jButtonSSO.setVisible(ssoActiveByServer);
+		Logging.notice("SSO active by server ", ssoActiveByServer);
 		setupLayout();
 	}
 
