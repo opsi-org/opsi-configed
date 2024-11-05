@@ -141,11 +141,15 @@ public class ConnectionHandler {
 	 *         unsuccessful connection.
 	 */
 	public HttpsURLConnection establishConnection(boolean doOutput) {
+		return establishConnection(doOutput, false);
+	}
+
+	public HttpsURLConnection establishConnection(boolean doOutput, boolean useInsecure) {
 		if (serviceURL == null) {
 			return null;
 		}
 
-		CertificateValidator certValidator = CertificateValidatorFactory.getValidator();
+		CertificateValidator certValidator = CertificateValidatorFactory.getValidator(useInsecure);
 		HttpsURLConnection connection = null;
 
 		try {

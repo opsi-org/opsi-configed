@@ -140,7 +140,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 		URL url = makeURL("/auth/session_id");
 		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
-		HttpsURLConnection connection = handler.establishConnection(true);
+		HttpsURLConnection connection = handler.establishConnection(true, true);
 		conStat = handler.getConnectionState();
 		if (connection == null) {
 			Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
