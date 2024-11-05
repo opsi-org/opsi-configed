@@ -32,7 +32,6 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 /**
@@ -214,7 +213,7 @@ public class HostInfoCollections {
 				depotNamesList.add(name);
 				allDepots.put(name, host);
 
-				if (Utils.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), true).booleanValue()) {
+				if (Boolean.TRUE.equals(host.get(HostInfo.IS_MASTER_DEPOT_KEY))) {
 					Map<String, Object> hostMap = new HashMap<>(host);
 					masterDepots.put(name, hostMap);
 				}
@@ -263,9 +262,7 @@ public class HostInfoCollections {
 			String name = (String) host.get(HostInfo.HOSTNAME_KEY);
 			allDepots.put(name, host);
 
-			boolean isMasterDepot = Utils.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), false);
-
-			if (isMasterDepot) {
+			if (Boolean.TRUE.equals(host.get(HostInfo.IS_MASTER_DEPOT_KEY))) {
 				Map<String, Object> hostMap = new HashMap<>(host);
 				masterDepots.put(name, hostMap);
 				depot2Host2HostInfo.put(name, new TreeMap<>());
