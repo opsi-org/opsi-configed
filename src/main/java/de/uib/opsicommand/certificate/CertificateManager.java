@@ -61,6 +61,7 @@ public final class CertificateManager {
 	public static void init(String urlPath, String caFolderName) {
 		CertificateManager.urlPath = urlPath;
 		CertificateManager.caFolderName = caFolderName;
+		Logging.notice("initialized with urlPath: ", urlPath, " and caFolderName: ", caFolderName);
 	}
 
 	/**
@@ -68,6 +69,7 @@ public final class CertificateManager {
 	 * {@link #init(String)} method).
 	 */
 	public static void downloadCertificateFile() {
+		Logging.notice("download with urlPath: ", urlPath, " and caFolderName: ", caFolderName);
 		if (urlPath == null) {
 			Logging.error("CertificateDownloader wasn't initialized");
 			return;

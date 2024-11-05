@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -15,7 +14,6 @@ import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -90,12 +88,12 @@ public class LoginDialog extends JFrame implements KeyListener {
 		super();
 		this.configedMain = configedMain;
 		initGuiElements();
-		if (ConfigedMain.getHost() != null) {
-			initSSO();
-		}
+		// if (ConfigedMain.getHost() != null) {
+		// 	initSSO();
+		// }
 		setupLayout();
 		setServers();
-		initSSO();
+		// initSSO();
 
 		finishAndMakeVisible();
 
@@ -111,7 +109,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	public void setHost(String host) {
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
-		initSSO();
+		// initSSO();
 	}
 
 	private void setServers() {
@@ -173,8 +171,8 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
-		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
-		fieldHost.addActionListener(actionEvent -> initSSO());
+		// fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
+		// fieldHost.addActionListener(actionEvent -> initSSO());
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(this);
@@ -201,24 +199,26 @@ public class LoginDialog extends JFrame implements KeyListener {
 		jButtonCommit.addActionListener(actionEvent -> tryConnecting());
 		jButtonSSO = new JButton(Configed.getResourceValue("LoginDialog.jButtonSSO"));
 		jButtonSSO.addActionListener(actionEvent -> tryConnecting(true));
+		jButtonSSO.setVisible(true);
 	}
 
 	private void initSSO() {
-		ssoActiveByServer = false;
-		if (!(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))) {
-			Logging.warning(this, "Desktop is not supported or browse action is not supported");
-			return;
-		}
-		String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
-		Logging.info("get auth info for ", host);
-		ServerFacade serverFacade = new ServerFacade(host, false);
-		Map<String, List<String>> headers = serverFacade.getHeaders();
+		ssoActiveByServer = true;
+		// ssoActiveByServer = false;
+		// if (!(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))) {
+		// 	Logging.warning(this, "Desktop is not supported or browse action is not supported");
+		// 	return;
+		// }
+		// String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
+		// Logging.info("get auth info for ", host);
+		// ServerFacade serverFacade = new ServerFacade(host, false);
+		// Map<String, List<String>> headers = serverFacade.getHeaders();
 
-		if (headers.containsKey("X-opsi-auth-methods")) {
-			String authMethods = headers.get("X-opsi-auth-methods").toString();
-			ssoActiveByServer = authMethods.contains("saml");
-			Logging.debug("Authentication methods for host ", host, ": ", authMethods);
-		}
+		// if (headers.containsKey("X-opsi-auth-methods")) {
+		// 	String authMethods = headers.get("X-opsi-auth-methods").toString();
+		// 	ssoActiveByServer = authMethods.contains("saml");
+		// 	Logging.debug("Authentication methods for host ", host, ": ", authMethods);
+		// }
 		jButtonSSO.setVisible(ssoActiveByServer);
 		setupLayout();
 	}
@@ -250,14 +250,14 @@ public class LoginDialog extends JFrame implements KeyListener {
 		SequentialGroup seqGroup = groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE);
 
-		if (ssoActiveByServer == null || !ssoActiveByServer) {
-			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
-		} else {
-			parGroup.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE);
-			seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
-			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
-		}
+		// if (ssoActiveByServer == null || !ssoActiveByServer) {
+		// 	seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
+		// } else {
+		parGroup.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
+		seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
+		seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
+		// }
 		parGroup.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE);
 
@@ -382,15 +382,15 @@ public class LoginDialog extends JFrame implements KeyListener {
 	}
 
 	public void tryConnectingDependOnServer(boolean requestSSO) {
-		if (ssoActiveByServer == null) {
-			ssoActiveByServer = false;
-			initSSO();
-		}
+		// if (ssoActiveByServer == null) {
+		// 	ssoActiveByServer = false;
+		// 	initSSO();
+		// }
 
-		if ((ssoActiveByServer == null || !ssoActiveByServer) && requestSSO) {
-			Logging.error("SSO not available. Concider to remove parameter or activate sso for this server.");
-			return;
-		}
+		// if ((ssoActiveByServer == null || !ssoActiveByServer) && requestSSO) {
+		// 	Logging.error("SSO not available. Concider to remove parameter or activate sso for this server.");
+		// 	return;
+		// }
 		tryConnecting(true);
 	}
 

@@ -99,6 +99,8 @@ public class OpsiServerVersionRetriever {
 					authorization = sessionId.split("=")[1];
 					connection.setRequestProperty("Cookie", "session-id=" + authorization);
 					connection.setRequestProperty("Cookie", "sessionId=" + authorization);
+					Logging.notice(this, "using session id for connection ", authorization);
+					Logging.notice(this, "connection", connection.getRequestProperties());
 				}
 			} else if (username != null && password != null) {
 				authorization = Base64.getEncoder()

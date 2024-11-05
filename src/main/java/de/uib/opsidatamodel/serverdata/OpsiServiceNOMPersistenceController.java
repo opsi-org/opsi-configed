@@ -152,7 +152,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		if (useSSO) {
-			Logging.warning(this.getClass(), "OSNOM no user or password given. try sso/saml");
+			Logging.warning(this.getClass(), "OSNOM try sso/saml");
 		} else if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
 			Logging.error(this.getClass(), "no user or password given");
 			return;
@@ -166,14 +166,14 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.info(this, "OSNOM useSSO ", useSSO);
 		if (useSSO) {
 			Logging.info(this, "OSNOM 0try sso");
-			try {
-				ServerFacade sf = new ServerFacade(server);
-				// this.user = sf.getUsername();
-				exec = sf;
-			} catch (Exception ex) {
-				Logging.error(this, "OSNOM 0error in sso", ex);
-				return;
-			}
+			// try {
+			ServerFacade sf = new ServerFacade(server);
+			// this.user = sf.getUsername();
+			exec = sf;
+			// } catch (Exception ex) {
+			// 	Logging.error(this, "OSNOM 0error in sso", ex);
+
+			// }
 			Logging.info(this, "OSNOM 0sso exec is ", exec, " connection state ", exec.getConnectionState());
 		} else {
 			Logging.info(this, "OSNOM 1try normal");

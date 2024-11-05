@@ -122,10 +122,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.otp = otp;
 
 		conStat = new ConnectionState();
-
 		if (useSAML && !connectSAML()) {
-			Logging.error("SAML connection failed");
-			return;
+			// Logging.error("SAML connection failed");
+			throw new RuntimeException("SAML connection failed");
 		}
 		checkServerVersion();
 
@@ -133,6 +132,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public Map<String, List<String>> getHeaders() {
+		// conStat = new ConnectionState();
+		// CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+		Logging.notice("getHeaders started");
 		Map<String, String> requestProperties = new HashMap<>();
 		requestProperties.put("Accept", "application/json");
 		if (sessionId != null) {
@@ -140,7 +142,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 		URL url = makeURL("/auth/session_id");
 		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
-		HttpsURLConnection connection = handler.establishConnection(true, true);
+		HttpsURLConnection connection = handler.establishConnection(true);
+		// HttpsURLConnection connection = handler.establishConnection(true, true);
 		conStat = handler.getConnectionState();
 		if (connection == null) {
 			Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
@@ -164,11 +167,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		String localKeySID = "respondSessionId";
 		//////// register and get new session id
 		URL url_get_sid = makeURL("/auth/session_id");
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+
 		Logging.warning("connectSAML 1 ", url_get_sid);
 		Map<String, Object> result = retrieveResponse(url_get_sid, "GET", requestProperties, jsonProperties,
 				localKeySID);
 		if (result == null || result.isEmpty() || !result.containsKey(localKeySID)) {
 			Logging.warning("connectSAML no sessionId received");
+
 			return false;
 		}
 		String sid = (String) result.get(localKeySID);
@@ -232,7 +238,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			throw new RuntimeException("username not received");
 		}
 		username = uname.split("user:")[1];
-		Logging.warning("connectSAML GOT username2 ", this.username);
+		Logging.warning("connectSAML GOT username2 ", username);
+		ConfigedMain.setUser(username);
+		checkServerVersion();
+		Logging.warning("connectSAML GOT host ", host, " configedmain.host ", ConfigedMain.getHost());
+		ConfigedMain.setHost(host);
 		return authenticated;
 	}
 
@@ -399,7 +409,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
 			Map<String, String> requestProperties, Map<String, Object> json, String resultkey,
 			Map<String, Object> responseHeader) {
-		Logging.info(this, "MY retrieveResponse started");
+		Logging.notice(this, "MY retrieveResponse started ", url, " ", requestMethod, " ", requestProperties, " ", json,
+				" ", resultkey, " ", responseHeader);
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 

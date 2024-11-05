@@ -388,7 +388,9 @@ public final class Utils {
 
 	public static boolean hasPort(String host) {
 		boolean result = false;
-
+		if (host == null || host.isEmpty()) {
+			return result;
+		}
 		if (host.contains("[") && host.contains("]")) {
 			Logging.info("Host is IPv6: ", host);
 			result = host.indexOf(":", host.indexOf("]")) != -1;
