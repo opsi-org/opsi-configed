@@ -120,6 +120,7 @@ public final class ConnectionErrorReporter {
 			if (conStat.getState() != ConnectionState.INTERRUPTED) {
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
+			Logging.notice("Trust only once. Certificate will be saved in the temporary folder.");
 		} else {
 			// There are only three options a user can select from.
 		}

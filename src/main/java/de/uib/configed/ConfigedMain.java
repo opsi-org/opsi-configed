@@ -208,7 +208,6 @@ public class ConfigedMain {
 		Logging.info(this, "initialize the data");
 
 		dependenciesModel = new DependenciesModel();
-
 		// Init data for these manager classes so they can work
 		ChangedDataManager.initData(this, hostInfo);
 		ServerActionManager.initData(this);
@@ -498,12 +497,13 @@ public class ConfigedMain {
 		}
 
 		Logging.info(this, "become interactive");
-
+		Logging.info(this, "using sso ? ", useSSO);
 		loginDialog.setVisible(true);
 
 		if (host == null) {
 			Logging.warning(this, "host is not set (yet)");
-		} else if (!useSSO && (user == null || password == null)) {
+		}
+		if (!useSSO && (user == null || password == null)) {
 			Logging.warning(this, "user or password not given (yet)");
 		} else {
 			// This must be called last, so that loading frame for connection is called last

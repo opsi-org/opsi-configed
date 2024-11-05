@@ -103,7 +103,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private synchronized void connect(String host, String username, String password, String otp, boolean useSAML) {
-		Logging.warning("CALLING CONNECT ", host, " ", username, " ", password, " ", otp, " ", useSAML);
 		this.useSAML = useSAML;
 		this.host = host;
 		int idx = -1;
@@ -126,41 +125,58 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			// Logging.error("SAML connection failed");
 			throw new RuntimeException("SAML connection failed");
 		}
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		checkServerVersion();
 
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 	}
 
 	public Map<String, List<String>> getHeaders() {
-		// conStat = new ConnectionState();
+		// lastValue = Utils.isDisableCertificateVerification();
+		// Utils.setDisableCertificateVerification(true);
+		// // conStat = new ConnectionState();
+		// Logging.notice("getHeaders started");
+		// Map<String, String> requestProperties = new HashMap<>();
+		// requestProperties.put("Accept", "application/json");
+		// if (sessionId != null) {
+		// 	requestProperties.put("Cookie", sessionId);
+		// }
+		// URL url = makeURL("/auth/session_id");
 		// CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
-		Logging.notice("getHeaders started");
-		Map<String, String> requestProperties = new HashMap<>();
-		requestProperties.put("Accept", "application/json");
-		if (sessionId != null) {
-			requestProperties.put("Cookie", sessionId);
-		}
-		URL url = makeURL("/auth/session_id");
-		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
-		HttpsURLConnection connection = handler.establishConnection(true);
+		// ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
+		// // HttpsURLConnection connection = handler.establishConnection(true);
 		// HttpsURLConnection connection = handler.establishConnection(true, true);
-		conStat = handler.getConnectionState();
-		if (connection == null) {
-			Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
-					conStat.getState());
-			return new HashMap<>();
-		}
-		Map<String, List<String>> result = new HashMap<>();
-		try {
-			handleResponseCode(connection);
-			result = connection.getHeaderFields();
-		} catch (IOException ex) {
-			Logging.error(this, ex, "Exception while trying to get headers");
-		}
-		return result;
+		// conStat = handler.getConnectionState();
+		// if (connection == null) {
+		// 	Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
+		// 			conStat.getState());
+		// 	return new HashMap<>();
+		// }
+		// Map<String, List<String>> result = new HashMap<>();
+		// try {
+		// 	handleResponseCode(connection);
+		// 	result = connection.getHeaderFields();
+		// } catch (IOException ex) {
+		// 	Logging.error(this, ex, "Exception while trying to get headers");
+		// }
+		// CertificateManager.init(null, null);
+		// // Utils.setDisableCertificateVerification(lastValue);
+		// return result;
+		return null;
 	}
 
 	private synchronized boolean connectSAML() {
+		Logging.info(this, "connectSAML started ");
+		// register and get new session id (may throw exception)
+		ssoRequestSessionId();
+		if (!ssoOpenBrowser()) {
+			Logging.error("connectSAML error opening browser");
+			return false;
+		}
+		return ssoCheckAuthenticated();
+	}
+
+	private synchronized void ssoRequestSessionId() {
+		Logging.info(this, "ssoRequestSessionId started");
 		Map<String, String> requestProperties = new HashMap<>();
 		Map<String, Object> jsonProperties = null;
 		requestProperties.put("Accept", "application/json");
@@ -168,24 +184,33 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		//////// register and get new session id
 		URL url_get_sid = makeURL("/auth/session_id");
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
-
-		Logging.warning("connectSAML 1 ", url_get_sid);
+		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 		Map<String, Object> result = retrieveResponse(url_get_sid, "GET", requestProperties, jsonProperties,
 				localKeySID);
+		if (conStat.getState() == ConnectionState.RETRY_CONNECTION) {
+			Logging.debug("connectSAML retry connection");
+			result = retrieveResponse(url_get_sid, "GET", requestProperties, jsonProperties, localKeySID);
+		}
+
 		if (result == null || result.isEmpty() || !result.containsKey(localKeySID)) {
-			Logging.warning("connectSAML no sessionId received");
-
-			return false;
+			Logging.error("connectSAML no sessionId received. Result: ", result);
+			throw new RuntimeException("sessionId not received");
 		}
-		String sid = (String) result.get(localKeySID);
-		if (!sid.contains("=")) {
-			sessionId = "opsiconfd-session=" + sid;
+		this.sessionId = (String) result.get(localKeySID);
+		if (sessionId == null) {
+			throw new RuntimeException("Requested sessionId is null");
+		} else {
+			sessionId = sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId);
 		}
-		Logging.warning("connectSAML result ", result, " sessionId ", sid, " <=> ", sessionId);
 
+	}
+
+	private boolean ssoOpenBrowser() {
+		Logging.info(this, "ssoOpenBrowser started");
 		/////// open browser
+		String sid = sessionId.contains("=") ? sessionId.split("=")[1] : sessionId;
 		String urlBrowserSaml = "/auth/saml/login?session_id=" + sid + "&redirect=close_window";
-		Logging.warning("connectSAML2 ", urlBrowserSaml);
+		boolean result = true;
 		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 			Desktop desktop = Desktop.getDesktop();
 			try {
@@ -193,66 +218,61 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				if (murl == null) {
 					Logging.error("Error creating URL");
 					return false;
+				} else {
+					desktop.browse(murl.toURI());
 				}
-				desktop.browse(murl.toURI());
 			} catch (IOException | URISyntaxException | UnsupportedOperationException e) {
 				Logging.error(e, "Error opening browser");
-				return false;
+				result = false;
 			}
 		} else {
 			Logging.error("Desktop is not supported");
-			return false;
+			result = false;
 		}
+		return result;
+	}
 
+	private boolean ssoCheckAuthenticated() {
 		/////// check if authenticated
+		Logging.info(this, "ssoCheckAuthenticated started");
 		URL url_authenticated = makeURL("/auth/wait_authenticated");
-		Logging.warning("connectSAML3 ", url_authenticated);
-		requestProperties.clear();
+
+		Map<String, String> requestProperties = new HashMap<>();
 		requestProperties.put("Accept", "application/json");
-		requestProperties.put("Cookie", sessionId);
-		jsonProperties = new HashMap<>();
+		requestProperties.put("Cookie", sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId));
+
+		Map<String, Object> jsonProperties = new HashMap<>();
 		jsonProperties.put("wait_time", 60);
 		HashMap<String, Object> responseHeader = new HashMap<>();
-		result = retrieveResponse(url_authenticated, "POST", requestProperties, jsonProperties, "authenticated",
-				responseHeader);
+		Map<String, Object> result = retrieveResponse(url_authenticated, "POST", requestProperties, jsonProperties,
+				"authenticated", responseHeader);
 
 		if (result == null || result.isEmpty() || !result.containsKey("authenticated")) {
 			throw new RuntimeException("authenticated not received");
-		} else {
-			Logging.warning("connectSAML GOT RESULT ", result);
 		}
 		if (responseHeader.isEmpty()) {
-			throw new RuntimeException("responseHeader not received");
+			throw new RuntimeException("responseHeaders not received");
 		}
 
+		// set credentials for further requests and for information
 		boolean authenticated = (boolean) result.get("authenticated");
-		Logging.warning("connectSAML result (should be authenticated)", result.get("authenticated"), " <=> ",
-				authenticated);
-
-		Logging.warning("connectSAML GOT responseHeader ", responseHeader);
-		Logging.warning("connectSAML GOT responseHeader keys", responseHeader.keySet());
-
 		String uname = (String) responseHeader.get("x-opsi-user-id");
-		Logging.warning("connectSAML GOT username0 ", uname);
 		if (uname == null) {
 			throw new RuntimeException("username not received");
 		}
 		username = uname.split("user:")[1];
-		Logging.warning("connectSAML GOT username2 ", username);
 		ConfigedMain.setUser(username);
-		checkServerVersion();
-		Logging.warning("connectSAML GOT host ", host, " configedmain.host ", ConfigedMain.getHost());
-		ConfigedMain.setHost(host);
+		if (host != null && !host.equals(ConfigedMain.getHost())) {
+			ConfigedMain.setHost(host);
+		}
+
 		return authenticated;
 	}
 
 	private synchronized void checkServerVersion() {
-		Logging.warning("checkServerVersion started");
 		if (useSAML) {
-			Logging.warning("checkServerVersion started with SAML");
 			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), sessionId);
 		} else {
-			Logging.warning("checkServerVersion started with username/password");
 			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), username, password);
 		}
 		versionRetriever.checkServerVersion();
@@ -284,8 +304,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		if (sessionId != null) {
-			requestProperties.put("Cookie", sessionId);
-			// Logging.warning("IDEAL SESSION ID ", sessionId);
+			requestProperties.put("Cookie", sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId));
 		}
 
 		return requestProperties;
@@ -293,9 +312,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private String produceBaseURL(String rpcPath) {
 		String url;
-		// if (host.contains("://") && host.contains(":")) {
-		// 	url = host + '/' + rpcPath;
-		// } else 
+
 		if (host.contains("://")) {
 			url = host + ":" + portHTTPS + rpcPath;
 		} else if (host.contains(":")) {
@@ -313,7 +330,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private URL makeURL(String urlpath) {
 		URL serviceURL = null;
 		String baseURL = produceBaseURL(urlpath);
-		Logging.debug("baseURL ", baseURL);
 
 		try {
 			serviceURL = new URI(baseURL).toURL();
@@ -409,11 +425,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
 			Map<String, String> requestProperties, Map<String, Object> json, String resultkey,
 			Map<String, Object> responseHeader) {
-		Logging.notice(this, "MY retrieveResponse started ", url, " ", requestMethod, " ", requestProperties, " ", json,
-				" ", resultkey, " ", responseHeader);
+		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod, " ", requestProperties, " ", json, " ",
+				resultkey, " ", responseHeader);
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
-
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + url);
 		timeCheck.start();
 
@@ -532,7 +547,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			String resultKey) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		String resultStr = readInputStream(stream).strip();
-		Logging.info("retrieveResponseBasedOnContentType ", contentType, ": ", resultStr);
+		Logging.debug("retrieveResponseBasedOnContentType ", contentType, ": ", resultStr);
 
 		Map<String, Object> result = new HashMap<>();
 		if (contentType.contains("application/json")) {
@@ -543,7 +558,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object[]>() {
 				}));
 			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("\"")) {
-				Logging.info("retrieveResponseBasedOnContentType ", contentType, " is string ", resultStr);
 				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
 				}));
 			} else if (resultStr != null && (resultStr.equals("true") || resultStr.equals("\"true\""))) {

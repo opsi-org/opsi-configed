@@ -154,33 +154,24 @@ public class OpsiServiceNOMPersistenceController {
 		if (useSSO) {
 			Logging.warning(this.getClass(), "OSNOM try sso/saml");
 		} else if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
-			Logging.error(this.getClass(), "no user or password given");
-			return;
+			throw new RuntimeException("No user or password given.");
 		}
 		// this.user = user; // could be overwritten by sso
 
 		Logging.debug(this, "create");
 
-		Logging.info(this, "OSNOM start init");
 		init();
-		Logging.info(this, "OSNOM useSSO ", useSSO);
 		if (useSSO) {
-			Logging.info(this, "OSNOM 0try sso");
-			// try {
 			ServerFacade sf = new ServerFacade(server);
-			// this.user = sf.getUsername();
 			exec = sf;
-			// } catch (Exception ex) {
-			// 	Logging.error(this, "OSNOM 0error in sso", ex);
-
-			// }
-			Logging.info(this, "OSNOM 0sso exec is ", exec, " connection state ", exec.getConnectionState());
 		} else {
-			Logging.info(this, "OSNOM 1try normal");
 			exec = new ServerFacade(server, user, password, otp);
-			Logging.info(this, "OSNOM 1exec is ", exec, " connection state ", exec.getConnectionState());
 		}
-		Logging.info(this, "OSNOM start getting data services");
+		if (this.exec == null) {
+			throw new RuntimeException("No connection to server.");
+		}
+		Logging.info(this, "connection state ", exec.getConnectionState());
+
 		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);
