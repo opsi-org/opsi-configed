@@ -806,7 +806,7 @@ public class ConfigedMain {
 
 		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
 
-		// We want to deactivate the listener here, since we want it to react only later when 
+		// We want to deactivate the listener here, since we want it to react only later when
 		// the values are selected. We only reactivate the listener if it was active before.
 		boolean listenerDeactivated = clientTablePanel.deactivateListSelectionListener();
 		clientTablePanel.getClientTable().updateModel(tm);
@@ -1298,6 +1298,7 @@ public class ConfigedMain {
 	}
 
 	public static void setHost(String host) {
+		Logging.trace("Setting host from ", ConfigedMain.host, "to", host);
 		ConfigedMain.host = host;
 	}
 

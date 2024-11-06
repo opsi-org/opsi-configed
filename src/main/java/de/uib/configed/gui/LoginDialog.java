@@ -408,7 +408,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 			ConfigedMain.setUser(user);
 			ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
 		}
-		Configed.setHost((String) fieldHost.getSelectedItem());
+		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
 		Configed.initSavedStates();
 
 		Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());

@@ -71,11 +71,12 @@ public class Messagebus implements MessagebusListener {
 			return true;
 		}
 
-		Logging.info(this, "Connecting to messagebus");
-
 		initialSubscriptionReceived = false;
 		disconnecting = false;
 		URI uri = createUri();
+
+		Logging.notice(this, "Connecting to messagebus at", uri);
+
 		String basicAuthEnc = createEncBasicAuth();
 		ServerFacade exec = getServerFacadeExecutor();
 
@@ -141,6 +142,9 @@ public class Messagebus implements MessagebusListener {
 	private String produceURL() {
 		String protocol = "wss";
 		String host = ConfigedMain.getHost();
+		if (host == null) {
+			throw new RuntimeException("Host is null");
+		}
 
 		if (!Utils.hasPort(host)) {
 			host = host + ":" + Globals.DEFAULT_PORT;

@@ -49,7 +49,6 @@ public final class Configed {
 	private static Properties extraLocalization;
 	private static boolean showLocalizationStrings;
 
-	private static String host;
 	private static String user;
 	private static String password;
 	private static String otp;
@@ -151,8 +150,8 @@ public final class Configed {
 	}
 
 	private static void addMissingArgs() {
-		if (host == null) {
-			host = Utils.getCLIParam("Host: ");
+		if (ConfigedMain.getHost() == null) {
+			ConfigedMain.setHost(Utils.getCLIParam("Host: "));
 		}
 		if (user == null) {
 			user = Utils.getCLIParam("User: ").toLowerCase(Locale.ROOT);
@@ -167,7 +166,7 @@ public final class Configed {
 
 	private static void processLoginOptions(CommandLine cmd) {
 		if (cmd.hasOption("h")) {
-			host = cmd.getOptionValue("h");
+			ConfigedMain.setHost(cmd.getOptionValue("h"));
 		}
 
 		if (cmd.hasOption("u")) {
@@ -334,6 +333,7 @@ public final class Configed {
 
 	private static void checkArgsAndStart() {
 		Logging.debug("initiating configed");
+		String host = ConfigedMain.getHost();
 
 		if (optionCLIQuerySearch) {
 			addMissingArgs();
@@ -450,11 +450,7 @@ public final class Configed {
 	}
 
 	private static String getSavedStatesDirectoryName(String locationName) {
-		return locationName + File.separator + host.replace(":", "_");
-	}
-
-	public static void setHost(String host) {
-		Configed.host = host;
+		return locationName + File.separator + ConfigedMain.getHost().replace(":", "_");
 	}
 
 	public static SavedStates getSavedStates() {
