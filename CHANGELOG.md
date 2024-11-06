@@ -1,4 +1,8 @@
-## [4.4.0.9] - 2024-30-10
+## [4.4.0.10] - 2024-11-06
+### Added
+- Add option to log in via Single Sign On (SSO)
+
+## [4.4.0.9] - 2024-10-30
 ### Fixed
 - Correct path for saving certificates when entering port in login dialog
 - Start configed when trusting the certificate once
