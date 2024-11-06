@@ -330,7 +330,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	}
 
 	public void actAfterWaiting() {
-		Logging.warning(this, "actAfterWaiting");
+		Logging.debug(this, "actAfterWaiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));

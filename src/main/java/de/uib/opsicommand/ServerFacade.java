@@ -57,7 +57,7 @@ import net.jpountz.lz4.LZ4FrameOutputStream;
  * connection is established it sends a {@code POST} request, to send
  * {@code OpsiMethodCall}, and retrieves data from the response send by the
  * server.
- * 
+ *
  * @author Rupert Roeder, Naglis Vidziunas
  */
 public class ServerFacade extends AbstractPOJOExecutioner {
@@ -90,7 +90,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	/**
 	 * Constructs {@code ServerFacade} object with provided information.
-	 * 
+	 *
 	 * @param host     server FQDN or IPv4/IPv6 address.
 	 * @param username to use for the authentication.
 	 * @param password to use for the authentication.
@@ -351,7 +351,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * It establishes connection with the server and sends the {@code POST}
 	 * request. Then retrieves response sent by the server. The response is
 	 * accepted in JSON and MessagePack format.
-	 * 
+	 *
 	 * @param omc RPC method to execute.
 	 * @return retrieved response from the server.
 	 */
@@ -463,7 +463,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					}
 					// responseHeader.putAll(connection.getHeaderFields());
 				}
-				Logging.warning(this, "Connection state after communication: ", conStat);
+				Logging.debug(this, "Connection state after communication: ", conStat);
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
 				return null;
@@ -678,7 +678,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	/**
 	 * Retrieve used username by the connection.
-	 * 
+	 *
 	 * @return used username by the connection.
 	 */
 	public String getUsername() {
@@ -687,7 +687,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	/**
 	 * Retrieve used password by the connection.
-	 * 
+	 *
 	 * @return used password by the connection.
 	 */
 	public String getPassword() {
@@ -696,7 +696,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	/**
 	 * Retrieve used session by the connection.
-	 * 
+	 *
 	 * @return used session by the connection.
 	 */
 	public String getSessionId() {

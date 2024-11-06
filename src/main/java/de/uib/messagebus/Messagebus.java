@@ -90,7 +90,7 @@ public class Messagebus implements MessagebusListener {
 			messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
 		}
 		if (exec.getSessionId() != null) {
-			Logging.warning("Adding cookie header");
+			Logging.info("Adding cookie header for session ID");
 			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 

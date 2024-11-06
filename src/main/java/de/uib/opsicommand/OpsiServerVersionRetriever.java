@@ -68,7 +68,7 @@ public class OpsiServerVersionRetriever {
 	/**
 	 * returns true, if the server has a newer version (or same version)
 	 * compared to the version in the argument
-	 * 
+	 *
 	 * @param compareVersion version to compare to of format x.y.z...
 	 */
 	public boolean isServerVersionAtLeast(String compareVersion) {
@@ -91,7 +91,7 @@ public class OpsiServerVersionRetriever {
 		String authorization = null;
 		try {
 			connection = (HttpsURLConnection) new URI(serviceURL).toURL().openConnection();
-			Logging.warning("using session id for connection ", sessionId);
+			Logging.secret("Session id for connection ", sessionId);
 			if (sessionId != null) {
 				authorization = sessionId;
 				connection.setRequestProperty("Cookie", authorization);
@@ -99,19 +99,19 @@ public class OpsiServerVersionRetriever {
 					authorization = sessionId.split("=")[1];
 					connection.setRequestProperty("Cookie", "session-id=" + authorization);
 					connection.setRequestProperty("Cookie", "sessionId=" + authorization);
-					Logging.notice(this, "using session id for connection ", authorization);
-					Logging.notice(this, "connection", connection.getRequestProperties());
+					Logging.info(this, "Using existing session id for connection");
+					Logging.info(this, "Connection:", connection.getRequestProperties());
 				}
 			} else if (username != null && password != null) {
 				authorization = Base64.getEncoder()
 						.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
 				connection.setRequestProperty("Authorization", "Basic " + authorization);
 			} else {
-				Logging.error("no session id or username/password provided");
+				Logging.error("No session id or username/password provided");
 				return;
 			}
 
-			Logging.warning("connection to ", serviceURL, " with authentication ", authorization);
+			Logging.info("Fetching service info for", serviceURL);
 
 			CertificateValidator certValidator = CertificateValidatorFactory.getInsecure();
 			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());

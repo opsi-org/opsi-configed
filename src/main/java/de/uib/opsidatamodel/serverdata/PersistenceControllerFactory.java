@@ -60,20 +60,20 @@ public final class PersistenceControllerFactory {
 		staticPersistControl = persistenceController;
 
 		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED) {
-			Logging.warning("PersistenceControllerFactory getNewPersistenceController, connected");
+			Logging.debug("PersistenceControllerFactory.getNewPersistenceController() - connected");
 			UserDataService userDataService = persistenceController.getUserDataService();
-			Logging.warning("PersistenceControllerFactory getNewPersistenceController, userDataService",
+			Logging.debug("PersistenceControllerFactory.getNewPersistenceController() - userDataService:",
 					userDataService);
 
 			if (!useSSO) {
 				boolean isMultiFactorAuthenticationEnabled = userDataService.usesMultiFactorAuthentication();
-				Logging.warning(
-						"PersistenceControllerFactory getNewPersistenceController, isMultiFactorAuthenticationEnabled",
+				Logging.debug(
+						"PersistenceControllerFactory.getNewPersistenceController() - isMultiFactorAuthenticationEnabled:",
 						isMultiFactorAuthenticationEnabled);
 
 				Utils.setMultiFactorAuthenticationEnabled(isMultiFactorAuthenticationEnabled);
-				Logging.warning(
-						"PersistenceControllerFactory getNewPersistenceController, setMultiFactorAuthenticationEnabled",
+				Logging.debug(
+						"PersistenceControllerFactory.getNewPersistenceController() - setMultiFactorAuthenticationEnabled:",
 						Utils.isMultiFactorAuthenticationEnabled());
 			}
 

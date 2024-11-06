@@ -152,7 +152,7 @@ public class OpsiServiceNOMPersistenceController {
 		}
 
 		if (useSSO) {
-			Logging.warning(this.getClass(), "OSNOM try sso/saml");
+			Logging.info(this.getClass(), "OSNOM try sso/saml");
 		} else if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
 			throw new RuntimeException("No user or password given.");
 		}

@@ -377,7 +377,7 @@ public class UserRolesConfigDataService {
 	}
 
 	private void checkTerminalPermissions() {
-		Logging.warning(this, " checkTerminalPermissions");
+		Logging.debug(this, "checkTerminalPermissions");
 
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
@@ -392,7 +392,7 @@ public class UserRolesConfigDataService {
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 
-			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
+			Logging.info(this, "checkPermissions value:", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
 		}
@@ -940,7 +940,7 @@ public class UserRolesConfigDataService {
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 
-		// list of domains for new clients		
+		// list of domains for new clients
 		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY,
 				arg -> computeConfigedGivenDomains(readyObjects));
 
