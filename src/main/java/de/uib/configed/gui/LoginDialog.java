@@ -73,7 +73,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 	private JButton jButtonCancel;
 	private JButton jButtonCommit;
 	private JButton jButtonSSO;
-	private boolean loadingSSOState = true;
 	private Boolean ssoActiveByServer;
 	private FocusListener myFocusListener = new FocusListener() {
 		@Override
@@ -171,7 +170,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.setSelectedItem("");
 		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
 		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
-		// fieldHost.addActionListener(actionEvent -> initSSO());
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(this);
