@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -51,7 +50,7 @@ import de.uib.utils.thread.WaitingSleeper;
 import de.uib.utils.thread.WaitingWorker;
 import de.uib.utils.userprefs.UserPreferences;
 
-public class LoginDialog extends JFrame implements WaitingSleeper {
+public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 
 	// 5000 reproduceable error
@@ -81,19 +80,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 
 	private JButton jButtonCancel;
 	private JButton jButtonCommit;
-
-	private KeyListener newKeyListener = new KeyAdapter() {
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				tryConnecting();
-			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				endProgram();
-			} else {
-				// Do nothing with other keys
-			}
-		}
-	};
 
 	public LoginDialog(ConfigedMain configedMain) {
 		super();
@@ -179,19 +165,20 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
-		fieldHost.addKeyListener(newKeyListener);
+		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
-		fieldUser.addKeyListener(newKeyListener);
+		fieldUser.addKeyListener(this);
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		passwordField.setPlaceholderText(Configed.getResourceValue("password"));
-		passwordField.addKeyListener(newKeyListener);
+		passwordField.addKeyListener(this);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, true));
 		fieldOTP.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderOTP"));
+		fieldOTP.addKeyListener(this);
 		fieldOTP.setVisible(false);
 		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
@@ -438,5 +425,34 @@ public class LoginDialog extends JFrame implements WaitingSleeper {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			endProgram();
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {
+				fieldUser.requestFocus();
+			} else if (fieldUser.getText() == null || fieldUser.getText().isEmpty()) {
+				fieldUser.requestFocus();
+			} else if (passwordField.getPassword() == null || passwordField.getPassword().length == 0) {
+				passwordField.requestFocus();
+			} else {
+				tryConnecting();
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			endProgram();
+		} else {
+			// Do nothing with other keys
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// Not needed here
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// Not needed here
 	}
 }
