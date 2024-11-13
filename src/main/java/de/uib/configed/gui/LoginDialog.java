@@ -28,9 +28,11 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 // import javax.swing.event.ChangeListener;
+import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
@@ -96,6 +98,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		finishAndMakeVisible();
 
 		initGlassPane();
+		initSSO();
 	}
 
 	private void initGlassPane() {
@@ -160,7 +163,9 @@ public class LoginDialog extends JFrame implements KeyListener {
 		setIconImage(Icons.getMainIcon());
 
 		jLabelLogo = new JLabel(Icons.getOpsiLogoWide());
-		jLabelLoadingSSOState = new JLabel(Configed.getResourceValue("LoginDialog.loadingSSOState"));
+		jLabelLoadingSSOState = new JLabel(Configed.getResourceValue("LoginDialog.loadingSSOState"),
+				SwingConstants.CENTER);
+		jLabelLoadingSSOState.setBorder(new EmptyBorder(3, 0, 0, 0));
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
@@ -200,14 +205,17 @@ public class LoginDialog extends JFrame implements KeyListener {
 	}
 
 	private void initSSO() {
-		jLabelLoadingSSOState.setVisible(true);
-		ssoActiveByServer = true;
-		// ssoActiveByServer = false;
 		if (!(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))) {
 			Logging.warning(this, "Desktop is not supported or browse action is not supported");
 			return;
 		}
 		String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
+		if (host == null || host.isEmpty()) {
+			Logging.debug(this, "No host provided");
+			return;
+		}
+		jLabelLoadingSSOState.setVisible(true);
+		ssoActiveByServer = true;
 		Logging.info("get auth info for ", host);
 		ServerFacade serverFacade = new ServerFacade(host, false);
 		Map<String, List<String>> headers = serverFacade.getHeaders();
@@ -389,8 +397,8 @@ public class LoginDialog extends JFrame implements KeyListener {
 			initSSO();
 		}
 
-		if ((ssoActiveByServer == null || !ssoActiveByServer) && requestSSO) {
-			Logging.error("SSO not available. Concider to remove parameter or activate sso for this server.");
+		if ((!ssoActiveByServer) && requestSSO) {
+			Logging.error("SSO not available. Consider to remove parameter or activate sso for this server.");
 			return;
 		}
 		tryConnecting(requestSSO);
@@ -456,8 +464,23 @@ public class LoginDialog extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			tryConnecting();
-		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			if (ssoActiveByServer) {
+				tryConnecting(true);
+			} else {
+				if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {
+					fieldUser.requestFocus();
+				} else if (e.getSource() == fieldUser) {
+					if (fieldUser.getText() != null && !fieldUser.getText().isEmpty()) {
+						passwordField.requestFocus();
+					}
+				} else {
+					tryConnecting();
+				}
+			}
+
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+
+		{
 			endProgram();
 		} else {
 			// Do nothing with other keys
