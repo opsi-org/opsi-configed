@@ -469,18 +469,16 @@ public class LoginDialog extends JFrame implements KeyListener {
 			} else {
 				if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {
 					fieldUser.requestFocus();
-				} else if (e.getSource() == fieldUser) {
-					if (fieldUser.getText() != null && !fieldUser.getText().isEmpty()) {
-						passwordField.requestFocus();
-					}
+				} else if (fieldUser.getText() == null || fieldUser.getText().isEmpty()) {
+					fieldUser.requestFocus();
+				} else if (passwordField.getPassword() == null || passwordField.getPassword().length == 0) {
+					passwordField.requestFocus();
 				} else {
 					tryConnecting();
 				}
 			}
 
-		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-
-		{
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			endProgram();
 		} else {
 			// Do nothing with other keys
