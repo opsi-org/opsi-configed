@@ -1,3 +1,7 @@
+## [4.4.0.11] - 2024-11-13
+### Changed
+- Improve login dialog usability
+
 ## [4.4.0.10] - 2024-11-06
 ### Added
 - Add option to log in via Single Sign On (SSO)
