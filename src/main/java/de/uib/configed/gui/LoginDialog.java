@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -90,30 +91,18 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 	private JButton jButtonCommit;
 	private JButton jButtonSSO;
 	private boolean ssoActiveByServer;
-
-	// private FocusListener myFocusListener = new FocusListener() {
-	// 	@Override
-	// 	public void focusGained(java.awt.event.FocusEvent e) {
-	// 		fieldHost.getEditor().selectAll();
-	// 	}
-
-	// 	@Override
-	// 	public void focusLost(java.awt.event.FocusEvent e) {
-	// 		initSSO();
-	// 	}
-	// };
+	private Map<String, Boolean> ssoServerStates;
 
 	public LoginDialog(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
+		ssoServerStates = new HashMap<>();
 		initGuiElements();
 		setupLayout();
-		//setServers();
 
 		finishAndMakeVisible();
 
 		initGlassPane();
-		initSSO();
 	}
 
 	private void initGlassPane() {
@@ -132,8 +121,12 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 	}
 
 	public void setServers(List<String> hosts) {
+		if (hosts == null) {
+			hosts = List.of("localhost");
+		}
+		Logging.debug(this, "setServers " + hosts);
 		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray(new String[0])));
-		// setHost(fieldHost.getSelectedItem().toString());
+		initSSO();
 	}
 
 	public void setUser(String user) {
@@ -184,7 +177,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 		}
 
 		jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
-		// jLabelLogo = new JLabel("opsi");
 
 		jLabelLoadingSSOState = new JLabel(Configed.getResourceValue("LoginDialog.loadingSSOState"),
 				SwingConstants.CENTER);
@@ -198,8 +190,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
+		// initSSO() is called when the user selects a host from dropdown or the hostTextfield looses focus
 		fieldHost.getEditor().getEditorComponent().addFocusListener(this);
-		fieldHost.addActionListener((e) -> {
+		fieldHost.addActionListener((ActionEvent e) -> {
 			initSSO();
 		});
 
@@ -237,29 +230,46 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 	}
 
 	private void initSSO() {
+		Logging.debug(this, "initSSO");
 		if (!(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))) {
 			Logging.warning(this, "Desktop is not supported or browse action is not supported");
 			return;
 		}
-		String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
-		Logging.warning(this, "check connection for host " + host);
+		String host = (String) fieldHost.getSelectedItem() != null ? (String) fieldHost.getSelectedItem()
+				: ConfigedMain.getHost();
+		Boolean state = ssoServerStates.get(host);
+		if (state != null) {
+			Logging.debug(this, "use cached value for host " + host + " " + state);
+			// use cached value if set to true (otherwise try to get it from server and decide later)
+			initSSOitems(state);
+			return;
+		}
+
+		Logging.info(this, "check authentication method for host " + host);
 		if (host == null || host.isEmpty()) {
 			Logging.info(this, "No host provided");
 			return;
 		}
 		jLabelLoadingSSOState.setVisible(true);
-		ssoActiveByServer = true;
+		ssoActiveByServer = false;
 		ServerFacade serverFacade = new ServerFacade(host, false);
 		Map<String, List<String>> headers = serverFacade.getHeaders();
 
 		if (headers != null && headers.containsKey("X-opsi-auth-methods")) {
 			String authMethods = headers.get("X-opsi-auth-methods").toString();
 			ssoActiveByServer = authMethods.contains("saml");
-			Logging.debug("Authentication methods for host " + host + ": ", authMethods);
+			// cache status of server
+			ssoServerStates.put(host, ssoActiveByServer);
+			Logging.debug("Authentication methods for host " + host + ": ",
+					authMethods + " SSO active: " + ssoActiveByServer);
 		}
+		initSSOitems(ssoActiveByServer);
+	}
+
+	private void initSSOitems(boolean ssoActive) {
+		ssoActiveByServer = ssoActive;
 		jLabelLoadingSSOState.setVisible(false);
 		jButtonSSO.setVisible(ssoActiveByServer);
-		Logging.notice("SSO active by server " + ssoActiveByServer);
 		setupLayout();
 	}
 
@@ -365,7 +375,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 		String osVersion = System.getProperty("os.version");
 		Logging.notice(" OS " + strOS + "  Version " + osVersion);
 
-		setHost("localhost");
 		fieldHost.requestFocus();
 
 		// Sets the window on the main screen
@@ -376,7 +385,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 
 	@Override
 	public void actAfterWaiting() {
-		Logging.warning("Act after waiting");
+		Logging.debug("Act after waiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
@@ -473,7 +482,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 	}
 
 	public void tryConnecting(boolean useSSO) {
-		Logging.info(this, "started  tryConnecting with SSO " + useSSO);
+		Logging.debug(this, "started  tryConnecting with sso " + useSSO);
 		setActivated(false);
 		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
 		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
@@ -567,6 +576,16 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 				} else {
 					tryConnecting();
 				}
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+			if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {
+				fieldUser.requestFocus();
+			} else if (e.getSource() == fieldUser) {
+				passwordField.requestFocus();
+			} else if (e.getSource() == passwordField) {
+				fieldHost.requestFocus();
+			} else {
+				fieldHost.requestFocus();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			endProgram();

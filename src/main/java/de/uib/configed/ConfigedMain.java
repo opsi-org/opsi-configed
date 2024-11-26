@@ -1120,6 +1120,8 @@ public class ConfigedMain implements MessagebusListener {
 		// set list of saved servers
 		if (!savedServers.isEmpty()) {
 			loginDialog.setServers(savedServers);
+		} else {
+			loginDialog.setServers(null);
 		}
 
 		// check if we started with preferred values
