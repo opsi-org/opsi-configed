@@ -15,12 +15,12 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 public class ProductpropertiesUpdate implements UpdateCommand {
 	private String pcname;
 	private String productname;
-	private Map<?, ?> newdata;
+	private Map<String, Object> newdata;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ProductpropertiesUpdate(String pcname, String productname, Map<?, ?> newdata) {
+	public ProductpropertiesUpdate(String pcname, String productname, Map<String, Object> newdata) {
 		this.pcname = pcname;
 		this.productname = productname;
 		this.newdata = newdata;
@@ -28,10 +28,8 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		if (newdata instanceof ConfigName2ConfigValue newConfigProperties) {
-			persistenceController.getProductDataService().setProductProperties(pcname, productname,
-					newConfigProperties);
-		}
+		persistenceController.getProductDataService().setProductProperties(pcname, productname,
+				new ConfigName2ConfigValue(newdata));
 	}
 
 	public void revert() {

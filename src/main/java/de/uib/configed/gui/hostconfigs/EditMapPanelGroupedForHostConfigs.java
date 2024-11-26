@@ -40,6 +40,7 @@ import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -383,7 +384,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// apply method of superclass for all partial maps
 	@Override
-	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
+	public void setUpdateCollection(UpdateCollection updateCollection) {
 		super.setUpdateCollection(updateCollection);
 
 		for (String key : keyclasses) {

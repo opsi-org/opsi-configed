@@ -20,6 +20,7 @@ import javax.swing.MenuElement;
 
 import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utils.DataChangedObserver;
 import de.uib.utils.logging.Logging;
 
@@ -193,7 +194,7 @@ public class DefaultEditMapPanel extends JPanel {
 	 * 
 	 * @param Collection updateCollection
 	 */
-	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
+	public void setUpdateCollection(UpdateCollection updateCollection) {
 		mapTableModel.setUpdateCollection(updateCollection);
 	}
 

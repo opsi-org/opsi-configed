@@ -10,6 +10,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utils.DataChangedObserver;
 import de.uib.utils.Utils;
@@ -29,8 +31,9 @@ import de.uib.utils.logging.Logging;
 public class MapTableModel extends AbstractTableModel {
 	private List<DataChangedObserver> observers;
 
-	private Collection<Map<String, Object>> updateCollection;
+	private UpdateCollection updateCollection;
 	private Collection<Map<String, Object>> storeData;
+	private Map<String, Object> alternative;
 	private boolean datachanged;
 
 	// keys which identify readonly entries
@@ -135,6 +138,7 @@ public class MapTableModel extends AbstractTableModel {
 
 		setNew();
 		storeData = data;
+		alternative = new HashMap<>();
 		resetModifiedKey();
 	}
 
@@ -144,7 +148,7 @@ public class MapTableModel extends AbstractTableModel {
 	 * 
 	 * @param Collection updateCollection
 	 */
-	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
+	public void setUpdateCollection(UpdateCollection updateCollection) {
 		this.updateCollection = updateCollection;
 	}
 
@@ -284,7 +288,7 @@ public class MapTableModel extends AbstractTableModel {
 			if (updateCollection == null) {
 				Logging.debug(this, "updateCollection null - should not be");
 			} else {
-				updateCollection.addAll(storeData);
+				updateCollection.addMap(alternative);
 			}
 
 			Logging.debug(this, " ---  updateCollection: ", updateCollection, "  has size ", updateCollection.size());
@@ -296,6 +300,8 @@ public class MapTableModel extends AbstractTableModel {
 			for (Map<String, Object> aStoreMap : storeData) {
 				aStoreMap.put(myKey, null);
 			}
+
+			alternative.put(myKey, null);
 
 			Logging.debug(this, "remove entry --  updateCollection: ", updateCollection, "  has size ",
 					updateCollection.size());
@@ -324,6 +330,8 @@ public class MapTableModel extends AbstractTableModel {
 					Logging.info(this, "EditMapPanel.setValueAt: we have some data null ");
 				}
 			}
+
+			alternative.put(myKey, value);
 
 			if (toStore) {
 				weHaveChangedStoredMaps();

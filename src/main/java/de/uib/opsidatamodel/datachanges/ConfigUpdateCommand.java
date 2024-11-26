@@ -14,20 +14,18 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class ConfigUpdateCommand implements UpdateCommand {
 	private String objectId;
-	private Map<?, ?> newdata;
+	private Map<String, Object> newdata;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ConfigUpdateCommand(String objectId, Map<?, ?> newdata) {
+	public ConfigUpdateCommand(String objectId, Map<String, Object> newdata) {
 		this.objectId = objectId;
 		this.newdata = newdata;
 	}
 
 	@Override
 	public void doCall() {
-		if (newdata instanceof ConfigName2ConfigValue configState) {
-			persistenceController.getConfigDataService().setConfiguration(objectId, configState);
-		}
+		persistenceController.getConfigDataService().setConfiguration(objectId, new ConfigName2ConfigValue(newdata));
 	}
 }

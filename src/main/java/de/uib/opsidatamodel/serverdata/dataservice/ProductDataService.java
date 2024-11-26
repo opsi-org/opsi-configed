@@ -1191,25 +1191,21 @@ public class ProductDataService {
 			List<?> newValue = (List<?>) propertyEntry.getValue();
 
 			Map<String, Object> retrievedConfig = configProperties.getRetrieved();
-			Object oldValue = retrievedConfig == null ? null : retrievedConfig.get(propertyId);
 
-			if (newValue != oldValue) {
-				Map<String, Object> state = new HashMap<>();
-				state.put("type", "ProductPropertyState");
-				state.put("objectId", pcname);
-				state.put("productId", productId);
-				state.put("propertyId", propertyId);
+			Map<String, Object> state = new HashMap<>();
+			state.put("type", "ProductPropertyState");
+			state.put("objectId", pcname);
+			state.put("productId", productId);
+			state.put("propertyId", propertyId);
 
-				if (newValue == null) {
-					Logging.debug(this, "setProductProperties,  requested deletion ", newValue);
-					deleteState(state, deleteCollection, retrievedConfig, productId, propertyId, configProperties);
-				} else {
-					Logging.debug(this, "setProductProperties,  requested update ", newValue, " for oldValue ",
-							oldValue);
+			if (newValue == null) {
+				Logging.debug(this, "setProductProperties,  requested deletion ", newValue);
+				deleteState(state, deleteCollection, retrievedConfig, productId, propertyId, configProperties);
+			} else {
+				Logging.debug(this, "setProductProperties,  requested update ", newValue);
 
-					state.put("values", newValue);
-					updateState(state, updateCollection, retrievedConfig, propertyId, newValue);
-				}
+				state.put("values", newValue);
+				updateState(state, updateCollection, retrievedConfig, propertyId, newValue);
 			}
 		}
 	}

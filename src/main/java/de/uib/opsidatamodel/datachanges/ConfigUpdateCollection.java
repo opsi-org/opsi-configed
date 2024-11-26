@@ -6,7 +6,6 @@
 
 package de.uib.opsidatamodel.datachanges;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -30,33 +29,16 @@ public class ConfigUpdateCollection extends UpdateCollection {
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends UpdateCommand> c) {
-		if (c.size() != objectIds.size()) {
-			Logging.warning(this, "object ids (not fitting to edited item) ", objectIds);
-			Logging.error("list of data has size ", c.size(), " differs from  length of objectIds list  ",
-					objectIds.size());
-
-			return false;
-		}
-
+	public boolean addMap(Map<String, Object> map) {
 		boolean result = true;
-		int i = 0;
 
-		// TODO Sometimes these are not updatecommands?!?
-		for (Object updateCommand : (Collection<?>) c) {
-			if (updateCommand instanceof Map) {
-				Map<String, List<Object>> map = POJOReMapper.remap(updateCommand);
-
-				Logging.debug(this, "addAll for one obj, map ", map);
-
-				if (masterConfig) {
-					Logging.debug(this, "adding ConfigUpdate");
-					result = add(new ConfigUpdate(map));
-				} else {
-					Logging.debug(this, "adding AdditionalconfigurationUpdate");
-					result = add(new ConfigUpdateCommand(objectIds.get(i), map));
-				}
-				i++;
+		for (String objectId : objectIds) {
+			if (masterConfig) {
+				Logging.debug(this, "adding ConfigUpdate");
+				result = add(new ConfigUpdate(POJOReMapper.remap(map)));
+			} else {
+				Logging.debug(this, "adding AdditionalconfigurationUpdate");
+				result = add(new ConfigUpdateCommand(objectId, map));
 			}
 		}
 

@@ -753,13 +753,11 @@ public class ConfigDataService {
 
 			if (retrievedConfig == null) {
 				configStateCollection.add(state);
-			} else if (entry.getValue() != retrievedConfig.get(entry.getKey())) {
+			} else {
 				configStateCollection.add(state);
 
 				// we hope that the update works and directly update the retrievedConfig
 				retrievedConfig.put(entry.getKey(), entry.getValue());
-			} else {
-				// Do nothing when retrieved config is not null and equals entry value
 			}
 		}
 	}
