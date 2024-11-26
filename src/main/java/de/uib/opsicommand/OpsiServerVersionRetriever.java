@@ -42,6 +42,7 @@ public class OpsiServerVersionRetriever {
 	private String serviceURL;
 	private String username;
 	private String password;
+	private String sessionId;
 
 	public OpsiServerVersionRetriever(String serviceURL, String username, String password) {
 		if (serviceURL == null || username == null || password == null) {
@@ -51,6 +52,17 @@ public class OpsiServerVersionRetriever {
 		this.serviceURL = serviceURL;
 		this.username = username;
 		this.password = password;
+	}
+
+	public OpsiServerVersionRetriever(String serviceURL, String sessionId) {
+		if (serviceURL == null || sessionId == null) {
+			throw new IllegalArgumentException("Provided parameters are null");
+		}
+
+		this.serviceURL = serviceURL;
+		this.sessionId = sessionId;
+		this.username = null;
+		this.password = null;
 	}
 
 	/**
@@ -76,12 +88,29 @@ public class OpsiServerVersionRetriever {
 	@SuppressWarnings("java:S2647")
 	public synchronized void checkServerVersion() {
 		HttpsURLConnection connection;
+		String authorization = null;
 
 		try {
 			connection = (HttpsURLConnection) new URI(serviceURL).toURL().openConnection();
-			String authorization = Base64.getEncoder()
-					.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
-			connection.setRequestProperty("Authorization", "Basic " + authorization);
+
+			if (sessionId != null) {
+				authorization = sessionId;
+				connection.setRequestProperty("Cookie", authorization);
+				if (sessionId.contains("=")) {
+					authorization = sessionId.split("=")[1];
+					connection.setRequestProperty("Cookie", "session-id=" + authorization);
+					connection.setRequestProperty("Cookie", "sessionId=" + authorization);
+					Logging.info(this, "Using existing session id for connection");
+					Logging.info(this, "Connection:" + connection.getRequestProperties());
+				}
+			} else if (username != null && password != null) {
+				authorization = Base64.getEncoder()
+						.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
+				connection.setRequestProperty("Authorization", "Basic " + authorization);
+			} else {
+				Logging.error("No session id or username/password provided");
+				return;
+			}
 
 			CertificateValidator certValidator = CertificateValidatorFactory.createInsecure();
 			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());

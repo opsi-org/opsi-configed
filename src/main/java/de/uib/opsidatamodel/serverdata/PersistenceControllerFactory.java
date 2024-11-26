@@ -28,7 +28,7 @@ public final class PersistenceControllerFactory {
 	 * method getPersistenceController - or construct a new one
 	 */
 	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server, String user,
-			String password, String otp) {
+			String password, String otp, boolean useSSO) {
 		Logging.info("getNewPersistenceController");
 
 		if (!otp.isEmpty() && !OTP_PATTERN.matcher(otp).matches()) {
@@ -37,11 +37,15 @@ public final class PersistenceControllerFactory {
 		}
 
 		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
-				user, password, otp);
+				user, password, otp, useSSO);
 		Logging.info(
 				"a PersistenceController initiated by option sqlAndGetRows got " + (persistenceController == null));
 
 		Logging.info("a PersistenceController initiated, got null? " + (persistenceController == null));
+		if (useSSO && persistenceController.getExecutioner() == null) {
+			Logging.error("Failed to create a PersistenceController instance using sso.");
+			return null;
+		}
 
 		while (persistenceController.getConnectionState().getState() == ConnectionState.UNDEFINED
 				|| persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
@@ -51,9 +55,12 @@ public final class PersistenceControllerFactory {
 		staticPersistControl = persistenceController;
 
 		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED) {
-			Utils.setMultiFactorAuthenticationEnabled(
-					persistenceController.getUserDataService().usesMultiFactorAuthentication());
 
+			if (!useSSO) {
+				Utils.setMultiFactorAuthenticationEnabled(
+						persistenceController.getUserDataService().usesMultiFactorAuthentication());
+
+			}
 			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
 			if (!Utils.isCertificateVerificationDisabled()) {
 				CertificateManager.updateCertificate();

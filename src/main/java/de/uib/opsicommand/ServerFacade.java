@@ -6,6 +6,7 @@
 
 package de.uib.opsicommand;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,12 +21,14 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.json.JSONObject;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,7 +70,23 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String password;
 	private String otp;
 	private String sessionId;
+	private boolean useSSO = false;
 	private int portHTTPS = Globals.DEFAULT_PORT;
+
+	public ServerFacade(String host) {
+		this(host, true);
+	}
+
+	public ServerFacade(String host, boolean connect) {
+		if (host == null) {
+			return;
+			// throw new IllegalArgumentException("All or some parameters are null");
+		}
+		this.host = host;
+		if (connect) {
+			connect(host, null, null, null, true);
+		}
+	}
 
 	/**
 	 * Constructs {@code ServerFacade} object with provided information.
@@ -77,10 +96,26 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * @param password to use for the authentication.
 	 */
 	public ServerFacade(String host, String username, String password, String otp) {
+
 		if (host == null || username == null || password == null) {
 			throw new IllegalArgumentException("All or some parameters are null");
 		}
+		connect(host, username, password, otp, false);
+	}
 
+	private synchronized boolean connectSSO() {
+		Logging.info(this, "connectSSO started ");
+		// register and get new session id (may throw exception)
+		ssoRequestSessionId();
+		if (!ssoOpenBrowser()) {
+			Logging.error("connectSSO error opening browser");
+			return false;
+		}
+		return ssoCheckAuthenticated();
+	}
+
+	private synchronized void connect(String host, String username, String password, String otp, boolean useSSO) {
+		this.useSSO = useSSO;
 		this.host = host;
 		int idx = -1;
 		if (host.contains("[") && host.contains("]")) {
@@ -96,7 +131,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.username = username;
 		this.password = password;
 		this.otp = otp;
+
 		conStat = new ConnectionState();
+
+		if (useSSO && !connectSSO()) {
+			// Logging.error("sso connection failed");
+			throw new RuntimeException("sso connection failed");
+		}
 
 		checkServerVersion();
 
@@ -110,8 +151,132 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 	}
 
+	public Map<String, List<String>> getHeaders() {
+		Logging.info("getHeaders started");
+		Map<String, String> requestProperties = new HashMap<>();
+		requestProperties.put("Accept", "application/json");
+		if (sessionId != null) {
+			requestProperties.put("Cookie", sessionId);
+		}
+		URL url = makeURL("/auth/session_id");
+		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
+		HttpsURLConnection connection = handler.establishConnection(true, true);
+		conStat = handler.getConnectionState();
+		if (connection == null) {
+			Logging.warning("try to get headers, but connection is null. " + "conStat ",
+					conStat + " state: " + conStat.getState());
+			return new HashMap<>();
+		}
+		Map<String, List<String>> result = new HashMap<>();
+		try {
+			handleResponseCode(connection);
+			result = connection.getHeaderFields();
+		} catch (IOException ex) {
+			Logging.error("Exception while trying to get headers" + ex);
+		}
+		// CertificateManager.init(null, null);
+		return result;
+	}
+
+	private synchronized void ssoRequestSessionId() {
+		Logging.info(this, "ssoRequestSessionId started");
+		Map<String, String> requestProperties = new HashMap<>();
+		Map<String, Object> jsonProperties = null;
+		requestProperties.put("Accept", "application/json");
+		String localKeySID = "respondSessionId";
+		//////// register and get new session id
+		URL url_get_sid = makeURL("/auth/session_id");
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
+		Map<String, Object> result = retrieveResponse(url_get_sid, "GET", requestProperties, jsonProperties,
+				localKeySID);
+		if (conStat.getState() == ConnectionState.RETRY_CONNECTION) {
+			Logging.debug("connectSSO retry connection");
+			result = retrieveResponse(url_get_sid, "GET", requestProperties, jsonProperties, localKeySID);
+		}
+
+		if (result == null || result.isEmpty() || !result.containsKey(localKeySID)) {
+			Logging.error("connectSSO no sessionId received. Result: " + result);
+			throw new RuntimeException("sessionId not received");
+		}
+		this.sessionId = (String) result.get(localKeySID);
+		if (sessionId == null) {
+			throw new RuntimeException("Requested sessionId is null");
+		} else {
+			sessionId = sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId);
+		}
+
+	}
+
+	private boolean ssoOpenBrowser() {
+		Logging.info(this, "ssoOpenBrowser started");
+		/////// open browser
+		String sid = sessionId.contains("=") ? sessionId.split("=")[1] : sessionId;
+		String urlBrowserSso = "/auth/saml/login?session_id=" + sid + "&redirect=close_window";
+		boolean result = true;
+		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				URL murl = makeURL(urlBrowserSso);
+				if (murl == null) {
+					Logging.error("Error creating URL");
+					return false;
+				} else {
+					desktop.browse(murl.toURI());
+				}
+			} catch (IOException | URISyntaxException | UnsupportedOperationException e) {
+				Logging.error(e, "Error opening browser");
+				result = false;
+			}
+		} else {
+			Logging.error("Desktop is not supported");
+			result = false;
+		}
+		return result;
+	}
+
+	private boolean ssoCheckAuthenticated() {
+		/////// check if authenticated
+		Logging.info(this, "ssoCheckAuthenticated started");
+		URL url_authenticated = makeURL("/auth/wait_authenticated");
+
+		Map<String, String> requestProperties = new HashMap<>();
+		requestProperties.put("Accept", "application/json");
+		requestProperties.put("Cookie", sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId));
+
+		Map<String, Object> jsonProperties = new HashMap<>();
+		jsonProperties.put("wait_time", 60);
+		HashMap<String, Object> responseHeader = new HashMap<>();
+		Map<String, Object> result = retrieveResponse(url_authenticated, "POST", requestProperties, jsonProperties,
+				"authenticated", responseHeader);
+
+		if (result == null || result.isEmpty() || !result.containsKey("authenticated")) {
+			throw new RuntimeException("authenticated not received");
+		}
+		if (responseHeader.isEmpty()) {
+			throw new RuntimeException("responseHeaders not received");
+		}
+
+		// set credentials for further requests and for information
+		String uname = (String) responseHeader.get("x-opsi-user-id");
+		if (uname == null) {
+			throw new RuntimeException("username not received");
+		}
+		username = uname.split("user:")[1];
+		ConfigedMain.setUser(username);
+		if (host != null && !host.equals(ConfigedMain.getHost())) {
+			ConfigedMain.setHost(host);
+		}
+
+		return (boolean) result.get("authenticated");
+	}
+
 	private synchronized void checkServerVersion() {
-		versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), username, password);
+		if (useSSO) {
+			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), sessionId);
+		} else {
+			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), username, password);
+		}
 		versionRetriever.checkServerVersion();
 	}
 
@@ -121,10 +286,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private Map<String, String> produceGeneralRequestProperties(OpsiMethodCall omc) {
 		Map<String, String> requestProperties = new HashMap<>();
-
-		String authorization = Base64.getEncoder()
-				.encodeToString((username + ":" + password + otp).getBytes(StandardCharsets.UTF_8));
-		requestProperties.put("Authorization", "Basic " + authorization);
+		if (!useSSO) {
+			String authorization = Base64.getEncoder()
+					.encodeToString((username + ":" + password + otp).getBytes(StandardCharsets.UTF_8));
+			requestProperties.put("Authorization", "Basic " + authorization);
+		}
 
 		// has to be value between 1 and 43300 [sec]
 		requestProperties.put("X-opsi-session-lifetime", "900");
@@ -140,19 +306,31 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		if (sessionId != null) {
-			requestProperties.put("Cookie", sessionId);
+			requestProperties.put("Cookie", sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId));
 		}
 
 		return requestProperties;
 	}
 
 	private String produceBaseURL(String rpcPath) {
-		return "https://" + host + ":" + portHTTPS + rpcPath;
+		String url;
+		if (host.contains("://")) {
+			url = host + ":" + portHTTPS + rpcPath;
+		} else if (host.contains(":")) {
+			url = "https://" + host + rpcPath;
+		} else {
+			url = "https://" + host + ":" + portHTTPS + rpcPath;
+		}
+		return url;
 	}
 
 	private URL makeURL() {
+		return makeURL("/rpc");
+	}
+
+	private URL makeURL(String urlpath) {
 		URL serviceURL = null;
-		String baseURL = produceBaseURL("/rpc");
+		String baseURL = produceBaseURL(urlpath);
 
 		try {
 			serviceURL = new URI(baseURL).toURL();
@@ -235,6 +413,71 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
+	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
+			Map<String, String> requestProperties, Map<String, Object> json, String resultkey) {
+		return retrieveResponse(url, requestMethod, requestProperties, json, resultkey, null);
+	}
+
+	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
+			Map<String, String> requestProperties, Map<String, Object> json, String resultkey,
+			Map<String, Object> responseHeader) {
+		Logging.info(this, "retrieveResponse started " + url + " " + requestMethod + " " + requestProperties + " "
+				+ json + " " + resultkey + " " + responseHeader);
+
+		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + url);
+		timeCheck.start();
+
+		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
+		handler.setRequestMethod(requestMethod);
+		HttpsURLConnection connection = handler.establishConnection(true);
+		conStat = handler.getConnectionState();
+		if (connection == null) {
+			return new HashMap<>();
+		}
+		// sending data
+		if (json != null) {
+			String jsonStr = new JSONObject(json).toString();
+			Logging.debug("send " + requestMethod + "jsonStr " + jsonStr);
+			try (OutputStream writer = getOutputStreamWriterForConnection(connection, jsonStr.length())) {
+				writer.write(jsonStr.getBytes(StandardCharsets.UTF_8));
+				writer.flush();
+			} catch (IOException iox) {
+				Logging.error("exception on writing json request ", iox);
+			}
+
+		}
+
+		Logging.info(this, "connection cipher suite " + (connection).getCipherSuite());
+		Map<String, Object> result = new HashMap<>();
+		// receiving data
+
+		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
+			try {
+				handleResponseCode(connection);
+
+				InputStream stream = getInputStreamBasedOnEncoding(connection);
+				Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
+
+				result = retrieveResponseBasedOnContentTypeToObject(connection.getContentType(), stream, resultkey);
+				if (responseHeader != null) {
+					for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet()) {
+						responseHeader.put(entry.getKey(), entry.getValue().get(0));
+					}
+					// responseHeader.putAll(connection.getHeaderFields());
+				}
+				Logging.debug(this, "Connection state after communication: " + conStat);
+			} catch (IOException ex) {
+				Logging.error(this, "Exception while data reading", ex);
+				return null;
+			}
+		}
+		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
+		Logging.info(this, "retrieveResponse ready");
+
+		return result;
+	}
+
 	private void sendPostRequest(HttpsURLConnection connection, OpsiMethodCall omc) {
 		if (connection == null) {
 			return;
@@ -278,6 +521,62 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.error(this, "Unsupported Content-Type: " + contentType);
 		}
 
+		return result;
+	}
+
+	private String readInputStream(InputStream fis) {
+		StringBuilder sb = new StringBuilder();
+
+		String thisLine = null;
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+			while ((thisLine = br.readLine()) != null) {
+				sb.append(thisLine);
+				sb.append("\n");
+			}
+			br.close();
+		} catch (IOException ex) {
+			Logging.error(ex, "Error reading input stream");
+		}
+		return sb.toString();
+	}
+
+	private Map<String, Object> retrieveResponseBasedOnContentTypeToObject(String contentType, InputStream stream,
+			String resultKey) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		String resultStr = readInputStream(stream).strip();
+		Logging.debug("retrieveResponseBasedOnContentType " + contentType + ": " + resultStr);
+
+		Map<String, Object> result = new HashMap<>();
+		if (contentType.contains("application/json")) {
+			if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("{")) {
+				result = mapper.readValue(resultStr, new TypeReference<Map<String, Object>>() {
+				});
+			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("[")) {
+				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object[]>() {
+				}));
+			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("\"")) {
+				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
+				}));
+			} else if (resultStr != null && (resultStr.equals("true") || resultStr.equals("\"true\""))) {
+				result.put(resultKey, true);
+			} else if (resultStr != null && (resultStr.equals("false") || resultStr.equals("\"false\""))) {
+				result.put(resultKey, false);
+
+			} else if (resultStr == null || resultStr.equals("null") || resultStr.equals("\"null\"")) {
+				result.put(resultKey, null);
+			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.contains(".")) {
+				result.put(resultKey, Float.parseFloat(resultStr));
+			} else {
+				result.put(resultKey, Integer.parseInt(resultStr));
+			}
+
+		} else if (contentType.contains("application/msgpack")) {
+			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			});
+		} else {
+			Logging.error(this, "Unsupported Content-Type: " + contentType);
+		}
 		return result;
 	}
 

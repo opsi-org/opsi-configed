@@ -147,6 +147,7 @@ public class ConfigedMain implements MessagebusListener {
 	private static String user;
 	private static String password;
 	private static String otp;
+	private static boolean useSSO;
 
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
@@ -276,7 +277,7 @@ public class ConfigedMain implements MessagebusListener {
 	private InitialDataLoader initialDataLoader;
 	private LicenseDisplayer licenseDisplayer;
 
-	public ConfigedMain(String host, String user, String password, String otp) {
+	public ConfigedMain(String host, String user, String password, String otp, boolean useSSO) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
 		}
@@ -290,6 +291,9 @@ public class ConfigedMain implements MessagebusListener {
 			setOTP(otp);
 		}
 
+		if (!ConfigedMain.useSSO) {
+			setUseSSO(useSSO);
+		}
 		Logging.registerConfigedMain(this);
 	}
 
@@ -1136,16 +1140,20 @@ public class ConfigedMain implements MessagebusListener {
 		}
 
 		Logging.info(this, "become interactive");
+		Logging.info(this, "using sso ? " + useSSO);
 
 		loginDialog.setVisible(true);
 
-		// This must be called last, so that loading frame for connection is called last
-		// and on top of the login-frame
-		if (host != null && user != null && password != null) {
-			// Auto login
-			Logging.info(this, "start with given credentials");
-
-			loginDialog.tryConnecting();
+		if (host == null) {
+			Logging.info(this, "host is not set (yet)");
+		}
+		if (!useSSO && (user == null || password == null)) {
+			Logging.info(this, "user or password not given (yet)");
+		} else {
+			// This must be called last, so that loading frame for connection is called last
+			// and on top of the login-frame
+			Logging.info("loginDialog tryConnecting with sso " + useSSO);
+			loginDialog.tryConnectingDependOnServer(useSSO);
 		}
 	}
 
@@ -3645,6 +3653,10 @@ public class ConfigedMain implements MessagebusListener {
 
 	public static void setOTP(String otp) {
 		ConfigedMain.otp = otp;
+	}
+
+	public static void setUseSSO(boolean useSSO) {
+		ConfigedMain.useSSO = useSSO;
 	}
 
 	@Override

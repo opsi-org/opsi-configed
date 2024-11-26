@@ -139,12 +139,17 @@ public class ConnectionHandler {
 	 * @return established HTTPS connection with the server; null indicates
 	 *         unsuccessful connection.
 	 */
+
 	public HttpsURLConnection establishConnection(boolean doOutput) {
+		return establishConnection(doOutput, false);
+	}
+
+	public HttpsURLConnection establishConnection(boolean doOutput, boolean useInsecure) {
 		if (serviceURL == null) {
 			return null;
 		}
 
-		CertificateValidator certValidator = CertificateValidatorFactory.createValidator();
+		CertificateValidator certValidator = CertificateValidatorFactory.getValidator(useInsecure);
 		HttpsURLConnection connection = null;
 
 		try {
@@ -187,7 +192,7 @@ public class ConnectionHandler {
 				conStat = reporter.getConnectionState();
 			} else {
 				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-				Logging.error("Exception on connecting, ", ex);
+				Logging.warning("Exception on connecting " + serviceURL);
 			}
 
 			connection = null;
