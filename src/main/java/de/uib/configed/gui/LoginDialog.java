@@ -232,7 +232,8 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 	private void initSSO() {
 		Logging.debug(this, "initSSO");
 		if (!(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))) {
-			Logging.warning(this, "Desktop is not supported or browse action is not supported");
+			Logging.error("Desktop is not supported or browse action is not supported");
+			initSSOitems(false);
 			return;
 		}
 		String host = (String) fieldHost.getSelectedItem() != null ? (String) fieldHost.getSelectedItem()
