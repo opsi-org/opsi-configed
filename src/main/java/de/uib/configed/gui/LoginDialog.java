@@ -9,26 +9,33 @@ package de.uib.configed.gui;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.FlatComboBox;
@@ -50,7 +57,7 @@ import de.uib.utils.thread.WaitingSleeper;
 import de.uib.utils.thread.WaitingWorker;
 import de.uib.utils.userprefs.UserPreferences;
 
-public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
+public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, FocusListener {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 
 	// 5000 reproduceable error
@@ -68,6 +75,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 	private JLabel jLabelTitle;
 	private JLabel jLabelVersion;
 	private JLabel jLabelLogo;
+	private JLabel jLabelLoadingSSOState;
 
 	private FlatTextField fieldUser = new FlatTextField();
 
@@ -80,12 +88,17 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 
 	private JButton jButtonCancel;
 	private JButton jButtonCommit;
+	private JButton jButtonSSO;
+	private boolean ssoActiveByServer;
+	private Map<String, Boolean> ssoServerStates;
 
 	public LoginDialog(ConfigedMain configedMain) {
 		super();
 		this.configedMain = configedMain;
+		ssoServerStates = new HashMap<>();
 		initGuiElements();
 		setupLayout();
+
 		finishAndMakeVisible();
 
 		initGlassPane();
@@ -103,10 +116,16 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 		}
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
+		initSSO();
 	}
 
 	public void setServers(List<String> hosts) {
+		if (hosts == null) {
+			hosts = List.of("localhost");
+		}
+		Logging.debug(this, "setServers " + hosts);
 		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray(new String[0])));
+		initSSO();
 	}
 
 	public void setUser(String user) {
@@ -158,6 +177,10 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 
 		jLabelLogo = new JLabel(Utils.createImageIcon(logoPath, null, 150, 50));
 
+		jLabelLoadingSSOState = new JLabel(Configed.getResourceValue("LoginDialog.loadingSSOState"),
+				SwingConstants.CENTER);
+		jLabelLoadingSSOState.setBorder(new EmptyBorder(3, 0, 0, 0));
+
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
@@ -166,6 +189,11 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
+		// initSSO() is called when the user selects a host from dropdown or the hostTextfield looses focus
+		fieldHost.getEditor().getEditorComponent().addFocusListener(this);
+		fieldHost.addActionListener((ActionEvent e) -> {
+			initSSO();
+		});
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(this);
@@ -195,6 +223,49 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
 		jButtonCommit.addActionListener((ActionEvent e) -> tryConnecting());
+
+		jButtonSSO = new JButton(Configed.getResourceValue("LoginDialog.jButtonSSO"));
+		jButtonSSO.addActionListener(actionEvent -> tryConnecting(true));
+	}
+
+	private void initSSO() {
+		Logging.debug(this, "initSSO");
+		String host = (String) fieldHost.getSelectedItem() != null ? (String) fieldHost.getSelectedItem()
+				: ConfigedMain.getHost();
+		Boolean state = ssoServerStates.get(host);
+		if (state != null) {
+			Logging.debug(this, "use cached value for host " + host + " " + state);
+			// use cached value if set to true (otherwise try to get it from server and decide later)
+			initSSOitems(state);
+			return;
+		}
+
+		Logging.info(this, "check authentication method for host " + host);
+		if (host == null || host.isEmpty()) {
+			Logging.info(this, "No host provided");
+			return;
+		}
+		jLabelLoadingSSOState.setVisible(true);
+		ssoActiveByServer = false;
+		ServerFacade serverFacade = new ServerFacade(host, false);
+		Map<String, List<String>> headers = serverFacade.getHeaders();
+
+		if (headers != null && headers.containsKey("X-opsi-auth-methods")) {
+			String authMethods = headers.get("X-opsi-auth-methods").toString();
+			ssoActiveByServer = authMethods.contains("saml");
+			// cache status of server
+			ssoServerStates.put(host, ssoActiveByServer);
+			Logging.debug("Authentication methods for host " + host + ": ",
+					authMethods + " SSO active: " + ssoActiveByServer);
+		}
+		initSSOitems(ssoActiveByServer);
+	}
+
+	private void initSSOitems(boolean ssoActive) {
+		ssoActiveByServer = ssoActive;
+		jLabelLoadingSSOState.setVisible(false);
+		jButtonSSO.setVisible(ssoActiveByServer);
+		setupLayout();
 	}
 
 	private void showOTPField(boolean show) {
@@ -210,15 +281,34 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 	}
 
 	private void setupLayout() {
-		JPanel panel = new JPanel();
+		// JPanel panel = new JPanel();
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-		panel.setBorder(padding);
+		((JComponent) getContentPane()).setBorder(padding);
 
-		GroupLayout groupLayout = new GroupLayout(panel);
+		GroupLayout groupLayout = new GroupLayout(((JComponent) getContentPane()));
 
 		groupLayout.setHonorsVisibility(false);
-		panel.setLayout(groupLayout);
+		((JComponent) getContentPane()).setLayout(groupLayout);
+
+		ParallelGroup parGroup = groupLayout.createParallelGroup().addComponent(jButtonCancel,
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
+		SequentialGroup seqGroup = groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE);
+
+		if (!ssoActiveByServer) {
+			parGroup.addComponent(jLabelLoadingSSOState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+					GroupLayout.PREFERRED_SIZE);
+			seqGroup.addComponent(jLabelLoadingSSOState, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
+			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
+		} else {
+			parGroup.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+					GroupLayout.PREFERRED_SIZE);
+			seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
+			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
+		}
+		parGroup.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
 				.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -243,11 +333,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 
 				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
 
-				.addGroup(groupLayout.createParallelGroup()
-						.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+				.addGroup(parGroup));
 
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE)
@@ -274,11 +360,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 
 				.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
-						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE)));
+				.addGroup(seqGroup));
 
-		this.getContentPane().add(panel);
+		// this.getContentPane().add(panel);
 	}
 
 	private void finishAndMakeVisible() {
@@ -286,7 +370,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 		String osVersion = System.getProperty("os.version");
 		Logging.notice(" OS " + strOS + "  Version " + osVersion);
 
-		setHost("localhost");
 		fieldHost.requestFocus();
 
 		// Sets the window on the main screen
@@ -297,6 +380,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 
 	@Override
 	public void actAfterWaiting() {
+		Logging.debug("Act after waiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
@@ -376,13 +460,34 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 	}
 
 	public void tryConnecting() {
-		Logging.info(this, "started  tryConnecting");
-		setActivated(false);
+		tryConnecting(false);
+	}
 
+	public void tryConnectingDependOnServer(boolean requestSSO) {
+		if (!ssoActiveByServer) {
+			ssoActiveByServer = false;
+			initSSO();
+		}
+
+		if (!ssoActiveByServer && requestSSO) {
+			Logging.error("SSO not available. Consider to remove parameter or activate sso for this server.");
+			return;
+		}
+		tryConnecting(requestSSO);
+	}
+
+	public void tryConnecting(boolean useSSO) {
+		Logging.debug(this, "started  tryConnecting with sso " + useSSO);
+		setActivated(false);
 		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
 		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
-		ConfigedMain.setUser(user);
-		ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
+		if (useSSO) {
+			ConfigedMain.setUseSSO(useSSO);
+		} else {
+			ConfigedMain.setUser(user);
+			ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
+		}
+
 		Logging.info(this,
 				"invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", " + user);
 
@@ -403,14 +508,28 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 			@Override
 			public void run() {
 				Logging.info(this, "get persis");
+				boolean invalidHost = fieldHost.getSelectedItem() == null
+						|| fieldHost.getSelectedItem().toString().isEmpty();
+				boolean invalidUser = user == null || user.isEmpty();
+				boolean invalidPw = String.valueOf(passwordField.getPassword()) == null
+						|| String.valueOf(passwordField.getPassword()).isEmpty();
+				if (!useSSO && (invalidHost || invalidUser || invalidPw)) {
+					Logging.error(this, "No host, user or password provided");
+					Logging.debug(this,
+							"Validate credentials: invalids " + invalidHost + " " + invalidUser + " " + invalidPw);
+					setActivated(true);
+					return;
+				}
+
 				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
 						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()),
-						String.valueOf(fieldOTP.getPassword()));
+						String.valueOf(fieldOTP.getPassword()), useSSO);
 
 				Logging.info(this, "got persis, == null " + (persistenceController == null));
 
 				Logging.info(this, "waitingTask can be set to ready");
 				waitingWorker.setReady();
+				setActivated(true);
 			}
 		}.start();
 	}
@@ -428,16 +547,40 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener {
 	}
 
 	@Override
+	public void focusGained(java.awt.event.FocusEvent e) {
+		fieldHost.getEditor().selectAll();
+	}
+
+	@Override
+	public void focusLost(java.awt.event.FocusEvent e) {
+		initSSO();
+	}
+
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (ssoActiveByServer) {
+				tryConnecting(true);
+			} else {
+				if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {
+					fieldUser.requestFocus();
+				} else if (fieldUser.getText() == null || fieldUser.getText().isEmpty()) {
+					fieldUser.requestFocus();
+				} else if (passwordField.getPassword() == null || passwordField.getPassword().length == 0) {
+					passwordField.requestFocus();
+				} else {
+					tryConnecting();
+				}
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_TAB) {
 			if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {
 				fieldUser.requestFocus();
-			} else if (fieldUser.getText() == null || fieldUser.getText().isEmpty()) {
-				fieldUser.requestFocus();
-			} else if (passwordField.getPassword() == null || passwordField.getPassword().length == 0) {
+			} else if (e.getSource() == fieldUser) {
 				passwordField.requestFocus();
+			} else if (e.getSource() == passwordField) {
+				fieldHost.requestFocus();
 			} else {
-				tryConnecting();
+				fieldHost.requestFocus();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			endProgram();

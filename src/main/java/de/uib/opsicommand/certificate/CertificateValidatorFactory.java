@@ -19,6 +19,16 @@ public final class CertificateValidatorFactory {
 	private CertificateValidatorFactory() {
 	}
 
+	public static CertificateValidator getValidator(boolean useInsecure) {
+		// used for first request/s (in login form) to read connection header to allow or disable SSO
+		if (useInsecure) {
+			Logging.info("using insecure certificate validator (temporary)");
+			return createInsecure();
+		}
+		Logging.debug("using default validator");
+		return createValidator();
+	}
+
 	/**
 	 * Creates insecure certificate validator.
 	 * <p>

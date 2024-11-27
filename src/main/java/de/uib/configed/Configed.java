@@ -53,6 +53,7 @@ public final class Configed {
 	private static String user;
 	private static String password;
 	private static String otp;
+	private static boolean useSSO = false;
 
 	private static boolean optionCLIQuerySearch;
 	private static String savedSearch;
@@ -75,9 +76,10 @@ public final class Configed {
 	private static String paramUser;
 	private static String paramPassword;
 	private static String paramOTP;
+	private static boolean paramSSO;
 
-	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP) {
-		setParamValues(paramHost, paramUser, paramPassword, paramOTP);
+	private Configed(String paramHost, String paramUser, String paramPassword, String paramOTP, boolean paramSSO) {
+		setParamValues(paramHost, paramUser, paramPassword, paramOTP, paramSSO);
 
 		Logging.debug("starting " + getClass().getName());
 		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
@@ -105,16 +107,18 @@ public final class Configed {
 		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP);
+		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, paramSSO);
 
 		SwingUtilities.invokeLater(configedMain::init);
 	}
 
-	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP) {
+	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP,
+			boolean paramSSO) {
 		Configed.paramHost = paramHost;
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
 		Configed.paramOTP = paramOTP;
+		Configed.paramSSO = paramSSO;
 	}
 
 	public static Integer getRefreshMinutes() {
@@ -182,6 +186,11 @@ public final class Configed {
 
 		if (cmd.hasOption("otp")) {
 			otp = cmd.getOptionValue("otp");
+		}
+
+		if (cmd.hasOption("sso")) {
+			// Single sign-on is not implemented
+			useSSO = true;
 		}
 	}
 
@@ -347,7 +356,7 @@ public final class Configed {
 			addMissingArgs();
 			initSavedStates();
 			Logging.debug("optionCLIQuerySearch");
-			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, savedSearch);
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, useSSO, savedSearch);
 
 			query.runSearch(true);
 			Main.endApp(Main.NO_ERROR);
@@ -356,7 +365,7 @@ public final class Configed {
 			initSavedStates();
 			Logging.debug("optionCLIDefineGroupBySearch");
 
-			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, savedSearch);
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, useSSO, savedSearch);
 
 			List<String> newGroupMembers = query.runSearch(false);
 
@@ -365,7 +374,7 @@ public final class Configed {
 		} else if (optionCLISwAuditPDF) {
 			Logging.debug("optionCLISwAuditPDF");
 			SwPdfExporter exporter = new SwPdfExporter();
-			exporter.setArgs(host, user, password, otp, clientsFile, outDir);
+			exporter.setArgs(host, user, password, otp, useSSO, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
 
@@ -373,7 +382,7 @@ public final class Configed {
 		} else if (optionCLISwAuditCSV) {
 			Logging.debug("optionCLISwAuditCSV");
 			SWcsvExporter exporter = new SWcsvExporter();
-			exporter.setArgs(host, user, password, otp, clientsFile, outDir);
+			exporter.setArgs(host, user, password, otp, useSSO, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
 
@@ -385,7 +394,7 @@ public final class Configed {
 			initSavedStates();
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getNewPersistenceController(host, user, password, otp);
+					.getNewPersistenceController(host, user, password, otp, useSSO);
 
 			UserConfigProducing up = new UserConfigProducing(false, host,
 					persistenceController.getHostInfoCollections().getDepotNamesList(),
@@ -402,7 +411,7 @@ public final class Configed {
 			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
-		new Configed(host, user, password, otp);
+		new Configed(host, user, password, otp, useSSO);
 	}
 
 	public static void initSavedStates() {

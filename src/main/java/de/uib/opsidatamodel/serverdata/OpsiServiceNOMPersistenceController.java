@@ -155,15 +155,36 @@ public class OpsiServiceNOMPersistenceController {
 
 	private String triggeredEvent;
 
-	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
+	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp, boolean useSSO) {
 		Logging.info(this.getClass(), "start construction, \nconnect to " + server + " as " + user);
 		this.user = user;
 
-		Logging.debug(this.getClass(), "create");
+		if (server == null || server.isEmpty()) {
+			Logging.error(this.getClass(), "no server given");
+			return;
+		}
+
+		if (useSSO) {
+			Logging.info(this.getClass(), "OSNOM try sso/saml");
+		} else if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
+			throw new RuntimeException("No user or password given.");
+		}
+		// this.user = user; // could be overwritten by sso
+
+		Logging.debug(this, "create");
 
 		init();
+		if (useSSO) {
+			ServerFacade sf = new ServerFacade(server);
+			exec = sf;
+		} else {
+			exec = new ServerFacade(server, user, password, otp);
+		}
+		if (this.exec == null) {
+			throw new RuntimeException("No connection to server.");
+		}
+		Logging.info(this, "connection state " + exec.getConnectionState());
 
-		exec = new ServerFacade(server, user, password, otp);
 		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);

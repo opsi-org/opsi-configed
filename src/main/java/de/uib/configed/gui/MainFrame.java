@@ -214,6 +214,7 @@ public class MainFrame extends JFrame {
 		ConfigedMain.setHost(null);
 		ConfigedMain.setUser(null);
 		ConfigedMain.setPassword(null);
+		ConfigedMain.setUseSSO(false);
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
 		ConfigedMain.requestLicensesFrameReload();
