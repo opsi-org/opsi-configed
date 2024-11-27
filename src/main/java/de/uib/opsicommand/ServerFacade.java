@@ -22,6 +22,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -61,6 +62,7 @@ import net.jpountz.lz4.LZ4FrameOutputStream;
  */
 public class ServerFacade extends AbstractPOJOExecutioner {
 	private static final int COMPRESS_MIN_SIZE = 10000;
+	private static final Pattern userPattern = Pattern.compile("user:");
 
 	private static OpsiServerVersionRetriever versionRetriever;
 
@@ -239,7 +241,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		if (uname == null) {
 			throw new RuntimeException("username not received");
 		}
-		username = uname.split("user:")[1];
+
+		username = userPattern.split(uname, 2)[1];
+
 		ConfigedMain.setUser(username);
 		if (host != null && !host.equals(ConfigedMain.getHost())) {
 			ConfigedMain.setHost(host);
