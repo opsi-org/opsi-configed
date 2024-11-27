@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -231,11 +230,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 
 	private void initSSO() {
 		Logging.debug(this, "initSSO");
-		if (!(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))) {
-			Logging.error("Desktop is not supported or browse action is not supported");
-			initSSOitems(false);
-			return;
-		}
 		String host = (String) fieldHost.getSelectedItem() != null ? (String) fieldHost.getSelectedItem()
 				: ConfigedMain.getHost();
 		Boolean state = ssoServerStates.get(host);
