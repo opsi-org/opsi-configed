@@ -40,8 +40,20 @@ public class OpsiServerVersionRetriever {
 	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
 
 	private String serviceURL;
+	private String sessionId;
 	private String username;
 	private String password;
+
+	public OpsiServerVersionRetriever(String serviceURL, String sessionId) {
+		if (serviceURL == null || sessionId == null) {
+			throw new IllegalArgumentException("Provided parameters are null");
+		}
+
+		this.serviceURL = serviceURL;
+		this.sessionId = sessionId;
+		this.username = null;
+		this.password = null;
+	}
 
 	public OpsiServerVersionRetriever(String serviceURL, String username, String password) {
 		if (serviceURL == null || username == null || password == null) {
@@ -56,7 +68,7 @@ public class OpsiServerVersionRetriever {
 	/**
 	 * returns true, if the server has a newer version (or same version)
 	 * compared to the version in the argument
-	 * 
+	 *
 	 * @param compareVersion version to compare to of format x.y.z...
 	 */
 	public boolean isServerVersionAtLeast(String compareVersion) {
@@ -76,12 +88,30 @@ public class OpsiServerVersionRetriever {
 	@SuppressWarnings("java:S2647")
 	public synchronized void checkServerVersion() {
 		HttpsURLConnection connection;
-
+		String authorization = null;
 		try {
 			connection = (HttpsURLConnection) new URI(serviceURL).toURL().openConnection();
-			String authorization = Base64.getEncoder()
-					.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
-			connection.setRequestProperty("Authorization", "Basic " + authorization);
+			Logging.secret("Session id for connection ", sessionId);
+			if (sessionId != null) {
+				authorization = sessionId;
+				connection.setRequestProperty("Cookie", authorization);
+				if (sessionId.contains("=")) {
+					authorization = sessionId.split("=")[1];
+					connection.setRequestProperty("Cookie", "session-id=" + authorization);
+					connection.setRequestProperty("Cookie", "sessionId=" + authorization);
+					Logging.info(this, "Using existing session id for connection");
+					Logging.info(this, "Connection:", connection.getRequestProperties());
+				}
+			} else if (username != null && password != null) {
+				authorization = Base64.getEncoder()
+						.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
+				connection.setRequestProperty("Authorization", "Basic " + authorization);
+			} else {
+				Logging.error("No session id or username/password provided");
+				return;
+			}
+
+			Logging.info("Fetching service info for", serviceURL);
 
 			CertificateValidator certValidator = CertificateValidatorFactory.getInsecure();
 			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
@@ -117,11 +147,13 @@ public class OpsiServerVersionRetriever {
 				}
 			}
 			setServerVersion(newServerVersion);
+			Logging.notice(this, "opsi server version: ", serverVersionString);
 		} else {
 			// Default is 4.3, if this query does not work
 			Logging.error("we set opsi version 4.3 because we did not find opsiconfd version in header");
 			setServerVersionNotFound();
 		}
+		Logging.info("server version: ", serverVersionString, serverComparableVersion);
 	}
 
 	private static synchronized void setServerVersionNotFound() {

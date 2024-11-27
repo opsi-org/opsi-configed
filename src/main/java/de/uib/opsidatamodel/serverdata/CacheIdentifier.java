@@ -290,6 +290,14 @@ public enum CacheIdentifier {
 	 * return type {@code Set<String>}
 	 */
 	TERMINAL_FORBIDDEN("terminal_forbidden"),
+	/**
+	 * return type {@code Set<String>}
+	 */
+	TERMINAL_MENU_ACTIVE("terminal_menu_active"),
+	/**
+	 * return type {@code Set<String>}
+	 */
+	TERMINAL_COMMANDS_ACTIVE("terminal_commands_active"),
 
 	/**
 	 * return type {@code String}

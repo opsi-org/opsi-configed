@@ -73,6 +73,7 @@ public class ConfigedMain {
 	private static String user;
 	private static String password;
 	private static String otp;
+	private static boolean useSSO;
 
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
@@ -116,7 +117,7 @@ public class ConfigedMain {
 
 	private InitialDataLoader initialDataLoader;
 
-	public ConfigedMain(String host, String user, String password, String otp) {
+	public ConfigedMain(String host, String user, String password, String otp, boolean useSSO) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
 		}
@@ -128,6 +129,9 @@ public class ConfigedMain {
 		}
 		if (ConfigedMain.otp == null) {
 			setOTP(otp);
+		}
+		if (!ConfigedMain.useSSO) {
+			setUseSSO(useSSO);
 		}
 	}
 
@@ -204,7 +208,6 @@ public class ConfigedMain {
 		Logging.info(this, "initialize the data");
 
 		dependenciesModel = new DependenciesModel();
-
 		// Init data for these manager classes so they can work
 		ChangedDataManager.initData(this, hostInfo);
 		ServerActionManager.initData(this);
@@ -494,16 +497,19 @@ public class ConfigedMain {
 		}
 
 		Logging.info(this, "become interactive");
-
+		Logging.info(this, "using sso ? ", useSSO);
 		loginDialog.setVisible(true);
 
-		// This must be called last, so that loading frame for connection is called last
-		// and on top of the login-frame
-		if (host != null && user != null && password != null) {
-			// Auto login
-			Logging.info(this, "start with given credentials");
-
-			loginDialog.tryConnecting();
+		if (host == null) {
+			Logging.info(this, "host is not set (yet)");
+		}
+		if (!useSSO && (user == null || password == null)) {
+			Logging.info(this, "user or password not given (yet)");
+		} else {
+			// This must be called last, so that loading frame for connection is called last
+			// and on top of the login-frame
+			Logging.info(this, "loginDialog tryConnecting with sso ", useSSO);
+			loginDialog.tryConnectingDependOnServer(useSSO);
 		}
 	}
 
@@ -800,7 +806,7 @@ public class ConfigedMain {
 
 		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
 
-		// We want to deactivate the listener here, since we want it to react only later when 
+		// We want to deactivate the listener here, since we want it to react only later when
 		// the values are selected. We only reactivate the listener if it was active before.
 		boolean listenerDeactivated = clientTablePanel.deactivateListSelectionListener();
 		clientTablePanel.getClientTable().updateModel(tm);
@@ -1292,6 +1298,7 @@ public class ConfigedMain {
 	}
 
 	public static void setHost(String host) {
+		Logging.trace("Setting host from ", ConfigedMain.host, "to", host);
 		ConfigedMain.host = host;
 	}
 
@@ -1313,5 +1320,9 @@ public class ConfigedMain {
 
 	public static void setOTP(String otp) {
 		ConfigedMain.otp = otp;
+	}
+
+	public static void setUseSSO(boolean useSSO) {
+		ConfigedMain.useSSO = useSSO;
 	}
 }

@@ -24,7 +24,6 @@ import javax.swing.event.PopupMenuListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -152,9 +151,10 @@ public class DepotListPresenter extends JPanel {
 	 * @return true if the selected depot/server is forbidden
 	 */
 	private boolean selectedServerForbidden() {
-		// Check if the selected depot is forbidden by the config "connect.terminal.forbidden"
-		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
-				.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
+		Logging.warning("selectedServerForbidden.....");
+		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().terminalsForbidden();
+		Logging.warning("forbiddenItems " + forbiddenItems);
 		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
 		boolean forbiddenConfigDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 

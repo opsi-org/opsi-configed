@@ -202,6 +202,7 @@ public class MainFrame extends JFrame {
 		ConfigedMain.setHost(null);
 		ConfigedMain.setUser(null);
 		ConfigedMain.setPassword(null);
+		ConfigedMain.setUseSSO(false);
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
 		resetData();
@@ -260,15 +261,15 @@ public class MainFrame extends JFrame {
 
 		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+				&& PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.terminalMenuIsActive());
 
 		JMenuItem jMenuTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
 		Icons.addIntellijIconToMenuItem(jMenuTerminal, "terminal");
 
 		// check terminal access rights defined by user roles
-		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
-				.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
+		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().terminalsForbidden();
 		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
 		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);

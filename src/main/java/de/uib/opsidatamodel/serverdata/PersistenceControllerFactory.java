@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.certificate.CertificateManager;
+import de.uib.opsidatamodel.serverdata.dataservice.UserDataService;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -21,14 +22,19 @@ public final class PersistenceControllerFactory {
 	private PersistenceControllerFactory() {
 	}
 
+	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server) {
+		return getNewPersistenceController(server, "", "", "", true);
+	}
+
 	/**
 	 * This creation method constructs a new Controller instance and lets a
 	 * static variable point to it When next time we need a Controller we can
 	 * choose if we take the already constructed one - returned from the static
-	 * method getPersistenceController - or construct a new one
+	 * method getPersistenceController - or construct a new one. If user, server
+	 * and otp is empty we try to use sso.
 	 */
 	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server, String user,
-			String password, String otp) {
+			String password, String otp, boolean useSSO) {
 		Logging.info("getNewPersistenceController");
 
 		if (!otp.isEmpty() && !OTP_PATTERN.matcher(otp).matches()) {
@@ -37,7 +43,11 @@ public final class PersistenceControllerFactory {
 		}
 
 		OpsiServiceNOMPersistenceController persistenceController = new OpsiServiceNOMPersistenceController(server,
-				user, password, otp);
+				user, password, otp, useSSO);
+		if (useSSO && persistenceController.getExecutioner() == null) {
+			Logging.error("Failed to create a PersistenceController instance using sso.");
+			return null;
+		}
 		Logging.info("a PersistenceController initiated by option sqlAndGetRows got ", persistenceController == null);
 
 		Logging.info("a PersistenceController initiated, got null? ", persistenceController == null);
@@ -50,8 +60,22 @@ public final class PersistenceControllerFactory {
 		staticPersistControl = persistenceController;
 
 		if (persistenceController.getConnectionState().getState() == ConnectionState.CONNECTED) {
-			Utils.setMultiFactorAuthenticationEnabled(
-					persistenceController.getUserDataService().usesMultiFactorAuthentication());
+			Logging.debug("PersistenceControllerFactory.getNewPersistenceController() - connected");
+			UserDataService userDataService = persistenceController.getUserDataService();
+			Logging.debug("PersistenceControllerFactory.getNewPersistenceController() - userDataService:",
+					userDataService);
+
+			if (!useSSO) {
+				boolean isMultiFactorAuthenticationEnabled = userDataService.usesMultiFactorAuthentication();
+				Logging.debug(
+						"PersistenceControllerFactory.getNewPersistenceController() - isMultiFactorAuthenticationEnabled:",
+						isMultiFactorAuthenticationEnabled);
+
+				Utils.setMultiFactorAuthenticationEnabled(isMultiFactorAuthenticationEnabled);
+				Logging.debug(
+						"PersistenceControllerFactory.getNewPersistenceController() - setMultiFactorAuthenticationEnabled:",
+						Utils.isMultiFactorAuthenticationEnabled());
+			}
 
 			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
 			if (!Utils.isCertificateVerificationDisabled()) {
@@ -75,7 +99,6 @@ public final class PersistenceControllerFactory {
 
 		ConnectionState result = staticPersistControl.getConnectionState();
 		Logging.info("PersistenceControllerFactory getConnectionState ", result);
-
-		return staticPersistControl.getConnectionState();
+		return result;
 	}
 }

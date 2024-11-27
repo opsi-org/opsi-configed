@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigOption.TYPE;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utils.DataChangedObserver;
 import de.uib.utils.datapanel.EditMapPanelX;
@@ -52,15 +53,15 @@ public class PanelHostProperties extends JPanel {
 		Logging.debug(this, "initMultipleHosts ", " configs  ", multipleMaps);
 
 		this.multipleMaps = multipleMaps;
-		editMapPanel.setUpdateCollection(updateCollection);
-		editMapPanel.setReadOnlyEntries(keysOfReadOnlyEntries);
+		editMapPanel.setUpdateCollection(POJOReMapper.remap(updateCollection));
+		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
 
 		setMap(selectedDepot);
 	}
 
 	// delegated methods
 	public void registerDataChangedObserver(DataChangedObserver o) {
-		editMapPanel.registerDataChangedObserver(o);
+		editMapPanel.getMapTableModel().registerDataChangedObserver(o);
 	}
 
 	private Map<String, ConfigOption> deriveOptionsMap(Map<String, Object> m) {
@@ -91,7 +92,7 @@ public class PanelHostProperties extends JPanel {
 			Logging.debug(this, "setMap ", multipleMaps.get(selectedDepot));
 			editMapPanel.setEditableMap(multipleMaps.get(selectedDepot),
 					deriveOptionsMap(multipleMaps.get(selectedDepot)));
-			editMapPanel.setStoreData(editedMaps);
+			editMapPanel.getMapTableModel().setStoreData(editedMaps);
 		}
 	}
 }

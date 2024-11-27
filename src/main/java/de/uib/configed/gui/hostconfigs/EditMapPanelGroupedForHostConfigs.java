@@ -478,7 +478,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		Logging.info(this, "theUsers found ", theUsers);
 
 		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
-			entry.getValue().setEditableFunction(key -> isEditable(key, entry));
+			entry.getValue().getMapTableModel().setIsEditable(key -> isEditable(key, entry));
 		}
 	}
 
@@ -738,7 +738,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			String key = keyB.toString();
 			Logging.info(this, "deleteUser, selected user key ", key);
 
-			List<String> propertyNames = partialPanels.get(key).getNames();
+			List<String> propertyNames = partialPanels.get(key).getMapTableModel().getKeys();
 			Logging.info(this, "deleteUser, property names ", propertyNames);
 			for (String name : propertyNames) {
 				((EditMapPanelX) partialPanels.get(key)).removeProperty(name);

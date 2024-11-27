@@ -38,6 +38,16 @@ public final class CertificateValidatorFactory {
 		return insecureCertificateValidator;
 	}
 
+	public static CertificateValidator getValidator(boolean useInsecure) {
+		// used for first request/s (in login form) to read connection header to allow or disable SSO
+		if (useInsecure) {
+			Logging.info("using insecure certificate validator (temporary)");
+			return getInsecure();
+		}
+		Logging.debug("using default validator");
+		return getValidator();
+	}
+
 	/**
 	 * Creates certificate validator based on the state of the
 	 * {@code --disable-certificate-verification} flag.

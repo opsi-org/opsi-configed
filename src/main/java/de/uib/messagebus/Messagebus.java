@@ -71,11 +71,12 @@ public class Messagebus implements MessagebusListener {
 			return true;
 		}
 
-		Logging.info(this, "Connecting to messagebus");
-
 		initialSubscriptionReceived = false;
 		disconnecting = false;
 		URI uri = createUri();
+
+		Logging.notice(this, "Connecting to messagebus at", uri);
+
 		String basicAuthEnc = createEncBasicAuth();
 		ServerFacade exec = getServerFacadeExecutor();
 
@@ -86,9 +87,11 @@ public class Messagebus implements MessagebusListener {
 			configedMain.registerMessagebusListeners();
 		}
 
-		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
+		if (basicAuthEnc != null) {
+			messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
+		}
 		if (exec.getSessionId() != null) {
-			Logging.debug("Adding cookie header");
+			Logging.info("Adding cookie header for session ID");
 			messagebusWebSocket.addHeader("Cookie", exec.getSessionId());
 		}
 
@@ -137,8 +140,10 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private String produceURL() {
-		String protocol = "wss";
 		String host = ConfigedMain.getHost();
+		if (host == null) {
+			throw new RuntimeException("Host is null");
+		}
 
 		if (!Utils.hasPort(host)) {
 			host = host + ":" + Globals.DEFAULT_PORT;
@@ -147,6 +152,7 @@ public class Messagebus implements MessagebusListener {
 			Logging.info(this, "Host does have specified port (using specified port): ", host);
 		}
 
+		String protocol = "wss";
 		String url = String.format("%s://%s/messagebus/v1", protocol, host);
 		Logging.info(this, "Connecting to messagebus using the following URL: ", url);
 
@@ -159,6 +165,9 @@ public class Messagebus implements MessagebusListener {
 
 	private String createEncBasicAuth() {
 		ServerFacade exec = getServerFacadeExecutor();
+		if (exec.isUseSAML()) {
+			return null;
+		}
 		String basicAuth = String.format("%s:%s", exec.getUsername(), exec.getPassword());
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}

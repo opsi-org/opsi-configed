@@ -36,6 +36,7 @@ import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductActionPanel;
 import de.uib.configed.tree.ProductTree;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -119,7 +120,8 @@ public class PanelProductSettings extends JSplitPane {
 
 		propertiesPanel = new EditMapPanelX(false, true, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
+		propertiesPanel.getMapTableModel()
+				.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
 
 		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
@@ -345,13 +347,13 @@ public class PanelProductSettings extends JSplitPane {
 
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));
-		propertiesPanel.setStoreData(storableProductProperties);
-		propertiesPanel.setUpdateCollection(updateCollection);
+		propertiesPanel.getMapTableModel().setStoreData(storableProductProperties);
+		propertiesPanel.setUpdateCollection(POJOReMapper.remap(updateCollection));
 	}
 
 	public void clearEditing() {
 		propertiesPanel.setEditableMap(null, null);
-		propertiesPanel.setStoreData(null);
+		propertiesPanel.getMapTableModel().setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
 		infoPane.clearEditing();
 	}

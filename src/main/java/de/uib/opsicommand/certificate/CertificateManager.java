@@ -68,6 +68,7 @@ public final class CertificateManager {
 	 * {@link #init(String)} method).
 	 */
 	public static void downloadCertificateFile() {
+		Logging.info("download with urlPath: ", urlPath, " and caFolderName: ", caFolderName);
 		if (urlPath == null) {
 			Logging.error("CertificateDownloader wasn't initialized");
 			return;

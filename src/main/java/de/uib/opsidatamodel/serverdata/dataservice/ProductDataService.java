@@ -877,7 +877,7 @@ public class ProductDataService {
 	/**
 	 * Collects the common property values of some product for a client
 	 * collection; Needed for local imaging handling.
-	 * 
+	 *
 	 * @param clients  collection of clients
 	 * @param product  for which to collect property values
 	 * @param property from which to collect values
@@ -1501,8 +1501,9 @@ public class ProductDataService {
 		Logging.debug(this, "getProductOnClientsDisplayFields() possibleValuesAccordingToService ",
 				possibleValuesAccordingToService);
 
-		if (configuredByService.isEmpty() || !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
-				.equals(new HashSet<>(possibleValuesAccordingToService)))) {
+		if (configuredByService == null || configuredByService.isEmpty()
+				|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
+						.equals(new HashSet<>(possibleValuesAccordingToService)))) {
 			// we did not initialize server property
 			configuredByService = produceProductOnClientDisplayfields(key);
 		}

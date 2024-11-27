@@ -52,6 +52,7 @@ public abstract class AbstractSWExporter {
 	private String user;
 	private String password;
 	private String otp;
+	private boolean sso;
 	private String clientsFile;
 	private String outDir;
 
@@ -59,11 +60,13 @@ public abstract class AbstractSWExporter {
 	protected AbstractSWExporter() {
 	}
 
-	public void setArgs(String server, String user, String password, String otp, String clientsFile, String outDir) {
+	public void setArgs(String server, String user, String password, String otp, boolean sso, String clientsFile,
+			String outDir) {
 		this.server = server;
 		this.user = user;
 		this.password = password;
 		this.otp = otp;
+		this.sso = sso;
 		this.clientsFile = clientsFile;
 		this.outDir = outDir;
 	}
@@ -128,7 +131,8 @@ public abstract class AbstractSWExporter {
 
 	public void run() {
 		Messages.setLocale("en");
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password, otp);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password, otp,
+				sso);
 		if (persistenceController == null) {
 			finish(ErrorCode.INITIALIZATION_ERROR);
 		} else if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {

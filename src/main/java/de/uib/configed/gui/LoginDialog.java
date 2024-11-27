@@ -7,24 +7,30 @@
 package de.uib.configed.gui;
 
 import java.awt.Dimension;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
@@ -53,6 +59,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	private JLabel jLabelTitle;
 	private JLabel jLabelVersion;
 	private JLabel jLabelLogo;
+	private JLabel jLabelLoadingSSOState;
 
 	private FlatTextField fieldUser = new FlatTextField();
 
@@ -65,6 +72,19 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 	private JButton jButtonCancel;
 	private JButton jButtonCommit;
+	private JButton jButtonSSO;
+	private Boolean ssoActiveByServer;
+	private FocusListener myFocusListener = new FocusListener() {
+		@Override
+		public void focusGained(java.awt.event.FocusEvent e) {
+			fieldHost.getEditor().selectAll();
+		}
+
+		@Override
+		public void focusLost(java.awt.event.FocusEvent e) {
+			initSSO();
+		}
+	};
 
 	public LoginDialog(ConfigedMain configedMain) {
 		super();
@@ -76,6 +96,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		finishAndMakeVisible();
 
 		initGlassPane();
+		initSSO();
 	}
 
 	private void initGlassPane() {
@@ -87,6 +108,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	public void setHost(String host) {
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
+		initSSO();
 	}
 
 	private void setServers() {
@@ -139,7 +161,9 @@ public class LoginDialog extends JFrame implements KeyListener {
 		setIconImage(Icons.getMainIcon());
 
 		jLabelLogo = new JLabel(Icons.getOpsiLogoWide());
-
+		jLabelLoadingSSOState = new JLabel(Configed.getResourceValue("LoginDialog.loadingSSOState"),
+				SwingConstants.CENTER);
+		jLabelLoadingSSOState.setBorder(new EmptyBorder(3, 0, 0, 0));
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
@@ -148,6 +172,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
+		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
 
 		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(this);
@@ -172,6 +197,31 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 		jButtonCommit = new JButton(Configed.getResourceValue("LoginDialog.jButtonCommit"));
 		jButtonCommit.addActionListener(actionEvent -> tryConnecting());
+		jButtonSSO = new JButton(Configed.getResourceValue("LoginDialog.jButtonSSO"));
+		jButtonSSO.addActionListener(actionEvent -> tryConnecting(true));
+	}
+
+	private void initSSO() {
+		String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
+		if (host == null || host.isEmpty()) {
+			Logging.debug(this, "No host provided");
+			return;
+		}
+		jLabelLoadingSSOState.setVisible(true);
+		ssoActiveByServer = true;
+		Logging.info("get auth info for ", host);
+		ServerFacade serverFacade = new ServerFacade(host, false);
+		Map<String, List<String>> headers = serverFacade.getHeaders();
+
+		if (headers != null && headers.containsKey("X-opsi-auth-methods")) {
+			String authMethods = headers.get("X-opsi-auth-methods").toString();
+			ssoActiveByServer = authMethods.contains("saml");
+			Logging.debug("Authentication methods for host ", host, ": ", authMethods);
+		}
+		jLabelLoadingSSOState.setVisible(false);
+		jButtonSSO.setVisible(ssoActiveByServer);
+		Logging.notice("SSO active by server ", ssoActiveByServer);
+		setupLayout();
 	}
 
 	private void showOTPField(boolean show) {
@@ -196,6 +246,23 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 		groupLayout.setHonorsVisibility(false);
 		getContentPane().setLayout(groupLayout);
+		ParallelGroup parGroup = groupLayout.createParallelGroup().addComponent(jButtonCancel,
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
+		SequentialGroup seqGroup = groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE);
+		if (!Boolean.TRUE.equals(ssoActiveByServer)) {
+			parGroup.addComponent(jLabelLoadingSSOState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+					GroupLayout.PREFERRED_SIZE);
+			seqGroup.addComponent(jLabelLoadingSSOState, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
+			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
+		} else {
+			parGroup.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+					GroupLayout.PREFERRED_SIZE);
+			seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
+			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
+		}
+		parGroup.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
 				.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -220,12 +287,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
 
-				.addGroup(groupLayout.createParallelGroup()
-						.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
-
+				.addGroup(parGroup));
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE)
 						.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -251,9 +313,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 				.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
-						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE)));
+				.addGroup(seqGroup));
 	}
 
 	private void finishAndMakeVisible() {
@@ -262,7 +322,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 		Logging.notice(" OS ", strOS, "  Version ", osVersion);
 
 		fieldHost.requestFocus();
-
 		// Sets the window on the main screen
 		pack();
 		setLocationRelativeTo(null);
@@ -271,6 +330,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	}
 
 	public void actAfterWaiting() {
+		Logging.debug(this, "actAfterWaiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
@@ -287,7 +347,9 @@ public class LoginDialog extends JFrame implements KeyListener {
 				// return to password dialog
 				Logging.info(this, "interrupted");
 			} else {
-				Logging.info(this, "not connected, timeout or not authorized");
+				Logging.info(this, "not connected, timeout or not authorized. state: ",
+						PersistenceControllerFactory.getConnectionState().getState());
+				Logging.info(this, "serverVersion ", ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
 
 				String message;
 
@@ -320,17 +382,33 @@ public class LoginDialog extends JFrame implements KeyListener {
 	}
 
 	public void tryConnecting() {
-		Logging.info(this, "started  tryConnecting");
+		tryConnecting(false);
+	}
+
+	public void tryConnectingDependOnServer(boolean requestSSO) {
+		if (ssoActiveByServer == null) {
+			ssoActiveByServer = false;
+			initSSO();
+		}
+
+		if ((!ssoActiveByServer) && requestSSO) {
+			Logging.error("SSO not available. Consider to remove parameter or activate sso for this server.");
+			return;
+		}
+		tryConnecting(requestSSO);
+	}
+
+	public void tryConnecting(boolean useSSO) {
+		Logging.info(this, "started  tryConnecting with SSO ", useSSO);
 		setActivated(false);
-
-		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
 		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
-		ConfigedMain.setUser(user);
-		ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
-		Logging.info(this, "invoking PersistenceControllerFactory host, user, ", fieldHost.getSelectedItem(), ", ",
-				user);
-
-		Configed.setHost((String) fieldHost.getSelectedItem());
+		if (useSSO) {
+			ConfigedMain.setUseSSO(useSSO);
+		} else {
+			ConfigedMain.setUser(user);
+			ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
+		}
+		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
 		Configed.initSavedStates();
 
 		Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());
@@ -341,14 +419,26 @@ public class LoginDialog extends JFrame implements KeyListener {
 			@Override
 			public void run() {
 				Logging.info(this, "get persis");
+				boolean invalidHost = fieldHost.getSelectedItem() == null
+						|| fieldHost.getSelectedItem().toString().isEmpty();
+				boolean invalidUser = user == null || user.isEmpty();
+				boolean invalidPw = String.valueOf(passwordField.getPassword()) == null
+						|| String.valueOf(passwordField.getPassword()).isEmpty();
+				if (!useSSO && (invalidHost || invalidUser || invalidPw)) {
+					Logging.error(this, "No host, user or password provided");
+					Logging.debug(this, "Validate credentials: invalids ", invalidHost, invalidUser, invalidPw);
+					setActivated(true);
+					return;
+				}
 				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
 						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()),
-						String.valueOf(fieldOTP.getPassword()));
+						String.valueOf(fieldOTP.getPassword()), useSSO);
 
 				Logging.info(this, "got persis, == null ", persistenceController == null);
 
 				Logging.info(this, "waitingTask can be set to ready");
 				actAfterWaiting();
+				setActivated(true);
 			}
 		}.start();
 	}
@@ -368,7 +458,20 @@ public class LoginDialog extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			tryConnecting();
+			if (Boolean.TRUE.equals(ssoActiveByServer)) {
+				tryConnecting(true);
+			} else {
+				if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {
+					fieldUser.requestFocus();
+				} else if (fieldUser.getText() == null || fieldUser.getText().isEmpty()) {
+					fieldUser.requestFocus();
+				} else if (passwordField.getPassword() == null || passwordField.getPassword().length == 0) {
+					passwordField.requestFocus();
+				} else {
+					tryConnecting();
+				}
+			}
+
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			endProgram();
 		} else {
