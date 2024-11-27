@@ -154,22 +154,20 @@ public class OpsiServiceNOMPersistenceController {
 		if (useSSO) {
 			Logging.info(this.getClass(), "OSNOM try sso/saml");
 		} else if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
-			throw new RuntimeException("No user or password given.");
+			Logging.error(this, "No user or password given.");
+		} else {
+			// Nothing to do here, we just continue logging in
 		}
-		// this.user = user; // could be overwritten by sso
 
 		Logging.debug(this, "create");
 
 		init();
 		if (useSSO) {
-			ServerFacade sf = new ServerFacade(server);
-			exec = sf;
+			exec = new ServerFacade(server);
 		} else {
 			exec = new ServerFacade(server, user, password, otp);
 		}
-		if (this.exec == null) {
-			throw new RuntimeException("No connection to server.");
-		}
+
 		Logging.info(this, "connection state ", exec.getConnectionState());
 
 		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);

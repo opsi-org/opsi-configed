@@ -70,7 +70,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String otp;
 	private String sessionId;
 	private int portHTTPS = Globals.DEFAULT_PORT;
-	public boolean useSAML = false;
+	public boolean useSAML;
 
 	public ServerFacade(String host) {
 		this(host, true);
@@ -79,7 +79,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public ServerFacade(String host, boolean connect) {
 		if (host == null) {
 			return;
-			// throw new IllegalArgumentException("All or some parameters are null");
 		}
 		this.host = host;
 		if (connect) {
@@ -121,7 +120,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		conStat = new ConnectionState();
 		if (useSAML && !connectSAML()) {
-			// Logging.error("SAML connection failed");
 			throw new RuntimeException("SAML connection failed");
 		}
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
@@ -152,7 +150,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		} catch (IOException ex) {
 			Logging.error(this, ex, "Exception while trying to get headers");
 		}
-		// CertificateManager.init(null, null);
 		return result;
 	}
 
@@ -174,14 +171,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		requestProperties.put("Accept", "application/json");
 		String localKeySID = "respondSessionId";
 		//////// register and get new session id
-		URL url_get_sid = makeURL("/auth/session_id");
+		URL urlGetSid = makeURL("/auth/session_id");
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
-		Map<String, Object> result = retrieveResponse(url_get_sid, "GET", requestProperties, jsonProperties,
-				localKeySID);
+		Map<String, Object> result = retrieveResponse(urlGetSid, "GET", requestProperties, jsonProperties, localKeySID);
 		if (conStat.getState() == ConnectionState.RETRY_CONNECTION) {
 			Logging.debug("connectSAML retry connection");
-			result = retrieveResponse(url_get_sid, "GET", requestProperties, jsonProperties, localKeySID);
+			result = retrieveResponse(urlGetSid, "GET", requestProperties, jsonProperties, localKeySID);
 		}
 
 		if (result == null || result.isEmpty() || !result.containsKey(localKeySID)) {
@@ -392,11 +388,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	// public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
-	// 		Map<String, String> requestProperties) {
-	// 	return retrieveResponse(url, requestMethod, requestProperties, "result");
-	// }
-
 	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
 			Map<String, String> requestProperties, Map<String, Object> json, String resultkey) {
 		return retrieveResponse(url, requestMethod, requestProperties, json, resultkey, null);
@@ -448,7 +439,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet()) {
 						responseHeader.put(entry.getKey(), entry.getValue().get(0));
 					}
-					// responseHeader.putAll(connection.getHeaderFields());
 				}
 				Logging.debug(this, "Connection state after communication: ", conStat);
 			} catch (IOException ex) {
@@ -544,14 +534,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("\"")) {
 				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
 				}));
-			} else if (resultStr != null && (resultStr.equals("true") || resultStr.equals("\"true\""))) {
+			} else if (resultStr != null && ("true".equals(resultStr) || "\"true\"".equals(resultStr))) {
 				result.put(resultKey, true);
-			} else if (resultStr != null && (resultStr.equals("false") || resultStr.equals("\"false\""))) {
+			} else if (resultStr != null && ("false".equals(resultStr) || "\"false\"".equals(resultStr))) {
 				result.put(resultKey, false);
 
-			} else if (resultStr == null || resultStr.equals("null") || resultStr.equals("\"null\"")) {
+			} else if (resultStr == null || "null".equals(resultStr) || "\"null\"".equals(resultStr)) {
 				result.put(resultKey, null);
-			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.contains(".")) {
+			} else if (!resultStr.isEmpty() && resultStr.contains(".")) {
 				result.put(resultKey, Float.parseFloat(resultStr));
 			} else {
 				result.put(resultKey, Integer.parseInt(resultStr));
@@ -630,8 +620,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			gzipped = "gzip".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 			Logging.debug(this, "gzipped ", gzipped);
 			deflated = "deflate".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
-			Logging.debug(this, "deflated\r\n" + //
-					"\t\t\t\t ", deflated);
+			Logging.debug(this, "deflated\r\n" + "\t\t\t\t ", deflated);
 			lz4compressed = "lz4".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 
 			Logging.debug(this, "lz4compressed ", lz4compressed);
