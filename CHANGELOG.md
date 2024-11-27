@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.3.4.1] - 2024-11-27
+### Added
+- Implement Single Sign-on (SSO)
+
+
 ## [4.3.3.19] - 2024-10-30
 ### Fixed
 - Correctly fix default values as specific values for product property states on clients and depots
