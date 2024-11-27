@@ -99,7 +99,6 @@ public final class PersistenceControllerFactory {
 
 		ConnectionState result = staticPersistControl.getConnectionState();
 		Logging.info("PersistenceControllerFactory getConnectionState ", result);
-		// return staticPersistControl.getConnectionState();
 		return result;
 	}
 }

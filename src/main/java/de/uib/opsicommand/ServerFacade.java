@@ -70,7 +70,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String otp;
 	private String sessionId;
 	private int portHTTPS = Globals.DEFAULT_PORT;
-	public boolean useSAML;
+	private boolean useSAML;
 
 	public ServerFacade(String host) {
 		this(host, true);
@@ -125,6 +125,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		checkServerVersion();
 
+	}
+
+	public boolean isUseSAML() {
+		return useSAML;
 	}
 
 	public Map<String, List<String>> getHeaders() {
@@ -231,7 +235,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		// set credentials for further requests and for information
-		boolean authenticated = (boolean) result.get("authenticated");
 		String uname = (String) responseHeader.get("x-opsi-user-id");
 		if (uname == null) {
 			throw new RuntimeException("username not received");
@@ -242,7 +245,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			ConfigedMain.setHost(host);
 		}
 
-		return authenticated;
+		return (boolean) result.get("authenticated");
 	}
 
 	private synchronized void checkServerVersion() {

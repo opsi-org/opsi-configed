@@ -165,7 +165,7 @@ public class Messagebus implements MessagebusListener {
 
 	private String createEncBasicAuth() {
 		ServerFacade exec = getServerFacadeExecutor();
-		if (exec.useSAML) {
+		if (exec.isUseSAML()) {
 			return null;
 		}
 		String basicAuth = String.format("%s:%s", exec.getUsername(), exec.getPassword());
