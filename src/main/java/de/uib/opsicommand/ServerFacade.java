@@ -6,7 +6,6 @@
 
 package de.uib.opsicommand;
 
-import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -203,26 +202,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		/////// open browser
 		String sid = sessionId.contains("=") ? sessionId.split("=")[1] : sessionId;
 		String urlBrowserSaml = "/auth/saml/login?session_id=" + sid + "&redirect=close_window";
-		boolean result = true;
-		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-			Desktop desktop = Desktop.getDesktop();
-			try {
-				URL murl = makeURL(urlBrowserSaml);
-				if (murl == null) {
-					Logging.error("Error creating URL");
-					return false;
-				} else {
-					desktop.browse(murl.toURI());
-				}
-			} catch (IOException | URISyntaxException | UnsupportedOperationException e) {
-				Logging.error(e, "Error opening browser");
-				result = false;
-			}
+		URL url = makeURL(urlBrowserSaml);
+		if (url != null) {
+			Utils.showExternalDocument(url.toString());
+			return true;
 		} else {
-			Logging.error("Desktop is not supported");
-			result = false;
+			// But actually this cannot happen
+			return false;
 		}
-		return result;
 	}
 
 	private boolean ssoCheckAuthenticated() {

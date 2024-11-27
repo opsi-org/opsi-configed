@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -31,7 +30,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-// import javax.swing.event.ChangeListener;
 import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.extras.components.FlatComboBox;
@@ -201,14 +199,9 @@ public class LoginDialog extends JFrame implements KeyListener {
 		jButtonCommit.addActionListener(actionEvent -> tryConnecting());
 		jButtonSSO = new JButton(Configed.getResourceValue("LoginDialog.jButtonSSO"));
 		jButtonSSO.addActionListener(actionEvent -> tryConnecting(true));
-		// jButtonSSO.setVisible(true);
 	}
 
 	private void initSSO() {
-		if (!(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))) {
-			Logging.warning(this, "Desktop is not supported or browse action is not supported");
-			return;
-		}
 		String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
 		if (host == null || host.isEmpty()) {
 			Logging.debug(this, "No host provided");
