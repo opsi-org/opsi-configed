@@ -52,7 +52,7 @@ public abstract class AbstractSWExporter {
 	private String user;
 	private String password;
 	private String otp;
-	private boolean sso = false;
+	private boolean sso;
 	private String clientsFile;
 	private String outDir;
 

@@ -140,7 +140,6 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private String produceURL() {
-		String protocol = "wss";
 		String host = ConfigedMain.getHost();
 		if (host == null) {
 			throw new RuntimeException("Host is null");
@@ -153,6 +152,7 @@ public class Messagebus implements MessagebusListener {
 			Logging.info(this, "Host does have specified port (using specified port): ", host);
 		}
 
+		String protocol = "wss";
 		String url = String.format("%s://%s/messagebus/v1", protocol, host);
 		Logging.info(this, "Connecting to messagebus using the following URL: ", url);
 

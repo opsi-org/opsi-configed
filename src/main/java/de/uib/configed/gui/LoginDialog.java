@@ -250,7 +250,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
 		SequentialGroup seqGroup = groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE);
-		if (ssoActiveByServer == null || !ssoActiveByServer) {
+		if (!Boolean.TRUE.equals(ssoActiveByServer)) {
 			parGroup.addComponent(jLabelLoadingSSOState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 					GroupLayout.PREFERRED_SIZE);
 			seqGroup.addComponent(jLabelLoadingSSOState, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
@@ -457,7 +457,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (ssoActiveByServer) {
+			if (Boolean.TRUE.equals(ssoActiveByServer)) {
 				tryConnecting(true);
 			} else {
 				if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {

@@ -211,19 +211,19 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private boolean ssoCheckAuthenticated() {
 		/////// check if authenticated
 		Logging.info(this, "ssoCheckAuthenticated started");
-		URL url_authenticated = makeURL("/auth/wait_authenticated");
 
 		Map<String, String> requestProperties = new HashMap<>();
 		requestProperties.put("Accept", "application/json");
 		requestProperties.put("Cookie", sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId));
 
+		URL urlAuthenticated = makeURL("/auth/wait_authenticated");
 		Map<String, Object> jsonProperties = new HashMap<>();
 		jsonProperties.put("wait_time", 60);
 		HashMap<String, Object> responseHeader = new HashMap<>();
-		Map<String, Object> result = retrieveResponse(url_authenticated, "POST", requestProperties, jsonProperties,
+		Map<String, Object> result = retrieveResponse(urlAuthenticated, "POST", requestProperties, jsonProperties,
 				"authenticated", responseHeader);
 
-		if (result == null || result.isEmpty() || !result.containsKey("authenticated")) {
+		if (!result.containsKey("authenticated")) {
 			throw new RuntimeException("authenticated not received");
 		}
 		if (responseHeader.isEmpty()) {
@@ -443,7 +443,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Logging.debug(this, "Connection state after communication: ", conStat);
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
-				return null;
+				return new HashMap<>();
 			}
 		}
 		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
@@ -491,16 +491,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			ObjectMapper mapper = new MessagePackMapper();
 			result = mapper.readValue(stream, new TypeReference<HashMap<String, Object>>() {
 			});
-		} else
-
-		{
+		} else {
 			Logging.error(this, "Unsupported Content-Type: ", contentType);
 		}
 
 		return result;
 	}
 
-	private String readInputStream(InputStream fis) {
+	private static String readInputStream(InputStream fis) {
 		StringBuilder sb = new StringBuilder();
 
 		String thisLine = null;

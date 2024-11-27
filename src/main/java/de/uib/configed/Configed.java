@@ -52,7 +52,7 @@ public final class Configed {
 	private static String user;
 	private static String password;
 	private static String otp;
-	private static boolean useSSO = false;
+	private static boolean useSSO;
 
 	private static boolean optionCLIQuerySearch;
 	private static String savedSearch;
