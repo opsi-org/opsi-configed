@@ -151,6 +151,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Logging.info("getHeaders started");
 		Map<String, String> requestProperties = new HashMap<>();
 		requestProperties.put("Accept", "application/json");
+		requestProperties.put("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION);
 		if (sessionId != null) {
 			requestProperties.put("Cookie", sessionId);
 		}
@@ -179,6 +180,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, String> requestProperties = new HashMap<>();
 		Map<String, Object> jsonProperties = null;
 		requestProperties.put("Accept", "application/json");
+		requestProperties.put("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION);
 		String localKeySID = "respondSessionId";
 		//////// register and get new session id
 		URL url_get_sid = makeURL("/auth/session_id");
@@ -226,6 +228,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		Map<String, String> requestProperties = new HashMap<>();
 		requestProperties.put("Accept", "application/json");
+		requestProperties.put("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION);
 		requestProperties.put("Cookie", sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId));
 
 		Map<String, Object> jsonProperties = new HashMap<>();
