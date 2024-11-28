@@ -78,7 +78,7 @@ public class CreateConfigDialog extends JDialog {
 	}
 
 	private void initBooleanDetailsPanel() {
-		JLabel defaultLabel = new JLabel("default value:");
+		JLabel defaultLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValue"));
 		booleanDefault = new JCheckBox();
 		booleanDefault.setHorizontalTextPosition(SwingConstants.LEADING);
 
@@ -94,12 +94,14 @@ public class CreateConfigDialog extends JDialog {
 	}
 
 	private void initUnicodeDetailsPanel() {
-		isEditable = new JCheckBox("editable", true);
-		isMultiValue = new JCheckBox("multivalue");
+		isEditable = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.editable"), true);
+		isMultiValue = new JCheckBox(Configed.getResourceValue("CreateConfigDialog.multiSelection"));
 
 		// These dialogs are there to 
-		defaultValuesSelectionDialog = createSelectionDialog("title1");
-		possibleValuesSelectionDialog = createSelectionDialog("title2");
+		defaultValuesSelectionDialog = createSelectionDialog(
+				Configed.getResourceValue("CreateConfigDialog.defaultValues"));
+		possibleValuesSelectionDialog = createSelectionDialog(
+				Configed.getResourceValue("CreateConfigDialog.possibleValues"));
 		possibleValuesSelectionDialog.setMultiSelection();
 
 		// These textfields will show currently selected values in the dialog.
@@ -117,10 +119,10 @@ public class CreateConfigDialog extends JDialog {
 			}
 		});
 
-		JLabel defaultValuesLabel = new JLabel("default values");
+		JLabel defaultValuesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.defaultValues"));
 		defaultValuesLabel.setFont(defaultValuesLabel.getFont().deriveFont(Font.BOLD));
 
-		JLabel possibleValuesLabel = new JLabel("possible values");
+		JLabel possibleValuesLabel = new JLabel(Configed.getResourceValue("CreateConfigDialog.possibleValues"));
 		possibleValuesLabel.setFont(possibleValuesLabel.getFont().deriveFont(Font.BOLD));
 
 		unicodeDetailsPanel = new JPanel();
