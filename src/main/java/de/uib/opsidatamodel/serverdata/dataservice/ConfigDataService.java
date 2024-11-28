@@ -468,7 +468,6 @@ public class ConfigDataService {
 
 	// collect config updates
 	public void setConfig(Map<String, List<Object>> settings) {
-		Logging.devel(settings.toString());
 		Logging.debug(this, "setConfig settings ", settings);
 		if (configCollection == null) {
 			configCollection = new ArrayList<>();
