@@ -50,6 +50,20 @@ public class ConfigOption extends RetrievedMap {
 		this(null);
 	}
 
+	public static ConfigOption createConfigOption(String description, TYPE type, boolean editable, boolean multiValue,
+			List<?> defaultValues, List<?> possibleValues) {
+
+		Map<String, Object> retrieved = new HashMap<>();
+		retrieved.put("possibleValues", possibleValues);
+		retrieved.put("defaultValues", defaultValues);
+		retrieved.put("description", description);
+		retrieved.put("type", type.toString());
+		retrieved.put("editable", editable);
+		retrieved.put("multiValue", multiValue);
+
+		return new ConfigOption(retrieved);
+	}
+
 	public static ConfigOption createConfigOption(String description, TYPE type, boolean editable, boolean multiValue) {
 		List<Object> possibleValues = new ArrayList<>();
 		List<Object> defaultValues = new ArrayList<>();
@@ -61,15 +75,7 @@ public class ConfigOption extends RetrievedMap {
 			editable = false;
 		}
 
-		Map<String, Object> retrieved = new HashMap<>();
-		retrieved.put("possibleValues", possibleValues);
-		retrieved.put("defaultValues", defaultValues);
-		retrieved.put("description", description);
-		retrieved.put("type", type.toString());
-		retrieved.put("editable", editable);
-		retrieved.put("multiValue", multiValue);
-
-		return new ConfigOption(retrieved);
+		return createConfigOption(description, type, editable, multiValue, defaultValues, possibleValues);
 	}
 
 	@Override

@@ -160,14 +160,18 @@ public class MapTableModel extends AbstractTableModel {
 		this.isEditable = isEditable;
 	}
 
-	public void addEntry(String key, Object newval, boolean toStore) {
-		data.put(key, newval);
-		oridata.put(key, newval);
+	public void addEntry(String key, Object defaultValues, boolean toStore) {
+		addEntry(key, defaultValues, defaultValues, toStore);
+	}
+
+	public void addEntry(String key, Object defaultValues, Object possibleValues, boolean toStore) {
+		data.put(key, defaultValues);
+		oridata.put(key, possibleValues);
 		Logging.debug(this, " keys ", keys);
 		keys = new ArrayList<>(data.keySet());
 		Logging.debug(this, " new keys  ", keys);
 		if (toStore) {
-			putEntryIntoStoredMaps(key, newval, toStore);
+			putEntryIntoStoredMaps(key, defaultValues, toStore);
 		}
 		fireTableDataChanged();
 	}

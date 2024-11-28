@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -362,7 +361,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		return ok;
 	}
 
-	public void addEntry(String configName, String description, boolean bool, boolean multivalue, boolean editable) {
+	public void addEntry(String configName, String description, boolean bool, boolean multivalue, boolean editable,
+			List<?> defaultValues, List<?> possibleValues) {
 		if (!checkKey(configName)) {
 			return;
 		}
@@ -371,19 +371,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 				bool, multivalue, editable);
 
 		ConfigOption configOption = ConfigOption.createConfigOption(description,
-				bool ? TYPE.BOOL_CONFIG : TYPE.UNICODE_CONFIG, editable, multivalue);
+				bool ? TYPE.BOOL_CONFIG : TYPE.UNICODE_CONFIG, editable, multivalue, defaultValues, possibleValues);
 
-		// Unfortunately we need to put here another value so that the updater recognizes this as different
-		// and will write the changes to the server.
-		// TODO: Find a better more elegant solution for this
-		List<Object> startValues = new ArrayList<>();
-		if (bool) {
-			startValues.add(false);
-		} else {
-			startValues.add("");
-		}
-
-		mapTableModel.addEntry(configName, startValues, true);
+		mapTableModel.addEntry(configName, defaultValues, possibleValues, true);
 		names = mapTableModel.getKeys();
 
 		optionsMap.put(configName, configOption);

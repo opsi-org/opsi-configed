@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -263,7 +265,18 @@ public class CreateConfigDialog extends JDialog {
 	}
 
 	private void createConfig() {
+		List<?> defaultValues;
+		List<?> possibleValues;
+		if (isBoolean.isSelected()) {
+			defaultValues = new ArrayList<>(Arrays.asList(booleanDefault.isSelected()));
+			possibleValues = new ArrayList<>(defaultValues);
+		} else {
+			defaultValues = new ArrayList<>(defaultValuesSelectionDialog.getSelectedValues());
+			possibleValues = new ArrayList<>(possibleValuesSelectionDialog.getSelectedValues());
+		}
+
 		editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
-				isBoolean.isSelected(), isMultiValue.isSelected(), isEditable.isSelected());
+				isBoolean.isSelected(), isMultiValue.isSelected(), isEditable.isSelected(), defaultValues,
+				possibleValues);
 	}
 }

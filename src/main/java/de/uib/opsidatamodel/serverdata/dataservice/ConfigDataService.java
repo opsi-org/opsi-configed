@@ -468,6 +468,7 @@ public class ConfigDataService {
 
 	// collect config updates
 	public void setConfig(Map<String, List<Object>> settings) {
+		Logging.devel(settings.toString());
 		Logging.debug(this, "setConfig settings ", settings);
 		if (configCollection == null) {
 			configCollection = new ArrayList<>();
@@ -483,37 +484,34 @@ public class ConfigDataService {
 
 			Logging.info(this, "setConfig, key: ", setting.getKey());
 
-			if (setting.getValue() == null
-					|| !setting.getValue().equals(configOptions.get(setting.getKey()).getDefaultValues())) {
-				Map<String, Object> config = new HashMap<>();
+			Map<String, Object> config = new HashMap<>();
 
-				config.put("ident", setting.getKey());
+			config.put("ident", setting.getKey());
 
-				String type;
+			String type;
 
-				Logging.debug(this, "setConfig, key,  configOptions.get(key):  ", setting.getKey(), ", ",
-						configOptions.get(setting.getKey()));
-				if (configOptions.get(setting.getKey()) != null) {
-					config.put("multiValue", configOptions.get(setting.getKey()).get("multiValue"));
+			Logging.debug(this, "setConfig, key,  configOptions.get(key):  ", setting.getKey(), ", ",
+					configOptions.get(setting.getKey()));
+			if (configOptions.get(setting.getKey()) != null) {
+				config.put("multiValue", configOptions.get(setting.getKey()).get("multiValue"));
 
-					type = (String) configOptions.get(setting.getKey()).get("type");
-				} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
-					type = "BoolConfig";
-				} else {
-					type = "UnicodeConfig";
-				}
-
-				config.put("type", type);
-
-				config.put("defaultValues", setting.getValue());
-
-				List<Object> possibleValues = createPossibleValues(type, setting.getValue(),
-						configOptions.get(setting.getKey()));
-
-				config.put("possibleValues", possibleValues);
-
-				configCollection.add(config);
+				type = (String) configOptions.get(setting.getKey()).get("type");
+			} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
+				type = "BoolConfig";
+			} else {
+				type = "UnicodeConfig";
 			}
+
+			config.put("type", type);
+
+			config.put("defaultValues", setting.getValue());
+
+			List<Object> possibleValues = createPossibleValues(type, setting.getValue(),
+					configOptions.get(setting.getKey()));
+
+			config.put("possibleValues", possibleValues);
+
+			configCollection.add(config);
 		}
 	}
 
