@@ -100,10 +100,22 @@ public class CreateConfigDialog extends JDialog {
 		// These dialogs are there to 
 		defaultValuesSelectionDialog = createSelectionDialog("title1");
 		possibleValuesSelectionDialog = createSelectionDialog("title2");
+		possibleValuesSelectionDialog.setMultiSelection();
 
 		// These textfields will show currently selected values in the dialog.
 		JTextField defaultValuesTextField = createTextFieldAssociated(defaultValuesSelectionDialog);
 		JTextField possibleValuesTextField = createTextFieldAssociated(possibleValuesSelectionDialog);
+
+		isMultiValue.addActionListener((ActionEvent actionEvent) -> {
+			if (isMultiValue.isSelected()) {
+				defaultValuesSelectionDialog.setMultiSelection();
+			} else {
+				defaultValuesSelectionDialog.setSingleSelection();
+				// Update field according to single selection
+				defaultValuesTextField.setText(
+						PropertiesCellEditorAndRenderer.formatList(defaultValuesSelectionDialog.getSelectedValues()));
+			}
+		});
 
 		JLabel defaultValuesLabel = new JLabel("default values");
 		defaultValuesLabel.setFont(defaultValuesLabel.getFont().deriveFont(Font.BOLD));
@@ -165,7 +177,6 @@ public class CreateConfigDialog extends JDialog {
 		FSelectionList fSelectionList = new FSelectionList(ConfigedMain.getMainFrame(), title, true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 300,
 				400, addValuesTextField);
-		fSelectionList.enableMultiSelection();
 		fSelectionList.setModel(new DefaultListModel<>());
 
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));

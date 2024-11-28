@@ -177,7 +177,11 @@ public class FSelectionList extends FGeneralDialog {
 		return indices;
 	}
 
-	public void enableMultiSelection() {
+	public void setSingleSelection() {
+		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+
+	public void setMultiSelection() {
 		jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 

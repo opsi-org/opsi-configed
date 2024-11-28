@@ -125,7 +125,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		fColumSelectionList.setListData(defaultValues);
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);
 		fColumSelectionList.setPreviousSelectionValues(defaultValues);
-		fColumSelectionList.enableMultiSelection();
+		fColumSelectionList.setMultiSelection();
 		fColumSelectionList.setVisible(true);
 
 		List<String> result = new ArrayList<>();

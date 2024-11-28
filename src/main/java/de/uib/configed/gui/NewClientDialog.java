@@ -362,7 +362,7 @@ public final class NewClientDialog extends FGeneralDialog {
 				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"), true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 500,
 				300);
-		groupsSelectionDialog.enableMultiSelection();
+		groupsSelectionDialog.setMultiSelection();
 		groupsSelectionDialog.setListData(
 				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
 		groupsSelectionDialog
