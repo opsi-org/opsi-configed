@@ -834,7 +834,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void setRow(int row, boolean addSelection, boolean select) {
-		if (select) {
+		if (row == -1) {
+			targetModel.setSelection(new int[0]);
+		} else if (select) {
 			if (addSelection) {
 				addSelectedRow(row);
 			} else {
@@ -863,16 +865,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.getCaret().setVisible(false);
 
 		if (value.length() < 2) {
-			setRow(0, false, select);
+			setRow(-1, false, select);
 		} else {
 			foundrow = findViewRowFromValue(startrow, value, selectedCols);
 
-			if (foundrow > -1) {
+			if (foundrow > -1 || startrow == 0) {
 				setRow(foundrow, addSelection, select);
-			} else if (startrow > 0) {
-				searchTheRow(0, addSelection, select);
 			} else {
-				setRow(0, false, select);
+				searchTheRow(0, addSelection, select);
 			}
 		}
 
@@ -930,12 +930,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			switchFilterOff();
-
-			setRow(0, false, selectMode);
-			// go back to start when editing is restarted
-		}
+		documentChanged(e);
 	}
 
 	private void documentChanged(DocumentEvent e) {
