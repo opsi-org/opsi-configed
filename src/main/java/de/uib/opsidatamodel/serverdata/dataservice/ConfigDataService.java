@@ -496,8 +496,7 @@ public class ConfigDataService {
 		for (Entry<String, List<Object>> setting : settings.entrySet()) {
 			Logging.debug(this, "setConfig,  key, settings.get(key): " + setting.getKey() + ", " + setting.getValue());
 
-			Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): "
-					+ setting.getValue() + " , " + setting.getValue().getClass().getName());
+			Logging.debug(this, "setConfig,  settings.get(key)" + setting.getValue());
 
 			List<Object> oldValue = null;
 
@@ -507,7 +506,7 @@ public class ConfigDataService {
 
 			Logging.info(this, "setConfig, key, oldValue: " + setting.getKey() + ", " + oldValue);
 
-			if (!setting.getValue().equals(oldValue)) {
+			if ((setting.getValue() == null && oldValue != null) || !setting.getValue().equals(oldValue)) {
 				Map<String, Object> config = new HashMap<>();
 
 				config.put("ident", setting.getKey());
@@ -551,9 +550,12 @@ public class ConfigDataService {
 			possibleValues = configOption.getPossibleValues();
 		}
 
-		for (Object item : defaultValues) {
-			if (!possibleValues.contains(item)) {
-				possibleValues.add(item);
+		// defaultValues is null when we delete a config
+		if (defaultValues != null) {
+			for (Object item : defaultValues) {
+				if (!possibleValues.contains(item)) {
+					possibleValues.add(item);
+				}
 			}
 		}
 
