@@ -3,6 +3,7 @@
 ## [4.3.4.x] - 2024-xx-xx
 ### Fixed
 - NullpointerException when trying to delete config
+- No selection when no element found from search
 
 ## [4.3.4.1] - 2024-11-27
 ### Added
