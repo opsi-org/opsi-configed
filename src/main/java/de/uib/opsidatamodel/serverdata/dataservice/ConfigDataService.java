@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -1118,7 +1117,7 @@ public class ConfigDataService {
 	}
 
 	public List<String> getDomains() {
-		Set<String> result = new TreeSet<>();
+		List<String> result = new ArrayList<>();
 
 		Map<String, List<Object>> configDefaultValues = getConfigDefaultValuesPD();
 		if (configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY) == null) {
@@ -1135,10 +1134,12 @@ public class ConfigDataService {
 			}
 		}
 
-		result.add(getOpsiDefaultDomainPD());
+		if (!result.contains(getOpsiDefaultDomainPD())) {
+			result.add(getOpsiDefaultDomainPD());
+		}
 
 		Logging.info(this, "getDomains " + result);
-		return new ArrayList<>(result);
+		return result;
 	}
 
 	public void writeDomains(List<Object> domains) {
