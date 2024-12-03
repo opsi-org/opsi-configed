@@ -1,6 +1,7 @@
-## [4.4.x.x] - 2024-xx-xx
+## [4.4.0.x] - 2024-xx-xx
 ### Fixed
 - No selection when no element found from search
+- Remember last used domain to create client
 
 ## [4.4.0.11] - 2024-11-13
 ### Changed
