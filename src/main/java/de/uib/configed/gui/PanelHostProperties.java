@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigOption.TYPE;
-import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utils.DataChangedObserver;
 import de.uib.utils.datapanel.EditMapPanelX;
@@ -53,7 +52,7 @@ public class PanelHostProperties extends JPanel {
 		Logging.debug(this, "initMultipleHosts ", " configs  ", multipleMaps);
 
 		this.multipleMaps = multipleMaps;
-		editMapPanel.setUpdateCollection(POJOReMapper.remap(updateCollection));
+		editMapPanel.setUpdateCollection(updateCollection);
 		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
 
 		setMap(selectedDepot);
