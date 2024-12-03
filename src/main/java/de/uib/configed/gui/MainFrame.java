@@ -168,7 +168,7 @@ public class MainFrame extends JFrame {
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			configedMain.reload();
-			if (iconBarPanel.getIconButtonReloadLicenses().isEnabled()) {
+			if (iconBarPanel.isLicensesManagementActive()) {
 				reloadLicensesAction();
 			}
 		});

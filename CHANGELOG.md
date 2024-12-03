@@ -4,6 +4,7 @@
 ### Fixed
 - NullpointerException when trying to delete config
 - No selection when no element found from search
+- NullpointerException when reloading all data in `Files` menu
 
 ## [4.3.4.1] - 2024-11-27
 ### Added

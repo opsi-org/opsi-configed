@@ -63,8 +63,8 @@ public class IconBarPanel extends JPanel {
 		init();
 	}
 
-	public IconButton getIconButtonReloadLicenses() {
-		return iconButtonReloadLicenses;
+	public boolean isLicensesManagementActive() {
+		return iconButtonReloadLicenses.isVisible();
 	}
 
 	public IconButton getIconButtonSaveConfiguration() {
@@ -439,7 +439,6 @@ public class IconBarPanel extends JPanel {
 	public void visualizeLicensesFramesActive(boolean b) {
 		jButtonLicenses.setSelected(b);
 		iconButtonReloadLicenses.setVisible(true);
-		iconButtonReloadLicenses.setEnabled(true);
 	}
 
 	public void enableAfterLoading() {
