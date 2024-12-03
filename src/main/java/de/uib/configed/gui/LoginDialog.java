@@ -424,9 +424,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 			} else {
 				fieldHost.requestFocus();
 			}
-
-			setActivated(true);
 		}
+
+		setActivated(true);
 	}
 
 	@Override
@@ -529,7 +529,6 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 
 				Logging.info(this, "waitingTask can be set to ready");
 				waitingWorker.setReady();
-				setActivated(true);
 			}
 		}.start();
 	}
