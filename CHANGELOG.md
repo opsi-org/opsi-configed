@@ -1,7 +1,8 @@
-## [4.4.0.x] - 2024-xx-xx
+## [4.4.0.12] - 2024-12-04
 ### Fixed
 - No selection when no element found from search
 - Remember last used domain to create client
+- Always show loading animation when loading data
 
 ## [4.4.0.11] - 2024-11-13
 ### Changed
