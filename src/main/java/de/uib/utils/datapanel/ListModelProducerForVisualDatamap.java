@@ -43,11 +43,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	public final void setData(Map<String, ConfigOption> optionsMap, Map<String, Object> currentData) {
 		this.optionsMap = optionsMap;
 
-		mapTypes(currentData);
-	}
-
-	public void updateData(Map<String, Object> data) {
-		mapTypes(data);
+		updateData(currentData);
 	}
 
 	@Override
@@ -55,7 +51,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		return optionsMap.get(key);
 	}
 
-	private void mapTypes(final Map<String, Object> data) {
+	public void updateData(final Map<String, Object> data) {
 		currentData = new HashMap<>();
 		Logging.debug(this, "mapTypes  ", data);
 		for (Entry<String, Object> dataEntry : data.entrySet()) {
