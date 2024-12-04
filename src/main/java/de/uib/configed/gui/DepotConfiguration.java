@@ -161,13 +161,13 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			UpdateCollectionManager.removeFromGlobalUpdateCollection(hostUpdateCollection);
 		}
 
-		hostUpdateCollection = new HostUpdateCollection();
-		UpdateCollectionManager.addToGlobalUpdateCollection(hostUpdateCollection);
-
 		String depot = "";
 		if (!depotsList.getSelectedValuesList().isEmpty()) {
 			depot = depotsList.getSelectedValuesList().get(0);
 		}
+
+		hostUpdateCollection = new HostUpdateCollection(depot);
+		UpdateCollectionManager.addToGlobalUpdateCollection(hostUpdateCollection);
 
 		panelHostProperties.initMultipleHostsEditing(depot, depotPropertiesForPermittedDepots, hostUpdateCollection,
 				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);

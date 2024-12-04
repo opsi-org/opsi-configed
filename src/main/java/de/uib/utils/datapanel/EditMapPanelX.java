@@ -333,12 +333,14 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	@Override
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
-		super.setEditableMap(visualdata, optionsMap);
-
 		if (optionsMap != null) {
 			modelProducer = new ListModelProducerForVisualDatamap(table, optionsMap, visualdata);
 			mapTableModel.setModelProducer(modelProducer);
 		}
+
+		// We need to call this method after creating the modelProducer since
+		// it will change the map visualdata
+		super.setEditableMap(visualdata, optionsMap);
 
 		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
 

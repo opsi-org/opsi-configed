@@ -13,13 +13,15 @@ import de.uib.utils.logging.Logging;
 /**
 */
 public class HostUpdateCollection extends UpdateCollection {
-	public HostUpdateCollection() {
-		super();
+	private String depot;
+
+	public HostUpdateCollection(String depot) {
+		this.depot = depot;
 	}
 
 	@Override
 	public boolean addMap(Map<String, Object> map) {
-		return add(new HostUpdate(map));
+		return add(new HostUpdate(map, depot));
 	}
 
 	@Override

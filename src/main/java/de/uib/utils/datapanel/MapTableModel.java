@@ -33,7 +33,7 @@ public class MapTableModel extends AbstractTableModel {
 
 	private UpdateCollection updateCollection;
 	private Collection<Map<String, Object>> storeData;
-	private Map<String, Object> alternative;
+	private Map<String, Object> changes;
 	private boolean datachanged;
 
 	// keys which identify readonly entries
@@ -138,7 +138,7 @@ public class MapTableModel extends AbstractTableModel {
 
 		setNew();
 		storeData = data;
-		alternative = new HashMap<>();
+		changes = new HashMap<>();
 		resetModifiedKey();
 	}
 
@@ -292,7 +292,7 @@ public class MapTableModel extends AbstractTableModel {
 			if (updateCollection == null) {
 				Logging.debug(this, "updateCollection null - should not be");
 			} else {
-				updateCollection.addMap(alternative);
+				updateCollection.addMap(changes);
 			}
 
 			Logging.debug(this, " ---  updateCollection: ", updateCollection, "  has size ", updateCollection.size());
@@ -305,7 +305,7 @@ public class MapTableModel extends AbstractTableModel {
 				aStoreMap.put(myKey, null);
 			}
 
-			alternative.put(myKey, null);
+			changes.put(myKey, null);
 
 			Logging.debug(this, "remove entry --  updateCollection: ", updateCollection, "  has size ",
 					updateCollection.size());
@@ -335,7 +335,7 @@ public class MapTableModel extends AbstractTableModel {
 				}
 			}
 
-			alternative.put(myKey, value);
+			changes.put(myKey, value);
 
 			if (toStore) {
 				weHaveChangedStoredMaps();
