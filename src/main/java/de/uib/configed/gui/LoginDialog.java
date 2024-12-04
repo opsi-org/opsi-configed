@@ -438,7 +438,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 				Logging.info(this, "waitingTask can be set to ready");
 				actAfterWaiting();
-				setActivated(true);
 			}
 		}.start();
 	}
