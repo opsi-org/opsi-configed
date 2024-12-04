@@ -424,9 +424,9 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 			} else {
 				fieldHost.requestFocus();
 			}
-		}
 
-		setActivated(true);
+			setActivated(true);
+		}
 	}
 
 	@Override

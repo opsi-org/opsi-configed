@@ -1,11 +1,12 @@
 # Changelog
 
-## [4.3.4.x] - 2024-xx-xx
+## [4.3.4.2] - 2024-12-04
 ### Fixed
 - NullpointerException when trying to delete config
 - No selection when no element found from search
 - NullpointerException when reloading all data in `Files` menu
 - Remember last used domain to create client
+- Always show loading animation when loading data
 
 ## [4.3.4.1] - 2024-11-27
 ### Added
