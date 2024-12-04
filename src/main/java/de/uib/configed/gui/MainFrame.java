@@ -44,6 +44,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
+import de.uib.configed.messageoftheday.FMessageOfTheDay;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.CommandWithParameters;
@@ -56,11 +57,13 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
 import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.permission.UserFeaturesConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.FeatureActivationChecker;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.userprefs.ThemeManager;
@@ -451,10 +454,35 @@ public class MainFrame extends JFrame {
 
 		jMenuFrameShowDialogs = ClientMenuManager.createArrangeWindowsMenuItem();
 
+		JMenuItem jMenuFrameMsgOfTheDay = null;
+
+		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
+				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
+		boolean forbiddenMOTD = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE)
+				&& forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
+
+		if (ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3.15.2")
+				&& FeatureActivationChecker.isFeatureActivated(FeatureActivationChecker.Feature.MESSAGE_OF_THE_DAY)) {
+			jMenuFrameMsgOfTheDay = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"));
+			jMenuFrameMsgOfTheDay.addActionListener((ActionEvent e) -> showMsgOfTheDay());
+
+			jMenuFrameMsgOfTheDay.setEnabled(!forbiddenMOTD);
+			if (forbiddenMOTD) {
+				jMenuFrameMsgOfTheDay.setText(
+						String.format("%s %s", Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"),
+								Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden")));
+
+			}
+
+		}
+
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameDashboard);
 		jMenuFrames.add(jMenuFrameLicenses);
+		if (jMenuFrameMsgOfTheDay != null) {
+			jMenuFrames.add(jMenuFrameMsgOfTheDay);
+		}
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
 
@@ -753,6 +781,12 @@ public class MainFrame extends JFrame {
 				deactivateLoadingPane();
 			}
 		}.start();
+	}
+
+	private static void showMsgOfTheDay() {
+		FMessageOfTheDay dialog = new FMessageOfTheDay();
+		dialog.setupLayout();
+		dialog.setVisible(true);
 	}
 
 	private static void showLogfileLocationAction(JFrame centerFrame) {

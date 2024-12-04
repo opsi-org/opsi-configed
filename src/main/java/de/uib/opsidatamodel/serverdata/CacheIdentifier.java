@@ -307,6 +307,11 @@ public enum CacheIdentifier {
 	TERMINAL_FORBIDDEN("terminal_forbidden"),
 
 	/**
+	 * return type {@code Set<String>}
+	 */
+	MOTD_FORBIDDEN("motd_forbidden"),
+
+	/**
 	 * return type {@code String}
 	 */
 	USER_CONFIG_PART("user_config_part"),

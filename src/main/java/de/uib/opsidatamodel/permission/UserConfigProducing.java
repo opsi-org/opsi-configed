@@ -338,6 +338,9 @@ public class UserConfigProducing {
 
 		updateConfigListItem(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN,
 				UserServerConsoleConfig.FORBIDDEN_OPTIONS, userConfig, prototypeConfig, prototypeObligatory, startKey);
+		updateConfigListItem(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN, UserFeaturesConfig.FORBIDDEN_OPTIONS,
+				userConfig, prototypeConfig, prototypeObligatory, startKey);
+
 		updateDepots(userConfig, prototypeConfig, prototypeObligatory, startKey);
 		updateHostGroups(userConfig, prototypeConfig, prototypeObligatory, startKey, username);
 		updateProductGroups(userConfig, prototypeConfig, prototypeObligatory, startKey);
