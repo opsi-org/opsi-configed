@@ -76,10 +76,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		setSelectedIndex(1);
 	}
 
-	public PanelHostProperties getPanelHostProperties() {
-		return panelHostProperties;
-	}
-
 	@Override
 	public void stateChanged(ChangeEvent event) {
 		updateTab();
