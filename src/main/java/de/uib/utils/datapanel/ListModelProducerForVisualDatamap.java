@@ -31,7 +31,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	private Map<Integer, ListModel<String>> listmodels = new HashMap<>();
 
 	private Map<String, ConfigOption> optionsMap;
-	private Map<String, List<String>> currentData;
+	private Map<String, Object> currentData;
 	private JTable table;
 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ConfigOption> optionsMap,
@@ -52,9 +52,10 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	}
 
 	public void updateData(final Map<String, Object> data) {
-		currentData = new HashMap<>();
-		Logging.debug(this, "mapTypes  ", data);
-		for (Entry<String, Object> dataEntry : data.entrySet()) {
+		currentData = data;
+
+		Logging.debug(this, "mapTypes  ", currentData);
+		for (Entry<String, Object> dataEntry : currentData.entrySet()) {
 			currentData.put(dataEntry.getKey(), toList(dataEntry.getValue()));
 		}
 	}
@@ -86,7 +87,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 			model.addElement(POJOReMapper.remap(iter.next()));
 		}
 		if (currentData.get(key) instanceof List) {
-			iter = currentData.get(key).iterator();
+			iter = ((List<?>) currentData.get(key)).iterator();
 
 			while (iter.hasNext()) {
 				String entry = (String) iter.next();

@@ -31,6 +31,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FSelectionList;
 import de.uib.configed.type.ConfigOption.TYPE;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
@@ -187,7 +188,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		listSelectionDialog.setTitle((String) table.getValueAt(row, 0));
 		listSelectionDialog.setModel(modelProducer.getListModel(row));
 
-		listSelectionDialog.setPreviousSelectionValues(modelProducer.toList(value));
+		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(modelProducer.toList(value)));
 		listSelectionDialog.setSize(400, 500);
 		listSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		addValuesTextField.setVisible(modelProducer.isEditable(row));

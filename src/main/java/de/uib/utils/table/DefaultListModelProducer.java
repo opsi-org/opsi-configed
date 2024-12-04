@@ -36,17 +36,17 @@ public class DefaultListModelProducer {
 	}
 
 	// TODO maybe this can go away, value should always be list
-	public List<String> toList(Object value) {
+	public List<Object> toList(Object value) {
 		if (value == null) {
 			Logging.warning(this, "value is null");
 			return new ArrayList<>();
 		}
 
 		if (value instanceof List) {
-			return (List<String>) value;
+			return (List<Object>) value;
 		}
 
 		Logging.info(this, "value is not instance of List<O>, create List with element value");
-		return Collections.singletonList((String) value);
+		return Collections.singletonList(value);
 	}
 }
