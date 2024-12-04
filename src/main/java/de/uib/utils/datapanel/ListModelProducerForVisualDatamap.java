@@ -27,11 +27,11 @@ import de.uib.utils.table.DefaultListModelProducer;
 	private for which data exist (to be placed in column 1 of the table)
 */
 
-public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProducer<O> {
-	private Map<Integer, ListModel<O>> listmodels = new HashMap<>();
+public class ListModelProducerForVisualDatamap extends DefaultListModelProducer {
+	private Map<Integer, ListModel<String>> listmodels = new HashMap<>();
 
 	private Map<String, ConfigOption> optionsMap;
-	private Map<String, List<O>> currentData;
+	private Map<String, List<String>> currentData;
 	private JTable table;
 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ConfigOption> optionsMap,
@@ -60,7 +60,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	}
 
 	@Override
-	public ListModel<O> getListModel(int row) {
+	public ListModel<String> getListModel(int row) {
 		// column can be assumed to be 1
 
 		if (listmodels.containsKey(row)) {
@@ -80,7 +80,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		Logging.info(this, "getListModel key ", key, " the option values ", values);
 		Logging.info(this, "getListModel key ", key, " options  ", options);
 
-		DefaultListModel<O> model = new DefaultListModel<>();
+		DefaultListModel<String> model = new DefaultListModel<>();
 		Iterator<? extends Object> iter = values.iterator();
 		while (iter.hasNext()) {
 			model.addElement(POJOReMapper.remap(iter.next()));
@@ -89,7 +89,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 			iter = currentData.get(key).iterator();
 
 			while (iter.hasNext()) {
-				O entry = POJOReMapper.remap(iter.next());
+				String entry = (String) iter.next();
 				if (!model.contains(entry) && entry != null) {
 					model.addElement(entry);
 				}

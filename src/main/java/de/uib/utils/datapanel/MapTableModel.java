@@ -55,7 +55,7 @@ public class MapTableModel extends AbstractTableModel {
 	private String modifiedKey;
 	private int rowModiTime;
 
-	private ListModelProducerForVisualDatamap<String> modelProducer;
+	private ListModelProducerForVisualDatamap modelProducer;
 
 	private boolean writeData = true;
 
@@ -63,7 +63,7 @@ public class MapTableModel extends AbstractTableModel {
 		observers = new ArrayList<>();
 	}
 
-	public void setModelProducer(ListModelProducerForVisualDatamap<String> modelProducer) {
+	public void setModelProducer(ListModelProducerForVisualDatamap modelProducer) {
 		this.modelProducer = modelProducer;
 	}
 

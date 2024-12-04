@@ -47,7 +47,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private TableColumn editableColumn;
 	private PropertiesCellEditorAndRenderer propertiesCellEditorAndRenderer;
 
-	private ListModelProducerForVisualDatamap<String> modelProducer;
+	private ListModelProducerForVisualDatamap modelProducer;
 
 	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupItemDeleteEntry1;
@@ -336,7 +336,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		super.setEditableMap(visualdata, optionsMap);
 
 		if (optionsMap != null) {
-			modelProducer = new ListModelProducerForVisualDatamap<>(table, optionsMap, visualdata);
+			modelProducer = new ListModelProducerForVisualDatamap(table, optionsMap, visualdata);
 			mapTableModel.setModelProducer(modelProducer);
 		}
 

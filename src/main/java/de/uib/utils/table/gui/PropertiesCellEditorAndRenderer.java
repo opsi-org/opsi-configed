@@ -57,7 +57,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	private int selectionMode;
 
-	private DefaultListModelProducer<String> modelProducer;
+	private DefaultListModelProducer modelProducer;
 
 	public PropertiesCellEditorAndRenderer() {
 		super();
@@ -105,8 +105,8 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		addValuesTextField.addActionListener(actionEvent -> listSelectionDialog.addItem(addValuesTextField.getText()));
 	}
 
-	public void setModelProducer(DefaultListModelProducer<String> producer) {
-		this.modelProducer = producer == null ? new DefaultListModelProducer<>() : producer;
+	public void setModelProducer(DefaultListModelProducer producer) {
+		this.modelProducer = producer == null ? new DefaultListModelProducer() : producer;
 	}
 
 	@Override

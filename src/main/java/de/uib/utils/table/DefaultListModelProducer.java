@@ -16,10 +16,10 @@ import javax.swing.ListSelectionModel;
 import de.uib.configed.type.ConfigOption;
 import de.uib.utils.logging.Logging;
 
-public class DefaultListModelProducer<O> {
+public class DefaultListModelProducer {
 	private static ConfigOption defaultConfigOption = new ConfigOption();
 
-	public ListModel<O> getListModel(int row) {
+	public ListModel<String> getListModel(int row) {
 		return null;
 	}
 
@@ -36,17 +36,17 @@ public class DefaultListModelProducer<O> {
 	}
 
 	// TODO maybe this can go away, value should always be list
-	public List<O> toList(Object value) {
+	public List<String> toList(Object value) {
 		if (value == null) {
 			Logging.warning(this, "value is null");
 			return new ArrayList<>();
 		}
 
 		if (value instanceof List) {
-			return (List<O>) value;
+			return (List<String>) value;
 		}
 
 		Logging.info(this, "value is not instance of List<O>, create List with element value");
-		return Collections.singletonList((O) value);
+		return Collections.singletonList((String) value);
 	}
 }
