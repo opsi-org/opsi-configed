@@ -17,14 +17,16 @@ import de.uib.utils.logging.Logging;
 public class HostUpdate implements UpdateCommand {
 	private Map<String, Object> newdata;
 	private String depot;
+	private String type;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public HostUpdate(Map<String, Object> newdata, String depot) {
+	public HostUpdate(Map<String, Object> newdata, String depot, String type) {
 		super();
 		this.newdata = newdata;
 		this.depot = depot;
+		this.type = type;
 	}
 
 	@Override
@@ -38,6 +40,15 @@ public class HostUpdate implements UpdateCommand {
 
 		// We need to add the depot as an id
 		newdata.put("id", depot);
+
+		// So the entry "maxBandwith" is actually an integer, but we can only edit as a string,
+		// so we have to parse it here
+		if (newdata.containsKey("maxBandwidth")) {
+			newdata.put("maxBandwidth", Integer.parseInt(newdata.get("maxBandwidth").toString().strip()));
+		}
+
+		// Without the type, the method will not work on the server
+		newdata.put("type", type);
 
 		persistenceController.getHostDataService().setHostValues(newdata);
 	}

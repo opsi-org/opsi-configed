@@ -6,6 +6,7 @@
 
 package de.uib.opsidatamodel.datachanges;
 
+import java.util.List;
 import java.util.Map;
 
 import de.uib.utils.logging.Logging;
@@ -14,14 +15,20 @@ import de.uib.utils.logging.Logging;
 */
 public class HostUpdateCollection extends UpdateCollection {
 	private String depot;
+	private String type;
 
-	public HostUpdateCollection(String depot) {
+	public HostUpdateCollection(String depot, Map<String, Object> depotInfo) {
 		this.depot = depot;
+		if (depotInfo.get("type") instanceof List) {
+			type = (String) ((List<?>) depotInfo.get("type")).get(0);
+		} else {
+			type = (String) depotInfo.get("type");
+		}
 	}
 
 	@Override
 	public boolean addMap(Map<String, Object> map) {
-		return add(new HostUpdate(map, depot));
+		return add(new HostUpdate(map, depot, type));
 	}
 
 	@Override

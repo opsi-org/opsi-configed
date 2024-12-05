@@ -168,7 +168,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (((List<?>) value).isEmpty()) {
 			comboBox.setSelectedItem(null);
 		} else {
-			String listElement = (String) ((List<?>) value).get(0);
+			String listElement = ((List<?>) value).get(0).toString();
 
 			if (((DefaultComboBoxModel<String>) comboBox.getModel()).getIndexOf(listElement) == -1) {
 				comboBox.addItem(listElement);
