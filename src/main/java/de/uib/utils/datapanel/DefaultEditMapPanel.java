@@ -41,7 +41,7 @@ public class DefaultEditMapPanel extends JPanel {
 		@Override
 		public void removeValue(String key) {
 			Logging.debug(this, "removing value for key ", key);
-			mapTableModel.removeEntry(key);
+			mapTableModel.removeConfigEntry(key);
 		}
 
 		@Override

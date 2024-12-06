@@ -55,11 +55,9 @@ public class ConfigUpdateCollection extends UpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion, element count: ", size());
-		if (masterConfig) {
-			persistenceController.getConfigDataService().setConfig();
-		} else {
-			persistenceController.getConfigDataService().setConfg();
-		}
+		persistenceController.getConfigDataService().setConfig();
+		persistenceController.getConfigDataService().setConfg();
+
 		clear();
 	}
 

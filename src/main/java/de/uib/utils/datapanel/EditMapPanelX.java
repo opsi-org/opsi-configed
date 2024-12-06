@@ -375,7 +375,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		ConfigOption configOption = ConfigOption.createConfigOption(description,
 				bool ? TYPE.BOOL_CONFIG : TYPE.UNICODE_CONFIG, editable, multivalue, defaultValues, possibleValues);
 
-		mapTableModel.addEntry(configName, defaultValues, possibleValues, true);
+		mapTableModel.addConfigEntry(configName, defaultValues, possibleValues);
 		names = mapTableModel.getKeys();
 
 		optionsMap.put(configName, configOption);

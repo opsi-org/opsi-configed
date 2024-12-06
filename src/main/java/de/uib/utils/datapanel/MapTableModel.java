@@ -22,6 +22,7 @@ import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utils.DataChangedObserver;
@@ -33,6 +34,7 @@ public class MapTableModel extends AbstractTableModel {
 
 	private UpdateCollection updateCollection;
 	private Collection<Map<String, Object>> storeData;
+	private Map<String, Object> configChanges;
 	private Map<String, Object> changes;
 	private boolean datachanged;
 
@@ -161,12 +163,8 @@ public class MapTableModel extends AbstractTableModel {
 	}
 
 	public void addEntry(String key, Object defaultValues, boolean toStore) {
-		addEntry(key, defaultValues, defaultValues, toStore);
-	}
-
-	public void addEntry(String key, Object defaultValues, Object possibleValues, boolean toStore) {
 		data.put(key, defaultValues);
-		oridata.put(key, possibleValues);
+		oridata.put(key, defaultValues);
 		Logging.debug(this, " keys ", keys);
 		keys = new ArrayList<>(data.keySet());
 		Logging.debug(this, " new keys  ", keys);
@@ -174,6 +172,29 @@ public class MapTableModel extends AbstractTableModel {
 			putEntryIntoStoredMaps(key, defaultValues, toStore);
 		}
 		fireTableDataChanged();
+	}
+
+	public void addConfigEntry(String key, Object defaultValues, Object possibleValues) {
+		((ConfigUpdateCollection) updateCollection).setMasterConfig(true);
+
+		data.put(key, defaultValues);
+		oridata.put(key, possibleValues);
+		Logging.debug(this, " keys ", keys);
+		keys = new ArrayList<>(data.keySet());
+		Logging.debug(this, " new keys  ", keys);
+
+		if (storeData != null) {
+			for (Map<String, Object> aStoreMap : storeData) {
+				aStoreMap.put(key, defaultValues);
+			}
+			configChanges = Collections.singletonMap(key, defaultValues);
+		}
+
+		updateCollection.addMap(configChanges);
+
+		notifyChange();
+
+		((ConfigUpdateCollection) updateCollection).setMasterConfig(false);
 	}
 
 	public void removeEntry(String key) {
@@ -277,6 +298,27 @@ public class MapTableModel extends AbstractTableModel {
 			return (keysOfReadOnlyEntries == null || !keysOfReadOnlyEntries.contains(keys.get(row)))
 					&& (isEditable == null || isEditable.apply(keys.get(row)));
 		}
+	}
+
+	public void removeConfigEntry(String key) {
+		((ConfigUpdateCollection) updateCollection).setMasterConfig(true);
+		data.remove(key);
+		oridata.remove(key);
+
+		keys = new ArrayList<>(data.keySet());
+
+		if (storeData != null) {
+			for (Map<String, Object> aStoreMap : storeData) {
+				aStoreMap.put(key, null);
+			}
+			configChanges = Collections.singletonMap(key, null);
+		}
+
+		updateCollection.addMap(configChanges);
+
+		notifyChange();
+
+		((ConfigUpdateCollection) updateCollection).setMasterConfig(false);
 	}
 
 	private void weHaveChangedStoredMaps() {
