@@ -193,6 +193,7 @@ public class MapTableModel extends AbstractTableModel {
 		updateCollection.addMap(configChanges);
 
 		notifyChange();
+		fireTableDataChanged();
 
 		((ConfigUpdateCollection) updateCollection).setMasterConfig(false);
 	}
@@ -314,9 +315,10 @@ public class MapTableModel extends AbstractTableModel {
 			configChanges = Collections.singletonMap(key, null);
 		}
 
-		updateCollection.addMap(configChanges);
-
 		notifyChange();
+		fireTableDataChanged();
+
+		updateCollection.addMap(configChanges);
 
 		((ConfigUpdateCollection) updateCollection).setMasterConfig(false);
 	}
