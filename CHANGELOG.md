@@ -1,3 +1,7 @@
+## [4.4.0.13] - 2024-12-09
+### Changed
+- Rework editing and creation of configs, configStates, productProperties and depot properties
+
 ## [4.4.0.12] - 2024-12-04
 ### Fixed
 - No selection when no element found from search
