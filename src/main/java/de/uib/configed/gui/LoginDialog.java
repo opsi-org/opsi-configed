@@ -457,20 +457,18 @@ public class LoginDialog extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (Boolean.TRUE.equals(ssoActiveByServer)) {
+			if (e.getSource() == passwordField) {
+				tryConnecting(false);
+			} else if (Boolean.TRUE.equals(ssoActiveByServer)) {
 				tryConnecting(true);
+			} else if (e.getSource() == fieldHost.getEditor().getEditorComponent() || fieldUser.getText() == null
+					|| fieldUser.getText().isEmpty()) {
+				fieldUser.requestFocus();
+			} else if (passwordField.getPassword() == null || passwordField.getPassword().length == 0) {
+				passwordField.requestFocus();
 			} else {
-				if (e.getSource() == fieldHost.getEditor().getEditorComponent()) {
-					fieldUser.requestFocus();
-				} else if (fieldUser.getText() == null || fieldUser.getText().isEmpty()) {
-					fieldUser.requestFocus();
-				} else if (passwordField.getPassword() == null || passwordField.getPassword().length == 0) {
-					passwordField.requestFocus();
-				} else {
-					tryConnecting();
-				}
+				tryConnecting(false);
 			}
-
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			endProgram();
 		} else {
