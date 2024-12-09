@@ -121,10 +121,10 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
+						.addComponent(additionalComponent, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(additionalPane, 300, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
+				.addComponent(additionalComponent, 300, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.MIN_GAP_SIZE));
 
@@ -280,10 +280,10 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE)));
 
-		super.setAdditionalPane(panelSWx);
+		super.setAdditionalComponent(panelSWx);
 
 		super.setCenterPane(panelSWnames);
-		additionalPane.setVisible(true);
+		additionalComponent.setVisible(true);
 
 		super.setupLayout();
 	}

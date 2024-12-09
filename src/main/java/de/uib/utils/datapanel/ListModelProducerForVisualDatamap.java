@@ -16,11 +16,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 
+import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.DefaultListCellOptions;
 import de.uib.utils.table.DefaultListModelProducer;
-import de.uib.utils.table.ListCellOptions;
 
 /*
 	private ListModelProducerForDatamap 
@@ -28,75 +27,70 @@ import de.uib.utils.table.ListCellOptions;
 	private for which data exist (to be placed in column 1 of the table)
 */
 
-public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProducer<O> {
-	private Map<Integer, ListModel<O>> listmodels = new HashMap<>();
+public class ListModelProducerForVisualDatamap extends DefaultListModelProducer {
+	private Map<Integer, ListModel<String>> listmodels = new HashMap<>();
 
-	private Map<String, ListCellOptions> optionsMap;
-	private Map<String, List<O>> currentData;
-	private Map<String, Class<?>> originalTypes;
+	private Map<String, ConfigOption> optionsMap;
+	private Map<String, Object> currentData;
 	private JTable table;
 
-	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,
+	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ConfigOption> optionsMap,
 			Map<String, Object> currentData) {
 		this.table = tableVisualizingMap;
 		setData(optionsMap, currentData);
 	}
 
-	public final void setData(Map<String, ListCellOptions> optionsMap, Map<String, Object> currentData) {
+	public final void setData(Map<String, ConfigOption> optionsMap, Map<String, Object> currentData) {
 		this.optionsMap = optionsMap;
 
-		mapTypes(currentData);
+		updateData(currentData);
 	}
 
-	public void updateData(Map<String, Object> data) {
-		mapTypes(data);
+	@Override
+	public ConfigOption getListCellOptions(String key) {
+		return optionsMap.get(key);
 	}
 
-	private ListCellOptions getListCellOptions(String key) {
-		return optionsMap.computeIfAbsent(key, arg -> new DefaultListCellOptions());
-	}
+	public void updateData(final Map<String, Object> data) {
+		currentData = data;
 
-	private void mapTypes(final Map<String, Object> data) {
-		currentData = new HashMap<>();
-		Logging.debug(this, "mapTypes  ", data);
-		originalTypes = new HashMap<>();
-		for (Entry<String, Object> dataEntry : data.entrySet()) {
-			originalTypes.put(dataEntry.getKey(), dataEntry.getValue().getClass());
+		Logging.debug(this, "mapTypes  ", currentData);
+		for (Entry<String, Object> dataEntry : currentData.entrySet()) {
 			currentData.put(dataEntry.getKey(), toList(dataEntry.getValue()));
 		}
 	}
 
 	@Override
-	public ListModel<O> getListModel(int row, int column) {
+	public ListModel<String> getListModel(int row) {
 		// column can be assumed to be 1
 
-		if (listmodels.get(row) != null) {
+		if (listmodels.containsKey(row)) {
 			// we already built a model
 			return listmodels.get(row);
 		}
 
-		Logging.info(this, "getListModel, row ", row, ", column ", column);
+		Logging.info(this, "getListModel, row ", row);
 
 		// build listmodel
 
 		String key = (String) table.getValueAt(row, 0);
 
-		ListCellOptions options = getListCellOptions(key);
+		ConfigOption options = getListCellOptions(key);
 
 		List<Object> values = options.getPossibleValues();
 		Logging.info(this, "getListModel key ", key, " the option values ", values);
 		Logging.info(this, "getListModel key ", key, " options  ", options);
 
-		DefaultListModel<O> model = new DefaultListModel<>();
+		DefaultListModel<String> model = new DefaultListModel<>();
 		Iterator<? extends Object> iter = values.iterator();
 		while (iter.hasNext()) {
 			model.addElement(POJOReMapper.remap(iter.next()));
 		}
 		if (currentData.get(key) instanceof List) {
-			iter = currentData.get(key).iterator();
+			iter = ((List<?>) currentData.get(key)).iterator();
 
 			while (iter.hasNext()) {
-				O entry = POJOReMapper.remap(iter.next());
+				String entry = (String) iter.next();
 				if (!model.contains(entry) && entry != null) {
 					model.addElement(entry);
 				}
@@ -108,31 +102,14 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	}
 
 	@Override
-	public int getSelectionMode(int row, int column) {
+	public int getSelectionMode(int row) {
 		String key = (String) table.getValueAt(row, 0);
 		return getListCellOptions(key).getSelectionMode();
 	}
 
 	@Override
-	public boolean isEditable(int row, int column) {
+	public boolean isEditable(int row) {
 		String key = (String) table.getValueAt(row, 0);
 		return getListCellOptions(key).isEditable();
-	}
-
-	@Override
-	public boolean isNullable(int row, int column) {
-		String key = (String) table.getValueAt(row, 0);
-		return getListCellOptions(key).isNullable();
-	}
-
-	@Override
-	public String getCaption(int row, int column) {
-		return (String) table.getValueAt(row, 0);
-	}
-
-	@Override
-	public Class<?> getClass(int row) {
-		String key = (String) table.getValueAt(row, 0);
-		return originalTypes.get(key);
 	}
 }

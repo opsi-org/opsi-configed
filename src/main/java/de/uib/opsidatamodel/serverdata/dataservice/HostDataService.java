@@ -529,20 +529,7 @@ public class HostDataService {
 			return;
 		}
 
-		List<Map<String, Object>> hostMaps = new ArrayList<>();
-
-		Map<String, Object> corrected = new HashMap<>();
-		for (Entry<String, Object> setting : settings.entrySet()) {
-			if (setting.getValue() instanceof String value && value.isBlank()) {
-				corrected.put(setting.getKey(), null);
-			} else {
-				corrected.put(setting.getKey(), setting.getValue());
-			}
-		}
-
-		hostMaps.add(corrected);
-
-		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { hostMaps }));
+		exec.doCall(new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS, new Object[] { settings }));
 	}
 
 	public Map<String, Boolean> getHostDisplayFields() {

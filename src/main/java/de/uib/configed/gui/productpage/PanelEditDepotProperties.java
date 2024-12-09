@@ -39,7 +39,6 @@ import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.DepotListCellRenderer;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
-import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -214,7 +213,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
 					listDepots.getSelectedValuesList(), productEdited);
-			productPropertiesPanel.setUpdateCollection(POJOReMapper.remap(depotProductpropertiesUpdateCollection));
+			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
 			UpdateCollectionManager.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}
 	}

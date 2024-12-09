@@ -13,11 +13,14 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Globals;
@@ -29,6 +32,12 @@ import de.uib.utils.table.gui.TableSearchPane;
 public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
 	private TableSearchPane searchPane;
+
+	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
+			int preferredHeight, JComponent additionalComponent) {
+		super(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight, false,
+				additionalComponent);
+	}
 
 	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
@@ -76,7 +85,7 @@ public class FSelectionList extends FGeneralDialog {
 		centerPanel.setLayout(centerLayout);
 
 		jList = new JList<>();
-		jList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jList.setVisible(true);
 		scrollpane.getViewport().add(jList);
 
@@ -109,10 +118,11 @@ public class FSelectionList extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(this.additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
+						.addComponent(this.additionalComponent, 50, 100, Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(this.additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
+				.addComponent(this.additionalComponent, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(jPanelButtonGrid, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -127,6 +137,19 @@ public class FSelectionList extends FGeneralDialog {
 		searchPane.setTargetModel(searchTargetModel);
 	}
 
+	public void setModel(ListModel<String> model) {
+		jList.setModel(model);
+	}
+
+	public void addItem(String element) {
+		DefaultListModel<String> model = (DefaultListModel<String>) jList.getModel();
+		if (!model.contains(element)) {
+			model.addElement(element);
+			jList.addSelectionInterval(model.size() - 1, model.size() - 1);
+			jList.ensureIndexIsVisible(jList.getMaxSelectionIndex());
+		}
+	}
+
 	public String getSelectedValue() {
 		return jList.getSelectedValue();
 	}
@@ -138,6 +161,8 @@ public class FSelectionList extends FGeneralDialog {
 	public void setPreviousSelectionValues(Collection<String> previouslySelectedValues) {
 		int[] indices = getPreviouslySelectedIndicesFromValues(previouslySelectedValues);
 		jList.setSelectedIndices(indices);
+
+		jList.ensureIndexIsVisible(jList.getSelectedIndex());
 	}
 
 	private int[] getPreviouslySelectedIndicesFromValues(Collection<String> previouslySelectedValues) {
@@ -152,7 +177,11 @@ public class FSelectionList extends FGeneralDialog {
 		return indices;
 	}
 
-	public void enableMultiSelection() {
+	public void setSingleSelection() {
+		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+
+	public void setMultiSelection() {
 		jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 

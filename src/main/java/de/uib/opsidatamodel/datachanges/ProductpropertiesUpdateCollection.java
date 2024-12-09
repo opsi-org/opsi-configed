@@ -7,8 +7,6 @@
 package de.uib.opsidatamodel.datachanges;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,41 +33,10 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends UpdateCommand> collection) {
+	public boolean addMap(Map<String, Object> map) {
 		boolean result = true;
-
-		if (!collection.isEmpty()) {
-			Iterator<? extends UpdateCommand> it = collection.iterator();
-			Object obj = it.next();
-			Logging.info(this, "addAll on collection of size ", collection.size(), " of type ", obj.getClass(),
-					" should produce values for all ", clients.size(), " hosts");
-		}
-
-		if (collection.size() != clients.size()) {
-			result = false;
-
-			Logging.error("list of data has size ", collection.size(), " differs from  length of clients list  ",
-					clients.size());
-		}
-
-		if (result) {
-			Iterator<? extends UpdateCommand> it = collection.iterator();
-			int i = 0;
-			while (it.hasNext()) {
-				Map<?, ?> map = null;
-				Object obj = it.next();
-
-				Logging.debug(this, "addAll, element of Collection: ", obj);
-
-				try {
-					map = (Map<?, ?>) obj;
-				} catch (ClassCastException ccex) {
-					Logging.error(ccex, "Wrong element type, found ", obj.getClass().getName(), ", expected a Map");
-				}
-
-				result = add(new ProductpropertiesUpdate(clients.get(i), productname, map));
-				i++;
-			}
+		for (String client : clients) {
+			result = add(new ProductpropertiesUpdate(client, productname, map));
 		}
 
 		return result;

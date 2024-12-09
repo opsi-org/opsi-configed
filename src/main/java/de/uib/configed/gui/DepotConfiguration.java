@@ -76,10 +76,6 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		setSelectedIndex(1);
 	}
 
-	public PanelHostProperties getPanelHostProperties() {
-		return panelHostProperties;
-	}
-
 	@Override
 	public void stateChanged(ChangeEvent event) {
 		updateTab();
@@ -165,15 +161,15 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 			UpdateCollectionManager.removeFromGlobalUpdateCollection(hostUpdateCollection);
 		}
 
-		hostUpdateCollection = new HostUpdateCollection();
-		UpdateCollectionManager.addToGlobalUpdateCollection(hostUpdateCollection);
-
 		String depot = "";
 		if (!depotsList.getSelectedValuesList().isEmpty()) {
 			depot = depotsList.getSelectedValuesList().get(0);
 		}
 
-		panelHostProperties.initMultipleHostsEditing(depot, depotPropertiesForPermittedDepots, hostUpdateCollection,
+		hostUpdateCollection = new HostUpdateCollection(depot, depotPropertiesForPermittedDepots.get(depot));
+		UpdateCollectionManager.addToGlobalUpdateCollection(hostUpdateCollection);
+
+		panelHostProperties.initMultipleHostsEditing(depotPropertiesForPermittedDepots.get(depot), hostUpdateCollection,
 				OpsiServiceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 	}
 
