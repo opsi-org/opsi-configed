@@ -169,11 +169,11 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 	@Override
 	protected void initComponents() {
-		additionalPane = new JPanel();
+		additionalComponent = new JPanel();
 
-		GroupLayout additionalLayout = new GroupLayout(additionalPane);
-		additionalPane.setLayout(additionalLayout);
-		additionalPane.setMinimumSize(new Dimension(200, 200));
+		GroupLayout additionalLayout = new GroupLayout(additionalComponent);
+		additionalComponent.setLayout(additionalLayout);
+		additionalComponent.setMinimumSize(new Dimension(200, 200));
 
 		saveNameField = new JTextField();
 		saveNameField.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
@@ -221,7 +221,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
 
-		additionalPane.setVisible(true);
+		additionalComponent.setVisible(true);
 	}
 
 	private void init() {

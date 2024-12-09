@@ -37,7 +37,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.JTextComponent;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
@@ -48,7 +47,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.StandardListCellRenderer;
-import de.uib.utils.table.gui.SensitiveCellEditor;
 
 public class FEditList<O> extends JDialog
 		implements ListSelectionListener, MouseListener, ActionListener, KeyListener, DocumentListener {
@@ -63,17 +61,12 @@ public class FEditList<O> extends JDialog
 
 	protected JButton buttonCommit;
 	protected JButton buttonCancel;
-	protected JButton buttonClear;
 	protected JButton buttonAdd;
-
-	protected boolean editable = true;
 
 	protected FlatTextField extraField;
 	protected JTextArea loggingArea;
 
 	protected JList<O> visibleList;
-
-	private JTextComponent tracker;
 
 	private Object initialValue = "";
 
@@ -81,28 +74,17 @@ public class FEditList<O> extends JDialog
 
 	protected Object selValue = "";
 
-	private SensitiveCellEditor celleditor;
-
 	private JPanel framingPanel;
 
 	private JSplitPane splitPane;
 
-	private boolean nullable;
-
 	public FEditList() {
-		this(null, null);
-	}
-
-	public FEditList(JTextComponent tracker, SensitiveCellEditor celleditor) {
 		super.setIconImage(Icons.getMainIcon());
 
 		createComponents();
 		// components initialized lazily in init()
 
 		addListeners();
-
-		this.tracker = tracker;
-		this.celleditor = celleditor;
 
 		visibleList = new JList<>();
 		visibleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -114,7 +96,6 @@ public class FEditList<O> extends JDialog
 		scrollpane = new JScrollPane();
 		scrollpane.setViewportView(visibleList);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
-		editable = false;
 	}
 
 	private void addListeners() {
@@ -122,12 +103,10 @@ public class FEditList<O> extends JDialog
 
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
-		buttonClear.addActionListener(this);
 		buttonAdd.addActionListener(this);
 
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
-		buttonClear.addKeyListener(this);
 		buttonAdd.addKeyListener(this);
 	}
 
@@ -157,12 +136,6 @@ public class FEditList<O> extends JDialog
 		buttonCancel.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
-		buttonClear = new JButton();
-		buttonClear.setIcon(Icons.getIntellijIcon("clearCash"));
-		buttonClear.setToolTipText(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"));
-		buttonClear.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
-		buttonClear.setVisible(false);
-
 		buttonAdd = new JButton(Icons.getIntellijIcon("add"));
 		buttonAdd.setToolTipText(Configed.getResourceValue("FEditObject.AddButtonTooltip"));
 		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
@@ -188,7 +161,6 @@ public class FEditList<O> extends JDialog
 								.addComponent(buttonCancel, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCommit, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 2)
-								.addComponent(buttonClear, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addGap(Globals.MIN_GAP_SIZE));
 
@@ -200,8 +172,6 @@ public class FEditList<O> extends JDialog
 						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonClear, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(extraField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
@@ -253,28 +223,12 @@ public class FEditList<O> extends JDialog
 		visibleList.setModel(model);
 	}
 
-	public void setSelectionMode(int selectionMode) {
-		visibleList.setSelectionMode(selectionMode);
-		buttonClear.setVisible(selectionMode != ListSelectionModel.SINGLE_SELECTION);
-	}
-
 	public void setLeaveOnCommit(boolean b) {
 		leaveOnCommit = b;
 	}
 
-	/**
-	 * determines if a null selection is allowed (extension of selectionModel
-	 * concept)
-	 * 
-	 * @parameter boolean
-	 */
-	public void setNullable(boolean b) {
-		nullable = b;
-	}
-
-	public void setEditable(boolean b) {
-		editable = b;
-		extraField.setVisible(b);
+	public void setEditable() {
+		extraField.setVisible(true);
 	}
 
 	private void addSelectedValues(List<O> toSelect) {
@@ -331,15 +285,8 @@ public class FEditList<O> extends JDialog
 		scrollpane.setPreferredSize(size);
 	}
 
-	private void setTracker(Object s) {
-		if (tracker != null) {
-			tracker.setText("" + s);
-		}
-	}
-
 	public void setStartValue(Object s) {
 		initialValue = s;
-		setTracker(s);
 	}
 
 	private void cancel() {
@@ -347,10 +294,6 @@ public class FEditList<O> extends JDialog
 
 		setStartValue(initialValue);
 		setVisible(false);
-
-		if (celleditor != null) {
-			celleditor.stopEditingAndSave();
-		}
 	}
 
 	private static boolean forbidEditingTargetSpecific() {
@@ -378,10 +321,6 @@ public class FEditList<O> extends JDialog
 			Logging.debug(this, "commit: forbidden");
 			cancel();
 		} else {
-			if (celleditor != null) {
-				celleditor.stopEditingAndSave();
-			}
-
 			if (leaveOnCommit) {
 				setVisible(false);
 			}
@@ -415,14 +354,10 @@ public class FEditList<O> extends JDialog
 			commit();
 		} else if (e.getSource() == buttonCancel) {
 			cancel();
-		} else if (e.getSource() == buttonAdd || e.getSource() == buttonClear) {
-			// These buttons will be used only in subclasses
+		} else if (e.getSource() == buttonAdd) {
+			// This button will be used only in subclasses
 		} else {
 			Logging.warning(this, "unexpected action on source ", e.getSource());
-		}
-
-		if (e.getSource() == buttonClear) {
-			visibleList.clearSelection();
 		}
 	}
 
@@ -435,10 +370,6 @@ public class FEditList<O> extends JDialog
 			cancel();
 		} else {
 			// Do nothing on other keys
-		}
-
-		if (e.getSource() == buttonClear) {
-			visibleList.clearSelection();
 		}
 	}
 
@@ -500,12 +431,9 @@ public class FEditList<O> extends JDialog
 	}
 
 	private void initEditing() {
-		Logging.debug(this, "FEditObject.initEditing");
+		Logging.debug(this, "FEditList.initEditing");
 		setDataChanged(false);
 		extraField.setText("");
-
-		Logging.debug(this, "FEditList.initEditing");
-		buttonClear.setEnabled(true);
 	}
 
 	// interface ListSelectionListener
@@ -515,17 +443,7 @@ public class FEditList<O> extends JDialog
 			return;
 		}
 
-		List<O> selectedList = getSelectedList();
-
-		if (!nullable && selectedList.isEmpty()) {
-			// reset to some value
-			initSelection();
-		}
 		setDataChanged(true);
-
-		setTracker(selectedList);
-
-		buttonClear.setEnabled(!selectedList.isEmpty());
 	}
 
 	public void setDataChanged(boolean b) {

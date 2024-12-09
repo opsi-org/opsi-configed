@@ -17,6 +17,7 @@ import java.util.Arrays;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -58,7 +59,7 @@ public class FGeneralDialog extends JDialog {
 	protected int result = 1;
 
 	protected JPanel jPanelButtonGrid = new JPanel();
-	protected JPanel additionalPane = new JPanel();
+	protected JComponent additionalComponent = new JPanel();
 
 	public FGeneralDialog(JFrame owner, String title) {
 		super(owner, false);
@@ -67,7 +68,7 @@ public class FGeneralDialog extends JDialog {
 		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(title);
 
-		checkAdditionalPane();
+		checkAdditionalComponent();
 		super.setLocationRelativeTo(owner);
 	}
 
@@ -78,8 +79,8 @@ public class FGeneralDialog extends JDialog {
 		super.setTitle(title);
 
 		super.setIconImage(Icons.getMainIcon());
-		checkAdditionalPane();
-		additionalPane.setVisible(false);
+		checkAdditionalComponent();
+		additionalComponent.setVisible(false);
 		guiInit();
 	}
 
@@ -103,7 +104,7 @@ public class FGeneralDialog extends JDialog {
 	}
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
+			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JComponent addPane) {
 		super(owner, modal);
 		Logging.info(this, "created by constructor 3  owner ", owner);
 
@@ -121,7 +122,7 @@ public class FGeneralDialog extends JDialog {
 	}
 
 	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
-			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
+			int preferredWidth, int preferredHeight, boolean lazyLayout, JComponent addPane) {
 		setIconImage(Icons.getMainIcon());
 
 		if (lastButtonNo > -1) {
@@ -141,7 +142,7 @@ public class FGeneralDialog extends JDialog {
 
 		setTitle(title);
 
-		additionalPane = addPane;
+		additionalComponent = addPane;
 
 		if (!lazyLayout) {
 			// else we have to call setupLayout later explicitly
@@ -155,7 +156,7 @@ public class FGeneralDialog extends JDialog {
 	}
 
 	protected void initComponents() {
-		checkAdditionalPane();
+		checkAdditionalComponent();
 	}
 
 	public void setCenterPane(JPanel p) {
@@ -176,15 +177,15 @@ public class FGeneralDialog extends JDialog {
 		scrollpane.getViewport().add(centerPanel);
 	}
 
-	public void setAdditionalPane(JPanel p) {
-		additionalPane = p;
+	public void setAdditionalComponent(JComponent p) {
+		additionalComponent = p;
 	}
 
-	private void checkAdditionalPane() {
-		if (additionalPane == null) {
-			additionalPane = new JPanel();
-			additionalPane.setVisible(false);
-			additionalPane.add(new JLabel("~~~~"));
+	private void checkAdditionalComponent() {
+		if (additionalComponent == null) {
+			additionalComponent = new JPanel();
+			additionalComponent.setVisible(false);
+			additionalComponent.add(new JLabel("~~~~"));
 		}
 	}
 
@@ -254,10 +255,10 @@ public class FGeneralDialog extends JDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
+						.addComponent(additionalComponent, 50, 100, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
+				.addComponent(additionalComponent, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)

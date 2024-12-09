@@ -100,9 +100,6 @@ public class ProductPageManager implements MessagebusListener {
 			return;
 		}
 
-		// All editing in the panel should be canceled
-		panelProductSettings.clearListEditors();
-
 		Map<String, List<Map<String, String>>> statesAndActions = persistenceController.getProductDataService()
 				.getMapOfProductStatesAndActions(configedMain.getSelectedClients(), attributes, productServerString);
 

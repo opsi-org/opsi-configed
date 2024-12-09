@@ -8,13 +8,12 @@ package de.uib.utils.datapanel;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -30,17 +29,15 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
-import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
+import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditText;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.DefaultListCellOptions;
-import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
-import de.uib.utils.table.gui.SensitiveCellEditor;
+import de.uib.utils.table.gui.PropertiesCellEditorAndRenderer;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel {
@@ -48,15 +45,14 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	protected JTable table;
 
 	private TableColumn editableColumn;
-	private SensitiveCellEditor sensitiveCellEditor;
+	private PropertiesCellEditorAndRenderer propertiesCellEditorAndRenderer;
 
-	private ListModelProducerForVisualDatamap<String> modelProducer;
+	private ListModelProducerForVisualDatamap modelProducer;
 
 	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupItemDeleteEntry1;
 	private JMenuItem popupItemDeleteEntry2;
 	private JMenuItem popupItemAddStringListEntry;
-	private JMenuItem popupItemAddBooleanListEntry;
 
 	protected Map<String, Object> originalMap;
 
@@ -115,11 +111,12 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		buildPanel();
 
-		sensitiveCellEditor = new SensitiveCellEditor();
+		propertiesCellEditorAndRenderer = new PropertiesCellEditorAndRenderer();
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
-		editableColumn.setCellRenderer(new PropertiesTableCellRenderer());
+		editableColumn.setCellRenderer(propertiesCellEditorAndRenderer);
+		editableColumn.setCellEditor(propertiesCellEditorAndRenderer);
 
 		popupMenu = definePopup();
 
@@ -134,27 +131,14 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 				popupMenu.addSeparator();
 			}
 
-			popupItemAddStringListEntry = new JMenuItem(
-					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
+			popupItemAddStringListEntry = new JMenuItem(Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor(false, false));
+			popupItemAddStringListEntry.addActionListener(actionEvent -> new CreateConfigDialog(this));
 			popupMenu.add(popupItemAddStringListEntry);
-
-			popupItemAddStringListEntry = new JMenuItem(
-					Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
-			Icons.addIntellijIconToMenuItem(popupItemAddStringListEntry, "add");
-			popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor(false, true));
-			popupMenu.add(popupItemAddStringListEntry);
-
-			popupItemAddBooleanListEntry = new JMenuItem(
-					Configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
-			Icons.addIntellijIconToMenuItem(popupItemAddBooleanListEntry, "add");
-			popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor(true, false));
-			popupMenu.add(popupItemAddBooleanListEntry);
 
 			popupItemDeleteEntry0 = new JMenuItem(defaultPropertyHandler.getRemovalMenuText());
 			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry0, "remove");
-			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
+			popupItemDeleteEntry0.addActionListener(actionEvent -> deleteConfigurationEntry());
 
 			popupMenu.add(popupItemDeleteEntry0);
 			// the menu item seems to work only for one menu
@@ -192,7 +176,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		this.originalMap = originalMap;
 	}
 
-	private void deleteEntry() {
+	private void deleteConfigurationEntry() {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
 			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
@@ -274,7 +258,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 					return c;
 				}
 
-				prepareRendererForJTable((JLabel) c, row, col);
+				prepareRendererForJTable((JComponent) c, row, col);
 				return c;
 			}
 		};
@@ -287,29 +271,32 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		add(jScrollPane, BorderLayout.CENTER);
 	}
 
-	private void prepareRendererForJTable(JLabel jLabel, int row, int col) {
-		jLabel.setToolTipText(generateTooltip(row));
+	private void prepareRendererForJTable(JComponent jComponent, int row, int col) {
+		jComponent.setToolTipText(generateTooltip(row));
 
 		// check equals with default
 		Object defaultValue;
+
+		jComponent.setFont(jComponent.getFont().deriveFont(Font.PLAIN));
 
 		if (defaultsMap == null) {
 			Logging.warning(this, "no default values available, defaultsMap is null");
 		} else if ((defaultValue = defaultsMap.get(table.getValueAt(row, 0))) == null) {
 			Logging.warning(this, "no default Value found");
 
-			jLabel.setForeground(Globals.OPSI_ERROR);
+			jComponent.setForeground(Globals.OPSI_ERROR);
 
-			jLabel.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
+			jComponent.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
-			jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
+			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
 		} else if (!defaultValue.equals(table.getValueAt(row, 1))) {
-			jLabel.setFont(jLabel.getFont().deriveFont(Font.BOLD));
+			jComponent.setFont(jComponent.getFont().deriveFont(Font.BOLD));
 		} else {
 			// Do nothing when default equals real value
 		}
 
-		if (col == 1 && Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
+		if (col == 1 && jComponent instanceof JLabel jLabel
+				&& Utils.isKeyForSecretValue((String) mapTableModel.getValueAt(row, 0))) {
 			jLabel.setText(Globals.STARRED_STRING);
 		}
 	}
@@ -345,25 +332,19 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	@Override
-	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
-		super.setEditableMap(visualdata, optionsMap);
-		cancelOldCellEditing();
-
+	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
 		if (optionsMap != null) {
-			modelProducer = new ListModelProducerForVisualDatamap<>(table, optionsMap, visualdata);
+			modelProducer = new ListModelProducerForVisualDatamap(table, optionsMap, visualdata);
 			mapTableModel.setModelProducer(modelProducer);
 		}
 
+		// We need to call this method after creating the modelProducer since
+		// it will change the map visualdata
+		super.setEditableMap(visualdata, optionsMap);
+
 		Logging.debug(this, "setEditableMap set modelProducer  == null ", modelProducer == null);
 
-		sensitiveCellEditor.setModelProducer(modelProducer);
-		sensitiveCellEditor.reInit();
-
-		editableColumn.setCellEditor(sensitiveCellEditor);
-	}
-
-	public void cancelOldCellEditing() {
-		sensitiveCellEditor.hideListEditor();
+		propertiesCellEditorAndRenderer.setModelProducer(modelProducer);
 	}
 
 	private boolean checkKey(String s) {
@@ -382,78 +363,24 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		return ok;
 	}
 
-	private void addEntryFor(final boolean isBoolean, final boolean multiselection) {
-		String initial = "";
-		if (table.getSelectedRowCount() > 0) {
-			initial = (String) table.getValueAt(table.getSelectedRow(), 0);
+	public void addEntry(String configName, String description, boolean bool, boolean multivalue, boolean editable,
+			List<?> defaultValues, List<?> possibleValues) {
+		if (!checkKey(configName)) {
+			return;
 		}
 
-		FEditText fed = new FEditText(initial, Configed.getResourceValue("EditMapPanel.KeyToAdd")) {
-			@Override
-			protected void commit() {
-				super.commit();
-				String s = getText().strip();
+		Logging.info(this, "we create configuration entry ", configName, " with values bool, multivalue, editable",
+				bool, multivalue, editable);
 
-				if (checkKey(s)) {
-					setVisible(false);
-					if (isBoolean) {
-						addBooleanProperty(s);
-					} else if (multiselection) {
-						addEmptyPropertyMultiSelection(s);
-					} else {
-						addEmptyProperty(s);
-					}
-				}
-			}
-		};
+		ConfigOption configOption = ConfigOption.createConfigOption(description,
+				bool ? TYPE.BOOL_CONFIG : TYPE.UNICODE_CONFIG, editable, multivalue, defaultValues, possibleValues);
 
-		fed.setModal(true);
-		fed.setSingleLine(true);
-		fed.select(0, initial.length());
-		fed.setTitle(Globals.APPNAME);
-		fed.init(new Dimension(300, 50));
-
-		Logging.info(this, "locate frame fed on center of mainFrame and then make it visible");
-		fed.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fed.setVisible(true);
-	}
-
-	private void addEmptyProperty(String key) {
-		List<String> val = new ArrayList<>();
-		val.add("");
-		addProperty(key, val);
-		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptions());
-		mapTableModel.setMap(mapTableModel.getData());
-		modelProducer.setData(optionsMap, mapTableModel.getData());
-	}
-
-	private void addEmptyPropertyMultiSelection(String key) {
-		List<String> val = new ArrayList<>();
-		val.add("");
-		addProperty(key, val);
-		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptionsMultiSelection());
-		mapTableModel.setMap(mapTableModel.getData());
-		modelProducer.setData(optionsMap, mapTableModel.getData());
-	}
-
-	private void addBooleanProperty(String key) {
-		List<Object> val = new ArrayList<>();
-		val.add(false);
-		addProperty(key, val);
-		optionsMap.put(key, DefaultListCellOptions.getNewBooleanListCellOptions());
-		mapTableModel.setMap(mapTableModel.getData());
-		modelProducer.setData(optionsMap, mapTableModel.getData());
-	}
-
-	/**
-	 * adding an entry to the table model and, finally, to the table
-	 *
-	 * @param String key
-	 * @param Object value (if null then an empty String is the value)
-	 */
-	private final void addProperty(String key, Object newval) {
-		mapTableModel.addEntry(key, newval);
+		mapTableModel.addConfigEntry(configName, defaultValues, possibleValues);
 		names = mapTableModel.getKeys();
+
+		optionsMap.put(configName, configOption);
+		mapTableModel.setMap(mapTableModel.getData());
+		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}
 
 	/**

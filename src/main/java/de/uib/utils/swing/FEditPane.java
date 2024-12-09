@@ -47,11 +47,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		singleLine = false;
 	}
 
-	public FEditPane(String initialText) {
-		super(initialText);
-		initFEditText();
-	}
-
 	private void initFEditText() {
 		JScrollPane scrollpane = new JScrollPane();
 		textpane = new JTextPane();
@@ -81,8 +76,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		} else {
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);
 		}
-
-		// HyperlinkListener hyperlinkListener = new
 	}
 
 	@Override

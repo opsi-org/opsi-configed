@@ -49,8 +49,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 		allpane.add(panelGlobalSoftware, BorderLayout.CENTER);
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("FGlobalSoftwareInfo.info"));
-		additionalPane.add(infoLabel);
-		additionalPane.setVisible(true);
+		additionalComponent.add(infoLabel);
+		additionalComponent.setVisible(true);
 
 		super.setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
 

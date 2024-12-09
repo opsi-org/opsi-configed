@@ -478,44 +478,38 @@ public class ConfigDataService {
 			Logging.debug(this, "setConfig,  key, settings.get(key): ", setting.getKey(), ", ", setting.getValue());
 
 			Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): ",
-					setting.getValue(), " , ", setting.getValue().getClass().getName());
+					setting.getValue());
 
-			List<Object> oldValue = null;
+			Logging.info(this, "setConfig, key: ", setting.getKey());
 
+			Map<String, Object> config = new HashMap<>();
+
+			config.put("ident", setting.getKey());
+
+			String type;
+
+			Logging.debug(this, "setConfig, key,  configOptions.get(key):  ", setting.getKey(), ", ",
+					configOptions.get(setting.getKey()));
 			if (configOptions.get(setting.getKey()) != null) {
-				oldValue = configOptions.get(setting.getKey()).getDefaultValues();
+				config.put("multiValue", configOptions.get(setting.getKey()).get("multiValue"));
+
+				type = (String) configOptions.get(setting.getKey()).get("type");
+			} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
+				type = "BoolConfig";
+			} else {
+				type = "UnicodeConfig";
 			}
 
-			Logging.info(this, "setConfig, key, oldValue: ", setting.getKey(), ", ", oldValue);
+			config.put("type", type);
 
-			if (!setting.getValue().equals(oldValue)) {
-				Map<String, Object> config = new HashMap<>();
+			config.put("defaultValues", setting.getValue());
 
-				config.put("ident", setting.getKey());
+			List<Object> possibleValues = createPossibleValues(type, setting.getValue(),
+					configOptions.get(setting.getKey()));
 
-				String type;
+			config.put("possibleValues", possibleValues);
 
-				Logging.debug(this, "setConfig, key,  configOptions.get(key):  ", setting.getKey(), ", ",
-						configOptions.get(setting.getKey()));
-				if (configOptions.get(setting.getKey()) != null) {
-					type = (String) configOptions.get(setting.getKey()).get("type");
-				} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
-					type = "BoolConfig";
-				} else {
-					type = "UnicodeConfig";
-				}
-
-				config.put("type", type);
-
-				config.put("defaultValues", setting.getValue());
-
-				List<Object> possibleValues = createPossibleValues(type, setting.getValue(),
-						configOptions.get(setting.getKey()));
-
-				config.put("possibleValues", possibleValues);
-
-				configCollection.add(config);
-			}
+			configCollection.add(config);
 		}
 	}
 
@@ -532,9 +526,12 @@ public class ConfigDataService {
 			possibleValues = configOption.getPossibleValues();
 		}
 
-		for (Object item : defaultValues) {
-			if (!possibleValues.contains(item)) {
-				possibleValues.add(item);
+		// defaultValues is null when we delete a config
+		if (defaultValues != null) {
+			for (Object item : defaultValues) {
+				if (!possibleValues.contains(item)) {
+					possibleValues.add(item);
+				}
 			}
 		}
 
@@ -752,13 +749,11 @@ public class ConfigDataService {
 
 			if (retrievedConfig == null) {
 				configStateCollection.add(state);
-			} else if (entry.getValue() != retrievedConfig.get(entry.getKey())) {
+			} else {
 				configStateCollection.add(state);
 
 				// we hope that the update works and directly update the retrievedConfig
 				retrievedConfig.put(entry.getKey(), entry.getValue());
-			} else {
-				// Do nothing when retrieved config is not null and equals entry value
 			}
 		}
 	}

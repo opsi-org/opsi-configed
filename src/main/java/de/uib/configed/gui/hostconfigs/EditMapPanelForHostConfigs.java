@@ -123,6 +123,8 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 
 		Object defaultValue;
 
+		jc.setFont(jc.getFont().deriveFont(Font.PLAIN));
+
 		if (defaultsMap == null) {
 			Logging.warning(this, "no default values available, defaultsMap is null");
 		} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {

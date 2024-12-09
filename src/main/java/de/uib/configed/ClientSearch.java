@@ -100,6 +100,7 @@ public class ClientSearch {
 				new Icon[] { Icons.getIntellijIcon("close"), Icons.getIntellijIcon("checkmark") }, 400, 600);
 		fProductSelectionList.setListData(new ArrayList<>(
 				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		fProductSelectionList.setMultiSelection();
 		fProductSelectionList.setVisible(true);
 		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
 	}

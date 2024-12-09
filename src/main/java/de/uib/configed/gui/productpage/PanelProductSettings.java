@@ -36,7 +36,6 @@ import de.uib.configed.gui.ClientMenuManager;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.productgroup.ProductActionPanel;
 import de.uib.configed.tree.ProductTree;
-import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -348,11 +347,7 @@ public class PanelProductSettings extends JSplitPane {
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));
 		propertiesPanel.getMapTableModel().setStoreData(storableProductProperties);
-		propertiesPanel.setUpdateCollection(POJOReMapper.remap(updateCollection));
-	}
-
-	public void clearListEditors() {
-		propertiesPanel.cancelOldCellEditing();
+		propertiesPanel.setUpdateCollection(updateCollection);
 	}
 
 	public void clearEditing() {

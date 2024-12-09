@@ -136,7 +136,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel labelGroupSelection = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		jTextGroupSelection = new JTextField();
-		jTextGroupSelection.setEditable(false);
+		jTextGroupSelection.setEnabled(false);
 		jTextGroupSelection.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
@@ -362,7 +362,7 @@ public final class NewClientDialog extends FGeneralDialog {
 				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"), true,
 				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 500,
 				300);
-		groupsSelectionDialog.enableMultiSelection();
+		groupsSelectionDialog.setMultiSelection();
 		groupsSelectionDialog.setListData(
 				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
 		groupsSelectionDialog

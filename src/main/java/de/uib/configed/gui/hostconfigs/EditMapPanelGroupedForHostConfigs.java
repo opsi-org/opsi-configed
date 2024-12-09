@@ -38,7 +38,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
+import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -49,7 +51,6 @@ import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.tree.XTree;
 
 // works on a map of pairs of type String - List
@@ -350,7 +351,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
 	@Override
-	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
+	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
 		super.setEditableMap(visualdata, optionsMap);
 		Logging.debug(this, " setEditableMap, visualdata keys ", visualdata);
 		if (visualdata != null) {
@@ -383,7 +384,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// apply method of superclass for all partial maps
 	@Override
-	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
+	public void setUpdateCollection(UpdateCollection updateCollection) {
 		super.setUpdateCollection(updateCollection);
 
 		for (String key : keyclasses) {

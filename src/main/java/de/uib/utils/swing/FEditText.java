@@ -24,12 +24,6 @@ public class FEditText extends FEdit implements DocumentListener {
 
 	private boolean singleLine;
 
-	public FEditText(String initialText, String hint) {
-		super(initialText, hint);
-		initFEditText();
-		setSingleLine(false);
-	}
-
 	public FEditText(String initialText, String hint, String extraName) {
 		super(initialText, hint);
 		initFEditTextWithExtra(extraName);
@@ -89,10 +83,6 @@ public class FEditText extends FEdit implements DocumentListener {
 
 	public String getExtra() {
 		return extraField != null ? extraField.getText() : "";
-	}
-
-	public void select(int selectionStart, int selectionEnd) {
-		textarea.select(selectionStart, selectionEnd);
 	}
 
 	@Override

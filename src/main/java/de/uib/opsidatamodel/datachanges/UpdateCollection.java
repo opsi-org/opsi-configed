@@ -9,6 +9,7 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 import de.uib.utils.logging.Logging;
 
@@ -18,18 +19,16 @@ import de.uib.utils.logging.Logging;
 public class UpdateCollection implements UpdateCommand, Collection<UpdateCommand> {
 	protected Collection<UpdateCommand> implementor = new ArrayList<>();
 
+	// This method should be implemented to add a map and convert it in an UpdateCommand
+	public boolean addMap(Map<String, Object> map) {
+		// We cannot implement this here, depends on the subclasses
+		return false;
+	}
+
 	@Override
 	public boolean addAll(Collection<? extends UpdateCommand> c) {
-		boolean success = true;
-		Iterator<? extends UpdateCommand> it = c.iterator();
-		while (it.hasNext() && success) {
-			UpdateCommand updateCommand = it.next();
-			Logging.debug(this, "addAll, element of Collection: ", updateCommand);
-			if (!add(updateCommand)) {
-				success = false;
-			}
-		}
-		return success;
+		Logging.warning(this, "this method should not be used, we want to use method addMap");
+		return false;
 	}
 
 	@Override

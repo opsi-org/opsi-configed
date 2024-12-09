@@ -17,8 +17,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import de.uib.configed.Configed;
+import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 
 // works on a map of pairs of type String - List
 public class DefaultEditMapPanel extends JPanel {
@@ -32,7 +33,7 @@ public class DefaultEditMapPanel extends JPanel {
 	protected JPopupMenu popupMenu;
 
 	protected List<String> names;
-	protected Map<String, ListCellOptions> optionsMap;
+	protected Map<String, ConfigOption> optionsMap;
 	protected Map<String, String> descriptionsMap;
 	protected Map<String, Object> defaultsMap;
 
@@ -40,7 +41,7 @@ public class DefaultEditMapPanel extends JPanel {
 		@Override
 		public void removeValue(String key) {
 			Logging.debug(this, "removing value for key ", key);
-			mapTableModel.removeEntry(key);
+			mapTableModel.removeConfigEntry(key);
 		}
 
 		@Override
@@ -97,7 +98,7 @@ public class DefaultEditMapPanel extends JPanel {
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
-	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
+	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 
@@ -117,7 +118,7 @@ public class DefaultEditMapPanel extends JPanel {
 		descriptionsMap = new HashMap<>();
 		defaultsMap = new HashMap<>();
 
-		for (Entry<String, ListCellOptions> option : this.optionsMap.entrySet()) {
+		for (Entry<String, ConfigOption> option : this.optionsMap.entrySet()) {
 			String description = option.getValue().getDescription();
 			Object defaultvalue = option.getValue().getDefaultValues();
 
@@ -182,7 +183,7 @@ public class DefaultEditMapPanel extends JPanel {
 	 * 
 	 * @param Collection updateCollection
 	 */
-	public void setUpdateCollection(Collection<Map<String, Object>> updateCollection) {
+	public void setUpdateCollection(UpdateCollection updateCollection) {
 		mapTableModel.setUpdateCollection(updateCollection);
 	}
 

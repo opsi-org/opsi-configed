@@ -39,7 +39,6 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.userprefs.UserPreferences;
 
 /**
@@ -340,7 +339,7 @@ public class ProductDataService {
 				getDepot2Product2PropertyDefinitionsPD().get(depotDataService.getDepot()));
 	}
 
-	public Map<String, Map<String, Map<String, ListCellOptions>>> getDepot2Product2PropertyDefinitionsPD() {
+	public Map<String, Map<String, Map<String, ConfigOption>>> getDepot2Product2PropertyDefinitionsPD() {
 		retrieveAllProductPropertyDefinitionsPD();
 		return cacheManager.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS, Map.class);
 	}
@@ -351,7 +350,7 @@ public class ProductDataService {
 		}
 		retrieveProductsAllDepotsPD();
 
-		Map<String, Map<String, Map<String, ListCellOptions>>> depot2Product2PropertyDefinitions = new HashMap<>();
+		Map<String, Map<String, Map<String, ConfigOption>>> depot2Product2PropertyDefinitions = new HashMap<>();
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_PROPERTY_GET_OBJECTS,
@@ -376,10 +375,10 @@ public class ProductDataService {
 						product2VersionInfo2Depots.get(productId));
 			} else {
 				for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
-					Map<String, Map<String, ListCellOptions>> product2PropertyDefinitions = depot2Product2PropertyDefinitions
+					Map<String, Map<String, ConfigOption>> product2PropertyDefinitions = depot2Product2PropertyDefinitions
 							.computeIfAbsent(depot, s -> new HashMap<>());
 
-					Map<String, ListCellOptions> propertyDefinitions = product2PropertyDefinitions
+					Map<String, ConfigOption> propertyDefinitions = product2PropertyDefinitions
 							.computeIfAbsent(productId, s -> new HashMap<>());
 
 					propertyDefinitions.put(propertyId, new ConfigOption(retrievedMap));
@@ -786,7 +785,7 @@ public class ProductDataService {
 		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductPropertiesPD(depotDataService.getDepot());
 
 		Map<String, Boolean> productHavingClientSpecificProperties = new HashMap<>();
-		Map<String, Map<String, ListCellOptions>> productPropertyDefinitions = cacheManager
+		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
 
 		for (String product : products) {
@@ -799,12 +798,12 @@ public class ProductDataService {
 				productHavingClientSpecificProperties);
 	}
 
-	private static void setDefaultValuesForProduct(Map<String, Map<String, ListCellOptions>> productPropertyDefinitions,
+	private static void setDefaultValuesForProduct(Map<String, Map<String, ConfigOption>> productPropertyDefinitions,
 			Map<String, ConfigName2ConfigValue> depotValues, String product) {
 		if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
 			ConfigName2ConfigValue productPropertyConfig = depotValues.get(product);
 
-			for (Entry<String, ListCellOptions> propertyEntry : productPropertyDefinitions.get(product).entrySet()) {
+			for (Entry<String, ConfigOption> propertyEntry : productPropertyDefinitions.get(product).entrySet()) {
 				if (productPropertyConfig.get(propertyEntry.getKey()) == null) {
 					propertyEntry.getValue().setDefaultValues(new ArrayList<>());
 				} else {
@@ -1192,25 +1191,21 @@ public class ProductDataService {
 			List<?> newValue = (List<?>) propertyEntry.getValue();
 
 			Map<String, Object> retrievedConfig = configProperties.getRetrieved();
-			Object oldValue = retrievedConfig == null ? null : retrievedConfig.get(propertyId);
 
-			if (newValue != oldValue) {
-				Map<String, Object> state = new HashMap<>();
-				state.put("type", "ProductPropertyState");
-				state.put("objectId", pcname);
-				state.put("productId", productId);
-				state.put("propertyId", propertyId);
+			Map<String, Object> state = new HashMap<>();
+			state.put("type", "ProductPropertyState");
+			state.put("objectId", pcname);
+			state.put("productId", productId);
+			state.put("propertyId", propertyId);
 
-				if (newValue == null) {
-					Logging.debug(this, "setProductProperties,  requested deletion ", newValue);
-					deleteState(state, deleteCollection, retrievedConfig, productId, propertyId, configProperties);
-				} else {
-					Logging.debug(this, "setProductProperties,  requested update ", newValue, " for oldValue ",
-							oldValue);
+			if (newValue == null) {
+				Logging.debug(this, "setProductProperties,  requested deletion ", newValue);
+				deleteState(state, deleteCollection, retrievedConfig, productId, propertyId, configProperties);
+			} else {
+				Logging.debug(this, "setProductProperties,  requested update ", newValue);
 
-					state.put("values", newValue);
-					updateState(state, updateCollection, retrievedConfig, propertyId, newValue);
-				}
+				state.put("values", newValue);
+				updateState(state, updateCollection, retrievedConfig, propertyId, newValue);
 			}
 		}
 	}
@@ -1301,8 +1296,8 @@ public class ProductDataService {
 		setProductProperties(updateCollection, deleteCollection);
 	}
 
-	public Map<String, ListCellOptions> getProductPropertyOptionsMap(String depotId, String productId) {
-		Map<String, ListCellOptions> result = null;
+	public Map<String, ConfigOption> getProductPropertyOptionsMap(String depotId, String productId) {
+		Map<String, ConfigOption> result = null;
 
 		if (getDepot2Product2PropertyDefinitionsPD().get(depotId) == null) {
 			result = new HashMap<>();
@@ -1320,11 +1315,11 @@ public class ProductDataService {
 		return result;
 	}
 
-	public Map<String, ListCellOptions> getProductPropertyOptionsMap(String productId) {
+	public Map<String, ConfigOption> getProductPropertyOptionsMap(String productId) {
 		retrieveProductPropertyDefinitions();
-		Map<String, ListCellOptions> result;
+		Map<String, ConfigOption> result;
 
-		Map<String, Map<String, ListCellOptions>> productPropertyDefinitions = cacheManager
+		Map<String, Map<String, ConfigOption>> productPropertyDefinitions = cacheManager
 				.getCachedData(CacheIdentifier.PRODUCT_PROPERTY_DEFINITIONS, Map.class);
 		if (productPropertyDefinitions == null) {
 			result = new HashMap<>();
