@@ -164,8 +164,11 @@ public class MainPanelManager {
 
 	public JPanel getServerConfigurationPanel() {
 		if (serverConfiguration == null) {
+			// We start the loading animation because this takes a lot of time
+			ConfigedMain.getMainFrame().activateLoadingCursor();
 			serverConfiguration = new ServerConfiguration();
 			serverConfiguration.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
+			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
 
 		return createPanel(serverConfiguration, new JToolBar(),
