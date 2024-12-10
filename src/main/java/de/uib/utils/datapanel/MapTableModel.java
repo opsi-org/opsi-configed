@@ -133,13 +133,13 @@ public class MapTableModel extends AbstractTableModel {
 	 * 
 	 * @param Collection data
 	 */
-	public void setStoreData(Collection<Map<String, Object>> data) {
-		if (data == null) {
+	public void setStoreData(Collection<Map<String, Object>> storeData) {
+		if (storeData == null) {
 			Logging.debug(this, "setStoreData, data is null ");
 		}
 
 		setNew();
-		storeData = data;
+		this.storeData = storeData;
 		changes = new HashMap<>();
 		resetModifiedKey();
 	}
@@ -310,7 +310,7 @@ public class MapTableModel extends AbstractTableModel {
 
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-				aStoreMap.put(key, null);
+				aStoreMap.remove(key);
 			}
 			configChanges = Collections.singletonMap(key, null);
 		}
@@ -346,7 +346,7 @@ public class MapTableModel extends AbstractTableModel {
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-				aStoreMap.put(myKey, null);
+				aStoreMap.put(myKey, defaultData.get(myKey));
 			}
 
 			changes.put(myKey, null);
