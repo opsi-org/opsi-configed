@@ -29,6 +29,7 @@ import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
+import de.uib.opsidatamodel.permission.UserFeaturesConfig;
 import de.uib.opsidatamodel.permission.UserOpsipermission;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -335,6 +336,8 @@ public class UserRolesConfigDataService {
 		checkHostGroupPermissions();
 		checkProductPermissions();
 		checkTerminalPermissions();
+		checkFeaturesPermissions();
+
 	}
 
 	private void checkServerAccessPermissions() {
@@ -385,6 +388,20 @@ public class UserRolesConfigDataService {
 			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey)));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
+		}
+	}
+
+	private void checkFeaturesPermissions() {
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
+		String configKey = userPartPD() + UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN;
+
+		if (serverPropertyMap.get(configKey) != null
+				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+
+			Logging.info(this, " checkPermissions  value  " + serverPropertyMap.get(configKey));
+			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
+			cacheManager.setCachedData(CacheIdentifier.MOTD_FORBIDDEN, forbiddenItems);
 		}
 	}
 

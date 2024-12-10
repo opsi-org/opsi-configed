@@ -81,6 +81,11 @@ public class OpsiServiceNOMPersistenceController {
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
 	public static final String CONFIG_KEY = "configed.meta_config";
 
+	public static final String CONFIG_KEY_MSG_OF_DAY_DEVICE = "message_of_the_day.device.message";
+	public static final String CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL = "message_of_the_day.device.message_valid_until";
+	public static final String CONFIG_KEY_MSG_OF_DAY_USER = "message_of_the_day.user.message";
+	public static final String CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL = "message_of_the_day.user.message_valid_until";
+
 	public static final String KEY_SHOW_DASH_FOR_LICENSEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
 
