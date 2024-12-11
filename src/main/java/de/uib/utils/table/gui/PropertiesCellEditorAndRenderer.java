@@ -188,7 +188,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		listSelectionDialog.setTitle((String) table.getValueAt(row, 0));
 		listSelectionDialog.setModel(modelProducer.getListModel(row));
 
-		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(modelProducer.toList(value)));
+		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(value));
 		listSelectionDialog.setSize(400, 500);
 		listSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		addValuesTextField.setVisible(modelProducer.isEditable(row));

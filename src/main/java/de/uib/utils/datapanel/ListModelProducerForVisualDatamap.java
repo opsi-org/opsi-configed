@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JTable;
@@ -37,13 +36,13 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ConfigOption> optionsMap,
 			Map<String, Object> currentData) {
 		this.table = tableVisualizingMap;
-		setData(optionsMap, currentData);
+		this.optionsMap = optionsMap;
+		this.currentData = currentData;
 	}
 
 	public final void setData(Map<String, ConfigOption> optionsMap, Map<String, Object> currentData) {
 		this.optionsMap = optionsMap;
-
-		updateData(currentData);
+		this.currentData = currentData;
 	}
 
 	@Override
@@ -51,13 +50,8 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		return optionsMap.get(key);
 	}
 
-	public void updateData(final Map<String, Object> data) {
-		currentData = data;
-
-		Logging.debug(this, "mapTypes  ", currentData);
-		for (Entry<String, Object> dataEntry : currentData.entrySet()) {
-			currentData.put(dataEntry.getKey(), toList(dataEntry.getValue()));
-		}
+	public void updateData(final Map<String, Object> currentData) {
+		this.currentData = currentData;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ package de.uib.configed.gui;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -60,13 +61,13 @@ public class PanelHostProperties extends JPanel {
 		editMapPanel.getMapTableModel().registerDataChangedObserver(o);
 	}
 
-	private Map<String, ConfigOption> deriveOptionsMap(Map<String, Object> m) {
+	private Map<String, ConfigOption> deriveOptionsMap(Map<String, Object> depotMap) {
 		Map<String, ConfigOption> result = new HashMap<>();
 
-		for (Entry<String, Object> entry : m.entrySet()) {
+		for (Entry<String, Object> entry : depotMap.entrySet()) {
 			ConfigOption cellOptions;
 
-			if ((entry.getValue()) instanceof Boolean) {
+			if (((List<?>) entry.getValue()).get(0) instanceof Boolean) {
 				cellOptions = ConfigOption.createConfigOption("", TYPE.BOOL_CONFIG, false, false);
 			} else {
 				cellOptions = ConfigOption.createConfigOption("", TYPE.UNICODE_CONFIG, true, false);
@@ -79,8 +80,21 @@ public class PanelHostProperties extends JPanel {
 		return result;
 	}
 
+	private Map<String, Object> deriveDepotMap(Map<String, Object> depotMap) {
+		Logging.debug(this, "mapTypes  ", depotMap);
+		for (Entry<String, Object> dataEntry : depotMap.entrySet()) {
+			if (!(dataEntry.getValue() instanceof List)) {
+				depotMap.put(dataEntry.getKey(), Collections.singletonList(dataEntry.getValue()));
+			}
+		}
+
+		return depotMap;
+	}
+
 	private void setMap(Map<String, Object> depotMap) {
 		Logging.debug(this, "setMap ", depotMap);
+
+		deriveDepotMap(depotMap);
 		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
 		editMapPanel.getMapTableModel().setStoreData(Collections.singletonList(depotMap));
 	}
