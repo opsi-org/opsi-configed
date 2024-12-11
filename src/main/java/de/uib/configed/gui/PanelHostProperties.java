@@ -6,9 +6,8 @@
 
 package de.uib.configed.gui;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -81,10 +80,8 @@ public class PanelHostProperties extends JPanel {
 	}
 
 	private void setMap(Map<String, Object> depotMap) {
-		List<Map<String, Object>> editedMaps = new ArrayList<>(1);
-		editedMaps.add(depotMap);
 		Logging.debug(this, "setMap ", depotMap);
 		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
-		editMapPanel.getMapTableModel().setStoreData(editedMaps);
+		editMapPanel.getMapTableModel().setStoreData(Collections.singletonList(depotMap));
 	}
 }
