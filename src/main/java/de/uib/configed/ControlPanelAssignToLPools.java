@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -111,11 +110,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		return thePanel;
 	}
 
-	private NavigableSet<Object> getUnAssignedSoftwareIds() {
-		// the object is cached in persist
-		return persistenceController.getSoftwareDataService().getSoftwareWithoutAssociatedLicensePoolPD();
-	}
-
 	public void setSoftwareIdsFromLicensePool() {
 		String selectedLicensePool = getSelectedLicensePool();
 		Logging.info(this, "setSoftwareIdsFromLicensePoot, selectedLicensePool ", selectedLicensePool);
@@ -157,7 +151,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "setSoftwareIdsFromLicensePool  unknown softwareIds for licensePool  ", poolID, " : ",
 				persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicensePoolPD(poolID).size());
 
-		Integer totalUnassignedSWEntries = getUnAssignedSoftwareIds().size();
+		Integer totalUnassignedSWEntries = persistenceController.getSoftwareDataService()
+				.getSoftwareWithoutAssociatedLicensePoolPD().size();
 		Logging.info(this, "setSoftwareIdsFromLicensePool unAssignedSoftwareIds ", totalUnassignedSWEntries);
 
 		resetCounters(poolID);
@@ -803,7 +798,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		TreeSet<Object> filter1 = null;
 
 		if (softwareShowAllMeans != SoftwareShowAllMeans.ALL) {
-			filter1 = new TreeSet<>(getUnAssignedSoftwareIds());
+			filter1 = new TreeSet<>(
+					persistenceController.getSoftwareDataService().getSoftwareWithoutAssociatedLicensePoolPD());
 		}
 
 		if (filter1 != null && softwareShowAllMeans == SoftwareShowAllMeans.ASSIGNED_OR_ASSIGNED_TO_NOTHING
