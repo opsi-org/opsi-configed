@@ -37,6 +37,7 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.utils.table.gui.ListModelProducer;
 import de.uib.utils.table.gui.PropertiesCellEditorAndRenderer;
 
 // works on a map of pairs of type String - List
@@ -47,7 +48,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private TableColumn editableColumn;
 	private PropertiesCellEditorAndRenderer propertiesCellEditorAndRenderer;
 
-	private ListModelProducerForVisualDatamap modelProducer;
+	private ListModelProducer modelProducer;
 
 	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupItemDeleteEntry1;
@@ -335,7 +336,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
 		if (optionsMap != null) {
 			modelProducer = new ListModelProducerForVisualDatamap(table, optionsMap, visualdata);
-			mapTableModel.setModelProducer(modelProducer);
 		}
 
 		// We need to call this method after creating the modelProducer since
@@ -380,7 +380,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		optionsMap.put(configName, configOption);
 		mapTableModel.setMap(mapTableModel.getData());
-		modelProducer.setData(optionsMap, mapTableModel.getData());
 	}
 
 	/**

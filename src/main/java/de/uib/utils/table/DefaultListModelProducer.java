@@ -10,8 +10,9 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.type.ConfigOption;
+import de.uib.utils.table.gui.ListModelProducer;
 
-public class DefaultListModelProducer {
+public class DefaultListModelProducer implements ListModelProducer {
 	private static ConfigOption defaultConfigOption = new ConfigOption();
 
 	public ListModel<String> getListModel(int row) {

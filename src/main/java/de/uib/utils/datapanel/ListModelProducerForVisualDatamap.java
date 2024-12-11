@@ -18,7 +18,7 @@ import javax.swing.ListModel;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.DefaultListModelProducer;
+import de.uib.utils.table.gui.ListModelProducer;
 
 /*
 	private ListModelProducerForDatamap 
@@ -26,7 +26,7 @@ import de.uib.utils.table.DefaultListModelProducer;
 	private for which data exist (to be placed in column 1 of the table)
 */
 
-public class ListModelProducerForVisualDatamap extends DefaultListModelProducer {
+public class ListModelProducerForVisualDatamap implements ListModelProducer {
 	private Map<Integer, ListModel<String>> listmodels = new HashMap<>();
 
 	private Map<String, ConfigOption> optionsMap;
@@ -40,18 +40,9 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		this.currentData = currentData;
 	}
 
-	public final void setData(Map<String, ConfigOption> optionsMap, Map<String, Object> currentData) {
-		this.optionsMap = optionsMap;
-		this.currentData = currentData;
-	}
-
 	@Override
 	public ConfigOption getListCellOptions(String key) {
 		return optionsMap.get(key);
-	}
-
-	public void updateData(final Map<String, Object> currentData) {
-		this.currentData = currentData;
 	}
 
 	@Override

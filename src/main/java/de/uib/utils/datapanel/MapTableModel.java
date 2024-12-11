@@ -57,16 +57,10 @@ public class MapTableModel extends AbstractTableModel {
 	private String modifiedKey;
 	private int rowModiTime;
 
-	private ListModelProducerForVisualDatamap modelProducer;
-
 	private boolean writeData = true;
 
 	public MapTableModel() {
 		observers = new ArrayList<>();
-	}
-
-	public void setModelProducer(ListModelProducerForVisualDatamap modelProducer) {
-		this.modelProducer = modelProducer;
 	}
 
 	public void setOptions(Map<String, ConfigOption> optionsMap, Map<String, Object> defaultData) {
@@ -422,8 +416,6 @@ public class MapTableModel extends AbstractTableModel {
 			oridata.put(myKey, o);
 			Logging.debug(this, "put into oridata for myKey o ", myKey, ": ", o);
 			// the data sources:
-
-			modelProducer.updateData(oridata);
 
 			if (writeData) {
 				Logging.debug(this, " -------  storeData ", value, " (class : ", value.getClass());
