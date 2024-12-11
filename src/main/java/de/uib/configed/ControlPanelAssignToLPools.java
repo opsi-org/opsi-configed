@@ -214,7 +214,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(wasUsingSelectedFilter);
 
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED,
-				getSoftwareShowAllMeans() != SoftwareShowAllMeans.ALL);
+				softwareShowAllMeans != SoftwareShowAllMeans.ALL);
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
 		Logging.info(this, "modelWindowsSoftwareIds row count ", totalShownEntries);
@@ -495,12 +495,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		JMenuItem menuItemAddRelationProductId2LPool = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.NewRelationProductId2LPool"));
 		menuItemAddRelationProductId2LPool.addActionListener((ActionEvent e) -> {
-			Object[] a = new Object[2];
-			a[0] = "";
+			Object[] a = new Object[] { "", "" };
 			if (thePanel.getPanelLicensepools().getJTable().getSelectedRow() > -1) {
 				a[0] = modelLicensepools.getValueAt(thePanel.getPanelLicensepools().getSelectedRowInModelTerms(), 0);
 			}
-			a[1] = "";
 			modelProductId2LPool.addRow(a);
 			thePanel.getPanelProductId2LPool().moveToValue("" + a[0], 0);
 		});
@@ -873,10 +871,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().setDataChanged(b);
 	}
 
-	public SoftwareShowAllMeans getSoftwareShowAllMeans() {
-		return softwareShowAllMeans;
-	}
-
 	public void setSoftwareShowAllMeans(SoftwareShowAllMeans meaning) {
 		SoftwareShowAllMeans softwareShowAllMeansOld = softwareShowAllMeans;
 		softwareShowAllMeans = meaning;
@@ -912,10 +906,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			Logging.info(this, "switched to ", direction);
 			initializeVisualSettings();
 		}
-	}
-
-	public SoftwareDirectionOfAssignment getSoftwareDirectionOfAssignment() {
-		return this.softwareDirectionOfAssignment;
 	}
 
 	private boolean gotNewSWKeysForLicensePool(String selectedLicensePool) {
