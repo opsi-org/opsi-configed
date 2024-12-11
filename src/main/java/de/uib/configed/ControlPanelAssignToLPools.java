@@ -46,7 +46,6 @@ import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
-import de.uib.utils.table.updates.MapBasedTableEditItem;
 import de.uib.utils.table.updates.MapBasedUpdater;
 import de.uib.utils.table.updates.MapItemsUpdateController;
 import de.uib.utils.table.updates.MapTableUpdateItemFactory;
@@ -410,11 +409,21 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new ArrayList<MapBasedTableEditItem>();
+		initializeModels();
+		initializePanelLicensepools();
+		initializePanelProductId2LPool();
+		initializePanelRegisteredSoftware();
+		initializeVisualSettings();
+	}
 
-		List<String> columnNames;
+	private void initializeModels() {
+		updateCollection = new ArrayList<>();
+		tableModels = new ArrayList<>();
+		tablePanes = new ArrayList<>();
+	}
 
-		columnNames = new ArrayList<>();
+	private void initializePanelLicensepools() {
+		List<String> columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
 		MapTableUpdateItemFactory updateItemFactoryLicensepools = new MapTableUpdateItemFactory(modelLicensepools,
@@ -442,10 +451,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		});
 
 		thePanel.getPanelLicensepools().addPopupItem(menuItemAddPool);
-
 		thePanel.getPanelLicensepools().getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		// updates
 		thePanel.getPanelLicensepools().setUpdateController(
 				new MapItemsUpdateController(thePanel.getPanelLicensepools(), modelLicensepools, new MapBasedUpdater() {
 					@Override
@@ -458,8 +465,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						return deleteLicensepool(rowmap);
 					}
 				}, updateCollection));
+	}
 
-		columnNames = new ArrayList<>();
+	private void initializePanelProductId2LPool() {
+		List<String> columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("productId");
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
@@ -493,11 +502,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			if (thePanel.getPanelLicensepools().getJTable().getSelectedRow() > -1) {
 				a[0] = modelLicensepools.getValueAt(thePanel.getPanelLicensepools().getSelectedRowInModelTerms(), 0);
 			}
-
 			a[1] = "";
-
 			modelProductId2LPool.addRow(a);
-
 			thePanel.getPanelProductId2LPool().moveToValue("" + a[0], 0);
 		});
 
@@ -505,16 +511,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		TableColumn col = thePanel.getPanelProductId2LPool().getJTable().getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
-
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = licensesPane.getLicensePoolTableProvider().getOrderedColumn(
 					licensesPane.getLicensePoolTableProvider().getColumnNames().indexOf("licensePoolId"), false);
-
 			if (poolIds.size() <= 1) {
 				poolIds.add("");
 			}
-			// hack, since combo box shows nothing otherwise
-
 			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
 		}));
 
@@ -538,11 +540,11 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 								(String) m.get("productId"), (String) m.get("licensePoolId"));
 					}
 				}, updateCollection));
+	}
 
-		columnNames = new ArrayList<>(SWAuditEntry.getDisplayKeys());
-
+	private void initializePanelRegisteredSoftware() {
+		List<String> columnNames = new ArrayList<>(SWAuditEntry.getDisplayKeys());
 		columnNames.add(COLUMN_MARK_CURSOR_ROW, "");
-
 		columnNames.remove("licenseKey");
 
 		Logging.info(this, "panelRegisteredSoftware constructed with (size) cols (", columnNames.size(), ") ",
@@ -623,7 +625,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().addPopupItem(menuItemSoftwareShowAll);
 		thePanel.getPanelRegisteredSoftware().addPopupItem(menuItemSoftwareShowAssigned);
 
-		col = thePanel.getPanelRegisteredSoftware().getJTable().getColumnModel().getColumn(COLUMN_MARK_CURSOR_ROW);
+		TableColumn col = thePanel.getPanelRegisteredSoftware().getJTable().getColumnModel()
+				.getColumn(COLUMN_MARK_CURSOR_ROW);
 		col.setMaxWidth(12);
 		col.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("localChanges"), null));
 
@@ -645,7 +648,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				thePanel.getPanelLicensepools(), 0, thePanel.getPanelRegisteredSoftware(), this));
 
 		thePanel.setFSoftwarename2LicensePool(new FSoftwarename2LicensePool(this));
-		thePanel.getFSoftwarename2LicensePool().setTableModel(); // test
+		thePanel.getFSoftwarename2LicensePool().setTableModel();
 		thePanel.setDisplaySimilarExist(
 				thePanel.getFSoftwarename2LicensePool().checkExistNamesWithVariantLicensepools());
 		thePanel.getFSoftwarename2LicensePool().setButtonsEnabled(true);
@@ -654,7 +657,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				.addListSelectionListener(this::licensePoolValueChanged);
 
 		setSoftwareIdsFromLicensePool(null);
-		initializeVisualSettings();
 	}
 
 	private void registeredSoftwareFiltermarkAction() {
