@@ -16,7 +16,7 @@ import de.uib.utils.logging.Logging;
 
 /**
 */
-public class ConfigUpdateCollection extends UpdateCollection {
+public class ConfigUpdateCollection extends DefaultUpdateCollection {
 	private List<String> objectIds;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();

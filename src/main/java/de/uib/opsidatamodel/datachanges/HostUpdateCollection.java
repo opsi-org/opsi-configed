@@ -13,7 +13,7 @@ import de.uib.utils.logging.Logging;
 
 /**
 */
-public class HostUpdateCollection extends UpdateCollection {
+public class HostUpdateCollection extends DefaultUpdateCollection {
 	private String depot;
 	private String type;
 

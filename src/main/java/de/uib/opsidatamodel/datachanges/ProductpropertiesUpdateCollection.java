@@ -16,7 +16,7 @@ import de.uib.utils.logging.Logging;
 
 /**
 */
-public class ProductpropertiesUpdateCollection extends UpdateCollection {
+public class ProductpropertiesUpdateCollection extends DefaultUpdateCollection {
 	private List<String> clients;
 	private String productname;
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
