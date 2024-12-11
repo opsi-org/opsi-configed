@@ -441,11 +441,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		JMenuItem menuItemAddPool = new JMenuItem(Configed.getResourceValue("ConfigedMain.Licenses.NewLicensepool"));
 		menuItemAddPool.addActionListener((ActionEvent e) -> {
-			Object[] a = new Object[2];
-			a[0] = "";
-			a[1] = "";
+			String[] a = new String[] { "", "" };
 			modelLicensepools.addRow(a);
-			thePanel.getPanelLicensepools().moveToValue("" + a[0], 0);
+			thePanel.getPanelLicensepools().moveToValue(a[0], 0);
 
 			// setting back the other tables is provided by ListSelectionListener
 		});
@@ -605,6 +603,24 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(false);
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 
+		initializePanelRegisteredSoftwareMenuItems(columnNames);
+
+		thePanel.getPanelRegisteredSoftware().setUpdateController(new SelectionMemorizerUpdateController(
+				thePanel.getPanelLicensepools(), 0, thePanel.getPanelRegisteredSoftware(), this));
+
+		thePanel.setFSoftwarename2LicensePool(new FSoftwarename2LicensePool(this));
+		thePanel.getFSoftwarename2LicensePool().setTableModel();
+		thePanel.setDisplaySimilarExist(
+				thePanel.getFSoftwarename2LicensePool().checkExistNamesWithVariantLicensepools());
+		thePanel.getFSoftwarename2LicensePool().setButtonsEnabled(true);
+
+		thePanel.getPanelLicensepools().getJTable().getSelectionModel()
+				.addListSelectionListener(this::licensePoolValueChanged);
+
+		setSoftwareIdsFromLicensePool(null);
+	}
+
+	private void initializePanelRegisteredSoftwareMenuItems(List<String> columnNames) {
 		JMenuItem menuItemSoftwareShowAssigned = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.PopupWindowsSoftwareShowAssigned"));
 		menuItemSoftwareShowAssigned.addActionListener((ActionEvent e) -> {
@@ -643,20 +659,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.getPanelRegisteredSoftware().getJTable().getColumnModel()
 				.getColumn(columnNames.indexOf("language"));
 		col.setMaxWidth(60);
-
-		thePanel.getPanelRegisteredSoftware().setUpdateController(new SelectionMemorizerUpdateController(
-				thePanel.getPanelLicensepools(), 0, thePanel.getPanelRegisteredSoftware(), this));
-
-		thePanel.setFSoftwarename2LicensePool(new FSoftwarename2LicensePool(this));
-		thePanel.getFSoftwarename2LicensePool().setTableModel();
-		thePanel.setDisplaySimilarExist(
-				thePanel.getFSoftwarename2LicensePool().checkExistNamesWithVariantLicensepools());
-		thePanel.getFSoftwarename2LicensePool().setButtonsEnabled(true);
-
-		thePanel.getPanelLicensepools().getJTable().getSelectionModel()
-				.addListSelectionListener(this::licensePoolValueChanged);
-
-		setSoftwareIdsFromLicensePool(null);
 	}
 
 	private void registeredSoftwareFiltermarkAction() {
