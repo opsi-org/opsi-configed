@@ -174,13 +174,6 @@ public class DefaultUpdateCollection implements UpdateCollection {
 			return;
 		}
 
-		Iterator<UpdateCommand> it = implementor.iterator();
-		while (it.hasNext()) {
-			UpdateCommand theCommand = it.next();
-
-			if (theCommand != null) {
-				theCommand.doCall();
-			}
-		}
+		implementor.forEach(UpdateCommand::doCall);
 	}
 }

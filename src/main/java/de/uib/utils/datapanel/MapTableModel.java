@@ -112,11 +112,6 @@ public class MapTableModel extends AbstractTableModel {
 		return getClass().getName() + ": " + data;
 	}
 
-	private void setNew() {
-		// starting with a new set of data
-		datachanged = false;
-	}
-
 	public List<String> getKeys() {
 		return keys;
 	}
@@ -132,7 +127,9 @@ public class MapTableModel extends AbstractTableModel {
 			Logging.debug(this, "setStoreData, data is null ");
 		}
 
-		setNew();
+		// starting with a new set of data
+		datachanged = false;
+
 		this.storeData = storeData;
 		changes = new HashMap<>();
 		resetModifiedKey();
