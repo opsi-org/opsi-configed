@@ -346,14 +346,12 @@ public class PanelProductSettings extends JSplitPane {
 
 		propertiesPanel.setEditableMap(editableProductProperties,
 				persistenceController.getProductDataService().getProductPropertyOptionsMap(productID));
-		propertiesPanel.getMapTableModel().setStoreData(storableProductProperties);
-		propertiesPanel.setUpdateCollection(updateCollection);
+		propertiesPanel.updateData(updateCollection, storableProductProperties);
 	}
 
 	public void clearEditing() {
 		propertiesPanel.setEditableMap(null, null);
-		propertiesPanel.getMapTableModel().setStoreData(null);
-		propertiesPanel.setUpdateCollection(null);
+		propertiesPanel.updateData(null, null);
 		infoPane.clearEditing();
 	}
 

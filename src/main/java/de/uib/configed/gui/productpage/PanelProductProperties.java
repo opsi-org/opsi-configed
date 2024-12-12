@@ -63,8 +63,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		propertiesPanel.getMapTableModel()
 				.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
-		propertiesPanel.getMapTableModel().setStoreData(null);
-		propertiesPanel.setUpdateCollection(null);
+		propertiesPanel.updateData(null, null);
 
 		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
 		paneProducts = new PaneProducts(columnNames, panelEditProperties, propertiesPanel);

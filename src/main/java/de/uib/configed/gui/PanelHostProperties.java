@@ -50,10 +50,15 @@ public class PanelHostProperties extends JPanel {
 			Set<String> keysOfReadOnlyEntries) {
 		Logging.debug(this, "initMultipleHosts ", " configs  ", depotMap);
 
-		editMapPanel.setUpdateCollection(updateCollection);
 		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
 
-		setMap(depotMap);
+		Logging.debug(this, "derive Map ", depotMap);
+
+		deriveDepotMap(depotMap);
+		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
+		editMapPanel.updateData(updateCollection, Collections.singletonList(depotMap));
+
+		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
 	}
 
 	// delegated methods
@@ -81,7 +86,7 @@ public class PanelHostProperties extends JPanel {
 	}
 
 	private Map<String, Object> deriveDepotMap(Map<String, Object> depotMap) {
-		Logging.debug(this, "mapTypes  ", depotMap);
+		Logging.debug(this, "deriveDepotMap  ", depotMap);
 		for (Entry<String, Object> dataEntry : depotMap.entrySet()) {
 			if (!(dataEntry.getValue() instanceof List)) {
 				depotMap.put(dataEntry.getKey(), Collections.singletonList(dataEntry.getValue()));
@@ -89,13 +94,5 @@ public class PanelHostProperties extends JPanel {
 		}
 
 		return depotMap;
-	}
-
-	private void setMap(Map<String, Object> depotMap) {
-		Logging.debug(this, "setMap ", depotMap);
-
-		deriveDepotMap(depotMap);
-		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
-		editMapPanel.getMapTableModel().setStoreData(Collections.singletonList(depotMap));
 	}
 }

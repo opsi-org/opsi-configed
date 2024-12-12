@@ -169,22 +169,15 @@ public class DefaultEditMapPanel extends JPanel {
 
 	/**
 	 * set collection (e.g. of clients) where each member stores the changed
-	 * data; we assume that it is a collection of maps
-	 * 
-	 * @param Collection data
-	 */
-	public void setStoreData(Collection<Map<String, Object>> data) {
-		mapTableModel.setStoreData(data);
-	}
-
-	/**
-	 * take a reference to a collection of maps that we will have to use for
-	 * updating the data base
+	 * data; we assume that it is a collection of maps; also take a reference to
+	 * a collection of maps that we will have to use for updating the data base
 	 * 
 	 * @param Collection updateCollection
+	 * @param Collection data
 	 */
-	public void setUpdateCollection(UpdateCollection updateCollection) {
+	public void updateData(UpdateCollection updateCollection, Collection<Map<String, Object>> data) {
 		mapTableModel.setUpdateCollection(updateCollection);
+		mapTableModel.setStoreData(data);
 	}
 
 	protected void logPopupElements() {

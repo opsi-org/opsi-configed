@@ -93,8 +93,7 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.includeAdditionalTooltipText(includeAdditionalTooltipText);
 		editMapPanel.setEditableMap(POJOReMapper.remap(configVisualMap),
 				persistenceController.getConfigDataService().getConfigOptionsPD());
-		editMapPanel.setStoreData(collectionConfigStored);
-		editMapPanel.setUpdateCollection(configUpdateCollection);
+		editMapPanel.updateData(configUpdateCollection, collectionConfigStored);
 		editMapPanel.setLabel(labeltext);
 	}
 }

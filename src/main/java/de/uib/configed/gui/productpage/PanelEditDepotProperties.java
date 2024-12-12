@@ -208,12 +208,11 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 					storableProperties.add(product2properties.get(productEdited));
 				}
 			}
-			productPropertiesPanel.getMapTableModel().setStoreData(storableProperties);
 
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
 					listDepots.getSelectedValuesList(), productEdited);
-			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
+			productPropertiesPanel.updateData(depotProductpropertiesUpdateCollection, storableProperties);
 			UpdateCollectionManager.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}
 	}
