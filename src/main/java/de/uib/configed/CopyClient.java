@@ -161,10 +161,10 @@ public class CopyClient {
 		Map<String, Object> clientConfigStates = persistenceController.getConfigDataService()
 				.getHostConfig(clientToCopy.getName());
 		if (clientConfigStates != null) {
-			persistenceController.getConfigDataService().setConfiguration(newClientNameWithDomain,
+			persistenceController.getConfigDataService().setConfigStates(newClientNameWithDomain,
 					(ConfigName2ConfigValue) clientConfigStates);
 			// Trigger the config state update.
-			persistenceController.getConfigDataService().setConfg();
+			persistenceController.getConfigDataService().updateConfigStates();
 		}
 	}
 }

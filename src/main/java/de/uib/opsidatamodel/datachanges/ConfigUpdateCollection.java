@@ -34,11 +34,11 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 
 		for (String objectId : objectIds) {
 			if (masterConfig) {
-				Logging.debug(this, "adding ConfigUpdate");
-				result = add(new ConfigUpdate(POJOReMapper.remap(map)));
+				Logging.debug(this, "adding ConfigUpdateCommand");
+				result = add(new ConfigUpdateCommand(POJOReMapper.remap(map)));
 			} else {
-				Logging.debug(this, "adding AdditionalconfigurationUpdate");
-				result = add(new ConfigUpdateCommand(objectId, map));
+				Logging.debug(this, "adding ConfigStateUpdateCommand");
+				result = add(new ConfigStateUpdateCommand(objectId, map));
 			}
 		}
 
@@ -55,8 +55,8 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion, element count: ", size());
-		persistenceController.getConfigDataService().setConfig();
-		persistenceController.getConfigDataService().setConfg();
+		persistenceController.getConfigDataService().updateConfigs();
+		persistenceController.getConfigDataService().updateConfigStates();
 
 		clear();
 	}

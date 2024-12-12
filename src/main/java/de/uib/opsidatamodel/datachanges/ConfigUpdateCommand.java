@@ -6,26 +6,27 @@
 
 package de.uib.opsidatamodel.datachanges;
 
+import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.logging.Logging;
 
 public class ConfigUpdateCommand implements UpdateCommand {
-	private String objectId;
-	private Map<String, Object> newdata;
+	private Map<String, List<Object>> newdata;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ConfigUpdateCommand(String objectId, Map<String, Object> newdata) {
-		this.objectId = objectId;
+	public ConfigUpdateCommand(Map<String, List<Object>> newdata) {
 		this.newdata = newdata;
 	}
 
 	@Override
 	public void doCall() {
-		persistenceController.getConfigDataService().setConfiguration(objectId, new ConfigName2ConfigValue(newdata));
+		Logging.info(this, "doCall, setting class ", newdata.getClass(), ", the new data is ", newdata);
+
+		persistenceController.getConfigDataService().setConfig(newdata);
 	}
 }

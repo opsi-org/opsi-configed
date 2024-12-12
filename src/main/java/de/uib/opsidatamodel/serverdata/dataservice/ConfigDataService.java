@@ -369,7 +369,7 @@ public class ConfigDataService {
 	}
 
 	// send config updates and clear the collection
-	public void setConfig() {
+	public void updateConfigs() {
 		setConfig(false);
 	}
 
@@ -707,7 +707,7 @@ public class ConfigDataService {
 	}
 
 	// collect config state updates
-	public void setConfiguration(String objectId, ConfigName2ConfigValue settings) {
+	public void setConfigStates(String objectId, ConfigName2ConfigValue settings) {
 		if (configStateCollection == null) {
 			configStateCollection = new ArrayList<>();
 		}
@@ -759,7 +759,7 @@ public class ConfigDataService {
 	}
 
 	// send config updates and clear the collection
-	public void setConfg() {
+	public void updateConfigStates() {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
