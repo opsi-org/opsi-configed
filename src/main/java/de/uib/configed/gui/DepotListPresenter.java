@@ -151,10 +151,10 @@ public class DepotListPresenter extends JPanel {
 	 * @return true if the selected depot/server is forbidden
 	 */
 	private boolean selectedServerForbidden() {
-		Logging.warning("selectedServerForbidden.....");
+		Logging.info("selectedServerForbidden.....");
 		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().terminalsForbidden();
-		Logging.warning("forbiddenItems " + forbiddenItems);
+		Logging.info("forbiddenItems " + forbiddenItems);
 		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
 		boolean forbiddenConfigDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 
