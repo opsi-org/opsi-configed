@@ -35,7 +35,7 @@ public final class UpdateCollectionManager {
 
 	public static void clearGlobalUpdateCollection() {
 		Logging.info("we clear the update collection ");
-		mainUpdateCollection.clear();
+		mainUpdateCollection.clearElements();
 	}
 
 	public static void cancelGlobalUpdateCollection() {

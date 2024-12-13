@@ -1,3 +1,8 @@
+## [4.4.0.14] - 202x-xx-xx
+### Fixed
+- Not saving ProductPropertyStates and ConfigStates when you edit again after saving
+
+
 ## [4.4.0.13] - 2024-12-09
 ### Changed
 - Rework editing and creation of configs, configStates, productProperties and depot properties
