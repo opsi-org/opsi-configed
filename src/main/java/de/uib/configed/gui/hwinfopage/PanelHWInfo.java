@@ -452,8 +452,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private void processHwClasses(Map<String, List<Map<String, Object>>> hwInfo) {
-		for (String hwClassUI : hwClassMapping.keySet()) {
-			String hwClass = (String) hwClassMapping.get(hwClassUI);
+		for (Entry<String, Object> hwClassEntry : hwClassMapping.entrySet()) {
+			String hwClass = (String) hwClassEntry.getValue();
 
 			List<Map<String, Object>> devices = hwInfo.get(hwClass);
 			if (devices == null) {
@@ -461,7 +461,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				continue;
 			}
 
-			IconNode classNode = new IconNode(hwClassUI);
+			IconNode classNode = new IconNode(hwClassEntry.getKey());
 			Icon classIcon = createImageIcon(hwClass);
 
 			classNode.setIcon(classIcon);
