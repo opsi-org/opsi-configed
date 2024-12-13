@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -421,30 +422,37 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return;
 		}
 
+		setTreeRootTitle(hwInfo);
+		createRoot(treeRootTitle);
+
+		initializeHwClassMapping();
+		devicesInfo = new HashMap<>();
+
+		processHwClasses(hwInfo);
+
+		treeModel.nodeChanged(root);
+		tree.expandRow(0);
+	}
+
+	private void setTreeRootTitle(Map<String, List<Map<String, Object>>> hwInfo) {
 		List<Map<String, Object>> hwInfoSpecial = hwInfo.get(SCANPROPERTYNAME);
 
 		if (hwInfoSpecial != null && !hwInfoSpecial.isEmpty() && hwInfoSpecial.get(0) != null
 				&& hwInfoSpecial.get(0).get(SCANTIME) != null) {
 			treeRootTitle = "Scan " + (String) hwInfoSpecial.get(0).get(SCANTIME);
 		}
+	}
 
-		createRoot(treeRootTitle);
-
-		hwClassMapping = new HashMap<>();
-		String[] hwClassesUI = new String[hwConfig.size()];
-		for (int i = 0; i < hwConfig.size(); i++) {
-			Map<String, Object> whc = hwConfig.get(i);
-			hwClassesUI[i] = (String) Map.class.cast(whc.get("Class")).get("UI");
-			hwClassMapping.put(hwClassesUI[i], Map.class.cast(whc.get("Class")).get("Opsi"));
+	private void initializeHwClassMapping() {
+		hwClassMapping = new TreeMap<>();
+		for (Map<String, Object> whc : hwConfig) {
+			hwClassMapping.put((String) Map.class.cast(whc.get("Class")).get("UI"),
+					Map.class.cast(whc.get("Class")).get("Opsi"));
 		}
+	}
 
-		Arrays.sort(hwClassesUI);
-
-		devicesInfo = new HashMap<>();
-
-		for (int i = 0; i < hwClassesUI.length; i++) {
-			// get next key - value - pair
-			String hwClassUI = hwClassesUI[i];
+	private void processHwClasses(Map<String, List<Map<String, Object>>> hwInfo) {
+		for (String hwClassUI : hwClassMapping.keySet()) {
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
 			List<Map<String, Object>> devices = hwInfo.get(hwClass);
@@ -478,9 +486,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			createIconNodes(names, devices, classIcon, classNode);
 		}
-
-		treeModel.nodeChanged(root);
-		tree.expandRow(0);
 	}
 
 	private static String[] createNamesArray(List<Map<String, Object>> devices,
