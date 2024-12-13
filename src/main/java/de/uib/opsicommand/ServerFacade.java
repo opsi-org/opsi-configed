@@ -442,11 +442,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
 
 				result = retrieveResponseBasedOnContentTypeToObject(connection.getContentType(), stream, resultkey);
-				if (responseHeader != null) {
-					for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet()) {
-						responseHeader.put(entry.getKey(), entry.getValue().get(0));
-					}
-				}
+				addHeaderFieldsToMap(connection, responseHeader);
 				Logging.debug(this, "Connection state after communication: ", conStat);
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
@@ -457,6 +453,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Logging.info(this, "retrieveResponse ready");
 
 		return result;
+	}
+
+	private static void addHeaderFieldsToMap(HttpsURLConnection connection, Map<String, Object> responseHeader) {
+		if (responseHeader != null) {
+			for (Map.Entry<String, List<String>> entry : connection.getHeaderFields().entrySet()) {
+				responseHeader.put(entry.getKey(), entry.getValue().get(0));
+			}
+		}
 	}
 
 	private void sendPostRequest(HttpsURLConnection connection, OpsiMethodCall omc) {
