@@ -21,11 +21,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import de.uib.Main;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.HostInfo;
@@ -126,10 +121,6 @@ public class HostInfoCollections {
 		retrieveConfigServerPD(opsiHosts);
 
 		String configServer = getConfigServer();
-		if (configServer == null) {
-			showNoDataDialog(opsiHosts.size());
-			Main.endApp(1);
-		}
 
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = new TreeMap<>();
 		depot2Host2HostInfo.put(configServer, new TreeMap<>());
@@ -164,31 +155,6 @@ public class HostInfoCollections {
 		Logging.info(this, "retrieveOpsiHosts  hostnames size ",
 				cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class).size());
 		Logging.info(this, "retrieveOpsiHosts   depotNamesList size ", depotNamesList.size());
-	}
-
-	private void showNoDataDialog(int countHosts) {
-		StringBuilder messbuff = new StringBuilder();
-
-		messbuff.append(Configed.getResourceValue("PersistenceController.noData0"));
-		messbuff.append("\n");
-		messbuff.append(Configed.getResourceValue("PersistenceController.noData1") + " " + countHosts);
-		messbuff.append("\n");
-		messbuff.append("\n");
-
-		for (int i = 2; i <= 4; i++) {
-			messbuff.append(Configed.getResourceValue("PersistenceController.noData" + i));
-			messbuff.append("\n");
-			messbuff.append("\n");
-		}
-
-		String message = messbuff.toString();
-		Logging.error(this, message);
-
-		FTextArea f = new FTextArea(ConfigedMain.getFrame(), Globals.APPNAME, true,
-				new String[] { Configed.getResourceValue("PersistenceController.endApp") }, 500, 400);
-		f.setMessage(message);
-
-		f.setVisible(true);
 	}
 
 	private void retrieveConfigServerPD(List<Map<String, Object>> opsiHosts) {
