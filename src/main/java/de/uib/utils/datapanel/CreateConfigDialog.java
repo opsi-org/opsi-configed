@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -74,7 +75,6 @@ public class CreateConfigDialog extends JDialog {
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		super.setResizable(false);
 		super.setVisible(true);
-
 	}
 
 	private void initBooleanDetailsPanel() {
@@ -196,6 +196,8 @@ public class CreateConfigDialog extends JDialog {
 		labelConfigEntry.setFont(getFont().deriveFont(Font.BOLD));
 
 		textFieldConfigEntry = new JTextField();
+		// Need to call this method inside invokeLater, otherwise it won't work
+		SwingUtilities.invokeLater(() -> textFieldConfigEntry.requestFocus());
 
 		JLabel labelDescription = new JLabel(Configed.getResourceValue("EditMapPanelX.description"));
 		labelDescription.setFont(getFont().deriveFont(Font.BOLD));
