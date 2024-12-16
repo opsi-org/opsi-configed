@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -334,8 +333,7 @@ public final class CommandParameterParser {
 				field.requestFocusInWindow();
 			}
 		};
-		final JDialog jdialog = opPane.createDialog(dialog,
-				Globals.APPNAME + " " + Configed.getResourceValue("CommandParameterParser.Input"));
+		final JDialog jdialog = opPane.createDialog(dialog, Configed.getResourceValue("CommandParameterParser.Input"));
 		jdialog.setSize(400, 150);
 		jdialog.setVisible(true);
 

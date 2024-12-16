@@ -351,7 +351,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 			if (names.contains(s)) {
 				ok = JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("EditMapPanelX.entryAlreadyExists"), Globals.APPNAME,
+						Configed.getResourceValue("EditMapPanelX.entryAlreadyExists"),
+						Configed.getResourceValue("EditMapPanelX.titleEntryAlreadyExists"),
 						JOptionPane.OK_CANCEL_OPTION);
 			}
 		}
