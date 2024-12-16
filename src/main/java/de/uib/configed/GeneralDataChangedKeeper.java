@@ -28,7 +28,8 @@ public class GeneralDataChangedKeeper extends DataChangedKeeper {
 		boolean result = false;
 		if (this.dataChanged) {
 			if (fAskSaveProductConfiguration == null) {
-				fAskSaveProductConfiguration = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME, true,
+				fAskSaveProductConfiguration = new FTextArea(ConfigedMain.getMainFrame(),
+						Configed.getResourceValue("PanelGenEditTable.saveData"), true,
 						new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 				fAskSaveProductConfiguration.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
 

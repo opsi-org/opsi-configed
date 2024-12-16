@@ -64,9 +64,10 @@ public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 		boolean result = false;
 		if (this.dataChanged) {
 			if (fAskSaveChangedText == null) {
-				fAskSaveChangedText = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME, true,
+				fAskSaveChangedText = new FTextArea(ConfigedMain.getMainFrame(),
+						Configed.getResourceValue("PanelGenEditTable.saveData"), true,
 						new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-				fAskSaveChangedText.setMessage(Configed.getResourceValue("MainFrame.SaveChangedValue"));
+				fAskSaveChangedText.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
 				fAskSaveChangedText.setSize(new Dimension(300, 220));
 			}
 
