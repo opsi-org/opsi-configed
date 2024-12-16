@@ -331,7 +331,7 @@ public final class CommandParameterParser {
 			@Override
 			public void selectInitialValue() {
 				super.selectInitialValue();
-				((Component) field).requestFocusInWindow();
+				field.requestFocusInWindow();
 			}
 		};
 		final JDialog jdialog = opPane.createDialog(dialog,
