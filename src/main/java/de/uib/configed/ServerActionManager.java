@@ -210,7 +210,8 @@ public final class ServerActionManager {
 	}
 
 	private static boolean confirmActionForSelectedClients(String confirmInfo) {
-		FShowList fConfirmActionForClients = new FShowList(ConfigedMain.getMainFrame(), Globals.APPNAME, true,
+		FShowList fConfirmActionForClients = new FShowList(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConfigedMain.TitleClientAction"), true,
 				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
 				400);
 
