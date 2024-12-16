@@ -21,7 +21,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 
-import de.uib.configed.Configed;
 import de.uib.utils.logging.Logging;
 
 public class ExporterToCSV extends AbstractExportTable {
@@ -61,7 +60,7 @@ public class ExporterToCSV extends AbstractExportTable {
 			writeHeader(printer);
 			writeRows(printer, selectedOnly);
 		} catch (IOException ex) {
-			Logging.error(ex, Configed.getResourceValue("ExportTable.error"));
+			Logging.error(ex, "error exporting to csv file ", fileName);
 		}
 	}
 

@@ -180,11 +180,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private void deleteConfigurationEntry() {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
-			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
-					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
-
-			fAsk.setVisible(true);
+			showErrorNoRowSelected();
 		} else if (names != null) {
 			propertyHandler = defaultPropertyHandler;
 
@@ -194,14 +190,18 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
+	private static void showErrorNoRowSelected() {
+		FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Configed.getResourceValue("error"),
+				Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
+				new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
+
+		fAsk.setVisible(true);
+	}
+
 	private void deleteSpecificEntry() {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
-			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
-					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
-
-			fAsk.setVisible(true);
+			showErrorNoRowSelected();
 		} else if (names != null) {
 			propertyHandler = removingSpecificValuesPropertyHandler;
 
@@ -214,11 +214,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private void removeDefaultAsSpecificEntry() {
 		Logging.info(this, "popupItemDeleteEntry action");
 		if (table.getSelectedRowCount() == 0) {
-			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
-					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-					new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
-
-			fAsk.setVisible(true);
+			showErrorNoRowSelected();
 		} else if (names != null) {
 			propertyHandler = settingDefaultValuesPropertyHandler;
 
