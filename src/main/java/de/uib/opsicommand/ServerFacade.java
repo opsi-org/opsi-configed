@@ -529,33 +529,32 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private Map<String, Object> retrieveResponseBasedOnContentTypeToObject(String contentType, InputStream stream,
 			String resultKey) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String resultStr = readInputStream(stream).strip();
-		Logging.debug("retrieveResponseBasedOnContentType ", contentType, ": ", resultStr);
-
+		Logging.debug("retrieveResponseBasedOnContentType ", contentType);
 		Map<String, Object> result = new HashMap<>();
 		if (contentType.contains("application/json")) {
-			if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("{")) {
+			String resultStr = readInputStream(stream).strip();
+			if (resultStr.isEmpty()) {
+				result.put(resultStr, result);
+			} else if (resultStr.startsWith("{")) {
 				result = mapper.readValue(resultStr, new TypeReference<Map<String, Object>>() {
 				});
-			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("[")) {
+			} else if (resultStr.startsWith("[")) {
 				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object[]>() {
 				}));
-			} else if (resultStr != null && !resultStr.isEmpty() && resultStr.startsWith("\"")) {
+			} else if (resultStr.startsWith("\"")) {
 				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
 				}));
-			} else if (resultStr != null && ("true".equals(resultStr) || "\"true\"".equals(resultStr))) {
+			} else if ("true".equals(resultStr)) {
 				result.put(resultKey, true);
-			} else if (resultStr != null && ("false".equals(resultStr) || "\"false\"".equals(resultStr))) {
+			} else if ("false".equals(resultStr)) {
 				result.put(resultKey, false);
-
-			} else if (resultStr == null || "null".equals(resultStr) || "\"null\"".equals(resultStr)) {
+			} else if ("null".equals(resultStr)) {
 				result.put(resultKey, null);
-			} else if (!resultStr.isEmpty() && resultStr.contains(".")) {
+			} else if (resultStr.contains(".")) {
 				result.put(resultKey, Float.parseFloat(resultStr));
 			} else {
 				result.put(resultKey, Integer.parseInt(resultStr));
 			}
-
 		} else if (contentType.contains("application/msgpack")) {
 			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
 			});
