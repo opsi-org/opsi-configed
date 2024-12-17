@@ -7,6 +7,7 @@
 package de.uib.configed;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,6 +19,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -158,10 +160,17 @@ public class CopyClient {
 	}
 
 	private void copyConfigStates() {
-		ConfigName2ConfigValue clientConfigStates = persistenceController.getConfigDataService()
-				.createHostConfi(clientToCopy.getName());
-		persistenceController.getConfigDataService().setConfigStates(newClientNameWithDomain, clientConfigStates);
+		ConfigDataService configDataService = persistenceController.getConfigDataService();
+
+		Map<String, Object> hostConfig = new HashMap<>();
+		if (configDataService.getHostConfigsPD().get(clientToCopy.getName()) != null) {
+			hostConfig.putAll(configDataService.getHostConfigsPD().get(clientToCopy.getName()));
+		}
+		ConfigName2ConfigValue clientConfigStates = new ConfigName2ConfigValue(hostConfig,
+				configDataService.getConfigOptionsPD());
+
+		configDataService.setConfigStates(newClientNameWithDomain, clientConfigStates);
 		// Trigger the config state update.
-		persistenceController.getConfigDataService().updateConfigStates();
+		configDataService.updateConfigStates();
 	}
 }

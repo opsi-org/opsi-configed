@@ -669,15 +669,6 @@ public class ConfigDataService {
 		return result;
 	}
 
-	// TODO is this needed?
-	public ConfigName2ConfigValue getHostConfig(String objectId) {
-		Map<String, Object> hostConfig = new HashMap<>();
-		if (getHostConfigsPD().get(objectId) != null) {
-			hostConfig.putAll(getHostConfigsPD().get(objectId));
-		}
-		return new ConfigName2ConfigValue(hostConfig, getConfigOptionsPD());
-	}
-
 	public List<Map<String, Object>> getHostsConfigsWithDefaults(List<String> objectIds) {
 		Logging.info(this, "getHostsConfigsWithDefaults for ", objectIds);
 
