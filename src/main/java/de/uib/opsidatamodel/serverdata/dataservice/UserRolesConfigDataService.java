@@ -846,32 +846,6 @@ public class UserRolesConfigDataService {
 		}
 	}
 
-	private void checkAdditionalQueries(Map<String, List<Object>> configDefaultValues,
-			List<Map<String, Object>> readyObjects) {
-		String key = OpsiServiceNOMPersistenceController.CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
-
-		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
-
-			StringBuilder qbuf = new StringBuilder("select");
-			qbuf.append(" hostId, productId, installationStatus from ");
-			qbuf.append(" HOST, PRODUCT_ON_CLIENT ");
-			qbuf.append(" WHERE HOST.hostId  = PRODUCT_ON_CLIENT.clientId ");
-			qbuf.append(" AND =  installationStatus='installed' ");
-			qbuf.append(" order by hostId, productId ");
-
-			String query = qbuf.toString();
-			String description = "all hosts and their installed products";
-
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, query, description));
-			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + EDITABLE_KEY, false,
-					"(command may be edited)"));
-			// description entry
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key + "." + DESCRIPTION_KEY,
-					description, ""));
-		}
-	}
-
 	private void checkSavedSearches(Map<String, List<Object>> configDefaultValues,
 			List<Map<String, Object>> readyObjects) {
 		String key = SavedSearch.CONFIG_KEY + "." + "product_failed";
@@ -931,9 +905,6 @@ public class UserRolesConfigDataService {
 
 		// remote controls
 		checkRemoteControlConfigs(configDefaultValues, readyObjects);
-
-		// additional queries
-		checkAdditionalQueries(configDefaultValues, readyObjects);
 
 		// WAN_CONFIGURATION
 		// does it exist?
