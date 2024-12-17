@@ -319,7 +319,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			for (Entry<String, Object> deviceInfoEntry : deviceInfo.entrySet()) {
 				if (deviceInfoEntry.getKey().equalsIgnoreCase(opsi) && deviceInfoEntry.getValue() != null) {
-
 					String cv = findCV(reduceScanToByAuditClasses, hwClass, unit, opsi, deviceInfoEntry.getValue());
 
 					String[] row = { ui, cv };

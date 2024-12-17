@@ -45,7 +45,6 @@ public class TopToolBarManager {
 		jButtonSaveConfiguration.setEnabled(false);
 		jButtonSaveConfiguration.addActionListener(event -> ChangedDataManager.checkSaveAll(false));
 		jButtonSaveConfiguration.addAncestorListener(new AncestorListener() {
-
 			@Override
 			public void ancestorAdded(AncestorEvent event) {
 				// This method is called, when an ancestor of this button is shown.

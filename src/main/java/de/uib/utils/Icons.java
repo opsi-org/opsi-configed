@@ -234,5 +234,4 @@ public final class Icons {
 
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/" + iconName + ".svg").derive(139, 50);
 	}
-
 }

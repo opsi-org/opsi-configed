@@ -126,7 +126,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		checkServerVersion();
-
 	}
 
 	public boolean isUseSAML() {
@@ -196,7 +195,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		} else {
 			sessionId = sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId);
 		}
-
 	}
 
 	private boolean ssoOpenBrowser() {
@@ -427,7 +425,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			} catch (IOException iox) {
 				Logging.info(this, "exception on writing json request ", iox);
 			}
-
 		}
 
 		Logging.info(this, "connection cipher suite ", (connection).getCipherSuite());

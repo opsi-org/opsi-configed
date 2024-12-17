@@ -48,7 +48,6 @@ public class OpsiLicensing extends JPanel {
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
 	public OpsiLicensing() {
-
 		PanelGenEditTable mainPanel = initLicensingInfoPanel();
 		JPanel clientInfo = initClientInfo();
 

@@ -476,5 +476,4 @@ public class FEditList<O> extends JDialog
 	public void removeUpdate(DocumentEvent e) {
 		extraFieldChanged(true);
 	}
-
 }

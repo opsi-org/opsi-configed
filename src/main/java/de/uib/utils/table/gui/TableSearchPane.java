@@ -404,7 +404,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean stringContains(final String s, final String part) {
-
 		if (part.length() > s.length()) {
 			return false;
 		}
@@ -452,7 +451,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				// We found the value
 				return true;
 			}
-
 		}
 
 		return false;

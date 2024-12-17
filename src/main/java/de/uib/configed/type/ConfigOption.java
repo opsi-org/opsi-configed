@@ -52,7 +52,6 @@ public class ConfigOption extends RetrievedMap {
 
 	public static ConfigOption createConfigOption(String description, TYPE type, boolean editable, boolean multiValue,
 			List<?> defaultValues, List<?> possibleValues) {
-
 		Map<String, Object> retrieved = new HashMap<>();
 		retrieved.put("possibleValues", possibleValues);
 		retrieved.put("defaultValues", defaultValues);

@@ -13,7 +13,6 @@ import java.util.Set;
 import de.uib.utils.logging.Logging;
 
 public class UserServerConsoleConfig extends UserConfigModule {
-
 	public static final String KEY_TERMINAL_ACCESS_FORBIDDEN = "connect.terminal.forbidden";
 
 	public static final String KEY_SERVER_CONSOLE_MENU_ACTIVE = "ssh.menu_serverconsole.active";

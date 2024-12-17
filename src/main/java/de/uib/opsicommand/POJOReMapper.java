@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public final class POJOReMapper {
-
 	private POJOReMapper() {
 	}
 

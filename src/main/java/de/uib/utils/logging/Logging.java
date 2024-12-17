@@ -378,7 +378,6 @@ public final class Logging {
 
 	// if errors Occurred show a window with the logged errors
 	public static synchronized void checkErrorList() {
-
 		int errorCount = errorList.size();
 
 		info("error list size ", errorCount);

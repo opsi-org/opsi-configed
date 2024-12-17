@@ -112,7 +112,6 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Map<String, Object>> responses = POJOReMapper.remap(retrieved.get("result"));
 
 		for (Entry<String, Map<String, Object>> entry : responses.entrySet()) {
-
 			if (entry.getValue().get("error") == null) {
 				List<Object> list = POJOReMapper.remap(entry.getValue().get("result"));
 				result.put(entry.getKey(), list);

@@ -26,7 +26,6 @@ import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utils.logging.Logging;
 
 public class ProductTable extends JTable {
-
 	public ProductTable() {
 		super.setDragEnabled(true);
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

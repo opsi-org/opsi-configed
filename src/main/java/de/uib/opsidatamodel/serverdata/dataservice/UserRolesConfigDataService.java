@@ -360,7 +360,6 @@ public class UserRolesConfigDataService {
 			CacheIdentifier cacheIdentifier) {
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
-
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
 			List<Object> items = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(cacheIdentifier, items.get(0));
@@ -382,7 +381,6 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, Collections.emptyList());
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
-
 			Logging.info(this, "checkPermissions value:", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);

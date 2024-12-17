@@ -306,7 +306,6 @@ public final class TerminalFrame implements MessagebusListener {
 	 */
 	private void filterByMsgbusForbiddenConfig(List<String> resultList, Set<String> allClientsDepotsAllowedByPrivilege,
 			List<String> depotsList) {
-
 		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
 		// filter clients and depots by configured permissions (mostly msg bus settings cause user roles already filtered)

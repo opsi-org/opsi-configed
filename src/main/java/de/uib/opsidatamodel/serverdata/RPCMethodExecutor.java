@@ -54,7 +54,6 @@ public class RPCMethodExecutor {
 	}
 
 	public List<String> wakeOnLanOpsi43(Collection<String> hostIds) {
-
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });
 
 		Map<String, Object> response = persistenceController.getExecutioner().getMapResult(omc);
