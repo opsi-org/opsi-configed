@@ -67,11 +67,6 @@ public class UserRolesConfigDataService {
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENSES = "free licenses for client";
 
-	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER = "configed.ssh.deploy-client-agent.default.user";
-	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER_DEFAULT_VALUE = "Administrator";
-	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW = "configed.ssh.deploy-client-agent.default.password";
-	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE = "";
-
 	// keys for default wan configuration
 	public static final String CONFIG_CLIENTD_EVENT_STARTUP = "opsiclientd.event_gui_startup.active";
 	public static final String CONFIG_CLIENTD_EVENT_STARTUP_USER = "opsiclientd.event_gui_startup{user_logged_in}.active";
@@ -907,25 +902,6 @@ public class UserRolesConfigDataService {
 		}
 	}
 
-	private void checkSSHCommands(Map<String, List<Object>> configDefaultValues,
-			List<Map<String, Object>> readyObjects) {
-		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
-					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER,
-					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER_DEFAULT_VALUE,
-					"default windows username for deploy-client-agent-script"));
-		}
-
-		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
-					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW,
-					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE,
-					"default windows password for deploy-client-agent-script"));
-		}
-	}
-
 	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
 		boolean result = persistenceController.getConfigDataService().getConfigOptionsPD() != null;
@@ -975,8 +951,6 @@ public class UserRolesConfigDataService {
 		// configuration of host menus
 		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS,
 				arg -> computeDisabledClientActions(readyObjects));
-
-		checkSSHCommands(configDefaultValues, readyObjects);
 
 		if (!configDefaultValues.containsKey(CONFIGED_WORKBENCH_KEY)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",

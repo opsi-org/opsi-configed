@@ -6,9 +6,6 @@
 
 package de.uib.configed.serverconsole;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -22,11 +19,8 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
-import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
-import de.uib.utils.logging.Logging;
 
 public class DeployClientAgentAuthPanel extends JPanel {
 	private FlatTextField flatTextFieldUser;
@@ -89,35 +83,7 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
-		getDefaultAuthData();
-
 		initLayout();
-	}
-
-	@SuppressWarnings("unchecked")
-	private void getDefaultAuthData() {
-		Map<String, ConfigOption> configs = persistenceController.getConfigDataService().getConfigOptionsPD();
-
-		List<Object> resultConfigList = (List<Object>) configs
-				.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER).get("defaultValues");
-		if (resultConfigList == null || resultConfigList.isEmpty()) {
-			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER not existing");
-			// the config will be created in this run of configed
-		} else {
-			flatTextFieldUser.setText((String) resultConfigList.get(0));
-			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER ", resultConfigList.get(0));
-		}
-
-		resultConfigList = (List<Object>) configs.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW)
-				.get("defaultValues");
-		if (resultConfigList == null || resultConfigList.isEmpty()) {
-			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW not existing");
-
-			// the config will be created in this run of configed
-		} else {
-			flatPasswordField.setText((String) resultConfigList.get(0));
-			Logging.info(this, "key_ssh_shell_active ***confidential***");
-		}
 	}
 
 	public void changeUser() {
