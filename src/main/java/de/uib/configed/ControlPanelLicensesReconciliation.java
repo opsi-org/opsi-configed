@@ -84,18 +84,14 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 	}
 
 	private void initPanels() {
-		List<String> columnNames;
-
 		List<String> extraHostFields = persistenceController.getConfigDataService().getServerConfigStrings(
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 
-		columnNames = new ArrayList<>();
+		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add(OpsiServiceNOMPersistenceController.HOST_KEY);
 
-		for (String fieldName : extraHostFields) {
-			columnNames.add(fieldName);
-		}
+		columnNames.addAll(extraHostFields);
 
 		columnNames.add("licensePoolId");
 		columnNames.add("used_by_opsi");
