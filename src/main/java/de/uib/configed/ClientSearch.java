@@ -111,7 +111,7 @@ public class ClientSearch {
 			return;
 		}
 
-		SelectionManager manager = new SelectionManager(null);
+		SelectionManager manager = new SelectionManager();
 
 		String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProduct);
 
@@ -145,7 +145,7 @@ public class ClientSearch {
 	}
 
 	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
-		SelectionManager manager = new SelectionManager(null);
+		SelectionManager manager = new SelectionManager();
 
 		if (arg == null || arg.isEmpty()) {
 			manager.setSearch(SavedSearches.SEARCH_FAILED_AT_ANY_TIME);

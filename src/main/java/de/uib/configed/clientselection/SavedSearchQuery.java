@@ -66,7 +66,7 @@ public class SavedSearchQuery {
 		// Load data that we need to find clients for selection
 		persistenceController.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
 
-		SelectionManager manager = new SelectionManager(null);
+		SelectionManager manager = new SelectionManager();
 		Set<String> searches = manager.getSavedSearchesNames();
 		if (searchName == null && printing) {
 			printResult(searches);

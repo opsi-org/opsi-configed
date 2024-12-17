@@ -43,10 +43,7 @@ public class SelectionManager {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SelectionManager(String backend) {
-		if (backend == null || backend.isEmpty()) {
-			backend = "opsidata";
-		}
+	public SelectionManager() {
 		this.backend = new OpsiDataBackend();
 		serializer = new OpsiDataSerializer(this);
 		groupWithStatusList = new LinkedList<>();

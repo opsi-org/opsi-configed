@@ -63,7 +63,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		setTitle(Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
 		setModal(false);
 		setLeaveOnCommit(false);
-		manager = new SelectionManager(null);
+		manager = new SelectionManager();
 		result = new LinkedList<>();
 
 		model = new DefaultListModel<>();
