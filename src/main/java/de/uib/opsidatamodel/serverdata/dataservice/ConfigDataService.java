@@ -670,7 +670,7 @@ public class ConfigDataService {
 	}
 
 	// TODO is this needed?
-	public Map<String, Object> getHostConfig(String objectId) {
+	public ConfigName2ConfigValue getHostConfig(String objectId) {
 		Map<String, Object> hostConfig = new HashMap<>();
 		if (getHostConfigsPD().get(objectId) != null) {
 			hostConfig.putAll(getHostConfigsPD().get(objectId));
