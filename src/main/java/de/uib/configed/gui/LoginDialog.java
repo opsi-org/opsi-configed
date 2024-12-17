@@ -25,10 +25,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.extras.components.FlatComboBox;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
@@ -53,7 +51,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 	private JLabel jLabelTitle;
 	private JLabel jLabelVersion;
 	private JLabel jLabelLogo;
-	private JLabel jLabelLoadingSSOState;
 
 	private FlatTextField fieldUser = new FlatTextField();
 
@@ -172,9 +169,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 		setIconImage(Icons.getMainIcon());
 
 		jLabelLogo = new JLabel(Icons.getOpsiLogoWide());
-		jLabelLoadingSSOState = new JLabel(Configed.getResourceValue("LoginDialog.loadingSSOState"),
-				SwingConstants.CENTER);
-		jLabelLoadingSSOState.setBorder(new EmptyBorder(3, 0, 0, 0));
 		jLabelTitle = new JLabel(Globals.APPNAME);
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
@@ -218,7 +212,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 			Logging.debug(this, "No host provided");
 			return;
 		}
-		jLabelLoadingSSOState.setVisible(true);
+
 		ssoActiveByServer = true;
 		Logging.info("get auth info for ", host);
 		ServerFacade serverFacade = new ServerFacade(host, false);
@@ -229,7 +223,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 			ssoActiveByServer = authMethods.contains("saml");
 			Logging.debug("Authentication methods for host ", host, ": ", authMethods);
 		}
-		jLabelLoadingSSOState.setVisible(false);
 		jButtonSSO.setVisible(ssoActiveByServer);
 		Logging.notice("SSO active by server ", ssoActiveByServer);
 		setupLayout();
@@ -261,17 +254,14 @@ public class LoginDialog extends JFrame implements KeyListener {
 				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
 		SequentialGroup seqGroup = groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE);
-		if (!Boolean.TRUE.equals(ssoActiveByServer)) {
-			parGroup.addComponent(jLabelLoadingSSOState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE);
-			seqGroup.addComponent(jLabelLoadingSSOState, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
-			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
-		} else {
+
+		if (Boolean.TRUE.equals(ssoActiveByServer)) {
 			parGroup.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 					GroupLayout.PREFERRED_SIZE);
 			seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
-			seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
 		}
+
+		seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
 		parGroup.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE);
 
