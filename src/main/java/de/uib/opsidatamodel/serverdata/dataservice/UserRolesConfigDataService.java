@@ -22,7 +22,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
-import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
@@ -55,9 +54,6 @@ import de.uib.utils.logging.Logging;
  */
 @SuppressWarnings({ "unchecked" })
 public class UserRolesConfigDataService {
-	private static final String DESCRIPTION_KEY = "description";
-	private static final String EDITABLE_KEY = "editable";
-
 	private static final String OPSI_CLIENTD_EVENT_SILENT_INSTALL = "silent_install";
 	private static final Boolean DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = false;
 
@@ -846,36 +842,6 @@ public class UserRolesConfigDataService {
 		}
 	}
 
-	private void checkSavedSearches(Map<String, List<Object>> configDefaultValues,
-			List<Map<String, Object>> readyObjects) {
-		String key = SavedSearch.CONFIG_KEY + "." + "product_failed";
-
-		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
-
-			StringBuilder val = new StringBuilder();
-			val.append("{ \"version\" : \"2\", ");
-			val.append("\"data\" : {");
-			val.append(" \"element\" : null, ");
-			val.append(" \"elementPath\" : null,");
-			val.append(" \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, ");
-			val.append(" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : ");
-			val.append("[ \\\"Product\\\", \\\"Action Result\\\" ], \"operation\" : \"StringEqualsOperation\",");
-			val.append(" \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
-			val.append("} }");
-
-			String value = val.toString();
-
-			String description = "any product failed";
-
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, value, description));
-
-			// description entry
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
-					key + "." + SavedSearch.DESCRIPTION_KEY, description, ""));
-		}
-	}
-
 	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
 		boolean result = persistenceController.getConfigDataService().getConfigOptionsPD() != null;
@@ -915,9 +881,6 @@ public class UserRolesConfigDataService {
 			Logging.info(this, "build default wanConfigOptions");
 			buildWANConfigOptions(readyObjects);
 		}
-
-		// saved searches
-		checkSavedSearches(configDefaultValues, readyObjects);
 
 		// configuration of host menus
 		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS,
