@@ -364,8 +364,8 @@ public class LoginDialog extends JFrame implements KeyListener {
 		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
 		Logging.info(this, "starting thread");
 
-		new LoginThread(this, configedMain, user, user, passwordField.getPassword(), fieldOTP.getPassword(), useSSO)
-				.start();
+		new LoginThread(this, configedMain, fieldHost.getSelectedItem(), user, passwordField.getPassword(),
+				fieldOTP.getPassword(), useSSO).start();
 	}
 
 	private static void endProgram() {
