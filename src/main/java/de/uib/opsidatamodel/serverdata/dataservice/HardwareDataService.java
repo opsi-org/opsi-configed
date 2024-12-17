@@ -82,7 +82,13 @@ public class HardwareDataService {
 			return;
 		}
 
-		Map<String, List<Map<String, Object>>> hwAuditConf = new HashMap<>();
+		Map<String, List<Map<String, Object>>> hwAuditConf;
+		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_CONF)) {
+			hwAuditConf = cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
+		} else {
+			hwAuditConf = new HashMap<>();
+		}
+
 		hwAuditConf.computeIfAbsent(locale, s -> exec
 				.getListOfMaps(new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
 		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);

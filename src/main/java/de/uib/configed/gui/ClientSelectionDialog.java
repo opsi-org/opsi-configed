@@ -131,7 +131,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		this.clientTablePanel = clientTablePanel;
 		this.savedSearchesDialog = savedSearchesDialog;
 		super.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-		manager = new SelectionManager("OpsiData");
+		manager = new SelectionManager();
 		complexElements = new LinkedList<>();
 		init();
 	}
