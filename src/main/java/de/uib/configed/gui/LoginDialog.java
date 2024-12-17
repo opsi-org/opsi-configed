@@ -11,7 +11,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,7 +25,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -39,10 +37,7 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
@@ -52,7 +47,6 @@ import de.uib.utils.userprefs.UserPreferences;
 
 public class LoginDialog extends JFrame implements KeyListener {
 	private ConfigedMain configedMain;
-	private OpsiServiceNOMPersistenceController persistenceController;
 
 	private GlassPane glassPane;
 
@@ -144,7 +138,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldOTP.setText(otp);
 	}
 
-	private void setActivated(boolean active) {
+	public void setActivated(boolean active) {
 		Logging.info(this, "activate");
 
 		glassPane.activate(!active);
@@ -154,6 +148,23 @@ public class LoginDialog extends JFrame implements KeyListener {
 		} else {
 			glassPane.setInfoText(Configed.getResourceValue("LoginDialog.WaitInfo.label"));
 		}
+	}
+
+	public void setInfoText(String text) {
+		glassPane.setInfoText(text);
+	}
+
+	public void returnToLogin() {
+		if (PersistenceControllerFactory.getConnectionState().getMessage().indexOf("authorized") > -1) {
+			Logging.info(this, "(not) authorized");
+
+			fieldUser.requestFocus();
+			fieldUser.setCaretPosition(fieldUser.getText().length());
+		} else {
+			fieldHost.requestFocus();
+		}
+
+		setActivated(true);
 	}
 
 	private void initGuiElements() {
@@ -329,58 +340,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 		setVisible(true);
 	}
 
-	public void actAfterWaiting() {
-		Logging.debug(this, "actAfterWaiting");
-		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
-				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
-			glassPane.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
-
-			// we can finish
-			Logging.info(this, "connected with persis ", persistenceController);
-			configedMain.setPersistenceController(persistenceController);
-			configedMain.loadDataAndGo();
-		} else {
-			// Clear cache
-			CacheManager.getInstance().clearAllCachedData();
-			// return to Passwordfield
-			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
-				// return to password dialog
-				Logging.info(this, "interrupted");
-			} else {
-				Logging.info(this, "not connected, timeout or not authorized. state: ",
-						PersistenceControllerFactory.getConnectionState().getState());
-				Logging.info(this, "serverVersion ", ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
-
-				String message;
-
-				if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.TIMEOUT) {
-					message = Configed.getResourceValue("LoginDialog.timeoutReached");
-				} else if (!ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
-					message = Configed.getResourceValue("LoginDialog.oldServerVersion");
-				} else {
-					message = new MessageFormat(
-							Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")).format(
-									new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() });
-				}
-
-				JOptionPane.showMessageDialog(this, message,
-						Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.title"),
-						JOptionPane.ERROR_MESSAGE);
-			}
-
-			if (PersistenceControllerFactory.getConnectionState().getMessage().indexOf("authorized") > -1) {
-				Logging.info(this, "(not) authorized");
-
-				fieldUser.requestFocus();
-				fieldUser.setCaretPosition(fieldUser.getText().length());
-			} else {
-				fieldHost.requestFocus();
-			}
-
-			setActivated(true);
-		}
-	}
-
 	public void tryConnecting() {
 		tryConnecting(false);
 	}
@@ -415,31 +374,8 @@ public class LoginDialog extends JFrame implements KeyListener {
 		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
 		Logging.info(this, "starting thread");
 
-		new Thread() {
-			@Override
-			public void run() {
-				Logging.info(this, "get persis");
-				boolean invalidHost = fieldHost.getSelectedItem() == null
-						|| fieldHost.getSelectedItem().toString().isEmpty();
-				boolean invalidUser = user == null || user.isEmpty();
-				boolean invalidPw = String.valueOf(passwordField.getPassword()) == null
-						|| String.valueOf(passwordField.getPassword()).isEmpty();
-				if (!useSSO && (invalidHost || invalidUser || invalidPw)) {
-					Logging.error(this, "No host, user or password provided");
-					Logging.debug(this, "Validate credentials: invalids ", invalidHost, invalidUser, invalidPw);
-					setActivated(true);
-					return;
-				}
-				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
-						(String) fieldHost.getSelectedItem(), user, String.valueOf(passwordField.getPassword()),
-						String.valueOf(fieldOTP.getPassword()), useSSO);
-
-				Logging.info(this, "got persis, == null ", persistenceController == null);
-
-				Logging.info(this, "waitingTask can be set to ready");
-				actAfterWaiting();
-			}
-		}.start();
+		new LoginThread(this, configedMain, user, user, passwordField.getPassword(), fieldOTP.getPassword(), useSSO)
+				.start();
 	}
 
 	private static void endProgram() {
