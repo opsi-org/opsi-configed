@@ -2,6 +2,9 @@
 ### Fixed
 - Not saving ProductPropertyStates and ConfigStates when you edit again after saving
 
+### Changed
+- Use normal login without SSO when password or OTP field active and pressing "ENTER"-key
+
 
 ## [4.4.0.13] - 2024-12-09
 ### Changed
