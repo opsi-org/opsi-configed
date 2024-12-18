@@ -219,14 +219,23 @@ public class Main {
 		setGlobalValues();
 
 		createOptions();
-		CommandLine cmd;
+		CommandLine cmd = null;
+		CommandLineParser parser = new DefaultParser(false);
 		try {
-			CommandLineParser parser = new DefaultParser(false);
 			cmd = parser.parse(options, args, false);
 		} catch (ParseException e) {
-			Logging.error(e, "Problem parsing arguments");
+			Logging.error(e, "Problem parsing arguments:", e.getMessage());
 			showHelp();
-			return;
+
+			// We try to parse the arguments again, but this time we don't stop
+			// That way we want the configed to start, but we also want to show the user
+			// the error message
+			try {
+				cmd = parser.parse(options, args, true);
+			} catch (ParseException e2) {
+				Logging.error(e2, "Problem parsing arguments, even when we don't stop");
+				endApp(ERROR_INVALID_OPTION);
+			}
 		}
 
 		parseArgs(cmd);
