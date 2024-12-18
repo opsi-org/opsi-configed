@@ -1,5 +1,8 @@
 # Changelog
 ## [4.3.4.3] - 2024-12-18
+### Fixed
+- User roles did not work when logging in with SSO
+
 ### Changed
 - Use normal login without SSO when password or OTP field active and pressing "ENTER"-key
 
@@ -11,6 +14,7 @@
 - NullpointerException when reloading all data in `Files` menu
 - Remember last used domain to create client
 - Always show loading animation when loading data
+
 
 ## [4.3.4.1] - 2024-11-27
 ### Added
@@ -24,9 +28,11 @@
 ### Changed
 - Health Check now works with new opsiconfd version
 
+
 ## [4.3.3.18] - 2024-09-27
 ### Fixed
 - Nullpointerexception when user is not in group opsi admin
+
 
 ## [4.3.3.17] - 2024-09-26
 ### Fixed

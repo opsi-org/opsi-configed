@@ -531,8 +531,7 @@ public class UserRolesConfigDataService {
 		}
 
 		if (applyUserSpecializedConfigPD()) {
-			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + persistenceController.getUser()
-					+ "}.";
+			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + ConfigedMain.getUser() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}
