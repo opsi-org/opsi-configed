@@ -22,10 +22,6 @@ public final class PersistenceControllerFactory {
 	private PersistenceControllerFactory() {
 	}
 
-	public static OpsiServiceNOMPersistenceController getNewPersistenceController(String server) {
-		return getNewPersistenceController(server, "", "", "", true);
-	}
-
 	/**
 	 * This creation method constructs a new Controller instance and lets a
 	 * static variable point to it When next time we need a Controller we can
