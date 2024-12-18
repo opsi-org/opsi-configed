@@ -387,10 +387,9 @@ public class LoginDialog extends JFrame implements KeyListener {
 				tryConnecting(false);
 			} else if (Boolean.TRUE.equals(ssoActiveByServer)) {
 				tryConnecting(true);
-			} else if (e.getSource() == fieldHost.getEditor().getEditorComponent() || fieldUser.getText() == null
-					|| fieldUser.getText().isEmpty()) {
+			} else if (e.getSource() == fieldHost.getEditor().getEditorComponent() || fieldUser.getText().isEmpty()) {
 				fieldUser.requestFocus();
-			} else if (passwordField.getPassword() == null || passwordField.getPassword().length == 0) {
+			} else if (passwordField.getPassword().length == 0) {
 				passwordField.requestFocus();
 			} else {
 				tryConnecting(false);
