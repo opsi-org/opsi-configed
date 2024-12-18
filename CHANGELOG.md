@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.4.3] - 2024-12-18
+### Changed
+- Use normal login without SSO when password or OTP field active and pressing "ENTER"-key
+
 
 ## [4.3.4.2] - 2024-12-04
 ### Fixed

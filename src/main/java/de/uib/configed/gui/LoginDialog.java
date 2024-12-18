@@ -558,7 +558,7 @@ public class LoginDialog extends JFrame implements WaitingSleeper, KeyListener, 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (e.getSource() == passwordField) {
+			if (e.getSource() == passwordField || e.getSource() == fieldOTP) {
 				tryConnecting(false);
 			} else if (Boolean.TRUE.equals(ssoActiveByServer)) {
 				tryConnecting(true);
