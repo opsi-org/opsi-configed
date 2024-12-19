@@ -29,6 +29,9 @@ public class FDialogRemoteControl extends FEditStringList {
 	public FDialogRemoteControl(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
+		extraField.setVisible(true);
+		extraField.addActionListener(event -> commit());
+
 		loggingPanel.setVisible(true);
 	}
 
@@ -106,13 +109,6 @@ public class FDialogRemoteControl extends FEditStringList {
 				new RemoteCommandExecutor(this, command, client).execute();
 			}
 		}
-	}
-
-	@Override
-	protected void createComponents() {
-		super.createComponents();
-		extraField.setVisible(true);
-		extraField.addActionListener(event -> commit());
 	}
 
 	@Override

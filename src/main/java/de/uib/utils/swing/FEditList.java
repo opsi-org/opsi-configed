@@ -110,7 +110,7 @@ public class FEditList<O> extends JDialog
 		buttonAdd.addKeyListener(this);
 	}
 
-	protected void createComponents() {
+	private void createComponents() {
 		framingPanel = new JPanel();
 		editingArea = new JPanel(new BorderLayout(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE));
 		loggingPanel = new JPanel(new BorderLayout());

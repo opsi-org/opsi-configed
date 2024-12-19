@@ -56,7 +56,25 @@ public class SavedSearchesDialog extends FEditStringList {
 		this.clientTablePanel = clientTablePanel;
 		this.configedMain = configedMain;
 
+		initSavedSearchesComponents();
 		initDialog();
+	}
+
+	private void initSavedSearchesComponents() {
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
+				new ArrayList<>());
+		searchPane = new TableSearchPane(searchTargetModel);
+		searchPane.setNarrow(true);
+		editingArea.add(searchPane, BorderLayout.NORTH);
+
+		// redefine buttonCommit
+		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
+		buttonCommit.setIcon(Icons.getIntellijIcon("run"));
+		buttonCommit.setSelectedIcon(null);
+		buttonCommit.setDisabledIcon(null);
+		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
+
+		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));
 	}
 
 	private void initDialog() {
@@ -73,26 +91,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		resetModel();
 
 		extraField.setVisible(false);
-	}
-
-	@Override
-	protected void createComponents() {
-		super.createComponents();
-
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
-				new ArrayList<>());
-		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setNarrow(true);
-		editingArea.add(searchPane, BorderLayout.NORTH);
-
-		// redefine buttonCommit
-		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
-		buttonCommit.setIcon(Icons.getIntellijIcon("run"));
-		buttonCommit.setSelectedIcon(null);
-		buttonCommit.setDisabledIcon(null);
-		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
-
-		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));
 	}
 
 	@Override
