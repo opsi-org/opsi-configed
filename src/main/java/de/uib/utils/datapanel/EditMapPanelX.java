@@ -45,7 +45,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	protected JScrollPane jScrollPane;
 	protected JTable table;
 
-	private TableColumn editableColumn;
 	private PropertiesCellEditorAndRenderer propertiesCellEditorAndRenderer;
 
 	private ListModelProducer modelProducer;
@@ -258,8 +257,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		propertiesCellEditorAndRenderer = new PropertiesCellEditorAndRenderer();
 
-		editableColumn = table.getColumnModel().getColumn(1);
-
+		TableColumn editableColumn = table.getColumnModel().getColumn(1);
 		editableColumn.setCellRenderer(propertiesCellEditorAndRenderer);
 		editableColumn.setCellEditor(propertiesCellEditorAndRenderer);
 
