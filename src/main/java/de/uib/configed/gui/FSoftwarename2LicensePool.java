@@ -215,24 +215,30 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 		GroupLayout panelActionLayout = new GroupLayout(panelAction);
 		panelAction.setLayout(panelActionLayout);
-		panelActionLayout.setVerticalGroup(panelActionLayout.createSequentialGroup()
-				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-						.addComponent(buttonRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-						.addComponent(buttonSetAllAssignmentsToGloballySelectedPool, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSetAllAssignmentsToGloballySelectedPool, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
-						.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		panelActionLayout
+				.setVerticalGroup(
+						panelActionLayout.createSequentialGroup()
+								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
+										.addComponent(buttonRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
+										.addComponent(buttonSetAllAssignmentsToGloballySelectedPool,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelSetAllAssignmentsToGloballySelectedPool,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
+										.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)));
 
 		panelActionLayout
 				.setHorizontalGroup(

@@ -254,9 +254,8 @@ public final class ServerActionManager {
 		additionalPaneLayout.setHorizontalGroup(
 				additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelHostname).addGap(Globals.GAP_SIZE).addComponent(jTextHostname));
-		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(jLabelHostname)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(jTextHostname));
+		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(jLabelHostname).addGap(Globals.MIN_GAP_SIZE).addComponent(jTextHostname));
 
 		FTextArea fAskCopyClient = new FTextArea(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuCopyClient"), true,

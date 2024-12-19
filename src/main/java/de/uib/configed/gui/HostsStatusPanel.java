@@ -166,16 +166,16 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 						layoutStatusPane.createSequentialGroup()
 								.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE,
 										Globals.COUNTERFIELD_WIDTH, Globals.COUNTERFIELD_WIDTH)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(labelActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(labelGroupActivated, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.GAP_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(fieldGroupActivated, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
@@ -184,13 +184,13 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 								.addGap(Globals.GAP_SIZE)
 								.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(fieldActivatedClientsCount, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.GAP_SIZE)
 								.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addGap(Globals.MIN_GAP_SIZE).addComponent(connectionStateLabel));

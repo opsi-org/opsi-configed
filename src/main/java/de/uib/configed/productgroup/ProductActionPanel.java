@@ -114,25 +114,30 @@ public class ProductActionPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE));
 
-		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		layoutMain
+				.setHorizontalGroup(
+						layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
+								.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE)
 
-				.addGroup(layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
-						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+								.addGroup(layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 
-						.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jComboBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonSetValues, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)));
+										.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(jComboBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(buttonSetValues, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)));
 	}
 
 	private void handleCollectiveAction(String selected) {

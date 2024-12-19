@@ -310,8 +310,7 @@ public final class NewClientDialog extends FGeneralDialog {
 						.addComponent(jTextInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT))
 				/////// NOTES
-				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE).addComponent(jLabelNotes)
-				.addComponent(jTextNotes)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelNotes).addComponent(jTextNotes)
 				/////// SYSTEM UUID
 				.addGap(Globals.GAP_SIZE).addGroup(gpl.createParallelGroup().addComponent(jLabelSystemUUID))
 				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
