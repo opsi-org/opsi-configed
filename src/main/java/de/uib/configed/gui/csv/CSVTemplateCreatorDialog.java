@@ -93,14 +93,14 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+				.addGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
+						.addGap(Globals.GAP_SIZE))
+				.addGroup(allLayout
+						.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(southPanel,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE)));
 	}
 
 	private JPanel createSouthPanel() {
