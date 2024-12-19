@@ -112,13 +112,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		buildPanel();
 
-		propertiesCellEditorAndRenderer = new PropertiesCellEditorAndRenderer();
-
-		editableColumn = table.getColumnModel().getColumn(1);
-
-		editableColumn.setCellRenderer(propertiesCellEditorAndRenderer);
-		editableColumn.setCellEditor(propertiesCellEditorAndRenderer);
-
 		popupMenu = definePopup();
 
 		super.logPopupElements();
@@ -262,6 +255,13 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		propertiesCellEditorAndRenderer = new PropertiesCellEditorAndRenderer();
+
+		editableColumn = table.getColumnModel().getColumn(1);
+
+		editableColumn.setCellRenderer(propertiesCellEditorAndRenderer);
+		editableColumn.setCellEditor(propertiesCellEditorAndRenderer);
 
 		jScrollPane = new JScrollPane(table);
 
