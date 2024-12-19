@@ -25,7 +25,6 @@ import de.uib.configed.type.RemoteControl;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.permission.UserOpsipermission;
@@ -686,90 +685,6 @@ public class UserRolesConfigDataService {
 		return defaultValues;
 	}
 
-	private List<Object> computeClientLimitWarningPercent(List<Map<String, Object>> readyObjects) {
-		Logging.info(this, "checkStandardConfigs: create domain list");
-
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-
-		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
-
-		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
-
-		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT);
-		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", defaultValues);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", true);
-		item.put("multiValue", false);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
-	private List<Object> computeClientLimitWarningAbsolute(List<Map<String, Object>> readyObjects) {
-		Logging.info(this, "checkStandardConfigs: create domain list");
-
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-
-		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE);
-		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", defaultValues);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", true);
-		item.put("multiValue", false);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
-	private List<Object> computeClientLimitWarningDays(List<Map<String, Object>> readyObjects) {
-		Logging.info(this, "checkStandardConfigs: create domain list");
-
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-
-		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS);
-		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", defaultValues);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", true);
-		item.put("multiValue", false);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
-	private List<Object> computeDisableWarningModules(List<Map<String, Object>> readyObjects) {
-		Logging.info(this, "checkStandardConfigs: create domain list");
-
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-
-		List<Object> defaultValues = Collections.emptyList();
-
-		List<Object> possibleValues = Collections.emptyList();
-
-		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES);
-		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", defaultValues);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", true);
-		item.put("multiValue", true);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
 	private void checkRemoteControlConfigs(Map<String, List<Object>> configDefaultValues,
 			List<Map<String, Object>> readyObjects) {
 		// ping_linux
@@ -840,7 +755,6 @@ public class UserRolesConfigDataService {
 		}
 	}
 
-	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
 		boolean result = persistenceController.getConfigDataService().getConfigOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there ", result);
@@ -900,27 +814,6 @@ public class UserRolesConfigDataService {
 		// configuration of opsiclientd extra events
 		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS,
 				arg -> computeOpsiclientdExtraEvents(readyObjects));
-
-		// for warnings for opsi licenses
-		// percentage number of clients
-		configDefaultValues.computeIfAbsent(
-				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT,
-				arg -> computeClientLimitWarningPercent(readyObjects));
-
-		// absolute number of clients
-		configDefaultValues.computeIfAbsent(
-				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE,
-				arg -> computeClientLimitWarningAbsolute(readyObjects));
-
-		// days limit warning
-		configDefaultValues.computeIfAbsent(
-				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS,
-				arg -> computeClientLimitWarningDays(readyObjects));
-
-		// modules disabled for warnings
-		configDefaultValues.computeIfAbsent(
-				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES,
-				arg -> computeDisableWarningModules(readyObjects));
 
 		// add metaconfigs
 
