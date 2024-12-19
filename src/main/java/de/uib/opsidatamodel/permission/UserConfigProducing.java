@@ -18,6 +18,7 @@ import java.util.TreeSet;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -167,7 +168,7 @@ public class UserConfigProducing {
 			List<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
 			Logging.info(this, "supplyConfigPermissionList products List ", listOptions);
 
-			item = Utils.createNOMitem(ConfigOption.UNICODE_TYPE);
+			item = Utils.createNOMitem(TYPE.UNICODE_CONFIG.toString());
 			item.put("ident", configKeyList);
 			item.put("editable", false);
 			item.put("multiValue", true);
@@ -351,7 +352,7 @@ public class UserConfigProducing {
 					": ", readyObjects.size() - 1);
 			List<Object> timeVal = Utils.getNowTimeListValue("set by role prototype");
 
-			Map<String, Object> itemModifyTime = Utils.createNOMitem(ConfigOption.UNICODE_TYPE);
+			Map<String, Object> itemModifyTime = Utils.createNOMitem(TYPE.UNICODE_CONFIG.toString());
 			itemModifyTime.put("ident", startKey + UserConfig.MODIFICATION_INFO_KEY);
 			itemModifyTime.put("editable", false);
 			itemModifyTime.put("multiValue", false);

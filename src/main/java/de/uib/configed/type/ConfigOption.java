@@ -34,12 +34,6 @@ public class ConfigOption extends RetrievedMap {
 		}
 	}
 
-	// UndefinedConfig should not occur
-
-	public static final String BOOL_TYPE = TYPE.BOOL_CONFIG.toString();
-	public static final String UNICODE_TYPE = TYPE.UNICODE_CONFIG.toString();
-	public static final String UNDEFINED_TYPE = TYPE.UNDEFINED_CONFIG.toString();
-
 	private TYPE type;
 
 	public ConfigOption(Map<String, Object> object) {
@@ -119,12 +113,12 @@ public class ConfigOption extends RetrievedMap {
 			type = TYPE.UNICODE_CONFIG;
 		} else {
 			if (retrieved.get("type") == null) {
-				put("type", UNDEFINED_TYPE);
+				put("type", TYPE.UNDEFINED_CONFIG.toString());
 			} else {
 				put("type", retrieved.get("type"));
 			}
 
-			if (get("type").equals(BOOL_TYPE) || "BoolProductProperty".equals(get("type"))) {
+			if (get("type").equals(TYPE.BOOL_CONFIG.toString()) || "BoolProductProperty".equals(get("type"))) {
 				type = TYPE.BOOL_CONFIG;
 			} else {
 				type = TYPE.UNICODE_CONFIG;

@@ -16,6 +16,7 @@ import java.util.Set;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -518,7 +519,7 @@ public class ConfigDataService {
 		List<Object> possibleValues;
 		if (configOption == null) {
 			possibleValues = new ArrayList<>();
-			if (type.equals(ConfigOption.BOOL_TYPE)) {
+			if (type.equals(TYPE.BOOL_CONFIG.toString())) {
 				possibleValues.add(true);
 				possibleValues.add(false);
 			}
