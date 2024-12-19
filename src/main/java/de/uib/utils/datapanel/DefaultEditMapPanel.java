@@ -14,7 +14,6 @@ import java.util.Map.Entry;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.MenuElement;
 
 import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
@@ -178,12 +177,6 @@ public class DefaultEditMapPanel extends JPanel {
 	public void updateData(UpdateCollection updateCollection, Collection<Map<String, Object>> data) {
 		mapTableModel.setUpdateCollection(updateCollection);
 		mapTableModel.setStoreData(data);
-	}
-
-	protected void logPopupElements() {
-		MenuElement[] popupElements = popupMenu.getSubElements();
-		int size = popupElements.length;
-		Logging.debug(this, "logPopupElements ", size);
 	}
 
 	public MapTableModel getMapTableModel() {

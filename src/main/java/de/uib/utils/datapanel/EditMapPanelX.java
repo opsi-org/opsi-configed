@@ -113,7 +113,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		popupMenu = definePopup();
 
-		super.logPopupElements();
+		Logging.debug(this, "logPopupElements ", popupMenu.getSubElements().length);
 
 		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupMenu);
 		table.addMouseListener(popupNoEditOptionsListener);
