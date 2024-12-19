@@ -92,7 +92,6 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	 */
 	@Override
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
-		Logging.devel(this, "prepareRendererForJTable row " + row + " col " + col);
 		addTooltip(jComponent, table, names.get(row), row);
 		setText(jComponent, table, col, row);
 	}
