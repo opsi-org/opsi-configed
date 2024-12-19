@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui.hostconfigs;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +14,9 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
@@ -35,7 +30,6 @@ import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ExporterToPDF;
-import de.uib.utils.table.gui.ColorTableCellRenderer;
 
 public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	private boolean includeAdditionalTooltipText;
@@ -92,28 +86,15 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		};
 	}
 
+	/**
+	 * We override this method since we need a different method to set Tooltip
+	 * and Text for the cells in the table.
+	 */
 	@Override
-	protected void buildPanel() {
-		setLayout(new BorderLayout());
-
-		table = new JTable(mapTableModel) {
-			@Override
-			public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
-				Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-				if (c instanceof JComponent jComponent && showToolTip) {
-					addTooltip(jComponent, this, names.get(rowIndex), rowIndex);
-					setText(jComponent, this, vColIndex, rowIndex);
-				}
-				return c;
-			}
-		};
-
-		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		jScrollPane = new JScrollPane(table);
-
-		add(jScrollPane, BorderLayout.CENTER);
+	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
+		Logging.devel(this, "prepareRendererForJTable row " + row + " col " + col);
+		addTooltip(jComponent, table, names.get(row), row);
+		setText(jComponent, table, col, row);
 	}
 
 	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {

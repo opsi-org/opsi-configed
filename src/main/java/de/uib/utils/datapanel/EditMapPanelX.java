@@ -244,7 +244,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	protected void buildPanel() {
+	private void buildPanel() {
 		setLayout(new BorderLayout());
 
 		table = new JTable(mapTableModel) {
@@ -255,7 +255,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 					return c;
 				}
 
-				prepareRendererForJTable((JComponent) c, row, col);
+				prepareRendererForJTable((JComponent) c, table, row, col);
 				return c;
 			}
 		};
@@ -268,7 +268,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		add(jScrollPane, BorderLayout.CENTER);
 	}
 
-	private void prepareRendererForJTable(JComponent jComponent, int row, int col) {
+	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
 		jComponent.setToolTipText(generateTooltip(row));
 
 		// check equals with default
