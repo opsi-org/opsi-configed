@@ -54,7 +54,6 @@ import de.uib.utils.logging.Logging;
 @SuppressWarnings({ "unchecked" })
 public class UserRolesConfigDataService {
 	private static final String OPSI_CLIENTD_EVENT_SILENT_INSTALL = "silent_install";
-	private static final Boolean DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = false;
 
 	private static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
 
@@ -590,18 +589,6 @@ public class UserRolesConfigDataService {
 		return defaultValues;
 	}
 
-	private List<Object> computeClientConfigInstallByShutdown(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
-				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
-
-		Map<String, Object> item = Utils.createNOMBoolConfig(
-				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
-				DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, "Use install by shutdown if possible");
-		readyObjects.add(item);
-
-		return Collections.singletonList(DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
-	}
-
 	private List<Object> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(
 			List<Map<String, Object>> readyObjects) {
 		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
@@ -771,10 +758,6 @@ public class UserRolesConfigDataService {
 		// list of domains for new clients
 		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY,
 				arg -> computeConfigedGivenDomains(readyObjects));
-
-		// global value for install_by_shutdown
-		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
-				arg -> computeClientConfigInstallByShutdown(readyObjects));
 
 		// extra display fields in licencing
 		configDefaultValues.computeIfAbsent(
