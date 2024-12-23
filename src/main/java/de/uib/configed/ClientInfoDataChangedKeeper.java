@@ -9,8 +9,6 @@ package de.uib.configed;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.JOptionPane;
-
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -56,20 +54,6 @@ public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 
 		// anyDataChanged in ConfigedMain
 		Logging.info(this, "dataHaveChanged dataChanged ", dataChanged);
-	}
-
-	public boolean askSave() {
-		boolean result = false;
-
-		if (this.dataChanged) {
-			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ConfigedMain.reminderSaveConfig"),
-					Configed.getResourceValue("PanelGenEditTable.saveData"), JOptionPane.YES_NO_OPTION);
-
-			result = answer == JOptionPane.YES_OPTION;
-		}
-
-		return result;
 	}
 
 	public void save() {

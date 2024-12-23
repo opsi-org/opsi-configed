@@ -6,6 +6,10 @@
 
 package de.uib.utils;
 
+import javax.swing.JOptionPane;
+
+import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.utils.logging.Logging;
 
 public class DataChangedKeeper implements DataChangedObserver {
@@ -15,6 +19,20 @@ public class DataChangedKeeper implements DataChangedObserver {
 	public void dataHaveChanged(Object source) {
 		Logging.debug(this, "dataHaveChanged ", source);
 		dataChanged = true;
+	}
+
+	public boolean askSave() {
+		boolean result = false;
+
+		if (this.dataChanged) {
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("ConfigedMain.reminderSaveConfig"),
+					Configed.getResourceValue("PanelGenEditTable.saveData"), JOptionPane.YES_NO_OPTION);
+
+			result = answer == JOptionPane.YES_OPTION;
+		}
+
+		return result;
 	}
 
 	public boolean isDataChanged() {

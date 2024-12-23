@@ -6,8 +6,6 @@
 
 package de.uib.configed;
 
-import javax.swing.JOptionPane;
-
 import de.uib.utils.DataChangedKeeper;
 import de.uib.utils.logging.Logging;
 
@@ -19,20 +17,6 @@ public class GeneralDataChangedKeeper extends DataChangedKeeper {
 
 		// anyDataChanged in ConfigedMain
 		ChangedDataManager.setDataChanged(super.isDataChanged());
-	}
-
-	public boolean askSave() {
-		boolean result = false;
-
-		if (this.dataChanged) {
-			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("ConfigedMain.reminderSaveConfig"),
-					Configed.getResourceValue("PanelGenEditTable.saveData"), JOptionPane.YES_NO_OPTION);
-
-			result = answer == JOptionPane.YES_OPTION;
-		}
-
-		return result;
 	}
 
 	private void saveConfigs() {
