@@ -226,7 +226,7 @@ public class ConfigedMain {
 
 		InstallationStateTableModel.restartColumnDict();
 
-		setupLoginDialog();
+		setupLoginDialog(this);
 	}
 
 	protected void preloadData() {
@@ -281,11 +281,11 @@ public class ConfigedMain {
 		}
 	}
 
-	public void setEditingTarget(EditingTarget newEditingTarget) {
-		Logging.info(this, "setEditingTarget ", newEditingTarget);
+	public static void setEditingTarget(EditingTarget newEditingTarget) {
+		Logging.info("setEditingTarget ", newEditingTarget);
 		ChangedDataManager.checkSaveAll(true);
 		if (newEditingTarget == editingTarget) {
-			Logging.info(this, "stop setting editingTarget, it remains the same");
+			Logging.info("stop setting editingTarget, it remains the same");
 			return;
 		}
 
@@ -474,9 +474,9 @@ public class ConfigedMain {
 	}
 
 	// returns true if we have a PersistenceController and are connected
-	private void setupLoginDialog() {
-		Logging.debug(this, " create password dialog ");
-		loginDialog = new LoginDialog(this);
+	private static void setupLoginDialog(ConfigedMain configedMain) {
+		Logging.debug(" create password dialog ");
+		loginDialog = new LoginDialog(configedMain);
 
 		// check if we started with preferred values
 		if (host != null && !host.isEmpty()) {
@@ -495,19 +495,19 @@ public class ConfigedMain {
 			loginDialog.setOTP(otp);
 		}
 
-		Logging.info(this, "become interactive");
-		Logging.info(this, "using sso ? ", useSSO);
+		Logging.info("become interactive");
+		Logging.info("using sso ? ", useSSO);
 		loginDialog.setVisible(true);
 
 		if (host == null) {
-			Logging.info(this, "host is not set (yet)");
+			Logging.info("host is not set (yet)");
 		}
 		if (!useSSO && (user == null || password == null)) {
-			Logging.info(this, "user or password not given (yet)");
+			Logging.info("user or password not given (yet)");
 		} else {
 			// This must be called last, so that loading frame for connection is called last
 			// and on top of the login-frame
-			Logging.info(this, "loginDialog tryConnecting with sso ", useSSO);
+			Logging.info("loginDialog tryConnecting with sso ", useSSO);
 			loginDialog.tryConnectingDependOnServer(useSSO);
 		}
 	}
