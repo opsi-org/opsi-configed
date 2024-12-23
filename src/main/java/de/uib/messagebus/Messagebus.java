@@ -142,7 +142,8 @@ public class Messagebus implements MessagebusListener {
 	private String produceURL() {
 		String host = ConfigedMain.getHost();
 		if (host == null) {
-			throw new RuntimeException("Host is null");
+			Logging.error(this, "Host is null");
+			return null;
 		}
 
 		if (!Utils.hasPort(host)) {
