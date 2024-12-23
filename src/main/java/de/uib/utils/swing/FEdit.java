@@ -13,7 +13,6 @@
 package de.uib.utils.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,8 +60,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	public FEdit(String initialText, String hint) {
-		super((Dialog) null);
-
 		Logging.debug(this, " FEdit constructed for >>", initialText, "<< title ", hint);
 		super.setIconImage(Icons.getMainIcon());
 
