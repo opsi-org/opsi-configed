@@ -17,8 +17,12 @@ import java.util.Map;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -39,7 +43,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.AbstractExportTable;
 import de.uib.utils.table.ClientTableExporterToCSV;
 import de.uib.utils.table.ExporterToCSV;
@@ -374,23 +377,26 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void showPopupOnClientsAction() {
-		FEditText fText = new FEditText("", Configed.getResourceValue("MainFrame.writePopupMessage"),
-				Configed.getResourceValue("MainFrame.writePopupDuration")) {
-			@Override
-			protected void commit() {
-				super.commit();
-				Float duration = 0F;
-				if (!getExtra().isEmpty()) {
-					duration = Float.parseFloat(getExtra());
-				}
-				ServerActionManager.showPopupOnSelectedClients(getText(), duration);
-			}
-		};
+		JTextField durationTextField = new JTextField();
+		JTextArea messageTextArea = new JTextArea();
+		messageTextArea.setRows(4);
 
-		fText.setTitle(Configed.getResourceValue("MainFrame.popupFrameTitle"));
-		fText.init();
-		fText.setLocationRelativeTo(mainFrame);
-		fText.setVisible(true);
+		JScrollPane messageScrollPane = new JScrollPane(messageTextArea);
+
+		Object[] message = { Configed.getResourceValue("MainFrame.writePopupDuration"), durationTextField,
+				Configed.getResourceValue("MainFrame.writePopupMessage"), messageScrollPane };
+
+		int result = JOptionPane.showConfirmDialog(mainFrame, message,
+				Configed.getResourceValue("MainFrame.popupFrameTitle"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (result == 0) {
+			Float duration = 0F;
+			if (!durationTextField.getText().isEmpty()) {
+				duration = Float.parseFloat(durationTextField.getText());
+			}
+			ServerActionManager.showPopupOnSelectedClients(messageTextArea.getText(), duration);
+		}
 	}
 
 	private static void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
