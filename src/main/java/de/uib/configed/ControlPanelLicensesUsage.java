@@ -111,10 +111,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 	}
 
 	private void initPanels() {
-		List<String> columnNames;
-
-		// --- panelLicensesUsage
-		columnNames = new ArrayList<>();
+		List<String> columnNames = new ArrayList<>();
 		columnNames.add(LicenseUsageEntry.CLIENT_ID_KEY);
 		columnNames.add(LicenseUsageEntry.LICENSE_ID_KEY);
 		columnNames.add(LicenseUsageEntry.LICENSE_POOL_ID_KEY);
@@ -144,8 +141,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		thePanel.getPanelUsage().setTableModel(modelLicensesUsage);
 		modelLicensesUsage.setEditableColumns(new int[] { 3, 4 });
 
-		TableColumn col;
-		col = thePanel.getPanelUsage().getJTable().getColumnModel().getColumn(4);
+		TableColumn col = thePanel.getPanelUsage().getJTable().getColumnModel().getColumn(4);
 		col.setCellEditor(new CellEditor4TableText());
 
 		setPanelUsageUpdateController();
