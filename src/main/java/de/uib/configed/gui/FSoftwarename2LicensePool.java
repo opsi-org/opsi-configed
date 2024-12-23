@@ -77,6 +77,8 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	private JLabel labelSetAllAssignmentsToGloballySelectedPool;
 	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
 	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
+	private JButton buttonRemoveAllAssignments;
+	private JLabel labelRemoveAllAssignments;
 
 	private String globalLicensePool;
 
@@ -189,8 +191,19 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	}
 
 	private void initLayout() {
-		JButton buttonRemoveAllAssignments = new JButton(Icons.getIntellijIcon("remove"));
-		JLabel labelRemoveAllAssignments = new JLabel(
+		initButtonsAndLabels();
+		JPanel panelAction = createPanelAction();
+		JPanel panelSWx = createPanelSWx(panelAction);
+
+		super.setAdditionalComponent(panelSWx);
+		super.setCenterPane(panelSWnames);
+		additionalComponent.setVisible(true);
+		super.setupLayout();
+	}
+
+	private void initButtonsAndLabels() {
+		buttonRemoveAllAssignments = new JButton(Icons.getIntellijIcon("remove"));
+		labelRemoveAllAssignments = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(VALUE_NO_LICENSE_POOL)));
@@ -205,14 +218,14 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(
-				Configed.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow")); // assign
-
+				Configed.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow"));
 		buttonSetAllAssignmentsToPoolFromSelectedRow
 				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(
 						(String) panelSWxLicensepool.getValueAt(panelSWxLicensepool.getJTable().getSelectedRow(), 1))));
+	}
 
+	private JPanel createPanelAction() {
 		JPanel panelAction = new JPanel();
-
 		GroupLayout panelActionLayout = new GroupLayout(panelAction);
 		panelAction.setLayout(panelActionLayout);
 		panelActionLayout
@@ -267,7 +280,10 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 										.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 										.addGap(Globals.GAP_SIZE)));
+		return panelAction;
+	}
 
+	private JPanel createPanelSWx(JPanel panelAction) {
 		JPanel panelSWx = new JPanel();
 		GroupLayout layoutSWx = new GroupLayout(panelSWx);
 		panelSWx.setLayout(layoutSWx);
@@ -285,13 +301,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 						.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(panelSWxLicensepool,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE)));
-
-		super.setAdditionalComponent(panelSWx);
-
-		super.setCenterPane(panelSWnames);
-		additionalComponent.setVisible(true);
-
-		super.setupLayout();
+		return panelSWx;
 	}
 
 	private void initDataStructure() {
