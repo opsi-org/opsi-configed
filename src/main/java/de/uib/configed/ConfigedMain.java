@@ -272,10 +272,9 @@ public class ConfigedMain {
 			Logging.error(this,
 					"this should not happen: group actions are not available since the module \"local_imaging\" is not available");
 		} else if (!activatedGroupModel.isActive()) {
-			FTextArea f = new FTextArea(mainFrame, Configed.getResourceValue("information"),
-					Configed.getResourceValue("ConfigedMain.noGroupSelected"), true,
+			FTextArea f = new FTextArea(mainFrame, Configed.getResourceValue("information"), true,
 					new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-
+			f.setMessage(Configed.getResourceValue("ConfigedMain.noGroupSelected"));
 			f.setVisible(true);
 		} else {
 			ExtraFrameController.startGroupActionFrame(this);

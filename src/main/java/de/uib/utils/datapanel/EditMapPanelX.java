@@ -183,10 +183,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	private static void showErrorNoRowSelected() {
-		FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Configed.getResourceValue("error"),
-				Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
+		FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Configed.getResourceValue("error"), true,
 				new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
-
+		fAsk.setMessage(Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
 		fAsk.setVisible(true);
 	}
 

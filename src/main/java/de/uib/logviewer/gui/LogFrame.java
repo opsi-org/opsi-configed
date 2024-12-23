@@ -292,8 +292,7 @@ public class LogFrame extends JFrame {
 			if (!isFileExtensionSupported(fileExtension)) {
 				Logging.error(this, "File with extension ", fileExtension, " is unsupported");
 				FTextArea fUnsupportedFileExtensionInfo = new FTextArea(this,
-						Configed.getResourceValue("LogFrame.unsupportedFileExtension.title"),
-						Configed.getResourceValue("ConfigedMain.noGroupSelected"), true,
+						Configed.getResourceValue("LogFrame.unsupportedFileExtension.title"), true,
 						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
 				fUnsupportedFileExtensionInfo.setMessage(String
 						.format(Configed.getResourceValue("LogFrame.unsupportedFileExtension.message"), fileExtension));

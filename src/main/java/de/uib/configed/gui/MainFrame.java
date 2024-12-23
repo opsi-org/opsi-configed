@@ -656,8 +656,8 @@ public class MainFrame extends JFrame {
 			}
 
 			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					message.toString(), true, new String[] { Configed.getResourceValue("buttonClose") }, 300,
-					50 + count * 25);
+					true, new String[] { Configed.getResourceValue("buttonClose") }, 300, 50 + count * 25);
+			f.setMessage(message.toString());
 
 			f.setVisible(true);
 		} else {
