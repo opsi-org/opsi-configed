@@ -291,10 +291,6 @@ public final class ServerActionManager {
 	}
 
 	private static boolean ask2OverwriteExistingHost(String host) {
-		FTextArea fAskOverwriteExsitingHost = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-
 		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
 		message.append(" \"");
@@ -302,12 +298,11 @@ public final class ServerActionManager {
 		message.append("\" \n");
 		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
 
-		fAskOverwriteExsitingHost.setMessage(message.toString());
-		fAskOverwriteExsitingHost.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fAskOverwriteExsitingHost.setAlwaysOnTop(true);
-		fAskOverwriteExsitingHost.setVisible(true);
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message.toString(),
+				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
 
-		return fAskOverwriteExsitingHost.getResult() == 2;
+		return answer == 0;
 	}
 
 	public static void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
