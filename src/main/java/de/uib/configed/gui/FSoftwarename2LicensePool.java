@@ -85,12 +85,12 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 	public FSoftwarename2LicensePool(ControlPanelAssignToLPools controlPanelAssignToLPools) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("FSoftwarename2LicensePool.title"), false,
 				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800, true);
-
 		this.controlPanelAssignToLPools = controlPanelAssignToLPools;
 
 		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 
-		panelSWxLicensepool = new PanelSWxLicensepool();
+		panelSWxLicensepool = new PanelSoftwareLicencepool(controlPanelAssignToLPools,
+				buttonSetAllAssignmentsToPoolFromSelectedRow, labelSetAllAssignmentsToPoolFromSelectedRow);
 
 		panelSWxLicensepool.setDeleteAllowed(false);
 
@@ -147,47 +147,6 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
-	}
-
-	private class PanelSWxLicensepool extends PanelGenEditTable {
-		private String labelText = Configed
-				.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow");
-
-		public PanelSWxLicensepool() {
-			super("", true, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
-		}
-
-		@Override
-		public void commit() {
-			super.commit();
-			controlPanelAssignToLPools.setSoftwareIdsFromLicensePool();
-		}
-
-		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			Logging.info(this, "panelSWxLicensepool ListSelectionEvent ", e);
-			super.valueChanged(e);
-
-			if (e.getValueIsAdjusting()) {
-				return;
-			}
-
-			Object val = null;
-			int selRow = jTable.getSelectedRow();
-			if (selRow > -1) {
-				val = getValueAt(selRow, 1);
-			}
-
-			if (val != null && jTable.getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
-					&& !((String) val).equals(VALUE_NO_LICENSE_POOL)) {
-				buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
-				labelSetAllAssignmentsToPoolFromSelectedRow
-						.setText(labelText + " " + getValueAt(jTable.getSelectedRow(), 1));
-			} else {
-				buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
-				labelSetAllAssignmentsToPoolFromSelectedRow.setText(labelText);
-			}
-		}
 	}
 
 	private void initLayout() {
