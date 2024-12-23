@@ -85,7 +85,6 @@ public class OpsiServerVersionRetriever {
 	/**
 	 * Checks if the server version is already known.
 	 */
-	@SuppressWarnings("java:S2647")
 	public synchronized void checkServerVersion() {
 		HttpsURLConnection connection;
 		String authorization = null;
