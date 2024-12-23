@@ -87,9 +87,6 @@ public class HostInfo {
 
 	private Boolean clientShutdownInstall;
 
-	public HostInfo() {
-	}
-
 	public Map<String, Object> getDisplayRowMap0() {
 		Map<String, Object> unordered = new HashMap<>();
 
