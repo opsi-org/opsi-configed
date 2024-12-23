@@ -387,7 +387,7 @@ public final class Logging {
 		}
 
 		if (fErrors == null) {
-			fErrors = new FShowList(ConfigedMain.getMainFrame(), Configed.getResourceValue("problemsOccured"), false,
+			fErrors = new FShowList(ConfigedMain.getMainFrame(), Configed.getResourceValue("problemsOccurred"), false,
 					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
 		}
 
