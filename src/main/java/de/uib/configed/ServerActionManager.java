@@ -19,7 +19,6 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.FShowListWithComboSelect;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
@@ -381,10 +380,6 @@ public final class ServerActionManager {
 				configedMain.getSelectedClients().get(0));
 
 		if (newClientName != null) {
-			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientName)) {
-				showInformationHostExistsAlready(newClientName);
-			}
-
 			Logging.debug("new name ", newClientName);
 
 			persistenceController.getHostDataService().renameClient(configedMain.getSelectedClients().get(0),
@@ -396,23 +391,6 @@ public final class ServerActionManager {
 				configedMain.setClient(newClientName);
 			});
 		}
-	}
-
-	private static void showInformationHostExistsAlready(String clientId) {
-		FTextArea fHostExistsInfo = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("FGeneralDialog.title.information"), true,
-				new String[] { Configed.getResourceValue("buttonClose") });
-
-		StringBuilder message = new StringBuilder();
-		message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
-		message.append(" \"");
-		message.append(clientId);
-		message.append("\" \n");
-
-		fHostExistsInfo.setMessage(message.toString());
-		fHostExistsInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fHostExistsInfo.setAlwaysOnTop(true);
-		fHostExistsInfo.setVisible(true);
 	}
 
 	public static void callChangeDepotDialog() {
