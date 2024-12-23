@@ -290,7 +290,7 @@ public class MainPanelManager {
 		boolean checkSavedLicensesFrame = licenseManagement == null || licenseManagement.checkSavedLicensesPane();
 
 		if (!checkSavedLicensesFrame) {
-			configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
+			ConfigedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT);
 		}
 
 		Logging.info(this, "close instance result ", checkSavedLicensesFrame);

@@ -20,12 +20,9 @@ import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 
 public class LeftControlBar extends JToolBar {
-	private ConfigedMain configedMain;
-
-	public LeftControlBar(ConfigedMain configedMain) {
+	public LeftControlBar() {
 		super(SwingConstants.VERTICAL);
 
-		this.configedMain = configedMain;
 		initControlIcons();
 	}
 
@@ -34,38 +31,38 @@ public class LeftControlBar extends JToolBar {
 		jButtonClientsConfiguration.setSelectedIcon(Icons.getSelectedThemeIntelljIcon("desktop", 32));
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setSelected(true);
-		jButtonClientsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.CLIENTS));
+		jButtonClientsConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.CLIENTS));
 
 		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Icons.getIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
-		jButtonDepotsConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DEPOTS));
+		jButtonDepotsConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DEPOTS));
 
 		JToggleButton jButtonServerConfiguration = new JToggleButton(Icons.getIntellijIcon("editorConfig", 32));
 		jButtonServerConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("editorConfig", 32));
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
-		jButtonServerConfiguration.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.SERVER));
+		jButtonServerConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.SERVER));
 
 		JToggleButton jButtonDashboard = new JToggleButton(Icons.getIntellijIcon("dataSchema", 32));
 		jButtonDashboard.setSelectedIcon(Icons.getSelectedIntellijIcon("dataSchema", 32));
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
-		jButtonDashboard.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.DASHBOARD));
+		jButtonDashboard.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DASHBOARD));
 
 		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiModulesIcon());
 		jButtonOpsiLicenses.setSelectedIcon(
 				Icons.getOpsiIcon(32, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT));
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		jButtonOpsiLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
+		jButtonOpsiLicenses.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
 
 		JToggleButton jButtonHealthCheck = new JToggleButton(Icons.getIntellijIcon("springBootHealth", 32));
 		jButtonHealthCheck.setSelectedIcon(Icons.getSelectedIntellijIcon("springBootHealth", 32));
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		jButtonHealthCheck.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.HEALTH_CHECK));
+		jButtonHealthCheck.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.HEALTH_CHECK));
 
 		JToggleButton jButtonLicenses = new JToggleButton(Icons.getIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setSelectedIcon(Icons.getSelectedIntellijIcon("scriptingScript", 32));
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
-		jButtonLicenses.addActionListener(event -> configedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
+		jButtonLicenses.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(jButtonClientsConfiguration);

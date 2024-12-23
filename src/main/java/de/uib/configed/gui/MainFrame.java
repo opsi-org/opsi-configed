@@ -113,7 +113,7 @@ public class MainFrame extends JFrame {
 
 		setJMenuBar(initMenuBar());
 
-		leftControlBar = new LeftControlBar(configedMain);
+		leftControlBar = new LeftControlBar();
 		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
 
 		showClientConfiguration();
