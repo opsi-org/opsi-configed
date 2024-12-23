@@ -41,7 +41,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected String initialText = "";
 	private String hint;
 
-	private JPanel framingPanel;
 	protected JComponent editingArea;
 	private JLabel labelHint;
 
@@ -79,18 +78,15 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	private void createComponents() {
-		framingPanel = new JPanel();
 		editingArea = new JPanel(new BorderLayout());
 
 		labelHint = new JLabel();
 
 		buttonCommit = new JButton(Icons.getIntellijIcon("checkmark"));
 		buttonCommit.setToolTipText(Configed.getResourceValue("save"));
-		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new JButton(Icons.getIntellijIcon("close"));
 		buttonCancel.setToolTipText(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"));
-		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 	}
 
 	private void initComponents() {
@@ -104,47 +100,33 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
 
-		GroupLayout layout1 = new GroupLayout(framingPanel);
-		framingPanel.setLayout(layout1);
-		layout1.setHorizontalGroup(layout1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout1
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addGroup(layout
 				.createParallelGroup(Alignment.LEADING)
 				.addComponent(labelHint, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(editingArea, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGroup(layout1.createSequentialGroup()
+				.addGroup(layout.createSequentialGroup()
 						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-
-						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)))
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE).addComponent(buttonCommit,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.MIN_GAP_SIZE));
 
-		layout1.setVerticalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1.createSequentialGroup()
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(labelHint, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(editingArea, 20, 80, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout1.createParallelGroup(Alignment.BASELINE)
+				.addComponent(editingArea, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)));
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout
-						.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(framingPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout
-						.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(framingPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addContainerGap(20, 20)));
-
-		pack();
 	}
 
 	public void setDataChanged(boolean b) {
