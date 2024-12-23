@@ -164,25 +164,13 @@ public class UserRolesConfigDataService {
 		// Load all data together to prevent an extra RPC-call
 		persistenceController.getGroupDataService().retrieveAllGroupsPD();
 
-		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfigPD(),
+		new UserConfigProducing(applyUserSpecializedConfigPD(),
 				persistenceController.getHostInfoCollections().getConfigServer(),
 				persistenceController.getHostInfoCollections().getDepotNamesList(),
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
 				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
-
-		if (readyConfigObjects == null) {
-			Logging.warning(this, "readyObjects for userparts null");
-		} else {
-			if (!readyConfigObjects.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
-						new Object[] { readyConfigObjects });
-				exec.doCall(omc);
-			}
-
-			Logging.info(this, "readyObjects for userparts ", readyConfigObjects.size());
-		}
 
 		checkPermissions();
 

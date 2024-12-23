@@ -379,15 +379,11 @@ public final class Configed {
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getNewPersistenceController(host, user, password, otp, useSSO);
 
-			UserConfigProducing up = new UserConfigProducing(false, host,
-					persistenceController.getHostInfoCollections().getDepotNamesList(),
+			new UserConfigProducing(false, host, persistenceController.getHostInfoCollections().getDepotNamesList(),
 					persistenceController.getGroupDataService().getHostGroupIds(),
 					persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					persistenceController.getConfigDataService().getConfigOptionsPD());
-
-			List<Object> newData = up.produce();
-			Logging.debug("UserConfigProducing: newData ", newData);
+					persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
 
 			Main.endApp(Main.NO_ERROR);
 		} else {

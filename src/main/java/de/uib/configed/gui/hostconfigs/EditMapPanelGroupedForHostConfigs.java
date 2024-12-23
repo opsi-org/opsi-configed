@@ -39,13 +39,11 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.datapanel.EditMapPanelX;
@@ -658,27 +656,12 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void buildUserConfig() {
-		UserConfigProducing up = new UserConfigProducing(false,
-				persistenceController.getHostInfoCollections().getConfigServer(),
+		new UserConfigProducing(false, persistenceController.getHostInfoCollections().getConfigServer(),
 				persistenceController.getHostInfoCollections().getDepotNamesList(),
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigOptionsPD());
-
-		List<Object> newData = up.produce();
-
-		if (newData == null) {
-			Logging.warning(this, "readyObjects for userparts null");
-		} else {
-			if (!newData.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { newData });
-
-				persistenceController.getExecutioner().doCall(omc);
-			}
-
-			Logging.info(this, "readyObjects for userparts ", newData.size());
-		}
+				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
 	}
 
 	private void addRole() {
