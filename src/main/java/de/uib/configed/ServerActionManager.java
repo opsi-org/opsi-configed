@@ -15,8 +15,10 @@ import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.FShowListWithComboSelect;
@@ -31,7 +33,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
-import de.uib.utils.swing.FEditText;
 
 public final class ServerActionManager {
 	private static ConfigedMain configedMain;
@@ -394,36 +395,27 @@ public final class ServerActionManager {
 			return;
 		}
 
-		FEditText fEdit = new FEditText(configedMain.getSelectedClients().get(0)) {
-			@Override
-			protected void commit() {
-				super.commit();
+		String newClientName = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("MainFrame.jMenuChangeClientID.message"),
+				Configed.getResourceValue("MainFrame.jMenuChangeClientID"), JOptionPane.DEFAULT_OPTION, null, null,
+				configedMain.getSelectedClients().get(0));
 
-				String newID = getText();
-
-				if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newID)) {
-					showInformationHostExistsAlready(newID);
-				}
-
-				Logging.debug(this, "new name ", newID);
-
-				persistenceController.getHostDataService().renameClient(configedMain.getSelectedClients().get(0),
-						newID);
-
-				configedMain.refreshClientListActivateALL();
-				Logging.debug(this, "set client refreshClientList");
-				configedMain.setClient(newID);
+		if (newClientName != null) {
+			if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newClientName)) {
+				showInformationHostExistsAlready(newClientName);
 			}
-		};
 
-		fEdit.init();
-		fEdit.setTitle(Configed.getResourceValue("MainFrame.jMenuChangeClientID"));
-		fEdit.setSize(350, 250);
-		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fEdit.setSingleLine(true);
-		fEdit.setModal(true);
-		fEdit.setAlwaysOnTop(true);
-		fEdit.setVisible(true);
+			Logging.debug("new name ", newClientName);
+
+			persistenceController.getHostDataService().renameClient(configedMain.getSelectedClients().get(0),
+					newClientName);
+
+			SwingUtilities.invokeLater(() -> {
+				configedMain.refreshClientListActivateALL();
+				Logging.debug("set client refreshClientList");
+				configedMain.setClient(newClientName);
+			});
+		}
 	}
 
 	private static void showInformationHostExistsAlready(String clientId) {
