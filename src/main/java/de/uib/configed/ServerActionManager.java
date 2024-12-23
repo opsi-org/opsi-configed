@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.FShowListWithComboSelect;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
@@ -207,19 +206,13 @@ public final class ServerActionManager {
 	}
 
 	private static boolean confirmActionForSelectedClients(String confirmInfo) {
-		FShowList fConfirmActionForClients = new FShowList(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConfigedMain.TitleClientAction"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
-				400);
+		String message = confirmInfo + "\n\n"
+				+ Utils.getListStringRepresentation(configedMain.getSelectedClients()).replace(";", "");
 
-		fConfirmActionForClients.setMessage(confirmInfo + "\n\n"
-				+ Utils.getListStringRepresentation(configedMain.getSelectedClients()).replace(";", ""));
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("ConfigedMain.TitleClientAction"), 0);
 
-		fConfirmActionForClients.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fConfirmActionForClients.setAlwaysOnTop(true);
-		fConfirmActionForClients.setVisible(true);
-
-		return fConfirmActionForClients.getResult() == 2;
+		return answer == 0;
 	}
 
 	public static void copySelectedClient() {
