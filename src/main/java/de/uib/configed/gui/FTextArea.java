@@ -10,7 +10,6 @@ import java.awt.Dimension;
 
 import javax.swing.Icon;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.text.JTextComponent;
@@ -34,13 +33,6 @@ public class FTextArea extends FGeneralDialog {
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons, int preferredWidth,
 			int preferredHeight) {
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight);
-		initFTextArea(preferredWidth, preferredHeight);
-	}
-
-	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
-			int preferredHeight, JPanel addPane) {
-		super(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight, false,
-				addPane);
 		initFTextArea(preferredWidth, preferredHeight);
 	}
 

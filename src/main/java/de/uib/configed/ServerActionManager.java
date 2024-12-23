@@ -13,10 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -239,11 +236,6 @@ public final class ServerActionManager {
 			return;
 		}
 
-		JPanel additionalPane = new JPanel();
-		GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
-		additionalPane.setLayout(additionalPaneLayout);
-
-		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
 		JTextField jTextHostname = new JTextField(new CheckedDocument(
 				new char[] { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
 						'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' },
@@ -252,28 +244,21 @@ public final class ServerActionManager {
 		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
 		jTextHostname.setText(copySuffixAddition.add());
 
-		additionalPaneLayout.setHorizontalGroup(
-				additionalPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelHostname).addGap(Globals.GAP_SIZE).addComponent(jTextHostname));
-		additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelHostname).addGap(Globals.MIN_GAP_SIZE).addComponent(jTextHostname));
+		StringBuilder messageText = new StringBuilder();
+		messageText.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
+		messageText.append("\n");
+		messageText.append(selectedClient.get().getName());
+		messageText.append("\n");
+		messageText.append("\n");
+		messageText.append(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
 
-		FTextArea fAskCopyClient = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("MainFrame.jMenuCopyClient"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") },
-				Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
+		Object[] message = new Object[] { messageText.toString(), jTextHostname };
 
-		StringBuilder message = new StringBuilder();
-		message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
-		message.append("\n\n");
-		message.append(selectedClient.get().getName());
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("MainFrame.jMenuCopyClient"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
 
-		fAskCopyClient.setMessage(message.toString());
-		fAskCopyClient.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fAskCopyClient.setAlwaysOnTop(true);
-		fAskCopyClient.setVisible(true);
-
-		if (fAskCopyClient.getResult() == 2) {
+		if (answer == 0) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
 			String newClientName = jTextHostname.getText();
 			boolean proceed = true;
