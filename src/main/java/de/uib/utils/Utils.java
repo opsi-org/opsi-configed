@@ -154,18 +154,10 @@ public final class Utils {
 	}
 
 	public static List<Object> getNowTimeListValue() {
-		return getNowTimeListValue(null);
-	}
-
-	public static List<Object> getNowTimeListValue(final String comment) {
 		List<Object> result = new ArrayList<>();
 		String now = new Timestamp(System.currentTimeMillis()).toString();
 		now = now.substring(0, now.indexOf("."));
-		if (comment != null) {
-			result.add(now + " " + comment);
-		} else {
-			result.add(now);
-		}
+		result.add(now);
 		Logging.info("getNowTimeListValue", result);
 		return result;
 	}

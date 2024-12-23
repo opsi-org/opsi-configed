@@ -18,9 +18,7 @@ import java.util.TreeSet;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.ConfigOption;
-import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class UserConfigProducing {
@@ -34,8 +32,6 @@ public class UserConfigProducing {
 	private Map<String, List<Object>> serverconfigValuesMap;
 	private Map<String, ConfigOption> configOptionsMap;
 
-	private List<Object> readyObjects;
-
 	public UserConfigProducing(boolean notUsingDefaultUser, String configserver, Collection<String> existingDepots,
 			Collection<String> existingHostgroups, Collection<String> existingProductgroups,
 			Map<String, List<Object>> serverconfigValuesMap, Map<String, ConfigOption> configOptionsMap) {
@@ -47,12 +43,11 @@ public class UserConfigProducing {
 		this.serverconfigValuesMap = serverconfigValuesMap;
 		this.configOptionsMap = configOptionsMap;
 
-		Logging.info(this, "create with existing collections depots, hostgroups, productgroups ", existingDepots.size(),
-				" - ", existingHostgroups.size(), " - ", existingProductgroups.size());
+		Logging.info(this, "create with existing collections hostgroups, productgroups ", " - ",
+				existingHostgroups.size(), " - ", existingProductgroups.size());
 	}
 
-	public List<Object> produce() {
-		readyObjects = new ArrayList<>();
+	public void produce() {
 
 		Set<String> userparts = new TreeSet<>();
 		Set<String> roleparts = new TreeSet<>();
@@ -69,8 +64,6 @@ public class UserConfigProducing {
 		}
 
 		supplyAllPermissionEntries(userparts, roleparts);
-
-		return readyObjects;
 	}
 
 	private void produceRoleAndUserParts(Set<String> userNames, Set<String> roleNames) {
@@ -134,52 +127,6 @@ public class UserConfigProducing {
 		});
 	}
 
-	private void supplyConfigPermissionList(final String configKeyUseList, final boolean initialValue,
-			final String configKeyList, final List<Object> selectedValues, final Set<Object> oldPossibleValues,
-			final Set<Object> currentPossibleValuesListed) {
-		// produces readyObjects for this configKey(List)
-
-		Logging.info(this, "supplyConfigPermissionList, configKeyUseList: ", configKeyUseList);
-
-		// item variable for adding items to readyObjects
-		Map<String, Object> item = null;
-
-		if (configKeyUseList != null && serverconfigValuesMap.get(configKeyUseList) == null) {
-			Logging.info(this, "supplyConfigPermissionList. serverconfigValuesMap has no value for key ",
-					configKeyUseList);
-			item = Utils.createNOMBoolConfig(configKeyUseList, initialValue,
-					"the primary value setting is " + initialValue);
-			readyObjects.add(item);
-		}
-
-		Logging.info(this, "supplyConfigPermissionList configKey ", configKeyList);
-		Logging.debug(this, "serverconfigValuesMap.get(configKeyList) ", serverconfigValuesMap.get(configKeyList));
-		Logging.debug(this, "selectedValues ", selectedValues);
-		Logging.debug(this, "currentPossibleValuesListed ", currentPossibleValuesListed);
-		Logging.debug(this, "oldPossibleValues ", oldPossibleValues);
-
-		if (serverconfigValuesMap.get(configKeyList) == null
-				|| !serverconfigValuesMap.get(configKeyList).equals(selectedValues)
-				|| !currentPossibleValuesListed.equals(oldPossibleValues)) {
-			Logging.info(this, "supplyConfigPermissionList initialization or change");
-			Logging.info(this, "supplyConfigPermissionList add to currentPossibleValuesListed ",
-					currentPossibleValuesListed);
-
-			List<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
-			Logging.info(this, "supplyConfigPermissionList products List ", listOptions);
-
-			item = Utils.createNOMitem(TYPE.UNICODE_CONFIG.toString());
-			item.put("ident", configKeyList);
-			item.put("editable", false);
-			item.put("multiValue", true);
-			item.put("description",
-					"the primary value setting is an empty selection list, but all existing items as option");
-			item.put("defaultValues", selectedValues);
-			item.put("possibleValues", listOptions);
-			readyObjects.add(item);
-		}
-	}
-
 	/** we call up the cascade of default role, other roles, and the users */
 	private void supplyAllPermissionEntries(Set<String> userParts, Set<String> roleParts) {
 		Logging.info(this, "supplyAllPermissionEntries start");
@@ -213,7 +160,6 @@ public class UserConfigProducing {
 		}
 
 		Logging.info(this, "supplyAllPermissionEntries roleConfigs.size() ", roleConfigs.size());
-		Logging.info(this, "supplyAllPermissionEntries readyObjects for roleparts ", readyObjects.size());
 		Logging.info(this, "supplyAllPermissionEntries for userparts ", userParts);
 
 		for (String userName : userParts) {
@@ -231,15 +177,11 @@ public class UserConfigProducing {
 			Logging.info(this, "supplyAllPermissionEntries got values ", values,
 					" for role from serverconfigValuesMap ");
 
-			String configuredRole = null;
 			boolean followConfiguredRole = false;
 			Logging.info(this, "supplyAllPermissionEntries has role ", values);
 
-			if (values == null || values.isEmpty()) {
-				// update role selection because we don't have one
-				readyObjects.add(createDefaultItemRole(roleKey, configuredRole, roleParts));
-			} else if (!((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
-				configuredRole = "" + values.get(0);
+			if (values != null && !values.isEmpty() && !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
+				String configuredRole = "" + values.get(0);
 
 				Logging.info(this, "supplyAllPermissionEntries configuredRole ", configuredRole);
 				Logging.info(this, "supplyAllPermissionEntries roleConfigs ", roleConfigs);
@@ -259,8 +201,6 @@ public class UserConfigProducing {
 			supplyPermissionEntriesForAUser(userName, userNameStartKey, followConfiguredRole, roleConfig, userConfig);
 		}
 
-		Logging.info(this, "readyObjects for userparts ", readyObjects.size());
-
 		if (notUsingDefaultUser) {
 			UserConfig.setCurrentConfig(userConfigs.get(ConfigedMain.getUser()));
 		} else {
@@ -268,70 +208,27 @@ public class UserConfigProducing {
 		}
 	}
 
-	private Map<String, Object> createDefaultItemRole(String roleKey, String configuredRole, Set<String> roleParts) {
-		List<Object> selectedValuesRole = new ArrayList<>();
-		selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
-
-		Set<String> possibleValuesSet = new HashSet<>(roleParts);
-		possibleValuesSet.add(configuredRole);
-		possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
-
-		List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
-		Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts ", " ", possibleValuesRole, ", ",
-				roleParts);
-
-		return Utils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
-				"which role should determine this users configuration", false, false, selectedValuesRole,
-				possibleValuesRole);
-	}
-
 	private void supplyPermissionEntriesForAUser(final String username, final String startKey,
 			final boolean prototypeObligatory, final UserConfig prototypeConfig, UserConfig userConfig) {
 		Logging.info(this, "supplyPermissionEntriesForAUser for user ", username, " with startkey ", startKey);
 		Logging.info(this, "supplyPermissionEntriesForAUser for user, prototypeConfig ", prototypeConfig);
-
-		int countReadyObjectsOnStart = readyObjects.size();
 
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserBoolKeys( ",
 				UserConfig.getUserBoolKeys());
 
 		updateUserConfigBooleanValues(userConfig, prototypeConfig, prototypeObligatory, startKey);
 
-		Logging.info(this, "supplyPermissionEntriesForAUser, readyObjects bool keys for user named ", username, " ",
-				readyObjects);
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserStringValueKeys ",
 				UserConfig.getUserStringValueKeys());
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserStringValueKeys_withoutRole ",
 				UserConfig.getUserStringValueKeysWithoutRole());
-
-		// role entry, will be removed for the next run, if not obligatory
-		if (!prototypeObligatory) {
-			String configKey = startKey + UserConfig.HAS_ROLE_ATTRIBUT;
-			Logging.info(this, "configkey ", configKey);
-			List<Object> values = serverconfigValuesMap.get(configKey);
-
-			if (values == null || values.isEmpty() || values.get(0) == null
-					|| !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
-				Logging.info(this, "supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key ",
-						configKey);
-
-				List<Object> selectedValuesRole = new ArrayList<>();
-				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
-
-				Map<String, Object> itemRole = Utils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey,
-						"which role should determine this users configuration", false, false, selectedValuesRole,
-						selectedValuesRole);
-				readyObjects.add(itemRole);
-			}
-		}
 
 		updateUserConfigUserStringValuesWithoutKeyRoles(userConfig, prototypeConfig, prototypeObligatory, startKey);
 
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserListKeys( ",
 				UserConfig.getUserListKeys());
 		Logging.info(this, "supplyPermissionEntriesForAUser  user config ", userConfig);
-		Logging.info(this, "supplyPermissionEntriesForAUser, readyObjects list keys for ", username, " ",
-				readyObjects.size());
+		Logging.info(this, "supplyPermissionEntriesForAUser, readyObjects list keys for ", username);
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig ", userConfig);
 
 		updateConfigListItem(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN,
@@ -341,28 +238,6 @@ public class UserConfigProducing {
 		updateProductGroups(userConfig, prototypeConfig, prototypeObligatory, startKey);
 
 		Logging.info(this, "supplyPermissionEntriesForAUser username ", username);
-		Logging.info(this, "supplyPermissionEntriesForAUser countReadyObjectsOnStart ", countReadyObjectsOnStart);
-		Logging.info(this, "supplyPermissionEntriesForAUser readyObjects.size() ", readyObjects.size());
-
-		if (countReadyObjectsOnStart == readyObjects.size()) {
-			Logging.info(this, "supplyPermissionEntriesForAUser added no object(s) for saving, for username ",
-					username);
-		} else {
-			Logging.info(this, "supplyPermissionEntriesForAUser added object(s) for saving, for username ", username,
-					": ", readyObjects.size() - 1);
-			List<Object> timeVal = Utils.getNowTimeListValue("set by role prototype");
-
-			Map<String, Object> itemModifyTime = Utils.createNOMitem(TYPE.UNICODE_CONFIG.toString());
-			itemModifyTime.put("ident", startKey + UserConfig.MODIFICATION_INFO_KEY);
-			itemModifyTime.put("editable", false);
-			itemModifyTime.put("multiValue", false);
-			itemModifyTime.put("description", "last modification time for entries of this user");
-			itemModifyTime.put("defaultValues", timeVal);
-			itemModifyTime.put("possibleValues", timeVal);
-
-			Logging.info(this, "modi time ", itemModifyTime);
-			readyObjects.add(itemModifyTime);
-		}
 	}
 
 	private void updateDepots(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
@@ -372,14 +247,10 @@ public class UserConfigProducing {
 		Set<Object> oldPossibleValuesDepot = null;
 		Set<Object> currentPossibleValuesDepotListed = null;
 
-		String configKeyUseList = startKey + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
 		String configKeyList = startKey + partkey;
 
-		boolean defaultvalueForRestrictionUsage = prototypeConfig
-				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED);
-
-		Logging.info(this, "configKeyUseList ", configKeyUseList, ", configKeyList ", configKeyList);
+		Logging.info(this, " configKeyList ", configKeyList);
 		currentPossibleValuesDepotListed = new LinkedHashSet<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
@@ -416,9 +287,6 @@ public class UserConfigProducing {
 
 		Logging.info(this, "updateDepots currentPossibleValuesDepotListed before supplying ",
 				currentPossibleValuesDepotListed);
-
-		supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
-				selectedValuesDepot, oldPossibleValuesDepot, currentPossibleValuesDepotListed);
 	}
 
 	private void updateHostGroups(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
@@ -428,17 +296,8 @@ public class UserConfigProducing {
 		Set<Object> oldPossibleValuesHostgroup = null;
 		Set<Object> currentPossibleValuesHostgroupListed = null;
 
-		String configKeyUseList = startKey
-				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
 		String configKeyList = startKey + partkey;
-
-		Logging.info(this, "configKeyUseList ", configKeyUseList, ", configKeyList ", configKeyList);
-
-		boolean defaultvalueForRestrictionUsage = prototypeConfig
-				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED);
-
-		possibleValuesHostgroup = new ArrayList<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesHostgroup = prototypeConfig.getValues(partkey);
@@ -472,13 +331,8 @@ public class UserConfigProducing {
 				selectedValuesHostgroup);
 		Logging.info(this, "updateHostGroups oldPossibleValuesHostgroupListed before supplying for ", username, ": ",
 				oldPossibleValuesHostgroup);
-		Logging.info(this, "updateHostGroups possibleValuesHostgroup before supplying for ", username, ": ",
-				possibleValuesHostgroup);
 		Logging.info(this, "updateHostGroups currentPossibleValuesHostgroupListed before supplying for ", username,
 				": ", currentPossibleValuesHostgroupListed);
-
-		supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
-				selectedValuesHostgroup, oldPossibleValuesHostgroup, currentPossibleValuesHostgroupListed);
 	}
 
 	private void updateProductGroups(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
@@ -488,15 +342,10 @@ public class UserConfigProducing {
 		Set<Object> oldPossibleValuesProductgroups = null;
 		Set<Object> currentPossibleValuesProductgroupsListed = null;
 
-		String configKeyUseList = startKey
-				+ UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
 		String configKeyList = startKey + partkey;
 
-		Logging.info(this, "configKeyUseList ", configKeyUseList, ", configKeyList ", configKeyList);
-
-		boolean defaultvalueForRestrictionUsage = prototypeConfig
-				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED);
+		Logging.info(this, " configKeyList ", configKeyList);
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesProductgroups = prototypeConfig.getValues(partkey);
@@ -531,9 +380,6 @@ public class UserConfigProducing {
 				oldPossibleValuesProductgroups);
 		Logging.info(this, "updateProductGroups currentPossibleValuesProductgroupsListed before supplying ",
 				currentPossibleValuesProductgroupsListed);
-
-		supplyConfigPermissionList(configKeyUseList, defaultvalueForRestrictionUsage, configKeyList,
-				selectedValuesProductgroups, oldPossibleValuesProductgroups, currentPossibleValuesProductgroupsListed);
 	}
 
 	private void updateConfigListItem(String partkey, List<Object> possibleValues, UserConfig userConfig,
@@ -544,16 +390,11 @@ public class UserConfigProducing {
 
 		List<Object> selectedValuesProductgroups = null;
 		List<Object> possibleValuesProductgroups = null;
-		Set<Object> oldPossibleValuesProductgroups = null;
 		Set<Object> currentPossibleValuesProductgroupsListed = null;
 
-		String configKeyConfigured = null;
 		String configKeyList = startKey + partkey;
 
-		Logging.info(this, "updateTerminalConfig, configKeyConfigured ", configKeyConfigured, ", configKeyList ",
-				configKeyList);
-
-		boolean defaultvalueForRestrictionUsage = false;
+		Logging.info(this, "updateTerminalConfig configKeyList ", configKeyList);
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesProductgroups = prototypeConfig.getValues(partkey);
@@ -566,13 +407,6 @@ public class UserConfigProducing {
 		}
 
 		userConfig.setValues(partkey, selectedValuesProductgroups);
-
-		if (configOptionsMap.get(configKeyList) == null
-				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesProductgroups = new TreeSet<>();
-		} else {
-			oldPossibleValuesProductgroups = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
-		}
 
 		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
 
@@ -588,13 +422,8 @@ public class UserConfigProducing {
 
 		Logging.info(this, "updateProductGroups selectedValuesProductgroups before supplying ",
 				selectedValuesProductgroups);
-		Logging.info(this, "updateProductGroups oldPossibleValuesProductgroupsListed before supplying ",
-				oldPossibleValuesProductgroups);
 		Logging.info(this, "updateProductGroups currentPossibleValuesProductgroupsListed before supplying ",
 				currentPossibleValuesProductgroupsListed);
-
-		supplyConfigPermissionList(configKeyConfigured, defaultvalueForRestrictionUsage, configKeyList,
-				selectedValuesProductgroups, oldPossibleValuesProductgroups, currentPossibleValuesProductgroupsListed);
 	}
 
 	private void updateUserConfigBooleanValues(UserConfig userConfig, UserConfig prototypeConfig,
@@ -615,10 +444,6 @@ public class UserConfigProducing {
 
 				value = prototypeConfig.getBooleanValue(partKey);
 				userConfig.setBooleanValue(partKey, value);
-
-				Map<String, Object> item = Utils.createNOMBoolConfig(configKey, value,
-						"the primary value setting is based on the user group");
-				readyObjects.add(item);
 			} else {
 				value = (Boolean) values.get(0);
 			}
@@ -646,10 +471,6 @@ public class UserConfigProducing {
 
 				values = prototypeConfig.getValues(partkey);
 				userConfig.setValues(partkey, values);
-
-				Map<String, Object> item = Utils.createNOMConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey, configKey,
-						false, false, values, values);
-				readyObjects.add(item);
 			}
 		}
 	}
