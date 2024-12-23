@@ -122,7 +122,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		conStat = new ConnectionState();
 		if (useSAML && !connectSAML()) {
-			throw new RuntimeException("SAML connection failed");
+			Logging.error(this, "SAML connection failed");
+			return;
 		}
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		checkServerVersion();
@@ -187,11 +188,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		if (result == null || result.isEmpty() || !result.containsKey(localKeySID)) {
 			Logging.error("connectSAML no sessionId received. Result: ", result);
-			throw new RuntimeException("sessionId not received");
+			Logging.error(this, "sessionId not received");
+			return;
 		}
 		this.sessionId = (String) result.get(localKeySID);
 		if (sessionId == null) {
-			throw new RuntimeException("Requested sessionId is null");
+			Logging.error(this, "Requested sessionId is null");
 		} else {
 			sessionId = sessionId.contains("=") ? sessionId : ("opsiconfd-session=" + sessionId);
 		}
@@ -227,27 +229,28 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, Object> result = retrieveResponse(urlAuthenticated, "POST", requestProperties, jsonProperties,
 				"authenticated", responseHeader);
 
+		boolean isAuthenticated = false;
+
 		if (!result.containsKey("authenticated")) {
-			throw new RuntimeException("authenticated not received");
-		}
-		if (responseHeader.isEmpty()) {
-			throw new RuntimeException("responseHeaders not received");
+			Logging.error(this, "authenticated not received");
+		} else if (responseHeader.isEmpty()) {
+			Logging.error(this, "responseHeaders not received");
+		} else {
+			// set credentials for further requests and for information
+			String uname = (String) responseHeader.get("x-opsi-user-id");
+			if (uname == null) {
+				Logging.error(this, "username not received");
+			} else {
+				username = userPattern.split(uname, 2)[1];
+				ConfigedMain.setUser(username);
+				if (host != null && !host.equals(ConfigedMain.getHost())) {
+					ConfigedMain.setHost(host);
+				}
+				isAuthenticated = (boolean) result.get("authenticated");
+			}
 		}
 
-		// set credentials for further requests and for information
-		String uname = (String) responseHeader.get("x-opsi-user-id");
-		if (uname == null) {
-			throw new RuntimeException("username not received");
-		}
-
-		username = userPattern.split(uname, 2)[1];
-
-		ConfigedMain.setUser(username);
-		if (host != null && !host.equals(ConfigedMain.getHost())) {
-			ConfigedMain.setHost(host);
-		}
-
-		return (boolean) result.get("authenticated");
+		return isAuthenticated;
 	}
 
 	private synchronized void checkServerVersion() {
