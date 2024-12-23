@@ -28,7 +28,6 @@ import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FShowList;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -647,12 +646,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				lines.append(p);
 			}
 
-			final FShowList fMissingProducts = new FShowList(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"), true,
-					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
-			fMissingProducts.setMessage(lines.toString());
-			fMissingProducts.setAlwaysOnTop(true);
-			fMissingProducts.setVisible(true);
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), lines,
+					Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
+					JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
