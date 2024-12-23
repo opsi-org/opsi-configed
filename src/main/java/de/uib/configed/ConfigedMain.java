@@ -349,7 +349,7 @@ public class ConfigedMain {
 
 		clientInDepot = "";
 
-		hostInfo.initialize();
+		hostInfo.resetValues();
 
 		updateHostInfo();
 
@@ -399,7 +399,7 @@ public class ConfigedMain {
 		Logging.info(this, "updateHostInfo, produce hostInfo  selectedClients.length ", selectedClients.size());
 
 		if (!selectedClients.isEmpty()) {
-			hostInfo.setBy(pcinfos.get(selectedClients.get(0)).getMap());
+			hostInfo.setValues(pcinfos.get(selectedClients.get(0)).getMap());
 
 			Logging.debug(this, "updateHostInfo, produce hostInfo first selClient ", selectedClients.get(0));
 			Logging.debug(this, "updateHostInfo, produce hostInfo  ", hostInfo);
@@ -407,7 +407,7 @@ public class ConfigedMain {
 			HostInfo secondInfo = new HostInfo();
 
 			for (int i = 1; i < selectedClients.size(); i++) {
-				secondInfo.setBy(pcinfos.get(selectedClients.get(i)).getMap());
+				secondInfo.setValues(pcinfos.get(selectedClients.get(i)).getMap());
 				hostInfo.combineWith(secondInfo);
 			}
 		}

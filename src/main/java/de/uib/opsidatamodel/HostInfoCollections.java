@@ -115,7 +115,6 @@ public class HostInfoCollections {
 		}
 
 		List<Map<String, Object>> opsiHosts = persistenceController.getHostDataService().getOpsiHosts();
-		HostInfo.resetInstancesCount();
 
 		// find opsi configserver and give it the top position
 		retrieveConfigServerPD(opsiHosts);
@@ -151,7 +150,6 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_NAMES_LIST, depotNamesList);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 
-		Logging.info(this, "retrieveOpsiHosts  HostInfo instances counter ", HostInfo.getInstancesCount());
 		Logging.info(this, "retrieveOpsiHosts  hostnames size ",
 				cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class).size());
 		Logging.info(this, "retrieveOpsiHosts   depotNamesList size ", depotNamesList.size());
@@ -285,7 +283,8 @@ public class HostInfoCollections {
 
 			depotId = depotFound ? depotId : getConfigServer();
 			host.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
-			hostInfo = new HostInfo(host);
+			hostInfo = new HostInfo();
+			hostInfo.setValues(host);
 			hostInfo.setInDepot(depotId);
 			myDepot = depotId;
 

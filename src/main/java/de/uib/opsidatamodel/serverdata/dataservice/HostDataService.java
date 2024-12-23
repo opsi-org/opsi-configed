@@ -151,7 +151,8 @@ public class HostDataService {
 
 			addGroupsToList(((String) client.get(9)), newClientId, groupsJsonObject);
 
-			HostInfo hostInfo = new HostInfo(hostItem);
+			HostInfo hostInfo = new HostInfo();
+			hostInfo.setValues(itemDepot);
 			if (depotId == null || depotId.isEmpty()) {
 				depotId = hostInfoCollections.getConfigServer();
 			}
@@ -261,7 +262,8 @@ public class HostDataService {
 			if (depotId == null || depotId.isEmpty()) {
 				depotId = hostInfoCollections.getConfigServer();
 			}
-			HostInfo hostInfo = new HostInfo(hostItem);
+			HostInfo hostInfo = new HostInfo();
+			hostInfo.setValues(hostItem);
 			hostInfo.setInDepot(depotId);
 			hostInfo.setWanConfig(wanConfig);
 			hostInfo.setShutdownInstall(shutdownInstall);

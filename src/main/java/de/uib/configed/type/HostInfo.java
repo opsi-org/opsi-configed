@@ -68,9 +68,6 @@ public class HostInfo {
 	public static final String HOST_TYPE_VALUE_OPSI_DEPOT_SERVER = "OpsiDepotserver";
 	public static final String HOST_TYPE_VALUE_OPSI_CLIENT = "OpsiClient";
 
-	// an AtomicInteger would be threadsafe
-	private static int numberOfInstances;
-
 	private String depotOfClient;
 	private String clientDescription;
 	private String clientInventoryNumber;
@@ -91,25 +88,6 @@ public class HostInfo {
 	private Boolean clientShutdownInstall;
 
 	public HostInfo() {
-		initialize();
-		increaseInstancesCount();
-	}
-
-	public HostInfo(Map<String, Object> pcInfo) {
-		increaseInstancesCount();
-		setBy(pcInfo);
-	}
-
-	public static void resetInstancesCount() {
-		numberOfInstances = 0;
-	}
-
-	public static int getInstancesCount() {
-		return numberOfInstances;
-	}
-
-	private static void increaseInstancesCount() {
-		numberOfInstances++;
 	}
 
 	public Map<String, Object> getDisplayRowMap0() {
@@ -307,11 +285,11 @@ public class HostInfo {
 		}
 	}
 
-	public void setBy(Map<String, Object> pcInfo) {
+	public void setValues(Map<String, Object> pcInfo) {
 		// shows pckey
 
 		if (pcInfo == null) {
-			initialize();
+			resetValues();
 			return;
 		}
 
@@ -347,7 +325,7 @@ public class HostInfo {
 		Boolean clientShutdownInstallSave = clientShutdownInstall;
 
 		// empty everything
-		initialize();
+		resetValues();
 
 		if (!secondInfo.clientWanConfig.equals(clientWanConfigSave)) {
 			clientWanConfig = null;
@@ -618,7 +596,7 @@ public class HostInfo {
 				+ ")";
 	}
 
-	public void initialize() {
+	public void resetValues() {
 		depotOfClient = "";
 		clientDescription = "";
 		clientInventoryNumber = "";
