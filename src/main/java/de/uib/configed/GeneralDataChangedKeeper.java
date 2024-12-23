@@ -6,15 +6,12 @@
 
 package de.uib.configed;
 
-import java.awt.Dimension;
+import javax.swing.JOptionPane;
 
-import de.uib.configed.gui.FTextArea;
 import de.uib.utils.DataChangedKeeper;
 import de.uib.utils.logging.Logging;
 
 public class GeneralDataChangedKeeper extends DataChangedKeeper {
-	private FTextArea fAskSaveProductConfiguration;
-
 	@Override
 	public void dataHaveChanged(Object source) {
 		super.dataHaveChanged(source);
@@ -26,22 +23,13 @@ public class GeneralDataChangedKeeper extends DataChangedKeeper {
 
 	public boolean askSave() {
 		boolean result = false;
+
 		if (this.dataChanged) {
-			if (fAskSaveProductConfiguration == null) {
-				fAskSaveProductConfiguration = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("PanelGenEditTable.saveData"), true,
-						new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-				fAskSaveProductConfiguration.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("ConfigedMain.reminderSaveConfig"),
+					Configed.getResourceValue("PanelGenEditTable.saveData"), JOptionPane.YES_NO_OPTION);
 
-				fAskSaveProductConfiguration.setSize(new Dimension(300, 220));
-			}
-
-			fAskSaveProductConfiguration.setLocationRelativeTo(ConfigedMain.getMainFrame());
-			fAskSaveProductConfiguration.setVisible(true);
-
-			result = fAskSaveProductConfiguration.getResult() == 2;
-
-			fAskSaveProductConfiguration.setVisible(false);
+			result = answer == JOptionPane.YES_OPTION;
 		}
 
 		return result;
