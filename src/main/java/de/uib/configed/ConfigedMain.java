@@ -1154,6 +1154,10 @@ public class ConfigedMain {
 
 		mainFrame.deactivateLoadingPane();
 
+		updatePage();
+	}
+
+	private static void updatePage() {
 		// We want to reset and reload the page that is being shown now...
 		EditingTarget t = editingTarget;
 		editingTarget = null;
