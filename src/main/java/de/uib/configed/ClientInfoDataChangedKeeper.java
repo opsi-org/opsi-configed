@@ -6,11 +6,11 @@
 
 package de.uib.configed;
 
-import java.awt.Dimension;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import de.uib.configed.gui.FTextArea;
+import javax.swing.JOptionPane;
+
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -18,8 +18,6 @@ import de.uib.utils.DataChangedKeeper;
 import de.uib.utils.logging.Logging;
 
 public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
-	private FTextArea fAskSaveChangedText;
-
 	private Map<?, ?> source;
 
 	private ConfigedMain configedMain;
@@ -62,20 +60,13 @@ public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 
 	public boolean askSave() {
 		boolean result = false;
+
 		if (this.dataChanged) {
-			if (fAskSaveChangedText == null) {
-				fAskSaveChangedText = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("PanelGenEditTable.saveData"), true,
-						new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-				fAskSaveChangedText.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
-				fAskSaveChangedText.setSize(new Dimension(300, 220));
-			}
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("ConfigedMain.reminderSaveConfig"),
+					Configed.getResourceValue("PanelGenEditTable.saveData"), JOptionPane.YES_NO_OPTION);
 
-			fAskSaveChangedText.setLocationRelativeTo(ConfigedMain.getMainFrame());
-			fAskSaveChangedText.setVisible(true);
-			result = fAskSaveChangedText.getResult() == 2;
-
-			fAskSaveChangedText.setVisible(false);
+			result = answer == JOptionPane.YES_OPTION;
 		}
 
 		return result;
