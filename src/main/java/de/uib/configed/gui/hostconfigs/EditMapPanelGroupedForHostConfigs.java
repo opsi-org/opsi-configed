@@ -97,6 +97,14 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupPopups() {
+		setupPopupMenu();
+		setupPopupForUserpathes();
+		setupPopupForUserpath();
+		setupPopupForRolepathes();
+		setupPopupForRolepath();
+	}
+
+	private void setupPopupMenu() {
 		popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			@Override
 			public void action(int p) {
@@ -111,7 +119,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
+	private void setupPopupForUserpathes() {
 		popupForUserpathes = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
@@ -135,7 +145,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
+	private void setupPopupForUserpath() {
 		popupForUserpath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
@@ -154,7 +166,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
+	private void setupPopupForRolepathes() {
 		popupForRolepathes = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
@@ -178,7 +192,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
+	private void setupPopupForRolepath() {
 		popupForRolepath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
