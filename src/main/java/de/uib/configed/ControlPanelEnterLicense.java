@@ -23,9 +23,9 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditDate;
 import de.uib.utils.swing.FEditPane;
 import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.CellDateEditor;
 import de.uib.utils.table.gui.CellEditor4TableText;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 import de.uib.utils.table.updates.MapBasedUpdater;
@@ -167,31 +167,15 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(2);
 
-		FEditDate fedConclusionDate = new FEditDate("");
-
-		CellEditor4TableText cellEditorConclusionDate = new CellEditor4TableText(fedConclusionDate,
-				FEditDate.AREA_DIMENSION);
-
-		fedConclusionDate.setServedCellEditor(cellEditorConclusionDate);
-		col.setCellEditor(cellEditorConclusionDate);
+		col.setCellEditor(new CellDateEditor());
 
 		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(3);
-		FEditDate fedNotificationDate = new FEditDate("");
 
-		CellEditor4TableText cellEditorNotificationDate = new CellEditor4TableText(fedNotificationDate,
-				FEditDate.AREA_DIMENSION);
-
-		fedNotificationDate.setServedCellEditor(cellEditorNotificationDate);
-		col.setCellEditor(cellEditorNotificationDate);
+		col.setCellEditor(new CellDateEditor());
 
 		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(4);
-		FEditDate fedExpirationDate = new FEditDate("");
 
-		CellEditor4TableText cellEditorExpirationDate = new CellEditor4TableText(fedExpirationDate,
-				FEditDate.AREA_DIMENSION);
-
-		fedExpirationDate.setServedCellEditor(cellEditorExpirationDate);
-		col.setCellEditor(cellEditorExpirationDate);
+		col.setCellEditor(new CellDateEditor());
 
 		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(5);
 

@@ -1,0 +1,85 @@
+
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.utils.table.gui;
+
+import java.awt.Component;
+import java.time.LocalDate;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.FlatLaf;
+
+import de.uib.configed.ConfigedMain;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.skin.DatePickerSkin;
+import javafx.scene.layout.StackPane;
+
+public class CellDateEditor extends DefaultCellEditor {
+	private String currentString;
+
+	public CellDateEditor() {
+		super(new JTextField());
+
+		((JTextField) getComponent()).setEditable(false);
+	}
+
+	@Override
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
+		String oldValue = (String) value;
+
+		JFXPanel jfxPanel = new JFXPanel();
+		DatePicker datePicker = new DatePicker();
+		if (oldValue != null && !oldValue.isBlank()) {
+			datePicker.setValue(LocalDate.parse(oldValue));
+		}
+
+		DatePickerSkin skin = new DatePickerSkin(datePicker);
+		StackPane pane = new StackPane(skin.getPopupContent());
+		Scene scene = new Scene(pane);
+		if (FlatLaf.isLafDark()) {
+			scene.getStylesheets().add(getClass().getResource("/css/date-picker-dark.css").toExternalForm());
+		} else {
+			scene.getStylesheets().add(getClass().getResource("/css/date-picker-light.css").toExternalForm());
+		}
+		jfxPanel.setScene(scene);
+
+		Platform.setImplicitExit(false);
+
+		// show the date picker in a dialog;
+		// the user can select a date or cancel the dialog
+		SwingUtilities.invokeLater(() -> {
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel, "Choose a date",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+			// answer == 0 means OK
+			// if the value is not null, the user did not select a date
+			if (answer == 0 && datePicker.getValue() != null) {
+				currentString = datePicker.getValue().toString();
+				((JTextField) c).setText(currentString);
+				stopCellEditing();
+			} else {
+				cancelCellEditing();
+			}
+		});
+
+		return c;
+	}
+
+	@Override
+	public Object getCellEditorValue() {
+		return currentString;
+	}
+}
