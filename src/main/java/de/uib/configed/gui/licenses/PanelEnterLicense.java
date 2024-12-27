@@ -13,7 +13,6 @@
 package de.uib.configed.gui.licenses;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,8 +41,10 @@ import de.uib.configed.ControlPanelEnterLicense;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.utils.Utils;
-import de.uib.utils.swing.FEditDate;
+import de.uib.utils.table.gui.CellDateEditor;
 import de.uib.utils.table.gui.PanelGenEditTable;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.DatePicker;
 
 public class PanelEnterLicense extends MultiTablePanel {
 	private static final int MIN_HEIGHT = 50;
@@ -83,8 +84,6 @@ public class PanelEnterLicense extends MultiTablePanel {
 	private JLabel jLabelConfigure;
 	private JLabel jLabelSLid3info;
 	private JLabel jLabelLKey;
-
-	private FEditDate fEditDate;
 
 	private ControlPanelEnterLicense enterLicenseController;
 
@@ -281,21 +280,17 @@ public class PanelEnterLicense extends MultiTablePanel {
 		jTextFieldEndOfLicense.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-					if (fEditDate == null) {
-						fEditDate = new FEditDate(jTextFieldEndOfLicense.getText());
-					} else {
-						fEditDate.setStartText(jTextFieldEndOfLicense.getText());
-					}
+				JFXPanel jfxPanel = new JFXPanel();
+				DatePicker datePicker = CellDateEditor.createDatePicker(jTextFieldEndOfLicense.getText(), jfxPanel);
 
-					fEditDate.setCaller(jTextFieldEndOfLicense);
-					fEditDate.init();
+				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel,
+						Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.LabelSLid5"),
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-					Point pointField = jTextFieldEndOfLicense.getLocationOnScreen();
-					fEditDate.setLocation((int) pointField.getX() + 30, (int) pointField.getY() + 20);
-
-					fEditDate.setTitle(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.LabelSLid5"));
-					fEditDate.setVisible(true);
+				// answer == 0 means OK
+				// if the value is not null, the user did not select a date
+				if (answer == 0 && datePicker.getValue() != null) {
+					jTextFieldEndOfLicense.setText(datePicker.getValue().toString());
 				}
 			}
 		});

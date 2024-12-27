@@ -62,7 +62,7 @@ public class CellDateEditor extends DefaultCellEditor {
 		return c;
 	}
 
-	private static DatePicker createDatePicker(String oldValue, JFXPanel jfxPanel) {
+	public static DatePicker createDatePicker(String oldValue, JFXPanel jfxPanel) {
 		DatePicker datePicker = new DatePicker();
 		if (oldValue != null && !oldValue.isBlank()) {
 			datePicker.setValue(LocalDate.parse(oldValue));
