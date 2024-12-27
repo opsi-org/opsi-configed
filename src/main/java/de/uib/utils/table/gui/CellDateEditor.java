@@ -1,4 +1,3 @@
-
 /**
  * Copyright (c) uib GmbH <info@uib.de>
  * License: AGPL-3.0
@@ -31,7 +30,7 @@ public class CellDateEditor extends DefaultCellEditor {
 	public CellDateEditor() {
 		super(new JTextField());
 
-		((JTextField) getComponent()).setEditable(false);
+		((JTextField) super.getComponent()).setEditable(false);
 	}
 
 	@Override
@@ -42,24 +41,26 @@ public class CellDateEditor extends DefaultCellEditor {
 		JFXPanel jfxPanel = new JFXPanel();
 		DatePicker datePicker = createDatePicker(oldValue, jfxPanel);
 
-		// show the date picker in a dialog;
+		// show the date picker in a dialog, so
 		// the user can select a date or cancel the dialog
-		SwingUtilities.invokeLater(() -> {
-			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel,
-					table.getColumnName(column), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-			// answer == 0 means OK
-			// if the value is not null, the user did not select a date
-			if (answer == 0 && datePicker.getValue() != null) {
-				currentString = datePicker.getValue().toString();
-				((JTextField) c).setText(currentString);
-				stopCellEditing();
-			} else {
-				cancelCellEditing();
-			}
-		});
+		SwingUtilities.invokeLater(() -> showEditor(table, c, column, jfxPanel, datePicker));
 
 		return c;
+	}
+
+	private void showEditor(JTable table, Component c, int column, JFXPanel jfxPanel, DatePicker datePicker) {
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel, table.getColumnName(column),
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		// answer == 0 means OK
+		// if the value is not null, the user did not select a date
+		if (answer == 0 && datePicker.getValue() != null) {
+			currentString = datePicker.getValue().toString();
+			((JTextField) c).setText(currentString);
+			stopCellEditing();
+		} else {
+			cancelCellEditing();
+		}
 	}
 
 	public static DatePicker createDatePicker(String oldValue, JFXPanel jfxPanel) {
