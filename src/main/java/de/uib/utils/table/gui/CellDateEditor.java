@@ -45,8 +45,8 @@ public class CellDateEditor extends DefaultCellEditor {
 		// show the date picker in a dialog;
 		// the user can select a date or cancel the dialog
 		SwingUtilities.invokeLater(() -> {
-			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel, "Choose a date",
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel,
+					table.getColumnName(column), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 			// answer == 0 means OK
 			// if the value is not null, the user did not select a date
