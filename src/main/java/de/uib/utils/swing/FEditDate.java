@@ -74,7 +74,7 @@ public class FEditDate extends FEdit implements MouseListener {
 		Logging.info(this, "setStartText(): ", s);
 
 		if (s != null && !s.isEmpty()) {
-			datePicker.setValue(LocalDate.parse(s));
+			Platform.runLater(() -> datePicker.setValue(LocalDate.parse(s)));
 			setDataChanged(false);
 		}
 	}
