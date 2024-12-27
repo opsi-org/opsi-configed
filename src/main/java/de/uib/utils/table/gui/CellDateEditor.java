@@ -19,7 +19,6 @@ import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.ConfigedMain;
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
@@ -41,22 +40,7 @@ public class CellDateEditor extends DefaultCellEditor {
 		String oldValue = (String) value;
 
 		JFXPanel jfxPanel = new JFXPanel();
-		DatePicker datePicker = new DatePicker();
-		if (oldValue != null && !oldValue.isBlank()) {
-			datePicker.setValue(LocalDate.parse(oldValue));
-		}
-
-		DatePickerSkin skin = new DatePickerSkin(datePicker);
-		StackPane pane = new StackPane(skin.getPopupContent());
-		Scene scene = new Scene(pane);
-		if (FlatLaf.isLafDark()) {
-			scene.getStylesheets().add(getClass().getResource("/css/date-picker-dark.css").toExternalForm());
-		} else {
-			scene.getStylesheets().add(getClass().getResource("/css/date-picker-light.css").toExternalForm());
-		}
-		jfxPanel.setScene(scene);
-
-		Platform.setImplicitExit(false);
+		DatePicker datePicker = createDatePicker(oldValue, jfxPanel);
 
 		// show the date picker in a dialog;
 		// the user can select a date or cancel the dialog
@@ -76,6 +60,25 @@ public class CellDateEditor extends DefaultCellEditor {
 		});
 
 		return c;
+	}
+
+	private static DatePicker createDatePicker(String oldValue, JFXPanel jfxPanel) {
+		DatePicker datePicker = new DatePicker();
+		if (oldValue != null && !oldValue.isBlank()) {
+			datePicker.setValue(LocalDate.parse(oldValue));
+		}
+
+		DatePickerSkin skin = new DatePickerSkin(datePicker);
+		StackPane pane = new StackPane(skin.getPopupContent());
+		Scene scene = new Scene(pane);
+		if (FlatLaf.isLafDark()) {
+			scene.getStylesheets().add(CellDateEditor.class.getResource("/css/date-picker-dark.css").toExternalForm());
+		} else {
+			scene.getStylesheets().add(CellDateEditor.class.getResource("/css/date-picker-light.css").toExternalForm());
+		}
+		jfxPanel.setScene(scene);
+
+		return datePicker;
 	}
 
 	@Override

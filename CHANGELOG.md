@@ -5,7 +5,7 @@
 ### Changed
 - Use normal login without SSO when password or OTP field active and pressing "ENTER"-key
 - Don't stop configed when there are irregular arguments
-
+- Use new CellEditor to edit date in tables
 
 ## [4.4.0.13] - 2024-12-09
 ### Changed
