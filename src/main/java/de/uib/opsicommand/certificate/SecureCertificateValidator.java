@@ -163,7 +163,6 @@ public class SecureCertificateValidator implements CertificateValidator {
 		public boolean verify(String hostname, SSLSession session) {
 			X509Certificate peerCertificate = retrievePeerCertificate(session);
 
-			ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 			if (peerCertificate == null) {
 				Logging.warning(this, "peer's certificate could not be retrieved");
 				return false;
