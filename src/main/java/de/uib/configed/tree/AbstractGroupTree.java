@@ -222,31 +222,13 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		String groupId = node.toString();
 
-		Map<String, String> groupData = new LinkedHashMap<>();
-		groupData.put("groupname", groupId);
-		groupData.put("description", groups.get(groupId).get("description"));
-		Map<String, String> labels = new HashMap<>();
-		labels.put("groupname", Configed.getResourceValue("ClientTree.editNode.label.groupname"));
-		labels.put("description", Configed.getResourceValue("ClientTree.editNode.label.description"));
-		Map<String, Boolean> editable = new HashMap<>();
-		editable.put("groupname", false);
-		editable.put("description", true);
+		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ClientTree.editNode.label.description"),
+				Configed.getResourceValue("ClientTree.editGroup") + " " + groupId, JOptionPane.OK_CANCEL_OPTION, null,
+				null, groups.get(groupId).get("description"));
 
-		FEditRecord fEdit = new FEditRecord(Configed.getResourceValue("ClientTree.editGroup"));
-		fEdit.setRecord(groupData, labels, null, editable, null);
-		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode"));
-		fEdit.init();
-		fEdit.setSize(450, 250);
-		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		fEdit.setModal(true);
-
-		fEdit.setVisible(true);
-
-		groupData = fEdit.getData();
-
-		if (!fEdit.isCancelled()) {
-			groups.get(groupId).put("description", groupData.get("description"));
+		if (answer != null) {
+			groups.get(groupId).put("description", answer);
 			persistenceController.getGroupDataService().updateGroup(groupId, groups.get(groupId),
 					this instanceof ClientTree);
 		}

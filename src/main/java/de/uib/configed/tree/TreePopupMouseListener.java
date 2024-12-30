@@ -42,7 +42,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 		menuItemCreateNode.addActionListener(actionEvent -> makeSubGroup());
 		jPopupMenu.add(menuItemCreateNode);
 
-		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editNode"));
+		menuItemEditNode = new JMenuItem(Configed.getResourceValue("ClientTree.editGroup"));
 		Icons.addIntellijIconToMenuItem(menuItemEditNode, "edit");
 		menuItemEditNode.addActionListener(actionEvent -> tree.editGroupNode(mousePath));
 		jPopupMenu.add(menuItemEditNode);
