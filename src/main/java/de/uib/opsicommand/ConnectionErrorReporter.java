@@ -6,8 +6,10 @@
 
 package de.uib.opsicommand;
 
+import java.awt.event.ActionEvent;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -16,7 +18,6 @@ import javax.swing.SwingUtilities;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FTextArea;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utils.logging.Logging;
 
@@ -83,43 +84,43 @@ public final class ConnectionErrorReporter {
 	}
 
 	private void displayFailedCertificateValidationDialog(String message) {
-		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
-				new String[] { Configed.getResourceValue("buttonCancel"),
-						Configed.getResourceValue("ConnectionErrorReporter.alwaysTrust"),
-						Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnce") },
-				530, 260);
+		JButton alwaysTrust = new JButton(Configed.getResourceValue("ConnectionErrorReporter.alwaysTrust"));
+		alwaysTrust.setToolTipText(Configed.getResourceValue("ConnectionErrorReporter.alwaysTrustTooltip"));
 
-		fErrorMsg.setTooltipButtons(null, Configed.getResourceValue("ConnectionErrorReporter.alwaysTrustTooltip"),
-				Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnceTooltip"));
+		JButton trustOnce = new JButton(Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnce"));
+		trustOnce.setToolTipText(Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnceTooltip"));
 
-		fErrorMsg.setMessage(message);
-		fErrorMsg.setAlwaysOnTop(true);
-		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
+		JOptionPane pane = new JOptionPane();
+		pane.setMessage(message);
+		pane.setOptions(new Object[] { Configed.getResourceValue("buttonCancel"), alwaysTrust, trustOnce });
 
-		if (!SwingUtilities.isEventDispatchThread()) {
-			launchDialogInEDT(fErrorMsg);
-		} else {
-			fErrorMsg.setVisible(true);
-		}
+		JDialog dialog = pane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"));
 
-		int choice = fErrorMsg.getResult();
+		alwaysTrust.addActionListener((ActionEvent event) -> {
+			dialog.setVisible(false);
 
-		if (choice == 1) {
-			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
-		} else if (choice == 2) {
 			CertificateManager.downloadCertificateFile();
 			CertificateManager.saveCertificate();
 			if (conStat.getState() != ConnectionState.INTERRUPTED) {
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
-		} else if (choice == 3) {
+		});
+
+		trustOnce.addActionListener((ActionEvent event) -> {
+			dialog.setVisible(false);
+
 			CertificateManager.downloadCertificateFile();
 			if (conStat.getState() != ConnectionState.INTERRUPTED) {
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
-		} else {
-			// There are only three options a user can select from.
+		});
+
+		dialog.setVisible(true);
+
+		// This means, we canceled the dialog or we clicked on the cancel button
+		if (pane.getValue() == null || pane.getValue().equals(Configed.getResourceValue("buttonCancel"))) {
+			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 		}
 	}
 
