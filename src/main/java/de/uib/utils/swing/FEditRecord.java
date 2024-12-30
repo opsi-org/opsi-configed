@@ -40,7 +40,7 @@ public class FEditRecord extends FEdit implements DocumentListener {
 	private Map<String, Boolean> secrets;
 
 	public FEditRecord(String hint) {
-		super("", hint);
+		super(hint);
 	}
 
 	private void initRecordPane() {

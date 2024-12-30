@@ -20,7 +20,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 
-import javax.swing.AbstractCellEditor;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -28,7 +27,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -38,7 +36,6 @@ import de.uib.utils.logging.Logging;
 public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected Dimension areaDimension = new Dimension(100, 40);
 
-	protected String initialText = "";
 	private String hint;
 
 	private JPanel framingPanel;
@@ -51,21 +48,9 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	private boolean cancelled;
 	private boolean starting = true;
 
-	private AbstractCellEditor servedCellEditor;
-
-	private JTextComponent caller;
-
-	public FEdit(String initialText) {
-		this(initialText, null);
-	}
-
-	public FEdit(String initialText, String hint) {
-		Logging.debug(this, " FEdit constructed for >>", initialText, "<< title ", hint);
+	public FEdit(String hint) {
+		Logging.debug(this, " FEdit constructed for title ", hint);
 		super.setIconImage(Icons.getMainIcon());
-
-		if (initialText != null) {
-			this.initialText = initialText;
-		}
 
 		this.hint = hint;
 
@@ -152,26 +137,11 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		buttonCancel.setEnabled(true);
 	}
 
-	public void setCaller(JTextComponent c) {
-		this.caller = c;
-	}
+	public void reset() {
+		Logging.debug(this, "reset");
 
-	public void updateCaller(String s) {
-		if (caller != null) {
-			caller.setText(s);
-		}
-	}
-
-	public void setStartText(String s) {
-		Logging.debug(this, "FEdit.setStartText(): ", s);
-
-		initialText = s;
 		setDataChanged(false);
 		cancelled = false;
-	}
-
-	public String getText() {
-		return initialText;
 	}
 
 	public boolean isCancelled() {
@@ -204,7 +174,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	private void leave() {
 		Logging.debug(this, "leave");
-		updateCaller(initialText);
 		buttonCommit.setEnabled(false);
 		setVisible(false);
 	}
@@ -220,29 +189,17 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	protected void commit() {
 		Logging.info(this, "commit");
-		setStartText(getText());
-
-		if (servedCellEditor != null) {
-			servedCellEditor.stopCellEditing();
-		}
+		reset();
 
 		leave();
 	}
 
 	protected void cancel() {
-		Logging.info(this, "cancel, go back to ", initialText);
-		setStartText(initialText);
+		Logging.info(this, "cancel");
+		reset();
 		cancelled = true;
 
-		if (servedCellEditor != null) {
-			servedCellEditor.stopCellEditing();
-		}
-
 		leave();
-	}
-
-	public void setServedCellEditor(AbstractCellEditor cellEditor) {
-		servedCellEditor = cellEditor;
 	}
 
 	// interface
