@@ -89,6 +89,7 @@ public final class ConnectionErrorReporter {
 		trustOnce.setToolTipText(Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnceTooltip"));
 
 		JOptionPane pane = new JOptionPane();
+		pane.setMessageType(JOptionPane.WARNING_MESSAGE);
 		pane.setMessage(message);
 		pane.setOptions(new Object[] { Configed.getResourceValue("buttonCancel"), alwaysTrust, trustOnce });
 
