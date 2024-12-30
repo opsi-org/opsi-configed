@@ -124,25 +124,11 @@ public final class ConnectionErrorReporter {
 	}
 
 	private void displayGeneralDialog(String message) {
-		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
-				new String[] { Configed.getResourceValue("buttonClose") }, 420, 200);
+		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"),
+				JOptionPane.OK_CANCEL_OPTION);
 
-		fErrorMsg.setMessage(message);
-		fErrorMsg.setAlwaysOnTop(true);
-		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
-
-		if (!SwingUtilities.isEventDispatchThread()) {
-			launchDialogInEDT(fErrorMsg);
-		} else {
-			fErrorMsg.setVisible(true);
-		}
-
-		int choice = fErrorMsg.getResult();
-
-		if (choice == 1) {
-			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
-		}
+		conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 	}
 
 	private synchronized void displayMFADialog() {
