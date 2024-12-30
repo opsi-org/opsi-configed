@@ -7,13 +7,11 @@
 package de.uib.opsicommand;
 
 import java.awt.event.ActionEvent;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
-import javax.swing.SwingUtilities;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -159,17 +157,6 @@ public final class ConnectionErrorReporter {
 			displayMFADialog();
 		} else {
 			Main.endApp(Main.NO_ERROR);
-		}
-	}
-
-	private static void launchDialogInEDT(JDialog dialog) {
-		try {
-			SwingUtilities.invokeAndWait(() -> dialog.setVisible(true));
-		} catch (InvocationTargetException e) {
-			Logging.debug("exception thrown during doRun: ", e);
-		} catch (InterruptedException e) {
-			Logging.info("Thread was interrupted");
-			Thread.currentThread().interrupt();
 		}
 	}
 
