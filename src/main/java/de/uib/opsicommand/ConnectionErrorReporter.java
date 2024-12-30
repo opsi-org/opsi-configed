@@ -7,11 +7,10 @@
 package de.uib.opsicommand;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 
 import de.uib.Main;
@@ -20,7 +19,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditRecord;
 
 /**
  * {@code ConnectionErrorReporter} reports connection errors, that occur during
@@ -150,36 +148,17 @@ public final class ConnectionErrorReporter {
 	private synchronized void displayMFADialog() {
 		Logging.info("Unauthorized, show password dialog");
 
-		Map<String, String> groupData = new LinkedHashMap<>();
-		groupData.put("password", "");
-		Map<String, String> labels = new HashMap<>();
-		labels.put("password", Configed.getResourceValue("LoginDialog.jLabelPassword"));
-		Map<String, Boolean> editable = new HashMap<>();
-		editable.put("password", true);
-		Map<String, Boolean> secrets = new HashMap<>();
-		secrets.put("password", true);
+		JPasswordField passwordField = new JPasswordField();
 
-		final FEditRecord newPasswordDialog = new FEditRecord(
-				Configed.getResourceValue("ConnectionErrorReporter.provideNewPassword"));
-		newPasswordDialog.setRecord(groupData, labels, null, editable, secrets);
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewPassword"), passwordField },
+				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
 
-		newPasswordDialog.setTitle(Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"));
-		newPasswordDialog.init();
-		newPasswordDialog.setSize(420, 210);
-		newPasswordDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		newPasswordDialog.setModal(true);
-		newPasswordDialog.setAlwaysOnTop(true);
-
-		if (!SwingUtilities.isEventDispatchThread()) {
-			launchDialogInEDT(newPasswordDialog);
+		if (answer == 0) {
+			ConfigedMain.setPassword(new String(passwordField.getPassword()));
 		} else {
-			newPasswordDialog.setVisible(true);
-		}
-
-		if (newPasswordDialog.isCancelled()) {
 			displayCancelConfigedDialog();
-		} else {
-			ConfigedMain.setPassword(newPasswordDialog.getData().get("password"));
 		}
 	}
 
