@@ -96,6 +96,8 @@ public final class ConnectionErrorReporter {
 		JDialog dialog = pane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"));
 
+		// We need to add action listeners to the buttons, because otherwise 
+		// the dialog will not close and nothing would happen
 		alwaysTrust.addActionListener((ActionEvent event) -> {
 			dialog.setVisible(false);
 
@@ -117,7 +119,7 @@ public final class ConnectionErrorReporter {
 
 		dialog.setVisible(true);
 
-		// This means, we canceled the dialog or we clicked on the cancel button
+		// This means, we canceled/closed the dialog or we clicked on the cancel button
 		if (pane.getValue() == null || pane.getValue().equals(Configed.getResourceValue("buttonCancel"))) {
 			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 		}
