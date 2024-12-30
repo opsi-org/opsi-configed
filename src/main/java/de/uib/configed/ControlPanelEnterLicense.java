@@ -23,10 +23,9 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditPane;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.CellDateEditor;
-import de.uib.utils.table.gui.CellEditor4TableText;
+import de.uib.utils.table.gui.CellInputDialogEditor;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 import de.uib.utils.table.updates.MapBasedUpdater;
 import de.uib.utils.table.updates.MapItemsUpdateController;
@@ -179,13 +178,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(5);
 
-		FEditPane fedNotes = new FEditPane("", "Notes");
-
-		CellEditor4TableText cellEditorLicenseContractNotes = new CellEditor4TableText(fedNotes,
-				FEditPane.AREA_DIMENSION);
-
-		fedNotes.setServedCellEditor(cellEditorLicenseContractNotes);
-		col.setCellEditor(cellEditorLicenseContractNotes);
+		col.setCellEditor(new CellInputDialogEditor());
 	}
 
 	private void setPanelKeysUpdateController() {

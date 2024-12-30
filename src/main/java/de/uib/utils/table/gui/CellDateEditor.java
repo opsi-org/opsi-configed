@@ -35,7 +35,6 @@ public class CellDateEditor extends DefaultCellEditor {
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
 		String oldValue = (String) value;
 
 		JFXPanel jfxPanel = new JFXPanel();
@@ -43,12 +42,12 @@ public class CellDateEditor extends DefaultCellEditor {
 
 		// show the date picker in a dialog, so
 		// the user can select a date or cancel the dialog
-		SwingUtilities.invokeLater(() -> showEditor(table, c, column, jfxPanel, datePicker));
+		SwingUtilities.invokeLater(() -> showEditor(table, column, jfxPanel, datePicker));
 
-		return c;
+		return super.getTableCellEditorComponent(table, value, isSelected, row, column);
 	}
 
-	private void showEditor(JTable table, Component c, int column, JFXPanel jfxPanel, DatePicker datePicker) {
+	private void showEditor(JTable table, int column, JFXPanel jfxPanel, DatePicker datePicker) {
 		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel, table.getColumnName(column),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
@@ -56,7 +55,6 @@ public class CellDateEditor extends DefaultCellEditor {
 		// if the value is not null, the user did not select a date
 		if (answer == 0 && datePicker.getValue() != null) {
 			currentString = datePicker.getValue().toString();
-			((JTextField) c).setText(currentString);
 			stopCellEditing();
 		} else {
 			cancelCellEditing();
