@@ -567,6 +567,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private void handleResponseCode(HttpsURLConnection connection) throws IOException {
 		Logging.debug(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage());
 
+		ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
 				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");

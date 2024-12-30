@@ -100,6 +100,7 @@ public final class CertificateManager {
 			Logging.error(e, "unable to create tmp certificate file");
 		}
 
+		ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 				FileOutputStream fos = new FileOutputStream(tmpCertFile)) {
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);

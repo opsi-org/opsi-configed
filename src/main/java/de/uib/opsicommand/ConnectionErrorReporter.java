@@ -155,6 +155,7 @@ public final class ConnectionErrorReporter {
 				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
+		// The user has clicked on the OK button.
 		if (answer == 0) {
 			ConfigedMain.setPassword(new String(passwordField.getPassword()));
 		} else {
@@ -163,26 +164,11 @@ public final class ConnectionErrorReporter {
 	}
 
 	private void displayCancelConfigedDialog() {
-		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 420,
-				200);
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), JOptionPane.OK_CANCEL_OPTION);
 
-		fErrorMsg.setTooltipButtons(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCancelHint"),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCloseHint"), null);
-		fErrorMsg.setMessage(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"));
-		fErrorMsg.setAlwaysOnTop(true);
-		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
-
-		if (!SwingUtilities.isEventDispatchThread()) {
-			launchDialogInEDT(fErrorMsg);
-		} else {
-			fErrorMsg.setVisible(true);
-		}
-
-		int choice = fErrorMsg.getResult();
-
-		if (choice == 1) {
+		if (answer == 0) {
 			displayMFADialog();
 		} else {
 			Main.endApp(Main.NO_ERROR);
