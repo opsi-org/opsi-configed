@@ -24,7 +24,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.CellEditor4TableText;
+import de.uib.utils.table.gui.CellInputDialogEditor;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
@@ -142,7 +142,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		modelLicensesUsage.setEditableColumns(new int[] { 3, 4 });
 
 		TableColumn col = thePanel.getPanelUsage().getJTable().getColumnModel().getColumn(4);
-		col.setCellEditor(new CellEditor4TableText());
+		col.setCellEditor(new CellInputDialogEditor());
 
 		setPanelUsageUpdateController();
 
