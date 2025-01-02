@@ -42,7 +42,6 @@ public class FGeneralDialog extends JDialog {
 	protected JButton jButton1 = new JButton();
 	protected JButton jButton2 = new JButton();
 	private JButton jButton3 = new JButton();
-	private int defaultResult = 1;
 
 	protected int preferredWidth;
 	protected int preferredHeight;
@@ -115,10 +114,6 @@ public class FGeneralDialog extends JDialog {
 	public FGeneralDialog(Window owner, String title, String[] buttonList, int preferredWidth, int preferredHeight) {
 		super(owner);
 		initFGeneralDialog(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
-	}
-
-	public void setDefaultResult(int d) {
-		defaultResult = d;
 	}
 
 	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
@@ -378,7 +373,6 @@ public class FGeneralDialog extends JDialog {
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			result = defaultResult;
 			leave();
 		} else {
 			super.processWindowEvent(e);
