@@ -28,7 +28,6 @@ import javax.swing.table.TableColumn;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.utils.Icons;
@@ -183,10 +182,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	private static void showErrorNoRowSelected() {
-		FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Configed.getResourceValue("error"), true,
-				new String[] { Configed.getResourceValue("buttonClose") }, 200, 200);
-		fAsk.setMessage(Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
-		fAsk.setVisible(true);
+		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), Configed.getResourceValue("error"),
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void deleteSpecificEntry() {
