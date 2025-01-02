@@ -37,7 +37,6 @@ import javax.swing.KeyStroke;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
@@ -291,12 +290,11 @@ public class LogFrame extends JFrame {
 			String fileExtension = getFileExtension(fileName);
 			if (!isFileExtensionSupported(fileExtension)) {
 				Logging.error(this, "File with extension ", fileExtension, " is unsupported");
-				FTextArea fUnsupportedFileExtensionInfo = new FTextArea(this,
-						Configed.getResourceValue("LogFrame.unsupportedFileExtension.title"), true,
-						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-				fUnsupportedFileExtensionInfo.setMessage(String
-						.format(Configed.getResourceValue("LogFrame.unsupportedFileExtension.message"), fileExtension));
-				fUnsupportedFileExtensionInfo.setVisible(true);
+				JOptionPane.showMessageDialog(this,
+						String.format(Configed.getResourceValue("LogFrame.unsupportedFileExtension.message"),
+								fileExtension),
+						Configed.getResourceValue("LogFrame.unsupportedFileExtension.title"),
+						JOptionPane.ERROR_MESSAGE);
 				result = "";
 			} else if (fileName.endsWith(".log") || fileName.endsWith(".txt")
 					|| IS_FILE_EXTENSION_NUMBER_PATTERN.matcher(fileExtension).matches() || !fileName.contains(".")) {
