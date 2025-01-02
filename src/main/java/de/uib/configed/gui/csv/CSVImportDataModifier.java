@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -27,7 +28,6 @@ import org.apache.commons.csv.CSVRecord;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.HostInfo;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
@@ -102,16 +102,22 @@ public class CSVImportDataModifier {
 			if (!headerNames.containsAll(importantHeaderNames)) {
 				StringBuilder message = new StringBuilder();
 				message.append(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.message"));
+				message.append("\n");
 				message.append(" " + importantHeaderNames.toString().replace("[", "").replace("]", ""));
-				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.title"),
-						message.toString());
+				JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
+						Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.title"),
+						JOptionPane.ERROR_MESSAGE);
+
 				return null;
 			}
 
 			for (CSVRecord csvRecord : parser.getRecords()) {
 				if (!csvRecord.isConsistent()) {
-					displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
-							Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
+					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+							Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"),
+							Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
+							JOptionPane.ERROR_MESSAGE);
+
 					csvData = null;
 					break;
 				}
@@ -122,19 +128,14 @@ public class CSVImportDataModifier {
 			}
 		} catch (IOException | UncheckedIOException ex) {
 			Logging.warning(this, ex, "Failed to read CSV file");
-			displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title"),
-					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"));
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"),
+					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title"),
+					JOptionPane.ERROR_MESSAGE);
+
 			csvData = null;
 		}
 		return csvData;
-	}
-
-	private static void displayInfoDialog(String title, String message) {
-		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title, false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-		fInfo.setMessage(message);
-		fInfo.setAlwaysOnTop(true);
-		fInfo.setVisible(true);
 	}
 
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
