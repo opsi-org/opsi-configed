@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
@@ -28,7 +29,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
-import de.uib.configed.gui.FShowList;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -294,21 +294,16 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private boolean confirmAction() {
-		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 400,
-				200);
-
-		fConfirmAction.setMessage(Configed.getResourceValue("PackageManagerUninstallParameterDialog.confirm") + "\n"
+		String message = Configed.getResourceValue("PackageManagerUninstallParameterDialog.confirm") + "\n"
 				+ textFieldProduct.getText() + "\n\n"
 				+ Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn") + "\n\n"
-				+ textFieldSelectedDepots.getText());
+				+ textFieldSelectedDepots.getText();
 
-		fConfirmAction.setLocationRelativeTo(this);
-		fConfirmAction.setAlwaysOnTop(true);
-		fConfirmAction.setVisible(true);
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"),
+				JOptionPane.OK_CANCEL_OPTION);
 
-		return fConfirmAction.getResult() == 2;
+		return answer == JOptionPane.OK_OPTION;
 	}
 
 	@Override
