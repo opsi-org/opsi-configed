@@ -134,7 +134,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 			// We remove the host key if it was included in the selection
 			// but the user does not want to include it
 			if (result.contains(HostInfo.HOST_KEY_KEY) && !Utils.includeOpsiHostKey()) {
-				result.remove(HostInfo.HOST_KEY_KEY);
+				return new ArrayList<>();
 			}
 
 			return result;
