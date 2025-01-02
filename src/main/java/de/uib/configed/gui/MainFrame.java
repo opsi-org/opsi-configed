@@ -21,12 +21,15 @@ import java.util.Map.Entry;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -599,40 +602,25 @@ public class MainFrame extends JFrame {
 	}
 
 	private static void showLogfileLocationAction(JFrame centerFrame) {
-		FTextArea info = new FTextArea(centerFrame, Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
-				new String[] { Configed.getResourceValue("buttonClose"),
-						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
-						Configed.getResourceValue("MainFrame.showLogFileOpen") },
-				400, 200) {
-			@Override
-			public void doAction2() {
-				getTextComponent().copy();
+		JTextArea jTextArea = new JTextArea(Logging.getCurrentLogfilePath());
+		jTextArea.setEditable(false);
+
+		JButton buttonCopy = new JButton(Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"));
+		buttonCopy.addActionListener(e -> jTextArea.copy());
+
+		JButton buttonOpen = new JButton(Configed.getResourceValue("MainFrame.showLogFileOpen"));
+		buttonOpen.addActionListener((ActionEvent event) -> {
+			try {
+				Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
+			} catch (IOException ex) {
+				Logging.error(ex, "cannot open: ", Logging.getCurrentLogfilePath());
 			}
+		});
 
-			@Override
-			public void doAction3() {
-				try {
-					Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
-				} catch (IOException e) {
-					Logging.error(e, "cannot open: ", Logging.getCurrentLogfilePath());
-				}
-				super.doAction2();
-			}
-		};
-
-		StringBuilder message = new StringBuilder();
-
-		message.append(Configed.getResourceValue("MainFrame.showLogFileInfoText"));
-		message.append("\n\n");
-		message.append(Logging.getCurrentLogfilePath());
-
-		info.setMessage(message.toString());
-
-		info.getTextComponent().setSelectionEnd(message.toString().length());
-		info.getTextComponent()
-				.setSelectionStart(message.toString().length() - Logging.getCurrentLogfilePath().length());
-
-		info.setVisible(true);
+		JOptionPane.showOptionDialog(centerFrame, jTextArea,
+				Configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"), JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null,
+				new Object[] { Configed.getResourceValue("buttonClose"), buttonCopy, buttonOpen }, null);
 	}
 
 	public void showHealthDataAction() {

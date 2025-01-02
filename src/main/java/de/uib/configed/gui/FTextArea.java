@@ -12,7 +12,6 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Globals;
 
@@ -39,10 +38,6 @@ public class FTextArea extends FGeneralDialog {
 	public void setMessage(String message) {
 		jTextPane.setText(message);
 		jTextPane.setCaretPosition(0);
-	}
-
-	public JTextComponent getTextComponent() {
-		return jTextPane;
 	}
 
 	private void initFTextArea() {
