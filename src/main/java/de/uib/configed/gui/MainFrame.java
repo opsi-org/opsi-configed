@@ -34,7 +34,6 @@ import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
-import de.uib.configed.FCreditsDialog;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.serverconsole.command.CommandExecutor;
@@ -458,7 +457,7 @@ public class MainFrame extends JFrame {
 
 	public static void addCreditsMenus(JMenu jMenuHelp, JFrame owner) {
 		JMenuItem jMenuHelpCredits = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCredits"));
-		jMenuHelpCredits.addActionListener(actionEvent -> FCreditsDialog.display(owner));
+		jMenuHelpCredits.addActionListener(actionEvent -> Utils.showCreditsAction(owner));
 		jMenuHelp.add(jMenuHelpCredits);
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"),

@@ -6,9 +6,13 @@
 
 package de.uib.utils;
 
+import java.awt.Dimension;
+import java.io.BufferedReader;
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -23,11 +27,14 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.gui.productpage.TextMarkdownPane;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -52,10 +59,6 @@ public final class Utils {
 	}
 
 	public static void showAboutAction(JFrame parent) {
-		FTextArea info = new FTextArea(parent,
-				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME, true,
-				new String[] { Configed.getResourceValue("buttonClose") }, 500, 300);
-
 		StringBuilder message = new StringBuilder();
 		message.append(Globals.APPNAME + "  " + Configed.getResourceValue("LoginDialog.version") + "  "
 				+ Globals.VERSION + " (" + Globals.VERDATE + ") ");
@@ -69,8 +72,42 @@ public final class Utils {
 		message.append("running on java version " + COMPLETE_VERSION_INFO + "\n");
 		message.append("on architecture " + System.getProperty("os.arch"));
 
-		info.setMessage(message.toString());
-		info.setVisible(true);
+		JOptionPane.showMessageDialog(parent, message,
+				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME,
+				JOptionPane.PLAIN_MESSAGE);
+	}
+
+	public static void showCreditsAction(JFrame parent) {
+		StringBuilder message = new StringBuilder();
+		message.append(Configed.getResourceValue("FCreditsDialog.message1"));
+		message.append("<br>");
+		message.append(Configed.getResourceValue("FCreditsDialog.message2"));
+		message.append("<br><br>");
+		message.append(Configed.getResourceValue("FCreditsDialog.message3"));
+		message.append("<br><br>");
+		appendCreditsFromFile(message);
+
+		TextMarkdownPane jTextPane = new TextMarkdownPane();
+		jTextPane.setText(message.toString());
+		jTextPane.setPreferredSize(new Dimension(jTextPane.getPreferredSize().width, 200));
+
+		JScrollPane scrollpane = new JScrollPane(jTextPane);
+
+		JOptionPane.showMessageDialog(parent, scrollpane, Configed.getResourceValue("MainFrame.jMenuHelpCredits"),
+				JOptionPane.PLAIN_MESSAGE);
+	}
+
+	private static void appendCreditsFromFile(StringBuilder message) {
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("credits.md"),
+						StandardCharsets.UTF_8))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				message.append(line + "<br>");
+			}
+		} catch (IOException e) {
+			Logging.warning(e, "unable to read credits file");
+		}
 	}
 
 	public static List<String> readLocallySavedServerNames() {
