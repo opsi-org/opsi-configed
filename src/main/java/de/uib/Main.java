@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -26,7 +27,6 @@ import com.formdev.flatlaf.util.SystemInfo;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FTextArea;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -46,8 +46,6 @@ public class Main {
 	public static final int ERROR_OUT_OF_MEMORY = 21;
 
 	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
-
-	private static FTextArea fErrorOutOfMemory;
 
 	private static boolean isLogviewer;
 
@@ -195,7 +193,9 @@ public class Main {
 		Logging.info("regularly exiting app with code ", exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {
-			fErrorOutOfMemory.setVisible(true);
+			JOptionPane.showMessageDialog(null,
+					"The program will be terminated,\nsince more memory is required than was assigned.",
+					Globals.APPNAME + "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		System.exit(exitcode);
@@ -251,12 +251,5 @@ public class Main {
 		} else {
 			Configed.main(cmd);
 		}
-
-		fErrorOutOfMemory = new FTextArea(null, "configed", true,
-				new String[] { Configed.getResourceValue("buttonClose") }, 400, 400);
-
-		// we activate it in case of an appropriate error
-		fErrorOutOfMemory
-				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
 	}
 }
