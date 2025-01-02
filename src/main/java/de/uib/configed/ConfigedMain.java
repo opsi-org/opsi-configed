@@ -39,7 +39,6 @@ import de.uib.Main;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.gui.ClientTablePanel;
 import de.uib.configed.gui.DepotsList;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.DependenciesModel;
@@ -272,10 +271,8 @@ public class ConfigedMain {
 			Logging.error(this,
 					"this should not happen: group actions are not available since the module \"local_imaging\" is not available");
 		} else if (!activatedGroupModel.isActive()) {
-			FTextArea f = new FTextArea(mainFrame, Configed.getResourceValue("information"), true,
-					new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-			f.setMessage(Configed.getResourceValue("ConfigedMain.noGroupSelected"));
-			f.setVisible(true);
+			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.noGroupSelected"),
+					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
 		} else {
 			ExtraFrameController.startGroupActionFrame(this);
 		}
