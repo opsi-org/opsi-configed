@@ -19,11 +19,6 @@ import de.uib.utils.logging.Logging;
 public class FShowList extends FTextArea {
 	private JTextArea jTextArea1 = new JTextArea();
 
-	public FShowList(JFrame owner, String title, boolean modal, String[] buttonList) {
-		super(owner, title, modal, buttonList);
-		initFShowList();
-	}
-
 	public FShowList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
 		super(owner, title, modal, buttonList);
@@ -48,14 +43,6 @@ public class FShowList extends FTextArea {
 		for (String line : lines) {
 			appendLine(line);
 		}
-	}
-
-	public void setLineWrap(boolean b) {
-		jTextArea1.setLineWrap(b);
-	}
-
-	private void initFShowList() {
-		initFShowList(800, 300);
 	}
 
 	private void initFShowList(int preferredWidth, int preferredHeight) {

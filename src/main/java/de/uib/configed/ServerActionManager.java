@@ -6,18 +6,20 @@
 
 package de.uib.configed;
 
-import java.awt.Dimension;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import de.uib.configed.gui.FShowListWithComboSelect;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
@@ -391,46 +393,36 @@ public final class ServerActionManager {
 			return;
 		}
 
-		FShowListWithComboSelect fChangeDepotForClients = new FShowListWithComboSelect(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
-				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), configedMain.getDepotArray(),
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") });
+		JComboBox<String> depotCombo = new JComboBox<>(configedMain.getDepotArray());
 
-		fChangeDepotForClients.setLineWrap(false);
-
-		StringBuilder messageBuffer = new StringBuilder(
-				"\n" + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving") + ": \n\n");
-
+		// We use the StringJoiner to separate these strings of clients with depots with a newline
+		StringJoiner stringJoiner = new StringJoiner("\n");
 		for (String selectedClient : configedMain.getSelectedClients()) {
-			messageBuffer.append(selectedClient);
-			messageBuffer.append("     (from: ");
-			messageBuffer.append(
-					persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient));
-
-			messageBuffer.append(") ");
-
-			messageBuffer.append("\n");
+			stringJoiner.add(selectedClient + "  ("
+					+ persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(selectedClient)
+					+ ")");
 		}
 
-		fChangeDepotForClients.setSize(new Dimension(400, 250));
-		fChangeDepotForClients.setMessage(messageBuffer.toString());
+		JTextArea selectedClientsArea = new JTextArea(stringJoiner.toString());
+		selectedClientsArea.setEditable(false);
 
-		fChangeDepotForClients.setVisible(true);
+		// We set the number of rows to be the number of selected clients, but at most 4
+		selectedClientsArea.setRows(Math.min(4, configedMain.getSelectedClients().size()));
 
-		if (fChangeDepotForClients.getResult() != 2) {
-			return;
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				new Object[] { Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving"),
+						new JScrollPane(selectedClientsArea),
+						"\n" + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), depotCombo },
+				Configed.getResourceValue("MainFrame.jMenuChangeDepot"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (answer == JOptionPane.OK_OPTION) {
+			Logging.debug(" start moving to another depot");
+			persistenceController.getHostInfoCollections().setDepotForClients(configedMain.getSelectedClients(),
+					(String) depotCombo.getSelectedItem());
+			Logging.checkErrorList();
+			configedMain.refreshClientListKeepingGroup();
+
 		}
-
-		final String targetDepot = (String) fChangeDepotForClients.getChoice();
-
-		if (targetDepot == null || targetDepot.isEmpty()) {
-			return;
-		}
-
-		Logging.debug(" start moving to another depot");
-		persistenceController.getHostInfoCollections().setDepotForClients(configedMain.getSelectedClients(),
-				targetDepot);
-		Logging.checkErrorList();
-		configedMain.refreshClientListKeepingGroup();
 	}
 }
