@@ -619,7 +619,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
 			}
-			CSVImportDataDialog csvImportDataDialog = CSVImportDataDialog.createCSVImportDataDialog(csvFile);
+			CSVImportDataDialog csvImportDataDialog = CSVImportDataDialog.createCSVImportDataDialog(this, csvFile);
 
 			if (csvImportDataDialog == null) {
 				return;

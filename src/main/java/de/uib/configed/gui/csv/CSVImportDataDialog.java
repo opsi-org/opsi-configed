@@ -21,6 +21,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.event.DocumentEvent;
@@ -36,7 +37,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.HostInfo;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.PanelGenEditTable;
@@ -350,16 +350,19 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		return modifier;
 	}
 
-	public static CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
+	public static CSVImportDataDialog createCSVImportDataDialog(FGeneralDialog parent, String csvFile) {
 		Logging.info("createCSVImportDataDialog for file ", csvFile);
 		List<String> columnNames = HostInfo.getKeysForCSV();
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
 		try {
 			csvFormatDetector.detectFormat(csvFile);
 			if (csvFormatDetector.hasHeader() && !csvFormatDetector.hasExpectedHeaderNames(columnNames)) {
-				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
+				JOptionPane.showMessageDialog(parent,
 						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
-								+ columnNames.toString().replace("[", "").replace("]", ""));
+								+ columnNames.toString().replace("[", "").replace("]", ""),
+						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
+						JOptionPane.ERROR_MESSAGE);
+
 				return null;
 			}
 		} catch (IOException e) {
@@ -381,13 +384,5 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		csvImportDataDialog.setDetectedOptions();
 
 		return csvImportDataDialog;
-	}
-
-	private static void displayInfoDialog(String title, String message) {
-		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title, false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-		fInfo.setMessage(message);
-		fInfo.setAlwaysOnTop(true);
-		fInfo.setVisible(true);
 	}
 }
