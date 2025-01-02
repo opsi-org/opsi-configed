@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringJoiner;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -633,20 +634,18 @@ public class MainFrame extends JFrame {
 
 	public void showOpsiModules() {
 		if (!persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
-			StringBuilder message = new StringBuilder();
 			Map<String, Object> modulesInfo = persistenceController.getModuleDataService().getOpsiModulesInfosPD();
 
-			int count = 0;
+			StringJoiner message = new StringJoiner("\n");
 			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
-				count++;
-				message.append("\n " + modulesInfoEntry.getKey() + ": " + modulesInfoEntry.getValue());
+				message.add(modulesInfoEntry.getKey() + ": " + modulesInfoEntry.getValue());
 			}
 
-			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					true, new String[] { Configed.getResourceValue("buttonClose") }, 300, 50 + count * 25);
-			f.setMessage(message.toString());
+			JTextArea textArea = new JTextArea(message.toString());
+			textArea.setEditable(false);
 
-			f.setVisible(true);
+			JOptionPane.showMessageDialog(this, textArea,
+					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), JOptionPane.PLAIN_MESSAGE);
 		} else {
 			showPanel(mainPanelManager.getOpsiLicensingPanel());
 		}
