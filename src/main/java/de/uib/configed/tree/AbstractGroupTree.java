@@ -299,7 +299,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 						new Object[] { inscription, Configed.getResourceValue("ClientTree.editNode.label.groupname"),
 								groupNameField, Configed.getResourceValue("ClientTree.editNode.label.description"),
 								groupDescriptionField },
-						Configed.getResourceValue("ClientTree.addNode.title"), JOptionPane.OK_CANCEL_OPTION,
+						Configed.getResourceValue("ClientTree.addNode"), JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.PLAIN_MESSAGE);
 
 				if (answer == JOptionPane.OK_OPTION) {
