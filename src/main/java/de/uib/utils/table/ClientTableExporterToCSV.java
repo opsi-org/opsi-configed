@@ -128,15 +128,18 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 		fColumSelectionList.setMultiSelection();
 		fColumSelectionList.setVisible(true);
 
-		List<String> result = new ArrayList<>();
-
 		if (fColumSelectionList.getResult() == 2) {
-			result = fColumSelectionList.getSelectedValues();
-			if (result.contains(HostInfo.HOST_KEY_KEY) && !Utils.includeOpsiHostKey()) {
-				result = new ArrayList<>();
-			}
-		}
+			List<String> result = fColumSelectionList.getSelectedValues();
 
-		return result;
+			// We remove the host key if it was included in the selection
+			// but the user does not want to include it
+			if (result.contains(HostInfo.HOST_KEY_KEY) && !Utils.includeOpsiHostKey()) {
+				result.remove(HostInfo.HOST_KEY_KEY);
+			}
+
+			return result;
+		} else {
+			return new ArrayList<>();
+		}
 	}
 }
