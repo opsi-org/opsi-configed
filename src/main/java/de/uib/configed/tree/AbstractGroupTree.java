@@ -255,8 +255,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			// found a group
 			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ClientTree.deleteGroupWarning"),
-					Configed.getResourceValue("ClientTree.deleteGroupNode"), JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.WARNING_MESSAGE);
+					Configed.getResourceValue("ClientTree.deleteGroupNode") + " " + nodeID,
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			if (returnedOption == JOptionPane.OK_OPTION) {
 				groupNodes.remove(nodeID);
