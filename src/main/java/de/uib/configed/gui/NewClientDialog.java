@@ -430,12 +430,9 @@ public final class NewClientDialog extends FGeneralDialog {
 			List<Object> client = iter.next();
 
 			if (!isBoolean((String) client.get(10)) || !isBoolean((String) client.get(11))) {
-				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"), false,
-						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-				fInfo.setMessage(Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
-				fInfo.setAlwaysOnTop(true);
-				fInfo.setVisible(true);
+				JOptionPane.showMessageDialog(this,
+						Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"),
+						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -542,21 +539,18 @@ public final class NewClientDialog extends FGeneralDialog {
 				return false;
 			}
 
-			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"), true,
-					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
 			StringBuilder message = new StringBuilder();
 			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
 			message.append(" \"");
 			message.append(opsiHostKey);
 			message.append("\" \n");
 			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
-			fQuestion.setMessage(message.toString());
-			fQuestion.setLocationRelativeTo(this);
-			fQuestion.setAlwaysOnTop(true);
-			fQuestion.setVisible(true);
 
-			if (fQuestion.getResult() == 1) {
+			int answer = JOptionPane.showConfirmDialog(this, message.toString(),
+					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question"),
+					JOptionPane.YES_NO_OPTION);
+
+			if (answer == JOptionPane.NO_OPTION) {
 				return false;
 			}
 		}
@@ -566,15 +560,12 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private boolean checkHostname(String hostname) {
 		if (hostname.length() > 15) {
-			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"), true,
-					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") });
-			fQuestion.setMessage(Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
-			fQuestion.setLocationRelativeTo(this);
-			fQuestion.setAlwaysOnTop(true);
-			fQuestion.setVisible(true);
+			int answer = JOptionPane.showConfirmDialog(this,
+					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"),
+					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question"),
+					JOptionPane.YES_NO_OPTION);
 
-			if (fQuestion.getResult() == 1) {
+			if (answer == JOptionPane.NO_OPTION) {
 				return false;
 			}
 		}
@@ -589,16 +580,12 @@ public final class NewClientDialog extends FGeneralDialog {
 		}
 
 		if (onlyNumbers) {
-			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question"), true,
-					new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
-					100);
-			fQuestion.setMessage(Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
-			fQuestion.setLocationRelativeTo(this);
-			fQuestion.setAlwaysOnTop(true);
-			fQuestion.setVisible(true);
+			int answer = JOptionPane.showConfirmDialog(this,
+					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"),
+					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question"),
+					JOptionPane.YES_NO_OPTION);
 
-			if (fQuestion.getResult() == 1) {
+			if (answer == JOptionPane.NO_OPTION) {
 				return false;
 			}
 		}
