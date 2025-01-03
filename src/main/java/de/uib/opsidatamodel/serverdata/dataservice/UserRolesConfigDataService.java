@@ -15,11 +15,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -253,39 +253,35 @@ public class UserRolesConfigDataService {
 			} else if (Boolean.TRUE.equals(locallySavedValueUserRegister)) {
 				// if true was locally saved but is not the value from service then we ask
 				Logging.warning(this, "setAgainUserRegistration, it seems that user check has been deactivated");
+				StringBuilder message = new StringBuilder(
+						Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
+				message.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
 
-				FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("RegisterUserWarning.dialog.title"), true,
-						new String[] { Configed.getResourceValue("buttonClose"),
+				int answer = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), message.toString(),
+						Configed.getResourceValue("RegisterUserWarning.dialog.title"), 0, JOptionPane.WARNING_MESSAGE,
+						null,
+						new Object[] { Configed.getResourceValue("buttonClose"),
 								Configed.getResourceValue("RegisterUserWarning.dialog.button.dontWarnAgain"),
 								Configed.getResourceValue("RegisterUserWarning.dialog.button.reactivateUserRoles") },
-						600, 200);
-				StringBuilder msg = new StringBuilder(Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
-				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
+						null);
 
-				dialog.setMessage(msg.toString());
-				dialog.setVisible(true);
-				int result = dialog.getResult();
-				Logging.info(this, "setAgainUserRegistration, reaction via option ", dialog.getResult());
+				Logging.info(this, "setAgainUserRegistration, reaction via option ", answer);
 
-				switch (result) {
+				switch (answer) {
 				case 1:
-					Logging.info(this, "setAgainUserRegistration ignore ");
-					break;
-
-				case 2:
 					Logging.info(this, "setAgainUserRegistration remove warning locally ");
 					// remove from store
 					Configed.getSavedStates().remove(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER);
 					break;
 
-				case 3:
+				case 2:
 					Logging.info(this, "setAgainUserRegistration reactivate user check ");
 					resultVal = true;
 					break;
 
 				default:
-					Logging.warning(this, "no case found for result in setAgainUserRegistration");
+					// We pressed cancel or closed the dialog
+					Logging.info(this, "setAgainUserRegistration ignore ");
 					break;
 				}
 			} else {
