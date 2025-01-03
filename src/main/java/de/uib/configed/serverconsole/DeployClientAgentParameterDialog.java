@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
@@ -28,7 +29,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent.FinalActionType;
@@ -216,28 +216,30 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		Logging.info(this, "doAction2 deploy-clientagent ");
 		if (jTextFieldClient.getText().isEmpty()) {
 			Logging.warning(this, "Client name(s) missing.");
-			displayNoClientSpecified();
+			JOptionPane.showMessageDialog(null,
+					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.message"),
+					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.title"),
+					JOptionPane.ERROR_MESSAGE);
+
 			return;
 		}
 		Set<String> clients = Set.of(jTextFieldClient.getText().trim().split(" "));
 		Set<String> nonExistingHostNames = getNonExistingHostNames(clients);
 		if (!nonExistingHostNames.isEmpty()) {
-			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"), true,
-					new String[] { Configed.getResourceValue("buttonCancel"),
-							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed") });
 			StringBuilder message = new StringBuilder();
 			message.append(Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.message1"));
 			message.append("\n\n");
 			message.append(nonExistingHostNames.toString().replace("[", "").replace("]", "").replace(",", "\n"));
 			message.append("\n\n");
 			message.append(Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.message2"));
-			fQuestion.setMessage(message.toString());
-			fQuestion.setLocationRelativeTo(this);
-			fQuestion.setAlwaysOnTop(true);
-			fQuestion.setVisible(true);
 
-			if (fQuestion.getResult() == 2) {
+			int answer = JOptionPane.showOptionDialog(this, message.toString(),
+					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"), 0, 0, null,
+					new String[] { Configed.getResourceValue("buttonCancel"),
+							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed") },
+					null);
+
+			if (answer == 1) {
 				clients.removeAll(nonExistingHostNames);
 			} else {
 				return;
@@ -266,17 +268,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		nonExistingHostNames.addAll(hostNames);
 		nonExistingHostNames.removeAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
 		return nonExistingHostNames;
-	}
-
-	private static void displayNoClientSpecified() {
-		FTextArea fNoClientSpecifiedDialog = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.title"), true,
-				new String[] { Configed.getResourceValue("buttonClose") });
-		fNoClientSpecifiedDialog
-				.setMessage(Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.message"));
-		fNoClientSpecifiedDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fNoClientSpecifiedDialog.setAlwaysOnTop(true);
-		fNoClientSpecifiedDialog.setVisible(true);
 	}
 
 	private void doCopySelectedClients() {
