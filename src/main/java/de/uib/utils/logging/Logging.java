@@ -6,6 +6,8 @@
 
 package de.uib.utils.logging;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,9 +21,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FShowList;
 
 @SuppressWarnings("java:S923")
 public final class Logging {
@@ -73,7 +80,8 @@ public final class Logging {
 	private static final int MAX_LISTED_ERRORS = 20;
 	private static List<String> errorList = new ArrayList<>(MAX_LISTED_ERRORS);
 
-	private static FShowList fErrors;
+	private static JDialog dialog;
+	private static JTextArea jTextArea;
 
 	// private constructor to hide the implicit public one
 	private Logging() {
@@ -386,24 +394,40 @@ public final class Logging {
 			return;
 		}
 
-		if (fErrors == null) {
-			fErrors = new FShowList(ConfigedMain.getMainFrame(), Configed.getResourceValue("problemsOccurred"), false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
+		if (dialog == null) {
+			jTextArea = new JTextArea();
+			jTextArea.setEditable(false);
+			jTextArea.setLineWrap(true);
+			jTextArea.setColumns(40);
+			jTextArea.setRows(10);
+
+			JScrollPane scrollPane = new JScrollPane(jTextArea);
+			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+			JOptionPane optionPane = new JOptionPane();
+			optionPane.setMessage(scrollPane);
+
+			dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("problemsOccurred"));
+			dialog.setModal(false);
+
+			/**
+			 * Whenever the dialog is hidden, we want to clear the errorlist By
+			 * trying out different listeners, this was the only one that worked
+			 * reliably always and only when the dialog was closed, no matter
+			 * which button or key was pressed
+			 */
+			dialog.addComponentListener(new ComponentAdapter() {
+				@Override
+				public void componentHidden(ComponentEvent e) {
+					clearErrorList();
+				}
+			});
 		}
 
-		fErrors.setMessage(Logging.getErrorListAsLines());
-		fErrors.setAlwaysOnTop(true);
-		fErrors.setVisible(true);
-	}
-
-	public static String getErrorListAsLines() {
-		StringBuilder result = new StringBuilder();
-		for (String error : errorList) {
-			result.append("\n");
-			result.append(error);
-		}
-
-		return result.toString();
+		// Get the text as a string, each element separated by a newline
+		jTextArea.setText(errorList.toString().replace("[", "").replace("]", "").replace(",", "\n"));
+		dialog.setVisible(true);
 	}
 
 	public static void setLogDirectoryName(String logDirectoryName) {
