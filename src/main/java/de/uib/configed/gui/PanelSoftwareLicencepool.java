@@ -41,7 +41,6 @@ public class PanelSoftwareLicencepool extends PanelGenEditTable {
 	}
 
 	@Override
-
 	public void valueChanged(ListSelectionEvent e) {
 		Logging.info(this, "panelSWxLicensepool ListSelectionEvent ", e);
 		super.valueChanged(e);

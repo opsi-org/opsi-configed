@@ -75,8 +75,11 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 	private JButton buttonSetAllAssignmentsToGloballySelectedPool;
 	private JLabel labelSetAllAssignmentsToGloballySelectedPool;
-	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
-	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
+
+	// This button and label  needs to be instanciated because it will be used in the class PanelSoftwareLicencepool
+	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton();
+	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel();
+
 	private JButton buttonRemoveAllAssignments;
 	private JLabel labelRemoveAllAssignments;
 
@@ -174,9 +177,9 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		buttonSetAllAssignmentsToGloballySelectedPool
 				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(globalLicensePool)));
 
-		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton(Icons.getIntellijIcon("add"));
+		buttonSetAllAssignmentsToPoolFromSelectedRow.setIcon(Icons.getIntellijIcon("add"));
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
-		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(
+		labelSetAllAssignmentsToPoolFromSelectedRow.setText(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow"));
 		buttonSetAllAssignmentsToPoolFromSelectedRow
 				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(
