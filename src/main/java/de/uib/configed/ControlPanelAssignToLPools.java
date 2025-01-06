@@ -26,7 +26,6 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicensePool;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.gui.licenses.PanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
@@ -383,16 +382,15 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		Logging.info(" software with ident \"", key, "\" already associated to license pool ", otherPool);
 
-		FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(), title, true,
+		int answer = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), info + "\n\n" + option, title,
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
 				new String[] { Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
 						Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
-				400, 200);
-		dialog.setMessage(info + "\n\n" + option);
-		dialog.setVisible(true);
+				null);
 
-		Logging.info(this, "validateWindowsSoftwareKeys result ", dialog.getResult());
+		Logging.info(this, "validateWindowsSoftwareKeys result ", answer);
 
-		if (dialog.getResult() == 1) {
+		if (answer == 0) {
 			// we cancel the new selection
 			cancelSelectionKeys.add(key);
 		} else {
