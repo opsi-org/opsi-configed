@@ -30,9 +30,6 @@ import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class FGeneralDialog extends JDialog {
-	private static final int DEFAULT_PREFERRED_WIDTH = 250;
-	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
-
 	protected JPanel allpane = new JPanel();
 
 	protected JScrollPane scrollpane = new JScrollPane();
@@ -81,10 +78,6 @@ public class FGeneralDialog extends JDialog {
 		checkAdditionalComponent();
 		additionalComponent.setVisible(false);
 		guiInit();
-	}
-
-	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList) {
-		this(owner, title, modal, buttonList, DEFAULT_PREFERRED_WIDTH, DEFAULT_PREFERRED_HEIGHT);
 	}
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,

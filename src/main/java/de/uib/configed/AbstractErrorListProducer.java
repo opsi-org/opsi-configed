@@ -8,7 +8,7 @@ package de.uib.configed;
 
 import java.util.List;
 
-import de.uib.configed.gui.FShowList;
+import javax.swing.JOptionPane;
 
 public abstract class AbstractErrorListProducer extends Thread {
 	String title;
@@ -24,19 +24,9 @@ public abstract class AbstractErrorListProducer extends Thread {
 		List<String> errors = getErrors();
 
 		if (!errors.isEmpty()) {
-			// final
-			FShowList fListFeedback = new FShowList(ConfigedMain.getMainFrame(), title, false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 800, 200);
-
-			fListFeedback.setMessage("");
-			fListFeedback.setButtonsEnabled(true);
-			fListFeedback.setCursor(Globals.WAIT_CURSOR);
-			fListFeedback.setVisible(true);
-			fListFeedback.setLines(errors);
-			fListFeedback.setCursor(null);
-			fListFeedback.setButtonsEnabled(true);
-
-			fListFeedback.setVisible(true);
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					errors.toString().replace("[", "").replace("]", "").replace(",", "\n"), title,
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
