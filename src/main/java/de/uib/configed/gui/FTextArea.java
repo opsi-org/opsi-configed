@@ -19,22 +19,12 @@ public class FTextArea extends FGeneralDialog {
 
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList) {
 		super(owner, title, modal, buttonList);
-		initFTextArea();
-	}
-
-	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
-			int preferredHeight) {
-		super(owner, title, modal, buttonList, preferredWidth, preferredHeight);
-		initFTextArea(preferredWidth, preferredHeight);
+		initFTextArea(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT);
 	}
 
 	public void setMessage(String message) {
 		jTextPane.setText(message);
 		jTextPane.setCaretPosition(0);
-	}
-
-	private void initFTextArea() {
-		initFTextArea(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT);
 	}
 
 	private void initFTextArea(int preferredWidth, int preferredHeight) {

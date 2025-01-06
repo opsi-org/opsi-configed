@@ -101,7 +101,7 @@ public final class Utils {
 		jTextArea.setText(message);
 
 		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), jTextArea,
-				Configed.getResourceValue("Permission.modules.infoheader"), JOptionPane.WARNING_MESSAGE);
+				Configed.getResourceValue("Permission.modules.title"), JOptionPane.WARNING_MESSAGE);
 	}
 
 	private static void appendCreditsFromFile(StringBuilder message) {

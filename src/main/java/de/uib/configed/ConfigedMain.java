@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SwingUtilities;
@@ -49,7 +48,6 @@ import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.Messagebus;
-import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -1110,8 +1108,6 @@ public class ConfigedMain {
 
 		preloadData();
 
-		FOpsiLicenseMissingText.reset();
-
 		mainFrame.resetData();
 
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
@@ -1240,17 +1236,6 @@ public class ConfigedMain {
 		terminalFrame.setMessagebus(Messagebus.getInstance());
 		terminalFrame.setSession(connectToHost);
 		terminalFrame.display();
-	}
-
-	public static JFrame getFrame() {
-		if (mainFrame != null) {
-			return mainFrame;
-		} else if (loginDialog != null) {
-			return loginDialog;
-		} else {
-			Logging.error(ConfigedMain.class, "This should not happen... Both mainFrame and loginDialog are null");
-			return null;
-		}
 	}
 
 	public static boolean closeInstance(boolean checkdirty) {

@@ -28,7 +28,6 @@ import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -101,7 +100,6 @@ public final class Configed {
 					formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1_000_000));
 		}
 
-		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
 		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, paramSSO);

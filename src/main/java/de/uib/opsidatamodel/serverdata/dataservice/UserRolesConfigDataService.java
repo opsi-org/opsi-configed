@@ -24,7 +24,6 @@ import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.permission.UserOpsipermission;
@@ -207,16 +206,14 @@ public class UserRolesConfigDataService {
 
 	private void callOpsiLicenseMissingText() {
 		StringBuilder info = new StringBuilder();
-		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
-		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
-		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "<br>");
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "<br>");
 		info.append(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER + " "
 				+ Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
-		info.append("\n");
 
 		Logging.warning(this, " user role administration configured but not permitted by the modules file ", info);
 
-		FOpsiLicenseMissingText.callInstanceWith(info.toString());
+		Utils.showMissingLicenseModules(info.toString());
 	}
 
 	private boolean doesUserBelongToSystemsReadOnlyGroup() {
