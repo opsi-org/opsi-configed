@@ -229,8 +229,6 @@ public class ConfigedMain {
 	}
 
 	protected void preloadData() {
-		persistenceController.getModuleDataService().retrieveOpsiModules();
-
 		if (depotRepresentative == null) {
 			depotRepresentative = persistenceController.getHostInfoCollections().getConfigServer();
 		}

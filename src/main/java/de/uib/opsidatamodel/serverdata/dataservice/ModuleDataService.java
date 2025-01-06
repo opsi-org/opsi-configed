@@ -21,7 +21,6 @@ import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.HostInfoCollections;
-import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.permission.ModulePermissionValue;
@@ -31,6 +30,7 @@ import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.ExtendedDate;
 import de.uib.utils.ExtendedInteger;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 /**
@@ -342,6 +342,7 @@ public class ModuleDataService {
 
 				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
 					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
+					missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
 
 					if (today.isAfter(noticeDate)) {
 						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
@@ -381,6 +382,10 @@ public class ModuleDataService {
 				}
 			}
 		}
+		String warningText = String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"), "" + 23,
+				"" + "key asöldkfj", "" + 23324);
+
+		missingModulesPermissionInfo.add(warningText);
 
 		Logging.info(this, "modules resulting  ", opsiModules);
 		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos ", missingModulesPermissionInfo);
@@ -403,7 +408,7 @@ public class ModuleDataService {
 				}
 
 				Logging.info(this, "missingModules ", info);
-				FOpsiLicenseMissingText.callInstanceWith(info.toString());
+				Utils.showMissingLicenseModules(info.toString());
 			});
 		}
 	}
