@@ -96,6 +96,14 @@ public final class Utils {
 				JOptionPane.PLAIN_MESSAGE);
 	}
 
+	public static void showMissingLicenseModules(String message) {
+		TextMarkdownPane jTextArea = new TextMarkdownPane();
+		jTextArea.setText(message);
+
+		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), jTextArea,
+				Configed.getResourceValue("Permission.modules.infoheader"), JOptionPane.WARNING_MESSAGE);
+	}
+
 	private static void appendCreditsFromFile(StringBuilder message) {
 		try (BufferedReader br = new BufferedReader(
 				new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("credits.md"),

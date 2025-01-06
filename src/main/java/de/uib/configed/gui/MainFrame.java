@@ -52,7 +52,6 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
-import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -663,8 +662,8 @@ public class MainFrame extends JFrame {
 					Logging.info(this, "show licensing pane");
 					showPanel(mainPanelManager.getLicenseManagementPanel());
 				} else {
-					FOpsiLicenseMissingText
-							.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
+					Utils.showMissingLicenseModules(
+							Configed.getResourceValue("ConfigedMain.LicensemanagementNotActive"));
 				}
 
 				if (Boolean.TRUE.equals(persistenceController.getConfigDataService().getGlobalBooleanConfigValue(
