@@ -331,8 +331,7 @@ public final class ClientMenuManager implements MenuListener {
 		jCheckBoxMenuItemShowInstallByShutdown.addActionListener(
 				event -> configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
+		JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem(Configed.getResourceValue("depot"));
 		jCheckBoxMenuItemShowDepotColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowDepotColumn

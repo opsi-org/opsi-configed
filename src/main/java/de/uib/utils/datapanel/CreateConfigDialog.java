@@ -199,7 +199,7 @@ public class CreateConfigDialog extends JDialog {
 		// Need to call this method inside invokeLater, otherwise it won't work
 		SwingUtilities.invokeLater(() -> textFieldConfigEntry.requestFocus());
 
-		JLabel labelDescription = new JLabel(Configed.getResourceValue("EditMapPanelX.description"));
+		JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
 		labelDescription.setFont(getFont().deriveFont(Font.BOLD));
 
 		textFieldDescription = new JTextField();

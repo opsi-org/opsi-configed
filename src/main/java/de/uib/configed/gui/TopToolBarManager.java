@@ -72,7 +72,7 @@ public class TopToolBarManager {
 
 	public JToolBar getOpsiLicensingToolBar(OpsiLicensing opsiLicensing) {
 		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
-		reloadButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
+		reloadButton.setToolTipText(Configed.getResourceValue("reloadData"));
 		reloadButton.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
 			opsiLicensing.reload();

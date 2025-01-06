@@ -121,7 +121,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		initComboDomain();
 
-		JLabel jLabelDescription = new JLabel(Configed.getResourceValue("NewClientDialog.description"));
+		JLabel jLabelDescription = new JLabel(Configed.getResourceValue("description"));
 
 		jTextDescription = new JTextField();
 

@@ -222,7 +222,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		String groupId = node.toString();
 
 		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ClientTree.editNode.label.description"),
+				Configed.getResourceValue("description"),
 				Configed.getResourceValue("ClientTree.editGroup") + " " + groupId, JOptionPane.PLAIN_MESSAGE, null,
 				null, groups.get(groupId).get("description"));
 
@@ -297,8 +297,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			do {
 				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 						new Object[] { inscription, Configed.getResourceValue("ClientTree.editNode.label.groupname"),
-								groupNameField, Configed.getResourceValue("ClientTree.editNode.label.description"),
-								groupDescriptionField },
+								groupNameField, Configed.getResourceValue("description"), groupDescriptionField },
 						Configed.getResourceValue("ClientTree.addNode"), JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.PLAIN_MESSAGE);
 

@@ -361,8 +361,7 @@ public class HostInfo {
 			int row) {
 		if (sourceOfChanges.get(CLIENT_DESCRIPTION_KEY) != null) {
 			clientDescription = (String) sourceOfChanges.get(CLIENT_DESCRIPTION_KEY);
-			int col = clientTablePanel.getTableModel()
-					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
+			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue("description"));
 			if (col > -1) {
 				clientTablePanel.getTableModel().setValueAt(clientDescription, row, col);
 			}

@@ -96,6 +96,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	@Override
 	public void updateDepot(String depotId) {
-		depotLabel.setText(Configed.getResourceValue("PanelProductDependencies.Depot") + ": " + depotId);
+		depotLabel.setText(Configed.getResourceValue("depot") + ": " + depotId);
 	}
 }

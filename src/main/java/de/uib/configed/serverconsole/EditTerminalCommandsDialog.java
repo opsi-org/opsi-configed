@@ -152,7 +152,7 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 		labelMenuText.setPreferredSize(dimensionJTextField);
 		JLabel labelParentMenuText = new JLabel(Configed.getResourceValue("CommandControlDialog.parentMenuText"));
 		labelParentMenuText.setPreferredSize(dimensionJTextField);
-		JLabel labelTooltipText = new JLabel(Configed.getResourceValue("CommandControlDialog.tooltipText"));
+		JLabel labelTooltipText = new JLabel(Configed.getResourceValue("description"));
 		labelTooltipText.setPreferredSize(dimensionJTextField);
 		JLabel labelPriority = new JLabel(Configed.getResourceValue("CommandControlDialog.priority"));
 		labelPriority.setPreferredSize(dimensionJTextField);

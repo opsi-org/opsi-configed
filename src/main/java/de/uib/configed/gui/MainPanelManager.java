@@ -135,7 +135,7 @@ public class MainPanelManager {
 			depotsList.setInfo(persistenceController.getHostInfoCollections().getDepots());
 			DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 
-			JLabel depotSelectionLabel = new JLabel(Configed.getResourceValue("DepotListPresenter.depotSelection"));
+			JLabel depotSelectionLabel = new JLabel(Configed.getResourceValue("depotSelection"));
 			DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList, configedMain);
 
 			JPanel depotsListPanel = new JPanel();

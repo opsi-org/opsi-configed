@@ -470,7 +470,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public static void addLogfileMenus(JMenu jMenuHelp, JFrame centerFrame) {
-		JMenu jMenuHelpLoglevel = new JMenu(Configed.getResourceValue("MainFrame.jMenuLoglevel"));
+		JMenu jMenuHelpLoglevel = new JMenu(Configed.getResourceValue("loglevel"));
 
 		JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
 		ButtonGroup loglevelGroup = new ButtonGroup();

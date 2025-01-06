@@ -54,7 +54,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	@SuppressWarnings({ "java:S1188" })
 	private static AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
 		String[] columnNames = new String[] { Configed.getResourceValue("SearchTargetModelFromJList.columnName"),
-				Configed.getResourceValue("SearchTargetModelFromJList.columnDescription") };
+				Configed.getResourceValue("description") };
 
 		return new AbstractTableModel() {
 			@Override

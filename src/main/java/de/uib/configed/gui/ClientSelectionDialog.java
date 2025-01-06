@@ -182,14 +182,14 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		JLabel saveNameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryName"));
 
-		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
+		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("description"));
 
 		JButton saveButton = new JButton(Icons.getIntellijIcon("save"));
 		saveButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.saveSearchTooltip"));
 		saveButton.addActionListener(actionEvent -> save());
 
 		buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
-		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
+		buttonReload.setToolTipText(Configed.getResourceValue("reloadData"));
 		buttonReload.addActionListener(actionEvent -> reload());
 
 		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));
