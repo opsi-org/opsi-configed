@@ -35,7 +35,7 @@ public class LeftControlBar extends JToolBar {
 
 		JToggleButton jButtonDepotsConfiguration = new JToggleButton(Icons.getIntellijIcon("dbms", 32));
 		jButtonDepotsConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("dbms", 32));
-		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
+		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("depotConfiguration"));
 		jButtonDepotsConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DEPOTS));
 
 		JToggleButton jButtonServerConfiguration = new JToggleButton(Icons.getIntellijIcon("editorConfig", 32));

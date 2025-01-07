@@ -159,7 +159,7 @@ public class MainPanelManager {
 		}
 
 		return createPanel(depotConfigurationSplitPane, new JToolBar(),
-				Configed.getResourceValue("MainFrame.labelDepotsConfiguration"));
+				Configed.getResourceValue("depotConfiguration"));
 	}
 
 	public JPanel getServerConfigurationPanel() {

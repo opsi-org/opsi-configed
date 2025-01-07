@@ -191,7 +191,7 @@ public class LogPane extends JPanel implements KeyListener {
 		jScrollPane.getViewport().add(jTextPane);
 		super.add(jScrollPane, BorderLayout.CENTER);
 
-		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
+		labelSearch = new JLabel(Configed.getResourceValue("search"));
 
 		JToggleButton buttonCaseSensitive = new JToggleButton(Icons.getIntellijIcon("matchCase"));
 		buttonCaseSensitive.setSelectedIcon(Icons.getSelectedIntellijIcon("matchCase"));

@@ -283,7 +283,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
 
 		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
-		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.hostName"));
+		newElementBox.addItem(Configed.getResourceValue("hostName"));
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwareName"));
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.swauditName"));
 

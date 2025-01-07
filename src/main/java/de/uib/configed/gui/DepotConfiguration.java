@@ -68,10 +68,10 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				" index ", indexOfTab(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
-		addTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties"), panelHostProperties);
+		addTab(Configed.getResourceValue("depotConfiguration"), panelHostProperties);
 
-		Logging.info(this, "added tab  ", Configed.getResourceValue("MainFrame.jPanel_HostProperties"), " index ",
-				indexOfTab(Configed.getResourceValue("MainFrame.jPanel_HostProperties")));
+		Logging.info(this, "added tab  ", Configed.getResourceValue("depotConfiguration"), " index ",
+				indexOfTab(Configed.getResourceValue("depotConfiguration")));
 
 		setSelectedIndex(1);
 	}

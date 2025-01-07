@@ -68,7 +68,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		editingArea.add(searchPane, BorderLayout.NORTH);
 
 		// redefine buttonCommit
-		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("search"));
 		buttonCommit.setIcon(Icons.getIntellijIcon("run"));
 		buttonCommit.setSelectedIcon(null);
 		buttonCommit.setDisabledIcon(null);

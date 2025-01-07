@@ -205,7 +205,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initPopup() {
-		popupSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.search"));
+		popupSearch = new JMenuItem(Configed.getResourceValue("search"));
 		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
 		JMenuItem popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
