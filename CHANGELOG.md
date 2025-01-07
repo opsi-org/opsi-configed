@@ -7,6 +7,7 @@
 - Don't stop configed when there are irregular arguments
 - Use new CellEditor to edit date in tables
 - Use new CellEditor to edit notes in license tables
+- Rework the dialog frames to use standard java library (JOptionPane) instead of own classes
 
 ## [4.4.0.13] - 2024-12-09
 ### Changed
