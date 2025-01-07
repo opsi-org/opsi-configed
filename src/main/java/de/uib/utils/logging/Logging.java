@@ -404,8 +404,7 @@ public final class Logging {
 			JScrollPane scrollPane = new JScrollPane(jTextArea);
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-			JOptionPane optionPane = new JOptionPane();
-			optionPane.setMessage(scrollPane);
+			JOptionPane optionPane = new JOptionPane(scrollPane);
 
 			dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("problemsOccurred"));
