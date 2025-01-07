@@ -9,6 +9,8 @@ package de.uib.configed.gui;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -122,7 +124,11 @@ public final class HealthCheckSettingsDialog {
 		if (selectedHostList == null) {
 			selectedHostList = new FSelectionList(null, "title", true, new String[] { "ok", "cancel" }, 500, 300);
 			selectedHostList.enableMultiSelection();
-			selectedHostList.setListData(persistenceController.getHostInfoCollections().getOpsiHostNames());
+			List<String> hostNames = new ArrayList<>(
+					persistenceController.getHostInfoCollections().getDepotNamesList());
+			hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+
+			selectedHostList.setListData(hostNames);
 		}
 
 		selectedHostList.setVisible(true);
@@ -139,7 +145,7 @@ public final class HealthCheckSettingsDialog {
 		// We need to set implicit exit to false to prevent a Nullpointerexception
 		// when opening a dialog for the second time
 		Platform.setImplicitExit(false);
-		
+
 		DatePicker datePicker = createDatePicker(startTime.getText(), jfxPanel);
 		showEditor(jfxPanel, datePicker, startTime);
 	}
