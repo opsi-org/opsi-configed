@@ -16,7 +16,7 @@ import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
 public class IPElement extends AbstractSelectElement {
 	public IPElement() {
-		super(new String[] { "IP Address" }, Configed.getResourceValue("NewClientDialog.IpAddress"));
+		super(new String[] { "IP Address" }, Configed.getResourceValue("ipAddress"));
 	}
 
 	@Override

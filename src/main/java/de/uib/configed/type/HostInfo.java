@@ -482,8 +482,7 @@ public class HostInfo {
 		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null) {
 			clientIpAddress = ((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
 
-			int col = clientTablePanel.getTableModel()
-					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));
+			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue("ipAddress"));
 			if (col > -1) {
 				clientTablePanel.getTableModel().setValueAt(clientIpAddress, row, col);
 			}

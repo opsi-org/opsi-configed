@@ -96,7 +96,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
-		labelClientIPAddress = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));
+		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsi-host-key");
 

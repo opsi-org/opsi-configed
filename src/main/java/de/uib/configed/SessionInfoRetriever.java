@@ -50,7 +50,7 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
 			AbstractTableModel model = configedMain.getClientTablePanel().getTableModel();
 
-			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
+			int col = model.findColumn(Configed.getResourceValue("sessionInfo"));
 
 			for (int row = 0; row < model.getRowCount(); row++) {
 				String clientId = (String) model.getValueAt(row, 0);

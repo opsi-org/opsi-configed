@@ -231,7 +231,7 @@ public final class ClientMenuManager implements MenuListener {
 
 		if (includeResetOptionForLocalbootProducts) {
 			JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem(
-					Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
+					Configed.getResourceValue("localbootProducts"));
 			jMenuResetLocalbootProductOnClientWithStates
 					.addActionListener(event -> resetProductOnClientAction(true, true, false));
 
@@ -245,7 +245,7 @@ public final class ClientMenuManager implements MenuListener {
 		}
 		if (includeResetOptionForNetbootProducts) {
 			JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem(
-					Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
+					Configed.getResourceValue("netbootProducts"));
 			jMenuResetNetbootProductOnClientWithStates
 					.addActionListener(event -> resetProductOnClientAction(true, false, true));
 
@@ -290,7 +290,7 @@ public final class ClientMenuManager implements MenuListener {
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
 		JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
+				Configed.getResourceValue("ipAddress"));
 		jCheckBoxMenuItemShowIPAddressColumn.setSelected(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowIPAddressColumn
@@ -311,7 +311,7 @@ public final class ClientMenuManager implements MenuListener {
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
 
 		JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
+				Configed.getResourceValue("sessionInfo"));
 		jCheckBoxMenuItemShowSessionInfoColumn.setSelected(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowSessionInfoColumn.addActionListener(

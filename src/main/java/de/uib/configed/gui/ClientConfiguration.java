@@ -107,9 +107,9 @@ public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 
 		addTab(Configed.getResourceValue("MainFrame.panel_Clientselection"), panelClientSelection);
 
-		addTab(Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), panelLocalbootProductSettings);
+		addTab(Configed.getResourceValue("localbootProducts"), panelLocalbootProductSettings);
 
-		addTab(Configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), panelNetbootProductSettings);
+		addTab(Configed.getResourceValue("netbootProducts"), panelNetbootProductSettings);
 
 		addTab(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), panelHostConfig);
 

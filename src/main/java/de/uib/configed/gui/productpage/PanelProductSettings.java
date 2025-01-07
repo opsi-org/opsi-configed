@@ -234,9 +234,9 @@ public class PanelProductSettings extends JSplitPane {
 		String title;
 
 		if (type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS) {
-			title = Configed.getResourceValue("MainFrame.panel_LocalbootProductsettings");
+			title = Configed.getResourceValue("localbootProducts");
 		} else {
-			title = Configed.getResourceValue("MainFrame.panel_NetbootProductsettings");
+			title = Configed.getResourceValue("netbootProducts");
 		}
 		// display, if filter is active,
 		// display selected productgroup
