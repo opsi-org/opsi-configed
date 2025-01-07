@@ -26,6 +26,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
@@ -135,6 +136,10 @@ public final class HealthCheckSettingsDialog {
 		Logging.info(this, "openDateSelectionDialog for health check settings");
 
 		JFXPanel jfxPanel = new JFXPanel();
+		// We need to set implicit exit to false to prevent a Nullpointerexception
+		// when opening a dialog for the second time
+		Platform.setImplicitExit(false);
+		
 		DatePicker datePicker = createDatePicker(startTime.getText(), jfxPanel);
 		showEditor(jfxPanel, datePicker, startTime);
 	}
