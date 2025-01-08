@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.ServerActionManager;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
@@ -34,6 +35,8 @@ public class ProductActionPanel extends JPanel {
 
 	private JButton buttonReloadProductStates;
 	private JButton buttonExecuteNow;
+
+	private JComboBox<String> comboVisibility;
 
 	private PanelProductSettings panelProductSettings;
 
@@ -73,6 +76,13 @@ public class ProductActionPanel extends JPanel {
 		buttonExecuteNow = new JButton(Icons.getIntellijIcon("run"));
 		buttonExecuteNow.setToolTipText(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"));
 
+		JLabel labelVisibility = new JLabel(Configed.getResourceValue("GroupPanel.labelVisibility"));
+		labelVisibility.setToolTipText(Configed.getResourceValue("GroupPanel.labelVisibility.tooltip"));
+
+		comboVisibility = new JComboBox<>(new String[] { ServerActionManager.KEY_PROCESS_ACTION_REQUEST_DEFAULT,
+				ServerActionManager.KEY_PROCESS_ACTION_REQUEST_VISIBLE,
+				ServerActionManager.KEY_PROCESS_ACTION_REQUEST_HIDDEN });
+
 		Map<String, String> values = new LinkedHashMap<>();
 
 		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
@@ -106,6 +116,10 @@ public class ProductActionPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelVisibility, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboVisibility, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -126,7 +140,12 @@ public class ProductActionPanel extends JPanel {
 										.addGap(Globals.MIN_GAP_SIZE)
 										.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(labelVisibility, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(comboVisibility, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 
 										.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE,

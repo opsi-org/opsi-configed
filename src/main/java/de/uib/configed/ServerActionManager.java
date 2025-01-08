@@ -32,6 +32,10 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 
 public final class ServerActionManager {
+	public static final String KEY_PROCESS_ACTION_REQUEST_DEFAULT = "";
+	public static final String KEY_PROCESS_ACTION_REQUEST_VISIBLE = "visible";
+	public static final String KEY_PROCESS_ACTION_REQUEST_HIDDEN = "hidden";
+
 	private static ConfigedMain configedMain;
 
 	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
