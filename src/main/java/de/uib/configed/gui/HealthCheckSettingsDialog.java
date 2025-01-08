@@ -59,7 +59,8 @@ public final class HealthCheckSettingsDialog {
 		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel());
 		jOptionPane.setOptions(
 				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
-		dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(), "title");
+		dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("HealthCheckSettingsDialog.title"));
 		dialog.setVisible(true);
 
 		Logging.info(this, "User selected " + jOptionPane.getValue());

@@ -342,7 +342,8 @@ public class HealthCheckDialog extends FGeneralDialog {
 		jButtonDownloadDiagnosticData
 				.setToolTipText(Configed.getResourceValue("HealthCheckDialog.downloadDiagnosticData.tooltip"));
 
-		JButton jButtonSettings = new JButton("settings");
+		JButton jButtonSettings = new JButton(Configed.getResourceValue("HealthCheckSettingsDialog.title"));
+		jButtonSettings.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.tooltip"));
 
 		centerPanelLayout.setHorizontalGroup(centerPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jButtonExpandAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
