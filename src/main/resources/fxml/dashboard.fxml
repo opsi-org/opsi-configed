@@ -24,110 +24,144 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="894.0" prefWidth="1907.0"
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+   minWidth="-Infinity" prefHeight="894.0" prefWidth="1907.0"
    xmlns="http://javafx.com/javafx/18"
    xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+         AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox fx:id="dashboardSceneVBox" spacing="20.0">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
-                        <BorderPane fx:id="depotNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                        <BorderPane fx:id="depotNumberArea" prefHeight="52.0" prefWidth="322.0"
+                           styleClass="border-pane">
                            <center>
-                              <Label fx:id="depotsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                              <Label fx:id="depotsNumberLabel" text="0" wrapText="true"
+                                 BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="28.0" />
                                  </font>
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="depotNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.depotTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="depotNumberTitleText" strokeType="OUTSIDE"
+                                 strokeWidth="0.0" text="%Dashboard.depotTitle"
+                                 BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane fx:id="clientNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                        <BorderPane fx:id="clientNumberArea" prefHeight="52.0" prefWidth="322.0"
+                           styleClass="border-pane">
                            <center>
-                              <Label fx:id="clientsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                              <Label fx:id="clientsNumberLabel" text="0" wrapText="true"
+                                 BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="28.0" />
                                  </font>
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="clientNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.clientTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="clientNumberTitleText" strokeType="OUTSIDE"
+                                 strokeWidth="0.0" text="%Dashboard.clientTitle"
+                                 BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane fx:id="productNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                        <BorderPane fx:id="productNumberArea" prefHeight="52.0" prefWidth="322.0"
+                           styleClass="border-pane">
                            <center>
-                              <Label fx:id="productsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                              <Label fx:id="productsNumberLabel" text="0" wrapText="true"
+                                 BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="28.0" />
                                  </font>
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="productNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.productTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="productNumberTitleText" strokeType="OUTSIDE"
+                                 strokeWidth="0.0" text="%Dashboard.productTitle"
+                                 BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane fx:id="localbootProductNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                        <BorderPane fx:id="localbootProductNumberArea" prefHeight="52.0"
+                           prefWidth="322.0" styleClass="border-pane">
                            <center>
-                              <Label fx:id="localbootProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                              <Label fx:id="localbootProductsNumberLabel" text="0" wrapText="true"
+                                 BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="28.0" />
                                  </font>
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="localbootProductNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.localbootProductsTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="localbootProductNumberTitleText" strokeType="OUTSIDE"
+                                 strokeWidth="0.0" text="%localbootProducts"
+                                 BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane fx:id="netbootProductNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                        <BorderPane fx:id="netbootProductNumberArea" prefHeight="52.0"
+                           prefWidth="322.0" styleClass="border-pane">
                            <center>
-                              <Label fx:id="netbootProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                              <Label fx:id="netbootProductsNumberLabel" text="0" wrapText="true"
+                                 BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="28.0" />
                                  </font>
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="netbootProductNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.netbootProductsTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="netbootProductNumberTitleText" strokeType="OUTSIDE"
+                                 strokeWidth="0.0" text="%netbootProducts"
+                                 BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane fx:id="installedOSNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                        <BorderPane fx:id="installedOSNumberArea" prefHeight="52.0"
+                           prefWidth="322.0" styleClass="border-pane">
                            <center>
-                              <Label fx:id="installedOSsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                              <Label fx:id="installedOSsNumberLabel" text="0" wrapText="true"
+                                 BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="28.0" />
                                  </font>
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="installedOSNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.installedOSTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="installedOSNumberTitleText" strokeType="OUTSIDE"
+                                 strokeWidth="0.0" text="%Dashboard.installedOSTitle"
+                                 BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane fx:id="moduleNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                        <BorderPane fx:id="moduleNumberArea" prefHeight="52.0" prefWidth="322.0"
+                           styleClass="border-pane">
                            <center>
-                              <Label fx:id="modulesNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                              <Label fx:id="modulesNumberLabel" text="0" wrapText="true"
+                                 BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="28.0" />
                                  </font>
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="moduleNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.moduleTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="moduleNumberTitleText" strokeType="OUTSIDE"
+                                 strokeWidth="0.0" text="%Dashboard.moduleTitle"
+                                 BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane fx:id="licenseNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                        <BorderPane fx:id="licenseNumberArea" prefHeight="52.0" prefWidth="322.0"
+                           styleClass="border-pane">
                            <center>
-                              <Label fx:id="licensesNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                              <Label fx:id="licensesNumberLabel" text="0" wrapText="true"
+                                 BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="28.0" />
                                  </font>
                               </Label>
                            </center>
                            <bottom>
-                              <Text fx:id="licenseNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.licensesTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="licenseNumberTitleText" strokeType="OUTSIDE"
+                                 strokeWidth="0.0" text="%Dashboard.licensesTitle"
+                                 BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
                      </children>
@@ -138,43 +172,66 @@
                            <children>
                               <HBox spacing="20.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <VBox fx:id="depotDataDisplayAreaVBox" prefHeight="379.0" prefWidth="342.0" spacing="10.0" styleClass="pane">
+                                    <VBox fx:id="depotDataDisplayAreaVBox" prefHeight="379.0"
+                                       prefWidth="342.0" spacing="10.0" styleClass="pane">
                                        <children>
-                                          <Text fx:id="depotTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.depotTitle">
+                                          <Text fx:id="depotTitleText" strokeType="OUTSIDE"
+                                             strokeWidth="0.0" text="%Dashboard.depotTitle">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
                                           </Text>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="360.0" spacing="20.0">
+                                          <HBox alignment="CENTER_LEFT" prefHeight="24.0"
+                                             prefWidth="360.0" spacing="20.0">
                                              <children>
-                                                <Text fx:id="selectedDepotText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.selectedDepotText" textOrigin="CENTER" HBox.hgrow="ALWAYS" />
-                                                <ComboBox fx:id="selectedDepotComboBox" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                <Text fx:id="selectedDepotText" strokeType="OUTSIDE"
+                                                   strokeWidth="0.0"
+                                                   text="%Dashboard.selectedDepotText"
+                                                   textOrigin="CENTER" HBox.hgrow="ALWAYS" />
+                                                <ComboBox fx:id="selectedDepotComboBox"
+                                                   prefWidth="150.0" HBox.hgrow="ALWAYS">
                                                    <cursor>
                                                       <Cursor fx:constant="NONE" />
                                                    </cursor>
                                                 </ComboBox>
                                              </children>
                                           </HBox>
-                                          <GridPane prefHeight="258.0" prefWidth="321.0" VBox.vgrow="ALWAYS">
+                                          <GridPane prefHeight="258.0" prefWidth="321.0"
+                                             VBox.vgrow="ALWAYS">
                                              <columnConstraints>
-                                                <ColumnConstraints hgrow="ALWAYS" maxWidth="146.0" minWidth="10.0" prefWidth="146.0" />
-                                                <ColumnConstraints hgrow="ALWAYS" maxWidth="215.0" minWidth="10.0" prefWidth="176.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" maxWidth="146.0"
+                                                   minWidth="10.0" prefWidth="146.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" maxWidth="215.0"
+                                                   minWidth="10.0" prefWidth="176.0" />
                                              </columnConstraints>
                                              <rowConstraints>
-                                                <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="47.0" vgrow="ALWAYS" />
-                                                <RowConstraints maxHeight="211.0" minHeight="10.0" prefHeight="211.0" vgrow="ALWAYS" />
+                                                <RowConstraints maxHeight="120.0" minHeight="10.0"
+                                                   prefHeight="47.0" vgrow="ALWAYS" />
+                                                <RowConstraints maxHeight="211.0" minHeight="10.0"
+                                                   prefHeight="211.0" vgrow="ALWAYS" />
                                              </rowConstraints>
                                              <children>
-                                                <Label fx:id="depotTypeLabel" text="%Dashboard.depot.type" GridPane.valignment="TOP" />
-                                                <TextFlow prefHeight="7.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                                <Label fx:id="depotTypeLabel"
+                                                   text="%Dashboard.depot.type"
+                                                   GridPane.valignment="TOP" />
+                                                <TextFlow prefHeight="7.0" prefWidth="195.0"
+                                                   GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"
+                                                   GridPane.vgrow="ALWAYS">
                                                    <children>
-                                                      <Text fx:id="depotTypeText" strokeType="OUTSIDE" strokeWidth="0.0" />
+                                                      <Text fx:id="depotTypeText"
+                                                         strokeType="OUTSIDE" strokeWidth="0.0" />
                                                    </children>
                                                 </TextFlow>
-                                                <Label fx:id="depotDescriptionLabel" text="%Dashboard.depot.description" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                                                <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                                <Label fx:id="depotDescriptionLabel"
+                                                   text="%description"
+                                                   GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                                                <TextFlow prefHeight="200.0" prefWidth="200.0"
+                                                   GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"
+                                                   GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                                                    <children>
-                                                      <Text fx:id="depotDescriptionText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="100.0" />
+                                                      <Text fx:id="depotDescriptionText"
+                                                         strokeType="OUTSIDE" strokeWidth="0.0"
+                                                         wrappingWidth="100.0" />
                                                    </children>
                                                 </TextFlow>
                                              </children>
@@ -184,14 +241,17 @@
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                     </VBox>
-                                    <VBox fx:id="productDataDisplayAreaVBox" prefHeight="326.0" prefWidth="349.0" HBox.hgrow="ALWAYS">
+                                    <VBox fx:id="productDataDisplayAreaVBox" prefHeight="326.0"
+                                       prefWidth="349.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <Text fx:id="productTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.productTitle">
+                                          <Text fx:id="productTitleText" strokeType="OUTSIDE"
+                                             strokeWidth="0.0" text="%Dashboard.productTitle">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
                                           </Text>
-                                          <ProductStatusComparison fx:id="productStatusComparison" VBox.vgrow="ALWAYS" />
+                                          <ProductStatusComparison fx:id="productStatusComparison"
+                                             VBox.vgrow="ALWAYS" />
                                        </children>
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -203,14 +263,17 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <VBox fx:id="clientDataDisplayAreaVBox" prefHeight="397.0" prefWidth="492.0" spacing="10.0" VBox.vgrow="ALWAYS">
+                              <VBox fx:id="clientDataDisplayAreaVBox" prefHeight="397.0"
+                                 prefWidth="492.0" spacing="10.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Text fx:id="clientTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.clientTitle">
+                                    <Text fx:id="clientTitleText" strokeType="OUTSIDE"
+                                       strokeWidth="0.0" text="%Dashboard.clientTitle">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
                                     </Text>
-                                    <ClientLastSeenComparison fx:id="clientLastSeenComparison" VBox.vgrow="ALWAYS" />
+                                    <ClientLastSeenComparison fx:id="clientLastSeenComparison"
+                                       VBox.vgrow="ALWAYS" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -222,42 +285,53 @@
                               </VBox>
                            </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="400.0" spacing="20.0" HBox.hgrow="SOMETIMES">
+                        <VBox prefHeight="200.0" prefWidth="400.0" spacing="20.0"
+                           HBox.hgrow="SOMETIMES">
                            <children>
-                              <VBox fx:id="installedOSDataDisplayAreaVBox" prefHeight="245.0" prefWidth="377.0" spacing="10.0" styleClass="pane" VBox.vgrow="SOMETIMES">
+                              <VBox fx:id="installedOSDataDisplayAreaVBox" prefHeight="245.0"
+                                 prefWidth="377.0" spacing="10.0" styleClass="pane"
+                                 VBox.vgrow="SOMETIMES">
                                  <children>
-                                    <Text fx:id="installedOSTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.installedOSTitle">
+                                    <Text fx:id="installedOSTitleText" strokeType="OUTSIDE"
+                                       strokeWidth="0.0" text="%Dashboard.installedOSTitle">
                                        <font>
                                           <Font size="19.0" />
                                        </font>
                                     </Text>
-                                    <InstalledOSComparison fx:id="installedOSComparison" VBox.vgrow="ALWAYS" />
+                                    <InstalledOSComparison fx:id="installedOSComparison"
+                                       VBox.vgrow="ALWAYS" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </VBox>
-                              <VBox fx:id="moduleDataDisplayAreaVBox" prefHeight="158.0" prefWidth="465.0" styleClass="pane" VBox.vgrow="SOMETIMES">
+                              <VBox fx:id="moduleDataDisplayAreaVBox" prefHeight="158.0"
+                                 prefWidth="465.0" styleClass="pane" VBox.vgrow="SOMETIMES">
                                  <children>
-                                    <Text fx:id="moduleTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.moduleTitle">
+                                    <Text fx:id="moduleTitleText" strokeType="OUTSIDE"
+                                       strokeWidth="0.0" text="%Dashboard.moduleTitle">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
                                     </Text>
-                                    <ModuleStatusComparison fx:id="moduleStatusComparison" VBox.vgrow="ALWAYS" />
+                                    <ModuleStatusComparison fx:id="moduleStatusComparison"
+                                       VBox.vgrow="ALWAYS" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </VBox>
-                              <VBox fx:id="licenseDataDisplayAreaVBox" prefHeight="347.0" prefWidth="269.0" VBox.vgrow="SOMETIMES">
+                              <VBox fx:id="licenseDataDisplayAreaVBox" prefHeight="347.0"
+                                 prefWidth="269.0" VBox.vgrow="SOMETIMES">
                                  <children>
-                                    <Text fx:id="licenseTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.licensesTitle">
+                                    <Text fx:id="licenseTitleText" strokeType="OUTSIDE"
+                                       strokeWidth="0.0" text="%Dashboard.licensesTitle">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
                                     </Text>
-                                    <LicenseStatusComparison fx:id="licenseStatusComparison" VBox.vgrow="ALWAYS" />
+                                    <LicenseStatusComparison fx:id="licenseStatusComparison"
+                                       VBox.vgrow="ALWAYS" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -276,9 +350,11 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
             </VBox>
-            <VBox fx:id="dataLoadingScreenVBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" visible="false">
+            <VBox fx:id="dataLoadingScreenVBox" alignment="CENTER" prefHeight="200.0"
+               prefWidth="100.0" spacing="20.0" visible="false">
                <children>
-                  <Text fx:id="reloadingText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.retrievingData">
+                  <Text fx:id="reloadingText" strokeType="OUTSIDE" strokeWidth="0.0"
+                     text="%Dashboard.retrievingData">
                      <font>
                         <Font size="32.0" />
                      </font>
