@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 
 import com.formdev.flatlaf.FlatLaf;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -40,14 +41,15 @@ public final class HealthCheckSettingsDialog {
 	private static final int TEXT_LABE_WIDTH = 200;
 
 	private static final String ZERO_HOUR_STRING = "00:00:00";
+	private static final String END_OF_DAY_STRING = "23:59:59";
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private FSelectionList selectedHostList;
-	private JTextField startTime;
-	private JTextField endTime;
-	private JCheckBox enabled;
+	private JTextField startDowntime;
+	private JTextField endDowntime;
+	private JCheckBox checkBoxCheckActive;
 
 	private JDialog dialog;
 
@@ -55,66 +57,69 @@ public final class HealthCheckSettingsDialog {
 		Logging.info(this, "show health check settings dialog");
 
 		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel());
-		jOptionPane.setOptions(new Object[] { "save", "Cancel" });
+		jOptionPane.setOptions(
+				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
 		dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(), "title");
 		dialog.setVisible(true);
 
 		Logging.info(this, "User selected " + jOptionPane.getValue());
-		if (jOptionPane.getValue() == "save") {
+		if (jOptionPane.getValue() == Configed.getResourceValue("save")) {
 			save();
 		}
 	}
 
 	private JPanel createOptionsPanel() {
-		JLabel label = new JLabel("Selected Hosts");
+		JLabel labelSelectedHosts = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
 
 		JTextField selectedHosts = new JTextField();
 		selectedHosts.setEditable(false);
 		selectedHosts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				openSelectionDialog(selectedHosts);
+				openHostSelectionDialog(selectedHosts);
 			}
 		});
 
-		JLabel labelActive = new JLabel("Active");
-		enabled = new JCheckBox((String) null, true);
+		JLabel labelCheckActive = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.healthCheckActive"));
+		checkBoxCheckActive = new JCheckBox((String) null, true);
 
-		JLabel labelStart = new JLabel("Start Time");
-		startTime = new JTextField();
-		startTime.setEditable(false);
-		startTime.addMouseListener(new MouseAdapter() {
+		JLabel labelStartDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
+		startDowntime = new JTextField();
+		startDowntime.setEditable(false);
+		startDowntime.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (enabled.isSelected()) {
-					openDateSelectionDialog(startTime);
+				if (checkBoxCheckActive.isSelected()) {
+					openDateSelectionDialog(startDowntime,
+							Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
 				}
 			}
 		});
 
-		JLabel labelEnd = new JLabel("End Time");
-		endTime = new JTextField();
-		endTime.setEditable(false);
-		endTime.addMouseListener(new MouseAdapter() {
+		JLabel labelEndDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
+		endDowntime = new JTextField();
+		endDowntime.setEditable(false);
+		endDowntime.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (enabled.isSelected()) {
-					openDateSelectionDialog(endTime);
+				if (checkBoxCheckActive.isSelected()) {
+					openDateSelectionDialog(endDowntime,
+							Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
 				}
 			}
 		});
 
-		enabled.addItemListener((ItemEvent event) -> {
-			labelStart.setEnabled(enabled.isSelected());
-			startTime.setEnabled(enabled.isSelected());
-			labelEnd.setEnabled(enabled.isSelected());
-			endTime.setEnabled(enabled.isSelected());
+		checkBoxCheckActive.addItemListener((ItemEvent event) -> {
+			labelStartDowntime.setEnabled(checkBoxCheckActive.isSelected());
+			startDowntime.setEnabled(checkBoxCheckActive.isSelected());
+			labelEndDowntime.setEnabled(checkBoxCheckActive.isSelected());
+			endDowntime.setEnabled(checkBoxCheckActive.isSelected());
 
 			// We want to remove the text when the checkbox is unchecked
 			// because there should be no time set anyways
-			if (!enabled.isSelected()) {
-				startTime.setText(null);
-				endTime.setText(null);
+			if (!checkBoxCheckActive.isSelected()) {
+				startDowntime.setText(null);
+				endDowntime.setText(null);
 			}
 		});
 
@@ -123,43 +128,44 @@ public final class HealthCheckSettingsDialog {
 		panel.setLayout(layout);
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup().addComponent(label).addComponent(selectedHosts))
+				.addGroup(layout.createParallelGroup().addComponent(labelSelectedHosts).addComponent(selectedHosts))
 				.addGap(Globals.GAP_SIZE * 2)
-				.addGroup(layout.createParallelGroup().addComponent(labelActive).addComponent(enabled))
+				.addGroup(layout.createParallelGroup().addComponent(labelCheckActive).addComponent(checkBoxCheckActive))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(labelStart).addComponent(startTime))
+				.addGroup(layout.createParallelGroup().addComponent(labelStartDowntime).addComponent(startDowntime))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(labelEnd).addComponent(endTime)));
+				.addGroup(layout.createParallelGroup().addComponent(labelEndDowntime).addComponent(endDowntime)));
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addComponent(label)
+				.addGroup(layout.createSequentialGroup().addComponent(labelSelectedHosts)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 						.addComponent(selectedHosts, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
-				.addGroup(layout.createSequentialGroup().addComponent(labelActive)
+				.addGroup(layout.createSequentialGroup().addComponent(labelCheckActive)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(enabled, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
-				.addGroup(layout.createSequentialGroup().addComponent(labelStart)
+						.addComponent(checkBoxCheckActive, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
+				.addGroup(layout.createSequentialGroup().addComponent(labelStartDowntime)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(startTime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
-				.addGroup(layout.createSequentialGroup().addComponent(labelEnd)
+						.addComponent(startDowntime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
+				.addGroup(layout.createSequentialGroup().addComponent(labelEndDowntime)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(endTime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)));
+						.addComponent(endDowntime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)));
 
 		return panel;
 	}
 
-	private void openSelectionDialog(JTextField selectedHosts) {
+	private void openHostSelectionDialog(JTextField selectedHosts) {
 		Logging.info(this, "openSelectionDialog for health check settings");
 
 		if (selectedHostList == null) {
-			selectedHostList = new FSelectionList(ConfigedMain.getMainFrame(), "title", true,
-					new String[] { "ok", "cancel" }, 500, 300);
+			selectedHostList = new FSelectionList(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"), true,
+					new String[] { Configed.getResourceValue("buttonOK"), Configed.getResourceValue("buttonCancel") },
+					300, 500);
 			selectedHostList.enableMultiSelection();
 			List<String> hostNames = new ArrayList<>(
 					persistenceController.getHostInfoCollections().getDepotNamesList());
 			hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
 
 			selectedHostList.setListData(hostNames);
-
 		}
 
 		// Get the selection to restore it if the user cancels the dialog
@@ -175,7 +181,7 @@ public final class HealthCheckSettingsDialog {
 		}
 	}
 
-	private void openDateSelectionDialog(JTextField startTime) {
+	private void openDateSelectionDialog(JTextField startTime, String title) {
 		Logging.info(this, "openDateSelectionDialog for health check settings");
 
 		JFXPanel jfxPanel = new JFXPanel();
@@ -184,7 +190,7 @@ public final class HealthCheckSettingsDialog {
 		Platform.setImplicitExit(false);
 
 		DatePicker datePicker = createDatePicker(startTime.getText(), jfxPanel);
-		showEditor(jfxPanel, datePicker, startTime);
+		showEditor(jfxPanel, datePicker, startTime, title);
 	}
 
 	public static DatePicker createDatePicker(String oldValue, JFXPanel jfxPanel) {
@@ -208,8 +214,8 @@ public final class HealthCheckSettingsDialog {
 		return datePicker;
 	}
 
-	private void showEditor(JFXPanel jfxPanel, DatePicker datePicker, JTextField startTime) {
-		int answer = JOptionPane.showConfirmDialog(dialog, jfxPanel, "title", JOptionPane.OK_CANCEL_OPTION,
+	private void showEditor(JFXPanel jfxPanel, DatePicker datePicker, JTextField startTime, String title) {
+		int answer = JOptionPane.showConfirmDialog(dialog, jfxPanel, title, JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (answer == 0 && datePicker.getValue() != null) {
@@ -228,7 +234,7 @@ public final class HealthCheckSettingsDialog {
 		}
 
 		persistenceController.getConfigDataService().writeDownTime(selectedHostList.getSelectedValues(),
-				enabled.isSelected(), startTime.getText() + " " + ZERO_HOUR_STRING,
-				endTime.getText() + " " + ZERO_HOUR_STRING);
+				checkBoxCheckActive.isSelected(), startDowntime.getText() + " " + ZERO_HOUR_STRING,
+				endDowntime.getText() + " " + END_OF_DAY_STRING);
 	}
 }
