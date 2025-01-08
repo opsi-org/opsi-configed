@@ -49,12 +49,17 @@ public final class HealthCheckSettingsDialog {
 	private JTextField endTime;
 	private JCheckBox enabled;
 
+	private JDialog dialog;
+
 	public void showHealthCheckSettings() {
+		Logging.info(this, "show health check settings dialog");
+
 		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel());
 		jOptionPane.setOptions(new Object[] { "save", "Cancel" });
-		JDialog dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(), "title");
+		dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(), "title");
 		dialog.setVisible(true);
 
+		Logging.info(this, "User selected " + jOptionPane.getValue());
 		if (jOptionPane.getValue() == "save") {
 			save();
 		}
@@ -105,6 +110,8 @@ public final class HealthCheckSettingsDialog {
 			labelEnd.setEnabled(enabled.isSelected());
 			endTime.setEnabled(enabled.isSelected());
 
+			// We want to remove the text when the checkbox is unchecked
+			// because there should be no time set anyways
 			if (!enabled.isSelected()) {
 				startTime.setText(null);
 				endTime.setText(null);
@@ -144,15 +151,21 @@ public final class HealthCheckSettingsDialog {
 		Logging.info(this, "openSelectionDialog for health check settings");
 
 		if (selectedHostList == null) {
-			selectedHostList = new FSelectionList(null, "title", true, new String[] { "ok", "cancel" }, 500, 300);
+			selectedHostList = new FSelectionList(ConfigedMain.getMainFrame(), "title", true,
+					new String[] { "ok", "cancel" }, 500, 300);
 			selectedHostList.enableMultiSelection();
 			List<String> hostNames = new ArrayList<>(
 					persistenceController.getHostInfoCollections().getDepotNamesList());
 			hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
 
 			selectedHostList.setListData(hostNames);
+
 		}
+
+		// Get the selection to restore it if the user cancels the dialog
 		List<String> previousSelection = selectedHostList.getSelectedValues();
+
+		selectedHostList.setLocationRelativeTo(dialog);
 		selectedHostList.setVisible(true);
 
 		if (selectedHostList.getResult() == 1) {
@@ -195,9 +208,9 @@ public final class HealthCheckSettingsDialog {
 		return datePicker;
 	}
 
-	private static void showEditor(JFXPanel jfxPanel, DatePicker datePicker, JTextField startTime) {
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel, "title",
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+	private void showEditor(JFXPanel jfxPanel, DatePicker datePicker, JTextField startTime) {
+		int answer = JOptionPane.showConfirmDialog(dialog, jfxPanel, "title", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
 
 		if (answer == 0 && datePicker.getValue() != null) {
 			startTime.setText(datePicker.getValue().toString());
@@ -205,8 +218,11 @@ public final class HealthCheckSettingsDialog {
 	}
 
 	private void save() {
+		Logging.info(this, "save health check settings for selected hosts" + selectedHostList.getSelectedValues());
+
 		if (selectedHostList == null || selectedHostList.getSelectedValues().isEmpty()) {
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), "Please select at least one host", "Error",
+			Logging.info(this, "No host selected");
+			JOptionPane.showMessageDialog(dialog, "Please select at least one host", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
