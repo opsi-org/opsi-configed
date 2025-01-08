@@ -103,9 +103,8 @@ public final class HealthCheckSettingsDialog {
 			labelStart.setEnabled(enabled.isSelected());
 			startTime.setEnabled(enabled.isSelected());
 			labelEnd.setEnabled(enabled.isSelected());
-			endTime.setText(null);
-
 			endTime.setEnabled(enabled.isSelected());
+
 			if (!enabled.isSelected()) {
 				startTime.setText(null);
 				endTime.setText(null);
