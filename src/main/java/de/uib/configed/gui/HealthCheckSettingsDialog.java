@@ -206,7 +206,7 @@ public final class HealthCheckSettingsDialog {
 	}
 
 	private void save() {
-		if (selectedHostList.getSelectedValues().isEmpty()) {
+		if (selectedHostList == null || selectedHostList.getSelectedValues().isEmpty()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), "Please select at least one host", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			return;

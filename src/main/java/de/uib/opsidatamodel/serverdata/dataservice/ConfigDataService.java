@@ -1215,9 +1215,9 @@ public class ConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 	}
 
-	public boolean writeDownTime(Collection<String> hostIds, boolean enabled, String startTime, String endTime) {
+	public void writeDownTime(Collection<String> hostIds, boolean enabled, String startTime, String endTime) {
 		if (hostIds.isEmpty()) {
-			return false;
+			return;
 		}
 
 		List<Map<String, Object>> readyObjects = new ArrayList<>();
@@ -1249,7 +1249,7 @@ public class ConfigDataService {
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
 				new Object[] { readyObjects });
-		return exec.doCall(omc);
+		exec.doCall(omc);
 	}
 
 	public String getConfigedWorkbenchDefaultValuePD() {
