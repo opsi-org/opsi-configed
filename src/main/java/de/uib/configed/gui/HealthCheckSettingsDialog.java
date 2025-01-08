@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -38,6 +39,8 @@ import javafx.scene.layout.StackPane;
 public final class HealthCheckSettingsDialog {
 	private static final int TEXT_LABE_WIDTH = 200;
 
+	private static final String ZERO_HOUR_STRING = "00:00:00";
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -49,7 +52,7 @@ public final class HealthCheckSettingsDialog {
 	public void showHealthCheckSettings() {
 		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel());
 		jOptionPane.setOptions(new Object[] { "save", "Cancel" });
-		JDialog dialog = jOptionPane.createDialog("title");
+		JDialog dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(), "title");
 		dialog.setVisible(true);
 
 		if (jOptionPane.getValue() == "save") {
@@ -69,13 +72,18 @@ public final class HealthCheckSettingsDialog {
 			}
 		});
 
+		JLabel labelActive = new JLabel("Active");
+		enabled = new JCheckBox((String) null, true);
+
 		JLabel labelStart = new JLabel("Start Time");
 		startTime = new JTextField();
 		startTime.setEditable(false);
 		startTime.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				openDateSelectionDialog(startTime);
+				if (enabled.isSelected()) {
+					openDateSelectionDialog(startTime);
+				}
 			}
 		});
 
@@ -85,12 +93,24 @@ public final class HealthCheckSettingsDialog {
 		endTime.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				openDateSelectionDialog(endTime);
+				if (enabled.isSelected()) {
+					openDateSelectionDialog(endTime);
+				}
 			}
 		});
 
-		JLabel labelActive = new JLabel("Active");
-		enabled = new JCheckBox();
+		enabled.addItemListener((ItemEvent event) -> {
+			labelStart.setEnabled(enabled.isSelected());
+			startTime.setEnabled(enabled.isSelected());
+			labelEnd.setEnabled(enabled.isSelected());
+			endTime.setText(null);
+
+			endTime.setEnabled(enabled.isSelected());
+			if (!enabled.isSelected()) {
+				startTime.setText(null);
+				endTime.setText(null);
+			}
+		});
 
 		JPanel panel = new JPanel();
 		GroupLayout layout = new GroupLayout(panel);
@@ -98,25 +118,25 @@ public final class HealthCheckSettingsDialog {
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGroup(layout.createParallelGroup().addComponent(label).addComponent(selectedHosts))
+				.addGap(Globals.GAP_SIZE * 2)
+				.addGroup(layout.createParallelGroup().addComponent(labelActive).addComponent(enabled))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup().addComponent(labelStart).addComponent(startTime))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(labelEnd).addComponent(endTime))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(labelActive).addComponent(enabled)));
+				.addGroup(layout.createParallelGroup().addComponent(labelEnd).addComponent(endTime)));
 		layout.setHorizontalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(label)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 						.addComponent(selectedHosts, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
+				.addGroup(layout.createSequentialGroup().addComponent(labelActive)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+						.addComponent(enabled, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
 				.addGroup(layout.createSequentialGroup().addComponent(labelStart)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 						.addComponent(startTime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
 				.addGroup(layout.createSequentialGroup().addComponent(labelEnd)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(endTime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
-				.addGroup(layout.createSequentialGroup().addComponent(labelActive)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(enabled, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)));
+						.addComponent(endTime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)));
 
 		return panel;
 	}
@@ -186,7 +206,14 @@ public final class HealthCheckSettingsDialog {
 	}
 
 	private void save() {
+		if (selectedHostList.getSelectedValues().isEmpty()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), "Please select at least one host", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		persistenceController.getConfigDataService().writeDownTime(selectedHostList.getSelectedValues(),
-				startTime.getText(), endTime.getText(), enabled.isSelected());
+				enabled.isSelected(), startTime.getText() + " " + ZERO_HOUR_STRING,
+				endTime.getText() + " " + ZERO_HOUR_STRING);
 	}
 }
