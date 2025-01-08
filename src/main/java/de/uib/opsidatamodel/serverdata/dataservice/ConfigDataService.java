@@ -1210,6 +1210,10 @@ public class ConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 	}
 
+	public void writeDownTime(List<String> hostIds, String startTime, String endTime, boolean enabled) {
+		// TODO: implement
+	}
+
 	public String getConfigedWorkbenchDefaultValuePD() {
 		return cacheManager.getCachedData(CacheIdentifier.CONFIGED_WORKBENCH_DEFAULT_VALUE, String.class);
 	}

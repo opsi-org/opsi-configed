@@ -42,6 +42,9 @@ public final class HealthCheckSettingsDialog {
 			.getPersistenceController();
 
 	private FSelectionList selectedHostList;
+	private JTextField startTime;
+	private JTextField endTime;
+	private JCheckBox enabled;
 
 	public void showHealthCheckSettings() {
 		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel());
@@ -67,7 +70,7 @@ public final class HealthCheckSettingsDialog {
 		});
 
 		JLabel labelStart = new JLabel("Start Time");
-		JTextField startTime = new JTextField();
+		startTime = new JTextField();
 		startTime.setEditable(false);
 		startTime.addMouseListener(new MouseAdapter() {
 			@Override
@@ -77,7 +80,7 @@ public final class HealthCheckSettingsDialog {
 		});
 
 		JLabel labelEnd = new JLabel("End Time");
-		JTextField endTime = new JTextField();
+		endTime = new JTextField();
 		endTime.setEditable(false);
 		endTime.addMouseListener(new MouseAdapter() {
 			@Override
@@ -87,7 +90,7 @@ public final class HealthCheckSettingsDialog {
 		});
 
 		JLabel labelActive = new JLabel("Active");
-		JCheckBox active = new JCheckBox();
+		enabled = new JCheckBox();
 
 		JPanel panel = new JPanel();
 		GroupLayout layout = new GroupLayout(panel);
@@ -100,7 +103,7 @@ public final class HealthCheckSettingsDialog {
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup().addComponent(labelEnd).addComponent(endTime))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(labelActive).addComponent(active)));
+				.addGroup(layout.createParallelGroup().addComponent(labelActive).addComponent(enabled)));
 		layout.setHorizontalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(label)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
@@ -113,7 +116,7 @@ public final class HealthCheckSettingsDialog {
 						.addComponent(endTime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
 				.addGroup(layout.createSequentialGroup().addComponent(labelActive)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(active, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)));
+						.addComponent(enabled, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)));
 
 		return panel;
 	}
@@ -130,11 +133,13 @@ public final class HealthCheckSettingsDialog {
 
 			selectedHostList.setListData(hostNames);
 		}
-
+		List<String> previousSelection = selectedHostList.getSelectedValues();
 		selectedHostList.setVisible(true);
 
 		if (selectedHostList.getResult() == 1) {
 			selectedHosts.setText(Utils.getListStringRepresentation(selectedHostList.getSelectedValues(), 5));
+		} else {
+			selectedHostList.setPreviousSelectionValues(previousSelection);
 		}
 	}
 
@@ -180,7 +185,8 @@ public final class HealthCheckSettingsDialog {
 		}
 	}
 
-	private static void save() {
-
+	private void save() {
+		persistenceController.getConfigDataService().writeDownTime(selectedHostList.getSelectedValues(),
+				startTime.getText(), endTime.getText(), enabled.isSelected());
 	}
 }
