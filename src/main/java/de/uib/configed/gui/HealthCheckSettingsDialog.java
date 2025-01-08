@@ -229,8 +229,9 @@ public final class HealthCheckSettingsDialog {
 
 		if (selectedHostList == null || selectedHostList.getSelectedValues().isEmpty()) {
 			Logging.info(this, "No host selected");
-			JOptionPane.showMessageDialog(dialog, "Please select at least one host", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(dialog,
+					Configed.getResourceValue("HealthCheckSettingsDialog.warningNoHostSelected"),
+					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
