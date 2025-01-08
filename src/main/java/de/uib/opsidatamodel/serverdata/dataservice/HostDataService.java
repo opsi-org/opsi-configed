@@ -570,38 +570,36 @@ public class HostDataService {
 		Logging.info(this, "produceHost_displayFields configOptions.get(key) ",
 				configOptions.get(KEY_HOST_DISPLAYFIELDS));
 
-		List<String> possibleValues = new ArrayList<>();
-		possibleValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
-
-		List<String> defaultValues = new ArrayList<>();
-		defaultValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
-		defaultValues.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
-		defaultValues.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
-		defaultValues.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
-		defaultValues.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-
 		if (givenList == null || givenList.isEmpty()) {
-			result = defaultValues;
-
 			Logging.info(this, "givenList is null or empty: ", givenList);
+
+			List<String> possibleValues = new ArrayList<>();
+			possibleValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
+
+			result = new ArrayList<>();
+			result.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
+			result.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
+			result.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
+			result.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
+			result.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
 
 			// create config for service
 			Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
 			item.put("ident", KEY_HOST_DISPLAYFIELDS);
 			item.put("description", "");
-			item.put("defaultValues", defaultValues);
+			item.put("defaultValues", result);
 			item.put("possibleValues", possibleValues);
 			item.put("editable", false);
 			item.put("multiValue", true);
@@ -609,6 +607,7 @@ public class HostDataService {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
 
 			exec.doCall(omc);
+
 		} else {
 			result = givenList;
 			// but not if we want to change the default values:
