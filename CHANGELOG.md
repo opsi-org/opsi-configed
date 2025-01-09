@@ -1,4 +1,4 @@
-## [4.4.0.14] - 202x-xx-xx
+## [4.4.0.14] - 2025-01-09
 ### Fixed
 - Not saving ProductPropertyStates and ConfigStates when you edit again after saving
 
