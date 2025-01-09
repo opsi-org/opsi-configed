@@ -1,4 +1,8 @@
 # Changelog
+## [4.3.5.x] - 2025-xx-xx
+### Fixed
+- Nullpointerexception when saving health check settings when no host was selected
+
 ## [4.3.5.1] - 2025-01-09
 ### Added
 - Add options to Health Check to en/disable the check for clients and depots
