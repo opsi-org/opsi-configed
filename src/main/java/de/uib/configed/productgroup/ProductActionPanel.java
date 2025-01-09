@@ -180,17 +180,12 @@ public class ProductActionPanel extends JPanel {
 		if (!installationStateTableModel.infoIfNoClientsSelected()) {
 			installationStateTableModel.initCollectiveChange();
 
-			int actionType;
-			if (selected.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"))) {
-				actionType = ActionRequest.SETUP;
-			} else if (selected
-					.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"))) {
-				actionType = ActionRequest.UNINSTALL;
-			} else if (selected.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"))) {
-				actionType = ActionRequest.NONE;
-			} else {
-				actionType = ActionRequest.INVALID;
-			}
+			int actionType = switch (selected) {
+			case "setup" -> ActionRequest.SETUP;
+			case "uninstall" -> ActionRequest.UNINSTALL;
+			case "none" -> ActionRequest.NONE;
+			default -> ActionRequest.INVALID;
+			};
 
 			if (actionType != ActionRequest.INVALID) {
 				panelProductSettings.getProductTable().getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
