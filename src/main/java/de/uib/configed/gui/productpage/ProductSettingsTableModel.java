@@ -11,7 +11,6 @@ import java.util.Comparator;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -28,7 +27,6 @@ import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utils.IntComparatorForStrings;
-import de.uib.utils.swing.list.StandardListCellRenderer;
 import de.uib.utils.table.gui.AdaptingCellEditorValuesByIndex;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.DynamicCellEditor;
@@ -41,8 +39,6 @@ public class ProductSettingsTableModel {
 	private static final int WIDTH_COLUMN_PRODUCT_SEQUENCE = 40;
 	private static final int WIDTH_COLUMN_VERSION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
 	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
-
-	private ListCellRenderer<Object> standardListCellRenderer;
 
 	private ColorTableCellRenderer colorTableCellRenderer;
 
@@ -69,7 +65,6 @@ public class ProductSettingsTableModel {
 	}
 
 	private void initRenderer() {
-		standardListCellRenderer = new StandardListCellRenderer();
 
 		productNameTableCellRenderer = new ProductNameTableCellRenderer();
 
@@ -130,7 +125,6 @@ public class ProductSettingsTableModel {
 			TableColumn targetColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
 			JComboBox<String> targetCombo = new JComboBox<>();
-			targetCombo.setRenderer(standardListCellRenderer);
 
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm));
 			targetColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
@@ -141,7 +135,6 @@ public class ProductSettingsTableModel {
 			TableColumn statusColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
 			JComboBox<String> statesCombo = new JComboBox<>();
-			statesCombo.setRenderer(standardListCellRenderer);
 
 			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm));
 			statusColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
@@ -152,7 +145,6 @@ public class ProductSettingsTableModel {
 			TableColumn actionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
 			JComboBox<String> actionsCombo = new JComboBox<>();
-			actionsCombo.setRenderer(standardListCellRenderer);
 			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm));
 			actionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			actionColumn.setCellRenderer(actionRequestTableCellRenderer);
@@ -197,8 +189,6 @@ public class ProductSettingsTableModel {
 			installationInfoColumn.setCellRenderer(installationInfoTableCellRenderer);
 
 			JComboBox<String> installationInfoCombo = new JComboBox<>();
-
-			installationInfoCombo.setRenderer(standardListCellRenderer);
 
 			DynamicCellEditor cellEditor = new DynamicCellEditor(installationInfoCombo, istm);
 
