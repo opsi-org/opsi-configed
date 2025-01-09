@@ -64,6 +64,15 @@ public class ProductActionPanel extends JPanel {
 		buttonExecuteNow.addActionListener(al);
 	}
 
+	public String getVisibility() {
+		return switch (comboVisibility.getSelectedIndex()) {
+		case 0 -> ServerActionManager.KEY_PROCESS_ACTION_REQUEST_DEFAULT;
+		case 1 -> ServerActionManager.KEY_PROCESS_ACTION_REQUEST_VISIBLE;
+		case 2 -> ServerActionManager.KEY_PROCESS_ACTION_REQUEST_HIDDEN;
+		default -> ServerActionManager.KEY_PROCESS_ACTION_REQUEST_DEFAULT;
+		};
+	}
+
 	private void initData() {
 		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(panelProductSettings));
 		searchPane.setFiltering();
@@ -79,20 +88,18 @@ public class ProductActionPanel extends JPanel {
 		JLabel labelVisibility = new JLabel(Configed.getResourceValue("GroupPanel.labelVisibility"));
 		labelVisibility.setToolTipText(Configed.getResourceValue("GroupPanel.labelVisibility.tooltip"));
 
-		comboVisibility = new JComboBox<>(new String[] { ServerActionManager.KEY_PROCESS_ACTION_REQUEST_DEFAULT,
-				ServerActionManager.KEY_PROCESS_ACTION_REQUEST_VISIBLE,
-				ServerActionManager.KEY_PROCESS_ACTION_REQUEST_HIDDEN });
+		comboVisibility = new JComboBox<>(
+				new String[] { Configed.getResourceValue("GroupPanel.comboVisibility.default"),
+						Configed.getResourceValue("GroupPanel.comboVisibility.visible"),
+						Configed.getResourceValue("GroupPanel.comboVisibility.hidden") });
 
 		Map<String, String> values = new LinkedHashMap<>();
 
-		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
-				Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
+		values.put("setup", Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
 
-		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"),
-				Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked.tooltip"));
+		values.put("uninstall", Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked.tooltip"));
 
-		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
-				Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
+		values.put("none", Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
 		// create list with tooltips
 		JComboBox<String> jComboBox = new JComboBox<>(values.keySet().toArray(new String[0]));
@@ -134,29 +141,30 @@ public class ProductActionPanel extends JPanel {
 								.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
 
-								.addGroup(layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(labelVisibility, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(comboVisibility, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+								.addGroup(
+										layoutMain.createSequentialGroup().addGap(Globals.GAP_SIZE)
+												.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.MIN_GAP_SIZE)
+												.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(labelVisibility, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.MIN_GAP_SIZE)
+												.addComponent(comboVisibility, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 
-										.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(jComboBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(buttonSetValues, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)));
+												.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(jComboBox, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(buttonSetValues, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE)));
 	}
 
 	private void handleCollectiveAction(String selected) {

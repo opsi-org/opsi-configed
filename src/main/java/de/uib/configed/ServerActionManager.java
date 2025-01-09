@@ -123,16 +123,16 @@ public final class ServerActionManager {
 		}.start();
 	}
 
-	public static void processActionRequestsAllProducts() {
-		processActionRequests(Collections.emptySet());
+	public static void processActionRequestsAllProducts(String visibility) {
+		processActionRequests(Collections.emptySet(), visibility);
 	}
 
-	public static void processActionRequestsSelectedProducts() {
+	public static void processActionRequestsSelectedProducts(String visibility) {
 		processActionRequests(ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings()
-				.getProductTable().getSelectedIDs());
+				.getProductTable().getSelectedIDs(), visibility);
 	}
 
-	private static void processActionRequests(Set<String> products) {
+	private static void processActionRequests(Set<String> products, String visibility) {
 		if (configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
@@ -143,7 +143,7 @@ public final class ServerActionManager {
 			@Override
 			protected List<String> getErrors() {
 				return persistenceController.getRPCMethodExecutor()
-						.processActionRequests(configedMain.getSelectedClients(), products);
+						.processActionRequests(configedMain.getSelectedClients(), products, visibility);
 			}
 		}.start();
 	}
