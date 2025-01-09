@@ -3178,15 +3178,16 @@ public class ConfigedMain implements MessagebusListener {
 		}.start();
 	}
 
-	public void processActionRequestsAllProducts() {
-		processActionRequests(Collections.emptySet());
+	public void processActionRequestsAllProducts(String visibility) {
+		processActionRequests(Collections.emptySet(), visibility);
 	}
 
-	public void processActionRequestsSelectedProducts() {
-		processActionRequests(mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getSelectedIDs());
+	public void processActionRequestsSelectedProducts(String visibility) {
+		processActionRequests(mainFrame.getTabbedConfigPanes().getPanelLocalbootProductSettings().getSelectedIDs(),
+				visibility);
 	}
 
-	private void processActionRequests(Set<String> products) {
+	private void processActionRequests(Set<String> products, String visibility) {
 		if (selectedClients.isEmpty()) {
 			return;
 		}
@@ -3196,7 +3197,8 @@ public class ConfigedMain implements MessagebusListener {
 		new AbstractErrorListProducer("opsiclientd processActionRequests") {
 			@Override
 			protected List<String> getErrors() {
-				return persistenceController.getRPCMethodExecutor().processActionRequests(selectedClients, products);
+				return persistenceController.getRPCMethodExecutor().processActionRequests(selectedClients, products,
+						visibility);
 			}
 		}.start();
 	}

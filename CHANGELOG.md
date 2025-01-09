@@ -7,7 +7,9 @@
 - Use normal login without SSO when password or OTP field active and pressing "ENTER"-key
 
 ### Added
-- Add Options to Health Check to en/disable the check for clients and depots
+- Add options to Health Check to en/disable the check for clients and depots
+- Add option of Visibility to method processActionRequest ("Execute") in product tables
+
 
 
 ## [4.3.4.2] - 2024-12-04

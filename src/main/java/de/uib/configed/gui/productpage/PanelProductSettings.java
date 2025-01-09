@@ -210,8 +210,8 @@ public class PanelProductSettings extends JSplitPane {
 				Utils.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemOnDemandForSelectedProducts
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
-		itemOnDemandForSelectedProducts
-				.addActionListener((ActionEvent e) -> configedMain.processActionRequestsSelectedProducts());
+		itemOnDemandForSelectedProducts.addActionListener(
+				(ActionEvent e) -> configedMain.processActionRequestsSelectedProducts(groupPanel.getVisibility()));
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		popup.add(itemOnDemandForSelectedProducts);
@@ -401,7 +401,7 @@ public class PanelProductSettings extends JSplitPane {
 		Logging.info(this, "saveAndExecuteAction");
 		configedMain.checkSaveAll(false);
 		configedMain.requestReloadStatesAndActions();
-		configedMain.processActionRequestsAllProducts();
+		configedMain.processActionRequestsAllProducts(groupPanel.getVisibility());
 	}
 
 	@SuppressWarnings("java:S1452")

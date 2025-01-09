@@ -16,6 +16,7 @@ import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -36,12 +37,18 @@ import de.uib.utils.swing.list.StandardListCellRenderer;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
+	public static final String KEY_PROCESS_ACTION_REQUEST_DEFAULT = "";
+	public static final String KEY_PROCESS_ACTION_REQUEST_VISIBLE = "visible";
+	public static final String KEY_PROCESS_ACTION_REQUEST_HIDDEN = "hidden";
+
 	private TableSearchPane searchPane;
 	private JTable tableProducts;
 
 	private IconButton buttonReloadProductStates;
 
 	private IconButton buttonExecuteNow;
+
+	private JComboBox<String> comboVisibility;
 
 	private PanelProductSettings associate;
 
@@ -75,6 +82,15 @@ public class ProductActionPanel extends JPanel {
 		buttonExecuteNow.addActionListener(al);
 	}
 
+	public String getVisibility() {
+		return switch (comboVisibility.getSelectedIndex()) {
+		case 0 -> KEY_PROCESS_ACTION_REQUEST_DEFAULT;
+		case 1 -> KEY_PROCESS_ACTION_REQUEST_VISIBLE;
+		case 2 -> KEY_PROCESS_ACTION_REQUEST_HIDDEN;
+		default -> KEY_PROCESS_ACTION_REQUEST_DEFAULT;
+		};
+	}
+
 	private void initData() {
 		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
 				true);
@@ -93,6 +109,12 @@ public class ProductActionPanel extends JPanel {
 		buttonExecuteNow = new IconButton(Configed.getResourceValue("ConfigedMain.Opsiclientd.executeAll"),
 				"images/executing_command_blue_16.png", "images/executing_command_blue_16.png", "", true);
 		buttonExecuteNow.setPreferredSize(Globals.NEW_SMALL_BUTTON);
+
+		JLabel labelVisibility = new JLabel(Configed.getResourceValue("GroupPanel.labelVisibility"));
+		comboVisibility = new JComboBox<>(
+				new String[] { Configed.getResourceValue("GroupPanel.comboVisibility.default"),
+						Configed.getResourceValue("GroupPanel.comboVisibility.visible"),
+						Configed.getResourceValue("GroupPanel.comboVisibility.hidden") });
 
 		Map<String, String> values = new LinkedHashMap<>();
 
@@ -145,6 +167,10 @@ public class ProductActionPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonExecuteNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelVisibility, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboVisibility, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 
 						.addGroup(layoutMain.createSequentialGroup()
 								.addComponent(labelStrip, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -161,6 +187,12 @@ public class ProductActionPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE)
 						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(labelVisibility, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(comboVisibility, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 
 						.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE)
