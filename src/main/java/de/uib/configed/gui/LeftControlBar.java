@@ -38,8 +38,8 @@ public class LeftControlBar extends JToolBar {
 		jButtonDepotsConfiguration.setToolTipText(Configed.getResourceValue("depotConfiguration"));
 		jButtonDepotsConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DEPOTS));
 
-		JToggleButton jButtonServerConfiguration = new JToggleButton(Icons.getIntellijIcon("editorConfig", 32));
-		jButtonServerConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("editorConfig", 32));
+		JToggleButton jButtonServerConfiguration = new JToggleButton(Icons.getIntellijIcon("settings", 32));
+		jButtonServerConfiguration.setSelectedIcon(Icons.getSelectedIntellijIcon("settings", 32));
 		jButtonServerConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jButtonServerConfiguration.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.SERVER));
 

@@ -11,6 +11,7 @@
 
 ## Added
 - Add option of Visibility to method processActionRequest ("Execute") in product tables
+- Add options to Health Check to en/disable the check for clients and depots
 
 ## [4.4.0.13] - 2024-12-09
 ### Changed
