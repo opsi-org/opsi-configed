@@ -63,7 +63,7 @@ public final class HealthCheckSettingsDialog {
 				Configed.getResourceValue("HealthCheckSettingsDialog.title"));
 		dialog.setVisible(true);
 
-		Logging.info(this, "User selected " + jOptionPane.getValue());
+		Logging.info(this, "User selected ", jOptionPane.getValue());
 		if (jOptionPane.getValue() == Configed.getResourceValue("save")) {
 			save();
 		}
@@ -224,7 +224,7 @@ public final class HealthCheckSettingsDialog {
 	}
 
 	private void save() {
-		Logging.info(this, "save health check settings for selected hosts" + selectedHostList.getSelectedValues());
+		Logging.info(this, "save health check settings for selected hosts");
 
 		if (selectedHostList == null || selectedHostList.getSelectedValues().isEmpty()) {
 			Logging.info(this, "No host selected");

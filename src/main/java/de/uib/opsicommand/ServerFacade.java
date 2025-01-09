@@ -628,7 +628,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			gzipped = "gzip".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 			Logging.debug(this, "gzipped ", gzipped);
 			deflated = "deflate".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
-			Logging.debug(this, "deflated\r\n" + "\t\t\t\t ", deflated);
+			Logging.debug(this, "deflated\r\n", "\t\t\t\t ", deflated);
 			lz4compressed = "lz4".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 
 			Logging.debug(this, "lz4compressed ", lz4compressed);
