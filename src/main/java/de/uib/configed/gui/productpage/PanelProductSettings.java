@@ -87,10 +87,13 @@ public class PanelProductSettings extends JSplitPane {
 	private void init() {
 		productTable = new ProductTable();
 
-		groupPanel = new ProductActionPanel(this);
+		groupPanel = new ProductActionPanel(this, type);
+
 		groupPanel.setReloadActionHandler(actionEvent -> reloadAction());
 
-		groupPanel.setSaveAndExecuteActionHandler(actionEvent -> saveAndExecuteAction());
+		if (type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS) {
+			groupPanel.setSaveAndExecuteActionHandler(actionEvent -> saveAndExecuteAction());
+		}
 
 		groupPanel.setVisible(true);
 
