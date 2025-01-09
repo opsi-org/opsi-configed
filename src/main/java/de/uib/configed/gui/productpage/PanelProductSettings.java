@@ -163,8 +163,8 @@ public class PanelProductSettings extends JSplitPane {
 		Icons.addIntellijIconToMenuItem(itemOnDemandForSelectedProducts, "run");
 		itemOnDemandForSelectedProducts
 				.setEnabled(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly());
-		itemOnDemandForSelectedProducts
-				.addActionListener(actionEvent -> ServerActionManager.processActionRequestsSelectedProducts());
+		itemOnDemandForSelectedProducts.addActionListener(
+				actionEvent -> ServerActionManager.processActionRequestsSelectedProducts(groupPanel.getVisibility()));
 		itemOnDemandForSelectedProducts.setEnabled(type != ProductSettingsType.NETBOOT_PRODUCT_SETTINGS);
 
 		popup.add(itemOnDemandForSelectedProducts);
@@ -306,7 +306,7 @@ public class PanelProductSettings extends JSplitPane {
 		Logging.info(this, "saveAndExecuteAction");
 		ChangedDataManager.checkSaveAll(false);
 		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
-		ServerActionManager.processActionRequestsAllProducts();
+		ServerActionManager.processActionRequestsAllProducts(groupPanel.getVisibility());
 	}
 
 	public boolean isFilteredMode() {

@@ -32,6 +32,10 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 
 public final class ServerActionManager {
+	public static final String KEY_PROCESS_ACTION_REQUEST_DEFAULT = "";
+	public static final String KEY_PROCESS_ACTION_REQUEST_VISIBLE = "visible";
+	public static final String KEY_PROCESS_ACTION_REQUEST_HIDDEN = "hidden";
+
 	private static ConfigedMain configedMain;
 
 	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -119,16 +123,16 @@ public final class ServerActionManager {
 		}.start();
 	}
 
-	public static void processActionRequestsAllProducts() {
-		processActionRequests(Collections.emptySet());
+	public static void processActionRequestsAllProducts(String visibility) {
+		processActionRequests(Collections.emptySet(), visibility);
 	}
 
-	public static void processActionRequestsSelectedProducts() {
+	public static void processActionRequestsSelectedProducts(String visibility) {
 		processActionRequests(ConfigedMain.getMainFrame().getClientConfiguration().getPanelLocalbootProductSettings()
-				.getProductTable().getSelectedIDs());
+				.getProductTable().getSelectedIDs(), visibility);
 	}
 
-	private static void processActionRequests(Set<String> products) {
+	private static void processActionRequests(Set<String> products, String visibility) {
 		if (configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
@@ -139,7 +143,7 @@ public final class ServerActionManager {
 			@Override
 			protected List<String> getErrors() {
 				return persistenceController.getRPCMethodExecutor()
-						.processActionRequests(configedMain.getSelectedClients(), products);
+						.processActionRequests(configedMain.getSelectedClients(), products, visibility);
 			}
 		}.start();
 	}

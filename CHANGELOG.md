@@ -9,6 +9,9 @@
 - Use new CellEditor to edit notes in license tables
 - Rework the dialog frames to use standard java library (JOptionPane) instead of own classes
 
+## Added
+- Add option of Visibility to method processActionRequest ("Execute") in product tables
+
 ## [4.4.0.13] - 2024-12-09
 ### Changed
 - Rework editing and creation of configs, configStates, productProperties and depot properties
