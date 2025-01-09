@@ -21,7 +21,6 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Globals;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.list.StandardListCellRenderer;
 
 public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 	private JList<String> theList;
@@ -113,7 +112,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog {
 		JPanel thePanel = new JPanel();
 
 		theList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		theList.setCellRenderer(new StandardListCellRenderer());
 
 		theField = new JTextField();
 

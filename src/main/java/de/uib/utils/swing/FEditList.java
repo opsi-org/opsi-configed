@@ -46,7 +46,6 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.list.StandardListCellRenderer;
 
 public class FEditList<O> extends JDialog
 		implements ListSelectionListener, MouseListener, ActionListener, KeyListener, DocumentListener {
@@ -89,7 +88,6 @@ public class FEditList<O> extends JDialog
 		visibleList = new JList<>();
 		visibleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		visibleList.addListSelectionListener(this);
-		visibleList.setCellRenderer(new StandardListCellRenderer());
 
 		visibleList.addMouseListener(this);
 
