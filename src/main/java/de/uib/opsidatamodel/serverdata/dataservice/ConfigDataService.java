@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -58,6 +59,10 @@ public class ConfigDataService {
 
 	protected static final String KEY_DISABLED_CLIENT_ACTIONS = "configed.host_actions_disabled";
 	protected static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
+
+	private static final String KEY_DOWNTIME_START = "opsi.check.downtime.start";
+	private static final String KEY_DOWNTIME_END = "opsi.check.downtime.end";
+	private static final String KEY_DOWNTIME_ENABLED = "opsi.check.enabled";
 
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;
@@ -1208,6 +1213,43 @@ public class ConfigDataService {
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		configDefaultValues.put(key, domains);
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
+	}
+
+	public void writeDownTime(Collection<String> hostIds, boolean enabled, String startTime, String endTime) {
+		if (hostIds.isEmpty()) {
+			return;
+		}
+
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
+
+		for (String hostId : hostIds) {
+
+			Map<String, Object> enabledItem = Utils
+					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
+			enabledItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
+			enabledItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_ENABLED);
+			enabledItem.put(OpsiServiceNOMPersistenceController.VALUES_ID, List.of(enabled));
+
+			Map<String, Object> startTimeItem = Utils
+					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
+			startTimeItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
+			startTimeItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_START);
+			startTimeItem.put(OpsiServiceNOMPersistenceController.VALUES_ID, List.of(startTime));
+
+			Map<String, Object> endTimeItem = Utils
+					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
+			endTimeItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
+			endTimeItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_END);
+			endTimeItem.put(OpsiServiceNOMPersistenceController.VALUES_ID, List.of(endTime));
+
+			readyObjects.add(enabledItem);
+			readyObjects.add(startTimeItem);
+			readyObjects.add(endTimeItem);
+		}
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
+				new Object[] { readyObjects });
+		exec.doCall(omc);
 	}
 
 	public String getConfigedWorkbenchDefaultValuePD() {
