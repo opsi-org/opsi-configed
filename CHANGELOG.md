@@ -6,6 +6,9 @@
 ### Changed
 - Use normal login without SSO when password or OTP field active and pressing "ENTER"-key
 
+### Added
+- Add Options to Health Check to en/disable the check for clients and depots
+
 
 ## [4.3.4.2] - 2024-12-04
 ### Fixed
