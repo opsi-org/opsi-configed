@@ -166,6 +166,7 @@ public final class HealthCheckSettingsDialog {
 			hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
 
 			selectedHostList.setListData(hostNames);
+			selectedHostList.setMultiSelection();
 		}
 
 		// Get the selection to restore it if the user cancels the dialog
