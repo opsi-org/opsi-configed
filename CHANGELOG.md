@@ -1,3 +1,8 @@
+## [4.4.0.xx] - 2025-xx-xx
+### Fixed
+- Only delete productPropertyStates for selected product type
+
+
 ## [4.4.0.14] - 2025-01-09
 ### Fixed
 - Not saving ProductPropertyStates and ConfigStates when you edit again after saving

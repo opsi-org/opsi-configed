@@ -1097,7 +1097,8 @@ public class ProductDataService {
 
 	private List<Map<String, Object>> produceDeleteProductItems(List<String> selectedClients, String productType) {
 		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
-		List<Map<String, Object>> modifiedProductsOnClients = retrieveModifiedProductsOnClients(selectedClients);
+		List<Map<String, Object>> modifiedProductsOnClients = retrieveModifiedProductsOnClients(selectedClients,
+				productType);
 
 		for (final String clientId : selectedClients) {
 			List<String> modifiedProductsOnClient = modifiedProductsOnClients.stream()
@@ -1114,10 +1115,11 @@ public class ProductDataService {
 		return deleteProductItems;
 	}
 
-	private List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds) {
+	private List<Map<String, Object>> retrieveModifiedProductsOnClients(List<String> clientIds, String productType) {
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("clientId", clientIds);
+		callFilter.put("productType", productType);
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_CLIENT_GET_OBJECTS,
 				new Object[] { callAttributes, callFilter });
 		return exec.getListOfMaps(omc);
