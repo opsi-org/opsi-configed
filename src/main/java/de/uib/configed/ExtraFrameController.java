@@ -50,7 +50,6 @@ public final class ExtraFrameController {
 
 	public static void callNewClientSelectionDialog(ConfigedMain configedMain) {
 		if (clientSelectionDialog != null) {
-			clientSelectionDialog.leave();
 			clientSelectionDialog = null;
 		}
 		callClientSelectionDialog(configedMain);
@@ -64,8 +63,7 @@ public final class ExtraFrameController {
 					savedSearchesDialog);
 		}
 
-		clientSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		clientSelectionDialog.setVisible(true);
+		clientSelectionDialog.show();
 	}
 
 	public static void editClientSearch(ConfigedMain configedMain, String name) {
