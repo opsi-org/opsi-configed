@@ -2,6 +2,7 @@
 ### Fixed
 - Only delete productPropertyStates for selected product type
 - Nullpointerexception when editing group that was just created
+- We can now return to the dialog when we cancel trusting the certificate when we login by SSO
 
 
 ## [4.4.0.14] - 2025-01-09

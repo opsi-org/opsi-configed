@@ -201,6 +201,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private boolean ssoOpenBrowser() {
 		Logging.info(this, "ssoOpenBrowser started");
+
+		if (sessionId == null) {
+			Logging.error(this, "sessionId is null");
+			return false;
+		}
 		/////// open browser
 		String sid = sessionId.contains("=") ? sessionId.split("=")[1] : sessionId;
 		String urlBrowserSaml = "/auth/saml/login?session_id=" + sid + "&redirect=close_window";
