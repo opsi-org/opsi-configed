@@ -80,8 +80,8 @@ public final class NewClientDialog {
 		init();
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
-				new String[] { Configed.getResourceValue("buttonClose"),
-						Configed.getResourceValue("NewClientDialog.buttonCreate") });
+				new String[] { Configed.getResourceValue("NewClientDialog.buttonCreate"),
+						Configed.getResourceValue("buttonClose") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title"));
