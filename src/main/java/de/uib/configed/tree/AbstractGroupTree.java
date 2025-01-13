@@ -321,23 +321,13 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			if (persistenceController.getGroupDataService().addGroup(newGroup, this instanceof ClientTree)) {
 				groups.put(newGroupKey, newGroup);
 				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup ", newGroupKey, ", ", newGroup);
-				result = insertGroup(newGroupKey, description, node);
+
+				result = new GroupNode(newGroupKey);
+				insertNodeInOrder(result, node);
 			}
 		}
 
 		return result;
-	}
-
-	protected GroupNode insertGroup(String groupObject, String groupDescription, DefaultMutableTreeNode parent) {
-		GroupNode node = produceGroupNode(groupObject, groupDescription);
-
-		if (parent == null) {
-			parent = groupNodeGroups;
-		}
-
-		insertNodeInOrder(node, parent);
-
-		return node;
 	}
 
 	protected void insertNodeInOrder(DefaultMutableTreeNode node, DefaultMutableTreeNode parent) {

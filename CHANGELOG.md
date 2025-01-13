@@ -1,6 +1,7 @@
 ## [4.4.0.xx] - 2025-xx-xx
 ### Fixed
 - Only delete productPropertyStates for selected product type
+- Nullpointerexception when editing group that was just created
 
 
 ## [4.4.0.14] - 2025-01-09
