@@ -102,8 +102,7 @@ public final class ExtraFrameController {
 		}
 
 		newClientDialog.setDefaultValues();
-		newClientDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		newClientDialog.setVisible(true);
+		newClientDialog.show();
 	}
 
 	public static void startEditTerminalCommandsDialog(ConfigedMain configedMain) {

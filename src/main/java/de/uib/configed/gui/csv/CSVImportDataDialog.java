@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.csv;
 
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -350,7 +351,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		return modifier;
 	}
 
-	public static CSVImportDataDialog createCSVImportDataDialog(FGeneralDialog parent, String csvFile) {
+	public static CSVImportDataDialog createCSVImportDataDialog(Component parent, String csvFile) {
 		Logging.info("createCSVImportDataDialog for file ", csvFile);
 		List<String> columnNames = HostInfo.getKeysForCSV();
 		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
