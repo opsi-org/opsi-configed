@@ -639,8 +639,7 @@ public final class NewClientDialog {
 				return;
 			}
 
-			csvImportDataDialog.setVisible(true);
-			if (csvImportDataDialog.getResult() == 2) {
+			if (csvImportDataDialog.show()) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				List<List<Object>> rows = modifier.getRows();
 				createClients(rows);
