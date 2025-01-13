@@ -234,8 +234,8 @@ public class CreateConfigDialog {
 		jTabbedPane = new JTabbedPane();
 		jTabbedPane.putClientProperty("JTabbedPane.tabAreaAlignment", "fill");
 		jTabbedPane.putClientProperty("JTabbedPane.tabWidthMode", "equal");
-		jTabbedPane.addTab("Allgemein", generalPanel);
-		jTabbedPane.addTab("Details", unicodeDetailsPanel);
+		jTabbedPane.addTab(Configed.getResourceValue("CreateConfigDialog.generalOptions"), generalPanel);
+		jTabbedPane.addTab(Configed.getResourceValue("CreateConfigDialog.details"), unicodeDetailsPanel);
 	}
 
 	private void updateDetailsTab() {
