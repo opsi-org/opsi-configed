@@ -845,8 +845,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private void addDoubleTypeComponent(SimpleGroup sourceGroup) {
 		TextInputField fieldDouble = new TextInputField();
 		fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-		fieldDouble.setToolTipText(
-				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		fieldDouble.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldDouble.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDouble;
 	}
