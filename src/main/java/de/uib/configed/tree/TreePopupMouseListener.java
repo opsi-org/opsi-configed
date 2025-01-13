@@ -12,12 +12,14 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.logging.Logging;
@@ -74,6 +76,14 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	}
 
 	private void removeElements() {
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("AbstractGroupTree.removeAllElements.message"),
+				Configed.getResourceValue("AbstractGroupTree.removeAllElements.title"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+		if (answer != JOptionPane.YES_OPTION) {
+			return;
+		}
+
 		if (mousePath != null
 				&& mousePath.getPathComponent(mousePath.getPathCount() - 1) instanceof GroupNode groupNode) {
 			Enumeration<TreeNode> enumer = groupNode.breadthFirstEnumeration();

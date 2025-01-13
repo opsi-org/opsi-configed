@@ -223,7 +223,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("description"),
-				Configed.getResourceValue("ClientTree.editGroup") + " " + groupId, JOptionPane.PLAIN_MESSAGE, null,
+				Configed.getResourceValue("ClientTree.editGroup") + ": " + groupId, JOptionPane.PLAIN_MESSAGE, null,
 				null, groups.get(groupId).get("description"));
 
 		if (answer != null) {
@@ -255,7 +255,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			// found a group
 			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ClientTree.deleteGroupWarning"),
-					Configed.getResourceValue("ClientTree.deleteGroupNode") + " " + nodeID,
+					Configed.getResourceValue("ClientTree.deleteGroupNode") + ": " + nodeID,
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			if (returnedOption == JOptionPane.OK_OPTION) {
