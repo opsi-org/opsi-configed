@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.5.x] - 2025-xx-xx
+## [4.3.5.2] - 2025-01-13
 ### Fixed
 - Nullpointerexception when saving health check settings when no host was selected
 - Only delete productPropertyStates for selected product type
