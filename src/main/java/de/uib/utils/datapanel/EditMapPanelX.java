@@ -355,10 +355,10 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		return ok;
 	}
 
-	public void addEntry(String configName, String description, boolean bool, boolean multivalue, boolean editable,
+	public boolean addEntry(String configName, String description, boolean bool, boolean multivalue, boolean editable,
 			List<?> defaultValues, List<?> possibleValues) {
 		if (!checkKey(configName)) {
-			return;
+			return false;
 		}
 
 		Logging.info(this, "we create configuration entry ", configName, " with values bool, multivalue, editable",
@@ -372,6 +372,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		optionsMap.put(configName, configOption);
 		mapTableModel.setMap(mapTableModel.getData());
+
+		return true;
 	}
 
 	/**

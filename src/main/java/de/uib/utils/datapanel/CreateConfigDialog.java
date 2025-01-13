@@ -14,20 +14,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
@@ -36,9 +34,10 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSelectionList;
 import de.uib.utils.Icons;
+import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.PropertiesCellEditorAndRenderer;
 
-public class CreateConfigDialog extends JDialog {
+public class CreateConfigDialog {
 	private EditMapPanelX editMapPanelX;
 
 	private JTextField textFieldConfigEntry;
@@ -59,10 +58,9 @@ public class CreateConfigDialog extends JDialog {
 	private JPanel booleanDetailsPanel;
 	private JPanel unicodeDetailsPanel;
 
-	public CreateConfigDialog(EditMapPanelX editMapPanelX) {
-		super(ConfigedMain.getMainFrame(), true);
-		super.setTitle(Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
+	private JDialog dialog;
 
+	public CreateConfigDialog(EditMapPanelX editMapPanelX) {
 		this.editMapPanelX = editMapPanelX;
 
 		initGeneralPanel();
@@ -71,10 +69,18 @@ public class CreateConfigDialog extends JDialog {
 
 		initPanel();
 
-		super.setSize(300, 300);
-		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		super.setResizable(false);
-		super.setVisible(true);
+		JOptionPane pane = new JOptionPane(jTabbedPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+
+		dialog = pane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
+		dialog.setVisible(true);
+
+		Logging.info(this, "result of create config dialog ", pane.getValue());
+
+		if (pane.getValue() != null && pane.getValue().equals(Configed.getResourceValue("save"))) {
+			createConfig();
+		}
 	}
 
 	private void initBooleanDetailsPanel() {
@@ -156,7 +162,7 @@ public class CreateConfigDialog extends JDialog {
 
 	private void activateSelection(FSelectionList fSelectionList, JTextField jTextField) {
 		fSelectionList.setSize(300, 400);
-		fSelectionList.setLocationRelativeTo(this);
+		fSelectionList.setLocationRelativeTo(dialog);
 
 		// We need to call this before setVisible
 		List<String> savedSelectedValues = fSelectionList.getSelectedValues();
@@ -193,14 +199,14 @@ public class CreateConfigDialog extends JDialog {
 
 	private void initGeneralPanel() {
 		JLabel labelConfigEntry = new JLabel(Configed.getResourceValue("EditMapPanelX.configName"));
-		labelConfigEntry.setFont(getFont().deriveFont(Font.BOLD));
+		labelConfigEntry.setFont(labelConfigEntry.getFont().deriveFont(Font.BOLD));
 
 		textFieldConfigEntry = new JTextField();
 		// Need to call this method inside invokeLater, otherwise it won't work
 		SwingUtilities.invokeLater(() -> textFieldConfigEntry.requestFocus());
 
 		JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
-		labelDescription.setFont(getFont().deriveFont(Font.BOLD));
+		labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
 
 		textFieldDescription = new JTextField();
 
@@ -230,49 +236,6 @@ public class CreateConfigDialog extends JDialog {
 		jTabbedPane.putClientProperty("JTabbedPane.tabWidthMode", "equal");
 		jTabbedPane.addTab("Allgemein", generalPanel);
 		jTabbedPane.addTab("Details", unicodeDetailsPanel);
-
-		JButton cancel = new JButton(Icons.getIntellijIcon("close"));
-		cancel.addActionListener(actionEvent -> dispose());
-
-		JButton accept = new JButton(Icons.getIntellijIcon("checkmark"));
-		accept.setEnabled(false);
-		accept.addActionListener((ActionEvent e) -> {
-			createConfig();
-			dispose();
-		});
-
-		// We only want the accept button to be active, when the input for config name is not blank
-		textFieldConfigEntry.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// Not needed here
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				accept.setEnabled(!textFieldConfigEntry.getText().isBlank());
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				accept.setEnabled(!textFieldConfigEntry.getText().isBlank());
-			}
-		});
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(jTabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(0, 0, Short.MAX_VALUE)
-				.addGroup(layout.createParallelGroup().addComponent(cancel).addComponent(accept)));
-
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(jTabbedPane).addGroup(layout
-				.createSequentialGroup().addComponent(cancel).addGap(0, 0, Short.MAX_VALUE).addComponent(accept)));
-
-		((JPanel) getContentPane()).setBorder(BorderFactory.createEmptyBorder(Globals.MIN_GAP_SIZE * 2,
-				Globals.MIN_GAP_SIZE * 2, Globals.MIN_GAP_SIZE * 2, Globals.MIN_GAP_SIZE * 2));
 	}
 
 	private void updateDetailsTab() {
@@ -290,8 +253,15 @@ public class CreateConfigDialog extends JDialog {
 			possibleValues = new ArrayList<>(possibleValuesSelectionDialog.getSelectedValues());
 		}
 
-		editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
+		if (!editMapPanelX.addEntry(textFieldConfigEntry.getText().strip(), textFieldDescription.getText(),
 				isBoolean.isSelected(), isMultiValue.isSelected(), isEditable.isSelected(), defaultValues,
-				possibleValues);
+				possibleValues)) {
+
+			JOptionPane.showMessageDialog(dialog,
+					Configed.getResourceValue("CreateConfigDialog.couldNotCreate.message") + ": "
+							+ textFieldConfigEntry.getText().strip(),
+					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
+			dialog.setVisible(true);
+		}
 	}
 }
