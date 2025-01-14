@@ -109,12 +109,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseL
 
 			controller.validateWindowsSoftwareKeys();
 
-			if (controller.getTabClient().getFSoftwarename2LicensePool().isVisible()) {
-				Logging.info(this, "selectionListener valueChanged,fSoftwarename2LicensePool.isVisible ");
-
-				// the data is not refreshed
-			}
-
 			setDataChanged(true);
 		} else {
 			// Do nothing here on mouse click

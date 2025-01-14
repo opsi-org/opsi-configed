@@ -445,17 +445,13 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	}
 
 	private void buttonSupplementSimilarAction() {
-		if (!fSoftwarename2LicensePool.isVisible()) {
-			fSoftwarename2LicensePool.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		}
-
 		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected ",
 				panelRadiobuttonsPreselectionForName2Pool.getValue());
 		fSoftwarename2LicensePool.setPreselectionForName2Pool(
 				(FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
 						.getValue());
 
-		fSoftwarename2LicensePool.setVisible(true);
+		fSoftwarename2LicensePool.show();
 
 		panelRegisteredSoftware.callName2Pool(panelRegisteredSoftware.getTableModel().getCursorRow());
 	}

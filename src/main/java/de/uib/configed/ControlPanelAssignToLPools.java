@@ -603,7 +603,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getFSoftwarename2LicensePool().setTableModel();
 		thePanel.setDisplaySimilarExist(
 				thePanel.getFSoftwarename2LicensePool().checkExistNamesWithVariantLicensepools());
-		thePanel.getFSoftwarename2LicensePool().setButtonsEnabled(true);
 
 		thePanel.getPanelLicensepools().getJTable().getSelectionModel()
 				.addListSelectionListener(this::licensePoolValueChanged);

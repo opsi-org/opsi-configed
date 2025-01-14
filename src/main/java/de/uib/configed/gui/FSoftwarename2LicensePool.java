@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,11 +14,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -48,7 +48,7 @@ import de.uib.utils.table.updates.MapBasedUpdater;
 import de.uib.utils.table.updates.MapItemsUpdateController;
 import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
-public class FSoftwarename2LicensePool extends FGeneralDialog {
+public class FSoftwarename2LicensePool {
 	public static final String VALUE_NO_LICENSE_POOL = "---";
 	private PanelGenEditTable panelSWnames;
 	private GenTableModel modelSWnames;
@@ -85,9 +85,10 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 	private String globalLicensePool;
 
+	private JOptionPane optionPane;
+	private JDialog dialog;
+
 	public FSoftwarename2LicensePool(ControlPanelAssignToLPools controlPanelAssignToLPools) {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("FSoftwarename2LicensePool.title"), false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 1, 700, 800, true);
 		this.controlPanelAssignToLPools = controlPanelAssignToLPools;
 
 		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
@@ -97,70 +98,20 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 
 		panelSWxLicensepool.setDeleteAllowed(false);
 
-		super.getOwner().setVisible(true);
-
 		initDataStructure();
-
-		initLayout();
-	}
-
-	@Override
-	protected void allLayout() {
-		Logging.info(this, "allLayout");
-
-		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-		allpane.setBorder(BorderFactory.createEtchedBorder());
-
-		if (centerPanel == null) {
-			centerPanel = new JPanel();
-		}
-
-		southPanel = new JPanel();
-
-		GroupLayout southLayout = new GroupLayout(southPanel);
-		southPanel.setLayout(southLayout);
-
-		southLayout.setHorizontalGroup(southLayout.createParallelGroup(Alignment.LEADING).addGroup(southLayout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalComponent, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
-
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(additionalComponent, 300, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		GroupLayout allLayout = new GroupLayout(allpane);
-		allpane.setLayout(allLayout);
-
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(centerPanel, 200, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-				.addComponent(southPanel, 300, 300, Short.MAX_VALUE).addGap(Globals.GAP_SIZE));
-
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
-	}
-
-	private void initLayout() {
 		initButtonsAndLabels();
-		JPanel panelAction = createPanelAction();
-		JPanel panelSWx = createPanelSWx(panelAction);
 
-		super.setAdditionalComponent(panelSWx);
-		super.setCenterPane(panelSWnames);
-		additionalComponent.setVisible(true);
-		super.setupLayout();
+		JPanel panel = createPanel(createPanelAction());
+
+		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE);
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("FSoftwarename2LicensePool.title"));
+	}
+
+	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
 	}
 
 	private void initButtonsAndLabels() {
@@ -224,46 +175,54 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 										.addGap(Globals.GAP_SIZE)
 										.addComponent(
 												labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.GAP_SIZE))
-								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(buttonSetAllAssignmentsToGloballySelectedPool,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(labelSetAllAssignmentsToGloballySelectedPool,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE))
+								.addGroup(
+										panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+												.addComponent(buttonSetAllAssignmentsToGloballySelectedPool,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(labelSetAllAssignmentsToGloballySelectedPool,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE))
 								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 										.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.GAP_SIZE)
 										.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.GAP_SIZE)));
 		return panelAction;
 	}
 
-	private JPanel createPanelSWx(JPanel panelAction) {
-		JPanel panelSWx = new JPanel();
-		GroupLayout layoutSWx = new GroupLayout(panelSWx);
-		panelSWx.setLayout(layoutSWx);
+	private JPanel createPanel(JPanel panelAction) {
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
 
-		layoutSWx.setVerticalGroup(layoutSWx.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(panelSWxLicensepool, 100, 200, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-				.addComponent(panelAction, 70, 70, 100).addGap(Globals.GAP_SIZE));
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(panelSWnames, 200, 200, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE).addComponent(panelSWxLicensepool, 200, 200, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE).addComponent(panelAction, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
-		layoutSWx.setHorizontalGroup(layoutSWx.createParallelGroup()
-				.addGroup(layoutSWx.createSequentialGroup().addGap(Globals.GAP_SIZE)
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(panelSWnames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(panelAction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE))
-				.addGroup(layoutSWx
+				.addGroup(layout
 						.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(panelSWxLicensepool,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE)));
-		return panelSWx;
+		return panel;
 	}
 
 	private void initDataStructure() {
@@ -302,7 +261,7 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 		panelSWnames.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
-			if (!e.getValueIsAdjusting() && isVisible()) {
+			if (!e.getValueIsAdjusting() && dialog.isVisible()) {
 				Logging.info(this, "selectedRow ", panelSWnames.getJTable().getSelectedRow());
 
 				if (panelSWnames.getJTable().getSelectedRow() >= 0) {
@@ -513,20 +472,6 @@ public class FSoftwarename2LicensePool extends FGeneralDialog {
 						return false;
 					}
 				}, updateCollection));
-	}
-
-	@Override
-	public void doAction2() {
-		Logging.debug(this, "doAction2");
-		result = 2;
-		getOwner().setVisible(true);
-		leave();
-	}
-
-	@Override
-	public void leave() {
-		setVisible(false);
-		// we dont dispose the window, dispose it in the enclosing class
 	}
 
 	public PanelGenEditTable getPanelSWnames() {
