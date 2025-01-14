@@ -691,12 +691,14 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addRole() {
-		String newUserRole = JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("FramingNewRole.textfieldLabel"),
+		JLabel roleLabel = new JLabel(Configed.getResourceValue("FramingNewRole.textfieldLabel"));
+		roleLabel.setFont(roleLabel.getFont().deriveFont(Font.BOLD));
+
+		String newUserRole = JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), roleLabel,
 				Configed.getResourceValue("FramingNewRole.title"), JOptionPane.PLAIN_MESSAGE);
 
 		if (newUserRole != null) {
-			setRoleConfig(newUserRole, "");
+			setRoleConfig(newUserRole);
 		}
 	}
 
@@ -733,9 +735,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		}
 	}
 
-	private void setRoleConfig(String name, String rolename) {
-		Logging.info(this, "setRoleConfig ", name, ",", rolename);
-		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name, rolename);
+	private void setRoleConfig(String name) {
+		Logging.info(this, "setRoleConfig ", name);
+		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name);
 	}
 
 	private void setUserConfig(String name, String rolename) {

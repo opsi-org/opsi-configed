@@ -544,9 +544,9 @@ public class ConfigDataService {
 		return possibleValues;
 	}
 
-	public void addRoleConfig(String name, String rolename) {
+	public void addRoleConfig(String name) {
 		String configkey = UserConfig.KEY_USER_ROLE_ROOT + ".{" + name + "}." + UserConfig.HAS_ROLE_ATTRIBUT;
-		addRoleAndUserConfig(configkey, rolename);
+		addRoleAndUserConfig(configkey, "");
 	}
 
 	public void addUserConfig(String name, String rolename) {
