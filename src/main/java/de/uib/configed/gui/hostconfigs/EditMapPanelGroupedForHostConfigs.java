@@ -6,10 +6,8 @@
 
 package de.uib.configed.gui.hostconfigs;
 
-import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,8 +42,6 @@ import com.itextpdf.text.Font;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FDialogTextfieldWithListSelection;
-import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -695,34 +691,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addRole() {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(ConfigedMain.getMainFrame(),
-				"add role", false,
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
-				600, 600, true) {
-			@Override
-			public void doAction2() {
-				Logging.info(this, "doAction2");
-				super.doAction2();
-				Logging.info(this, "addUser action, result Text ", getResultText());
-				Logging.info(this, "addUser action, result listelement ", getSelectedListelement());
+		String newUserRole = JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("FramingNewRole.textfieldLabel"),
+				Configed.getResourceValue("FramingNewRole.title"), JOptionPane.PLAIN_MESSAGE);
 
-				setRoleConfig(getResultText(), getSelectedListelement());
-			}
-		};
-
-		FramingTextfieldWithListselection defs = new FramingNewRole();
-		defs.setListData(new ArrayList<>(theRoles));
-		f.applyFraming(defs);
-
-		JPanel centerPanel = f.initPanel();
-		f.setCenterPaneInScrollpane(centerPanel);
-		f.setListVisible(false);
-
-		f.setCenterPane(centerPanel);
-
-		f.setupLayout();
-		f.setSize(new Dimension(500, 400));
-		f.setVisible(true);
+		if (newUserRole != null) {
+			setRoleConfig(newUserRole, "");
+		}
 	}
 
 	private void deleteUser() {

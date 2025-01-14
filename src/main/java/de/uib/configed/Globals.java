@@ -138,7 +138,6 @@ public final class Globals {
 	public static final int PROGRESS_BAR_HEIGHT = 10;
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
-	public static final int LABEL_WIDTH = 80;
 
 	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
 	public static final Dimension SHORT_LABEL_DIMENSION = new Dimension(60, LINE_HEIGHT);
