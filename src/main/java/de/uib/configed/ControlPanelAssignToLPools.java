@@ -160,7 +160,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getButtonShowAssignedNotExisting().setEnabled(!persistenceController.getSoftwareDataService()
 				.getUnknownSoftwareListForLicensePoolPD(poolID).isEmpty());
 		if (thePanel.getFMissingSoftwareInfo() == null) {
-			thePanel.setFMissingSoftwareInfo(new FGlobalSoftwareInfo(ConfigedMain.getMainFrame(), this));
+			thePanel.setFMissingSoftwareInfo(new FGlobalSoftwareInfo(this));
 		}
 
 		if (!persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicensePoolPD(poolID).isEmpty()) {

@@ -7,7 +7,6 @@
 package de.uib.configed.gui.licenses;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -22,7 +21,6 @@ import javax.swing.event.ChangeListener;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowAllMeans;
@@ -123,10 +121,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		buttonShowAssignedNotExisting
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 
-		buttonShowAssignedNotExisting.addActionListener((ActionEvent actionEvent) -> {
-			fMissingSoftwareInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
-			fMissingSoftwareInfo.setVisible(true);
-		});
+		buttonShowAssignedNotExisting.addActionListener(actionEvent -> fMissingSoftwareInfo.show());
 
 		JLabel labelSupplementSimilar = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licenses.supplementSimilarSWEntries"));
