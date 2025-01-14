@@ -6,7 +6,6 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
@@ -18,20 +17,18 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
@@ -41,13 +38,10 @@ import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 
-public final class EditTerminalCommandsDialog extends FGeneralDialog {
+public final class EditTerminalCommandsDialog {
 	private static final int FRAME_WIDTH = 850;
-	private static final int FRAME_HEIGHT = 600;
 
 	private JPanel parameterPanel;
-
-	private JButton buttonSave = new JButton(Configed.getResourceValue("CommandControlDialog.ButtonSave"));
 
 	private JComboBox<String> jComboBoxMenuText;
 
@@ -59,37 +53,56 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 	private ConfigedMain configedMain;
 	private final CommandFactory factory;
 
+	private JOptionPane optionPane;
+	private JDialog dialog;
+
 	public EditTerminalCommandsDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		this.configedMain = configedMain;
 		factory = CommandFactory.getInstance();
-		parameterPanel = new CommandControlParameterMethodsPanel(this, configedMain);
-		init();
 
-		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setVisible(true);
+		parameterPanel = new CommandControlParameterMethodsPanel(this, configedMain);
+		JPanel panel = init();
+
+		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 	}
 
-	private void init() {
+	public void show() {
+		dialog.setVisible(true);
+
+		waitForUserInput();
+	}
+
+	private void waitForUserInput() {
+		Object selectedValue = optionPane.getValue();
+		if (selectedValue != null && selectedValue.equals(Configed.getResourceValue("save"))) {
+			save();
+		}
+	}
+
+	private JPanel init() {
 		Logging.debug(this, "init setting up components ");
 
 		parameterPanel.setVisible(true);
 
-		getContentPane().add(initControlPanel(), BorderLayout.NORTH);
-		getContentPane().add(initCommandPanel(), BorderLayout.CENTER);
-		getContentPane().add(initButtonPanel(), BorderLayout.SOUTH);
+		JPanel controlPanel = initControlPanel();
+		JPanel commandPanel = initCommandPanel();
 
-		this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
 
-		repaint();
-		revalidate();
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(controlPanel).addComponent(commandPanel));
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(controlPanel).addGap(Globals.GAP_SIZE)
+				.addComponent(commandPanel));
 
-		final EditTerminalCommandsDialog caller = this;
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			((CommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
-					actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller));
+					actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(dialog));
 		}
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
@@ -102,8 +115,11 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 		updateLists();
 		updateSelectedCommand();
 
-		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
-		buttonClose.addActionListener(actionEvent -> doAction1());
+		return panel;
+	}
+
+	public JDialog getDialog() {
+		return dialog;
 	}
 
 	private JPanel initControlPanel() {
@@ -159,7 +175,6 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 
 		jTextFieldTooltipText.setToolTipText(Configed.getResourceValue("CommandControlDialog.tooltipText.tooltip"));
 		jTextFieldTooltipText.setPreferredSize(dimensionJTextField);
-		jTextFieldTooltipText.getDocument().addDocumentListener(new SaveButtonEnabler());
 		jTextFieldTooltipText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 
@@ -168,7 +183,6 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 				String.valueOf(CommandFactory.DEFAULT_POSITION), 1);
 		jTextFieldPriority.setToolTipText(Configed.getResourceValue("CommandControlDialog.priority.tooltip"));
 		jTextFieldPriority.setPreferredSize(dimensionButton);
-		jTextFieldPriority.getDocument().addDocumentListener(new SaveButtonEnabler());
 		jTextFieldPriority.setColumns(4);
 		jTextFieldPriority.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
@@ -271,7 +285,6 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 		jTextPaneCommands = new JTextPane();
 		jTextPaneCommands.setToolTipText(Configed.getResourceValue("CommandControlDialog.commands.tooltip"));
 		jTextPaneCommands.setPreferredSize(dimensionJTextFieldLong);
-		jTextPaneCommands.getDocument().addDocumentListener(new SaveButtonEnabler());
 		jTextPaneCommands.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 		JScrollPane jScrollPane = new JScrollPane(jTextPaneCommands);
@@ -304,21 +317,6 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE * 1));
 
 		return commandListPanel;
-	}
-
-	private JPanel initButtonPanel() {
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-
-		buttonSave.addActionListener(actionEvent -> doAction2());
-
-		JButton buttonClose = new JButton(Configed.getResourceValue("buttonClose"));
-		buttonClose.addActionListener(actionEvent -> doAction1());
-
-		buttonPanel.add(buttonClose);
-		buttonPanel.add(buttonSave);
-
-		return buttonPanel;
 	}
 
 	private void updateLists() {
@@ -400,8 +398,7 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 		ConfigedMain.getMainFrame().reloadServerConsoleMenu();
 	}
 
-	@Override
-	public void doAction2() {
+	private void save() {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			return;
@@ -421,7 +418,7 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 			updateSelectedCommand(menuText);
 			ConfigedMain.getMainFrame().reloadServerConsoleMenu();
 		} else {
-			JOptionPane.showInternalMessageDialog(this,
+			JOptionPane.showInternalMessageDialog(dialog,
 					Configed.getResourceValue("CommandControlDialog.couldnotsave.title"),
 					Configed.getResourceValue("CommandControlDialog.couldnotsave"), JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -455,23 +452,6 @@ public final class EditTerminalCommandsDialog extends FGeneralDialog {
 				executor.execute();
 			}
 		}.start();
-	}
-
-	private class SaveButtonEnabler implements DocumentListener {
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			buttonSave.setEnabled(canCommandBeSaved());
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			buttonSave.setEnabled(canCommandBeSaved());
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			// Plain text components do not fire these events
-		}
 	}
 
 	private boolean canCommandBeSaved() {

@@ -109,7 +109,8 @@ public final class ExtraFrameController {
 		if (commandControlDialog == null) {
 			commandControlDialog = new EditTerminalCommandsDialog(configedMain);
 		}
-		commandControlDialog.setVisible(true);
+
+		commandControlDialog.show();
 	}
 
 	public static void startProductActionFrame() {

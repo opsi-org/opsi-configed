@@ -29,7 +29,7 @@ import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class CommandControlParameterMethodsPanel extends JPanel {
-	private JDialog main;
+	private EditTerminalCommandsDialog editTerminalCommandsDialog;
 
 	private JLabel jLabelParamMethods = new JLabel();
 	private JLabel jLabelParamFormats = new JLabel();
@@ -41,10 +41,11 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	private ConfigedMain configedMain;
 
-	public CommandControlParameterMethodsPanel(JDialog owner, ConfigedMain configedMain) {
+	public CommandControlParameterMethodsPanel(EditTerminalCommandsDialog editTerminalCommandsDialog,
+			ConfigedMain configedMain) {
 		super();
-		Logging.info(this, "SSHCommandControlParameterMethodsPane  main ", main);
-		main = owner;
+		Logging.info(this, "SSHCommandControlParameterMethodsPane  main ", editTerminalCommandsDialog);
+		this.editTerminalCommandsDialog = editTerminalCommandsDialog;
 		this.configedMain = configedMain;
 		init();
 
@@ -194,7 +195,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 				showThisText = Configed.getResourceValue("CommandControlDialog.parameterTest.failed");
 			}
 
-			JOptionPane.showMessageDialog(main, showThisText,
+			JOptionPane.showMessageDialog(editTerminalCommandsDialog.getDialog(), showThisText,
 					Configed.getResourceValue("CommandControlDialog.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (HeadlessException ble) {
