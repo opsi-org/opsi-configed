@@ -54,9 +54,6 @@ import de.uib.utils.swing.PopupMenuTrait;
 public class LogPane extends JPanel implements KeyListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 4;
 
-	private static final int DEFAULT_WIDTH = 1212;
-	private static final int DEFAULT_HEIGHT = 511;
-
 	private static final int SLIDER_H = 35;
 	private static final int SLIDER_W = 180;
 	private static final String DEFAULT_TYPE = "(all)";
