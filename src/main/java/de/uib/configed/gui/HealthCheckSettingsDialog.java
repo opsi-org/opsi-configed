@@ -158,9 +158,7 @@ public final class HealthCheckSettingsDialog {
 
 		if (selectedHostList == null) {
 			selectedHostList = new FSelectionList(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"), true,
-					new String[] { Configed.getResourceValue("buttonOK"), Configed.getResourceValue("buttonCancel") },
-					300, 500);
+					Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
 			List<String> hostNames = new ArrayList<>(
 					persistenceController.getHostInfoCollections().getDepotNamesList());
 			hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());

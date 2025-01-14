@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
-import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -23,7 +22,6 @@ import de.uib.configed.type.DateExtendedByVars;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class ClientSearch {
@@ -96,8 +94,7 @@ public class ClientSearch {
 
 	private String getLocalbootProductsFromSelection() {
 		FSelectionList fProductSelectionList = new FSelectionList(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("MainFrame.productSelection"), true, new String[] { "", "" },
-				new Icon[] { Icons.getIntellijIcon("close"), Icons.getIntellijIcon("checkmark") }, 400, 600);
+				Configed.getResourceValue("MainFrame.productSelection"));
 		fProductSelectionList.setListData(new ArrayList<>(
 				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
 		fProductSelectionList.setMultiSelection();

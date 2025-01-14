@@ -15,7 +15,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -23,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModel;
@@ -33,20 +33,14 @@ public class FSelectionList extends FGeneralDialog {
 	private JList<String> jList;
 	private TableSearchPane searchPane;
 
-	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
-			int preferredHeight, JComponent additionalComponent) {
-		super(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight, false,
-				additionalComponent);
+	public FSelectionList(JFrame owner, String title) {
+		this(owner, title, null);
 	}
 
-	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
-			int preferredHeight) {
-		this(owner, title, modal, buttonList, null, preferredWidth, preferredHeight);
-	}
-
-	public FSelectionList(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int preferredWidth, int preferredHeight) {
-		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight);
+	public FSelectionList(JFrame owner, String title, JComponent additionalComponent) {
+		super(owner, title, true,
+				new String[] { Configed.getResourceValue("buttonOK"), Configed.getResourceValue("buttonCancel") }, null,
+				2, 300, 500, false, additionalComponent);
 	}
 
 	@Override

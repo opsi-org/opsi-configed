@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
@@ -118,9 +117,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 
 	private static List<String> getColumnsToInclude() {
 		FSelectionList fColumSelectionList = new FSelectionList(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"), true,
-				new String[] { "", "" },
-				new Icon[] { Icons.getIntellijIcon("close"), Icons.getIntellijIcon("checkmark") }, 400, 410);
+				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"));
 		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
 		fColumSelectionList.setListData(defaultValues);
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);

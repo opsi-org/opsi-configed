@@ -182,9 +182,7 @@ public class CreateConfigDialog {
 	private static FSelectionList createSelectionDialog(String title) {
 		FlatTextField addValuesTextField = new FlatTextField();
 
-		FSelectionList fSelectionList = new FSelectionList(ConfigedMain.getMainFrame(), title, true,
-				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 300,
-				400, addValuesTextField);
+		FSelectionList fSelectionList = new FSelectionList(ConfigedMain.getMainFrame(), title, addValuesTextField);
 		fSelectionList.setModel(new DefaultListModel<>());
 
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));

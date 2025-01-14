@@ -169,9 +169,7 @@ public final class TerminalFrame implements MessagebusListener {
 		if (restrictView) {
 			return;
 		}
-		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
-				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
-				500, 300);
+		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"));
 
 		// result list (allowed clients and depots connected by message bus)
 		List<String> clientsConnectedByMessagebus = getAllowedDevices();

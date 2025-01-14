@@ -93,9 +93,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		addValuesTextField = new FlatTextField();
 
-		listSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, true,
-				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 400,
-				500, addValuesTextField);
+		listSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, addValuesTextField);
 		listSelectionDialog.setMultiSelection();
 
 		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
