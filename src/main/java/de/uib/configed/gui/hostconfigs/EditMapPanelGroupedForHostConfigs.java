@@ -24,14 +24,22 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.GroupLayout;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
+
+import com.itextpdf.text.Font;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -635,39 +643,45 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addUser() {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(ConfigedMain.getMainFrame(),
-				"add user", false,
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
-				600, 600, true) {
-			@Override
-			public void doAction2() {
-				Logging.info(this, "doAction2");
-				super.doAction2();
-				Logging.info(this, "addUser action, result Text ", getResultText());
-				Logging.info(this, "addUser action, result listelement ", getSelectedListelement());
+		JLabel userLabel = new JLabel(Configed.getResourceValue("FramingNewUser.textfieldLabel"));
+		userLabel.setFont(userLabel.getFont().deriveFont(Font.BOLD));
 
-				setUserConfig(getResultText(), getSelectedListelement());
-			}
-		};
+		JTextField userField = new JTextField();
 
-		FramingTextfieldWithListselection defs = new FramingNewUser();
-		defs.setListData(new ArrayList<>(theRoles));
+		JLabel userRolesLabel = new JLabel(Configed.getResourceValue("FramingNewUser.listLabel"));
+		userRolesLabel.setToolTipText(Configed.getResourceValue("FramingNewUser.listLabel.ToolTip"));
+		userRolesLabel.setFont(userRolesLabel.getFont().deriveFont(Font.BOLD));
 
-		f.applyFraming(defs);
+		JList<String> userRolesList = new JList<>(theRoles.toArray(new String[0]));
 
-		JPanel centerPanel = f.initPanel();
-		f.setCenterPaneInScrollpane(centerPanel);
+		// With this call all the elements will have a fixed height. Also the empty entry
+		userRolesList.setFixedCellHeight((Integer) UIManager.get("Table.rowHeight"));
 
-		f.setCenterPane(centerPanel);
+		JScrollPane userRolesScrollPane = new JScrollPane(userRolesList);
 
-		f.setupLayout();
-		f.setSize(new Dimension(500, 400));
-		f.setVisible(true);
+		if (userRolesList.getModel().getSize() > 0) {
+			userRolesList.setSelectedIndex(0);
+		}
+		userRolesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		Logging.info(this, "addUser finished, result ", f.getResult());
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
 
-		if (f.getResult() == 1) {
-			Logging.info(this, "addUser ok");
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(userLabel).addComponent(userField)
+				.addGap(Globals.GAP_SIZE).addComponent(userRolesLabel).addComponent(userRolesScrollPane));
+
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(userLabel)
+				.addComponent(userField).addComponent(userRolesLabel).addComponent(userRolesScrollPane));
+
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), panel,
+				Configed.getResourceValue("FramingNewUser.title"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (answer == JOptionPane.OK_OPTION) {
+			Logging.info(this, "addUser action, result Text ", userField.getText());
+			Logging.info(this, "addUser action, result listelement ", userRolesList.getSelectedValue());
+			setUserConfig(userField.getText(), userRolesList.getSelectedValue());
 		}
 	}
 
