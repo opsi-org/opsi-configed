@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -36,7 +37,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.ClientConfiguration;
-import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.messages.Messages;
@@ -202,12 +202,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		copyOfMe.tree.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.tree.setSelectionInterval(tree.getMinSelectionRow(), tree.getMinSelectionRow());
 
-		GeneralFrame externalView = new GeneralFrame(null, treeRootTitle, false);
-		externalView.addPanel(copyOfMe);
-		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		externalView.setVisible(true);
+		JDialog dialog = new JDialog();
+		dialog.setTitle(treeRootTitle);
+		dialog.setContentPane(copyOfMe);
+		dialog.setSize(getSize());
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */

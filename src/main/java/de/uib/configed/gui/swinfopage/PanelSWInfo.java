@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,7 +33,6 @@ import javax.swing.table.TableRowSorter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -449,12 +449,12 @@ public class PanelSWInfo extends JPanel {
 		copyOfMe.setHost(hostId);
 		copyOfMe.updateModel();
 
-		GeneralFrame externalView = new GeneralFrame(null, title, false);
-		externalView.addPanel(copyOfMe);
-		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		externalView.setVisible(true);
+		JDialog dialog = new JDialog();
+		dialog.setTitle(title);
+		dialog.setContentPane(copyOfMe);
+		dialog.setSize(getSize());
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
 	}
 
 	public void updateModel() {

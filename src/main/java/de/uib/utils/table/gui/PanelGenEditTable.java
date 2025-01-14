@@ -48,7 +48,6 @@ import javax.swing.table.TableRowSorter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.GeneralFrame;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
@@ -76,8 +75,6 @@ public class PanelGenEditTable extends JPanel
 	public static final int POPUP_SORT_AGAIN = 5;
 
 	public static final int POPUP_SAVE = PopupMenuTrait.POPUP_SAVE; // 8
-
-	public static final int POPUP_FLOATING_COPY = PopupMenuTrait.POPUP_FLOATING_COPY; // 14
 
 	public static final int POPUP_PDF = PopupMenuTrait.POPUP_PDF; // 21
 
@@ -189,14 +186,6 @@ public class PanelGenEditTable extends JPanel
 
 	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition) {
 		this(title, editing, generalPopupPosition, null);
-	}
-
-	public PanelGenEditTable(String title, boolean editing) {
-		this(title, editing, 0);
-	}
-
-	public PanelGenEditTable() {
-		this("", true);
 	}
 
 	private static final List<String> giveMenuitemNames(List<Integer> popups) {
@@ -475,10 +464,6 @@ public class PanelGenEditTable extends JPanel
 				addPopupItem(menuItemPrint);
 				break;
 
-			case POPUP_FLOATING_COPY:
-				addPopupMenuFloatingCopy();
-				break;
-
 			case POPUP_EXPORT_CSV:
 				JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
 				addPopupItem(menuItemExportCSV);
@@ -515,17 +500,6 @@ public class PanelGenEditTable extends JPanel
 		}
 
 		addPopupItem(menuItemReload);
-	}
-
-	private void addPopupMenuFloatingCopy() {
-		JMenuItem menuItemFloatingCopy = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
-		menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
-
-		if (popupIndex > 1) {
-			popupMenu.addSeparator();
-		}
-
-		addPopupItem(menuItemFloatingCopy);
 	}
 
 	private void addPopupMenuDeleteRow() {
@@ -1117,17 +1091,5 @@ public class PanelGenEditTable extends JPanel
 	@Override
 	public void rowUpdated(int modelrow) {
 		Logging.info(this, " in PanelGenEditTable rowUpdated to modelrow ", modelrow);
-	}
-
-	private void floatExternal() {
-		PanelGenEditTable copyOfMe = new PanelGenEditTable(title, false);
-		copyOfMe.setTableModel(tableModel);
-
-		GeneralFrame externalView = new GeneralFrame(null, "hallo", false);
-		externalView.addPanel(copyOfMe);
-		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		externalView.setVisible(true);
 	}
 }
