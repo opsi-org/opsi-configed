@@ -90,11 +90,6 @@ public class FGeneralDialog extends JDialog {
 		this(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, false, null);
 	}
 
-	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
-			int preferredWidth, int preferredHeight, boolean lazyLayout) {
-		this(owner, title, modal, buttonList, null, lastButtonNo, preferredWidth, preferredHeight, lazyLayout, null);
-	}
-
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JComponent addPane) {
 		super(owner, modal);
@@ -352,12 +347,6 @@ public class FGeneralDialog extends JDialog {
 		setVisible(false);
 
 		dispose();
-	}
-
-	public void setButtonsEnabled(boolean b) {
-		jButton1.setEnabled(b);
-		jButton2.setEnabled(b);
-		jButton3.setEnabled(b);
 	}
 
 	// Events
