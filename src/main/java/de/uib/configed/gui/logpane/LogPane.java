@@ -23,6 +23,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -46,7 +47,6 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.GeneralFrame;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
@@ -435,7 +435,7 @@ public class LogPane extends JPanel implements KeyListener {
 		copyOfMe.setParsedText(lines, showTypeRestricted, selTypeIndex, parser);
 		copyOfMe.jTextPane.setCaretPosition(jTextPane.getCaretPosition());
 		copyOfMe.adaptSlider();
-		externalize(copyOfMe, title, this.getSize());
+		externalize(copyOfMe, title, getParent().getSize());
 	}
 
 	public void externalize(String title, Dimension size) {
@@ -443,15 +443,13 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	public void externalize(LogPane logPane, String title, Dimension size) {
-		GeneralFrame externalView = new GeneralFrame(null, title, false);
-		externalView.addPanel(logPane);
-		if (size.equals(new Dimension(0, 0))) {
-			externalView.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		} else {
-			externalView.setSize(size);
-		}
-		externalView.setLocationRelativeTo(Main.getMainFrame());
-		externalView.setVisible(true);
+		JDialog dialog = new JDialog();
+		dialog.setTitle(title);
+		dialog.setContentPane(logPane);
+		dialog.setSize(size);
+		dialog.setResizable(true);
+		dialog.setLocationRelativeTo(this.getParent());
+		dialog.setVisible(true);
 	}
 
 	public void setTitle(String s) {

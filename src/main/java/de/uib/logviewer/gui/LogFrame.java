@@ -350,7 +350,7 @@ public class LogFrame extends JFrame {
 		}
 		for (Entry<String, String> entry : files.entrySet()) {
 			StandaloneLogPane externalLogPane = new StandaloneLogPane(this);
-			externalLogPane.externalize(entry.getKey(), logPane.getSize());
+			externalLogPane.externalize(entry.getKey(), getSize());
 			externalLogPane.setTitle(entry.getKey());
 			externalLogPane.setText(entry.getValue());
 		}
