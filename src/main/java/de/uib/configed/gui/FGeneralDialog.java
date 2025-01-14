@@ -80,20 +80,6 @@ public class FGeneralDialog extends JDialog {
 		guiInit();
 	}
 
-	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int lastButtonNo, int preferredWidth, int preferredHeight) {
-		this(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, false, null);
-	}
-
-	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
-			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JComponent addPane) {
-		super(owner, modal);
-		Logging.info(this, "created by constructor 3  owner ", owner);
-
-		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
-				addPane);
-	}
-
 	public FGeneralDialog(Window owner, String title, String[] buttonList, int preferredWidth, int preferredHeight) {
 		super(owner);
 		initFGeneralDialog(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);

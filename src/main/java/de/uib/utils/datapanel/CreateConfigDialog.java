@@ -16,7 +16,6 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -27,13 +26,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import com.formdev.flatlaf.extras.components.FlatTextField;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FSelectionList;
-import de.uib.utils.Icons;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.PropertiesCellEditorAndRenderer;
 
@@ -45,8 +41,8 @@ public class CreateConfigDialog {
 
 	private JCheckBox booleanDefault;
 
-	private FSelectionList defaultValuesSelectionDialog;
-	private FSelectionList possibleValuesSelectionDialog;
+	private ListSelectionDialog defaultValuesSelectionDialog;
+	private ListSelectionDialog possibleValuesSelectionDialog;
 
 	private JCheckBox isBoolean;
 	private JCheckBox isEditable;
@@ -147,52 +143,39 @@ public class CreateConfigDialog {
 				.addComponent(possibleValuesTextField));
 	}
 
-	private JTextField createTextFieldAssociated(FSelectionList fSelectionList) {
+	private static JTextField createTextFieldAssociated(ListSelectionDialog selectionListDialog) {
 		JTextField jTextField = new JTextField();
 		jTextField.setEnabled(false);
 		jTextField.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				activateSelection(fSelectionList, jTextField);
+				activateSelection(selectionListDialog, jTextField);
 			}
 		});
 
 		return jTextField;
 	}
 
-	private void activateSelection(FSelectionList fSelectionList, JTextField jTextField) {
-		fSelectionList.setSize(300, 400);
-		fSelectionList.setLocationRelativeTo(dialog);
-
+	private static void activateSelection(ListSelectionDialog listSelectionDialog, JTextField jTextField) {
 		// We need to call this before setVisible
-		List<String> savedSelectedValues = fSelectionList.getSelectedValues();
+		List<String> savedSelectedValues = listSelectionDialog.getSelectedValues();
 
-		fSelectionList.setVisible(true);
+		listSelectionDialog.show();
 
-		if (fSelectionList.getResult() == 2) {
-			jTextField.setText(PropertiesCellEditorAndRenderer.formatList(fSelectionList.getSelectedValues()));
+		if (listSelectionDialog.wasAccepted()) {
+			jTextField.setText(PropertiesCellEditorAndRenderer.formatList(listSelectionDialog.getSelectedValues()));
 		} else {
 			DefaultListModel<String> model = new DefaultListModel<>();
 			model.addAll(savedSelectedValues);
-			fSelectionList.setModel(model);
-			fSelectionList.setPreviousSelectionValues(savedSelectedValues);
+			listSelectionDialog.setModel(model);
+			listSelectionDialog.setPreviousSelectionValues(savedSelectedValues);
 		}
 	}
 
-	private static FSelectionList createSelectionDialog(String title) {
-		FlatTextField addValuesTextField = new FlatTextField();
-
-		FSelectionList fSelectionList = new FSelectionList(ConfigedMain.getMainFrame(), title, addValuesTextField);
-		fSelectionList.setModel(new DefaultListModel<>());
-
-		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
-		addValueButton.addActionListener(actionEvent -> fSelectionList.addItem(addValuesTextField.getText()));
-
-		addValuesTextField.setTrailingComponent(addValueButton);
-		addValuesTextField.setShowClearButton(true);
-		addValuesTextField.addActionListener(actionEvent -> fSelectionList.addItem(addValuesTextField.getText()));
-
-		return fSelectionList;
+	private static ListSelectionDialog createSelectionDialog(String title) {
+		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(), title, true);
+		listSelectionDialog.setModel(new DefaultListModel<>());
+		return listSelectionDialog;
 	}
 
 	private void initGeneralPanel() {

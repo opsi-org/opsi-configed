@@ -20,7 +20,7 @@ import org.apache.commons.csv.CSVPrinter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSelectionList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -116,17 +116,17 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	}
 
 	private static List<String> getColumnsToInclude() {
-		FSelectionList fColumSelectionList = new FSelectionList(ConfigedMain.getMainFrame(),
+		ListSelectionDialog columnSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"));
 		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
-		fColumSelectionList.setListData(defaultValues);
+		columnSelectionDialog.setListData(defaultValues);
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);
-		fColumSelectionList.setPreviousSelectionValues(defaultValues);
-		fColumSelectionList.setMultiSelection();
-		fColumSelectionList.setVisible(true);
+		columnSelectionDialog.setPreviousSelectionValues(defaultValues);
+		columnSelectionDialog.setMultiSelection();
+		columnSelectionDialog.show();
 
-		if (fColumSelectionList.getResult() == 2) {
-			List<String> result = fColumSelectionList.getSelectedValues();
+		if (columnSelectionDialog.wasAccepted()) {
+			List<String> result = columnSelectionDialog.getSelectedValues();
 
 			// We remove the host key if it was included in the selection
 			// but the user does not want to include it

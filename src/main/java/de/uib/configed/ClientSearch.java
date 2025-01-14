@@ -17,7 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import de.uib.configed.clientselection.SelectionManager;
-import de.uib.configed.gui.FSelectionList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.type.DateExtendedByVars;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -93,13 +93,13 @@ public class ClientSearch {
 	}
 
 	private String getLocalbootProductsFromSelection() {
-		FSelectionList fProductSelectionList = new FSelectionList(ConfigedMain.getMainFrame(),
+		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.productSelection"));
-		fProductSelectionList.setListData(new ArrayList<>(
+		listSelectionDialog.setListData(new ArrayList<>(
 				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
-		fProductSelectionList.setMultiSelection();
-		fProductSelectionList.setVisible(true);
-		return fProductSelectionList.getResult() == 2 ? fProductSelectionList.getSelectedValue() : "";
+		listSelectionDialog.setMultiSelection();
+		listSelectionDialog.show();
+		return listSelectionDialog.wasAccepted() ? listSelectionDialog.getSelectedValue() : "";
 	}
 
 	private void selectClientsWithFailedProduct(String selectedProduct) {

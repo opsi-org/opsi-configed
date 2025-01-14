@@ -383,16 +383,16 @@ public final class NewClientDialog {
 	}
 
 	private void displayGroupSelectionDialog() {
-		FSelectionList groupsSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(),
+		ListSelectionDialog groupsSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"));
 		groupsSelectionDialog.setMultiSelection();
 		groupsSelectionDialog.setListData(
 				PersistenceControllerFactory.getPersistenceController().getGroupDataService().getHostGroupIds());
 		groupsSelectionDialog
 				.setPreviousSelectionValues(Arrays.asList(jTextGroupSelection.getText().replace("; ", ";").split(";")));
-		groupsSelectionDialog.setVisible(true);
+		groupsSelectionDialog.show();
 
-		if (groupsSelectionDialog.getResult() == 2) {
+		if (groupsSelectionDialog.wasAccepted()) {
 			String selectedGroups = Utils.getListStringRepresentation(groupsSelectionDialog.getSelectedValues());
 			jTextGroupSelection.setText(selectedGroups);
 			jTextGroupSelection.setToolTipText(

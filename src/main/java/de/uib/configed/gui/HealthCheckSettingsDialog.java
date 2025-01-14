@@ -46,7 +46,7 @@ public final class HealthCheckSettingsDialog {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private FSelectionList selectedHostList;
+	private ListSelectionDialog selectedHostList;
 	private JTextField startDowntime;
 	private JTextField endDowntime;
 	private JCheckBox checkBoxCheckActive;
@@ -157,7 +157,7 @@ public final class HealthCheckSettingsDialog {
 		Logging.info(this, "openSelectionDialog for health check settings");
 
 		if (selectedHostList == null) {
-			selectedHostList = new FSelectionList(ConfigedMain.getMainFrame(),
+			selectedHostList = new ListSelectionDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
 			List<String> hostNames = new ArrayList<>(
 					persistenceController.getHostInfoCollections().getDepotNamesList());
@@ -170,10 +170,9 @@ public final class HealthCheckSettingsDialog {
 		// Get the selection to restore it if the user cancels the dialog
 		List<String> previousSelection = selectedHostList.getSelectedValues();
 
-		selectedHostList.setLocationRelativeTo(dialog);
-		selectedHostList.setVisible(true);
+		selectedHostList.show();
 
-		if (selectedHostList.getResult() == 1) {
+		if (selectedHostList.wasAccepted()) {
 			selectedHosts.setText(Utils.getListStringRepresentation(selectedHostList.getSelectedValues()));
 		} else {
 			selectedHostList.setPreviousSelectionValues(previousSelection);

@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,16 +23,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSelectionList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.DefaultListModelProducer;
@@ -53,8 +50,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	private FlatTriStateCheckBox checkBox;
 	private JComboBox<String> comboBox;
 
-	private FSelectionList listSelectionDialog;
-	private FlatTextField addValuesTextField;
+	private ListSelectionDialog listSelectionDialog;
 
 	private int selectionMode;
 
@@ -91,17 +87,8 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		unusedfield = new JLabel();
 
-		addValuesTextField = new FlatTextField();
-
-		listSelectionDialog = new FSelectionList(ConfigedMain.getMainFrame(), null, addValuesTextField);
+		listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(), null, true);
 		listSelectionDialog.setMultiSelection();
-
-		JButton addValueButton = new JButton(Icons.getIntellijIcon("add"));
-		addValueButton.addActionListener(actionEvent -> listSelectionDialog.addItem(addValuesTextField.getText()));
-
-		addValuesTextField.setTrailingComponent(addValueButton);
-		addValuesTextField.setShowClearButton(true);
-		addValuesTextField.addActionListener(actionEvent -> listSelectionDialog.addItem(addValuesTextField.getText()));
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
@@ -187,16 +174,13 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		listSelectionDialog.setModel(modelProducer.getListModel(row));
 
 		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(value));
-		listSelectionDialog.setSize(400, 500);
-		listSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		addValuesTextField.setVisible(modelProducer.isEditable(row));
-		addValuesTextField.setText(null);
-		listSelectionDialog.setVisible(true);
+		listSelectionDialog.setEditable(modelProducer.isEditable(row));
+		listSelectionDialog.show();
 
 		// We should put this code into invokeLater, because otherwise we will call stop 
 		// or cancel editing before it actually began. Editing would not have an effect
 		SwingUtilities.invokeLater(() -> {
-			if (listSelectionDialog.getResult() == 2) {
+			if (listSelectionDialog.wasAccepted()) {
 				stopCellEditing();
 			} else {
 				cancelCellEditing();

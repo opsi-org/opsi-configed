@@ -27,7 +27,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSelectionList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
@@ -169,17 +169,17 @@ public final class TerminalFrame implements MessagebusListener {
 		if (restrictView) {
 			return;
 		}
-		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"));
+		ListSelectionDialog sessionsDialog = new ListSelectionDialog(frame,
+				Configed.getResourceValue("Terminal.session.title"));
 
 		// result list (allowed clients and depots connected by message bus)
 		List<String> clientsConnectedByMessagebus = getAllowedDevices();
 
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
-		sessionsDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		sessionsDialog.setVisible(true);
+		sessionsDialog.show();
 
-		if (sessionsDialog.getResult() == 2) {
+		if (sessionsDialog.wasAccepted()) {
 			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 			if (widget != null) {
 				tabbedPane.getSelectedTerminalWidget().close();
