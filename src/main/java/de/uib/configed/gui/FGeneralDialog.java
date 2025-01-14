@@ -34,7 +34,6 @@ public class FGeneralDialog extends JDialog {
 
 	protected JScrollPane scrollpane = new JScrollPane();
 	protected JPanel northPanel;
-	protected JPanel centerPanel;
 	protected JPanel southPanel;
 	protected JButton jButton1 = new JButton();
 	protected JButton jButton2 = new JButton();
@@ -123,24 +122,6 @@ public class FGeneralDialog extends JDialog {
 		checkAdditionalComponent();
 	}
 
-	public void setCenterPane(JPanel p) {
-		if (p == null) {
-			centerPanel = new JPanel();
-		} else {
-			centerPanel = p;
-		}
-	}
-
-	public void setCenterPaneInScrollpane(JPanel p) {
-		if (p == null) {
-			centerPanel = new JPanel();
-		} else {
-			centerPanel = p;
-		}
-
-		scrollpane.getViewport().add(centerPanel);
-	}
-
 	public void setAdditionalComponent(JComponent p) {
 		additionalComponent = p;
 	}
@@ -197,12 +178,6 @@ public class FGeneralDialog extends JDialog {
 		Logging.info(this, "with icons ", Arrays.toString(buttonNames));
 	}
 
-	public void setTooltipButtons(String tooltip1, String tooltip2, String tooltip3) {
-		jButton1.setToolTipText(tooltip1);
-		jButton2.setToolTipText(tooltip2);
-		jButton3.setToolTipText(tooltip3);
-	}
-
 	protected void allLayout() {
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 
@@ -242,10 +217,6 @@ public class FGeneralDialog extends JDialog {
 				.addComponent(southPanel, 100, 300, Short.MAX_VALUE));
 
 		getContentPane().add(allpane);
-	}
-
-	public void setupLayout() {
-		guiInit();
 	}
 
 	private void guiInit() {
