@@ -6,29 +6,25 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent.FinalActionType;
@@ -37,10 +33,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PanelStateSwitch;
 
-public class DeployClientAgentParameterDialog extends FGeneralDialog {
-	private static final int FRAME_WIDTH = 800;
-	private static final int FRAME_HEIGHT = 500;
-
+public class DeployClientAgentParameterDialog {
 	private enum OS {
 		WINDOWS("Windows"), LINUX("Linux"), MACOS("MacOS");
 
@@ -57,7 +50,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	private JPanel inputPanel = new JPanel();
-	private JPanel buttonPanel = new JPanel();
 
 	private JLabel jLabelClient = new JLabel();
 	private JLabel jLabelUserData = new JLabel();
@@ -82,45 +74,49 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private DeployClientAgentAuthPanel authPanel;
 
+	private JDialog dialog;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private boolean isGlobalReadOnly = persistenceController.getUserRolesConfigDataService().isGlobalReadOnly();
-
 	public DeployClientAgentParameterDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("DeployClientAgentParameterDialog.title"), false);
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		this.configedMain = configedMain;
 		authPanel = new DeployClientAgentAuthPanel(commandDeployClientAgent);
 
 		init();
 		initLayout();
 
-		super.setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		super.setVisible(true);
-
 		Logging.info(this, "DeployClientAgentParameterDialog build");
+
+		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
+				null,
+				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("DeployClientAgentParameterDialog.title"));
+
+		dialog.setVisible(true);
+
+		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
+			execute();
+		}
 	}
 
 	private void init() {
-		getContentPane().add(inputPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		inputPanel.setPreferredSize(new Dimension(376, 220));
-
 		jLabelIgnorePing.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.ignorePing"));
 		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
-		jCheckBoxIgnorePing.setEnabled(!isGlobalReadOnly);
 		jCheckBoxIgnorePing.addItemListener(itemEvent -> commandDeployClientAgent.togglePingIsRequired());
 
 		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
 		jCheckBoxLoglevel = new JComboBox<>();
-		jCheckBoxLoglevel.setEnabled(!isGlobalReadOnly);
-		jCheckBoxLoglevel.setEditable(!isGlobalReadOnly);
 		for (int i = 3; i <= 9; i++) {
 			jCheckBoxLoglevel.addItem(i);
 		}
@@ -132,8 +128,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		jTextFieldClient = new JTextField();
 		jTextFieldClient
 				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.tooltip.tf_client"));
-		jTextFieldClient.setEnabled(!isGlobalReadOnly);
-		jTextFieldClient.setEditable(!isGlobalReadOnly);
 		jTextFieldClient.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
@@ -176,20 +170,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 
 		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		JButton jButtonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
-		jButtonExecute.setEnabled(!isGlobalReadOnly);
-
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			jButtonExecute.addActionListener(actionEvent -> doAction2());
-		}
-
-		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
-		jButtonClose.addActionListener(actionEvent -> cancel());
-
-		buttonPanel.add(jButtonClose);
-		buttonPanel.add(jButtonExecute);
-
 		doCopySelectedClients();
 
 		changeClient();
@@ -207,12 +187,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 		commandDeployClientAgent.setClient(jTextFieldClient.getText().trim());
 	}
 
-	private void cancel() {
-		super.doAction1();
-	}
-
-	@Override
-	public void doAction2() {
+	private void execute() {
 		Logging.info(this, "doAction2 deploy-clientagent ");
 		if (jTextFieldClient.getText().isEmpty()) {
 			Logging.warning(this, "Client name(s) missing.");
@@ -233,7 +208,7 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 			message.append("\n\n");
 			message.append(Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.message2"));
 
-			int answer = JOptionPane.showOptionDialog(this, message.toString(),
+			int answer = JOptionPane.showOptionDialog(dialog, message.toString(),
 					Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.title"), 0, 0, null,
 					new String[] { Configed.getResourceValue("buttonCancel"),
 							Configed.getResourceValue("DeployClientAgentParameterDialog.clientDoesNotExist.proceed") },
@@ -285,41 +260,38 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup().addGroup(inputPanelLayout.createSequentialGroup()
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
+				.addGroup(inputPanelLayout.createSequentialGroup()
 						.addComponent(jLabelClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE).addComponent(jTextFieldClient, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelUserData, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelUserData, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jButtonCopySelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(authPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGroup(inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
+						.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonCopySelectedClients, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(authPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGroup(inputPanelLayout.createSequentialGroup()
-								.addGroup(inputPanelLayout.createParallelGroup()
-										.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelIgnorePing, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(2 * Globals.GAP_SIZE)
-								.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
-										.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-												Globals.ICON_WIDTH)
-										.addComponent(jCheckBoxLoglevel, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-												Globals.ICON_WIDTH)
-										.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH))))
-				.addGap(Globals.GAP_SIZE));
+						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelIgnorePing, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+						.addGap(2 * Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
+								.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH)
+								.addComponent(jCheckBoxLoglevel, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH)
+								.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH))));
 
 		inputPanelLayout
-				.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.setVerticalGroup(inputPanelLayout.createSequentialGroup()
 						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(jLabelClient, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
@@ -357,7 +329,6 @@ public class DeployClientAgentParameterDialog extends FGeneralDialog {
 								.addComponent(jLabelOperatingSystem, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
 								.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
-						.addGap(Globals.GAP_SIZE));
+										Globals.BUTTON_HEIGHT)));
 	}
 }
