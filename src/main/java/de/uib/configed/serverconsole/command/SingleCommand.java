@@ -8,7 +8,7 @@ package de.uib.configed.serverconsole.command;
 
 import java.util.List;
 
-import de.uib.configed.gui.FGeneralDialog;
+import javax.swing.JDialog;
 
 public interface SingleCommand extends CommandMetadata {
 	String getCommand();
@@ -25,5 +25,5 @@ public interface SingleCommand extends CommandMetadata {
 
 	boolean needParameter();
 
-	FGeneralDialog getDialog();
+	JDialog getDialog();
 }

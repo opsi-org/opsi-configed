@@ -9,12 +9,12 @@ package de.uib.configed.serverconsole.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uib.configed.gui.FGeneralDialog;
+import javax.swing.JDialog;
 
 public class SingleCommandHelp implements SingleCommand {
 	private boolean needParameter;
 	private SingleCommand basicCommand;
-	private FGeneralDialog dialog;
+	private JDialog dialog;
 
 	public SingleCommandHelp(SingleCommand basicCommand) {
 		this.basicCommand = basicCommand;
@@ -77,7 +77,7 @@ public class SingleCommandHelp implements SingleCommand {
 	}
 
 	@Override
-	public FGeneralDialog getDialog() {
+	public JDialog getDialog() {
 		return dialog;
 	}
 
