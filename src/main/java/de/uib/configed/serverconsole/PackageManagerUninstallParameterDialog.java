@@ -72,6 +72,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		this.configedMain = configedMain;
 
 		depotSelection = new ListSelectionDialog(this, Configed.getResourceValue("FDepotselectionList.title"));
+		depotSelection.setMultiSelection();
 
 		init();
 
