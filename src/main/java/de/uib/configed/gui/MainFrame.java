@@ -225,8 +225,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void reloadServerConsoleMenu() {
-		//jMenuServerConsole.removeAll();
-		//setupMenuServerConsole();
+		leftToolBar.reloadServerConsoleMenu();
 	}
 
 	private JMenu createJMenuClientSelection() {

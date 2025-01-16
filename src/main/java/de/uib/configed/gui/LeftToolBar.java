@@ -178,4 +178,9 @@ public class LeftToolBar extends JToolBar {
 					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
 		}
 	}
+
+	public void reloadServerConsoleMenu() {
+		jMenuServerConsole.removeAll();
+		setupMenuServerConsole();
+	}
 }
