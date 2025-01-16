@@ -139,7 +139,7 @@ public class CommandExecutor implements MessagebusListener {
 			});
 			commandNumber++;
 			terminalFrame.writeToWidget("(" + commandNumber + ") " + fileUploadCommand.getSecuredCommand() + "\r\n");
-			terminalFrame.uploadFile(fileUploader);
+			TerminalFrame.uploadFile(fileUploader);
 			locker.lock();
 		} else {
 			startCommandProcess(command);
