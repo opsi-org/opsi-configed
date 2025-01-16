@@ -6,50 +6,43 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
-import javax.swing.WindowConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.serverconsole.command.SingleCommandHelp;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
-public class CurlParameterDialog extends FGeneralDialog {
+public class CurlParameterDialog {
 	private JPanel inputPanel = new JPanel();
-	private JPanel buttonPanel = new JPanel();
 
 	private JLabel jLabelURL = new JLabel();
 	private JLabel jLabelDir = new JLabel();
 	private JLabel jLabelLoglevel = new JLabel();
 	private JLabel jLabelFreeInput = new JLabel();
 
-	private JButton jButtonHelp;
-	private JButton jButtonExecute;
 	private JButton jButtonSearchDir;
 
 	private JTextField jTextFieldURL;
-	private JTextField jTextFieldDir;
 	private JComboBox<String> jComboBoxDir;
 	private JComboBox<Integer> jComboBoxLoglevel;
 	private JTextField jTextFieldFreeInput;
@@ -60,49 +53,46 @@ public class CurlParameterDialog extends FGeneralDialog {
 
 	private ConfigedMain configedMain;
 
+	private JDialog dialog;
+
 	public CurlParameterDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("CurlParameterDialog.title"), false);
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		this.configedMain = configedMain;
 		this.completion = new CompletionComboButton();
 
 		init();
 		initLayout();
-		super.setSize(800, 320);
-		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		super.setVisible(true);
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			setComponentsEnabledRO(false);
-		}
 
 		jComboBoxDir.setEnabled(true);
-	}
 
-	private void setComponentsEnabledRO(boolean value) {
-		jTextFieldURL.setEnabled(value);
-		jTextFieldURL.setEditable(value);
-		jTextFieldDir.setEnabled(value);
-		jTextFieldDir.setEditable(value);
-		jComboBoxDir.setEnabled(value);
-		jComboBoxDir.setEditable(value);
-		jComboBoxLoglevel.setEnabled(value);
+		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION,
+				null,
+				new Object[] { Configed.getResourceValue("buttonExecute"),
+						Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo"),
+						Configed.getResourceValue("buttonCancel") });
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("CurlParameterDialog.title"));
 
-		jTextFieldFreeInput.setEnabled(value);
-		jTextFieldFreeInput.setEditable(value);
+		dialog.setVisible(true);
 
-		jButtonExecute.setEnabled(value);
-		jButtonHelp.setEnabled(value);
+		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
+			execute();
+		} else if (optionPane.getValue() != null
+				&& optionPane.getValue().equals(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo"))) {
+			doActionHelp();
+		} else {
+			// Do nothing since the user clicked on cancel or closed the dialog
+		}
 	}
 
 	private void init() {
-		getContentPane().add(inputPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		inputPanel.setPreferredSize(new Dimension(376, 220));
-
 		jLabelURL.setText(Configed.getResourceValue("CurlParameterDialog.jLabelUrl"));
 		jTextFieldURL = new JTextField();
 		jTextFieldURL.setText(Configed.getResourceValue("CurlParameterDialog.downloadLink"));
@@ -118,7 +108,6 @@ public class CurlParameterDialog extends FGeneralDialog {
 		});
 
 		jLabelDir.setText(Configed.getResourceValue("CurlParameterDialog.jLabelDirectory"));
-		jTextFieldDir = new JTextField();
 
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
@@ -140,29 +129,13 @@ public class CurlParameterDialog extends FGeneralDialog {
 
 		curlAuthPanel = new CurlAuthenticationPanel();
 		((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
+
+		// Add the listener and invoke it later so that it is executed after the panel 
+		// is set visible
+		((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH))
+				.addItemListener(event -> SwingUtilities.invokeLater(() -> dialog.pack()));
 		curlAuthPanel.isOpen(true);
 		curlAuthPanel.close();
-
-		jButtonHelp = new JButton(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo"));
-		jButtonHelp.setToolTipText(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo.tooltip"));
-		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
-
-		jButtonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
-
-		jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
-			if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-					.isGlobalReadOnly()) {
-				doAction3();
-			}
-		});
-
-		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
-
-		jButtonClose.addActionListener(actionEvent -> cancel());
-
-		buttonPanel.add(jButtonClose);
-		buttonPanel.add(jButtonHelp);
-		buttonPanel.add(jButtonExecute);
 
 		changeUrl();
 		changeFreeInput();
@@ -184,8 +157,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	@Override
-	public void doAction3() {
+	private void execute() {
 		Logging.warning(this, "execute");
 		if (jTextFieldURL.getText().equals(Configed.getResourceValue("CurlParameterDialog.downloadLink"))
 				|| jTextFieldURL.getText().isEmpty()) {
@@ -218,51 +190,41 @@ public class CurlParameterDialog extends FGeneralDialog {
 		executor.execute();
 	}
 
-	private void cancel() {
-		super.doAction1();
-	}
-
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addGroup(inputPanelLayout.createSequentialGroup()
-								.addGroup(inputPanelLayout.createParallelGroup()
-										.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(
-												curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE,
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
+				.addGroup(inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
+						.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(
+								jLabelFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(inputPanelLayout.createParallelGroup()
+								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+								.addGroup(inputPanelLayout.createSequentialGroup()
+										.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Short.MAX_VALUE)
+										.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(inputPanelLayout.createParallelGroup()
-										.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE))
-										.addGroup(inputPanelLayout.createSequentialGroup()
-												.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-														Short.MAX_VALUE)
-												.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addComponent(jComboBoxLoglevel, GroupLayout.Alignment.LEADING,
-												Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-										.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
-												GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Short.MAX_VALUE)))
-						.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGap(Globals.GAP_SIZE));
+								.addComponent(jComboBoxLoglevel, GroupLayout.Alignment.LEADING, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+								.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
+										GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE)))
+				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jTextFieldURL, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
@@ -294,8 +256,7 @@ public class CurlParameterDialog extends FGeneralDialog {
 						.addComponent(jTextFieldFreeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 						.addComponent(jLabelFreeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE).addContainerGap(70, 70));
+								Globals.BUTTON_HEIGHT)));
 	}
 
 	private static class DocumentListenerAdapter implements DocumentListener {
