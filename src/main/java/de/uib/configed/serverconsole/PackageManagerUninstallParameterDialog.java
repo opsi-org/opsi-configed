@@ -84,7 +84,7 @@ public class PackageManagerUninstallParameterDialog {
 				JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
 
-		JDialog dialog = optionPane.createDialog(optionPane,
+		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"));
 
 		depotSelection = new ListSelectionDialog(dialog, Configed.getResourceValue("FDepotselectionList.title"));
