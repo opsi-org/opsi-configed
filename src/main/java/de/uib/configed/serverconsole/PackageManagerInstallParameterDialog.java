@@ -76,7 +76,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		installLocalPanel = new PMInstallLocalPanel();
 		installServerPanel = new PMInstallServerPanel(fromMakeProductfile);
 		installCurlPanel = new PMInstallCurlPanel();
-		installSettingsPanel = new PMInstallSettingsPanel(this, configedMain);
+		installSettingsPanel = new PMInstallSettingsPanel(this);
 
 		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {
 			jRadioButtonServer.setSelected(true);

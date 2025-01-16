@@ -19,9 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FDepotselectionList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -46,20 +45,17 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private JCheckBox jCheckBoxUpdateInstalled;
 	private JCheckBox jCheckBoxSetupInstalled;
 
-	private FDepotselectionList fDepotList;
+	private ListSelectionDialog depotSelection;
 	private List<String> depots;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PMInstallSettingsPanel(JDialog dia, ConfigedMain configedMain) {
-		if (dia != null) {
-			setFDepotList(dia, configedMain);
-		}
+	public PMInstallSettingsPanel(JDialog dia) {
+		depotSelection = new ListSelectionDialog(dia, Configed.getResourceValue("FDepotselectionList.title"));
 
 		initComponents();
 		initLayout();
-		initDepots();
 	}
 
 	private void initComponents() {
@@ -72,8 +68,11 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jButtonDepotselection = new JButton(Configed.getResourceValue("depotSelection"));
 		jButtonDepotselection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
-			fDepotList.setLocationRelativeTo(this);
-			fDepotList.setVisible(true);
+			depotSelection.show();
+
+			if (depotSelection.wasAccepted()) {
+				jTextFieldSelecteddepots.setText(produceDepotParameter());
+			}
 		});
 
 		jTextFieldSelecteddepots = new JTextField();
@@ -90,27 +89,6 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jCheckBoxProperties.setSelected(true);
 		jCheckBoxUpdateInstalled = new JCheckBox();
 		jCheckBoxSetupInstalled = new JCheckBox();
-	}
-
-	private void setFDepotList(JDialog dia, ConfigedMain configedMain) {
-		fDepotList = new FDepotselectionList(dia, configedMain) {
-			@Override
-			public void setListData(List<String> v) {
-				if (v == null || v.isEmpty()) {
-					setListData(new ArrayList<>());
-					jButton1.setEnabled(false);
-				} else {
-					super.setListData(v);
-					jButton1.setEnabled(true);
-				}
-			}
-
-			@Override
-			public void doAction2() {
-				jTextFieldSelecteddepots.setText(produceDepotParameter());
-				super.doAction2();
-			}
-		};
 	}
 
 	private void initLayout() {
@@ -204,7 +182,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 	private String produceDepotParameter() {
 		String depotParameter = "";
-		List<String> selectedDepots = fDepotList.getSelectedDepots();
+		List<String> selectedDepots = depotSelection.getSelectedValues();
 
 		if (selectedDepots.isEmpty()) {
 			if (persistenceController.getUserRolesConfigDataService().hasDepotsFullPermissionPD()) {
@@ -237,7 +215,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private void initDepots() {
 		depots = getAllowedInstallTargets();
 		Logging.info(this, "depots: ", depots);
-		fDepotList.setListData(depots);
+		depotSelection.setListData(depots);
 		if (depots.isEmpty()) {
 			jButtonDepotselection.setVisible(false);
 		}

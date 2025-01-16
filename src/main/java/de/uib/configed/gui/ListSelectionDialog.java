@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +17,6 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -42,11 +42,11 @@ public class ListSelectionDialog {
 	private JOptionPane jOptionPane;
 	private JDialog dialog;
 
-	public ListSelectionDialog(JFrame owner, String title) {
+	public ListSelectionDialog(Component owner, String title) {
 		this(owner, title, false);
 	}
 
-	public ListSelectionDialog(JFrame owner, String title, boolean editable) {
+	public ListSelectionDialog(Component owner, String title, boolean editable) {
 		JPanel panel = createPanel(editable);
 		jOptionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 

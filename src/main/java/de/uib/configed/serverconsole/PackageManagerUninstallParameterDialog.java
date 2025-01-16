@@ -28,7 +28,7 @@ import javax.swing.WindowConstants;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FDepotselectionList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -60,7 +60,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private FDepotselectionList fDepotList;
+	private ListSelectionDialog depotSelection;
 
 	private List<String> possibleDepots;
 
@@ -71,24 +71,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 		this.configedMain = configedMain;
 
-		fDepotList = new FDepotselectionList(this, configedMain) {
-			@Override
-			public void setListData(List<String> v) {
-				if (v == null || v.isEmpty()) {
-					setListData(new ArrayList<>());
-					jButton1.setEnabled(false);
-				} else {
-					super.setListData(v);
-					jButton1.setEnabled(true);
-				}
-			}
-
-			@Override
-			public void doAction2() {
-				textFieldSelectedDepots.setText(produceDepotParameter());
-				super.doAction2();
-			}
-		};
+		depotSelection = new ListSelectionDialog(this, Configed.getResourceValue("FDepotselectionList.title"));
 
 		init();
 
@@ -104,7 +87,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private String produceDepotParameter() {
 		String depotParameter = "";
-		List<String> selectedDepots = fDepotList.getSelectedDepots();
+		List<String> selectedDepots = depotSelection.getSelectedValues();
 
 		Logging.debug(this, "produceDepotParameter, selectedDepots ", selectedDepots);
 
@@ -181,7 +164,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private void initDepots() {
 		possibleDepots = getPossibleDepots();
-		fDepotList.setListData(possibleDepots);
+		depotSelection.setListData(possibleDepots);
 		if (possibleDepots.isEmpty()) {
 			// probably no permission
 
@@ -243,8 +226,11 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 				.getUserRolesConfigDataService().isGlobalReadOnly());
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
-			fDepotList.setLocationRelativeTo(this);
-			fDepotList.setVisible(true);
+			depotSelection.show();
+
+			if (depotSelection.wasAccepted()) {
+				textFieldSelectedDepots.setText(produceDepotParameter());
+			}
 		});
 
 		textFieldSelectedDepots = new JTextField();
@@ -335,12 +321,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	public void doAction1() {
 		this.setVisible(false);
 		this.dispose();
-	}
-
-	@Override
-	public void leave() {
-		fDepotList.exit();
-		super.leave();
 	}
 
 	private void initLayout() {
