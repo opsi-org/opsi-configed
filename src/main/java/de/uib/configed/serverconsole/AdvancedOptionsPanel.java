@@ -21,8 +21,6 @@ public class AdvancedOptionsPanel extends JPanel {
 	private JCheckBox jCheckBoxZsync;
 	private JCheckBox jCheckBoxSetRights;
 
-	private boolean isAdvancedOpen = true;
-
 	private boolean isGlobalReadOnly = PersistenceControllerFactory.getPersistenceController()
 			.getUserRolesConfigDataService().isGlobalReadOnly();
 
@@ -84,7 +82,6 @@ public class AdvancedOptionsPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE));
 		advancedOptionsPanelLayout.setVerticalGroup(advancedOptionsPanelLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE)
 				.addGroup(advancedOptionsPanelLayout.createParallelGroup()
 						.addComponent(jLabelzsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -101,12 +98,6 @@ public class AdvancedOptionsPanel extends JPanel {
 						.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jCheckBoxSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE));
-	}
-
-	public void showAdvancedSettings() {
-		isAdvancedOpen = !isAdvancedOpen;
-		setVisible(isAdvancedOpen);
+								GroupLayout.PREFERRED_SIZE)));
 	}
 }

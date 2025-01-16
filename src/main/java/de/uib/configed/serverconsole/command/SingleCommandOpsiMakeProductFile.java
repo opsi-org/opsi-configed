@@ -9,9 +9,10 @@ package de.uib.configed.serverconsole.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JDialog;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.MakeProductFileDialog;
 import de.uib.utils.logging.Logging;
 
@@ -21,7 +22,7 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 	private String baseName = "opsi-makepackage";
 	private String command = "opsi-makepackage";
 
-	private FGeneralDialog dialog;
+	private JDialog dialog;
 	private boolean needParameter = true;
 
 	private String dir = "";
@@ -146,11 +147,11 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new MakeProductFileDialog(configedMain);
+		dialog = new MakeProductFileDialog(configedMain).getDialog();
 	}
 
 	@Override
-	public FGeneralDialog getDialog() {
+	public JDialog getDialog() {
 		return dialog;
 	}
 

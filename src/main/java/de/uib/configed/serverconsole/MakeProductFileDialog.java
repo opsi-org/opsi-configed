@@ -17,15 +17,16 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
+import javax.swing.JToggleButton;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiMakeProductFile;
@@ -35,7 +36,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
-public class MakeProductFileDialog extends FGeneralDialog {
+public class MakeProductFileDialog {
 	private static final Pattern tripleSemicolonMatcher = Pattern.compile(";;;");
 	private static final String FILE_REPLACEMENT_PATTERN = "*.file.*";
 	private static final String REMOVE_EXISTING_FILE_COMMAND = "[ -f " + FILE_REPLACEMENT_PATTERN + " ] &&  rm "
@@ -55,37 +56,59 @@ public class MakeProductFileDialog extends FGeneralDialog {
 	private JCheckBox jCheckBoxOverwrite;
 	private AdvancedOptionsPanel advancedOptionsPanel;
 
-	private JButton jButtonToPackageManager;
-	private JButton jButtonExec;
 	private String filename;
 	private ConfigedMain configedMain;
 	private CompletionComboButton autocompletion;
 
+	private JDialog dialog;
+
 	public MakeProductFileDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("MakeProductFileDialog.title"), false);
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		this.configedMain = configedMain;
 		autocompletion = new CompletionComboButton();
 		advancedOptionsPanel = new AdvancedOptionsPanel();
-		initGUI();
+		advancedOptionsPanel.setVisible(false);
+
+		JPanel panel = initPanel();
 
 		filename = "";
 
-		advancedOptionsPanel.showAdvancedSettings();
 		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly());
 
-		initFrame();
+		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION,
+				null,
+				new Object[] { Configed.getResourceValue("buttonExecute"),
+						Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"),
+						Configed.getResourceValue("buttonCancel") });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("MakeProductFileDialog.title"));
+
+		dialog.setVisible(true);
+
+		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
+			execute();
+		} else if (optionPane.getValue() != null && optionPane.getValue()
+				.equals(Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"))) {
+			new PackageManagerInstallParameterDialog(configedMain, filename);
+		} else {
+			// Do nothing on cancel button or when dialog was closed
+		}
 	}
 
-	private void initFrame() {
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(900, 500);
-		setLocationRelativeTo(ConfigedMain.getMainFrame());
-		setVisible(true);
+	public JDialog getDialog() {
+		return dialog;
 	}
 
 	private void setComponentsEnabled(boolean value) {
-		jButtonExec.setEnabled(value);
 		if (!value) {
 			jTextFieldPackageVersion.setEnabled(value);
 			jTextFieldProductVersion.setEnabled(value);
@@ -94,24 +117,13 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		jCheckBoxOverwrite.setEnabled(value);
 	}
 
-	private String setOpsiPackageFilename(String path) {
-		filename = path;
-		jButtonToPackageManager.setEnabled(true);
-		jButtonToPackageManager.setToolTipText(
-				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager.tooltip") + " " + filename);
-		return filename;
-	}
-
-	private void initGUI() {
+	private JPanel initPanel() {
 		JPanel workbenchPanel = new JPanel();
-		JPanel mainButtonPanel = new JPanel();
+		JPanel mainPanel = new JPanel();
 
-		mainButtonPanel.setLayout(new BorderLayout());
-		mainButtonPanel.add(advancedOptionsPanel, BorderLayout.NORTH);
-		mainButtonPanel.add(initButtonPanel(), BorderLayout.SOUTH);
-
-		getContentPane().add(workbenchPanel, BorderLayout.CENTER);
-		getContentPane().add(mainButtonPanel, BorderLayout.SOUTH);
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.add(workbenchPanel, BorderLayout.NORTH);
+		mainPanel.add(advancedOptionsPanel, BorderLayout.SOUTH);
 
 		GroupLayout workbenchPanelLayout = new GroupLayout(workbenchPanel);
 		workbenchPanelLayout.setAutoCreateGaps(true);
@@ -162,12 +174,15 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		jCheckBoxOverwrite = new JCheckBox();
 		jCheckBoxOverwrite.setSelected(true);
 
-		JButton jButtonAdvancedSettings = new JButton(
+		JToggleButton jButtonAdvancedSettings = new JToggleButton(
 				Configed.getResourceValue("MakeProductFileDialog.btn_advancedSettings"));
 
 		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
-			jButtonAdvancedSettings.addActionListener(actionEvent -> advancedOptionsPanel.showAdvancedSettings());
+			jButtonAdvancedSettings.addActionListener((ActionEvent event) -> {
+				advancedOptionsPanel.setVisible(jButtonAdvancedSettings.isSelected());
+				dialog.pack();
+			});
 		}
 
 		jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
@@ -268,40 +283,8 @@ public class MakeProductFileDialog extends FGeneralDialog {
 				.addGroup(workbenchPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
 						jButtonAdvancedSettings, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-	}
 
-	private JPanel initButtonPanel() {
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-
-		jButtonToPackageManager = new JButton(
-				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"));
-		jButtonToPackageManager.setEnabled(false);
-		jButtonToPackageManager
-				.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager.tooltip"));
-
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			jButtonToPackageManager
-					.addActionListener(actionEvent -> new PackageManagerInstallParameterDialog(configedMain, filename));
-		}
-
-		jButtonExec = new JButton(Configed.getResourceValue("buttonExecute"));
-
-		jButtonExec.setEnabled(false);
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			jButtonExec.addActionListener(actionEvent -> doAction2());
-		}
-
-		JButton jButtonCancel = new JButton(Configed.getResourceValue("buttonClose"));
-		jButtonCancel.addActionListener(actionEvent -> cancel());
-
-		buttonPanel.add(jButtonCancel);
-		buttonPanel.add(jButtonToPackageManager);
-		buttonPanel.add(jButtonExec);
-
-		return buttonPanel;
+		return mainPanel;
 	}
 
 	private String doActionGetVersions() {
@@ -344,16 +327,12 @@ public class MakeProductFileDialog extends FGeneralDialog {
 
 			jTextFieldProductVersion.setText(versionArray[1]);
 			jLabelProductVersionControlFile.setText(versionArray[1]);
-
-			jButtonExec.setEnabled(true);
 		} else {
 			enableTfVersions(false);
 			jTextFieldPackageVersion.setText("");
 			jLabelPackageVersionControlFile.setText("");
 			jTextFieldProductVersion.setText("");
 			jLabelProductVersionControlFile.setText("");
-
-			jButtonExec.setEnabled(false);
 		}
 	}
 
@@ -369,12 +348,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 		executor.execute();
 	}
 
-	private void cancel() {
-		super.doAction1();
-	}
-
-	@Override
-	public void doAction2() {
+	private void execute() {
 		if (jLabelProductVersionControlFile.getText() == null || jLabelProductVersionControlFile.getText().isEmpty()) {
 			Logging.warning(this, "Please select a valid opsi product directory.");
 			return;
@@ -399,7 +373,7 @@ public class MakeProductFileDialog extends FGeneralDialog {
 			prodVersion = checkVersion(prodVersion, "", versionArray[1]);
 			packVersion = checkVersion(packVersion, "", versionArray[0]);
 			String packageID = getPackageID(dirLocationInServer);
-			setOpsiPackageFilename(dir + "" + packageID + "_" + prodVersion + "-" + packVersion + ".opsi");
+			filename = dir + "" + packageID + "_" + prodVersion + "-" + packVersion + ".opsi";
 			String serverPath = dirLocationInServer + "" + packageID + "_" + prodVersion + "-" + packVersion + ".opsi";
 
 			String command = REMOVE_EXISTING_FILE_COMMAND.replace(FILE_REPLACEMENT_PATTERN, serverPath);
