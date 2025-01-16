@@ -14,7 +14,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -40,20 +39,11 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
-import de.uib.configed.serverconsole.command.CommandExecutor;
-import de.uib.configed.serverconsole.command.CommandFactory;
-import de.uib.configed.serverconsole.command.CommandWithParameters;
-import de.uib.configed.serverconsole.command.MultiCommandTemplate;
-import de.uib.configed.serverconsole.command.SingleCommand;
-import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
-import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
-import de.uib.opsidatamodel.permission.UserConfig;
-import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -75,13 +65,11 @@ public class MainFrame extends JFrame {
 	private ClientMenuManager clientMenu;
 
 	private LeftControlBar leftControlBar;
+	private LeftToolBar leftToolBar;
 
 	private MainPanelManager mainPanelManager;
 
 	private LicenseDisplayer licenseDisplayer;
-
-	// Inititalize it here so that we keep the reference throughout a full reload
-	private JMenu jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
 
 	private ClientTablePanel clientTablePanel;
 
@@ -116,6 +104,7 @@ public class MainFrame extends JFrame {
 		setJMenuBar(initMenuBar());
 
 		leftControlBar = new LeftControlBar();
+		leftToolBar = new LeftToolBar(configedMain);
 		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
 
 		showClientConfiguration();
@@ -236,121 +225,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void reloadServerConsoleMenu() {
-		jMenuServerConsole.removeAll();
-		setupMenuServerConsole();
-	}
-
-	private void setupMenuServerConsole() {
-		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
-		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
-		jMenuCommandControl
-				.addActionListener(actionEvent -> ExtraFrameController.startEditTerminalCommandsDialog(configedMain));
-		jMenuServerConsole.add(jMenuCommandControl);
-		jMenuServerConsole.addSeparator();
-
-		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
-		Icons.addOpsiIconToMenuItem(menuOpsi);
-		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
-				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
-		Logging.info(this, "setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
-		CommandFactory factory = CommandFactory.getInstance();
-		factory.retrieveCommandList();
-		addCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
-		if (menuOpsi.getSubElements().length != 0) {
-			menuOpsi.addSeparator();
-		}
-		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
-
-		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.terminalMenuIsActive());
-
-		JMenuItem jMenuTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
-		Icons.addIntellijIconToMenuItem(jMenuTerminal, "terminal");
-
-		// check terminal access rights defined by user roles
-		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().terminalsForbidden();
-		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
-		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
-		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
-
-		if (forbiddenConfigServer && forbiddenDepots && forbiddenClients) {
-			Logging.info(this, "setupMenuServerConsole all forbidden");
-			String s = " " + Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden");
-			jMenuTerminal.setText(jMenuTerminal.getText() + s);
-			jMenuTerminal.setEnabled(false);
-		} else {
-			Logging.info(this, "setupMenuServerConsole forbiddenItems ", forbiddenItems);
-			Logging.info(this, "setupMenuServerConsole forbiddenConfigServer ", forbiddenConfigServer,
-					" forbiddenDepots ", forbiddenDepots, " forbiddenClients ", forbiddenClients);
-			jMenuTerminal.addActionListener((ActionEvent e) -> {
-				Messagebus.initMessagebus(configedMain);
-				TerminalFrame terminal = new TerminalFrame(configedMain);
-				terminal.setMessagebus(Messagebus.getInstance());
-				terminal.display();
-			});
-		}
-
-		jMenuServerConsole.add(jMenuTerminal);
-	}
-
-	private void addDefaultOpsiCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
-		for (final SingleCommand command : CommandFactory.getDefaultOpsiCommands()) {
-			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
-			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
-			jMenuOpsiCommand.addActionListener(
-					actionEvent -> ((CommandWithParameters) command).startParameterGui(configedMain));
-			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
-			menuOpsi.add(jMenuOpsiCommand);
-		}
-	}
-
-	private void addCommandsToMenuServer(JMenu menuOpsi, boolean commandsAreDeactivated) {
-		final CommandFactory factory = CommandFactory.getInstance();
-		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
-
-		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs ", sortedComs);
-		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
-			String parentMenuName = entry.getKey();
-			JMenu parentMenu = new JMenu(parentMenuName);
-
-			Logging.info(this, "parent menu text ", parentMenuName);
-			if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
-				jMenuServerConsole.add(menuOpsi);
-				jMenuServerConsole.addSeparator();
-			}
-
-			addSubCommands(menuOpsi, parentMenu, entry.getValue(), commandsAreDeactivated);
-		}
-	}
-
-	private void addSubCommands(JMenu menuOpsi, JMenu parentMenu, List<MultiCommandTemplate> listCom,
-			boolean commandsAreDeactivated) {
-		for (final MultiCommandTemplate com : listCom) {
-			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
-			Logging.info(this, "command menuitem text ", com.getMenuText());
-			jMenuItem.setToolTipText(com.getToolTipText());
-			jMenuItem.addActionListener((ActionEvent e) -> {
-				CommandExecutor executor = new CommandExecutor(configedMain, com);
-				executor.execute();
-			});
-
-			String parentMenuName = parentMenu.getText();
-			if (parentMenuName.equals(CommandFactory.PARENT_NULL)) {
-				jMenuServerConsole.add(jMenuItem);
-			} else if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
-				menuOpsi.add(jMenuItem);
-			} else {
-				parentMenu.add(jMenuItem);
-				jMenuServerConsole.add(parentMenu);
-			}
-
-			jMenuItem.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
-		}
+		//jMenuServerConsole.removeAll();
+		//setupMenuServerConsole();
 	}
 
 	private JMenu createJMenuClientSelection() {
@@ -525,28 +401,32 @@ public class MainFrame extends JFrame {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createParallelGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(panel));
-		layout.setHorizontalGroup(layout
-				.createSequentialGroup().addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		layout.setVerticalGroup(
+				layout.createParallelGroup()
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+								.addComponent(leftToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.LINE_HEIGHT + Globals.GAP_SIZE))
+						.addComponent(panel));
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup()
+						.addComponent(leftControlBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(leftToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addComponent(panel).addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	private JMenuBar initMenuBar() {
 		clientMenu = ClientMenuManager.getNewInstance(configedMain, this);
-		setupMenuServerConsole();
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(createJMenuFile());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
-		jMenuBar.add(jMenuServerConsole);
-
-		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
 		jMenuBar.add(jMenuExtras());
 		jMenuBar.add(createJMenuHelp());
