@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Font;
+
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -17,8 +19,6 @@ import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-
-import com.itextpdf.text.Font;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;

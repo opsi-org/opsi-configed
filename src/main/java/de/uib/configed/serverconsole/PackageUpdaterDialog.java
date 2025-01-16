@@ -6,6 +6,7 @@
 
 package de.uib.configed.serverconsole;
 
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +17,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import com.itextpdf.text.Font;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
