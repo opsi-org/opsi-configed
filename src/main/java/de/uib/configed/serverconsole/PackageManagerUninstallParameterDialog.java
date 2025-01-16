@@ -6,24 +6,21 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -35,7 +32,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
-public class PackageManagerUninstallParameterDialog extends PackageManagerParameterDialog {
+public class PackageManagerUninstallParameterDialog {
 	private static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
@@ -66,24 +63,44 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private SingleCommandOpsiPackageManagerUninstall commandPMUninstall = new SingleCommandOpsiPackageManagerUninstall();
 
+	private ConfigedMain configedMain;
+
+	private JDialog dialog;
+
 	public PackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
-		super(Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"));
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 
 		this.configedMain = configedMain;
 
-		depotSelection = new ListSelectionDialog(this, Configed.getResourceValue("FDepotselectionList.title"));
-		depotSelection.setMultiSelection();
-
 		init();
 
-		jButtonExecute.setEnabled(false);
 		textFieldSelectedDepots.setText("");
 
-		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		super.setSize(800, 350);
-		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		JOptionPane optionPane = new JOptionPane(uninstallPanel, JOptionPane.PLAIN_MESSAGE,
+				JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
 
-		super.setVisible(true);
+		dialog = optionPane.createDialog(optionPane,
+				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"));
+
+		depotSelection = new ListSelectionDialog(dialog, Configed.getResourceValue("FDepotselectionList.title"));
+		depotSelection.setMultiSelection();
+
+		dialog.setVisible(true);
+
+		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
+			execute();
+		}
+	}
+
+	public JDialog getDialog() {
+		return dialog;
 	}
 
 	private String produceDepotParameter() {
@@ -98,10 +115,9 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
 			} else {
-				jButtonExecute.setEnabled(false);
+				// Do nothing if no depots are available
 			}
 		} else {
-			jButtonExecute.setEnabled(true);
 
 			if (selectedDepots.contains(PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS;
@@ -169,7 +185,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		if (possibleDepots.isEmpty()) {
 			// probably no permission
 
-			jButtonExecute.setVisible(false);
 			textFieldSelectedDepots.setText("");
 		} else {
 			textFieldSelectedDepots.setText("" + possibleDepots.get(0));
@@ -177,12 +192,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private void init() {
-		getContentPane().add(uninstallPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-		uninstallPanel.setBorder(BorderFactory.createTitledBorder(""));
-		uninstallPanel.setPreferredSize(new Dimension(376, 220));
-
 		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
 
 		jComboboxLoglevel = new JComboBox<>();
@@ -216,7 +225,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		jComboBoxOpsiProducts.addItemListener((ItemEvent itemEvent) -> {
 			textFieldSelectedDepots.setText("");
 
-			jButtonExecute.setEnabled(false);
 			textFieldProduct.setText((String) jComboBoxOpsiProducts.getSelectedItem());
 		});
 
@@ -237,7 +245,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		textFieldSelectedDepots = new JTextField();
 		textFieldSelectedDepots.setEditable(false);
 
-		initButtons(this);
 		initLayout();
 		resetProducts();
 		changeProduct("");
@@ -293,8 +300,7 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		return answer == JOptionPane.OK_OPTION;
 	}
 
-	@Override
-	public void doAction3() {
+	private void execute() {
 		changeDepot();
 		final String prod = textFieldProduct.getText();
 		Logging.info(this, "doAction3 uninstall  ", prod);
@@ -316,12 +322,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		};
 
 		execThread.start();
-	}
-
-	@Override
-	public void doAction1() {
-		this.setVisible(false);
-		this.dispose();
 	}
 
 	private void initLayout() {

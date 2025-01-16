@@ -6,15 +6,16 @@
 
 package de.uib.configed.serverconsole.command;
 
+import javax.swing.JDialog;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageManagerUninstallParameterDialog;
 import de.uib.utils.logging.Logging;
 
 public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiPackageManager
 		implements CommandWithParameters {
-	private FGeneralDialog dialog;
+	private JDialog dialog;
 	private String command;
 	private int priority = 10;
 
@@ -54,13 +55,13 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 	}
 
 	@Override
-	public FGeneralDialog getDialog() {
+	public JDialog getDialog() {
 		return dialog;
 	}
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new PackageManagerUninstallParameterDialog(configedMain);
+		dialog = new PackageManagerUninstallParameterDialog(configedMain).getDialog();
 	}
 
 	@Override

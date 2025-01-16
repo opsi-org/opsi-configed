@@ -41,7 +41,7 @@ public class PackageUpdaterDialog {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("PackageUpdaterDialog.readOnly"),
+					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}

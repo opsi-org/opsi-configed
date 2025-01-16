@@ -6,13 +6,14 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -23,10 +24,11 @@ import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
-public class PackageManagerInstallParameterDialog extends PackageManagerParameterDialog {
+public class PackageManagerInstallParameterDialog {
 	private JPanel mainPanel = new JPanel();
 	private JPanel radioPanel = new JPanel();
 	private PMInstallLocalPanel installLocalPanel;
@@ -40,27 +42,48 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 	private JRadioButton jRadioButtonCurl;
 	private String fromMakeProductfile;
 
+	private ConfigedMain configedMain;
+
+	private JDialog dialog;
+
 	public PackageManagerInstallParameterDialog(ConfigedMain configedMain) {
 		this(configedMain, "");
 	}
 
 	public PackageManagerInstallParameterDialog(ConfigedMain configedMain, String fullPathToPackage) {
-		super(Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 
 		this.configedMain = configedMain;
 		fromMakeProductfile = fullPathToPackage;
 
 		initInstances();
-		init();
 		initLayout();
 
-		super.setSize(900, 600);
-		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		super.setVisible(true);
+		JOptionPane optionPane = new JOptionPane(mainPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
+				null,
+				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
+
+		dialog.setVisible(true);
+
+		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
+			execute();
+		}
+	}
+
+	public JDialog getDialog() {
+		return dialog;
 	}
 
 	private void initInstances() {
-		super.initButtons(this);
 		ButtonGroup group = new ButtonGroup();
 
 		jRadioButtonLocal = new JRadioButton(
@@ -76,7 +99,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 		installLocalPanel = new PMInstallLocalPanel();
 		installServerPanel = new PMInstallServerPanel(fromMakeProductfile);
 		installCurlPanel = new PMInstallCurlPanel();
-		installSettingsPanel = new PMInstallSettingsPanel(this);
+		installSettingsPanel = new PMInstallSettingsPanel(dialog);
 
 		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {
 			jRadioButtonServer.setSelected(true);
@@ -119,6 +142,9 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 	}
 
 	private void initLayout() {
+		radioPanel.setBorder(BorderFactory.createTitledBorder(""));
+		jLabelInstall.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstall"));
+
 		GroupLayout radioPanelLayout = new GroupLayout(radioPanel);
 		radioPanel.setLayout(radioPanelLayout);
 
@@ -173,16 +199,7 @@ public class PackageManagerInstallParameterDialog extends PackageManagerParamete
 				.addComponent(installSettingsPanel).addGap(2 * Globals.GAP_SIZE));
 	}
 
-	private void init() {
-		getContentPane().add(mainPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-		radioPanel.setBorder(BorderFactory.createTitledBorder(""));
-		jLabelInstall.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstall"));
-	}
-
-	@Override
-	public void doAction3() {
+	private void execute() {
 		Logging.info(this, " doAction3 install ");
 		MultiCommandTemplate commands = new MultiCommandTemplate();
 		commands.setMainName("PackageInstallation");

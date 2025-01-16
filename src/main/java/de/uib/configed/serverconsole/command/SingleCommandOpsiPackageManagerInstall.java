@@ -6,9 +6,10 @@
 
 package de.uib.configed.serverconsole.command;
 
+import javax.swing.JDialog;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageManagerInstallParameterDialog;
 import de.uib.utils.logging.Logging;
 
@@ -16,7 +17,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 		implements CommandWithParameters {
 	private String command;
 	private int priority = 8;
-	private FGeneralDialog dialog;
+	private JDialog dialog;
 
 	private String opsiproduct = "";
 	private String depot = "";
@@ -76,11 +77,11 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new PackageManagerInstallParameterDialog(configedMain);
+		dialog = new PackageManagerInstallParameterDialog(configedMain).getDialog();
 	}
 
 	@Override
-	public FGeneralDialog getDialog() {
+	public JDialog getDialog() {
 		return dialog;
 	}
 
