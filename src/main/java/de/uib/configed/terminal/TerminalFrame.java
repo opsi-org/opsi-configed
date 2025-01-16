@@ -6,6 +6,7 @@
 
 package de.uib.configed.terminal;
 
+import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -169,7 +170,16 @@ public final class TerminalFrame implements MessagebusListener {
 		if (restrictView) {
 			return;
 		}
-		ListSelectionDialog sessionsDialog = new ListSelectionDialog(frame,
+
+		// We want to show the dialog on the owner of the terminal frame only if it is visible
+		Component owner;
+		if (frame.isVisible()) {
+			owner = frame;
+		} else {
+			owner = ConfigedMain.getMainFrame();
+		}
+
+		ListSelectionDialog sessionsDialog = new ListSelectionDialog(owner,
 				Configed.getResourceValue("Terminal.session.title"));
 
 		// result list (allowed clients and depots connected by message bus)
@@ -398,8 +408,7 @@ public final class TerminalFrame implements MessagebusListener {
 		widget.setViewRestricted(true);
 	}
 
-	@SuppressWarnings({ "java:S2325" })
-	public void uploadFile(AbstractBackgroundFileUploader fileUploader) {
+	public static void uploadFile(AbstractBackgroundFileUploader fileUploader) {
 		fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + 1);
 		fileUploader.execute();
 	}
