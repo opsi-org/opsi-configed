@@ -423,8 +423,8 @@ public class ConfigedMain {
 				}
 			}
 		};
+
 		depotsList.addListSelectionListener(depotsListSelectionListener);
-		// TODO: add right click manager for depots items to open context menu
 
 		fetchDepots();
 
