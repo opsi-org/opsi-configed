@@ -108,8 +108,8 @@ public class OpsiSetRightsParameterDialog {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
-				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGroup(inputPanelLayout.createSequentialGroup()
 						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

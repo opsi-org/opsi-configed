@@ -170,8 +170,6 @@ public class DeployClientAgentParameterDialog {
 
 		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		doCopySelectedClients();
-
 		changeClient();
 		authPanel.changeUser();
 		authPanel.changePassw();
@@ -191,7 +189,7 @@ public class DeployClientAgentParameterDialog {
 		Logging.info(this, "doAction2 deploy-clientagent ");
 		if (jTextFieldClient.getText().isEmpty()) {
 			Logging.warning(this, "Client name(s) missing.");
-			JOptionPane.showMessageDialog(null,
+			JOptionPane.showMessageDialog(dialog,
 					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.message"),
 					Configed.getResourceValue("DeployClientAgentParameterDialog.noClientSpecified.title"),
 					JOptionPane.ERROR_MESSAGE);
@@ -281,7 +279,7 @@ public class DeployClientAgentParameterDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelIgnorePing, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-						.addGap(2 * Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
 								.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 										Globals.ICON_WIDTH)
