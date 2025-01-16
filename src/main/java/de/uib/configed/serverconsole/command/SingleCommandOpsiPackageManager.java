@@ -9,12 +9,9 @@ package de.uib.configed.serverconsole.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JDialog;
-
 import de.uib.configed.Configed;
 
 public class SingleCommandOpsiPackageManager implements SingleCommand {
-	private JDialog dialog;
 	private boolean needParameter = true;
 	private int priority = 100;
 
@@ -70,11 +67,6 @@ public class SingleCommandOpsiPackageManager implements SingleCommand {
 	@Override
 	public boolean needParameter() {
 		return needParameter;
-	}
-
-	@Override
-	public JDialog getDialog() {
-		return dialog;
 	}
 
 	@Override

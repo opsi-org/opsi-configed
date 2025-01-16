@@ -11,7 +11,6 @@ import java.util.List;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.DeployClientAgentParameterDialog;
 
 public class SingleCommandDeployClientAgent implements SingleCommand, CommandWithParameters {
@@ -19,7 +18,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 	private String baseDir = "/var/lib/opsi/depot";
 	private String opsiClientAgentDir;
 	private String opsiDeployClientAgent = "opsi-deploy-client-agent";
-	private FGeneralDialog dialog;
+
 	private boolean pingIsRequired = true;
 	private boolean needParameter = true;
 	private int priority = 105;
@@ -130,12 +129,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new DeployClientAgentParameterDialog(configedMain);
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return dialog;
+		new DeployClientAgentParameterDialog(configedMain);
 	}
 
 	public void setClient(String c) {

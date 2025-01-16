@@ -79,10 +79,6 @@ public class PackageManagerInstallParameterDialog {
 		}
 	}
 
-	public JDialog getDialog() {
-		return dialog;
-	}
-
 	private void initInstances() {
 		ButtonGroup group = new ButtonGroup();
 

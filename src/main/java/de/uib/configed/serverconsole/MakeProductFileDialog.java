@@ -104,10 +104,6 @@ public class MakeProductFileDialog {
 		}
 	}
 
-	public JDialog getDialog() {
-		return dialog;
-	}
-
 	private void setComponentsEnabled(boolean value) {
 		if (!value) {
 			jTextFieldPackageVersion.setEnabled(value);

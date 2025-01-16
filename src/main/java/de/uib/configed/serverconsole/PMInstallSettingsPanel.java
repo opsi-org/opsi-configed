@@ -51,8 +51,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PMInstallSettingsPanel(JDialog dia) {
-		depotSelection = new ListSelectionDialog(dia, Configed.getResourceValue("FDepotselectionList.title"));
+	public PMInstallSettingsPanel(JDialog dialog) {
+		depotSelection = new ListSelectionDialog(dialog, Configed.getResourceValue("FDepotselectionList.title"));
 		depotSelection.setMultiSelection();
 
 		initComponents();

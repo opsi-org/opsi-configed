@@ -65,8 +65,6 @@ public class PackageManagerUninstallParameterDialog {
 
 	private ConfigedMain configedMain;
 
-	private JDialog dialog;
-
 	public PackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -86,7 +84,7 @@ public class PackageManagerUninstallParameterDialog {
 				JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
 
-		dialog = optionPane.createDialog(optionPane,
+		JDialog dialog = optionPane.createDialog(optionPane,
 				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"));
 
 		depotSelection = new ListSelectionDialog(dialog, Configed.getResourceValue("FDepotselectionList.title"));
@@ -97,10 +95,6 @@ public class PackageManagerUninstallParameterDialog {
 		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
 			execute();
 		}
-	}
-
-	public JDialog getDialog() {
-		return dialog;
 	}
 
 	private String produceDepotParameter() {

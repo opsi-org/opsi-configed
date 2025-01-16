@@ -35,8 +35,6 @@ public class PackageUpdaterDialog {
 
 	private ConfigedMain configedMain;
 
-	private JDialog dialog;
-
 	public PackageUpdaterDialog(ConfigedMain configedMain) {
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
@@ -54,17 +52,14 @@ public class PackageUpdaterDialog {
 
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null,
 				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+
+		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageUpdaterDialog.title"));
 
 		dialog.setVisible(true);
 		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
 			execute();
 		}
-	}
-
-	public JDialog getDialog() {
-		return dialog;
 	}
 
 	private void retrieveRepos() {
