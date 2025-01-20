@@ -6,9 +6,6 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,10 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.itextpdf.text.Font;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -94,25 +92,19 @@ public class CurlParameterDialog {
 
 	private void init() {
 		jLabelURL.setText(Configed.getResourceValue("CurlParameterDialog.jLabelUrl"));
+		jLabelURL.setFont(jLabelURL.getFont().deriveFont(Font.BOLD));
+
 		jTextFieldURL = new JTextField();
-		jTextFieldURL.setText(Configed.getResourceValue("CurlParameterDialog.downloadLink"));
-		jTextFieldURL.getDocument().addDocumentListener(new DocumentListenerAdapter(this::changeUrl));
-		jTextFieldURL.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (jTextFieldURL.getText().equals(Configed.getResourceValue("CurlParameterDialog.downloadLink"))) {
-					jTextFieldURL.setSelectionStart(0);
-					jTextFieldURL.setSelectionEnd(jTextFieldURL.getText().length());
-				}
-			}
-		});
 
 		jLabelDir.setText(Configed.getResourceValue("CurlParameterDialog.jLabelDirectory"));
+		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
 
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
 
 		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
+		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+
 		jComboBoxLoglevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
 			jComboBoxLoglevel.addItem(i);
@@ -123,6 +115,8 @@ public class CurlParameterDialog {
 				.addItemListener(itemEvent -> commandCurl.setLoglevel((int) jComboBoxLoglevel.getSelectedItem()));
 
 		jLabelFreeInput.setText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput"));
+		jLabelFreeInput.setFont(jLabelFreeInput.getFont().deriveFont(Font.BOLD));
+
 		jTextFieldFreeInput = new JTextField();
 		jTextFieldFreeInput.setToolTipText(Configed.getResourceValue("CurlParameterDialog.jLabelFreeInput.tooltip"));
 		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListenerAdapter(this::changeFreeInput));
@@ -137,7 +131,6 @@ public class CurlParameterDialog {
 		curlAuthPanel.isOpen(true);
 		curlAuthPanel.close();
 
-		changeUrl();
 		changeFreeInput();
 	}
 
@@ -149,18 +142,9 @@ public class CurlParameterDialog {
 		}
 	}
 
-	private void changeUrl() {
-		if (!(jTextFieldURL.getText().isEmpty())) {
-			commandCurl.setUrl(jTextFieldURL.getText().trim());
-		} else {
-			commandCurl.setUrl("");
-		}
-	}
-
 	private void execute() {
 		Logging.warning(this, "execute");
-		if (jTextFieldURL.getText().equals(Configed.getResourceValue("CurlParameterDialog.downloadLink"))
-				|| jTextFieldURL.getText().isEmpty()) {
+		if (jTextFieldURL.getText().isBlank()) {
 			Logging.warning(this, "Please enter url.");
 			return;
 		}
@@ -194,69 +178,64 @@ public class CurlParameterDialog {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
-				.addGroup(inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+				.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(inputPanelLayout.createSequentialGroup()
+						.addComponent(jComboBoxDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(inputPanelLayout.createSequentialGroup()
 						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(
-								jLabelFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(inputPanelLayout.createParallelGroup()
-								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-								.addGroup(inputPanelLayout.createSequentialGroup()
-										.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Short.MAX_VALUE)
-										.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addComponent(jComboBoxLoglevel, GroupLayout.Alignment.LEADING, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-								.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
-										GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Short.MAX_VALUE)))
-				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH), GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE));
 
 		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
+				.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jTextFieldURL, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jLabelURL, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jButtonSearchDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jComboBoxDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(jLabelDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxLoglevel, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(jLabelLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH), Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
-								GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
+								GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jTextFieldFreeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jLabelFreeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)));
+				.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 
 	private static class DocumentListenerAdapter implements DocumentListener {
