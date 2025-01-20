@@ -6,6 +6,8 @@
 
 package de.uib.configed.serverconsole;
 
+import java.awt.Font;
+
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
@@ -13,8 +15,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import com.itextpdf.text.Font;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;

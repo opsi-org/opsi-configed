@@ -6,6 +6,7 @@
 
 package de.uib.configed.serverconsole;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -78,9 +79,7 @@ public class MakeProductFileDialog {
 
 		filename = "";
 
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
-
+		jComboBoxMainDir.setEnabled(true);
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION,
 				null,
 				new Object[] { Configed.getResourceValue("buttonExecute"),
@@ -102,15 +101,6 @@ public class MakeProductFileDialog {
 		}
 	}
 
-	private void setComponentsEnabled(boolean value) {
-		if (!value) {
-			jTextFieldPackageVersion.setEnabled(value);
-			jTextFieldProductVersion.setEnabled(value);
-		}
-		jComboBoxMainDir.setEnabled(value);
-		jCheckBoxOverwrite.setEnabled(value);
-	}
-
 	private JPanel initPanel() {
 		JPanel panel = new JPanel();
 
@@ -118,6 +108,7 @@ public class MakeProductFileDialog {
 		panel.setLayout(layout);
 
 		JLabel jLabelDir = new JLabel(Configed.getResourceValue("MakeProductFileDialog.serverDir"));
+		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
 
 		autocompletion.setCombobox(new CompletionComboBox<>(
 				new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
@@ -139,14 +130,18 @@ public class MakeProductFileDialog {
 
 		JLabel jLabelPackageVersion = new JLabel(
 				"    " + Configed.getResourceValue("MakeProductFileDialog.packageVersion"));
+		jLabelPackageVersion.setFont(jLabelPackageVersion.getFont().deriveFont(Font.BOLD));
+
 		JLabel jLabelProductVersion = new JLabel(
 				"    " + Configed.getResourceValue("MakeProductFileDialog.productVersion"));
+		jLabelProductVersion.setFont(jLabelProductVersion.getFont().deriveFont(Font.BOLD));
+
 		JLabel jLabelVersionsControlFile = new JLabel(
 				Configed.getResourceValue("MakeProductFileDialog.versions_controlfile"));
+		jLabelVersionsControlFile.setFont(jLabelVersionsControlFile.getFont().deriveFont(Font.BOLD));
+
 		JLabel jLabelVersions = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions"));
-		JLabel jLabelSetRightsNow = new JLabel(Configed.getResourceValue("MakeProductFileDialog.setRights_now"));
-		JLabel jLabelRemoveExistingPackage = new JLabel(
-				Configed.getResourceValue("MakeProductFileDialog.removeExisting"));
+		jLabelVersions.setFont(jLabelVersions.getFont().deriveFont(Font.BOLD));
 
 		jLabelProductVersionControlFile = new JLabel();
 		jLabelPackageVersionControlFile = new JLabel();
@@ -156,60 +151,47 @@ public class MakeProductFileDialog {
 
 		enableTfVersions(false);
 
-		jCheckBoxOverwrite = new JCheckBox();
-		jCheckBoxOverwrite.setSelected(true);
+		jCheckBoxOverwrite = new JCheckBox(Configed.getResourceValue("MakeProductFileDialog.removeExisting"), true);
 
 		JToggleButton jButtonAdvancedSettings = new JToggleButton(
 				Configed.getResourceValue("MakeProductFileDialog.btn_advancedSettings"));
 
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			jButtonAdvancedSettings.addActionListener((ActionEvent event) -> {
-				advancedOptionsPanel.setVisible(jButtonAdvancedSettings.isSelected());
-				dialog.pack();
-			});
-		}
+		jButtonAdvancedSettings.addActionListener((ActionEvent event) -> {
+			advancedOptionsPanel.setVisible(jButtonAdvancedSettings.isSelected());
+			dialog.pack();
+		});
 
 		jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 		jTextFieldPackageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 
 		JButton jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
 		jButtonSetRights.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.btn_setRights.tooltip"));
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
-		}
+		jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(jComboBoxMainDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(jButtonSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGroup(layout.createSequentialGroup()
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelSetRightsNow, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelPackageVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(
-										jLabelRemoveExistingPackage, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jComboBoxMainDir, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+								.addComponent(jLabelVersionsControlFile, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 										Short.MAX_VALUE)
-								.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabelProductVersionControlFile, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
+										Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 								.addComponent(jLabelPackageVersionControlFile, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
-
-								.addGroup(layout.createSequentialGroup().addComponent(jCheckBoxOverwrite,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
+										Globals.BUTTON_WIDTH, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -217,28 +199,25 @@ public class MakeProductFileDialog {
 								.addComponent(jTextFieldProductVersion, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jTextFieldPackageVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
+				.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jButtonAdvancedSettings, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(advancedOptionsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+				.addGap(Globals.GAP_SIZE).addComponent(advancedOptionsPanel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jComboBoxMainDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelSetRightsNow, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonSetRights, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(jButtonSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -262,15 +241,12 @@ public class MakeProductFileDialog {
 						.addComponent(jTextFieldPackageVersion, GroupLayout.Alignment.LEADING,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelRemoveExistingPackage, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+				.addComponent(jCheckBoxOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jButtonAdvancedSettings, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(advancedOptionsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+				.addGap(Globals.GAP_SIZE).addComponent(advancedOptionsPanel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		return panel;
 	}

@@ -6,6 +6,7 @@
 
 package de.uib.configed.serverconsole;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
-import com.itextpdf.text.Font;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
