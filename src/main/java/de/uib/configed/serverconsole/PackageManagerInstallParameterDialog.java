@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import com.itextpdf.text.Font;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -124,22 +126,26 @@ public class PackageManagerInstallParameterDialog {
 			installLocalPanel.open();
 			installServerPanel.close();
 			installCurlPanel.close();
+			dialog.pack();
 		});
 		jRadioButtonServer.addActionListener((ActionEvent actionEvent) -> {
 			installLocalPanel.close();
 			installServerPanel.open();
 			installCurlPanel.close();
+			dialog.pack();
 		});
 		jRadioButtonCurl.addActionListener((ActionEvent actionEvent) -> {
 			installLocalPanel.close();
 			installServerPanel.close();
 			installCurlPanel.open();
+			dialog.pack();
 		});
 	}
 
 	private void initLayout() {
 		radioPanel.setBorder(BorderFactory.createTitledBorder(""));
 		jLabelInstall.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstall"));
+		jLabelInstall.setFont(jLabelInstall.getFont().deriveFont(Font.BOLD));
 
 		GroupLayout radioPanelLayout = new GroupLayout(radioPanel);
 		radioPanel.setLayout(radioPanelLayout);
@@ -156,18 +162,21 @@ public class PackageManagerInstallParameterDialog {
 				.addComponent(jRadioButtonCurl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(2 * Globals.GAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 
 		radioPanelLayout.setVerticalGroup(radioPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(jRadioButtonLocal, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jRadioButtonLocal, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(installLocalPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(jRadioButtonServer, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jRadioButtonServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(installServerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(jRadioButtonCurl, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jRadioButtonCurl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE));
@@ -175,24 +184,15 @@ public class PackageManagerInstallParameterDialog {
 		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
 		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
-				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-						.addComponent(jLabelInstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(radioPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(mainPanelLayout
-						.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(installSettingsPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)));
+				.addComponent(jLabelInstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(radioPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(installSettingsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
-		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-				.addComponent(jLabelInstall).addGap(Globals.GAP_SIZE).addComponent(radioPanel).addGap(Globals.GAP_SIZE)
-				.addComponent(installSettingsPanel).addGap(2 * Globals.GAP_SIZE));
+		mainPanelLayout.setVerticalGroup(
+				mainPanelLayout.createSequentialGroup().addComponent(jLabelInstall).addGap(Globals.GAP_SIZE)
+						.addComponent(radioPanel).addGap(Globals.GAP_SIZE).addComponent(installSettingsPanel));
 	}
 
 	private void execute() {
