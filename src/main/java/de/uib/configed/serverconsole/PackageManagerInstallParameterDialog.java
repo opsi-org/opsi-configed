@@ -97,6 +97,7 @@ public class PackageManagerInstallParameterDialog {
 		installLocalPanel = new PMInstallLocalPanel();
 		installServerPanel = new PMInstallServerPanel(fromMakeProductfile);
 		installCurlPanel = new PMInstallCurlPanel();
+
 		installSettingsPanel = new PMInstallSettingsPanel(dialog);
 
 		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {
@@ -150,7 +151,7 @@ public class PackageManagerInstallParameterDialog {
 		GroupLayout radioPanelLayout = new GroupLayout(radioPanel);
 		radioPanel.setLayout(radioPanelLayout);
 
-		radioPanelLayout.setHorizontalGroup(radioPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE)
+		radioPanelLayout.setHorizontalGroup(radioPanelLayout.createParallelGroup()
 				.addComponent(jRadioButtonLocal, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(installLocalPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -161,8 +162,8 @@ public class PackageManagerInstallParameterDialog {
 						Short.MAX_VALUE)
 				.addComponent(jRadioButtonCurl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE));
+				.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE));
 
 		radioPanelLayout.setVerticalGroup(radioPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(jRadioButtonLocal, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
