@@ -6,8 +6,6 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
@@ -43,11 +41,9 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 
 	private String mainProduct;
 	private String mainDir;
-	private String urlDefText;
 
 	public PMInstallCurlPanel() {
 		super();
-		urlDefText = Configed.getResourceValue("CurlParameterDialog.downloadLink");
 		initComponents();
 		initLayout();
 	}
@@ -67,17 +63,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 		jButtonAutoCompletion = autocompletion.getButton();
 		jButtonAutoCompletion.setEnabled(true);
 
-		jTextFieldURL = new JTextField(urlDefText);
-
-		jTextFieldURL.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (jTextFieldURL.getText().equals(urlDefText)) {
-					jTextFieldURL.setSelectionStart(0);
-					jTextFieldURL.setSelectionEnd(jTextFieldURL.getText().length());
-				}
-			}
-		});
+		jTextFieldURL = new JTextField();
 
 		curlAuthPanel = new CurlAuthenticationPanel();
 		curlAuthPanel.isOpen(true);
@@ -103,8 +89,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 	}
 
 	public MultiCommandTemplate getCommand(MultiCommandTemplate commands) {
-		if (jTextFieldURL.getText() == null || jTextFieldURL.getText().isBlank()
-				|| jTextFieldURL.getText().trim().equals(urlDefText)) {
+		if (jTextFieldURL.getText().isBlank()) {
 			return null;
 		}
 
