@@ -6,16 +6,13 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 
 import com.itextpdf.text.Font;
 
@@ -32,16 +29,15 @@ import de.uib.utils.logging.Logging;
 
 public class PackageManagerInstallParameterDialog {
 	private JPanel mainPanel = new JPanel();
-	private JPanel radioPanel = new JPanel();
+	private JPanel downloadPanel = new JPanel();
 	private PMInstallLocalPanel installLocalPanel;
 	private PMInstallServerPanel installServerPanel;
 	private PMInstallCurlPanel installCurlPanel;
 	private PMInstallSettingsPanel installSettingsPanel;
 	private JLabel jLabelInstall = new JLabel();
 
-	private JRadioButton jRadioButtonLocal;
-	private JRadioButton jRadioButtonServer;
-	private JRadioButton jRadioButtonCurl;
+	private JComboBox<String> jComboBoxPackageSource;
+
 	private String fromMakeProductfile;
 
 	private ConfigedMain configedMain;
@@ -82,17 +78,13 @@ public class PackageManagerInstallParameterDialog {
 	}
 
 	private void initInstances() {
-		ButtonGroup group = new ButtonGroup();
+		jComboBoxPackageSource = new JComboBox<>(
+				new String[] { Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromLocal"),
+						Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromServer"),
+						Configed.getResourceValue(
+								"PackageManagerInstallParameterDialog.opsipackagemanager_install.jLabelCurlFrom") });
 
-		jRadioButtonLocal = new JRadioButton(
-				Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromLocal"));
-		jRadioButtonServer = new JRadioButton(
-				Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromServer"));
-		jRadioButtonCurl = new JRadioButton(Configed
-				.getResourceValue("PackageManagerInstallParameterDialog.opsipackagemanager_install.jLabelCurlFrom"));
-		group.add(jRadioButtonLocal);
-		group.add(jRadioButtonServer);
-		group.add(jRadioButtonCurl);
+		jComboBoxPackageSource.addItemListener(itemEvent -> packageSourceChanged());
 
 		installLocalPanel = new PMInstallLocalPanel();
 		installServerPanel = new PMInstallServerPanel(fromMakeProductfile);
@@ -101,7 +93,8 @@ public class PackageManagerInstallParameterDialog {
 		installSettingsPanel = new PMInstallSettingsPanel(dialog);
 
 		if (fromMakeProductfile != null && !fromMakeProductfile.isEmpty()) {
-			jRadioButtonServer.setSelected(true);
+			jComboBoxPackageSource.setSelectedItem(
+					Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromServer"));
 
 			installLocalPanel.isOpen(true);
 			installLocalPanel.close();
@@ -111,7 +104,8 @@ public class PackageManagerInstallParameterDialog {
 
 			installServerPanel.setPackagePath(fromMakeProductfile);
 		} else {
-			jRadioButtonLocal.setSelected(true);
+			jComboBoxPackageSource
+					.setSelectedItem(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromLocal"));
 
 			installLocalPanel.isOpen(false);
 			installLocalPanel.open();
@@ -122,61 +116,53 @@ public class PackageManagerInstallParameterDialog {
 
 		installCurlPanel.isOpen(true);
 		installCurlPanel.close();
+	}
 
-		jRadioButtonLocal.addActionListener((ActionEvent actionEvent) -> {
+	private void packageSourceChanged() {
+		if (jComboBoxPackageSource.getSelectedItem()
+				.equals(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromLocal"))) {
 			installLocalPanel.open();
 			installServerPanel.close();
 			installCurlPanel.close();
-			dialog.pack();
-		});
-		jRadioButtonServer.addActionListener((ActionEvent actionEvent) -> {
+		} else if (jComboBoxPackageSource.getSelectedItem()
+				.equals(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromServer"))) {
 			installLocalPanel.close();
 			installServerPanel.open();
 			installCurlPanel.close();
-			dialog.pack();
-		});
-		jRadioButtonCurl.addActionListener((ActionEvent actionEvent) -> {
+		} else if (jComboBoxPackageSource.getSelectedItem().equals(Configed
+				.getResourceValue("PackageManagerInstallParameterDialog.opsipackagemanager_install.jLabelCurlFrom"))) {
 			installLocalPanel.close();
 			installServerPanel.close();
 			installCurlPanel.open();
-			dialog.pack();
-		});
+		} else {
+			Logging.warning(this, "Unknown source selected");
+		}
+
+		dialog.pack();
 	}
 
 	private void initLayout() {
-		radioPanel.setBorder(BorderFactory.createTitledBorder(""));
+		downloadPanel.setBorder(BorderFactory.createTitledBorder(""));
 		jLabelInstall.setText(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelInstall"));
 		jLabelInstall.setFont(jLabelInstall.getFont().deriveFont(Font.BOLD));
 
-		GroupLayout radioPanelLayout = new GroupLayout(radioPanel);
-		radioPanel.setLayout(radioPanelLayout);
+		GroupLayout downloadPanelLayout = new GroupLayout(downloadPanel);
+		downloadPanel.setLayout(downloadPanelLayout);
 
-		radioPanelLayout.setHorizontalGroup(radioPanelLayout.createParallelGroup()
-				.addComponent(jRadioButtonLocal, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(installLocalPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				.addComponent(jRadioButtonServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(installServerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				.addComponent(jRadioButtonCurl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
+		downloadPanelLayout.setHorizontalGroup(downloadPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(downloadPanelLayout.createParallelGroup()
+						.addComponent(installLocalPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(installServerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				.addGap(Globals.GAP_SIZE));
 
-		radioPanelLayout.setVerticalGroup(radioPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(jRadioButtonLocal, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+		downloadPanelLayout.setVerticalGroup(downloadPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(installLocalPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jRadioButtonServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
 				.addComponent(installServerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jRadioButtonCurl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(installCurlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -187,13 +173,21 @@ public class PackageManagerInstallParameterDialog {
 		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
 				.addComponent(jLabelInstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(radioPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(jComboBoxPackageSource, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(downloadPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(installSettingsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
-		mainPanelLayout.setVerticalGroup(
-				mainPanelLayout.createSequentialGroup().addComponent(jLabelInstall).addGap(Globals.GAP_SIZE)
-						.addComponent(radioPanel).addGap(Globals.GAP_SIZE).addComponent(installSettingsPanel));
+		mainPanelLayout
+				.setVerticalGroup(
+						mainPanelLayout.createSequentialGroup().addComponent(jLabelInstall).addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(jComboBoxPackageSource, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(downloadPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE).addComponent(installSettingsPanel));
 	}
 
 	private void execute() {
@@ -202,9 +196,11 @@ public class PackageManagerInstallParameterDialog {
 		commands.setMainName("PackageInstallation");
 		SingleCommandOpsiPackageManagerInstall pmInstallCom;
 
-		if (jRadioButtonLocal.isSelected()) {
+		if (jComboBoxPackageSource.getSelectedItem()
+				.equals(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromLocal"))) {
 			pmInstallCom = handleLocalFileUpload(commands);
-		} else if (jRadioButtonServer.isSelected()) {
+		} else if (jComboBoxPackageSource.getSelectedItem()
+				.equals(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromServer"))) {
 			pmInstallCom = handleServerFileUpload(commands);
 		} else {
 			pmInstallCom = handleCurlFileUpload(commands);
