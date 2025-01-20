@@ -6,6 +6,7 @@
 
 package de.uib.configed.serverconsole;
 
+import java.awt.Font;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,7 +55,6 @@ public class DeployClientAgentParameterDialog {
 	private JLabel jLabelClient = new JLabel();
 	private JLabel jLabelUserData = new JLabel();
 	private JLabel jLabelLoglevel = new JLabel();
-	private JLabel jLabelIgnorePing = new JLabel();
 	private JLabel jLabelFinalize = new JLabel();
 	private JLabel jLabelOperatingSystem = new JLabel();
 
@@ -66,7 +66,7 @@ public class DeployClientAgentParameterDialog {
 	private PanelStateSwitch<FinalActionType> panelFinalAction;
 
 	private JCheckBox jCheckBoxIgnorePing;
-	private JComboBox<Integer> jCheckBoxLoglevel;
+	private JComboBox<Integer> jComboBoxLoglevel;
 	private JComboBox<String> jComboBoxOperatingSystem;
 
 	private SingleCommandDeployClientAgent commandDeployClientAgent = new SingleCommandDeployClientAgent();
@@ -111,20 +111,22 @@ public class DeployClientAgentParameterDialog {
 	}
 
 	private void init() {
-		jLabelIgnorePing.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.ignorePing"));
-		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
+		jCheckBoxIgnorePing = new JCheckBox(Configed.getResourceValue("DeployClientAgentParameterDialog.ignorePing"),
+				!commandDeployClientAgent.isPingRequired());
 		jCheckBoxIgnorePing.addItemListener(itemEvent -> commandDeployClientAgent.togglePingIsRequired());
 
 		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
-		jCheckBoxLoglevel = new JComboBox<>();
+		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+		jComboBoxLoglevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
-			jCheckBoxLoglevel.addItem(i);
+			jComboBoxLoglevel.addItem(i);
 		}
 
-		jCheckBoxLoglevel.setSelectedItem(4);
-		jCheckBoxLoglevel.addItemListener(itemEvent -> updateLoglevel());
+		jComboBoxLoglevel.setSelectedItem(4);
+		jComboBoxLoglevel.addItemListener(itemEvent -> updateLoglevel());
 
 		jLabelClient.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.jLabelClient"));
+		jLabelClient.setFont(jLabelClient.getFont().deriveFont(Font.BOLD));
 		jTextFieldClient = new JTextField();
 		jTextFieldClient
 				.setToolTipText(Configed.getResourceValue("DeployClientAgentParameterDialog.tooltip.tf_client"));
@@ -147,7 +149,10 @@ public class DeployClientAgentParameterDialog {
 
 		jLabelUserData
 				.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.targetclient_authentication"));
+		jLabelUserData.setFont(jLabelUserData.getFont().deriveFont(Font.BOLD));
+
 		jLabelFinalize.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize"));
+		jLabelFinalize.setFont(jLabelFinalize.getFont().deriveFont(Font.BOLD));
 
 		panelFinalAction = new PanelStateSwitch<>(null, FinalActionType.START_OCD, FinalActionType.values(),
 				new String[] { Configed.getResourceValue("DeployClientAgentParameterDialog.lbl_finalize.START_OCD"),
@@ -160,6 +165,8 @@ public class DeployClientAgentParameterDialog {
 
 		jLabelOperatingSystem
 				.setText(Configed.getResourceValue("DeployClientAgentParameterDialog.opsiClientAgent.label"));
+		jLabelOperatingSystem.setFont(jLabelOperatingSystem.getFont().deriveFont(Font.BOLD));
+
 		jComboBoxOperatingSystem = new JComboBox<>(
 				new String[] { OS.WINDOWS.toString(), OS.LINUX.toString(), OS.MACOS.toString() });
 		jComboBoxOperatingSystem
@@ -178,7 +185,7 @@ public class DeployClientAgentParameterDialog {
 	}
 
 	private void updateLoglevel() {
-		commandDeployClientAgent.setLoglevel((int) jCheckBoxLoglevel.getSelectedItem());
+		commandDeployClientAgent.setLoglevel((int) jComboBoxLoglevel.getSelectedItem());
 	}
 
 	private void changeClient() {
@@ -258,75 +265,62 @@ public class DeployClientAgentParameterDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
+
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
-				.addGroup(inputPanelLayout.createSequentialGroup()
-						.addComponent(jLabelClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(jTextFieldClient, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(jLabelUserData, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jButtonCopySelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(authPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGroup(inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelIgnorePing, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
-								.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH)
-								.addComponent(jCheckBoxLoglevel, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH)
-								.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH))));
+				.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(panelFinalAction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jCheckBoxIgnorePing, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		inputPanelLayout
 				.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelClient, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jTextFieldClient, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
+						.addComponent(jLabelClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jTextFieldClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(jButtonCopySelectedClients, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-								jButtonCopySelectedClients, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-						.addGap(Globals.GAP_SIZE * 2)
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-								jLabelUserData, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-						.addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelUserData, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addComponent(authPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE * 2)
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelFinalize, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(panelFinalAction))
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelIgnorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jCheckBoxIgnorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jCheckBoxLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
+						.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(panelFinalAction).addGap(Globals.GAP_SIZE)
+
+						.addComponent(jCheckBoxIgnorePing, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelOperatingSystem, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jComboBoxOperatingSystem, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)));
+						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxOperatingSystem, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE));
 	}
 }
