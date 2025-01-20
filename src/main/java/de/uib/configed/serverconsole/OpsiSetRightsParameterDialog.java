@@ -7,6 +7,7 @@
 package de.uib.configed.serverconsole;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class OpsiSetRightsParameterDialog {
 		completion = new CompletionComboButton(additionalDefaultPaths);
 
 		jLabelInfo = new JLabel(Configed.getResourceValue("SingleCommandOpsiSetRights.additionalPath"));
-		inputPanel.add(jLabelInfo);
+		jLabelInfo.setFont(jLabelInfo.getFont().deriveFont(Font.BOLD));
 
 		jButtonSearchDir = completion.getButton();
 		jComboBoxAutoCompletion = completion.getCombobox();
@@ -87,8 +88,6 @@ public class OpsiSetRightsParameterDialog {
 		jComboBoxAutoCompletion.setSelectedItem("");
 		((DefaultListCellRenderer) jComboBoxAutoCompletion.getRenderer())
 				.setPreferredSize(new Dimension(COMBOBOX_LIST_WIDTH, (Integer) UIManager.get("Table.rowHeight")));
-		inputPanel.add(jComboBoxAutoCompletion);
-		inputPanel.add(jButtonSearchDir);
 	}
 
 	private void execute() {
