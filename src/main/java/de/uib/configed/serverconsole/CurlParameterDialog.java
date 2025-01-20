@@ -8,7 +8,6 @@ package de.uib.configed.serverconsole;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -122,12 +121,11 @@ public class CurlParameterDialog {
 		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListenerAdapter(this::changeFreeInput));
 
 		curlAuthPanel = new CurlAuthenticationPanel();
-		((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
+		curlAuthPanel.getCheckBox().setSelected(false);
 
 		// Add the listener and invoke it later so that it is executed after the panel 
 		// is set visible
-		((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH))
-				.addItemListener(event -> SwingUtilities.invokeLater(() -> dialog.pack()));
+		curlAuthPanel.getCheckBox().addItemListener(event -> SwingUtilities.invokeLater(() -> dialog.pack()));
 		curlAuthPanel.isOpen(true);
 		curlAuthPanel.close();
 
@@ -150,7 +148,7 @@ public class CurlParameterDialog {
 		}
 
 		commandCurl.setDir((String) jComboBoxDir.getSelectedItem());
-		if (((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
+		if (curlAuthPanel.getCheckBox().isSelected()) {
 			commandCurl
 					.setAuthentication("--insecure -u " + curlAuthPanel.getUser() + ":" + curlAuthPanel.getPassword());
 		} else {
@@ -192,11 +190,8 @@ public class CurlParameterDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGroup(inputPanelLayout.createSequentialGroup()
-						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH), GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(curlAuthPanel.getCheckBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -222,12 +217,8 @@ public class CurlParameterDialog {
 				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
-								GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+				.addComponent(curlAuthPanel.getCheckBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 

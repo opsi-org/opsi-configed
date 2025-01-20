@@ -7,6 +7,7 @@
 package de.uib.configed.serverconsole;
 
 import java.awt.Font;
+import java.awt.Window;
 import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
@@ -15,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -42,6 +44,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 
 	public PMInstallCurlPanel() {
 		super();
+
 		initComponents();
 		initLayout();
 	}
@@ -93,7 +96,7 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 
 		SingleCommandCurl curl = getCurlCommand();
 		if (curl != null) {
-			if (((JCheckBox) curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
+			if (curlAuthPanel.getCheckBox().isSelected()) {
 				curl.setAuthentication("--insecure -u " + curlAuthPanel.getUser() + ":" + curlAuthPanel.getPassword());
 			} else {
 				curl.setAuthentication("");
@@ -113,6 +116,12 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 					""));
 		}
 		return commands;
+	}
+
+	public void addDialogToReactOn(Window associatedDialog) {
+		// Add the listener and invoke it later so that it is executed after the panel 
+		// is set visible
+		curlAuthPanel.getCheckBox().addItemListener(itemEvent -> SwingUtilities.invokeLater(associatedDialog::pack));
 	}
 
 	private SingleCommandCurl getCurlCommand() {
@@ -179,17 +188,11 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(jCheckBoxIncludeZSync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(
-								jCheckBoxCompareMD5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jCheckBoxCompareMD5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH),
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
+						.addComponent(curlAuthPanel.getCheckBox(), GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE));
 
@@ -208,11 +211,8 @@ public class PMInstallCurlPanel extends PMInstallPanel {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jCheckBoxIncludeZSync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.LBLNEEDAUTH),
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(curlAuthPanel.get(CurlAuthenticationPanel.CBNEEDAUTH), GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(curlAuthPanel.getCheckBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(curlAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 }

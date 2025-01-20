@@ -70,6 +70,9 @@ public class PackageManagerInstallParameterDialog {
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
 
+		// the dialog should resize to the size of the content
+		installCurlPanel.addDialogToReactOn(dialog);
+
 		dialog.setVisible(true);
 
 		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
