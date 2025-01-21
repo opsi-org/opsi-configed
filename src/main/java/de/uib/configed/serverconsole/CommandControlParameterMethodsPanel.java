@@ -81,9 +81,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		jComboBoxParameterMethods.addItemListener((ItemEvent itemEvent) -> {
 			boolean enabled = ((String) jComboBoxParameterMethods.getSelectedItem())
-					.equals(Configed.getResourceValue("CommandControlDialog.cbElementInteractiv"))
-					|| ((String) jComboBoxParameterMethods.getSelectedItem())
-							.equals(Configed.getResourceValue("CommandControlParameterMethodsPanel.optionSelection"));
+					.equals(Configed.getResourceValue("CommandControlDialog.cbElementInteractiv"));
 
 			jComboBoxParameterFormats.setEnabled(enabled);
 		});
