@@ -6,7 +6,7 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 
@@ -24,7 +24,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.CommandParameterParser;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
@@ -33,7 +32,6 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	private JLabel jLabelParamMethods = new JLabel();
 	private JLabel jLabelParamFormats = new JLabel();
-	private JLabel jLabelEmpty = new JLabel();
 	private JComboBox<String> jComboBoxParameterMethods;
 	private JComboBox<String> jComboBoxParameterFormats;
 	private JButton jButtonAddParam;
@@ -54,19 +52,15 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 	private void init() {
 		Logging.debug(this, "init setting up components ");
-		Dimension jComboBoxDim = new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.BUTTON_HEIGHT);
-		Dimension jButtonDim = new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT);
-
-		jLabelEmpty.setPreferredSize(jComboBoxDim);
 		jLabelParamMethods.setText(Configed.getResourceValue("CommandControlDialog.parameterMethods"));
+		jLabelParamMethods.setFont(jLabelParamMethods.getFont().deriveFont(Font.BOLD));
 
 		jLabelParamFormats.setText(Configed.getResourceValue("CommandControlDialog.parameterFormats"));
+		jLabelParamFormats.setFont(jLabelParamFormats.getFont().deriveFont(Font.BOLD));
 
 		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 		jComboBoxParameterFormats = new JComboBox<>(parameterParser.getParameterFormats());
 		Logging.info(this, "cb_parameter_formats lightweight ", jComboBoxParameterFormats.isLightWeightPopupEnabled());
-
-		jComboBoxParameterFormats.setPreferredSize(jComboBoxDim);
 
 		// we have to delimit it so that is constrained to the component (in Windows)
 		jComboBoxParameterFormats.setMaximumRowCount(5);
@@ -74,7 +68,6 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 		jComboBoxParameterMethods = new JComboBox<>(CommandParameterParser.getParameterMethodLocalNames());
 		jComboBoxParameterMethods
 				.setSelectedItem(Configed.getResourceValue("CommandControlDialog.cbElementInteractiv"));
-		jComboBoxParameterMethods.setPreferredSize(jComboBoxDim);
 		jComboBoxParameterMethods.setMaximumRowCount(5);
 
 		jComboBoxParameterFormats.setEnabled(false);
@@ -88,20 +81,9 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		jButtonTestParam = new JButton(Icons.getIntellijIcon("run"));
 		jButtonTestParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnTestParamMethod"));
-		jButtonTestParam.setPreferredSize(jButtonDim);
 
 		jButtonAddParam = new JButton(Icons.getIntellijIcon("add"));
 		jButtonAddParam.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnAddParamMethod"));
-		jButtonAddParam.setSize(jButtonDim);
-		jButtonAddParam.setPreferredSize(jButtonDim);
-		setComponentsEnabledRO();
-	}
-
-	private void setComponentsEnabledRO() {
-		jButtonTestParam.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
-		jButtonAddParam.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
 	}
 
 	public JButton getButtonAdd() {
@@ -117,53 +99,37 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 
 		GroupLayout thisLayout = new GroupLayout(this);
 		setLayout(thisLayout);
-		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3)
-				.addGroup(thisLayout.createParallelGroup()
-						.addGroup(thisLayout.createSequentialGroup()
-								.addGroup(thisLayout.createParallelGroup()
-										.addComponent(jLabelParamMethods, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabelParamFormats, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.MIN_GAP_SIZE * 2)
-								.addGroup(thisLayout.createParallelGroup()
-										.addComponent(jComboBoxParameterMethods, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH)
-										.addComponent(jComboBoxParameterFormats, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH))
-								.addGap(Globals.MIN_GAP_SIZE * 3, Globals.MIN_GAP_SIZE * 3, Short.MAX_VALUE))
+		thisLayout.setHorizontalGroup(thisLayout.createParallelGroup()
+				.addComponent(jLabelParamMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxParameterMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jLabelParamFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxParameterFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(thisLayout.createSequentialGroup()
+						.addComponent(jButtonTestParam, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(jButtonAddParam, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
-						.addGroup(thisLayout.createSequentialGroup().addComponent(jLabelEmpty, 10, 10, Short.MAX_VALUE)
-								.addComponent(jButtonTestParam, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH)
-								.addComponent(jButtonAddParam, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH))
-
-				).addGap(Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3));
 		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
+				.addComponent(jLabelParamMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxParameterMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelParamFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxParameterFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxParameterMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jButtonTestParam, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(thisLayout.createSequentialGroup().addComponent(jLabelParamMethods,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jComboBoxParameterFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(thisLayout.createSequentialGroup().addComponent(jLabelParamFormats,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jButtonAddParam, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jButtonTestParam, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jLabelEmpty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE * 4, Globals.GAP_SIZE * 4, Globals.GAP_SIZE * 4));
-
-		repaint();
-		revalidate();
+						.addComponent(jButtonAddParam, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
 	}
 
 	public void doActionTestParam(JDialog caller) {
