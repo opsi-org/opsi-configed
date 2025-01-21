@@ -213,7 +213,7 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 		}
 	}
 
-	protected JPopupMenu definePopup() {
+	private JPopupMenu definePopup() {
 		Logging.info(this, "(EditMapPanelX) definePopup");
 
 		if (reloadable) {
