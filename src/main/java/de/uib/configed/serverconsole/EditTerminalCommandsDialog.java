@@ -26,6 +26,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.JTextComponent;
 
+import com.itextpdf.text.Font;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -46,7 +48,7 @@ public final class EditTerminalCommandsDialog {
 	private JComboBox<String> jComboBoxMenuText;
 
 	private JComboBox<String> jComboBoxParentMenuText;
-	private JTextField jTextFieldTooltipText = new JTextField();
+	private JTextField jTextFieldDescription = new JTextField();
 	private JTextField jTextFieldPriority = new JTextField();
 	private JTextPane jTextPaneCommands = new JTextPane();
 
@@ -125,18 +127,7 @@ public final class EditTerminalCommandsDialog {
 	}
 
 	private JPanel initControlPanel() {
-		JPanel controlPanel = new JPanel();
-		controlPanel.setBorder(BorderFactory.createTitledBorder(""));
-
-		GroupLayout controlPanelLayout = new GroupLayout(controlPanel);
-		controlPanel.setLayout(controlPanelLayout);
-
-		Dimension dimensionJTextField = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_SIZE,
-				Globals.BUTTON_HEIGHT);
-		Dimension dimensionButton = new Dimension(Globals.GRAPHIC_BUTTON_SIZE, Globals.BUTTON_HEIGHT);
-
 		jComboBoxMenuText = new JComboBox<>();
-		jComboBoxMenuText.setPreferredSize(dimensionJTextField);
 		jComboBoxMenuText.addItem(CommandFactory.MENU_NEW);
 		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("CommandControlDialog.menuText.tooltip"));
 		jComboBoxMenuText.setEditable(true);
@@ -151,89 +142,80 @@ public final class EditTerminalCommandsDialog {
 		});
 
 		jComboBoxParentMenuText = new JComboBox<>();
-		jComboBoxParentMenuText.setPreferredSize(dimensionJTextField);
 		jComboBoxParentMenuText.addItemListener(itemEvent -> canCommandBeSaved());
 		jComboBoxParentMenuText.addItem(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS);
 		jComboBoxParentMenuText.setEditable(true);
 
 		JButton buttonDelete = new JButton(Icons.getIntellijIcon("remove"));
 		buttonDelete.setToolTipText(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"));
-		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
-		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.addActionListener(actionEvent -> deleteCommand());
 
 		JLabel labelMenuText = new JLabel(Configed.getResourceValue("CommandControlDialog.menuText"));
-		labelMenuText.setPreferredSize(dimensionJTextField);
+		labelMenuText.setFont(labelMenuText.getFont().deriveFont(Font.BOLD));
 		JLabel labelParentMenuText = new JLabel(Configed.getResourceValue("CommandControlDialog.parentMenuText"));
-		labelParentMenuText.setPreferredSize(dimensionJTextField);
+		labelParentMenuText.setFont(labelParentMenuText.getFont().deriveFont(Font.BOLD));
 		JLabel labelTooltipText = new JLabel(Configed.getResourceValue("description"));
-		labelTooltipText.setPreferredSize(dimensionJTextField);
+		labelTooltipText.setFont(labelTooltipText.getFont().deriveFont(Font.BOLD));
 		JLabel labelPriority = new JLabel(Configed.getResourceValue("CommandControlDialog.priority"));
-		labelPriority.setPreferredSize(dimensionJTextField);
+		labelPriority.setFont(labelPriority.getFont().deriveFont(Font.BOLD));
 
-		jTextFieldTooltipText.setToolTipText(Configed.getResourceValue("CommandControlDialog.tooltipText.tooltip"));
-		jTextFieldTooltipText.setPreferredSize(dimensionJTextField);
+		jTextFieldDescription.setToolTipText(Configed.getResourceValue("CommandControlDialog.tooltipText.tooltip"));
 
 		jTextFieldPriority = new JTextField(
 				new CheckedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
 				String.valueOf(CommandFactory.DEFAULT_POSITION), 1);
 		jTextFieldPriority.setToolTipText(Configed.getResourceValue("CommandControlDialog.priority.tooltip"));
-		jTextFieldPriority.setPreferredSize(dimensionButton);
 		jTextFieldPriority.setColumns(4);
 
-		controlPanelLayout.setHorizontalGroup(controlPanelLayout
-				.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
-				.addGroup(controlPanelLayout
-						.createParallelGroup()
-						.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGroup(controlPanelLayout.createParallelGroup()
-						.addGroup(controlPanelLayout.createSequentialGroup()
-								.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+		JPanel controlPanel = new JPanel();
+		GroupLayout controlPanelLayout = new GroupLayout(controlPanel);
+		controlPanel.setLayout(controlPanelLayout);
+
+		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createParallelGroup()
+				.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(controlPanelLayout.createSequentialGroup()
+						.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addComponent(jTextFieldTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE * 3));
-		controlPanelLayout.setVerticalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
+						.addGap(Globals.GAP_SIZE).addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(labelParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				.addComponent(labelPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
+
+		controlPanelLayout.setVerticalGroup(controlPanelLayout.createSequentialGroup()
+				.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(jTextFieldTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(labelPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE).addGap(Globals.GAP_SIZE * 2));
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		return controlPanel;
 	}
@@ -369,7 +351,7 @@ public final class EditTerminalCommandsDialog {
 
 	private void updateComponents(String parent, String tooltip, int prio, String coms) {
 		jComboBoxParentMenuText.setSelectedItem(parent);
-		jTextFieldTooltipText.setText(tooltip);
+		jTextFieldDescription.setText(tooltip);
 		jTextFieldPriority.setText(String.valueOf(prio));
 		jTextPaneCommands.setText(coms);
 	}
@@ -474,7 +456,7 @@ public final class EditTerminalCommandsDialog {
 
 		MultiCommandTemplate tempCommand = CommandFactory.buildCommand(
 				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
-				jTextFieldTooltipText.getText(), prio, coms);
+				jTextFieldDescription.getText(), prio, coms);
 		Logging.debug(this, "getCommandNow command: ", tempCommand);
 
 		return tempCommand;
