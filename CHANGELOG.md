@@ -6,6 +6,10 @@
 - Exception in SearchTargetModelFromTable when no result found in search
 
 
+### Changed
+- Rework all the Server console dialogs to use standard java library (JOptionPane) instead of own classes
+
+
 ## [4.4.0.14] - 2025-01-09
 ### Fixed
 - Not saving ProductPropertyStates and ConfigStates when you edit again after saving

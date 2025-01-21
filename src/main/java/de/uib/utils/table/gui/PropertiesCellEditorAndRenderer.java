@@ -120,12 +120,14 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		Component result;
 
-		if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
+		if (modelProducer.getListCellOptions(key) == null) {
+			return null;
+		} else if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
 			result = getBooleanEditor(value);
-		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.SINGLE_SELECTION) {
-			result = getSingleValueEditor(key, value, row);
-		} else {
+		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
 			result = getMultiValueEditor(table, value, row);
+		} else {
+			result = getSingleValueEditor(key, value, row);
 		}
 
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
@@ -208,7 +210,12 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		String key = (String) table.getValueAt(row, 0);
 
 		Component result;
-		if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
+		if (modelProducer.getListCellOptions(key) == null
+				|| modelProducer.getListCellOptions(key).getType() != TYPE.BOOL_CONFIG) {
+			rendererLabel.setText(formatList(value));
+
+			result = rendererLabel;
+		} else {
 			// We want a checkbox
 			if (((List<?>) value).isEmpty()) {
 				rendererCheckBox.setIndeterminate(true);
@@ -217,10 +224,6 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			}
 
 			result = rendererCheckBox;
-		} else {
-			rendererLabel.setText(formatList(value));
-
-			result = rendererLabel;
 		}
 
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
@@ -230,6 +233,6 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	public static String formatList(Object value) {
 		String s = value.toString();
-		return s.substring(1, s.length() - 1);
+		return s.substring(Math.min(s.length(), 1), Math.max(0, s.length() - 1));
 	}
 }
