@@ -836,6 +836,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private void setRow(int row, boolean addSelection, boolean select) {
 		if (row == -1) {
 			targetModel.setSelection(new int[0]);
+			row = 0;
 		} else if (select) {
 			if (addSelection) {
 				addSelectedRow(row);

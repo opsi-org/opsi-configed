@@ -1,4 +1,9 @@
 # Changelog
+## [4.3.5.3] - 2025-01-xx
+### Fixed
+- Exception in SearchTargetModelFromTable when no result found in search
+
+
 ## [4.3.5.2] - 2025-01-13
 ### Fixed
 - Nullpointerexception when saving health check settings when no host was selected
