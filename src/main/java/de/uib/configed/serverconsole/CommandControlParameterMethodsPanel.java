@@ -125,7 +125,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 				.addComponent(jComboBoxParameterFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup(thisLayout.createParallelGroup()
 						.addComponent(jButtonTestParam, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonAddParam, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

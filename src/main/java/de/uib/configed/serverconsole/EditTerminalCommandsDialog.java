@@ -188,7 +188,7 @@ public final class EditTerminalCommandsDialog {
 		controlPanelLayout.setVerticalGroup(controlPanelLayout.createSequentialGroup()
 				.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGroup(controlPanelLayout.createParallelGroup()
+				.addGroup(controlPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -244,7 +244,7 @@ public final class EditTerminalCommandsDialog {
 						GroupLayout.PREFERRED_SIZE));
 
 		commandlistPanelLayout.setVerticalGroup(commandlistPanelLayout.createSequentialGroup()
-				.addGroup(commandlistPanelLayout.createParallelGroup()
+				.addGroup(commandlistPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonTestCommand, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
