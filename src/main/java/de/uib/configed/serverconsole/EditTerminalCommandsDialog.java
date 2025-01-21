@@ -51,12 +51,20 @@ public final class EditTerminalCommandsDialog {
 	private JTextPane jTextPaneCommands = new JTextPane();
 
 	private ConfigedMain configedMain;
-	private final CommandFactory factory;
+	private CommandFactory factory;
 
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
 	public EditTerminalCommandsDialog(ConfigedMain configedMain) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		this.configedMain = configedMain;
 		factory = CommandFactory.getInstance();
 
@@ -99,18 +107,12 @@ public final class EditTerminalCommandsDialog {
 		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(controlPanel).addGap(Globals.GAP_SIZE)
 				.addComponent(commandPanel));
 
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			((CommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
-					actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(dialog));
-		}
+		((CommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
+				actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(dialog));
 
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			((CommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
-					.addActionListener(actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel)
-							.doActionParamAdd(jTextPaneCommands));
-		}
+		((CommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
+				.addActionListener(actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel)
+						.doActionParamAdd(jTextPaneCommands));
 
 		updateLists();
 		updateSelectedCommand();
@@ -153,16 +155,12 @@ public final class EditTerminalCommandsDialog {
 		jComboBoxParentMenuText.addItemListener(itemEvent -> canCommandBeSaved());
 		jComboBoxParentMenuText.addItem(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS);
 		jComboBoxParentMenuText.setEditable(true);
-		jComboBoxParentMenuText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		JButton buttonDelete = new JButton(Icons.getIntellijIcon("remove"));
 		buttonDelete.setToolTipText(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"));
 		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonDelete.addActionListener(actionEvent -> deleteCommand());
-		buttonDelete.setEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
 
 		JLabel labelMenuText = new JLabel(Configed.getResourceValue("CommandControlDialog.menuText"));
 		labelMenuText.setPreferredSize(dimensionJTextField);
@@ -175,8 +173,6 @@ public final class EditTerminalCommandsDialog {
 
 		jTextFieldTooltipText.setToolTipText(Configed.getResourceValue("CommandControlDialog.tooltipText.tooltip"));
 		jTextFieldTooltipText.setPreferredSize(dimensionJTextField);
-		jTextFieldTooltipText.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		jTextFieldPriority = new JTextField(
 				new CheckedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
@@ -184,8 +180,6 @@ public final class EditTerminalCommandsDialog {
 		jTextFieldPriority.setToolTipText(Configed.getResourceValue("CommandControlDialog.priority.tooltip"));
 		jTextFieldPriority.setPreferredSize(dimensionButton);
 		jTextFieldPriority.setColumns(4);
-		jTextFieldPriority.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		controlPanelLayout.setHorizontalGroup(controlPanelLayout
 				.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
@@ -278,15 +272,11 @@ public final class EditTerminalCommandsDialog {
 		buttonTestCommand.setToolTipText(Configed.getResourceValue("CommandControlDialog.btnTestCommand"));
 		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_SIZE + 15, Globals.BUTTON_HEIGHT));
 		buttonTestCommand.addActionListener(actionEvent -> doActionTestCommand());
-		buttonTestCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
 
 		Dimension dimensionJTextFieldLong = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
 		jTextPaneCommands = new JTextPane();
 		jTextPaneCommands.setToolTipText(Configed.getResourceValue("CommandControlDialog.commands.tooltip"));
 		jTextPaneCommands.setPreferredSize(dimensionJTextFieldLong);
-		jTextPaneCommands.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
 		JScrollPane jScrollPane = new JScrollPane(jTextPaneCommands);
 
 		commandlistPanelLayout
@@ -385,10 +375,6 @@ public final class EditTerminalCommandsDialog {
 	}
 
 	private void deleteCommand() {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			return;
-		}
 		String menu = (String) jComboBoxMenuText.getSelectedItem();
 		factory.deleteCommandByMenu(menu);
 
@@ -399,11 +385,6 @@ public final class EditTerminalCommandsDialog {
 	}
 
 	private void save() {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			return;
-		}
-
 		Logging.info(this, "doAction2 savecommand ");
 		MultiCommandTemplate command = getCommandNow();
 		if (command == null) {
@@ -429,11 +410,6 @@ public final class EditTerminalCommandsDialog {
 	}
 
 	private void doActionTestCommand() {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			return;
-		}
-
 		Logging.info(this, "doActionTestCommand testCommand building command ...");
 		MultiCommandTemplate command = getCommandNow(true);
 		if (command == null) {
@@ -456,10 +432,6 @@ public final class EditTerminalCommandsDialog {
 
 	private boolean canCommandBeSaved() {
 		boolean commandCanBeSaved = false;
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			return commandCanBeSaved;
-		}
 
 		if (jComboBoxMenuText.getSelectedItem() != null
 				&& !((String) jComboBoxMenuText.getSelectedItem()).trim().equals(CommandFactory.MENU_NEW)) {
