@@ -97,14 +97,15 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		String key = (String) table.getValueAt(row, 0);
-		if (Utils.isKeyForSecretValue(key)) {
-			if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-					.isGlobalReadOnly()) {
-				Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
-				return null;
-			}
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
+			return null;
+		}
 
+		String key = (String) table.getValueAt(row, 0);
+
+		if (Utils.isKeyForSecretValue(key)) {
 			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
 					Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"), JOptionPane.YES_NO_OPTION);
