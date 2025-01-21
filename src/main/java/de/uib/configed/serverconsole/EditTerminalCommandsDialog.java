@@ -7,7 +7,7 @@
 package de.uib.configed.serverconsole;
 
 import java.awt.event.ItemEvent;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -413,7 +413,7 @@ public final class EditTerminalCommandsDialog {
 		} catch (NumberFormatException e) {
 			Logging.warning(e, "Cannot get value from priority field Exception: ");
 		}
-		List<String> coms = new LinkedList<>();
+		List<String> coms = new ArrayList<>();
 		for (String c : jTextAreaCommands.getText().split("\n")) {
 			if (!(c == null || c.isBlank())) {
 				coms.add(c);
