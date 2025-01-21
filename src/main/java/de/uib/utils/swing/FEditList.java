@@ -261,10 +261,6 @@ public class FEditList<O> extends JDialog
 		addSelectedValues(toSelect);
 	}
 
-	public void setSelectedValue(O ob) {
-		visibleList.setSelectedValue(ob, true);
-	}
-
 	protected void addElement(O element) {
 		ListModel<O> limo = visibleList.getModel();
 		if (limo instanceof DefaultListModel) {
