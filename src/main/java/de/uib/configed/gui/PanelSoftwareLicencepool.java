@@ -55,7 +55,7 @@ public class PanelSoftwareLicencepool extends PanelGenEditTable {
 		}
 
 		if (val != null && jTable.getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
-				&& !((String) val).equals(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL)) {
+				&& !((String) val).equals(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL)) {
 			buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
 			labelSetAllAssignmentsToPoolFromSelectedRow
 					.setText(labelText + " " + getValueAt(jTable.getSelectedRow(), 1));

@@ -128,8 +128,7 @@ public class LeftToolBar extends JToolBar {
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(
 					actionEvent -> ((CommandWithParameters) command).startParameterGui(configedMain));
-			jMenuOpsiCommand.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-					.getUserRolesConfigDataService().isGlobalReadOnly() && !commandsAreDeactivated);
+			jMenuOpsiCommand.setEnabled(!commandsAreDeactivated);
 			menuOpsi.add(jMenuOpsiCommand);
 		}
 	}

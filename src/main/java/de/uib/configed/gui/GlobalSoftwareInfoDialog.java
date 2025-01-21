@@ -27,7 +27,7 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
-public class FGlobalSoftwareInfo {
+public class GlobalSoftwareInfoDialog {
 	private PanelGenEditTable panelGlobalSoftware;
 
 	private List<String> columnNames;
@@ -40,7 +40,7 @@ public class FGlobalSoftwareInfo {
 
 	private ControlPanelAssignToLPools myController;
 
-	public FGlobalSoftwareInfo(ControlPanelAssignToLPools myController) {
+	public GlobalSoftwareInfoDialog(ControlPanelAssignToLPools myController) {
 		this.myController = myController;
 
 		panelGlobalSoftware = new PanelGenEditTable("", false, 2);

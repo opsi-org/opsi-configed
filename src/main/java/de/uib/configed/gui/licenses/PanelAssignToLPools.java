@@ -25,9 +25,9 @@ import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowAllMeans;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGlobalSoftwareInfo;
-import de.uib.configed.gui.FSoftwarename2LicensePool;
-import de.uib.configed.gui.FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction;
+import de.uib.configed.gui.GlobalSoftwareInfoDialog;
+import de.uib.configed.gui.Softwarename2LicensePoolDialog;
+import de.uib.configed.gui.Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PanelStateSwitch;
@@ -51,8 +51,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private PanelGenEditTable panelLicensepools;
 	private PanelGenEditTable panelProductId2LPool;
 
-	private FGlobalSoftwareInfo fMissingSoftwareInfo;
-	private FSoftwarename2LicensePool fSoftwarename2LicensePool;
+	private GlobalSoftwareInfoDialog fMissingSoftwareInfo;
+	private Softwarename2LicensePoolDialog fSoftwarename2LicensePool;
 
 	private PanelStateSwitch<Softwarename2LicensepoolRestriction> panelRadiobuttonsPreselectionForName2Pool;
 	private JCheckBox jCheckBoxSimilarEntriesExist;
@@ -140,8 +140,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		jCheckBoxSimilarEntriesExist.setEnabled(false);
 
 		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(null,
-				FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction.SHOW_ALL_NAMES,
-				FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction.values(),
+				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.SHOW_ALL_NAMES,
+				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.values(),
 				new String[] {
 						Configed.getResourceValue(
 								"PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showAllSwNames"),
@@ -150,11 +150,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						Configed.getResourceValue(
 								"PanelAssignToLPools.Licenses.supplementSimilarSWEntries.showOnlyNamesWithoutAssignments") },
 
-				FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction.class, null) {
+				Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction.class, null) {
 			@Override
 			protected void notifyChangeListeners(ChangeEvent e) {
 				fSoftwarename2LicensePool.setPreselectionForName2Pool(
-						(FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction) this.getValue());
+						(Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction) this.getValue());
 				super.notifyChangeListeners(e);
 			}
 		};
@@ -443,7 +443,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected ",
 				panelRadiobuttonsPreselectionForName2Pool.getValue());
 		fSoftwarename2LicensePool.setPreselectionForName2Pool(
-				(FSoftwarename2LicensePool.Softwarename2LicensepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
+				(Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
 						.getValue());
 
 		fSoftwarename2LicensePool.show();
@@ -531,19 +531,19 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		return panelProductId2LPool;
 	}
 
-	public FGlobalSoftwareInfo getFMissingSoftwareInfo() {
+	public GlobalSoftwareInfoDialog getFMissingSoftwareInfo() {
 		return fMissingSoftwareInfo;
 	}
 
-	public void setFMissingSoftwareInfo(FGlobalSoftwareInfo fMissingSoftwareInfo) {
+	public void setFMissingSoftwareInfo(GlobalSoftwareInfoDialog fMissingSoftwareInfo) {
 		this.fMissingSoftwareInfo = fMissingSoftwareInfo;
 	}
 
-	public FSoftwarename2LicensePool getFSoftwarename2LicensePool() {
+	public Softwarename2LicensePoolDialog getFSoftwarename2LicensePool() {
 		return fSoftwarename2LicensePool;
 	}
 
-	public void setFSoftwarename2LicensePool(FSoftwarename2LicensePool fSoftwarename2LicensePool) {
+	public void setFSoftwarename2LicensePool(Softwarename2LicensePoolDialog fSoftwarename2LicensePool) {
 		this.fSoftwarename2LicensePool = fSoftwarename2LicensePool;
 	}
 }

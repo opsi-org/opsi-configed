@@ -48,7 +48,7 @@ import de.uib.utils.table.updates.MapBasedUpdater;
 import de.uib.utils.table.updates.MapItemsUpdateController;
 import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
-public class FSoftwarename2LicensePool {
+public class Softwarename2LicensePoolDialog {
 	public static final String VALUE_NO_LICENSE_POOL = "---";
 	private PanelGenEditTable panelSWnames;
 	private GenTableModel modelSWnames;
@@ -88,7 +88,7 @@ public class FSoftwarename2LicensePool {
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
-	public FSoftwarename2LicensePool(ControlPanelAssignToLPools controlPanelAssignToLPools) {
+	public Softwarename2LicensePoolDialog(ControlPanelAssignToLPools controlPanelAssignToLPools) {
 		this.controlPanelAssignToLPools = controlPanelAssignToLPools;
 
 		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);

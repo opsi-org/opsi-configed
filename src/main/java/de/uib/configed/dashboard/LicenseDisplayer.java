@@ -23,7 +23,7 @@ import javax.swing.event.TableModelListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSoftwarename2LicensePool;
+import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -256,7 +256,7 @@ public class LicenseDisplayer {
 			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
-				range.add(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL);
+				range.add(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL);
 			} else {
 				range.add(licpool);
 			}

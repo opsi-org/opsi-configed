@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSoftwarename2LicensePool;
+import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
@@ -737,7 +737,8 @@ public class SoftwareDataService {
 		boolean ok = false;
 		Logging.info(this, "editPool2AuditSoftware ");
 
-		if (licensePoolIDOld != null && !licensePoolIDOld.equals(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL)) {
+		if (licensePoolIDOld != null
+				&& !licensePoolIDOld.equals(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL)) {
 			// there was an association, we delete it)
 
 			List<String> swIds = new ArrayList<>();
@@ -749,7 +750,7 @@ public class SoftwareDataService {
 			}
 		}
 
-		if (FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL.equals(licensePoolIDNew)) {
+		if (Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL.equals(licensePoolIDNew)) {
 			// nothing to do, we deleted the entry
 			ok = true;
 		} else {

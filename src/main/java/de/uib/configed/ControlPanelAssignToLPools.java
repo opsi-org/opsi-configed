@@ -24,8 +24,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
 
-import de.uib.configed.gui.FGlobalSoftwareInfo;
-import de.uib.configed.gui.FSoftwarename2LicensePool;
+import de.uib.configed.gui.GlobalSoftwareInfoDialog;
+import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.gui.licenses.PanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
@@ -160,7 +160,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getButtonShowAssignedNotExisting().setEnabled(!persistenceController.getSoftwareDataService()
 				.getUnknownSoftwareListForLicensePoolPD(poolID).isEmpty());
 		if (thePanel.getFMissingSoftwareInfo() == null) {
-			thePanel.setFMissingSoftwareInfo(new FGlobalSoftwareInfo(this));
+			thePanel.setFMissingSoftwareInfo(new GlobalSoftwareInfoDialog(this));
 		}
 
 		if (!persistenceController.getSoftwareDataService().getUnknownSoftwareListForLicensePoolPD(poolID).isEmpty()) {
@@ -355,7 +355,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			if (Boolean.TRUE.equals(newAssociation)) {
 				String otherPool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(key);
 
-				if (otherPool.equals(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL)) {
+				if (otherPool.equals(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL)) {
 					Logging.info(this, "validateWindowsSoftwareKeys, assigned to valNoLicensepool");
 				} else {
 					askForAddingKey(key, otherPool, cancelSelectionKeys);
@@ -599,7 +599,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.getPanelRegisteredSoftware().setUpdateController(new SelectionMemorizerUpdateController(
 				thePanel.getPanelLicensepools(), 0, thePanel.getPanelRegisteredSoftware(), this));
 
-		thePanel.setFSoftwarename2LicensePool(new FSoftwarename2LicensePool(this));
+		thePanel.setFSoftwarename2LicensePool(new Softwarename2LicensePoolDialog(this));
 		thePanel.getFSoftwarename2LicensePool().setTableModel();
 		thePanel.setDisplaySimilarExist(
 				thePanel.getFSoftwarename2LicensePool().checkExistNamesWithVariantLicensepools());
