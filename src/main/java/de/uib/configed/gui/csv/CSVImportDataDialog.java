@@ -38,6 +38,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class CSVImportDataDialog {
@@ -167,7 +168,7 @@ public class CSVImportDataDialog {
 
 		// don't use a definite max table width (-1), with popups
 		thePanel = new PanelGenEditTable("", true, 0,
-				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_RELOAD }, true);
+				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
 
 		modifier.updateTable(format, startLine, thePanel);
 

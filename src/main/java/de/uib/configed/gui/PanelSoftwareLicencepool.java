@@ -13,6 +13,7 @@ import javax.swing.event.ListSelectionEvent;
 import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelSoftwareLicencepool extends PanelGenEditTable {
@@ -25,7 +26,7 @@ public class PanelSoftwareLicencepool extends PanelGenEditTable {
 
 	public PanelSoftwareLicencepool(ControlPanelAssignToLPools controlPanelAssignToLPools,
 			JButton buttonSetAllAssignmentsToPoolFromSelectedRow, JLabel labelSetAllAssignmentsToPoolFromSelectedRow) {
-		super("", true, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
+		super("", true, 0, new int[] { PopupMenuTrait.POPUP_RELOAD }, false);
 
 		this.controlPanelAssignToLPools = controlPanelAssignToLPools;
 		this.buttonSetAllAssignmentsToPoolFromSelectedRow = buttonSetAllAssignmentsToPoolFromSelectedRow;

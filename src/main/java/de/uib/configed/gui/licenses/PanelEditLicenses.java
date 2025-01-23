@@ -20,6 +20,7 @@ import javax.swing.ListSelectionModel;
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelEditLicenses extends MultiTablePanel {
@@ -37,8 +38,8 @@ public class PanelEditLicenses extends MultiTablePanel {
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelKeys.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -46,16 +47,16 @@ public class PanelEditLicenses extends MultiTablePanel {
 
 		panelSoftwarelicenses = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSoftwarelicense"), true, 2,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelSoftwarelicenses.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelSoftwarelicenses.getTableSearchPane().setFiltering();
 
 		panelLicensecontracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelLicensecontracts.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

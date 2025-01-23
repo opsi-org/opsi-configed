@@ -36,6 +36,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.DefaultTableModelFilterCondition;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.TableModelFilterCondition;
@@ -91,7 +92,7 @@ public class Softwarename2LicensePoolDialog {
 	public Softwarename2LicensePoolDialog(ControlPanelAssignToLPools controlPanelAssignToLPools) {
 		this.controlPanelAssignToLPools = controlPanelAssignToLPools;
 
-		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
+		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
 
 		panelSWxLicensepool = new PanelSoftwareLicencepool(controlPanelAssignToLPools,
 				buttonSetAllAssignmentsToPoolFromSelectedRow, labelSetAllAssignmentsToPoolFromSelectedRow);

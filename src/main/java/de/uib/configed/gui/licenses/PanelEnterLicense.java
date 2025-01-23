@@ -41,6 +41,7 @@ import de.uib.configed.ControlPanelEnterLicense;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.utils.Utils;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.CellDateEditor;
 import de.uib.utils.table.gui.PanelGenEditTable;
 import javafx.embed.swing.JFXPanel;
@@ -254,16 +255,16 @@ public class PanelEnterLicense extends MultiTablePanel {
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"), true, 0,
-				new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
+				new int[] { PopupMenuTrait.POPUP_RELOAD }, false);
 
 		panelLicensePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensepool"), false, 0,
-				new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
+				new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
 
 		panelLicenseContracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 
 		jTextFieldLicenseID = new JTextField();

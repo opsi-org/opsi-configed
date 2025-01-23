@@ -30,6 +30,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.PanelGenEditTable;
 import de.uib.utils.table.provider.DefaultTableProvider;
@@ -124,7 +125,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		public PaneProducts(List<String> columnNames, PanelEditDepotProperties panelEditDepotProperties,
 				EditMapPanelX propertiesPanel) {
-			super("", false, 0, new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN }, true);
+			super("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, POPUP_SORT_AGAIN }, true);
 			this.columnNames = columnNames;
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;

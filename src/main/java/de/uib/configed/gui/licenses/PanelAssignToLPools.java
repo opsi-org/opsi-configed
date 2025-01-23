@@ -31,6 +31,7 @@ import de.uib.configed.gui.Softwarename2LicensePoolDialog.Softwarename2Licensepo
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PanelStateSwitch;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
@@ -383,14 +384,14 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		panelLicensepools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 
 		panelProductId2LPool = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);

@@ -16,6 +16,7 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseListener {
@@ -24,7 +25,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseL
 	private int[] saveRowSelection;
 
 	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
-		super("", true, 2, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
+		super("", true, 2, new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
 		this.controller = controller;
 		tableSearchPane.showNavPane();
 

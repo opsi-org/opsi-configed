@@ -27,6 +27,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelLicensesUsage;
 import de.uib.configed.Globals;
 import de.uib.utils.swing.AutoCompletionComboBox;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelLicensesUsage extends MultiTablePanel {
@@ -61,7 +62,7 @@ public class PanelLicensesUsage extends MultiTablePanel {
 	private void initSubPanel() {
 		panelLicensePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), false, 0,
-				new int[] { PanelGenEditTable.POPUP_RELOAD });
+				new int[] { PopupMenuTrait.POPUP_RELOAD });
 
 		panelGetAndAssignSL = new JPanel();
 		JLabel labelGetAndAssignSL = new JLabel(
@@ -100,8 +101,8 @@ public class PanelLicensesUsage extends MultiTablePanel {
 
 	private void initComponents() {
 		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleUsage"), true,
-				0, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				0, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 
 		panelUsage.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

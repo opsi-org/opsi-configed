@@ -65,26 +65,14 @@ import de.uib.utils.table.updates.UpdateController;
 
 public class PanelGenEditTable extends JPanel
 		implements TableModelListener, ListSelectionListener, KeyListener, ComponentListener, CursorrowObserver {
-	public static final int POPUP_SEPARATOR = PopupMenuTrait.POPUP_SEPARATOR; // 0
 	public static final int POPUP_DELETE_ROW = 1;
 
 	public static final int POPUP_CANCEL = 3;
 
-	public static final int POPUP_RELOAD = PopupMenuTrait.POPUP_RELOAD; // 4
-
 	public static final int POPUP_SORT_AGAIN = 5;
 
-	public static final int POPUP_SAVE = PopupMenuTrait.POPUP_SAVE; // 8
-
-	public static final int POPUP_PDF = PopupMenuTrait.POPUP_PDF; // 21
-
-	public static final int POPUP_EXPORT_CSV = PopupMenuTrait.POPUP_EXPORT_CSV; // 23
-	public static final int POPUP_EXPORT_SELECTED_CSV = PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV; // 24
-
-	public static final int POPUP_PRINT = PopupMenuTrait.POPUP_PRINT; // 30
-
-	private static final int[] POPUPS_EXPORT = new int[] { POPUP_SEPARATOR, POPUP_EXPORT_CSV,
-			POPUP_EXPORT_SELECTED_CSV, };
+	private static final int[] POPUPS_EXPORT = new int[] { PopupMenuTrait.POPUP_SEPARATOR,
+			PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, };
 
 	private static final Map<Integer, String> keyNames = new HashMap<Integer, String>() {
 		@Override
@@ -155,14 +143,14 @@ public class PanelGenEditTable extends JPanel
 				Logging.info(this, "add popup ", wantedPopup);
 			}
 		} else {
-			this.internalpopups.add(POPUP_RELOAD);
+			this.internalpopups.add(PopupMenuTrait.POPUP_RELOAD);
 
-			this.internalpopups.add(POPUP_PDF);
+			this.internalpopups.add(PopupMenuTrait.POPUP_PDF);
 		}
 
 		Logging.info(this, "internalpopups ", giveMenuitemNames(internalpopups));
 
-		this.internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
+		this.internalpopups = supplementBefore(PopupMenuTrait.POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
 
 		Logging.info(this, "internalpopups supplemented ", giveMenuitemNames(internalpopups));
 
@@ -416,17 +404,17 @@ public class PanelGenEditTable extends JPanel
 			popupMenu.addSeparator();
 		}
 
-		internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, internalpopups);
+		internalpopups = supplementBefore(PopupMenuTrait.POPUP_RELOAD, POPUPS_EXPORT, internalpopups);
 
 		Logging.info(this, "addPopupmenuStandardpart, supplemented internalpopups ", giveMenuitemNames(internalpopups));
 
 		for (int popuptype : internalpopups) {
 			switch (popuptype) {
-			case POPUP_SEPARATOR:
+			case PopupMenuTrait.POPUP_SEPARATOR:
 				addPopupItem(null);
 				break;
 
-			case POPUP_SAVE:
+			case PopupMenuTrait.POPUP_SAVE:
 				menuItemSave = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.saveData"));
 				menuItemSave.setEnabled(false);
 				menuItemSave.addActionListener(actionEvent -> commit());
@@ -440,7 +428,7 @@ public class PanelGenEditTable extends JPanel
 				addPopupItem(menuItemCancel);
 				break;
 
-			case POPUP_RELOAD:
+			case PopupMenuTrait.POPUP_RELOAD:
 				addPopupItemReload();
 				break;
 
@@ -456,7 +444,7 @@ public class PanelGenEditTable extends JPanel
 				addPopupMenuDeleteRow();
 				break;
 
-			case POPUP_PRINT:
+			case PopupMenuTrait.POPUP_PRINT:
 				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
 				Icons.addIntellijIconToMenuItem(menuItemPrint, "print");
 				menuItemPrint.addActionListener(actionEvent -> print());
@@ -464,17 +452,17 @@ public class PanelGenEditTable extends JPanel
 				addPopupItem(menuItemPrint);
 				break;
 
-			case POPUP_EXPORT_CSV:
+			case PopupMenuTrait.POPUP_EXPORT_CSV:
 				JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
 				addPopupItem(menuItemExportCSV);
 				break;
 
-			case POPUP_EXPORT_SELECTED_CSV:
+			case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV:
 				JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
 				addPopupItem(menuItemExportSelectedCSV);
 				break;
 
-			case POPUP_PDF:
+			case PopupMenuTrait.POPUP_PDF:
 				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
 				Icons.addThemeIconInvertedToMenuItem(menuItemPDF, "anyType");
 				menuItemPDF.addActionListener(actionEvent -> exportTable());
