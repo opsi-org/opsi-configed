@@ -317,8 +317,7 @@ public class HealthCheck extends JPanel {
 		jButtonExpandAll = new JButton(Configed.getResourceValue("HealthCheckDialog.expandAll"));
 		jButtonExpandAll.setEnabled(true);
 
-		JButton jButtonCopyHealthInformation = new JButton(
-				Configed.getResourceValue("HealthCheckDialog.copyHealthInformation"));
+		JButton jButtonCopyHealthInformation = new JButton(Configed.getResourceValue("copy"));
 
 		JButton jButtonDownloadDiagnosticData = new JButton(
 				Configed.getResourceValue("HealthCheckDialog.downloadDiagnosticData"));

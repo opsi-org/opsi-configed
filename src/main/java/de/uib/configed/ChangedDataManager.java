@@ -84,7 +84,7 @@ public final class ChangedDataManager {
 		if (anyDataChanged) {
 			result = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
-					Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"), JOptionPane.YES_NO_CANCEL_OPTION,
+					Configed.getResourceValue("buttonClose"), JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 		}
 

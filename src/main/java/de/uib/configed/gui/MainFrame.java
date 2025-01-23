@@ -481,7 +481,7 @@ public class MainFrame extends JFrame {
 		JTextArea jTextArea = new JTextArea(Logging.getCurrentLogfilePath());
 		jTextArea.setEditable(false);
 
-		JButton buttonCopy = new JButton(Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"));
+		JButton buttonCopy = new JButton(Configed.getResourceValue("copy"));
 		buttonCopy.addActionListener(e -> jTextArea.copy());
 
 		JButton buttonOpen = new JButton(Configed.getResourceValue("MainFrame.showLogFileOpen"));
