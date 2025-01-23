@@ -6,33 +6,73 @@
 
 package de.uib.configed.gui;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
-import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.utils.Icons;
+import de.uib.configed.Globals;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditStringList;
 
-public class FDialogRemoteControl extends FEditStringList {
+public class FDialogRemoteControl implements DocumentListener {
 	private Map<String, String> meanings;
 	private Map<String, Boolean> editableFields;
 	private String selText;
 
 	private ConfigedMain configedMain;
 
+	private JList<String> visibleList;
+	private JTextField extraField;
+
+	private JTextArea loggingArea;
+
+	private JOptionPane optionPane;
+	private JDialog dialog;
+
+	private String selValue;
+
 	public FDialogRemoteControl(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
-		extraField.setVisible(true);
-		extraField.addActionListener(event -> commit());
+		JPanel panel = initComponents();
 
-		loggingPanel.setVisible(true);
+		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		buttonExecute.addActionListener(event -> commit());
+
+		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.CLOSED_OPTION, null,
+				new Object[] { buttonExecute, Configed.getResourceValue("buttonClose") });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
+	}
+
+	public void setListModel(ListModel<String> model) {
+		visibleList.setModel(model);
+	}
+
+	public void setCellRenderer(ListCellRenderer<Object> render) {
+		visibleList.setCellRenderer(render);
+	}
+
+	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
 	}
 
 	public void setMeanings(Map<String, String> meanings) {
@@ -47,19 +87,47 @@ public class FDialogRemoteControl extends FEditStringList {
 		return meanings.get(key);
 	}
 
-	@Override
-	protected void initComponents() {
-		super.initComponents();
+	private JPanel initComponents() {
+		visibleList = new JList<>();
+		visibleList
+				.addListSelectionListener(listSelectionEvent -> valueChanged(listSelectionEvent.getValueIsAdjusting()));
+		visibleList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				checkSelected();
 
-		// Change tooltips to run and cancel action
-		buttonCommit.setIcon(Icons.getIntellijIcon("run"));
-		buttonCommit.setToolTipText(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"));
+				if (e.getClickCount() > 1) {
+					commit();
+				}
+			}
+		});
 
-		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));
+		JScrollPane visibleListScrollPane = new JScrollPane(visibleList);
 
-		// Here it's impossible to add the functionality
-		buttonAdd.setVisible(false);
+		extraField = new JTextField();
+		extraField.addActionListener(event -> commit());
 		extraField.getDocument().addDocumentListener(this);
+
+		loggingArea = new JTextArea();
+		loggingArea.setEditable(false);
+		loggingArea.setColumns(30);
+		loggingArea.setRows(3);
+
+		JScrollPane loggingScrollPane = new JScrollPane(loggingArea);
+
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addComponent(visibleListScrollPane).addGap(Globals.GAP_SIZE)
+						.addComponent(extraField).addGap(Globals.GAP_SIZE).addComponent(loggingScrollPane,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE));
+
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(visibleListScrollPane)
+				.addComponent(extraField).addComponent(loggingScrollPane));
+
+		return panel;
 	}
 
 	private void noText() {
@@ -70,10 +138,7 @@ public class FDialogRemoteControl extends FEditStringList {
 	}
 
 	private void checkSelected() {
-		if (visibleList.getSelectedValue() != null && selValue != null && !"".equals(selValue)) {
-			setDataChanged(true);
-		} else {
-			setDataChanged(false);
+		if (visibleList.getSelectedValue() == null || selValue == null || "".equals(selValue)) {
 			noText();
 		}
 	}
@@ -94,39 +159,23 @@ public class FDialogRemoteControl extends FEditStringList {
 		});
 	}
 
-	@Override
 	public void commit() {
-		super.commit();
-		setVisible(true);
-
-		Logging.debug(this, "getSelectedValue ", getSelectedList());
+		Logging.debug(this, "getSelectedValue ", visibleList.getSelectedValuesList());
 
 		appendLog(null);
 
-		if (!getSelectedList().isEmpty()) {
-			String command = getSelectedList().getFirst();
+		if (!visibleList.getSelectedValuesList().isEmpty()) {
+			String command = visibleList.getSelectedValuesList().getFirst();
 			for (String client : configedMain.getSelectedClients()) {
 				new RemoteCommandExecutor(this, command, client).execute();
 			}
 		}
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		checkSelected();
-
-		if (e.getClickCount() > 1) {
-			commit();
-		}
-	}
-
 	// interface ListSelectionListener
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		super.valueChanged(e);
-
+	private void valueChanged(boolean valueIsAdjusting) {
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting()) {
+		if (valueIsAdjusting) {
 			return;
 		}
 

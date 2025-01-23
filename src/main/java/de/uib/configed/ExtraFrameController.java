@@ -168,18 +168,10 @@ public final class ExtraFrameController {
 			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(tooltips));
-
-			dialogRemoteControl.setTitle(Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
-			dialogRemoteControl.setModal(false);
-			dialogRemoteControl.init();
 		}
 
 		dialogRemoteControl.resetValue();
 
-		dialogRemoteControl.setSize(800, ConfigedMain.getMainFrame().getHeight() / 2);
-		dialogRemoteControl.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		dialogRemoteControl.setVisible(true);
-		dialogRemoteControl.setDividerLocation(0.8);
+		dialogRemoteControl.show();
 	}
 }

@@ -8,6 +8,7 @@
 
 ### Changed
 - Rework all the Server console dialogs to use standard java library (JOptionPane) instead of own classes
+- Rework Saved Searches Dialog and Remote Control dialog in order use JOptionPane instead of own classes
 
 
 ## [4.4.0.14] - 2025-01-09

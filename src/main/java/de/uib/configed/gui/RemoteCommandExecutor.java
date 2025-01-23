@@ -40,7 +40,7 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 
 		List<String> parts = Interpreter.splitToList(cmd);
 		try {
-			Logging.debug(this, "startRemoteControlForSelectedClients, cmd: " , cmd , " splitted to " , parts);
+			Logging.debug(this, "startRemoteControlForSelectedClients, cmd: ", cmd, " splitted to ", parts);
 
 			ProcessBuilder pb = new ProcessBuilder(parts);
 			pb.redirectErrorStream(true);

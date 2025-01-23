@@ -68,7 +68,7 @@ public class SavedSearchesDialog {
 		initPopupMenu();
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
-				new Object[] { Configed.getResourceValue("search"), Configed.getResourceValue("cancel") });
+				new Object[] { Configed.getResourceValue("search"), Configed.getResourceValue("buttonCancel") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
