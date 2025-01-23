@@ -30,7 +30,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.logging.Logging;
 
-public class FDialogRemoteControl implements DocumentListener {
+public class RemoveControlDialog implements DocumentListener {
 	private Map<String, String> meanings;
 	private Map<String, Boolean> editableFields;
 	private String selText;
@@ -47,7 +47,7 @@ public class FDialogRemoteControl implements DocumentListener {
 
 	private String selValue;
 
-	public FDialogRemoteControl(ConfigedMain configedMain) {
+	public RemoveControlDialog(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
 		JPanel panel = initComponents();

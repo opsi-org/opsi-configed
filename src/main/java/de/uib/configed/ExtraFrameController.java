@@ -17,8 +17,8 @@ import javax.swing.DefaultComboBoxModel;
 
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
-import de.uib.configed.gui.FDialogRemoteControl;
 import de.uib.configed.gui.NewClientDialog;
+import de.uib.configed.gui.RemoveControlDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.configed.productaction.FCompleteWinProducts;
 import de.uib.configed.serverconsole.EditTerminalCommandsDialog;
@@ -40,7 +40,7 @@ public final class ExtraFrameController {
 	private static EditTerminalCommandsDialog commandControlDialog;
 	private static FCompleteWinProducts productActionFrame;
 	private static FGroupActions groupActionFrame;
-	private static FDialogRemoteControl dialogRemoteControl;
+	private static RemoveControlDialog remoteControlDialog;
 	private static Map<String, RemoteControl> remoteControls;
 
 	// We have a private empty constructor to prevent instantiation
@@ -132,8 +132,8 @@ public final class ExtraFrameController {
 
 	public static void startRemoteControlFrame(ConfigedMain configedMain,
 			OpsiServiceNOMPersistenceController persistenceController) {
-		if (dialogRemoteControl == null) {
-			dialogRemoteControl = new FDialogRemoteControl(configedMain);
+		if (remoteControlDialog == null) {
+			remoteControlDialog = new RemoveControlDialog(configedMain);
 		}
 
 		if (remoteControls == null
@@ -159,19 +159,19 @@ public final class ExtraFrameController {
 				commandsEditable.put(entry.getKey(), editable);
 			}
 
-			dialogRemoteControl.setMeanings(rcCommands);
-			dialogRemoteControl.setEditableFields(commandsEditable);
+			remoteControlDialog.setMeanings(rcCommands);
+			remoteControlDialog.setEditableFields(commandsEditable);
 
 			// we want to present a sorted list of the keys
 			List<String> sortedKeys = new ArrayList<>(remoteControls.keySet());
 			sortedKeys.sort(Comparator.comparing(String::toString));
-			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
+			remoteControlDialog.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
 
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(tooltips));
+			remoteControlDialog.setCellRenderer(new ListCellRendererByIndex(tooltips));
 		}
 
-		dialogRemoteControl.resetValue();
+		remoteControlDialog.resetValue();
 
-		dialogRemoteControl.show();
+		remoteControlDialog.show();
 	}
 }

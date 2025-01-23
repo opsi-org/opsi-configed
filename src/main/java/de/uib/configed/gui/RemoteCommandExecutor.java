@@ -26,10 +26,10 @@ import de.uib.utils.script.Interpreter;
 public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 	private String command;
 	private String client;
-	private FDialogRemoteControl fDialogRemoteControl;
+	private RemoveControlDialog remoteControlDialog;
 
-	public RemoteCommandExecutor(FDialogRemoteControl fDialogRemoteControl, String command, String client) {
-		this.fDialogRemoteControl = fDialogRemoteControl;
+	public RemoteCommandExecutor(RemoveControlDialog remoteControlDialog, String command, String client) {
+		this.remoteControlDialog = remoteControlDialog;
 		this.command = command;
 		this.client = client;
 	}
@@ -61,7 +61,7 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 	}
 
 	private String interpretCommand(String command, String targetClient) {
-		String cmd = fDialogRemoteControl.getValue(command);
+		String cmd = remoteControlDialog.getValue(command);
 
 		Interpreter trans = new Interpreter(new String[] { "%host%", "%hostname%", "%ipaddress%", "%inventorynumber%",
 				"%hardwareaddress%", "%opsihostkey%", "%depotid%", "%configserverid%" });
@@ -99,7 +99,7 @@ public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 	@Override
 	protected void process(List<String> logLines) {
 		for (String logLine : logLines) {
-			fDialogRemoteControl.appendLog(logLine);
+			remoteControlDialog.appendLog(logLine);
 		}
 	}
 }
