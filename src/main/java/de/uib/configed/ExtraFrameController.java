@@ -6,7 +6,6 @@
 
 package de.uib.configed;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -75,8 +74,6 @@ public final class ExtraFrameController {
 		if (savedSearchesDialog == null) {
 			Logging.debug("create SavedSearchesDialog");
 			savedSearchesDialog = new SavedSearchesDialog(configedMain.getClientTablePanel(), configedMain);
-			savedSearchesDialog.setPreferredScrollPaneSize(new Dimension(300, 400));
-			savedSearchesDialog.init();
 		}
 	}
 
@@ -84,8 +81,7 @@ public final class ExtraFrameController {
 		Logging.debug("clientSelectionGetSavedSearch");
 		initSavedSearchesDialog(configedMain);
 
-		savedSearchesDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		savedSearchesDialog.setVisible(true);
+		savedSearchesDialog.show();
 	}
 
 	public static void reloadDialogs() {

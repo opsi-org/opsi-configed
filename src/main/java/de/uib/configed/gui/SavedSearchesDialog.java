@@ -6,25 +6,28 @@
 
 package de.uib.configed.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.JDialog;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.event.ListSelectionEvent;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
-import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -33,13 +36,12 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditStringList;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
 import de.uib.utils.table.gui.SearchTargetModel;
 import de.uib.utils.table.gui.SearchTargetModelFromJList;
 import de.uib.utils.table.gui.TableSearchPane;
 
-public class SavedSearchesDialog extends FEditStringList {
+public class SavedSearchesDialog {
 	private SelectionManager manager;
 	private List<String> result;
 	private DefaultListModel<String> model;
@@ -47,7 +49,11 @@ public class SavedSearchesDialog extends FEditStringList {
 	private ClientTablePanel clientTablePanel;
 	private ConfigedMain configedMain;
 
+	private JList<String> visibleList;
 	private TableSearchPane searchPane;
+
+	private JOptionPane optionPane;
+	private JDialog dialog;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -56,47 +62,73 @@ public class SavedSearchesDialog extends FEditStringList {
 		this.clientTablePanel = clientTablePanel;
 		this.configedMain = configedMain;
 
-		initSavedSearchesComponents();
-		initDialog();
+		JPanel panel = createPanel();
+
+		// The visibleList already needs to exist
+		initPopupMenu();
+
+		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
+				new Object[] { Configed.getResourceValue("search"), Configed.getResourceValue("cancel") });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
+
+		waitForUserInput();
 	}
 
-	private void initSavedSearchesComponents() {
+	private void waitForUserInput() {
+		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("search"))) {
+			commit();
+		}
+	}
+
+	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
+
+		waitForUserInput();
+	}
+
+	private JPanel createPanel() {
+		manager = new SelectionManager();
+		result = new ArrayList<>();
+
+		model = new DefaultListModel<>();
+
+		visibleList = new JList<>(model);
+		visibleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		visibleList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() > 1) {
+					dialog.setVisible(false);
+					commit();
+				}
+			}
+		});
+
+		JScrollPane scrollPane = new JScrollPane(visibleList);
+
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(visibleList, new ArrayList<>(),
 				new ArrayList<>());
 		searchPane = new TableSearchPane(searchTargetModel);
 		searchPane.setNarrow(true);
-		editingArea.add(searchPane, BorderLayout.NORTH);
 
-		// redefine buttonCommit
-		buttonCommit.setToolTipText(Configed.getResourceValue("search"));
-		buttonCommit.setIcon(Icons.getIntellijIcon("run"));
-		buttonCommit.setSelectedIcon(null);
-		buttonCommit.setDisabledIcon(null);
-		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
-
-		buttonCancel.setToolTipText(Configed.getResourceValue("buttonCancel"));
-	}
-
-	private void initDialog() {
-		setTitle(Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
-		setModal(false);
-		setLeaveOnCommit(false);
-		manager = new SelectionManager();
-		result = new LinkedList<>();
-
-		model = new DefaultListModel<>();
-
-		setEditable();
-		setListModel(model);
 		resetModel();
 
-		extraField.setVisible(false);
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGroup(layout
+				.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(searchPane).addComponent(scrollPane)));
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(searchPane).addComponent(scrollPane));
+
+		return panel;
 	}
 
-	@Override
-	protected void initComponents() {
-		super.initComponents();
-
+	private void initPopupMenu() {
 		JMenuItem reload = new JMenuItem(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		Icons.addIntellijIconToMenuItem(reload, "refresh");
 		reload.addActionListener(actionEvent -> reloadAction());
@@ -123,50 +155,15 @@ public class SavedSearchesDialog extends FEditStringList {
 		visibleList.setComponentPopupMenu(jPopupMenu);
 	}
 
-	@Override
-	public void setDataChanged(boolean b) {
-		boolean active = buttonCommit.isEnabled();
-		super.setDataChanged(b);
-		buttonCommit.setEnabled(active);
-	}
+	private void commit() {
 
-	// interface ListSelectionListener
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		Logging.debug(this, "SavedSearchesDialog ListSelectionListener valueChanged ", e);
+		result = new ArrayList<>();
 
-		super.valueChanged(e);
+		List<String> selected = visibleList.getSelectedValuesList();
+		if (!selected.isEmpty()) {
+			manager.loadSearch(selected.get(0));
 
-		if (e.getValueIsAdjusting()) {
-			return;
-		}
-
-		buttonCommit.setEnabled(!getSelectedList().isEmpty());
-	}
-
-	@Override
-	protected void commit() {
-		setCursor(Globals.WAIT_CURSOR);
-
-		buttonCommit.setEnabled(false);
-		buttonCancel.setEnabled(false);
-
-		result = new LinkedList<>();
-
-		try {
-			List<String> selected = getSelectedList();
-			if (!selected.isEmpty()) {
-				manager.loadSearch(selected.get(0));
-
-				// test:
-
-				result = manager.selectClients();
-			}
-			super.commit();
-		} finally {
-			buttonCommit.setEnabled(true);
-			buttonCancel.setEnabled(true);
-			setCursor(null);
+			result = manager.selectClients();
 		}
 
 		Logging.info(this, "commit result == null ", result == null);
@@ -219,32 +216,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		searchPane.setTargetModel(new SearchTargetModelFromJList(visibleList, new ArrayList<>(descMap.keySet()),
 				new ArrayList<>(descMap.values())));
 
-		setCellRenderer(new ListCellRendererByIndex(descMap));
-
-		initSelection();
+		visibleList.setCellRenderer(new ListCellRendererByIndex(descMap));
 	}
-
-	// interface MouseListener
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() > 1) {
-			commit();
-		}
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		/* Not needed */}
 }
