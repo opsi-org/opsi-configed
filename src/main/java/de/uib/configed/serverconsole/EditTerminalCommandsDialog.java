@@ -65,6 +65,7 @@ public final class EditTerminalCommandsDialog {
 		this.configedMain = configedMain;
 		factory = CommandFactory.getInstance();
 
+		initComponents();
 		JPanel panel = init();
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
@@ -118,7 +119,7 @@ public final class EditTerminalCommandsDialog {
 		return dialog;
 	}
 
-	private JPanel initControlPanel() {
+	private void initComponents() {
 		jComboBoxMenuText = new JComboBox<>();
 		jComboBoxMenuText.addItem(CommandFactory.MENU_NEW);
 		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("CommandControlDialog.menuText.tooltip"));
@@ -138,6 +139,16 @@ public final class EditTerminalCommandsDialog {
 		jComboBoxParentMenuText.addItem(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS);
 		jComboBoxParentMenuText.setEditable(true);
 
+		jTextFieldDescription.setToolTipText(Configed.getResourceValue("CommandControlDialog.tooltipText.tooltip"));
+
+		jTextFieldPriority = new JTextField(
+				new CheckedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
+				String.valueOf(CommandFactory.DEFAULT_POSITION), 1);
+		jTextFieldPriority.setToolTipText(Configed.getResourceValue("CommandControlDialog.priority.tooltip"));
+		jTextFieldPriority.setColumns(4);
+	}
+
+	private JPanel initControlPanel() {
 		JButton buttonDelete = new JButton(Icons.getIntellijIcon("remove"));
 		buttonDelete.setToolTipText(Configed.getResourceValue("CommandControlDialog.rm_menuText.tooltip"));
 		buttonDelete.addActionListener(actionEvent -> deleteCommand());
@@ -150,14 +161,6 @@ public final class EditTerminalCommandsDialog {
 		labelTooltipText.setFont(labelTooltipText.getFont().deriveFont(Font.BOLD));
 		JLabel labelPriority = new JLabel(Configed.getResourceValue("CommandControlDialog.priority"));
 		labelPriority.setFont(labelPriority.getFont().deriveFont(Font.BOLD));
-
-		jTextFieldDescription.setToolTipText(Configed.getResourceValue("CommandControlDialog.tooltipText.tooltip"));
-
-		jTextFieldPriority = new JTextField(
-				new CheckedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
-				String.valueOf(CommandFactory.DEFAULT_POSITION), 1);
-		jTextFieldPriority.setToolTipText(Configed.getResourceValue("CommandControlDialog.priority.tooltip"));
-		jTextFieldPriority.setColumns(4);
 
 		JPanel controlPanel = new JPanel();
 		GroupLayout controlPanelLayout = new GroupLayout(controlPanel);

@@ -161,9 +161,6 @@ public class MakeProductFileDialog {
 			dialog.pack();
 		});
 
-		jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
-		jTextFieldPackageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
-
 		JButton jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
 		jButtonSetRights.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.btn_setRights.tooltip"));
 		jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
@@ -186,12 +183,12 @@ public class MakeProductFileDialog {
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jLabelVersionsControlFile, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Short.MAX_VALUE)
-								.addComponent(jLabelProductVersionControlFile, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-								.addComponent(jLabelPackageVersionControlFile, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH, Short.MAX_VALUE))
+								.addComponent(jLabelVersionsControlFile, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelProductVersionControlFile, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelPackageVersionControlFile, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(jLabelVersions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
