@@ -55,6 +55,15 @@ public class MakeProductFileDialog {
 	private JCheckBox jCheckBoxOverwrite;
 	private AdvancedOptionsPanel advancedOptionsPanel;
 
+	private JLabel jLabelDir;
+	private JButton jButtonSearchDir;
+	private JButton jButtonSetRights;
+	private JLabel jLabelProductVersion;
+	private JLabel jLabelPackageVersion;
+	private JLabel jLabelVersionsControlFile;
+	private JLabel jLabelVersions;
+	private JToggleButton jButtonAdvancedSettings;
+
 	private String filename;
 	private ConfigedMain configedMain;
 	private CompletionComboButton autocompletion;
@@ -75,6 +84,7 @@ public class MakeProductFileDialog {
 		advancedOptionsPanel = new AdvancedOptionsPanel();
 		advancedOptionsPanel.setVisible(false);
 
+		initComponents();
 		JPanel panel = initPanel();
 
 		filename = "";
@@ -101,13 +111,8 @@ public class MakeProductFileDialog {
 		}
 	}
 
-	private JPanel initPanel() {
-		JPanel panel = new JPanel();
-
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
-
-		JLabel jLabelDir = new JLabel(Configed.getResourceValue("MakeProductFileDialog.serverDir"));
+	private void initComponents() {
+		jLabelDir = new JLabel(Configed.getResourceValue("MakeProductFileDialog.serverDir"));
 		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
 
 		autocompletion.setCombobox(new CompletionComboBox<>(
@@ -121,26 +126,23 @@ public class MakeProductFileDialog {
 		autocompletion.initCombobox();
 		jComboBoxMainDir = autocompletion.getCombobox();
 
-		JButton jButtonSearchDir = autocompletion.getButton();
+		jButtonSearchDir = autocompletion.getButton();
 		jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
 		jButtonSearchDir.addActionListener((ActionEvent actionEvent) -> {
 			autocompletion.doButtonAction();
 			doSetActionGetVersions();
 		});
 
-		JLabel jLabelPackageVersion = new JLabel(
-				"    " + Configed.getResourceValue("MakeProductFileDialog.packageVersion"));
+		jLabelPackageVersion = new JLabel("    " + Configed.getResourceValue("MakeProductFileDialog.packageVersion"));
 		jLabelPackageVersion.setFont(jLabelPackageVersion.getFont().deriveFont(Font.BOLD));
 
-		JLabel jLabelProductVersion = new JLabel(
-				"    " + Configed.getResourceValue("MakeProductFileDialog.productVersion"));
+		jLabelProductVersion = new JLabel("    " + Configed.getResourceValue("MakeProductFileDialog.productVersion"));
 		jLabelProductVersion.setFont(jLabelProductVersion.getFont().deriveFont(Font.BOLD));
 
-		JLabel jLabelVersionsControlFile = new JLabel(
-				Configed.getResourceValue("MakeProductFileDialog.versions_controlfile"));
+		jLabelVersionsControlFile = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions_controlfile"));
 		jLabelVersionsControlFile.setFont(jLabelVersionsControlFile.getFont().deriveFont(Font.BOLD));
 
-		JLabel jLabelVersions = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions"));
+		jLabelVersions = new JLabel(Configed.getResourceValue("MakeProductFileDialog.versions"));
 		jLabelVersions.setFont(jLabelVersions.getFont().deriveFont(Font.BOLD));
 
 		jLabelProductVersionControlFile = new JLabel();
@@ -153,7 +155,7 @@ public class MakeProductFileDialog {
 
 		jCheckBoxOverwrite = new JCheckBox(Configed.getResourceValue("MakeProductFileDialog.removeExisting"), true);
 
-		JToggleButton jButtonAdvancedSettings = new JToggleButton(
+		jButtonAdvancedSettings = new JToggleButton(
 				Configed.getResourceValue("MakeProductFileDialog.btn_advancedSettings"));
 
 		jButtonAdvancedSettings.addActionListener((ActionEvent event) -> {
@@ -161,9 +163,16 @@ public class MakeProductFileDialog {
 			dialog.pack();
 		});
 
-		JButton jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
+		jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
 		jButtonSetRights.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.btn_setRights.tooltip"));
 		jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
+
+	}
+
+	private JPanel initPanel() {
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
 				.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
