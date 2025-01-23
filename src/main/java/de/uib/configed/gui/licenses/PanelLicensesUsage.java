@@ -72,7 +72,7 @@ public class PanelLicensesUsage extends MultiTablePanel {
 		comboClient.setPreferredSize(new Dimension(200, 20));
 		comboClient.setEditable(true);
 
-		JButton buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licenses.Usage.AssignLicense"));
+		JButton buttonGet = new JButton(Configed.getResourceValue("buttonExecute"));
 		buttonGet.addActionListener(
 				event -> licensesUsageController.getSoftwareLicenseReservation((String) comboClient.getSelectedItem()));
 

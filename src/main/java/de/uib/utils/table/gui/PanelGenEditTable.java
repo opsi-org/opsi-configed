@@ -72,7 +72,7 @@ public class PanelGenEditTable extends JPanel
 	public static final int POPUP_SORT_AGAIN = 5;
 
 	private static final int[] POPUPS_EXPORT = new int[] { PopupMenuTrait.POPUP_SEPARATOR,
-			PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, };
+			PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV };
 
 	private static final Map<Integer, String> keyNames = new HashMap<Integer, String>() {
 		@Override
