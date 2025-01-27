@@ -135,7 +135,6 @@ public final class Globals {
 	public static final int BUTTON_HEIGHT = 25;
 	public static final int LINE_HEIGHT = 30;
 	public static final int SMALL_HEIGHT = 20;
-	public static final int PROGRESS_BAR_HEIGHT = 10;
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
 

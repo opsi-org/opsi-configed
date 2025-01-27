@@ -50,7 +50,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FLoadingWaiter;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -603,10 +602,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private class PanelDriverUploadThread extends Thread {
 		@Override
 		public void run() {
-			final FLoadingWaiter waiter = new FLoadingWaiter(PanelDriverUpload.this, Globals.APPNAME,
-					Configed.getResourceValue("PanelDriverUpload.execute.running"));
-			waiter.startWaiting();
-
+			dialog.setCursor(Globals.WAIT_CURSOR);
+			buttonUploadDrivers.setEnabled(false);
 			Logging.info(this, "copy  ", driverPath, " to ", targetPath);
 
 			makePath(targetPath);
@@ -634,7 +631,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				persistenceController.getRPCMethodExecutor().setRights(driverDir);
 			}
 
-			waiter.setReady();
+			buttonUploadDrivers.setEnabled(true);
+			dialog.setCursor(null);
 		}
 	}
 
