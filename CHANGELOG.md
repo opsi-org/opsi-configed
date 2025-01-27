@@ -1,5 +1,5 @@
 # Changelog
-## [4.3.5.3] - 2025-01-xx
+## [4.3.5.3] - 2025-01-27
 ### Fixed
 - Exception in SearchTargetModelFromTable when no result found in search
 
