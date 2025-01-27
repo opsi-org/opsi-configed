@@ -329,10 +329,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		fieldDriverPath.setEditable(true);
 		fieldDriverPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
-		final JPanel thisPanel = this;
-
 		buttonCallSelectDriverFiles.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = chooserDriverPath.showOpenDialog(thisPanel);
+			int returnVal = chooserDriverPath.showOpenDialog(dialog);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String pathInstallFiles = chooserDriverPath.getSelectedFile().getPath();
@@ -343,86 +341,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			}
 		});
 
-		JLabel jLabelByAuditDriverLocationPath = new JLabel(
-				Configed.getResourceValue("PanelDriverUpload.byAuditDriverLocationPath"));
 		JLabel labelDriverLocationType = new JLabel(Configed.getResourceValue("PanelDriverUpload.type"));
 		labelDriverLocationType.setFont(labelDriverLocationType.getFont().deriveFont(Font.BOLD));
 
-		List<RadioButtonIntegrationType> radioButtons = new ArrayList<>();
-
-		RadioButtonIntegrationType buttonStandard = new RadioButtonIntegrationType(
-				Configed.getResourceValue("PanelDriverUpload.type.standard"), getLocalsystemPath(DIRECTORY_DRIVERS));
-		RadioButtonIntegrationType buttonPreferred = new RadioButtonIntegrationType(
-				Configed.getResourceValue("PanelDriverUpload.type.preferred"),
-				getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
-		RadioButtonIntegrationType buttonNotPreferred = new RadioButtonIntegrationType(
-				Configed.getResourceValue("PanelDriverUpload.type.excluded"),
-				getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
-		RadioButtonIntegrationType buttonAdditional = new RadioButtonIntegrationType(
-				Configed.getResourceValue("PanelDriverUpload.type.additional"),
-				getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
-		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
-				getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
-
-		radioButtons.add(buttonStandard);
-		radioButtons.add(buttonPreferred);
-		radioButtons.add(buttonNotPreferred);
-		radioButtons.add(buttonAdditional);
-		radioButtons.add(buttonByAudit);
-
-		ButtonGroup buttonGroup = new ButtonGroup();
-
-		for (final RadioButtonIntegrationType button : radioButtons) {
-			buttonGroup.add(button);
-			button.addItemListener((ItemEvent e) -> {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					Logging.debug(this, " ", e);
-					driverDirectory = button.getSubdir();
-
-					produceTarget();
-				}
-			});
-		}
-
-		JPanel panelButtonGroup = new JPanel();
-		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
-		panelButtonGroup.setLayout(layoutButtonGroup);
-		panelButtonGroup.setBorder(
-				BorderFactory.createCompoundBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 1, true),
-						new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
-								Globals.MIN_GAP_SIZE)));
-
-		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addComponent(buttonStandard)
-				.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonNotPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonAdditional, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutButtonGroup.createParallelGroup()
-						.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
-
-		layoutButtonGroup.setHorizontalGroup(layoutButtonGroup.createParallelGroup()
-				.addComponent(buttonStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonNotPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonAdditional, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutButtonGroup.createSequentialGroup().addGap(50)
-						.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		JPanel panelButtonGroup = createPanelButtonGroup();
 
 		driverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
 				stateDriverPath);
@@ -554,6 +476,89 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 						.addGap(Globals.GAP_SIZE).addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+	}
+
+	private JPanel createPanelButtonGroup() {
+		JLabel jLabelByAuditDriverLocationPath = new JLabel(
+				Configed.getResourceValue("PanelDriverUpload.byAuditDriverLocationPath"));
+
+		List<RadioButtonIntegrationType> radioButtons = new ArrayList<>();
+
+		RadioButtonIntegrationType buttonStandard = new RadioButtonIntegrationType(
+				Configed.getResourceValue("PanelDriverUpload.type.standard"), getLocalsystemPath(DIRECTORY_DRIVERS));
+		RadioButtonIntegrationType buttonPreferred = new RadioButtonIntegrationType(
+				Configed.getResourceValue("PanelDriverUpload.type.preferred"),
+				getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
+		RadioButtonIntegrationType buttonNotPreferred = new RadioButtonIntegrationType(
+				Configed.getResourceValue("PanelDriverUpload.type.excluded"),
+				getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
+		RadioButtonIntegrationType buttonAdditional = new RadioButtonIntegrationType(
+				Configed.getResourceValue("PanelDriverUpload.type.additional"),
+				getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
+		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
+				getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
+
+		radioButtons.add(buttonStandard);
+		radioButtons.add(buttonPreferred);
+		radioButtons.add(buttonNotPreferred);
+		radioButtons.add(buttonAdditional);
+		radioButtons.add(buttonByAudit);
+
+		ButtonGroup buttonGroup = new ButtonGroup();
+
+		for (final RadioButtonIntegrationType button : radioButtons) {
+			buttonGroup.add(button);
+			button.addItemListener((ItemEvent e) -> {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					Logging.debug(this, " ", e);
+					driverDirectory = button.getSubdir();
+
+					produceTarget();
+				}
+			});
+		}
+
+		JPanel panelButtonGroup = new JPanel();
+		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
+		panelButtonGroup.setLayout(layoutButtonGroup);
+		panelButtonGroup.setBorder(
+				BorderFactory.createCompoundBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 1, true),
+						new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
+								Globals.MIN_GAP_SIZE)));
+
+		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addComponent(buttonStandard)
+				.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonNotPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonAdditional, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutButtonGroup.createParallelGroup()
+						.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
+
+		layoutButtonGroup.setHorizontalGroup(layoutButtonGroup.createParallelGroup()
+				.addComponent(buttonStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonNotPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonAdditional, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutButtonGroup.createSequentialGroup().addGap(50)
+						.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+
+		return panelButtonGroup;
 	}
 
 	private void initValues() {
