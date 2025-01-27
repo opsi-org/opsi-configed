@@ -392,29 +392,22 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						new EmptyBorder(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE,
 								Globals.MIN_GAP_SIZE)));
 
-		layoutButtonGroup
-				.setVerticalGroup(
-						layoutButtonGroup.createSequentialGroup()
-								.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE).addComponent(buttonStandard)
-								.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonNotPreferred, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonAdditional, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGroup(layoutButtonGroup.createParallelGroup()
-										.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addComponent(buttonStandard)
+				.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonNotPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonAdditional, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutButtonGroup.createParallelGroup()
+						.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
 
 		layoutButtonGroup.setHorizontalGroup(layoutButtonGroup.createParallelGroup()
-				.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonStandard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonPreferred, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -429,8 +422,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						.addComponent(jLabelByAuditDriverLocationPath, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldByAuditPath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE)));
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		driverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
 				stateDriverPath);
@@ -481,6 +473,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						.addComponent(buttonCallSelectDriverFiles, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
@@ -534,9 +528,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						.addGroup(layoutByAuditInfo.createSequentialGroup()
 								.addComponent(fieldDriverPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE).addComponent(
-										buttonCallSelectDriverFiles, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectDriverFiles,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -545,7 +541,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 								GroupLayout.PREFERRED_SIZE)
 						.addGroup(layoutByAuditInfo.createSequentialGroup()
 								.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+										Short.MAX_VALUE)
 								.addGap(Globals.GAP_SIZE).addComponent(buttonCallChooserServerpath,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)))
