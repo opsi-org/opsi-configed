@@ -40,7 +40,7 @@ public class PanelHWByAuditDriver extends JPanel {
 	private JTextField fieldBaseBoardVendor = new JTextField();
 	private JTextField fieldBaseBoardLabel = new JTextField();
 
-	private FDriverUpload fDriverUpload;
+	private DriverUploadDialog fDriverUpload;
 	private ConfigedMain configedMain;
 
 	public PanelHWByAuditDriver(ConfigedMain configedMain) {
@@ -213,7 +213,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		}
 
 		if (fDriverUpload == null) {
-			fDriverUpload = new FDriverUpload(configedMain);
+			fDriverUpload = new DriverUploadDialog(configedMain);
 		}
 
 		fDriverUpload.setSize(Globals.HELPER_FORM_DIMENSION);

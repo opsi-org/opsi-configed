@@ -20,7 +20,7 @@ import de.uib.configed.gui.ClientSelectionDialog;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.RemoveControlDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
-import de.uib.configed.productaction.FCompleteWinProducts;
+import de.uib.configed.productaction.CompleteWinProductsDialog;
 import de.uib.configed.serverconsole.EditTerminalCommandsDialog;
 import de.uib.configed.type.RemoteControl;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -38,7 +38,7 @@ public final class ExtraFrameController {
 	private static ClientSelectionDialog clientSelectionDialog;
 	private static NewClientDialog newClientDialog;
 	private static EditTerminalCommandsDialog commandControlDialog;
-	private static FCompleteWinProducts productActionFrame;
+	private static CompleteWinProductsDialog productActionFrame;
 	private static FGroupActions groupActionFrame;
 	private static RemoveControlDialog remoteControlDialog;
 	private static Map<String, RemoteControl> remoteControls;
@@ -113,7 +113,7 @@ public final class ExtraFrameController {
 		Logging.info("startProductActionFrame ");
 
 		if (productActionFrame == null) {
-			productActionFrame = new FCompleteWinProducts();
+			productActionFrame = new CompleteWinProductsDialog();
 			productActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		}
 

@@ -40,7 +40,7 @@ import de.uib.utils.NameProducer;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SecondaryFrame;
 
-public class FCompleteWinProducts extends SecondaryFrame implements NameProducer {
+public class CompleteWinProductsDialog extends SecondaryFrame implements NameProducer {
 	// file name conventions
 
 	private String winProduct = "";
@@ -70,7 +70,7 @@ public class FCompleteWinProducts extends SecondaryFrame implements NameProducer
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public FCompleteWinProducts() {
+	public CompleteWinProductsDialog() {
 		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(Configed.getResourceValue("FProductAction.title"));
 

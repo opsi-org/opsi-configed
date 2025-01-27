@@ -120,8 +120,7 @@ public class PanelMountShare extends JPanel {
 			return;
 		}
 
-		String call;
-		call = "explorer.exe " + " \"" + np.produceName() + "\"";
+		String call = "explorer.exe " + " \"" + np.produceName() + "\"";
 
 		Logging.info(this, "windows call: ", call);
 

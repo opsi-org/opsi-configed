@@ -11,7 +11,7 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.uib.configed.productaction.FCompleteWinProducts;
+import de.uib.configed.productaction.CompleteWinProductsDialog;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -116,7 +116,7 @@ public class OpsiServiceNOMPersistenceController {
 	private static NavigableMap<String, String> propertyClassesClient;
 	private static Set<String> configKeyStartersNotForClients;
 
-	private FCompleteWinProducts panelCompleteWinProducts;
+	private CompleteWinProductsDialog panelCompleteWinProducts;
 
 	private ServerFacade exec;
 
@@ -388,7 +388,7 @@ public class OpsiServiceNOMPersistenceController {
 		return triggeredEvent;
 	}
 
-	public void registerPanelCompleteWinProducts(FCompleteWinProducts panelCompleteWinProducts) {
+	public void registerPanelCompleteWinProducts(CompleteWinProductsDialog panelCompleteWinProducts) {
 		this.panelCompleteWinProducts = panelCompleteWinProducts;
 	}
 

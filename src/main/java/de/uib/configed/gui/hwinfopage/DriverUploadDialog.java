@@ -14,12 +14,12 @@ import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 import de.uib.utils.swing.SecondaryFrame;
 
-public class FDriverUpload extends SecondaryFrame {
+public class DriverUploadDialog extends SecondaryFrame {
 	private PanelDriverUpload panelDriverUpload;
 
 	private ConfigedMain configedMain;
 
-	public FDriverUpload(ConfigedMain configedMain) {
+	public DriverUploadDialog(ConfigedMain configedMain) {
 		super();
 
 		this.configedMain = configedMain;
