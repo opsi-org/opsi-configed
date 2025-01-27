@@ -6,26 +6,37 @@
 
 package de.uib.configed.gui.hwinfopage;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.utils.Icons;
-import de.uib.utils.swing.SecondaryFrame;
 
-public class DriverUploadDialog extends SecondaryFrame {
+public class DriverUploadDialog {
 	private PanelDriverUpload panelDriverUpload;
 
 	private ConfigedMain configedMain;
+
+	private JDialog dialog;
 
 	public DriverUploadDialog(ConfigedMain configedMain) {
 		super();
 
 		this.configedMain = configedMain;
 
-		panelDriverUpload = new PanelDriverUpload(configedMain, this);
-		super.setContentPane(panelDriverUpload);
+		panelDriverUpload = new PanelDriverUpload(configedMain);
 
-		super.setIconImage(Icons.getMainIcon());
-		super.setTitle(Configed.getResourceValue("FDriverUpload.title"));
+		JOptionPane optionPane = new JOptionPane(panelDriverUpload);
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("FDriverUpload.title"));
+		dialog.setModal(false);
+
+		panelDriverUpload.setDialog(dialog);
+	}
+
+	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
 	}
 
 	public void setUploadParameters(String byAuditPath) {

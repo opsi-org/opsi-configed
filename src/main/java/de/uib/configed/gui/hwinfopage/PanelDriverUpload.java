@@ -20,6 +20,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -50,7 +51,6 @@ import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.FLoadingWaiter;
-import de.uib.utils.swing.SecondaryFrame;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -172,11 +172,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
-	private SecondaryFrame rootFrame;
+	private JDialog dialog;
 
-	public PanelDriverUpload(ConfigedMain configedMain, SecondaryFrame root) {
+	public PanelDriverUpload(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
-		this.rootFrame = root;
 
 		defineChoosers();
 
@@ -189,7 +188,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		labelDriverToIntegrate = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 		labelDriverToIntegrate.setFont(labelDriverToIntegrate.getFont().deriveFont(Font.BOLD));
 
-		panelMountShare = new PanelMountShare(this, root) {
+		panelMountShare = new PanelMountShare(this) {
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();
@@ -217,6 +216,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		// We init the values later, since there are listeners attached to it.
 		// If we init the values earlier, null objects will be accessed
 		initValues();
+	}
+
+	public void setDialog(JDialog dialog) {
+		this.dialog = dialog;
 	}
 
 	private void defineChoosers() {
@@ -501,57 +504,51 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 								GroupLayout.PREFERRED_SIZE)));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createParallelGroup()
-				.addGroup(layoutByAuditInfo
-						.createSequentialGroup().addGap(
-								Globals.GAP_SIZE)
-						.addGroup(layoutByAuditInfo.createParallelGroup()
-								.addGroup(layoutByAuditInfo.createSequentialGroup()
-										.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(labelClientName, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addComponent(jLabelDepotServer)
-								.addComponent(comboChooseDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addGroup(layoutByAuditInfo.createParallelGroup()
+						.addGroup(layoutByAuditInfo.createSequentialGroup()
+								.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE)
-								.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								.addGap(Globals.GAP_SIZE).addComponent(labelClientName, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(jLabelDepotServer)
+						.addComponent(comboChooseDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layoutByAuditInfo.createSequentialGroup()
+								.addComponent(jLabelShowDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE,
+								.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonShowDrivers,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGroup(layoutByAuditInfo.createSequentialGroup()
+								.addComponent(jLabelCreateDrivers, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(layoutByAuditInfo.createSequentialGroup()
-										.addComponent(jLabelShowDrivers, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(buttonShowDrivers, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layoutByAuditInfo.createSequentialGroup()
-										.addComponent(jLabelCreateDrivers, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE).addComponent(btnCreateDrivers,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addComponent(labelDriverToIntegrate, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(layoutByAuditInfo.createSequentialGroup()
-										.addComponent(fieldDriverPath, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(buttonCallSelectDriverFiles, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								.addGap(Globals.MIN_GAP_SIZE).addComponent(btnCreateDrivers, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(labelDriverToIntegrate, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layoutByAuditInfo.createSequentialGroup()
+								.addComponent(fieldDriverPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
-								.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								.addGap(Globals.GAP_SIZE).addComponent(
+										buttonCallSelectDriverFiles, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layoutByAuditInfo.createSequentialGroup()
+								.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGroup(layoutByAuditInfo.createSequentialGroup()
-										.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE).addComponent(buttonCallChooserServerpath,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)))
-						.addGap(Globals.GAP_SIZE))
+								.addGap(Globals.GAP_SIZE).addComponent(buttonCallChooserServerpath,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)))
 				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
@@ -571,7 +568,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		Logging.info(this, "makePath for ", path);
 
 		if (path != null && !path.exists()) {
-			int returnedOption = JOptionPane.showConfirmDialog(rootFrame,
+			int returnedOption = JOptionPane.showConfirmDialog(dialog,
 					Configed.getResourceValue("PanelDriverUpload.makeFilePath.text"),
 					Configed.getResourceValue("PanelDriverUpload.makeFilePath.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
@@ -608,7 +605,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			final FLoadingWaiter waiter = new FLoadingWaiter(PanelDriverUpload.this, Globals.APPNAME,
 					Configed.getResourceValue("PanelDriverUpload.execute.running"));
 			waiter.startWaiting();
-			rootFrame.activateLoadingCursor();
 
 			Logging.info(this, "copy  ", driverPath, " to ", targetPath);
 
@@ -624,7 +620,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						FileUtils.copyFileToDirectory(driverPath, targetPath);
 					}
 				} catch (IOException iox) {
-					rootFrame.deactivateLoadingCursor();
 					Logging.error(iox, "copy error:\n", iox);
 				}
 			} else {
@@ -637,8 +632,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				Logging.info(this, "set rights for ", driverDir);
 				persistenceController.getRPCMethodExecutor().setRights(driverDir);
 			}
-
-			rootFrame.deactivateLoadingCursor();
 
 			waiter.setReady();
 		}
@@ -681,7 +674,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		makePath(currentDirectory);
 		chooserServerpath.setCurrentDirectory(currentDirectory);
 
-		int returnVal = chooserServerpath.showOpenDialog(this);
+		int returnVal = chooserServerpath.showOpenDialog(dialog);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			String serverPathGot = chooserServerpath.getSelectedFile().getPath();

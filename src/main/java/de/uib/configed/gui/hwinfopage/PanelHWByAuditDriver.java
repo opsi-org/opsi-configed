@@ -216,9 +216,7 @@ public class PanelHWByAuditDriver extends JPanel {
 			driverUploadDialog = new DriverUploadDialog(configedMain);
 		}
 
-		driverUploadDialog.setSize(900, 600);
-		driverUploadDialog.setVisible(true);
-		driverUploadDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		driverUploadDialog.show();
 
 		driverUploadDialog.setUploadParameters(byAuditPath);
 	}

@@ -80,7 +80,7 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 		selectedDepot = "" + comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 
-		panelMountShare = new PanelMountShare(this, this) {
+		panelMountShare = new PanelMountShare(this) {
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();

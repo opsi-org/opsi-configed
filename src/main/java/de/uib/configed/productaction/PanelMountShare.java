@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -28,8 +27,6 @@ import de.uib.utils.logging.Logging;
 public class PanelMountShare extends JPanel {
 	private static List<PanelMountShare> instances = new ArrayList<>();
 
-	private JFrame rootFrame;
-
 	private JButton buttonMountShare;
 	private JLabel mountShareDescriptionLabel;
 
@@ -37,9 +34,8 @@ public class PanelMountShare extends JPanel {
 
 	private NameProducer np;
 
-	public PanelMountShare(NameProducer np, JFrame root) {
+	public PanelMountShare(NameProducer np) {
 		instances.add(this);
-		this.rootFrame = root;
 		this.np = np;
 
 		smbMounted = false;
@@ -162,7 +158,6 @@ public class PanelMountShare extends JPanel {
 						Logging.debug(this, "trying to find dir, count ", i);
 						sleep(1000);
 						checkConnectionToShare();
-						rootFrame.toFront();
 					} catch (InterruptedException ex) {
 						Logging.debug(this, "Exception ", ex);
 						Thread.currentThread().interrupt();
