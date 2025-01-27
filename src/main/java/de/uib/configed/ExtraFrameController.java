@@ -38,7 +38,7 @@ public final class ExtraFrameController {
 	private static ClientSelectionDialog clientSelectionDialog;
 	private static NewClientDialog newClientDialog;
 	private static EditTerminalCommandsDialog commandControlDialog;
-	private static CompleteWinProductsDialog productActionFrame;
+	private static CompleteWinProductsDialog completeWinProductsPanel;
 	private static FGroupActions groupActionFrame;
 	private static RemoveControlDialog remoteControlDialog;
 	private static Map<String, RemoteControl> remoteControls;
@@ -112,12 +112,12 @@ public final class ExtraFrameController {
 	public static void startProductActionFrame() {
 		Logging.info("startProductActionFrame ");
 
-		if (productActionFrame == null) {
-			productActionFrame = new CompleteWinProductsDialog();
-			productActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		if (completeWinProductsPanel == null) {
+			completeWinProductsPanel = new CompleteWinProductsDialog();
+			completeWinProductsPanel.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		}
 
-		productActionFrame.start();
+		completeWinProductsPanel.start();
 	}
 
 	public static void startGroupActionFrame(ConfigedMain configedMain) {

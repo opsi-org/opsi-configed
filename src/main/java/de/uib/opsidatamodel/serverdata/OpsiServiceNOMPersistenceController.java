@@ -116,7 +116,7 @@ public class OpsiServiceNOMPersistenceController {
 	private static NavigableMap<String, String> propertyClassesClient;
 	private static Set<String> configKeyStartersNotForClients;
 
-	private CompleteWinProductsDialog panelCompleteWinProducts;
+	private CompleteWinProductsDialog completeWinProductsPanel;
 
 	private ServerFacade exec;
 
@@ -388,13 +388,13 @@ public class OpsiServiceNOMPersistenceController {
 		return triggeredEvent;
 	}
 
-	public void registerPanelCompleteWinProducts(CompleteWinProductsDialog panelCompleteWinProducts) {
-		this.panelCompleteWinProducts = panelCompleteWinProducts;
+	public void registerPanelCompleteWinProducts(CompleteWinProductsDialog completeWinProductsPanel) {
+		this.completeWinProductsPanel = completeWinProductsPanel;
 	}
 
 	public void notifyPanelCompleteWinProducts() {
-		if (panelCompleteWinProducts != null) {
-			panelCompleteWinProducts.evaluateWinProducts();
+		if (completeWinProductsPanel != null) {
+			completeWinProductsPanel.evaluateWinProducts();
 		}
 	}
 

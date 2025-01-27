@@ -40,7 +40,7 @@ public class PanelHWByAuditDriver extends JPanel {
 	private JTextField fieldBaseBoardVendor = new JTextField();
 	private JTextField fieldBaseBoardLabel = new JTextField();
 
-	private DriverUploadDialog fDriverUpload;
+	private DriverUploadDialog driverUploadDialog;
 	private ConfigedMain configedMain;
 
 	public PanelHWByAuditDriver(ConfigedMain configedMain) {
@@ -162,8 +162,8 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldBaseBoardVendor.setText("");
 		fieldBaseBoardLabel.setText("");
 
-		if (fDriverUpload != null) {
-			fDriverUpload.setUploadParameters("");
+		if (driverUploadDialog != null) {
+			driverUploadDialog.setUploadParameters("");
 		}
 	}
 
@@ -198,8 +198,8 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldBaseBoardVendor.setText(vendorStringBaseBoard);
 		fieldBaseBoardLabel.setText(productString);
 
-		if (fDriverUpload != null) {
-			fDriverUpload.setUploadParameters(byAuditPath);
+		if (driverUploadDialog != null) {
+			driverUploadDialog.setUploadParameters(byAuditPath);
 		}
 	}
 
@@ -212,14 +212,14 @@ public class PanelHWByAuditDriver extends JPanel {
 					+ eliminateIllegalPathChars(fieldComputerSystemLabel.getText());
 		}
 
-		if (fDriverUpload == null) {
-			fDriverUpload = new DriverUploadDialog(configedMain);
+		if (driverUploadDialog == null) {
+			driverUploadDialog = new DriverUploadDialog(configedMain);
 		}
 
-		fDriverUpload.setSize(Globals.HELPER_FORM_DIMENSION);
-		fDriverUpload.setVisible(true);
-		fDriverUpload.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		driverUploadDialog.setSize(Globals.HELPER_FORM_DIMENSION);
+		driverUploadDialog.setVisible(true);
+		driverUploadDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
-		fDriverUpload.setUploadParameters(byAuditPath);
+		driverUploadDialog.setUploadParameters(byAuditPath);
 	}
 }
