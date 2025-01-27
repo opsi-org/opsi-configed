@@ -164,8 +164,6 @@ public final class Globals {
 
 	public static final String PSEUDO_KEY_SEPARATOR = ";";
 
-	public static final Dimension HELPER_FORM_DIMENSION = new Dimension(1100, 600);
-
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
 
 	public static final int DEFAULT_PORT = 4447;

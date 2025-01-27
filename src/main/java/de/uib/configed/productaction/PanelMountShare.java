@@ -35,19 +35,12 @@ public class PanelMountShare extends JPanel {
 
 	private boolean smbMounted;
 
-	private int leftBound = -1;
-
 	private NameProducer np;
 
 	public PanelMountShare(NameProducer np, JFrame root) {
-		this(np, root, -1);
-	}
-
-	public PanelMountShare(NameProducer np, JFrame root, int leftBound) {
 		instances.add(this);
 		this.rootFrame = root;
 		this.np = np;
-		this.leftBound = leftBound;
 
 		smbMounted = false;
 
@@ -57,7 +50,6 @@ public class PanelMountShare extends JPanel {
 
 	private void initComponents() {
 		buttonMountShare = new JButton(Icons.getIntellijIcon("windows"));
-		buttonMountShare.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		if (SystemInfo.isWindows) {
 			buttonMountShare.setToolTipText(
 					Configed.getResourceValue("PanelMountShare.mountShareDescription") + " " + np.produceName());
@@ -78,32 +70,18 @@ public class PanelMountShare extends JPanel {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addGap(Globals.LINE_HEIGHT)
-				.addComponent(buttonMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(mountShareDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-						Globals.LINE_HEIGHT));
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(mountShareDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
-		if (leftBound >= 0) {
-			layout.setHorizontalGroup(layout.createSequentialGroup().addGap(leftBound, leftBound, leftBound)
-					.addComponent(buttonMountShare, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-							Globals.GRAPHIC_BUTTON_SIZE)
-					.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
-					.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 3,
-							Short.MAX_VALUE)
-					.addGap(Globals.GAP_SIZE));
-		} else {
-			layout.setHorizontalGroup(
-					layout.createSequentialGroup().addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
-							.addGap(Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH)
-							.addGap(Globals.GAP_SIZE)
-							.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
-							.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
-									Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-							.addGap(Globals.MIN_GAP_SIZE)
-							.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE));
-		}
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(mountShareDescriptionLabel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE));
 	}
 
 	public void mount(boolean mounted) {
