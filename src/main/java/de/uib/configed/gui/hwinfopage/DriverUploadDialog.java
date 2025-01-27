@@ -6,11 +6,8 @@
 
 package de.uib.configed.gui.hwinfopage;
 
-import javax.swing.GroupLayout;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 import de.uib.utils.swing.SecondaryFrame;
 
@@ -24,24 +21,11 @@ public class DriverUploadDialog extends SecondaryFrame {
 
 		this.configedMain = configedMain;
 
-		init();
+		panelDriverUpload = new PanelDriverUpload(configedMain, this);
+		super.setContentPane(panelDriverUpload);
 
 		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(Configed.getResourceValue("FDriverUpload.title"));
-	}
-
-	private void init() {
-		panelDriverUpload = new PanelDriverUpload(configedMain, this);
-
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(panelDriverUpload, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
-
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(panelDriverUpload, 100,
-				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	public void setUploadParameters(String byAuditPath) {

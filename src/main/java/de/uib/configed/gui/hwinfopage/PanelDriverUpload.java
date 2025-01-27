@@ -200,7 +200,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			}
 		};
 
-		initComponents();
+		defineChoosers();
 
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 		smbMounted = new File(depotProductDirectory).exists();
@@ -249,10 +249,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserServerpath.setDialogTitle(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
-	}
-
-	private void initComponents() {
-		defineChoosers();
 	}
 
 	private void evaluateWinProducts() {
