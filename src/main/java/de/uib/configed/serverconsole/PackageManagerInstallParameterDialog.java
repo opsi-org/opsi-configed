@@ -10,6 +10,7 @@ import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -63,21 +64,20 @@ public class PackageManagerInstallParameterDialog {
 		initInstances();
 		initLayout();
 
+		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		buttonExecute.addActionListener(actionEvent -> execute());
+
 		JOptionPane optionPane = new JOptionPane(mainPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
-				null,
-				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
+				null, new Object[] { buttonExecute, Configed.getResourceValue("buttonCancel") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
+		dialog.setModal(false);
 
 		// the dialog should resize to the size of the content
 		installCurlPanel.addDialogToReactOn(dialog);
 
 		dialog.setVisible(true);
-
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
-			execute();
-		}
 	}
 
 	private void initInstances() {

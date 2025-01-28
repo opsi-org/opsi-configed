@@ -90,25 +90,22 @@ public class MakeProductFileDialog {
 		filename = "";
 
 		jComboBoxMainDir.setEnabled(true);
+
+		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		buttonExecute.addActionListener(actionEvent -> execute());
+
+		JButton buttonPackageManager = new JButton(
+				Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"));
+		buttonPackageManager
+				.addActionListener(actionEvent -> new PackageManagerInstallParameterDialog(configedMain, filename));
+
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION,
-				null,
-				new Object[] { Configed.getResourceValue("buttonExecute"),
-						Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"),
-						Configed.getResourceValue("buttonCancel") });
+				null, new Object[] { buttonExecute, buttonPackageManager, Configed.getResourceValue("buttonCancel") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MakeProductFileDialog.title"));
-
+		dialog.setModal(false);
 		dialog.setVisible(true);
-
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
-			execute();
-		} else if (optionPane.getValue() != null && optionPane.getValue()
-				.equals(Configed.getResourceValue("MakeProductFileDialog.buttonToPackageManager"))) {
-			new PackageManagerInstallParameterDialog(configedMain, filename);
-		} else {
-			// Do nothing on cancel button or when dialog was closed
-		}
 	}
 
 	private void initComponents() {
@@ -166,7 +163,6 @@ public class MakeProductFileDialog {
 		jButtonSetRights = new JButton(Configed.getResourceValue("MakeProductFileDialog.btn_setRights"));
 		jButtonSetRights.setToolTipText(Configed.getResourceValue("MakeProductFileDialog.btn_setRights.tooltip"));
 		jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
-
 	}
 
 	private JPanel initPanel() {

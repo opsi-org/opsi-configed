@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -49,16 +50,16 @@ public class PackageUpdaterDialog {
 		retrieveRepos();
 		JPanel panel = initPanel();
 
+		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		buttonExecute.addActionListener(actionEvent -> execute());
+
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null,
-				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
+				new Object[] { buttonExecute, Configed.getResourceValue("buttonCancel") });
 
 		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageUpdaterDialog.title"));
-
+		dialog.setModal(false);
 		dialog.setVisible(true);
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
-			execute();
-		}
 	}
 
 	private void retrieveRepos() {

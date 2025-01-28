@@ -60,17 +60,15 @@ public class OpsiSetRightsParameterDialog {
 		init();
 		initLayout();
 
+		JButton jButtonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		jButtonExecute.addActionListener(actionEvent -> execute());
+
 		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
-				null,
-				new String[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
+				null, new Object[] { jButtonExecute, Configed.getResourceValue("buttonCancel") });
 		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("SingleCommandOpsiSetRights.title"));
-
+		dialog.setModal(false);
 		dialog.setVisible(true);
-
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
-			execute();
-		}
 	}
 
 	private void init() {

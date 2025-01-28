@@ -79,21 +79,21 @@ public class PackageManagerUninstallParameterDialog {
 
 		textFieldSelectedDepots.setText("");
 
+		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		buttonExecute.addActionListener(actionEvent -> execute());
+
 		JOptionPane optionPane = new JOptionPane(uninstallPanel, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null,
-				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
+				new Object[] { buttonExecute, Configed.getResourceValue("buttonCancel") });
 
 		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"));
+		dialog.setModal(false);
 
 		depotSelection = new ListSelectionDialog(dialog, Configed.getResourceValue("FDepotselectionList.title"));
 		depotSelection.setMultiSelection();
 
 		dialog.setVisible(true);
-
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
-			execute();
-		}
 	}
 
 	private String produceDepotParameter() {

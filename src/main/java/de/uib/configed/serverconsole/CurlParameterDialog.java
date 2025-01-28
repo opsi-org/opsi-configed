@@ -69,24 +69,18 @@ public class CurlParameterDialog {
 
 		jComboBoxDir.setEnabled(true);
 
+		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		buttonExecute.addActionListener(actionEvent -> execute());
+
+		JButton buttonParameterInfo = new JButton(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo"));
+		buttonParameterInfo.addActionListener(actionEvent -> showParameterInfo());
+
 		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION,
-				null,
-				new Object[] { Configed.getResourceValue("buttonExecute"),
-						Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo"),
-						Configed.getResourceValue("buttonCancel") });
+				null, new Object[] { buttonExecute, buttonParameterInfo, Configed.getResourceValue("buttonCancel") });
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("CurlParameterDialog.title"));
-
+		dialog.setModal(false);
 		dialog.setVisible(true);
-
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
-			execute();
-		} else if (optionPane.getValue() != null
-				&& optionPane.getValue().equals(Configed.getResourceValue("CurlParameterDialog.buttonParameterInfo"))) {
-			doActionHelp();
-		} else {
-			// Do nothing since the user clicked on cancel or closed the dialog
-		}
 	}
 
 	private void init() {
@@ -167,7 +161,7 @@ public class CurlParameterDialog {
 		}
 	}
 
-	private void doActionHelp() {
+	private void showParameterInfo() {
 		CommandExecutor executor = new CommandExecutor(configedMain, new SingleCommandHelp(commandCurl));
 		executor.execute();
 	}
