@@ -45,13 +45,13 @@ import de.uib.configed.gui.csv.CSVTemplateCreatorDialog;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
 import de.uib.utils.swing.SeparatedDocument;
 
 public final class NewClientDialog {
-	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
 	private static final int WIDTH_INPUT_BOX = Globals.BUTTON_WIDTH * 2;
 
 	private JComboBox<String> jComboDomain;
@@ -189,12 +189,6 @@ public final class NewClientDialog {
 		JScrollPane jTextNodesScrollPane = new JScrollPane(jTextNotes);
 		jTextNodesScrollPane.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 
-		JLabel labelInfoMac = new JLabel(Configed.getResourceValue("NewClientDialog.infoMac"));
-		labelInfoMac.setFont(labelInfoMac.getFont().deriveFont(Font.BOLD));
-
-		JLabel labelInfoIP = new JLabel(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
-		labelInfoIP.setFont(labelInfoIP.getFont().deriveFont(Font.BOLD));
-
 		JLabel jLabelSystemUUID = new JLabel(Configed.getResourceValue("NewClientDialog.SystemUUID"));
 		jLabelSystemUUID.setFont(jLabelSystemUUID.getFont().deriveFont(Font.BOLD));
 
@@ -203,6 +197,8 @@ public final class NewClientDialog {
 				Character.MIN_VALUE, 36, true), "", 36);
 
 		JLabel jLabelMacAddress = new JLabel(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
+		jLabelMacAddress.setIcon(Icons.getIntellijIcon("info"));
+		jLabelMacAddress.setToolTipText(Configed.getResourceValue("NewClientDialog.infoMac"));
 		jLabelMacAddress.setFont(jLabelMacAddress.getFont().deriveFont(Font.BOLD));
 
 		macAddressField = new JTextField(new SeparatedDocument(
@@ -210,6 +206,8 @@ public final class NewClientDialog {
 				2, true), "", 17);
 
 		JLabel jLabelIpAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+		jLabelIpAddress.setIcon(Icons.getIntellijIcon("info"));
+		jLabelIpAddress.setToolTipText(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
 		jLabelIpAddress.setFont(jLabelIpAddress.getFont().deriveFont(Font.BOLD));
 
 		ipAddressField = new JTextField(new SeparatedDocument(
@@ -241,10 +239,12 @@ public final class NewClientDialog {
 				.addComponent(jComboDomain, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// DESCRIPTION + INVENTORY
-				.addComponent(jLabelDescription, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+				.addComponent(jLabelDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addComponent(jLabelInventoryNumber, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+				.addComponent(jLabelInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
 
@@ -262,14 +262,11 @@ public final class NewClientDialog {
 				/////// MAC-ADDRESS
 				.addComponent(jLabelMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelInfoMac, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
 				.addComponent(macAddressField, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 
 				/////// IP-ADDRESS
 				.addComponent(jLabelIpAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelInfoIP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(ipAddressField, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 
 				/////// InstallByShutdown and WAN
@@ -279,15 +276,18 @@ public final class NewClientDialog {
 						GroupLayout.PREFERRED_SIZE)
 
 				// depot
-				.addComponent(jLabelDepot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+				.addComponent(jLabelDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jComboDepots, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 
 				// group
-				.addComponent(labelGroupSelection, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+				.addComponent(labelGroupSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jTextGroupSelection, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX)
 
 				// netboot
-				.addComponent(jLabelNetboot, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
+				.addComponent(jLabelNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jComboNetboot, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX, WIDTH_INPUT_BOX));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(northPanel)
@@ -318,12 +318,12 @@ public final class NewClientDialog {
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// MAC-ADDRESS
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelMacAddress).addComponent(labelInfoMac)
+				.addGap(Globals.GAP_SIZE).addComponent(jLabelMacAddress)
 				.addComponent(macAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// IP-ADDRESS
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelIpAddress).addComponent(labelInfoIP)
+				.addGap(Globals.GAP_SIZE).addComponent(jLabelIpAddress)
 				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
