@@ -63,6 +63,8 @@ public class CurlParameterDialog {
 		}
 
 		this.configedMain = configedMain;
+
+		// The dialog needs to change its size when the completion list is updated
 		this.completion = new CompletionComboButton() {
 			@Override
 			public void setItems(Set<String> items, final String curdir) {

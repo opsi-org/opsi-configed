@@ -79,28 +79,20 @@ public final class NewClientDialog {
 	public NewClientDialog() {
 		init();
 
+		JButton buttonCreate = new JButton(Configed.getResourceValue("NewClientDialog.buttonCreate"));
+		buttonCreate.addActionListener(actionEvent -> create());
+
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
-				new String[] { Configed.getResourceValue("NewClientDialog.buttonCreate"),
-						Configed.getResourceValue("buttonClose") });
+				new Object[] { buttonCreate, Configed.getResourceValue("buttonClose") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title"));
-
-		waitForUserInput();
+		dialog.setModal(false);
 	}
 
 	public void show() {
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		dialog.setVisible(true);
-
-		waitForUserInput();
-	}
-
-	private void waitForUserInput() {
-		if (optionPane.getValue() != null
-				&& optionPane.getValue().equals(Configed.getResourceValue("NewClientDialog.buttonCreate"))) {
-			create();
-		}
 	}
 
 	/**
