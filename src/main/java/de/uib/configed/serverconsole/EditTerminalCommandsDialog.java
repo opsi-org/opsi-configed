@@ -68,8 +68,11 @@ public final class EditTerminalCommandsDialog {
 		initComponents();
 		JPanel panel = init();
 
+		JButton saveButton = new JButton(Configed.getResourceValue("save"));
+		saveButton.addActionListener(actionEvent -> save());
+
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
-				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+				new Object[] { saveButton, Configed.getResourceValue("buttonCancel") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuCommandControl"));
@@ -77,15 +80,6 @@ public final class EditTerminalCommandsDialog {
 
 	public void show() {
 		dialog.setVisible(true);
-
-		waitForUserInput();
-	}
-
-	private void waitForUserInput() {
-		Object selectedValue = optionPane.getValue();
-		if (selectedValue != null && selectedValue.equals(Configed.getResourceValue("save"))) {
-			save();
-		}
 	}
 
 	private JPanel init() {
