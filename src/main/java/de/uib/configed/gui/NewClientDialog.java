@@ -384,11 +384,11 @@ public final class NewClientDialog {
 
 	private JPanel createNorthPanel() {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
-		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
+		JButton jCSVTemplateButton = new JButton(Icons.getIntellijIcon("add"));
 		jCSVTemplateButton.addActionListener(actionEvent -> CSVTemplateCreatorDialog.displayCSVTemplateDialog());
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
-		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
+		JButton jImportButton = new JButton(Icons.getIntellijIcon("open"));
 		jImportButton.addActionListener(actionEvent -> importCSV());
 
 		JPanel northPanel = new JPanel();
@@ -399,13 +399,14 @@ public final class NewClientDialog {
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jCSVTemplateLabel)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCSVTemplateButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH)
+						.addComponent(jCSVTemplateButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jImportLabel)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jImportButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-						.addGap(Globals.MIN_GAP_SIZE)));
+				.addGroup(
+						northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(jImportLabel)
+								.addGap(Globals.GAP_SIZE).addComponent(jImportButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)));
 
 		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
