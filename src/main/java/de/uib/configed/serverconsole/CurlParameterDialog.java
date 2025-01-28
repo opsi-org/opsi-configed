@@ -7,6 +7,7 @@
 package de.uib.configed.serverconsole;
 
 import java.awt.Font;
+import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -62,7 +63,13 @@ public class CurlParameterDialog {
 		}
 
 		this.configedMain = configedMain;
-		this.completion = new CompletionComboButton();
+		this.completion = new CompletionComboButton() {
+			@Override
+			public void setItems(Set<String> items, final String curdir) {
+				super.setItems(items, curdir);
+				dialog.pack();
+			}
+		};
 
 		init();
 		initLayout();
@@ -177,9 +184,9 @@ public class CurlParameterDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(inputPanelLayout.createSequentialGroup()
 						.addComponent(jComboBoxDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

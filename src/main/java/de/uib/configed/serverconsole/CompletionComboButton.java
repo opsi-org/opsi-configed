@@ -208,7 +208,7 @@ public class CompletionComboButton {
 		return contains;
 	}
 
-	private final void setItems(Set<String> items, final String curdir) {
+	public void setItems(Set<String> items, final String curdir) {
 		if (items == null) {
 			Logging.warning("getDirectoriesIn could not find directories in ", curdir);
 		} else {
