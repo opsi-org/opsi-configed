@@ -1,4 +1,4 @@
-## [4.4.0.xx] - 2025-xx-xx
+## [4.3.6.1] - 2025-01-28
 ### Fixed
 - Only delete productPropertyStates for selected product type
 - Nullpointerexception when editing group that was just created
@@ -10,6 +10,8 @@
 - Rework all the Server console dialogs to use standard java library (JOptionPane) instead of own classes
 - Rework Saved Searches Dialog and Remote Control dialog in order use JOptionPane instead of own classes
 
+
+## We go back to version 4.3.6.x because the release of opsi 4.4 was canceled...
 
 ## [4.4.0.14] - 2025-01-09
 ### Fixed
