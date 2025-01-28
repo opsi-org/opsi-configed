@@ -109,7 +109,7 @@ public final class EditTerminalCommandsDialog {
 				.addActionListener(actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel)
 						.doActionParamAdd(jTextAreaCommands));
 
-		updateLists();
+		updateLists("");
 		updateSelectedCommand();
 
 		return panel;
@@ -121,15 +121,11 @@ public final class EditTerminalCommandsDialog {
 
 	private void initComponents() {
 		jComboBoxMenuText = new JComboBox<>();
-		jComboBoxMenuText.addItem(CommandFactory.MENU_NEW);
+		jComboBoxMenuText.addItem("");
 		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("CommandControlDialog.menuText.tooltip"));
 		jComboBoxMenuText.setEditable(true);
 		final JTextComponent editor = (JTextComponent) jComboBoxMenuText.getEditor().getEditorComponent();
 		jComboBoxMenuText.addItemListener((ItemEvent itemEvent) -> {
-			if (editor.getText().trim().equals(CommandFactory.MENU_NEW)) {
-				editor.setSelectionStart(0);
-				editor.setSelectionEnd(editor.getText().length());
-			}
 			updateSelectedCommand(editor.getText());
 			canCommandBeSaved();
 		});
@@ -259,10 +255,6 @@ public final class EditTerminalCommandsDialog {
 		return commandListPanel;
 	}
 
-	private void updateLists() {
-		updateLists(null);
-	}
-
 	private void updateLists(String selectedCommand) {
 		Logging.info(this, "updateLists selectedCommand ", selectedCommand);
 		jComboBoxMenuText.removeAllItems();
@@ -270,10 +262,6 @@ public final class EditTerminalCommandsDialog {
 
 		addItemsToComboBox(jComboBoxMenuText, factory.getCommandMenuNames());
 		addItemsToComboBox(jComboBoxParentMenuText, factory.getCommandMenuParents());
-
-		if (selectedCommand == null || selectedCommand.isBlank()) {
-			selectedCommand = CommandFactory.MENU_NEW;
-		}
 
 		jComboBoxMenuText.setSelectedItem(selectedCommand);
 	}
@@ -292,7 +280,7 @@ public final class EditTerminalCommandsDialog {
 
 	private void updateSelectedCommand(String menuText) {
 		Logging.info(this, "updateSelectedCommand menuText ", menuText);
-		if (menuText == null || menuText.isEmpty() || menuText.equals(CommandFactory.MENU_NEW)) {
+		if (menuText == null || menuText.isEmpty()) {
 			updateComponents(CommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS, "", CommandFactory.DEFAULT_POSITION, "");
 		} else {
 			updateComponentsMenuText(menuText);
@@ -328,18 +316,15 @@ public final class EditTerminalCommandsDialog {
 		String menu = (String) jComboBoxMenuText.getSelectedItem();
 		factory.deleteCommandByMenu(menu);
 
-		jComboBoxMenuText.setSelectedItem(CommandFactory.MENU_NEW);
-		updateLists(CommandFactory.MENU_NEW);
-		updateSelectedCommand(CommandFactory.MENU_NEW);
+		updateLists("");
+		updateSelectedCommand("");
 		ConfigedMain.getMainFrame().reloadServerConsoleMenu();
 	}
 
 	private void save() {
 		Logging.info(this, "doAction2 savecommand ");
 		MultiCommandTemplate command = getCommandNow();
-		if (command == null) {
-			return;
-		}
+
 		Logging.debug(this, "doAction2 savecommand ", command);
 
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
@@ -361,13 +346,8 @@ public final class EditTerminalCommandsDialog {
 
 	private void doActionTestCommand() {
 		Logging.info(this, "doActionTestCommand testCommand building command ...");
-		MultiCommandTemplate command = getCommandNow(true);
-		if (command == null) {
-			return;
-		}
-		if (command.getMenuText() == null) {
-			command.setMenuText(CommandFactory.MENU_NEW);
-		}
+		MultiCommandTemplate command = getCommandNow();
+
 		Logging.debug(this, "doActionTestCommand buildCommand ", command);
 		Logging.debug(this, "doActionTestCommand buildCommand commandlist ", command.getCommands());
 
@@ -383,14 +363,11 @@ public final class EditTerminalCommandsDialog {
 	private boolean canCommandBeSaved() {
 		boolean commandCanBeSaved = false;
 
-		if (jComboBoxMenuText.getSelectedItem() != null
-				&& !((String) jComboBoxMenuText.getSelectedItem()).trim().equals(CommandFactory.MENU_NEW)) {
+		if (jComboBoxMenuText.getSelectedItem() != null) {
 			Logging.info(this, "canCommandBeSaved menuText ", jComboBoxMenuText.getSelectedItem());
 			MultiCommandTemplate tempCommand = getCommandNow();
 			Logging.debug(this, "canCommandBeSaved command ", tempCommand);
-			if (tempCommand == null) {
-				return commandCanBeSaved;
-			}
+
 			Logging.debug(this, "canCommandBeSaved is command saved ", factory.isCommandEqualSavedCommand(tempCommand));
 			commandCanBeSaved = !factory.isCommandEqualSavedCommand(tempCommand);
 		}
@@ -399,15 +376,8 @@ public final class EditTerminalCommandsDialog {
 	}
 
 	private MultiCommandTemplate getCommandNow() {
-		return getCommandNow(false);
-	}
-
-	private MultiCommandTemplate getCommandNow(boolean testing) {
 		Logging.debug(this, "getCommandNow ");
-		String menuText = (String) jComboBoxMenuText.getSelectedItem();
-		if (!testing && menuText.trim().equals(CommandFactory.MENU_NEW)) {
-			return null;
-		}
+
 		String parent = (String) jComboBoxParentMenuText.getSelectedItem();
 		int prio = 0;
 		try {
@@ -422,8 +392,9 @@ public final class EditTerminalCommandsDialog {
 			}
 		}
 
-		MultiCommandTemplate tempCommand = CommandFactory.buildCommand(
-				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
+		String menuText = (String) jComboBoxMenuText.getSelectedItem();
+
+		MultiCommandTemplate tempCommand = CommandFactory.buildCommand(generateId(menuText), parent, menuText,
 				jTextFieldDescription.getText(), prio, coms);
 		Logging.debug(this, "getCommandNow command: ", tempCommand);
 
