@@ -160,8 +160,7 @@ public class CommandControlParameterMethodsPanel extends JPanel {
 			}
 
 			JOptionPane.showMessageDialog(editTerminalCommandsDialog.getDialog(), showThisText,
-					Configed.getResourceValue("CommandControlDialog.parameterTest.title"),
-					JOptionPane.INFORMATION_MESSAGE);
+					Configed.getResourceValue("CommandControlDialog.parameterTest.title"), JOptionPane.PLAIN_MESSAGE);
 		} catch (HeadlessException ble) {
 			Logging.warning(this, ble, "Testing parameter-method failed.");
 		}
