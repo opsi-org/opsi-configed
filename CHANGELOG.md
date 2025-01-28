@@ -4,7 +4,7 @@
 - Nullpointerexception when editing group that was just created
 - We can now return to the dialog when we cancel trusting the certificate when we login by SSO
 - Exception in SearchTargetModelFromTable when no result found in search
-- Exception a ProductPropertyState exists, but the respective ProductProperty does not exist any more
+- Exception when a ProductPropertyState exists, but the respective ProductProperty does not exist any more
 
 ### Changed
 - Rework all the Server console dialogs to use standard java library (JOptionPane) instead of own classes
