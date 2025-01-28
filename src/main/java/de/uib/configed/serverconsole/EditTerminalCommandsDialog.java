@@ -76,9 +76,11 @@ public final class EditTerminalCommandsDialog {
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuCommandControl"));
+		dialog.setModal(false);
 	}
 
 	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		dialog.setVisible(true);
 	}
 
