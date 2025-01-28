@@ -30,7 +30,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.logging.Logging;
 
-public class RemoveControlDialog implements DocumentListener {
+public class RemoteControlDialog implements DocumentListener {
 	private Map<String, String> meanings;
 	private Map<String, Boolean> editableFields;
 	private String selText;
@@ -47,7 +47,7 @@ public class RemoveControlDialog implements DocumentListener {
 
 	private String selValue;
 
-	public RemoveControlDialog(ConfigedMain configedMain) {
+	public RemoteControlDialog(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
 		JPanel panel = initComponents();
@@ -110,7 +110,7 @@ public class RemoveControlDialog implements DocumentListener {
 
 		loggingArea = new JTextArea();
 		loggingArea.setEditable(false);
-		loggingArea.setColumns(30);
+		loggingArea.setColumns(50);
 		loggingArea.setRows(3);
 
 		JScrollPane loggingScrollPane = new JScrollPane(loggingArea);

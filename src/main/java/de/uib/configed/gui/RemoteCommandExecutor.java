@@ -26,9 +26,9 @@ import de.uib.utils.script.Interpreter;
 public class RemoteCommandExecutor extends SwingWorker<Void, String> {
 	private String command;
 	private String client;
-	private RemoveControlDialog remoteControlDialog;
+	private RemoteControlDialog remoteControlDialog;
 
-	public RemoteCommandExecutor(RemoveControlDialog remoteControlDialog, String command, String client) {
+	public RemoteCommandExecutor(RemoteControlDialog remoteControlDialog, String command, String client) {
 		this.remoteControlDialog = remoteControlDialog;
 		this.command = command;
 		this.client = client;

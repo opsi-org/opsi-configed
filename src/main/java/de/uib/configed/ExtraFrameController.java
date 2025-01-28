@@ -18,7 +18,7 @@ import javax.swing.DefaultComboBoxModel;
 import de.uib.configed.groupaction.FGroupActions;
 import de.uib.configed.gui.ClientSelectionDialog;
 import de.uib.configed.gui.NewClientDialog;
-import de.uib.configed.gui.RemoveControlDialog;
+import de.uib.configed.gui.RemoteControlDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
 import de.uib.configed.productaction.CompleteWinProductsDialog;
 import de.uib.configed.serverconsole.EditTerminalCommandsDialog;
@@ -40,7 +40,7 @@ public final class ExtraFrameController {
 	private static EditTerminalCommandsDialog commandControlDialog;
 	private static CompleteWinProductsDialog completeWinProductsPanel;
 	private static FGroupActions groupActionFrame;
-	private static RemoveControlDialog remoteControlDialog;
+	private static RemoteControlDialog remoteControlDialog;
 	private static Map<String, RemoteControl> remoteControls;
 
 	// We have a private empty constructor to prevent instantiation
@@ -133,7 +133,7 @@ public final class ExtraFrameController {
 	public static void startRemoteControlFrame(ConfigedMain configedMain,
 			OpsiServiceNOMPersistenceController persistenceController) {
 		if (remoteControlDialog == null) {
-			remoteControlDialog = new RemoveControlDialog(configedMain);
+			remoteControlDialog = new RemoteControlDialog(configedMain);
 		}
 
 		if (remoteControls == null
