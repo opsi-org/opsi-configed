@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -18,19 +18,15 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-
-import com.formdev.flatlaf.extras.components.FlatComboBox;
-import com.formdev.flatlaf.extras.components.FlatPasswordField;
-import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -52,12 +48,17 @@ public class LoginDialog extends JFrame implements KeyListener {
 	private JLabel jLabelVersion;
 	private JLabel jLabelLogo;
 
-	private FlatTextField fieldUser = new FlatTextField();
+	private JLabel jLabelHost;
+	private JLabel jLabelUser;
+	private JLabel jLabelPassword;
+	private JLabel jLabelOTP;
 
-	private FlatPasswordField passwordField = new FlatPasswordField();
-	private FlatPasswordField fieldOTP = new FlatPasswordField();
+	private JTextField fieldUser = new JTextField();
 
-	private FlatComboBox<String> fieldHost = new FlatComboBox<>();
+	private JPasswordField passwordField = new JPasswordField();
+	private JPasswordField fieldOTP = new JPasswordField();
+
+	private JComboBox<String> fieldHost = new JComboBox<>();
 
 	private JCheckBox checkUseOTP;
 
@@ -173,24 +174,32 @@ public class LoginDialog extends JFrame implements KeyListener {
 		jLabelVersion = new JLabel(Configed.getResourceValue("LoginDialog.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") ");
 
-		fieldHost.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderHost"));
+		jLabelHost = new JLabel(Configed.getResourceValue("LoginDialog.placeholderHost"));
+		jLabelHost.setFont(jLabelHost.getFont().deriveFont(Font.BOLD));
+
+		jLabelUser = new JLabel(Configed.getResourceValue("username"));
+		jLabelUser.setFont(jLabelUser.getFont().deriveFont(Font.BOLD));
+
+		jLabelPassword = new JLabel(Configed.getResourceValue("password"));
+		jLabelPassword.setFont(jLabelPassword.getFont().deriveFont(Font.BOLD));
+
+		jLabelOTP = new JLabel(Configed.getResourceValue("LoginDialog.placeholderOTP"));
+		jLabelOTP.setFont(jLabelOTP.getFont().deriveFont(Font.BOLD));
+		jLabelOTP.setVisible(false);
+
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.getEditor().getEditorComponent().addKeyListener(this);
 		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
 
-		fieldUser.setPlaceholderText(Configed.getResourceValue("username"));
 		fieldUser.addKeyListener(this);
 
-		passwordField.setPlaceholderText(Configed.getResourceValue("password"));
 		passwordField.addKeyListener(this);
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, true));
-		fieldOTP.setPlaceholderText(Configed.getResourceValue("LoginDialog.placeholderOTP"));
 		fieldOTP.addKeyListener(this);
 		fieldOTP.setVisible(false);
-		fieldOTP.setPreferredSize(new Dimension(0, 0));
 
 		checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
 		checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
@@ -223,72 +232,73 @@ public class LoginDialog extends JFrame implements KeyListener {
 			ssoActiveByServer = authMethods.contains("saml");
 			Logging.debug("Authentication methods for host ", host, ": ", authMethods);
 		}
+
 		jButtonSSO.setVisible(ssoActiveByServer);
+		pack();
 		Logging.notice("SSO active by server ", ssoActiveByServer);
-		setupLayout();
 	}
 
 	private void showOTPField(boolean show) {
-		if (show) {
-			fieldOTP.setVisible(true);
-			fieldOTP.setPreferredSize(new Dimension(Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
-			setSize(getPreferredSize());
-		} else {
-			fieldOTP.setVisible(false);
-			fieldOTP.setPreferredSize(new Dimension(0, 0));
-			setSize(getPreferredSize());
-		}
+		fieldOTP.setVisible(show);
+		jLabelOTP.setVisible(show);
+		pack();
 
 		UserPreferences.setBoolean(UserPreferences.OTP, show);
 	}
 
 	private void setupLayout() {
-		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-		((JComponent) getContentPane()).setBorder(padding);
-
+		((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-
-		groupLayout.setHonorsVisibility(false);
 		getContentPane().setLayout(groupLayout);
-		ParallelGroup parGroup = groupLayout.createParallelGroup().addComponent(jButtonCancel,
-				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
-		SequentialGroup seqGroup = groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE);
 
-		if (Boolean.TRUE.equals(ssoActiveByServer)) {
-			parGroup.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-					GroupLayout.PREFERRED_SIZE);
-			seqGroup.addComponent(jButtonSSO, 120, 120, 120).addGap(0, 0, Globals.GAP_SIZE);
-		}
+		groupLayout
+				.setVerticalGroup(
+						groupLayout.createSequentialGroup()
+								.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 
-		seqGroup.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.GAP_SIZE);
-		parGroup.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
+								.addGap(Globals.GAP_SIZE)
 
-		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
-				.addComponent(jLabelLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE)
 
-				.addGap(Globals.LINE_HEIGHT)
+								.addComponent(jLabelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE)
+								.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE)
 
-				.addGap(2).addComponent(fieldHost, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.LINE_HEIGHT)
-				.addComponent(fieldUser, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(passwordField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+								.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE)
 
-				.addComponent(checkUseOTP, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+								.addComponent(jLabelOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 
-				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
+								.addGap(Globals.GAP_SIZE * 2)
 
-				.addGroup(parGroup));
+								.addGroup(groupLayout.createParallelGroup()
+										.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE)
 						.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -304,17 +314,35 @@ public class LoginDialog extends JFrame implements KeyListener {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE, 100, Short.MAX_VALUE))
 
+				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
+				.addComponent(jLabelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
+				.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				.addComponent(fieldOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
+				.addComponent(jLabelOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(checkUseOTP, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-				.addGroup(seqGroup));
+				.addGroup(
+						groupLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+								.addComponent(jButtonSSO, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+								.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE)));
 	}
 
 	private void finishAndMakeVisible() {
