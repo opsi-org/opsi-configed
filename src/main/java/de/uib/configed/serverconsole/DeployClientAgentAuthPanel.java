@@ -19,19 +19,12 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public class DeployClientAgentAuthPanel extends JPanel {
 	private FlatTextField flatTextFieldUser;
 	private FlatPasswordField flatPasswordField;
 
 	private SingleCommandDeployClientAgent commandDeployClientAgent;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
-
-	private boolean isGlobalReadOnly = persistenceController.getUserRolesConfigDataService().isGlobalReadOnly();
 
 	public DeployClientAgentAuthPanel(SingleCommandDeployClientAgent commandDeployClientAgent) {
 		this.commandDeployClientAgent = commandDeployClientAgent;
@@ -42,8 +35,6 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 2, true));
 		flatTextFieldUser = new FlatTextField();
 		flatTextFieldUser.setPlaceholderText(Configed.getResourceValue("username"));
-		flatTextFieldUser.setEnabled(!isGlobalReadOnly);
-		flatTextFieldUser.setEditable(!isGlobalReadOnly);
 		flatTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
@@ -63,8 +54,6 @@ public class DeployClientAgentAuthPanel extends JPanel {
 
 		flatPasswordField = new FlatPasswordField();
 		flatPasswordField.setPlaceholderText(Configed.getResourceValue("password"));
-		flatPasswordField.setEnabled(!isGlobalReadOnly);
-		flatPasswordField.setEditable(!isGlobalReadOnly);
 
 		flatPasswordField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
