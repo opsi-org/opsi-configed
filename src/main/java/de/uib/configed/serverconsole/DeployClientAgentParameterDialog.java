@@ -297,7 +297,7 @@ public class DeployClientAgentParameterDialog {
 						.addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(jButtonCopySelectedClients, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE * 2)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelUserData, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
