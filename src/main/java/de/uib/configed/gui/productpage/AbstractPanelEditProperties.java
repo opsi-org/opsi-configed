@@ -11,8 +11,6 @@ import javax.swing.JPanel;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 
 public abstract class AbstractPanelEditProperties extends JPanel {
-	protected static final int MIN_WIDTH = 50;
-
 	protected DefaultEditMapPanel productPropertiesPanel;
 
 	protected String productEdited;

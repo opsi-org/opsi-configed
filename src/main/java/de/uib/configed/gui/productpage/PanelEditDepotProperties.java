@@ -104,15 +104,19 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		GroupLayout layoutEditProperties = new GroupLayout(panelTop);
 		panelTop.setLayout(layoutEditProperties);
 
-		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(scrollpaneDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		layoutEditProperties
+				.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
+						.addComponent(scrollpaneDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
-		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
-				.addComponent(scrollpaneDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		layoutEditProperties
+				.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollpaneDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitter.setResizeWeight(0.3);
@@ -122,10 +126,10 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		GroupLayout layoutAll = new GroupLayout(this);
 		setLayout(layoutAll);
 
-		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, MIN_WIDTH,
+		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, Globals.MIN_TABLE_V_SIZE,
+		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
@@ -136,11 +140,11 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		titlePanel.setLayout(titleLayout);
 
 		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
-				MIN_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		titleLayout.setVerticalGroup(titleLayout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelEditDepotProductProperties,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(jLabelEditDepotProductProperties, 0, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
