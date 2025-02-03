@@ -1,3 +1,11 @@
+## [4.3.6.1] - 2025-xx-xx
+### Fixed
+- NullpointerException in default properties in depot configuration
+
+### Changed
+- Don't use placeholders in input fields
+
+
 ## [4.3.6.1] - 2025-01-28
 ### Fixed
 - Only delete productPropertyStates for selected product type
