@@ -67,11 +67,11 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelInfoProductDependenciesTable)
-				.addComponent(dependenciesPanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
+				.addComponent(dependenciesPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(labelInfoProductDependenciesTree)
-				.addComponent(dependenciesTreePanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(),
-						2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE));
+				.addComponent(dependenciesTreePanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), 0,
+						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	public void setDependenciesModel(DependenciesModel dependenciesModel) {

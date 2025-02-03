@@ -121,9 +121,6 @@ public final class Globals {
 	public static final int MIN_GAP_SIZE = 5;
 	public static final int GAP_SIZE = 10;
 
-	public static final int MIN_VSIZE = 10;
-	public static final int PREF_VSIZE = 80;
-
 	public static final int BUTTON_HEIGHT = 25;
 	public static final int LINE_HEIGHT = 30;
 	public static final int SMALL_HEIGHT = 20;

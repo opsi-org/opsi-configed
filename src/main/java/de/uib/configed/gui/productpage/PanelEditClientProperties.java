@@ -45,8 +45,8 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		GroupLayout layoutEditProperties = new GroupLayout(this);
 		setLayout(layoutEditProperties);
 
-		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup().addComponent(
-				productPropertiesPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
+				.addComponent(productPropertiesPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutEditProperties.setVerticalGroup(layoutEditProperties.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(productPropertiesPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

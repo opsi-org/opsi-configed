@@ -94,7 +94,6 @@ public class ProductInfoPane extends JSplitPane {
 		productSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		productSplitPane.setTopComponent(jScrollPaneProductInfo);
 		productSplitPane.setBottomComponent(jScrollPaneProductAdvice);
-		productSplitPane.setDividerLocation(Globals.PREF_VSIZE);
 		productSplitPane.setResizeWeight(0.5);
 
 		dependenciesActivateButton = new JToggleButton(Icons.getIntellijIcon("arrowRight"));
@@ -131,13 +130,12 @@ public class ProductInfoPane extends JSplitPane {
 						jLabelProductName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
 				.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelLabelProductVersion, 0, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE))
 
-				.addComponent(productSplitPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
+				.addComponent(productSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -149,8 +147,7 @@ public class ProductInfoPane extends JSplitPane {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addComponent(productSplitPane, 0, Globals.PREF_VSIZE * 2, Short.MAX_VALUE));
+				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(productSplitPane, 0, 160, Short.MAX_VALUE));
 
 		setTopComponent(productDescriptionsPanel);
 	}
