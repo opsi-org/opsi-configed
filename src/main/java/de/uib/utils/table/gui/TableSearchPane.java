@@ -171,8 +171,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.setLeadingIcon(new FlatSearchIcon());
 		flatTextFieldSearch.setShowClearButton(true);
 
-		flatTextFieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-
 		flatTextFieldSearch.getDocument().addDocumentListener(this);
 
 		flatTextFieldSearch.addKeyListener(this);
@@ -245,7 +243,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initNavigationPanel() {
-		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
+		Dimension navButtonDimension = new Dimension(30, 19);
 
 		JButton nextButton = new JButton(Icons.getIntellijIcon("playForward"));
 		nextButton.setToolTipText(Configed.getResourceValue("NavigationPanel.nextEntryTooltip"));
@@ -332,7 +330,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonShowHideExtraOptions, 10, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addComponent(buttonShowHideExtraOptions, 10, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -348,7 +347,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(flatTextFieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(flatTextFieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)

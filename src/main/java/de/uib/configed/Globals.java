@@ -83,9 +83,6 @@ public final class Globals {
 
 	// End new colors
 
-	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
-	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
-
 	// some value which shall be interpreted as identical
 	public static final Color INVISIBLE = new Color(11, 13, 17);
 
@@ -136,7 +133,6 @@ public final class Globals {
 	public static final int LINE_HEIGHT = 30;
 	public static final int SMALL_HEIGHT = 20;
 	public static final int BUTTON_WIDTH = 140;
-	public static final int ICON_WIDTH = 60;
 
 	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
 	public static final Dimension SHORT_LABEL_DIMENSION = new Dimension(60, LINE_HEIGHT);
