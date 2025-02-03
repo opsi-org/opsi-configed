@@ -102,12 +102,10 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
-		jTextFieldDescription.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		jTextFieldDescription.getDocument().addDocumentListener(this);
 
 		jTextFieldInventoryNumber = new JTextField();
 		jTextFieldInventoryNumber.setEditable(true);
-		jTextFieldInventoryNumber.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		jTextFieldInventoryNumber.getDocument().addDocumentListener(this);
 
 		jTextAreaNotes = new JTextArea();
@@ -119,7 +117,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextAreaNotes.getDocument().addDocumentListener(this);
 
 		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
-		scrollpaneNotes.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -234,41 +231,47 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelClientID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT,
+						Globals.DEFAULT_JLABEL_HEIGHT)
 
 				/////// DESCRIPTION
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldDescription, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jTextFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// INVENTORY NUMBER
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jTextFieldInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// SYSTEM UUID
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(systemUUIDField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// MAC ADDRESS
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(macAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(macAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// IP ADDRESS
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientIPAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(ipAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				////// INSTALL BY SHUTDOWN
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(checkBoxInstallByShutdown, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
@@ -280,22 +283,25 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// ONE TIME PASSWORD
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelOneTimePassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldOneTimePassword, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jTextFieldOneTimePassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				////// opsiHostKey
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelOpsiHostKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(hostKeyField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(hostKeyField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// NOTES
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(scrollpaneNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE));
 	}
 
 	public void setClientDescriptionText(String s) {
