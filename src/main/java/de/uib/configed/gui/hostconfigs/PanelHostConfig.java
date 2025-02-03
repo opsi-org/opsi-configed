@@ -15,7 +15,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.ChangedDataManager;
-import de.uib.configed.Globals;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -77,8 +76,7 @@ public class PanelHostConfig extends JPanel {
 
 		planeLayout.setHorizontalGroup(planeLayout.createParallelGroup().addComponent(editMapPanel));
 
-		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addComponent(editMapPanel,
-				Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addComponent(editMapPanel));
 	}
 
 	public void initEditing(String labeltext, Map<String, List<Object>> configVisualMap,

@@ -127,7 +127,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelGroupActivated = new JLabel(Configed.getResourceValue("MainFrame.groupActivated"));
 
 		fieldGroupActivated = new JTextField();
-		fieldGroupActivated.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldGroupActivated.setEditable(false);
 
 		labelAllClientsCount = new JLabel();
@@ -139,16 +138,13 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
 
 		fieldActivatedClientsCount = new JTextField();
-		fieldActivatedClientsCount.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldActivatedClientsCount.setEditable(false);
 
 		fieldSelectedClientsNames = new JTextField();
-		fieldSelectedClientsNames.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldSelectedClientsNames.setEditable(false);
 		fieldSelectedClientsNames.setDragEnabled(true);
 
 		fieldInvolvedDepots = new JTextField();
-		fieldInvolvedDepots.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedDepots.setEditable(false);
 
 		connectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
@@ -161,61 +157,52 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		GroupLayout layoutStatusPane = new GroupLayout(this);
 		this.setLayout(layoutStatusPane);
 
-		layoutStatusPane
-				.setHorizontalGroup(
-						layoutStatusPane.createSequentialGroup()
-								.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE,
-										Globals.COUNTERFIELD_WIDTH, Globals.COUNTERFIELD_WIDTH)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelGroupActivated, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldGroupActivated, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE)
-								.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldActivatedClientsCount, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE)
-								.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.MIN_GAP_SIZE).addComponent(connectionStateLabel));
+		layoutStatusPane.setHorizontalGroup(layoutStatusPane.createSequentialGroup()
+				.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(labelGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldGroupActivated, 0, 0, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedClientsNames, 0, 0, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldActivatedClientsCount, 0, 0, Short.MAX_VALUE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldInvolvedDepots, 0, 0, Short.MAX_VALUE)
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(connectionStateLabel));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelAllClientsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(labelActivated, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(labelGroupActivated, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(fieldGroupActivated, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(labelSelectedClientsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(fieldActivatedClientsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(labelSelectedClientsNames, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(fieldSelectedClientsNames, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(labelInvolvedDepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(fieldInvolvedDepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
+						.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldActivatedClientsCount, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addComponent(connectionStateLabel))
 				.addGap(Globals.MIN_GAP_SIZE));
 	}

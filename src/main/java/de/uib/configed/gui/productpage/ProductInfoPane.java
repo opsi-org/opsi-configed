@@ -137,17 +137,19 @@ public class ProductInfoPane extends JSplitPane {
 
 				.addComponent(productSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelProductID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelProductName, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+		layoutDescriptionsPanel
+				.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(productSplitPane, 0, 160, Short.MAX_VALUE));
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelProductName, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT)
+						.addGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE).addComponent(productSplitPane, 0, 160, Short.MAX_VALUE));
 
 		setTopComponent(productDescriptionsPanel);
 	}

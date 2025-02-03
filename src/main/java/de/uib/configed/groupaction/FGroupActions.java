@@ -207,18 +207,16 @@ public class FGroupActions extends SecondaryFrame {
 		JLabel clientsCountLabel = new JLabel(Configed.getResourceValue("FGroupAction.clientcounter"));
 
 		fieldGroupname = new JTextField();
-		fieldGroupname.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldGroupname.setEditable(false);
 
 		fieldInvolvedClientsCount = new JTextField();
-		fieldInvolvedClientsCount.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedClientsCount.setEditable(false);
 
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE * 2)
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(groupNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(fieldGroupname, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)

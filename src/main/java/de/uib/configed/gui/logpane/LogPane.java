@@ -54,7 +54,6 @@ import de.uib.utils.swing.PopupMenuTrait;
 public class LogPane extends JPanel implements KeyListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 4;
 
-	private static final int SLIDER_H = 35;
 	private static final int SLIDER_W = 180;
 	private static final String DEFAULT_TYPE = "(all)";
 
@@ -266,16 +265,21 @@ public class LogPane extends JPanel implements KeyListener {
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup().addComponent(jScrollPane)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
-						.addComponent(labelSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(jComboBoxSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(jToolBar, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(labelDisplayRestriction, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(comboType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(labelLevel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
-
-				).addGap(Globals.MIN_GAP_SIZE));
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(sliderLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	private void applyType() {
