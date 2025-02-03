@@ -125,9 +125,7 @@ public final class Globals {
 	// We got this value empirically by calling getPreferredSize() on a JLabel
 	public static final int DEFAULT_JLABEL_HEIGHT = 18;
 
-	public static final int BUTTON_HEIGHT = 25;
 	public static final int LINE_HEIGHT = 30;
-	public static final int SMALL_HEIGHT = 20;
 	public static final int BUTTON_WIDTH = 140;
 
 	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
@@ -141,8 +139,6 @@ public final class Globals {
 	public static final int GRAPHIC_BUTTON_SIZE = 40;
 
 	public static final int COMBOBOX_ROW_COUNT = 20;
-
-	public static final Dimension GRAPHIC_BUTTON_DIMENSION = new Dimension(GRAPHIC_BUTTON_SIZE, GRAPHIC_BUTTON_SIZE);
 
 	// action form constants
 	public static final int HFIRST_GAP = GAP_SIZE * 3;

@@ -158,7 +158,6 @@ public class PanelSWMultiClientReport extends JPanel {
 		exportDirectoryS = "";
 
 		JButton buttonCallSelectExportDirectory = new JButton(Icons.getIntellijIcon("open"));
-		buttonCallSelectExportDirectory.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectExportDirectory
 				.setToolTipText(Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
@@ -207,8 +206,8 @@ public class PanelSWMultiClientReport extends JPanel {
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelExportDirectory, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
-						.addComponent(buttonCallSelectExportDirectory, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
+						.addComponent(buttonCallSelectExportDirectory, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(fieldExportDirectory, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT))
 				.addGap(Globals.MIN_GAP_SIZE)
@@ -319,7 +318,7 @@ public class PanelSWMultiClientReport extends JPanel {
 				.addGap(Globals.GAP_SIZE)
 
 				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonStart,
-						Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)));
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		glGlobal.setHorizontalGroup(
 				glGlobal.createParallelGroup().addGap(3 * Globals.GAP_SIZE, 3 * Globals.GAP_SIZE, 3 * Globals.GAP_SIZE)

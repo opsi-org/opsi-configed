@@ -35,8 +35,6 @@ import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
-	private static final int MIN_V_SIZE = 80;
-
 	private JLabel fieldSelectedLicensePoolId;
 
 	private JLabel fieldCountAssignedStatus;
@@ -169,19 +167,19 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		layoutNamebased.setVerticalGroup(layoutNamebased.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutNamebased.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelSupplementSimilar, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT)
-						.addComponent(buttonSupplementSimilar, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT)
-						.addComponent(jCheckBoxSimilarEntriesExist, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT))
+						.addComponent(labelSupplementSimilar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonSupplementSimilar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxSimilarEntriesExist, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(panelRadiobuttonsPreselectionForName2Pool, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE));
 
 		layoutNamebased
 				.setHorizontalGroup(layoutNamebased.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layoutNamebased.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGroup(layoutNamebased.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(labelSupplementSimilar, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE)
@@ -190,7 +188,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 								.addComponent(jCheckBoxSimilarEntriesExist, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE))
+								.addGap(Globals.MIN_GAP_SIZE))
 						.addGroup(
 								layoutNamebased.createSequentialGroup().addGap(Globals.GAP_SIZE)
 										.addComponent(panelRadiobuttonsPreselectionForName2Pool,
@@ -252,29 +250,27 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								titleWindowsSoftware2, 50, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
 								panelRadiobuttonsDirectionOfAssignmentX, 20, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-
-				));
+								Short.MAX_VALUE))));
 
 		layoutPanelInfo.setVerticalGroup(layoutPanelInfo.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-						titleWindowsSoftware, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT))
+						titleWindowsSoftware, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE))
 
 				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelSelectedLicensePoolId, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT)
-						.addComponent(fieldSelectedLicensePoolId, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT))
+						.addComponent(labelSelectedLicensePoolId, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldSelectedLicensePoolId, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGroup(layoutPanelInfo.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-						titleWindowsSoftware2, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT))
+						titleWindowsSoftware2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE))
 
-				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 				.addComponent(panelWorkNamebased, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				.addComponent(panelRadiobuttonsDirectionOfAssignmentX, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		PanelStateSwitch<SoftwareShowAllMeans> panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch<>(null,
 				SoftwareShowAllMeans.ALL, SoftwareShowAllMeans.values(),
@@ -300,7 +296,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		}
 
 		layoutPanelInfoConfig.setHorizontalGroup(layoutPanelInfoConfig.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutPanelInfoConfig
 						.createParallelGroup(
 								GroupLayout.Alignment.LEADING)
@@ -345,42 +340,41 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								GroupLayout.PREFERRED_SIZE)
 
 				));
-		layoutPanelInfoConfig.setVerticalGroup(layoutPanelInfoConfig.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE)
+		layoutPanelInfoConfig
+				.setVerticalGroup(
+						layoutPanelInfoConfig.createSequentialGroup()
+								.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
+										.addComponent(labelCountAllWindowsSoftware, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fieldCountAllWindowsSoftware, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelCountDisplayedWindowsSoftware, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fieldCountDisplayedWindowsSoftware, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelCountNotAssignedSoftware, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fieldCountNotAssignedSoftware, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
-				.addGap(Globals.BUTTON_HEIGHT)
-				.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelCountAllWindowsSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(fieldCountAllWindowsSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(labelCountDisplayedWindowsSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(fieldCountDisplayedWindowsSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(labelCountNotAssignedSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(fieldCountNotAssignedSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
+								// to get the level of the components of the left side
+								.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
+										.addComponent(labelCountAssignedStatus, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fieldCountAssignedStatus, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(labelCountAssignedInEditing, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fieldCountAssignedInEditing, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(buttonShowAssignedNotExisting, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.GAP_SIZE)
 
-				// to get the level of the components of the left side
-				.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelCountAssignedStatus, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT)
-						.addComponent(fieldCountAssignedStatus, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT)
-						.addComponent(labelCountAssignedInEditing, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT)
-						.addComponent(fieldCountAssignedInEditing, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT)
-						.addComponent(buttonShowAssignedNotExisting, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
-								Globals.SMALL_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(panelRadiobuttonsSoftwareselectionX, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-				.addComponent(panelRadiobuttonsSoftwareselectionX, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-				.addGap(Globals.MIN_GAP_SIZE));
+								.addGap(Globals.GAP_SIZE));
 
 		panelLicensepools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), true, 1,
@@ -405,10 +399,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addComponent(panelProductId2LPool, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
-		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
-				.addComponent(panelLicensepools, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(panelProductId2LPool, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE));
+		layoutTopPane.setVerticalGroup(
+				layoutTopPane.createSequentialGroup().addComponent(panelLicensepools, 0, 0, Short.MAX_VALUE)
+						.addComponent(panelProductId2LPool, 0, 0, Short.MAX_VALUE));
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
@@ -422,11 +415,13 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addComponent(panelRegisteredSoftware, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 						Short.MAX_VALUE));
 
-		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup()
 				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(panelInfoWindowsSoftware).addComponent(panelInfoConfigWindowsSoftware))
-				.addComponent(panelRegisteredSoftware, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE));
+						.addComponent(panelInfoWindowsSoftware, 0, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(panelInfoConfigWindowsSoftware, 0, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addComponent(panelRegisteredSoftware, 0, 0, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE));
 
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);

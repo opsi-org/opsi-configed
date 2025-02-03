@@ -221,7 +221,6 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 		fieldProductKey.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
 		buttonCallSelectFolderWinPE = new JButton(Icons.getIntellijIcon("open"));
-		buttonCallSelectFolderWinPE.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
 		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
@@ -237,7 +236,6 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 		});
 
 		buttonCallSelectFolderInstallFiles = new JButton(Icons.getIntellijIcon("open"));
-		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallSelectFolderInstallFiles
 				.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));
 
@@ -256,7 +254,6 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 		});
 
 		buttonCallExecute = new JButton(Icons.getIntellijIcon("upload"));
-		buttonCallExecute.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));
 
 		buttonCallExecute.setEnabled(false);
