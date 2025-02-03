@@ -283,10 +283,13 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		// merge the other depots
 		for (int i = 1; i < depots.size(); i++) {
-			properties = depot2product2properties.get(depots.get(i)).get(productId);
+			String depot = depots.get(i);
+			properties = depot2product2properties.containsKey(depot)
+					? depot2product2properties.get(depot).get(productId)
+					: null;
 			if (properties == null) {
 				Logging.info(this,
-						"mergeProperties, product on depot has not properties " + productId + " on " + depots.get(i));
+						"mergeProperties, product on depot has not properties " + productId + " on " + depot);
 				continue;
 			}
 

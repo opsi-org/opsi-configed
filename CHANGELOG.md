@@ -1,4 +1,9 @@
 # Changelog
+## [4.3.5.4] - 2025-02-03
+### Fixed
+- NullpointerException in default properties in depot configuration
+
+
 ## [4.3.5.3] - 2025-01-27
 ### Fixed
 - Exception in SearchTargetModelFromTable when no result found in search
