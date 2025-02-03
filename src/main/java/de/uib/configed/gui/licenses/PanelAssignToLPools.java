@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui.licenses;
 
-import java.awt.Dimension;
-
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -82,37 +80,31 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				Configed.getResourceValue("PanelAssignToLPools.labelSelectedLicensePoolId"));
 
 		fieldSelectedLicensePoolId = new JLabel();
-		fieldSelectedLicensePoolId.setPreferredSize(new Dimension(250, Globals.LINE_HEIGHT));
 
 		JLabel labelCountAllWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
 
 		fieldCountAllWindowsSoftware = new JLabel();
-		fieldCountAllWindowsSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		JLabel labelCountDisplayedWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
 
 		fieldCountDisplayedWindowsSoftware = new JLabel();
-		fieldCountDisplayedWindowsSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		JLabel labelCountNotAssignedSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
 
 		fieldCountNotAssignedSoftware = new JLabel();
-		fieldCountNotAssignedSoftware.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		JLabel labelCountAssignedStatus = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
 
 		fieldCountAssignedStatus = new JLabel();
-		fieldCountAssignedStatus.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		JLabel labelCountAssignedInEditing = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
 
 		fieldCountAssignedInEditing = new JLabel();
-		fieldCountAssignedInEditing.setPreferredSize(Globals.SHORT_LABEL_DIMENSION);
 
 		buttonShowAssignedNotExisting = new JButton(
 				Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing"));

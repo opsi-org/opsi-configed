@@ -52,7 +52,6 @@ public class PanelEnterLicense extends MultiTablePanel {
 	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
 
 	private static final int MIN_FIELD_WIDTH = 40;
-	private static final int MIN_FIELD_HEIGHT = 6;
 
 	private PanelGenEditTable panelKeys;
 	private PanelGenEditTable panelLicensePools;
@@ -389,33 +388,41 @@ public class PanelEnterLicense extends MultiTablePanel {
 												GroupLayout.PREFERRED_SIZE))))
 				.addContainerGap(10, Short.MAX_VALUE));
 
-		panelLicenseModelLayout.setVerticalGroup(panelLicenseModelLayout.createSequentialGroup()
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabelSLid1, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldLicenseID, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelSLid5, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldEndOfLicense, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE))
+		panelLicenseModelLayout
+				.setVerticalGroup(panelLicenseModelLayout.createSequentialGroup()
+						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabelSLid1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldLicenseID, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelSLid5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldEndOfLicense, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabelSLid2, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldLicenseType, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE))
+						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabelSLid2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldLicenseType, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabelSLid3, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldMaxInstallations, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelSLid3info, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelSLid6, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldLicenseContract, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabelSLid4, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboClient, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)));
+						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabelSLid3, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldMaxInstallations, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelSLid3info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelSLid6, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldLicenseContract, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabelSLid4, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)));
 
 		JPanel panelEnterKey = new JPanel();
 		panelEnterKey.setBorder(BorderFactory.createEtchedBorder());
@@ -429,8 +436,10 @@ public class PanelEnterLicense extends MultiTablePanel {
 				.addContainerGap(10, Short.MAX_VALUE));
 
 		panelEnterKeyLayout.setVerticalGroup(panelEnterKeyLayout.createParallelGroup(Alignment.BASELINE)
-				.addComponent(jLabelLKey, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldLKey, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE));
+				.addComponent(jLabelLKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldLKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		JPanel panelTask = new JPanel();
 		GroupLayout layoutTask = new GroupLayout(panelTask);
@@ -517,8 +526,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(panelTask, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(panelKeys, MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT,
-						MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE));
+				.addGap(Globals.GAP_SIZE).addComponent(panelKeys, 0, 0, Short.MAX_VALUE));
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

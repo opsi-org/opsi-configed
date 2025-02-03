@@ -129,7 +129,6 @@ public final class Globals {
 	public static final int BUTTON_WIDTH = 140;
 
 	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
-	public static final Dimension SHORT_LABEL_DIMENSION = new Dimension(60, LINE_HEIGHT);
 
 	// Make width long enough so that it will be not too small for the whole text
 	public static final Dimension LABEL_SIZE_OF_JTREE = new Dimension(500, 20);
