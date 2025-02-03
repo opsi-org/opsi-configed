@@ -121,6 +121,10 @@ public final class Globals {
 	public static final int MIN_GAP_SIZE = 5;
 	public static final int GAP_SIZE = 10;
 
+	// This is the height a JLabel has by default when it has text.
+	// We got this value empirically by calling getPreferredSize() on a JLabel
+	public static final int DEFAULT_JLABEL_HEIGHT = 18;
+
 	public static final int BUTTON_HEIGHT = 25;
 	public static final int LINE_HEIGHT = 30;
 	public static final int SMALL_HEIGHT = 20;

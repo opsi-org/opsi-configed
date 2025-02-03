@@ -184,16 +184,16 @@ public class ProductInfoPane extends JSplitPane {
 		layoutBottomComponent
 				.setVerticalGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(dependenciesActivateButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
+								.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
 						.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(propertiesActivateButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
+								.addComponent(propertiesActivateButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(panelEditProperties.getTitlePanel()))
 						.addComponent(panelEditProperties, 0, 0, Short.MAX_VALUE));
 

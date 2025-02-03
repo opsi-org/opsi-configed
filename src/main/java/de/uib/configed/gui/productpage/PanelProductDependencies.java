@@ -66,12 +66,13 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelInfoProductDependenciesTable)
-				.addComponent(dependenciesPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(labelInfoProductDependenciesTable).addComponent(dependenciesPanel, 0, 0, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(labelInfoProductDependenciesTree)
-				.addComponent(dependenciesTreePanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), 0,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(dependenciesTreePanel, 0, 0, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)
+
+				// We need to add 2 to the height of the tree path panel because the border
+				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), Globals.DEFAULT_JLABEL_HEIGHT + 2,
+						Globals.DEFAULT_JLABEL_HEIGHT + 2, Globals.DEFAULT_JLABEL_HEIGHT + 2));
 	}
 
 	public void setDependenciesModel(DependenciesModel dependenciesModel) {
