@@ -6,21 +6,24 @@
 
 package de.uib.configed.serverconsole;
 
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
-
-import com.formdev.flatlaf.extras.components.FlatPasswordField;
-import com.formdev.flatlaf.extras.components.FlatTextField;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 
 public class CurlAuthenticationPanel extends PMInstallPanel {
 	private JCheckBox jCheckBoxNeedAuthentication;
-	private FlatTextField flatTextFieldUser;
-	private FlatPasswordField flatPasswordField;
+	private JLabel labelUser;
+	private JTextField jTextFieldUser;
+	private JLabel labelPassword;
+	private JPasswordField jPasswordField;
 
 	public CurlAuthenticationPanel() {
 		super();
@@ -41,10 +44,13 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 			}
 		});
 
-		flatTextFieldUser = new FlatTextField();
-		flatTextFieldUser.setPlaceholderText(Configed.getResourceValue("username"));
-		flatPasswordField = new FlatPasswordField();
-		flatPasswordField.setPlaceholderText(Configed.getResourceValue("password"));
+		labelUser = new JLabel(Configed.getResourceValue("username"));
+		labelUser.setFont(labelUser.getFont().deriveFont(Font.BOLD));
+		jTextFieldUser = new JTextField();
+
+		labelPassword = new JLabel(Configed.getResourceValue("password"));
+		labelPassword.setFont(labelPassword.getFont().deriveFont(Font.BOLD));
+		jPasswordField = new JPasswordField();
 	}
 
 	public JCheckBox getCheckBox() {
@@ -52,11 +58,11 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 	}
 
 	public String getUser() {
-		return flatTextFieldUser.getText();
+		return jTextFieldUser.getText();
 	}
 
 	public String getPassword() {
-		return new String(flatPasswordField.getPassword());
+		return new String(jPasswordField.getPassword());
 	}
 
 	private void initLayout() {
@@ -64,15 +70,22 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(flatTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				.addComponent(flatPasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE));
+				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jPasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(flatTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(flatPasswordField, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+				.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jPasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 }
