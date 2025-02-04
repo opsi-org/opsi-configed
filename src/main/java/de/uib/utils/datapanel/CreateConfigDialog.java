@@ -59,17 +59,23 @@ public class CreateConfigDialog {
 	public CreateConfigDialog(EditMapPanelX editMapPanelX) {
 		this.editMapPanelX = editMapPanelX;
 
+		// We need to create the dialog before initializing the panels,
+		// because the listSelectionDialogs need the dialog as parent
+		JOptionPane pane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+
+		dialog = pane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
+
 		initGeneralPanel();
 		initBooleanDetailsPanel();
 		initUnicodeDetailsPanel();
 
 		initPanel();
 
-		JOptionPane pane = new JOptionPane(jTabbedPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
-				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+		pane.setMessage(jTabbedPane);
+		dialog.pack();
 
-		dialog = pane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 		dialog.setVisible(true);
 
 		Logging.info(this, "result of create config dialog ", pane.getValue());
@@ -172,8 +178,8 @@ public class CreateConfigDialog {
 		}
 	}
 
-	private static ListSelectionDialog createSelectionDialog(String title) {
-		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(), title, true);
+	private ListSelectionDialog createSelectionDialog(String title) {
+		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(dialog, title, true);
 		listSelectionDialog.setModel(new DefaultListModel<>());
 		return listSelectionDialog;
 	}
