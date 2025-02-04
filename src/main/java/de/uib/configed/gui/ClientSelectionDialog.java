@@ -226,34 +226,46 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		buttonRestart.addActionListener(actionEvent -> restart());
 
-		completeLayout.setHorizontalGroup(completeLayout.createParallelGroup().addComponent(scrollPane)
-				.addGroup(completeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200).addGap(Globals.GAP_SIZE)
-						.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addGap(Globals.GAP_SIZE)));
+		completeLayout
+				.setHorizontalGroup(
+						completeLayout.createParallelGroup().addComponent(scrollPane)
+								.addGroup(completeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(saveButton, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)));
 
 		completeLayout.setVerticalGroup(completeLayout.createSequentialGroup().addComponent(scrollPane)
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(completeLayout.createParallelGroup()
-						.addComponent(saveNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(saveNameField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(saveDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(saveDescriptionField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)));
+				.addGroup(completeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(saveNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(saveDescriptionField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(saveButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
 
 		return completePanel;
 	}
