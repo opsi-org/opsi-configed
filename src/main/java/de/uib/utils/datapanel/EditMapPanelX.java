@@ -49,8 +49,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private ListModelProducer modelProducer;
 
 	private JMenuItem popupItemDeleteEntry0;
-	private JMenuItem popupItemDeleteEntry1;
-	private JMenuItem popupItemDeleteEntry2;
+	private JMenuItem popupRemoveSpecificEntry;
+	private JMenuItem setDefaultValue;
 	private JMenuItem popupItemAddStringListEntry;
 
 	protected Map<String, Object> originalMap;
@@ -142,23 +142,23 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			}
 
 			// initialize special property handlers
-			removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
-			removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
-
 			settingDefaultValuesPropertyHandler = new SettingDefaultValuesHandler();
 			settingDefaultValuesPropertyHandler.setMapTableModel(mapTableModel);
 
-			popupItemDeleteEntry1 = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
-			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry1, "remove");
-			popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
+			setDefaultValue = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
+			Icons.addIntellijIconToMenuItem(setDefaultValue, "locked");
+			setDefaultValue.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
 
-			popupMenu.add(popupItemDeleteEntry1);
+			popupMenu.add(setDefaultValue);
 
-			popupItemDeleteEntry2 = new JMenuItem(settingDefaultValuesPropertyHandler.getRemovalMenuText());
-			Icons.addIntellijIconToMenuItem(popupItemDeleteEntry2, "locked");
-			popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
+			removingSpecificValuesPropertyHandler = new RemovingSpecificHandler();
+			removingSpecificValuesPropertyHandler.setMapTableModel(mapTableModel);
 
-			popupMenu.add(popupItemDeleteEntry2);
+			popupRemoveSpecificEntry = new JMenuItem(removingSpecificValuesPropertyHandler.getRemovalMenuText());
+			Icons.addIntellijIconToMenuItem(popupRemoveSpecificEntry, "remove");
+			popupRemoveSpecificEntry.addActionListener(actionEvent -> deleteSpecificEntry());
+
+			popupMenu.add(popupRemoveSpecificEntry);
 		}
 
 		propertyHandler.setMapTableModel(mapTableModel);
