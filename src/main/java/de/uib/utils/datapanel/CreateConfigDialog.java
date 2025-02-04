@@ -132,10 +132,10 @@ public class CreateConfigDialog {
 		unicodeDetailsPanel.setLayout(layout);
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(isEditable)
-				.addComponent(isMultiValue).addGap(Globals.MIN_GAP_SIZE).addComponent(defaultValuesLabel)
+				.addComponent(isMultiValue).addGap(Globals.GAP_SIZE).addComponent(defaultValuesLabel)
 				.addComponent(defaultValuesTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(possibleValuesLabel).addComponent(possibleValuesTextField,
+				.addGap(Globals.GAP_SIZE).addComponent(possibleValuesLabel).addComponent(possibleValuesTextField,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(0, 0, Short.MAX_VALUE));
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(isEditable).addComponent(isMultiValue)
@@ -198,13 +198,13 @@ public class CreateConfigDialog {
 		GroupLayout layout = new GroupLayout(generalPanel);
 		generalPanel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelConfigEntry)
-				.addComponent(textFieldConfigEntry, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE * 2).addComponent(labelDescription).addComponent(textFieldDescription,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(isBoolean));
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(labelConfigEntry)
+						.addComponent(textFieldConfigEntry, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(labelDescription).addComponent(textFieldDescription,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(isBoolean));
 
 		layout.setHorizontalGroup(
 				layout.createParallelGroup().addComponent(labelConfigEntry).addComponent(textFieldConfigEntry)
