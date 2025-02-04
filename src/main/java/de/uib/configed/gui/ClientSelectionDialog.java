@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -351,6 +352,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		complexElements.add(createSoftwareGroup());
 		complexElements.getLast().connectionType.setVisible(false);
 		scrollPane = new JScrollPane(contentPane);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	private void reload() {
@@ -1163,6 +1165,12 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		contentPane.repaint();
 		newElementBox.setSelectedIndex(0);
 		complexElements.getLast().connectionType.setVisible(false);
+
+		// This will change the width of the dialog so that all the content will be visible
+		// and we only need a vertical scrollbar
+		int diffSize = scrollPane.getPreferredSize().width - scrollPane.getSize().width
+				+ scrollPane.getVerticalScrollBar().getWidth();
+		dialog.setSize(dialog.getWidth() + diffSize, dialog.getHeight());
 	}
 
 	private void selectOperation(ActionEvent actionEvent) {
