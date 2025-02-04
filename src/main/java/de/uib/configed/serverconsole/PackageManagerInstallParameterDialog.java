@@ -215,8 +215,9 @@ public class PackageManagerInstallParameterDialog {
 
 		installSettingsPanel.updateCommand(pmInstallCom);
 
-		CommandExecutor executor = new CommandExecutor(configedMain, commands);
-		executor.execute();
+		// Execute the command
+		new CommandExecutor(configedMain, commands).execute();
+
 		Logging.info(this, "doAction3 end ");
 	}
 

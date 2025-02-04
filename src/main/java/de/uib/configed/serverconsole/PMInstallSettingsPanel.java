@@ -85,8 +85,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jComboBoxLoglevel.setSelectedItem(4);
 
 		jCheckBoxProperties = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.lbl_properties"), true);
-		jCheckBoxUpdateInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.setupInstalled"));
-		jCheckBoxSetupInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.updateInstalled"));
+		jCheckBoxUpdateInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.updateInstalled"));
+		jCheckBoxSetupInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.setupInstalled"));
 	}
 
 	private void initLayout() {
