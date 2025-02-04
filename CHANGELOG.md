@@ -1,10 +1,11 @@
-## [4.3.6.1] - 2025-xx-xx
+## [4.3.6.2] - 2025-02-04
 ### Fixed
 - NullpointerException in default properties in depot configuration
 
 ### Changed
 - Don't use placeholders in input fields
-
+- Make it possible to copy the property name into the clipboard
+- Small redesign of Login Dialog
 
 ## [4.3.6.1] - 2025-01-28
 ### Fixed

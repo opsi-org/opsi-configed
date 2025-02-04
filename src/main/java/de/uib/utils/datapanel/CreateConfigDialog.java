@@ -188,7 +188,9 @@ public class CreateConfigDialog {
 		JLabel labelConfigEntry = new JLabel(Configed.getResourceValue("EditMapPanelX.configName"));
 		labelConfigEntry.setFont(labelConfigEntry.getFont().deriveFont(Font.BOLD));
 
-		textFieldConfigEntry = new JTextField();
+		int selectionIndex = editMapPanelX.table.getSelectionModel().getMinSelectionIndex();
+		String value = selectionIndex >= 0 ? (String) editMapPanelX.table.getValueAt(selectionIndex, 0) : null;
+		textFieldConfigEntry = new JTextField(value);
 		// Need to call this method inside invokeLater, otherwise it won't work
 		SwingUtilities.invokeLater(() -> textFieldConfigEntry.requestFocus());
 

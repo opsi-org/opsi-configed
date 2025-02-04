@@ -7,12 +7,15 @@
 package de.uib.configed.gui.hostconfigs;
 
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
@@ -25,6 +28,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.logging.Logging;
@@ -62,7 +66,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	@Override
 	protected JPopupMenu definePopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
-		return new PopupMenuTrait(
+		JPopupMenu jPopupMenu = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF }) {
 			@Override
 			public void action(int p) {
@@ -84,6 +88,24 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 				}
 			}
 		};
+
+		JMenuItem jPopupMenuCopyToClipBoard = new JMenuItem(
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.copyPropertyToClipboard"));
+		Icons.addIntellijIconToMenuItem(jPopupMenuCopyToClipBoard, "copy");
+		jPopupMenuCopyToClipBoard.addActionListener(actionEvent -> copyPropertyToClipboard());
+		jPopupMenu.add(jPopupMenuCopyToClipBoard);
+
+		return jPopupMenu;
+	}
+
+	private void copyPropertyToClipboard() {
+		int row = table.getSelectedRow();
+		if (row == -1) {
+			return;
+		}
+
+		String propertyName = (String) table.getValueAt(row, 0);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(propertyName), null);
 	}
 
 	/**
