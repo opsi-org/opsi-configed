@@ -342,8 +342,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		newElementBox.addActionListener(actionEvent -> addElement());
 
-		vMainGroup.addComponent(newElementBox, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		hMainGroup.addComponent(newElementBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH);
+		vMainGroup.addComponent(newElementBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
+		hMainGroup.addComponent(newElementBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
 
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
@@ -850,18 +852,15 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		case NONE_TYPE:
 			return;
 		}
-		sourceGroup.dataComponent.setMaximumSize(new Dimension(sourceGroup.dataComponent.getMaximumSize().width,
-				sourceGroup.dataComponent.getMinimumSize().height));
-		int minHeight = Globals.LINE_HEIGHT;
-		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER, minHeight, minHeight,
-				minHeight);
+
+		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER,
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
 		hGroupData.addComponent(sourceGroup.dataComponent, 100, 100, Short.MAX_VALUE);
 	}
 
 	private void addTextTypeComponent(SimpleGroup sourceGroup) {
 		TextInputField fieldText = new TextInputField(sourceGroup.element.getEnumData());
 		fieldText.setEditable(true);
-		fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldText.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldText;
@@ -869,7 +868,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private void addDateTypeComponent(SimpleGroup sourceGroup) {
 		TextInputField fieldDate = new TextInputField();
-		fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldDate.setToolTipText("yyyy-mm-dd");
 		fieldDate.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDate;
@@ -890,7 +888,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private void addDoubleTypeComponent(SimpleGroup sourceGroup) {
 		TextInputField fieldDouble = new TextInputField();
-		fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldDouble.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldDouble.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDouble;
