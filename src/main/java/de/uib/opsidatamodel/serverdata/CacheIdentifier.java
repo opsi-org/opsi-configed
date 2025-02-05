@@ -293,7 +293,7 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Set<String>}
 	 */
-	TERMINAL_MENU_ACTIVE("terminal_menu_active"),
+	MOTD_FORBIDDEN("motd_forbidden"), TERMINAL_MENU_ACTIVE("terminal_menu_active"),
 	/**
 	 * return type {@code Set<String>}
 	 */

@@ -14,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,15 +40,19 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
+import de.uib.configed.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
+import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.permission.UserFeaturesConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.FeatureActivationChecker;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
@@ -288,6 +293,29 @@ public class MainFrame extends JFrame {
 		jMenuExtras.add(jMenuWorkOnGroups);
 		jMenuExtras.add(jMenuWorkOnProducts);
 
+		JMenuItem jMenuFrameMsgOfTheDay = null;
+		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
+				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
+		boolean forbiddenMOTD = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE)
+				&& forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
+
+		if (ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3.15.2")
+				&& FeatureActivationChecker.isFeatureActivated(FeatureActivationChecker.Feature.MESSAGE_OF_THE_DAY)) {
+			jMenuFrameMsgOfTheDay = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"));
+			jMenuFrameMsgOfTheDay.addActionListener((ActionEvent e) -> showMsgOfTheDay());
+
+			jMenuFrameMsgOfTheDay.setEnabled(!forbiddenMOTD);
+			if (forbiddenMOTD) {
+				jMenuFrameMsgOfTheDay.setText(
+						String.format("%s %s", Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"),
+								Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden")));
+			}
+
+		}
+		if (jMenuFrameMsgOfTheDay != null) {
+			jMenuExtras.add(jMenuFrameMsgOfTheDay);
+		}
+
 		return jMenuExtras;
 	}
 
@@ -497,6 +525,10 @@ public class MainFrame extends JFrame {
 				Configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"), JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null,
 				new Object[] { Configed.getResourceValue("buttonClose"), buttonCopy, buttonOpen }, null);
+	}
+
+	private static void showMsgOfTheDay() {
+		new MessageOfTheDayDialog();
 	}
 
 	public void showHealthDataAction() {

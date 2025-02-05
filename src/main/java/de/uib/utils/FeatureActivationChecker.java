@@ -32,6 +32,7 @@ import de.uib.utils.logging.Logging;
  */
 public final class FeatureActivationChecker {
 	public enum Feature {
+		MESSAGE_OF_THE_DAY
 	}
 
 	private static EnumSet<Feature> activatedFeatures;

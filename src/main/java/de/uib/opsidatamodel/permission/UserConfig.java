@@ -103,6 +103,7 @@ public class UserConfig {
 			userBoolKeys.addAll(UserServerConsoleConfig.BOOL_KEYS);
 			Logging.info("addAll opsipermission bool keys");
 			userBoolKeys.addAll(UserOpsipermission.BOOL_KEYS);
+			userBoolKeys.addAll(UserFeaturesConfig.BOOL_KEYS);
 		}
 
 		return userBoolKeys;
@@ -131,6 +132,7 @@ public class UserConfig {
 
 			userListKeys.addAll(UserOpsipermission.LIST_KEYS);
 			userListKeys.addAll(UserServerConsoleConfig.LIST_KEYS);
+			userListKeys.addAll(UserFeaturesConfig.LIST_KEYS);
 		}
 
 		return userListKeys;
@@ -148,11 +150,14 @@ public class UserConfig {
 
 		archeoPrototypeConfig.booleanMap.putAll(UserOpsipermission.DEFAULT.getBooleanMap());
 		archeoPrototypeConfig.booleanMap.putAll(UserServerConsoleConfig.DEFAULT.getBooleanMap());
+		archeoPrototypeConfig.booleanMap.putAll(UserFeaturesConfig.DEFAULT.getBooleanMap());
 
 		archeoPrototypeConfig.valuesMap.putAll(UserOpsipermission.DEFAULT.getValuesMap());
 		archeoPrototypeConfig.valuesMap.putAll(UserServerConsoleConfig.DEFAULT.getValuesMap());
+		archeoPrototypeConfig.valuesMap.putAll(UserFeaturesConfig.DEFAULT.getValuesMap());
 		archeoPrototypeConfig.possibleValuesMap.putAll(UserOpsipermission.DEFAULT.getPossibleValuesMap());
 		archeoPrototypeConfig.possibleValuesMap.putAll(UserServerConsoleConfig.DEFAULT.getPossibleValuesMap());
+		archeoPrototypeConfig.possibleValuesMap.putAll(UserFeaturesConfig.DEFAULT.getPossibleValuesMap());
 
 		archeoPrototypeConfig.setValues(MODIFICATION_INFO_KEY, ZERO_TIME);
 

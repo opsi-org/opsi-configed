@@ -1014,6 +1014,50 @@ public class ConfigDataService {
 		return POJOReMapper.remap(getConfigDefaultValuesPD().get(key));
 	}
 
+	// setConfig(Map<String, List<Object>> settings)
+	public void setMessageOfTheDayConfigs(Map<String, String> configs) {
+		String[] keys = new String[] { OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE,
+				OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL,
+				OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER,
+				OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL };
+		Object[] data = new Object[] { configs.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE),
+				configs.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL),
+				configs.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER),
+				configs.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL) };
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_MESSAGE_OF_THE_DAY, data);
+		persistenceController.getExecutioner().doCall(omc);
+
+		String possibleValues = "possibleValues";
+		for (int i = 0; i < keys.length; i++) {
+			Logging.debug(this, "setMessageOfTheDayConfigs key ", keys[i], " data ", data[i]);
+			ConfigOption option = getConfigOptionsPD().get(keys[i]);
+			option.setDefaultValues(List.of(data[i]));
+			option.put(possibleValues, List.of(data[i]));
+		}
+	}
+
+	public Map<String, String> getMessageOfTheDayConfigs() {
+		Logging.debug(this, "getMessageOfTheDayConfigs");
+
+		String[] keys = new String[] { OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE,
+				OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL,
+				OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER,
+				OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL };
+
+		Map<String, String> result = new HashMap<>();
+		for (String key : keys) {
+			ConfigOption option = getConfigOptionsPD().get(key);
+			if (option == null) {
+				Logging.warning(this, "getMessageOfTheDayConfigs, no option found for key ", key);
+				continue;
+			}
+			result.put(key, option.getDefaultValues().get(0).toString());
+		}
+		Logging.debug(this, "getMessageOfTheDayConfigs result ", result);
+		return result;
+	}
+
 	public List<String> getDomains() {
 		List<String> result = new ArrayList<>();
 
