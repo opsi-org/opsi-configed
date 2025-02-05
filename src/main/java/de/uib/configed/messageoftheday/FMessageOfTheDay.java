@@ -6,6 +6,7 @@
 
 package de.uib.configed.messageoftheday;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,7 @@ public class FMessageOfTheDay {
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"));
 		dialog.setVisible(true);
+		dialog.setSize(new Dimension(900, 600));
 
 		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
 			execute();
