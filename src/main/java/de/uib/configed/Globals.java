@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 
+import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 /**
@@ -123,7 +124,7 @@ public final class Globals {
 
 	// This is the height a JLabel has by default when it has text.
 	// We got this value empirically by calling getPreferredSize() on a JLabel
-	public static final int DEFAULT_JLABEL_HEIGHT = 18;
+	public static final int DEFAULT_JLABEL_HEIGHT = new JLabel("a").getPreferredSize().height;
 
 	public static final int LINE_HEIGHT = 30;
 	public static final int BUTTON_WIDTH = 140;
