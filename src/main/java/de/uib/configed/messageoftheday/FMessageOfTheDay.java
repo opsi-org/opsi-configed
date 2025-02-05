@@ -44,19 +44,13 @@ public class FMessageOfTheDay {
 	private PanelMessageInfos pMsgInfoGeneral;
 	private PanelMessageInfos pMsgInfoUser;
 	private JButton resetButton = new JButton(Configed.getResourceValue("MessageOfTheDay.resetButton"));
-	private JCheckBox previewCheckbox = new JCheckBox(Configed.getResourceValue("MessageOfTheDay.previewButton"));
 	private Map<String, String> motdData = new HashMap<>();
 	private boolean forbiddenDevice;
 	private boolean forbiddenUser;
-	private boolean showPreview = true;
 	private JDialog dialog;
 	private JScrollPane scrollpane = new JScrollPane();
 
 	public FMessageOfTheDay() {
-		// super(ConfigedMain.getMainFrame(), Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"), false,
-		// 		new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
-		// 		900, 600, true);
-
 		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
 				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
 		forbiddenDevice = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE);
@@ -198,6 +192,7 @@ public class FMessageOfTheDay {
 
 	public void setSaveButtonEnable(boolean enable) {
 		Logging.debug("FMessageOfTheDay setSaveButtonEnable ", enable);
+		// TODO: how to disable the save button now?
 		// jButton2.setEnabled(enable);
 	}
 
@@ -223,19 +218,4 @@ public class FMessageOfTheDay {
 		resetData();
 		setSaveButtonEnable(false);
 	}
-
-	// @Override
-	// public void paint(Graphics g) {
-	// 	super.paint(g);
-	// 	// to ensure that the buttons are visible
-	// 	jButton1.repaint();
-	// 	jButton2.repaint();
-	// 	// if (!forbiddenDevice) {
-	// 	// 	pMsgInfoGeneral.repaint();
-	// 	// } else if (!forbiddenUser) {
-	// 	// 	pMsgInfoUser.repaint();
-	// 	// } else {
-	// 	// 	Logging.error("FMessageOfTheDay paint forbidden");
-	// 	// }
-	// }
 }
