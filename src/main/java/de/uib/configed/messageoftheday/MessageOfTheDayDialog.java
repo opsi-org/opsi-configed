@@ -6,7 +6,6 @@
 
 package de.uib.configed.messageoftheday;
 
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,7 +36,7 @@ import de.uib.utils.logging.Logging;
  * for the user motd config. This dialog is used in the {@link MainFrame} class
  * to show the motd configuration in the top menu "window".
  */
-public class FMessageOfTheDay {
+public class MessageOfTheDayDialog {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private PanelMessageInfos pMsgInfoGeneral;
@@ -50,13 +48,12 @@ public class FMessageOfTheDay {
 	private JDialog dialog;
 	private JScrollPane scrollpane = new JScrollPane();
 
-	public FMessageOfTheDay() {
+	public MessageOfTheDayDialog() {
 		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
 				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
 		forbiddenDevice = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE);
 		forbiddenUser = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 		if (forbiddenDevice && forbiddenUser) {
-			// Logging.error("MessageOfTheDay Feature is forbidden by configs");
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("feature.permissionDenied.message"),
 					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
@@ -68,17 +65,14 @@ public class FMessageOfTheDay {
 
 		// JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 		JOptionPane optionPane = new JOptionPane(scrollpane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
-				null,
-				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
+				null, new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"));
 		dialog.setVisible(true);
-		dialog.setSize(new Dimension(900, 600));
 
 		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
-			execute();
+			saveData();
 		}
-
 	}
 
 	private void init() {
@@ -93,18 +87,15 @@ public class FMessageOfTheDay {
 					motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
 			pMsgInfoUser.resetData();
 		}
-		setSaveButtonEnable(false);
 	}
 
 	private void define() {
 		if (!forbiddenDevice) {
-			pMsgInfoGeneral = new PanelMessageInfos(this, PanelMessageInfos.InfoType.DEVICE, motdData, forbiddenDevice);
+			pMsgInfoGeneral = new PanelMessageInfos(PanelMessageInfos.InfoType.DEVICE, motdData, forbiddenDevice);
 		}
 		if (!forbiddenUser) {
-			pMsgInfoUser = new PanelMessageInfos(this, PanelMessageInfos.InfoType.USER, motdData, forbiddenUser);
+			pMsgInfoUser = new PanelMessageInfos(PanelMessageInfos.InfoType.USER, motdData, forbiddenUser);
 		}
-
-		setSaveButtonEnable(false);
 
 		JPanel panel = new JPanel();
 		GroupLayout gpl = new GroupLayout(panel);
@@ -115,64 +106,35 @@ public class FMessageOfTheDay {
 
 		SequentialGroup seqGroup = gpl.createSequentialGroup();
 		seqGroup.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
-				.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(resetButton, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addComponent(previewCheckbox, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-
-				));
+				.addComponent(frameTitleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(resetButton,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		ParallelGroup vertGroup = gpl.createParallelGroup();
 		vertGroup.addGroup(gpl.createSequentialGroup()
-				.addComponent(frameTitleLabel, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addGroup(gpl.createSequentialGroup().addComponent(resetButton, 30,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addGap(Globals.GAP_SIZE)
-				// .addComponent(previewCheckbox, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				));
+				.addComponent(frameTitleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addGroup(gpl.createSequentialGroup().addComponent(resetButton,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
 		if (!forbiddenDevice) {
-			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoGeneral, 100, GroupLayout.PREFERRED_SIZE,
+			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoGeneral, GroupLayout.PREFERRED_SIZE,
+					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
+			vertGroup.addComponent(pMsgInfoGeneral, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 					Short.MAX_VALUE);
-			vertGroup.addComponent(pMsgInfoGeneral, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
 		}
 		if (!forbiddenUser) {
-			vertGroup.addComponent(pMsgInfoUser, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
-			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoUser, 100, GroupLayout.PREFERRED_SIZE,
+			vertGroup.addComponent(pMsgInfoUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 					Short.MAX_VALUE);
+			seqGroup.addGap(Globals.GAP_SIZE).addComponent(pMsgInfoUser, GroupLayout.PREFERRED_SIZE,
+					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE);
 		}
 		gpl.setVerticalGroup(seqGroup);
 		gpl.setHorizontalGroup(vertGroup);
 		scrollpane.getViewport().add(panel);
 		scrollpane.setBorder(null);
-	}
-
-	public void checkDefaultValues() {
-		Logging.debug("FMessageOfTheDay checkDefaultValues");
-		if (pMsgInfoGeneral == null || pMsgInfoUser == null) {
-			return;
-		}
-
-		boolean txtDeviceEqualToDefault = true;
-		boolean txtDeviceValidUntilEqualToDefault = true;
-		if (!forbiddenDevice) {
-			txtDeviceEqualToDefault = pMsgInfoGeneral.getText()
-					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE));
-			txtDeviceValidUntilEqualToDefault = pMsgInfoGeneral.getValidUntil()
-					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL));
-		}
-
-		boolean txtUserEqualToDefault = true;
-		boolean txtUserValidUntilEqualToDefault = true;
-		if (!forbiddenUser) {
-			txtUserEqualToDefault = pMsgInfoUser.getText()
-					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER));
-			txtUserValidUntilEqualToDefault = pMsgInfoUser.getValidUntil()
-					.equals(motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_USER_VALID_UNTIL));
-		}
-
-		setSaveButtonEnable(!(txtUserEqualToDefault && txtDeviceEqualToDefault && txtUserValidUntilEqualToDefault
-				&& txtDeviceValidUntilEqualToDefault));
 	}
 
 	private void resetData() {
@@ -186,17 +148,9 @@ public class FMessageOfTheDay {
 			pMsgInfoUser.setDataMap(motdData);
 			pMsgInfoUser.resetData();
 		}
-		setSaveButtonEnable(false);
-
 	}
 
-	public void setSaveButtonEnable(boolean enable) {
-		Logging.debug("FMessageOfTheDay setSaveButtonEnable ", enable);
-		// TODO: how to disable the save button now?
-		// jButton2.setEnabled(enable);
-	}
-
-	public void execute() {
+	private void saveData() {
 		Logging.debug("FMessageOfTheDay doAction2 store");
 		Map<String, String> data = new HashMap<>();
 		if (!forbiddenDevice) {
@@ -216,6 +170,5 @@ public class FMessageOfTheDay {
 		persistenceController.getConfigDataService().setMessageOfTheDayConfigs(data);
 		Logging.info("FMessageOfTheDay doAction2 store done: ", data);
 		resetData();
-		setSaveButtonEnable(false);
 	}
 }

@@ -8,7 +8,7 @@
  * Represents the panel for the message of the day configuration. This panel
  * contains a text area for the message and a date chooser for the "valid
  * until" date as well as a button to set the valid date to "forever". This
- * panel is used in the {@link FMessageOfTheDay} dialog.
+ * panel is used in the {@link MessageOfTheDayDialog} dialog.
  */
 package de.uib.configed.messageoftheday;
 
@@ -43,7 +43,6 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		DEVICE, USER
 	}
 
-	private FMessageOfTheDay caller;
 	private InfoType type;
 	private String date;
 	private JTextField dateChooserText = new JTextField();
@@ -57,11 +56,10 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 	private JRadioButton infiniteDateChooserButton;
 	private JLabel topicLabel;
 
-	public PanelMessageInfos(FMessageOfTheDay caller, InfoType type, Map<String, String> msgdata, boolean disabled) {
+	public PanelMessageInfos(InfoType type, Map<String, String> msgdata, boolean disabled) {
 		Logging.debug("PanelMessageInfos type: ", type);
 		this.type = type;
 		this.motdData = msgdata;
-		this.caller = caller;
 
 		initComponents();
 		defineLayout();
@@ -197,12 +195,11 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				caller.checkDefaultValues();
+				// We do not need to update the preview on remove
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				caller.checkDefaultValues();
 				markdownPreview.setText(textArea.getText());
 			}
 
@@ -301,14 +298,12 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 			Logging.debug("PanelMessageInfos dataChanged: null");
 			date = "0";
 			setDateText(date, null);
-			caller.checkDefaultValues();
 			return;
 		}
 		Logging.debug("PanelMessageInfos dataChanged: ", datetime);
 		long unixTime = datetime.atZone(DateTimePicker.ZONEID).toEpochSecond();
 		setDateText(datetime.toString(), unixTime);
 		date = Long.toString(unixTime);
-		caller.checkDefaultValues();
 	}
 
 	@Override

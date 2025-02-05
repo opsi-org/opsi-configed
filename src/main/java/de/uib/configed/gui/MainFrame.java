@@ -40,7 +40,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
-import de.uib.configed.messageoftheday.FMessageOfTheDay;
+import de.uib.configed.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
 import de.uib.messages.Messages;
@@ -528,7 +528,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private static void showMsgOfTheDay() {
-		new FMessageOfTheDay();
+		new MessageOfTheDayDialog();
 	}
 
 	public void showHealthDataAction() {

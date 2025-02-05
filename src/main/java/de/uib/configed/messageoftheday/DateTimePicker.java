@@ -202,7 +202,6 @@ public class DateTimePicker extends DatePicker {
 	class InternalConverter extends StringConverter<LocalDate> {
 		public String toString(LocalDate object) {
 			Logging.trace("DateTimePicker InternalConverter toString was: ", object);
-			// LocalDateTime value = object == null ? null : LocalDateTime.of(object, timeNow());
 			LocalDateTime value = object == null ? null : getDateTimeValue();
 			String s = (value != null) ? value.format(formatter) : "";
 			Logging.trace("DateTimePicker InternalConverter toString is: ", s);
