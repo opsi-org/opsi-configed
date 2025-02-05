@@ -288,48 +288,45 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		}
 
 		layoutPanelInfoConfig.setHorizontalGroup(layoutPanelInfoConfig.createSequentialGroup()
-				.addGroup(layoutPanelInfoConfig
-						.createParallelGroup(
-								GroupLayout.Alignment.LEADING)
-						.addGroup(
-								layoutPanelInfoConfig.createSequentialGroup()
-										.addComponent(labelCountAssignedStatus, col0width, col0width, col0width)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(fieldCountAssignedStatus, Globals.BUTTON_WIDTH / 3,
-												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(labelCountAssignedInEditing, 5, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(fieldCountAssignedInEditing, Globals.BUTTON_WIDTH / 3,
-												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(buttonShowAssignedNotExisting, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
+				.addGroup(layoutPanelInfoConfig.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addGroup(layoutPanelInfoConfig.createSequentialGroup()
+								.addComponent(labelCountAssignedStatus, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(fieldCountAssignedStatus, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(labelCountAssignedInEditing, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(fieldCountAssignedInEditing, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(buttonShowAssignedNotExisting, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE))
 
-						.addGroup(
-								layoutPanelInfoConfig.createSequentialGroup()
-										.addComponent(labelCountAllWindowsSoftware, col0width, col0width, col0width)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(fieldCountAllWindowsSoftware, Globals.BUTTON_WIDTH / 3,
-												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(labelCountDisplayedWindowsSoftware, 5, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(fieldCountDisplayedWindowsSoftware, Globals.BUTTON_WIDTH / 3,
-												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(labelCountNotAssignedSoftware, 5, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE)
-										.addComponent(fieldCountNotAssignedSoftware, Globals.BUTTON_WIDTH / 3,
-												Globals.BUTTON_WIDTH / 3, Globals.BUTTON_WIDTH / 3)
-										.addGap(Globals.MIN_GAP_SIZE))
+						.addGroup(layoutPanelInfoConfig.createSequentialGroup()
+								.addComponent(labelCountAllWindowsSoftware, col0width, col0width, col0width)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(fieldCountAllWindowsSoftware, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(labelCountDisplayedWindowsSoftware, 5, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(fieldCountDisplayedWindowsSoftware, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(labelCountNotAssignedSoftware, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE)
+								.addComponent(fieldCountNotAssignedSoftware, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.MIN_GAP_SIZE))
 
-						.addComponent(panelRadiobuttonsSoftwareselectionX, 20, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+						.addComponent(panelRadiobuttonsSoftwareselectionX, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
 				));
 		layoutPanelInfoConfig
