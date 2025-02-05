@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.csv;
 
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -128,6 +129,7 @@ public class CSVTemplateCreatorDialog {
 		otherDelimiterInput.setEnabled(false);
 
 		JLabel quoteLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		quoteLabel.setFont(quoteLabel.getFont().deriveFont(Font.BOLD));
 
 		JComboBox<Character> quoteOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		quoteOptions.addItemListener((ItemEvent e) -> {
@@ -166,8 +168,10 @@ public class CSVTemplateCreatorDialog {
 
 		JLabel dataSelectionLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
+		dataSelectionLabel.setFont(dataSelectionLabel.getFont().deriveFont(Font.BOLD));
 		JLabel fieldSeparatorLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
+		fieldSeparatorLabel.setFont(fieldSeparatorLabel.getFont().deriveFont(Font.BOLD));
 
 		includeFormatHintOption = new JCheckBox(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.includeFormatHintOption"));
@@ -181,58 +185,41 @@ public class CSVTemplateCreatorDialog {
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list.setVisibleRowCount(-1);
 
-		centerLayout
-				.setHorizontalGroup(
-						centerLayout.createParallelGroup().addComponent(dataSelectionLabel)
-								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(list, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
-								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(includeFormatHintOption, Globals.BUTTON_WIDTH,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
+		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup().addComponent(dataSelectionLabel)
+				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(includeFormatHintOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
-								.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
+				.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
-								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(commaOption, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
+				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
-								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
+				.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
-								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
+				.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
-								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(otherOption, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.MIN_GAP_SIZE))
-								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.GAP_SIZE).addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+				.addGroup(centerLayout.createSequentialGroup()
+						.addComponent(otherOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
+				.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup().addComponent(dataSelectionLabel)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE).addComponent(includeFormatHintOption).addGap(Globals.GAP_SIZE)
-				.addComponent(fieldSeparatorLabel).addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(fieldSeparatorLabel)
 				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -243,8 +230,7 @@ public class CSVTemplateCreatorDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(otherOption)
 						.addComponent(otherDelimiterInput))
-				.addGap(Globals.GAP_SIZE).addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(quoteLabel).addComponent(quoteOptions)));
+				.addGap(Globals.GAP_SIZE).addComponent(quoteLabel).addComponent(quoteOptions));
 
 		return centerPanel;
 	}

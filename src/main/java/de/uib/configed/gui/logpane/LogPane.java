@@ -242,25 +242,31 @@ public class LogPane extends JPanel implements KeyListener {
 		GroupLayout layoutCommandpane = new GroupLayout(this);
 		setLayout(layoutCommandpane);
 
-		layoutCommandpane.setHorizontalGroup(layoutCommandpane.createParallelGroup().addComponent(jScrollPane)
-				.addGroup(layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE * 2)
-						.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE * 2)
-						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(comboType, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE * 2)
-						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
-						.addGap(Globals.GAP_SIZE)));
+		layoutCommandpane
+				.setHorizontalGroup(
+						layoutCommandpane.createParallelGroup().addComponent(jScrollPane)
+								.addGroup(
+										layoutCommandpane.createSequentialGroup().addGap(Globals.GAP_SIZE)
+												.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(jComboBoxSearch, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+												.addGap(Globals.GAP_SIZE * 2)
+												.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE * 2)
+												.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(comboType, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+												.addGap(Globals.GAP_SIZE * 2)
+												.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(Globals.GAP_SIZE)
+												.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
+												.addGap(Globals.GAP_SIZE)));
 
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup().addComponent(jScrollPane)
 				.addGap(Globals.MIN_GAP_SIZE)
