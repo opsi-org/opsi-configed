@@ -129,30 +129,28 @@ public class PanelHWByAuditDriver extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(selectionBaseBoard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(labelComputerSystemVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2)
-						.addComponent(fieldComputerSystemVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2)
-						.addComponent(labelBaseBoardVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2)
-						.addComponent(fieldBaseBoardVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2))
-				.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelComputerSystemVendor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldComputerSystemVendor, 0, 0, Short.MAX_VALUE)
+						.addComponent(labelBaseBoardVendor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldBaseBoardVendor, 0, 0, Short.MAX_VALUE))
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutByAuditInfo
 						.createParallelGroup().addComponent(labelSeparator).addComponent(labelSeparator2))
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(labelProductOrModel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2)
-						.addComponent(fieldComputerSystemLabel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2)
-						.addComponent(labelProductOrModel2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2)
-						.addComponent(fieldBaseBoardLabel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH * 2))
-				.addGap(2 * Globals.MIN_GAP_SIZE, 4 * Globals.MIN_GAP_SIZE, Short.MAX_VALUE));
+						.addComponent(labelProductOrModel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldComputerSystemLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(labelProductOrModel2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldBaseBoardLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE));
 	}
 
 	public void emptyByAuditStrings() {
