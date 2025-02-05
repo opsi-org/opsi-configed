@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -71,6 +72,7 @@ public final class HealthCheckSettingsDialog {
 
 	private JPanel createOptionsPanel() {
 		JLabel labelSelectedHosts = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
+		labelSelectedHosts.setFont(labelSelectedHosts.getFont().deriveFont(Font.BOLD));
 
 		JTextField selectedHosts = new JTextField();
 		selectedHosts.setEditable(false);
@@ -81,10 +83,12 @@ public final class HealthCheckSettingsDialog {
 			}
 		});
 
-		JLabel labelCheckActive = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.healthCheckActive"));
-		checkBoxCheckActive = new JCheckBox((String) null, true);
+		checkBoxCheckActive = new JCheckBox(Configed.getResourceValue("HealthCheckSettingsDialog.healthCheckActive"),
+				true);
 
 		JLabel labelStartDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
+		labelStartDowntime.setFont(labelStartDowntime.getFont().deriveFont(Font.BOLD));
+
 		startDowntime = new JTextField();
 		startDowntime.setEditable(false);
 		startDowntime.addMouseListener(new MouseAdapter() {
@@ -98,6 +102,8 @@ public final class HealthCheckSettingsDialog {
 		});
 
 		JLabel labelEndDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
+		labelEndDowntime.setFont(labelEndDowntime.getFont().deriveFont(Font.BOLD));
+
 		endDowntime = new JTextField();
 		endDowntime.setEditable(false);
 		endDowntime.addMouseListener(new MouseAdapter() {
@@ -128,27 +134,21 @@ public final class HealthCheckSettingsDialog {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup().addComponent(labelSelectedHosts).addComponent(selectedHosts))
-				.addGap(Globals.GAP_SIZE * 2)
-				.addGroup(layout.createParallelGroup().addComponent(labelCheckActive).addComponent(checkBoxCheckActive))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(labelStartDowntime).addComponent(startDowntime))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(labelEndDowntime).addComponent(endDowntime)));
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addComponent(labelSelectedHosts)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(selectedHosts, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
-				.addGroup(layout.createSequentialGroup().addComponent(labelCheckActive)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(checkBoxCheckActive, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
-				.addGroup(layout.createSequentialGroup().addComponent(labelStartDowntime)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(startDowntime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH))
-				.addGroup(layout.createSequentialGroup().addComponent(labelEndDowntime)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(endDowntime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)));
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelSelectedHosts)
+				.addComponent(selectedHosts).addGap(Globals.GAP_SIZE).addComponent(checkBoxCheckActive)
+				.addGap(Globals.GAP_SIZE).addComponent(labelStartDowntime).addComponent(startDowntime)
+				.addGap(Globals.GAP_SIZE).addComponent(labelEndDowntime).addComponent(endDowntime));
+
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(labelSelectedHosts)
+				.addComponent(selectedHosts, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)
+
+				.addComponent(checkBoxCheckActive)
+
+				.addComponent(labelStartDowntime)
+				.addComponent(startDowntime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)
+
+				.addComponent(labelEndDowntime)
+				.addComponent(endDowntime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH));
 
 		return panel;
 	}
