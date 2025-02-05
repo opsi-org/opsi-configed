@@ -15,18 +15,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.RemoteControl;
-import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.permission.UserFeaturesConfig;
@@ -56,22 +53,13 @@ import de.uib.utils.logging.Logging;
  */
 @SuppressWarnings({ "unchecked" })
 public class UserRolesConfigDataService {
-	private static final String DESCRIPTION_KEY = "description";
-	private static final String EDITABLE_KEY = "editable";
-
 	private static final String OPSI_CLIENTD_EVENT_SILENT_INSTALL = "silent_install";
-	private static final Boolean DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = false;
 
 	private static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
 
 	public static final String ITEM_ADD_CLIENT = "add client";
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENSES = "free licenses for client";
-
-	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER = "configed.ssh.deploy-client-agent.default.user";
-	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER_DEFAULT_VALUE = "Administrator";
-	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW = "configed.ssh.deploy-client-agent.default.password";
-	public static final String KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE = "";
 
 	// keys for default wan configuration
 	public static final String CONFIG_CLIENTD_EVENT_STARTUP = "opsiclientd.event_gui_startup.active";
@@ -114,14 +102,6 @@ public class UserRolesConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
 	}
 
-	public Set<String> getPermittedProductGroupsPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, Set.class);
-	}
-
-	public boolean hasProductGroupsFullPermissionPD() {
-		return cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class);
-	}
-
 	public Set<String> getHostGroupsPermitted() {
 		Set<String> result = null;
 		if (!isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
@@ -149,7 +129,6 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.CREATE_CLIENT_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, isUserRegisterActivated());
 
@@ -185,25 +164,13 @@ public class UserRolesConfigDataService {
 		// Load all data together to prevent an extra RPC-call
 		persistenceController.getGroupDataService().retrieveAllGroupsPD();
 
-		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfigPD(),
+		new UserConfigProducing(applyUserSpecializedConfigPD(),
 				persistenceController.getHostInfoCollections().getConfigServer(),
 				persistenceController.getHostInfoCollections().getDepotNamesList(),
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigListCellOptionsPD()).produce();
-
-		if (readyConfigObjects == null) {
-			Logging.warning(this, "readyObjects for userparts null");
-		} else {
-			if (!readyConfigObjects.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS,
-						new Object[] { readyConfigObjects });
-				exec.doCall(omc);
-			}
-
-			Logging.info(this, "readyObjects for userparts ", readyConfigObjects.size());
-		}
+				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
 
 		checkPermissions();
 
@@ -240,16 +207,14 @@ public class UserRolesConfigDataService {
 
 	private void callOpsiLicenseMissingText() {
 		StringBuilder info = new StringBuilder();
-		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
-		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
-		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "<br>");
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "<br>");
 		info.append(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER + " "
 				+ Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
-		info.append("\n");
 
 		Logging.warning(this, " user role administration configured but not permitted by the modules file ", info);
 
-		FOpsiLicenseMissingText.callInstanceWith(info.toString());
+		Utils.showMissingLicenseModules(info.toString());
 	}
 
 	private boolean doesUserBelongToSystemsReadOnlyGroup() {
@@ -286,39 +251,35 @@ public class UserRolesConfigDataService {
 			} else if (Boolean.TRUE.equals(locallySavedValueUserRegister)) {
 				// if true was locally saved but is not the value from service then we ask
 				Logging.warning(this, "setAgainUserRegistration, it seems that user check has been deactivated");
+				StringBuilder message = new StringBuilder(
+						Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
+				message.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
 
-				FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("RegisterUserWarning.dialog.title"), true,
-						new String[] { Configed.getResourceValue("buttonClose"),
+				int answer = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), message.toString(),
+						Configed.getResourceValue("RegisterUserWarning.dialog.title"), 0, JOptionPane.WARNING_MESSAGE,
+						null,
+						new Object[] { Configed.getResourceValue("buttonClose"),
 								Configed.getResourceValue("RegisterUserWarning.dialog.button.dontWarnAgain"),
 								Configed.getResourceValue("RegisterUserWarning.dialog.button.reactivateUserRoles") },
-						600, 200);
-				StringBuilder msg = new StringBuilder(Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
-				msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
+						null);
 
-				dialog.setMessage(msg.toString());
-				dialog.setVisible(true);
-				int result = dialog.getResult();
-				Logging.info(this, "setAgainUserRegistration, reaction via option ", dialog.getResult());
+				Logging.info(this, "setAgainUserRegistration, reaction via option ", answer);
 
-				switch (result) {
+				switch (answer) {
 				case 1:
-					Logging.info(this, "setAgainUserRegistration ignore ");
-					break;
-
-				case 2:
 					Logging.info(this, "setAgainUserRegistration remove warning locally ");
 					// remove from store
 					Configed.getSavedStates().remove(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER);
 					break;
 
-				case 3:
+				case 2:
 					Logging.info(this, "setAgainUserRegistration reactivate user check ");
 					resultVal = true;
 					break;
 
 				default:
-					Logging.warning(this, "no case found for result in setAgainUserRegistration");
+					// We pressed cancel or closed the dialog
+					Logging.info(this, "setAgainUserRegistration ignore ");
 					break;
 				}
 			} else {
@@ -376,15 +337,32 @@ public class UserRolesConfigDataService {
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, serverActionPermission);
 	}
 
-	private void checkTerminalPermissions() {
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
-		String configKey = userPartPD() + UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
-
+	private void checkKeyPermission(Map<String, List<Object>> serverPropertyMap, String configKey,
+			CacheIdentifier cacheIdentifier) {
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
-
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
+			List<Object> items = serverPropertyMap.get(configKey);
+			cacheManager.setCachedData(cacheIdentifier, items.get(0));
+		}
+	}
+
+	private void checkTerminalPermissions() {
+		Logging.debug(this, "checkTerminalPermissions");
+
+		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
+				.getConfigDefaultValuesPD();
+
+		checkKeyPermission(serverPropertyMap, userPartPD() + UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE,
+				CacheIdentifier.TERMINAL_MENU_ACTIVE);
+		checkKeyPermission(serverPropertyMap, userPartPD() + UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE,
+				CacheIdentifier.TERMINAL_COMMANDS_ACTIVE);
+
+		String configKey = userPartPD() + UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
+		cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, Collections.emptyList());
+		if (serverPropertyMap.get(configKey) != null
+				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
+			Logging.info(this, "checkPermissions value:", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
 		}
@@ -496,9 +474,6 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productgroupsFullPermission);
-
 		if (!productgroupsFullPermission) {
 			setProductsPermitted(productGroupsPermitted);
 		}
@@ -530,8 +505,7 @@ public class UserRolesConfigDataService {
 		}
 
 		if (applyUserSpecializedConfigPD()) {
-			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + persistenceController.getUser()
-					+ "}.";
+			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + ConfigedMain.getUser() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}
@@ -610,18 +584,6 @@ public class UserRolesConfigDataService {
 		readyObjects.add(item);
 
 		return defaultValues;
-	}
-
-	private List<Object> computeClientConfigInstallByShutdown(List<Map<String, Object>> readyObjects) {
-		Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
-				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
-
-		Map<String, Object> item = Utils.createNOMBoolConfig(
-				OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
-				DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, "Use install by shutdown if possible");
-		readyObjects.add(item);
-
-		return Collections.singletonList(DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 	}
 
 	private List<Object> computeHostExtraDisplayfieldsInPanelLicensesReconciliation(
@@ -707,90 +669,6 @@ public class UserRolesConfigDataService {
 		return defaultValues;
 	}
 
-	private List<Object> computeClientLimitWarningPercent(List<Map<String, Object>> readyObjects) {
-		Logging.info(this, "checkStandardConfigs: create domain list");
-
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-
-		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
-
-		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
-
-		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT);
-		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", defaultValues);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", true);
-		item.put("multiValue", false);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
-	private List<Object> computeClientLimitWarningAbsolute(List<Map<String, Object>> readyObjects) {
-		Logging.info(this, "checkStandardConfigs: create domain list");
-
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-
-		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE);
-		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", defaultValues);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", true);
-		item.put("multiValue", false);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
-	private List<Object> computeClientLimitWarningDays(List<Map<String, Object>> readyObjects) {
-		Logging.info(this, "checkStandardConfigs: create domain list");
-
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-
-		List<Object> defaultValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-		List<Object> possibleValues = Collections.singletonList(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
-
-		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS);
-		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", defaultValues);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", true);
-		item.put("multiValue", false);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
-	private List<Object> computeDisableWarningModules(List<Map<String, Object>> readyObjects) {
-		Logging.info(this, "checkStandardConfigs: create domain list");
-
-		Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
-
-		List<Object> defaultValues = Collections.emptyList();
-
-		List<Object> possibleValues = Collections.emptyList();
-
-		item.put("ident", LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES);
-		item.put("description", "saved domains for creating clients");
-		item.put("defaultValues", defaultValues);
-		item.put("possibleValues", possibleValues);
-		item.put("editable", true);
-		item.put("multiValue", true);
-
-		readyObjects.add(item);
-
-		return defaultValues;
-	}
-
 	private void checkRemoteControlConfigs(Map<String, List<Object>> configDefaultValues,
 			List<Map<String, Object>> readyObjects) {
 		// ping_linux
@@ -861,84 +739,8 @@ public class UserRolesConfigDataService {
 		}
 	}
 
-	private void checkAdditionalQueries(Map<String, List<Object>> configDefaultValues,
-			List<Map<String, Object>> readyObjects) {
-		String key = OpsiServiceNOMPersistenceController.CONFIG_KEY_SUPPLEMENTARY_QUERY + "." + "hosts_with_products";
-
-		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
-
-			StringBuilder qbuf = new StringBuilder("select");
-			qbuf.append(" hostId, productId, installationStatus from ");
-			qbuf.append(" HOST, PRODUCT_ON_CLIENT ");
-			qbuf.append(" WHERE HOST.hostId  = PRODUCT_ON_CLIENT.clientId ");
-			qbuf.append(" AND =  installationStatus='installed' ");
-			qbuf.append(" order by hostId, productId ");
-
-			String query = qbuf.toString();
-			String description = "all hosts and their installed products";
-
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, query, description));
-			readyObjects.add(ConfigDataService.produceConfigEntry("BoolConfig", key + "." + EDITABLE_KEY, false,
-					"(command may be edited)"));
-			// description entry
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key + "." + DESCRIPTION_KEY,
-					description, ""));
-		}
-	}
-
-	private void checkSavedSearches(Map<String, List<Object>> configDefaultValues,
-			List<Map<String, Object>> readyObjects) {
-		String key = SavedSearch.CONFIG_KEY + "." + "product_failed";
-
-		if (!configDefaultValues.containsKey(key)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ", key);
-
-			StringBuilder val = new StringBuilder();
-			val.append("{ \"version\" : \"2\", ");
-			val.append("\"data\" : {");
-			val.append(" \"element\" : null, ");
-			val.append(" \"elementPath\" : null,");
-			val.append(" \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, ");
-			val.append(" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : ");
-			val.append("[ \\\"Product\\\", \\\"Action Result\\\" ], \"operation\" : \"StringEqualsOperation\",");
-			val.append(" \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
-			val.append("} }");
-
-			String value = val.toString();
-
-			String description = "any product failed";
-
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", key, value, description));
-
-			// description entry
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig",
-					key + "." + SavedSearch.DESCRIPTION_KEY, description, ""));
-		}
-	}
-
-	private void checkSSHCommands(Map<String, List<Object>> configDefaultValues,
-			List<Map<String, Object>> readyObjects) {
-		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
-					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER,
-					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER_DEFAULT_VALUE,
-					"default windows username for deploy-client-agent-script"));
-		}
-
-		if (!configDefaultValues.containsKey(KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW)) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
-					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
-			readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW,
-					KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW_DEFAULT_VALUE,
-					"default windows password for deploy-client-agent-script"));
-		}
-	}
-
-	@SuppressWarnings({ "java:S103" })
 	private boolean checkStandardConfigs() {
-		boolean result = persistenceController.getConfigDataService().getConfigListCellOptionsPD() != null;
+		boolean result = persistenceController.getConfigDataService().getConfigOptionsPD() != null;
 		Logging.info(this, "checkStandardConfigs, already there ", result);
 
 		if (!result) {
@@ -950,13 +752,9 @@ public class UserRolesConfigDataService {
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 
-		// list of domains for new clients		
+		// list of domains for new clients
 		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY,
 				arg -> computeConfigedGivenDomains(readyObjects));
-
-		// global value for install_by_shutdown
-		configDefaultValues.computeIfAbsent(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
-				arg -> computeClientConfigInstallByShutdown(readyObjects));
 
 		// extra display fields in licencing
 		configDefaultValues.computeIfAbsent(
@@ -965,9 +763,6 @@ public class UserRolesConfigDataService {
 
 		// remote controls
 		checkRemoteControlConfigs(configDefaultValues, readyObjects);
-
-		// additional queries
-		checkAdditionalQueries(configDefaultValues, readyObjects);
 
 		// WAN_CONFIGURATION
 		// does it exist?
@@ -979,14 +774,9 @@ public class UserRolesConfigDataService {
 			buildWANConfigOptions(readyObjects);
 		}
 
-		// saved searches
-		checkSavedSearches(configDefaultValues, readyObjects);
-
 		// configuration of host menus
 		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_DISABLED_CLIENT_ACTIONS,
 				arg -> computeDisabledClientActions(readyObjects));
-
-		checkSSHCommands(configDefaultValues, readyObjects);
 
 		if (!configDefaultValues.containsKey(CONFIGED_WORKBENCH_KEY)) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  ",
@@ -1004,27 +794,6 @@ public class UserRolesConfigDataService {
 		// configuration of opsiclientd extra events
 		configDefaultValues.computeIfAbsent(ConfigDataService.KEY_OPSICLIENTD_EXTRA_EVENTS,
 				arg -> computeOpsiclientdExtraEvents(readyObjects));
-
-		// for warnings for opsi licenses
-		// percentage number of clients
-		configDefaultValues.computeIfAbsent(
-				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT,
-				arg -> computeClientLimitWarningPercent(readyObjects));
-
-		// absolute number of clients
-		configDefaultValues.computeIfAbsent(
-				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE,
-				arg -> computeClientLimitWarningAbsolute(readyObjects));
-
-		// days limit warning
-		configDefaultValues.computeIfAbsent(
-				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS,
-				arg -> computeClientLimitWarningDays(readyObjects));
-
-		// modules disabled for warnings
-		configDefaultValues.computeIfAbsent(
-				LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES,
-				arg -> computeDisableWarningModules(readyObjects));
 
 		// add metaconfigs
 
@@ -1108,5 +877,26 @@ public class UserRolesConfigDataService {
 		Set<String> depotsPermitted = cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
 
 		return depotsPermitted != null && depotsPermitted.contains(depotId);
+	}
+
+	public boolean terminalMenuIsActive() {
+		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_MENU_ACTIVE, Boolean.class) == null) {
+			checkTerminalPermissions();
+		}
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_MENU_ACTIVE, Boolean.class));
+	}
+
+	public boolean terminalCommandsIsActive() {
+		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class) == null) {
+			checkTerminalPermissions();
+		}
+		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class));
+	}
+
+	public List<Object> terminalsForbidden() {
+		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class) == null) {
+			checkTerminalPermissions();
+		}
+		return cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class);
 	}
 }

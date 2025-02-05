@@ -15,7 +15,6 @@ import java.util.Set;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageUpdaterDialog;
 
 public class SingleCommandPackageUpdater implements SingleCommand, CommandWithParameters {
@@ -23,7 +22,6 @@ public class SingleCommandPackageUpdater implements SingleCommand, CommandWithPa
 
 	private String command;
 	private String baseName = "opsi-package-updater";
-	private FGeneralDialog dialog;
 	private boolean needParameter = true;
 
 	private String action = "list --repos";
@@ -114,12 +112,7 @@ public class SingleCommandPackageUpdater implements SingleCommand, CommandWithPa
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new PackageUpdaterDialog(configedMain);
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return dialog;
+		new PackageUpdaterDialog(configedMain);
 	}
 
 	public void setRepos(Map<String, String> r) {

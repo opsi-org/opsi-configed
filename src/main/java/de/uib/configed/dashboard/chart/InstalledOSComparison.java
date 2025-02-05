@@ -41,7 +41,7 @@ public class InstalledOSComparison extends StackPane implements DataChangeListen
 		try {
 			fxmlLoader.load();
 		} catch (IOException ioE) {
-			Logging.error(this.getClass(), ioE, "Could not load fxmlLoader");
+			Logging.error(this, ioE, "Could not load fxmlLoader");
 		}
 	}
 

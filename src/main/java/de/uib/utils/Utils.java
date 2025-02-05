@@ -6,14 +6,13 @@
 
 package de.uib.utils;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
+import java.awt.Dimension;
+import java.io.BufferedReader;
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -25,25 +24,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
-
-import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FTextArea;
+import de.uib.configed.gui.productpage.TextMarkdownPane;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoDialog;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import javafx.application.Application;
@@ -59,7 +51,6 @@ public final class Utils {
 			8 * KIBI_BYTE * KIBI_BYTE, 0, 1 * KIBI_BYTE * KIBI_BYTE };
 
 	private static JFrame masterFrame;
-	private static Image mainIcon;
 	private static boolean disableCertificateVerification;
 	private static boolean isMultiFactorAuthenticationEnabled;
 
@@ -67,10 +58,6 @@ public final class Utils {
 	}
 
 	public static void showAboutAction(JFrame parent) {
-		FTextArea info = new FTextArea(parent,
-				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME, true,
-				new String[] { Configed.getResourceValue("buttonClose") }, 500, 300);
-
 		StringBuilder message = new StringBuilder();
 		message.append(Globals.APPNAME + "  " + Configed.getResourceValue("LoginDialog.version") + "  "
 				+ Globals.VERSION + " (" + Globals.VERDATE + ") ");
@@ -84,8 +71,105 @@ public final class Utils {
 		message.append("running on java version " + COMPLETE_VERSION_INFO + "\n");
 		message.append("on architecture " + System.getProperty("os.arch"));
 
-		info.setMessage(message.toString());
-		info.setVisible(true);
+		JOptionPane.showMessageDialog(parent, message,
+				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME,
+				JOptionPane.PLAIN_MESSAGE);
+	}
+
+	public static void showCreditsAction(JFrame parent) {
+		StringBuilder message = new StringBuilder();
+		message.append(Configed.getResourceValue("FCreditsDialog.message1"));
+		message.append("<br>");
+		message.append(Configed.getResourceValue("FCreditsDialog.message2"));
+		message.append("<br><br>");
+		message.append(Configed.getResourceValue("FCreditsDialog.message3"));
+		message.append("<br><br>");
+		appendCreditsFromFile(message);
+
+		TextMarkdownPane jTextPane = new TextMarkdownPane();
+		jTextPane.setText(message.toString());
+		jTextPane.setPreferredSize(new Dimension(jTextPane.getPreferredSize().width, 200));
+
+		JScrollPane scrollpane = new JScrollPane(jTextPane);
+
+		JOptionPane.showMessageDialog(parent, scrollpane, Configed.getResourceValue("MainFrame.jMenuHelpCredits"),
+				JOptionPane.PLAIN_MESSAGE);
+	}
+
+	public static void showMissingLicenseModules(String message) {
+		TextMarkdownPane jTextArea = new TextMarkdownPane();
+		jTextArea.setText(message);
+
+		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), jTextArea,
+				Configed.getResourceValue("Permission.modules.title"), JOptionPane.WARNING_MESSAGE);
+	}
+
+	private static void appendCreditsFromFile(StringBuilder message) {
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("credits.md"),
+						StandardCharsets.UTF_8))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				message.append(line + "<br>");
+			}
+		} catch (IOException e) {
+			Logging.warning(e, "unable to read credits file");
+		}
+	}
+
+	public static List<String> readLocallySavedServerNames() {
+		TreeMap<Long, String> sortingmap = new TreeMap<>();
+		File savedStatesLocation = null;
+		// the following is nearly a double of initSavedStates
+
+		boolean success = true;
+
+		if (Configed.getSavedStatesLocationName() != null) {
+			Logging.info("trying to find saved states in ", Configed.getSavedStatesLocationName());
+
+			savedStatesLocation = new File(Configed.getSavedStatesLocationName());
+			savedStatesLocation.mkdirs();
+			success = savedStatesLocation.setReadable(true);
+		}
+
+		if (!success) {
+			Logging.warning("cannot not find saved states in ", Configed.getSavedStatesLocationName());
+		}
+
+		if (Configed.getSavedStatesLocationName() == null || !success) {
+			Logging.info("searching saved states in ", Utils.getSavedStatesDefaultLocation());
+			savedStatesLocation = new File(Utils.getSavedStatesDefaultLocation());
+			savedStatesLocation.mkdirs();
+		}
+
+		Logging.info("saved states location ", savedStatesLocation);
+
+		File[] subdirs = null;
+
+		if (savedStatesLocation != null) {
+			subdirs = savedStatesLocation.listFiles(File::isDirectory);
+
+			for (File folder : subdirs) {
+				File checkFile = new File(folder + File.separator + Configed.SAVED_STATES_FILENAME);
+				String folderPath = folder.getPath();
+				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
+
+				if (elementname.lastIndexOf("_") > -1) {
+					elementname = elementname.replace("_", ":");
+				}
+
+				sortingmap.put(checkFile.lastModified(), elementname);
+			}
+		}
+
+		List<String> result = new ArrayList<>();
+		for (Long l : sortingmap.descendingKeySet()) {
+			result.add(sortingmap.get(l));
+		}
+
+		Logging.info("readLocallySavedServerNames  result ", result);
+
+		return result;
 	}
 
 	public static String[] getLogTypes() {
@@ -104,216 +188,6 @@ public final class Utils {
 		return MAX_LOG_SIZES[index];
 	}
 
-	private static FlatSVGIcon getThemeIconForThemeMenu(boolean dark, String iconName) {
-		ColorFilter filter = new ColorFilter();
-		if (dark) {
-			iconName = iconName + "_dark";
-			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_LIGHT);
-		} else {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_DARK);
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
-	}
-
-	public static void addThemeIconInvertedToMenuItem(AbstractButton abstractButton, String iconName) {
-		abstractButton.setIcon(getThemeIconForThemeMenu(!FlatLaf.isLafDark(), iconName));
-		if (!FlatLaf.isLafDark()) {
-			abstractButton.setSelectedIcon(getThemeIconForThemeMenu(false, iconName));
-		}
-	}
-
-	public static void addThemeIconToMenuItem(AbstractButton abstractButton, String iconName) {
-		abstractButton.setIcon(getThemeIcon(iconName, 16));
-		abstractButton.setSelectedIcon(
-				getThemeIcon(iconName, 16).setColorFilter(new ColorFilter(color -> Globals.OPSI_FOREGROUND_DARK)));
-	}
-
-	public static FlatSVGIcon getThemeIcon(String iconName, int size) {
-		ColorFilter filter = new ColorFilter();
-		if (FlatLaf.isLafDark()) {
-			iconName = iconName + "_dark";
-			filter.add(new Color(206, 208, 214), Globals.OPSI_FOREGROUND_DARK);
-		} else {
-			filter.add(new Color(108, 112, 126), Globals.OPSI_FOREGROUND_LIGHT);
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter).derive(size,
-				size);
-	}
-
-	public static FlatSVGIcon getThemeFilledIcon(String iconName, int size) {
-		FlatSVGIcon icon = getThemeIcon(iconName, size);
-
-		ColorFilter filter = icon.getColorFilter();
-		if (FlatLaf.isLafDark()) {
-			filter.add(new Color(67, 69, 74), Globals.OPSI_FOREGROUND_DARK);
-		} else {
-			filter.add(new Color(235, 236, 240), Globals.OPSI_FOREGROUND_LIGHT);
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
-	}
-
-	private static FlatSVGIcon getOpsiModulesIcon() {
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-
-		Color iconColor = null;
-		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
-			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!LicensingInfoDialog.isExtendedView());
-
-			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				iconColor = Globals.OPSI_ERROR;
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				iconColor = Globals.OPSI_WARNING;
-				break;
-
-			case LicensingInfoMap.STATE_OKAY:
-				iconColor = Globals.OPSI_OK;
-				break;
-
-			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
-				break;
-			}
-		}
-
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-		final Color color = iconColor;
-		icon.setColorFilter(new ColorFilter(arg -> color));
-
-		return icon;
-	}
-
-	public static void addOpsiModulesIconToMenuItem(AbstractButton abstractButton) {
-		abstractButton.setIcon(getOpsiModulesIcon(16));
-
-		// Create filter for selected icon
-		ColorFilter filter = new ColorFilter();
-		filter.add(Globals.OPSI_MAGENTA, Globals.OPSI_FOREGROUND_DARK);
-
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-		icon = icon.derive(16, 16);
-		icon.setColorFilter(filter);
-		abstractButton.setSelectedIcon(icon);
-	}
-
-	public static FlatSVGIcon getOpsiModulesIcon(int size) {
-		return getOpsiModulesIcon().derive(size, size);
-	}
-
-	public static ImageIcon getReloadLicensingIcon() {
-		ImageIcon refreshIcon = getIntellijIcon("refresh", 32);
-		ImageIcon licenseIcon = getIntellijIcon("scriptingScript");
-
-		Image refreshImage = refreshIcon.getImage();
-		Image licenseImage = licenseIcon.getImage();
-		int w = Math.max(refreshImage.getWidth(null), licenseImage.getWidth(null));
-		int h = Math.max(refreshImage.getHeight(null), licenseImage.getHeight(null));
-		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics g2 = image.getGraphics();
-		g2.drawImage(refreshImage, 0, 0, null);
-		g2.drawImage(licenseImage, 8, 8, null);
-		g2.dispose();
-		return new ImageIcon(image);
-	}
-
-	public static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
-		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
-
-		ColorFilter filter = new ColorFilter();
-
-		filter.add(new Color(108, 112, 126), color);
-		FlatSVGIcon icon = new FlatSVGIcon(path);
-		icon.setColorFilter(filter);
-		return icon;
-	}
-
-	public static FlatSVGIcon getIntellijIcon(String iconName, int size) {
-		return getIntellijIcon(iconName).derive(size, size);
-	}
-
-	public static FlatSVGIcon getIntellijIcon(String iconName, Color color, int size) {
-		return getIntellijIcon(iconName, color).derive(size, size);
-	}
-
-	public static void addIntellijIconToMenuItem(AbstractButton abstractButton, String name) {
-		abstractButton.setIcon(getIntellijIcon(name));
-
-		FlatSVGIcon selectedIcon = new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + name + ".svg");
-		selectedIcon.setColorFilter(new ColorFilter(color -> Globals.OPSI_FOREGROUND_DARK));
-		abstractButton.setSelectedIcon(selectedIcon);
-	}
-
-	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
-		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
-
-		// set normal icon
-		abstractButton.setIcon(icon.derive(16, 16));
-
-		// Create filter for selected icon
-		ColorFilter filter = new ColorFilter();
-		filter.add(Globals.OPSI_MAGENTA, Globals.OPSI_FOREGROUND_DARK);
-		icon = icon.derive(16, 16);
-		icon.setColorFilter(filter);
-		abstractButton.setSelectedIcon(icon);
-	}
-
-	public static FlatSVGIcon getSelectedIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT);
-	}
-
-	public static FlatSVGIcon getSelectedIntellijIcon(String iconName, int size) {
-		return getSelectedIntellijIcon(iconName).derive(size, size);
-	}
-
-	public static FlatSVGIcon getSelectedThemeIntelljIcon(String iconName, int size) {
-		ColorFilter filter = new ColorFilter();
-		if (FlatLaf.isLafDark()) {
-			iconName += "_dark";
-			filter.add(new Color(206, 208, 214), Globals.ICON_ACTIVE_DARK);
-		} else {
-			filter.add(new Color(108, 112, 126), Globals.ICON_ACTIVE_LIGHT);
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter).derive(size,
-				size);
-	}
-
-	public static FlatSVGIcon getIntellijIcon(String iconName) {
-		return getIntellijIcon(iconName,
-				FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
-	}
-
-	public static ImageIcon createImageIcon(String path, String description) {
-		String xPath = Globals.IMAGE_BASE + path;
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		URL imgURL = cl.getResource(xPath);
-
-		// should have the same result (but seems not to have)
-		if (imgURL != null) {
-			return new ImageIcon(imgURL, description);
-		} else {
-			Logging.info("Couldn't find file: ", path);
-			return null;
-		}
-	}
-
-	public static FlatSVGIcon getOpsiLogoWide() {
-		String iconName = "opsi_logo_wide";
-		if (FlatLaf.isLafDark()) {
-			iconName += "_dark";
-		}
-
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/" + iconName + ".svg").derive(139, 50);
-	}
-
 	public static void threadSleep(Object caller, long millis) {
 		try {
 			Thread.sleep(millis);
@@ -324,18 +198,10 @@ public final class Utils {
 	}
 
 	public static List<Object> getNowTimeListValue() {
-		return getNowTimeListValue(null);
-	}
-
-	public static List<Object> getNowTimeListValue(final String comment) {
 		List<Object> result = new ArrayList<>();
 		String now = new Timestamp(System.currentTimeMillis()).toString();
 		now = now.substring(0, now.indexOf("."));
-		if (comment != null) {
-			result.add(now + " " + comment);
-		} else {
-			result.add(now);
-		}
+		result.add(now);
 		Logging.info("getNowTimeListValue", result);
 		return result;
 	}
@@ -432,25 +298,6 @@ public final class Utils {
 		return masterFrame;
 	}
 
-	public static Image getMainIcon() {
-		if (mainIcon == null) {
-			mainIcon = createMainIcon();
-		}
-		return mainIcon;
-	}
-
-	private static Image createMainIcon() {
-		String iconPath = (Main.isLogviewer() ? Globals.ICON_LOGVIEWER : Globals.ICON_CONFIGED);
-		ImageIcon icon = createImageIcon(iconPath, "");
-
-		if (icon != null) {
-			return icon.getImage();
-		} else {
-			Logging.warning(Utils.class, "cannot create main icon, icon ", iconPath, "not found");
-			return null;
-		}
-	}
-
 	public static void setDisableCertificateVerification(boolean disable) {
 		disableCertificateVerification = disable;
 	}
@@ -494,20 +341,6 @@ public final class Utils {
 		return sb.toString();
 	}
 
-	public static List<String> takeAsStringList(List<Object> list) {
-		List<String> result = new ArrayList<>();
-
-		if (list == null) {
-			return result;
-		}
-
-		for (Object val : list) {
-			result.add((String) val);
-		}
-
-		return result;
-	}
-
 	public static Map<String, Object> createNOMConfig(ConfigOption.TYPE type, String key, String description,
 			boolean editable, boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
 		Map<String, Object> item = createNOMitem(type.toString());
@@ -530,40 +363,10 @@ public final class Utils {
 				possibleValues);
 	}
 
-	public static Map<String, Object> createUefiNOMEntry(String clientId, String val) {
-		Map<String, Object> item = createNOMitem("ConfigState");
-		List<String> values = new ArrayList<>();
-		values.add(val);
-		item.put("objectId", clientId);
-		item.put("values", values);
-		item.put("configId", OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME);
-		return item;
-	}
-
 	public static Map<String, Object> createNOMitem(String type) {
 		Map<String, Object> item = new HashMap<>();
 		item.put("type", type);
 		return item;
-	}
-
-	public static Boolean interpretAsBoolean(Object ob, Boolean defaultValue) {
-		Boolean result = false;
-
-		if (ob == null) {
-			result = defaultValue;
-		} else if (ob instanceof Boolean b) {
-			result = b;
-		} else if (ob instanceof Integer integer) {
-			result = integer == 1;
-		} else if (ob instanceof String string) {
-			result = "1".equals(string);
-		} else {
-			/* Not foreseen value. */
-			Logging.warning("could not find boolean in interpretAsBoolean, returning false");
-			result = false;
-		}
-
-		return result;
 	}
 
 	public static String getSavedStatesDefaultLocation() {
@@ -579,15 +382,17 @@ public final class Utils {
 		return result;
 	}
 
-	public static String getListStringRepresentation(List<String> list, Integer max) {
+	public static String getListStringRepresentation(List<String> list) {
 		if (list == null || list.isEmpty()) {
 			return "";
 		}
 
+		final int MAX = 5;
+
 		StringBuilder result = new StringBuilder();
 		int stop = list.size();
-		if (max != null && stop > max) {
-			stop = max;
+		if (stop > MAX) {
+			stop = MAX;
 		}
 
 		for (int i = 0; i < stop - 1; i++) {
@@ -597,7 +402,7 @@ public final class Utils {
 
 		result.append(list.get(stop - 1));
 
-		if (max != null && list.size() > max) {
+		if (list.size() > MAX) {
 			result.append(" ... ");
 		}
 
@@ -605,21 +410,22 @@ public final class Utils {
 	}
 
 	public static boolean includeOpsiHostKey() {
-		FTextArea f = new FTextArea(ConfigedMain.getMainFrame(), Configed.getResourceValue("securityWarning"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 400,
-				200);
 		StringBuilder message = new StringBuilder();
 		message.append(Configed.getResourceValue("Utils.opsiHostKey.message1"));
 		message.append("\n\n");
 		message.append(Configed.getResourceValue("Utils.opsiHostKey.message2"));
-		f.setMessage(message.toString());
-		f.setVisible(true);
-		return f.getResult() == 2;
+
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("securityWarning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+		return answer == JOptionPane.YES_OPTION;
 	}
 
 	public static boolean hasPort(String host) {
 		boolean result = false;
-
+		if (host == null || host.isEmpty()) {
+			return result;
+		}
 		if (host.contains("[") && host.contains("]")) {
 			Logging.info("Host is IPv6: ", host);
 			result = host.indexOf(":", host.indexOf("]")) != -1;

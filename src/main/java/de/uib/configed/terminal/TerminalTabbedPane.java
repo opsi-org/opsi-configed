@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
 
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -44,7 +43,7 @@ public class TerminalTabbedPane extends JPanel implements MessagebusListener {
 		this.setLayout(groupLayout);
 
 		jTabbedPane = new JTabbedPane();
-		jTabbedPane.addChangeListener((ChangeEvent event) -> onTabChange());
+		jTabbedPane.addChangeListener(changeEvent -> onTabChange());
 		jTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
 		groupLayout

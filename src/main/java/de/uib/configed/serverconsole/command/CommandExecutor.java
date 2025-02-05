@@ -20,6 +20,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.AbstractBackgroundFileUploader;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.terminal.WebDAVBackgroundFileUploader;
+import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.utils.ThreadLocker;
@@ -82,7 +83,7 @@ public class CommandExecutor implements MessagebusListener {
 			Logging.info(this, "Stopping file upload");
 			fileUploader.cancel(true);
 		}
-		configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
+		Messagebus.getInstance().getWebSocket().unregisterListener(CommandExecutor.this);
 	}
 
 	public JFrame getDialog() {
@@ -94,18 +95,18 @@ public class CommandExecutor implements MessagebusListener {
 			return null;
 		}
 
-		terminalFrame.setMessagebus(configedMain.getMessagebus());
+		terminalFrame.setMessagebus(Messagebus.getInstance());
 		if (withGUI) {
 			terminalFrame.display();
 			terminalFrame.disableUserInputForSelectedWidget();
 		}
 
-		configedMain.getMessagebus().getWebSocket().registerListener(CommandExecutor.this);
+		Messagebus.getInstance().getWebSocket().registerListener(CommandExecutor.this);
 
 		if (singleCommand != null) {
 			startBackgroundThread(() -> {
 				execute(singleCommand);
-				configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
+				Messagebus.getInstance().getWebSocket().unregisterListener(CommandExecutor.this);
 			});
 		} else {
 			startBackgroundThread(this::handleMultiCommand);
@@ -124,7 +125,7 @@ public class CommandExecutor implements MessagebusListener {
 			}
 			execute(command);
 		}
-		configedMain.getMessagebus().getWebSocket().unregisterListener(CommandExecutor.this);
+		Messagebus.getInstance().getWebSocket().unregisterListener(CommandExecutor.this);
 	}
 
 	private void execute(SingleCommand command) {
@@ -138,7 +139,7 @@ public class CommandExecutor implements MessagebusListener {
 			});
 			commandNumber++;
 			terminalFrame.writeToWidget("(" + commandNumber + ") " + fileUploadCommand.getSecuredCommand() + "\r\n");
-			terminalFrame.uploadFile(fileUploader);
+			TerminalFrame.uploadFile(fileUploader);
 			locker.lock();
 		} else {
 			startCommandProcess(command);
@@ -165,7 +166,7 @@ public class CommandExecutor implements MessagebusListener {
 		CommandParameterParser parameterParser = new CommandParameterParser(configedMain);
 		String commandRepresentation = MORE_THAN_ONE_SPACE_PATTERN
 				.matcher(parameterParser.parseParameter(command, this).getCommand()).replaceAll(" ");
-		commandProcess = new CommandProcess(configedMain, locker, commandRepresentation);
+		commandProcess = new CommandProcess(locker, commandRepresentation);
 		commandProcess.sendProcessStartRequest();
 	}
 

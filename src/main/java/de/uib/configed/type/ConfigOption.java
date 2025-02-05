@@ -7,16 +7,16 @@
 package de.uib.configed.type;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.ListSelectionModel;
 
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 
 // has a problem with type of defaultValues
-public class ConfigOption extends RetrievedMap implements ListCellOptions {
+public class ConfigOption extends RetrievedMap {
 	public static final String REFERENCE_ID = "configId";
 
 	public enum TYPE {
@@ -34,24 +34,46 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		}
 	}
 
-	// UndefinedConfig should not occur
-
-	public static final String BOOL_TYPE = TYPE.BOOL_CONFIG.toString();
-	public static final String UNICODE_TYPE = TYPE.UNICODE_CONFIG.toString();
-	public static final String UNDEFINED_TYPE = TYPE.UNDEFINED_CONFIG.toString();
-
 	private TYPE type;
 
 	public ConfigOption(Map<String, Object> object) {
 		super(object);
-		build();
 	}
 
-	private ConfigOption() {
+	public ConfigOption() {
+		this(null);
+	}
+
+	public static ConfigOption createConfigOption(String description, TYPE type, boolean editable, boolean multiValue,
+			List<?> defaultValues, List<?> possibleValues) {
+		Map<String, Object> retrieved = new HashMap<>();
+		retrieved.put("possibleValues", possibleValues);
+		retrieved.put("defaultValues", defaultValues);
+		retrieved.put("description", description);
+		retrieved.put("type", type.toString());
+		retrieved.put("editable", editable);
+		retrieved.put("multiValue", multiValue);
+
+		return new ConfigOption(retrieved);
+	}
+
+	public static ConfigOption createConfigOption(String description, TYPE type, boolean editable, boolean multiValue) {
+		List<Object> possibleValues = new ArrayList<>();
+		List<Object> defaultValues = new ArrayList<>();
+
+		if (type == TYPE.BOOL_CONFIG) {
+			possibleValues.add(true);
+			possibleValues.add(false);
+
+			editable = false;
+		}
+
+		return createConfigOption(description, type, editable, multiValue, defaultValues, possibleValues);
 	}
 
 	@Override
 	protected void build() {
+		super.build();
 		// overwrite values
 		if (retrieved == null || retrieved.get("possibleValues") == null) {
 			put("possibleValues", new ArrayList<>());
@@ -82,10 +104,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		} else {
 			put("editable", retrieved.get("editable"));
 		}
-
-		if (type != TYPE.BOOL_CONFIG) {
-			put("nullable", false);
-		}
 	}
 
 	private void buildType() {
@@ -95,12 +113,12 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 			type = TYPE.UNICODE_CONFIG;
 		} else {
 			if (retrieved.get("type") == null) {
-				put("type", UNDEFINED_TYPE);
+				put("type", TYPE.UNDEFINED_CONFIG.toString());
 			} else {
 				put("type", retrieved.get("type"));
 			}
 
-			if (get("type").equals(BOOL_TYPE) || "BoolProductProperty".equals(get("type"))) {
+			if (get("type").equals(TYPE.BOOL_CONFIG.toString()) || "BoolProductProperty".equals(get("type"))) {
 				type = TYPE.BOOL_CONFIG;
 			} else {
 				type = TYPE.UNICODE_CONFIG;
@@ -120,57 +138,31 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		}
 	}
 
-	// interface ListCellOptions
-	@Override
 	public List<Object> getPossibleValues() {
 		return (List<Object>) get("possibleValues");
 	}
 
-	@Override
 	public List<Object> getDefaultValues() {
 		return (List<Object>) get("defaultValues");
 	}
 
-	@Override
 	public void setDefaultValues(List<Object> values) {
 		put("defaultValues", values);
 	}
 
-	@Override
 	public int getSelectionMode() {
 		return (Integer) get("selectionMode");
 	}
 
-	@Override
-	public boolean isNullable() {
-		// until we extend the data structure
-		return type != TYPE.BOOL_CONFIG;
-	}
-
-	@Override
 	public boolean isEditable() {
 		return (Boolean) get("editable");
 	}
 
-	@Override
 	public String getDescription() {
 		return (String) get("description");
 	}
 
 	public TYPE getType() {
 		return type;
-	}
-
-	@Override
-	public ListCellOptions deepCopy() {
-		ConfigOption configOption = new ConfigOption();
-		configOption.put("type", type);
-		configOption.put("description", get("description"));
-		configOption.put("possibleValues", get("possibleValues"));
-		configOption.put("defaultValues", get("defaultValues"));
-		configOption.put("editable", get("editable"));
-		configOption.put("selectionMode", get("selectionMode"));
-		configOption.put("nullable", get("nullable"));
-		return configOption;
 	}
 }

@@ -6,19 +6,22 @@
 
 package de.uib.configed.gui.csv;
 
+import java.awt.Component;
 import java.awt.event.ItemEvent;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.event.DocumentEvent;
@@ -33,13 +36,12 @@ import org.apache.commons.csv.QuoteMode;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.type.HostInfo;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
-public class CSVImportDataDialog extends FGeneralDialog {
-	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
-
+public class CSVImportDataDialog {
 	private PanelGenEditTable thePanel;
 	private CSVFormat format;
 
@@ -56,51 +58,22 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private int startLine = 1;
 
-	public CSVImportDataDialog(CSVFormat format, CSVImportDataModifier modifier) {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,
-				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 2,
-				1000, 600, true);
+	private JOptionPane optionPane;
+	private JDialog dialog;
 
+	public CSVImportDataDialog(CSVFormat format, CSVImportDataModifier modifier) {
 		this.format = format;
 		this.modifier = modifier;
+
+		JPanel panel = createPanel();
+
+		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("CSVImportDataDialog.title"));
 	}
 
-	@Override
-	protected void allLayout() {
-		Logging.info(this, "allLayout");
-
-		allpane.setBorder(BorderFactory.createEtchedBorder());
-
-		northPanel = createNorthPanel();
-		southPanel = createSouthPanel();
-
-		GroupLayout allLayout = new GroupLayout(allpane);
-		allpane.setLayout(allLayout);
-
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(northPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE).addComponent(centerPanel).addGap(Globals.GAP_SIZE)
-				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
-
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-						.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)
-						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE).addComponent(southPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, 2 * Globals.GAP_SIZE)));
-	}
-
-	private JPanel createNorthPanel() {
+	private JPanel createPanel() {
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
 
@@ -193,94 +166,45 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		JLabel splittingOptionsLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
-		JPanel northPanel = new JPanel();
-		GroupLayout northLayout = new GroupLayout(northPanel);
-		northPanel.setLayout(northLayout);
+		// don't use a definite max table width (-1), with popups
+		thePanel = new PanelGenEditTable("", true, 0,
+				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
 
-		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
-				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(importOptionsLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(startLineLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(startLineInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(splittingOptionsLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL,
-								WIDTH_LEFT_LABEL)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(tabsOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(commaOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(semicolonOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(spaceOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(otherOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(otherDelimiterInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(northLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(quoteLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(quoteOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
+		modifier.updateTable(format, startLine, thePanel);
 
-		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(importOptionsLabel)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(startLineLabel)
+						.addGap(Globals.GAP_SIZE).addComponent(startLineInput).addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(splittingOptionsLabel)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(tabsOption)
+						.addGap(Globals.GAP_SIZE).addComponent(commaOption).addGap(Globals.GAP_SIZE)
+						.addComponent(semicolonOption).addGap(Globals.GAP_SIZE).addComponent(spaceOption)
+						.addGap(Globals.GAP_SIZE).addComponent(otherOption).addGap(Globals.GAP_SIZE)
+						.addComponent(otherDelimiterInput).addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(quoteLabel)
+						.addGap(Globals.GAP_SIZE).addComponent(quoteOptions))
+				.addComponent(thePanel));
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(importOptionsLabel).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(startLineLabel)
-						.addComponent(startLineInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(startLineLabel)
+						.addComponent(startLineInput))
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(splittingOptionsLabel).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(tabsOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(commaOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(semicolonOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(spaceOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(otherOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(otherDelimiterInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(quoteLabel)
-						.addComponent(quoteOptions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE));
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(tabsOption)
+						.addComponent(commaOption).addComponent(semicolonOption).addComponent(spaceOption)
+						.addComponent(otherOption).addComponent(otherDelimiterInput))
+				.addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(quoteLabel).addComponent(quoteOptions))
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(thePanel));
 
-		return northPanel;
-	}
-
-	private JPanel createSouthPanel() {
-		southPanel = new JPanel();
-
-		GroupLayout southLayout = new GroupLayout(southPanel);
-		southPanel.setLayout(southLayout);
-
-		southLayout.setHorizontalGroup(southLayout.createParallelGroup(Alignment.LEADING).addGroup(southLayout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
-
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		return southPanel;
+		return panel;
 	}
 
 	public void setDetectedOptions() {
@@ -304,20 +228,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		}
 
 		quoteOptions.setSelectedItem(format.getDelimiterString());
-	}
-
-	public JPanel initPanel() {
-		// don't use a definite max table width (-1), with popups
-		thePanel = new PanelGenEditTable("", true, 0,
-				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_RELOAD }, true);
-
-		boolean updatedSuccessfull = modifier.updateTable(format, startLine, thePanel);
-
-		if (updatedSuccessfull) {
-			return thePanel;
-		} else {
-			return null;
-		}
 	}
 
 	private static class InputListener implements DocumentListener {
@@ -344,5 +254,39 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	public CSVImportDataModifier getModifier() {
 		return modifier;
+	}
+
+	public static CSVImportDataDialog createCSVImportDataDialog(Component parent, String csvFile) {
+		Logging.info("createCSVImportDataDialog for file ", csvFile);
+		List<String> columnNames = HostInfo.getKeysForCSV();
+		CSVFormatDetector csvFormatDetector = new CSVFormatDetector();
+		try {
+			csvFormatDetector.detectFormat(csvFile);
+			if (csvFormatDetector.hasHeader() && !csvFormatDetector.hasExpectedHeaderNames(columnNames)) {
+				JOptionPane.showMessageDialog(parent,
+						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
+								+ columnNames.toString().replace("[", "").replace("]", ""),
+						Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title"),
+						JOptionPane.ERROR_MESSAGE);
+
+				return null;
+			}
+		} catch (IOException e) {
+			Logging.error(e, "Unable to detect format of CSV file");
+		}
+
+		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
+				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().build();
+		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
+		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
+		csvImportDataDialog.setDetectedOptions();
+
+		return csvImportDataDialog;
+	}
+
+	public boolean show() {
+		dialog.setVisible(true);
+
+		return optionPane.getValue() == (Integer) JOptionPane.OK_OPTION;
 	}
 }

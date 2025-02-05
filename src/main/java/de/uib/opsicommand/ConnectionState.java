@@ -14,6 +14,7 @@ public class ConnectionState {
 	public static final int RETRY_CONNECTION = 4;
 	public static final int INTERRUPTED = 6;
 	public static final int UNAUTHORIZED = 7;
+	public static final int TIMEOUT = 8;
 	public static final int ERROR = 10;
 
 	public static final ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");

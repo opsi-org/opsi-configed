@@ -11,7 +11,6 @@ import java.util.List;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.CurlParameterDialog;
 import de.uib.utils.logging.Logging;
 
@@ -30,8 +29,6 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 	private String fileName = "";
 	private String verbosity = "";
 	private String freeInput = "";
-
-	private FGeneralDialog dialog;
 
 	public SingleCommandCurl() {
 	}
@@ -55,9 +52,9 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 			d = d + "/";
 		}
 		setProduct(d + getFilenameFromUrl(url));
-		Logging.debug(this.getClass(), "SingleCommandCurl dir ", dir);
-		Logging.debug(this.getClass(), "SingleCommandCurl url ", url);
-		Logging.debug(this.getClass(), "SingleCommandCurl product ", getProduct());
+		Logging.debug(this, "SingleCommandCurl dir ", dir);
+		Logging.debug(this, "SingleCommandCurl url ", url);
+		Logging.debug(this, "SingleCommandCurl product ", getProduct());
 		needParameter = false;
 	}
 
@@ -141,12 +138,7 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new CurlParameterDialog(configedMain);
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return dialog;
+		new CurlParameterDialog(configedMain);
 	}
 
 	public final void setDir(String d) {

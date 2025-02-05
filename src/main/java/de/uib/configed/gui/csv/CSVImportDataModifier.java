@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -27,7 +28,6 @@ import org.apache.commons.csv.CSVRecord;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.type.HostInfo;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
@@ -51,18 +51,17 @@ public class CSVImportDataModifier {
 		this.hiddenColumns = new ArrayList<>();
 	}
 
-	public boolean updateTable(CSVFormat format, int startLine, PanelGenEditTable thePanel) {
+	public void updateTable(CSVFormat format, int startLine, PanelGenEditTable thePanel) {
 		model = updateModel(format, startLine, thePanel);
 		if (model == null) {
-			return false;
+			Logging.error(this, "Failed to update table model, returned model is null");
+			return;
 		}
 		thePanel.setTableModel(model);
 
 		hideEmptyColumns(thePanel);
 		makeColumnsEditable(model, columnNames);
 		disableRowSorting(thePanel);
-
-		return true;
 	}
 
 	private GenTableModel updateModel(CSVFormat format, int startLine, PanelGenEditTable thePanel) {
@@ -102,16 +101,22 @@ public class CSVImportDataModifier {
 			if (!headerNames.containsAll(importantHeaderNames)) {
 				StringBuilder message = new StringBuilder();
 				message.append(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.message"));
+				message.append("\n");
 				message.append(" " + importantHeaderNames.toString().replace("[", "").replace("]", ""));
-				displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.title"),
-						message.toString());
+				JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
+						Configed.getResourceValue("CSVImportDataDialog.missingRequiredHeaderNames.title"),
+						JOptionPane.ERROR_MESSAGE);
+
 				return null;
 			}
 
 			for (CSVRecord csvRecord : parser.getRecords()) {
 				if (!csvRecord.isConsistent()) {
-					displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
-							Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
+					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+							Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"),
+							Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title"),
+							JOptionPane.ERROR_MESSAGE);
+
 					csvData = null;
 					break;
 				}
@@ -122,19 +127,14 @@ public class CSVImportDataModifier {
 			}
 		} catch (IOException | UncheckedIOException ex) {
 			Logging.warning(this, ex, "Failed to read CSV file");
-			displayInfoDialog(Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title"),
-					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"));
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"),
+					Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title"),
+					JOptionPane.ERROR_MESSAGE);
+
 			csvData = null;
 		}
 		return csvData;
-	}
-
-	private static void displayInfoDialog(String title, String message) {
-		FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title, false,
-				new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-		fInfo.setMessage(message);
-		fInfo.setAlwaysOnTop(true);
-		fInfo.setVisible(true);
 	}
 
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
@@ -173,9 +173,9 @@ public class CSVImportDataModifier {
 	private void hideEmptyColumns(PanelGenEditTable thePanel) {
 		hiddenColumns.clear();
 
-		for (int i = 0; i < thePanel.getTheTable().getColumnCount(); i++) {
+		for (int i = 0; i < thePanel.getJTable().getColumnCount(); i++) {
 			if (isColumnEmpty(i, thePanel)) {
-				TableColumn column = thePanel.getTheTable().getColumnModel().getColumn(i);
+				TableColumn column = thePanel.getJTable().getColumnModel().getColumn(i);
 				column.setMinWidth(0);
 				column.setMaxWidth(0);
 				column.setResizable(false);
@@ -189,7 +189,7 @@ public class CSVImportDataModifier {
 		List<List<Object>> rows = model.getRows();
 
 		for (int row = 0; row < rows.size(); row++) {
-			String value = thePanel.getTheTable().getValueAt(row, column).toString();
+			String value = thePanel.getJTable().getValueAt(row, column).toString();
 
 			if (value.isEmpty()) {
 				emptyRows++;
@@ -200,15 +200,15 @@ public class CSVImportDataModifier {
 	}
 
 	private static void disableRowSorting(PanelGenEditTable thePanel) {
-		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(thePanel.getTheTable().getModel());
+		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(thePanel.getJTable().getModel());
 
-		int columnCount = thePanel.getTheTable().getColumnCount();
+		int columnCount = thePanel.getJTable().getColumnCount();
 
 		for (int i = 0; i < columnCount; i++) {
 			rowSorter.setSortable(i, false);
 		}
 
-		thePanel.getTheTable().setRowSorter(rowSorter);
+		thePanel.getJTable().setRowSorter(rowSorter);
 	}
 
 	private static void makeColumnsEditable(GenTableModel model, List<String> columnNames) {

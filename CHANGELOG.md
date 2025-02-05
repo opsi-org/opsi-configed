@@ -1,4 +1,135 @@
-# Changelog
+## [4.3.6.2] - 2025-02-04
+### Fixed
+- NullpointerException in default properties in depot configuration
+
+### Changed
+- Don't use placeholders in input fields
+- Make it possible to copy the property name into the clipboard
+- Small redesign of Login Dialog
+
+## [4.3.6.1] - 2025-01-28
+### Fixed
+- Only delete productPropertyStates for selected product type
+- Nullpointerexception when editing group that was just created
+- We can now return to the dialog when we cancel trusting the certificate when we login by SSO
+- Exception in SearchTargetModelFromTable when no result found in search
+- Exception when a ProductPropertyState exists, but the respective ProductProperty does not exist any more
+
+### Changed
+- Rework all the Server console dialogs to use standard java library (JOptionPane) instead of own classes
+- Rework Saved Searches Dialog and Remote Control dialog in order use JOptionPane instead of own classes
+
+
+## We go back to version 4.3.6.x because the release of opsi 4.4 was canceled...
+
+## [4.4.0.14] - 2025-01-09
+### Fixed
+- Not saving ProductPropertyStates and ConfigStates when you edit again after saving
+
+### Changed
+- Use normal login without SSO when password or OTP field active and pressing "ENTER"-key
+- Don't stop configed when there are irregular arguments
+- Use new CellEditor to edit date in tables
+- Use new CellEditor to edit notes in license tables
+- Rework the dialog frames to use standard java library (JOptionPane) instead of own classes
+
+## Added
+- Add option of Visibility to method processActionRequest ("Execute") in product tables
+- Add options to Health Check to en/disable the check for clients and depots
+
+## [4.4.0.13] - 2024-12-09
+### Changed
+- Rework editing and creation of configs, configStates, productProperties and depot properties
+
+## [4.4.0.12] - 2024-12-04
+### Fixed
+- No selection when no element found from search
+- Remember last used domain to create client
+- Always show loading animation when loading data
+
+## [4.4.0.11] - 2024-11-13
+### Changed
+- Improve login dialog usability
+
+## [4.4.0.10] - 2024-11-06
+### Added
+- Add option to log in via Single Sign On (SSO)
+
+## [4.4.0.9] - 2024-10-30
+### Fixed
+- Correct path for saving certificates when entering port in login dialog
+- Start configed when trusting the certificate once
+- Nullpointerexception when user is not in group opsi admin
+- Correctly fix default values as specific values for product property states on clients and depots
+- Correctly deactivate filter in client selection
+
+### Changed
+- Move reload and save buttons to top toolbar
+- Some small changes in component and gap sizes
+- Health Check now works with new opsiconfd version
+
+## [4.4.0.8] - 2024-09-25
+### Changed
+- Make it possible to delete/create configs in config state editing for depots and clients
+- Don't create unnecessary copies of configs when (re)loading -> better performance
+- Rotate up to 10 logfiles
+- Make the logfile name independent from the user name
+
+### Fixed
+- Nullpointerexception when unexpected entry in config "configed.host_actions_disabled"
+- Create whole path of folders for CA-Certificate if folders don't exist yet
+
+
+## [4.4.0.7] - 2024-09-18
+### Changed
+- Remove unnecessary feature to arrange dialogs
+- Cast Maps/Lists instead of remapping them always, better for performance
+- Remove waiting loop in when loading data in login. Will save up to 500ms every login.
+- Find a better way to get a timeout. Timeout is set at 5000ms now.
+- Download all CA certificats instead of only the opsi CA certificate
+- Use path <user-config-dir>/opsi/services/<service_host>_<service_port>/ca-certs.pem for CA certificats, which is also used by opsi-cli
+
+### Fixed
+- Show correct client in HostStatusPanel after full reload
+- Correctly refresh client configuration page after full reload
+- Nullpointer Exception when reloading host configs of a depot
+- Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
+
+## [4.4.0.6] - 2024-09-05
+### Fixed
+- Show correctly the new lines ("\n") in tooltips
+- Correct support page in help menu
+
+### Changed
+- Small change in Layout in Dialogs
+- Rework GUI design, put View change to the left, etc.
+
+
+## [4.4.0.5] - 2024-08-15
+
+### Changed
+- Keep connection and certificate validators so that they don't have to be recreated with every server request to improve performance
+
+## [4.4.0.4] - 2024-08-14
+
+### Changed
+- Show licenses management, opsi licensing info, health check and the dashboard in MainFrame
+
+### Fixed
+- Space between options in command for uninstalling opsi products
+
+
+## [4.4.0.3] - 2024-08-08
+
+### Changed
+- Only show enabled tabs in Client/Depot/Server configuration
+- Lazy loading for all tabs in Client/Depot/Server configuration apart from Client and Product tables
+
+### Fixed
+- Don't unnecessarily refresh saved searches when editing search
+- Problems with column visibility in Product and Client tables after full reload
+- Start Remote Desktop Processes synchronuously instead of one after another when selected several clients
+
 
 ## [4.4.0.2] - 2024-07-18
 

@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -26,7 +27,6 @@ import com.formdev.flatlaf.util.SystemInfo;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FTextArea;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -46,8 +46,6 @@ public class Main {
 	public static final int ERROR_OUT_OF_MEMORY = 21;
 
 	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
-
-	private static FTextArea fErrorOutOfMemory;
 
 	private static boolean isLogviewer;
 
@@ -74,6 +72,9 @@ public class Main {
 		options.addOption("otp", "one-time-password", true, """
 				One time password for authentication. DEFAULT: give interactive
 				OTP is a paid feature. Should be used when license is available and OTP is enabled for a user""");
+		options.addOption("sso", "single-sign-on", false, """
+				Try to connect automatically via single-sign-on (host have to be given). DEFAULT: disabled
+				""");
 		options.addOption("s", "savedstates", true,
 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
 		options.addOption("qs", "querysavedsearch", true,
@@ -192,7 +193,9 @@ public class Main {
 		Logging.info("regularly exiting app with code ", exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {
-			fErrorOutOfMemory.setVisible(true);
+			JOptionPane.showMessageDialog(null,
+					"The program will be terminated,\nsince more memory is required than was assigned.",
+					Globals.APPNAME + "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		System.exit(exitcode);
@@ -207,10 +210,6 @@ public class Main {
 			// enable custom window decorations
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JDialog.setDefaultLookAndFeelDecorated(true);
-		} else if (SystemInfo.isMacOS) {
-			System.setProperty("flatlaf.useNativeLibrary", "false");
-		} else {
-			// Do nothing for other operating systems
 		}
 	}
 
@@ -220,14 +219,23 @@ public class Main {
 		setGlobalValues();
 
 		createOptions();
-		CommandLine cmd;
+		CommandLine cmd = null;
+		CommandLineParser parser = new DefaultParser(false);
 		try {
-			CommandLineParser parser = new DefaultParser(false);
 			cmd = parser.parse(options, args, false);
 		} catch (ParseException e) {
-			Logging.error(e, "Problem parsing arguments");
+			Logging.error(e, "Problem parsing arguments:", e.getMessage());
 			showHelp();
-			return;
+
+			// We try to parse the arguments again, but this time we don't stop
+			// That way we want the configed to start, but we also want to show the user
+			// the error message
+			try {
+				cmd = parser.parse(options, args, true);
+			} catch (ParseException e2) {
+				Logging.error(e2, "Problem parsing arguments, even when we don't stop");
+				endApp(ERROR_INVALID_OPTION);
+			}
 		}
 
 		parseArgs(cmd);
@@ -243,12 +251,5 @@ public class Main {
 		} else {
 			Configed.main(cmd);
 		}
-
-		fErrorOutOfMemory = new FTextArea(null, "configed", true,
-				new String[] { Configed.getResourceValue("buttonClose") }, 400, 400);
-
-		// we activate it in case of an appropriate error
-		fErrorOutOfMemory
-				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
 	}
 }

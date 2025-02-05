@@ -52,18 +52,24 @@ import de.uib.utils.logging.Logging;
 public class SecureCertificateValidator implements CertificateValidator {
 	private boolean certificateExists;
 	private KeyStore ks;
+	private HostnameVerifier hostnameVerifier;
+	private SSLSocketFactory sslSocketFactory;
 
 	SecureCertificateValidator() {
 		ks = CertificateManager.initializeKeyStore();
+		hostnameVerifier = new MyHostnameVerifier();
+		createSSLSocketFactory();
 	}
 
 	@Override
-	public SSLSocketFactory createSSLSocketFactory() {
-		SSLSocketFactory sslFactory = null;
+	public SSLSocketFactory getSSLSocketFactory() {
+		return sslSocketFactory;
+	}
 
+	private void createSSLSocketFactory() {
 		try {
-			if (CertificateDownloader.getDownloadedCertificateFile() != null) {
-				CertificateManager.loadCertificateToKeyStore(CertificateDownloader.getDownloadedCertificateFile());
+			if (CertificateManager.getDownloadedCertificateFile() != null) {
+				CertificateManager.loadCertificateToKeyStore(CertificateManager.getDownloadedCertificateFile());
 			} else {
 				CertificateManager.loadCertificatesToKeyStore();
 			}
@@ -78,7 +84,8 @@ public class SecureCertificateValidator implements CertificateValidator {
 			sslContext.init(kmf.getKeyManagers(),
 					new X509TrustManager[] { new X509TrustManagerWrapper(systemTrustManager) }, new SecureRandom());
 
-			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
+			sslSocketFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(),
+					new MyHandshakeCompletedListener());
 		} catch (KeyStoreException e) {
 			Logging.error(this, e, "keystore wasn't initialized: ", e.toString());
 		} catch (NoSuchAlgorithmException e) {
@@ -88,8 +95,6 @@ public class SecureCertificateValidator implements CertificateValidator {
 		} catch (KeyManagementException e) {
 			Logging.error(this, e, "failed to initialize SSL context: ", e.toString());
 		}
-
-		return sslFactory;
 	}
 
 	private static X509TrustManager getSystemTrustManager(TrustManagerFactory tmf) {
@@ -105,8 +110,8 @@ public class SecureCertificateValidator implements CertificateValidator {
 	}
 
 	@Override
-	public HostnameVerifier createHostnameVerifier() {
-		return new MyHostnameVerifier();
+	public HostnameVerifier getHostnameVerifier() {
+		return hostnameVerifier;
 	}
 
 	@Override
@@ -206,16 +211,16 @@ public class SecureCertificateValidator implements CertificateValidator {
 
 		@Override
 		public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
-			List<File> certificateFiles = CertificateManager.getCertificates();
+			File certificateFile = CertificateManager.getCertificates();
 			for (X509Certificate certificate : certificates) {
-				certificateFiles.forEach((File certificateFile) -> {
-					if (certificate.equals(CertificateManager.instantiateCertificate(certificateFile))) {
+				for (Certificate localCertificate : CertificateManager.instantiateCertificate(certificateFile)) {
+					if (certificate.equals(localCertificate)) {
 						certificateExists = true;
 						return;
 					} else {
 						certificateExists = false;
 					}
-				});
+				}
 			}
 			delegate.checkServerTrusted(certificates, authType);
 		}

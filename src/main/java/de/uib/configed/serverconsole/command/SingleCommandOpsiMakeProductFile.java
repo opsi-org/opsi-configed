@@ -11,7 +11,6 @@ import java.util.List;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.MakeProductFileDialog;
 import de.uib.utils.logging.Logging;
 
@@ -21,7 +20,6 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 	private String baseName = "opsi-makepackage";
 	private String command = "opsi-makepackage";
 
-	private FGeneralDialog dialog;
 	private boolean needParameter = true;
 
 	private String dir = "";
@@ -37,9 +35,9 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 		setProductVersion(prv);
 		setMd5sum(m);
 		setZsync(z);
-		Logging.info(this.getClass(), "CommandOpsimakeproductfile dir ", dir);
-		Logging.info(this.getClass(), "CommandOpsimakeproductfile packageVersion ", packageVersion);
-		Logging.info(this.getClass(), "CommandOpsimakeproductfile productVersion ", productVersion);
+		Logging.info(this, "CommandOpsimakeproductfile dir ", dir);
+		Logging.info(this, "CommandOpsimakeproductfile packageVersion ", packageVersion);
+		Logging.info(this, "CommandOpsimakeproductfile productVersion ", productVersion);
 	}
 
 	public SingleCommandOpsiMakeProductFile(String d, String pav, String prv) {
@@ -146,12 +144,7 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new MakeProductFileDialog(configedMain);
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return dialog;
+		new MakeProductFileDialog(configedMain);
 	}
 
 	private void setMd5sum(boolean m) {

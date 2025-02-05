@@ -6,21 +6,13 @@
 
 package de.uib.utils.table.gui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
@@ -28,38 +20,32 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class TableSearchPane extends JPanel implements DocumentListener, KeyListener {
-	private static final Pattern S_PLUS_PATTERN = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
-
-	public enum SearchMode {
-		FULL_TEXT_SEARCH, FULL_TEXT_WITH_ALTERNATIVES_SEARCH, START_TEXT_SEARCH, REGEX_SEARCH
-	}
-
 	private FlatTextField flatTextFieldSearch;
 
 	private JComboBox<String> comboSearchFields;
-	private JComboBox<String> comboSearchFieldsMode;
 
 	private JLabel labelSearch;
-	private JLabel labelSearchMode;
+
+	private JToggleButton respectCase;
+	private JToggleButton regexActive;
 	private JToggleButton filtermark;
 
 	private JToggleButton buttonShowHideExtraOptions;
@@ -72,32 +58,21 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JMenuItem popupMarkAndFilter;
 	private JMenuItem popupEmptySearchfield;
 
-	private boolean withRegEx = true;
 	private boolean selectMode = true;
 
 	private int foundrow = -1;
 
 	private SearchTargetModel targetModel;
 
-	private final Comparator<Object> comparator;
-
-	/**
-	 * Provides search functionality for tables.
-	 * 
-	 * @param SearchTargetModel the model for delivering data and selecting
-	 */
-	public TableSearchPane(SearchTargetModel targetModel) {
-		this(targetModel, false);
-	}
+	private final Collator comparator;
 
 	/**
 	 * Provides search functionality for tables.
 	 * 
 	 * @param targetModel the model for delivering data and selecting
-	 * @param withRegex   modifies the search function
 	 */
-	public TableSearchPane(SearchTargetModel targetModel, boolean withRegEx) {
-		this(null, targetModel, withRegEx);
+	public TableSearchPane(SearchTargetModel targetModel) {
+		this(null, targetModel);
 	}
 
 	/**
@@ -105,16 +80,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * 
 	 * @param thePanel    the model for delivering data and selecting
 	 * @param targetModel the model for delivering data and selecting
-	 * @param withRegex   modifies the search function
 	 */
-	public TableSearchPane(PanelGenEditTable thePanel, boolean withRegEx) {
-		this(thePanel, new SearchTargetModelFromTable(thePanel), withRegEx);
+	public TableSearchPane(PanelGenEditTable thePanel) {
+		this(thePanel, new SearchTargetModelFromTable(thePanel));
 	}
 
-	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel, boolean withRegEx) {
+	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel) {
 		associatedPanel = thePanel;
 		this.targetModel = targetModel;
-		this.withRegEx = withRegEx;
 
 		comparator = getCollator();
 
@@ -125,7 +98,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		initComponents();
 		initPopup();
 		setupLayout();
-
 		setSearchFieldsAll();
 	}
 
@@ -155,12 +127,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		this.selectMode = selectMode;
 	}
 
-	@Override
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
-		flatTextFieldSearch.setEnabled(enabled);
-	}
-
 	/**
 	 * serve graphical filtermark
 	 */
@@ -188,9 +154,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		comboSearchFields.setVisible(!narrow);
-		comboSearchFieldsMode.setVisible(!narrow);
 		labelSearch.setVisible(!narrow);
-		labelSearchMode.setVisible(!narrow);
 	}
 
 	public void setTargetModel(SearchTargetModel searchTargetModel) {
@@ -207,64 +171,39 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.setLeadingIcon(new FlatSearchIcon());
 		flatTextFieldSearch.setShowClearButton(true);
 
-		flatTextFieldSearch.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
-
 		flatTextFieldSearch.getDocument().addDocumentListener(this);
 
 		flatTextFieldSearch.addKeyListener(this);
 
 		flatTextFieldSearch.addActionListener(actionEvent -> searchNextRow(selectMode));
 
-		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
-		comboSearchFields.setPreferredSize(Globals.BUTTON_DIMENSION);
+		comboSearchFields = new JComboBox<>();
 
-		setSearchFieldsAll();
+		respectCase = new JToggleButton(Icons.getIntellijIcon("matchCase"));
+		respectCase.setSelectedIcon(Icons.getSelectedIntellijIcon("matchCase"));
+		respectCase.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
 
-		labelSearchMode = new JLabel(Configed.getResourceValue("SearchPane.searchmode.searchmode"));
+		regexActive = new JToggleButton(Icons.getIntellijIcon("regex"));
+		regexActive.setSelectedIcon(Icons.getSelectedIntellijIcon("regex"));
+		regexActive.setToolTipText(Configed.getResourceValue("SearchPane.mode.regex"));
 
-		Map<String, String> tooltipsMap = new LinkedHashMap<>();
-
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.searchmode.fulltext"),
-				Configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives"),
-				Configed.getResourceValue("SearchPane.mode.fulltextWithAlternatives.tooltip"));
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"),
-				Configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
-		if (withRegEx) {
-			tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.regex"),
-					Configed.getResourceValue("SearchPane.mode.regex.tooltip"));
-		}
-
-		comboSearchFieldsMode = new JComboBox<>();
-		for (String key : tooltipsMap.keySet()) {
-			comboSearchFieldsMode.addItem(key);
-		}
-		comboSearchFieldsMode.setRenderer(new BasicComboBoxRenderer() {
-			@Override
-			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-					boolean cellHasFocus) {
-				if (isSelected && -1 < index && index < tooltipsMap.size()) {
-					list.setToolTipText(new ArrayList<>(tooltipsMap.values()).get(index));
-				}
-
-				setText(value != null ? value.toString() : "");
-				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			}
-		});
-		comboSearchFieldsMode.setSelectedIndex(SearchMode.START_TEXT_SEARCH.ordinal());
-		comboSearchFieldsMode.setPreferredSize(Globals.BUTTON_DIMENSION);
-
-		filtermark = new JToggleButton(Utils.getIntellijIcon("funnelRegular"));
-		filtermark.setSelectedIcon(Utils.getSelectedIntellijIcon("funnelRegular"));
+		filtermark = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
+		filtermark.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
 		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addItemListener(event -> filtermarkEvent());
 		filtermark.setVisible(false);
 
-		flatTextFieldSearch.setTrailingComponent(filtermark);
+		JToolBar jToolBar = new JToolBar();
+		jToolBar.add(respectCase);
+		jToolBar.add(regexActive);
+		jToolBar.addSeparator();
+		jToolBar.add(filtermark);
+
+		flatTextFieldSearch.setTrailingComponent(jToolBar);
 	}
 
 	private void initPopup() {
-		popupSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.search"));
+		popupSearch = new JMenuItem(Configed.getResourceValue("search"));
 		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
 		JMenuItem popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
@@ -304,24 +243,24 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initNavigationPanel() {
-		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
+		Dimension navButtonDimension = new Dimension(30, 19);
 
-		JButton nextButton = new JButton(Utils.getIntellijIcon("playForward"));
+		JButton nextButton = new JButton(Icons.getIntellijIcon("playForward"));
 		nextButton.setToolTipText(Configed.getResourceValue("NavigationPanel.nextEntryTooltip"));
 		nextButton.setPreferredSize(navButtonDimension);
 		nextButton.addActionListener(event -> associatedPanel.advanceCursor(+1));
 
-		JButton previousButton = new JButton(Utils.getIntellijIcon("playBack"));
+		JButton previousButton = new JButton(Icons.getIntellijIcon("playBack"));
 		previousButton.setToolTipText(Configed.getResourceValue("NavigationPanel.previousEntryTooltip"));
 		previousButton.setPreferredSize(navButtonDimension);
 		previousButton.addActionListener(event -> associatedPanel.advanceCursor(-1));
 
-		JButton firstButton = new JButton(Utils.getIntellijIcon("playFirst"));
+		JButton firstButton = new JButton(Icons.getIntellijIcon("playFirst"));
 		firstButton.setToolTipText(Configed.getResourceValue("NavigationPanel.firstEntryTooltip"));
 		firstButton.setPreferredSize(navButtonDimension);
 		firstButton.addActionListener(event -> associatedPanel.setCursorToFirstRow());
 
-		JButton lastButton = new JButton(Utils.getIntellijIcon("playLast"));
+		JButton lastButton = new JButton(Icons.getIntellijIcon("playLast"));
 		lastButton.setToolTipText(Configed.getResourceValue("NavigationPanel.lastEntryTooltip"));
 		lastButton.setPreferredSize(navButtonDimension);
 		lastButton.addActionListener(event -> associatedPanel.setCursorToLastRow());
@@ -353,14 +292,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void showExtraOptions() {
 		comboSearchFields.setVisible(buttonShowHideExtraOptions.isSelected());
-		comboSearchFieldsMode.setVisible(buttonShowHideExtraOptions.isSelected());
 		labelSearch.setVisible(buttonShowHideExtraOptions.isSelected());
-		labelSearchMode.setVisible(buttonShowHideExtraOptions.isSelected());
 	}
 
 	private void setupNarrowLayout() {
-		buttonShowHideExtraOptions = new JToggleButton(Utils.getIntellijIcon("arrowLeft"));
-		buttonShowHideExtraOptions.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
+		buttonShowHideExtraOptions = new JToggleButton(Icons.getIntellijIcon("arrowLeft"));
+		buttonShowHideExtraOptions.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
 		buttonShowHideExtraOptions
 				.setToolTipText(Configed.getResourceValue("SearchPane.narrowLayout.extraOptions.toolTip"));
 		buttonShowHideExtraOptions.setFocusable(false);
@@ -385,12 +322,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(comboSearchFieldsMode, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addComponent(comboSearchFields, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addGap(Globals.GAP_SIZE));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
@@ -398,12 +330,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(flatTextFieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonShowHideExtraOptions, 10, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addComponent(buttonShowHideExtraOptions, 10, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutTablesearchPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboSearchFieldsMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 	}
 
@@ -416,17 +347,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(flatTextFieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(flatTextFieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE,
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE));
 
@@ -436,10 +362,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 				.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(flatTextFieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
@@ -476,97 +398,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFields.setSelectedIndex(0);
 	}
 
-	public void setSearchMode(SearchMode mode) {
-		if (mode == SearchMode.REGEX_SEARCH && !withRegEx) {
-			return;
-		}
-
-		comboSearchFieldsMode.setSelectedIndex(mode.ordinal());
-	}
-
 	@Override
 	public void requestFocus() {
 		flatTextFieldSearch.requestFocusInWindow();
 	}
 
-	private static class Finding {
-		boolean success;
-		int endChar = -1;
-	}
-
-	private Finding stringContainsParts(final String s, String[] parts) {
-		Finding result = new Finding();
-
-		if (s == null || parts == null) {
-			return result;
-		}
-
-		int len = parts.length;
-		if (len == 0) {
-			result.success = true;
-			return result;
-		}
-
-		int i = 0;
-		boolean searching = true;
-		Finding partSearch;
-
-		String remainder = s;
-
-		while (searching) {
-			partSearch = stringContains(remainder, parts[i]);
-			if (partSearch.success) {
-				i++;
-				// look for the next part?
-				if (i >= len) {
-					// all parts found
-					result.success = true;
-					result.endChar = partSearch.endChar;
-					searching = false;
-				} else if (remainder.length() > 0) {
-					remainder = remainder.substring(partSearch.endChar);
-				} else {
-					result.success = false;
-				}
-			} else {
-				result.success = false;
-				searching = false;
-			}
-		}
-
-		return result;
-	}
-
-	private Finding stringContains(final String s, final String part) {
-		Finding result = new Finding();
-
-		if (s == null || part == null || part.length() > s.length()) {
-			return result;
-		}
-
-		if (part.length() == 0) {
-			result.success = true;
-			result.endChar = 0;
-			return result;
-		}
-
-		result.success = false;
-
-		int i = 0;
-
-		int end = s.length() - part.length() + 1;
-
-		while (!result.success && i < end) {
-			result.success = comparator.compare(s.substring(i, i + part.length()), part) == 0;
-			result.endChar = i + part.length() - 1;
-			i++;
-		}
-
-		return result;
-	}
-
-	private boolean stringStartsWith(final String s, final String part) {
-		if (s == null || part == null || part.length() > s.length()) {
+	private boolean stringContains(final String s, final String part) {
+		if (part.length() > s.length()) {
 			return false;
 		}
 
@@ -574,110 +412,71 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			return true;
 		}
 
-		return comparator.compare(s.substring(0, part.length()), part) == 0;
-	}
+		boolean success = false;
 
-	private int findViewRowFromValue(int startviewrow, String value, Set<Integer> colIndices) {
-		String valueLower = value.toLowerCase(Locale.ROOT);
-		Pattern regexPattern = null;
-		SearchMode mode = getSearchMode(comboSearchFieldsMode.getSelectedIndex());
-		if (mode == SearchMode.REGEX_SEARCH) {
-			regexPattern = Pattern.compile(valueLower);
+		int end = s.length() - part.length() + 1;
+
+		for (int i = 0; !success && i < end; i++) {
+			success = comparator.compare(s.substring(i, i + part.length()), part) == 0;
 		}
 
-		int viewrow = Math.max(0, startviewrow);
-		boolean found = false;
+		return success;
+	}
 
-		while (!found && viewrow < targetModel.getRowCount()) {
-			found = searchForStringInColumns(viewrow, colIndices, valueLower, regexPattern, mode);
-			if (!found) {
+	private int findViewRowFromValue(int startviewrow, String value) {
+		int viewrow = Math.max(0, startviewrow);
+
+		int column = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
+
+		while (viewrow < targetModel.getRowCount()) {
+			if (searchForStringInColumns(viewrow, value, column)) {
+				return viewrow;
+			} else {
 				viewrow++;
 			}
 		}
 
-		return found ? viewrow : -1;
+		return -1;
 	}
 
-	private static SearchMode getSearchMode(int i) {
-		for (SearchMode mode : SearchMode.values()) {
-			if (mode.ordinal() == i) {
-				return mode;
-			}
+	private boolean searchForStringInColumns(int viewrow, String value, int column) {
+		if (column != -1) {
+			// search in that column
+			return searchForStringBasedOnSearchMode(value, column, viewrow);
 		}
-		return null;
-	}
 
-	@SuppressWarnings("java:S135")
-	private boolean searchForStringInColumns(int viewrow, Set<Integer> colIndices, String valueLower,
-			Pattern regexPattern, SearchMode mode) {
-		boolean found = false;
+		// Search in all columns
 		for (int j = 0; j < targetModel.getColumnCount(); j++) {
-			// we dont compare all values (comparing all values is default)
-			if (colIndices != null && !colIndices.contains(j)) {
-				continue;
-			}
-
-			Object compareValue = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow),
-					targetModel.getColForVisualCol(j));
-
-			if (compareValue != null) {
-				String compareValueLower = compareValue.toString().toLowerCase(Locale.ROOT);
-				found = searchForStringBasedOnSearchMode(compareValueLower, valueLower, regexPattern, mode);
-			}
-
-			if (found) {
-				break;
-			}
-		}
-		return found;
-	}
-
-	private boolean searchForStringBasedOnSearchMode(String searchString, String searchPattern, Pattern regexPattern,
-			SearchMode mode) {
-		boolean found = false;
-		if (mode == null) {
-			return found;
-		}
-
-		switch (mode) {
-		case REGEX_SEARCH:
-			if (regexPattern.matcher(searchString).matches()) {
-				found = true;
-			}
-			break;
-		case FULL_TEXT_SEARCH:
-			found = stringContainsParts(searchString, searchPattern.split(" ")).success;
-			break;
-		case FULL_TEXT_WITH_ALTERNATIVES_SEARCH:
-			String valLower = searchPattern.toLowerCase(Locale.ROOT);
-			List<String> alternativeWords = getWords(valLower);
-			found = fullTextSearchingWithAlternatives(alternativeWords, searchString);
-			break;
-		default:
-			found = stringStartsWith(searchString, searchPattern);
-		}
-
-		return found;
-	}
-
-	private static List<String> getWords(String line) {
-		List<String> result = new ArrayList<>();
-		String[] splitted = S_PLUS_PATTERN.split(line);
-		for (String s : splitted) {
-			if (!" ".equals(s)) {
-				result.add(s);
-			}
-		}
-		return result;
-	}
-
-	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
-		for (String word : alternativeWords) {
-			if (compareVal.indexOf(word) >= 0) {
+			if (searchForStringBasedOnSearchMode(value, j, viewrow)) {
+				// We found the value
 				return true;
 			}
 		}
+
 		return false;
+	}
+
+	private boolean searchForStringBasedOnSearchMode(String searchPattern, int column, int row) {
+		Object cellValue = targetModel.getValueAt(targetModel.getRowForVisualRow(row),
+				targetModel.getColForVisualCol(column));
+		if (cellValue == null) {
+			return false;
+		}
+
+		String cellString = cellValue.toString();
+
+		if (regexActive.isSelected()) {
+			Pattern regexPattern = Pattern.compile(".*" + searchPattern + ".*",
+					respectCase.isSelected() ? 0 : Pattern.CASE_INSENSITIVE);
+			return regexPattern.matcher(cellString).matches();
+		} else {
+			if (!respectCase.isSelected()) {
+				cellString = cellString.toLowerCase(Locale.ROOT);
+				searchPattern = searchPattern.toLowerCase(Locale.ROOT);
+			}
+
+			return stringContains(cellString, searchPattern);
+		}
 	}
 
 	/**
@@ -751,7 +550,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void setRow(int row, boolean addSelection, boolean select) {
-		if (select) {
+		if (row == -1) {
+			targetModel.setSelection(new int[0]);
+			row = 0;
+		} else if (select) {
 			if (addSelection) {
 				targetModel.addSelectedRow(row);
 			} else {
@@ -768,29 +570,16 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
 		final String value = flatTextFieldSearch.getText();
 
-		Set<Integer> selectedCols0 = null;
-
-		if (comboSearchFields.getSelectedIndex() > 0) {
-			selectedCols0 = new HashSet<>();
-			selectedCols0.add(targetModel.findColumn((String) comboSearchFields.getSelectedItem()));
-		}
-
-		final Set<Integer> selectedCols = selectedCols0;
-
 		flatTextFieldSearch.getCaret().setVisible(false);
 
 		// Search only for value longer than one digit
-		if (value.length() < 2) {
-			setRow(0, false, select);
-		} else {
-			foundrow = findViewRowFromValue(startrow, value, selectedCols);
+		if (value.length() >= 2) {
+			foundrow = findViewRowFromValue(startrow, value);
 
-			if (foundrow > -1) {
+			if (foundrow > -1 || startrow == 0) {
 				setRow(foundrow, addSelection, select);
-			} else if (startrow > 0) {
-				searchTheRow(0, addSelection, select);
 			} else {
-				setRow(0, false, select);
+				searchTheRow(0, addSelection, select);
 			}
 		}
 
@@ -833,12 +622,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			filtermark.setSelected(false);
-
-			setRow(0, false, selectMode);
-			// go back to start when editing is restarted
-		}
+		documentChanged(e);
 	}
 
 	private void documentChanged(DocumentEvent e) {

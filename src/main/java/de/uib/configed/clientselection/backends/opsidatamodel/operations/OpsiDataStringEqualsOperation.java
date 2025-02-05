@@ -25,14 +25,13 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 	public OpsiDataStringEqualsOperation(String map, String key, String data, AbstractSelectElement element) {
 		super(element);
-		Logging.debug(this.getClass(), "OpsiDataStringEqualsOperation maptype, key, data: ", map, ", ", key, ", ",
-				data);
+		Logging.debug(this, "OpsiDataStringEqualsOperation maptype, key, data: ", map, ", ", key, ", ", data);
 		this.map = map;
 		this.key = key;
 		this.data = data.toLowerCase(Locale.ROOT);
 		if (data.contains("*")) {
 			dataSplitted = this.data.split("\\*");
-			Logging.debug(this.getClass(), "OpsiDataStringEqualsOperation ", dataSplitted.length);
+			Logging.debug(this, "OpsiDataStringEqualsOperation ", dataSplitted.length);
 		}
 		startsWith = data.startsWith("*");
 		endsWith = data.endsWith("*");

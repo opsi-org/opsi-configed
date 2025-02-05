@@ -24,7 +24,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane {
@@ -94,17 +94,16 @@ public class ProductInfoPane extends JSplitPane {
 		productSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		productSplitPane.setTopComponent(jScrollPaneProductInfo);
 		productSplitPane.setBottomComponent(jScrollPaneProductAdvice);
-		productSplitPane.setDividerLocation(Globals.PREF_VSIZE);
 		productSplitPane.setResizeWeight(0.5);
 
-		dependenciesActivateButton = new JToggleButton(Utils.getIntellijIcon("arrowRight"));
-		dependenciesActivateButton.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
+		dependenciesActivateButton = new JToggleButton(Icons.getIntellijIcon("arrowRight"));
+		dependenciesActivateButton.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
 		dependenciesActivateButton.addActionListener(event -> toggleDependenciesActive());
 		dependenciesActivateButton.setFocusable(false);
 		panelProductDependencies.setVisible(false);
 
-		propertiesActivateButton = new JToggleButton(Utils.getIntellijIcon("arrowRight"), true);
-		propertiesActivateButton.setSelectedIcon(Utils.getIntellijIcon("arrowDown"));
+		propertiesActivateButton = new JToggleButton(Icons.getIntellijIcon("arrowRight"), true);
+		propertiesActivateButton.setSelectedIcon(Icons.getIntellijIcon("arrowDown"));
 		propertiesActivateButton.addActionListener(event -> togglePropertiesActive());
 		propertiesActivateButton.setFocusable(false);
 	}
@@ -127,28 +126,30 @@ public class ProductInfoPane extends JSplitPane {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
 
-				.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelProductName, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE))
+				.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
+						jLabelProductName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
 				.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelLabelProductVersion, Globals.MIN_HSIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelProductVersion, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE))
-
-				.addComponent(productSplitPane, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE));
-
-		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelProductID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jLabelProductName, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelLabelProductVersion, 0, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(0, Globals.GAP_SIZE, Globals.GAP_SIZE)
-				.addComponent(productSplitPane, 0, Globals.PREF_VSIZE * 2, Short.MAX_VALUE));
+								Short.MAX_VALUE))
+
+				.addComponent(productSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+
+		layoutDescriptionsPanel
+				.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelProductName, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT)
+						.addGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE).addComponent(productSplitPane, 0, 160, Short.MAX_VALUE));
 
 		setTopComponent(productDescriptionsPanel);
 	}
@@ -185,16 +186,16 @@ public class ProductInfoPane extends JSplitPane {
 		layoutBottomComponent
 				.setVerticalGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(dependenciesActivateButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
+								.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
 						.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(propertiesActivateButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
+								.addComponent(propertiesActivateButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(panelEditProperties.getTitlePanel()))
 						.addComponent(panelEditProperties, 0, 0, Short.MAX_VALUE));
 

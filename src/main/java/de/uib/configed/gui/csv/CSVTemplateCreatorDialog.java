@@ -23,16 +23,17 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -49,13 +50,12 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.CheckBoxList;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.type.HostInfo;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
-public class CSVTemplateCreatorDialog extends FGeneralDialog {
-	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
+public class CSVTemplateCreatorDialog {
+	private static CSVTemplateCreatorDialog csvTemplateCreatorDialog;
 
 	private CSVFormat format;
 
@@ -66,68 +66,19 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private List<String> columnNames;
 	private List<JCheckBox> headerCheckBoxes;
 
+	private JOptionPane optionPane;
+	private JDialog dialog;
+
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.csvTemplateLabel"), false,
-				new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") }, 2,
-				1000, 450, true);
-
 		this.columnNames = columnNames;
+
+		JPanel panel = initPanel();
+		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 	}
 
-	@Override
-	protected void allLayout() {
-		Logging.info(this, "allLayout in TEMPLATE");
-
-		allpane.setBorder(BorderFactory.createEtchedBorder());
-
-		southPanel = createSouthPanel();
-
-		GroupLayout allLayout = new GroupLayout(allpane);
-		allpane.setLayout(allLayout);
-
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE));
-
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE))
-				.addGroup(allLayout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
-	}
-
-	private JPanel createSouthPanel() {
-		southPanel = new JPanel();
-
-		GroupLayout southLayout = new GroupLayout(southPanel);
-		southPanel.setLayout(southLayout);
-
-		southLayout.setHorizontalGroup(southLayout.createParallelGroup(Alignment.LEADING).addGroup(southLayout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)));
-
-		southLayout.setVerticalGroup(southLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE));
-
-		return southPanel;
-	}
-
-	public JPanel initPanel() {
+	private JPanel initPanel() {
 		format = CSVFormat.DEFAULT.builder().setDelimiter(";").setCommentMarker('#').build();
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
@@ -213,10 +164,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		GroupLayout centerLayout = new GroupLayout(centerPanel);
 		centerPanel.setLayout(centerLayout);
 
-		JLabel dataLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.dataOptionsLabel"));
 		JLabel dataSelectionLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
-		JLabel csvFormatLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.csvFormatLabel"));
 		JLabel fieldSeparatorLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
@@ -228,91 +177,81 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		columnNames.forEach(header -> addHeaderCheckBox(header, model));
 
 		CheckBoxList list = new CheckBoxList(model);
+		list.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list.setVisibleRowCount(-1);
 
-		JScrollPane scroll = new JScrollPane(list);
-		scroll.setAlignmentX(LEFT_ALIGNMENT);
+		centerLayout
+				.setHorizontalGroup(
+						centerLayout.createParallelGroup().addComponent(dataSelectionLabel)
+								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(list, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
+								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(includeFormatHintOption, Globals.BUTTON_WIDTH,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
 
-		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(dataLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(dataSelectionLabel)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(scroll)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(csvFormatLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(includeFormatHintOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(fieldSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL).addGap(
-								Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(tabsOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(commaOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(semicolonOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(spaceOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(otherOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(otherDelimiterInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(quoteLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(quoteOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
+								.addComponent(fieldSeparatorLabel, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
 
-		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(dataLabel).addGap(Globals.GAP_SIZE).addComponent(dataSelectionLabel)
-				.addGap(Globals.GAP_SIZE).addComponent(scroll).addGap(Globals.GAP_SIZE).addComponent(csvFormatLabel)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(includeFormatHintOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-						Globals.BUTTON_HEIGHT)
-				.addGap(Globals.GAP_SIZE).addComponent(fieldSeparatorLabel).addGap(Globals.GAP_SIZE)
-				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(tabsOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(commaOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(semicolonOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(spaceOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(otherOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(otherDelimiterInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(quoteLabel)
-						.addComponent(quoteOptions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE));
+								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(commaOption, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
+
+								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
+
+								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
+
+								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(otherOption, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE))
+								.addGroup(centerLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE).addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+
+		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup().addComponent(dataSelectionLabel)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(list, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(includeFormatHintOption).addGap(Globals.GAP_SIZE)
+				.addComponent(fieldSeparatorLabel).addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(otherOption)
+						.addComponent(otherDelimiterInput))
+				.addGap(Globals.GAP_SIZE).addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(quoteLabel).addComponent(quoteOptions)));
 
 		return centerPanel;
 	}
 
 	private void addHeaderCheckBox(String header, DefaultListModel<JCheckBox> model) {
-		JCheckBox headerCheckBox = new JCheckBox(header);
+		JCheckBox headerCheckBox = new JCheckBox(header, isImportantHeader(header));
 		headerCheckBox.setActionCommand(header);
-
-		if (HostInfo.CLIENT_UEFI_BOOT_KEY.equals(header)) {
-			return;
-		}
-
-		if (isImportantHeader(header)) {
-			headerCheckBox.setSelected(true);
-			headerCheckBox.setEnabled(false);
-		}
 
 		model.addElement(headerCheckBox);
 		headerCheckBoxes.add(headerCheckBox);
@@ -342,10 +281,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			/* Not needed */}
 	}
 
-	@Override
-	public void doAction2() {
-		result = 2;
-
+	public void createTemplate() {
 		boolean proceed = true;
 		for (JCheckBox headerCheckBox : headerCheckBoxes) {
 			if (HostInfo.HOST_KEY_KEY.equals(headerCheckBox.getText()) && headerCheckBox.isSelected()
@@ -396,5 +332,23 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		} catch (IOException e) {
 			Logging.error(this, e, "Unable to write to file");
 		}
+	}
+
+	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
+
+		if (optionPane.getValue() == (Integer) JOptionPane.OK_OPTION) {
+			createTemplate();
+		}
+	}
+
+	public static void displayCSVTemplateDialog() {
+		List<String> columnNames = HostInfo.getKeysForCSV();
+		if (csvTemplateCreatorDialog == null) {
+			csvTemplateCreatorDialog = new CSVTemplateCreatorDialog(columnNames);
+		}
+
+		csvTemplateCreatorDialog.show();
 	}
 }

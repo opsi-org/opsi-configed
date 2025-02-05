@@ -9,9 +9,10 @@ package de.uib.utils.swing.list;
 import java.awt.Component;
 import java.util.Map;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
-public class ListCellRendererByIndex extends StandardListCellRenderer {
+public class ListCellRendererByIndex extends DefaultListCellRenderer {
 	private Map<String, String> mapOfTooltips;
 
 	public ListCellRendererByIndex(Map<String, String> mapOfTooltips) {

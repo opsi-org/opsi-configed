@@ -1,0 +1,56 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.configed.gui.hwinfopage;
+
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
+import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+
+public class DriverUploadDialog {
+	private PanelDriverUpload panelDriverUpload;
+
+	private ConfigedMain configedMain;
+
+	private JDialog dialog;
+
+	public DriverUploadDialog(ConfigedMain configedMain) {
+		super();
+
+		this.configedMain = configedMain;
+
+		panelDriverUpload = new PanelDriverUpload(configedMain);
+
+		JOptionPane optionPane = new JOptionPane(panelDriverUpload);
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("FDriverUpload.title"));
+		dialog.setModal(false);
+
+		panelDriverUpload.setDialog(dialog);
+	}
+
+	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
+	}
+
+	public void setUploadParameters(String byAuditPath) {
+		panelDriverUpload.setByAuditPath(byAuditPath);
+
+		String clientName;
+
+		if (configedMain.getSelectedClients().size() == 1) {
+			clientName = configedMain.getSelectedClients().get(0);
+		} else {
+			clientName = "";
+		}
+
+		panelDriverUpload.setClientName(clientName);
+		panelDriverUpload.setDepot();
+	}
+}

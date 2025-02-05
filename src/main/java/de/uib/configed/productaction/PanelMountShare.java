@@ -6,7 +6,6 @@
 
 package de.uib.configed.productaction;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -22,33 +20,23 @@ import com.formdev.flatlaf.util.SystemInfo;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class PanelMountShare extends JPanel {
 	private static List<PanelMountShare> instances = new ArrayList<>();
-
-	private JFrame rootFrame;
 
 	private JButton buttonMountShare;
 	private JLabel mountShareDescriptionLabel;
 
 	private boolean smbMounted;
 
-	private int leftBound = -1;
-
 	private NameProducer np;
 
-	public PanelMountShare(NameProducer np, JFrame root) {
-		this(np, root, -1);
-	}
-
-	public PanelMountShare(NameProducer np, JFrame root, int leftBound) {
+	public PanelMountShare(NameProducer np) {
 		instances.add(this);
-		this.rootFrame = root;
 		this.np = np;
-		this.leftBound = leftBound;
 
 		smbMounted = false;
 
@@ -57,8 +45,7 @@ public class PanelMountShare extends JPanel {
 	}
 
 	private void initComponents() {
-		buttonMountShare = new JButton(Utils.getIntellijIcon("windows"));
-		buttonMountShare.setPreferredSize(Globals.GRAPHIC_BUTTON_DIMENSION);
+		buttonMountShare = new JButton(Icons.getIntellijIcon("windows"));
 		if (SystemInfo.isWindows) {
 			buttonMountShare.setToolTipText(
 					Configed.getResourceValue("PanelMountShare.mountShareDescription") + " " + np.produceName());
@@ -66,7 +53,7 @@ public class PanelMountShare extends JPanel {
 
 		buttonMountShare.setEnabled(SystemInfo.isWindows);
 
-		buttonMountShare.addActionListener((ActionEvent e) -> callMountShare());
+		buttonMountShare.addActionListener(actionEvent -> callMountShare());
 	}
 
 	private void defineLayout() {
@@ -80,32 +67,17 @@ public class PanelMountShare extends JPanel {
 		panel.setLayout(layout);
 
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGap(Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(buttonMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(mountShareDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-						Globals.LINE_HEIGHT));
+				.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(mountShareDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
-		if (leftBound >= 0) {
-			layout.setHorizontalGroup(layout.createSequentialGroup().addGap(leftBound, leftBound, leftBound)
-					.addComponent(buttonMountShare, Globals.GRAPHIC_BUTTON_SIZE, Globals.GRAPHIC_BUTTON_SIZE,
-							Globals.GRAPHIC_BUTTON_SIZE)
-					.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
-					.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 3,
-							Short.MAX_VALUE)
-					.addGap(Globals.GAP_SIZE));
-		} else {
-			layout.setHorizontalGroup(
-					layout.createSequentialGroup().addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
-							.addGap(Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH)
-							.addGap(Globals.GAP_SIZE)
-							.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addGap(Globals.HFIRST_GAP, Globals.HFIRST_GAP, Globals.HFIRST_GAP)
-							.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
-									Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-							.addGap(Globals.MIN_GAP_SIZE)
-							.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Short.MAX_VALUE));
-		}
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(mountShareDescriptionLabel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE));
 	}
 
 	public void mount(boolean mounted) {
@@ -122,8 +94,7 @@ public class PanelMountShare extends JPanel {
 			return;
 		}
 
-		String call;
-		call = "explorer.exe " + " \"" + np.produceName() + "\"";
+		String call = "explorer.exe " + " \"" + np.produceName() + "\"";
 
 		Logging.info(this, "windows call: ", call);
 
@@ -187,7 +158,6 @@ public class PanelMountShare extends JPanel {
 						Logging.debug(this, "trying to find dir, count ", i);
 						sleep(1000);
 						checkConnectionToShare();
-						rootFrame.toFront();
 					} catch (InterruptedException ex) {
 						Logging.debug(this, "Exception ", ex);
 						Thread.currentThread().interrupt();

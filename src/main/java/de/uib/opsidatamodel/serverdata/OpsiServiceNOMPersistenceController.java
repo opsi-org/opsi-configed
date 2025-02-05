@@ -11,7 +11,7 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.uib.configed.productaction.FCompleteWinProducts;
+import de.uib.configed.productaction.CompleteWinProductsDialog;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -73,8 +73,6 @@ import de.uib.utils.logging.Logging;
 public class OpsiServiceNOMPersistenceController {
 	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = Set.of("type", "id");
 
-	public static final String CONFIG_KEY_SUPPLEMENTARY_QUERY = "configed.query_supplementary";
-
 	@SuppressWarnings({ "java:S103" })
 	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
@@ -102,16 +100,6 @@ public class OpsiServiceNOMPersistenceController {
 
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
-	public static final String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";
-	public static final String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
-	// the current real value, but it is not necessary to configure it:
-
-	// not more used:
-
-	public static final String EFI_DHCPD_NOT = "";
-
-	public static final String EFI_STRING = "efi";
-
 	public static final String KEY_USER_ROOT = "user";
 
 	public static final String KEY_USER_ROLE_ROOT = KEY_USER_ROOT + "." + "role";// UserConfig.
@@ -133,11 +121,9 @@ public class OpsiServiceNOMPersistenceController {
 	private static NavigableMap<String, String> propertyClassesClient;
 	private static Set<String> configKeyStartersNotForClients;
 
-	private FCompleteWinProducts panelCompleteWinProducts;
+	private CompleteWinProductsDialog completeWinProductsPanel;
 
-	private String user;
-
-	private AbstractPOJOExecutioner exec;
+	private ServerFacade exec;
 
 	private HostInfoCollections hostInfoCollections;
 
@@ -160,15 +146,33 @@ public class OpsiServiceNOMPersistenceController {
 
 	private String triggeredEvent;
 
-	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp) {
-		Logging.info(this.getClass(), "start construction, \nconnect to ", server, " as ", user);
-		this.user = user;
+	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp, boolean useSSO) {
+		Logging.info(this, "start construction, \nconnect to ", server, " as ", user);
 
-		Logging.debug(this.getClass(), "create");
+		if (server == null || server.isEmpty()) {
+			Logging.error(this.getClass(), "no server given");
+			return;
+		}
+
+		if (useSSO) {
+			Logging.info(this.getClass(), "OSNOM try sso/saml");
+		} else if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
+			Logging.error(this, "No user or password given.");
+		} else {
+			// Nothing to do here, we just continue logging in
+		}
+
+		Logging.debug(this, "create");
 
 		init();
+		if (useSSO) {
+			exec = new ServerFacade(server);
+		} else {
+			exec = new ServerFacade(server, user, password, otp);
+		}
 
-		exec = new ServerFacade(server, user, password, otp);
+		Logging.info(this, "connection state ", exec.getConnectionState());
+
 		userRolesConfigDataService = new UserRolesConfigDataService(exec, this);
 		configDataService = new ConfigDataService(exec, this);
 		depotDataService = new DepotDataService(exec);
@@ -287,7 +291,7 @@ public class OpsiServiceNOMPersistenceController {
 		return rpcMethodExecutor;
 	}
 
-	@SuppressWarnings({ "java:S103", "java:S138" })
+	@SuppressWarnings({ "java:S103" })
 	private void registerReloadHandlers() {
 		reloadDispatcher = new ReloadDispatcher();
 
@@ -389,13 +393,13 @@ public class OpsiServiceNOMPersistenceController {
 		return triggeredEvent;
 	}
 
-	public void registerPanelCompleteWinProducts(FCompleteWinProducts panelCompleteWinProducts) {
-		this.panelCompleteWinProducts = panelCompleteWinProducts;
+	public void registerPanelCompleteWinProducts(CompleteWinProductsDialog completeWinProductsPanel) {
+		this.completeWinProductsPanel = completeWinProductsPanel;
 	}
 
 	public void notifyPanelCompleteWinProducts() {
-		if (panelCompleteWinProducts != null) {
-			panelCompleteWinProducts.evaluateWinProducts();
+		if (completeWinProductsPanel != null) {
+			completeWinProductsPanel.evaluateWinProducts();
 		}
 	}
 
@@ -405,8 +409,6 @@ public class OpsiServiceNOMPersistenceController {
 		propertyClassesServer.put("clientconfig", "HostConfigNodeRenderer.clientconfig.Tooltip");
 		propertyClassesServer.put(LicensingInfoMap.CONFIG_KEY, "HostConfigNodeRenderer.licensing.Tooltip");
 		propertyClassesServer.put(CONTROL_DASH_CONFIG_KEY, "HostConfigNodeRenderer.configed.dash_config.Tooltip");
-		propertyClassesServer.put(CONFIG_KEY_SUPPLEMENTARY_QUERY,
-				"HostConfigNodeRenderer.configed.query_supplementary");
 		propertyClassesServer.put(CONFIG_KEY, "HostConfigNodeRenderer.configed.meta_config");
 		propertyClassesServer.put(SavedSearch.CONFIG_KEY, "HostConfigNodeRenderer.configed.saved_search");
 		propertyClassesServer.put(RemoteControl.CONFIG_KEY, "HostConfigNodeRenderer.configed.remote_control");
@@ -447,12 +449,8 @@ public class OpsiServiceNOMPersistenceController {
 		return exec.getConnectionState();
 	}
 
-	public AbstractPOJOExecutioner getExecutioner() {
+	public ServerFacade getExecutioner() {
 		return exec;
-	}
-
-	public String getUser() {
-		return user;
 	}
 
 	public static NavigableMap<String, String> getPropertyClassesServer() {

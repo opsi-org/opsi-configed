@@ -6,7 +6,6 @@
 
 package de.uib.configed.messageoftheday;
 
-import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,13 +15,15 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserFeaturesConfig;
@@ -36,7 +37,7 @@ import de.uib.utils.logging.Logging;
  * for the user motd config. This dialog is used in the {@link MainFrame} class
  * to show the motd configuration in the top menu "window".
  */
-public class FMessageOfTheDay extends FGeneralDialog {
+public class FMessageOfTheDay {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private PanelMessageInfos pMsgInfoGeneral;
@@ -47,23 +48,41 @@ public class FMessageOfTheDay extends FGeneralDialog {
 	private boolean forbiddenDevice;
 	private boolean forbiddenUser;
 	private boolean showPreview = true;
+	private JDialog dialog;
+	private JScrollPane scrollpane = new JScrollPane();
 
 	public FMessageOfTheDay() {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"), false,
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
-				900, 600, true);
+		// super(ConfigedMain.getMainFrame(), Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"), false,
+		// 		new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
+		// 		900, 600, true);
 
 		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
 				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
 		forbiddenDevice = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE);
 		forbiddenUser = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 		if (forbiddenDevice && forbiddenUser) {
-			Logging.error("MessageOfTheDay Feature is forbidden by configs");
+			// Logging.error("MessageOfTheDay Feature is forbidden by configs");
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		motdData = persistenceController.getConfigDataService().getMessageOfTheDayConfigs();
 		define();
 		init();
+
+		// JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
+		JOptionPane optionPane = new JOptionPane(scrollpane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
+				null,
+				new Object[] { Configed.getResourceValue("buttonExecute"), Configed.getResourceValue("buttonCancel") });
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"));
+		dialog.setVisible(true);
+
+		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
+			execute();
+		}
+
 	}
 
 	private void init() {
@@ -177,11 +196,10 @@ public class FMessageOfTheDay extends FGeneralDialog {
 
 	public void setSaveButtonEnable(boolean enable) {
 		Logging.debug("FMessageOfTheDay setSaveButtonEnable ", enable);
-		jButton2.setEnabled(enable);
+		// jButton2.setEnabled(enable);
 	}
 
-	@Override
-	public void doAction2() {
+	public void execute() {
 		Logging.debug("FMessageOfTheDay doAction2 store");
 		Map<String, String> data = new HashMap<>();
 		if (!forbiddenDevice) {
@@ -204,18 +222,18 @@ public class FMessageOfTheDay extends FGeneralDialog {
 		setSaveButtonEnable(false);
 	}
 
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		// to ensure that the buttons are visible
-		jButton1.repaint();
-		jButton2.repaint();
-		// if (!forbiddenDevice) {
-		// 	pMsgInfoGeneral.repaint();
-		// } else if (!forbiddenUser) {
-		// 	pMsgInfoUser.repaint();
-		// } else {
-		// 	Logging.error("FMessageOfTheDay paint forbidden");
-		// }
-	}
+	// @Override
+	// public void paint(Graphics g) {
+	// 	super.paint(g);
+	// 	// to ensure that the buttons are visible
+	// 	jButton1.repaint();
+	// 	jButton2.repaint();
+	// 	// if (!forbiddenDevice) {
+	// 	// 	pMsgInfoGeneral.repaint();
+	// 	// } else if (!forbiddenUser) {
+	// 	// 	pMsgInfoUser.repaint();
+	// 	// } else {
+	// 	// 	Logging.error("FMessageOfTheDay paint forbidden");
+	// 	// }
+	// }
 }

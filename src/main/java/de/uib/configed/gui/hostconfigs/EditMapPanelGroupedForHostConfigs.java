@@ -6,10 +6,9 @@
 
 package de.uib.configed.gui.hostconfigs;
 
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,34 +23,35 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.GroupLayout;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FDialogTextfieldWithListSelection;
-import de.uib.configed.gui.FramingTextfieldWithListselection;
-import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.ListCellOptions;
 import de.uib.utils.tree.XTree;
 
 // works on a map of pairs of type String - List
@@ -70,6 +70,8 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private List<String> theRoles;
 
+	private boolean configStatesEditable;
+
 	private JSplitPane splitPane;
 	protected XTree tree;
 	private JPanel emptyRightPane;
@@ -84,12 +86,13 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
 
-	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable, final DefaultEditMapPanel.Actor actor) {
-		super(tableCellRenderer, keylistExtendible, keylistEditable, true);
+	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean configStatesEditable) {
+		super(true);
 
-		buildPanel();
 		this.actor = actor;
+		this.configStatesEditable = configStatesEditable;
+
+		setupLayout();
 
 		setupPopups();
 		setupPopupTexts();
@@ -97,7 +100,15 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void setupPopups() {
-		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
+		setupPopupMenu();
+		setupPopupForUserpathes();
+		setupPopupForUserpath();
+		setupPopupForRolepathes();
+		setupPopupForRolepath();
+	}
+
+	private void setupPopupMenu() {
+		popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			@Override
 			public void action(int p) {
 				Logging.debug(this, "( EditMapPanelGrouped ) popup ", p);
@@ -111,7 +122,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
+	private void setupPopupForUserpathes() {
 		popupForUserpathes = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
@@ -135,7 +148,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
+	private void setupPopupForUserpath() {
 		popupForUserpath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
@@ -154,7 +169,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
+	private void setupPopupForRolepathes() {
 		popupForRolepathes = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
@@ -178,7 +195,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 				}
 			}
 		};
+	}
 
+	private void setupPopupForRolepath() {
 		popupForRolepath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
@@ -310,8 +329,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		givenClasses.remove(key);
 	}
 
-	@Override
-	protected void buildPanel() {
+	private void setupLayout() {
 		splitPane = new JSplitPane();
 
 		tree = new XTree();
@@ -350,7 +368,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
 	@Override
-	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
+	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
 		super.setEditableMap(visualdata, optionsMap);
 		Logging.debug(this, " setEditableMap, visualdata keys ", visualdata);
 		if (visualdata != null) {
@@ -373,35 +391,14 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	// apply method of superclass for all partial maps
 	@Override
-	public void setOptionsEditable(boolean b) {
-		super.setOptionsEditable(b);
+	public void updateData(UpdateCollection updateCollection, Collection<Map<String, Object>> data) {
+		super.updateData(updateCollection, data);
 
 		for (String key : keyclasses) {
-			partialPanels.get(key).setOptionsEditable(b);
+			partialPanels.get(key).updateData(updateCollection, data);
 		}
 	}
 
-	// apply method of superclass for all partial maps
-	@Override
-	public void setStoreData(Collection<Map<String, Object>> data) {
-		super.setStoreData(data);
-
-		for (String key : keyclasses) {
-			partialPanels.get(key).setStoreData(data);
-		}
-	}
-
-	// apply method of superclass for all partial maps
-	@Override
-	public void setUpdateCollection(Collection updateCollection) {
-		super.setUpdateCollection(updateCollection);
-
-		for (String key : keyclasses) {
-			partialPanels.get(key).setUpdateCollection(updateCollection);
-		}
-	}
-
-	@Override
 	public void setLabel(String s) {
 		if (treemodel == null) {
 			return;
@@ -455,10 +452,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(tableCellRenderer, keylistExtendible,
-					keylistEditable, reloadable, tree, includeAdditionalTooltipText);
+			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(reloadable, tree, configStatesEditable,
+					includeAdditionalTooltipText);
 
-			editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
 			editMapPanel.setActor(actor);
 			editMapPanel.setOriginalMap(originalMap);
 
@@ -489,7 +485,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		Logging.info(this, "theUsers found ", theUsers);
 
 		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
-			entry.getValue().setEditableFunction(key -> isEditable(key, entry));
+			entry.getValue().getMapTableModel().setIsEditable(key -> isEditable(key, entry));
 		}
 	}
 
@@ -642,95 +638,67 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	}
 
 	private void addUser() {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(ConfigedMain.getMainFrame(),
-				"add user", false,
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
-				600, 600, true) {
-			@Override
-			public void doAction2() {
-				Logging.info(this, "doAction2");
-				super.doAction2();
-				Logging.info(this, "addUser action, result Text ", getResultText());
-				Logging.info(this, "addUser action, result listelement ", getSelectedListelement());
+		JLabel userLabel = new JLabel(Configed.getResourceValue("FramingNewUser.textfieldLabel"));
+		userLabel.setFont(userLabel.getFont().deriveFont(Font.BOLD));
 
-				setUserConfig(getResultText(), getSelectedListelement());
-			}
-		};
+		JTextField userField = new JTextField();
 
-		FramingTextfieldWithListselection defs = new FramingNewUser();
-		defs.setListData(new ArrayList<>(theRoles));
+		JLabel userRolesLabel = new JLabel(Configed.getResourceValue("FramingNewUser.listLabel"));
+		userRolesLabel.setToolTipText(Configed.getResourceValue("FramingNewUser.listLabel.ToolTip"));
+		userRolesLabel.setFont(userRolesLabel.getFont().deriveFont(Font.BOLD));
 
-		f.applyFraming(defs);
+		JList<String> userRolesList = new JList<>(theRoles.toArray(new String[0]));
 
-		JPanel centerPanel = f.initPanel();
-		f.setCenterPaneInScrollpane(centerPanel);
+		// With this call all the elements will have a fixed height. Also the empty entry
+		userRolesList.setFixedCellHeight((Integer) UIManager.get("Table.rowHeight"));
 
-		f.setCenterPane(centerPanel);
+		JScrollPane userRolesScrollPane = new JScrollPane(userRolesList);
 
-		f.setupLayout();
-		f.setSize(new Dimension(500, 400));
-		f.setVisible(true);
+		if (userRolesList.getModel().getSize() > 0) {
+			userRolesList.setSelectedIndex(0);
+		}
+		userRolesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		Logging.info(this, "addUser finished, result ", f.getResult());
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
 
-		if (f.getResult() == 1) {
-			Logging.info(this, "addUser ok");
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(userLabel).addComponent(userField)
+				.addGap(Globals.GAP_SIZE).addComponent(userRolesLabel).addComponent(userRolesScrollPane));
+
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(userLabel)
+				.addComponent(userField).addComponent(userRolesLabel).addComponent(userRolesScrollPane));
+
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), panel,
+				Configed.getResourceValue("FramingNewUser.title"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (answer == JOptionPane.OK_OPTION) {
+			Logging.info(this, "addUser action, result Text ", userField.getText());
+			Logging.info(this, "addUser action, result listelement ", userRolesList.getSelectedValue());
+			setUserConfig(userField.getText(), userRolesList.getSelectedValue());
 		}
 	}
 
 	private void buildUserConfig() {
-		UserConfigProducing up = new UserConfigProducing(false,
-				persistenceController.getHostInfoCollections().getConfigServer(),
+		new UserConfigProducing(false, persistenceController.getHostInfoCollections().getConfigServer(),
 				persistenceController.getHostInfoCollections().getDepotNamesList(),
 				persistenceController.getGroupDataService().getHostGroupIds(),
 				persistenceController.getGroupDataService().getProductGroupsPD().keySet(),
 				persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-				persistenceController.getConfigDataService().getConfigListCellOptionsPD());
-
-		List<Object> newData = up.produce();
-
-		if (newData == null) {
-			Logging.warning(this, "readyObjects for userparts null");
-		} else {
-			if (!newData.isEmpty()) {
-				OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { newData });
-
-				persistenceController.getExecutioner().doCall(omc);
-			}
-
-			Logging.info(this, "readyObjects for userparts ", newData.size());
-		}
+				persistenceController.getConfigDataService().getConfigOptionsPD()).produce();
 	}
 
 	private void addRole() {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(ConfigedMain.getMainFrame(),
-				"add role", false,
-				new String[] { Configed.getResourceValue("buttonClose"), Configed.getResourceValue("buttonOK") }, 2,
-				600, 600, true) {
-			@Override
-			public void doAction2() {
-				Logging.info(this, "doAction2");
-				super.doAction2();
-				Logging.info(this, "addUser action, result Text ", getResultText());
-				Logging.info(this, "addUser action, result listelement ", getSelectedListelement());
+		JLabel roleLabel = new JLabel(Configed.getResourceValue("FramingNewRole.textfieldLabel"));
+		roleLabel.setFont(roleLabel.getFont().deriveFont(Font.BOLD));
 
-				setRoleConfig(getResultText(), getSelectedListelement());
-			}
-		};
+		String newUserRole = JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), roleLabel,
+				Configed.getResourceValue("FramingNewRole.title"), JOptionPane.PLAIN_MESSAGE);
 
-		FramingTextfieldWithListselection defs = new FramingNewRole();
-		defs.setListData(new ArrayList<>(theRoles));
-		f.applyFraming(defs);
-
-		JPanel centerPanel = f.initPanel();
-		f.setCenterPaneInScrollpane(centerPanel);
-		f.setListVisible(false);
-
-		f.setCenterPane(centerPanel);
-
-		f.setupLayout();
-		f.setSize(new Dimension(500, 400));
-		f.setVisible(true);
+		if (newUserRole != null) {
+			setRoleConfig(newUserRole);
+		}
 	}
 
 	private void deleteUser() {
@@ -749,7 +717,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 			String key = keyB.toString();
 			Logging.info(this, "deleteUser, selected user key ", key);
 
-			List<String> propertyNames = partialPanels.get(key).getNames();
+			List<String> propertyNames = partialPanels.get(key).getMapTableModel().getKeys();
 			Logging.info(this, "deleteUser, property names ", propertyNames);
 			for (String name : propertyNames) {
 				((EditMapPanelX) partialPanels.get(key)).removeProperty(name);
@@ -766,9 +734,9 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		}
 	}
 
-	private void setRoleConfig(String name, String rolename) {
-		Logging.info(this, "setRoleConfig ", name, ",", rolename);
-		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name, rolename);
+	private void setRoleConfig(String name) {
+		Logging.info(this, "setRoleConfig ", name);
+		PersistenceControllerFactory.getPersistenceController().getConfigDataService().addRoleConfig(name);
 	}
 
 	private void setUserConfig(String name, String rolename) {

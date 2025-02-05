@@ -34,7 +34,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	}
 
 	public SearchTargetModelFromTable(PanelGenEditTable thePanel) {
-		setTable(thePanel.getTheTable());
+		setTable(thePanel.getJTable());
 		this.thePanel = thePanel;
 	}
 

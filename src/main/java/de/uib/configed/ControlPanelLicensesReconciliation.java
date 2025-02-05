@@ -43,11 +43,8 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 	private int indexUsedByOpsi;
 	private int indexSWInventoryUsed;
 
-	private ConfigedMain configedMain;
-
-	public ControlPanelLicensesReconciliation(ConfigedMain configedMain) {
+	public ControlPanelLicensesReconciliation() {
 		thePanel = new PanelLicensesReconciliation(this);
-		this.configedMain = configedMain;
 
 		init();
 	}
@@ -87,18 +84,14 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 	}
 
 	private void initPanels() {
-		List<String> columnNames;
-
 		List<String> extraHostFields = persistenceController.getConfigDataService().getServerConfigStrings(
 				OpsiServiceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENSES_RECONCILIATION);
 
-		columnNames = new ArrayList<>();
+		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add(OpsiServiceNOMPersistenceController.HOST_KEY);
 
-		for (String fieldName : extraHostFields) {
-			columnNames.add(fieldName);
-		}
+		columnNames.addAll(extraHostFields);
 
 		columnNames.add("licensePoolId");
 		columnNames.add("used_by_opsi");
@@ -114,9 +107,7 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded() && !configedMain.isInitialLicenseDataLoading()) {
-							persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
-						}
+						persistenceController.reloadData(ReloadEvent.STATISTICS_DATA_RELOAD.toString());
 					}
 
 					@Override
@@ -125,9 +116,8 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 						if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 							return new HashMap<>();
 						}
-						return !configedMain.isInitialLicenseDataLoading()
-								? persistenceController.getSoftwareDataService().getLicensesReconciliationPD()
-								: new HashMap<>();
+
+						return persistenceController.getSoftwareDataService().getLicensesReconciliationPD();
 					}
 				})), -1, new int[] { 0, 1 }, thePanel.getPanelReconciliation(), updateCollection);
 
@@ -157,12 +147,12 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 	private void initTreatmentOfColumns() {
 		TableColumn col;
 
-		col = thePanel.getPanelReconciliation().getColumnModel().getColumn(indexUsedByOpsi);
+		col = thePanel.getPanelReconciliation().getJTable().getColumnModel().getColumn(indexUsedByOpsi);
 		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);
 
-		col = thePanel.getPanelReconciliation().getColumnModel().getColumn(indexSWInventoryUsed);
+		col = thePanel.getPanelReconciliation().getJTable().getColumnModel().getColumn(indexSWInventoryUsed);
 		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);

@@ -13,7 +13,6 @@
 package de.uib.configed.gui.licenses;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -35,7 +34,6 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -43,22 +41,23 @@ import de.uib.configed.ControlPanelEnterLicense;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.utils.Utils;
-import de.uib.utils.swing.FEditDate;
+import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.utils.table.gui.CellDateEditor;
 import de.uib.utils.table.gui.PanelGenEditTable;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.DatePicker;
 
 public class PanelEnterLicense extends MultiTablePanel {
 	private static final int MIN_HEIGHT = 50;
 	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
 
 	private static final int MIN_FIELD_WIDTH = 40;
-	private static final int MIN_FIELD_HEIGHT = 6;
 
 	private PanelGenEditTable panelKeys;
 	private PanelGenEditTable panelLicensePools;
 	private PanelGenEditTable panelLicenseContracts;
 
 	private String selectedLicensePool = "";
-	private ListSelectionListener licensePoolSelectionListener;
 
 	private JButton jButtonCreateStandard;
 	private JButton jButtonCreateVolume;
@@ -86,8 +85,6 @@ public class PanelEnterLicense extends MultiTablePanel {
 	private JLabel jLabelSLid3info;
 	private JLabel jLabelLKey;
 
-	private FEditDate fEditDate;
-
 	private ControlPanelEnterLicense enterLicenseController;
 
 	private ComboBoxModel<String> emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
@@ -104,7 +101,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private void defineListeners() {
-		panelLicenseContracts.getListSelectionModel().addListSelectionListener(this::selectPanelLicenseContracts);
+		panelLicenseContracts.getJTable().getSelectionModel()
+				.addListSelectionListener(this::selectPanelLicenseContracts);
 
 		panelLicensePools.addListSelectionListener(this::selectPanelLicensePools);
 	}
@@ -131,7 +129,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 			return;
 		}
 
-		int i = panelLicensePools.getSelectedRow();
+		int i = panelLicensePools.getJTable().getSelectedRow();
 
 		selectedLicensePool = "";
 
@@ -155,15 +153,15 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private boolean checkAndStart() {
-		if (panelLicensePools.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(ConfigedMain.getLicensesFrame(),
+		if (panelLicensePools.getJTable().getSelectedRow() == -1) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectLicensepool"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
-		if (panelLicenseContracts.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(ConfigedMain.getLicensesFrame(),
+		if (panelLicenseContracts.getJTable().getSelectedRow() == -1) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectLicensecontract"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 			return false;
@@ -176,7 +174,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		jTextFieldEndOfLicense.setText("");
 		jTextFieldLicenseContract.setEnabled(true);
 		jTextFieldLicenseContract
-				.setText("" + panelLicenseContracts.getValueAt(panelLicenseContracts.getSelectedRow(), 0));
+				.setText("" + panelLicenseContracts.getValueAt(panelLicenseContracts.getJTable().getSelectedRow(), 0));
 		jTextFieldLicenseContract.setEditable(false);
 
 		jTextFieldLKey.setEnabled(true);
@@ -256,16 +254,16 @@ public class PanelEnterLicense extends MultiTablePanel {
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"), true, 0,
-				new int[] { PanelGenEditTable.POPUP_RELOAD }, false);
+				new int[] { PopupMenuTrait.POPUP_RELOAD }, false);
 
 		panelLicensePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensepool"), false, 0,
-				new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
+				new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
 
 		panelLicenseContracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 
 		jTextFieldLicenseID = new JTextField();
@@ -282,21 +280,17 @@ public class PanelEnterLicense extends MultiTablePanel {
 		jTextFieldEndOfLicense.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-					if (fEditDate == null) {
-						fEditDate = new FEditDate(jTextFieldEndOfLicense.getText());
-					} else {
-						fEditDate.setStartText(jTextFieldEndOfLicense.getText());
-					}
+				JFXPanel jfxPanel = new JFXPanel();
+				DatePicker datePicker = CellDateEditor.createDatePicker(jTextFieldEndOfLicense.getText(), jfxPanel);
 
-					fEditDate.setCaller(jTextFieldEndOfLicense);
-					fEditDate.init();
+				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), jfxPanel,
+						Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.LabelSLid5"),
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-					Point pointField = jTextFieldEndOfLicense.getLocationOnScreen();
-					fEditDate.setLocation((int) pointField.getX() + 30, (int) pointField.getY() + 20);
-
-					fEditDate.setTitle(Configed.getResourceValue("ConfigedMain.Licenses.EnterLicense.LabelSLid5"));
-					fEditDate.setVisible(true);
+				// answer == 0 means OK
+				// if the value is not null, the user did not select a date
+				if (answer == 0 && datePicker.getValue() != null) {
+					jTextFieldEndOfLicense.setText(datePicker.getValue().toString());
 				}
 			}
 		});
@@ -394,33 +388,41 @@ public class PanelEnterLicense extends MultiTablePanel {
 												GroupLayout.PREFERRED_SIZE))))
 				.addContainerGap(10, Short.MAX_VALUE));
 
-		panelLicenseModelLayout.setVerticalGroup(panelLicenseModelLayout.createSequentialGroup()
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabelSLid1, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldLicenseID, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelSLid5, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldEndOfLicense, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE))
+		panelLicenseModelLayout
+				.setVerticalGroup(panelLicenseModelLayout.createSequentialGroup()
+						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabelSLid1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldLicenseID, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelSLid5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldEndOfLicense, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabelSLid2, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldLicenseType, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE))
+						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabelSLid2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldLicenseType, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabelSLid3, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldMaxInstallations, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelSLid3info, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelSLid6, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jTextFieldLicenseContract, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
-								GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabelSLid4, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboClient, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)));
+						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabelSLid3, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldMaxInstallations, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelSLid3info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelSLid6, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jTextFieldLicenseContract, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(panelLicenseModelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabelSLid4, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)));
 
 		JPanel panelEnterKey = new JPanel();
 		panelEnterKey.setBorder(BorderFactory.createEtchedBorder());
@@ -434,8 +436,10 @@ public class PanelEnterLicense extends MultiTablePanel {
 				.addContainerGap(10, Short.MAX_VALUE));
 
 		panelEnterKeyLayout.setVerticalGroup(panelEnterKeyLayout.createParallelGroup(Alignment.BASELINE)
-				.addComponent(jLabelLKey, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldLKey, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE));
+				.addComponent(jLabelLKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldLKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		JPanel panelTask = new JPanel();
 		GroupLayout layoutTask = new GroupLayout(panelTask);
@@ -522,8 +526,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(panelTask, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(panelKeys, MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT,
-						MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE));
+				.addGap(Globals.GAP_SIZE).addComponent(panelKeys, 0, 0, Short.MAX_VALUE));
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
@@ -552,7 +555,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		m.put("licenseContractId", contractSendValue);
 
-		m.put("licensePoolId", panelLicensePools.getValueAt(panelLicensePools.getSelectedRow(), 0).toString());
+		m.put("licensePoolId",
+				panelLicensePools.getValueAt(panelLicensePools.getJTable().getSelectedRow(), 0).toString());
 		m.put("licenseKey", jTextFieldLKey.getText());
 
 		enterLicenseController.saveNewLicense(m);
@@ -560,10 +564,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 	@Override
 	public void reset() {
-		panelLicensePools.removeListSelectionListener(licensePoolSelectionListener);
 		super.reset();
 		deactivate();
-		panelLicensePools.addListSelectionListener(licensePoolSelectionListener);
 		panelLicensePools.moveToValue(selectedLicensePool, 0);
 	}
 

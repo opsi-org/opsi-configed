@@ -45,14 +45,12 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 	protected void done() {
 		Logging.info(this, "Session information retrieved");
 
-		ConfigedMain.getMainFrame().getIconBarPanel().getjButtonSessionInfo().setEnabled(true);
-
 		// update column
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
-			AbstractTableModel model = configedMain.getClientTable().getTableModel();
+			AbstractTableModel model = configedMain.getClientTablePanel().getTableModel();
 
-			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
+			int col = model.findColumn(Configed.getResourceValue("sessionInfo"));
 
 			for (int row = 0; row < model.getRowCount(); row++) {
 				String clientId = (String) model.getValueAt(row, 0);
@@ -60,8 +58,23 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 			}
 
 			model.fireTableDataChanged();
-			configedMain.setSelectedClients(configedMain.getSelectedClients());
+			configedMain.getClientTablePanel().setSelectedValues(sessionInfo.keySet());
 		}
 		ConfigedMain.getMainFrame().setCursor(null);
+	}
+
+	public static void retrieveSessionInfo(ConfigedMain configedMain) {
+		ConfigedMain.getMainFrame().setCursor(Globals.WAIT_CURSOR);
+		boolean visible = PersistenceControllerFactory.getPersistenceController().getHostDataService()
+				.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		if (!visible) {
+			configedMain.toggleColumn(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		}
+
+		Logging.info("setColumnSessionInfo ", visible);
+
+		SessionInfoRetriever infoRetriever = new SessionInfoRetriever(configedMain);
+		infoRetriever.setOnlySelectedClients(!configedMain.getSelectedClients().isEmpty());
+		infoRetriever.execute();
 	}
 }

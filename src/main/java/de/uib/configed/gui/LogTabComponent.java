@@ -46,13 +46,11 @@ public class LogTabComponent extends LogPane {
 	@Override
 	public void reload() {
 		super.reload();
-		ConfigedMain.getMainFrame().activateLoadingCursor();
-		loadDocument(logFileType);
-		ConfigedMain.getMainFrame().deactivateLoadingCursor();
-	}
+		Logging.info("reload logFileType ", logFileType);
 
-	public void loadDocument(String ident) {
-		Logging.debug(this, "loadDocument ident ", ident);
+		ConfigedMain.getMainFrame().activateLoadingCursor();
+		ConfigedMain.getMainFrame().getClientConfiguration().setLogFileTab(logFileType);
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	@Override
@@ -80,7 +78,7 @@ public class LogTabComponent extends LogPane {
 
 	@Override
 	protected void downloadAllAsZip() {
-		if (configedMain.getSelectedClients() == null || configedMain.getSelectedClients().isEmpty()) {
+		if (configedMain.getSelectedClients().isEmpty()) {
 			return;
 		}
 

@@ -6,27 +6,24 @@
 
 package de.uib.configed.serverconsole;
 
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
-
-import com.formdev.flatlaf.extras.components.FlatPasswordField;
-import com.formdev.flatlaf.extras.components.FlatTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 
 public class CurlAuthenticationPanel extends PMInstallPanel {
-	public static final String LBLNEEDAUTH = "lbl_needAuthentication";
-	public static final String CBNEEDAUTH = "cb_needAuthentication";
-
 	private JCheckBox jCheckBoxNeedAuthentication;
-	private JLabel jLabelNeedAuthentication;
-	private FlatTextField flatTextFieldUser;
-	private FlatPasswordField flatPasswordField;
+	private JLabel labelUser;
+	private JTextField jTextFieldUser;
+	private JLabel labelPassword;
+	private JPasswordField jPasswordField;
 
 	public CurlAuthenticationPanel() {
 		super();
@@ -35,10 +32,10 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 	}
 
 	private void initComponents() {
-		jLabelNeedAuthentication = new JLabel(Configed.getResourceValue("CurlAuthenticationPanel.needAuthentication"));
-		jLabelNeedAuthentication
+		jCheckBoxNeedAuthentication = new JCheckBox(
+				Configed.getResourceValue("CurlAuthenticationPanel.needAuthentication"));
+		jCheckBoxNeedAuthentication
 				.setToolTipText(Configed.getResourceValue("CurlAuthenticationPanel.needAuthentication.tooltip"));
-		jCheckBoxNeedAuthentication = new JCheckBox();
 		jCheckBoxNeedAuthentication.addItemListener((ItemEvent itemEvent) -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				open();
@@ -47,30 +44,25 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 			}
 		});
 
-		flatTextFieldUser = new FlatTextField();
-		flatTextFieldUser.setPlaceholderText(Configed.getResourceValue("username"));
-		flatPasswordField = new FlatPasswordField();
-		flatPasswordField.setPlaceholderText(Configed.getResourceValue("password"));
+		labelUser = new JLabel(Configed.getResourceValue("username"));
+		labelUser.setFont(labelUser.getFont().deriveFont(Font.BOLD));
+		jTextFieldUser = new JTextField();
+
+		labelPassword = new JLabel(Configed.getResourceValue("password"));
+		labelPassword.setFont(labelPassword.getFont().deriveFont(Font.BOLD));
+		jPasswordField = new JPasswordField();
 	}
 
-	public JComponent get(String comp) {
-		JComponent result;
-		if (comp.equals(LBLNEEDAUTH)) {
-			result = jLabelNeedAuthentication;
-		} else if (comp.equals(CBNEEDAUTH)) {
-			result = jCheckBoxNeedAuthentication;
-		} else {
-			result = null;
-		}
-		return result;
+	public JCheckBox getCheckBox() {
+		return jCheckBoxNeedAuthentication;
 	}
 
 	public String getUser() {
-		return flatTextFieldUser.getText();
+		return jTextFieldUser.getText();
 	}
 
 	public String getPassword() {
-		return new String(flatPasswordField.getPassword());
+		return new String(jPasswordField.getPassword());
 	}
 
 	private void initLayout() {
@@ -78,12 +70,22 @@ public class CurlAuthenticationPanel extends PMInstallPanel {
 
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(flatTextFieldUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
-				.addComponent(flatPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2));
+				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jPasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(flatTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(flatPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT));
+				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jPasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 }

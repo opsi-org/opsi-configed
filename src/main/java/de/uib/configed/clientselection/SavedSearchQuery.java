@@ -27,26 +27,29 @@ public class SavedSearchQuery {
 	private String user;
 	private String password;
 	private String otp;
+	private boolean sso;
 	private String searchName;
 
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public SavedSearchQuery(String host, String user, String password, String otp, String searchName) {
-		setArgs(host, user, password, otp, searchName);
+	public SavedSearchQuery(String host, String user, String password, String otp, boolean sso, String searchName) {
+		setArgs(host, user, password, otp, sso, searchName);
 		initConnection();
 	}
 
-	private void setArgs(String host, String user, String password, String otp, String searchName) {
+	private void setArgs(String host, String user, String password, String otp, boolean sso, String searchName) {
 		Logging.info(this, "setArgs ", host, ", PASSWORD, ", searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;
 		this.otp = otp;
+		this.sso = sso;
 		this.searchName = searchName;
 	}
 
 	private void initConnection() {
-		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password, otp);
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(host, user, password, otp,
+				sso);
 
 		if (persistenceController == null
 				|| persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
@@ -63,7 +66,7 @@ public class SavedSearchQuery {
 		// Load data that we need to find clients for selection
 		persistenceController.getHostInfoCollections().getClientsForDepots(depots.keySet(), null);
 
-		SelectionManager manager = new SelectionManager(null);
+		SelectionManager manager = new SelectionManager();
 		Set<String> searches = manager.getSavedSearchesNames();
 		if (searchName == null && printing) {
 			printResult(searches);

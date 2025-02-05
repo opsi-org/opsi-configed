@@ -29,7 +29,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SecondaryFrame;
 
@@ -57,7 +57,7 @@ public class FGroupActions extends SecondaryFrame {
 		define();
 		reload();
 
-		super.setIconImage(Utils.getMainIcon());
+		super.setIconImage(Icons.getMainIcon());
 		super.setTitle(Configed.getResourceValue("FGroupAction.title"));
 
 		glassPane = new GlassPane();
@@ -159,7 +159,7 @@ public class FGroupActions extends SecondaryFrame {
 
 		buttonSetup.addActionListener(actionEvent -> replay());
 
-		JButton buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		JButton buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
 		buttonReload.setToolTipText(Configed.getResourceValue("reloadData"));
 
 		buttonReload.addActionListener(actionEvent -> reload());
@@ -177,8 +177,10 @@ public class FGroupActions extends SecondaryFrame {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSetup, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addComponent(buttonSetup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 4));
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
@@ -196,7 +198,8 @@ public class FGroupActions extends SecondaryFrame {
 						.addGap(Globals.GAP_SIZE * 2, Globals.GAP_SIZE * 4, Globals.GAP_SIZE * 4)
 						.addComponent(buttonSetup, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
 						.addGap(Globals.GAP_SIZE * 2)
-						.addComponent(buttonReload, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE, Globals.HFIRST_GAP, Short.MAX_VALUE)));
 	}
 
@@ -206,25 +209,26 @@ public class FGroupActions extends SecondaryFrame {
 		JLabel clientsCountLabel = new JLabel(Configed.getResourceValue("FGroupAction.clientcounter"));
 
 		fieldGroupname = new JTextField();
-		fieldGroupname.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldGroupname.setEditable(false);
 
 		fieldInvolvedClientsCount = new JTextField();
-		fieldInvolvedClientsCount.setPreferredSize(Globals.COUTNER_FIELD_DIMENSION);
 		fieldInvolvedClientsCount.setEditable(false);
 
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE * 2)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(groupNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(fieldGroupname, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(clientsCountLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(fieldInvolvedClientsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT))
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE * 2));
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(groupNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(fieldGroupname, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(clientsCountLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(fieldInvolvedClientsCount, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(
 				layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.HFIRST_GAP, Globals.HFIRST_GAP)

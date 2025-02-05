@@ -44,6 +44,7 @@ public class PMInstallServerPanel extends PMInstallPanel {
 
 	private void initComponents() {
 		jLabelServerDir.setText(Configed.getResourceValue("PMInstallServerPanel.jLabelOtherPath"));
+		jLabelServerDir.setFont(jLabelServerDir.getFont().deriveFont(java.awt.Font.BOLD));
 
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.setToolTipText(
@@ -61,26 +62,23 @@ public class PMInstallServerPanel extends PMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addGroup(layout
-				.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(jLabelServerDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-						Globals.BUTTON_HEIGHT)
-				.addComponent(jButtonAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-						Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)).addGap(2 * Globals.GAP_SIZE));
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Short.MAX_VALUE)
-								.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGap(2 * Globals.GAP_SIZE));
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 	}
 
 	public SingleCommandOpsiPackageManagerInstall getCommand() {

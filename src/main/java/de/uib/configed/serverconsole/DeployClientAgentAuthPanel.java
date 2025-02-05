@@ -6,13 +6,13 @@
 
 package de.uib.configed.serverconsole;
 
-import java.util.List;
-import java.util.Map;
+import java.awt.Font;
 
 import javax.swing.GroupLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -22,23 +22,15 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandDeployClientAgent;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
-import de.uib.utils.logging.Logging;
 
 public class DeployClientAgentAuthPanel extends JPanel {
-	private FlatTextField flatTextFieldUser;
-	private FlatPasswordField flatPasswordField;
+	private JLabel labelUser;
+	private JTextField textFieldUser;
 
-	private String defaultUser;
+	private JLabel labelPassword;
+	private JPasswordField passwordField;
 
 	private SingleCommandDeployClientAgent commandDeployClientAgent;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
-
-	private boolean isGlobalReadOnly = persistenceController.getUserRolesConfigDataService().isGlobalReadOnly();
 
 	public DeployClientAgentAuthPanel(SingleCommandDeployClientAgent commandDeployClientAgent) {
 		this.commandDeployClientAgent = commandDeployClientAgent;
@@ -46,14 +38,11 @@ public class DeployClientAgentAuthPanel extends JPanel {
 	}
 
 	private void init() {
-		getDefaultAuthData();
-		setBorder(new LineBorder(UIManager.getColor("Component.borderColor"), 2, true));
-		flatTextFieldUser = new FlatTextField();
-		flatTextFieldUser.setText(defaultUser);
-		flatTextFieldUser.setPlaceholderText(Configed.getResourceValue("username"));
-		flatTextFieldUser.setEnabled(!isGlobalReadOnly);
-		flatTextFieldUser.setEditable(!isGlobalReadOnly);
-		flatTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
+		labelUser = new JLabel(Configed.getResourceValue("username"));
+		labelUser.setFont(labelUser.getFont().deriveFont(Font.BOLD));
+
+		textFieldUser = new FlatTextField();
+		textFieldUser.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changeUser();
@@ -70,12 +59,11 @@ public class DeployClientAgentAuthPanel extends JPanel {
 			}
 		});
 
-		flatPasswordField = new FlatPasswordField();
-		flatPasswordField.setPlaceholderText(Configed.getResourceValue("password"));
-		flatPasswordField.setEnabled(!isGlobalReadOnly);
-		flatPasswordField.setEditable(!isGlobalReadOnly);
+		labelPassword = new JLabel(Configed.getResourceValue("password"));
+		labelPassword.setFont(labelPassword.getFont().deriveFont(Font.BOLD));
+		passwordField = new FlatPasswordField();
 
-		flatPasswordField.getDocument().addDocumentListener(new DocumentListener() {
+		passwordField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changePassw();
@@ -95,65 +83,35 @@ public class DeployClientAgentAuthPanel extends JPanel {
 		initLayout();
 	}
 
-	@SuppressWarnings("unchecked")
-	private void getDefaultAuthData() {
-		Map<String, Object> configs = persistenceController.getConfigDataService()
-				.getHostConfig(persistenceController.getHostInfoCollections().getConfigServer());
-
-		List<Object> resultConfigList = (List<Object>) configs
-				.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER);
-		if (resultConfigList == null || resultConfigList.isEmpty()) {
-			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER not existing");
-
-			// the config will be created in this run of configed
-		} else {
-			defaultUser = (String) resultConfigList.get(0);
-			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_USER ", resultConfigList.get(0));
-		}
-
-		resultConfigList = (List<Object>) configs.get(UserRolesConfigDataService.KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW);
-		if (resultConfigList == null || resultConfigList.isEmpty()) {
-			Logging.info(this, "KEY_DEPLOY_CLIENT_AGENT_DEFAULT_PW not existing");
-
-			// the config will be created in this run of configed
-		} else {
-			if (flatPasswordField == null) {
-				flatPasswordField = new FlatPasswordField();
-			}
-			flatPasswordField.setText((String) resultConfigList.get(0));
-			Logging.info(this, "key_ssh_shell_active ***confidential***");
-		}
-	}
-
 	public void changeUser() {
-		if (!(flatTextFieldUser.getText().equals(defaultUser))) {
-			commandDeployClientAgent.setUser(flatTextFieldUser.getText().trim());
-		} else {
-			commandDeployClientAgent.setUser("");
-		}
+		commandDeployClientAgent.setUser(textFieldUser.getText().trim());
 	}
 
 	public void changePassw() {
-		commandDeployClientAgent.setPassword(new String(flatPasswordField.getPassword()).trim());
+		commandDeployClientAgent.setPassword(new String(passwordField.getPassword()));
 	}
 
 	private void initLayout() {
 		GroupLayout winAuthPanelLayout = new GroupLayout(this);
 		setLayout(winAuthPanelLayout);
 
-		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-								flatTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-								flatPasswordField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
-				.addGap(Globals.GAP_SIZE));
+		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(textFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(flatTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup()
+				.addComponent(labelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(textFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(flatPasswordField, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				.addGap(Globals.GAP_SIZE));
+				.addComponent(labelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 }

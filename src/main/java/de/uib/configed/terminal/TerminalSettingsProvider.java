@@ -43,7 +43,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	public @NotNull TerminalActionPresentation getCopyActionPresentation() {
 		KeyStroke keyStroke = Platform.isMacOS() ? KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.META_DOWN_MASK)
 				: KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
-		return new TerminalActionPresentation(Configed.getResourceValue("Terminal.popup.copy"), keyStroke);
+		return new TerminalActionPresentation(Configed.getResourceValue("copy"), keyStroke);
 	}
 
 	@Override

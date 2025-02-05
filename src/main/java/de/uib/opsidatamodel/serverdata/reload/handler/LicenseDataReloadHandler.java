@@ -51,6 +51,16 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL);
 		softwareDataService.retrieveRelationsAuditSoftwareToLicensePoolsPD();
 
+		cacheManager.clearCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL);
+		softwareDataService.retrieveAuditSoftwareXLicensePoolPD();
+
+		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
+		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
+		licenseDataService.retrieveLicenseContractsPD();
+
+		cacheManager.clearCachedData(CacheIdentifier.LICENSES);
+		licenseDataService.retrieveLicensesPD();
+
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
 		licenseDataService.retrieveLicenseUsagesPD();
 
@@ -62,14 +72,12 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL);
 		licenseDataService.retrieveSoftwareLicense2LicensePoolPD();
 
-		cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
-		hostInfoCollections.retrieveOpsiHostsPD();
-
-		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
-		hostInfoCollections.retrieveFNode2TreeparentsPD();
-
 		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
 				CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
+			// Reload this to update the clients that we have to get audit data from (for statistics and reconciliation)
+			cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
+			hostInfoCollections.retrieveOpsiHostsPD();
+
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS);
 			softwareDataService.retrieveLicenseStatisticsPD();

@@ -13,16 +13,21 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.utils.swing.PopupMenuTrait;
 
 public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
-	public LicensingInfoPanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
-			boolean withTablesearchPane) {
-		super(title, editing, generalPopupPosition, popupsWanted, withTablesearchPane);
+	public LicensingInfoPanelGenEditTable() {
+		super(null, false, 0,
+				new int[] { PopupMenuTrait.POPUP_PRINT, PopupMenuTrait.POPUP_PDF, PanelGenEditTable.POPUP_SORT_AGAIN,
+						PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+						PopupMenuTrait.POPUP_RELOAD },
+				false);
+
 		setMarkBoldHeaderCellRenderer();
 	}
 
 	private void setMarkBoldHeaderCellRenderer() {
-		theTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+		jTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {
@@ -36,6 +41,6 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 			}
 		});
 
-		theTable.getTableHeader().setReorderingAllowed(true);
+		jTable.getTableHeader().setReorderingAllowed(true);
 	}
 }

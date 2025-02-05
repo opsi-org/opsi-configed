@@ -7,22 +7,22 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -31,7 +31,9 @@ import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
+import de.uib.configed.ExtraFrameController;
+import de.uib.configed.ServerActionManager;
+import de.uib.configed.SessionInfoRetriever;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
@@ -39,10 +41,8 @@ import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditObject;
-import de.uib.utils.swing.FEditText;
 import de.uib.utils.table.AbstractExportTable;
 import de.uib.utils.table.ClientTableExporterToCSV;
 import de.uib.utils.table.ExporterToCSV;
@@ -50,8 +50,6 @@ import de.uib.utils.table.ExporterToPDF;
 
 @SuppressWarnings({ "java:S1200" })
 public final class ClientMenuManager implements MenuListener {
-	private static ClientMenuManager instance;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -97,12 +95,7 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
-		instance = new ClientMenuManager(configedMain, mainFrame);
-		return instance;
-	}
-
-	public static ClientMenuManager getInstance() {
-		return instance;
+		return new ClientMenuManager(configedMain, mainFrame);
 	}
 
 	public JMenu getJMenu() {
@@ -112,56 +105,58 @@ public final class ClientMenuManager implements MenuListener {
 	private void initJMenu() {
 		jMenuClients.addMenuListener(this);
 
-		jMenuChangeDepot.addActionListener(event -> configedMain.callChangeDepotDialog());
-		jMenuChangeClientID.addActionListener(event -> configedMain.callChangeClientIDDialog());
+		jMenuChangeDepot.addActionListener(event -> ServerActionManager.callChangeDepotDialog());
+		jMenuChangeClientID.addActionListener(event -> ServerActionManager.callChangeClientIDDialog());
 
 		JMenuItem jMenuSelectionGetGroup = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		jMenuSelectionGetGroup.addActionListener(event -> configedMain.callClientSelectionDialog());
+		jMenuSelectionGetGroup.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
 		JMenuItem jMenuSelectionGetSavedSearch = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
-		jMenuSelectionGetSavedSearch.addActionListener(event -> configedMain.clientSelectionGetSavedSearch());
+		jMenuSelectionGetSavedSearch
+				.addActionListener(event -> ExtraFrameController.clientSelectionGetSavedSearch(configedMain));
 
 		JMenuItem jMenuRebuildClientList = new JMenuItem(Configed.getResourceValue("PopupMenuTrait.reload"));
-		Utils.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");
+		Icons.addIntellijIconToMenuItem(jMenuRebuildClientList, "refresh");
 		jMenuRebuildClientList.addActionListener(event -> configedMain.reloadHosts());
 
 		JMenuItem jMenuCreatePdf = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
-		Utils.addThemeIconInvertedToMenuItem(jMenuCreatePdf, "anyType");
+		Icons.addThemeIconInvertedToMenuItem(jMenuCreatePdf, "anyType");
 		jMenuCreatePdf.addActionListener(event -> createPdf());
 
-		Utils.addIntellijIconToMenuItem(jMenuAddClient, "add");
-		jMenuAddClient.addActionListener(event -> configedMain.callNewClientDialog());
+		Icons.addIntellijIconToMenuItem(jMenuAddClient, "add");
+		jMenuAddClient.addActionListener(event -> ExtraFrameController.callNewClientDialog());
 
-		jMenuDeletePackageCaches.addActionListener(event -> configedMain.deletePackageCachesOfSelectedClients());
+		jMenuDeletePackageCaches.addActionListener(event -> ServerActionManager.deletePackageCachesOfSelectedClients());
 
 		JMenuItem jMenuWakeOnLan = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-		jMenuWakeOnLan.addActionListener(event -> configedMain.wakeSelectedClients());
+		jMenuWakeOnLan.addActionListener(event -> ServerActionManager.wakeSelectedClients());
 
 		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : persistenceController.getConfigDataService().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
-			item.addActionListener((ActionEvent e) -> configedMain.fireOpsiclientdEventOnSelectedClients(event));
+			item.addActionListener(actionEvent -> ServerActionManager.fireOpsiclientdEventOnSelectedClients(event));
 			jMenuOpsiClientdEvent.add(item);
 		}
 
 		jMenuShowPopupMessage.addActionListener(event -> showPopupOnClientsAction());
-		jMenuShutdownClient.addActionListener(event -> configedMain.shutdownSelectedClients());
-		jMenuRequestSessionInfo.addActionListener(event -> configedMain.getSessionInfo());
-		jMenuRebootClient.addActionListener(event -> configedMain.rebootSelectedClients());
+		jMenuShutdownClient.addActionListener(event -> ServerActionManager.shutdownSelectedClients());
+		jMenuRequestSessionInfo.addActionListener(event -> SessionInfoRetriever.retrieveSessionInfo(configedMain));
+		Icons.addThemeIconInvertedToMenuItem(jMenuRequestSessionInfo, "user");
+		jMenuRebootClient.addActionListener(event -> ServerActionManager.rebootSelectedClients());
 
-		Utils.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
-		jMenuDeleteClient.addActionListener(event -> configedMain.deleteSelectedClients());
+		Icons.addIntellijIconToMenuItem(jMenuDeleteClient, "delete");
+		jMenuDeleteClient.addActionListener(event -> ServerActionManager.deleteSelectedClients());
 
-		jMenuCopyClient.addActionListener(event -> configedMain.copySelectedClient());
-		jMenuFreeLicenses.addActionListener(event -> configedMain.freeAllPossibleLicensesForSelectedClients());
+		jMenuCopyClient.addActionListener(event -> ServerActionManager.copySelectedClient());
+		jMenuFreeLicenses.addActionListener(event -> ServerActionManager.freeAllPossibleLicensesForSelectedClients());
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
-		jMenuRemoteControl
-				.addActionListener(event -> mainFrame.getClientTable().startRemoteControlForSelectedClients());
+		jMenuRemoteControl.addActionListener(
+				event -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
-		Utils.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
+		Icons.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
 		jMenuClients.add(jMenuWakeOnLan);
@@ -202,11 +197,11 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(jMenuRebuildClientList);
 		jMenuClients.add(jMenuCreatePdf);
 
-		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTable().getTable());
+		AbstractExportTable exportTable = new ExporterToCSV(mainFrame.getClientTablePanel().getClientTable());
 		exportTable.addMenuItemsTo(jMenuClients);
 
 		ClientTableExporterToCSV clientTableExporter = new ClientTableExporterToCSV(
-				mainFrame.getClientTable().getTable());
+				mainFrame.getClientTablePanel().getClientTable());
 		clientTableExporter.addMenuItemsTo(jMenuClients);
 
 		jMenuClients.addSeparator();
@@ -214,38 +209,29 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.add(initShowColumnsMenu());
 	}
 
-	private JMenu initResetProductsMenu() {
+	private static JMenu initResetProductsMenu() {
 		return createResetProductsMenuItemsTo();
 	}
 
-	public JMenu createResetProductsMenuItemsTo() {
+	public static JMenu createResetProductsMenuItemsTo() {
 		return createResetProductsMenuItemsTo(true, true, true);
 	}
 
-	public JMenu createResetLocalbootProductsMenuItemsTo() {
+	public static JMenu createResetLocalbootProductsMenuItemsTo() {
 		return createResetProductsMenuItemsTo(true, false, false);
 	}
 
-	public JMenu createResetNetbootProductsMenuItemsTo() {
+	public static JMenu createResetNetbootProductsMenuItemsTo() {
 		return createResetProductsMenuItemsTo(false, true, false);
 	}
 
-	public static JMenuItem createArrangeWindowsMenuItem() {
-		JMenuItem jMenuShowScheduledWOL = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
-		jMenuShowScheduledWOL.setEnabled(false);
-		jMenuShowScheduledWOL.addActionListener(event -> arrangeWs(FEditObject.runningInstances.getAll()));
-
-		return jMenuShowScheduledWOL;
-	}
-
-	private JMenu createResetProductsMenuItemsTo(boolean includeResetOptionForLocalbootProducts,
+	private static JMenu createResetProductsMenuItemsTo(boolean includeResetOptionForLocalbootProducts,
 			boolean includeResetOptionForNetbootProducts, boolean includeResetOptionForBothProducts) {
 		JMenu jMenu = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
 
 		if (includeResetOptionForLocalbootProducts) {
 			JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem(
-					Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
+					Configed.getResourceValue("localbootProducts"));
 			jMenuResetLocalbootProductOnClientWithStates
 					.addActionListener(event -> resetProductOnClientAction(true, true, false));
 
@@ -259,7 +245,7 @@ public final class ClientMenuManager implements MenuListener {
 		}
 		if (includeResetOptionForNetbootProducts) {
 			JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem(
-					Configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
+					Configed.getResourceValue("netbootProducts"));
 			jMenuResetNetbootProductOnClientWithStates
 					.addActionListener(event -> resetProductOnClientAction(true, false, true));
 
@@ -304,7 +290,7 @@ public final class ClientMenuManager implements MenuListener {
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
 		JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
+				Configed.getResourceValue("ipAddress"));
 		jCheckBoxMenuItemShowIPAddressColumn.setSelected(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowIPAddressColumn
@@ -325,7 +311,7 @@ public final class ClientMenuManager implements MenuListener {
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
 
 		JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
+				Configed.getResourceValue("sessionInfo"));
 		jCheckBoxMenuItemShowSessionInfoColumn.setSelected(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowSessionInfoColumn.addActionListener(
@@ -345,8 +331,7 @@ public final class ClientMenuManager implements MenuListener {
 		jCheckBoxMenuItemShowInstallByShutdown.addActionListener(
 				event -> configedMain.toggleColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
-		JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
+		JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem(Configed.getResourceValue("depot"));
 		jCheckBoxMenuItemShowDepotColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowDepotColumn
@@ -383,7 +368,7 @@ public final class ClientMenuManager implements MenuListener {
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", "");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTable().getTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(mainFrame.getClientTablePanel().getClientTable());
 
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
@@ -391,49 +376,31 @@ public final class ClientMenuManager implements MenuListener {
 	}
 
 	private void showPopupOnClientsAction() {
-		FEditText fText = new FEditText("", Configed.getResourceValue("MainFrame.writePopupMessage"),
-				Configed.getResourceValue("MainFrame.writePopupDuration")) {
-			@Override
-			protected void commit() {
-				super.commit();
-				Float duration = 0F;
-				if (!getExtra().isEmpty()) {
-					duration = Float.parseFloat(getExtra());
-				}
-				configedMain.showPopupOnSelectedClients(getText(), duration);
+		JTextField durationTextField = new JTextField();
+		JTextArea messageTextArea = new JTextArea();
+		messageTextArea.setRows(4);
+
+		JScrollPane messageScrollPane = new JScrollPane(messageTextArea);
+
+		Object[] message = { Configed.getResourceValue("MainFrame.writePopupDuration"), durationTextField,
+				Configed.getResourceValue("MainFrame.writePopupMessage"), messageScrollPane };
+
+		int result = JOptionPane.showConfirmDialog(mainFrame, message,
+				Configed.getResourceValue("MainFrame.popupFrameTitle"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (result == 0) {
+			Float duration = 0F;
+			if (!durationTextField.getText().isEmpty()) {
+				duration = Float.parseFloat(durationTextField.getText());
 			}
-		};
-
-		fText.setTitle(Configed.getResourceValue("MainFrame.popupFrameTitle"));
-		fText.init();
-		fText.setLocationRelativeTo(mainFrame);
-		fText.setVisible(true);
-	}
-
-	private static void arrangeWs(Set<JDialog> frames) {
-		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
-		// Can iconify, but not deiconify a modal JDialog
-
-		if (frames == null) {
-			return;
-		}
-
-		MainFrame mainFrame = ConfigedMain.getMainFrame();
-		int transpose = 20;
-
-		for (Window f : frames) {
-			transpose = transpose + Globals.LINE_HEIGHT;
-
-			if (f != null) {
-				f.setVisible(true);
-				f.setLocation(mainFrame.getLocation().x + transpose, mainFrame.getLocation().y + transpose);
-			}
+			ServerActionManager.showPopupOnSelectedClients(messageTextArea.getText(), duration);
 		}
 	}
 
-	private void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
+	private static void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
 			boolean resetNetbootProducts) {
-		configedMain.resetProductsForSelectedClients(withProductProperties, resetLocalbootProducts,
+		ServerActionManager.resetProductsForSelectedClients(withProductProperties, resetLocalbootProducts,
 				resetNetbootProducts);
 	}
 
@@ -473,7 +440,11 @@ public final class ClientMenuManager implements MenuListener {
 			for (String menuActionType : disabledClientMenuEntries) {
 				JMenuItem menuItem = menuItemsHost.get(menuActionType);
 				Logging.debug("disable ", menuActionType, ", ", menuItem);
-				menuItem.setEnabled(false);
+				if (menuItem != null) {
+					menuItem.setEnabled(false);
+				} else {
+					Logging.warning(this, "Cannot disable menuItem", menuActionType, ", it does not exist");
+				}
 			}
 
 			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()) {

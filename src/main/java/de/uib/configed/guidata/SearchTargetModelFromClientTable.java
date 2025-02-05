@@ -20,7 +20,7 @@ public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable
 
 		this.configedMain = configedMain;
 
-		Logging.info(this.getClass(), "table null? ", table == null);
+		Logging.info(this, "table null? ", table == null);
 	}
 
 	@Override
@@ -30,6 +30,6 @@ public class SearchTargetModelFromClientTable extends SearchTargetModelFromTable
 
 	@Override
 	public void setFiltered(boolean b) {
-		configedMain.toggleFilterClientList(true);
+		configedMain.setRebuiltClientListTableModel(true, false);
 	}
 }

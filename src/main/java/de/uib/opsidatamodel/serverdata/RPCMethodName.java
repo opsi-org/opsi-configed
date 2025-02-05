@@ -103,7 +103,7 @@ public enum RPCMethodName {
 
 	LOG_READ("log_read"),
 
-	GET_OPSI_CA_CERT("getOpsiCACert"),
+	GET_CA_CERTS("getCACerts"),
 
 	GET_DOMAIN("getDomain"),
 

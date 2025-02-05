@@ -35,13 +35,14 @@ import javax.swing.event.ListSelectionListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.UpdateCollectionManager;
 import de.uib.configed.gui.DepotListCellRenderer;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 import de.uib.utils.logging.Logging;
 
@@ -60,12 +61,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			.getPersistenceController();
 
 	public PanelEditDepotProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
-		super(configedMain, productPropertiesPanel);
-		initComponents();
+		super(productPropertiesPanel);
+		initComponents(configedMain);
 		initTitlePanel();
 	}
 
-	private void initComponents() {
+	private void initComponents(ConfigedMain configedMain) {
 		listDepots = new JList<>();
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);
@@ -94,7 +95,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
 
-		JButton buttonSetValuesFromPackage = new JButton(Utils.getIntellijIcon("remove"));
+		JButton buttonSetValuesFromPackage = new JButton(Icons.getIntellijIcon("remove"));
 		buttonSetValuesFromPackage
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"));
 		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
@@ -103,15 +104,19 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		GroupLayout layoutEditProperties = new GroupLayout(panelTop);
 		panelTop.setLayout(layoutEditProperties);
 
-		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(scrollpaneDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		layoutEditProperties
+				.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
+						.addComponent(scrollpaneDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
-		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
-				.addComponent(scrollpaneDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+		layoutEditProperties
+				.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollpaneDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitter.setResizeWeight(0.3);
@@ -121,10 +126,10 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		GroupLayout layoutAll = new GroupLayout(this);
 		setLayout(layoutAll);
 
-		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, minHSize,
+		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, 0,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, Globals.MIN_TABLE_V_SIZE,
+		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
@@ -135,11 +140,11 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		titlePanel.setLayout(titleLayout);
 
 		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
-				minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		titleLayout.setVerticalGroup(titleLayout
-				.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(jLabelEditDepotProductProperties,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(jLabelEditDepotProductProperties, 0, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
@@ -207,13 +212,12 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 					storableProperties.add(product2properties.get(productEdited));
 				}
 			}
-			productPropertiesPanel.setStoreData(storableProperties);
 
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
 					listDepots.getSelectedValuesList(), productEdited);
-			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
-			configedMain.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
+			productPropertiesPanel.updateData(depotProductpropertiesUpdateCollection, storableProperties);
+			UpdateCollectionManager.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}
 	}
 
@@ -259,7 +263,10 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		// merge the other depots
 		for (int i = 1; i < depots.size(); i++) {
-			properties = depot2product2properties.get(depots.get(i)).get(productId);
+			String depot = depots.get(i);
+			properties = depot2product2properties.containsKey(depot)
+					? depot2product2properties.get(depot).get(productId)
+					: null;
 			if (properties == null) {
 				Logging.info(this, "mergeProperties, product on depot has not properties ", productId, " on ",
 						depots.get(i));

@@ -7,6 +7,7 @@
 package de.uib.opsicommand;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -140,11 +141,16 @@ public class ConnectionHandler {
 	 *         unsuccessful connection.
 	 */
 	public HttpsURLConnection establishConnection(boolean doOutput) {
+		return establishConnection(doOutput, false);
+	}
+
+	public HttpsURLConnection establishConnection(boolean doOutput, boolean useInsecure) {
 		if (serviceURL == null) {
 			return null;
 		}
+		Logging.info(this, "establishing connection with ", serviceURL);
 
-		CertificateValidator certValidator = CertificateValidatorFactory.createValidator();
+		CertificateValidator certValidator = CertificateValidatorFactory.getValidator(useInsecure);
 		HttpsURLConnection connection = null;
 
 		try {
@@ -167,8 +173,8 @@ public class ConnectionHandler {
 					connection.getRequestProperties(), ", cookie=", (requestProperties.get("Cookie") == null ? "null"
 							: (requestProperties.get("Cookie").substring(0, 26) + "...")));
 
-			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
-			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
+			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
+			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
 			connection.connect();
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: ", ex);
@@ -180,15 +186,28 @@ public class ConnectionHandler {
 
 			conStat = reporter.getConnectionState();
 			connection = null;
+
+			// We need to reset the certificate validators when the validation failed
+			// so that new validators can be created on the next try
+			CertificateValidatorFactory.resetCertificateValidators();
 		} catch (IOException ex) {
-			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
+			if (ex instanceof SocketTimeoutException) {
+				conStat = new ConnectionState(ConnectionState.TIMEOUT, ex.toString());
+				Logging.warning(ex, "Timeout exception reached, we have a set timeout of",
+						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
+
+			} else if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				conStat = reporter.getConnectionState();
 			} else {
 				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-				Logging.error(ex, "Exception on connecting, ");
+				Logging.warning(ex, "Exception on connecting");
 			}
 
 			connection = null;
+
+			// We need to reset the certificate validators when the validation failed
+			// so that new validators can be created on the next try
+			CertificateValidatorFactory.resetCertificateValidators();
 		}
 
 		return connection;

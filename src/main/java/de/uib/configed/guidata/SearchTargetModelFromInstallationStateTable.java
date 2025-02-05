@@ -8,8 +8,6 @@ package de.uib.configed.guidata;
 
 import java.util.Arrays;
 
-import javax.swing.JTable;
-
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModelFromTable;
@@ -17,9 +15,9 @@ import de.uib.utils.table.gui.SearchTargetModelFromTable;
 public class SearchTargetModelFromInstallationStateTable extends SearchTargetModelFromTable {
 	private PanelProductSettings panelProductSettings;
 
-	public SearchTargetModelFromInstallationStateTable(JTable table, PanelProductSettings panelProductSettings) {
-		super(table);
-		Logging.info(this.getClass(), "table null? ", table == null);
+	public SearchTargetModelFromInstallationStateTable(PanelProductSettings panelProductSettings) {
+		super(panelProductSettings.getProductTable());
+		Logging.info(this, "table null? ", table == null);
 
 		this.panelProductSettings = panelProductSettings;
 	}
@@ -41,7 +39,7 @@ public class SearchTargetModelFromInstallationStateTable extends SearchTargetMod
 
 			Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
 
-			panelProductSettings.reduceToSelected();
+			panelProductSettings.getProductTable().reduceToSelected();
 		} else {
 			panelProductSettings.valueChanged(false);
 		}

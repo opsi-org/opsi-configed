@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.Configed;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -35,7 +33,6 @@ public final class CommandFactory {
 	public static final String PARENT_NULL = Configed.getResourceValue("MainFrame.jMenuServer");
 	public static final String PARENT_DEFAULT_FOR_OWN_COMMANDS = "...";
 	public static final String PARENT_OPSI = "opsi";
-	public static final String MENU_NEW = Configed.getResourceValue("CommandControlDialog.menuText_newCommand");
 	public static final int DEFAULT_POSITION = 0;
 
 	public static final String COMMAND_MAP_ID = "id";
@@ -98,9 +95,7 @@ public final class CommandFactory {
 					(String) map.get(COMMAND_MAP_PARENT_MENU_TEXT), (String) map.get(COMMAND_MAP_MENU_TEXT),
 					(String) map.get(COMMAND_MAP_TOOLTIP_TEXT), (int) map.get(COMMAND_MAP_POSITION), null);
 			if (map.get(COMMAND_MAP_COMMANDS) != null) {
-				List<String> commandCommands = new LinkedList<>(
-						POJOReMapper.remap(map.get(COMMAND_MAP_COMMANDS), new TypeReference<List<String>>() {
-						}));
+				List<String> commandCommands = POJOReMapper.remap(map.get(COMMAND_MAP_COMMANDS));
 
 				com.setCommands(commandCommands);
 			}

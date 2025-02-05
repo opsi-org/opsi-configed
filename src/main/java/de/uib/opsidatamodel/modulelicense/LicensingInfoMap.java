@@ -23,8 +23,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.configed.Configed;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.utils.logging.Logging;
@@ -83,7 +81,7 @@ public final class LicensingInfoMap {
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
 
-	private static boolean reducedView = !LicensingInfoDialog.isExtendedView();
+	private static boolean reducedView = !OpsiLicensing.isExtendedView();
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -114,8 +112,7 @@ public final class LicensingInfoMap {
 	private LicensingInfoMap(Map<String, Object> jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
 		Logging.info(getClass(), "generate with reducedView ", reduced, " at the moment ignored, we set false");
 
-		jOResult = POJOReMapper.remap(jsonObj.get(RESULT), new TypeReference<Map<String, Object>>() {
-		});
+		jOResult = POJOReMapper.remap(jsonObj.get(RESULT));
 
 		configs = configVals;
 		produceConfigs();
@@ -177,22 +174,16 @@ public final class LicensingInfoMap {
 	}
 
 	private Map<String, Object> produceClientNumbersMap() {
-		return POJOReMapper.remap(jOResult.get(CLIENT_NUMBERS_INFO), new TypeReference<Map<String, Object>>() {
-		});
+		return POJOReMapper.remap(jOResult.get(CLIENT_NUMBERS_INFO));
 	}
 
 	private Map<String, Map<String, Object>> produceLicenses() {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
-		List<Object> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID),
-				new TypeReference<List<Object>>() {
-				});
+		List<Map<String, Object>> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID));
 
-		for (Object producedLicense : producedLicenses) {
+		for (Map<String, Object> originalMap : producedLicenses) {
 			Map<String, Object> tmp = new HashMap<>();
-			Map<String, Object> originalMap = POJOReMapper.remap(producedLicense,
-					new TypeReference<Map<String, Object>>() {
-					});
 
 			tmp.put(MODULE_ID, originalMap.get(MODULE_ID));
 			tmp.put(VALID_UNTIL, originalMap.get(VALID_UNTIL));
@@ -206,14 +197,9 @@ public final class LicensingInfoMap {
 	private Set<String> produceCustomerNameSet() {
 		Set<String> producedCustomerNames = new LinkedHashSet<>();
 
-		List<Object> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID),
-				new TypeReference<List<Object>>() {
-				});
+		List<Map<String, Object>> producedLicenses = POJOReMapper.remap(jOResult.get(LICENSES_ID));
 
-		for (Object producedLicense : producedLicenses) {
-			Map<String, Object> originalMap = POJOReMapper.remap(producedLicense,
-					new TypeReference<Map<String, Object>>() {
-					});
+		for (Map<String, Object> originalMap : producedLicenses) {
 			String customerName = String.valueOf(originalMap.get(CUSTOMER_NAME));
 
 			if (originalMap.get(CUSTOMER_UNIT) != null) {
@@ -227,8 +213,7 @@ public final class LicensingInfoMap {
 	}
 
 	private List<String> produceAvailableModules() {
-		List<String> result = POJOReMapper.remap(jOResult.get(AVAILABLE_MODULES), new TypeReference<List<String>>() {
-		});
+		List<String> result = POJOReMapper.remap(jOResult.get(AVAILABLE_MODULES));
 		Collections.sort(result);
 
 		return result;
@@ -238,8 +223,7 @@ public final class LicensingInfoMap {
 		List<String> result = availableModules;
 
 		if (jOResult.containsKey(KNOWN_MODULES)) {
-			result = POJOReMapper.remap(jOResult.get(KNOWN_MODULES), new TypeReference<List<String>>() {
-			});
+			result = POJOReMapper.remap(jOResult.get(KNOWN_MODULES));
 		}
 
 		Collections.sort(result);
@@ -250,8 +234,7 @@ public final class LicensingInfoMap {
 		List<String> result = new ArrayList<>();
 
 		if (jOResult.containsKey(OBSOLETE_MODULES)) {
-			result = POJOReMapper.remap(jOResult.get(OBSOLETE_MODULES), new TypeReference<List<String>>() {
-			});
+			result = POJOReMapper.remap(jOResult.get(OBSOLETE_MODULES));
 		}
 
 		Collections.sort(result);
@@ -265,7 +248,7 @@ public final class LicensingInfoMap {
 
 		List<String> result;
 
-		if (LicensingInfoDialog.isShowOnlyAvailableModules()) {
+		if (OpsiLicensing.isShowOnlyAvailableModules()) {
 			result = new ArrayList<>(availableModules);
 		} else {
 			result = new ArrayList<>(knownModulesList);
@@ -280,16 +263,12 @@ public final class LicensingInfoMap {
 	private void produceConfigs() {
 		try {
 			if (jOResult.containsKey(CONFIG)) {
-				Map<String, Object> config = POJOReMapper.remap(jOResult.get(CONFIG),
-						new TypeReference<Map<String, Object>>() {
-						});
+				Map<String, Object> config = POJOReMapper.remap(jOResult.get(CONFIG));
 
 				percentClientLimitWarning = Integer.parseInt(config.get(CLIENT_LIMIT_WARNING_PERCENT).toString());
 				absolutClientLimitWarning = Integer.parseInt(config.get(CLIENT_LIMIT_WARNING_ABSOLUTE).toString());
 				daysClientLimitWarning = Integer.parseInt(config.get(CLIENT_LIMIT_WARNING_DAYS).toString());
-				disabledWarningModules = POJOReMapper.remap(config.get(DISABLE_WARNING_FOR_MODULES),
-						new TypeReference<List<String>>() {
-						});
+				disabledWarningModules = POJOReMapper.remap(config.get(DISABLE_WARNING_FOR_MODULES));
 			} else {
 				String key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_PERCENT;
 
@@ -333,8 +312,7 @@ public final class LicensingInfoMap {
 	private List<String> produceDatesKeys() {
 		List<String> dates = new ArrayList<>();
 
-		Map<String, Object> datesM = POJOReMapper.remap(jOResult.get(DATES), new TypeReference<Map<String, Object>>() {
-		});
+		Map<String, Object> datesM = POJOReMapper.remap(jOResult.get(DATES));
 
 		for (Entry<String, Object> entry : datesM.entrySet()) {
 			dates.add(entry.getKey());
@@ -377,17 +355,13 @@ public final class LicensingInfoMap {
 
 		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
 
-		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(jOResult.get(DATES),
-				new TypeReference<Map<String, Map<String, Map<String, Object>>>>() {
-				});
+		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(jOResult.get(DATES));
 
 		for (String key : datesKeys) {
 			Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
 			// iterate over date entries
-			Map<String, Object> moduleToDate = POJOReMapper.remap(dates.get(key).get(MODULES),
-					new TypeReference<Map<String, Object>>() {
-					});
+			Map<String, Object> moduleToDate = dates.get(key).get(MODULES);
 			// iterate over module entries to every date entry
 
 			// also warning state should be none
@@ -407,8 +381,7 @@ public final class LicensingInfoMap {
 		boolean available = availableModules.contains(currentModule);
 
 		if (moduleToDate.containsKey(currentModule)) {
-			moduleInfo = POJOReMapper.remap(moduleToDate.get(currentModule), new TypeReference<Map<String, Object>>() {
-			});
+			moduleInfo = POJOReMapper.remap(moduleToDate.get(currentModule));
 			if (disabledWarningModules != null && disabledWarningModules.contains(currentModule)) {
 				moduleInfo.put(STATE, STATE_IGNORE_WARNING);
 			}

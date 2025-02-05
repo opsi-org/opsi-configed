@@ -8,19 +8,17 @@ package de.uib.configed.serverconsole.command;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageManagerUninstallParameterDialog;
 import de.uib.utils.logging.Logging;
 
 public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiPackageManager
 		implements CommandWithParameters {
-	private FGeneralDialog dialog;
 	private String command;
 	private int priority = 10;
 
 	private String opsiproduct;
 	private String depots;
-	private String verbosity = " -vvv";
+	private String verbosity = "";
 	private String keepFiles = "";
 	private String freeInput = "";
 
@@ -54,13 +52,8 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 	}
 
 	@Override
-	public FGeneralDialog getDialog() {
-		return dialog;
-	}
-
-	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new PackageManagerUninstallParameterDialog(configedMain);
+		new PackageManagerUninstallParameterDialog(configedMain);
 	}
 
 	@Override
@@ -70,7 +63,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	@Override
 	public String getCommand() {
-		command = "opsi-package-manager -q" + verbosity + keepFiles + depots + freeInput + opsiproduct;
+		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
 		return command;
 	}
 

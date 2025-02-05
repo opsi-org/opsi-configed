@@ -23,6 +23,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -46,18 +47,13 @@ import com.formdev.flatlaf.FlatLaf;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.GeneralFrame;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 
 public class LogPane extends JPanel implements KeyListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 4;
 
-	private static final int DEFAULT_WIDTH = 1212;
-	private static final int DEFAULT_HEIGHT = 511;
-
-	private static final int SLIDER_H = 35;
 	private static final int SLIDER_W = 180;
 	private static final String DEFAULT_TYPE = "(all)";
 
@@ -105,7 +101,7 @@ public class LogPane extends JPanel implements KeyListener {
 	private LogFileParser parser;
 
 	public LogPane(String defaultText, boolean withPopup) {
-		Logging.info(this.getClass(), "initializing");
+		Logging.info(this, "initializing");
 		title = "";
 		info = "";
 
@@ -191,10 +187,10 @@ public class LogPane extends JPanel implements KeyListener {
 		jScrollPane.getViewport().add(jTextPane);
 		super.add(jScrollPane, BorderLayout.CENTER);
 
-		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
+		labelSearch = new JLabel(Configed.getResourceValue("search"));
 
-		JToggleButton buttonCaseSensitive = new JToggleButton(Utils.getIntellijIcon("matchCase"));
-		buttonCaseSensitive.setSelectedIcon(Utils.getSelectedIntellijIcon("matchCase"));
+		JToggleButton buttonCaseSensitive = new JToggleButton(Icons.getIntellijIcon("matchCase"));
+		buttonCaseSensitive.setSelectedIcon(Icons.getSelectedIntellijIcon("matchCase"));
 		buttonCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
 		buttonCaseSensitive.setSelected(false);
 		buttonCaseSensitive.addActionListener(event -> searcher.setCaseSensitivity(buttonCaseSensitive.isSelected()));
@@ -209,14 +205,14 @@ public class LogPane extends JPanel implements KeyListener {
 			jTextPane.requestFocusInWindow();
 		});
 
-		JButton buttonSearch = new JButton(Utils.getIntellijIcon("search"));
+		JButton buttonSearch = new JButton(Icons.getIntellijIcon("search"));
 		buttonSearch.addActionListener(event -> search());
 
-		JButton buttonFontPlus = new JButton(Utils.getIntellijIcon("zoomIn"));
+		JButton buttonFontPlus = new JButton(Icons.getIntellijIcon("zoomIn"));
 		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(event -> increaseFontSize());
 
-		JButton buttonFontMinus = new JButton(Utils.getIntellijIcon("zoomOut"));
+		JButton buttonFontMinus = new JButton(Icons.getIntellijIcon("zoomOut"));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(event -> reduceFontSize());
 
@@ -269,16 +265,21 @@ public class LogPane extends JPanel implements KeyListener {
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup().addComponent(jScrollPane)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
-						.addComponent(labelSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(jComboBoxSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(jToolBar, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(labelDisplayRestriction, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(comboType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(labelLevel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
-
-				).addGap(Globals.MIN_GAP_SIZE));
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(sliderLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	private void applyType() {
@@ -435,7 +436,7 @@ public class LogPane extends JPanel implements KeyListener {
 		copyOfMe.setParsedText(lines, showTypeRestricted, selTypeIndex, parser);
 		copyOfMe.jTextPane.setCaretPosition(jTextPane.getCaretPosition());
 		copyOfMe.adaptSlider();
-		externalize(copyOfMe, title, this.getSize());
+		externalize(copyOfMe, title, getParent().getSize());
 	}
 
 	public void externalize(String title, Dimension size) {
@@ -443,15 +444,13 @@ public class LogPane extends JPanel implements KeyListener {
 	}
 
 	public void externalize(LogPane logPane, String title, Dimension size) {
-		GeneralFrame externalView = new GeneralFrame(null, title, false);
-		externalView.addPanel(logPane);
-		if (size.equals(new Dimension(0, 0))) {
-			externalView.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		} else {
-			externalView.setSize(size);
-		}
-		externalView.setLocationRelativeTo(Main.getMainFrame());
-		externalView.setVisible(true);
+		JDialog dialog = new JDialog();
+		dialog.setTitle(title);
+		dialog.setContentPane(logPane);
+		dialog.setSize(size);
+		dialog.setResizable(true);
+		dialog.setLocationRelativeTo(this.getParent());
+		dialog.setVisible(true);
 	}
 
 	public void setTitle(String s) {

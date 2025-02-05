@@ -35,30 +35,30 @@ public class SelectData {
 		dataObject = data;
 		dataType = type;
 
-		Logging.debug(this.getClass(), "got data, type ", data, ", ", type);
+		Logging.debug(this, "got data, type ", data, ", ", type);
 
 		switch (type) {
 		case TEXT_TYPE, DATE_TYPE:
 			if (!(data instanceof String)) {
-				Logging.error(this.getClass(), "Data is no String");
+				Logging.error(this, "Data is no String");
 				throw new IllegalArgumentException("Data is no String");
 			}
 			break;
 		case INTEGER_TYPE:
 			if (!(data instanceof Integer)) {
-				Logging.error(this.getClass(), "Data is no Integer");
+				Logging.error(this, "Data is no Integer");
 				throw new IllegalArgumentException("Data is no Integer");
 			}
 			break;
 		case BIG_INTEGER_TYPE:
 			if (!(data instanceof Long)) {
-				Logging.error(this.getClass(), "Data is no Long");
+				Logging.error(this, "Data is no Long");
 				throw new IllegalArgumentException("Data is no Long");
 			}
 			break;
 		case DOUBLE_TYPE:
 			if (!(data instanceof Double)) {
-				Logging.error(this.getClass(), "Data is no Double");
+				Logging.error(this, "Data is no Double");
 				throw new IllegalArgumentException("Data is no Double");
 			}
 			break;

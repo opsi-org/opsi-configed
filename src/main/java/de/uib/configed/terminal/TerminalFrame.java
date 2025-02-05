@@ -6,6 +6,7 @@
 
 package de.uib.configed.terminal;
 
+import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -27,7 +28,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSelectionList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
@@ -37,7 +38,7 @@ import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public final class TerminalFrame implements MessagebusListener {
@@ -101,7 +102,7 @@ public final class TerminalFrame implements MessagebusListener {
 
 	private void createAndShowGUI() {
 		frame = new JFrame(Configed.getResourceValue("Terminal.title"));
-		frame.setIconImage(Utils.getMainIcon());
+		frame.setIconImage(Icons.getMainIcon());
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		TerminalMenuBar menuBar = new TerminalMenuBar(this, restrictView);
 		menuBar.init();
@@ -169,19 +170,26 @@ public final class TerminalFrame implements MessagebusListener {
 		if (restrictView) {
 			return;
 		}
-		FSelectionList sessionsDialog = new FSelectionList(frame, Configed.getResourceValue("Terminal.session.title"),
-				true, new String[] { Configed.getResourceValue("buttonCancel"), Configed.getResourceValue("buttonOK") },
-				500, 300);
+
+		// We want to show the dialog on the owner of the terminal frame only if it is visible
+		Component owner;
+		if (frame.isVisible()) {
+			owner = frame;
+		} else {
+			owner = ConfigedMain.getMainFrame();
+		}
+
+		ListSelectionDialog sessionsDialog = new ListSelectionDialog(owner,
+				Configed.getResourceValue("Terminal.session.title"));
 
 		// result list (allowed clients and depots connected by message bus)
 		List<String> clientsConnectedByMessagebus = getAllowedDevices();
 
 		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
-		sessionsDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		sessionsDialog.setVisible(true);
+		sessionsDialog.show();
 
-		if (sessionsDialog.getResult() == 2) {
+		if (sessionsDialog.wasAccepted()) {
 			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
 			if (widget != null) {
 				tabbedPane.getSelectedTerminalWidget().close();
@@ -306,7 +314,6 @@ public final class TerminalFrame implements MessagebusListener {
 	 */
 	private void filterByMsgbusForbiddenConfig(List<String> resultList, Set<String> allClientsDepotsAllowedByPrivilege,
 			List<String> depotsList) {
-
 		boolean forbiddenDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
 		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
 		// filter clients and depots by configured permissions (mostly msg bus settings cause user roles already filtered)
@@ -401,8 +408,7 @@ public final class TerminalFrame implements MessagebusListener {
 		widget.setViewRestricted(true);
 	}
 
-	@SuppressWarnings({ "java:S2325" })
-	public void uploadFile(AbstractBackgroundFileUploader fileUploader) {
+	public static void uploadFile(AbstractBackgroundFileUploader fileUploader) {
 		fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + 1);
 		fileUploader.execute();
 	}

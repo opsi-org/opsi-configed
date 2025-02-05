@@ -20,7 +20,7 @@ public interface CertificateValidator {
 	 * @return created {@code SSLSocketFactory} based on the
 	 *         {@link CertificateValidator} implementation.
 	 */
-	SSLSocketFactory createSSLSocketFactory();
+	SSLSocketFactory getSSLSocketFactory();
 
 	/**
 	 * Creates {@code HostnameVerifier} based on the
@@ -32,7 +32,7 @@ public interface CertificateValidator {
 	 * @return created {@code HostnameVerifier} based on the
 	 *         {@link CertificateValidator} implementation.
 	 */
-	HostnameVerifier createHostnameVerifier();
+	HostnameVerifier getHostnameVerifier();
 
 	/**
 	 * Checks whether or not client's certificate is locally available or it was

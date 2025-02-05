@@ -6,24 +6,19 @@
 
 package de.uib.utils.datapanel;
 
-import java.awt.BorderLayout;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.Function;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.MenuElement;
-import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.Configed;
-import de.uib.utils.DataChangedObserver;
+import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 
 // works on a map of pairs of type String - List
 public class DefaultEditMapPanel extends JPanel {
@@ -32,27 +27,20 @@ public class DefaultEditMapPanel extends JPanel {
 	protected boolean reloadable;
 	protected boolean showToolTip = true;
 
-	protected boolean keylistExtendible;
-	protected boolean keylistEditable = true;
-
 	protected Actor actor;
 
-	protected JPopupMenu popupmenuAtRow;
-	protected JPopupMenu popupEditOptions;
-	protected JPopupMenu popupNoEditOptions;
+	protected JPopupMenu popupMenu;
 
 	protected List<String> names;
-	protected Map<String, ListCellOptions> optionsMap;
+	protected Map<String, ConfigOption> optionsMap;
 	protected Map<String, String> descriptionsMap;
 	protected Map<String, Object> defaultsMap;
-
-	protected TableCellRenderer tableCellRenderer;
 
 	private static class DefaultPropertyHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
 			Logging.debug(this, "removing value for key ", key);
-			mapTableModel.removeEntry(key);
+			mapTableModel.removeConfigEntry(key);
 		}
 
 		@Override
@@ -87,25 +75,16 @@ public class DefaultEditMapPanel extends JPanel {
 
 	protected final AbstractPropertyHandler defaultPropertyHandler;
 
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable) {
+	public DefaultEditMapPanel(boolean reloadable) {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
-		this.keylistExtendible = keylistExtendible;
-		this.keylistEditable = keylistEditable;
 		this.reloadable = reloadable;
 
-		this.tableCellRenderer = tableCellRenderer;
-		Logging.debug(this.getClass(), "DefaultEditMapPanel ", keylistExtendible, ",  ", keylistEditable, ",  ",
-				reloadable);
+		Logging.debug(this, "DefaultEditMapPanel reloadable:", reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
 		propertyHandler = defaultPropertyHandler;
-	}
-
-	protected void buildPanel() {
-		setLayout(new BorderLayout());
 	}
 
 	public void init() {
@@ -118,7 +97,7 @@ public class DefaultEditMapPanel extends JPanel {
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
-	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
+	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 
@@ -138,27 +117,20 @@ public class DefaultEditMapPanel extends JPanel {
 		descriptionsMap = new HashMap<>();
 		defaultsMap = new HashMap<>();
 
-		if (optionsMap != null) {
-			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
-				String description = option.getValue().getDescription();
-				Object defaultvalue = option.getValue().getDefaultValues();
+		for (Entry<String, ConfigOption> option : this.optionsMap.entrySet()) {
+			String description = option.getValue().getDescription();
+			Object defaultvalue = option.getValue().getDefaultValues();
 
-				descriptionsMap.put(option.getKey(), description);
-				defaultsMap.put(option.getKey(), defaultvalue);
-			}
+			descriptionsMap.put(option.getKey(), description);
+			defaultsMap.put(option.getKey(), defaultvalue);
 		}
 
-		mapTableModel.setOptions(optionsMap,
-				// for convenience we deliver defaultsMap
-				defaultsMap);
+		mapTableModel.setOptions(optionsMap, defaultsMap);
 	}
 
 	public void setActor(Actor actor) {
 		this.actor = actor;
 	}
-
-	public void setLabel(String s) {
-		/* Not needed */}
 
 	public void setValues(Map<String, Object> data) {
 		if (data == null) {
@@ -171,7 +143,13 @@ public class DefaultEditMapPanel extends JPanel {
 	}
 
 	public void resetDefaults() {
+		for (String key : names) {
+			mapTableModel.addEntry(key, defaultsMap.get(key), true);
+		}
+
+		mapTableModel.unsetWrite();
 		setValues(defaultsMap);
+		mapTableModel.setWrite();
 	}
 
 	public void setVoid() {
@@ -184,60 +162,21 @@ public class DefaultEditMapPanel extends JPanel {
 		mapTableModel.setWrite();
 	}
 
-	public List<String> getNames() {
-		return mapTableModel.getKeys();
-	}
-
-	public void setShowToolTip(boolean b) {
-		showToolTip = b;
-	}
-
-	public void registerDataChangedObserver(DataChangedObserver o) {
-		mapTableModel.registerDataChangedObserver(o);
+	public void setShowToolTip(boolean showToolTip) {
+		this.showToolTip = showToolTip;
 	}
 
 	/**
 	 * set collection (e.g. of clients) where each member stores the changed
-	 * data; we assume that it is a collection of maps
-	 * 
-	 * @param Collection data
-	 */
-	public void setStoreData(Collection<Map<String, Object>> data) {
-		mapTableModel.setStoreData(data);
-	}
-
-	/**
-	 * take a reference to a collection of maps that we will have to use for
-	 * updating the data base
+	 * data; we assume that it is a collection of maps; also take a reference to
+	 * a collection of maps that we will have to use for updating the data base
 	 * 
 	 * @param Collection updateCollection
+	 * @param Collection data
 	 */
-	public void setUpdateCollection(Collection updateCollection) {
+	public void updateData(UpdateCollection updateCollection, Collection<Map<String, Object>> data) {
 		mapTableModel.setUpdateCollection(updateCollection);
-	}
-
-	public void setReadOnlyEntries(Set<String> keys) {
-		mapTableModel.setReadOnlyEntries(keys);
-	}
-
-	public void setEditableFunction(Function<String, Boolean> isEditable) {
-		mapTableModel.setIsEditable(isEditable);
-	}
-
-	protected void logPopupElements() {
-		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
-		int size = popupElements.length;
-		Logging.debug(this, "logPopupElements ", size);
-	}
-
-	public void setOptionsEditable(boolean b) {
-		Logging.debug(this, "DefaultEditMapPanel.setOptionsEditable ", b);
-
-		if (b) {
-			popupmenuAtRow = popupEditOptions;
-		} else {
-			popupmenuAtRow = popupNoEditOptions;
-		}
+		mapTableModel.setStoreData(data);
 	}
 
 	public MapTableModel getMapTableModel() {

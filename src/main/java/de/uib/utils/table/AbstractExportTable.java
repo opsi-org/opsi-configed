@@ -8,7 +8,6 @@ package de.uib.utils.table;
 
 import java.awt.Container;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Locale;
 import java.util.Map;
@@ -22,7 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FTextArea;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -57,7 +56,7 @@ public abstract class AbstractExportTable {
 
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV"));
-		Utils.addIntellijIconToMenuItem(menuItem, "export");
+		Icons.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
 	}
@@ -69,8 +68,8 @@ public abstract class AbstractExportTable {
 
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV"));
-		Utils.addIntellijIconToMenuItem(menuItem, "export");
-		menuItem.addActionListener((ActionEvent actionEvent) -> execute(null, true));
+		Icons.addIntellijIconToMenuItem(menuItem, "export");
+		menuItem.addActionListener(actionEvent -> execute(null, true));
 
 		return menuItem;
 	}
@@ -101,31 +100,27 @@ public abstract class AbstractExportTable {
 		if (onlySelectedRows) {
 			Logging.debug("selectedRows: ", theTable.getSelectedRowCount());
 			if (theTable.getRowCount() > 0 && theTable.getSelectedRowCount() == 0) {
-				FTextArea fChoice = new FTextArea(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("ExportTable.title"), true,
-						new String[] { Configed.getResourceValue("buttonCancel"),
+				String message = Configed.getResourceValue("ExportTable.caseNoSelectedRows.info") + "\n\n\n"
+						+ Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly.text")
+						+ "\n\n"
+						+ Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable.text");
+
+				int answer = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), message,
+						Configed.getResourceValue("ExportTable.title"), JOptionPane.OK_OPTION,
+						JOptionPane.PLAIN_MESSAGE, null,
+						new Object[] { Configed.getResourceValue("buttonCancel"),
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
 								Configed.getResourceValue(
 										"ExportTable.caseNoSelectedRows.option.exportCompleteTable") },
-						500, 200);
-				fChoice.setDefaultResult(3);
-				fChoice.setMessage(Configed.getResourceValue("ExportTable.caseNoSelectedRows.info") + "\n\n\n"
-						+ Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly.text")
-						+ "\n\n"
-						+ Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable.text")
-						+ "\n\n");
-				fChoice.setVisible(true);
+						null);
 
-				int answer = fChoice.getResult();
-
-				result = null;
 				Logging.info(this, "checkSelection answered ", answer);
 				if (answer == 1) {
 					result = true;
 				} else if (answer == 2) {
 					result = false;
 				} else {
-					Logging.warning(this, "unexpected answer ", answer);
+					result = null;
 				}
 			}
 		}

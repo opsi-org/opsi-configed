@@ -16,12 +16,12 @@ import javax.swing.JTable;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
 public class LicensingInfoTableCellRenderer extends ColorTableCellRenderer {
 	private static final String DISPLAY_INFINITE = "\u221E";
-	private static final ImageIcon availableIcon = Utils.getIntellijIcon("checkmark");
+	private static final ImageIcon availableIcon = Icons.getIntellijIcon("checkmark");
 
 	protected LicensingInfoMap licensingInfoMap;
 

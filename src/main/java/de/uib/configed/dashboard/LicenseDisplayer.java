@@ -23,12 +23,12 @@ import javax.swing.event.TableModelListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSoftwarename2LicensePool;
+import de.uib.configed.gui.Softwarename2LicensePoolDialog;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.provider.DefaultTableProvider;
@@ -97,7 +97,7 @@ public class LicenseDisplayer {
 		Scene scene = new Scene(root);
 		stage = new Stage();
 
-		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Utils.getMainIcon()), null));
+		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Icons.getMainIcon()), null));
 		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
 		stage.setScene(scene);
 
@@ -197,7 +197,7 @@ public class LicenseDisplayer {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (configedMain != null && !configedMain.isAllLicenseDataReloaded()) {
+						if (configedMain != null) {
 							persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
 						}
 					}
@@ -256,7 +256,7 @@ public class LicenseDisplayer {
 			String licpool = persistenceController.getSoftwareDataService().getFSoftware2LicensePoolPD(swID);
 
 			if (licpool == null) {
-				range.add(FSoftwarename2LicensePool.VALUE_NO_LICENSE_POOL);
+				range.add(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL);
 			} else {
 				range.add(licpool);
 			}

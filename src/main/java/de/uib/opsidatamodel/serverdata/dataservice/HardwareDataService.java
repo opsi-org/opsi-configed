@@ -65,10 +65,10 @@ public class HardwareDataService {
 		cacheManager.setCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST, relationsAuditHardwareOnHost);
 	}
 
-	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConfPD(String locale) {
+	public List<Map<String, Object>> getOpsiHWAuditConfPD(String locale) {
 		retrieveOpsiHWAuditConfPD(locale);
-		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = cacheManager
-				.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
+		Map<String, List<Map<String, Object>>> hwAuditConf = cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF,
+				Map.class);
 		return hwAuditConf.get(locale);
 	}
 
@@ -82,9 +82,15 @@ public class HardwareDataService {
 			return;
 		}
 
-		Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf = new HashMap<>();
-		hwAuditConf.computeIfAbsent(locale, s -> exec.getListOfMapsOfListsOfMaps(
-				new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
+		Map<String, List<Map<String, Object>>> hwAuditConf;
+		if (cacheManager.isDataCached(CacheIdentifier.HW_AUDIT_CONF)) {
+			hwAuditConf = cacheManager.getCachedData(CacheIdentifier.HW_AUDIT_CONF, Map.class);
+		} else {
+			hwAuditConf = new HashMap<>();
+		}
+
+		hwAuditConf.computeIfAbsent(locale, s -> exec
+				.getListOfMaps(new OpsiMethodCall(RPCMethodName.AUDIT_HARDWARE_GET_CONFIG, new String[] { locale })));
 		cacheManager.setCachedData(CacheIdentifier.HW_AUDIT_CONF, hwAuditConf);
 	}
 

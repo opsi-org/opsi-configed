@@ -6,17 +6,14 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 
 public class PanelEditClientProperties extends AbstractPanelEditProperties {
@@ -26,8 +23,8 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	private JPanel titlePanel;
 
-	public PanelEditClientProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
-		super(configedMain, productPropertiesPanel);
+	public PanelEditClientProperties(DefaultEditMapPanel productPropertiesPanel) {
+		super(productPropertiesPanel);
 		initComponents();
 		initTitlePanel();
 	}
@@ -35,25 +32,24 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 
-		buttonSetValuesFromServerDefaults = new JButton(Utils.getIntellijIcon("locked"));
+		buttonSetValuesFromServerDefaults = new JButton(Icons.getIntellijIcon("locked"));
 		buttonSetValuesFromServerDefaults
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"));
-		buttonSetValuesFromServerDefaults.addActionListener((ActionEvent e) -> productPropertiesPanel.resetDefaults());
+		buttonSetValuesFromServerDefaults.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
 
-		buttonRemoveSpecificValues = new JButton(Utils.getIntellijIcon("remove"));
+		buttonRemoveSpecificValues = new JButton(Icons.getIntellijIcon("remove"));
 		buttonRemoveSpecificValues
 				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"));
-		buttonRemoveSpecificValues.addActionListener((ActionEvent e) -> productPropertiesPanel.setVoid());
+		buttonRemoveSpecificValues.addActionListener(actionEvent -> productPropertiesPanel.setVoid());
 
 		GroupLayout layoutEditProperties = new GroupLayout(this);
 		setLayout(layoutEditProperties);
 
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-				.addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(productPropertiesPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutEditProperties.setVerticalGroup(
-				layoutEditProperties.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-						productPropertiesPanel, Globals.MIN_TABLE_V_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutEditProperties.setVerticalGroup(layoutEditProperties.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(productPropertiesPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	private void initTitlePanel() {
@@ -63,20 +59,22 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		titlePanel.setLayout(titleLayout);
 
 		titleLayout.setHorizontalGroup(titleLayout.createSequentialGroup()
-				.addComponent(jLabelProductProperties, minHSize, prefHSize, Short.MAX_VALUE)
+				.addComponent(jLabelProductProperties, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.DEFAULT_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonRemoveSpecificValues, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE));
 
-		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addGroup(titleLayout
-				.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(jLabelProductProperties, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(buttonRemoveSpecificValues, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)));
+		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup()
+				.addGroup(titleLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelProductProperties, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonRemoveSpecificValues, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 	}
 
 	@Override

@@ -7,19 +7,17 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
@@ -34,10 +32,8 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Utils;
-import de.uib.utils.datapanel.MapTableModel;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
-import de.uib.utils.table.ListCellOptions;
 
 /**
  * Provides methods for working with configuration data on the server.
@@ -60,6 +56,10 @@ public class ConfigDataService {
 
 	protected static final String KEY_DISABLED_CLIENT_ACTIONS = "configed.host_actions_disabled";
 	protected static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
+
+	private static final String KEY_DOWNTIME_START = "opsi.check.downtime.start";
+	private static final String KEY_DOWNTIME_END = "opsi.check.downtime.end";
+	private static final String KEY_DOWNTIME_ENABLED = "opsi.check.enabled";
 
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;
@@ -121,14 +121,8 @@ public class ConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.CONFIG_OPTIONS, Map.class);
 	}
 
-	public Map<String, ListCellOptions> getConfigListCellOptionsPD() {
-		retrieveConfigOptionsPD();
-		return cacheManager.getCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, Map.class);
-	}
-
 	public void retrieveConfigOptionsPD() {
-		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS,
-				CacheIdentifier.CONFIG_OPTIONS, CacheIdentifier.CONFIG_DEFAULT_VALUES))) {
+		if (cacheManager.isDataCached(CacheIdentifier.CONFIG_DEFAULT_VALUES)) {
 			return;
 		}
 
@@ -137,7 +131,6 @@ public class ConfigDataService {
 		List<Map<String, Object>> deleteItems = new ArrayList<>();
 
 		Map<String, ConfigOption> configOptions = new HashMap<>();
-		Map<String, ListCellOptions> configListCellOptions = new HashMap<>();
 		Map<String, List<Object>> configDefaultValues = new HashMap<>();
 
 		RemoteControls remoteControls = new RemoteControls();
@@ -148,7 +141,6 @@ public class ConfigDataService {
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_GET_OBJECTS, new Object[0]);
 		List<Map<String, Object>> retrievedList = exec.getListOfMaps(omc);
-
 		Logging.info(this, "configOptions retrieved ");
 		for (Map<String, Object> configItem : retrievedList) {
 			String key = (String) configItem.get("ident");
@@ -173,7 +165,6 @@ public class ConfigDataService {
 
 			ConfigOption configOption = new ConfigOption(configItem);
 			configOptions.put(key, configOption);
-			configListCellOptions.put(key, configOption);
 			configDefaultValues.put(key, configOption.getDefaultValues());
 
 			if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
@@ -184,7 +175,6 @@ public class ConfigDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.REMOTE_CONTROLS, remoteControls);
 		cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
-		cacheManager.setCachedData(CacheIdentifier.CONFIG_LIST_CELL_OPTIONS, configListCellOptions);
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_OPTIONS, configOptions);
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
 
@@ -291,9 +281,7 @@ public class ConfigDataService {
 			if (hostConfig.getKey() != null && !"".equals(hostConfig.getKey())) {
 				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostConfig.getKey(),
 						arg -> new HashMap<>());
-				Map<String, Object> configs = POJOReMapper.remap(hostConfig.getValue(),
-						new TypeReference<Map<String, Object>>() {
-						});
+				Map<String, Object> configs = POJOReMapper.remap(hostConfig.getValue());
 
 				Logging.debug(this, "retrieveHostConfigs objectId,  element ", hostConfig.getKey(), ": ", hostConfig);
 
@@ -387,7 +375,7 @@ public class ConfigDataService {
 	}
 
 	// send config updates and clear the collection
-	public void setConfig() {
+	public void updateConfigs() {
 		setConfig(false);
 	}
 
@@ -436,7 +424,7 @@ public class ConfigDataService {
 		List<Map<String, Object>> callsConfigDeleteCollection = new ArrayList<>();
 
 		for (Map<String, Object> callConfig : configCollection) {
-			if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
+			if (callConfig.get("defaultValues") == null) {
 				callsConfigDeleteCollection.add(callConfig);
 			} else if (!restrictToMissing || usedConfigIds.contains(callConfig.get("ident"))) {
 				callConfig.put("defaultValues", callConfig.get("defaultValues"));
@@ -496,44 +484,38 @@ public class ConfigDataService {
 			Logging.debug(this, "setConfig,  key, settings.get(key): ", setting.getKey(), ", ", setting.getValue());
 
 			Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): ",
-					setting.getValue(), " , ", setting.getValue().getClass().getName());
+					setting.getValue());
 
-			List<Object> oldValue = null;
+			Logging.info(this, "setConfig, key: ", setting.getKey());
 
+			Map<String, Object> config = new HashMap<>();
+
+			config.put("ident", setting.getKey());
+
+			String type;
+
+			Logging.debug(this, "setConfig, key,  configOptions.get(key):  ", setting.getKey(), ", ",
+					configOptions.get(setting.getKey()));
 			if (configOptions.get(setting.getKey()) != null) {
-				oldValue = configOptions.get(setting.getKey()).getDefaultValues();
+				config.put("multiValue", configOptions.get(setting.getKey()).get("multiValue"));
+
+				type = (String) configOptions.get(setting.getKey()).get("type");
+			} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
+				type = "BoolConfig";
+			} else {
+				type = "UnicodeConfig";
 			}
 
-			Logging.info(this, "setConfig, key, oldValue: ", setting.getKey(), ", ", oldValue);
+			config.put("type", type);
 
-			if (!setting.getValue().equals(oldValue)) {
-				Map<String, Object> config = new HashMap<>();
+			config.put("defaultValues", setting.getValue());
 
-				config.put("ident", setting.getKey());
+			List<Object> possibleValues = createPossibleValues(type, setting.getValue(),
+					configOptions.get(setting.getKey()));
 
-				String type;
+			config.put("possibleValues", possibleValues);
 
-				Logging.debug(this, "setConfig, key,  configOptions.get(key):  ", setting.getKey(), ", ",
-						configOptions.get(setting.getKey()));
-				if (configOptions.get(setting.getKey()) != null) {
-					type = (String) configOptions.get(setting.getKey()).get("type");
-				} else if (!setting.getValue().isEmpty() && setting.getValue().get(0) instanceof Boolean) {
-					type = "BoolConfig";
-				} else {
-					type = "UnicodeConfig";
-				}
-
-				config.put("type", type);
-
-				config.put("defaultValues", setting.getValue());
-
-				List<Object> possibleValues = createPossibleValues(type, setting.getValue(),
-						configOptions.get(setting.getKey()));
-
-				config.put("possibleValues", possibleValues);
-
-				configCollection.add(config);
-			}
+			configCollection.add(config);
 		}
 	}
 
@@ -542,7 +524,7 @@ public class ConfigDataService {
 		List<Object> possibleValues;
 		if (configOption == null) {
 			possibleValues = new ArrayList<>();
-			if (type.equals(ConfigOption.BOOL_TYPE)) {
+			if (type.equals(TYPE.BOOL_CONFIG.toString())) {
 				possibleValues.add(true);
 				possibleValues.add(false);
 			}
@@ -550,18 +532,21 @@ public class ConfigDataService {
 			possibleValues = configOption.getPossibleValues();
 		}
 
-		for (Object item : defaultValues) {
-			if (!possibleValues.contains(item)) {
-				possibleValues.add(item);
+		// defaultValues is null when we delete a config
+		if (defaultValues != null) {
+			for (Object item : defaultValues) {
+				if (!possibleValues.contains(item)) {
+					possibleValues.add(item);
+				}
 			}
 		}
 
 		return possibleValues;
 	}
 
-	public void addRoleConfig(String name, String rolename) {
+	public void addRoleConfig(String name) {
 		String configkey = UserConfig.KEY_USER_ROLE_ROOT + ".{" + name + "}." + UserConfig.HAS_ROLE_ATTRIBUT;
-		addRoleAndUserConfig(configkey, rolename);
+		addRoleAndUserConfig(configkey, "");
 	}
 
 	public void addUserConfig(String name, String rolename) {
@@ -610,9 +595,10 @@ public class ConfigDataService {
 
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_DELETE_OBJECTS, new Object[] { readyObjects });
 
-		exec.doCall(omc);
-		savedSearches.remove(name);
-		cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
+		if (exec.doCall(omc)) {
+			savedSearches.remove(name);
+			cacheManager.setCachedData(CacheIdentifier.SAVED_SEARCHES, savedSearches);
+		}
 	}
 
 	public void saveSearch(SavedSearch ob) {
@@ -666,7 +652,8 @@ public class ConfigDataService {
 		}
 		Map<String, List<Object>> configDefaultValues = cacheManager
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
-		return Utils.takeAsStringList(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
+
+		return POJOReMapper.remap(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
 	}
 
 	public List<String> getOpsiclientdExtraEvents() {
@@ -683,30 +670,25 @@ public class ConfigDataService {
 					KEY_OPSICLIENTD_EXTRA_EVENTS);
 		}
 
-		List<String> result = Utils.takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
+		List<String> result = POJOReMapper.remap(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
 		Logging.debug(this, "getOpsiclientdExtraEvents() ", result);
 		return result;
 	}
 
-	public Map<String, Object> getHostConfig(String objectId) {
-		Map<String, Object> hostConfig = new HashMap<>();
-		if (getHostConfigsPD().get(objectId) != null) {
-			hostConfig.putAll(getHostConfigsPD().get(objectId));
-		}
-		return new ConfigName2ConfigValue(hostConfig, getConfigOptionsPD());
-	}
-
 	public List<Map<String, Object>> getHostsConfigsWithDefaults(List<String> objectIds) {
+		Logging.info(this, "getHostsConfigsWithDefaults for ", objectIds);
+
+		if (objectIds == null || objectIds.isEmpty()) {
+			return new ArrayList<>();
+		}
+
 		List<Map<String, Object>> result = new ArrayList<>();
 		Set<String> configIds = new HashSet<>();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_GET_VALUES,
 				new Object[] { configIds, objectIds, true });
-		Map<String, Object> retrieved = exec.getMapResult(omc);
-		for (Entry<String, Object> entry : retrieved.entrySet()) {
-			Map<String, Object> configs = POJOReMapper.remap(entry.getValue(),
-					new TypeReference<Map<String, Object>>() {
-					});
-			result.add(new ConfigName2ConfigValue(configs, getConfigOptionsPD()));
+		Map<String, Map<String, Object>> retrieved = exec.getMapOfMaps(omc);
+		for (Entry<String, Map<String, Object>> entry : retrieved.entrySet()) {
+			result.add(new ConfigName2ConfigValue(entry.getValue(), getConfigOptionsPD()));
 		}
 		return result;
 	}
@@ -722,7 +704,7 @@ public class ConfigDataService {
 	}
 
 	// collect config state updates
-	public void setAdditionalConfiguration(String objectId, ConfigName2ConfigValue settings) {
+	public void setConfigStates(String objectId, ConfigName2ConfigValue settings) {
 		if (configStateCollection == null) {
 			configStateCollection = new ArrayList<>();
 		}
@@ -764,19 +746,17 @@ public class ConfigDataService {
 
 			if (retrievedConfig == null) {
 				configStateCollection.add(state);
-			} else if (entry.getValue() != retrievedConfig.get(entry.getKey())) {
+			} else {
 				configStateCollection.add(state);
 
 				// we hope that the update works and directly update the retrievedConfig
 				retrievedConfig.put(entry.getKey(), entry.getValue());
-			} else {
-				// Do nothing when retrieved config is not null and equals entry value
 			}
 		}
 	}
 
 	// send config updates and clear the collection
-	public void setAdditionalConfiguration() {
+	public void updateConfigStates() {
 		if (userRolesConfigDataService.isGlobalReadOnly()) {
 			return;
 		}
@@ -801,19 +781,17 @@ public class ConfigDataService {
 
 			List<?> valueList = (List<?>) configState.get("values");
 
-			if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
-				typesOfUsedConfigIds.put(ident, "BoolConfig");
-			} else {
-				typesOfUsedConfigIds.put(ident, "UnicodeConfig");
-			}
-
-			if (valueList.equals(MapTableModel.nullLIST)) {
+			if (valueList == null) {
 				Map<String, Object> item = Utils.createNOMitem("ConfigState");
 				item.put("objectId", configState.get("objectId"));
 				item.put("configId", configState.get("configId"));
 
 				deleteConfigStateItems.add(item);
 				doneList.add(configState);
+			} else if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
+				typesOfUsedConfigIds.put(ident, "BoolConfig");
+			} else {
+				typesOfUsedConfigIds.put(ident, "UnicodeConfig");
 			}
 		}
 
@@ -858,19 +836,11 @@ public class ConfigDataService {
 			persistenceController.reloadData(ReloadEvent.CONFIG_OPTIONS_RELOAD.toString());
 		}
 
-		// build calls
-		List<Map<String, Object>> callsConfigName2ConfigValueCollection = new ArrayList<>();
-
-		for (Map<String, Object> state : configStateCollection) {
-			state.put("values", state.get("values"));
-			callsConfigName2ConfigValueCollection.add(state);
-		}
-
 		// do call
-		if (!callsConfigName2ConfigValueCollection.isEmpty()) {
+		if (!configStateCollection.isEmpty()) {
 			// now we can set the values and clear the collected update items
 			exec.doCall(new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-					new Object[] { callsConfigName2ConfigValueCollection }));
+					new Object[] { configStateCollection }));
 		}
 	}
 
@@ -881,7 +851,7 @@ public class ConfigDataService {
 
 		Map<String, Object> hostConfig = getHostConfigsPD().get(hostId);
 		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
-			value = Utils.interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
+			value = (Boolean) ((List<?>) hostConfig.get(key)).get(0);
 			Logging.debug(this, "getHostBooleanConfigValue key '", key, "', host '", hostId, "', value: ", value);
 			if (value != null) {
 				return value;
@@ -905,51 +875,13 @@ public class ConfigDataService {
 		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
 
-	public Boolean isUefiConfigured(String hostname) {
-		Boolean result = false;
-
-		if (getHostConfigsPD().get(hostname) != null
-				&& getHostConfigsPD().get(hostname)
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME) != null
-				&& !((List<?>) getHostConfigsPD().get(hostname)
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).isEmpty()) {
-			String configValue = (String) ((List<?>) getHostConfigsPD().get(hostname)
-					.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).get(0);
-
-			if (configValue.indexOf(OpsiServiceNOMPersistenceController.EFI_STRING) >= 0) {
-				// something similar should work, but not this:
-
-				result = true;
-			}
-		} else if (getConfigDefaultValuesPD().get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME) != null
-				&& !((List<?>) getConfigDefaultValuesPD()
-						.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).isEmpty()) {
-			String configValue = (String) ((List<?>) getConfigDefaultValuesPD()
-					.get(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME)).get(0);
-
-			if (configValue.indexOf(OpsiServiceNOMPersistenceController.EFI_STRING) >= 0) {
-				// something similar should work, but not this:
-				result = true;
-			}
-		} else {
-			// No UEFI configuration
-		}
-
-		return result;
-	}
-
 	/**
 	 * Checks if the given clients have an entry for UEFI boot. That means, the
 	 * client has a client config with an entry
 	 * {@code clientconfig.uefinetbootlabel}.
-	 * <p>
-	 * Should only be used in opsi 4.3 (or later) since in opsi 4.3
-	 * {@code clientconfig.dhcpd.filename} entry has been replaced by
-	 * {@code clientconfig.uefinetbootlabel} entry and is no longer editable.
 	 *
 	 * @param clients for which to check the existence of UEFI boot entry
 	 * @return null if clients have different values or if client list is empty
-	 * @see #isUefiConfigured(String)
 	 */
 	@SuppressWarnings({ "java:S2447" })
 	public Boolean isUEFI43(Iterable<String> clients) {
@@ -995,7 +927,7 @@ public class ConfigDataService {
 			if (configuration.getValue() == null) {
 				Logging.info(this, "We encountered non BOOL_CONFIG option ", configuration.getKey(), "; We skip it");
 			} else {
-				tested = valueFromConfigStateAsExpected(getHostConfig(host), configuration.getKey(),
+				tested = valueFromConfigStateAsExpected(getHostConfigsPD().get(host), configuration.getKey(),
 						(Boolean) (configuration.getValue().get(0)));
 				if (!tested) {
 					break;
@@ -1032,47 +964,6 @@ public class ConfigDataService {
 		return result;
 	}
 
-	public boolean configureUefiBoot(String clientId, boolean uefiBoot) {
-		boolean result = false;
-
-		Logging.info(this, "configureUefiBoot, clientId ", clientId, " ", uefiBoot);
-
-		List<String> values = new ArrayList<>();
-
-		if (uefiBoot) {
-			values.add(OpsiServiceNOMPersistenceController.EFI_DHCPD_FILENAME);
-
-			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			jsonObjects.add(Utils.createUefiNOMEntry(clientId, OpsiServiceNOMPersistenceController.EFI_DHCPD_FILENAME));
-
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-					new Object[] { jsonObjects });
-			result = exec.doCall(omc);
-		} else {
-			values.add(OpsiServiceNOMPersistenceController.EFI_DHCPD_NOT);
-
-			List<Map<String, Object>> jsonObjects = new ArrayList<>();
-			jsonObjects.add(Utils.createUefiNOMEntry(clientId, OpsiServiceNOMPersistenceController.EFI_DHCPD_NOT));
-
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-					new Object[] { jsonObjects });
-			result = exec.doCall(omc);
-		}
-
-		// locally
-		if (result) {
-			if (getHostConfigsPD().get(clientId) == null) {
-				getHostConfigsPD().put(clientId, new HashMap<>());
-			}
-
-			Logging.info(this, "configureUefiBoot, configs for clientId ", clientId, " ",
-					getHostConfigsPD().get(clientId));
-			getHostConfigsPD().get(clientId).put(OpsiServiceNOMPersistenceController.CONFIG_DHCPD_FILENAME, values);
-		}
-
-		return result;
-	}
-
 	private boolean setHostBooleanConfigValue(String configId, String hostName, boolean val) {
 		Logging.info(this, "setHostBooleanConfigValue ", hostName, " configId ", configId, " val ", val);
 
@@ -1095,22 +986,21 @@ public class ConfigDataService {
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
 		Boolean val = defaultVal;
-		Object obj = getConfigListCellOptionsPD().get(key);
+		ConfigOption configOption = getConfigOptionsPD().get(key);
 
-		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "'='", obj, "'");
-		if (obj == null) {
+		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "'='", configOption, "'");
+		if (configOption == null) {
 			Logging.warning(this, "getGlobalBooleanConfigValue '", key, "' is null, returning default value: ", val);
 			return val;
 		}
 
-		ConfigOption option = (ConfigOption) obj;
-		if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
+		if (configOption.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
 			Logging.warning(this, "getGlobalBooleanConfigValue type of '", key, "' should be boolean, but is ",
-					option.getType(), ", returning default value: ", val);
+					configOption.getType(), ", returning default value: ", val);
 			return val;
 		}
 
-		List<Object> values = option.getDefaultValues();
+		List<Object> values = configOption.getDefaultValues();
 		Logging.debug(this, "getGlobalBooleanConfigValue '", key, "' defaultValues: ", values);
 		if (values != null && !values.isEmpty()) {
 			val = (Boolean) values.get(0);
@@ -1121,7 +1011,7 @@ public class ConfigDataService {
 
 	public List<String> getServerConfigStrings(String key) {
 		retrieveConfigOptionsPD();
-		return Utils.takeAsStringList(getConfigDefaultValuesPD().get(key));
+		return POJOReMapper.remap(getConfigDefaultValuesPD().get(key));
 	}
 
 	// setConfig(Map<String, List<Object>> settings)
@@ -1169,7 +1059,7 @@ public class ConfigDataService {
 	}
 
 	public List<String> getDomains() {
-		Set<String> result = new TreeSet<>();
+		List<String> result = new ArrayList<>();
 
 		Map<String, List<Object>> configDefaultValues = getConfigDefaultValuesPD();
 		if (configDefaultValues.get(OpsiServiceNOMPersistenceController.CONFIGED_GIVEN_DOMAINS_KEY) == null) {
@@ -1186,10 +1076,12 @@ public class ConfigDataService {
 			}
 		}
 
-		result.add(getOpsiDefaultDomainPD());
+		if (!result.contains(getOpsiDefaultDomainPD())) {
+			result.add(getOpsiDefaultDomainPD());
+		}
 
 		Logging.info(this, "getDomains ", result);
-		return new ArrayList<>(result);
+		return result;
 	}
 
 	public void writeDomains(List<Object> domains) {
@@ -1214,6 +1106,43 @@ public class ConfigDataService {
 				.getCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, Map.class);
 		configDefaultValues.put(key, domains);
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES, configDefaultValues);
+	}
+
+	public void writeDownTime(Collection<String> hostIds, boolean enabled, String startTime, String endTime) {
+		if (hostIds.isEmpty()) {
+			return;
+		}
+
+		List<Map<String, Object>> readyObjects = new ArrayList<>();
+
+		for (String hostId : hostIds) {
+
+			Map<String, Object> enabledItem = Utils
+					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
+			enabledItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
+			enabledItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_ENABLED);
+			enabledItem.put(OpsiServiceNOMPersistenceController.VALUES_ID, List.of(enabled));
+
+			Map<String, Object> startTimeItem = Utils
+					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
+			startTimeItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
+			startTimeItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_START);
+			startTimeItem.put(OpsiServiceNOMPersistenceController.VALUES_ID, List.of(startTime));
+
+			Map<String, Object> endTimeItem = Utils
+					.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
+			endTimeItem.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostId);
+			endTimeItem.put(OpsiServiceNOMPersistenceController.CONFIG_ID, KEY_DOWNTIME_END);
+			endTimeItem.put(OpsiServiceNOMPersistenceController.VALUES_ID, List.of(endTime));
+
+			readyObjects.add(enabledItem);
+			readyObjects.add(startTimeItem);
+			readyObjects.add(endTimeItem);
+		}
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
+				new Object[] { readyObjects });
+		exec.doCall(omc);
 	}
 
 	public String getConfigedWorkbenchDefaultValuePD() {

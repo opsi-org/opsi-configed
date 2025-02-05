@@ -6,36 +6,34 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FDepotselectionList;
-import de.uib.configed.gui.FShowList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
-public class PackageManagerUninstallParameterDialog extends PackageManagerParameterDialog {
+public class PackageManagerUninstallParameterDialog {
 	private static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
@@ -43,7 +41,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private JLabel jLabelUninstall = new JLabel();
 	private JLabel jLabelOn = new JLabel();
-	private JLabel jLabelKeepFiles = new JLabel();
 
 	protected JLabel jLabelLoglevel = new JLabel(Configed.getResourceValue("loglevel"));
 
@@ -52,7 +49,6 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private JCheckBox checkBoxKeepFiles;
 
-	private JTextField textFieldProduct;
 	private JTextField textFieldSelectedDepots;
 
 	private JButton jButtonDepotSelection;
@@ -60,51 +56,49 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private FDepotselectionList fDepotList;
+	private ListSelectionDialog depotSelection;
 
 	private List<String> possibleDepots;
 
 	private SingleCommandOpsiPackageManagerUninstall commandPMUninstall = new SingleCommandOpsiPackageManagerUninstall();
 
+	private ConfigedMain configedMain;
+
 	public PackageManagerUninstallParameterDialog(ConfigedMain configedMain) {
-		super(Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"));
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 
 		this.configedMain = configedMain;
 
-		fDepotList = new FDepotselectionList(this, configedMain) {
-			@Override
-			public void setListData(List<String> v) {
-				if (v == null || v.isEmpty()) {
-					setListData(new ArrayList<>());
-					jButton1.setEnabled(false);
-				} else {
-					super.setListData(v);
-					jButton1.setEnabled(true);
-				}
-			}
-
-			@Override
-			public void doAction2() {
-				textFieldSelectedDepots.setText(produceDepotParameter());
-				super.doAction2();
-			}
-		};
-
 		init();
 
-		jButtonExecute.setEnabled(false);
 		textFieldSelectedDepots.setText("");
 
-		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		super.setSize(800, 350);
-		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		buttonExecute.addActionListener(actionEvent -> execute());
 
-		super.setVisible(true);
+		JOptionPane optionPane = new JOptionPane(uninstallPanel, JOptionPane.PLAIN_MESSAGE,
+				JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { buttonExecute, Configed.getResourceValue("buttonCancel") });
+
+		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"));
+		dialog.setModal(false);
+
+		depotSelection = new ListSelectionDialog(dialog, Configed.getResourceValue("FDepotselectionList.title"));
+		depotSelection.setMultiSelection();
+
+		dialog.setVisible(true);
 	}
 
 	private String produceDepotParameter() {
 		String depotParameter = "";
-		List<String> selectedDepots = fDepotList.getSelectedDepots();
+		List<String> selectedDepots = depotSelection.getSelectedValues();
 
 		Logging.debug(this, "produceDepotParameter, selectedDepots ", selectedDepots);
 
@@ -114,10 +108,9 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
 			} else {
-				jButtonExecute.setEnabled(false);
+				// Do nothing if no depots are available
 			}
 		} else {
-			jButtonExecute.setEnabled(true);
 
 			if (selectedDepots.contains(PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = PMInstallSettingsPanel.DEPOT_SELECTION_NODEPOTS;
@@ -181,11 +174,10 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 
 	private void initDepots() {
 		possibleDepots = getPossibleDepots();
-		fDepotList.setListData(possibleDepots);
+		depotSelection.setListData(possibleDepots);
 		if (possibleDepots.isEmpty()) {
 			// probably no permission
 
-			jButtonExecute.setVisible(false);
 			textFieldSelectedDepots.setText("");
 		} else {
 			textFieldSelectedDepots.setText("" + possibleDepots.get(0));
@@ -193,19 +185,10 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private void init() {
-		getContentPane().add(uninstallPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-		uninstallPanel.setBorder(BorderFactory.createTitledBorder(""));
-		uninstallPanel.setPreferredSize(new Dimension(376, 220));
-
+		jLabelUninstall.setFont(jLabelUninstall.getFont().deriveFont(Font.BOLD));
 		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
 
 		jComboboxLoglevel = new JComboBox<>();
-		jComboboxLoglevel.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
-		jComboboxLoglevel.setEditable(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
 		for (int i = 3; i <= 9; i++) {
 			jComboboxLoglevel.addItem(i);
 		}
@@ -213,15 +196,9 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		jComboboxLoglevel.setSelectedItem(4);
 		jComboboxLoglevel.addItemListener(itemEvent -> updateLoglevel());
 
-		jLabelKeepFiles.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelKeepFiles"));
-		checkBoxKeepFiles = new JCheckBox();
+		checkBoxKeepFiles = new JCheckBox(
+				Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelKeepFiles"));
 		checkBoxKeepFiles.addItemListener(itemEvent -> changeKeepFiles());
-		checkBoxKeepFiles.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
-
-		textFieldProduct = new JTextField();
-
-		textFieldProduct.setEditable(false);
 
 		jComboBoxOpsiProducts = new JComboBox<>();
 		jComboBoxOpsiProducts.setRenderer(new DefaultListCellRenderer());
@@ -229,28 +206,26 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		jComboBoxOpsiProducts.setEnabled(true);
 		jComboBoxOpsiProducts.setEditable(false);
 
-		jComboBoxOpsiProducts.addItemListener((ItemEvent itemEvent) -> {
-			textFieldSelectedDepots.setText("");
+		jComboBoxOpsiProducts.addItemListener(itemEvent -> textFieldSelectedDepots.setText(""));
 
-			jButtonExecute.setEnabled(false);
-			textFieldProduct.setText((String) jComboBoxOpsiProducts.getSelectedItem());
-		});
-
+		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
 		jLabelOn.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn"));
 
-		jButtonDepotSelection = new JButton(Configed.getResourceValue("depotSelection"));
-		jButtonDepotSelection.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
+		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+
+		jButtonDepotSelection = new JButton(Icons.getIntellijIcon("edit"));
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
-			fDepotList.setLocationRelativeTo(this);
-			fDepotList.setVisible(true);
+			depotSelection.show();
+
+			if (depotSelection.wasAccepted()) {
+				textFieldSelectedDepots.setText(produceDepotParameter());
+			}
 		});
 
 		textFieldSelectedDepots = new JTextField();
 		textFieldSelectedDepots.setEditable(false);
 
-		initButtons(this);
 		initLayout();
 		resetProducts();
 		changeProduct("");
@@ -294,27 +269,21 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 	}
 
 	private boolean confirmAction() {
-		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 400,
-				200);
-
-		fConfirmAction.setMessage(Configed.getResourceValue("PackageManagerUninstallParameterDialog.confirm") + "\n"
-				+ textFieldProduct.getText() + "\n\n"
+		String message = Configed.getResourceValue("PackageManagerUninstallParameterDialog.confirm") + "\n"
+				+ jComboBoxOpsiProducts.getSelectedItem() + "\n\n"
 				+ Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn") + "\n\n"
-				+ textFieldSelectedDepots.getText());
+				+ textFieldSelectedDepots.getText();
 
-		fConfirmAction.setLocationRelativeTo(this);
-		fConfirmAction.setAlwaysOnTop(true);
-		fConfirmAction.setVisible(true);
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("PackageManagerUninstallParameterDialog.title"),
+				JOptionPane.OK_CANCEL_OPTION);
 
-		return fConfirmAction.getResult() == 2;
+		return answer == JOptionPane.OK_OPTION;
 	}
 
-	@Override
-	public void doAction3() {
+	private void execute() {
 		changeDepot();
-		final String prod = textFieldProduct.getText();
+		final String prod = (String) jComboBoxOpsiProducts.getSelectedItem();
 		Logging.info(this, "doAction3 uninstall  ", prod);
 
 		changeProduct(prod);
@@ -336,82 +305,47 @@ public class PackageManagerUninstallParameterDialog extends PackageManagerParame
 		execThread.start();
 	}
 
-	@Override
-	public void doAction1() {
-		this.setVisible(false);
-		this.dispose();
-	}
-
-	@Override
-	public void leave() {
-		fDepotList.exit();
-		super.leave();
-	}
-
 	private void initLayout() {
-		GroupLayout uninstallPanelLayout = new GroupLayout(uninstallPanel);
-		uninstallPanelLayout.setAutoCreateGaps(true);
-		uninstallPanelLayout.setAutoCreateContainerGaps(true);
-		uninstallPanel.setLayout(uninstallPanelLayout);
-		uninstallPanelLayout
-				.setHorizontalGroup(
-						uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(jLabelUninstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE * 2)
-								.addGroup(uninstallPanelLayout
-										.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
-												.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
-														.addComponent(jComboBoxOpsiProducts, Globals.BUTTON_WIDTH,
-																Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH)
-														.addGap(Globals.MIN_GAP_SIZE).addGap(5, 10, 20))
-												.addGroup(uninstallPanelLayout.createSequentialGroup()
-														.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addGap(5, 10, 10).addComponent(jButtonDepotSelection,
-																GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-												.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelKeepFiles, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addGap(Globals.GAP_SIZE)
-										.addGroup(uninstallPanelLayout
-												.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addComponent(textFieldProduct, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-												.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-												.addComponent(jComboboxLoglevel, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH)
-												.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))));
+		GroupLayout layout = new GroupLayout(uninstallPanel);
+		uninstallPanel.setLayout(layout);
 
-		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(jLabelUninstall)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(jLabelUninstall, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboboxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
+
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addComponent(jLabelUninstall)
 						.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(textFieldProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				.addGap(3 * Globals.GAP_SIZE)
-				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelOn, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(jButtonDepotSelection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(textFieldSelectedDepots, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(3 * Globals.GAP_SIZE)
-				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jComboboxLoglevel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelKeepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(checkBoxKeepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE));
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboboxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 }

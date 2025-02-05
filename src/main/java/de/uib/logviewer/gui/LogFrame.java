@@ -14,7 +14,6 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,12 +37,11 @@ import javax.swing.KeyStroke;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
-import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utils.ExtractorUtil;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -74,28 +72,28 @@ public class LogFrame extends JFrame {
 
 	private JMenu setupMenuFile() {
 		JMenuItem jMenuFileOpen = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
-		Utils.addIntellijIconToMenuItem(jMenuFileOpen, "open");
+		Icons.addIntellijIconToMenuItem(jMenuFileOpen, "open");
 		jMenuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
+		jMenuFileOpen.addActionListener(actionEvent -> openFileInLogFrame());
 
 		JMenuItem jMenuFileClose = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileClose"));
-		Utils.addIntellijIconToMenuItem(jMenuFileClose, "close");
+		Icons.addIntellijIconToMenuItem(jMenuFileClose, "close");
 		jMenuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileClose.addActionListener((ActionEvent e) -> closeFile());
+		jMenuFileClose.addActionListener(actionEvent -> closeFile());
 
 		JMenuItem jMenuFileSave = new JMenuItem(Configed.getResourceValue("LogFrame.jMenuFileSave"));
-		Utils.addIntellijIconToMenuItem(jMenuFileSave, "save");
+		Icons.addIntellijIconToMenuItem(jMenuFileSave, "save");
 		jMenuFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.download());
+		jMenuFileSave.addActionListener(actionEvent -> logPane.download());
 
 		JMenuItem jMenuFileReload = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileReload"));
-		Utils.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
+		Icons.addIntellijIconToMenuItem(jMenuFileReload, "refresh");
 		jMenuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileReload.addActionListener((ActionEvent e) -> reloadFile());
+		jMenuFileReload.addActionListener(actionEvent -> reloadFile());
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
-		Utils.addThemeIconToMenuItem(jMenuFileExit, "exit");
-		jMenuFileExit.addActionListener((ActionEvent e) -> Main.endApp(Main.NO_ERROR));
+		Icons.addThemeIconToMenuItem(jMenuFileExit, "exit");
+		jMenuFileExit.addActionListener(actionEvent -> Main.endApp(Main.NO_ERROR));
 
 		JMenu jMenuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 		jMenuFile.add(jMenuFileOpen);
@@ -116,14 +114,14 @@ public class LogFrame extends JFrame {
 
 	private JMenu setupMenuView() {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.zoomIn"));
-		Utils.addIntellijIconToMenuItem(jMenuViewFontsizePlus, "zoomIn");
+		Icons.addIntellijIconToMenuItem(jMenuViewFontsizePlus, "zoomIn");
 		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> logPane.increaseFontSize());
+		jMenuViewFontsizePlus.addActionListener(actionEvent -> logPane.increaseFontSize());
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.zoomOut"));
-		Utils.addIntellijIconToMenuItem(jMenuViewFontsizeMinus, "zoomOut");
+		Icons.addIntellijIconToMenuItem(jMenuViewFontsizeMinus, "zoomOut");
 		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
-		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> logPane.reduceFontSize());
+		jMenuViewFontsizeMinus.addActionListener(actionEvent -> logPane.reduceFontSize());
 
 		JMenu jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);
@@ -147,15 +145,15 @@ public class LogFrame extends JFrame {
 	}
 
 	private JToolBar createIconsToolbar() {
-		JButton iconButtonOpen = new JButton(Utils.getIntellijIcon("open"));
+		JButton iconButtonOpen = new JButton(Icons.getIntellijIcon("open"));
 		iconButtonOpen.setToolTipText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
-		iconButtonOpen.addActionListener((ActionEvent e) -> openFileInLogFrame());
+		iconButtonOpen.addActionListener(actionEvent -> openFileInLogFrame());
 
-		JButton iconButtonReload = new JButton(Utils.getIntellijIcon("refresh"));
+		JButton iconButtonReload = new JButton(Icons.getIntellijIcon("refresh"));
 		iconButtonReload.setToolTipText(Configed.getResourceValue("LogFrame.buttonReload"));
-		iconButtonReload.addActionListener((ActionEvent e) -> reloadFile());
+		iconButtonReload.addActionListener(actionEvent -> reloadFile());
 
-		JButton iconButtonSave = new JButton(Utils.getIntellijIcon("download"));
+		JButton iconButtonSave = new JButton(Icons.getIntellijIcon("download"));
 		iconButtonSave.setToolTipText(Configed.getResourceValue("download"));
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null && !fileName.isEmpty()) {
@@ -163,9 +161,9 @@ public class LogFrame extends JFrame {
 			}
 		});
 
-		JButton iconButtonCopy = new JButton(Utils.getIntellijIcon("copy"));
+		JButton iconButtonCopy = new JButton(Icons.getIntellijIcon("copy"));
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
-		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
+		iconButtonCopy.addActionListener(actionEvent -> logPane.floatExternal());
 
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(iconButtonOpen);
@@ -184,11 +182,11 @@ public class LogFrame extends JFrame {
 			}
 		});
 
-		this.setIconImage(Utils.getMainIcon());
+		this.setIconImage(Icons.getMainIcon());
 
 		JToolBar jToolBar = createIconsToolbar();
 
-		logPane = new StandaloneLogPane();
+		logPane = new StandaloneLogPane(this);
 
 		GroupLayout layoutIconPane1 = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layoutIconPane1);
@@ -227,69 +225,13 @@ public class LogFrame extends JFrame {
 		setTitle(null);
 	}
 
-	private class StandaloneLogPane extends LogPane {
-		public StandaloneLogPane() {
-			super("", true);
-		}
-
-		@Override
-		public void reload() {
-			int caretPosition = getCaretPosition();
-			super.setText(reloadFile(fileName));
-			super.setTitle(fileName);
-			super.setCaretPosition(caretPosition);
-			super.removeAllHighlights();
-		}
-
-		public void close() {
-			resetFileName();
-			super.setText(fileName);
-			super.setTitle(fileName);
-			super.removeAllHighlights();
-		}
-
-		@Override
-		public void download() {
-			String fn = openFile(Configed.getResourceValue("LogFrame.jMenuFileSave"));
-			if (fn != null && !fn.isEmpty()) {
-				saveToFile(fn, logPane.lines);
-				super.setTitle(fn);
-			}
-		}
-
-		private String reloadFile(String fn) {
-			if (fn != null && !fn.isEmpty()) {
-				return readFile(fn);
-			} else {
-				Logging.error(this, "File does not exist: ", fn);
-				JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn,
-						null, JOptionPane.WARNING_MESSAGE);
-				return "";
-			}
-		}
-
-		private void saveToFile(String filename, String[] logfilelines) {
-			try (FileWriter fWriter = new FileWriter(filename, StandardCharsets.UTF_8)) {
-				int i = 0;
-				while (i < logfilelines.length) {
-					fWriter.write(logfilelines[i] + "\n");
-					LogFrame.this.setTitle(filename);
-					i++;
-				}
-			} catch (IOException ex) {
-				Logging.error(ex, "Error encountered while trying to save to file: ", filename,
-						"\n --- ; stop saving to file");
-			}
-		}
-	}
-
 	/**********************************************************************************************/
 	// File operations
 	public static void setFileName(String fn) {
 		LogFrame.fileName = fn;
 	}
 
-	private static String openFile(String title) {
+	public static String openFile(String title) {
 		JFileChooser chooser = new JFileChooser(fileName);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
@@ -302,6 +244,10 @@ public class LogFrame extends JFrame {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}
 
+		return fileName;
+	}
+
+	public String getFileName() {
 		return fileName;
 	}
 
@@ -330,7 +276,7 @@ public class LogFrame extends JFrame {
 		}
 	}
 
-	private String readFile(String fileName) {
+	public String readFile(String fileName) {
 		String result = "";
 		File file = new File(fileName);
 
@@ -344,13 +290,11 @@ public class LogFrame extends JFrame {
 			String fileExtension = getFileExtension(fileName);
 			if (!isFileExtensionSupported(fileExtension)) {
 				Logging.error(this, "File with extension ", fileExtension, " is unsupported");
-				FTextArea fUnsupportedFileExtensionInfo = new FTextArea(this,
+				JOptionPane.showMessageDialog(this,
+						String.format(Configed.getResourceValue("LogFrame.unsupportedFileExtension.message"),
+								fileExtension),
 						Configed.getResourceValue("LogFrame.unsupportedFileExtension.title"),
-						Configed.getResourceValue("ConfigedMain.noGroupSelected"), true,
-						new String[] { Configed.getResourceValue("buttonClose") }, 400, 200);
-				fUnsupportedFileExtensionInfo.setMessage(String
-						.format(Configed.getResourceValue("LogFrame.unsupportedFileExtension.message"), fileExtension));
-				fUnsupportedFileExtensionInfo.setVisible(true);
+						JOptionPane.ERROR_MESSAGE);
 				result = "";
 			} else if (fileName.endsWith(".log") || fileName.endsWith(".txt")
 					|| IS_FILE_EXTENSION_NUMBER_PATTERN.matcher(fileExtension).matches() || !fileName.contains(".")) {
@@ -405,8 +349,8 @@ public class LogFrame extends JFrame {
 			return;
 		}
 		for (Entry<String, String> entry : files.entrySet()) {
-			StandaloneLogPane externalLogPane = new StandaloneLogPane();
-			externalLogPane.externalize(entry.getKey(), logPane.getSize());
+			StandaloneLogPane externalLogPane = new StandaloneLogPane(this);
+			externalLogPane.externalize(entry.getKey(), getSize());
 			externalLogPane.setTitle(entry.getKey());
 			externalLogPane.setText(entry.getValue());
 		}
@@ -415,10 +359,8 @@ public class LogFrame extends JFrame {
 	private String readNotCompressedFile(File file) {
 		Logging.info(this, "Start readNotCompressedFile");
 		String result = "";
-		try {
-			InputStream fis = new FileInputStream(file);
+		try (InputStream fis = new FileInputStream(file)) {
 			result = readInputStream(fis);
-			fis.close();
 		} catch (IOException ex) {
 			Logging.error(ex, "Error opening file: ");
 			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.errorOpeningFile") + "\n" + ex,
@@ -447,7 +389,7 @@ public class LogFrame extends JFrame {
 		return sb.toString();
 	}
 
-	private static void resetFileName() {
+	public static void resetFileName() {
 		fileName = "";
 	}
 }

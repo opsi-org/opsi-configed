@@ -6,23 +6,20 @@
 
 package de.uib.configed.gui.hostconfigs;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
@@ -31,20 +28,20 @@ import de.uib.configed.Globals;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ExporterToPDF;
-import de.uib.utils.table.gui.ColorTableCellRenderer;
 
 public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	private boolean includeAdditionalTooltipText;
 	private JTree tree;
 
-	public EditMapPanelForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable, boolean reloadable, JTree tree, boolean includeAdditionalTooltipText) {
-		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable);
+	public EditMapPanelForHostConfigs(boolean reloadable, JTree tree, boolean configStatesEditable,
+			boolean includeAdditionalTooltipText) {
+		super(true, configStatesEditable, reloadable);
 
 		this.tree = tree;
 		this.includeAdditionalTooltipText = includeAdditionalTooltipText;
@@ -69,7 +66,7 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	@Override
 	protected JPopupMenu definePopup() {
 		Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
-		return new PopupMenuTrait(
+		JPopupMenu jPopupMenu = new PopupMenuTrait(
 				new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF }) {
 			@Override
 			public void action(int p) {
@@ -91,30 +88,34 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 				}
 			}
 		};
+
+		JMenuItem jPopupMenuCopyToClipBoard = new JMenuItem(
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.copyPropertyToClipboard"));
+		Icons.addIntellijIconToMenuItem(jPopupMenuCopyToClipBoard, "copy");
+		jPopupMenuCopyToClipBoard.addActionListener(actionEvent -> copyPropertyToClipboard());
+		jPopupMenu.add(jPopupMenuCopyToClipBoard);
+
+		return jPopupMenu;
 	}
 
+	private void copyPropertyToClipboard() {
+		int row = table.getSelectedRow();
+		if (row == -1) {
+			return;
+		}
+
+		String propertyName = (String) table.getValueAt(row, 0);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(propertyName), null);
+	}
+
+	/**
+	 * We override this method since we need a different method to set Tooltip
+	 * and Text for the cells in the table.
+	 */
 	@Override
-	protected void buildPanel() {
-		setLayout(new BorderLayout());
-
-		table = new JTable(mapTableModel) {
-			@Override
-			public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
-				Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-				if (c instanceof JComponent jComponent && showToolTip) {
-					addTooltip(jComponent, this, names.get(rowIndex), rowIndex);
-					setText(jComponent, this, vColIndex, rowIndex);
-				}
-				return c;
-			}
-		};
-
-		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		jScrollPane = new JScrollPane(table);
-
-		add(jScrollPane, BorderLayout.CENTER);
+	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {
+		addTooltip(jComponent, table, names.get(row), row);
+		setText(jComponent, table, col, row);
 	}
 
 	private void addTooltip(JComponent jc, JTable table, String propertyName, int rowIndex) {
@@ -123,6 +124,8 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 		// check equals with default
 
 		Object defaultValue;
+
+		jc.setFont(jc.getFont().deriveFont(Font.PLAIN));
 
 		if (defaultsMap == null) {
 			Logging.warning(this, "no default values available, defaultsMap is null");
@@ -143,14 +146,9 @@ public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	}
 
 	private static void setText(JComponent jComponent, JTable table, int vColIndex, int rowIndex) {
-		if (vColIndex == 1 && Utils.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))) {
-			if (jComponent instanceof JLabel jLabel) {
-				jLabel.setText(Globals.STARRED_STRING);
-			} else if (jComponent instanceof JTextComponent jTextComponent) {
-				jTextComponent.setText(Globals.STARRED_STRING);
-			} else {
-				// Do nothing
-			}
+		if (vColIndex == 1 && Utils.isKeyForSecretValue((String) table.getValueAt(rowIndex, 0))
+				&& jComponent instanceof JLabel jLabel) {
+			jLabel.setText(Globals.STARRED_STRING);
 		}
 	}
 

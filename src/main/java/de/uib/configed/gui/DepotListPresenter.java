@@ -18,11 +18,16 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModel;
 import de.uib.utils.table.gui.SearchTargetModelFromJList;
@@ -35,17 +40,17 @@ public class DepotListPresenter extends JPanel {
 
 	private TableSearchPane searchPane;
 
-	private boolean multidepot;
-
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
+
+	private ConfigedMain configedMain;
 
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public DepotListPresenter(DepotsList depotsList) {
+	public DepotListPresenter(DepotsList depotsList, ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 		this.depotslist = depotsList;
-		this.multidepot = persistenceController.getHostInfoCollections().getDepots().size() != 1;
 
 		List<String> values = new ArrayList<>();
 		List<String> descriptions = new ArrayList<>();
@@ -63,8 +68,6 @@ public class DepotListPresenter extends JPanel {
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
 
 		searchPane = new TableSearchPane(searchTargetModel);
-		searchPane.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
-		searchPane.setSearchFields(new Integer[] { 0, 1 });
 
 		initComponents();
 		layouting();
@@ -80,11 +83,94 @@ public class DepotListPresenter extends JPanel {
 		return scrollpaneDepotslist;
 	}
 
-	private void initComponents() {
-		if (!multidepot) {
-			searchPane.setEnabled(false);
+	private void buildPopup() {
+		JPopupMenu jPopupMenu = new JPopupMenu();
+		if (persistenceController.getHostInfoCollections().getDepots().size() != 1) {
+			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
+			selectAll.addActionListener(event -> depotslist.selectAll());
+			JMenuItem selectWithEqualProperties = new JMenuItem(
+					Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
+			selectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
+			jPopupMenu.add(selectAll);
+			jPopupMenu.add(selectWithEqualProperties);
 		}
 
+		JMenuItem showShell = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuOpenTerminalOnDepot"));
+		Icons.addIntellijIconToMenuItem(showShell, "terminal");
+		jPopupMenu.add(showShell);
+
+		jPopupMenu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent event) {
+				// We don't need this action here
+			}
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent popupMenuEvent) {
+				updatePopupMenuItem(showShell);
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
+				// We don't need this action here
+			}
+		});
+
+		depotslist.setComponentPopupMenu(jPopupMenu);
+	}
+
+	/***
+	 * Rebuild popup window (context menu) for depotslist This is needed to
+	 * update the selected depot (e.g. open terminal on the selected depot)
+	 * after the depotslist has been updated
+	 */
+	private void updatePopupMenuItem(JMenuItem showShell) {
+		if (depotslist.getSelectedValuesList().isEmpty() || depotslist.getSelectedValuesList().size() > 1) {
+			// Disable the button if no depots selected or more than one depot
+			showShell.setEnabled(false);
+		} else if (selectedServerForbidden()) {
+			// Disable the button if the selected configserver is selected but forbidden 
+			//  or if depot is selected but forbidden by config "connect.terminal.forbidden"
+			showShell.setEnabled(false);
+			showShell.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminalOnDepot") + " "
+					+ Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden"));
+		} else {
+			// is allowed
+			String selectedDepot = depotslist.getSelectedValue();
+			if (selectedDepot != null) {
+				showShell.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminalOnDepot"));
+			}
+			showShell.addActionListener(event -> configedMain.openTerminalOnDepot());
+		}
+	}
+
+	/**
+	 * Check if the selected depot/server is forbidden by the config
+	 * "connect.terminal.forbidden". Called if only one depot is selected
+	 * 
+	 * @return true if the selected depot/server is forbidden
+	 */
+	private boolean selectedServerForbidden() {
+		Logging.info("selectedServerForbidden.....");
+		List<Object> forbiddenItems = PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().terminalsForbidden();
+		Logging.info("forbiddenItems ", forbiddenItems);
+		boolean forbiddenConfigServer = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER);
+		boolean forbiddenConfigDepots = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_DEPOTS);
+
+		boolean isConfigserverAndForbidden = forbiddenConfigServer && depotslist.getSelectedValuesList()
+				.contains(persistenceController.getHostInfoCollections().getConfigServer());
+		boolean isDepotAndForbidden = forbiddenConfigDepots && !depotslist.getSelectedValuesList().isEmpty()
+				&& !depotslist.getSelectedValuesList()
+						.contains(persistenceController.getHostInfoCollections().getConfigServer());
+
+		boolean isReadOnly = PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly();
+
+		return isConfigserverAndForbidden || isDepotAndForbidden || isReadOnly;
+	}
+
+	private void initComponents() {
 		searchPane.setNarrow(true);
 
 		// not visible in this panel
@@ -95,21 +181,7 @@ public class DepotListPresenter extends JPanel {
 		scrollpaneDepotslist.getViewport().add(depotslist);
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
-
-		if (multidepot) {
-			JPopupMenu jPopupMenu = new JPopupMenu();
-			JMenuItem selectAll = new JMenuItem(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
-			selectAll.addActionListener(event -> depotslist.selectAll());
-
-			JMenuItem selectWithEqualProperties = new JMenuItem(
-					Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
-			selectWithEqualProperties.addActionListener(event -> selectDepotsWithEqualProperties());
-
-			jPopupMenu.add(selectAll);
-			jPopupMenu.add(selectWithEqualProperties);
-
-			depotslist.setComponentPopupMenu(jPopupMenu);
-		}
+		buildPopup();
 	}
 
 	private void layouting() {

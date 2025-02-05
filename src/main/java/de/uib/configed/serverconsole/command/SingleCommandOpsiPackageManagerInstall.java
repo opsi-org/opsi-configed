@@ -8,7 +8,6 @@ package de.uib.configed.serverconsole.command;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.PackageManagerInstallParameterDialog;
 import de.uib.utils.logging.Logging;
 
@@ -16,7 +15,6 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 		implements CommandWithParameters {
 	private String command;
 	private int priority = 8;
-	private FGeneralDialog dialog;
 
 	private String opsiproduct = "";
 	private String depot = "";
@@ -76,12 +74,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new PackageManagerInstallParameterDialog(configedMain);
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return dialog;
+		new PackageManagerInstallParameterDialog(configedMain);
 	}
 
 	public void setOpsiproduct(String prod) {

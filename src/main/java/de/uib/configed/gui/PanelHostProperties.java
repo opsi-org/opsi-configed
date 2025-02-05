@@ -6,7 +6,7 @@
 
 package de.uib.configed.gui;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,19 +17,16 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
+import de.uib.configed.type.ConfigOption;
+import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utils.DataChangedObserver;
 import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.DefaultListCellOptions;
-import de.uib.utils.table.ListCellOptions;
 
 public class PanelHostProperties extends JPanel {
 	// delegate
 	private EditMapPanelX editMapPanel;
-	private Map<String, Map<String, Object>> multipleMaps;
 
 	public PanelHostProperties() {
 		buildPanel();
@@ -37,8 +34,7 @@ public class PanelHostProperties extends JPanel {
 
 	private void buildPanel() {
 		Logging.info(this, "buildPanel, produce editMapPanel");
-		editMapPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
-		editMapPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
+		editMapPanel = new EditMapPanelX(false, false, false);
 		editMapPanel.setShowToolTip(false);
 
 		GroupLayout planeLayout = new GroupLayout(this);
@@ -50,32 +46,36 @@ public class PanelHostProperties extends JPanel {
 				.addComponent(editMapPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
-	public void initMultipleHostsEditing(String selectedDepot, Map<String, Map<String, Object>> multipleMaps,
-			UpdateCollection updateCollection, Set<String> keysOfReadOnlyEntries) {
-		Logging.debug(this, "initMultipleHosts ", " configs  ", multipleMaps);
+	public void initMultipleHostsEditing(Map<String, Object> depotMap, UpdateCollection updateCollection,
+			Set<String> keysOfReadOnlyEntries) {
+		Logging.debug(this, "initMultipleHosts ", " configs  ", depotMap);
 
-		this.multipleMaps = multipleMaps;
-		editMapPanel.setUpdateCollection(updateCollection);
-		editMapPanel.setReadOnlyEntries(keysOfReadOnlyEntries);
+		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
 
-		setMap(selectedDepot);
+		Logging.debug(this, "derive Map ", depotMap);
+
+		deriveDepotMap(depotMap);
+		editMapPanel.setEditableMap(depotMap, deriveOptionsMap(depotMap));
+		editMapPanel.updateData(updateCollection, Collections.singletonList(depotMap));
+
+		editMapPanel.getMapTableModel().setReadOnlyEntries(keysOfReadOnlyEntries);
 	}
 
 	// delegated methods
 	public void registerDataChangedObserver(DataChangedObserver o) {
-		editMapPanel.registerDataChangedObserver(o);
+		editMapPanel.getMapTableModel().registerDataChangedObserver(o);
 	}
 
-	private Map<String, ListCellOptions> deriveOptionsMap(Map<String, Object> m) {
-		Map<String, ListCellOptions> result = new HashMap<>();
+	private Map<String, ConfigOption> deriveOptionsMap(Map<String, Object> depotMap) {
+		Map<String, ConfigOption> result = new HashMap<>();
 
-		for (Entry<String, Object> entry : m.entrySet()) {
-			ListCellOptions cellOptions = null;
+		for (Entry<String, Object> entry : depotMap.entrySet()) {
+			ConfigOption cellOptions;
 
-			if ((entry.getValue()) instanceof Boolean) {
-				cellOptions = DefaultListCellOptions.getNewBooleanListCellOptions();
+			if (((List<?>) entry.getValue()).get(0) instanceof Boolean) {
+				cellOptions = ConfigOption.createConfigOption("", TYPE.BOOL_CONFIG, false, false);
 			} else {
-				cellOptions = DefaultListCellOptions.getNewEmptyListCellOptions();
+				cellOptions = ConfigOption.createConfigOption("", TYPE.UNICODE_CONFIG, true, false);
 			}
 
 			Logging.debug(this, "cellOptions: ", cellOptions);
@@ -85,16 +85,14 @@ public class PanelHostProperties extends JPanel {
 		return result;
 	}
 
-	private void setMap(String selectedDepot) {
-		if (selectedDepot == null || selectedDepot.isBlank()) {
-			editMapPanel.setEditableMap(null, null);
-		} else {
-			List<Map<String, Object>> editedMaps = new ArrayList<>(1);
-			editedMaps.add(multipleMaps.get(selectedDepot));
-			Logging.debug(this, "setMap ", multipleMaps.get(selectedDepot));
-			editMapPanel.setEditableMap(multipleMaps.get(selectedDepot),
-					deriveOptionsMap(multipleMaps.get(selectedDepot)));
-			editMapPanel.setStoreData(editedMaps);
+	private Map<String, Object> deriveDepotMap(Map<String, Object> depotMap) {
+		Logging.debug(this, "deriveDepotMap  ", depotMap);
+		for (Entry<String, Object> dataEntry : depotMap.entrySet()) {
+			if (!(dataEntry.getValue() instanceof List)) {
+				depotMap.put(dataEntry.getKey(), Collections.singletonList(dataEntry.getValue()));
+			}
 		}
+
+		return depotMap;
 	}
 }

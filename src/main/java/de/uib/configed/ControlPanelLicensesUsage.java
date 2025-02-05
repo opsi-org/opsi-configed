@@ -15,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
+import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.configed.gui.licenses.PanelLicensesUsage;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
@@ -23,7 +24,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.CellEditor4TableText;
+import de.uib.utils.table.gui.CellInputDialogEditor;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
@@ -41,17 +42,19 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
+	private LicenseManagement licensesPane;
 
-	public ControlPanelLicensesUsage(ConfigedMain configedMain) {
+	public ControlPanelLicensesUsage(ConfigedMain configedMain, LicenseManagement licensesPane) {
 		thePanel = new PanelLicensesUsage(this);
 		this.configedMain = configedMain;
+		this.licensesPane = licensesPane;
 
 		init();
 	}
 
 	public String getSoftwareLicenseReservation(String clientId) {
 		if (clientId == null || clientId.isEmpty()) {
-			JOptionPane.showMessageDialog(ConfigedMain.getLicensesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectClient"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 
@@ -61,7 +64,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		List<String> selectedLPoolIds = thePanel.getPanelLicensePools().getSelectedKeys();
 
 		if (selectedLPoolIds == null || selectedLPoolIds.size() != 1) {
-			JOptionPane.showMessageDialog(ConfigedMain.getLicensesFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectOneLicensepool"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 
@@ -108,10 +111,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 	}
 
 	private void initPanels() {
-		List<String> columnNames;
-
-		// --- panelLicensesUsage
-		columnNames = new ArrayList<>();
+		List<String> columnNames = new ArrayList<>();
 		columnNames.add(LicenseUsageEntry.CLIENT_ID_KEY);
 		columnNames.add(LicenseUsageEntry.LICENSE_ID_KEY);
 		columnNames.add(LicenseUsageEntry.LICENSE_POOL_ID_KEY);
@@ -123,10 +123,8 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, new MapRetriever() {
 					@Override
 					public void reloadMap() {
-						if (!configedMain.isAllLicenseDataReloaded()) {
-							persistenceController
-									.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
-						}
+						persistenceController
+								.reloadData(ReloadEvent.SOFTWARE_LICENSE_TO_LICENSE_POOL_DATA_RELOAD.toString());
 					}
 
 					@Override
@@ -143,9 +141,8 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		thePanel.getPanelUsage().setTableModel(modelLicensesUsage);
 		modelLicensesUsage.setEditableColumns(new int[] { 3, 4 });
 
-		TableColumn col;
-		col = thePanel.getPanelUsage().getColumnModel().getColumn(4);
-		col.setCellEditor(new CellEditor4TableText());
+		TableColumn col = thePanel.getPanelUsage().getJTable().getColumnModel().getColumn(4);
+		col.setCellEditor(new CellInputDialogEditor());
 
 		setPanelUsageUpdateController();
 
@@ -154,8 +151,8 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 		columnNames.add("description");
 		MapTableUpdateItemFactory updateItemFactoryLicensepools = new MapTableUpdateItemFactory(modelLicensepools,
 				columnNames);
-		modelLicensepools = new GenTableModel(updateItemFactoryLicensepools, configedMain.licensePoolTableProvider, 0,
-				thePanel.getPanelLicensePools(), updateCollection);
+		modelLicensepools = new GenTableModel(updateItemFactoryLicensepools, licensesPane.getLicensePoolTableProvider(),
+				0, thePanel.getPanelLicensePools(), updateCollection);
 		updateItemFactoryLicensepools.setSource(modelLicensepools);
 
 		tableModels.add(modelLicensepools);

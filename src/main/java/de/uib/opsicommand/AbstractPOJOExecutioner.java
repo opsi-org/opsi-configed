@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.utils.logging.Logging;
 
 /**
@@ -41,8 +39,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<List<List<String>>>() {
-			});
+			result = POJOReMapper.remap(response.get("result"));
 		}
 
 		return result;
@@ -53,8 +50,18 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<List<Object>>() {
-			});
+			result = POJOReMapper.remap(response.get("result"));
+		}
+
+		return result;
+	}
+
+	public Map<String, Map<String, Object>> getMapOfMaps(OpsiMethodCall omc) {
+		Map<String, Map<String, Object>> result = new HashMap<>();
+		Map<String, Object> response = retrieveResponse(omc);
+
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = POJOReMapper.remap(response.get("result"));
 		}
 
 		return result;
@@ -65,8 +72,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<List<String>>() {
-			});
+			result = POJOReMapper.remap(response.get("result"));
 		}
 
 		return result;
@@ -77,8 +83,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<HashMap<String, Object>>() {
-			});
+			result = POJOReMapper.remap(response.get("result"));
 		}
 
 		return result;
@@ -89,9 +94,7 @@ public abstract class AbstractPOJOExecutioner {
 
 		if (retrieved.containsKey("error") && retrieved.get("error") != null) {
 			if (retrieved.get("error") instanceof Map) {
-				Map<String, Object> error = POJOReMapper.remap(retrieved.get("error"),
-						new TypeReference<Map<String, Object>>() {
-						});
+				Map<String, Object> error = POJOReMapper.remap(retrieved.get("error"));
 
 				if (error != null && error.get("class") != null && error.get("message") != null) {
 					errorMessage = " [" + error.get("class") + "] " + error.get("message");
@@ -106,21 +109,14 @@ public abstract class AbstractPOJOExecutioner {
 
 	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
 		Map<String, Object> result = new HashMap<>();
-		Map<String, Object> responses = POJOReMapper.remap(retrieved.get("result"),
-				new TypeReference<Map<String, Object>>() {
-				});
+		Map<String, Map<String, Object>> responses = POJOReMapper.remap(retrieved.get("result"));
 
-		for (Entry<String, Object> entry : responses.entrySet()) {
-			Map<String, Object> response = POJOReMapper.remap(entry.getValue(),
-					new TypeReference<Map<String, Object>>() {
-					});
-
-			if (response.get("error") == null) {
-				List<Object> list = POJOReMapper.remap(response.get("result"), new TypeReference<List<Object>>() {
-				});
+		for (Entry<String, Map<String, Object>> entry : responses.entrySet()) {
+			if (entry.getValue().get("error") == null) {
+				List<Object> list = POJOReMapper.remap(entry.getValue().get("result"));
 				result.put(entry.getKey(), list);
 			} else {
-				String str = "" + response.get("error");
+				String str = "" + entry.getValue().get("error");
 				result.put(entry.getKey(), str);
 			}
 		}
@@ -167,8 +163,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Map<String, String>> result = new TreeMap<>();
 
 		for (Object object : objects) {
-			Map<String, String> originalMap = POJOReMapper.remap(object, new TypeReference<Map<String, String>>() {
-			});
+			Map<String, String> originalMap = POJOReMapper.remap(object);
 
 			if (originalMap.get(key) == null) {
 				Logging.error(AbstractPOJOExecutioner.class, "Missing key ", key, " in output list");
@@ -233,21 +228,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<List<Map<String, Object>>>() {
-			});
-		}
-
-		return result;
-	}
-
-	public List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
-		List<Map<String, List<Map<String, Object>>>> result = new ArrayList<>();
-		Map<String, Object> response = retrieveResponse(omc);
-
-		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"),
-					new TypeReference<List<Map<String, List<Map<String, Object>>>>>() {
-					});
+			result = POJOReMapper.remap(response.get("result"));
 		}
 
 		return result;
@@ -258,8 +239,7 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<String>() {
-			});
+			result = (String) response.get("result");
 		}
 
 		return result;
@@ -270,20 +250,9 @@ public abstract class AbstractPOJOExecutioner {
 		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = POJOReMapper.remap(response.get("result"), new TypeReference<Boolean>() {
-			});
+			result = (Boolean) response.get("result");
 		}
 
 		return Boolean.TRUE.equals(result);
-	}
-
-	public Map<String, Object> getMapFromItem(Object item) {
-		return POJOReMapper.remap(item, new TypeReference<Map<String, Object>>() {
-		});
-	}
-
-	public List<Object> getListFromItem(String item) {
-		return POJOReMapper.remap(item, new TypeReference<List<Object>>() {
-		});
 	}
 }

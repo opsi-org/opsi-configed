@@ -10,12 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 
 public class SingleCommandFileUpload implements SingleCommand, CommandWithParameters {
 	private static final int PRIORITY = 0;
 
-	protected FGeneralDialog dialog;
 	private boolean needParameter = true;
 
 	private String baseName = "File Upload";
@@ -142,11 +140,6 @@ public class SingleCommandFileUpload implements SingleCommand, CommandWithParame
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
 		/* Not needed */
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return null;
 	}
 
 	@Override

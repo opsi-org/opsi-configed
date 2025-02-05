@@ -6,7 +6,6 @@
 
 package de.uib.configed.tree;
 
-import java.awt.Dimension;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +21,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -31,9 +29,9 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditList;
 
 public class ClientTree extends AbstractGroupTree {
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");
@@ -503,35 +501,23 @@ public class ClientTree extends AbstractGroupTree {
 
 		//Ask only if mainFrame is not null; Otherwise, errors will occure
 		if (groupSet.size() > 1 && ConfigedMain.getMainFrame() != null) {
-			FEditList<GroupNode> fList = new FEditList<>();
-			fList.setListModel(new DefaultComboBoxModel<>(groupSet.toArray(new GroupNode[0])));
-			fList.setTitle(Configed.getResourceValue("ClientTree.severalLocationsAssigned") + " " + clientID + ". "
-					+ Configed.getResourceValue("ClientTree.selectCorrectLocation"));
-			fList.setPreferredScrollPaneSize(new Dimension(640, 60));
-			fList.init();
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("ClientTree.severalLocationsAssigned") + " " + clientID + ".\n"
+							+ Configed.getResourceValue("ClientTree.selectCorrectLocation"));
 
-			fList.setLocationRelativeTo(ConfigedMain.getMainFrame());
-			fList.setModal(true);
-
+			ListSelectionDialog dialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("ClientTree.selectCorrectLocation"));
+			dialog.setListData(groupSet.stream().map(Object::toString).toList());
 			if (preSelected != null) {
-				fList.setSelectedValue(preSelected);
-				fList.setDataChanged(true);
+				dialog.setPreviousSelectionValues(Collections.singleton(preSelected.toString()));
 			}
 
-			fList.setVisible(true);
+			// Repeat until the user has selected exactly one group
+			do {
+				dialog.show();
+			} while (!dialog.wasAccepted() || dialog.getSelectedValues().size() != 1);
 
-			if (fList.getSelectedList().isEmpty()) {
-				int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-						Configed.getResourceValue("ClientTree.abandonUniqueLocation"),
-						Configed.getResourceValue("ClientTree.requestInformation"), JOptionPane.YES_NO_CANCEL_OPTION,
-						JOptionPane.WARNING_MESSAGE);
-
-				if (returnedOption == JOptionPane.NO_OPTION || returnedOption == JOptionPane.CLOSED_OPTION) {
-					result = selectOneNode(groupSet, clientID, preSelected);
-				}
-			} else {
-				result = fList.getSelectedList();
-			}
+			result = groupSet.stream().filter(node -> dialog.getSelectedValues().contains(node.toString())).toList();
 		}
 
 		return result;
@@ -568,6 +554,6 @@ public class ClientTree extends AbstractGroupTree {
 
 	@Override
 	public Set<String> getSelectedObjectsInTable() {
-		return configedMain.getClientTable().getSelectedSet();
+		return configedMain.getClientTablePanel().getClientTable().getSelectedSet();
 	}
 }

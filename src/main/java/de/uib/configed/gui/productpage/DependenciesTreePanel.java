@@ -129,8 +129,9 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 		dependenciesTreeGroupLayout.setVerticalGroup(dependenciesTreeGroupLayout.createParallelGroup()
 				.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addComponent(dependenciesNeedsButton)
-						.addComponent(dependenciesNeededByButton).addGap(0, 0, Short.MAX_VALUE).addComponent(
-								copyListButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addComponent(dependenciesNeededByButton).addGap(0, 0, Short.MAX_VALUE)
+						.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addComponent(dependenciesTreeScrollPanel));
 	}
 

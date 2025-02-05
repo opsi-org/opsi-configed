@@ -15,35 +15,44 @@ import java.util.Map;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
+import de.uib.configed.gui.ClientConfiguration;
+import de.uib.configed.gui.DepotsList;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.PanelGenEditTable;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.ExternalSource;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 
-public class PanelProductProperties extends JSplitPane {
+public class PanelProductProperties extends JSplitPane implements AncestorListener {
 	private PanelGenEditTable paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
+	private DepotsList depotsList;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public PanelProductProperties(ConfigedMain configedMain) {
+	public PanelProductProperties(ConfigedMain configedMain, DepotsList depotsList) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.configedMain = configedMain;
+		this.depotsList = depotsList;
+
+		super.addAncestorListener(this);
+
 		init();
 	}
 
@@ -51,17 +60,16 @@ public class PanelProductProperties extends JSplitPane {
 		GenTableModel model = createTableModel();
 		final List<String> columnNames = model.getColumnNames();
 
-		EditMapPanelX propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
+		EditMapPanelX propertiesPanel = new EditMapPanelX(false, false, false);
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
-		propertiesPanel.setCellEditor(new SensitiveCellEditorForDataPanel());
-		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
-		propertiesPanel.setStoreData(null);
-		propertiesPanel.setUpdateCollection(null);
+		propertiesPanel.getMapTableModel()
+				.registerDataChangedObserver(ChangedDataManager.getGeneralDataChangedKeeper());
+		propertiesPanel.updateData(null, null);
 
 		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
 		paneProducts = new PaneProducts(columnNames, panelEditProperties, propertiesPanel);
 		paneProducts.setTableModel(model);
-		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paneProducts.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING);
@@ -90,14 +98,14 @@ public class PanelProductProperties extends JSplitPane {
 
 		List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 		return new GenTableModel(null,
-				new DefaultTableProvider(new ExternalSource(columnNames, configedMain.getSelectedDepots())), -1,
+				new DefaultTableProvider(new ExternalSource(columnNames, depotsList.getSelectedValuesList())), -1,
 				paneProducts, updateCollection);
 	}
 
 	public void setProductProperties() {
 		paneProducts.setTableModel(createTableModel());
-		int saveSelectedRow = paneProducts.getSelectedRow();
-		paneProducts.reset();
+		int saveSelectedRow = paneProducts.getJTable().getSelectedRow();
+		paneProducts.getTableModel().reset();
 
 		if (paneProducts.getTableModel().getRowCount() > 0) {
 			if (saveSelectedRow == -1 || paneProducts.getTableModel().getRowCount() <= saveSelectedRow) {
@@ -106,10 +114,6 @@ public class PanelProductProperties extends JSplitPane {
 				paneProducts.setSelectedRow(saveSelectedRow);
 			}
 		}
-	}
-
-	public void reload() {
-		paneProducts.reload();
 	}
 
 	@SuppressWarnings({ "java:S2972" })
@@ -121,7 +125,7 @@ public class PanelProductProperties extends JSplitPane {
 
 		public PaneProducts(List<String> columnNames, PanelEditDepotProperties panelEditDepotProperties,
 				EditMapPanelX propertiesPanel) {
-			super("", false, 0, new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN }, true);
+			super("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, POPUP_SORT_AGAIN }, true);
 			this.columnNames = columnNames;
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;
@@ -145,18 +149,20 @@ public class PanelProductProperties extends JSplitPane {
 
 			Logging.debug(this, "valueChanged in paneProducts ", e);
 
-			if (!e.getValueIsAdjusting()) {
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			if (e.getValueIsAdjusting()) {
+				return;
+			}
 
-				if (lsm.getSelectedItemsCount() == 1) {
-					updateInfoPane(lsm.getMinSelectionIndex());
-				} else {
-					Logging.info(this, "selected not a unique row ");
-					infoPane.clearEditing();
-					propertiesPanel.init();
-					panelEditProperties.clearDepotListData();
-				}
+			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+			lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+			if (lsm.getSelectedItemsCount() == 1) {
+				updateInfoPane(lsm.getMinSelectionIndex());
+			} else {
+				Logging.info(this, "selected not a unique row ");
+				infoPane.clearEditing();
+				propertiesPanel.init();
+				panelEditProperties.clearDepotListData();
 			}
 		}
 
@@ -166,17 +172,17 @@ public class PanelProductProperties extends JSplitPane {
 			if (row == -1) {
 				depotsOfPackage.clear();
 			} else {
-				String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
+				String productEdited = "" + jTable.getValueAt(row, columnNames.indexOf("productId"));
 
 				Logging.info(this, "selected  product: ", productEdited);
 
 				String versionInfo = OpsiPackage.produceVersionInfo(
-						"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-						"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
+						"" + jTable.getValueAt(row, columnNames.indexOf("productVersion")),
+						"" + jTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
 				List<String> depotsOfPackageAsRetrieved = persistenceController.getProductDataService()
-						.getProduct2VersionInfo2DepotsPD()
-						.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
+						.getProduct2VersionInfo2DepotsPD().get(jTable.getValueAt(row, columnNames.indexOf("productId")))
+						.get(versionInfo);
 
 				Logging.info(this, "valueChanged  versionInfo ", versionInfo);
 
@@ -192,13 +198,27 @@ public class PanelProductProperties extends JSplitPane {
 
 				if (!depotsOfPackage.isEmpty()) {
 					infoPane.setEditValues(productEdited,
-							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
-							depotsOfPackage.get(0));
+							"" + jTable.getValueAt(row, columnNames.indexOf("productVersion")),
+							"" + jTable.getValueAt(row, columnNames.indexOf("packageVersion")), depotsOfPackage.get(0));
 				}
 
 				panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 			}
 		}
+	}
+
+	@Override
+	public void ancestorAdded(AncestorEvent event) {
+		setDividerLocation(ClientConfiguration.DIVIDER_LOCATION);
+	}
+
+	@Override
+	public void ancestorMoved(AncestorEvent event) {
+		// Not needed for this here
+	}
+
+	@Override
+	public void ancestorRemoved(AncestorEvent event) {
+		// Not needed for this here
 	}
 }

@@ -6,6 +6,7 @@
 
 package de.uib.configed.serverconsole;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.nio.file.Paths;
 
@@ -20,7 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 
 public class PMInstallLocalPanel extends PMInstallPanel {
 	private JLabel jLabelUploadFrom;
@@ -41,9 +42,12 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 
 	private void initComponents() {
 		jLabelUploadFrom = new JLabel(Configed.getResourceValue("PMInstallLocalPanel.jLabelLocalFrom"));
+		jLabelUploadFrom.setFont(jLabelUploadFrom.getFont().deriveFont(Font.BOLD));
+
 		jLabelUploadTo = new JLabel(Configed.getResourceValue("PMInstallLocalPanel.jLabelLocalTo"));
+		jLabelUploadTo.setFont(jLabelUploadTo.getFont().deriveFont(Font.BOLD));
+
 		jTextFieldPath = new JTextField();
-		jTextFieldPath.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
 		jComboBoxAutoCompletion.setSelectedItem(workbench);
@@ -54,12 +58,11 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		jFileChooser.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		jFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		jFileChooser.setDialogTitle(Globals.APPNAME);
+		jFileChooser.setDialogTitle(Configed.getResourceValue("PMInstallLocalPanel.titleDialogLocalFrom"));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
 		jFileChooser.setFileFilter(filter);
 
-		jButtonFileChooser = new JButton(Utils.getIntellijIcon("open"));
-		jButtonFileChooser.setPreferredSize(Globals.SMALL_BUTTON_DIMENSION);
+		jButtonFileChooser = new JButton(Icons.getIntellijIcon("open"));
 		jButtonFileChooser.setToolTipText(Configed.getResourceValue("PMInstallLocalPanel.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = jFileChooser.showOpenDialog(this);
@@ -76,39 +79,39 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addGroup(layout
-				.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(jLabelUploadFrom, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				.addComponent(jTextFieldPath, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				.addComponent(jButtonFileChooser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(jLabelUploadFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelUploadTo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(jButtonAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(2 * Globals.GAP_SIZE));
-
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup()
-						.addComponent(jLabelUploadFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelUploadTo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(jTextFieldPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(jButtonFileChooser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH))
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGap(2 * Globals.GAP_SIZE));
+				.addComponent(jLabelUploadTo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
+
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addComponent(jLabelUploadFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(jTextFieldPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
+				.addComponent(jLabelUploadTo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 	}
 
 	public SingleCommandFileUpload getCommand() {

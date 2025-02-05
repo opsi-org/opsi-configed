@@ -6,6 +6,8 @@
 
 package de.uib.utils.logging;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,19 +21,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FShowList;
 
 @SuppressWarnings("java:S923")
 public final class Logging {
 	private static String logDirectoryName;
 	private static String logFilenameInUse;
 
-	private static String logfileDelimiter = "configed";
-	private static String logfileMarker;
+	private static final String LOG_FILE_DELIMITER = "configed";
 	public static final String WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY = "APPDATA";
 	public static final String ENV_VARIABLE_FOR_USER_DIRECTORY = "user.home";
 	private static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
@@ -69,23 +73,18 @@ public final class Logging {
 
 	private static final int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
 
-	private static int numberOfKeptLogFiles = 3;
+	private static final int NUMBER_OF_LOG_FILES = 10;
 	private static PrintWriter logFileWriter;
 	private static boolean logFileInitialized;
 
 	private static final int MAX_LISTED_ERRORS = 20;
 	private static List<String> errorList = new ArrayList<>(MAX_LISTED_ERRORS);
 
-	private static FShowList fErrors;
-
-	private static ConfigedMain configedMain;
+	private static JDialog dialog;
+	private static JTextArea jTextArea;
 
 	// private constructor to hide the implicit public one
 	private Logging() {
-	}
-
-	public static String levelText(int level) {
-		return LEVEL_TO_NAME.get(level);
 	}
 
 	public static synchronized Integer getLogLevelConsole() {
@@ -117,19 +116,6 @@ public final class Logging {
 		setLogLevelFile(newLevel);
 	}
 
-	public static synchronized void setLogfileMarker(String marker) {
-		if (logfileMarker != null) {
-			debug("logfileMarker already set");
-			return;
-		}
-
-		if (marker == null || marker.length() == 0) {
-			logfileMarker = "";
-		} else {
-			logfileMarker = "__" + marker.replace('.', '_').replace(":", "__");
-		}
-	}
-
 	public static synchronized void initLogFile() {
 		// Try to initialize only once!
 		logFileInitialized = true;
@@ -157,11 +143,10 @@ public final class Logging {
 
 			logDirectory.mkdirs();
 
-			logFilename = logDirectory.getAbsolutePath() + File.separator + logfileDelimiter + logfileMarker
-					+ extension;
+			logFilename = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + extension;
 			logFilename = new File(logFilename).getAbsolutePath();
 
-			if (numberOfKeptLogFiles > 0) {
+			if (NUMBER_OF_LOG_FILES > 0) {
 				treatOtherLogFiles(logFilename, logDirectory);
 			}
 
@@ -176,16 +161,16 @@ public final class Logging {
 	// Renames the other existing logfiles
 	private static void treatOtherLogFiles(String logFilename, File logDirectory) {
 		File logFile = new File(logFilename);
-		String[] logFilenames = new String[numberOfKeptLogFiles];
-		File[] logFiles = new File[numberOfKeptLogFiles];
+		String[] logFilenames = new String[NUMBER_OF_LOG_FILES];
+		File[] logFiles = new File[NUMBER_OF_LOG_FILES];
 
-		for (int i = 0; i < numberOfKeptLogFiles; i++) {
-			logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + logfileDelimiter + logfileMarker + "___"
-					+ i + extension;
+		for (int i = 0; i < NUMBER_OF_LOG_FILES; i++) {
+			logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_" + i
+					+ extension;
 			logFiles[i] = new File(logFilenames[i]);
 		}
 
-		for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
+		for (int i = NUMBER_OF_LOG_FILES - 1; i > 0; i--) {
 			if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i])) {
 				Logging.warning("renaming logfile failed for file: ", logFiles[i - 1]);
 			}
@@ -210,10 +195,7 @@ public final class Logging {
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
 
-		// TODO activate logging also in Logviewer?
-		if (configedMain != null) {
-			configedMain.logEventOccurred();
-		}
+		checkErrorList();
 	}
 
 	public static String getSize(Collection<String> c) {
@@ -231,17 +213,18 @@ public final class Logging {
 
 		StringBuilder result = new StringBuilder(message);
 		for (Object o : mesg) {
-			result.append(o);
+			// python style
+			result.append(o).append(" ");
 		}
-
-		String loggingMessage = result.toString();
 
 		String currentTime = formatter.format(LocalDateTime.now());
 		String context = Thread.currentThread().getName();
 		if (caller instanceof Class) {
-			loggingMessage += "   (" + ((Class<?>) caller).getName() + ")";
+			result.append("   (").append(((Class<?>) caller).getName()).append(")");
+
 		} else if (caller != null) {
-			loggingMessage += "   (" + caller.getClass().getName() + ")";
+			result.append("   (").append(caller.getClass().getName()).append(")");
+
 		} else {
 			// Do nothing if caller is null
 		}
@@ -252,6 +235,8 @@ public final class Logging {
 			ex.printStackTrace(new PrintWriter(sw));
 			exMesg = "\n" + sw.toString();
 		}
+
+		String loggingMessage = result.toString();
 
 		if (level <= logLevelConsole) {
 			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
@@ -399,16 +384,8 @@ public final class Logging {
 		errorList.clear();
 	}
 
-	public static synchronized void checkErrorList(JFrame parentFrame) {
-		// if errors Occurred show a window with the logged errors
-
-		final JFrame f;
-		if (parentFrame == null) {
-			f = ConfigedMain.getMainFrame();
-		} else {
-			f = parentFrame;
-		}
-
+	// if errors Occurred show a window with the logged errors
+	public static synchronized void checkErrorList() {
 		int errorCount = errorList.size();
 
 		info("error list size ", errorCount);
@@ -417,32 +394,39 @@ public final class Logging {
 			return;
 		}
 
-		if (fErrors == null) {
-			fErrors = new FShowList(f, Configed.getResourceValue("problemsOccured"), false,
-					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
+		if (dialog == null) {
+			jTextArea = new JTextArea();
+			jTextArea.setEditable(false);
+			jTextArea.setLineWrap(true);
+			jTextArea.setColumns(40);
+			jTextArea.setRows(10);
+
+			JScrollPane scrollPane = new JScrollPane(jTextArea);
+			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+			JOptionPane optionPane = new JOptionPane(scrollPane);
+
+			dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("problemsOccurred"));
+			dialog.setModal(false);
+
+			/**
+			 * Whenever the dialog is hidden, we want to clear the errorlist By
+			 * trying out different listeners, this was the only one that worked
+			 * reliably always and only when the dialog was closed, no matter
+			 * which button or key was pressed
+			 */
+			dialog.addComponentListener(new ComponentAdapter() {
+				@Override
+				public void componentHidden(ComponentEvent e) {
+					clearErrorList();
+				}
+			});
 		}
 
-		fErrors.setMessage(Logging.getErrorListAsLines());
-		fErrors.setAlwaysOnTop(true);
-		fErrors.setVisible(true);
-	}
-
-	public static String getErrorListAsLines() {
-		StringBuilder result = new StringBuilder();
-		for (String error : errorList) {
-			result.append("\n");
-			result.append(error);
-		}
-
-		return result.toString();
-	}
-
-	public static void registerConfigedMain(ConfigedMain configedMain) {
-		Logging.configedMain = configedMain;
-	}
-
-	public static String getLogDirectoryName() {
-		return logDirectoryName;
+		// Get the text as a string, each element separated by a newline
+		jTextArea.setText(errorList.toString().replace("[", "").replace("]", "").replace(",", "\n"));
+		dialog.setVisible(true);
 	}
 
 	public static void setLogDirectoryName(String logDirectoryName) {

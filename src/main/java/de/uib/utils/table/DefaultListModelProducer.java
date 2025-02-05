@@ -6,63 +6,28 @@
 
 package de.uib.utils.table;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
-import de.uib.utils.logging.Logging;
+import de.uib.configed.type.ConfigOption;
+import de.uib.utils.table.gui.ListModelProducer;
 
-public class DefaultListModelProducer<O> implements ListModelProducer<O> {
-	@Override
-	public ListModel<O> getListModel(int row, int column) {
+public class DefaultListModelProducer implements ListModelProducer {
+	private static ConfigOption defaultConfigOption = new ConfigOption();
+
+	public ListModel<String> getListModel(int row) {
 		return null;
 	}
 
-	@Override
-	public int getSelectionMode(int row, int column) {
+	public int getSelectionMode(int row) {
 		return ListSelectionModel.SINGLE_SELECTION;
 	}
 
-	@Override
-	public boolean isNullable(int row, int column) {
-		return true;
-	}
-
-	@Override
-	public boolean isEditable(int row, int column) {
+	public boolean isEditable(int row) {
 		return false;
 	}
 
-	@Override
-	public List<O> getSelectedValues(int row, int column) {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public String getCaption(int row, int column) {
-		return "";
-	}
-
-	@Override
-	public Class<?> getClass(int row) {
-		return Object.class;
-	}
-
-	@Override
-	public List<O> toList(Object value) {
-		if (value == null) {
-			Logging.warning(this, "value is null");
-			return new ArrayList<>();
-		}
-
-		if (value instanceof List) {
-			return (List<O>) value;
-		}
-
-		Logging.info(this, "value is not instance of List<O>, create List with element value");
-		return Collections.singletonList((O) value);
+	public ConfigOption getListCellOptions(String key) {
+		return defaultConfigOption;
 	}
 }

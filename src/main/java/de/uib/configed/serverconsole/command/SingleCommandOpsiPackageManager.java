@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.Configed;
-import de.uib.configed.gui.FGeneralDialog;
 
 public class SingleCommandOpsiPackageManager implements SingleCommand {
-	private FGeneralDialog dialog;
 	private boolean needParameter = true;
 	private int priority = 100;
 
@@ -69,11 +67,6 @@ public class SingleCommandOpsiPackageManager implements SingleCommand {
 	@Override
 	public boolean needParameter() {
 		return needParameter;
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return dialog;
 	}
 
 	@Override

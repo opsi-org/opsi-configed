@@ -6,22 +6,18 @@
 
 package de.uib.opsicommand;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.awt.event.ActionEvent;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FTextArea;
-import de.uib.opsicommand.certificate.CertificateDownloader;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditRecord;
 
 /**
  * {@code ConnectionErrorReporter} reports connection errors, that occur during
@@ -39,7 +35,7 @@ public final class ConnectionErrorReporter {
 	}
 
 	/**
-	 * Constructs new instnace of {@link ConnectionErrorReporter} with provided
+	 * Constructs new instance of {@link ConnectionErrorReporter} with provided
 	 * information.
 	 * <p>
 	 * {@link ConnectionState} is used to indicate the connection state. The
@@ -86,139 +82,84 @@ public final class ConnectionErrorReporter {
 	}
 
 	private void displayFailedCertificateValidationDialog(String message) {
-		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
-				new String[] { Configed.getResourceValue("buttonCancel"),
-						Configed.getResourceValue("ConnectionErrorReporter.alwaysTrust"),
-						Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnce") },
-				530, 260);
+		JButton alwaysTrust = new JButton(Configed.getResourceValue("ConnectionErrorReporter.alwaysTrust"));
+		alwaysTrust.setToolTipText(Configed.getResourceValue("ConnectionErrorReporter.alwaysTrustTooltip"));
 
-		fErrorMsg.setTooltipButtons(null, Configed.getResourceValue("ConnectionErrorReporter.alwaysTrustTooltip"),
-				Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnceTooltip"));
+		JButton trustOnce = new JButton(Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnce"));
+		trustOnce.setToolTipText(Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnceTooltip"));
 
-		fErrorMsg.setMessage(message);
-		fErrorMsg.setAlwaysOnTop(true);
-		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
+		JOptionPane pane = new JOptionPane();
+		pane.setMessageType(JOptionPane.WARNING_MESSAGE);
+		pane.setMessage(message);
+		pane.setOptions(new Object[] { Configed.getResourceValue("buttonCancel"), alwaysTrust, trustOnce });
 
-		if (!SwingUtilities.isEventDispatchThread()) {
-			launchDialogInEDT(fErrorMsg);
-		} else {
-			fErrorMsg.setVisible(true);
-		}
+		JDialog dialog = pane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"));
 
-		int choice = fErrorMsg.getResult();
+		// We need to add action listeners to the buttons, because otherwise 
+		// the dialog will not close and nothing would happen
+		alwaysTrust.addActionListener((ActionEvent event) -> {
+			dialog.setVisible(false);
 
-		if (choice == 1) {
+			CertificateManager.downloadCertificateFile();
+			CertificateManager.saveCertificate();
+			if (conStat.getState() != ConnectionState.INTERRUPTED) {
+				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+			}
+		});
+
+		trustOnce.addActionListener((ActionEvent event) -> {
+			dialog.setVisible(false);
+
+			CertificateManager.downloadCertificateFile();
+			if (conStat.getState() != ConnectionState.INTERRUPTED) {
+				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+			}
+		});
+
+		dialog.setVisible(true);
+
+		// This means, we canceled/closed the dialog or we clicked on the cancel button
+		if (pane.getValue() == null || pane.getValue().equals(Configed.getResourceValue("buttonCancel"))) {
 			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
-		} else if (choice == 2) {
-			CertificateDownloader.downloadCertificateFile();
-			CertificateManager.saveCertificate(CertificateDownloader.getDownloadedCertificateFile());
-			if (conStat.getState() != ConnectionState.INTERRUPTED) {
-				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
-			}
-		} else if (choice == 3) {
-			CertificateDownloader.downloadCertificateFile();
-			if (conStat.getState() != ConnectionState.INTERRUPTED) {
-				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
-			}
-		} else {
-			// There are only three options a user can select from.
 		}
 	}
 
 	private void displayGeneralDialog(String message) {
-		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
-				new String[] { Configed.getResourceValue("buttonClose") }, 420, 200);
+		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
+				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"),
+				JOptionPane.OK_CANCEL_OPTION);
 
-		fErrorMsg.setMessage(message);
-		fErrorMsg.setAlwaysOnTop(true);
-		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
-
-		if (!SwingUtilities.isEventDispatchThread()) {
-			launchDialogInEDT(fErrorMsg);
-		} else {
-			fErrorMsg.setVisible(true);
-		}
-
-		int choice = fErrorMsg.getResult();
-
-		if (choice == 1) {
-			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
-		}
+		conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 	}
 
 	private synchronized void displayMFADialog() {
 		Logging.info("Unauthorized, show password dialog");
 
-		Map<String, String> groupData = new LinkedHashMap<>();
-		groupData.put("password", "");
-		Map<String, String> labels = new HashMap<>();
-		labels.put("password", Configed.getResourceValue("LoginDialog.jLabelPassword"));
-		Map<String, Boolean> editable = new HashMap<>();
-		editable.put("password", true);
-		Map<String, Boolean> secrets = new HashMap<>();
-		secrets.put("password", true);
+		JPasswordField passwordField = new JPasswordField();
 
-		final FEditRecord newPasswordDialog = new FEditRecord(
-				Configed.getResourceValue("ConnectionErrorReporter.provideNewPassword"));
-		newPasswordDialog.setRecord(groupData, labels, null, editable, secrets);
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewPassword"), passwordField },
+				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
 
-		newPasswordDialog.setTitle(Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"));
-		newPasswordDialog.init();
-		newPasswordDialog.setSize(420, 210);
-		newPasswordDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		newPasswordDialog.setModal(true);
-		newPasswordDialog.setAlwaysOnTop(true);
-
-		if (!SwingUtilities.isEventDispatchThread()) {
-			launchDialogInEDT(newPasswordDialog);
+		// The user has clicked on the OK button.
+		if (answer == 0) {
+			ConfigedMain.setPassword(new String(passwordField.getPassword()));
 		} else {
-			newPasswordDialog.setVisible(true);
-		}
-
-		if (newPasswordDialog.isCancelled()) {
 			displayCancelConfigedDialog();
-		} else {
-			ConfigedMain.setPassword(newPasswordDialog.getData().get("password"));
 		}
 	}
 
 	private void displayCancelConfigedDialog() {
-		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), true,
-				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 420,
-				200);
+		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), JOptionPane.OK_CANCEL_OPTION);
 
-		fErrorMsg.setTooltipButtons(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCancelHint"),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedCloseHint"), null);
-		fErrorMsg.setMessage(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"));
-		fErrorMsg.setAlwaysOnTop(true);
-		fErrorMsg.setLocationRelativeTo(ConfigedMain.getFrame());
-
-		if (!SwingUtilities.isEventDispatchThread()) {
-			launchDialogInEDT(fErrorMsg);
-		} else {
-			fErrorMsg.setVisible(true);
-		}
-
-		int choice = fErrorMsg.getResult();
-
-		if (choice == 1) {
+		if (answer == 0) {
 			displayMFADialog();
 		} else {
 			Main.endApp(Main.NO_ERROR);
-		}
-	}
-
-	private static void launchDialogInEDT(JDialog dialog) {
-		try {
-			SwingUtilities.invokeAndWait(() -> dialog.setVisible(true));
-		} catch (InvocationTargetException e) {
-			Logging.debug("exception thrown during doRun: ", e);
-		} catch (InterruptedException e) {
-			Logging.info("Thread was interrupted");
-			Thread.currentThread().interrupt();
 		}
 	}
 

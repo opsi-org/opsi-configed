@@ -82,7 +82,6 @@ public class TableHeader extends PdfPageEventHelper {
 			xHeaderTop = 803;
 		}
 		try {
-
 			// add header table with page number
 			table.setWidths(new int[] { 24, 24, 2 });
 			table.setTotalWidth(headerWidth); // 527

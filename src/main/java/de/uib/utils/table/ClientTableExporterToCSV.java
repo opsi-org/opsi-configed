@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
@@ -21,10 +20,11 @@ import org.apache.commons.csv.CSVPrinter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FSelectionList;
+import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
@@ -88,7 +88,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	@Override
 	public JMenuItem getMenuItemExport() {
 		JMenuItem menuItem = new JMenuItem(Configed.getResourceValue("ClientTableExporterToCSV.exportTableAsCSV"));
-		Utils.addIntellijIconToMenuItem(menuItem, "export");
+		Icons.addIntellijIconToMenuItem(menuItem, "export");
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
 			columnNames = getColumnsToInclude();
 			if (!columnNames.isEmpty()) {
@@ -102,7 +102,7 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	public JMenuItem getMenuItemExportSelected() {
 		JMenuItem menuItem = new JMenuItem(
 				Configed.getResourceValue("ClientTableExporterToCSV.exportSelectedRowsAsCSV"));
-		Utils.addIntellijIconToMenuItem(menuItem, "export");
+		Icons.addIntellijIconToMenuItem(menuItem, "export");
 
 		menuItem.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "menuItemExportSelectedCSV , only selected");
@@ -116,26 +116,27 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	}
 
 	private static List<String> getColumnsToInclude() {
-		FSelectionList fColumSelectionList = new FSelectionList(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"), true,
-				new String[] { "", "" },
-				new Icon[] { Utils.getIntellijIcon("close"), Utils.getIntellijIcon("checkmark") }, 400, 410);
+		ListSelectionDialog columnSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("ClientTableExporterToCSV.columnSelectionDialog.title"));
 		List<String> defaultValues = new ArrayList<>(HostInfo.getKeysForCSV());
-		fColumSelectionList.setListData(defaultValues);
+		columnSelectionDialog.setListData(defaultValues);
 		defaultValues.remove(HostInfo.HOST_KEY_KEY);
-		fColumSelectionList.setPreviousSelectionValues(defaultValues);
-		fColumSelectionList.enableMultiSelection();
-		fColumSelectionList.setVisible(true);
+		columnSelectionDialog.setPreviousSelectionValues(defaultValues);
+		columnSelectionDialog.setMultiSelection();
+		columnSelectionDialog.show();
 
-		List<String> result = new ArrayList<>();
+		if (columnSelectionDialog.wasAccepted()) {
+			List<String> result = columnSelectionDialog.getSelectedValues();
 
-		if (fColumSelectionList.getResult() == 2) {
-			result = fColumSelectionList.getSelectedValues();
+			// We remove the host key if it was included in the selection
+			// but the user does not want to include it
 			if (result.contains(HostInfo.HOST_KEY_KEY) && !Utils.includeOpsiHostKey()) {
-				result = new ArrayList<>();
+				return new ArrayList<>();
 			}
-		}
 
-		return result;
+			return result;
+		} else {
+			return new ArrayList<>();
+		}
 	}
 }

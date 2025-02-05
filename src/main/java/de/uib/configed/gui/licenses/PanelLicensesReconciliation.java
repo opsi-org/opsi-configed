@@ -34,10 +34,10 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 	private void initComponents() {
 		panelReconciliation = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleReconciliation"), false, 0, null, true);
-		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelReconciliation.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelReconciliation.setFiltering();
+		panelReconciliation.getTableSearchPane().setFiltering();
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
@@ -60,10 +60,8 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 	public void reset() {
 		if (!CacheManager.getInstance().isDataCached(CacheIdentifier.ROWS_LICENSES_RECONCILIATION)) {
 			ConfigedMain.getMainFrame().activateLoadingCursor();
-			ConfigedMain.getLicensesFrame().setCursor(Globals.WAIT_CURSOR);
 			SwingUtilities.invokeLater(() -> {
 				panelReconciliation.reload();
-				ConfigedMain.getLicensesFrame().setCursor(null);
 				ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			});
 		} else if (panelReconciliation.getTableModel().getRows().isEmpty()) {

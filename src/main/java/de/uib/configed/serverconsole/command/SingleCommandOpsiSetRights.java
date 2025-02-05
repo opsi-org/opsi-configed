@@ -11,7 +11,6 @@ import java.util.List;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.OpsiSetRightsParameterDialog;
 import de.uib.utils.logging.Logging;
 
@@ -22,7 +21,6 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 
 	private String command = BASE_NAME;
 
-	private FGeneralDialog dialog;
 	private boolean needParameter = true;
 	private String dir;
 	private String myTmpCommand;
@@ -38,7 +36,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 			d = d + "/";
 		}
 
-		Logging.info(this.getClass(), "CommandOpsiSetRights dir ", dir);
+		Logging.info(this, "CommandOpsiSetRights dir ", dir);
 	}
 
 	@Override
@@ -148,13 +146,7 @@ public class SingleCommandOpsiSetRights implements SingleCommand, CommandWithPar
 
 	@Override
 	public void startParameterGui(ConfigedMain configedMain) {
-		dialog = new OpsiSetRightsParameterDialog(configedMain, this);
-		dialog.setVisible(true);
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return dialog;
+		new OpsiSetRightsParameterDialog(configedMain, this);
 	}
 
 	public final void setDir(String d) {

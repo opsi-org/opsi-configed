@@ -54,22 +54,25 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(labelInfoProductDependenciesTable))
 
-				.addComponent(dependenciesPanel, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
+				.addComponent(dependenciesPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
 
 				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(labelInfoProductDependenciesTree))
 
-				.addComponent(dependenciesTreePanel, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
-				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), Globals.MIN_HSIZE,
-						Globals.PREF_HSIZE, Short.MAX_VALUE));
+				.addComponent(dependenciesTreePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelInfoProductDependenciesTable)
-				.addComponent(dependenciesPanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
+				.addComponent(labelInfoProductDependenciesTable).addComponent(dependenciesPanel, 0, 0, Short.MAX_VALUE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(labelInfoProductDependenciesTree)
-				.addComponent(dependenciesTreePanel, 3 * Globals.MIN_VSIZE, Globals.PREF_VSIZE, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(),
-						2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE, 2 * Globals.MIN_VSIZE));
+				.addComponent(dependenciesTreePanel, 0, 0, Short.MAX_VALUE).addGap(Globals.MIN_GAP_SIZE)
+
+				// We need to add 2 to the height of the tree path panel because the border
+				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), Globals.DEFAULT_JLABEL_HEIGHT + 2,
+						Globals.DEFAULT_JLABEL_HEIGHT + 2, Globals.DEFAULT_JLABEL_HEIGHT + 2));
 	}
 
 	public void setDependenciesModel(DependenciesModel dependenciesModel) {
@@ -96,6 +99,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	@Override
 	public void updateDepot(String depotId) {
-		depotLabel.setText(Configed.getResourceValue("PanelProductDependencies.Depot") + ": " + depotId);
+		depotLabel.setText(Configed.getResourceValue("depot") + ": " + depotId);
 	}
 }

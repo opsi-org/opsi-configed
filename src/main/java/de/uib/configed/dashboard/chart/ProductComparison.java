@@ -39,7 +39,7 @@ public class ProductComparison extends StackPane implements DataChangeListener {
 		try {
 			fxmlLoader.load();
 		} catch (IOException ioE) {
-			Logging.error(this.getClass(), ioE, "Could not load fxmlLoader");
+			Logging.error(this, ioE, "Could not load fxmlLoader");
 		}
 	}
 
@@ -63,10 +63,12 @@ public class ProductComparison extends StackPane implements DataChangeListener {
 		int totalNetbootProducts = netbootProducts.size();
 		int totalLocalbootProducts = localbootProducts.size();
 
-		data.add(new PieChart.Data(String.format("%s %d", Configed.getResourceValue("Dashboard.netbootProductsTitle"),
-				totalNetbootProducts), totalNetbootProducts));
-		data.add(new PieChart.Data(String.format("%s %d", Configed.getResourceValue("Dashboard.localbootProductsTitle"),
-				totalLocalbootProducts), totalLocalbootProducts));
+		data.add(new PieChart.Data(
+				String.format("%s %d", Configed.getResourceValue("netbootProducts"), totalNetbootProducts),
+				totalNetbootProducts));
+		data.add(new PieChart.Data(
+				String.format("%s %d", Configed.getResourceValue("localbootProducts"), totalLocalbootProducts),
+				totalLocalbootProducts));
 
 		productComparisonPieChart.setData(data);
 

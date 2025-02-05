@@ -28,6 +28,7 @@ import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -35,7 +36,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 
@@ -88,28 +89,23 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD));
 
-		labelClientDescription = new JLabel(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
-		labelClientDescription.setPreferredSize(Globals.BUTTON_DIMENSION);
+		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
 		labelClientInventoryNumber = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
-		labelClientInventoryNumber.setPreferredSize(Globals.BUTTON_DIMENSION);
 		labelClientNotes = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.notes"));
 		labelClientSystemUUID = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.systemUUID"));
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
-		labelClientIPAddress = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));
+		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsi-host-key");
 
 		jTextFieldDescription = new JTextField();
 		jTextFieldDescription.setEditable(true);
-		jTextFieldDescription.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		jTextFieldDescription.getDocument().addDocumentListener(this);
 
 		jTextFieldInventoryNumber = new JTextField();
 		jTextFieldInventoryNumber.setEditable(true);
-		jTextFieldInventoryNumber.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		jTextFieldInventoryNumber.getDocument().addDocumentListener(this);
 
 		jTextAreaNotes = new JTextArea();
@@ -121,7 +117,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		jTextAreaNotes.getDocument().addDocumentListener(this);
 
 		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
-		scrollpaneNotes.setPreferredSize(Globals.TEXT_FIELD_DIMENSION);
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -165,7 +160,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		hostKeyField.setEditable(false);
 
 		// This button copies the hostKey into the clipboard
-		JButton jButtonCopyHostKey = new JButton(Utils.getIntellijIcon("copy"));
+		JButton jButtonCopyHostKey = new JButton(Icons.getIntellijIcon("copy"));
 		jButtonCopyHostKey.setToolTipText(Configed.getResourceValue("MainFrame.copyHostKey"));
 		jButtonCopyHostKey.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(new String(hostKeyField.getPassword())), null));
@@ -195,20 +190,17 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				/////// SYSTEM UUID
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-						Globals.FIRST_LABEL_WIDTH)
+				.addComponent(systemUUIDField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// MAC ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-						Globals.FIRST_LABEL_WIDTH)
+				.addComponent(macAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// IP ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
-						Globals.FIRST_LABEL_WIDTH)
+				.addComponent(ipAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				/////// INSTALL BY SHUTDOWN
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
@@ -239,41 +231,47 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelClientID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT,
+						Globals.DEFAULT_JLABEL_HEIGHT)
 
 				/////// DESCRIPTION
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldDescription, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jTextFieldDescription, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// INVENTORY NUMBER
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jTextFieldInventoryNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// SYSTEM UUID
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(systemUUIDField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// MAC ADDRESS
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(macAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(macAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// IP ADDRESS
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientIPAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(ipAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				////// INSTALL BY SHUTDOWN
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(checkBoxInstallByShutdown, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
@@ -285,22 +283,25 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// ONE TIME PASSWORD
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelOneTimePassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jTextFieldOneTimePassword, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jTextFieldOneTimePassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				////// opsiHostKey
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelOpsiHostKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(hostKeyField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(hostKeyField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				/////// NOTES
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(scrollpaneNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE));
 	}
 
 	public void setClientDescriptionText(String s) {
@@ -386,7 +387,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		for (String client : configedMain.getSelectedClients()) {
 			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 			changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, Boolean.toString(checkBoxWANConfig.isSelected()));
-			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+			ChangedDataManager.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 		}
 	}
 
@@ -397,7 +398,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 			Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 			changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
 					Boolean.toString(checkBoxInstallByShutdown.isSelected()));
-			configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+			ChangedDataManager.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 		}
 	}
 
@@ -431,7 +432,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		String client = configedMain.getSelectedClients().get(0);
 		Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 		changedClientInfo.put(key, editorField.getText());
-		configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+		ChangedDataManager.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 
 	}
 

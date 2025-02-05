@@ -9,7 +9,6 @@ package de.uib.configed.serverconsole.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.utils.logging.Logging;
 
 public class SingleCommandTemplate implements SingleCommand {
@@ -171,11 +170,6 @@ public class SingleCommandTemplate implements SingleCommand {
 	@SuppressWarnings({ "java:S4144" })
 	public String getCommand() {
 		return command;
-	}
-
-	@Override
-	public FGeneralDialog getDialog() {
-		return null;
 	}
 
 	@Override

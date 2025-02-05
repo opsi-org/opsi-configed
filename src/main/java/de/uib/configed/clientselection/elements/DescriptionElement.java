@@ -16,8 +16,7 @@ import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
 public class DescriptionElement extends AbstractSelectElement {
 	public DescriptionElement() {
-		super(new String[] { "Description" },
-				/* "Description" */Configed.getResourceValue("NewClientDialog.description"));
+		super(new String[] { "Description" }, Configed.getResourceValue("description"));
 	}
 
 	@Override

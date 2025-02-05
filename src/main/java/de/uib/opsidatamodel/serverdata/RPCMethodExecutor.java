@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
@@ -56,7 +54,6 @@ public class RPCMethodExecutor {
 	}
 
 	public List<String> wakeOnLanOpsi43(Collection<String> hostIds) {
-
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });
 
 		Map<String, Object> response = persistenceController.getExecutioner().getMapResult(omc);
@@ -71,9 +68,9 @@ public class RPCMethodExecutor {
 		return collectErrorsFromResponsesByHost(responses, "fireOpsiclientdEventOnClients");
 	}
 
-	public List<String> processActionRequests(List<String> clientIds, Set<String> productIds) {
+	public List<String> processActionRequests(List<String> clientIds, Set<String> productIds, String visibility) {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_PROCESS_ACTION_REQUESTS,
-				new Object[] { clientIds, productIds });
+				new Object[] { clientIds, productIds, visibility });
 		Map<String, Object> responses = exec.getMapResult(omc);
 		return collectErrorsFromResponsesByHost(responses, "processActionRequests");
 	}
@@ -117,8 +114,7 @@ public class RPCMethodExecutor {
 		List<String> errors = new ArrayList<>();
 
 		for (Entry<String, Object> response : responses.entrySet()) {
-			Map<String, Object> jO = POJOReMapper.remap(response.getValue(), new TypeReference<Map<String, Object>>() {
-			});
+			Map<String, Object> jO = POJOReMapper.remap(response.getValue());
 			String error = exec.getErrorFromResponse(jO);
 
 			if (error != null) {

@@ -7,19 +7,14 @@
 package de.uib.configed.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
@@ -34,19 +29,22 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
@@ -81,19 +79,16 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.LowerCaseTextField;
 import de.uib.utils.swing.TextInputField;
 
 /**
  * This dialog shows a number of options you can use to select specific clients.
  */
-public class ClientSelectionDialog extends FGeneralDialog implements ActionListener, DocumentListener {
-	private static final Pattern searchNamePattern = Pattern.compile("[\\p{javaLowerCase}\\d_-]*");
-
-	private static final int FRAME_WIDTH = 750;
-	private static final int FRAME_HEIGHT = 650;
+public class ClientSelectionDialog implements ActionListener, DocumentListener {
+	private static final Pattern searchNamePattern = Pattern.compile("[\\p{Alpha}\\d_-]*",
+			Pattern.UNICODE_CHARACTER_CLASS);
 
 	private GroupLayout layout;
 	private GroupLayout.SequentialGroup vGroup;
@@ -111,52 +106,72 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private JButton buttonRestart;
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
-	private JButton saveButton;
 
 	private LinkedList<ComplexGroup> complexElements;
 
 	private SelectionManager manager;
-	private ClientTable selectionPanel;
+	private ClientTablePanel clientTablePanel;
 	private SavedSearchesDialog savedSearchesDialog;
+
+	private JScrollPane scrollPane;
+
+	private JOptionPane optionPane;
+	private JDialog dialog;
 
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ClientSelectionDialog(ConfigedMain configedMain, ClientTable selectionPanel,
+	public ClientSelectionDialog(ConfigedMain configedMain, ClientTablePanel clientTablePanel,
 			SavedSearchesDialog savedSearchesDialog) {
-		super(null, Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"), false,
-				new String[] { Configed.getResourceValue("buttonClose"),
-						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
-						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
-				FRAME_WIDTH, FRAME_HEIGHT);
 
 		this.configedMain = configedMain;
-		this.selectionPanel = selectionPanel;
+		this.clientTablePanel = clientTablePanel;
 		this.savedSearchesDialog = savedSearchesDialog;
-		super.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-		manager = new SelectionManager("OpsiData");
+		manager = new SelectionManager();
 		complexElements = new LinkedList<>();
 		init();
+		JPanel panel = initComponents();
 
-		super.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				Logging.info(this, "ClientSelectionDialog resized");
-				// move it up and down for fixing the combobox popup vanishing
-				Component c = e.getComponent();
-				Point point = c.getLocation();
-				Point savePoint = new Point(point);
-				point.setLocation(point.getX(), point.getY() + 1.0);
-				c.setLocation(point);
-				c.revalidate();
-				c.repaint();
-				c.setLocation(savePoint);
-				c.revalidate();
-				c.repaint();
-			}
-		});
+		JButton buttonReset = new JButton(Configed.getResourceValue("ClientSelectionDialog.buttonReset"));
+		buttonReset.addActionListener(actionEvent -> reset());
+
+		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { Configed.getResourceValue("search"), buttonReset,
+						Configed.getResourceValue("buttonClose") });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
+
+		waitForUserInput();
+	}
+
+	public void show() {
+		dialog.setVisible(true);
+		waitForUserInput();
+	}
+
+	private void waitForUserInput() {
+		Logging.info(this, "waitForUserInput", optionPane.getValue());
+
+		if (optionPane.getValue() == null) {
+			return;
+		}
+
+		if (optionPane.getValue().equals(Configed.getResourceValue("ClientSelectionDialog.buttonReset"))) {
+			reset();
+		} else if (optionPane.getValue().equals(Configed.getResourceValue("search"))) {
+			// This needs to be in the event queue, because otherwise the loading cursor
+			// will not be shown
+			SwingUtilities.invokeLater(() -> {
+				ConfigedMain.getMainFrame().activateLoadingCursor();
+				doSearch();
+				ConfigedMain.getMainFrame().deactivateLoadingCursor();
+			});
+		} else {
+			// Do nothing then, the dialog was closed or canceled
+		}
 	}
 
 	public void loadSearch(String name) {
@@ -169,89 +184,91 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		saveDescriptionField.setText(search.getDescription());
 	}
 
-	@Override
-	public void doAction3() {
-		Logging.info(this, "doAction3");
-		List<String> clients = new ArrayList<>();
+	private void doSearch() {
+		Logging.info(this, "doSearch");
 
 		collectData();
 
 		// because of potential memory problems we switch to
 		// client view
-		configedMain.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS);
+		ConfigedMain.getMainFrame().getClientConfiguration().setSelectedIndex(0);
 
-		if (manager != null) {
-			clients = manager.selectClients();
-		}
-
-		if (clients == null) {
-			return;
-		}
+		List<String> clients = manager.selectClients();
 
 		Logging.debug(this, "", clients);
-		selectionPanel.setSelectedValues(clients);
+		clientTablePanel.setSelectedValues(clients);
 	}
 
-	@Override
-	public void doAction2() {
-		reset();
-	}
+	private JPanel initComponents() {
+		JPanel completePanel = new JPanel();
 
-	@Override
-	protected void initComponents() {
-		additionalPane = new JPanel();
+		GroupLayout completeLayout = new GroupLayout(completePanel);
+		completePanel.setLayout(completeLayout);
 
-		GroupLayout additionalLayout = new GroupLayout(additionalPane);
-		additionalPane.setLayout(additionalLayout);
-		additionalPane.setMinimumSize(new Dimension(200, 200));
-
-		saveNameField = new LowerCaseTextField();
+		saveNameField = new JTextField();
 		saveNameField.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
 
 		saveDescriptionField = new JTextField();
 
 		JLabel saveNameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryName"));
 
-		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
+		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("description"));
 
-		saveButton = new JButton(Utils.getIntellijIcon("save"));
+		JButton saveButton = new JButton(Icons.getIntellijIcon("save"));
 		saveButton.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.saveSearchTooltip"));
 		saveButton.addActionListener(actionEvent -> save());
 
-		buttonReload = new JButton(Utils.getIntellijIcon("refresh"));
-		buttonReload.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonReload"));
-		buttonReload.addActionListener((ActionEvent e) -> reload());
+		buttonReload = new JButton(Icons.getIntellijIcon("refresh"));
+		buttonReload.setToolTipText(Configed.getResourceValue("reloadData"));
+		buttonReload.addActionListener(actionEvent -> reload());
 
-		buttonRestart = new JButton(Utils.getIntellijIcon("reset"));
+		buttonRestart = new JButton(Icons.getIntellijIcon("reset"));
 		buttonRestart.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"));
 
-		buttonRestart.addActionListener((ActionEvent e) -> restart());
+		buttonRestart.addActionListener(actionEvent -> restart());
 
-		additionalLayout.setHorizontalGroup(additionalLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200).addGap(Globals.GAP_SIZE)
-				.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
+		completeLayout
+				.setHorizontalGroup(
+						completeLayout.createParallelGroup().addComponent(scrollPane)
+								.addGroup(completeLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE).addComponent(saveNameField, 40, 100, 200)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(saveButton, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.MIN_GAP_SIZE)
+										.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE)));
+
+		completeLayout.setVerticalGroup(completeLayout.createSequentialGroup().addComponent(scrollPane)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(Globals.GAP_SIZE));
+				.addGroup(completeLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(saveNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(saveDescriptionField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(saveButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonRestart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
 
-		additionalLayout.setVerticalGroup(additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(saveNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(saveNameField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(saveDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(saveDescriptionField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
-
-		additionalPane.setVisible(true);
+		return completePanel;
 	}
 
 	private void init() {
@@ -313,7 +330,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
 
 		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
-		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.hostName"));
+		newElementBox.addItem(Configed.getResourceValue("hostName"));
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwareName"));
 		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.swauditName"));
 
@@ -326,25 +343,28 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 
 		newElementBox.addActionListener(actionEvent -> addElement());
 
-		vMainGroup.addComponent(newElementBox, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		hMainGroup.addComponent(newElementBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH);
+		vMainGroup.addComponent(newElementBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
+		hMainGroup.addComponent(newElementBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				GroupLayout.PREFERRED_SIZE);
 
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
 		complexElements.getLast().connectionType.setVisible(false);
-		scrollpane.getViewport().add(contentPane);
+		scrollPane = new JScrollPane(contentPane);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	private void reload() {
 		Logging.info(this, "actionPerformed");
 		buttonReload.setEnabled(false);
 		buttonRestart.setEnabled(false);
-		setCursor(Globals.WAIT_CURSOR);
+		dialog.setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			manager.getBackend().setReloadRequested();
 			buttonReload.setEnabled(true);
 			buttonRestart.setEnabled(true);
-			setCursor(null);
+			dialog.setCursor(null);
 		});
 	}
 
@@ -352,11 +372,11 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		Logging.info(this, "actionPerformed");
 		buttonRestart.setEnabled(false);
 		buttonReload.setEnabled(false);
-		setCursor(Globals.WAIT_CURSOR);
+		dialog.setCursor(Globals.WAIT_CURSOR);
 		SwingUtilities.invokeLater(() -> {
 			manager.getBackend().setReloadRequested();
-			configedMain.callNewClientSelectionDialog();
-			setCursor(null);
+			ExtraFrameController.callNewClientSelectionDialog(configedMain);
+			dialog.setCursor(null);
 			// we lose all components of this dialog, there is nothing to reset
 		});
 	}
@@ -440,6 +460,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static JCheckBox createNOTCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox(new ImageIcon());
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setFocusable(false);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
 		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "not" : ""));
 
@@ -464,8 +485,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static JCheckBox createANDORCheckBox() {
 		JCheckBox jCheckBox = new JCheckBox("and", new ImageIcon(), true);
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setFocusable(false);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
-
 		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
 
 		jCheckBox.addMouseListener(new MouseAdapter() {
@@ -489,6 +510,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private static JCheckBox createParenthesisCheckBox(String type, boolean enabled) {
 		JCheckBox jCheckBox = new JCheckBox(type, new ImageIcon(), true);
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+		jCheckBox.setFocusable(false);
 		jCheckBox.setDisabledIcon(new ImageIcon());
 		jCheckBox.setEnabled(enabled);
 
@@ -593,7 +615,7 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private ComplexGroup createComplexGroup() {
 		ComplexGroup result = new ComplexGroup();
 
-		result.removeButton = new JButton(Utils.getIntellijIcon("delete"));
+		result.removeButton = new JButton(Icons.getIntellijIcon("delete"));
 		result.removeButton.addActionListener(this::removeButton);
 
 		result.negateButton = createNOTCheckBox();
@@ -832,26 +854,22 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		case NONE_TYPE:
 			return;
 		}
-		sourceGroup.dataComponent.setMaximumSize(new Dimension(sourceGroup.dataComponent.getMaximumSize().width,
-				sourceGroup.dataComponent.getMinimumSize().height));
-		int minHeight = Globals.LINE_HEIGHT;
-		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER, minHeight, minHeight,
-				minHeight);
+
+		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER,
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
 		hGroupData.addComponent(sourceGroup.dataComponent, 100, 100, Short.MAX_VALUE);
 	}
 
 	private void addTextTypeComponent(SimpleGroup sourceGroup) {
-		TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
+		TextInputField fieldText = new TextInputField(sourceGroup.element.getEnumData());
 		fieldText.setEditable(true);
-		fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		fieldText.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldText.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldText;
 	}
 
 	private void addDateTypeComponent(SimpleGroup sourceGroup) {
-		TextInputField fieldDate = new TextInputField(null);
-		fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
+		TextInputField fieldDate = new TextInputField();
 		fieldDate.setToolTipText("yyyy-mm-dd");
 		fieldDate.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDate;
@@ -871,10 +889,8 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	}
 
 	private void addDoubleTypeComponent(SimpleGroup sourceGroup) {
-		TextInputField fieldDouble = new TextInputField("");
-		fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-		fieldDouble.setToolTipText(
-				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		TextInputField fieldDouble = new TextInputField();
+		fieldDouble.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 		fieldDouble.setClientSelectionDialog(this);
 		sourceGroup.dataComponent = fieldDouble;
 	}
@@ -1149,6 +1165,12 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 		contentPane.repaint();
 		newElementBox.setSelectedIndex(0);
 		complexElements.getLast().connectionType.setVisible(false);
+
+		// This will change the width of the dialog so that all the content will be visible
+		// and we only need a vertical scrollbar
+		int diffSize = scrollPane.getPreferredSize().width - scrollPane.getSize().width
+				+ scrollPane.getVerticalScrollBar().getWidth();
+		dialog.setSize(dialog.getWidth() + diffSize, dialog.getHeight());
 	}
 
 	private void selectOperation(ActionEvent actionEvent) {
@@ -1194,16 +1216,14 @@ public class ClientSelectionDialog extends FGeneralDialog implements ActionListe
 	private void save() {
 		String text = saveNameField.getText();
 		if (text.isEmpty()) {
-			JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
+			JOptionPane.showMessageDialog(dialog, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
 					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle"), JOptionPane.OK_OPTION);
-			toFront();
 		} else if (searchNamePattern.matcher(text).matches()) {
 			collectData();
 			manager.saveSearch(text, saveDescriptionField.getText());
 			savedSearchesDialog.reloadAction();
 		} else {
-			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
-			toFront();
+			JOptionPane.showMessageDialog(dialog, "wrong name", "error", JOptionPane.OK_OPTION);
 		}
 	}
 

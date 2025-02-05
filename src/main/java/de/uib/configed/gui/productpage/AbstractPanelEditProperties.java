@@ -8,22 +8,15 @@ package de.uib.configed.gui.productpage;
 
 import javax.swing.JPanel;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.utils.datapanel.DefaultEditMapPanel;
 
 public abstract class AbstractPanelEditProperties extends JPanel {
 	protected DefaultEditMapPanel productPropertiesPanel;
 
-	protected int minHSize = 50;
-	protected int prefHSize = 80;
-
-	protected ConfigedMain configedMain;
-
 	protected String productEdited;
 
-	protected AbstractPanelEditProperties(ConfigedMain configedMain, DefaultEditMapPanel productPropertiesPanel) {
+	protected AbstractPanelEditProperties(DefaultEditMapPanel productPropertiesPanel) {
 		super();
-		this.configedMain = configedMain;
 		this.productPropertiesPanel = productPropertiesPanel;
 	}
 

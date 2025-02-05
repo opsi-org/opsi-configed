@@ -24,7 +24,7 @@ public class LicensepoolEntry extends AbstractTableEntry {
 		KEYS.add(DESCRIPTION_KEY);
 	}
 
-	public LicensepoolEntry(Map<String, Object> entry) {
+	public LicensepoolEntry(Map<String, String> entry) {
 		super(entry);
 		super.remap(ID_SERVICE_KEY, ID_KEY);
 		super.remap(DESCRIPTION_KEY, DESCRIPTION_KEY);

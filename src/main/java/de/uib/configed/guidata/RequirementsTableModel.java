@@ -32,7 +32,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 			.getPersistenceController();
 
 	public RequirementsTableModel() {
-		Logging.info(this.getClass(), "creating");
+		Logging.info(this, "creating");
 
 		init();
 	}

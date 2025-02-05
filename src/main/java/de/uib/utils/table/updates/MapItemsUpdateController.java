@@ -83,7 +83,7 @@ public class MapItemsUpdateController implements UpdateController {
 			// we have valid data again, even if not the expected ones
 			success = true;
 		} else {
-			Logging.checkErrorList(null);
+			Logging.checkErrorList();
 		}
 
 		return success;

@@ -24,13 +24,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
+import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FShowList;
-import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -71,8 +68,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private static Map<String, String> columnDict;
 
 	private String actualProduct = "";
-
-	private ConfigedMain configedMain;
 
 	private List<String> sortedProductsList;
 
@@ -120,21 +115,19 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	private int[] indexPreparedColumns;
 	private boolean[] editablePreparedColumns;
 
-	public InstallationStateTableModel(ConfigedMain configedMain,
+	public InstallationStateTableModel(List<String> selectedClients,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, Set<String> productNames,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
-		Logging.info(this.getClass(), "creating an InstallationStateTableModel ");
+		Logging.info(this, "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
-			Logging.info(this.getClass(), " statesAndActions null ");
+			Logging.info(this, " statesAndActions null ");
 		} else {
-			Logging.info(this.getClass(), " statesAndActions ", statesAndActions.size());
+			Logging.info(this, " statesAndActions ", statesAndActions.size());
 		}
 
-		this.configedMain = configedMain;
-
+		this.selectedClients = selectedClients;
 		this.collectChangedStates = collectChangedStates;
-		this.selectedClients = configedMain.getSelectedClients();
 
 		this.possibleActions = possibleActions;
 		this.globalProductInfos = productGlobalInfos;
@@ -148,7 +141,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		this.productNames = productNames;
 		sortedProductsList = new ArrayList<>(productNames);
 
-		Logging.debug(this.getClass(), "productNames ", productNames);
+		Logging.debug(this, "productNames ", productNames);
 
 		initalizeProductStates(statesAndActions);
 	}
@@ -209,9 +202,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		List<Map<String, String>> productInfos = persistenceController.getProductDataService()
 				.getProductInfos(productIds, clientId, attributes);
 		for (Map<String, String> productInfo : productInfos) {
-			allClientsProductStates.get(clientId).put(productInfo.get("productId"),
-					POJOReMapper.remap(productInfo, new TypeReference<>() {
-					}));
+			allClientsProductStates.get(clientId).put(productInfo.get("productId"), productInfo);
 		}
 
 		produceVisualStatesFromExistingEntries();
@@ -236,9 +227,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				attributes);
 		if (!productInfos.isEmpty()) {
 			for (Map<String, String> productInfo : productInfos) {
-				allClientsProductStates.get(clientId).put(productInfo.get("productId"),
-						POJOReMapper.remap(productInfo, new TypeReference<>() {
-						}));
+				allClientsProductStates.get(clientId).put(productInfo.get("productId"), productInfo);
 			}
 		} else {
 			allClientsProductStates.get(clientId).clear();
@@ -598,7 +587,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		changedStatesForProduct.put(stateType, state);
 
-		configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
+		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
 	private String getChangedState(String clientId, String product, String stateType) {
@@ -657,12 +646,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 				lines.append(p);
 			}
 
-			final FShowList fMissingProducts = new FShowList(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"), true,
-					new String[] { Configed.getResourceValue("buttonClose") }, 400, 300);
-			fMissingProducts.setMessage(lines.toString());
-			fMissingProducts.setAlwaysOnTop(true);
-			fMissingProducts.setVisible(true);
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), lines,
+					Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
+					JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -869,7 +855,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.debug(this, "---- stateAndAction ", stateAndAction);
 
 			if (stateAndAction == null) {
-				stateAndAction = new ProductState(null);
+				stateAndAction = ProductState.createDefaultProductState();
 			}
 
 			String actionRequestForRequiredProduct = stateAndAction.get(ActionRequest.KEY);
@@ -888,7 +874,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 			int requiredIS = InstallationStatus.getVal(requiredState);
 
-			Logging.debug(this, " requiredInstallationsStatus ", InstallationStatus.getDisplayLabel(requiredIS));
+			Logging.debug(this, " requiredInstallationsStatus ", InstallationStatus.getLabel(requiredIS));
 
 			// handle state requests
 			if ((requiredIS == InstallationStatus.INSTALLED || requiredIS == InstallationStatus.NOT_INSTALLED)
@@ -949,8 +935,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		List<String> actionsForProduct = new ArrayList<>();
 		if (possibleActions != null) {
 			for (String label : possibleActions.get(actualProduct)) {
-				ActionRequest ar = ActionRequest.produceFromLabel(label);
-				actionsForProduct.add(ActionRequest.getDisplayLabel(ar.getVal()));
+				actionsForProduct.add(ActionRequest.produceFromLabel(label));
 			}
 
 			// Add in values in correct ordering
@@ -1131,32 +1116,23 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		int col = indexPreparedColumns[displayCol];
 
-		switch (col) {
-		case 0:
-			return actualProduct;
+		return switch (col) {
+		case 0 -> actualProduct;
 
-		case 1:
-			return globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
+		case 1 -> globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 
-		case 3:
-			InstallationStatus is = InstallationStatus.produceFromLabel(
-					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
-			return InstallationStatus.getDisplayLabel(is.getVal());
+		case 3 -> InstallationStatus
+				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
 
-		case 8:
-			ActionRequest ar = ActionRequest
-					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
-			return ActionRequest.getDisplayLabel(ar.getVal());
+		case 8 -> ActionRequest
+				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 
-		case 10:
-			return getDisplayLabelForPosition();
+		case 10 -> getDisplayLabelForPosition();
 
-		case 11:
-			return actualProductVersion();
+		case 11 -> actualProductVersion();
 
-		default:
-			return combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
-		}
+		default -> combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
+		};
 	}
 
 	private Object getDisplayLabelForPosition() {
@@ -1247,7 +1223,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			// change recursively visible action changes and collect the changes for saving
 
 			initCollectiveChange();
-			collectiveChangeActionRequest(actualProduct, ActionRequest.produceFromLabel((String) value));
+			collectiveChangeActionRequest(actualProduct, ActionRequest.produceActionRequestFromLabel((String) value));
 			finishCollectiveChange();
 		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 			if (value.equals(NONE_DISPLAY_STRING)) {
@@ -1259,7 +1235,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			Logging.warning(this, "unexpected indexPreparedColumns[col] ", indexPreparedColumns[col]);
 		}
 
-		configedMain.getGeneralDataChangedKeeper().dataHaveChanged(this);
+		ChangedDataManager.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
 	private void setLatestProductVersion() {

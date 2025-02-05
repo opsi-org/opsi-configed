@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -25,6 +24,7 @@ import java.util.TreeMap;
 import javax.swing.DropMode;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
@@ -40,7 +40,6 @@ import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.FEditRecord;
 
 public abstract class AbstractGroupTree extends JTree implements TreeSelectionListener {
 	public static final String ALL_GROUPS_NAME = Configed.getResourceValue("AbstractGroupTree.groupsName");
@@ -222,31 +221,13 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		String groupId = node.toString();
 
-		Map<String, String> groupData = new LinkedHashMap<>();
-		groupData.put("groupname", groupId);
-		groupData.put("description", groups.get(groupId).get("description"));
-		Map<String, String> labels = new HashMap<>();
-		labels.put("groupname", Configed.getResourceValue("ClientTree.editNode.label.groupname"));
-		labels.put("description", Configed.getResourceValue("ClientTree.editNode.label.description"));
-		Map<String, Boolean> editable = new HashMap<>();
-		editable.put("groupname", false);
-		editable.put("description", true);
+		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("description"),
+				Configed.getResourceValue("ClientTree.editGroup") + ": " + groupId, JOptionPane.PLAIN_MESSAGE, null,
+				null, groups.get(groupId).get("description"));
 
-		FEditRecord fEdit = new FEditRecord(Configed.getResourceValue("ClientTree.editGroup"));
-		fEdit.setRecord(groupData, labels, null, editable, null);
-		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode"));
-		fEdit.init();
-		fEdit.setSize(450, 250);
-		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		fEdit.setModal(true);
-
-		fEdit.setVisible(true);
-
-		groupData = fEdit.getData();
-
-		if (!fEdit.isCancelled()) {
-			groups.get(groupId).put("description", groupData.get("description"));
+		if (answer != null) {
+			groups.get(groupId).put("description", answer);
 			persistenceController.getGroupDataService().updateGroup(groupId, groups.get(groupId),
 					this instanceof ClientTree);
 		}
@@ -274,8 +255,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			// found a group
 			int returnedOption = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ClientTree.deleteGroupWarning"),
-					Configed.getResourceValue("ClientTree.deleteGroupWarningTitle"), JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.WARNING_MESSAGE);
+					Configed.getResourceValue("ClientTree.deleteGroupNode") + ": " + nodeID,
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			if (returnedOption == JOptionPane.OK_OPTION) {
 				groupNodes.remove(nodeID);
@@ -307,79 +288,46 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 
 		if (node.getAllowsChildren()) {
-			Map<String, String> groupData = new LinkedHashMap<>();
-			groupData.put("groupname", "");
-			groupData.put("description", "");
-			Map<String, String> labels = new HashMap<>();
-			labels.put("groupname", Configed.getResourceValue("ClientTree.editNode.label.groupname"));
-			labels.put("description", Configed.getResourceValue("ClientTree.editNode.label.description"));
-			Map<String, Boolean> editable = new HashMap<>();
-			editable.put("groupname", true);
-			editable.put("description", true);
-
-			String newGroupKey = "";
-
+			JTextField groupNameField = new JTextField();
+			JTextField groupDescriptionField = new JTextField();
 			String inscription = "";
 
-			FEditRecord fEdit = new FEditRecord(inscription);
-			fEdit.setRecord(groupData, labels, null, editable, null);
-			fEdit.setTitle(Configed.getResourceValue("ClientTree.addNode.title"));
-			fEdit.init();
-			fEdit.setSize(450, 250);
-			fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
+			String newGroupKey = null;
 
-			fEdit.setModal(true);
+			do {
+				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+						new Object[] { inscription, Configed.getResourceValue("ClientTree.editNode.label.groupname"),
+								groupNameField, Configed.getResourceValue("description"), groupDescriptionField },
+						Configed.getResourceValue("ClientTree.addNode"), JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE);
 
-			while ("".equals(newGroupKey) || groups.keySet().contains(newGroupKey)) {
-				if ("".equals(newGroupKey)) {
-					inscription = Configed.getResourceValue("ClientTree.requestGroup");
+				if (answer == JOptionPane.OK_OPTION) {
+					newGroupKey = groupNameField.getText().toLowerCase(Locale.ROOT);
 				} else {
-					inscription = "'" + newGroupKey + "' "
-							+ Configed.getResourceValue("ClientTree.requestNotExistingGroupName");
-				}
-
-				fEdit.setHint(inscription);
-
-				fEdit.setVisible(true);
-
-				newGroupKey = fEdit.getData().get("groupname").toLowerCase(Locale.ROOT);
-
-				if (fEdit.isCancelled()) {
 					return null;
 				}
-			}
+				inscription = Configed.getResourceValue("ClientTree.requestNotExistingGroupName");
+			} while ("".equals(newGroupKey) || groups.keySet().contains(newGroupKey));
+
+			String description = groupDescriptionField.getText();
+
 			// Now variable gotName equals true
-
 			Map<String, String> newGroup = new HashMap<>();
-
 			newGroup.put("groupId", newGroupKey);
 			newGroup.put("parentGroupId", node.toString());
-			newGroup.put("description", groupData.get("description"));
+			newGroup.put("description", description);
 
-			// get persistence
+			// send data to server
 			if (persistenceController.getGroupDataService().addGroup(newGroup, this instanceof ClientTree)) {
 				groups.put(newGroupKey, newGroup);
 				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup ", newGroupKey, ", ", newGroup);
-				GroupNode newNode = insertGroup(newGroupKey, groupData.get("description"), node);
-				groupNodes.put(newGroupKey, newNode);
 
-				result = newNode;
+				result = new GroupNode(newGroupKey);
+				insertNodeInOrder(result, node);
 			}
 		}
 
 		return result;
-	}
-
-	protected GroupNode insertGroup(String groupObject, String groupDescription, DefaultMutableTreeNode parent) {
-		GroupNode node = produceGroupNode(groupObject, groupDescription);
-
-		if (parent == null) {
-			parent = groupNodeGroups;
-		}
-
-		insertNodeInOrder(node, parent);
-
-		return node;
 	}
 
 	protected void insertNodeInOrder(DefaultMutableTreeNode node, DefaultMutableTreeNode parent) {

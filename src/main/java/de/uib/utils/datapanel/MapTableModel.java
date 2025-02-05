@@ -10,6 +10,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,19 +21,21 @@ import java.util.function.Function;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
+import de.uib.configed.type.ConfigOption;
+import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
+import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utils.DataChangedObserver;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ListCellOptions;
 
 public class MapTableModel extends AbstractTableModel {
-	public static final List<?> nullLIST = Collections.singletonList(null);
-
 	private List<DataChangedObserver> observers;
 
-	private Collection updateCollection;
+	private UpdateCollection updateCollection;
 	private Collection<Map<String, Object>> storeData;
+	private Map<String, Object> configChanges;
+	private Map<String, Object> changes;
 	private boolean datachanged;
 
 	// keys which identify readonly entries
@@ -40,7 +43,7 @@ public class MapTableModel extends AbstractTableModel {
 
 	private Function<String, Boolean> isEditable;
 
-	private Map<String, ListCellOptions> optionsMap;
+	private Map<String, ConfigOption> optionsMap;
 
 	// shall be sorted
 	private Map<String, Object> data;
@@ -54,19 +57,13 @@ public class MapTableModel extends AbstractTableModel {
 	private String modifiedKey;
 	private int rowModiTime;
 
-	private ListModelProducerForVisualDatamap<String> modelProducer;
-
 	private boolean writeData = true;
 
 	public MapTableModel() {
 		observers = new ArrayList<>();
 	}
 
-	public void setModelProducer(ListModelProducerForVisualDatamap<String> modelProducer) {
-		this.modelProducer = modelProducer;
-	}
-
-	public void setOptions(Map<String, ListCellOptions> optionsMap, Map<String, Object> defaultData) {
+	public void setOptions(Map<String, ConfigOption> optionsMap, Map<String, Object> defaultData) {
 		this.optionsMap = optionsMap;
 		this.defaultData = defaultData;
 	}
@@ -115,11 +112,6 @@ public class MapTableModel extends AbstractTableModel {
 		return getClass().getName() + ": " + data;
 	}
 
-	private void setNew() {
-		// starting with a new set of data
-		datachanged = false;
-	}
-
 	public List<String> getKeys() {
 		return keys;
 	}
@@ -130,13 +122,16 @@ public class MapTableModel extends AbstractTableModel {
 	 * 
 	 * @param Collection data
 	 */
-	public void setStoreData(Collection<Map<String, Object>> data) {
-		if (data == null) {
+	public void setStoreData(Collection<Map<String, Object>> storeData) {
+		if (storeData == null) {
 			Logging.debug(this, "setStoreData, data is null ");
 		}
 
-		setNew();
-		storeData = data;
+		// starting with a new set of data
+		datachanged = false;
+
+		this.storeData = storeData;
+		changes = new HashMap<>();
 		resetModifiedKey();
 	}
 
@@ -146,7 +141,7 @@ public class MapTableModel extends AbstractTableModel {
 	 * 
 	 * @param Collection updateCollection
 	 */
-	public void setUpdateCollection(Collection updateCollection) {
+	public void setUpdateCollection(UpdateCollection updateCollection) {
 		this.updateCollection = updateCollection;
 	}
 
@@ -158,20 +153,40 @@ public class MapTableModel extends AbstractTableModel {
 		this.isEditable = isEditable;
 	}
 
-	public void addEntry(String key, Object newval, boolean toStore) {
-		data.put(key, newval);
-		oridata.put(key, newval);
+	public void addEntry(String key, Object defaultValues, boolean toStore) {
+		data.put(key, defaultValues);
+		oridata.put(key, defaultValues);
 		Logging.debug(this, " keys ", keys);
 		keys = new ArrayList<>(data.keySet());
 		Logging.debug(this, " new keys  ", keys);
 		if (toStore) {
-			putEntryIntoStoredMaps(key, newval, toStore);
+			putEntryIntoStoredMaps(key, defaultValues, toStore);
 		}
 		fireTableDataChanged();
 	}
 
-	public void addEntry(String key, Object newval) {
-		addEntry(key, newval, true);
+	public void addConfigEntry(String key, Object defaultValues, Object possibleValues) {
+		((ConfigUpdateCollection) updateCollection).setMasterConfig(true);
+
+		data.put(key, defaultValues);
+		oridata.put(key, possibleValues);
+		Logging.debug(this, " keys ", keys);
+		keys = new ArrayList<>(data.keySet());
+		Logging.debug(this, " new keys  ", keys);
+
+		if (storeData != null) {
+			for (Map<String, Object> aStoreMap : storeData) {
+				aStoreMap.put(key, defaultValues);
+			}
+			configChanges = Collections.singletonMap(key, defaultValues);
+		}
+
+		updateCollection.addMap(configChanges);
+
+		notifyChange();
+		fireTableDataChanged();
+
+		((ConfigUpdateCollection) updateCollection).setMasterConfig(false);
 	}
 
 	public void removeEntry(String key) {
@@ -277,6 +292,28 @@ public class MapTableModel extends AbstractTableModel {
 		}
 	}
 
+	public void removeConfigEntry(String key) {
+		((ConfigUpdateCollection) updateCollection).setMasterConfig(true);
+		data.remove(key);
+		oridata.remove(key);
+
+		keys = new ArrayList<>(data.keySet());
+
+		if (storeData != null) {
+			for (Map<String, Object> aStoreMap : storeData) {
+				aStoreMap.remove(key);
+			}
+			configChanges = Collections.singletonMap(key, null);
+		}
+
+		notifyChange();
+		fireTableDataChanged();
+
+		updateCollection.addMap(configChanges);
+
+		((ConfigUpdateCollection) updateCollection).setMasterConfig(false);
+	}
+
 	private void weHaveChangedStoredMaps() {
 		// updateCollection has been emptied since last change
 		if (!datachanged || updateCollection.isEmpty()) {
@@ -290,7 +327,7 @@ public class MapTableModel extends AbstractTableModel {
 			if (updateCollection == null) {
 				Logging.debug(this, "updateCollection null - should not be");
 			} else {
-				updateCollection.addAll(storeData);
+				updateCollection.addMap(changes);
 			}
 
 			Logging.debug(this, " ---  updateCollection: ", updateCollection, "  has size ", updateCollection.size());
@@ -300,8 +337,10 @@ public class MapTableModel extends AbstractTableModel {
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-				aStoreMap.put(myKey, nullLIST);
+				aStoreMap.put(myKey, defaultData.get(myKey));
 			}
+
+			changes.put(myKey, null);
 
 			Logging.debug(this, "remove entry --  updateCollection: ", updateCollection, "  has size ",
 					updateCollection.size());
@@ -330,6 +369,8 @@ public class MapTableModel extends AbstractTableModel {
 					Logging.info(this, "EditMapPanel.setValueAt: we have some data null ");
 				}
 			}
+
+			changes.put(myKey, value);
 
 			if (toStore) {
 				weHaveChangedStoredMaps();
@@ -372,8 +413,6 @@ public class MapTableModel extends AbstractTableModel {
 			oridata.put(myKey, o);
 			Logging.debug(this, "put into oridata for myKey o ", myKey, ": ", o);
 			// the data sources:
-
-			modelProducer.updateData(oridata);
 
 			if (writeData) {
 				Logging.debug(this, " -------  storeData ", value, " (class : ", value.getClass());
@@ -434,7 +473,7 @@ public class MapTableModel extends AbstractTableModel {
 	private void notifyChange() {
 		Logging.debug(this, "notifyChange, notify observers ", observers.size());
 		for (int i = 0; i < observers.size(); i++) {
-			(observers.get(i)).dataHaveChanged(this);
+			observers.get(i).dataHaveChanged(this);
 		}
 	}
 }

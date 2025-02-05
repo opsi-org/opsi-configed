@@ -21,18 +21,12 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import de.uib.Main;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 /**
@@ -121,16 +115,11 @@ public class HostInfoCollections {
 		}
 
 		List<Map<String, Object>> opsiHosts = persistenceController.getHostDataService().getOpsiHosts();
-		HostInfo.resetInstancesCount();
 
 		// find opsi configserver and give it the top position
 		retrieveConfigServerPD(opsiHosts);
 
 		String configServer = getConfigServer();
-		if (configServer == null) {
-			showNoDataDialog(opsiHosts.size());
-			Main.endApp(1);
-		}
 
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = new TreeMap<>();
 		depot2Host2HostInfo.put(configServer, new TreeMap<>());
@@ -161,35 +150,9 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_NAMES_LIST, depotNamesList);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 
-		Logging.info(this, "retrieveOpsiHosts  HostInfo instances counter ", HostInfo.getInstancesCount());
 		Logging.info(this, "retrieveOpsiHosts  hostnames size ",
 				cacheManager.getCachedData(CacheIdentifier.OPSI_HOST_NAMES, List.class).size());
 		Logging.info(this, "retrieveOpsiHosts   depotNamesList size ", depotNamesList.size());
-	}
-
-	private void showNoDataDialog(int countHosts) {
-		StringBuilder messbuff = new StringBuilder();
-
-		messbuff.append(Configed.getResourceValue("PersistenceController.noData0"));
-		messbuff.append("\n");
-		messbuff.append(Configed.getResourceValue("PersistenceController.noData1") + " " + countHosts);
-		messbuff.append("\n");
-		messbuff.append("\n");
-
-		for (int i = 2; i <= 4; i++) {
-			messbuff.append(Configed.getResourceValue("PersistenceController.noData" + i));
-			messbuff.append("\n");
-			messbuff.append("\n");
-		}
-
-		String message = messbuff.toString();
-		Logging.error(this, message);
-
-		FTextArea f = new FTextArea(ConfigedMain.getFrame(), Globals.APPNAME, true,
-				new String[] { Configed.getResourceValue("PersistenceController.endApp") }, 500, 400);
-		f.setMessage(message);
-
-		f.setVisible(true);
 	}
 
 	private void retrieveConfigServerPD(List<Map<String, Object>> opsiHosts) {
@@ -214,7 +177,7 @@ public class HostInfoCollections {
 				depotNamesList.add(name);
 				allDepots.put(name, host);
 
-				if (Utils.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), true).booleanValue()) {
+				if (Boolean.TRUE.equals(host.get(HostInfo.IS_MASTER_DEPOT_KEY))) {
 					Map<String, Object> hostMap = new HashMap<>(host);
 					masterDepots.put(name, hostMap);
 				}
@@ -263,9 +226,7 @@ public class HostInfoCollections {
 			String name = (String) host.get(HostInfo.HOSTNAME_KEY);
 			allDepots.put(name, host);
 
-			boolean isMasterDepot = Utils.interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), false);
-
-			if (isMasterDepot) {
+			if (Boolean.TRUE.equals(host.get(HostInfo.IS_MASTER_DEPOT_KEY))) {
 				Map<String, Object> hostMap = new HashMap<>(host);
 				masterDepots.put(name, hostMap);
 				depot2Host2HostInfo.put(name, new TreeMap<>());
@@ -311,23 +272,19 @@ public class HostInfoCollections {
 
 			host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
 					persistenceController.getConfigDataService().isInstallByShutdownConfigured(name));
-			host.put(HostInfo.CLIENT_UEFI_BOOT_KEY,
-					persistenceController.getConfigDataService().isUefiConfigured(name));
 
-			if (persistenceController.getConfigDataService().getHostConfig(name) != null) {
-				boolean result = persistenceController.getConfigDataService()
-						.findBooleanConfigurationComparingToDefaults(name,
-								persistenceController.getConfigDataService().getWanConfigurationPD());
-				Logging.debug(this, "host ", name, " wan config ", result);
-				host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
-			}
+			boolean result = persistenceController.getConfigDataService().findBooleanConfigurationComparingToDefaults(
+					name, persistenceController.getConfigDataService().getWanConfigurationPD());
+			Logging.debug(this, "host ", name, " wan config ", result);
+			host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
 
 			HostInfo hostInfo = null;
 			String myDepot = null;
 
 			depotId = depotFound ? depotId : getConfigServer();
 			host.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
-			hostInfo = new HostInfo(host);
+			hostInfo = new HostInfo();
+			hostInfo.setValues(host);
 			hostInfo.setInDepot(depotId);
 			myDepot = depotId;
 
@@ -453,10 +410,10 @@ public class HostInfoCollections {
 		for (String client : clients) {
 			setDepot(client, depotId);
 			// collect data
-			persistenceController.getConfigDataService().setAdditionalConfiguration(client, config);
+			persistenceController.getConfigDataService().setConfigStates(client, config);
 		}
 		// send data
-		persistenceController.getConfigDataService().setAdditionalConfiguration();
+		persistenceController.getConfigDataService().updateConfigStates();
 	}
 
 	// update derived data (caution!), does not create a HostInfo

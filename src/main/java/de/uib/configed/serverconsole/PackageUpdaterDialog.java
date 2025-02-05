@@ -6,50 +6,60 @@
 
 package de.uib.configed.serverconsole;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandPackageUpdater;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
-public class PackageUpdaterDialog extends FGeneralDialog {
-	private JPanel inputPanel = new JPanel();
-	private JPanel buttonPanel = new JPanel();
+public class PackageUpdaterDialog {
 
-	private JLabel jLabelInfo;
-	private JLabel jLabelRepos;
 	private JComboBox<String> jComboBoxActions;
 	private JComboBox<String> jComboBoxRepos;
-	private JButton jButtonDoAction;
 	private SingleCommandPackageUpdater command;
 
 	private ConfigedMain configedMain;
 
 	public PackageUpdaterDialog(ConfigedMain configedMain) {
-		super(null, Configed.getResourceValue("PackageUpdaterDialog.title"), false);
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("feature.permissionDenied.message"),
+					Configed.getResourceValue("permissionDenied"), JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		this.configedMain = configedMain;
 		command = new SingleCommandPackageUpdater();
-		Logging.info(this.getClass(), "with command");
+		Logging.info(this, "with command");
 		retrieveRepos();
-		init();
-		initLayout();
+		JPanel panel = initPanel();
+
+		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
+		buttonExecute.addActionListener(actionEvent -> execute());
+
+		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null,
+				new Object[] { buttonExecute, Configed.getResourceValue("buttonCancel") });
+
+		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("PackageUpdaterDialog.title"));
+		dialog.setModal(false);
+		dialog.setVisible(true);
 	}
 
 	private void retrieveRepos() {
@@ -78,35 +88,26 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 		}
 	}
 
-	private void init() {
-		getContentPane().add(inputPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-
-		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
-		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-
-		jLabelInfo = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.info"));
-		jLabelRepos = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.repos"));
-		inputPanel.add(jLabelInfo);
-		inputPanel.add(jLabelRepos);
-		jButtonDoAction = new JButton(Configed.getResourceValue("buttonExecute"));
-
-		if (!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly()) {
-			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
-				Logging.info(this, "btn_doAction pressed");
-				doAction2();
-			});
+	private void execute() {
+		command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
+		String repo = (String) jComboBoxRepos.getSelectedItem();
+		if (repo.equals(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"))) {
+			command.setRepo(null);
+		} else {
+			command.setRepo(repo);
 		}
 
-		JButton jButtonClose = new JButton(Configed.getResourceValue("buttonClose"));
-		jButtonClose.addActionListener(actionEvent -> cancel());
+		Logging.info(this, "doAction2 opsi-package-updater: ", command);
+		CommandExecutor executor = new CommandExecutor(configedMain, command);
+		executor.execute();
+	}
 
-		buttonPanel.add(jButtonClose);
-		buttonPanel.add(jButtonDoAction);
+	private JPanel initPanel() {
+		JLabel jLabelInfo = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.info"));
+		jLabelInfo.setFont(jLabelInfo.getFont().deriveFont(Font.BOLD));
 
-		setComponentsEnabled(!PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-				.isGlobalReadOnly());
+		JLabel jLabelRepos = new JLabel(Configed.getResourceValue("PackageUpdaterDialog.repos"));
+		jLabelRepos.setFont(jLabelRepos.getFont().deriveFont(Font.BOLD));
 
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
 		jComboBoxActions.addItemListener((ItemEvent itemEvent) -> {
@@ -125,66 +126,29 @@ public class PackageUpdaterDialog extends FGeneralDialog {
 		jComboBoxRepos.addItem(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"));
 		jComboBoxRepos.setSelectedItem(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"));
 		jComboBoxActions.setEnabled(true);
-		inputPanel.add(jComboBoxActions);
-		inputPanel.add(jComboBoxRepos);
-	}
 
-	private void setComponentsEnabled(boolean value) {
-		jButtonDoAction.setEnabled(value);
-	}
+		JPanel panel = new JPanel();
+		GroupLayout inputPanelLayout = new GroupLayout(panel);
+		panel.setLayout(inputPanelLayout);
 
-	@Override
-	public void doAction2() {
-		command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
-		String repo = (String) jComboBoxRepos.getSelectedItem();
-		if (repo.equals(Configed.getResourceValue("PackageUpdaterDialog.allrepositories"))) {
-			command.setRepo(null);
-		} else {
-			command.setRepo(repo);
-		}
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
+				.addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jLabelRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxActions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(jComboBoxRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		Logging.info(this, "doAction2 opsi-package-updater: ", command);
-		CommandExecutor executor = new CommandExecutor(configedMain, command);
-		executor.execute();
-	}
-
-	private void cancel() {
-		super.doAction1();
-	}
-
-	private void initLayout() {
-		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
-		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
+				.addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxActions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(jComboBoxActions, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addComponent(jComboBoxRepos, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
-				.addGap(Globals.GAP_SIZE));
-
-		inputPanelLayout
-				.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelInfo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jComboBoxActions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(jLabelRepos, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(jComboBoxRepos, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
-						.addGap(2 * Globals.GAP_SIZE));
-
-		this.setSize(600, 210);
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setVisible(true);
+				.addComponent(jLabelRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
+		return panel;
 	}
 }

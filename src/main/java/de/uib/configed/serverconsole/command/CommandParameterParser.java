@@ -15,13 +15,11 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -326,17 +324,15 @@ public final class CommandParameterParser {
 		Logging.debug(this, "getUserText text ", text);
 		final JTextField field = new JTextField();
 
-		final JOptionPane opPane = new JOptionPane(new Object[] { new JLabel(text), field },
-				JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
+		final JOptionPane opPane = new JOptionPane(new Object[] { text, field }, JOptionPane.PLAIN_MESSAGE,
+				JOptionPane.OK_CANCEL_OPTION) {
 			@Override
 			public void selectInitialValue() {
 				super.selectInitialValue();
-				((Component) field).requestFocusInWindow();
+				field.requestFocusInWindow();
 			}
 		};
-		final JDialog jdialog = opPane.createDialog(dialog,
-				Globals.APPNAME + " " + Configed.getResourceValue("CommandParameterParser.Input"));
-		jdialog.setSize(400, 150);
+		final JDialog jdialog = opPane.createDialog(dialog, Configed.getResourceValue("CommandParameterParser.Input"));
 		jdialog.setVisible(true);
 
 		if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION) {

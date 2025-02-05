@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,11 +33,11 @@ import javax.swing.table.TableRowSorter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ExporterToCSV;
@@ -46,7 +47,6 @@ import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.TableModelFilterCondition;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.PanelGenEditTable;
-import de.uib.utils.table.gui.TableSearchPane;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
@@ -92,7 +92,10 @@ public class PanelSWInfo extends JPanel {
 
 	private JCheckBox checkWithMsUpdates2;
 
-	public PanelSWInfo(boolean withPopup) {
+	private ConfigedMain configedMain;
+
+	public PanelSWInfo(ConfigedMain configedMain, boolean withPopup) {
+		this.configedMain = configedMain;
 		this.withPopup = withPopup;
 
 		initTableComponents();
@@ -145,9 +148,8 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle = new JLabel();
 
 		panelTable = new PanelGenEditTable("", false, 0, new int[] {}, true);
-		panelTable.setColumnSelectionAllowed(false);
-		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		panelTable.setSearchMode(TableSearchPane.SearchMode.FULL_TEXT_SEARCH);
+		panelTable.getJTable().setColumnSelectionAllowed(false);
+		panelTable.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
@@ -235,11 +237,11 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
 
-		panelTable.getColumnModel().getColumn(0).setPreferredWidth(400);
-		panelTable.getColumnModel().getColumn(1).setPreferredWidth(200);
-		panelTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+		panelTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(400);
+		panelTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(200);
+		panelTable.getJTable().getColumnModel().getColumn(2).setPreferredWidth(100);
 
-		csvExportTable = new ExporterToCSV(panelTable.getTheTable());
+		csvExportTable = new ExporterToCSV(panelTable.getJTable());
 	}
 
 	private void buildPanel() {
@@ -283,7 +285,7 @@ public class PanelSWInfo extends JPanel {
 				}
 			};
 
-			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getTheTable(),
+			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getJTable(),
 					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
 		}
 	}
@@ -421,7 +423,7 @@ public class PanelSWInfo extends JPanel {
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", "software inventory");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable.getTheTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable.getJTable());
 		pdfExportTable.setClient(hostId);
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();
@@ -434,25 +436,25 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle.setText(supertitle);
 	}
 
-	/** overwrite in subclasses */
-	protected void reload() {
+	private void reload() {
 		Logging.debug(this, "reload action");
+		ConfigedMain.getMainFrame().activateLoadingCursor();
+		persistenceController.reloadData(ReloadEvent.INSTALLED_SOFTWARE_RELOAD.toString());
+		ConfigedMain.getMainFrame().getClientConfiguration().setSoftwareAudit();
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	private void floatExternalX() {
-		PanelSWInfo copyOfMe;
-		GeneralFrame externalView;
-
-		copyOfMe = new PanelSWInfo(false);
+		PanelSWInfo copyOfMe = new PanelSWInfo(configedMain, false);
 		copyOfMe.setHost(hostId);
 		copyOfMe.updateModel();
 
-		externalView = new GeneralFrame(null, title, false);
-		externalView.addPanel(copyOfMe);
-		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		externalView.setVisible(true);
+		JDialog dialog = new JDialog();
+		dialog.setTitle(title);
+		dialog.setContentPane(copyOfMe);
+		dialog.setSize(getSize());
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
 	}
 
 	public void updateModel() {
