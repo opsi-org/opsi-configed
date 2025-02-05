@@ -134,14 +134,9 @@ public final class Globals {
 	// Make width long enough so that it will be not too small for the whole text
 	public static final Dimension LABEL_SIZE_OF_JTREE = new Dimension(500, 20);
 
-	public static final int GRAPHIC_BUTTON_SIZE = 40;
-
 	public static final int COMBOBOX_ROW_COUNT = 20;
 
 	// action form constants
-	public static final int HFIRST_GAP = GAP_SIZE * 3;
-	public static final int FIRST_LABEL_WIDTH = 250;
-
 	public static final String STARRED_STRING = "*****";
 
 	public static final String CONFLICT_STATE_STRING = "mixed";
