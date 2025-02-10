@@ -6,6 +6,7 @@
 
 package de.uib.configed.productaction;
 
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -31,8 +32,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
-
-import com.itextpdf.text.Font;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -104,7 +103,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 		JPanel panel = initLayout();
 
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
-				new Object[] { buttonCallExecute });
+				new Object[] { buttonCallExecute, Configed.getResourceValue("buttonCancel") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("FProductAction.title"));

@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 import javax.swing.DefaultComboBoxModel;
 
-import de.uib.configed.groupaction.FGroupActions;
+import de.uib.configed.groupaction.GroupActionsDialog;
 import de.uib.configed.gui.ClientSelectionDialog;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.RemoteControlDialog;
@@ -39,7 +39,7 @@ public final class ExtraFrameController {
 	private static NewClientDialog newClientDialog;
 	private static EditTerminalCommandsDialog commandControlDialog;
 	private static CompleteWinProductsDialog completeWinProductsPanel;
-	private static FGroupActions groupActionFrame;
+	private static GroupActionsDialog groupActionFrame;
 	private static RemoteControlDialog remoteControlDialog;
 	private static Map<String, RemoteControl> remoteControls;
 
@@ -121,12 +121,10 @@ public final class ExtraFrameController {
 
 	public static void startGroupActionFrame(ConfigedMain configedMain) {
 		if (groupActionFrame == null) {
-			groupActionFrame = new FGroupActions(configedMain);
-			groupActionFrame.setSize(1000, 300);
+			groupActionFrame = new GroupActionsDialog(configedMain);
 		}
 
-		groupActionFrame.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		groupActionFrame.start();
+		groupActionFrame.show();
 	}
 
 	public static void startRemoteControlFrame(ConfigedMain configedMain,
