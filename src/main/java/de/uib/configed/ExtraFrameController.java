@@ -114,10 +114,9 @@ public final class ExtraFrameController {
 
 		if (completeWinProductsPanel == null) {
 			completeWinProductsPanel = new CompleteWinProductsDialog();
-			completeWinProductsPanel.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		}
 
-		completeWinProductsPanel.start();
+		completeWinProductsPanel.show();
 	}
 
 	public static void startGroupActionFrame(ConfigedMain configedMain) {

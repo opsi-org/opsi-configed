@@ -20,9 +20,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -30,7 +32,10 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
+import com.itextpdf.text.Font;
+
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -38,9 +43,8 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.SecondaryFrame;
 
-public class CompleteWinProductsDialog extends SecondaryFrame implements NameProducer {
+public class CompleteWinProductsDialog implements NameProducer {
 	// file name conventions
 
 	private String winProduct = "";
@@ -67,13 +71,12 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 
 	private JFileChooser chooserFolder;
 
+	private JDialog dialog;
+
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	public CompleteWinProductsDialog() {
-		super.setIconImage(Icons.getMainIcon());
-		super.setTitle(Configed.getResourceValue("FProductAction.title"));
-
 		defineChoosers();
 		initComponentsForNameProducer();
 
@@ -98,10 +101,21 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 
 		evaluateWinProducts();
 
-		defineLayout();
-		super.setSize(800, 400);
+		JPanel panel = initLayout();
+
+		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
+				new Object[] { buttonCallExecute });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("FProductAction.title"));
+		dialog.setModal(false);
 
 		persistenceController.registerPanelCompleteWinProducts(this);
+	}
+
+	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
 	}
 
 	public void evaluateWinProducts() {
@@ -162,9 +176,7 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 			return;
 		}
 
-		buttonCallExecute.setEnabled(
-				// true
-				new File(fieldTargetPath.getText()).isDirectory());
+		buttonCallExecute.setEnabled(new File(fieldTargetPath.getText()).isDirectory());
 	}
 
 	private void produceTarget() {
@@ -221,7 +233,7 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
 		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = chooserFolder.showOpenDialog(getContentPane());
+			int returnVal = chooserFolder.showOpenDialog(dialog);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String pathWinPE = chooserFolder.getSelectedFile().getPath();
@@ -239,7 +251,7 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 		fieldPathInstallFiles = new JTextField();
 
 		buttonCallSelectFolderInstallFiles.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = chooserFolder.showOpenDialog(getContentPane());
+			int returnVal = chooserFolder.showOpenDialog(dialog);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
@@ -250,8 +262,7 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 			}
 		});
 
-		buttonCallExecute = new JButton(Icons.getIntellijIcon("upload"));
-		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));
+		buttonCallExecute = new JButton(Configed.getResourceValue("CompleteWinProducts.execute"));
 
 		buttonCallExecute.setEnabled(false);
 
@@ -259,7 +270,7 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 	}
 
 	private void execute() {
-		activateLoadingCursor();
+		dialog.setCursor(Globals.WAIT_CURSOR);
 
 		try {
 			File targetDirectory = null;
@@ -286,9 +297,9 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 			persistenceController.getRPCMethodExecutor()
 					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
 							+ winProduct + "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
-			deactivateLoadingCursor();
+			dialog.setCursor(null);
 
-			JOptionPane.showMessageDialog(this, "Ready", Configed.getResourceValue("CompleteWinProduct.reportTitle"),
+			JOptionPane.showMessageDialog(dialog, "Ready", Configed.getResourceValue("CompleteWinProduct.reportTitle"),
 					JOptionPane.INFORMATION_MESSAGE);
 
 			List<String> values = new ArrayList<>();
@@ -313,25 +324,25 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
 			if (!oldProductKey.equals(productKey)) {
-				int returnedOption = JOptionPane.showConfirmDialog(this,
+				int returnedOption = JOptionPane.showConfirmDialog(dialog,
 						Configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
 						Configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
-					activateLoadingCursor();
+					dialog.setCursor(Globals.WAIT_CURSOR);
 					Logging.info(this, "setCommonProductPropertyValue ", depots, ", ", winProduct, ", ", values);
 					persistenceController.getProductDataService().setCommonProductPropertyValue(depots, winProduct,
 							"productkey", values);
 
-					deactivateLoadingCursor();
+					dialog.setCursor(null);
 				}
 			}
 		} catch (IOException ex) {
-			deactivateLoadingCursor();
+			dialog.setCursor(null);
 			Logging.error(ex, "copy error:\n", ex);
 		} catch (HeadlessException ex) {
-			deactivateLoadingCursor();
+			dialog.setCursor(null);
 			Logging.error(ex, "Headless exception when invoking showOptionDialog");
 		}
 	}
@@ -345,130 +356,115 @@ public class CompleteWinProductsDialog extends SecondaryFrame implements NamePro
 		}
 	}
 
-	private void defineLayout() {
+	private JPanel initLayout() {
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
+		topicLabel.setFont(topicLabel.getFont().deriveFont(Font.BOLD));
+
 		JLabel labelServer = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelServer"));
+		labelServer.setFont(labelServer.getFont().deriveFont(Font.BOLD));
+
 		JLabel labelWinProduct = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelWinProduct"));
+		labelWinProduct.setFont(labelWinProduct.getFont().deriveFont(Font.BOLD));
+
 		JLabel labelFolderWinPE = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelFolderWinPE"));
+		labelFolderWinPE.setFont(labelFolderWinPE.getFont().deriveFont(Font.BOLD));
+
 		JLabel labelFolderInstallFiles = new JLabel(
 				Configed.getResourceValue("CompleteWinProducts.labelFolderInstallFiles"));
+		labelFolderInstallFiles.setFont(labelFolderInstallFiles.getFont().deriveFont(Font.BOLD));
+
 		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
+		labelTargetPath.setFont(labelTargetPath.getFont().deriveFont(Font.BOLD));
+
 		JLabel labelProductKey = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelProductKey"));
+		labelProductKey.setFont(labelProductKey.getFont().deriveFont(Font.BOLD));
 
-		GroupLayout layout = new GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(
-						topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboChooseDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonCallSelectFolderInstallFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonCallExecute,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE));
-
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+		layout.setVerticalGroup(
+				layout.createSequentialGroup()
 						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE))
-
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
 						.addComponent(comboChooseDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
-
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
 						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
-
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCallSelectFolderInstallFiles, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(buttonCallSelectFolderInstallFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-				.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
 						.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
 						.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE))
-				.addGroup(layout
-						.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(buttonCallExecute,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)));
+								GroupLayout.PREFERRED_SIZE));
+
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+
+				.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(comboChooseDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+
+				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+
+				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
+				.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderInstallFiles,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE));
+
+		return panel;
 	}
 }
