@@ -21,6 +21,8 @@ public final class InstallationStatus {
 
 	public static final String KEY_NOT_INSTALLED = "not_installed";
 	public static final String KEY_INSTALLED = "installed";
+	public static final String KEY_UNKNOWN = "unknown";
+	public static final String KEY_UNDEFINED = "undefined";
 
 	// conflicting entries from several clients
 	public static final int CONFLICT = -4;
@@ -57,35 +59,35 @@ public final class InstallationStatus {
 		labels = new LinkedHashSet<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
-		labels.add("undefined");
+		labels.add(InstallationStatus.KEY_UNDEFINED);
 		labels.add(InstallationStatus.KEY_INSTALLED);
 		labels.add(InstallationStatus.KEY_NOT_INSTALLED);
 
-		labels.add("unknown");
+		labels.add(InstallationStatus.KEY_UNKNOWN);
 
 		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
-		state2label.put(UNDEFINED, "undefined");
+		state2label.put(UNDEFINED, InstallationStatus.KEY_UNDEFINED);
 		state2label.put(INSTALLED, InstallationStatus.KEY_INSTALLED);
 		state2label.put(NOT_INSTALLED, InstallationStatus.KEY_NOT_INSTALLED);
-		state2label.put(UNKNOWN, "unknown");
+		state2label.put(UNKNOWN, InstallationStatus.KEY_UNKNOWN);
 
 		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
-		label2state.put("undefined", UNDEFINED);
+		label2state.put(InstallationStatus.KEY_UNDEFINED, UNDEFINED);
 		label2state.put(InstallationStatus.KEY_INSTALLED, INSTALLED);
 		label2state.put(InstallationStatus.KEY_NOT_INSTALLED, NOT_INSTALLED);
-		label2state.put("unknown", UNKNOWN);
+		label2state.put(InstallationStatus.KEY_UNKNOWN, UNKNOWN);
 
 		choiceLabels = new String[] { InstallationStatus.KEY_NOT_INSTALLED, InstallationStatus.KEY_INSTALLED,
-				"unknown" };
+				InstallationStatus.KEY_UNKNOWN };
 
 		label2textColor = new HashMap<>();
 		label2textColor.put(InstallationStatus.KEY_NOT_INSTALLED, Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR);
 		label2textColor.put(InstallationStatus.KEY_INSTALLED, Globals.INSTALLATION_STATUS_INSTALLED_COLOR);
-		label2textColor.put("unknown", Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
+		label2textColor.put(InstallationStatus.KEY_UNKNOWN, Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
 	}
 
 	public static Map<String, Color> getLabel2TextColor() {

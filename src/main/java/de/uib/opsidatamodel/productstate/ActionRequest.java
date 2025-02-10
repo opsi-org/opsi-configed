@@ -29,6 +29,15 @@ public class ActionRequest {
 	// product offers no actions
 	public static final int NOT_AVAILABLE = -6;
 
+	public static final String KEY_NONE = "none";
+	public static final String KEY_SETUP = "setup";
+	public static final String KEY_UPDATE = "update";
+	public static final String KEY_UNINSTALL = "uninstall";
+	public static final String KEY_ALWAYS = "always";
+	public static final String KEY_ONCE = "once";
+	public static final String KEY_CUSTOM = "custom";
+	public static final String KEY_NOT_AVAILABLE = "not_available";
+
 	// valid service states
 	public static final int NONE = 0;
 	public static final int SETUP = 1;
@@ -64,34 +73,34 @@ public class ActionRequest {
 		labels = new LinkedHashSet<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
-		labels.add("not_available");
-		labels.add("none");
-		labels.add("setup");
-		labels.add("update");
-		labels.add("uninstall");
-		labels.add("always");
-		labels.add("once");
-		labels.add("custom");
+		labels.add(KEY_NOT_AVAILABLE);
+		labels.add(KEY_NONE);
+		labels.add(KEY_SETUP);
+		labels.add(KEY_UPDATE);
+		labels.add(KEY_UNINSTALL);
+		labels.add(KEY_ALWAYS);
+		labels.add(KEY_ONCE);
+		labels.add(KEY_CUSTOM);
 
 		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
-		state2label.put(NOT_AVAILABLE, "not_available");
-		state2label.put(NONE, "none");
-		state2label.put(SETUP, "setup");
-		state2label.put(UPDATE, "update");
-		state2label.put(UNINSTALL, "uninstall");
-		state2label.put(ALWAYS, "always");
-		state2label.put(ONCE, "once");
-		state2label.put(CUSTOM, "custom");
+		state2label.put(NOT_AVAILABLE, KEY_NOT_AVAILABLE);
+		state2label.put(NONE, KEY_NONE);
+		state2label.put(SETUP, KEY_SETUP);
+		state2label.put(UPDATE, KEY_UPDATE);
+		state2label.put(UNINSTALL, KEY_UNINSTALL);
+		state2label.put(ALWAYS, KEY_ALWAYS);
+		state2label.put(ONCE, KEY_ONCE);
+		state2label.put(CUSTOM, KEY_CUSTOM);
 
 		Map<String, Integer> serviceValue2state = new HashMap<>();
-		serviceValue2state.put("setup", SETUP);
-		serviceValue2state.put("update", UPDATE);
-		serviceValue2state.put("uninstall", UNINSTALL);
-		serviceValue2state.put("always", ALWAYS);
-		serviceValue2state.put("once", ONCE);
-		serviceValue2state.put("custom", CUSTOM);
+		serviceValue2state.put(KEY_SETUP, SETUP);
+		serviceValue2state.put(KEY_UPDATE, UPDATE);
+		serviceValue2state.put(KEY_UNINSTALL, UNINSTALL);
+		serviceValue2state.put(KEY_ALWAYS, ALWAYS);
+		serviceValue2state.put(KEY_ONCE, ONCE);
+		serviceValue2state.put(KEY_CUSTOM, CUSTOM);
 
 		scriptKeys = new ArrayList<>();
 
@@ -106,25 +115,26 @@ public class ActionRequest {
 		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
-		label2state.put("not_available", NOT_AVAILABLE);
-		label2state.put("none", NONE);
-		label2state.put("setup", SETUP);
-		label2state.put("update", UPDATE);
-		label2state.put("uninstall", UNINSTALL);
-		label2state.put("always", ALWAYS);
-		label2state.put("once", ONCE);
-		label2state.put("custom", CUSTOM);
+		label2state.put(KEY_NOT_AVAILABLE, NOT_AVAILABLE);
+		label2state.put(KEY_NONE, NONE);
+		label2state.put(KEY_SETUP, SETUP);
+		label2state.put(KEY_UPDATE, UPDATE);
+		label2state.put(KEY_UNINSTALL, UNINSTALL);
+		label2state.put(KEY_ALWAYS, ALWAYS);
+		label2state.put(KEY_ONCE, ONCE);
+		label2state.put(KEY_CUSTOM, CUSTOM);
 
-		choiceLabels = new String[] { "none", "setup", "update", "uninstall", "always", "once", "custom", };
+		choiceLabels = new String[] { KEY_NONE, KEY_SETUP, KEY_UPDATE, KEY_UNINSTALL, KEY_ALWAYS, KEY_ONCE,
+				KEY_CUSTOM, };
 
 		label2textColor = new HashMap<>();
-		label2textColor.put("none", Globals.ACTION_REQUEST_NONE_COLOR);
-		label2textColor.put("setup", Globals.ACTION_REQUEST_SETUP_COLOR);
-		label2textColor.put("update", Globals.ACTION_REQUEST_UPDATE_COLOR);
-		label2textColor.put("uninstall", Globals.ACTION_REQUEST_UNINSTALL_COLOR);
-		label2textColor.put("always", Globals.ACTION_REQUEST_ALWAYS_COLOR);
-		label2textColor.put("once", Globals.ACTION_REQUEST_ONCE_COLOR);
-		label2textColor.put("custom", Globals.ACTION_REQUEST_CUSTOM_COLOR);
+		label2textColor.put(KEY_NONE, Globals.ACTION_REQUEST_NONE_COLOR);
+		label2textColor.put(KEY_SETUP, Globals.ACTION_REQUEST_SETUP_COLOR);
+		label2textColor.put(KEY_UPDATE, Globals.ACTION_REQUEST_UPDATE_COLOR);
+		label2textColor.put(KEY_UNINSTALL, Globals.ACTION_REQUEST_UNINSTALL_COLOR);
+		label2textColor.put(KEY_ALWAYS, Globals.ACTION_REQUEST_ALWAYS_COLOR);
+		label2textColor.put(KEY_ONCE, Globals.ACTION_REQUEST_ONCE_COLOR);
+		label2textColor.put(KEY_CUSTOM, Globals.ACTION_REQUEST_CUSTOM_COLOR);
 	}
 
 	public static List<String> getScriptKeys() {
