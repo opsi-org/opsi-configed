@@ -95,6 +95,8 @@ public final class HealthInfo {
 		List<Map<String, Object>> healthDetails = persistenceController.getHealthDataService()
 				.retrieveHealthDetails((String) ((Map<?, ?>) healthData.get("check")).get("id"));
 
+		sortHealthDataBasedOnStatusLevel(healthDetails);
+
 		if (healthDetails.isEmpty()) {
 			return "";
 		}
