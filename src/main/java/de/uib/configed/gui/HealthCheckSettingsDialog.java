@@ -39,7 +39,7 @@ import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.layout.StackPane;
 
 public final class HealthCheckSettingsDialog {
-	private static final int TEXT_LABE_WIDTH = 200;
+	private static final int TEXT_LABEL_WIDTH = 200;
 
 	private static final String ZERO_HOUR_STRING = "00:00:00";
 	private static final String END_OF_DAY_STRING = "23:59:59";
@@ -140,15 +140,15 @@ public final class HealthCheckSettingsDialog {
 				.addGap(Globals.GAP_SIZE).addComponent(labelEndDowntime).addComponent(endDowntime));
 
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(labelSelectedHosts)
-				.addComponent(selectedHosts, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)
+				.addComponent(selectedHosts, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH)
 
 				.addComponent(checkBoxCheckActive)
 
 				.addComponent(labelStartDowntime)
-				.addComponent(startDowntime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH)
+				.addComponent(startDowntime, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH)
 
 				.addComponent(labelEndDowntime)
-				.addComponent(endDowntime, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH, TEXT_LABE_WIDTH));
+				.addComponent(endDowntime, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH));
 
 		return panel;
 	}
@@ -157,7 +157,7 @@ public final class HealthCheckSettingsDialog {
 		Logging.info(this, "openSelectionDialog for health check settings");
 
 		if (selectedHostList == null) {
-			selectedHostList = new ListSelectionDialog(ConfigedMain.getMainFrame(),
+			selectedHostList = new ListSelectionDialog(dialog,
 					Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
 			List<String> hostNames = new ArrayList<>(
 					persistenceController.getHostInfoCollections().getDepotNamesList());

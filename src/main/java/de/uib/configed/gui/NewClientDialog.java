@@ -65,8 +65,6 @@ public final class NewClientDialog {
 	private JCheckBox jCheckWan;
 	private JCheckBox jCheckShutdownInstall;
 
-	private JPanel panel;
-
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
@@ -76,17 +74,21 @@ public final class NewClientDialog {
 			.getPersistenceController();
 
 	public NewClientDialog() {
-		init();
-
 		JButton buttonCreate = new JButton(Configed.getResourceValue("NewClientDialog.buttonCreate"));
 		buttonCreate.addActionListener(actionEvent -> create());
 
-		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+		optionPane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { buttonCreate, Configed.getResourceValue("buttonClose") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title"));
 		dialog.setModal(false);
+
+		// We need to create the panel after the creation because the panel needs the dialog
+		JPanel panel = createPanel();
+
+		optionPane.setMessage(panel);
+		dialog.pack();
 	}
 
 	public void show() {
@@ -123,7 +125,7 @@ public final class NewClientDialog {
 				.isInstallByShutdownConfigured(persistenceController.getHostInfoCollections().getConfigServer()));
 	}
 
-	private void init() {
+	private JPanel createPanel() {
 		JLabel jLabelHostname = new JLabel(Configed.getResourceValue("NewClientDialog.hostname"));
 		jLabelHostname.setFont(jLabelHostname.getFont().deriveFont(Font.BOLD));
 
@@ -219,7 +221,7 @@ public final class NewClientDialog {
 			jCheckWan.setEnabled(false);
 		}
 
-		panel = new JPanel();
+		JPanel panel = new JPanel();
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
@@ -352,10 +354,12 @@ public final class NewClientDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jComboNetboot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
+
+		return panel;
 	}
 
 	private void displayGroupSelectionDialog() {
-		ListSelectionDialog groupsSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
+		ListSelectionDialog groupsSelectionDialog = new ListSelectionDialog(dialog,
 				Configed.getResourceValue("NewClientDialog.groupSelectionDialog.title"));
 		groupsSelectionDialog.setMultiSelection();
 		groupsSelectionDialog.setListData(
@@ -383,7 +387,7 @@ public final class NewClientDialog {
 	private JPanel createNorthPanel() {
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Icons.getIntellijIcon("add"));
-		jCSVTemplateButton.addActionListener(actionEvent -> CSVTemplateCreatorDialog.displayCSVTemplateDialog());
+		jCSVTemplateButton.addActionListener(actionEvent -> CSVTemplateCreatorDialog.displayCSVTemplateDialog(dialog));
 
 		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
 		JButton jImportButton = new JButton(Icons.getIntellijIcon("open"));
@@ -596,7 +600,7 @@ public final class NewClientDialog {
 		jFileChooser.addChoosableFileFilter(fileFilter);
 		jFileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showOpenDialog(ConfigedMain.getMainFrame());
+		int returnValue = jFileChooser.showOpenDialog(dialog);
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();

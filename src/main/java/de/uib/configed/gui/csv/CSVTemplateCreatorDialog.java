@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.csv;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.io.BufferedWriter;
@@ -70,13 +71,12 @@ public class CSVTemplateCreatorDialog {
 	private JOptionPane optionPane;
 	private JDialog dialog;
 
-	public CSVTemplateCreatorDialog(List<String> columnNames) {
+	public CSVTemplateCreatorDialog(List<String> columnNames, Component parent) {
 		this.columnNames = columnNames;
 
 		JPanel panel = initPanel();
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
+		dialog = optionPane.createDialog(parent, Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 	}
 
 	private JPanel initPanel() {
@@ -321,7 +321,7 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	public void show() {
-		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setLocationRelativeTo(dialog.getParent());
 		dialog.setVisible(true);
 
 		if (optionPane.getValue() == (Integer) JOptionPane.OK_OPTION) {
@@ -329,10 +329,10 @@ public class CSVTemplateCreatorDialog {
 		}
 	}
 
-	public static void displayCSVTemplateDialog() {
+	public static void displayCSVTemplateDialog(Component parent) {
 		List<String> columnNames = HostInfo.getKeysForCSV();
 		if (csvTemplateCreatorDialog == null) {
-			csvTemplateCreatorDialog = new CSVTemplateCreatorDialog(columnNames);
+			csvTemplateCreatorDialog = new CSVTemplateCreatorDialog(columnNames, parent);
 		}
 
 		csvTemplateCreatorDialog.show();
