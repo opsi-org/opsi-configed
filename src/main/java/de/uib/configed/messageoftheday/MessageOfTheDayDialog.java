@@ -70,7 +70,7 @@ public class MessageOfTheDayDialog {
 				Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"));
 		dialog.setVisible(true);
 
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("buttonExecute"))) {
+		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("save"))) {
 			saveData();
 		}
 	}
@@ -151,7 +151,7 @@ public class MessageOfTheDayDialog {
 	}
 
 	private void saveData() {
-		Logging.debug("FMessageOfTheDay doAction2 store");
+		Logging.debug("FMessageOfTheDay saveData");
 		Map<String, String> data = new HashMap<>();
 		if (!forbiddenDevice) {
 			data.put(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE, pMsgInfoGeneral.getText());
@@ -164,11 +164,11 @@ public class MessageOfTheDayDialog {
 					pMsgInfoUser.getValidUntil());
 		}
 		if (data.isEmpty()) {
-			Logging.error("FMessageOfTheDay doAction2 store no data", data);
+			Logging.error("FMessageOfTheDay saveData no data", data);
 			return;
 		}
 		persistenceController.getConfigDataService().setMessageOfTheDayConfigs(data);
-		Logging.info("FMessageOfTheDay doAction2 store done: ", data);
+		Logging.info("FMessageOfTheDay saveData done: ", data);
 		resetData();
 	}
 }
