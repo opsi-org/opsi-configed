@@ -6,6 +6,9 @@
 
 package de.uib.configed;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -27,13 +30,16 @@ public final class HealthInfo {
 	}
 
 	/**
-	 * retrieves processed data as String.
+	 * retrieves processed data as String. Data entries are sorted based on the
+	 * status level (error, warning, ok).
 	 * 
 	 * @return processed data with or without detailed information
 	 */
 	public static String getHealthData() {
 		List<Map<String, Object>> healthData = persistenceController.getHealthDataService().checkHealthPD();
 		StringBuilder healthDataBuilder = new StringBuilder();
+
+		sortHealthDataBasedOnStatusLevel(healthData);
 
 		for (Map<String, Object> data : healthData) {
 			healthDataBuilder.append(produceMessages(data));
@@ -44,7 +50,8 @@ public final class HealthInfo {
 	}
 
 	/**
-	 * retrieves processed data as Map object.
+	 * retrieves processed data as Map object. Data entries are sorted based on
+	 * the status level (error, warning, ok).
 	 * 
 	 * @param includeDetailedInformation whether to include detailed
 	 *                                   information, when processing health
@@ -57,8 +64,10 @@ public final class HealthInfo {
 	}
 
 	private static Map<String, Map<String, Object>> produceMap(boolean includeDetailedInformation) {
-		Map<String, Map<String, Object>> result = new TreeMap<>();
+		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 		List<Map<String, Object>> healthData = persistenceController.getHealthDataService().checkHealthPD();
+
+		sortHealthDataBasedOnStatusLevel(healthData);
 
 		for (Map<String, Object> data : healthData) {
 			Map<String, Object> info = new TreeMap<>();
@@ -86,6 +95,8 @@ public final class HealthInfo {
 		List<Map<String, Object>> healthDetails = persistenceController.getHealthDataService()
 				.retrieveHealthDetails((String) ((Map<?, ?>) healthData.get("check")).get("id"));
 
+		sortHealthDataBasedOnStatusLevel(healthDetails);
+
 		if (healthDetails.isEmpty()) {
 			return "";
 		}
@@ -101,5 +112,14 @@ public final class HealthInfo {
 		}
 
 		return healthDetailsBuilder.toString();
+	}
+
+	private static void sortHealthDataBasedOnStatusLevel(List<Map<String, Object>> healthData) {
+		Collections.sort(healthData, (map1, map2) -> {
+			List<String> statusLevels = Arrays.asList("error", "warning", "ok");
+			String status1 = (String) map1.get("check_status");
+			String status2 = (String) map2.get("check_status");
+			return Integer.compare(statusLevels.indexOf(status1), statusLevels.indexOf(status2));
+		});
 	}
 }
