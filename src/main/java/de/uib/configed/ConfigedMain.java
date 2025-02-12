@@ -689,6 +689,7 @@ public class ConfigedMain {
 		activateGroupByTree(preferringOldSelection, node);
 
 		Logging.info(this, "expand activated  path ", path);
+		clientTree.setSelectionPath(path);
 		clientTree.expandPath(path);
 
 		return true;
