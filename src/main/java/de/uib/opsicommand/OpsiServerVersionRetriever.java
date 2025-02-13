@@ -36,8 +36,8 @@ public class OpsiServerVersionRetriever {
 	private static final Pattern versionPattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
 	private static final int EXPECTED_SERVER_VERSION_LENGTH = 4;
 
-	private static String serverVersionString = "Server version not found (assume recent version)";
-	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
+	private String serverVersionString = "Server version not found (assume recent version)";
+	private ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
 
 	private String serviceURL;
 	private String sessionId;
@@ -78,14 +78,14 @@ public class OpsiServerVersionRetriever {
 		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
 	}
 
-	public synchronized String getServerVersion() {
+	public String getServerVersion() {
 		return serverVersionString;
 	}
 
 	/**
 	 * Checks if the server version is already known.
 	 */
-	public synchronized void checkServerVersion() {
+	public void checkServerVersion() {
 		HttpsURLConnection connection;
 		String authorization = null;
 		try {
@@ -155,12 +155,12 @@ public class OpsiServerVersionRetriever {
 		Logging.info("server version: ", serverVersionString, serverComparableVersion);
 	}
 
-	private static synchronized void setServerVersionNotFound() {
+	private void setServerVersionNotFound() {
 		setServerVersion(new int[] { 4, 3, 0, 0 });
 		serverVersionString = "Server version not found (assume 4.3)";
 	}
 
-	private static synchronized void setServerVersion(int[] serverVersion) {
+	private void setServerVersion(int[] serverVersion) {
 		if (serverVersion == null || serverVersion.length == 0) {
 			return;
 		}

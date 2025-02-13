@@ -159,7 +159,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	private synchronized boolean connectSAML() {
+	private boolean connectSAML() {
 		Logging.info(this, "connectSAML started ");
 		// register and get new session id (may throw exception)
 		ssoRequestSessionId();
@@ -170,7 +170,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return ssoCheckAuthenticated();
 	}
 
-	private synchronized void ssoRequestSessionId() {
+	private void ssoRequestSessionId() {
 		Logging.info(this, "ssoRequestSessionId started");
 		Map<String, String> requestProperties = new HashMap<>();
 		Map<String, Object> jsonProperties = null;
