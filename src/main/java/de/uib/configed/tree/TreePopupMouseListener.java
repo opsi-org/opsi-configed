@@ -68,7 +68,7 @@ public class TreePopupMouseListener extends PopupMouseListener {
 	}
 
 	private void makeSubGroup() {
-		DefaultMutableTreeNode resultNode = tree.makeSubgroupAt(mousePath);
+		GroupNode resultNode = tree.makeSubgroupAt(mousePath);
 		if (resultNode != null) {
 			tree.makeVisible(mousePath.pathByAddingChild(resultNode));
 			tree.repaint();

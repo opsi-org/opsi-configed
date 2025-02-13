@@ -276,8 +276,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	// calls main controller for getting persistence for the new subgroup
-	public DefaultMutableTreeNode makeSubgroupAt(TreePath path) {
-		DefaultMutableTreeNode result = null;
+	public GroupNode makeSubgroupAt(TreePath path) {
+		GroupNode result = null;
 
 		DefaultMutableTreeNode node;
 
@@ -323,6 +323,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup ", newGroupKey, ", ", newGroup);
 
 				result = new GroupNode(newGroupKey);
+				groupNodes.put(newGroupKey, result);
 				insertNodeInOrder(result, node);
 			}
 		}
