@@ -401,14 +401,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
-			Map<String, String> requestProperties, Map<String, Object> json, String resultkey) {
+	public Map<String, Object> retrieveResponse(URL url, String requestMethod, Map<String, String> requestProperties,
+			Map<String, Object> json, String resultkey) {
 		return retrieveResponse(url, requestMethod, requestProperties, json, resultkey, null);
 	}
 
-	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
-			Map<String, String> requestProperties, Map<String, Object> json, String resultkey,
-			Map<String, Object> responseHeader) {
+	public Map<String, Object> retrieveResponse(URL url, String requestMethod, Map<String, String> requestProperties,
+			Map<String, Object> json, String resultkey, Map<String, Object> responseHeader) {
 		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod, " ", requestProperties, " ", json, " ",
 				resultkey, " ", responseHeader);
 
