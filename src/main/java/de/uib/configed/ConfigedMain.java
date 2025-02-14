@@ -246,6 +246,8 @@ public class ConfigedMain {
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
 		executor.runInParallel(() -> persistenceController.getProductDataService().retrieveDepotProductPropertiesPD());
 		executor.waitForCompletion();
+
+		ExtraFrameController.reloadDialogs();
 	}
 
 	public void toggleColumn(String column) {
