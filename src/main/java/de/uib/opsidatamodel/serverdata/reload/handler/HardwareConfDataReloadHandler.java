@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.serverdata.reload.handler;
 
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.HardwareDataService;
 
@@ -30,13 +31,14 @@ public class HardwareConfDataReloadHandler implements ReloadHandler {
 
 	@Override
 	public void handle(String event) {
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		cacheManager.clearCachedData(CacheIdentifier.HW_AUDIT_CONF);
-		hardwareDataService.retrieveOpsiHWAuditConfPD();
+		executor.runInParallel(() -> hardwareDataService.retrieveOpsiHWAuditConfPD());
 
 		cacheManager.clearCachedData(CacheIdentifier.REMOTE_CONTROLS);
 		cacheManager.clearCachedData(CacheIdentifier.SAVED_SEARCHES);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_OPTIONS);
 		cacheManager.clearCachedData(CacheIdentifier.CONFIG_DEFAULT_VALUES);
-		configDataService.retrieveConfigOptionsPD();
+		executor.runInParallel(() -> configDataService.retrieveConfigOptionsPD());
 	}
 }

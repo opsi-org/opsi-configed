@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.serverdata.reload.handler;
 
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 
@@ -30,24 +31,27 @@ public class ProductDataReloadHandler implements ReloadHandler {
 
 	@Override
 	public void handle(String event) {
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
-		productDataService.retrieveProductInfosPD();
+		executor.runInParallel(productDataService::retrieveProductInfosPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PACKAGES);
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS);
-		productDataService.retrieveProductsAllDepotsPD();
+		executor.runInParallel(productDataService::retrieveProductsAllDepotsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS);
-		productDataService.retrieveAllProductDependenciesPD();
+		executor.runInParallel(productDataService::retrieveAllProductDependenciesPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES);
-		productDataService.retrieveDepotProductPropertiesPD();
+		executor.runInParallel(productDataService::retrieveDepotProductPropertiesPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GROUPS);
-		groupDataService.retrieveProductGroupsPD();
+		executor.runInParallel(groupDataService::retrieveProductGroupsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_PROPERTIES);
+
+		executor.waitForCompletion();
 	}
 }

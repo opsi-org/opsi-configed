@@ -9,6 +9,7 @@ package de.uib.opsidatamodel.serverdata.reload.handler;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 
 public class OpsiHostDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
@@ -24,10 +25,13 @@ public class OpsiHostDataReloadHandler implements ReloadHandler {
 
 	@Override
 	public void handle(String event) {
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
-		hostInfoCollections.retrieveOpsiHostsPD();
+		executor.runInParallel(hostInfoCollections::retrieveOpsiHostsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
-		hostInfoCollections.retrieveFNode2TreeparentsPD();
+		executor.runInParallel(hostInfoCollections::retrieveFNode2TreeparentsPD);
+
+		executor.waitForCompletion();
 	}
 }

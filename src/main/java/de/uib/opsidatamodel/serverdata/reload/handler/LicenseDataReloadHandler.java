@@ -11,6 +11,7 @@ import java.util.Arrays;
 import de.uib.opsidatamodel.HostInfoCollections;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.dataservice.LicenseDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.SoftwareDataService;
 
@@ -38,49 +39,53 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 
 	@Override
 	public void handle(String event) {
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.NAME_TO_SW_IDENTS);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
-		softwareDataService.retrieveInstalledSoftwareInformationPD();
+		executor.runInParallel(softwareDataService::retrieveInstalledSoftwareInformationPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FSOFTWARE_TO_LICENSE_POOL);
-		softwareDataService.retrieveRelationsAuditSoftwareToLicensePoolsPD();
+		executor.runInParallel(softwareDataService::retrieveRelationsAuditSoftwareToLicensePoolsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.AUDIT_SOFTWARE_XL_LICENSE_POOL);
-		softwareDataService.retrieveAuditSoftwareXLicensePoolPD();
+		executor.runInParallel(softwareDataService::retrieveAuditSoftwareXLicensePoolPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
-		licenseDataService.retrieveLicenseContractsPD();
+		executor.runInParallel(softwareDataService::retrieveLicenseStatisticsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSES);
-		licenseDataService.retrieveLicensesPD();
+		executor.runInParallel(licenseDataService::retrieveLicensesPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USAGE);
-		licenseDataService.retrieveLicenseUsagesPD();
+		executor.runInParallel(licenseDataService::retrieveLicenseUsagesPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOLS);
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_POOL_X_OPSI_PRODUCT);
-		licenseDataService.retrieveLicensePoolsPD();
+		executor.runInParallel(licenseDataService::retrieveLicensePoolsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_USABILITIES);
 		cacheManager.clearCachedData(CacheIdentifier.RELATIONS_SOFTWARE_L_TO_L_POOL);
 		licenseDataService.retrieveSoftwareLicense2LicensePoolPD();
+		executor.runInParallel(licenseDataService::retrieveSoftwareLicense2LicensePoolPD);
 
 		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
 				CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
 			// Reload this to update the clients that we have to get audit data from (for statistics and reconciliation)
 			cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
-			hostInfoCollections.retrieveOpsiHostsPD();
+			executor.runInParallel(hostInfoCollections::retrieveOpsiHostsPD);
 
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_RECONCILIATION);
 			cacheManager.clearCachedData(CacheIdentifier.ROWS_LICENSES_STATISTICS);
-			softwareDataService.retrieveLicenseStatisticsPD();
+			executor.runInParallel(softwareDataService::retrieveLicenseStatisticsPD);
 		}
+
+		executor.waitForCompletion();
 	}
 }

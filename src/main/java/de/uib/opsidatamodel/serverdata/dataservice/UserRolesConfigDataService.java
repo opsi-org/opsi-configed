@@ -33,6 +33,7 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -119,8 +120,11 @@ public class UserRolesConfigDataService {
 	}
 
 	public final void checkConfigurationPD() {
-		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
-		persistenceController.getModuleDataService().retrieveOpsiModules();
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
+		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
+		executor.runInParallel(() -> persistenceController.getModuleDataService().retrieveOpsiModules());
+		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
+		executor.waitForCompletion();
 
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
@@ -162,7 +166,7 @@ public class UserRolesConfigDataService {
 		applyUserSpecializedConfigPD();
 
 		// Load all data together to prevent an extra RPC-call
-		persistenceController.getGroupDataService().retrieveAllGroupsPD();
+		// persistenceController.getGroupDataService().retrieveAllGroupsPD();
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(),
 				persistenceController.getHostInfoCollections().getConfigServer(),

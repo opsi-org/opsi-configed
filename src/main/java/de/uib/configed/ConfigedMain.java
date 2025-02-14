@@ -51,6 +51,7 @@ import de.uib.messagebus.Messagebus;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
@@ -233,20 +234,18 @@ public class ConfigedMain {
 
 		persistenceController.getDepotDataService().setDepot(depotRepresentative);
 
-		persistenceController.getProductDataService().retrieveProductIdsAndDefaultStatesPD();
-
-		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsNetbootProducts();
-		persistenceController.getProductDataService().retrieveProductOnClientsDisplayFieldsLocalbootProducts();
-
-		ExtraFrameController.reloadDialogs();
-
-		// Load all group data in this method to only call one method!
-		persistenceController.getGroupDataService().retrieveAllGroupsPD();
-		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
-
-		persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
-		persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
-		persistenceController.getProductDataService().retrieveDepotProductPropertiesPD();
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
+		executor.runInParallel(() -> {
+			persistenceController.getProductDataService().retrieveProductIdsAndDefaultStatesPD();
+			persistenceController.getProductDataService().retrieveAllProductPropertyDefinitionsPD();
+			persistenceController.getProductDataService().retrieveAllProductDependenciesPD();
+		});
+		executor.runInParallel(() -> persistenceController.getProductDataService()
+				.retrieveProductOnClientsDisplayFieldsLocalbootProducts());
+		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
+		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
+		executor.runInParallel(() -> persistenceController.getProductDataService().retrieveDepotProductPropertiesPD());
+		executor.waitForCompletion();
 	}
 
 	public void toggleColumn(String column) {
