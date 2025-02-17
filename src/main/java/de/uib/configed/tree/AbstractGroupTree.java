@@ -276,8 +276,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	// calls main controller for getting persistence for the new subgroup
-	public DefaultMutableTreeNode makeSubgroupAt(TreePath path) {
-		DefaultMutableTreeNode result = null;
+	public GroupNode makeSubgroupAt(TreePath path) {
+		GroupNode result = null;
 
 		DefaultMutableTreeNode node;
 
@@ -319,10 +319,9 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 			// send data to server
 			if (persistenceController.getGroupDataService().addGroup(newGroup, this instanceof ClientTree)) {
-				groups.put(newGroupKey, newGroup);
 				Logging.debug(this, "makeSubGroupAt newGroupKey, newGroup ", newGroupKey, ", ", newGroup);
 
-				result = new GroupNode(newGroupKey);
+				result = produceGroupNode(newGroupKey, description, node.toString());
 				insertNodeInOrder(result, node);
 			}
 		}
@@ -399,10 +398,17 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	protected GroupNode produceGroupNode(String groupId, String description) {
+		return produceGroupNode(groupId, description, null);
+	}
+
+	protected GroupNode produceGroupNode(String groupId, String description, String parentId) {
 		GroupNode groupNode = new GroupNode(groupId);
 
 		Map<String, String> groupMap = new HashMap<>();
 		groupMap.put("groupId", groupId);
+		if (parentId != null) {
+			groupMap.put("parentGroupId", parentId);
+		}
 		groupMap.put("description", description);
 
 		groups.put(groupId, groupMap);

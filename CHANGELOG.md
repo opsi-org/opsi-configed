@@ -1,3 +1,11 @@
+## [4.3.6.3] - 2025-xx-xx
+### Changed
+- Sort messages after warning level in Health Check
+- Sort "none"/empty values in state and action columns in product configuration to the end
+
+### Fixed
+- Nullpointer exception when creating a new group, clicking on the group and then elsewhere
+
 ## [4.3.6.2] - 2025-02-04
 ### Fixed
 - NullpointerException in default properties in depot configuration
