@@ -24,6 +24,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.PopupMenuEvent;
@@ -378,9 +379,12 @@ public final class ClientMenuManager implements MenuListener {
 	private void showPopupOnClientsAction() {
 		JTextField durationTextField = new JTextField();
 		JTextArea messageTextArea = new JTextArea();
-		messageTextArea.setRows(4);
+		messageTextArea.setColumns(30);
+		messageTextArea.setRows(8);
+		messageTextArea.setLineWrap(true);
 
 		JScrollPane messageScrollPane = new JScrollPane(messageTextArea);
+		messageScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		Object[] message = { Configed.getResourceValue("MainFrame.writePopupDuration"), durationTextField,
 				Configed.getResourceValue("MainFrame.writePopupMessage"), messageScrollPane };
