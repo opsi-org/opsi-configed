@@ -36,8 +36,8 @@ public class OpsiServerVersionRetriever {
 	private static final Pattern versionPattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
 	private static final int EXPECTED_SERVER_VERSION_LENGTH = 4;
 
-	private static String serverVersionString = "Server version not found (assume recent version)";
-	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
+	private String serverVersionString = "Server version not found (assume recent version)";
+	private ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
 
 	private String serviceURL;
 	private String sessionId;
@@ -78,54 +78,15 @@ public class OpsiServerVersionRetriever {
 		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
 	}
 
-	public synchronized String getServerVersion() {
+	public String getServerVersion() {
 		return serverVersionString;
 	}
 
 	/**
 	 * Checks if the server version is already known.
 	 */
-	public synchronized void checkServerVersion() {
-		HttpsURLConnection connection;
-		String authorization = null;
-		try {
-			connection = (HttpsURLConnection) new URI(serviceURL).toURL().openConnection();
-			Logging.secret("Session id for connection ", sessionId);
-			if (sessionId != null) {
-				authorization = sessionId;
-				connection.setRequestProperty("Cookie", authorization);
-				if (sessionId.contains("=")) {
-					authorization = sessionId.split("=")[1];
-					connection.setRequestProperty("Cookie", "session-id=" + authorization);
-					connection.setRequestProperty("Cookie", "sessionId=" + authorization);
-					Logging.info(this, "Using existing session id for connection");
-					Logging.info(this, "Connection:", connection.getRequestProperties());
-				}
-			} else if (username != null && password != null) {
-				authorization = Base64.getEncoder()
-						.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
-				connection.setRequestProperty("Authorization", "Basic " + authorization);
-			} else {
-				Logging.error("No session id or username/password provided");
-				return;
-			}
-
-			Logging.info("Fetching service info for", serviceURL);
-
-			CertificateValidator certValidator = CertificateValidatorFactory.getInsecure();
-			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
-			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
-			connection.setRequestMethod("HEAD");
-		} catch (URISyntaxException e) {
-			Logging.warning(this, e, "cannot create URI from ", serviceURL);
-			return;
-		} catch (IOException e) {
-			Logging.warning(this, e, "error in testing connection to server for getting server opsi version");
-			return;
-		}
-
-		String server = connection.getHeaderField("Server");
-
+	public void checkServerVersion() {
+		String server = retrieveServerHeader();
 		if (server == null) {
 			Logging.warning("error in getting server version, Headerfield is null");
 			setServerVersionNotFound();
@@ -155,12 +116,56 @@ public class OpsiServerVersionRetriever {
 		Logging.info("server version: ", serverVersionString, serverComparableVersion);
 	}
 
-	private static synchronized void setServerVersionNotFound() {
+	private String retrieveServerHeader() {
+		HttpsURLConnection connection = openConnection();
+		return connection != null ? connection.getHeaderField("Server") : null;
+	}
+
+	private HttpsURLConnection openConnection() {
+		HttpsURLConnection connection = null;
+		String authorization = null;
+		try {
+			connection = (HttpsURLConnection) new URI(serviceURL).toURL().openConnection();
+			Logging.secret("Session id for connection ", sessionId);
+			if (sessionId != null) {
+				authorization = sessionId;
+				connection.setRequestProperty("Cookie", authorization);
+				if (sessionId.contains("=")) {
+					authorization = sessionId.split("=")[1];
+					connection.setRequestProperty("Cookie", "session-id=" + authorization);
+					connection.setRequestProperty("Cookie", "sessionId=" + authorization);
+					Logging.info(this, "Using existing session id for connection");
+					Logging.info(this, "Connection:", connection.getRequestProperties());
+				}
+			} else if (username != null && password != null) {
+				authorization = Base64.getEncoder()
+						.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
+				connection.setRequestProperty("Authorization", "Basic " + authorization);
+			} else {
+				Logging.error("No session id or username/password provided");
+				return null;
+			}
+
+			Logging.info("Fetching service info for", serviceURL);
+
+			CertificateValidator certValidator = CertificateValidatorFactory.getInsecure();
+			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
+			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
+			connection.setRequestMethod("HEAD");
+		} catch (URISyntaxException e) {
+			Logging.warning(this, e, "cannot create URI from ", serviceURL);
+		} catch (IOException e) {
+			Logging.warning(this, e, "error in testing connection to server for getting server opsi version");
+		}
+		return connection;
+	}
+
+	private void setServerVersionNotFound() {
 		setServerVersion(new int[] { 4, 3, 0, 0 });
 		serverVersionString = "Server version not found (assume 4.3)";
 	}
 
-	private static synchronized void setServerVersion(int[] serverVersion) {
+	private void setServerVersion(int[] serverVersion) {
 		if (serverVersion == null || serverVersion.length == 0) {
 			return;
 		}

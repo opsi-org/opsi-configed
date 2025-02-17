@@ -133,7 +133,7 @@ public final class ConnectionErrorReporter {
 		conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 	}
 
-	private synchronized void displayMFADialog() {
+	private void displayMFADialog() {
 		Logging.info("Unauthorized, show password dialog");
 
 		JPasswordField passwordField = new JPasswordField();
