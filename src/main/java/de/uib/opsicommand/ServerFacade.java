@@ -159,7 +159,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	private synchronized boolean connectSAML() {
+	private boolean connectSAML() {
 		Logging.info(this, "connectSAML started ");
 		// register and get new session id (may throw exception)
 		ssoRequestSessionId();
@@ -170,7 +170,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return ssoCheckAuthenticated();
 	}
 
-	private synchronized void ssoRequestSessionId() {
+	private void ssoRequestSessionId() {
 		Logging.info(this, "ssoRequestSessionId started");
 		Map<String, String> requestProperties = new HashMap<>();
 		Map<String, Object> jsonProperties = null;
@@ -353,7 +353,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 */
 	@Override
 	@SuppressWarnings("java:S1168")
-	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
+	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		Logging.info(this, "retrieveResponse started");
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
@@ -401,14 +401,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
-			Map<String, String> requestProperties, Map<String, Object> json, String resultkey) {
+	public Map<String, Object> retrieveResponse(URL url, String requestMethod, Map<String, String> requestProperties,
+			Map<String, Object> json, String resultkey) {
 		return retrieveResponse(url, requestMethod, requestProperties, json, resultkey, null);
 	}
 
-	public synchronized Map<String, Object> retrieveResponse(URL url, String requestMethod,
-			Map<String, String> requestProperties, Map<String, Object> json, String resultkey,
-			Map<String, Object> responseHeader) {
+	public Map<String, Object> retrieveResponse(URL url, String requestMethod, Map<String, String> requestProperties,
+			Map<String, Object> json, String resultkey, Map<String, Object> responseHeader) {
 		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod, " ", requestProperties, " ", json, " ",
 				resultkey, " ", responseHeader);
 
