@@ -22,6 +22,7 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JOptionPane;
 
@@ -45,6 +46,7 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.ExtendedInteger;
@@ -370,50 +372,32 @@ public class SoftwareDataService {
 	}
 
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(Collection<String> clients) {
-		Map<String, List<SWAuditClientEntry>> client2software = new HashMap<>();
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start ", Utils.usedMemory());
-		Logging.info(this, "retrieveSoftwareAuditOnClients clients cound: ", clients.size());
-		final int STEP_SIZE = 100;
+		Logging.info(this, "getSoftwareAuditOnClients used memory on start ", Utils.usedMemory());
+		Logging.info(this, "getSoftwareAuditOnClients clients count: ", clients.size());
+		Map<String, List<SWAuditClientEntry>> client2software = new ConcurrentHashMap<>();
 
+		int stepSize = 100;
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		Iterator<String> clientIterator = clients.iterator();
+
 		while (clientIterator.hasNext()) {
 			List<String> clientListForCall = new ArrayList<>();
-
-			for (int i = 0; i < STEP_SIZE && clientIterator.hasNext(); i++) {
+			for (int i = 0; i < stepSize && clientIterator.hasNext(); i++) {
 				clientListForCall.add(clientIterator.next());
 			}
 
-			Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
-
-			String[] callAttributes = new String[] {};
-			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("clientId", clientListForCall);
-
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS,
-					new Object[] { callAttributes, callFilter });
-			List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(omc);
-
-			Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size ",
-					softwareAuditOnClients.size());
-
-			for (String clientId : clientListForCall) {
-				client2software.put(clientId, new LinkedList<>());
-			}
-
-			for (Map<String, Object> item : softwareAuditOnClients) {
-				SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
-				String clientId = clientEntry.getClientId();
-
-				if (clientId != null) {
-					List<SWAuditClientEntry> entries = client2software.get(clientId);
-					entries.add(clientEntry);
+			executor.runInParallel(() -> {
+				for (Map<String, Object> item : getAuditSoftwareOnClients(clientListForCall)) {
+					SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
+					client2software.computeIfAbsent(clientEntry.getClientId(), v -> new LinkedList<>())
+							.add(clientEntry);
 				}
-			}
-
-			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
+			});
 		}
 
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end ", Utils.usedMemory());
+		executor.waitForCompletion();
+
+		Logging.info(this, "getSoftwareAuditOnClients used memory on end ", Utils.usedMemory());
 
 		return client2software;
 	}
@@ -821,7 +805,8 @@ public class SoftwareDataService {
 
 		Logging.info(this, "retrieveLicenseStatistics");
 		Map<String, Map<String, Object>> rowsLicensesReconciliation = getRowsLicenseReconciliation();
-		checkLicensesReconciliationUsedBySWInventory(rowsLicensesReconciliation);
+		Map<String, Set<String>> swId2Clients = getSoftwareIdentOnClients(hostInfoCollections.getOpsiHostNames());
+		checkLicensesReconciliationUsedBySWInventory(rowsLicensesReconciliation, swId2Clients);
 
 		retrieveInstalledSoftwareInformationPD();
 		retrieveRelationsAuditSoftwareToLicensePoolsPD();
@@ -849,7 +834,7 @@ public class SoftwareDataService {
 
 		// all used licenses for pools
 		Logging.info(this, "  retrieveStatistics  collect pool2installationsCount");
-		Map<String, Integer> pool2installationsCount = getPool2InstallationsCount();
+		Map<String, Integer> pool2installationsCount = getPool2InstallationsCount(swId2Clients);
 		Map<String, LicenseStatisticsRow> rowsLicenseStatistics = new TreeMap<>();
 		// table LICENSE_POOL
 		Map<String, LicensepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
@@ -923,10 +908,8 @@ public class SoftwareDataService {
 	}
 
 	private void checkLicensesReconciliationUsedBySWInventory(
-			Map<String, Map<String, Object>> rowsLicensesReconciliation) {
+			Map<String, Map<String, Object>> rowsLicensesReconciliation, Map<String, Set<String>> swId2clients) {
 		Map<String, String> fSoftware2LicensePool = getFSoftware2LicensePoolPD();
-		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
-		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (String softwareIdent : getInstalledSoftwareInformationForLicensingPD().keySet()) {
 			String licensePoolId = fSoftware2LicensePool.get(softwareIdent);
 			Logging.debug(this, "software ", softwareIdent, " installed on ", swId2clients.get(softwareIdent));
@@ -972,22 +955,20 @@ public class SoftwareDataService {
 		return pool2allowedUsagesCount;
 	}
 
-	private Map<String, Integer> getPool2InstallationsCount() {
+	private Map<String, Integer> getPool2InstallationsCount(Map<String, Set<String>> swId2Clients) {
 		TreeMap<String, Integer> pool2installationsCount = new TreeMap<>();
-		for (Entry<String, TreeSet<String>> poolEntry : getPool2Clients().entrySet()) {
+		for (Entry<String, TreeSet<String>> poolEntry : getPool2Clients(swId2Clients).entrySet()) {
 			pool2installationsCount.put(poolEntry.getKey(), poolEntry.getValue().size());
 		}
 		return pool2installationsCount;
 	}
 
-	private TreeMap<String, TreeSet<String>> getPool2Clients() {
+	private TreeMap<String, TreeSet<String>> getPool2Clients(Map<String, Set<String>> swId2Clients) {
 		// require this licensepool
 		// add the clients which have this software installed
 		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<>();
 		// we take Set since we count only one usage per client
 		AuditSoftwareXLicensePool auditSoftwareXLicensePool = getAuditSoftwareXLicensePoolPD();
-		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
-		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (StringValuedRelationElement swXpool : auditSoftwareXLicensePool) {
 			Logging.debug(this, " retrieveStatistics1 relationElement  ", swXpool);
 			String pool = swXpool.get(LicensepoolEntry.ID_SERVICE_KEY);
@@ -998,53 +979,50 @@ public class SoftwareDataService {
 
 			Logging.debug(this, " retrieveStatistics1 swIdent ", swIdent);
 
-			if (swId2clients.get(swIdent) != null) {
-				Logging.debug(this, "pool ", pool, " serves clients ", swId2clients.get(swIdent));
-				clientsServedByPool.addAll(swId2clients.get(swIdent));
+			if (swId2Clients.get(swIdent) != null) {
+				Logging.debug(this, "pool ", pool, " serves clients ", swId2Clients.get(swIdent));
+				clientsServedByPool.addAll(swId2Clients.get(swIdent));
 			}
 		}
 		return pool2clients;
 	}
 
 	private Map<String, Set<String>> getSoftwareIdentOnClients(final List<String> clients) {
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start ", Utils.usedMemory());
+		Logging.info(this, "getSoftwareIdentOnClients used memory on start ", Utils.usedMemory());
+		Map<String, Set<String>> softwareIdent2clients = new ConcurrentHashMap<>();
+
 		int stepSize = 100;
-		Map<String, Set<String>> softwareIdent2clients = new HashMap<>();
-		while (!clients.isEmpty()) {
-			List<String> clientListForCall = new ArrayList<>();
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 
-			for (int i = 0; i < stepSize && i < clients.size(); i++) {
-				clientListForCall.add(clients.get(i));
-			}
-
-			clients.removeAll(clientListForCall);
-
-			Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
-
-			String[] callAttributes = new String[] {};
-			Map<String, Object> callFilter = new HashMap<>();
-			callFilter.put("clientId", clientListForCall);
-
-			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS,
-					new Object[] { callAttributes, callFilter });
-			List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(omc);
-
-			Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size ",
-					softwareAuditOnClients.size());
-
-			for (Map<String, Object> item : softwareAuditOnClients) {
-				SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
-				Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(clientEntry.getSWIdent(),
-						s -> new HashSet<>());
-				clientsWithThisSW.add(clientEntry.getClientId());
-			}
-
-			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
+		for (int i = 0; i < clients.size(); i += stepSize) {
+			List<String> clientListForCall = clients.subList(i, Math.min(i + stepSize, clients.size()));
+			executor.runInParallel(() -> {
+				for (Map<String, Object> item : getAuditSoftwareOnClients(clientListForCall)) {
+					SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
+					softwareIdent2clients.computeIfAbsent(clientEntry.getSWIdent(), s -> new HashSet<>())
+							.add(clientEntry.getClientId());
+				}
+			});
 		}
+		executor.waitForCompletion();
 
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end ", Utils.usedMemory());
+		Logging.info(this, "getSoftwareIdentOnClients used memory on end ", Utils.usedMemory());
 		persistenceController.notifyPanelCompleteWinProducts();
 
 		return softwareIdent2clients;
+	}
+
+	private List<Map<String, Object>> getAuditSoftwareOnClients(List<String> clients) {
+		Logging.info(this, "getAuditSoftwareOnClients request started");
+		String[] callAttributes = new String[] {};
+		Map<String, Object> callFilter = new HashMap<>();
+		callFilter.put("clientId", clients);
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS,
+				new Object[] { callAttributes, callFilter });
+		List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(omc);
+		Logging.info(this, "getAuditSoftwareOnClients, finished a request, map size ", softwareAuditOnClients.size());
+
+		return softwareAuditOnClients;
 	}
 }
