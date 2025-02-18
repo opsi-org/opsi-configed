@@ -23,7 +23,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommandFileUpload;
-import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageInstall;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -197,7 +197,7 @@ public class PackageManagerInstallParameterDialog {
 		Logging.info(this, " doAction3 install ");
 		MultiCommandTemplate commands = new MultiCommandTemplate();
 		commands.setMainName("PackageInstallation");
-		SingleCommandOpsiPackageManagerInstall pmInstallCom;
+		SingleCommandOpsiPackageInstall pmInstallCom;
 
 		if (jComboBoxPackageSource.getSelectedItem()
 				.equals(Configed.getResourceValue("PackageManagerInstallParameterDialog.jLabelFromLocal"))) {
@@ -221,9 +221,9 @@ public class PackageManagerInstallParameterDialog {
 		Logging.info(this, "doAction3 end ");
 	}
 
-	private SingleCommandOpsiPackageManagerInstall handleLocalFileUpload(MultiCommandTemplate commands) {
+	private SingleCommandOpsiPackageInstall handleLocalFileUpload(MultiCommandTemplate commands) {
 		SingleCommandFileUpload fileUploadCommand = installLocalPanel.getCommand();
-		SingleCommandOpsiPackageManagerInstall pmInstallCom = null;
+		SingleCommandOpsiPackageInstall pmInstallCom = null;
 		if (fileUploadCommand == null) {
 			Logging.warning(this, "No opsi-package given. 1");
 			return pmInstallCom;
@@ -240,8 +240,8 @@ public class PackageManagerInstallParameterDialog {
 		return pmInstallCom;
 	}
 
-	private SingleCommandOpsiPackageManagerInstall handleServerFileUpload(MultiCommandTemplate commands) {
-		SingleCommandOpsiPackageManagerInstall pmInstallCom = installServerPanel.getCommand();
+	private SingleCommandOpsiPackageInstall handleServerFileUpload(MultiCommandTemplate commands) {
+		SingleCommandOpsiPackageInstall pmInstallCom = installServerPanel.getCommand();
 		if (pmInstallCom == null) {
 			Logging.warning(this, "No opsi-package selected. 3");
 		} else {
@@ -250,8 +250,8 @@ public class PackageManagerInstallParameterDialog {
 		return pmInstallCom;
 	}
 
-	private SingleCommandOpsiPackageManagerInstall handleCurlFileUpload(MultiCommandTemplate commands) {
-		SingleCommandOpsiPackageManagerInstall pmInstallCom = null;
+	private SingleCommandOpsiPackageInstall handleCurlFileUpload(MultiCommandTemplate commands) {
+		SingleCommandOpsiPackageInstall pmInstallCom = null;
 		commands = installCurlPanel.getCommand(commands);
 		if (commands == null) {
 			Logging.warning(this, "No opsi-package given.4");

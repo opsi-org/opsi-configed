@@ -51,9 +51,9 @@ public final class CommandFactory {
 	// required directory enabled/activated (and not having a way to enable/activate the directory) and Messagebus
 	// due to the `file_upload` events needing terminal to be opened on the server.
 	private static final SingleCommand[] DEFAULT_OPSI_COMMANDS = new SingleCommand[] {
-			new SingleCommandPackageUpdater(), new SingleCommandOpsiPackageManagerInstall(),
-			new SingleCommandOpsiPackageManagerUninstall(), new SingleCommandOpsiMakeProductFile(),
-			new SingleCommandCurl(), new SingleCommandOpsiSetRights(), new SingleCommandDeployClientAgent() };
+			new SingleCommandPackageUpdater(), new SingleCommandOpsiPackageInstall(),
+			new SingleCommandOpsiPackageUninstall(), new SingleCommandOpsiMakeProductFile(), new SingleCommandCurl(),
+			new SingleCommandOpsiSetRights(), new SingleCommandDeployClientAgent() };
 
 	private List<MultiCommandTemplate> commandList;
 	private Set<String> knownMenus;

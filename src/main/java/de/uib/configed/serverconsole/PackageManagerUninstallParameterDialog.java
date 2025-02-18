@@ -27,7 +27,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.serverconsole.command.CommandExecutor;
-import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerUninstall;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageUninstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
@@ -57,7 +57,7 @@ public class PackageManagerUninstallParameterDialog {
 
 	private List<String> possibleDepots;
 
-	private SingleCommandOpsiPackageManagerUninstall commandPMUninstall = new SingleCommandOpsiPackageManagerUninstall();
+	private SingleCommandOpsiPackageUninstall commandPMUninstall = new SingleCommandOpsiPackageUninstall();
 
 	private ConfigedMain configedMain;
 

@@ -11,7 +11,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.serverconsole.PackageManagerUninstallParameterDialog;
 import de.uib.utils.logging.Logging;
 
-public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiPackageManager
+public class SingleCommandOpsiPackageUninstall extends SingleCommandOpsiPackageManager
 		implements CommandWithParameters {
 	private String command;
 	private int priority = 10;
@@ -21,13 +21,13 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 	private String keepFiles = "";
 	private String freeInput = "";
 
-	public SingleCommandOpsiPackageManagerUninstall() {
+	public SingleCommandOpsiPackageUninstall() {
 		command = "opsi-cli";
 	}
 
 	@Override
 	public String getId() {
-		return "CommandOpsiPackageManagerUninstall";
+		return "CommandOpsiPackageUninstall";
 	}
 
 	@Override

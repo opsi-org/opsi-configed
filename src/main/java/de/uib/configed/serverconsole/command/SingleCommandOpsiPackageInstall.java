@@ -11,8 +11,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.serverconsole.PackageManagerInstallParameterDialog;
 import de.uib.utils.logging.Logging;
 
-public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPackageManager
-		implements CommandWithParameters {
+public class SingleCommandOpsiPackageInstall extends SingleCommandOpsiPackageManager implements CommandWithParameters {
 	private String command;
 	private int priority = 8;
 
@@ -21,13 +20,13 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 	private String freeInput = "";
 	private String property = " -p keep ";
 
-	public SingleCommandOpsiPackageManagerInstall() {
+	public SingleCommandOpsiPackageInstall() {
 		command = "opsi-cli";
 	}
 
 	@Override
 	public String getId() {
-		return "CommandOpsiPackageManagerInstall";
+		return "CommandOpsiPackageInstall";
 	}
 
 	@Override
