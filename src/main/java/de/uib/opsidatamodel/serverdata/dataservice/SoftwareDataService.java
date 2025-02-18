@@ -821,7 +821,8 @@ public class SoftwareDataService {
 
 		Logging.info(this, "retrieveLicenseStatistics");
 		Map<String, Map<String, Object>> rowsLicensesReconciliation = getRowsLicenseReconciliation();
-		checkLicensesReconciliationUsedBySWInventory(rowsLicensesReconciliation);
+		Map<String, Set<String>> swId2Clients = getSoftwareIdentOnClients(hostInfoCollections.getOpsiHostNames());
+		checkLicensesReconciliationUsedBySWInventory(rowsLicensesReconciliation, swId2Clients);
 
 		retrieveInstalledSoftwareInformationPD();
 		retrieveRelationsAuditSoftwareToLicensePoolsPD();
@@ -849,7 +850,7 @@ public class SoftwareDataService {
 
 		// all used licenses for pools
 		Logging.info(this, "  retrieveStatistics  collect pool2installationsCount");
-		Map<String, Integer> pool2installationsCount = getPool2InstallationsCount();
+		Map<String, Integer> pool2installationsCount = getPool2InstallationsCount(swId2Clients);
 		Map<String, LicenseStatisticsRow> rowsLicenseStatistics = new TreeMap<>();
 		// table LICENSE_POOL
 		Map<String, LicensepoolEntry> licensePools = licenseDataService.getLicensePoolsPD();
@@ -923,10 +924,8 @@ public class SoftwareDataService {
 	}
 
 	private void checkLicensesReconciliationUsedBySWInventory(
-			Map<String, Map<String, Object>> rowsLicensesReconciliation) {
+			Map<String, Map<String, Object>> rowsLicensesReconciliation, Map<String, Set<String>> swId2clients) {
 		Map<String, String> fSoftware2LicensePool = getFSoftware2LicensePoolPD();
-		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
-		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (String softwareIdent : getInstalledSoftwareInformationForLicensingPD().keySet()) {
 			String licensePoolId = fSoftware2LicensePool.get(softwareIdent);
 			Logging.debug(this, "software ", softwareIdent, " installed on ", swId2clients.get(softwareIdent));
@@ -972,22 +971,20 @@ public class SoftwareDataService {
 		return pool2allowedUsagesCount;
 	}
 
-	private Map<String, Integer> getPool2InstallationsCount() {
+	private Map<String, Integer> getPool2InstallationsCount(Map<String, Set<String>> swId2Clients) {
 		TreeMap<String, Integer> pool2installationsCount = new TreeMap<>();
-		for (Entry<String, TreeSet<String>> poolEntry : getPool2Clients().entrySet()) {
+		for (Entry<String, TreeSet<String>> poolEntry : getPool2Clients(swId2Clients).entrySet()) {
 			pool2installationsCount.put(poolEntry.getKey(), poolEntry.getValue().size());
 		}
 		return pool2installationsCount;
 	}
 
-	private TreeMap<String, TreeSet<String>> getPool2Clients() {
+	private TreeMap<String, TreeSet<String>> getPool2Clients(Map<String, Set<String>> swId2Clients) {
 		// require this licensepool
 		// add the clients which have this software installed
 		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<>();
 		// we take Set since we count only one usage per client
 		AuditSoftwareXLicensePool auditSoftwareXLicensePool = getAuditSoftwareXLicensePoolPD();
-		List<String> opsiHostNames = hostInfoCollections.getOpsiHostNames();
-		Map<String, Set<String>> swId2clients = getSoftwareIdentOnClients(opsiHostNames);
 		for (StringValuedRelationElement swXpool : auditSoftwareXLicensePool) {
 			Logging.debug(this, " retrieveStatistics1 relationElement  ", swXpool);
 			String pool = swXpool.get(LicensepoolEntry.ID_SERVICE_KEY);
@@ -998,9 +995,9 @@ public class SoftwareDataService {
 
 			Logging.debug(this, " retrieveStatistics1 swIdent ", swIdent);
 
-			if (swId2clients.get(swIdent) != null) {
-				Logging.debug(this, "pool ", pool, " serves clients ", swId2clients.get(swIdent));
-				clientsServedByPool.addAll(swId2clients.get(swIdent));
+			if (swId2Clients.get(swIdent) != null) {
+				Logging.debug(this, "pool ", pool, " serves clients ", swId2Clients.get(swIdent));
+				clientsServedByPool.addAll(swId2Clients.get(swIdent));
 			}
 		}
 		return pool2clients;
@@ -1038,8 +1035,6 @@ public class SoftwareDataService {
 						s -> new HashSet<>());
 				clientsWithThisSW.add(clientEntry.getClientId());
 			}
-
-			Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
 		}
 
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end ", Utils.usedMemory());
