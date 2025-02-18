@@ -627,7 +627,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void documentChanged(DocumentEvent e) {
 		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			filtermark.setSelected(false);
 			searchTheRow(selectMode);
 		}
 	}
