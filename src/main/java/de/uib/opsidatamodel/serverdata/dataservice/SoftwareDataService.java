@@ -1005,22 +1005,41 @@ public class SoftwareDataService {
 
 	private Map<String, Set<String>> getSoftwareIdentOnClients(final List<String> clients) {
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start ", Utils.usedMemory());
-		Map<String, List<SWAuditClientEntry>> entries = getSoftwareAuditOnClients(clients);
-		Map<String, Set<String>> softwareIdent2Clients = new HashMap<>();
+		int stepSize = 100;
+		Map<String, Set<String>> softwareIdent2clients = new HashMap<>();
+		while (!clients.isEmpty()) {
+			List<String> clientListForCall = new ArrayList<>();
 
-		for (Map.Entry<String, List<SWAuditClientEntry>> entry : entries.entrySet()) {
-			List<SWAuditClientEntry> swAuditClientEntries = entry.getValue();
+			for (int i = 0; i < stepSize && i < clients.size(); i++) {
+				clientListForCall.add(clients.get(i));
+			}
 
-			for (SWAuditClientEntry swAuditClientEntry : swAuditClientEntries) {
-				String swIdent = swAuditClientEntry.getSWIdent();
-				String clientId = swAuditClientEntry.getClientId();
-				softwareIdent2Clients.computeIfAbsent(swIdent, k -> new HashSet<>()).add(clientId);
+			clients.removeAll(clientListForCall);
+
+			Logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
+
+			String[] callAttributes = new String[] {};
+			Map<String, Object> callFilter = new HashMap<>();
+			callFilter.put("clientId", clientListForCall);
+
+			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_ON_CLIENT_GET_OBJECTS,
+					new Object[] { callAttributes, callFilter });
+			List<Map<String, Object>> softwareAuditOnClients = exec.getListOfMaps(omc);
+
+			Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size ",
+					softwareAuditOnClients.size());
+
+			for (Map<String, Object> item : softwareAuditOnClients) {
+				SWAuditClientEntry clientEntry = new SWAuditClientEntry(item);
+				Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(clientEntry.getSWIdent(),
+						s -> new HashSet<>());
+				clientsWithThisSW.add(clientEntry.getClientId());
 			}
 		}
 
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end ", Utils.usedMemory());
 		persistenceController.notifyPanelCompleteWinProducts();
 
-		return softwareIdent2Clients;
+		return softwareIdent2clients;
 	}
 }
