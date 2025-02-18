@@ -73,10 +73,12 @@ public final class PersistenceControllerFactory {
 						Utils.isMultiFactorAuthenticationEnabled());
 			}
 
-			persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
+			ParallelTaskExecutor executor = new ParallelTaskExecutor();
+			executor.runInParallel(() -> persistenceController.getUserRolesConfigDataService().checkConfigurationPD());
 			if (!Utils.isCertificateVerificationDisabled()) {
-				CertificateManager.updateCertificate();
+				executor.runInParallel(CertificateManager::updateCertificate);
 			}
+			executor.waitForCompletion();
 		}
 
 		return staticPersistControl;

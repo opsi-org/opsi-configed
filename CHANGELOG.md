@@ -1,10 +1,13 @@
-## [4.3.6.3] - 2025-xx-xx
+## [4.3.6.3] - 2025-02-18
 ### Changed
 - Sort messages after warning level in Health Check
 - Sort "none"/empty values in state and action columns in product configuration to the end
+- We parallelize loading data to improve the performance
 
 ### Fixed
 - Nullpointer exception when creating a new group, clicking on the group and then elsewhere
+- Freeze of configed when waiting for response when firing event to many clients
+
 
 ## [4.3.6.2] - 2025-02-04
 ### Fixed

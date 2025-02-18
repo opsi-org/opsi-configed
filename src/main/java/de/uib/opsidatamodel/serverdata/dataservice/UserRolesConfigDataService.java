@@ -33,6 +33,7 @@ import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -119,13 +120,17 @@ public class UserRolesConfigDataService {
 	}
 
 	public final void checkConfigurationPD() {
-		persistenceController.getGroupDataService().retrieveAllObject2GroupsPD();
-		persistenceController.getModuleDataService().retrieveOpsiModules();
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
+		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
+		executor.runInParallel(() -> persistenceController.getModuleDataService().retrieveOpsiModules());
+		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
+		executor.runInParallel(() -> cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY,
+				doesUserBelongToSystemsReadOnlyGroup()));
+		executor.waitForCompletion();
 
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
 
-		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, doesUserBelongToSystemsReadOnlyGroup());
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
@@ -162,7 +167,7 @@ public class UserRolesConfigDataService {
 		applyUserSpecializedConfigPD();
 
 		// Load all data together to prevent an extra RPC-call
-		persistenceController.getGroupDataService().retrieveAllGroupsPD();
+		// persistenceController.getGroupDataService().retrieveAllGroupsPD();
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(),
 				persistenceController.getHostInfoCollections().getConfigServer(),
