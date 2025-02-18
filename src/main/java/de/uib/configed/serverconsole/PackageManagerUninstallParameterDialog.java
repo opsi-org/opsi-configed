@@ -42,10 +42,7 @@ public class PackageManagerUninstallParameterDialog {
 	private JLabel jLabelUninstall = new JLabel();
 	private JLabel jLabelOn = new JLabel();
 
-	protected JLabel jLabelLoglevel = new JLabel(Configed.getResourceValue("loglevel"));
-
 	private JComboBox<String> jComboBoxOpsiProducts;
-	private JComboBox<Integer> jComboboxLoglevel;
 
 	private JCheckBox checkBoxKeepFiles;
 
@@ -188,14 +185,6 @@ public class PackageManagerUninstallParameterDialog {
 		jLabelUninstall.setFont(jLabelUninstall.getFont().deriveFont(Font.BOLD));
 		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
 
-		jComboboxLoglevel = new JComboBox<>();
-		for (int i = 3; i <= 9; i++) {
-			jComboboxLoglevel.addItem(i);
-		}
-
-		jComboboxLoglevel.setSelectedItem(4);
-		jComboboxLoglevel.addItemListener(itemEvent -> updateLoglevel());
-
 		checkBoxKeepFiles = new JCheckBox(
 				Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelKeepFiles"));
 		checkBoxKeepFiles.addItemListener(itemEvent -> changeKeepFiles());
@@ -210,8 +199,6 @@ public class PackageManagerUninstallParameterDialog {
 
 		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
 		jLabelOn.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn"));
-
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
 
 		jButtonDepotSelection = new JButton(Icons.getIntellijIcon("edit"));
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
@@ -229,7 +216,6 @@ public class PackageManagerUninstallParameterDialog {
 		initLayout();
 		resetProducts();
 		changeProduct("");
-		updateLoglevel();
 	}
 
 	private void resetProducts() {
@@ -257,11 +243,6 @@ public class PackageManagerUninstallParameterDialog {
 		} else {
 			commandPMUninstall.setDepot(textFieldSelectedDepots.getText());
 		}
-	}
-
-	private void updateLoglevel() {
-		Logging.info(this, "change loglevel , selected ", jComboboxLoglevel.getSelectedItem());
-		commandPMUninstall.setLoglevel((int) jComboboxLoglevel.getSelectedItem());
 	}
 
 	private void changeProduct(String prod) {
@@ -321,31 +302,21 @@ public class PackageManagerUninstallParameterDialog {
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE).addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboboxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
 				.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup().addComponent(jLabelUninstall)
-						.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(jLabelUninstall)
+				.addComponent(jComboBoxOpsiProducts, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(textFieldSelectedDepots, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboboxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE).addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+						.addComponent(jButtonDepotSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE).addComponent(checkBoxKeepFiles,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 }

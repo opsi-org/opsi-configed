@@ -18,15 +18,11 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	private String opsiproduct = "";
 	private String depot = "";
-	private String verbosity = "-vvv";
 	private String freeInput = "";
 	private String property = " -p keep ";
 
-	private String updateInstalled = "";
-	private String setupInstalled = "";
-
 	public SingleCommandOpsiPackageManagerInstall() {
-		command = "opsi-package-manager";
+		command = "opsi-cli";
 	}
 
 	@Override
@@ -36,7 +32,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getBasicName() {
-		return "opsi-package-manager";
+		return "opsi-cli";
 	}
 
 	@Override
@@ -56,8 +52,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getCommand() {
-		command = "opsi-package-manager  --force -q " + verbosity + updateInstalled + setupInstalled + property + depot
-				+ freeInput + opsiproduct;
+		command = "opsi-cli package install --force " + depot + freeInput + opsiproduct;
 		Logging.info(this, "got command ", command);
 		return command;
 	}
@@ -79,7 +74,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	public void setOpsiproduct(String prod) {
 		if (prod != null && !prod.isEmpty()) {
-			opsiproduct = " -i " + prod;
+			opsiproduct = " " + prod;
 		} else {
 			opsiproduct = "";
 		}
@@ -87,21 +82,9 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	public void setDepotForPInstall(String dep) {
 		if (!dep.isEmpty()) {
-			depot = " -d " + dep;
+			depot = " --depots " + dep;
 		} else {
 			depot = "";
-		}
-	}
-
-	public void setLoglevel(int vSum) {
-		if (vSum <= 3) {
-			verbosity = "";
-		} else {
-			StringBuilder v = new StringBuilder("-");
-			for (int i = 3; i < vSum; i++) {
-				v.append("v");
-			}
-			verbosity = v.toString();
 		}
 	}
 
@@ -123,21 +106,5 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	public String getProperty() {
 		return property;
-	}
-
-	public void enableUpdateInstalled() {
-		updateInstalled = " --update ";
-	}
-
-	public void disableUpdateInstalled() {
-		updateInstalled = "";
-	}
-
-	public void enableSetupInstalled() {
-		setupInstalled = " --setup ";
-	}
-
-	public void disableSetupInstalled() {
-		setupInstalled = "";
 	}
 }

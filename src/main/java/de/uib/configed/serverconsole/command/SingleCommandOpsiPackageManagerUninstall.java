@@ -18,12 +18,11 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	private String opsiproduct;
 	private String depots;
-	private String verbosity = "";
 	private String keepFiles = "";
 	private String freeInput = "";
 
 	public SingleCommandOpsiPackageManagerUninstall() {
-		command = "opsi-package-manager";
+		command = "opsi-cli";
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	@Override
 	public String getBasicName() {
-		return "opsi-package-manager";
+		return "opsi-cli";
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	@Override
 	public String getCommand() {
-		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
+		command = "opsi-cli package uninstall " + keepFiles + depots + freeInput + opsiproduct;
 		return command;
 	}
 
@@ -82,7 +81,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	public void setOpsiproduct(String prod) {
 		if (prod != null && !prod.isEmpty()) {
-			opsiproduct = " -r " + prod;
+			opsiproduct = " " + prod;
 		} else {
 			opsiproduct = " ";
 		}
@@ -90,21 +89,9 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	public void setDepot(String depotlist) {
 		if (depotlist != null && !depotlist.isEmpty()) {
-			depots = " -d " + depotlist.replace(" ", "");
+			depots = " --depots " + depotlist.replace(" ", ",");
 		} else {
 			depots = "";
-		}
-	}
-
-	public void setLoglevel(int vSum) {
-		if (vSum <= 3) {
-			verbosity = "";
-		} else {
-			StringBuilder v = new StringBuilder("-");
-			for (int i = 3; i < vSum; i++) {
-				v.append("v");
-			}
-			verbosity = v.toString();
 		}
 	}
 
