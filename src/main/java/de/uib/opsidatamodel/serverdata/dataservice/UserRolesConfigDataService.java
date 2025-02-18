@@ -124,12 +124,13 @@ public class UserRolesConfigDataService {
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
 		executor.runInParallel(() -> persistenceController.getModuleDataService().retrieveOpsiModules());
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
+		executor.runInParallel(() -> cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY,
+				doesUserBelongToSystemsReadOnlyGroup()));
 		executor.waitForCompletion();
 
 		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
 				.getConfigDefaultValuesPD();
 
-		cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY, doesUserBelongToSystemsReadOnlyGroup());
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
