@@ -6,6 +6,7 @@
 
 package de.uib.configed.messageoftheday;
 
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,17 +64,20 @@ public class MessageOfTheDayDialog {
 		define();
 		init();
 
-		// JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
+		JButton buttonSave = new JButton(Configed.getResourceValue("save"));
+
 		JOptionPane optionPane = new JOptionPane(scrollpane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
-				null, new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+				null, new Object[] { buttonSave, Configed.getResourceValue("buttonCancel") });
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"));
 		dialog.setModal(false);
-		dialog.setVisible(true);
 
-		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("save"))) {
+		buttonSave.addActionListener((ActionEvent event) -> {
 			saveData();
-		}
+			dialog.setVisible(false);
+		});
+
+		dialog.setVisible(true);
 	}
 
 	private void init() {
