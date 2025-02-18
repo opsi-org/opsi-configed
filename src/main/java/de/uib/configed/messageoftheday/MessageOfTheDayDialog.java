@@ -68,6 +68,8 @@ public class MessageOfTheDayDialog {
 				null, new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"));
+		dialog.setResizable(true);
+		dialog.setModal(false);
 		dialog.setVisible(true);
 
 		if (optionPane.getValue() != null && optionPane.getValue().equals(Configed.getResourceValue("save"))) {
