@@ -180,7 +180,7 @@ public class PackageManagerInstallParameterDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(downloadPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(installSettingsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+						Short.MAX_VALUE));
 
 		mainPanelLayout
 				.setVerticalGroup(
