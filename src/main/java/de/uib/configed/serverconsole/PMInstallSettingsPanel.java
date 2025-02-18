@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.ListSelectionDialog;
-import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageInstall;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
@@ -156,12 +156,12 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jTextFieldSelecteddepots.setText("" + depots.get(0));
 	}
 
-	public SingleCommandOpsiPackageInstall updateCommand(SingleCommandOpsiPackageInstall basicCommand) {
+	public SingleCommandOpsiPackageManagerInstall updateCommand(SingleCommandOpsiPackageManagerInstall basicCommand) {
 		setDepotBasedOnSelectedDepot(basicCommand, jTextFieldSelecteddepots.getText());
 		return basicCommand;
 	}
 
-	private static void setDepotBasedOnSelectedDepot(SingleCommandOpsiPackageInstall basicCommand,
+	private static void setDepotBasedOnSelectedDepot(SingleCommandOpsiPackageManagerInstall basicCommand,
 			String selectedDepot) {
 		if (selectedDepot.contains(DEPOT_SELECTION_NODEPOTS)) {
 			basicCommand.setDepotForPInstall("");

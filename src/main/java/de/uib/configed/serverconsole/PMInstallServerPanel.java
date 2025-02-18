@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageInstall;
+import de.uib.configed.serverconsole.command.SingleCommandOpsiPackageManagerInstall;
 import de.uib.utils.Utils;
 
 public class PMInstallServerPanel extends PMInstallPanel {
@@ -81,17 +81,17 @@ public class PMInstallServerPanel extends PMInstallPanel {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 	}
 
-	public SingleCommandOpsiPackageInstall getCommand() {
+	public SingleCommandOpsiPackageManagerInstall getCommand() {
 		return PMInstallServerPanel
 				.getCommand(Utils.getServerPathFromWebDAVPath(autocompletion.getTextField().getText()));
 	}
 
-	public static SingleCommandOpsiPackageInstall getCommand(String product) {
+	public static SingleCommandOpsiPackageManagerInstall getCommand(String product) {
 		if (product == null || product.isEmpty()) {
 			return null;
 		}
 
-		SingleCommandOpsiPackageInstall com = new SingleCommandOpsiPackageInstall();
+		SingleCommandOpsiPackageManagerInstall com = new SingleCommandOpsiPackageManagerInstall();
 		com.setOpsiproduct(product.replace("\n", ""));
 
 		if (com.checkCommand()) {
