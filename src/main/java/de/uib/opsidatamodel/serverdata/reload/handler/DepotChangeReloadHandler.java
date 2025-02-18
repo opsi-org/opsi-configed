@@ -8,6 +8,7 @@ package de.uib.opsidatamodel.serverdata.reload.handler;
 
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.dataservice.DepotDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
 
@@ -30,13 +31,16 @@ public class DepotChangeReloadHandler implements ReloadHandler {
 
 	@Override
 	public void handle(String event) {
+		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_GLOBAL_INFOS);
 		cacheManager.clearCachedData(CacheIdentifier.POSSIBLE_ACTIONS);
-		productDataService.checkProductGlobalInfosPD(depotDataService.getDepot());
+		executor.runInParallel(() -> productDataService.checkProductGlobalInfosPD(depotDataService.getDepot()));
 
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_IDS);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_DEFAULT_STATES);
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
-		productDataService.retrieveProductIdsAndDefaultStatesPD();
+		executor.runInParallel(() -> productDataService.retrieveProductIdsAndDefaultStatesPD());
+
+		executor.waitForCompletion();
 	}
 }
