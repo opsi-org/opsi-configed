@@ -126,11 +126,6 @@ public final class Globals {
 	// We got this value empirically by calling getPreferredSize() on a JLabel
 	public static final int DEFAULT_JLABEL_HEIGHT = new JLabel("a").getPreferredSize().height;
 
-	public static final int LINE_HEIGHT = 30;
-	public static final int BUTTON_WIDTH = 140;
-
-	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
-
 	// Make width long enough so that it will be not too small for the whole text
 	public static final Dimension LABEL_SIZE_OF_JTREE = new Dimension(500, 20);
 
