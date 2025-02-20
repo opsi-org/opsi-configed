@@ -6,7 +6,6 @@
 
 package de.uib.configed.tree;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.TreeSet;
 
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
@@ -172,7 +170,7 @@ public class ProductTree extends AbstractGroupTree {
 		for (DefaultMutableTreeNode groupNode : groupNodes) {
 			anyIsLeaf = anyIsLeaf || groupNode.isLeaf();
 			Logging.info(this, "setGroupsAndSelect groupNode: ", groupNode, " isLeaf: ", anyIsLeaf);
-			if (groupNode.isLeaf()) {
+			if (groupNode.isLeaf() && !groupNode.getAllowsChildren()) {
 				selectedProductIds.add(groupNode.getUserObject().toString());
 				productIds.add(groupNode.getUserObject().toString());
 			} else {
@@ -183,26 +181,6 @@ public class ProductTree extends AbstractGroupTree {
 		if (anyIsLeaf) {
 			localbootPanel.getProductTable().setSelection(selectedProductIds);
 			netbootPanel.getProductTable().setSelection(selectedProductIds);
-		}
-	}
-
-	public static Set<String> getChildrenRecursively(TreeNode groupNode) {
-		Set<String> productIds = new HashSet<>();
-
-		addChildrenRecoursively(groupNode.children(), productIds);
-
-		return productIds;
-	}
-
-	private static void addChildrenRecoursively(Enumeration<? extends TreeNode> children, Set<String> productIds) {
-		while (children.hasMoreElements()) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
-
-			if (child.getAllowsChildren()) {
-				addChildrenRecoursively(child.children(), productIds);
-			} else {
-				productIds.add(child.getUserObject().toString());
-			}
 		}
 	}
 

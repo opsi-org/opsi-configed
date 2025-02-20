@@ -515,4 +515,24 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
 
 	abstract Set<String> getSelectedObjectsInTable();
+
+	public static Set<String> getChildrenRecursively(TreeNode groupNode) {
+		Set<String> resultIds = new HashSet<>();
+
+		addChildrenRecoursively(groupNode.children(), resultIds);
+
+		return resultIds;
+	}
+
+	protected static void addChildrenRecoursively(Enumeration<? extends TreeNode> children, Set<String> resultIds) {
+		while (children.hasMoreElements()) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+
+			if (child.getAllowsChildren()) {
+				addChildrenRecoursively(child.children(), resultIds);
+			} else {
+				resultIds.add(child.getUserObject().toString());
+			}
+		}
+	}
 }

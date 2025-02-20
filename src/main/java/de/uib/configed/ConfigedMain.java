@@ -673,6 +673,7 @@ public class ConfigedMain {
 	 *
 	 * @param groupname
 	 */
+	// used by clientTree
 	public boolean activateGroup(boolean preferringOldSelection, String groupname) {
 		Logging.info(this, "activateGroup  ", groupname);
 		if (groupname == null) {
@@ -700,6 +701,7 @@ public class ConfigedMain {
 	 *
 	 * @param groupname
 	 */
+	// used by clientTree
 	public void setGroupAndSelect(String groupname) {
 		Logging.info(this, "setGroup ", groupname);
 		if (!activateGroup(true, groupname)) {
@@ -707,6 +709,16 @@ public class ConfigedMain {
 		}
 
 		clientTablePanel.setSelectedValues(clientsFilteredByTree);
+	}
+
+	public void setClientsFilteredAndSelected(Set<String> filterIds, Set<String> selectedIds) {
+		clientsFilteredByTree.clear();
+		if (filterIds != null) {
+			for (String filterId : filterIds) {
+				clientsFilteredByTree.add(filterId);
+			}
+		}
+		setRebuiltClientListTableModel(true, false, selectedIds);
 	}
 
 	public List<String> getSelectedClients() {
