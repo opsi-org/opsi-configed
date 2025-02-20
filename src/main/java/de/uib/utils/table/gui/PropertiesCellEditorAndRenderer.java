@@ -8,6 +8,8 @@ package de.uib.utils.table.gui;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,24 +73,44 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		checkBox.setAllowIndeterminate(false);
 
 		checkBox.addItemListener(itemEvent -> stopCellEditing());
+		checkBox.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent event) {
+				stopCellEditing();
+			}
+		});
 
 		comboBox = new JComboBox<>();
 
 		JTextField editorComponent = (JTextField) comboBox.getEditor().getEditorComponent();
-		editorComponent.addActionListener((ActionEvent e) -> {
-			String newItem = editorComponent.getText();
-			comboBox.addItem(newItem);
-			comboBox.setSelectedItem(newItem);
-
-			stopCellEditing();
+		editorComponent.addActionListener((ActionEvent e) -> actOnEditorComponentAction(editorComponent));
+		editorComponent.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent event) {
+				actOnEditorComponentAction(editorComponent);
+			}
 		});
 
 		comboBox.addItemListener(itemEvent -> stopCellEditing());
+		comboBox.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent event) {
+				stopCellEditing();
+			}
+		});
 
 		unusedfield = new JLabel();
 
 		listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(), null, true);
 		listSelectionDialog.setMultiSelection();
+	}
+
+	private void actOnEditorComponentAction(JTextField editorComponent) {
+		String newItem = editorComponent.getText();
+		comboBox.addItem(newItem);
+		comboBox.setSelectedItem(newItem);
+
+		stopCellEditing();
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
