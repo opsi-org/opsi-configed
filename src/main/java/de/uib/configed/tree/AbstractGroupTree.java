@@ -112,9 +112,16 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		MouseListener ml = new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				TreePath[] selectedPaths = getSelectionPaths();
+				Logging.info("\n\n\n\n\n\n\n");
+				Logging.info(this, "mousePressed selectedPaths ", selectedPaths.length, " ", selectedPaths.toString());
 				int selRow = getRowForLocation(e.getX(), e.getY());
 				TreePath selPath = getPathForRow(selRow);
-				if (selRow != -1 && e.getClickCount() == 2
+
+				if (selectedPaths.length > 1) {
+					setGroupsAndSelect(Arrays.stream(getSelectionPaths()).map(TreePath::getLastPathComponent)
+							.map(DefaultMutableTreeNode.class::cast).toArray(DefaultMutableTreeNode[]::new));
+				} else if (selRow != -1 && e.getClickCount() == 2
 						&& groups.containsKey(selPath.getLastPathComponent().toString())) {
 					expandPath(selPath);
 					setGroupAndSelect((DefaultMutableTreeNode) selPath.getLastPathComponent());
@@ -157,6 +164,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	abstract void createTopNodes();
 
 	abstract void setGroupAndSelect(DefaultMutableTreeNode groupNode);
+
+	abstract void setGroupsAndSelect(DefaultMutableTreeNode[] groupNode);
 
 	public void initActiveParents() {
 		activeParents.clear();

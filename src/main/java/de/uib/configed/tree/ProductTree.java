@@ -24,6 +24,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.type.Object2GroupEntry;
+import de.uib.utils.logging.Logging;
 
 public class ProductTree extends AbstractGroupTree {
 	private PanelProductSettings localbootPanel;
@@ -161,6 +162,28 @@ public class ProductTree extends AbstractGroupTree {
 		setFilter(productIds);
 		localbootPanel.getProductTable().setSelection(productIds);
 		netbootPanel.getProductTable().setSelection(productIds);
+	}
+
+	@Override
+	public void setGroupsAndSelect(DefaultMutableTreeNode[] groupNodes) {
+		Set<String> productIds = new HashSet<>();
+		Set<String> selectedProductIds = new HashSet<>();
+		boolean anyIsLeaf = false;
+		for (DefaultMutableTreeNode groupNode : groupNodes) {
+			anyIsLeaf = anyIsLeaf || groupNode.isLeaf();
+			Logging.info(this, "setGroupsAndSelect groupNode: ", groupNode, " isLeaf: ", anyIsLeaf);
+			if (groupNode.isLeaf()) {
+				selectedProductIds.add(groupNode.getUserObject().toString());
+				productIds.add(groupNode.getUserObject().toString());
+			} else {
+				productIds.addAll(getChildrenRecursively(groupNode));
+			}
+		}
+		setFilter(productIds);
+		if (anyIsLeaf) {
+			localbootPanel.getProductTable().setSelection(selectedProductIds);
+			netbootPanel.getProductTable().setSelection(selectedProductIds);
+		}
 	}
 
 	public static Set<String> getChildrenRecursively(TreeNode groupNode) {

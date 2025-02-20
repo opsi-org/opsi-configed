@@ -215,6 +215,11 @@ public class ClientTree extends AbstractGroupTree {
 		configedMain.setGroupAndSelect(groupNode.toString());
 	}
 
+	@Override
+	public void setGroupsAndSelect(DefaultMutableTreeNode[] groupNode) {
+		// configedMain.setGroupAndSelect(groupNode.toString());
+	}
+
 	public void produceTreeForALL(Collection<String> clientIds) {
 		clientNodesInDirectory.clear();
 		produceClients(clientIds, groupNodeFullList);
