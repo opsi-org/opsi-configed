@@ -169,7 +169,6 @@ public class ProductTree extends AbstractGroupTree {
 		boolean anyIsLeaf = false;
 		for (DefaultMutableTreeNode groupNode : groupNodes) {
 			anyIsLeaf = anyIsLeaf || groupNode.isLeaf();
-			Logging.info(this, "setGroupsAndSelect groupNode: ", groupNode, " isLeaf: ", anyIsLeaf);
 			if (groupNode.isLeaf() && !groupNode.getAllowsChildren()) {
 				selectedProductIds.add(groupNode.getUserObject().toString());
 				productIds.add(groupNode.getUserObject().toString());
@@ -182,6 +181,8 @@ public class ProductTree extends AbstractGroupTree {
 			localbootPanel.getProductTable().setSelection(selectedProductIds);
 			netbootPanel.getProductTable().setSelection(selectedProductIds);
 		}
+		Logging.debug("ProductTree.setGroupsAndSelect productIds " + productIds);
+		Logging.debug("ProductTree.setGroupsAndSelect selectedProductIds " + selectedProductIds);
 	}
 
 	private void setFilter(Set<String> productIds) {

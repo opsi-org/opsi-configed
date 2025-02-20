@@ -673,7 +673,6 @@ public class ConfigedMain {
 	 *
 	 * @param groupname
 	 */
-	// used by clientTree
 	public boolean activateGroup(boolean preferringOldSelection, String groupname) {
 		Logging.info(this, "activateGroup  ", groupname);
 		if (groupname == null) {
@@ -701,7 +700,6 @@ public class ConfigedMain {
 	 *
 	 * @param groupname
 	 */
-	// used by clientTree
 	public void setGroupAndSelect(String groupname) {
 		Logging.info(this, "setGroup ", groupname);
 		if (!activateGroup(true, groupname)) {
