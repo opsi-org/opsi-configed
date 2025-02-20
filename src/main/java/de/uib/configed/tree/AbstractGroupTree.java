@@ -91,7 +91,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		super.addTreeSelectionListener(this);
 
-		createTopNodes();
+		createTree();
 
 		setRootVisible(false);
 		setShowsRootHandles(true);
@@ -135,10 +135,12 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			nodeSelection = ((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getParent().toString();
 		}
 
+		List<String> expandedNodes = getExpandedNodes();
+
 		groupNodes.clear();
 		groups.clear();
 		rootNode.removeAllChildren();
-		createTopNodes();
+		createTree();
 
 		removeTreeSelectionListener(this);
 		model = new DefaultTreeModel(rootNode);
@@ -151,10 +153,36 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		setSelectionPath(pathToSelect);
 		expandPath(pathToSelect);
 
+		expandNodes(expandedNodes);
+
 		addTreeSelectionListener(this);
 	}
 
-	abstract void createTopNodes();
+	public List<String> getExpandedNodes() {
+		List<String> expandedNodes = new ArrayList<>();
+
+		Enumeration<TreePath> expanded = getExpandedDescendants(new TreePath(rootNode));
+		if (expanded != null) {
+			while (expanded.hasMoreElements()) {
+				TreePath path = expanded.nextElement();
+				expandedNodes.add(path.getLastPathComponent().toString());
+			}
+		}
+
+		return expandedNodes;
+	}
+
+	public void expandNodes(Iterable<String> nodes) {
+		for (String node : nodes) {
+			DefaultMutableTreeNode nodeToExpand = groupNodes.get(node);
+			if (nodeToExpand != null) {
+				TreePath pathToExpand = new TreePath(getModel().getPathToRoot(nodeToExpand));
+				expandPath(pathToExpand);
+			}
+		}
+	}
+
+	abstract void createTree();
 
 	abstract void setGroupAndSelect(DefaultMutableTreeNode groupNode);
 

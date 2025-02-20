@@ -43,7 +43,7 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	protected void createTopNodes() {
+	protected void createTree() {
 		List<String> depotIds = configedMain.getSelectedDepots();
 		Set<String> productIds = new TreeSet<>(
 				persistenceController.getProductDataService().getAllLocalbootProductNames(depotIds));

@@ -635,23 +635,8 @@ public class ConfigedMain {
 	}
 
 	private void rebuildTree(Collection<String> allPCs, Set<String> permittedHostGroups) {
-		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  ", allPCs);
-
 		clientTree.clear();
-
-		clientTree.produceTreeForALL(allPCs);
-
-		clientTree.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),
-				permittedHostGroups);
-
-		Logging.info(this, "buildPclistTableModel, permittedHostGroups ", permittedHostGroups);
-		Logging.info(this, "buildPclistTableModel, allPCs ", allPCs.size());
-		allowedClients = clientTree.associateClientsToGroups(allPCs,
-				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
-
-		if (allowedClients != null) {
-			Logging.info(this, "buildPclistTableModel, allowedClients ", allowedClients.size());
-		}
+		allowedClients = clientTree.build(allPCs, permittedHostGroups);
 	}
 
 	public void setClient(String clientName) {
@@ -965,7 +950,10 @@ public class ConfigedMain {
 			initialTreeActivation();
 
 			productTree.reInitTree();
+
+			List<String> expandedNodes = clientTree.getExpandedNodes();
 			refreshClientListKeepingGroup();
+			clientTree.expandNodes(expandedNodes);
 		}
 	}
 

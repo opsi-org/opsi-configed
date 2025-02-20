@@ -129,7 +129,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	// generate tree structure
 	@Override
-	protected void createTopNodes() {
+	protected void createTree() {
 		rootNode.setImmutable(true);
 		rootNode.setFixed(true);
 
@@ -161,6 +161,31 @@ public class ClientTree extends AbstractGroupTree {
 		groupNodeFullList.setFixed(true);
 
 		pathToALL = new TreePath(new Object[] { rootNode, groupNodeFullList });
+
+		if (model != null) {
+			Set<String> allPCs = new TreeSet<>(persistenceController.getHostInfoCollections()
+					.getClientsForDepots(configedMain.getSelectedDepots(), null));
+			Set<String> permittedHostGroups = persistenceController.getUserRolesConfigDataService()
+					.getHostGroupsPermitted();
+			build(allPCs, permittedHostGroups);
+		}
+	}
+
+	public Set<String> build(Collection<String> allPCs, Set<String> permittedHostGroups) {
+		Logging.debug(this, "build, rebuildTree, allPCs  " + allPCs + " size " + allPCs.size());
+		Logging.info(this, "build, permittedHostGroups ", permittedHostGroups);
+
+		produceTreeForALL(allPCs);
+		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(), permittedHostGroups);
+
+		Set<String> allowedClients = associateClientsToGroups(allPCs,
+				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
+
+		if (allowedClients != null) {
+			Logging.info(this, "build, allowedClients ", allowedClients.size());
+		}
+
+		return allowedClients;
 	}
 
 	public void clear() {
