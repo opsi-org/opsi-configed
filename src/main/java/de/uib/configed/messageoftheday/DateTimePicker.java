@@ -37,7 +37,8 @@ public class DateTimePicker extends DatePicker {
 
 	private IDateTimePickerCaller caller;
 	private DateTimeFormatter formatter;
-	private ObjectProperty<LocalDateTime> dateTimeValue = new SimpleObjectProperty<>(LocalDateTime.now());
+	private ObjectProperty<LocalDateTime> dateTimeValue = new SimpleObjectProperty<>(
+			LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
 
 	@java.lang.SuppressWarnings("squid:S110")
 	private ObjectProperty<String> format = new SimpleObjectProperty<String>() {
@@ -73,13 +74,14 @@ public class DateTimePicker extends DatePicker {
 		// Syncronize changes to the underlying date value back to the dateTimeValue
 		valueProperty().addListener(
 				(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) -> {
+					Logging.debug("DateTimePicker valueProperty listener newValue: ", newValue, " oldValue: ",
+							oldValue);
 					if (newValue == null) {
 						setDateTimeValue(null);
 					} else if (dateTimeValue.get() == null) {
-						setDateTimeValue(LocalDateTime.of(newValue, timeNow()));
+						setDateTimeValue(LocalDateTime.of(newValue, LocalTime.MAX));
 					} else {
-						LocalTime time = dateTimeValue.get().toLocalTime();
-						setDateTimeValue(LocalDateTime.of(newValue, time));
+						setDateTimeValue(LocalDateTime.of(newValue, LocalTime.MAX));
 					}
 				});
 
@@ -101,12 +103,8 @@ public class DateTimePicker extends DatePicker {
 				});
 	}
 
-	private static LocalTime timeNow() {
-		Instant time = Instant.now();
-		return time.atZone(DateTimePicker.ZONEID).toLocalTime();
-	}
-
 	private static LocalDateTime datetimeNow() {
+		Logging.debug("DateTimePicker datetimeNow");
 		Instant time = Instant.now();
 		return time.atZone(DateTimePicker.ZONEID).toLocalDateTime();
 	}
@@ -170,12 +168,15 @@ public class DateTimePicker extends DatePicker {
 		}
 
 		getEditor().setText(dateTime.format(formatter));
+		Logging.debug("DateTimePicker setDateTimeValue new editor: ", getEditor().getText());
 		if (notify) {
 			if (caller == null) {
 				Logging.warning("Caller is null");
 				return;
 			}
-			caller.dataChanged(getDateTimeValue());
+			LocalDateTime value = getDateTimeValue();
+			Logging.debug("DateTimePicker setDateTimeValue3 notify ", value, " editor: ", getEditor().getText());
+			caller.dataChanged(value);
 		}
 	}
 
@@ -213,15 +214,17 @@ public class DateTimePicker extends DatePicker {
 			Logging.trace("DateTimePicker InternalConverter fromString: ", value);
 			if (value == null || "0".equals(value) || "".equals(value)) {
 				setDateTimeValue(null);
+				// setDateTimeValue(0);
 				return null;
 			}
 			LocalDateTime currValue = getDateTimeValue();
 			try {
 				LocalDateTime currValue2 = LocalDateTime.parse(value, formatter);
 				if (currValue2.compareTo(datetimeNow()) <= 0) {
-					Logging.error("DateTime Error: Date is in the past. Set previous value.");
+					Logging.error("DateTime Error: Date is in the past. Set datetime to now.");
 					setDateTimeValue(currValue);
-					return currValue.toLocalDate();
+					// return currValue.toLocalDate();
+					return datetimeNow().toLocalDate();
 				}
 				currValue = currValue2;
 			} catch (DateTimeParseException e) {

@@ -183,8 +183,8 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		group.add(dateChooserButton);
 		group.add(infiniteDateChooserButton);
 
+		selectDateOption(); // default // init datetimepicker
 		resetData();
-
 		dateChooserButton.addItemListener((ItemEvent e) -> {
 			if (dateChooserButton.isSelected()) {
 				selectDateOption();
@@ -276,34 +276,15 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		this.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
 	}
 
-	private void setDateText(String date, long unix) {
-		setDateText(date, Long.toString(unix));
-	}
-
-	private void setDateText(String date, String unix) {
-		Logging.debug("PanelMessageInfos setDateText: ", date, " (", unix, ")");
-		String datetextfield = "";
-		if (date != null && !date.isEmpty()) {
-			datetextfield = date;
-		}
-		if (unix != null && !unix.isEmpty()) {
-			datetextfield += " (" + unix + ")";
-		}
-		dateChooserText.setText(datetextfield);
-
-	}
-
 	public void dataChanged(LocalDateTime datetime) {
 		if (datetime == null) {
 			Logging.debug("PanelMessageInfos dataChanged: null");
-			date = "0";
-			setDateText(date, null);
+			this.date = "0";
 			return;
 		}
 		Logging.debug("PanelMessageInfos dataChanged: ", datetime);
 		long unixTime = datetime.atZone(DateTimePicker.ZONEID).toEpochSecond();
-		setDateText(datetime.toString(), unixTime);
-		date = Long.toString(unixTime);
+		this.date = Long.toString(unixTime); // sets the date in data
 	}
 
 	@Override
