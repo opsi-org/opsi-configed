@@ -19,7 +19,6 @@ public final class ProductState {
 	public static final String KEY_LAST_STATE_CHANGE = "modificationTime";
 	public static final String KEY_PRODUCT_VERSION = "productVersion";
 	public static final String KEY_PACKAGE_VERSION = "packageVersion";
-	public static final String KEY_TARGET_CONFIGURATION = TargetConfiguration.KEY;
 	public static final String KEY_LAST_ACTION = LastAction.KEY;
 	public static final String KEY_INSTALLATION_STATUS = InstallationStatus.KEY;
 	public static final String KEY_ACTION_REQUEST = ActionRequest.KEY;
@@ -37,10 +36,10 @@ public final class ProductState {
 	// additional values
 	public static final String KEY_PRODUCT_NAME = "productName";
 
-	public static final List<String> KEYS = List.of(KEY_PRODUCT_ID, KEY_PRODUCT_NAME, KEY_TARGET_CONFIGURATION,
-			KEY_INSTALLATION_STATUS, KEY_INSTALLATION_INFO, KEY_ACTION_RESULT, KEY_ACTION_PROGRESS, KEY_LAST_ACTION,
-			KEY_PRODUCT_PRIORITY, KEY_ACTION_SEQUENCE, KEY_ACTION_REQUEST, KEY_VERSION_INFO, KEY_PRODUCT_VERSION,
-			KEY_PACKAGE_VERSION, KEY_LAST_STATE_CHANGE);
+	public static final List<String> KEYS = List.of(KEY_PRODUCT_ID, KEY_PRODUCT_NAME, KEY_INSTALLATION_STATUS,
+			KEY_INSTALLATION_INFO, KEY_ACTION_RESULT, KEY_ACTION_PROGRESS, KEY_LAST_ACTION, KEY_PRODUCT_PRIORITY,
+			KEY_ACTION_SEQUENCE, KEY_ACTION_REQUEST, KEY_VERSION_INFO, KEY_PRODUCT_VERSION, KEY_PACKAGE_VERSION,
+			KEY_LAST_STATE_CHANGE);
 
 	// Empty constructor to prevent instantiation
 	private ProductState() {
@@ -51,7 +50,6 @@ public final class ProductState {
 		productState.put(KEY_PRODUCT_ID, "");
 		productState.put(KEY_PRODUCT_NAME, "");
 
-		productState.put(KEY_TARGET_CONFIGURATION, "undefined");
 		productState.put(KEY_INSTALLATION_STATUS, InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED));
 
 		productState.put(KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));

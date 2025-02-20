@@ -1520,9 +1520,6 @@ public class ProductDataService {
 		productOnClientsDisplayFields.put(ProductState.KEY_PRODUCT_NAME,
 				configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1);
 
-		productOnClientsDisplayFields.put(ProductState.KEY_TARGET_CONFIGURATION,
-				configuredByService.indexOf(ProductState.KEY_TARGET_CONFIGURATION) > -1);
-
 		productOnClientsDisplayFields.put(ProductState.KEY_INSTALLATION_STATUS, true);
 
 		productOnClientsDisplayFields.put(ProductState.KEY_INSTALLATION_INFO,
@@ -1599,7 +1596,6 @@ public class ProductDataService {
 		possibleValues.add(ProductState.KEY_ACTION_REQUEST);
 		possibleValues.add(ProductState.KEY_PRODUCT_PRIORITY);
 		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
-		possibleValues.add(ProductState.KEY_TARGET_CONFIGURATION);
 		possibleValues.add(ProductState.KEY_VERSION_INFO);
 		return possibleValues;
 	}
