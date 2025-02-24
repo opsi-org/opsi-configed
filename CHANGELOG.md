@@ -1,3 +1,7 @@
+## [4.3.6.5] - 2025-02-24
+### Fixed
+- Errors in rendering of some columns in product table
+
 ## [4.3.6.4] - 2025-02-20
 ### Fixed
 - Correctly stop editing in product property states to prevent different errors
