@@ -126,6 +126,25 @@ public class ConfigedMain {
 				depotsListValueChanged();
 			}
 		}
+
+		private void depotsListValueChanged() {
+			Logging.info(this, "depotsList selection changed");
+
+			Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
+
+			Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
+
+			// when running after the first run, we deactivate buttons
+			if (initialDataLoader.isDataLoaded()) {
+				initialTreeActivation();
+
+				productTree.reInitTree();
+
+				Map<String, Map<String, Object>> nodes = clientTree.getExpandedAndSelectedNodes();
+				refreshClientListKeepingGroup();
+				clientTree.expandAndSelectNodes(nodes);
+			}
+		}
 	};
 
 	public ConfigedMain(String host, String user, String password, String otp, boolean useSSO) {
@@ -936,25 +955,6 @@ public class ConfigedMain {
 
 	public ActivatedGroupModel getActivatedGroupModel() {
 		return activatedGroupModel;
-	}
-
-	private void depotsListValueChanged() {
-		Logging.info(this, "depotsList selection changed");
-
-		Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
-
-		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
-
-		// when running after the first run, we deactivate buttons
-		if (initialDataLoader.isDataLoaded()) {
-			initialTreeActivation();
-
-			productTree.reInitTree();
-
-			Map<String, Map<String, Object>> nodes = clientTree.getExpandedAndSelectedNodes();
-			refreshClientListKeepingGroup();
-			clientTree.expandAndSelectNodes(nodes);
-		}
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
