@@ -114,6 +114,20 @@ public class ConfigedMain {
 
 	private InitialDataLoader initialDataLoader;
 
+	private ListSelectionListener depotsListSelectionListener = new ListSelectionListener() {
+		private int counter;
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			counter++;
+			Logging.info(this, "depotSelection event count  ", counter);
+
+			if (!e.getValueIsAdjusting()) {
+				depotsListValueChanged();
+			}
+		}
+	};
+
 	public ConfigedMain(String host, String user, String password, String otp, boolean useSSO) {
 		if (ConfigedMain.host == null) {
 			setHost(host);
@@ -410,20 +424,6 @@ public class ConfigedMain {
 		depotsList = new DepotsList(this);
 
 		Logging.info(this, "create depotsListSelectionListener");
-		ListSelectionListener depotsListSelectionListener = new ListSelectionListener() {
-			private int counter;
-
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				counter++;
-				Logging.info(this, "depotSelection event count  ", counter);
-
-				if (!e.getValueIsAdjusting()) {
-					depotsListValueChanged();
-				}
-			}
-		};
-
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 
 		fetchDepots();
@@ -951,9 +951,9 @@ public class ConfigedMain {
 
 			productTree.reInitTree();
 
-			List<String> expandedNodes = clientTree.getExpandedNodes();
+			Map<String, Map<String, Object>> nodes = clientTree.getExpandedAndSelectedNodes();
 			refreshClientListKeepingGroup();
-			clientTree.expandNodes(expandedNodes);
+			clientTree.expandAndSelectNodes(nodes);
 		}
 	}
 
@@ -1090,6 +1090,7 @@ public class ConfigedMain {
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
 		clientTablePanel.deactivateListSelectionListener();
+		depotsList.removeListSelectionListener(depotsListSelectionListener);
 		allowedClients = null;
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
@@ -1124,6 +1125,7 @@ public class ConfigedMain {
 		Logging.debug(this, " reset the values, particularly in list ");
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.activateListSelectionListener();
+		depotsList.addListSelectionListener(depotsListSelectionListener);
 
 		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
 		mainFrame.reloadServerConsoleMenu();
