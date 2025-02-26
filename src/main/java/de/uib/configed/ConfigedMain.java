@@ -139,10 +139,7 @@ public class ConfigedMain {
 				initialTreeActivation();
 
 				productTree.reInitTree();
-
-				Map<String, Map<String, Object>> nodes = clientTree.getExpandedAndSelectedNodes();
 				refreshClientListKeepingGroup();
-				clientTree.expandAndSelectNodes(nodes);
 			}
 		}
 	};
@@ -1074,8 +1071,10 @@ public class ConfigedMain {
 		String oldGroupSelection = activatedGroupModel.getGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection ", oldGroupSelection);
 
+		Map<String, Map<String, Object>> nodes = clientTree.getExpandedAndSelectedNodes();
 		setRebuiltClientListTableModel(true, true);
 		activateGroup(true, oldGroupSelection);
+		clientTree.expandAndSelectNodes(nodes);
 	}
 
 	public void reload() {
