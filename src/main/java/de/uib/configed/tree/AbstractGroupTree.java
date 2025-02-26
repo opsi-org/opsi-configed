@@ -156,10 +156,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		addTreeSelectionListener(this);
 	}
 
-	public void selectFullListGroup() {
-		setGroupAndSelect(groupNodeFullList);
-	}
-
 	abstract void createTopNodes();
 
 	abstract void setGroupAndSelect(DefaultMutableTreeNode groupNode);
