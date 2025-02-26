@@ -32,7 +32,9 @@ import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.ButtonTabComponent;
 
 public class MainPanelManager {
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 375;
@@ -100,14 +102,32 @@ public class MainPanelManager {
 		scrollpaneTreeProducts.setPreferredSize(productTree.getMaximumSize());
 
 		leftTabs = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		leftTabs.addTab(Configed.getResourceValue("DepotListPresenter.depots"), depotListPresenter);
-		leftTabs.addTab(Configed.getResourceValue("MainFrame.tab_ClientTree"), scrollpaneTreeClients);
-		leftTabs.addTab(Configed.getResourceValue("MainFrame.tab_ProductTree"), scrollpaneTreeProducts);
+		leftTabs.addTab(null, depotListPresenter);
+		leftTabs.addTab(null, scrollpaneTreeClients);
+		leftTabs.addTab(null, scrollpaneTreeProducts);
+
+		leftTabs.setTabComponentAt(0, new ButtonTabComponent(Icons.getIntellijIcon("selectAll"),
+				Configed.getResourceValue("DepotListPresenter.depots"),
+				Configed.getResourceValue("DepotListPresenter.depots.tooltip"), () -> configedMain.selectAllDepots()));
+		leftTabs.setTabComponentAt(1,
+				new ButtonTabComponent(Icons.getIntellijIcon("selectAll"),
+						Configed.getResourceValue("MainFrame.tab_ClientTree"),
+						Configed.getResourceValue("MainFrame.tab_ClientTree.tooltip"),
+						() -> configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME)));
+		leftTabs.setTabComponentAt(2,
+				new ButtonTabComponent(Icons.getIntellijIcon("selectAll"),
+						Configed.getResourceValue("MainFrame.tab_ProductTree"),
+						Configed.getResourceValue("MainFrame.tab_ProductTree.tooltip"),
+						() -> configedMain.activateAllProductsGroup()));
 
 		leftTabs.setSelectedIndex(1);
 
 		clientConfiguration = new ClientConfiguration(configedMain, mainFrame, productTree);
 		hostsStatusPanel = new HostsStatusPanel();
+	}
+
+	public JTabbedPane getTabbedPane() {
+		return leftTabs;
 	}
 
 	public JPanel getClientConfigurationPanel() {

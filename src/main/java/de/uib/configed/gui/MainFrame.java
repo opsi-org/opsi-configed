@@ -30,6 +30,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -118,6 +119,10 @@ public class MainFrame extends JFrame {
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
+	}
+
+	public JTabbedPane getTabbedPane() {
+		return mainPanelManager.getTabbedPane();
 	}
 
 	public ClientTablePanel getClientTablePanel() {
