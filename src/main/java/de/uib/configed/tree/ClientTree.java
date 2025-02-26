@@ -228,6 +228,9 @@ public class ClientTree extends AbstractGroupTree {
 		groups.putAll(importedGroups);
 
 		for (String group : importedGroups.keySet()) {
+			if (topGroupNames.contains(group)) {
+				continue;
+			}
 			groupNodes.put(group, new GroupNode(group));
 		}
 
