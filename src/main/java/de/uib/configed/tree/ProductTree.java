@@ -194,8 +194,10 @@ public class ProductTree extends AbstractGroupTree {
 		if (ConfigedMain.getMainFrame() != null) {
 			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
 					.getTabComponentAt(2);
-			comp.showButton(!Configed.getResourceValue("ProductTree.allProducts")
-					.equals(event.getPath().getLastPathComponent().toString()));
+			comp.showButton(getSelectionPaths() == null
+					|| !Configed.getResourceValue("ProductTree.allProducts")
+							.equals(getSelectionPath().getLastPathComponent().toString())
+					|| getSelectionPaths().length > 1);
 		}
 		localbootPanel.valueChanged(true);
 		netbootPanel.valueChanged(true);

@@ -103,7 +103,9 @@ public class ClientTree extends AbstractGroupTree {
 		if (ConfigedMain.getMainFrame() != null) {
 			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
 					.getTabComponentAt(1);
-			comp.showButton(!ALL_CLIENTS_NAME.equals(e.getPath().getLastPathComponent().toString()));
+			comp.showButton(getSelectionPaths() == null
+					|| !ALL_CLIENTS_NAME.equals(getSelectionPath().getLastPathComponent().toString())
+					|| getSelectionPaths().length > 1);
 		}
 		configedMain.treeClientsSelectAction(getSelectionPaths());
 	}
