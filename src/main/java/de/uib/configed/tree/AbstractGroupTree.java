@@ -68,6 +68,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	private Collection<String> selectedObjectsInTable = new HashSet<>();
 
+	private TreePath pathToROOT = new TreePath(new Object[] { rootNode });
+
 	protected AbstractGroupTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		init();
@@ -435,6 +437,21 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	public GroupNode getGroupNode(String groupId) {
 		return groupNodes.get(groupId);
+	}
+
+	public TreePath getPathToNode(DefaultMutableTreeNode node) {
+		if (node == null) {
+			return null;
+		}
+
+		TreeNode[] ancestors = node.getPath();
+		TreePath path = pathToROOT;
+
+		for (int i = 1; i < ancestors.length; i++) {
+			path = path.pathByAddingChild(ancestors[i]);
+		}
+
+		return path;
 	}
 
 	public boolean removeNodes(Iterable<DefaultMutableTreeNode> nodes) {

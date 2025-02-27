@@ -56,6 +56,7 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.ButtonTabComponent;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
 
@@ -141,6 +142,9 @@ public class ConfigedMain {
 
 				productTree.reInitTree();
 				refreshClientListKeepingGroup();
+
+				ButtonTabComponent comp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
+				comp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
 			}
 		}
 	};
@@ -1033,6 +1037,17 @@ public class ConfigedMain {
 
 	public List<String> getSelectedDepots() {
 		return depotsList.getSelectedValuesList();
+	}
+
+	public void selectAllDepots() {
+		depotsList.setSelectedValues(depots.keySet());
+	}
+
+	public void activateAllProductsGroup() {
+		GroupNode node = productTree.getGroupNode(Configed.getResourceValue("ProductTree.allProducts"));
+		TreePath path = productTree.getPathToNode(node);
+		productTree.setSelectionPath(path);
+		productTree.expandPath(path);
 	}
 
 	public Set<String> getAllowedClients() {
