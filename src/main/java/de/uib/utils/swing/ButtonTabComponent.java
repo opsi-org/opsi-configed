@@ -33,8 +33,8 @@ public class ButtonTabComponent extends JPanel {
 		add(button);
 	}
 
-	public void showButton(boolean hide) {
-		button.setVisible(hide);
+	public void showButton(boolean show) {
+		button.setVisible(show);
 	}
 
 	private static class TabButton extends JButton implements ActionListener {
