@@ -196,7 +196,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			if (Boolean.TRUE.equals(node.getValue().get("selected"))) {
 				TreePath path = new TreePath(getModel().getPathToRoot(currentNode));
 				addSelectionPath(path);
-				expandPath(path);
 			}
 		}
 	}
