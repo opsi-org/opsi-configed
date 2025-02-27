@@ -338,6 +338,13 @@ public final class ClientMenuManager implements MenuListener {
 		jCheckBoxMenuItemShowDepotColumn
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
 
+		JCheckBoxMenuItem jCheckBoxMenuItemShowHealthCheckActiveColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL));
+		jCheckBoxMenuItemShowHealthCheckActiveColumn.setSelected(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL));
+		jCheckBoxMenuItemShowHealthCheckActiveColumn
+				.addActionListener(event -> configedMain.toggleColumn(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL));
+
 		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
@@ -348,6 +355,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShowColumns.add(jCheckBoxMenuItemShowCreatedColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowInstallByShutdown);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowHealthCheckActiveColumn);
 
 		return jMenuShowColumns;
 	}

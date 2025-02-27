@@ -7,8 +7,10 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -16,6 +18,7 @@ import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with health data on the server.
@@ -81,5 +84,12 @@ public class HealthDataService {
 			}
 		}
 		return result;
+	}
+
+	public Set<Object> getHostsWithActiveHealthCheck() {
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SERVICE_GET_HOSTS_WITH_ACTIVE_HEALTH_CHECK,
+				new Object[0]);
+		Logging.devel(this, "calling " + omc);
+		return new HashSet<>(exec.getListResult(omc));
 	}
 }

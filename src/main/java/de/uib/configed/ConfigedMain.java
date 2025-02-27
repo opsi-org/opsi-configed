@@ -622,6 +622,8 @@ public class ConfigedMain {
 		Logging.info(this, "buildPclistTableModel host_displayFields ",
 				persistenceController.getHostDataService().getHostDisplayFields());
 
+		Set<Object> hostsWithActiveHealthCheck = persistenceController.getHealthDataService()
+				.getHostsWithActiveHealthCheck();
 		for (String clientId : clientIds) {
 			HostInfo pcinfo = pcinfos.get(clientId);
 			if (pcinfo == null) {
@@ -637,6 +639,7 @@ public class ConfigedMain {
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
 			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
+			rowmap.put(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL, hostsWithActiveHealthCheck.contains(clientId));
 
 			List<Object> rowItems = new ArrayList<>();
 
@@ -764,6 +767,23 @@ public class ConfigedMain {
 
 			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
+
+			Logging.info(this, "setSelectionPanelCols ,  found col ", col);
+
+			initSelectionPanelColumn(col);
+		}
+
+		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
+				.get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL))) {
+			List<String> columns = new ArrayList<>();
+			for (int i = 0; i < clientTablePanel.getTableModel().getColumnCount(); i++) {
+				columns.add(clientTablePanel.getTableModel().getColumnName(i));
+			}
+			Logging.info(this, "showAndSave columns are ", columns, ", search for ",
+					HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL);
+
+			int col = clientTablePanel.getTableModel().findColumn(Configed
+					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL));
 
 			Logging.info(this, "setSelectionPanelCols ,  found col ", col);
 
