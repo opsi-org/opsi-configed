@@ -1,3 +1,7 @@
+## [4.3.X.X] - XXXX-XX-XX
+### Fixed
+- Dialogs rendered improperly after restart (for example, new client dialog)
+
 ## [4.3.6.5] - 2025-02-24
 ### Fixed
 - Errors in rendering of some columns in product table
