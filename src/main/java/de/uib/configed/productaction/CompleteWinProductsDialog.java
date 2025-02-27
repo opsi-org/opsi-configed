@@ -141,7 +141,6 @@ public class CompleteWinProductsDialog implements NameProducer {
 	private void defineChoosers() {
 		chooserFolder = new JFileChooser();
 		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooserFolder.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
 
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);

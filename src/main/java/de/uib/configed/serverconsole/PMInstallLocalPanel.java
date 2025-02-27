@@ -56,7 +56,6 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 
 		JFileChooser jFileChooser = new JFileChooser();
 		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		jFileChooser.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		jFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		jFileChooser.setDialogTitle(Configed.getResourceValue("PMInstallLocalPanel.titleDialogLocalFrom"));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
