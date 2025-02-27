@@ -51,13 +51,18 @@ public final class HealthCheckSettingsDialog {
 	private JTextField startDowntimeField;
 	private JTextField endDowntimeField;
 	private JCheckBox checkBoxCheckActive;
+	private JTextField selectedHosts;
 
 	private JDialog dialog;
 
 	public void showHealthCheckSettings() {
+		showHealthCheckSettings(new ArrayList<>());
+	}
+
+	public void showHealthCheckSettings(List<String> selectedHostsList) {
 		Logging.info(this, "show health check settings dialog");
 
-		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel());
+		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel(selectedHostsList));
 		jOptionPane.setOptions(
 				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
 		dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(),
@@ -70,18 +75,19 @@ public final class HealthCheckSettingsDialog {
 		}
 	}
 
-	private JPanel createOptionsPanel() {
+	private JPanel createOptionsPanel(List<String> selectedHostsList) {
 		JLabel labelSelectedHosts = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
 		labelSelectedHosts.setFont(labelSelectedHosts.getFont().deriveFont(Font.BOLD));
 
-		JTextField selectedHosts = new JTextField();
+		selectedHosts = new JTextField();
 		selectedHosts.setEditable(false);
 		selectedHosts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				openHostSelectionDialog(selectedHosts);
+				openHostSelectionDialog(selectedHosts, selectedHostsList);
 			}
 		});
+		selectedHosts.setText(Utils.getListStringRepresentation(selectedHostsList));
 
 		checkBoxCheckActive = new JCheckBox(Configed.getResourceValue("HealthCheckSettingsDialog.healthCheckActive"),
 				true);
@@ -153,7 +159,7 @@ public final class HealthCheckSettingsDialog {
 		return panel;
 	}
 
-	private void openHostSelectionDialog(JTextField selectedHosts) {
+	private void openHostSelectionDialog(JTextField selectedHosts, List<String> defaultSelection) {
 		Logging.info(this, "openSelectionDialog for health check settings");
 
 		if (selectedHostList == null) {
@@ -165,6 +171,7 @@ public final class HealthCheckSettingsDialog {
 
 			selectedHostList.setListData(hostNames);
 			selectedHostList.setMultiSelection();
+			selectedHostList.setPreviousSelectionValues(defaultSelection);
 		}
 
 		// Get the selection to restore it if the user cancels the dialog

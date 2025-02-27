@@ -56,6 +56,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private FlatTriStateCheckBox checkBoxInstallByShutdown;
 	private FlatTriStateCheckBox checkBoxUEFIBoot;
 	private FlatTriStateCheckBox checkBoxWANConfig;
+	private FlatTriStateCheckBox checkBoxHealthCheckActive;
 
 	private JTextField jTextFieldDescription;
 	private JTextField jTextFieldInventoryNumber;
@@ -65,6 +66,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JTextField ipAddressField;
 	private JTextField jTextFieldOneTimePassword;
 	private FlatPasswordField hostKeyField;
+
+	private JButton openHealthCheckSettingsDialogButton;
 
 	private Map<String, Map<String, String>> changedClientInfos;
 
@@ -145,6 +148,17 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		checkBoxWANConfig.addActionListener(event -> wanConfigAction());
 		checkBoxWANConfig.setFocusable(false);
 
+		checkBoxHealthCheckActive = new FlatTriStateCheckBox(
+				Configed.getResourceValue("NewClientDialog.healthCheckActive"));
+		checkBoxHealthCheckActive.setAllowIndeterminate(false);
+		checkBoxHealthCheckActive.addActionListener(event -> wanConfigAction());
+		checkBoxHealthCheckActive.setFocusable(false);
+		checkBoxHealthCheckActive.setEnabled(false);
+
+		openHealthCheckSettingsDialogButton = new JButton(Icons.getIntellijIcon("settings"));
+		openHealthCheckSettingsDialogButton.addActionListener(
+				e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain.getSelectedClients()));
+
 		checkBoxInstallByShutdown = new FlatTriStateCheckBox(
 				Configed.getResourceValue("NewClientDialog.installByShutdown"));
 		checkBoxInstallByShutdown.setAllowIndeterminate(false);
@@ -214,6 +228,13 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(checkBoxWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
+				/////// Health-Check active
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(checkBoxHealthCheckActive, 0, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(openHealthCheckSettingsDialogButton, 0, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+
 				/////// ONE TIME PASSWORD
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
@@ -281,6 +302,13 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 				.addComponent(checkBoxWANConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
+
+				/////// Health-Check active
+				.addGroup(layoutClientPane.createParallelGroup()
+						.addComponent(checkBoxHealthCheckActive, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(openHealthCheckSettingsDialogButton, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// ONE TIME PASSWORD
 				.addGap(Globals.GAP_SIZE)
