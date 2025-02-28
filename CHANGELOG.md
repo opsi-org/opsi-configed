@@ -1,3 +1,7 @@
+## [4.3.X.X] - XXXX-XX-XX
+### Fixed
+- `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
+
 ## [4.3.6.5] - 2025-02-24
 ### Fixed
 - Errors in rendering of some columns in product table
