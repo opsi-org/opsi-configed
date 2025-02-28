@@ -18,7 +18,6 @@ import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utils.logging.Logging;
 
 /**
  * Provides methods for working with health data on the server.
@@ -89,7 +88,6 @@ public class HealthDataService {
 	public Set<Object> getHostsWithActiveHealthCheck() {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SERVICE_GET_HOSTS_WITH_ACTIVE_HEALTH_CHECK,
 				new Object[0]);
-		Logging.devel(this, "calling " + omc);
 		return new HashSet<>(exec.getListResult(omc));
 	}
 }
