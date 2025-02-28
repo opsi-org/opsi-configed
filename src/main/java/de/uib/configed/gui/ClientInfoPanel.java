@@ -154,6 +154,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		checkBoxHealthCheckActive.addActionListener(event -> wanConfigAction());
 		checkBoxHealthCheckActive.setFocusable(false);
 		checkBoxHealthCheckActive.setEnabled(false);
+		checkBoxHealthCheckActive.setSelected(persistenceController.getHealthDataService()
+				.getHostsWithActiveHealthCheck().contains(labelClientID.getText()));
 		checkBoxHealthCheckActive.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
 
@@ -524,6 +526,12 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	public void hideHealthCheckActiveCheckBox(boolean hide) {
 		checkBoxHealthCheckActive.setVisible(hide);
 		openHealthCheckSettingsDialogButton.setVisible(hide);
+	}
+
+	public void updateHealthCheckActiveCheckBoxStatus(String clientId) {
+		checkBoxHealthCheckActive.setChecked(clientId != null
+				? persistenceController.getHealthDataService().getHostsWithActiveHealthCheck().contains(clientId)
+				: null);
 	}
 
 	// DocumentListener

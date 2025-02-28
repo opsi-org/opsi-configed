@@ -406,8 +406,11 @@ public class ConfigedMain {
 
 		if (selectedClients.size() == 1) {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
+			mainFrame.getClientConfiguration().getClientInfoPanel()
+					.updateHealthCheckActiveCheckBoxStatus(selectedClients.get(0));
 		} else {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
+			mainFrame.getClientConfiguration().getClientInfoPanel().updateHealthCheckActiveCheckBoxStatus(null);
 		}
 
 		hostInfo.resetGui();
