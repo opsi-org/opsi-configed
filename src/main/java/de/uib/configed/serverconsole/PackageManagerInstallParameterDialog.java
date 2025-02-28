@@ -50,8 +50,6 @@ public class PackageManagerInstallParameterDialog {
 	}
 
 	public PackageManagerInstallParameterDialog(ConfigedMain configedMain, String fullPathToPackage) {
-		Logging.devel(this, "is read only " + PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly());
 		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
 				.isGlobalReadOnly()) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
