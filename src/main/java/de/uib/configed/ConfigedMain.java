@@ -280,6 +280,7 @@ public class ConfigedMain {
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
 		executor.runInParallel(() -> persistenceController.getProductDataService().retrieveDepotProductPropertiesPD());
+		executor.runInParallel(() -> persistenceController.getHealthDataService().retrieveHostsWithHealthCheck());
 		executor.waitForCompletion();
 
 		ExtraFrameController.reloadDialogs();

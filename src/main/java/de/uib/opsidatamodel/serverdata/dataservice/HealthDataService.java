@@ -86,8 +86,18 @@ public class HealthDataService {
 	}
 
 	public Set<Object> getHostsWithActiveHealthCheck() {
+		retrieveHostsWithHealthCheck();
+		return cacheManager.getCachedData(CacheIdentifier.HOSTS_WITH_ACTIVE_HEALTH_CHECK, Set.class);
+	}
+
+	public void retrieveHostsWithHealthCheck() {
+		if (cacheManager.isDataCached(CacheIdentifier.HOSTS_WITH_ACTIVE_HEALTH_CHECK)) {
+			return;
+		}
+
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SERVICE_GET_HOSTS_WITH_ACTIVE_HEALTH_CHECK,
 				new Object[0]);
-		return new HashSet<>(exec.getListResult(omc));
+		cacheManager.setCachedData(CacheIdentifier.HOSTS_WITH_ACTIVE_HEALTH_CHECK,
+				new HashSet<>(exec.getListResult(omc)));
 	}
 }

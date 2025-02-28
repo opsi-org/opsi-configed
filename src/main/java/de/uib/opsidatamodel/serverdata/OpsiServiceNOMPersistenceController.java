@@ -299,6 +299,7 @@ public class OpsiServiceNOMPersistenceController {
 		hostDataReloadHandler.setConfigDataService(configDataService);
 		hostDataReloadHandler.setGroupDataService(groupDataService);
 		hostDataReloadHandler.setHostInfoCollections(hostInfoCollections);
+		hostDataReloadHandler.setHealthDataService(healthDataService);
 		reloadDispatcher.registerHandler(ReloadEvent.HOST_DATA_RELOAD.toString(), hostDataReloadHandler);
 
 		ConfigOptionsDataReloadHandler configOptionsDataReloadHandler = new ConfigOptionsDataReloadHandler();
