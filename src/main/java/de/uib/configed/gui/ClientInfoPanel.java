@@ -154,8 +154,12 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		checkBoxHealthCheckActive.addActionListener(event -> wanConfigAction());
 		checkBoxHealthCheckActive.setFocusable(false);
 		checkBoxHealthCheckActive.setEnabled(false);
+		checkBoxHealthCheckActive.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
 
 		openHealthCheckSettingsDialogButton = new JButton(Icons.getIntellijIcon("settings"));
+		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
 		openHealthCheckSettingsDialogButton.addActionListener(
 				e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain.getSelectedClients()));
 
@@ -515,6 +519,11 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
 			jTextAreaNotes.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
 		}
+	}
+
+	public void hideHealthCheckActiveCheckBox(boolean hide) {
+		checkBoxHealthCheckActive.setVisible(hide);
+		openHealthCheckSettingsDialogButton.setVisible(hide);
 	}
 
 	// DocumentListener

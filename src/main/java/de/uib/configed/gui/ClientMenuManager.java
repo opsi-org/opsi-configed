@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -342,8 +343,12 @@ public final class ClientMenuManager implements MenuListener {
 				Configed.getResourceValue(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL));
 		jCheckBoxMenuItemShowHealthCheckActiveColumn.setSelected(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL));
-		jCheckBoxMenuItemShowHealthCheckActiveColumn
-				.addActionListener(event -> configedMain.toggleColumn(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL));
+		jCheckBoxMenuItemShowHealthCheckActiveColumn.addActionListener((ActionEvent event) -> {
+			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
+					.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getHostDataService()
+							.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
+			configedMain.toggleColumn(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL);
+		});
 
 		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
