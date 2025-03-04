@@ -26,7 +26,7 @@ public interface CertificateValidator {
 	 * Creates {@code HostnameVerifier} based on the
 	 * {@link CertificateValidator} implmenetation (i.e. disabled or not).
 	 * <p>
-	 * Created {@code HostnameVerifier} is the nused to either verify hostnames
+	 * Created {@code HostnameVerifier} is then used to either verify hostnames
 	 * or not.
 	 * 
 	 * @return created {@code HostnameVerifier} based on the
