@@ -141,7 +141,9 @@ public class PackageManagerInstallParameterDialog {
 			Logging.warning(this, "Unknown source selected");
 		}
 
-		dialog.pack();
+		if (dialog != null) {
+			dialog.pack();
+		}
 	}
 
 	private void initLayout() {
