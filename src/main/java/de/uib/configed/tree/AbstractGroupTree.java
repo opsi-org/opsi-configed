@@ -114,10 +114,18 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		MouseListener ml = new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				TreePath[] selectedPaths = getSelectionPaths();
 				int selRow = getRowForLocation(e.getX(), e.getY());
 				TreePath selPath = getPathForRow(selRow);
-				if (selRow != -1 && e.getClickCount() == 2
+
+				if (selectedPaths != null && selectedPaths.length > 1) {
+					Logging.debug(this, "mousePressed (multi groups) ", selectedPaths.length, " ",
+							selectedPaths.toString());
+					setGroupsAndSelect(Arrays.stream(getSelectionPaths()).map(TreePath::getLastPathComponent)
+							.map(DefaultMutableTreeNode.class::cast).toArray(DefaultMutableTreeNode[]::new));
+				} else if (selRow != -1 && e.getClickCount() == 2
 						&& groups.containsKey(selPath.getLastPathComponent().toString())) {
+					Logging.debug(this, "mousePressed (single groups) ", selPath);
 					expandPath(selPath);
 					setGroupAndSelect((DefaultMutableTreeNode) selPath.getLastPathComponent());
 				}
@@ -216,6 +224,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	abstract void createTree();
 
 	abstract void setGroupAndSelect(DefaultMutableTreeNode groupNode);
+
+	abstract void setGroupsAndSelect(DefaultMutableTreeNode[] groupNode);
 
 	public void initActiveParents() {
 		activeParents.clear();
@@ -580,4 +590,24 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath);
 
 	abstract Set<String> getSelectedObjectsInTable();
+
+	public static Set<String> getChildrenRecursively(TreeNode groupNode) {
+		Set<String> resultIds = new HashSet<>();
+
+		addChildrenRecoursively(groupNode.children(), resultIds);
+
+		return resultIds;
+	}
+
+	protected static void addChildrenRecoursively(Enumeration<? extends TreeNode> children, Set<String> resultIds) {
+		while (children.hasMoreElements()) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+
+			if (child.getAllowsChildren()) {
+				addChildrenRecoursively(child.children(), resultIds);
+			} else {
+				resultIds.add(child.getUserObject().toString());
+			}
+		}
+	}
 }

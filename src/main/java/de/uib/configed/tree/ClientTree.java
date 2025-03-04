@@ -230,6 +230,28 @@ public class ClientTree extends AbstractGroupTree {
 		configedMain.setGroupAndSelect(groupNode.toString());
 	}
 
+	@Override
+	public void setGroupsAndSelect(DefaultMutableTreeNode[] groupNodes) {
+		Set<String> clientIds = new HashSet<>();
+		Set<String> selectedAclientIds = new HashSet<>();
+		boolean anyIsLeaf = false;
+		for (DefaultMutableTreeNode groupNode : groupNodes) {
+			anyIsLeaf = anyIsLeaf || groupNode.isLeaf();
+
+			if (groupNode.isLeaf() && !groupNode.getAllowsChildren()) {
+				String nodeinfo = (String) groupNode.getUserObject();
+				clientIds.add(nodeinfo);
+				selectedAclientIds.add(groupNode.getUserObject().toString());
+			} else {
+				clientIds.addAll(getChildrenRecursively(groupNode));
+			}
+		}
+
+		Logging.debug("ClientTree.setGroupsAndSelect clientIds " + clientIds);
+		Logging.debug("ClientTree.setGroupsAndSelect selectedAclientIds " + selectedAclientIds);
+		configedMain.setClientsFilteredAndSelected(clientIds, selectedAclientIds);
+	}
+
 	public void produceTreeForALL(Collection<String> clientIds) {
 		clientNodesInDirectory.clear();
 		produceClients(clientIds, groupNodeFullList);
