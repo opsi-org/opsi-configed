@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -35,6 +36,8 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 	private JTextField jTextFieldSelecteddepots;
 	private JButton jButtonDepotselection;
+	private JCheckBox jCheckBoxUpdateInstalled;
+	private JCheckBox jCheckBoxSetupInstalled;
 
 	private ListSelectionDialog depotSelection;
 	private List<String> depots;
@@ -66,6 +69,9 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 		jTextFieldSelecteddepots = new JTextField();
 		jTextFieldSelecteddepots.setEditable(false);
+
+		jCheckBoxUpdateInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.updateInstalled"));
+		jCheckBoxSetupInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.setupInstalled"));
 	}
 
 	private void initLayout() {
@@ -79,17 +85,26 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 						.addComponent(jTextFieldSelecteddepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE).addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
-
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jTextFieldSelecteddepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
+
+		layout.setVerticalGroup(
+				layout.createSequentialGroup()
+						.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.GAP_SIZE));
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jTextFieldSelecteddepots, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE));
 	}
 
 	private List<String> getAllowedInstallTargets() {
@@ -157,8 +172,26 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	}
 
 	public SingleCommandOpsiPackageManagerInstall updateCommand(SingleCommandOpsiPackageManagerInstall basicCommand) {
+		toggleUpdateBasedOnCheckBox(basicCommand);
+		toggleSetupBasedOnCheckBox(basicCommand);
 		setDepotBasedOnSelectedDepot(basicCommand, jTextFieldSelecteddepots.getText());
 		return basicCommand;
+	}
+
+	private void toggleUpdateBasedOnCheckBox(SingleCommandOpsiPackageManagerInstall basicCommand) {
+		if (jCheckBoxUpdateInstalled.isSelected()) {
+			basicCommand.enableUpdateInstalled();
+		} else {
+			basicCommand.disableUpdateInstalled();
+		}
+	}
+
+	private void toggleSetupBasedOnCheckBox(SingleCommandOpsiPackageManagerInstall basicCommand) {
+		if (jCheckBoxSetupInstalled.isSelected()) {
+			basicCommand.enableSetupInstalled();
+		} else {
+			basicCommand.disableSetupInstalled();
+		}
 	}
 
 	private static void setDepotBasedOnSelectedDepot(SingleCommandOpsiPackageManagerInstall basicCommand,

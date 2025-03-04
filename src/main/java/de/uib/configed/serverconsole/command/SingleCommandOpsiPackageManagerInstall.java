@@ -21,6 +21,9 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 	private String freeInput = "";
 	private String property = " -p keep ";
 
+	private String updateInstalled = "";
+	private String setupInstalled = "";
+
 	public SingleCommandOpsiPackageManagerInstall() {
 		command = "opsi-cli";
 	}
@@ -52,7 +55,8 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getCommand() {
-		command = "opsi-cli package install --force " + depot + freeInput + opsiproduct;
+		command = "opsi-cli package install --force " + setupInstalled + updateInstalled + depot + freeInput
+				+ opsiproduct;
 		Logging.info(this, "got command ", command);
 		return command;
 	}
@@ -106,5 +110,21 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	public String getProperty() {
 		return property;
+	}
+
+	public void enableUpdateInstalled() {
+		updateInstalled = " --update-where-installed ";
+	}
+
+	public void disableUpdateInstalled() {
+		updateInstalled = "";
+	}
+
+	public void enableSetupInstalled() {
+		setupInstalled = " --setup-where-installed ";
+	}
+
+	public void disableSetupInstalled() {
+		setupInstalled = "";
 	}
 }
