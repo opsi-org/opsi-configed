@@ -1,4 +1,9 @@
 ## [4.3.7.0] 
+### Fixed
+- `NPE` when opening install package dialog after building the package first in "Make opsi package..." dialog 
+- Dialogs rendered improperly after restart (for example, new client dialog)
+- `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
+
 ### Added
 - Feature for selecting multiple groups in host and product tree
 
