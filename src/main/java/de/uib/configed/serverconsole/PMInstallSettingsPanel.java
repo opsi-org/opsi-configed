@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -33,6 +34,9 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 			.getResourceValue("SingleCommandOpsiPackageManager.DEPOT_SELECTION_ALL");
 
 	private JLabel jLabelOn = new JLabel();
+	private JLabel jLabelLoglevel = new JLabel();
+
+	private JComboBox<Integer> jComboBoxLoglevel;
 
 	private JTextField jTextFieldSelecteddepots;
 	private JButton jButtonDepotselection;
@@ -57,6 +61,9 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 		jLabelOn.setText(Configed.getResourceValue("PMInstallSettingsPanel.jLabelOn"));
 		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
 
+		jLabelLoglevel.setText(Configed.getResourceValue("loglevel"));
+		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+
 		jButtonDepotselection = new JButton(Configed.getResourceValue("depotSelection"));
 		jButtonDepotselection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
@@ -69,6 +76,13 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 		jTextFieldSelecteddepots = new JTextField();
 		jTextFieldSelecteddepots.setEditable(false);
+
+		jComboBoxLoglevel = new JComboBox<>();
+		for (int i = 3; i <= 9; i++) {
+			jComboBoxLoglevel.addItem(i);
+		}
+
+		jComboBoxLoglevel.setSelectedItem(4);
 
 		jCheckBoxUpdateInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.updateInstalled"));
 		jCheckBoxSetupInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.setupInstalled"));
@@ -86,6 +100,10 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE).addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -101,6 +119,12 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 								.addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+
 						.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -172,6 +196,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	}
 
 	public SingleCommandOpsiPackageManagerInstall updateCommand(SingleCommandOpsiPackageManagerInstall basicCommand) {
+		basicCommand.setLoglevel((int) jComboBoxLoglevel.getSelectedItem());
 		toggleUpdateBasedOnCheckBox(basicCommand);
 		toggleSetupBasedOnCheckBox(basicCommand);
 		setDepotBasedOnSelectedDepot(basicCommand, jTextFieldSelecteddepots.getText());

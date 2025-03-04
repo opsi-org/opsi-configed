@@ -18,6 +18,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	private String opsiproduct = "";
 	private String depot = "";
+	private String verbosity = "-l3";
 	private String freeInput = "";
 	private String property = " -p keep ";
 
@@ -55,8 +56,8 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getCommand() {
-		command = "opsi-cli package install --force " + setupInstalled + updateInstalled + depot + freeInput
-				+ opsiproduct;
+		command = "opsi-cli " + verbosity + " package install --force " + setupInstalled + updateInstalled + depot
+				+ freeInput + opsiproduct;
 		Logging.info(this, "got command ", command);
 		return command;
 	}
@@ -90,6 +91,10 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 		} else {
 			depot = "";
 		}
+	}
+
+	public void setLoglevel(int vSum) {
+		verbosity = "-l" + vSum;
 	}
 
 	public void setFreeInput(String fI) {

@@ -18,6 +18,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	private String opsiproduct;
 	private String depots;
+	private String verbosity = "-l3";
 	private String keepFiles = "";
 	private String freeInput = "";
 
@@ -62,7 +63,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	@Override
 	public String getCommand() {
-		command = "opsi-cli package uninstall " + keepFiles + depots + freeInput + opsiproduct;
+		command = "opsi-cli " + verbosity + " package uninstall " + keepFiles + depots + freeInput + opsiproduct;
 		return command;
 	}
 
@@ -93,6 +94,10 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 		} else {
 			depots = "";
 		}
+	}
+
+	public void setLoglevel(int vSum) {
+		verbosity = "-l" + vSum;
 	}
 
 	public void setFreeInput(String fI) {
