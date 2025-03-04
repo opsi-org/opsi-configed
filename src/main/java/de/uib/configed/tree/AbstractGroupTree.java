@@ -118,7 +118,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				int selRow = getRowForLocation(e.getX(), e.getY());
 				TreePath selPath = getPathForRow(selRow);
 
-				if (selectedPaths.length > 1) {
+				if (selectedPaths != null && selectedPaths.length > 1) {
 					Logging.debug(this, "mousePressed (multi groups) ", selectedPaths.length, " ",
 							selectedPaths.toString());
 					setGroupsAndSelect(Arrays.stream(getSelectionPaths()).map(TreePath::getLastPathComponent)
