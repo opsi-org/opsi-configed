@@ -1,3 +1,7 @@
+## [4.3.7.0] 
+### Added
+- Feature for selecting multiple groups in host and product tree
+
 ## [4.3.6.5] - 2025-02-24
 ### Fixed
 - Errors in rendering of some columns in product table
