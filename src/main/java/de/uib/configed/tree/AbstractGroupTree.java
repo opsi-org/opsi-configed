@@ -120,7 +120,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 				if (selectedPaths != null && selectedPaths.length > 1) {
 					Logging.debug(this, "mousePressed (multi groups) ", selectedPaths.length, " ",
-							selectedPaths.toString());
+							Arrays.toString(selectedPaths));
 					setGroupsAndSelect(Arrays.stream(getSelectionPaths()).map(TreePath::getLastPathComponent)
 							.map(DefaultMutableTreeNode.class::cast).toArray(DefaultMutableTreeNode[]::new));
 				} else if (selRow != -1 && e.getClickCount() == 2
@@ -128,6 +128,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 					Logging.debug(this, "mousePressed (single groups) ", selPath);
 					expandPath(selPath);
 					setGroupAndSelect((DefaultMutableTreeNode) selPath.getLastPathComponent());
+				} else {
+					// Nothing to do in other cases
 				}
 			}
 		};
