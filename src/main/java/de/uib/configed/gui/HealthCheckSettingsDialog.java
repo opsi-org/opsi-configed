@@ -48,8 +48,8 @@ public final class HealthCheckSettingsDialog {
 			.getPersistenceController();
 
 	private ListSelectionDialog selectedHostList;
-	private JTextField startDowntime;
-	private JTextField endDowntime;
+	private JTextField startDowntimeField;
+	private JTextField endDowntimeField;
 	private JCheckBox checkBoxCheckActive;
 
 	private JDialog dialog;
@@ -89,13 +89,13 @@ public final class HealthCheckSettingsDialog {
 		JLabel labelStartDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
 		labelStartDowntime.setFont(labelStartDowntime.getFont().deriveFont(Font.BOLD));
 
-		startDowntime = new JTextField();
-		startDowntime.setEditable(false);
-		startDowntime.addMouseListener(new MouseAdapter() {
+		startDowntimeField = new JTextField();
+		startDowntimeField.setEditable(false);
+		startDowntimeField.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (checkBoxCheckActive.isSelected()) {
-					openDateSelectionDialog(startDowntime,
+					openDateSelectionDialog(startDowntimeField,
 							Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
 				}
 			}
@@ -104,13 +104,13 @@ public final class HealthCheckSettingsDialog {
 		JLabel labelEndDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
 		labelEndDowntime.setFont(labelEndDowntime.getFont().deriveFont(Font.BOLD));
 
-		endDowntime = new JTextField();
-		endDowntime.setEditable(false);
-		endDowntime.addMouseListener(new MouseAdapter() {
+		endDowntimeField = new JTextField();
+		endDowntimeField.setEditable(false);
+		endDowntimeField.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (checkBoxCheckActive.isSelected()) {
-					openDateSelectionDialog(endDowntime,
+					openDateSelectionDialog(endDowntimeField,
 							Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
 				}
 			}
@@ -118,15 +118,15 @@ public final class HealthCheckSettingsDialog {
 
 		checkBoxCheckActive.addItemListener((ItemEvent event) -> {
 			labelStartDowntime.setEnabled(checkBoxCheckActive.isSelected());
-			startDowntime.setEnabled(checkBoxCheckActive.isSelected());
+			startDowntimeField.setEnabled(checkBoxCheckActive.isSelected());
 			labelEndDowntime.setEnabled(checkBoxCheckActive.isSelected());
-			endDowntime.setEnabled(checkBoxCheckActive.isSelected());
+			endDowntimeField.setEnabled(checkBoxCheckActive.isSelected());
 
 			// We want to remove the text when the checkbox is unchecked
 			// because there should be no time set anyways
 			if (!checkBoxCheckActive.isSelected()) {
-				startDowntime.setText(null);
-				endDowntime.setText(null);
+				startDowntimeField.setText(null);
+				endDowntimeField.setText(null);
 			}
 		});
 
@@ -136,8 +136,8 @@ public final class HealthCheckSettingsDialog {
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelSelectedHosts)
 				.addComponent(selectedHosts).addGap(Globals.GAP_SIZE).addComponent(checkBoxCheckActive)
-				.addGap(Globals.GAP_SIZE).addComponent(labelStartDowntime).addComponent(startDowntime)
-				.addGap(Globals.GAP_SIZE).addComponent(labelEndDowntime).addComponent(endDowntime));
+				.addGap(Globals.GAP_SIZE).addComponent(labelStartDowntime).addComponent(startDowntimeField)
+				.addGap(Globals.GAP_SIZE).addComponent(labelEndDowntime).addComponent(endDowntimeField));
 
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(labelSelectedHosts)
 				.addComponent(selectedHosts, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH)
@@ -145,10 +145,10 @@ public final class HealthCheckSettingsDialog {
 				.addComponent(checkBoxCheckActive)
 
 				.addComponent(labelStartDowntime)
-				.addComponent(startDowntime, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH)
+				.addComponent(startDowntimeField, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH)
 
 				.addComponent(labelEndDowntime)
-				.addComponent(endDowntime, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH));
+				.addComponent(endDowntimeField, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH));
 
 		return panel;
 	}
@@ -232,8 +232,13 @@ public final class HealthCheckSettingsDialog {
 			return;
 		}
 
+		String startDownTime = startDowntimeField.getText();
+		startDownTime = startDownTime.isBlank() ? "" : (startDownTime + ZERO_HOUR_STRING);
+
+		String endDownTime = endDowntimeField.getText();
+		endDownTime = endDownTime.isBlank() ? "" : (endDownTime + END_OF_DAY_STRING);
+
 		persistenceController.getConfigDataService().writeDownTime(selectedHostList.getSelectedValues(),
-				checkBoxCheckActive.isSelected(), startDowntime.getText() + " " + ZERO_HOUR_STRING,
-				endDowntime.getText() + " " + END_OF_DAY_STRING);
+				checkBoxCheckActive.isSelected(), startDownTime, endDownTime);
 	}
 }

@@ -123,16 +123,6 @@ public class ProductSettingsTableModel {
 			completeNameColumn.setCellRenderer(colorTableCellRenderer);
 		}
 
-		if ((colIndex = istm.getColumnIndex(ProductState.KEY_TARGET_CONFIGURATION)) > -1) {
-			TableColumn targetColumn = tableProducts.getColumnModel().getColumn(colIndex);
-
-			JComboBox<String> targetCombo = new JComboBox<>();
-
-			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm));
-			targetColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
-			targetColumn.setCellRenderer(colorTableCellRenderer);
-		}
-
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_INSTALLATION_STATUS)) > -1) {
 			TableColumn statusColumn = tableProducts.getColumnModel().getColumn(colIndex);
 

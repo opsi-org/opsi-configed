@@ -32,6 +32,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.ButtonTabComponent;
 
 public class ClientTree extends AbstractGroupTree {
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");
@@ -44,7 +45,6 @@ public class ClientTree extends AbstractGroupTree {
 	private GroupNode groupNodeDirectory;
 	private GroupNode groupNodeDirectoryNotAssigned;
 
-	private TreePath pathToROOT;
 	private TreePath pathToALL;
 
 	// supervising data
@@ -97,24 +97,16 @@ public class ClientTree extends AbstractGroupTree {
 		return super.getPathBetweenRows(index0, index1);
 	}
 
-	public TreePath getPathToNode(DefaultMutableTreeNode node) {
-		if (node == null) {
-			return null;
-		}
-
-		TreeNode[] ancestors = node.getPath();
-		TreePath path = pathToROOT;
-
-		for (int i = 1; i < ancestors.length; i++) {
-			path = path.pathByAddingChild(ancestors[i]);
-		}
-
-		return path;
-	}
-
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
+		if (ConfigedMain.getMainFrame() != null) {
+			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
+					.getTabComponentAt(1);
+			comp.showButton(getSelectionPaths() == null
+					|| !ALL_CLIENTS_NAME.equals(getSelectionPath().getLastPathComponent().toString())
+					|| getSelectionPaths().length > 1);
+		}
 		configedMain.treeClientsSelectAction(getSelectionPaths());
 	}
 
@@ -129,11 +121,9 @@ public class ClientTree extends AbstractGroupTree {
 
 	// generate tree structure
 	@Override
-	protected void createTopNodes() {
+	protected void createTree() {
 		rootNode.setImmutable(true);
 		rootNode.setFixed(true);
-
-		pathToROOT = new TreePath(new Object[] { rootNode });
 
 		// GROUPS
 		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME,
@@ -161,6 +151,31 @@ public class ClientTree extends AbstractGroupTree {
 		groupNodeFullList.setFixed(true);
 
 		pathToALL = new TreePath(new Object[] { rootNode, groupNodeFullList });
+
+		if (model != null) {
+			Set<String> allPCs = new TreeSet<>(persistenceController.getHostInfoCollections()
+					.getClientsForDepots(configedMain.getSelectedDepots(), null));
+			Set<String> permittedHostGroups = persistenceController.getUserRolesConfigDataService()
+					.getHostGroupsPermitted();
+			build(allPCs, permittedHostGroups);
+		}
+	}
+
+	public Set<String> build(Collection<String> allPCs, Set<String> permittedHostGroups) {
+		Logging.debug(this, "build, rebuildTree, allPCs  " + allPCs + " size " + allPCs.size());
+		Logging.info(this, "build, permittedHostGroups ", permittedHostGroups);
+
+		produceTreeForALL(allPCs);
+		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(), permittedHostGroups);
+
+		Set<String> allowedClients = associateClientsToGroups(allPCs,
+				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
+
+		if (allowedClients != null) {
+			Logging.info(this, "build, allowedClients ", allowedClients.size());
+		}
+
+		return allowedClients;
 	}
 
 	public void clear() {
@@ -250,6 +265,9 @@ public class ClientTree extends AbstractGroupTree {
 		groups.putAll(importedGroups);
 
 		for (String group : importedGroups.keySet()) {
+			if (topGroupNames.contains(group)) {
+				continue;
+			}
 			groupNodes.put(group, new GroupNode(group));
 		}
 

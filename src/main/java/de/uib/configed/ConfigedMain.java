@@ -56,6 +56,7 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.ButtonTabComponent;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
 
@@ -114,6 +115,39 @@ public class ConfigedMain {
 	private ConnectedHostsManager connectedHostsManager;
 
 	private InitialDataLoader initialDataLoader;
+
+	private ListSelectionListener depotsListSelectionListener = new ListSelectionListener() {
+		private int counter;
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			counter++;
+			Logging.info(this, "depotSelection event count  ", counter);
+
+			if (!e.getValueIsAdjusting()) {
+				depotsListValueChanged();
+			}
+		}
+
+		private void depotsListValueChanged() {
+			Logging.info(this, "depotsList selection changed");
+
+			Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
+
+			Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
+
+			// when running after the first run, we deactivate buttons
+			if (initialDataLoader.isDataLoaded()) {
+				initialTreeActivation();
+
+				productTree.reInitTree();
+				refreshClientListKeepingGroup();
+
+				ButtonTabComponent comp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
+				comp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
+			}
+		}
+	};
 
 	public ConfigedMain(String host, String user, String password, String otp, boolean useSSO) {
 		if (ConfigedMain.host == null) {
@@ -411,20 +445,6 @@ public class ConfigedMain {
 		depotsList = new DepotsList(this);
 
 		Logging.info(this, "create depotsListSelectionListener");
-		ListSelectionListener depotsListSelectionListener = new ListSelectionListener() {
-			private int counter;
-
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				counter++;
-				Logging.info(this, "depotSelection event count  ", counter);
-
-				if (!e.getValueIsAdjusting()) {
-					depotsListValueChanged();
-				}
-			}
-		};
-
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 
 		fetchDepots();
@@ -636,23 +656,8 @@ public class ConfigedMain {
 	}
 
 	private void rebuildTree(Collection<String> allPCs, Set<String> permittedHostGroups) {
-		Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  ", allPCs);
-
 		clientTree.clear();
-
-		clientTree.produceTreeForALL(allPCs);
-
-		clientTree.produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),
-				permittedHostGroups);
-
-		Logging.info(this, "buildPclistTableModel, permittedHostGroups ", permittedHostGroups);
-		Logging.info(this, "buildPclistTableModel, allPCs ", allPCs.size());
-		allowedClients = clientTree.associateClientsToGroups(allPCs,
-				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
-
-		if (allowedClients != null) {
-			Logging.info(this, "buildPclistTableModel, allowedClients ", allowedClients.size());
-		}
+		allowedClients = clientTree.build(allPCs, permittedHostGroups);
 	}
 
 	public void setClient(String clientName) {
@@ -690,6 +695,7 @@ public class ConfigedMain {
 		activateGroupByTree(preferringOldSelection, node);
 
 		Logging.info(this, "expand activated  path ", path);
+		clientTree.setSelectionPath(path);
 		clientTree.expandPath(path);
 
 		return true;
@@ -963,22 +969,6 @@ public class ConfigedMain {
 		return activatedGroupModel;
 	}
 
-	private void depotsListValueChanged() {
-		Logging.info(this, "depotsList selection changed");
-
-		Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
-
-		Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
-
-		// when running after the first run, we deactivate buttons
-		if (initialDataLoader.isDataLoaded()) {
-			initialTreeActivation();
-
-			productTree.reInitTree();
-			refreshClientListKeepingGroup();
-		}
-	}
-
 	private boolean checkSynchronous(Set<String> depots) {
 		if (depots.size() > 1 && !persistenceController.getDepotDataService().areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"),
@@ -1059,6 +1049,17 @@ public class ConfigedMain {
 		return depotsList.getSelectedValuesList();
 	}
 
+	public void selectAllDepots() {
+		depotsList.setSelectedValues(depots.keySet());
+	}
+
+	public void activateAllProductsGroup() {
+		GroupNode node = productTree.getGroupNode(Configed.getResourceValue("ProductTree.allProducts"));
+		TreePath path = productTree.getPathToNode(node);
+		productTree.setSelectionPath(path);
+		productTree.expandPath(path);
+	}
+
 	public Set<String> getAllowedClients() {
 		return allowedClients;
 	}
@@ -1096,8 +1097,10 @@ public class ConfigedMain {
 		String oldGroupSelection = activatedGroupModel.getGroupName();
 		Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection ", oldGroupSelection);
 
+		Map<String, Map<String, Object>> nodes = clientTree.getExpandedAndSelectedNodes();
 		setRebuiltClientListTableModel(true, true);
 		activateGroup(true, oldGroupSelection);
+		clientTree.expandAndSelectNodes(nodes);
 	}
 
 	public void reload() {
@@ -1112,6 +1115,7 @@ public class ConfigedMain {
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
 		clientTablePanel.deactivateListSelectionListener();
+		depotsList.removeListSelectionListener(depotsListSelectionListener);
 		allowedClients = null;
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
@@ -1146,6 +1150,7 @@ public class ConfigedMain {
 		Logging.debug(this, " reset the values, particularly in list ");
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.activateListSelectionListener();
+		depotsList.addListSelectionListener(depotsListSelectionListener);
 
 		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
 		mainFrame.reloadServerConsoleMenu();

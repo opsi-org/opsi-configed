@@ -57,7 +57,6 @@ import de.uib.configed.clientselection.elements.SoftwareModificationTimeElement;
 import de.uib.configed.clientselection.elements.SoftwareNameElement;
 import de.uib.configed.clientselection.elements.SoftwarePackageVersionElement;
 import de.uib.configed.clientselection.elements.SoftwareRequestElement;
-import de.uib.configed.clientselection.elements.SoftwareTargetConfigurationElement;
 import de.uib.configed.clientselection.elements.SoftwareVersionElement;
 import de.uib.configed.clientselection.elements.SwAuditArchitectureElement;
 import de.uib.configed.clientselection.elements.SwAuditLanguageElement;
@@ -221,8 +220,6 @@ public final class OpsiDataBackend {
 			attributeTextSoftware = ProductState.KEY_PACKAGE_VERSION;
 		} else if (element instanceof SoftwareRequestElement) {
 			attributeTextSoftware = ProductState.KEY_ACTION_REQUEST;
-		} else if (element instanceof SoftwareTargetConfigurationElement) {
-			attributeTextSoftware = ProductState.KEY_TARGET_CONFIGURATION;
 		} else if (element instanceof SoftwareInstallationStatusElement) {
 			attributeTextSoftware = ProductState.KEY_INSTALLATION_STATUS;
 		} else if (element instanceof SoftwareActionProgressElement) {

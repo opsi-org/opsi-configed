@@ -68,6 +68,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	private Collection<String> selectedObjectsInTable = new HashSet<>();
 
+	private TreePath pathToROOT = new TreePath(new Object[] { rootNode });
+
 	protected AbstractGroupTree(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 		init();
@@ -91,7 +93,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		super.addTreeSelectionListener(this);
 
-		createTopNodes();
+		createTree();
 
 		setRootVisible(false);
 		setShowsRootHandles(true);
@@ -134,35 +136,92 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	public void reInitTree() {
-		String nodeSelection;
-		if (getSelectionPath() == null) {
-			nodeSelection = null;
-		} else if (((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getAllowsChildren()) {
-			nodeSelection = getSelectionPath().getLastPathComponent().toString();
-		} else {
-			nodeSelection = ((DefaultMutableTreeNode) getSelectionPath().getLastPathComponent()).getParent().toString();
-		}
+		Map<String, Map<String, Object>> nodes = getExpandedAndSelectedNodes();
 
 		groupNodes.clear();
 		groups.clear();
 		rootNode.removeAllChildren();
-		createTopNodes();
+		createTree();
 
 		removeTreeSelectionListener(this);
 		model = new DefaultTreeModel(rootNode);
 		setModel(model);
 
-		// Select old node
-		DefaultMutableTreeNode nodeToSelect = groupNodes.get(nodeSelection) != null ? groupNodes.get(nodeSelection)
-				: groupNodeFullList;
-		TreePath pathToSelect = new TreePath(getModel().getPathToRoot(nodeToSelect));
-		setSelectionPath(pathToSelect);
-		expandPath(pathToSelect);
+		expandAndSelectNodes(nodes);
 
 		addTreeSelectionListener(this);
 	}
 
-	abstract void createTopNodes();
+	public Map<String, Map<String, Object>> getExpandedAndSelectedNodes() {
+		Map<String, Map<String, Object>> expandedNodes = new HashMap<>();
+
+		Enumeration<TreePath> expanded = getExpandedDescendants(new TreePath(rootNode));
+		List<TreePath> selectionPaths = Arrays.asList(getSelectionPaths());
+
+		if (expanded != null) {
+			while (expanded.hasMoreElements()) {
+				TreePath path = expanded.nextElement();
+				Map<String, Object> map = new HashMap<>();
+				map.put("expanded", true);
+				expandedNodes.put(path.getLastPathComponent().toString(), map);
+			}
+		}
+
+		if (selectionPaths != null) {
+			for (TreePath path : selectionPaths) {
+				Map<String, Object> map = expandedNodes.get(path.getLastPathComponent().toString()) != null
+						? expandedNodes.get(path.getLastPathComponent().toString())
+						: new HashMap<>();
+
+				map.put("selected", true);
+				if (!((DefaultMutableTreeNode) path.getLastPathComponent()).getAllowsChildren()) {
+					map.put("parent", path.getParentPath().getLastPathComponent().toString());
+					map.put("index", model.getIndexOfChild(path.getParentPath().getLastPathComponent(),
+							path.getLastPathComponent()));
+				}
+				String parent = !((DefaultMutableTreeNode) path.getLastPathComponent()).getAllowsChildren()
+						? (path.getParentPath().getLastPathComponent().toString() + "/"
+								+ path.getLastPathComponent().toString())
+						: path.getLastPathComponent().toString();
+				expandedNodes.put(parent, map);
+			}
+		}
+
+		return expandedNodes;
+	}
+
+	public void expandAndSelectNodes(Map<String, Map<String, Object>> nodes) {
+		for (Map.Entry<String, Map<String, Object>> node : nodes.entrySet()) {
+			DefaultMutableTreeNode currentNode = getNodeFromMap(node);
+
+			if (currentNode == null) {
+				continue;
+			}
+
+			if (Boolean.TRUE.equals(node.getValue().get("expanded"))) {
+				TreePath path = new TreePath(getModel().getPathToRoot(currentNode));
+				expandPath(path);
+			}
+
+			if (Boolean.TRUE.equals(node.getValue().get("selected"))) {
+				TreePath path = new TreePath(getModel().getPathToRoot(currentNode));
+				addSelectionPath(path);
+			}
+		}
+	}
+
+	private DefaultMutableTreeNode getNodeFromMap(Map.Entry<String, Map<String, Object>> node) {
+		DefaultMutableTreeNode result = groupNodes.get(node.getKey());
+		if (result == null && node.getValue().containsKey("parent")) {
+			DefaultMutableTreeNode parentNode = groupNodes.get(node.getValue().get("parent"));
+			if (parentNode.getChildCount() > 0) {
+				result = (DefaultMutableTreeNode) parentNode.getChildAt((int) node.getValue().get("index"));
+			}
+		}
+		return result;
+	}
+
+	abstract void createTree();
 
 	abstract void setGroupAndSelect(DefaultMutableTreeNode groupNode);
 
@@ -388,6 +447,21 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	public GroupNode getGroupNode(String groupId) {
 		return groupNodes.get(groupId);
+	}
+
+	public TreePath getPathToNode(DefaultMutableTreeNode node) {
+		if (node == null) {
+			return null;
+		}
+
+		TreeNode[] ancestors = node.getPath();
+		TreePath path = pathToROOT;
+
+		for (int i = 1; i < ancestors.length; i++) {
+			path = path.pathByAddingChild(ancestors[i]);
+		}
+
+		return path;
 	}
 
 	public boolean removeNodes(Iterable<DefaultMutableTreeNode> nodes) {

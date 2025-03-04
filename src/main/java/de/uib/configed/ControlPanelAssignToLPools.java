@@ -742,10 +742,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		if (thePanel.getFSoftwarename2LicensePool() != null) {
 			thePanel.getFSoftwarename2LicensePool().getPanelSWnames().getTableModel().requestReload();
-		}
-
-		if (thePanel.getFSoftwarename2LicensePool() != null) {
-			thePanel.getFSoftwarename2LicensePool().getPanelSWxLicensepool().getTableModel().requestReload();
+			if (thePanel.getFSoftwarename2LicensePool().getPanelSWxLicensepool().getTableModel() != null) {
+				thePanel.getFSoftwarename2LicensePool().getPanelSWxLicensepool().getTableModel().requestReload();
+			}
 		}
 
 		return result;

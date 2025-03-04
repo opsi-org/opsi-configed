@@ -23,6 +23,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.ButtonTabComponent;
 
 public class ProductTree extends AbstractGroupTree {
 	private PanelProductSettings localbootPanel;
@@ -42,7 +43,7 @@ public class ProductTree extends AbstractGroupTree {
 	}
 
 	@Override
-	protected void createTopNodes() {
+	protected void createTree() {
 		List<String> depotIds = configedMain.getSelectedDepots();
 		Set<String> productIds = new TreeSet<>(
 				persistenceController.getProductDataService().getAllLocalbootProductNames(depotIds));
@@ -192,6 +193,14 @@ public class ProductTree extends AbstractGroupTree {
 
 	@Override
 	public void valueChanged(TreeSelectionEvent event) {
+		if (ConfigedMain.getMainFrame() != null) {
+			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
+					.getTabComponentAt(2);
+			comp.showButton(getSelectionPaths() == null
+					|| !Configed.getResourceValue("ProductTree.allProducts")
+							.equals(getSelectionPath().getLastPathComponent().toString())
+					|| getSelectionPaths().length > 1);
+		}
 		localbootPanel.valueChanged(true);
 		netbootPanel.valueChanged(true);
 	}

@@ -183,7 +183,8 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		group.add(dateChooserButton);
 		group.add(infiniteDateChooserButton);
 
-		selectDateOption(); // default // init datetimepicker
+		// default // init datetimepicker
+		selectDateOption();
 		resetData();
 		dateChooserButton.addItemListener((ItemEvent e) -> {
 			if (dateChooserButton.isSelected()) {
@@ -284,7 +285,9 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		}
 		Logging.debug("PanelMessageInfos dataChanged: ", datetime);
 		long unixTime = datetime.atZone(DateTimePicker.ZONEID).toEpochSecond();
-		this.date = Long.toString(unixTime); // sets the date in data
+
+		// sets the date in data
+		this.date = Long.toString(unixTime);
 	}
 
 	@Override

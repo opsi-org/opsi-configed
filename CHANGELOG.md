@@ -1,3 +1,17 @@
+## [4.3.6.5] - 2025-02-24
+### Fixed
+- Errors in rendering of some columns in product table
+
+## [4.3.6.4] - 2025-02-20
+### Fixed
+- Correctly stop editing in product property states to prevent different errors
+- Only write empty entry and no time when no date was entered in start/end time for health check downtime
+- Nullpointer exception when updating license pool
+
+### Changed
+- Parallelize and improve performance in loading statistics in licensing management
+- Remove unnecessary target configuration column in product tables
+
 ## [4.3.6.3] - 2025-02-18
 ### Changed
 - Sort messages after warning level in Health Check

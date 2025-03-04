@@ -214,7 +214,7 @@ public class DateTimePicker extends DatePicker {
 			Logging.trace("DateTimePicker InternalConverter fromString: ", value);
 			if (value == null || "0".equals(value) || "".equals(value)) {
 				setDateTimeValue(null);
-				// setDateTimeValue(0);
+
 				return null;
 			}
 			LocalDateTime currValue = getDateTimeValue();
@@ -223,7 +223,7 @@ public class DateTimePicker extends DatePicker {
 				if (currValue2.compareTo(datetimeNow()) <= 0) {
 					Logging.error("DateTime Error: Date is in the past. Set datetime to now.");
 					setDateTimeValue(currValue);
-					// return currValue.toLocalDate();
+
 					return datetimeNow().toLocalDate();
 				}
 				currValue = currValue2;

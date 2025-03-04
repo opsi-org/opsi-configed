@@ -33,7 +33,6 @@ import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.opsidatamodel.productstate.TargetConfiguration;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.ComboBoxModeller;
@@ -157,8 +156,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 			columnDict.put("productId", Configed.getResourceValue("InstallationStateTableModel.productId"));
 			columnDict.put(ProductState.KEY_PRODUCT_NAME,
 					Configed.getResourceValue("InstallationStateTableModel.productName"));
-			columnDict.put(ProductState.KEY_TARGET_CONFIGURATION,
-					Configed.getResourceValue("InstallationStateTableModel.targetConfiguration"));
 			columnDict.put(ProductState.KEY_INSTALLATION_STATUS,
 					Configed.getResourceValue("InstallationStateTableModel.installationStatus"));
 
@@ -298,13 +295,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 	}
 
 	private void changeValuesForVisualOutput(Map<String, String> stateAndAction, String productId) {
-		String targetConfiguration = stateAndAction.get(ProductState.KEY_TARGET_CONFIGURATION);
-		if (targetConfiguration == null || targetConfiguration.isEmpty()) {
-			targetConfiguration = "undefined";
-		}
-
-		stateAndAction.put(ProductState.KEY_TARGET_CONFIGURATION, targetConfiguration);
-
 		String priority = "";
 		if (globalProductInfos != null && globalProductInfos.get(productId) != null) {
 			priority = "" + globalProductInfos.get(productId).get("priority");
@@ -387,44 +377,41 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		preparedColumns.add(1, ProductState.KEY_PRODUCT_NAME);
 		editablePreparedColumns[1] = false;
 
-		preparedColumns.add(2, ProductState.KEY_TARGET_CONFIGURATION);
+		preparedColumns.add(2, ProductState.KEY_INSTALLATION_STATUS);
 		editablePreparedColumns[2] = true;
 
-		preparedColumns.add(3, ProductState.KEY_INSTALLATION_STATUS);
+		preparedColumns.add(3, ProductState.KEY_INSTALLATION_INFO);
 		editablePreparedColumns[3] = true;
 
-		preparedColumns.add(4, ProductState.KEY_INSTALLATION_INFO);
-		editablePreparedColumns[4] = true;
+		preparedColumns.add(4, ProductState.KEY_ACTION_PROGRESS);
+		editablePreparedColumns[4] = false;
 
-		preparedColumns.add(5, ProductState.KEY_ACTION_PROGRESS);
+		preparedColumns.add(5, ProductState.KEY_ACTION_RESULT);
 		editablePreparedColumns[5] = false;
 
-		preparedColumns.add(6, ProductState.KEY_ACTION_RESULT);
+		preparedColumns.add(6, ProductState.KEY_LAST_ACTION);
 		editablePreparedColumns[6] = false;
 
-		preparedColumns.add(7, ProductState.KEY_LAST_ACTION);
-		editablePreparedColumns[7] = false;
+		preparedColumns.add(7, ProductState.KEY_ACTION_REQUEST);
+		editablePreparedColumns[7] = true;
 
-		preparedColumns.add(8, ProductState.KEY_ACTION_REQUEST);
-		editablePreparedColumns[8] = true;
+		preparedColumns.add(8, ProductState.KEY_PRODUCT_PRIORITY);
+		editablePreparedColumns[8] = false;
 
-		preparedColumns.add(9, ProductState.KEY_PRODUCT_PRIORITY);
+		preparedColumns.add(9, ProductState.KEY_ACTION_SEQUENCE);
 		editablePreparedColumns[9] = false;
 
-		preparedColumns.add(10, ProductState.KEY_ACTION_SEQUENCE);
+		preparedColumns.add(10, ProductState.KEY_VERSION_INFO);
 		editablePreparedColumns[10] = false;
 
-		preparedColumns.add(11, ProductState.KEY_VERSION_INFO);
+		preparedColumns.add(11, ProductState.KEY_PRODUCT_VERSION);
 		editablePreparedColumns[11] = false;
 
-		preparedColumns.add(12, ProductState.KEY_PRODUCT_VERSION);
+		preparedColumns.add(12, ProductState.KEY_PACKAGE_VERSION);
 		editablePreparedColumns[12] = false;
 
-		preparedColumns.add(13, ProductState.KEY_PACKAGE_VERSION);
+		preparedColumns.add(13, ProductState.KEY_LAST_STATE_CHANGE);
 		editablePreparedColumns[13] = false;
-
-		preparedColumns.add(14, ProductState.KEY_LAST_STATE_CHANGE);
-		editablePreparedColumns[14] = false;
 
 		if (columnsToDisplay == null) {
 			Logging.error(this, "columnsToDisplay are null");
@@ -996,9 +983,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 		} else if (column == columnsToDisplay.indexOf(InstallationStatus.KEY)) {
 			// selection of status
 			possibleOptions = producePossibleInstallationStatus(InstallationStatus.getDisplayLabelsForChoice());
-		} else if (column == columnsToDisplay.indexOf(TargetConfiguration.KEY)) {
-			// selection of target status
-			possibleOptions = producePossibleInstallationStatus(TargetConfiguration.getDisplayLabelsForChoice());
 		} else if (column == columnsToDisplay.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 			possibleOptions = producePossibleInstallationInfos((String) getValueAt(row, column));
 		} else {
@@ -1118,19 +1102,13 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 
 		return switch (col) {
 		case 0 -> actualProduct;
-
 		case 1 -> globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
-
-		case 3 -> InstallationStatus
+		case 2 -> InstallationStatus
 				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
-
-		case 8 -> ActionRequest
+		case 7 -> ActionRequest
 				.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
-
-		case 10 -> getDisplayLabelForPosition();
-
-		case 11 -> actualProductVersion();
-
+		case 9 -> getDisplayLabelForPosition();
+		case 10 -> actualProductVersion();
 		default -> combinedVisualValues.get(preparedColumns.get(col)).get(actualProduct);
 		};
 	}
@@ -1215,9 +1193,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements C
 					&& combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct).isEmpty()) {
 				setLatestProductVersion();
 			}
-		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(TargetConfiguration.KEY)) {
-			combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).put(actualProduct, (String) value);
-			registerStateChange(actualProduct, TargetConfiguration.KEY, (String) value);
 		} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ActionRequest.KEY)) {
 			// an action has changed
 			// change recursively visible action changes and collect the changes for saving

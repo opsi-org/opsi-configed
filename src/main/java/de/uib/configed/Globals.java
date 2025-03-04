@@ -20,7 +20,7 @@ import javax.swing.UIManager;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2025-02-18";
+	public static final String VERDATE = "2025-02-24";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
@@ -125,11 +125,6 @@ public final class Globals {
 	// This is the height a JLabel has by default when it has text.
 	// We got this value empirically by calling getPreferredSize() on a JLabel
 	public static final int DEFAULT_JLABEL_HEIGHT = new JLabel("a").getPreferredSize().height;
-
-	public static final int LINE_HEIGHT = 30;
-	public static final int BUTTON_WIDTH = 140;
-
-	public static final Dimension TEXT_FIELD_DIMENSION = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
 
 	// Make width long enough so that it will be not too small for the whole text
 	public static final Dimension LABEL_SIZE_OF_JTREE = new Dimension(500, 20);

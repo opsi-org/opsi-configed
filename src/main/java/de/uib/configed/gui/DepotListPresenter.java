@@ -68,6 +68,8 @@ public class DepotListPresenter extends JPanel {
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
 
 		searchPane = new TableSearchPane(searchTargetModel);
+		searchPane.setFiltering();
+		searchPane.setNarrow(true);
 
 		initComponents();
 		layouting();
@@ -171,10 +173,7 @@ public class DepotListPresenter extends JPanel {
 	}
 
 	private void initComponents() {
-		searchPane.setNarrow(true);
-
 		// not visible in this panel
-
 		depotslist.setMaximumSize(new Dimension(200, 400));
 
 		scrollpaneDepotslist = new JScrollPane();
