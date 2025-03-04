@@ -160,6 +160,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
 
 		openHealthCheckSettingsDialogButton = new JButton(Icons.getIntellijIcon("settings"));
+		openHealthCheckSettingsDialogButton
+				.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.title"));
 		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
 		openHealthCheckSettingsDialogButton.addActionListener(
@@ -238,8 +240,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(checkBoxHealthCheckActive, 0, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(openHealthCheckSettingsDialogButton, 0, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.GAP_SIZE).addComponent(openHealthCheckSettingsDialogButton,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				/////// ONE TIME PASSWORD
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
