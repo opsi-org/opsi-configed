@@ -32,6 +32,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.ButtonTabComponent;
 
 public class ClientTree extends AbstractGroupTree {
 	public static final String DIRECTORY_NAME = Configed.getResourceValue("AbstractGroupTree.directory");
@@ -44,7 +45,6 @@ public class ClientTree extends AbstractGroupTree {
 	private GroupNode groupNodeDirectory;
 	private GroupNode groupNodeDirectoryNotAssigned;
 
-	private TreePath pathToROOT;
 	private TreePath pathToALL;
 
 	// supervising data
@@ -97,24 +97,16 @@ public class ClientTree extends AbstractGroupTree {
 		return super.getPathBetweenRows(index0, index1);
 	}
 
-	public TreePath getPathToNode(DefaultMutableTreeNode node) {
-		if (node == null) {
-			return null;
-		}
-
-		TreeNode[] ancestors = node.getPath();
-		TreePath path = pathToROOT;
-
-		for (int i = 1; i < ancestors.length; i++) {
-			path = path.pathByAddingChild(ancestors[i]);
-		}
-
-		return path;
-	}
-
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
+		if (ConfigedMain.getMainFrame() != null) {
+			ButtonTabComponent comp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
+					.getTabComponentAt(1);
+			comp.showButton(getSelectionPaths() == null
+					|| !ALL_CLIENTS_NAME.equals(getSelectionPath().getLastPathComponent().toString())
+					|| getSelectionPaths().length > 1);
+		}
 		configedMain.treeClientsSelectAction(getSelectionPaths());
 	}
 
@@ -132,8 +124,6 @@ public class ClientTree extends AbstractGroupTree {
 	protected void createTree() {
 		rootNode.setImmutable(true);
 		rootNode.setFixed(true);
-
-		pathToROOT = new TreePath(new Object[] { rootNode });
 
 		// GROUPS
 		groupNodeGroups = produceGroupNode(ALL_GROUPS_NAME,

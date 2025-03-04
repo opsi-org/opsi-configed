@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -63,6 +64,7 @@ public class ListSelectionDialog {
 		jList = new JList<>();
 		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane listScrollPane = new JScrollPane(jList);
+		listScrollPane.setPreferredSize(new Dimension(200, 200));
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, new ArrayList<>(),
 				new ArrayList<>());

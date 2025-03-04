@@ -1,6 +1,7 @@
 ## [4.3.X.X] - XXXX-XX-XX
 ### Fixed
 - Dialogs rendered improperly after restart (for example, new client dialog)
+- `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
 
 ## [4.3.6.5] - 2025-02-24
 ### Fixed
