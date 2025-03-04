@@ -134,44 +134,26 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		init();
 		JPanel panel = initComponents();
 
+		JButton buttonSearch = new JButton(Configed.getResourceValue("search"));
+		buttonSearch.addActionListener((ActionEvent event) -> {
+			dialog.setCursor(Globals.WAIT_CURSOR);
+			doSearch();
+			dialog.setCursor(null);
+		});
+
 		JButton buttonReset = new JButton(Configed.getResourceValue("ClientSelectionDialog.buttonReset"));
 		buttonReset.addActionListener(actionEvent -> reset());
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
-				new Object[] { Configed.getResourceValue("search"), buttonReset,
-						Configed.getResourceValue("buttonClose") });
+				new Object[] { buttonSearch, buttonReset, Configed.getResourceValue("buttonClose") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-
-		waitForUserInput();
+		dialog.setModal(false);
 	}
 
 	public void show() {
 		dialog.setVisible(true);
-		waitForUserInput();
-	}
-
-	private void waitForUserInput() {
-		Logging.info(this, "waitForUserInput", optionPane.getValue());
-
-		if (optionPane.getValue() == null) {
-			return;
-		}
-
-		if (optionPane.getValue().equals(Configed.getResourceValue("ClientSelectionDialog.buttonReset"))) {
-			reset();
-		} else if (optionPane.getValue().equals(Configed.getResourceValue("search"))) {
-			// This needs to be in the event queue, because otherwise the loading cursor
-			// will not be shown
-			SwingUtilities.invokeLater(() -> {
-				ConfigedMain.getMainFrame().activateLoadingCursor();
-				doSearch();
-				ConfigedMain.getMainFrame().deactivateLoadingCursor();
-			});
-		} else {
-			// Do nothing then, the dialog was closed or canceled
-		}
 	}
 
 	public void loadSearch(String name) {
