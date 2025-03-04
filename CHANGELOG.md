@@ -1,4 +1,4 @@
-## [4.3.X.X] - XXXX-XX-XX
+## [4.3.6.6] - 2025-03-04
 ### Fixed
 - `NPE` when opening install package dialog after building the package first in "Make opsi package..." dialog 
 - Dialogs rendered improperly after restart (for example, new client dialog)
