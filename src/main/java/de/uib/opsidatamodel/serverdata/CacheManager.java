@@ -8,9 +8,9 @@ package de.uib.opsidatamodel.serverdata;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Provides methods for storing and retrieving cache data.
@@ -29,7 +29,7 @@ public final class CacheManager {
 	// SonarLint rule makes a valid point.
 	@SuppressWarnings({ "java:S3077" })
 	private static volatile CacheManager instance;
-	private Map<CacheIdentifier, Object> cache = new EnumMap<>(CacheIdentifier.class);
+	private Map<CacheIdentifier, Object> cache = new ConcurrentHashMap<>();
 
 	// This is a list of caches that we want to keep in a reload since it contains data about the GUI
 	// that should not change.
@@ -69,7 +69,9 @@ public final class CacheManager {
 	 * @param data       to store internally
 	 */
 	public <T> void setCachedData(CacheIdentifier identifier, T data) {
-		cache.put(identifier, data);
+		if (data != null) {
+			cache.put(identifier, data);
+		}
 	}
 
 	/**
