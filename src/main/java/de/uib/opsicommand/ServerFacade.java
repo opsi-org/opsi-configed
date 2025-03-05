@@ -120,7 +120,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.password = password;
 		this.otp = otp;
 
-		conStat = new ConnectionState();
+		setConnectionState(new ConnectionState());
 		if (useSAML && !connectSAML()) {
 			Logging.error(this, "SAML connection failed");
 			return;
@@ -143,10 +143,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		URL url = makeURL("/auth/session_id");
 		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
 		HttpsURLConnection connection = handler.establishConnection(true, true);
-		conStat = handler.getConnectionState();
+		setConnectionState(handler.getConnectionState());
 		if (connection == null) {
 			Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
-					conStat.getState());
+					getConnectionState().getState());
 			return new HashMap<>();
 		}
 		Map<String, List<String>> result = new HashMap<>();
@@ -179,9 +179,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		//////// register and get new session id
 		URL urlGetSid = makeURL("/auth/session_id");
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
-		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
+		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
 		Map<String, Object> result = retrieveResponse(urlGetSid, "GET", requestProperties, jsonProperties, localKeySID);
-		if (conStat.getState() == ConnectionState.RETRY_CONNECTION) {
+		if (getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
 			Logging.debug("connectSAML retry connection");
 			result = retrieveResponse(urlGetSid, "GET", requestProperties, jsonProperties, localKeySID);
 		}
@@ -356,14 +356,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		Logging.info(this, "retrieveResponse started");
 
-		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
-
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(omc));
 		HttpsURLConnection connection = handler.establishConnection(true);
-		conStat = handler.getConnectionState();
+		setConnectionState(handler.getConnectionState());
 		sendPostRequest(connection, omc);
 
 		if (connection == null) {
@@ -374,18 +372,19 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		Map<String, Object> result = new HashMap<>();
 
-		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
+		if (getConnectionState().getState() == ConnectionState.STARTED_CONNECTING
+				|| getConnectionState().getState() == ConnectionState.CONNECTED) {
 			try {
 				handleResponseCode(connection);
 
-				if (conStat.getState() == ConnectionState.CONNECTED) {
+				if (getConnectionState().getState() == ConnectionState.CONNECTED) {
 					retrieveSessionIDFromResponse(connection);
 					InputStream stream = getInputStreamBasedOnEncoding(connection);
 
 					Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
 
 					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
-				} else if (conStat.getState() == ConnectionState.UNAUTHORIZED) {
+				} else if (getConnectionState().getState() == ConnectionState.UNAUTHORIZED) {
 					return retrieveResponse(omc);
 				} else {
 					Logging.warning(this, "Encountered unhandled connection state: ", conStat);
@@ -411,14 +410,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod, " ", requestProperties, " ", json, " ",
 				resultkey, " ", responseHeader);
 
-		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
+		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + url);
 		timeCheck.start();
 
 		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
 		handler.setRequestMethod(requestMethod);
 		HttpsURLConnection connection = handler.establishConnection(true);
-		conStat = handler.getConnectionState();
+		setConnectionState(handler.getConnectionState());
 		if (connection == null) {
 			return new HashMap<>();
 		}
@@ -438,7 +437,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, Object> result = new HashMap<>();
 		// receiving data
 
-		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
+		if (getConnectionState().getState() == ConnectionState.STARTED_CONNECTING) {
 			try {
 				handleResponseCode(connection);
 
@@ -573,18 +572,18 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
 				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
+			setConnectionState(new ConnectionState(ConnectionState.CONNECTED, "ok"));
 		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 			Logging.debug("Unauthorized: ", sessionId, ", mfa=", Utils.isMultiFactorAuthenticationEnabled());
 			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
 				password = ConfigedMain.getPassword();
-				conStat = new ConnectionState(ConnectionState.UNAUTHORIZED);
+				setConnectionState(new ConnectionState(ConnectionState.UNAUTHORIZED));
 			} else {
-				conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
+				setConnectionState(new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage()));
 			}
 		} else {
-			conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
+			setConnectionState(new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage()));
 			Logging.error(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage(), " ",
 					retrieveErrorFromResponse(connection));
 		}
