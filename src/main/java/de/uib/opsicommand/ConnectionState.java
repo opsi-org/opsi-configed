@@ -6,7 +6,7 @@
 
 package de.uib.opsicommand;
 
-public class ConnectionState {
+public final class ConnectionState {
 	public static final int UNDEFINED = 0;
 	public static final int NOT_CONNECTED = 1;
 	public static final int STARTED_CONNECTING = 2;
@@ -18,11 +18,10 @@ public class ConnectionState {
 	public static final int ERROR = 10;
 
 	public static final ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
-	private static int instancesCount;
 
-	private int myState = NOT_CONNECTED;
+	private final int myState;
 
-	private String message = "";
+	private final String message;
 
 	/**
 	 * constructor
@@ -30,7 +29,6 @@ public class ConnectionState {
 	public ConnectionState(int state, String message) {
 		myState = state;
 		this.message = message;
-		instancesCount++;
 	}
 
 	/**
@@ -45,13 +43,6 @@ public class ConnectionState {
 	 */
 	public ConnectionState() {
 		this(UNDEFINED, "");
-	}
-
-	/**
-	 * get count of instances
-	 */
-	public static int getInstancesCount() {
-		return instancesCount;
 	}
 
 	/**
