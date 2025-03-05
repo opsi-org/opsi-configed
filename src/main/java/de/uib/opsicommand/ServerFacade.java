@@ -145,7 +145,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		HttpsURLConnection connection = handler.establishConnection(true, true);
 		setConnectionState(handler.getConnectionState());
 		if (connection == null) {
-			Logging.warning("try to get headers, but connection is null. ", "conStat ", conStat, "state: ",
+			Logging.warning("try to get headers, but connection is null. ", "conStat ", getConnectionState(), "state: ",
 					getConnectionState().getState());
 			return new HashMap<>();
 		}
@@ -387,7 +387,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				} else if (getConnectionState().getState() == ConnectionState.UNAUTHORIZED) {
 					return retrieveResponse(omc);
 				} else {
-					Logging.warning(this, "Encountered unhandled connection state: ", conStat);
+					Logging.warning(this, "Encountered unhandled connection state: ", getConnectionState());
 				}
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
@@ -446,7 +446,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 				result = retrieveResponseBasedOnContentTypeToObject(connection.getContentType(), stream, resultkey);
 				addHeaderFieldsToMap(connection, responseHeader);
-				Logging.debug(this, "Connection state after communication: ", conStat);
+				Logging.debug(this, "Connection state after communication: ", getConnectionState());
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
 				return new HashMap<>();
