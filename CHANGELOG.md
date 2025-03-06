@@ -1,3 +1,7 @@
+## [4.3.6.X] - XXXX-XX-XX
+### Fixed
+- Issue: non scrollable notes field in client info panel
+
 ## [4.3.6.6] - 2025-03-04
 ### Fixed
 - `NPE` when opening install package dialog after building the package first in "Make opsi package..." dialog 
