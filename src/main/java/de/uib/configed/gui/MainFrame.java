@@ -227,6 +227,7 @@ public class MainFrame extends JFrame implements KeyListener {
 
 	private static void restartConfiged() {
 		ConfigedMain.closeInstance(true);
+		ExtraFrameController.deleteInstances();
 		new Thread() {
 			@Override
 			public void run() {

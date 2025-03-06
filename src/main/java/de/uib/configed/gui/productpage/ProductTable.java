@@ -21,7 +21,7 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.tree.ProductTree;
+import de.uib.configed.tree.AbstractGroupTree;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utils.logging.Logging;
 
@@ -77,7 +77,7 @@ public class ProductTable extends JTable {
 
 	public void nodeSelection(DefaultMutableTreeNode node) {
 		if (node.getAllowsChildren()) {
-			Set<String> productIds = ProductTree.getChildrenRecursively(node);
+			Set<String> productIds = AbstractGroupTree.getChildrenRecursively(node);
 			setFilter(productIds);
 		} else {
 			Set<String> productIds = Collections.singleton(node.toString());

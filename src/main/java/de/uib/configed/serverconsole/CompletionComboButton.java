@@ -7,6 +7,7 @@
 package de.uib.configed.serverconsole;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Set;
@@ -111,7 +112,7 @@ public class CompletionComboButton {
 		combobox.setRenderer(new ItemElementListener(this));
 		combobox.setToolTipText(Configed.getResourceValue("CompletionComboButton.cb_serverDir.tooltip"));
 		combobox.setEditable(true);
-
+		combobox.setPreferredSize(new Dimension(200, combobox.getPreferredSize().height));
 		if (comboboxDefaultPath != null) {
 			combobox.setSelectedItem(comboboxDefaultPath);
 		}

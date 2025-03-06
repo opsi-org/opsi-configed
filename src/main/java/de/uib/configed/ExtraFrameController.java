@@ -171,4 +171,14 @@ public final class ExtraFrameController {
 
 		remoteControlDialog.show();
 	}
+
+	public static void deleteInstances() {
+		savedSearchesDialog = null;
+		clientSelectionDialog = null;
+		newClientDialog = null;
+		commandControlDialog = null;
+		completeWinProductsPanel = null;
+		groupActionFrame = null;
+		remoteControlDialog = null;
+	}
 }

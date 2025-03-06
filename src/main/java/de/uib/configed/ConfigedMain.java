@@ -715,6 +715,16 @@ public class ConfigedMain {
 		clientTablePanel.setSelectedValues(clientsFilteredByTree);
 	}
 
+	public void setClientsFilteredAndSelected(Set<String> filterIds, Set<String> selectedIds) {
+		clientsFilteredByTree.clear();
+		if (filterIds != null) {
+			for (String filterId : filterIds) {
+				clientsFilteredByTree.add(filterId);
+			}
+		}
+		setRebuiltClientListTableModel(true, false, selectedIds);
+	}
+
 	public List<String> getSelectedClients() {
 		return selectedClients;
 	}

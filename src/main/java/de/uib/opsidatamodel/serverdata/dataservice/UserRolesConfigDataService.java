@@ -123,6 +123,8 @@ public class UserRolesConfigDataService {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
 		executor.runInParallel(() -> persistenceController.getModuleDataService().retrieveOpsiModules());
+
+		// Load all data together to prevent an extra RPC-call
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
 		executor.runInParallel(() -> cacheManager.setCachedData(CacheIdentifier.GLOBAL_READ_ONLY,
 				doesUserBelongToSystemsReadOnlyGroup()));
@@ -165,9 +167,6 @@ public class UserRolesConfigDataService {
 		}
 
 		applyUserSpecializedConfigPD();
-
-		// Load all data together to prevent an extra RPC-call
-		// persistenceController.getGroupDataService().retrieveAllGroupsPD();
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(),
 				persistenceController.getHostInfoCollections().getConfigServer(),

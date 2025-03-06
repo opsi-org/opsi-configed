@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 import de.uib.utils.logging.Logging;
 
@@ -20,12 +21,16 @@ import de.uib.utils.logging.Logging;
  * will be retrieved in POJO.
  */
 public abstract class AbstractPOJOExecutioner {
-	protected ConnectionState conStat;
+	private AtomicReference<ConnectionState> conStat = new AtomicReference<>();
 
 	public abstract Map<String, Object> retrieveResponse(OpsiMethodCall omc);
 
 	public ConnectionState getConnectionState() {
-		return conStat;
+		return conStat.get();
+	}
+
+	public void setConnectionState(ConnectionState newState) {
+		conStat.set(newState);
 	}
 
 	public boolean doCall(OpsiMethodCall omc) {

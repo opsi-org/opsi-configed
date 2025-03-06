@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,7 +19,9 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.http.HttpHost;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 
 import com.github.sardine.DavResource;
@@ -27,22 +30,30 @@ import com.github.sardine.impl.SardineImpl;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class WebDAVClient {
 	private Sardine sardine;
 
 	public WebDAVClient() {
-		sardine = new SardineImpl() {
-			@Override
-			protected ConnectionSocketFactory createDefaultSecureSocketFactory() {
-				return new SSLSocketFactoryWrapper(CertificateValidatorFactory.getValidator().getSSLSocketFactory());
-			}
-		};
-		int port = getPortFromHost(ConfigedMain.getHost());
-		sardine.enablePreemptiveAuthentication(ConfigedMain.getHost(), port, port);
-		sardine.setCredentials(ConfigedMain.getUser(), ConfigedMain.getPassword());
+		HttpClientBuilder builder = HttpClientBuilder.create();
+		CertificateValidator validator = CertificateValidatorFactory.getValidator();
+		builder.setSSLSocketFactory(new SSLSocketFactoryWrapper(validator.getSSLSocketFactory()));
+
+		String sessionID = PersistenceControllerFactory.getPersistenceController().getExecutioner().getSessionId();
+
+		if (sessionID != null) {
+			builder.setDefaultHeaders(Collections.singletonList(new BasicHeader("Cookie", sessionID)));
+			sardine = new SardineImpl(builder);
+		} else {
+			sardine = new SardineImpl(builder);
+			int port = getPortFromHost(ConfigedMain.getHost());
+			sardine.enablePreemptiveAuthentication(ConfigedMain.getHost(), port, port);
+			sardine.setCredentials(ConfigedMain.getUser(), ConfigedMain.getPassword());
+		}
 	}
 
 	private int getPortFromHost(String host) {
@@ -114,7 +125,8 @@ public class WebDAVClient {
 		return "https://" + ConfigedMain.getHost() + ":" + getPortFromHost(ConfigedMain.getHost()) + "/dav/";
 	}
 
-	private static class SSLSocketFactoryWrapper implements ConnectionSocketFactory {
+	@SuppressWarnings({ "squid:S2972" })
+	private static class SSLSocketFactoryWrapper implements LayeredConnectionSocketFactory {
 		private final SSLSocketFactory sslSocketFactory;
 
 		public SSLSocketFactoryWrapper(SSLSocketFactory sslSocketFactory) {
@@ -124,6 +136,12 @@ public class WebDAVClient {
 		@Override
 		public Socket createSocket(HttpContext context) throws IOException {
 			return sslSocketFactory.createSocket();
+		}
+
+		@Override
+		public Socket createLayeredSocket(Socket socket, String target, int port, HttpContext context)
+				throws IOException {
+			return sslSocketFactory.createSocket(socket, target, port, true);
 		}
 
 		@Override
