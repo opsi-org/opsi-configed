@@ -1,3 +1,7 @@
+## [4.3.6.X] - XXXX-XX-XX
+### Fixed
+- Issue: non scrollable notes field in client info panel
+
 ## [4.3.6.6] - 2025-03-04
 ### Fixed
 - On some occasions occuring `NPE`, when opsi-configed starts.
