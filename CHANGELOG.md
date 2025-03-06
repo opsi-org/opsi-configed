@@ -1,5 +1,9 @@
 ## [4.3.6.6] - 2025-03-04
 ### Fixed
+- On some occasions occuring `NPE`, when opsi-configed starts.
+
+## [4.3.6.6] - 2025-03-04
+### Fixed
 - `NPE` when opening install package dialog after building the package first in "Make opsi package..." dialog 
 - Dialogs rendered improperly after restart (for example, new client dialog)
 - `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
