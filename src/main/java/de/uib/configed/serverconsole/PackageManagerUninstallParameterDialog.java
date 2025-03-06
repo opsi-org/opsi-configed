@@ -45,7 +45,7 @@ public class PackageManagerUninstallParameterDialog {
 	protected JLabel jLabelLoglevel = new JLabel(Configed.getResourceValue("loglevel"));
 
 	private JComboBox<String> jComboBoxOpsiProducts;
-	private JComboBox<Integer> jComboboxLoglevel;
+	private JComboBox<Integer> jComboBoxLogLevel;
 
 	private JCheckBox checkBoxKeepFiles;
 
@@ -188,13 +188,13 @@ public class PackageManagerUninstallParameterDialog {
 		jLabelUninstall.setFont(jLabelUninstall.getFont().deriveFont(Font.BOLD));
 		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
 
-		jComboboxLoglevel = new JComboBox<>();
+		jComboBoxLogLevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
-			jComboboxLoglevel.addItem(i);
+			jComboBoxLogLevel.addItem(i);
 		}
 
-		jComboboxLoglevel.setSelectedItem(4);
-		jComboboxLoglevel.addItemListener(itemEvent -> updateLoglevel());
+		jComboBoxLogLevel.setSelectedItem(4);
+		jComboBoxLogLevel.addItemListener(itemEvent -> updateLoglevel());
 
 		checkBoxKeepFiles = new JCheckBox(
 				Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelKeepFiles"));
@@ -210,8 +210,6 @@ public class PackageManagerUninstallParameterDialog {
 
 		jLabelOn.setFont(jLabelOn.getFont().deriveFont(Font.BOLD));
 		jLabelOn.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelOn"));
-
-		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
 
 		jButtonDepotSelection = new JButton(Icons.getIntellijIcon("edit"));
 		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
@@ -241,6 +239,11 @@ public class PackageManagerUninstallParameterDialog {
 		}
 	}
 
+	private void updateLoglevel() {
+		Logging.info(this, "change loglevel , selected ", jComboBoxLogLevel.getSelectedItem());
+		commandPMUninstall.setLoglevel((int) jComboBoxLogLevel.getSelectedItem());
+	}
+
 	private void changeKeepFiles() {
 		if (checkBoxKeepFiles.isSelected()) {
 			commandPMUninstall.enableKeepingFiles();
@@ -257,11 +260,6 @@ public class PackageManagerUninstallParameterDialog {
 		} else {
 			commandPMUninstall.setDepot(textFieldSelectedDepots.getText());
 		}
-	}
-
-	private void updateLoglevel() {
-		Logging.info(this, "change loglevel , selected ", jComboboxLoglevel.getSelectedItem());
-		commandPMUninstall.setLoglevel((int) jComboboxLoglevel.getSelectedItem());
 	}
 
 	private void changeProduct(String prod) {
@@ -323,8 +321,9 @@ public class PackageManagerUninstallParameterDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jComboboxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(jComboBoxLogLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
+
 				.addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
@@ -343,7 +342,7 @@ public class PackageManagerUninstallParameterDialog {
 						.addGap(Globals.GAP_SIZE)
 						.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboboxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxLogLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE).addComponent(checkBoxKeepFiles, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));

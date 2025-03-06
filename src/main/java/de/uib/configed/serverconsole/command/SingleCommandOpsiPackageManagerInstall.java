@@ -18,7 +18,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	private String opsiproduct = "";
 	private String depot = "";
-	private String verbosity = "-vvv";
+	private String verbosity = "-l3";
 	private String freeInput = "";
 	private String property = " -p keep ";
 
@@ -26,7 +26,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 	private String setupInstalled = "";
 
 	public SingleCommandOpsiPackageManagerInstall() {
-		command = "opsi-package-manager";
+		command = "opsi-cli";
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getBasicName() {
-		return "opsi-package-manager";
+		return "opsi-cli";
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getCommand() {
-		command = "opsi-package-manager  --force -q " + verbosity + updateInstalled + setupInstalled + property + depot
+		command = "opsi-cli " + verbosity + " package install --force " + setupInstalled + updateInstalled + depot
 				+ freeInput + opsiproduct;
 		Logging.info(this, "got command ", command);
 		return command;
@@ -79,7 +79,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	public void setOpsiproduct(String prod) {
 		if (prod != null && !prod.isEmpty()) {
-			opsiproduct = " -i " + prod;
+			opsiproduct = " " + prod;
 		} else {
 			opsiproduct = "";
 		}
@@ -87,22 +87,14 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	public void setDepotForPInstall(String dep) {
 		if (!dep.isEmpty()) {
-			depot = " -d " + dep;
+			depot = " --depots " + dep;
 		} else {
 			depot = "";
 		}
 	}
 
 	public void setLoglevel(int vSum) {
-		if (vSum <= 3) {
-			verbosity = "";
-		} else {
-			StringBuilder v = new StringBuilder("-");
-			for (int i = 3; i < vSum; i++) {
-				v.append("v");
-			}
-			verbosity = v.toString();
-		}
+		verbosity = "-l" + vSum;
 	}
 
 	public void setFreeInput(String fI) {
@@ -126,7 +118,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 	}
 
 	public void enableUpdateInstalled() {
-		updateInstalled = " --update ";
+		updateInstalled = " --update-where-installed ";
 	}
 
 	public void disableUpdateInstalled() {
@@ -134,7 +126,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 	}
 
 	public void enableSetupInstalled() {
-		setupInstalled = " --setup ";
+		setupInstalled = " --setup-where-installed ";
 	}
 
 	public void disableSetupInstalled() {

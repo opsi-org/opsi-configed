@@ -37,9 +37,9 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 	private JLabel jLabelLoglevel = new JLabel();
 
 	private JComboBox<Integer> jComboBoxLoglevel;
+
 	private JTextField jTextFieldSelecteddepots;
 	private JButton jButtonDepotselection;
-	private JCheckBox jCheckBoxProperties;
 	private JCheckBox jCheckBoxUpdateInstalled;
 	private JCheckBox jCheckBoxSetupInstalled;
 
@@ -84,7 +84,6 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 		jComboBoxLoglevel.setSelectedItem(4);
 
-		jCheckBoxProperties = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.lbl_properties"), true);
 		jCheckBoxUpdateInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.updateInstalled"));
 		jCheckBoxSetupInstalled = new JCheckBox(Configed.getResourceValue("PMInstallSettingsPanel.setupInstalled"));
 	}
@@ -104,8 +103,6 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(jCheckBoxProperties, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -127,8 +124,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 						.addComponent(jComboBoxLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(jCheckBoxProperties, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+
 						.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -201,19 +197,10 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 
 	public SingleCommandOpsiPackageManagerInstall updateCommand(SingleCommandOpsiPackageManagerInstall basicCommand) {
 		basicCommand.setLoglevel((int) jComboBoxLoglevel.getSelectedItem());
-		applyPropertyDefaultsBasedOnCheckBox(basicCommand);
 		toggleUpdateBasedOnCheckBox(basicCommand);
 		toggleSetupBasedOnCheckBox(basicCommand);
 		setDepotBasedOnSelectedDepot(basicCommand, jTextFieldSelecteddepots.getText());
 		return basicCommand;
-	}
-
-	private void applyPropertyDefaultsBasedOnCheckBox(SingleCommandOpsiPackageManagerInstall basicCommand) {
-		if (jCheckBoxProperties.isSelected()) {
-			basicCommand.keepDepotDefaults();
-		} else {
-			basicCommand.usePackageDefaults();
-		}
 	}
 
 	private void toggleUpdateBasedOnCheckBox(SingleCommandOpsiPackageManagerInstall basicCommand) {
