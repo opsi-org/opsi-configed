@@ -1,6 +1,7 @@
 ## [4.3.6.X] - XXXX-XX-XX
 ### Fixed
 - Issue: non scrollable notes field in client info panel
+- Issue: Old selection disappears after changing visible columns in client table
 
 ## [4.3.6.6] - 2025-03-04
 ### Fixed
