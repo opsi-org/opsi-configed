@@ -9,7 +9,6 @@ package de.uib.utils.table.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
@@ -66,8 +65,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private SearchTargetModel targetModel;
 
 	private final Collator comparator;
-
-	private boolean invertSearch;
 
 	/**
 	 * Provides search functionality for tables.
@@ -233,18 +230,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		popupMarkHits.setVisible(false);
 		popupMarkAndFilter.setVisible(false);
 
-		JMenuItem popupInvertSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.invertSearch"));
-		popupInvertSearch.addActionListener((ActionEvent actionEvent) -> {
-			invertSearch = !invertSearch;
-			searchTheRow(selectMode);
-		});
-		popupInvertSearch.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-
 		Logging.info(this, "buildMenuSearchfield");
 		JPopupMenu searchMenu = new JPopupMenu();
 		searchMenu.add(popupSearch);
-		searchMenu.add(popupInvertSearch);
 		searchMenu.add(popupSearchNext);
 		searchMenu.add(popupNewSearch);
 		searchMenu.add(popupMarkHits);
@@ -480,16 +468,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		if (regexActive.isSelected()) {
 			Pattern regexPattern = Pattern.compile(".*" + searchPattern + ".*",
 					respectCase.isSelected() ? 0 : Pattern.CASE_INSENSITIVE);
-			return invertSearch ? !regexPattern.matcher(cellString).matches()
-					: regexPattern.matcher(cellString).matches();
+			return regexPattern.matcher(cellString).matches();
 		} else {
 			if (!respectCase.isSelected()) {
 				cellString = cellString.toLowerCase(Locale.ROOT);
 				searchPattern = searchPattern.toLowerCase(Locale.ROOT);
 			}
 
-			return invertSearch ? !stringContains(cellString, searchPattern)
-					: stringContains(cellString, searchPattern);
+			return stringContains(cellString, searchPattern);
 		}
 	}
 
@@ -662,9 +648,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 			searchNextRow(selectMode);
-		} else if (e.isControlDown() && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_I) {
-			invertSearch = !invertSearch;
-			searchTheRow(selectMode);
 		} else {
 			// We want to do nothing on other keys
 		}
