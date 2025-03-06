@@ -137,11 +137,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		JPanel panel = initComponents();
 
 		JButton buttonSearch = new JButton(Configed.getResourceValue("search"));
-		buttonSearch.addActionListener((ActionEvent event) -> {
-			dialog.setCursor(Globals.WAIT_CURSOR);
-			doSearch();
-			dialog.setCursor(null);
-		});
+		buttonSearch.addActionListener((event) -> doSearch());
 
 		JButton buttonReset = new JButton(Configed.getResourceValue("ClientSelectionDialog.buttonReset"));
 		buttonReset.addActionListener(actionEvent -> reset());
