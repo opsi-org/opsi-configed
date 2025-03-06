@@ -9,6 +9,7 @@
 
 ### Added
 - Feature for selecting multiple groups in host and product tree
+- Show loading screen on search query execution
 - Option in client table to invert selection
 
 ### Changed
