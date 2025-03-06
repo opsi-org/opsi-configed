@@ -7,6 +7,9 @@
 ### Added
 - Feature for selecting multiple groups in host and product tree
 
+### Changed
+- Switch from opsi-package-manager to opsi-cli
+
 ## [4.3.6.5] - 2025-02-24
 ### Fixed
 - Errors in rendering of some columns in product table
