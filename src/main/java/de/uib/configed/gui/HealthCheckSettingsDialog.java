@@ -59,10 +59,10 @@ public final class HealthCheckSettingsDialog {
 		showHealthCheckSettings(new ArrayList<>());
 	}
 
-	public void showHealthCheckSettings(List<String> selectedHostsList) {
+	public void showHealthCheckSettings(List<String> defaultSelection) {
 		Logging.info(this, "show health check settings dialog");
 
-		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel(selectedHostsList));
+		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel(defaultSelection));
 		jOptionPane.setOptions(
 				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
 		dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(),
@@ -75,7 +75,7 @@ public final class HealthCheckSettingsDialog {
 		}
 	}
 
-	private JPanel createOptionsPanel(List<String> selectedHostsList) {
+	private JPanel createOptionsPanel(List<String> defaultSelection) {
 		JLabel labelSelectedHosts = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
 		labelSelectedHosts.setFont(labelSelectedHosts.getFont().deriveFont(Font.BOLD));
 
@@ -84,10 +84,21 @@ public final class HealthCheckSettingsDialog {
 		selectedHosts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				openHostSelectionDialog(selectedHosts, selectedHostsList);
+				openHostSelectionDialog(selectedHosts);
 			}
 		});
-		selectedHosts.setText(Utils.getListStringRepresentation(selectedHostsList));
+		selectedHosts.setText(Utils.getListStringRepresentation(defaultSelection));
+
+		selectedHostList = new ListSelectionDialog(dialog,
+				Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
+		List<String> hostNames = new ArrayList<>(persistenceController.getHostInfoCollections().getDepotNamesList());
+		hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
+
+		selectedHostList.setListData(hostNames);
+		selectedHostList.setMultiSelection();
+		if (defaultSelection != null && !defaultSelection.isEmpty()) {
+			selectedHostList.setPreviousSelectionValues(defaultSelection);
+		}
 
 		checkBoxCheckActive = new JCheckBox(Configed.getResourceValue("HealthCheckSettingsDialog.healthCheckActive"),
 				true);
@@ -159,20 +170,8 @@ public final class HealthCheckSettingsDialog {
 		return panel;
 	}
 
-	private void openHostSelectionDialog(JTextField selectedHosts, List<String> defaultSelection) {
+	private void openHostSelectionDialog(JTextField selectedHosts) {
 		Logging.info(this, "openSelectionDialog for health check settings");
-
-		if (selectedHostList == null) {
-			selectedHostList = new ListSelectionDialog(dialog,
-					Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
-			List<String> hostNames = new ArrayList<>(
-					persistenceController.getHostInfoCollections().getDepotNamesList());
-			hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
-
-			selectedHostList.setListData(hostNames);
-			selectedHostList.setMultiSelection();
-			selectedHostList.setPreviousSelectionValues(defaultSelection);
-		}
 
 		// Get the selection to restore it if the user cancels the dialog
 		List<String> previousSelection = selectedHostList.getSelectedValues();
