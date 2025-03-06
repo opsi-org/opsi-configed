@@ -288,7 +288,7 @@ public class ConfigedMain {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
 		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
 
-		setRebuiltClientListTableModel(false, true);
+		activateGroup(true, getActivatedGroupModel().getGroupName());
 		clientTablePanel.getClientTable().initSortKeys();
 
 		// We need to make first selected visible again after resetting sortKeys
