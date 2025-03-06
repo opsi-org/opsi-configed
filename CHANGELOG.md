@@ -2,9 +2,6 @@
 ### Fixed
 - Issue: non scrollable notes field in client info panel
 - Issue: Old selection disappears after changing visible columns in client table
-
-## [4.3.6.6] - 2025-03-04
-### Fixed
 - On some occasions occuring `NPE`, when opsi-configed starts.
 
 ## [4.3.6.6] - 2025-03-04
