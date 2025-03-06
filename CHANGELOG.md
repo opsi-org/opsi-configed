@@ -9,6 +9,7 @@
 
 ### Added
 - Feature for selecting multiple groups in host and product tree
+- Show loading screen on search query execution
 
 ### Changed
 - Switch from opsi-package-manager to opsi-cli

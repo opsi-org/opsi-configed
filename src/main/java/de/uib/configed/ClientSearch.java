@@ -8,7 +8,6 @@ package de.uib.configed;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
@@ -23,19 +22,16 @@ import de.uib.opsidatamodel.SavedSearches;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.SearchQueryExecutor;
 
 public class ClientSearch {
-	private ConfigedMain configedMain;
-
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ClientSearch(ConfigedMain configedMain) {
-		this.configedMain = configedMain;
-
+	public ClientSearch() {
 		initMenuData();
 	}
 
@@ -70,8 +66,8 @@ public class ClientSearch {
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItem(entry.getValue());
 
-			item.addActionListener(
-					actionEvent -> selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
+			item.addActionListener(actionEvent -> selectClientsByFailedAtSomeTimeAgo(
+					searchedTimeSpans.get(entry.getKey()), entry.getValue()));
 
 			jMenu.add(item);
 		}
@@ -79,12 +75,14 @@ public class ClientSearch {
 
 	public void groupByNotCurrentProductVersion() {
 		String products = getLocalbootProductsFromSelection();
-		selectClientsNotCurrentProductInstalled(products, false);
+		selectClientsNotCurrentProductInstalled(products, false,
+				Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersion"));
 	}
 
 	public void groupByNotCurrentProductVersionOrBrokenInstallation() {
 		String products = getLocalbootProductsFromSelection();
-		selectClientsNotCurrentProductInstalled(products, true);
+		selectClientsNotCurrentProductInstalled(products, true, Configed
+				.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersionOrUnknownState"));
 	}
 
 	public void groupByFailedProduct() {
@@ -108,54 +106,56 @@ public class ClientSearch {
 			return;
 		}
 
-		SelectionManager manager = new SelectionManager();
-
-		String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProduct);
-
-		manager.setSearch(test);
-
-		List<String> result = manager.selectClients();
-
-		Logging.info(this, "selected: ", result);
-		configedMain.getClientTablePanel().setSelectedValues(result);
+		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
+			SelectionManager manager = new SelectionManager();
+			String test = String.format(SavedSearches.SEARCH_FAILED_PRODUCT, selectedProduct);
+			manager.setSearch(test);
+			return manager.selectClients();
+		}, Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedForProduct").replace("...",
+				" " + selectedProduct));
+		executor.execute();
 	}
 
 	public void selectClientsNotCurrentProductInstalled(String selectedProduct,
-			boolean includeClientsWithBrokenInstallation) {
+			boolean includeClientsWithBrokenInstallation, String searchQueryName) {
 		Logging.debug(this, "selectClientsNotCurrentProductInstalled, products ", selectedProduct);
 		if (selectedProduct == null || selectedProduct.isEmpty()) {
 			return;
 		}
 
-		String productVersion = persistenceController.getProductDataService().getProductVersion(selectedProduct);
-		String packageVersion = persistenceController.getProductDataService().getProductPackageVersion(selectedProduct);
+		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
+			String productVersion = persistenceController.getProductDataService().getProductVersion(selectedProduct);
+			String packageVersion = persistenceController.getProductDataService()
+					.getProductPackageVersion(selectedProduct);
 
-		Logging.debug(this, "selectClientsNotCurrentProductInstalled product ", selectedProduct, ", ", productVersion,
-				", ", packageVersion);
+			Logging.debug(this, "selectClientsNotCurrentProductInstalled product ", selectedProduct, ", ",
+					productVersion, ", ", packageVersion);
 
-		List<String> clientsToSelect = persistenceController.getHostDataService().getClientsWithOtherProductVersion(
-				selectedProduct, productVersion, packageVersion, includeClientsWithBrokenInstallation);
-
-		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found globally ", clientsToSelect.size());
-
-		configedMain.getClientTablePanel().setSelectedValues(clientsToSelect);
+			return persistenceController.getHostDataService().getClientsWithOtherProductVersion(selectedProduct,
+					productVersion, packageVersion, includeClientsWithBrokenInstallation);
+		}, searchQueryName.replace("...", " " + selectedProduct));
+		executor.execute();
 	}
 
-	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
-		SelectionManager manager = new SelectionManager();
+	public void selectClientsByFailedAtSomeTimeAgo(String arg, String searchQueryName) {
+		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
+			SelectionManager manager = new SelectionManager();
+			manager.setSearch(getSearchQueryFromArg(arg));
+			return manager.selectClients();
+		}, Configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan")
+				+ searchQueryName);
+		executor.execute();
+	}
 
-		if (arg == null || arg.isEmpty()) {
-			manager.setSearch(SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
-		} else {
+	private String getSearchQueryFromArg(String arg) {
+		String searchQuery = SavedSearches.SEARCH_FAILED_AT_ANY_TIME;
+
+		if (arg != null && !arg.isEmpty()) {
 			String timeAgo = DateExtendedByVars.interpretVar(arg);
-			String test = String.format(SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
-
-			Logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test ", test);
-			manager.setSearch(test);
+			searchQuery = String.format(SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
+			Logging.info(this, "getSearchQueryFromArg  searchQuery ", searchQuery);
 		}
 
-		List<String> result = manager.selectClients();
-
-		configedMain.getClientTablePanel().setSelectedValues(result);
+		return searchQuery;
 	}
 }
