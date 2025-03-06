@@ -110,6 +110,7 @@ public enum RPCMethodName {
 	SET_RIGHTS("setRights"),
 
 	SERVICE_HEALTH_CHECK("service_healthCheck"), SERVICE_GET_DIAGNOSTIC_DATA("service_getDiagnosticData"),
+	SERVICE_GET_HOSTS_WITH_ACTIVE_HEALTH_CHECK("service_getHostsWithActiveHealthCheck"),
 
 	/**
 	 * This enum only exists for testing purposes.

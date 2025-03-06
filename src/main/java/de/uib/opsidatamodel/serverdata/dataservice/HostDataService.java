@@ -587,6 +587,7 @@ public class HostDataService {
 			possibleValues.add(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL);
 
 			result = new ArrayList<>();
 			result.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
