@@ -1,5 +1,7 @@
 ## [4.3.7.0] 
 ### Fixed
+- Issue: non scrollable notes field in client info panel
+- On some occasions occuring `NPE`, when opsi-configed starts.
 - `NPE` when opening install package dialog after building the package first in "Make opsi package..." dialog 
 - Dialogs rendered improperly after restart (for example, new client dialog)
 - `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
