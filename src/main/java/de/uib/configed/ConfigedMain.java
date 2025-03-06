@@ -245,7 +245,7 @@ public class ConfigedMain {
 		ServerActionManager.initData(this);
 		Messagebus.initMessagebus(this);
 
-		clientSearch = new ClientSearch(this);
+		clientSearch = new ClientSearch();
 
 		initialDataLoader = new InitialDataLoader(this);
 		initialDataLoader.execute();
