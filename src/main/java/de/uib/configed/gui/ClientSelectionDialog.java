@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Color;
+import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -81,6 +82,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.SearchQueryExecutor;
 import de.uib.utils.swing.TextInputField;
 
 /**
@@ -135,11 +137,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		JPanel panel = initComponents();
 
 		JButton buttonSearch = new JButton(Configed.getResourceValue("search"));
-		buttonSearch.addActionListener((ActionEvent event) -> {
-			dialog.setCursor(Globals.WAIT_CURSOR);
-			doSearch();
-			dialog.setCursor(null);
-		});
+		buttonSearch.addActionListener((event) -> doSearch());
 
 		JButton buttonReset = new JButton(Configed.getResourceValue("ClientSelectionDialog.buttonReset"));
 		buttonReset.addActionListener(actionEvent -> reset());
@@ -149,7 +147,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		dialog.setModal(false);
+		dialog.setModalityType(ModalityType.MODELESS);
 	}
 
 	public void show() {
@@ -168,17 +166,17 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 	private void doSearch() {
 		Logging.info(this, "doSearch");
-
-		collectData();
-
-		// because of potential memory problems we switch to
-		// client view
-		ConfigedMain.getMainFrame().getClientConfiguration().setSelectedIndex(0);
-
-		List<String> clients = manager.selectClients();
-
-		Logging.debug(this, "", clients);
-		clientTablePanel.setSelectedValues(clients);
+		String searchName = (saveNameField.getText() != null || !saveNameField.getText().isBlank())
+				? saveNameField.getText()
+				: "";
+		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
+			dialog.setCursor(Globals.WAIT_CURSOR);
+			collectData();
+			List<String> result = manager.selectClients();
+			dialog.setCursor(null);
+			return result;
+		}, searchName);
+		executor.execute();
 	}
 
 	private JPanel initComponents() {

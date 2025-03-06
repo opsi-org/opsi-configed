@@ -477,7 +477,12 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code boolean}
 	 */
-	MFA_ENABLED("mfa_enabled");
+	MFA_ENABLED("mfa_enabled"),
+
+	/**
+	 * return type {@code Set<Object>}
+	 */
+	HOSTS_WITH_ACTIVE_HEALTH_CHECK("hosts_with_active_health_check");
 
 	private final String displayName;
 

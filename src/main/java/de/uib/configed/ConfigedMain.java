@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -245,7 +246,7 @@ public class ConfigedMain {
 		ServerActionManager.initData(this);
 		Messagebus.initMessagebus(this);
 
-		clientSearch = new ClientSearch(this);
+		clientSearch = new ClientSearch();
 
 		initialDataLoader = new InitialDataLoader(this);
 		initialDataLoader.execute();
@@ -279,6 +280,7 @@ public class ConfigedMain {
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
 		executor.runInParallel(() -> persistenceController.getProductDataService().retrieveDepotProductPropertiesPD());
+		executor.runInParallel(() -> persistenceController.getHealthDataService().retrieveHostsWithHealthCheck());
 		executor.waitForCompletion();
 
 		ExtraFrameController.reloadDialogs();
@@ -404,8 +406,11 @@ public class ConfigedMain {
 
 		if (selectedClients.size() == 1) {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
+			mainFrame.getClientConfiguration().getClientInfoPanel()
+					.updateHealthCheckActiveCheckBoxStatus(selectedClients.get(0));
 		} else {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
+			mainFrame.getClientConfiguration().getClientInfoPanel().updateHealthCheckActiveCheckBoxStatus(null);
 		}
 
 		hostInfo.resetGui();
@@ -622,6 +627,8 @@ public class ConfigedMain {
 		Logging.info(this, "buildPclistTableModel host_displayFields ",
 				persistenceController.getHostDataService().getHostDisplayFields());
 
+		Set<Object> hostsWithActiveHealthCheck = persistenceController.getHealthDataService()
+				.getHostsWithActiveHealthCheck();
 		for (String clientId : clientIds) {
 			HostInfo pcinfo = pcinfos.get(clientId);
 			if (pcinfo == null) {
@@ -637,6 +644,7 @@ public class ConfigedMain {
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
 			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
+			rowmap.put(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL, hostsWithActiveHealthCheck.contains(clientId));
 
 			List<Object> rowItems = new ArrayList<>();
 
@@ -730,64 +738,34 @@ public class ConfigedMain {
 	}
 
 	private void setSelectionPanelCols() {
-		Logging.info(this, "setSelectionPanelCols ");
+		BooleanIconTableCellRenderer defaultCheckMarkCellRenderer = new BooleanIconTableCellRenderer(
+				Icons.getIntellijIcon("checkmark", null), null);
+		BooleanIconTableCellRenderer opsiCheckMarkCellRenderer = new BooleanIconTableCellRenderer(
+				Icons.getIntellijIcon("checkmark", Globals.OPSI_OK), null);
 
-		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL))) {
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
-					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
-
-			TableColumn column = clientTablePanel.getClientTable().getColumnModel().getColumn(col);
-
-			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-
-			column.setCellRenderer(
-					new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark", Globals.OPSI_OK), null));
-		}
-
-		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL))) {
-			List<String> columns = new ArrayList<>();
-			for (int i = 0; i < clientTablePanel.getTableModel().getColumnCount(); i++) {
-				columns.add(clientTablePanel.getTableModel().getColumnName(i));
-			}
-			Logging.info(this, "showAndSave columns are ", columns, ", search for ",
-					HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
-
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
-					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
-
-			Logging.info(this, "setSelectionPanelCols ,  found col ", col);
-
-			initSelectionPanelColumn(col);
-		}
-
-		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
-				.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL))) {
-			List<String> columns = new ArrayList<>();
-
-			for (int i = 0; i < clientTablePanel.getTableModel().getColumnCount(); i++) {
-				columns.add(clientTablePanel.getTableModel().getColumnName(i));
-			}
-			Logging.info(this, "showAndSave columns are ", columns, ", search for ",
-					HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
-
-			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue(
-					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
-
-			Logging.info(this, "setSelectionPanelCols ,  found col ", col);
-
-			initSelectionPanelColumn(col);
-		}
+		configureColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, opsiCheckMarkCellRenderer);
+		configureColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
+		configureColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
+		configureColumn(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL, defaultCheckMarkCellRenderer);
 	}
 
-	private void initSelectionPanelColumn(int col) {
-		if (col > -1) {
-			TableColumn column = clientTablePanel.getClientTable().getColumnModel().getColumn(col);
-			Logging.info(this, "setSelectionPanelCols  column ", column.getHeaderValue());
-			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
-			column.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
+	private void configureColumn(String fieldLabel, TableCellRenderer renderer) {
+		if (Boolean.FALSE.equals(persistenceController.getHostDataService().getHostDisplayFields().get(fieldLabel))) {
+			Logging.info(this, "configureColumn, column is hidden " + fieldLabel);
+			return;
 		}
+
+		String colPropertyName = Configed.getResourceValue("ConfigedMain.pclistTableModel." + fieldLabel);
+		int col = clientTablePanel.getTableModel().findColumn(colPropertyName);
+		if (col == -1) {
+			Logging.info(this, "configureColumn, column not found " + colPropertyName);
+			return;
+		}
+
+		TableColumn column = clientTablePanel.getClientTable().getColumnModel().getColumn(col);
+		column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
+		column.setCellRenderer(renderer);
+		Logging.info(this, "configureColumn, found column ", col);
 	}
 
 	public void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree) {

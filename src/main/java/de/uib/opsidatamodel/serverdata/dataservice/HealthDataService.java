@@ -7,8 +7,10 @@
 package de.uib.opsidatamodel.serverdata.dataservice;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -81,5 +83,21 @@ public class HealthDataService {
 			}
 		}
 		return result;
+	}
+
+	public Set<Object> getHostsWithActiveHealthCheck() {
+		retrieveHostsWithHealthCheck();
+		return cacheManager.getCachedData(CacheIdentifier.HOSTS_WITH_ACTIVE_HEALTH_CHECK, Set.class);
+	}
+
+	public void retrieveHostsWithHealthCheck() {
+		if (cacheManager.isDataCached(CacheIdentifier.HOSTS_WITH_ACTIVE_HEALTH_CHECK)) {
+			return;
+		}
+
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.SERVICE_GET_HOSTS_WITH_ACTIVE_HEALTH_CHECK,
+				new Object[0]);
+		cacheManager.setCachedData(CacheIdentifier.HOSTS_WITH_ACTIVE_HEALTH_CHECK,
+				new HashSet<>(exec.getListResult(omc)));
 	}
 }

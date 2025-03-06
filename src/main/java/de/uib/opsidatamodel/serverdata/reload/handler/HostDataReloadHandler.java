@@ -13,12 +13,14 @@ import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.dataservice.ConfigDataService;
 import de.uib.opsidatamodel.serverdata.dataservice.GroupDataService;
+import de.uib.opsidatamodel.serverdata.dataservice.HealthDataService;
 
 public class HostDataReloadHandler implements ReloadHandler {
 	private CacheManager cacheManager;
 	private ConfigDataService configDataService;
 	private GroupDataService groupDataService;
 	private HostInfoCollections hostInfoCollections;
+	private HealthDataService healthDataService;
 
 	public HostDataReloadHandler() {
 		this.cacheManager = CacheManager.getInstance();
@@ -34,6 +36,10 @@ public class HostDataReloadHandler implements ReloadHandler {
 
 	public void setHostInfoCollections(HostInfoCollections hostInfoCollections) {
 		this.hostInfoCollections = hostInfoCollections;
+	}
+
+	public void setHealthDataService(HealthDataService healthDataService) {
+		this.healthDataService = healthDataService;
 	}
 
 	@Override
@@ -57,6 +63,9 @@ public class HostDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.FGROUP_TO_MEMBERS);
 		executor.runInParallel(() -> groupDataService.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP,
 				"clientId", CacheIdentifier.FGROUP_TO_MEMBERS));
+
+		cacheManager.clearCachedData(CacheIdentifier.HOSTS_WITH_ACTIVE_HEALTH_CHECK);
+		executor.runInParallel(() -> healthDataService.retrieveHostsWithHealthCheck());
 
 		executor.waitForCompletion();
 	}

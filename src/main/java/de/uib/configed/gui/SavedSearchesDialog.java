@@ -36,6 +36,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.SearchQueryExecutor;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
 import de.uib.utils.table.gui.SearchTargetModel;
 import de.uib.utils.table.gui.SearchTargetModelFromJList;
@@ -156,21 +157,17 @@ public class SavedSearchesDialog {
 	}
 
 	private void commit() {
+		SearchQueryExecutor executor = new SearchQueryExecutor(() -> {
+			result = new ArrayList<>();
+			List<String> selected = visibleList.getSelectedValuesList();
+			if (!selected.isEmpty()) {
+				manager.loadSearch(selected.get(0));
 
-		result = new ArrayList<>();
-
-		List<String> selected = visibleList.getSelectedValuesList();
-		if (!selected.isEmpty()) {
-			manager.loadSearch(selected.get(0));
-
-			result = manager.selectClients();
-		}
-
-		Logging.info(this, "commit result == null ", result == null);
-		if (result != null) {
-			Logging.info(this, "result size ", result.size());
-			clientTablePanel.setSelectedValues(result);
-		}
+				result = manager.selectClients();
+			}
+			return result;
+		}, visibleList.getSelectedValue());
+		executor.execute();
 	}
 
 	private void removeSelectedEntry() {
