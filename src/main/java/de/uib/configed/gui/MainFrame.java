@@ -10,6 +10,7 @@ import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -63,7 +64,7 @@ import de.uib.utils.userprefs.UserPreferences;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements KeyListener {
 	private ConfigedMain configedMain;
 
 	private JMenuItem jMenuFileSaveConfigurations;
@@ -606,5 +607,22 @@ public class MainFrame extends JFrame {
 		} else {
 			licenseDisplayer.display();
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if ((e.isControlDown() && e.isShiftDown()) && e.getKeyCode() == KeyEvent.VK_I) {
+			configedMain.invertSelection();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// Not needed.
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// Not Needed.
 	}
 }
