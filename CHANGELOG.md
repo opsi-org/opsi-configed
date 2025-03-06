@@ -1,6 +1,6 @@
 ## [4.3.X.X] - XXXX-XX-XX
 ### Added
-- Option in search bar to invert search
+- Option in client table to invert selection
 
 ## [4.3.6.5] - 2025-02-24
 ### Fixed
