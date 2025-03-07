@@ -105,8 +105,13 @@ public class TopToolBarManager {
 		JButton addClientButton = new JButton(Icons.getIntellijIcon("add", 24));
 		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
 		addClientButton.addActionListener(event -> ExtraFrameController.callNewClientDialog());
-		addClientButton.setEnabled(!persistenceController.getConfigDataService().getDisabledClientMenuEntries()
-				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT));
+		if (persistenceController.getConfigDataService().getDisabledClientMenuEntries()
+				.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
+			addClientButton.setEnabled(false);
+		} else {
+			addClientButton
+					.setEnabled(persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
+		}
 
 		JButton clientSearchButton = new JButton(Icons.getIntellijIcon("search", 24));
 		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
