@@ -101,7 +101,7 @@ public class MainFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent event) {
-				ConfigedMain.finishApp(true, 0);
+				ConfigedMain.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
 			}
 		});
 
@@ -147,7 +147,8 @@ public class MainFrame extends JFrame {
 
 		JMenuItem jMenuFileExit = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		Icons.addThemeIconToMenuItem(jMenuFileExit, "exit");
-		jMenuFileExit.addActionListener(actionEvent -> ConfigedMain.finishApp(true, 0));
+		jMenuFileExit.addActionListener(actionEvent -> ConfigedMain
+				.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0));
 
 		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
