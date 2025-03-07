@@ -164,11 +164,6 @@ public class UserRolesConfigDataService {
 			exec.doCall(omc);
 		}
 
-		applyUserSpecializedConfigPD();
-
-		// Load all data together to prevent an extra RPC-call
-		// persistenceController.getGroupDataService().retrieveAllGroupsPD();
-
 		new UserConfigProducing(applyUserSpecializedConfigPD(),
 				persistenceController.getHostInfoCollections().getConfigServer(),
 				persistenceController.getHostInfoCollections().getDepotNamesList(),
