@@ -54,5 +54,7 @@ public class DriverUploadDialog {
 
 		panelDriverUpload.setClientName(clientName);
 		panelDriverUpload.setDepot();
+
+		dialog.pack();
 	}
 }

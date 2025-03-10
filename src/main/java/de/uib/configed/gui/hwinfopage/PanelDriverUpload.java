@@ -329,17 +329,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		fieldDriverPath.setEditable(true);
 		fieldDriverPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
-		buttonCallSelectDriverFiles.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = chooserDriverPath.showOpenDialog(dialog);
-
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String pathInstallFiles = chooserDriverPath.getSelectedFile().getPath();
-				fieldDriverPath.setText(pathInstallFiles);
-				fieldDriverPath.setCaretPosition(pathInstallFiles.length());
-			} else {
-				fieldDriverPath.setText("");
-			}
-		});
+		buttonCallSelectDriverFiles.addActionListener(actionEvent -> chooseDriverPath());
 
 		JLabel labelDriverLocationType = new JLabel(Configed.getResourceValue("PanelDriverUpload.type"));
 		labelDriverLocationType.setFont(labelDriverLocationType.getFont().deriveFont(Font.BOLD));
@@ -674,6 +664,16 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			String serverPathGot = chooserServerpath.getSelectedFile().getPath();
 			fieldServerPath.setText(serverPathGot);
 			fieldServerPath.setCaretPosition(serverPathGot.length());
+		}
+	}
+
+	private void chooseDriverPath() {
+		if (chooserDriverPath.showOpenDialog(dialog) == JFileChooser.APPROVE_OPTION) {
+			String pathInstallFiles = chooserDriverPath.getSelectedFile().getPath();
+			fieldDriverPath.setText(pathInstallFiles);
+			fieldDriverPath.setCaretPosition(pathInstallFiles.length());
+		} else {
+			fieldDriverPath.setText("");
 		}
 	}
 
