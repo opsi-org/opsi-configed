@@ -1,9 +1,12 @@
+## [4.3.6.x] - 2025-xx-xx
+### Fixed
+- Correct size in driver upload
+
 ## [4.3.6.7] - 2025-03-06
 ### Fixed
 - Issue: non scrollable notes field in client info panel
 - Issue: Old selection disappears after changing visible columns in client table
 - On some occasions occuring `NPE`, when opsi-configed starts.
-- Correct size in driver upload
 
 ## [4.3.6.6] - 2025-03-04
 ### Fixed
