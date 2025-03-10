@@ -9,6 +9,7 @@ package de.uib.configed.gui;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -73,6 +74,7 @@ public final class ClientMenuManager implements MenuListener {
 	private JMenuItem jMenuFreeLicenses = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFreeLicenses"));
 	private JMenuItem jMenuDeletePackageCaches = new JMenuItem(
 			Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
+	private JMenuItem jMenuInvertSelection = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuInvertSelection"));
 
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuDeleteClient,
 			jMenuFreeLicenses, jMenuShowPopupMessage, jMenuRequestSessionInfo, jMenuDeletePackageCaches,
@@ -161,6 +163,10 @@ public final class ClientMenuManager implements MenuListener {
 		Icons.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
 		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
 
+		jMenuInvertSelection.addActionListener(event -> configedMain.invertSelection());
+		jMenuInvertSelection.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+
 		jMenuClients.add(jMenuWakeOnLan);
 		jMenuClients.add(jMenuOpsiClientdEvent);
 		jMenuClients.add(jMenuShowPopupMessage);
@@ -209,6 +215,10 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuClients.addSeparator();
 
 		jMenuClients.add(initShowColumnsMenu());
+
+		jMenuClients.addSeparator();
+
+		jMenuClients.add(jMenuInvertSelection);
 	}
 
 	private static JMenu initResetProductsMenu() {
