@@ -112,7 +112,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private LinkedList<ComplexGroup> complexElements;
 
 	private SelectionManager manager;
-	private ClientTablePanel clientTablePanel;
 	private SavedSearchesDialog savedSearchesDialog;
 
 	private JScrollPane scrollPane;
@@ -125,11 +124,9 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public ClientSelectionDialog(ConfigedMain configedMain, ClientTablePanel clientTablePanel,
-			SavedSearchesDialog savedSearchesDialog) {
+	public ClientSelectionDialog(ConfigedMain configedMain, SavedSearchesDialog savedSearchesDialog) {
 
 		this.configedMain = configedMain;
-		this.clientTablePanel = clientTablePanel;
 		this.savedSearchesDialog = savedSearchesDialog;
 		manager = new SelectionManager();
 		complexElements = new LinkedList<>();
@@ -137,7 +134,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		JPanel panel = initComponents();
 
 		JButton buttonSearch = new JButton(Configed.getResourceValue("search"));
-		buttonSearch.addActionListener((event) -> doSearch());
+		buttonSearch.addActionListener(event -> doSearch());
 
 		JButton buttonReset = new JButton(Configed.getResourceValue("ClientSelectionDialog.buttonReset"));
 		buttonReset.addActionListener(actionEvent -> reset());

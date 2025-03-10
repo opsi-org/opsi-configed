@@ -47,7 +47,6 @@ public class SavedSearchesDialog {
 	private List<String> result;
 	private DefaultListModel<String> model;
 
-	private ClientTablePanel clientTablePanel;
 	private ConfigedMain configedMain;
 
 	private JList<String> visibleList;
@@ -59,8 +58,7 @@ public class SavedSearchesDialog {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	public SavedSearchesDialog(ClientTablePanel clientTablePanel, ConfigedMain configedMain) {
-		this.clientTablePanel = clientTablePanel;
+	public SavedSearchesDialog(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
 		JPanel panel = createPanel();

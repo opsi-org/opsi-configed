@@ -58,8 +58,7 @@ public final class ExtraFrameController {
 		initSavedSearchesDialog(configedMain);
 
 		if (clientSelectionDialog == null) {
-			clientSelectionDialog = new ClientSelectionDialog(configedMain, configedMain.getClientTablePanel(),
-					savedSearchesDialog);
+			clientSelectionDialog = new ClientSelectionDialog(configedMain, savedSearchesDialog);
 		}
 
 		clientSelectionDialog.show();
@@ -73,7 +72,7 @@ public final class ExtraFrameController {
 	private static void initSavedSearchesDialog(ConfigedMain configedMain) {
 		if (savedSearchesDialog == null) {
 			Logging.debug("create SavedSearchesDialog");
-			savedSearchesDialog = new SavedSearchesDialog(configedMain.getClientTablePanel(), configedMain);
+			savedSearchesDialog = new SavedSearchesDialog(configedMain);
 		}
 	}
 

@@ -115,7 +115,7 @@ public final class HealthInfo {
 	}
 
 	private static void sortHealthDataBasedOnStatusLevel(List<Map<String, Object>> healthData) {
-		Collections.sort(healthData, (map1, map2) -> {
+		Collections.sort(healthData, (Map<String, Object> map1, Map<String, Object> map2) -> {
 			List<String> statusLevels = Arrays.asList("error", "warning", "ok");
 			String status1 = (String) map1.get("check_status");
 			String status2 = (String) map2.get("check_status");
