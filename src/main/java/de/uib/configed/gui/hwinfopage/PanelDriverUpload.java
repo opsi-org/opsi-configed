@@ -344,8 +344,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		driverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
 				stateDriverPath);
+		driverPathChecked.setEnabled(false);
 
 		serverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.targetdirConnected"), true);
+		serverPathChecked.setEnabled(false);
 
 		buttonUploadDrivers = new JButton(Configed.getResourceValue("FDriverUpload.upload"));
 		buttonUploadDrivers.setEnabled(false);
