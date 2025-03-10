@@ -220,6 +220,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		this.dialog = dialog;
 	}
 
+	public JButton getButtonUploadDrivers() {
+		return buttonUploadDrivers;
+	}
+
 	private void defineChoosers() {
 		comboChooseDepot = new JComboBox<>();
 
@@ -411,11 +415,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+				.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createParallelGroup()
 				.addGroup(layoutByAuditInfo.createParallelGroup()
@@ -467,13 +468,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 										GroupLayout.PREFERRED_SIZE)))
 				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-
-						.addGap(Globals.GAP_SIZE).addComponent(buttonUploadDrivers, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+				.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 
 	private JPanel createPanelButtonGroup() {

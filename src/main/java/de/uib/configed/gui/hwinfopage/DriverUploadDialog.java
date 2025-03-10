@@ -26,7 +26,9 @@ public class DriverUploadDialog {
 
 		panelDriverUpload = new PanelDriverUpload(configedMain);
 
-		JOptionPane optionPane = new JOptionPane(panelDriverUpload);
+		JOptionPane optionPane = new JOptionPane(panelDriverUpload, JOptionPane.PLAIN_MESSAGE,
+				JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { panelDriverUpload.getButtonUploadDrivers(), Configed.getResourceValue("buttonCancel") });
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("FDriverUpload.title"));
 		dialog.setModal(false);
