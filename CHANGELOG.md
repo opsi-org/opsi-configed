@@ -10,6 +10,9 @@
 - `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
 - WebDAV Functionality Breaks with SSO Integration
 
+### Added
+- Select all products/depots/clients in the trees and list with a click on a button in the tab
+
 ## [4.3.6.5] - 2025-02-24
 ### Fixed
 - Errors in rendering of some columns in product table
