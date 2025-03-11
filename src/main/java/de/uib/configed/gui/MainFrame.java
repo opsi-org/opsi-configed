@@ -215,6 +215,28 @@ public class MainFrame extends JFrame implements KeyListener {
 		restartConfiged();
 	}
 
+	public void reconnectOTP(String otp) {
+		// // only close the instance works
+		ConfigedMain.closeInstance(false);
+		// // close all errors
+		// ConnectionErrorReporter.destroyInstance();
+		// // Messagebus.getInstance().disconnect();
+
+		// // ConfigedMain.setHost(null);
+		// // ConfigedMain.setUser(null);
+		// // ConfigedMain.setPassword(null);
+		// // ConfigedMain.setUseSSO(false);
+		// ConfigedMain.setOTP(otp);
+		// CacheManager.getInstance().clearAllCachedData();
+		// Configed.getSavedStates().removeAll();
+		// resetData();
+
+		// // We need to reset the validators so that new ones will be created when reconnecting
+		// CertificateValidatorFactory.resetCertificateValidators();
+
+		restartConfiged(false);
+	}
+
 	public void resetData() {
 		mainPanelManager.resetData();
 
@@ -226,7 +248,11 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	private static void restartConfiged() {
-		ConfigedMain.closeInstance(true);
+		restartConfiged(true);
+	}
+
+	private static void restartConfiged(boolean checkdirty) {
+		ConfigedMain.closeInstance(checkdirty);
 		ExtraFrameController.deleteInstances();
 		new Thread() {
 			@Override

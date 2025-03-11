@@ -147,7 +147,7 @@ public class OpsiServiceNOMPersistenceController {
 	private String triggeredEvent;
 
 	OpsiServiceNOMPersistenceController(String server, String user, String password, String otp, boolean useSSO) {
-		Logging.info(this, "start construction, \nconnect to ", server, " as ", user);
+		Logging.warning(this, "start construction, \nconnect to ", server, " as ", user, " sso ", useSSO, " otp ", otp);
 
 		if (server == null || server.isEmpty()) {
 			Logging.error(this.getClass(), "no server given");
@@ -166,8 +166,10 @@ public class OpsiServiceNOMPersistenceController {
 
 		init();
 		if (useSSO) {
+			Logging.warning("ONOMPC useSSO true");
 			exec = new ServerFacade(server);
 		} else {
+			Logging.warning("ONOMPC useSSO false");
 			exec = new ServerFacade(server, user, password, otp);
 		}
 

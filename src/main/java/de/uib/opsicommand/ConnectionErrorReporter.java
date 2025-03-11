@@ -12,12 +12,14 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.SwingUtilities;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.SeparatedDocument;
 
 /**
  * {@code ConnectionErrorReporter} reports connection errors, that occur during
@@ -28,6 +30,7 @@ import de.uib.utils.logging.Logging;
  */
 public final class ConnectionErrorReporter {
 	private static ConnectionErrorReporter instance;
+	private static boolean dialogOpened = false;
 	private ConnectionState conStat;
 
 	private ConnectionErrorReporter(ConnectionState conStat) {
@@ -135,32 +138,60 @@ public final class ConnectionErrorReporter {
 
 	private void displayMFADialog() {
 		Logging.info("Unauthorized, show password dialog");
-
-		JPasswordField passwordField = new JPasswordField();
-
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewPassword"), passwordField },
-				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"), JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE);
-
-		// The user has clicked on the OK button.
-		if (answer == 0) {
-			ConfigedMain.setPassword(new String(passwordField.getPassword()));
-		} else {
-			displayCancelConfigedDialog();
+		if (dialogOpened) {
+			return;
 		}
+		dialogOpened = true;
+		JPasswordField passwordField = new JPasswordField();
+		JPasswordField otpField = new JPasswordField();
+		// 		fieldOTP.setVisible(false);
+
+		otpField.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
+				Character.MIN_VALUE, 6, true));
+		// JCheckBox checkUseOTP = new JCheckBox(Configed.getResourceValue("LoginDialog.checkUseOTP"));
+		// checkUseOTP.setToolTipText(Configed.getResourceValue("LoginDialog.checkUseOTP.toolTip"));
+		// checkUseOTP.addItemListener(itemEvent -> otpField.setVisible(checkUseOTP.isSelected()));
+		// checkUseOTP.setSelected(UserPreferences.getBoolean(UserPreferences.OTP));
+
+		SwingUtilities.invokeLater(() -> {
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },
+					Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"), JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
+
+			if (answer == 0) {
+				// The user has clicked on the OK button.
+				// ConfigedMain.setPassword(new String(passwordField.getPassword()));
+				// ConfigedMain.setOTP(new String(otpField.getPassword()));
+				dialogOpened = false;
+				// Configed.restartConfiged(new String(otpField.getPassword()));
+				ConfigedMain.getMainFrame().reconnectOTP(new String(otpField.getPassword()));
+			} else {
+				dialogOpened = false;
+				displayCancelConfigedDialog();
+			}
+		});
 	}
 
 	private void displayCancelConfigedDialog() {
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), JOptionPane.OK_CANCEL_OPTION);
-
-		if (answer == 0) {
-			displayMFADialog();
-		} else {
-			Main.endApp(Main.NO_ERROR);
+		if (dialogOpened) {
+			return;
 		}
+		dialogOpened = true;
+		SwingUtilities.invokeLater(() -> {
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
+					Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"),
+					JOptionPane.OK_CANCEL_OPTION);
+
+			if (answer == 0) {
+				dialogOpened = false;
+				displayMFADialog();
+			} else {
+				dialogOpened = false;
+				Main.endApp(Main.NO_ERROR);
+			}
+		});
 	}
 
 	/**

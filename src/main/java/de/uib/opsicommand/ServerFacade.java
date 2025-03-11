@@ -79,6 +79,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public ServerFacade(String host, boolean connect) {
+		Logging.warning("ServerFacade ", host, " connect ", connect);
 		if (host == null) {
 			return;
 		}
@@ -96,6 +97,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * @param password to use for the authentication.
 	 */
 	public ServerFacade(String host, String username, String password, String otp) {
+		Logging.warning("ServerFacade ", host, " username ", username, " otp ", otp);
 		if (host == null || username == null || password == null) {
 			throw new IllegalArgumentException("All or some parameters are null");
 		}

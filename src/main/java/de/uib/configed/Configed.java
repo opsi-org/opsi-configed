@@ -24,6 +24,7 @@ import org.apache.commons.cli.CommandLine;
 
 import de.uib.Main;
 import de.uib.configed.clientselection.SavedSearchQuery;
+import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.messages.Messages;
@@ -105,6 +106,17 @@ public final class Configed {
 		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, paramSSO);
 
 		SwingUtilities.invokeLater(configedMain::init);
+	}
+
+	public static void restartConfiged(String paramOTP) {
+		// setParamValues(paramHost, paramUser, paramPassword, paramOTP, paramSSO);
+		Configed.paramOTP = paramOTP;
+		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, paramSSO);
+		LoginDialog loginDialog = new LoginDialog(configedMain);
+		loginDialog.setOTP(paramOTP);
+		loginDialog.tryConnecting();
+
+		// SwingUtilities.invokeLater(configedMain::init);
 	}
 
 	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP,
