@@ -1,4 +1,8 @@
-## [4.3.6.X] - XXXX-XX-XX
+## [4.3.6.x] - 2025-xx-xx
+### Fixed
+- Correct size in driver upload
+
+## [4.3.6.7] - 2025-03-06
 ### Fixed
 - Issue: non scrollable notes field in client info panel
 - On some occasions occuring `NPE`, when opsi-configed starts.
@@ -11,6 +15,9 @@
 - Dialogs rendered improperly after restart (for example, new client dialog)
 - `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
 - WebDAV Functionality Breaks with SSO Integration
+
+### Added
+- Select all products/depots/clients in the trees and list with a click on a button in the tab
 
 ## [4.3.6.5] - 2025-02-24
 ### Fixed
