@@ -1,13 +1,13 @@
 ## [4.3.6.x] - 2025-xx-xx
 ### Fixed
 - Correct size in driver upload
+- `NPE` when reloading all data after changing groupaccess for client tree
+- Issue: user-roles not enforced correctly
 
 ## [4.3.6.7] - 2025-03-06
 ### Fixed
 - Issue: non scrollable notes field in client info panel
 - On some occasions occuring `NPE`, when opsi-configed starts.
-- `NPE` when reloading all data after changing groupaccess for client tree
-- Issue: user-roles not enforced correctly
 
 ## [4.3.6.6] - 2025-03-04
 ### Fixed
