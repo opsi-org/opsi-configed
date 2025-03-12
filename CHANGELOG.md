@@ -1,10 +1,9 @@
 ## [4.3.6.X] - XXXX-XX-XX
 ### Fixed
 - Issue: non scrollable notes field in client info panel
-
-## [4.3.6.6] - 2025-03-04
-### Fixed
 - On some occasions occuring `NPE`, when opsi-configed starts.
+- `NPE` when reloading all data after changing groupaccess for client tree
+- Issue: user-roles not enforced correctly
 
 ## [4.3.6.6] - 2025-03-04
 ### Fixed
