@@ -55,6 +55,10 @@ public final class ExtraFrameController {
 	}
 
 	public static void callClientSelectionDialog(ConfigedMain configedMain) {
+		callClientSelectionDialog(configedMain, null);
+	}
+
+	public static void callClientSelectionDialog(ConfigedMain configedMain, String searchName) {
 		initSavedSearchesDialog(configedMain);
 
 		if (clientSelectionDialog == null) {
@@ -62,12 +66,11 @@ public final class ExtraFrameController {
 					savedSearchesDialog);
 		}
 
-		clientSelectionDialog.show();
+		clientSelectionDialog.show(searchName);
 	}
 
 	public static void editClientSearch(ConfigedMain configedMain, String name) {
-		callClientSelectionDialog(configedMain);
-		clientSelectionDialog.loadSearch(name);
+		callClientSelectionDialog(configedMain, name);
 	}
 
 	private static void initSavedSearchesDialog(ConfigedMain configedMain) {
