@@ -1,6 +1,10 @@
 ## [4.3.6.x] - 2025-xx-xx
 ### Fixed
 - Correct size in driver upload
+- Issue: `ClientSelectionDialog` UI not properly updated, when clicking on "Edit search" in `SavedSearchesDialog`
+
+### Changed
+- Open new instance of `ClientSelectionDialog`, when clicking on "Create new search" in `SavedSearchesDialog`
 
 ## [4.3.6.7] - 2025-03-06
 ### Fixed
