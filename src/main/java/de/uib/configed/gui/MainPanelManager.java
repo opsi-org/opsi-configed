@@ -106,16 +106,16 @@ public class MainPanelManager {
 		leftTabs.addTab(null, scrollpaneTreeClients);
 		leftTabs.addTab(null, scrollpaneTreeProducts);
 
-		leftTabs.setTabComponentAt(0, new ButtonTabComponent(Icons.getIntellijIcon("close"),
+		leftTabs.setTabComponentAt(0, new ButtonTabComponent(Icons.getIntellijIcon("selectAll"),
 				Configed.getResourceValue("DepotListPresenter.depots"),
 				Configed.getResourceValue("DepotListPresenter.depots.tooltip"), () -> configedMain.selectAllDepots()));
 		leftTabs.setTabComponentAt(1,
-				new ButtonTabComponent(Icons.getIntellijIcon("close"),
+				new ButtonTabComponent(Icons.getIntellijIcon("selectAll"),
 						Configed.getResourceValue("MainFrame.tab_ClientTree"),
 						Configed.getResourceValue("MainFrame.tab_ClientTree.tooltip"),
 						() -> configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME)));
 		leftTabs.setTabComponentAt(2,
-				new ButtonTabComponent(Icons.getIntellijIcon("close"),
+				new ButtonTabComponent(Icons.getIntellijIcon("selectAll"),
 						Configed.getResourceValue("MainFrame.tab_ProductTree"),
 						Configed.getResourceValue("MainFrame.tab_ProductTree.tooltip"),
 						() -> configedMain.activateAllProductsGroup()));
