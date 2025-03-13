@@ -2,6 +2,9 @@
 ### Fixed
 - Correct size in driver upload
 
+### Changed
+- Init tab components at start
+
 ## [4.3.6.7] - 2025-03-06
 ### Fixed
 - Issue: non scrollable notes field in client info panel
