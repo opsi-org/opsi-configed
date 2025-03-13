@@ -199,6 +199,8 @@ public class ConfigedMain {
 
 		startMainFrame(this, clientTablePanel, depotsList, clientTree, productTree);
 
+		initTabComponents();
+
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
 
 		initialTreeActivation();
@@ -216,6 +218,24 @@ public class ConfigedMain {
 		Logging.debug(this, "initialTreeActivation");
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+	}
+
+	private void initTabComponents() {
+		ButtonTabComponent depotComp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
+		depotComp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
+
+		ButtonTabComponent clientComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
+				.getTabComponentAt(1);
+		clientComp.showButton(clientTree.getSelectionPaths() == null
+				|| !ClientTree.ALL_CLIENTS_NAME.equals(clientTree.getSelectionPath().getLastPathComponent().toString())
+				|| clientTree.getSelectionPaths().length > 1);
+
+		ButtonTabComponent productComp = (ButtonTabComponent) ConfigedMain.getMainFrame().getTabbedPane()
+				.getTabComponentAt(2);
+		productComp.showButton(productTree.getSelectionPaths() == null
+				|| !Configed.getResourceValue("ProductTree.allProducts")
+						.equals(productTree.getSelectionPath().getLastPathComponent().toString())
+				|| productTree.getSelectionPaths().length > 1);
 	}
 
 	public void registerMessagebusListeners() {
@@ -570,8 +590,8 @@ public class ConfigedMain {
 		}
 
 		// changes the produced unfilteredList
-		if (allowedClients != null) {
-			clientsForTableModel = produceClientSetForDepots(allowedClients);
+		if (getAllowedClients() != null) {
+			clientsForTableModel = produceClientSetForDepots(getAllowedClients());
 
 			Logging.info(this, " clientsForTableModel ", clientsForTableModel.size());
 
@@ -657,7 +677,7 @@ public class ConfigedMain {
 
 	private void rebuildTree(Collection<String> allPCs, Set<String> permittedHostGroups) {
 		clientTree.clear();
-		allowedClients = clientTree.build(allPCs, permittedHostGroups);
+		clientTree.build(allPCs, permittedHostGroups);
 	}
 
 	public void setClient(String clientName) {
@@ -1051,7 +1071,7 @@ public class ConfigedMain {
 	}
 
 	public Set<String> getAllowedClients() {
-		return allowedClients;
+		return clientTree.getAllowedClients();
 	}
 
 	public String[] getDepotArray() {
@@ -1106,7 +1126,6 @@ public class ConfigedMain {
 
 		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotsListSelectionListener);
-		allowedClients = null;
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
 		persistenceController.getUserRolesConfigDataService().checkConfigurationPD();

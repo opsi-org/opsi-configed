@@ -5,6 +5,9 @@
 
 ### Changed
 - Open new instance of `ClientSelectionDialog`, when clicking on "Create new search" in `SavedSearchesDialog`
+- `NPE` when reloading all data after changing groupaccess for client tree
+- Issue: user-roles not enforced correctly
+- Init tab components at start
 
 ## [4.3.6.7] - 2025-03-06
 ### Fixed
