@@ -590,8 +590,8 @@ public class ConfigedMain {
 		}
 
 		// changes the produced unfilteredList
-		if (allowedClients != null) {
-			clientsForTableModel = produceClientSetForDepots(allowedClients);
+		if (getAllowedClients() != null) {
+			clientsForTableModel = produceClientSetForDepots(getAllowedClients());
 
 			Logging.info(this, " clientsForTableModel ", clientsForTableModel.size());
 
@@ -677,7 +677,7 @@ public class ConfigedMain {
 
 	private void rebuildTree(Collection<String> allPCs, Set<String> permittedHostGroups) {
 		clientTree.clear();
-		allowedClients = clientTree.build(allPCs, permittedHostGroups);
+		clientTree.build(allPCs, permittedHostGroups);
 	}
 
 	public void setClient(String clientName) {
@@ -1071,7 +1071,7 @@ public class ConfigedMain {
 	}
 
 	public Set<String> getAllowedClients() {
-		return allowedClients;
+		return clientTree.getAllowedClients();
 	}
 
 	public String[] getDepotArray() {
@@ -1126,7 +1126,6 @@ public class ConfigedMain {
 
 		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotsListSelectionListener);
-		allowedClients = null;
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
 		persistenceController.getUserRolesConfigDataService().checkConfigurationPD();

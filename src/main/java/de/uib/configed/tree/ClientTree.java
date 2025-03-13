@@ -47,6 +47,8 @@ public class ClientTree extends AbstractGroupTree {
 
 	private TreePath pathToALL;
 
+	private Set<String> allowedClients;
+
 	// supervising data
 	private Map<String, Set<GroupNode>> locationsInDirectory;
 	// clientId --> set of all containing groups
@@ -154,22 +156,34 @@ public class ClientTree extends AbstractGroupTree {
 
 		if (model != null) {
 			Set<String> allPCs = new TreeSet<>(persistenceController.getHostInfoCollections()
-					.getClientsForDepots(configedMain.getSelectedDepots(), null));
+					.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients));
 			Set<String> permittedHostGroups = persistenceController.getUserRolesConfigDataService()
 					.getHostGroupsPermitted();
 			build(allPCs, permittedHostGroups);
 		}
 	}
 
+	public Set<String> getAllowedClients() {
+		return allowedClients;
+	}
+
 	public Set<String> build(Collection<String> allPCs, Set<String> permittedHostGroups) {
 		Logging.debug(this, "build, rebuildTree, allPCs  " + allPCs + " size " + allPCs.size());
 		Logging.info(this, "build, permittedHostGroups ", permittedHostGroups);
 
+		// we must rebuild this map since the direct call of persist.getFGroup2Members
+		// would eliminate the filter by depot etc.
+		Map<String, List<String>> group2Members = produceGroup2Members(allPCs,
+				persistenceController.getGroupDataService().getFObject2GroupsPD());
+		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new ArrayList<>());
+		allowedClients = getAllowedClients(group2Members, permittedHostGroups);
+		allPCs = new TreeSet<>(persistenceController.getHostInfoCollections()
+				.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients));
+
 		produceTreeForALL(allPCs);
 		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(), permittedHostGroups);
 
-		Set<String> allowedClients = associateClientsToGroups(allPCs,
-				persistenceController.getGroupDataService().getFObject2GroupsPD(), permittedHostGroups);
+		associateClientsToGroups(allPCs, group2Members);
 
 		if (allowedClients != null) {
 			Logging.info(this, "build, allowedClients ", allowedClients.size());
@@ -299,16 +313,8 @@ public class ClientTree extends AbstractGroupTree {
 
 	// Return null means, all clients are allowed
 	@SuppressWarnings("java:S1168")
-	public Set<String> associateClientsToGroups(Iterable<String> clientIds, Map<String, Set<String>> fObject2Groups,
-			Set<String> permittedHostGroups) {
+	public void associateClientsToGroups(Iterable<String> clientIds, Map<String, List<String>> group2Members) {
 		locationsInDirectory.clear();
-
-		// we must rebuild this map since the direct call of persist.getFGroup2Members
-		// would eliminate the filter by depot etc.
-		Map<String, List<String>> group2Members = produceGroup2Members(clientIds, fObject2Groups);
-
-		List<String> membersOfDirectoryNotAssigned = new ArrayList<>();
-		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, membersOfDirectoryNotAssigned);
 
 		// we build and link the groups
 		for (Entry<String, List<String>> entry : group2Members.entrySet()) {
@@ -323,7 +329,7 @@ public class ClientTree extends AbstractGroupTree {
 
 		for (String clientId : clientIds) {
 			if (!isClientInAnyDIRECTORYGroup(clientId)) {
-				membersOfDirectoryNotAssigned.add(clientId);
+				group2Members.get(DIRECTORY_NOT_ASSIGNED_NAME).add(clientId);
 
 				DefaultMutableTreeNode node = new DefaultMutableTreeNode(clientId, false);
 				groupNodeDirectoryNotAssigned.add(node);
@@ -333,20 +339,23 @@ public class ClientTree extends AbstractGroupTree {
 		}
 
 		model.nodeStructureChanged(groupNodeDirectory);
+	}
 
+	private static Set<String> getAllowedClients(Map<String, List<String>> group2Members,
+			Set<String> permittedHostGroups) {
 		if (permittedHostGroups == null) {
 			// null means, all are allowed
 			return null;
 		}
 
-		Set<String> allowedClients = new HashSet<>();
+		Set<String> result = new HashSet<>();
 		for (String permittedGroup : permittedHostGroups) {
 			if (group2Members.containsKey(permittedGroup)) {
-				allowedClients.addAll(group2Members.get(permittedGroup));
+				result.addAll(group2Members.get(permittedGroup));
 			}
 		}
 
-		return allowedClients;
+		return result;
 	}
 
 	private boolean isClientInAnyDIRECTORYGroup(String clientId) {

@@ -1,6 +1,8 @@
 ## [4.3.6.x] - 2025-xx-xx
 ### Fixed
 - Correct size in driver upload
+- `NPE` when reloading all data after changing groupaccess for client tree
+- Issue: user-roles not enforced correctly
 
 ### Changed
 - Init tab components at start
