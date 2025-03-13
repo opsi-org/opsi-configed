@@ -147,7 +147,10 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		dialog.setModalityType(ModalityType.MODELESS);
 	}
 
-	public void show() {
+	public void show(String searchName) {
+		if (searchName != null) {
+			loadSearch(searchName);
+		}
 		dialog.setVisible(true);
 	}
 

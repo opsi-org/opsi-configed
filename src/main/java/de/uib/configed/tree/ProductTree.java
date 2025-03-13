@@ -51,9 +51,17 @@ public class ProductTree extends AbstractGroupTree {
 
 		Map<String, DefaultMutableTreeNode> nodeMap = new HashMap<>();
 
+		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
+				.getProductGroupsPD();
+
+		if (!persistenceController.getUserRolesConfigDataService().hasProductGroupsFullPermissionPD()) {
+			Set<String> permittedProductGroups = persistenceController.getUserRolesConfigDataService()
+					.getPermittedProductGroupsPD();
+			productGroups.keySet().retainAll(permittedProductGroups);
+		}
+
 		// Create groups
-		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
-				.getProductGroupsPD().entrySet()) {
+		for (Entry<String, Map<String, String>> groupEntry : productGroups.entrySet()) {
 			GroupNode groupNode = new GroupNode(groupEntry.getKey());
 			nodeMap.put(groupEntry.getKey(), groupNode);
 			groupNodes.put(groupEntry.getKey(), groupNode);
@@ -70,8 +78,7 @@ public class ProductTree extends AbstractGroupTree {
 		groupNodeFullList.setImmutable(true);
 		groupNodeFullList.setFixed(true);
 
-		for (Entry<String, Map<String, String>> groupEntry : persistenceController.getGroupDataService()
-				.getProductGroupsPD().entrySet()) {
+		for (Entry<String, Map<String, String>> groupEntry : productGroups.entrySet()) {
 			if ("null".equals(groupEntry.getValue().get("parentGroupId"))
 					|| nodeMap.get(groupEntry.getValue().get("parentGroupId")) == null) {
 				groupNodeGroups.add(nodeMap.get(groupEntry.getKey()));

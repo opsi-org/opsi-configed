@@ -1,12 +1,4 @@
-## [4.3.7.0] 
-### Fixed
-- Issue: non scrollable notes field in client info panel
-- On some occasions occuring `NPE`, when opsi-configed starts.
-- `NPE` when opening install package dialog after building the package first in "Make opsi package..." dialog 
-- Dialogs rendered improperly after restart (for example, new client dialog)
-- `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
-- WebDAV Functionality Breaks with SSO Integration
-
+## [4.3.7.0] - 2025-xx-xx
 ### Added
 - Feature for selecting multiple groups in host and product tree
 - Show loading screen on search query execution
@@ -14,6 +6,30 @@
 
 ### Changed
 - Switch from opsi-package-manager to opsi-cli
+
+## [4.3.6.8] - 2025-03-13
+### Fixed
+- Correct size in driver upload
+- Issue: `ClientSelectionDialog` UI not properly updated, when clicking on "Edit search" in `SavedSearchesDialog`
+- Issue: user-roles not enforced correctly
+
+### Changed
+- Open new instance of `ClientSelectionDialog`, when clicking on "Create new search" in `SavedSearchesDialog`
+- `NPE` when reloading all data after changing groupaccess for client tree
+- Init tab components at start
+
+## [4.3.6.7] - 2025-03-06
+### Fixed
+- Issue: non scrollable notes field in client info panel
+- Issue: Old selection disappears after changing visible columns in client table
+- On some occasions occuring `NPE`, when opsi-configed starts.
+- `NPE` when opening install package dialog after building the package first in "Make opsi package..." dialog 
+- Dialogs rendered improperly after restart (for example, new client dialog)
+- `JComboBox` resizing issue that caused nearby button to shift or become hidden when the selected value changed or new data was added.
+- WebDAV Functionality Breaks with SSO Integration
+
+### Added
+- Select all products/depots/clients in the trees and list with a click on a button in the tab
 
 ## [4.3.6.5] - 2025-02-24
 ### Fixed

@@ -475,8 +475,15 @@ public final class ClientMenuManager implements MenuListener {
 			}
 
 			if (!persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD()) {
-				jMenuAddClient.setEnabled(false);
 				jMenuCopyClient.setEnabled(false);
+			}
+
+			if (persistenceController.getConfigDataService().getDisabledClientMenuEntries()
+					.contains(UserRolesConfigDataService.ITEM_ADD_CLIENT)) {
+				jMenuAddClient.setEnabled(false);
+			} else {
+				jMenuAddClient.setEnabled(
+						persistenceController.getUserRolesConfigDataService().hasCreateClientPermissionPD());
 			}
 		}
 	}

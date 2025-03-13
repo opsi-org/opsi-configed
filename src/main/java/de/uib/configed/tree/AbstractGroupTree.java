@@ -143,6 +143,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		groupNodes.clear();
 		groups.clear();
 		rootNode.removeAllChildren();
+		groupNodeFullList.removeAllChildren();
+		model.nodeStructureChanged(groupNodeGroups);
 		createTree();
 
 		removeTreeSelectionListener(this);

@@ -95,12 +95,21 @@ public class UserRolesConfigDataService {
 		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, Boolean.class));
 	}
 
+	public boolean hasProductGroupsFullPermissionPD() {
+		return Boolean.TRUE
+				.equals(cacheManager.getCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, Boolean.class));
+	}
+
 	public boolean hasKeyUserRegisterValuePD() {
 		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.KEY_USER_REGISTER_VALUE, Boolean.class));
 	}
 
 	public Set<String> getPermittedProductsPD() {
 		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCTS, Set.class);
+	}
+
+	public Set<String> getPermittedProductGroupsPD() {
+		return cacheManager.getCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, Set.class);
 	}
 
 	public Set<String> getHostGroupsPermitted() {
@@ -165,8 +174,6 @@ public class UserRolesConfigDataService {
 
 			exec.doCall(omc);
 		}
-
-		applyUserSpecializedConfigPD();
 
 		new UserConfigProducing(applyUserSpecializedConfigPD(),
 				persistenceController.getHostInfoCollections().getConfigServer(),
@@ -465,8 +472,9 @@ public class UserRolesConfigDataService {
 		String configKeyList = userPartPD() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
 		Set<String> productGroupsPermitted = new HashSet<>();
 
-		boolean productgroupsFullPermission = checkFullPermission(productGroupsPermitted, configKeyUseList,
+		boolean productGroupsFullPermission = checkFullPermission(productGroupsPermitted, configKeyUseList,
 				configKeyList, serverPropertyMap);
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS_FULL_PERMISSION, productGroupsFullPermission);
 
 		// Add subgroups of permitted groups to permitted groups
 		Map<String, Map<String, String>> productGroups = persistenceController.getGroupDataService()
@@ -478,7 +486,8 @@ public class UserRolesConfigDataService {
 			}
 		}
 
-		if (!productgroupsFullPermission) {
+		if (!productGroupsFullPermission) {
+			cacheManager.setCachedData(CacheIdentifier.PERMITTED_PRODUCT_GROUPS, productGroupsPermitted);
 			setProductsPermitted(productGroupsPermitted);
 		}
 	}

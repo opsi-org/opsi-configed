@@ -71,6 +71,8 @@ public class LeftToolBar extends JToolBar {
 		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
 		jMenuCommandControl
 				.addActionListener(actionEvent -> ExtraFrameController.startEditTerminalCommandsDialog(configedMain));
+		jMenuCommandControl.setEnabled(UserConfig.getCurrentUserConfig()
+				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDCONTROL_ACTIVE));
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
 
