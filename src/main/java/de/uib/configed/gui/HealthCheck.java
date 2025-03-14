@@ -392,6 +392,10 @@ public class HealthCheck extends JPanel {
 			Logging.warning(this, e, "could not insert message into health check dialog");
 		}
 
+		highlightStatusText();
+	}
+
+	private void highlightStatusText() {
 		try {
 			Matcher matcher = pattern.matcher(styledDocument.getText(0, styledDocument.getLength()));
 			while (matcher.find()) {
