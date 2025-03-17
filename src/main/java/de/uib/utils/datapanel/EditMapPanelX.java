@@ -30,6 +30,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigOption.TYPE;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
@@ -54,6 +55,9 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private JMenuItem popupItemAddStringListEntry;
 
 	protected Map<String, Object> originalMap;
+
+	private boolean hasServerFullPermission = PersistenceControllerFactory.getPersistenceController()
+			.getUserRolesConfigDataService().hasServerFullPermissionPD();
 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 		@Override
