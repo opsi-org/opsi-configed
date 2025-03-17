@@ -392,10 +392,18 @@ public class HealthCheck extends JPanel {
 			Logging.warning(this, e, "could not insert message into health check dialog");
 		}
 
-		Matcher matcher = pattern.matcher(textPane.getText());
-		while (matcher.find()) {
-			Style style = getStyle(matcher.group());
-			styledDocument.setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), style, false);
+		highlightStatusText();
+	}
+
+	private void highlightStatusText() {
+		try {
+			Matcher matcher = pattern.matcher(styledDocument.getText(0, styledDocument.getLength()));
+			while (matcher.find()) {
+				Style style = getStyle(matcher.group());
+				styledDocument.setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), style, false);
+			}
+		} catch (BadLocationException e) {
+			Logging.error(this, "failed to retrieve text", e);
 		}
 	}
 
