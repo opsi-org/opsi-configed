@@ -70,7 +70,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 
 	private List<String> theRoles;
 
-	private boolean configStatesEditable;
+	private boolean isServerConfig;
 
 	private JSplitPane splitPane;
 	protected XTree tree;
@@ -86,11 +86,11 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean includeAdditionalTooltipText;
 	private Map<String, Object> originalMap;
 
-	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean configStatesEditable) {
+	public EditMapPanelGroupedForHostConfigs(final DefaultEditMapPanel.Actor actor, boolean isServerConfig) {
 		super(true);
 
 		this.actor = actor;
-		this.configStatesEditable = configStatesEditable;
+		this.isServerConfig = isServerConfig;
 
 		setupLayout();
 
@@ -452,7 +452,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(reloadable, tree, configStatesEditable,
+			EditMapPanelX editMapPanel = new EditMapPanelForHostConfigs(reloadable, tree, isServerConfig,
 					includeAdditionalTooltipText);
 
 			editMapPanel.setActor(actor);
@@ -493,7 +493,7 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
 		Logging.info(this, "entry ", partialPanelEntry, " key ", key);
 
-		if (!configStatesEditable) {
+		if (isServerConfig && !persistenceController.getUserRolesConfigDataService().hasServerFullPermissionPD()) {
 			return false;
 		}
 
