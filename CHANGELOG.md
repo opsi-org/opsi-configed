@@ -6,12 +6,10 @@
 
 ### Changed
 - Switch from opsi-package-manager to opsi-cli
+- Remove possibility to create config in Client and Depot configuration
 
 ### Fixed
 - Highlighting issue in Health Check dialog under Windows
-
-### Changed
-- Remove possibility to create config in Client and Depot configuration
 
 ## [4.3.6.8] - 2025-03-13
 ### Fixed
