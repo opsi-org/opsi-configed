@@ -143,7 +143,7 @@ public class SavedSearchesDialog {
 
 		JMenuItem add = new JMenuItem(Configed.getResourceValue("SavedSearchesDialog.CreateNewSearch"));
 		Icons.addIntellijIconToMenuItem(add, "add");
-		add.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
+		add.addActionListener(event -> ExtraFrameController.callNewClientSelectionDialog(configedMain));
 
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		jPopupMenu.add(reload);

@@ -493,6 +493,10 @@ public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel imple
 	private boolean isEditable(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
 		Logging.info(this, "entry ", partialPanelEntry, " key ", key);
 
+		if (!configStatesEditable) {
+			return false;
+		}
+
 		boolean result;
 
 		if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {

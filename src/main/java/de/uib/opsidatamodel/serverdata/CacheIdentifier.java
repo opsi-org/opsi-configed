@@ -286,14 +286,27 @@ public enum CacheIdentifier {
 	 * return type {@code Set<String>}
 	 */
 	HOST_GROUPS_PERMITTED("host_groups_permitted"),
+
+	/**
+	 * return type {@code Set<String>}
+	 */
+	PERMITTED_PRODUCT_GROUPS("permitted_product_groups"),
+
+	/**
+	 * return type {@code Boolean}
+	 */
+	PRODUCT_GROUPS_FULL_PERMISSION("product_groups_full_permission"),
+
 	/**
 	 * return type {@code Set<String>}
 	 */
 	TERMINAL_FORBIDDEN("terminal_forbidden"),
+
 	/**
 	 * return type {@code Set<String>}
 	 */
 	MOTD_FORBIDDEN("motd_forbidden"), TERMINAL_MENU_ACTIVE("terminal_menu_active"),
+
 	/**
 	 * return type {@code Set<String>}
 	 */
