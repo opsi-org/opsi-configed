@@ -141,6 +141,7 @@ public final class ConnectionErrorReporter {
 		if (dialogOpened) {
 			return;
 		}
+		Logging.clearErrorListAndHide();
 		dialogOpened = true;
 		JPasswordField passwordField = new JPasswordField();
 		JPasswordField otpField = new JPasswordField();

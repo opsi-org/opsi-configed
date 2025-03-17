@@ -384,6 +384,13 @@ public final class Logging {
 		errorList.clear();
 	}
 
+	public static void clearErrorListAndHide() {
+		errorList.clear();
+		if (dialog != null) {
+			dialog.setVisible(false);
+		}
+	}
+
 	// if errors Occurred show a window with the logged errors
 	public static synchronized void checkErrorList() {
 		int errorCount = errorList.size();

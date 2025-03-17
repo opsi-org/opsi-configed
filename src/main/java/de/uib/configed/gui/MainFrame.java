@@ -45,6 +45,7 @@ import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
+import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
@@ -217,26 +218,49 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	public void reconnectOTP(String otp) {
-		// // only close the instance works
+		try {
+			Messagebus.getInstance().disconnect();
+			Messagebus.getInstance().getWebSocket().close();
+		} catch (Exception e) {
+			Logging.error(e, "error disconnecting messagebus");
+		}
 		ConfigedMain.closeInstance(false);
-		// // close all errors
-		// ConnectionErrorReporter.destroyInstance();
-		// // Messagebus.getInstance().disconnect();
-
 		// // ConfigedMain.setHost(null);
 		// // ConfigedMain.setUser(null);
 		// // ConfigedMain.setPassword(null);
-		// // ConfigedMain.setUseSSO(false);
-		// ConfigedMain.setOTP(otp);
-		// CacheManager.getInstance().clearAllCachedData();
+		// ConfigedMain.setUseSSO(false);
+		ConfigedMain.setOTP(otp);
+		CacheManager.getInstance().clearAllCachedData();
 		// Configed.getSavedStates().removeAll();
-		// resetData();
+		resetData();
 
 		// // We need to reset the validators so that new ones will be created when reconnecting
-		// CertificateValidatorFactory.resetCertificateValidators();
+		CertificateValidatorFactory.resetCertificateValidators();
 
-		restartConfiged(false);
+		restartConfiged();
 	}
+
+	// public void reconnectOTP(String otp) {
+	// 	// // only close the instance works
+	// 	ConfigedMain.closeInstance(false);
+	// 	// // close all errors
+	// 	// ConnectionErrorReporter.destroyInstance();
+	// 	// // Messagebus.getInstance().disconnect();
+
+	// 	// // ConfigedMain.setHost(null);
+	// 	// // ConfigedMain.setUser(null);
+	// 	// // ConfigedMain.setPassword(null);
+	// 	// // ConfigedMain.setUseSSO(false);
+	// 	// ConfigedMain.setOTP(otp);
+	// 	// CacheManager.getInstance().clearAllCachedData();
+	// 	// Configed.getSavedStates().removeAll();
+	// 	// resetData();
+
+	// 	// // We need to reset the validators so that new ones will be created when reconnecting
+	// 	// CertificateValidatorFactory.resetCertificateValidators();
+
+	// 	// restartConfiged(false);
+	// }
 
 	public void resetData() {
 		mainPanelManager.resetData();

@@ -169,7 +169,8 @@ public class OpsiServiceNOMPersistenceController {
 			Logging.warning("ONOMPC useSSO true");
 			exec = new ServerFacade(server);
 		} else {
-			Logging.warning("ONOMPC useSSO false");
+			Logging.warning("ONOMPC useSSO false server ", server, " user ", user, " password ", password.length(),
+					" otp ", otp);
 			exec = new ServerFacade(server, user, password, otp);
 		}
 
