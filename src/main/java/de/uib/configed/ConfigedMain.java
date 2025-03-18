@@ -1122,6 +1122,7 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
+		String selectedGroup = getActivatedGroupModel().getGroupName();
 		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotsListSelectionListener);
 
@@ -1155,6 +1156,7 @@ public class ConfigedMain {
 		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
 		Logging.debug(this, " reset the values, particularly in list ");
+		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.activateListSelectionListener();
 		depotsList.addListSelectionListener(depotsListSelectionListener);
