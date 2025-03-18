@@ -1,6 +1,7 @@
 ## [4.3.6.X] - XXXX-XX-XX
 ### Fixed
 - Highlighting issue in Health Check dialog under Windows
+- Issue: cancel selection buttons incorrectly shown after full reload
 
 ### Changed
 - Remove possibility to create config in Client and Depot configuration
