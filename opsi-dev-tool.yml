@@ -19,8 +19,5 @@ project:
 
 # command to create changelos: `opsi-dev-tool -l 5 changelog from-git output`
 # command to create git tag: `opsi-dev-cli git-tag` (https://gitlab.uib.gmbh/uib/opsi-webgui/-/blob/v5/CONTRIBUTING.md#release)
-# todo / discussion 
-# - opsi-dev-tool: possibility to update xml files (version)
-# - opsi-dev-tool: add default changelog, the commit messages should be added
-# - updating version date in file/s:
-#   Globals.java:	{ ... public static final String VERDATE = "2025-03-13"; ... } 
+
+# todo / discussion / open questions: https://gitlab.uib.gmbh/uib/opsi-configed/-/merge_requests/305
