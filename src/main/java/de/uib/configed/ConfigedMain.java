@@ -1186,6 +1186,8 @@ public class ConfigedMain {
 		mainFrame.deactivateLoadingPane();
 
 		updatePage();
+
+		initTabComponents();
 	}
 
 	private static void updatePage() {
