@@ -1,0 +1,17 @@
+project:
+  name: opsi-configed
+  summary: opsi-configed management interface
+  description: opsi-configed management interface for the client management system opsi
+  homepage: https://www.opsi.org
+  maintainer: uib GmbH info@uib.de
+  licenses:
+    - license: AGPL-3.0
+  # version is currently not important, since we are not using it for changelogs. 
+  # It may be used in the future for opsi-dev-tools git-tag command
+  version: "{{version}}"
+  version_files:
+    # pom.xml: 'project.version' # yml not supported now
+    # other examples:
+    # opsi-dev-tool.yml: pull-binaries[0].version
+    # frontend/package.json: '$.version'
+    # backend/addon/webgui/python/const.py: 'ADDON_VERSION'
