@@ -89,8 +89,6 @@ public class ConfigedMain {
 	private String clientInDepot = "";
 	private HostInfo hostInfo = new HostInfo();
 
-	private Set<String> allowedClients;
-
 	// collection of retrieved software audit and hardware maps
 
 	private ClientTablePanel clientTablePanel;
