@@ -1,4 +1,4 @@
-## [4.3.7.0] - 2025-xx-xx
+## [4.3.7.0] - 2025-02-18
 ### Added
 - Feature for selecting multiple groups in host and product tree
 - Show loading screen on search query execution
