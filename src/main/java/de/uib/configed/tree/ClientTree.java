@@ -167,7 +167,7 @@ public class ClientTree extends AbstractGroupTree {
 		return allowedClients;
 	}
 
-	public Set<String> build(Collection<String> allPCs, Set<String> permittedHostGroups) {
+	public void build(Collection<String> allPCs, Set<String> permittedHostGroups) {
 		Logging.debug(this, "build, rebuildTree, allPCs  " + allPCs + " size " + allPCs.size());
 		Logging.info(this, "build, permittedHostGroups ", permittedHostGroups);
 
@@ -188,8 +188,6 @@ public class ClientTree extends AbstractGroupTree {
 		if (allowedClients != null) {
 			Logging.info(this, "build, allowedClients ", allowedClients.size());
 		}
-
-		return allowedClients;
 	}
 
 	public void clear() {
