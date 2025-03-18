@@ -1123,6 +1123,10 @@ public class ConfigedMain {
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
 		String selectedGroup = getActivatedGroupModel().getGroupName();
+		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
+				.getProductTable().getSelectedIDs();
+		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
+				.getProductTable().getSelectedIDs();
 		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotsListSelectionListener);
 
@@ -1156,9 +1160,20 @@ public class ConfigedMain {
 		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
 		Logging.debug(this, " reset the values, particularly in list ");
+
 		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.activateListSelectionListener();
+		clientTree.produceActiveParents();
+		clientTree.updateSelectedObjectsInTable();
+
+		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+				.setSelection(selectedLocalbootProducts);
+		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+				.setSelection(selectedNetbootProducts);
+		productTree.produceActiveParents();
+		productTree.updateSelectedObjectsInTable();
+
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 
 		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
