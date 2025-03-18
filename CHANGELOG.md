@@ -10,6 +10,8 @@
 
 ### Fixed
 - Highlighting issue in Health Check dialog under Windows
+- Issue: lost selection after full reload
+- Issue: cancel selection buttons incorrectly shown after full reload
 
 ## [4.3.6.8] - 2025-03-13
 ### Fixed
