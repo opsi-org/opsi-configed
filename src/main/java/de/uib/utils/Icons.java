@@ -101,7 +101,7 @@ public final class Icons {
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
-	public static FlatSVGIcon getOpsiModulesIcon() {
+	public static FlatSVGIcon getOpsiModulesIcon(int size) {
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 
@@ -130,7 +130,7 @@ public final class Icons {
 			}
 		}
 
-		return getOpsiIcon(32, iconColor);
+		return getOpsiIcon(size, iconColor);
 	}
 
 	public static FlatSVGIcon getIntellijIcon(String iconName, Color color) {

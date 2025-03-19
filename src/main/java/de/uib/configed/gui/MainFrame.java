@@ -39,6 +39,7 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
@@ -173,6 +174,52 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuFile.add(jMenuFileExit);
 
 		return jMenuFile;
+	}
+
+	private JMenu createJMenuView() {
+		JMenu jMenuView = new JMenu(Configed.getResourceValue("MainFrame.jMenuView"));
+
+		JMenuItem jMenuViewClientsConfiguration = new JMenuItem(
+				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+		jMenuViewClientsConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.CLIENTS));
+		Icons.addIntellijIconToMenuItem(jMenuViewClientsConfiguration, "desktop");
+
+		JMenuItem jMenuViewDepotConfiguration = new JMenuItem(Configed.getResourceValue("depotConfiguration"));
+		jMenuViewDepotConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.DEPOTS));
+		Icons.addIntellijIconToMenuItem(jMenuViewDepotConfiguration, "dbms");
+
+		JMenuItem jMenuViewServerConfiguration = new JMenuItem(
+				Configed.getResourceValue("MainFrame.labelServerConfiguration"));
+		jMenuViewServerConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.SERVER));
+		Icons.addIntellijIconToMenuItem(jMenuViewServerConfiguration, "settings");
+
+		JMenuItem jMenuViewDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
+		jMenuViewDashboard.addActionListener(event -> leftControlBar.selectView(EditingTarget.DASHBOARD));
+		Icons.addIntellijIconToMenuItem(jMenuViewDashboard, "dataSchema");
+
+		JMenuItem jMenuViewOpsiModuleInformation = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), Icons.getOpsiModulesIcon(16));
+		jMenuViewOpsiModuleInformation
+				.addActionListener(event -> leftControlBar.selectView(EditingTarget.OPSI_MODULES));
+
+		JMenuItem jMenuViewHealthCheck = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		jMenuViewHealthCheck.addActionListener(event -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK));
+		Icons.addIntellijIconToMenuItem(jMenuViewHealthCheck, "springBootHealth");
+
+		JMenuItem jMenuViewLicenseManagement = new JMenuItem(Configed.getResourceValue("MainFrame.labelLicenses"));
+		jMenuViewLicenseManagement
+				.addActionListener(event -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT));
+		Icons.addIntellijIconToMenuItem(jMenuViewLicenseManagement, "scriptingScript");
+
+		jMenuView.add(jMenuViewClientsConfiguration);
+		jMenuView.add(jMenuViewDepotConfiguration);
+		jMenuView.add(jMenuViewServerConfiguration);
+		jMenuView.add(jMenuViewDashboard);
+		jMenuView.add(jMenuViewOpsiModuleInformation);
+		jMenuView.add(jMenuViewHealthCheck);
+		jMenuView.add(jMenuViewLicenseManagement);
+
+		return jMenuView;
 	}
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
@@ -457,6 +504,7 @@ public class MainFrame extends JFrame implements KeyListener {
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(createJMenuFile());
+		jMenuBar.add(createJMenuView());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
 
