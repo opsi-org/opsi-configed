@@ -1110,6 +1110,7 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
+		Logging.devel(this, "sel value list " + selValuesList);
 		String selectedGroup = getActivatedGroupModel().getGroupName();
 		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
 				.getProductTable().getSelectedIDs();
@@ -1144,6 +1145,8 @@ public class ConfigedMain {
 				clientsLeft.add(client);
 			}
 		}
+
+		selectedClients = new ArrayList<>(clientsLeft);
 
 		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
