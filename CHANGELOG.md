@@ -1,3 +1,7 @@
+## [4.3.7.X] - XXXX-XX-XX
+### Fixed
+- Issue: after reloading all data, the properties for the products (localboot and netboot) are gone.
+
 ## [4.3.7.0] - 2025-02-18
 ### Added
 - Feature for selecting multiple groups in host and product tree
