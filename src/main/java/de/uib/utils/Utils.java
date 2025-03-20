@@ -75,9 +75,8 @@ public final class Utils {
 		JTextArea jTextArea = new JTextArea(message.toString());
 		jTextArea.setEditable(false);
 		jTextArea.setCaretPosition(0);
-		JScrollPane jScrollPane = new JScrollPane(jTextArea);
 
-		JOptionPane.showMessageDialog(parent, jScrollPane,
+		JOptionPane.showMessageDialog(parent, jTextArea,
 				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME,
 				JOptionPane.PLAIN_MESSAGE);
 	}
