@@ -124,6 +124,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 			date = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL);
 		}
 		textArea.setText(text);
+		markdownPreview.setText(text != null ? text : "");
 		if (date == null) {
 			date = "0";
 		}
