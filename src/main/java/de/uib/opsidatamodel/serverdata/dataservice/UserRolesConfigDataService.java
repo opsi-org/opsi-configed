@@ -66,7 +66,7 @@ public class UserRolesConfigDataService {
 	public static final String CONFIG_CLIENTD_EVENT_STARTUP = "opsiclientd.event_gui_startup.active";
 	public static final String CONFIG_CLIENTD_EVENT_STARTUP_USER = "opsiclientd.event_gui_startup{user_logged_in}.active";
 	public static final String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";
-	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "event_net_connection.active";
+	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "opsiclientd.event_net_connection.active";
 
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;

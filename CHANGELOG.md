@@ -5,6 +5,7 @@
 ### Fixed
 - Issue: after reloading all data, the properties for the products (localboot and netboot) are gone.
 - Correct location of list selection dialog in health check client selection and property editing
+- Create the correct config `opsiclientd.event_net_connection.active` and not `event_net_connection.active`
 
 ## [4.3.7.0] - 2025-02-18
 ### Added
