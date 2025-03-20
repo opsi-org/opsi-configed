@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import de.uib.utils.logging.Logging;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -167,8 +168,10 @@ public class DateTimePicker extends DatePicker {
 			return;
 		}
 
-		getEditor().setText(dateTime.format(formatter));
-		Logging.debug("DateTimePicker setDateTimeValue new editor: ", getEditor().getText());
+		Platform.runLater(() -> {
+			getEditor().setText(dateTime.format(formatter));
+			Logging.debug("DateTimePicker setDateTimeValue new editor: ", getEditor().getText());
+		});
 		if (notify) {
 			if (caller == null) {
 				Logging.warning("Caller is null");
@@ -206,15 +209,12 @@ public class DateTimePicker extends DatePicker {
 			LocalDateTime value = object == null ? null : getDateTimeValue();
 			String s = (value != null) ? value.format(formatter) : "";
 			Logging.trace("DateTimePicker InternalConverter toString is: ", s);
-			setDateTimeValue(value);
 			return s;
 		}
 
 		public LocalDate fromString(String value) {
 			Logging.trace("DateTimePicker InternalConverter fromString: ", value);
 			if (value == null || "0".equals(value) || "".equals(value)) {
-				setDateTimeValue(null);
-
 				return null;
 			}
 			LocalDateTime currValue = getDateTimeValue();
@@ -222,8 +222,6 @@ public class DateTimePicker extends DatePicker {
 				LocalDateTime currValue2 = LocalDateTime.parse(value, formatter);
 				if (currValue2.compareTo(datetimeNow()) <= 0) {
 					Logging.error("DateTime Error: Date is in the past. Set datetime to now.");
-					setDateTimeValue(currValue);
-
 					return datetimeNow().toLocalDate();
 				}
 				currValue = currValue2;
@@ -231,7 +229,6 @@ public class DateTimePicker extends DatePicker {
 				Logging.error(e, "DateTime InternalConverter Error. Set previous value.");
 			}
 
-			setDateTimeValue(currValue);
 			return currValue.toLocalDate();
 		}
 	}
