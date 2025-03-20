@@ -33,7 +33,7 @@ public class SingleCommandOpsiPackageManagerUninstall extends SingleCommandOpsiP
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SingleCommandOpsiPackageManagerUninstall.title");
+		return Configed.getResourceValue("PackageManagerUninstallParameterDialog.title");
 	}
 
 	@Override
