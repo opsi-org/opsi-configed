@@ -4,6 +4,7 @@
 
 ### Fixed
 - Issue: after reloading all data, the properties for the products (localboot and netboot) are gone.
+- `NPEs` occuring when opening "Message of the day" dialog
 
 ## [4.3.7.0] - 2025-02-18
 ### Added
