@@ -1,4 +1,7 @@
 ## [4.3.7.X] - XXXX-XX-XX
+## Changed
+- Enable copy & paste in "About opsi-configed" dialog
+
 ### Fixed
 - Issue: after reloading all data, the properties for the products (localboot and netboot) are gone.
 

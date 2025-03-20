@@ -29,6 +29,7 @@ import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -71,7 +72,11 @@ public final class Utils {
 		message.append("running on java version " + COMPLETE_VERSION_INFO + "\n");
 		message.append("on architecture " + System.getProperty("os.arch"));
 
-		JOptionPane.showMessageDialog(parent, message,
+		JTextArea jTextArea = new JTextArea(message.toString());
+		jTextArea.setEditable(false);
+		jTextArea.setCaretPosition(0);
+
+		JOptionPane.showMessageDialog(parent, jTextArea,
 				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME,
 				JOptionPane.PLAIN_MESSAGE);
 	}
