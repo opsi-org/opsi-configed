@@ -340,33 +340,33 @@ public class ConfigedMain {
 		editingTarget = newEditingTarget;
 
 		switch (editingTarget) {
-		case CLIENTS:
-			mainFrame.showClientConfiguration();
-			break;
+			case CLIENTS:
+				mainFrame.showClientConfiguration();
+				break;
 
-		case DEPOTS:
-			mainFrame.showDepotConfiguration();
-			break;
+			case DEPOTS:
+				mainFrame.showDepotConfiguration();
+				break;
 
-		case SERVER:
-			mainFrame.showServerConfiguration();
-			break;
+			case SERVER:
+				mainFrame.showServerConfiguration();
+				break;
 
-		case DASHBOARD:
-			mainFrame.showDashboard();
-			break;
+			case DASHBOARD:
+				mainFrame.showDashboard();
+				break;
 
-		case OPSI_MODULES:
-			mainFrame.showOpsiModules();
-			break;
+			case OPSI_MODULES:
+				mainFrame.showOpsiModules();
+				break;
 
-		case HEALTH_CHECK:
-			mainFrame.showHealthDataAction();
-			break;
+			case HEALTH_CHECK:
+				mainFrame.showHealthDataAction();
+				break;
 
-		case LICENSE_MANAGEMENT:
-			mainFrame.startLicensingManagement();
-			break;
+			case LICENSE_MANAGEMENT:
+				mainFrame.startLicensingManagement();
+				break;
 		}
 	}
 
@@ -811,8 +811,10 @@ public class ConfigedMain {
 
 		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
 
-		// We want to deactivate the listener here, since we want it to react only later when
-		// the values are selected. We only reactivate the listener if it was active before.
+		// We want to deactivate the listener here, since we want it to react only later
+		// when
+		// the values are selected. We only reactivate the listener if it was active
+		// before.
 		boolean listenerDeactivated = clientTablePanel.deactivateListSelectionListener();
 		clientTablePanel.getClientTable().updateModel(tm);
 		if (listenerDeactivated) {
@@ -1077,8 +1079,10 @@ public class ConfigedMain {
 		depots = persistenceController.getHostInfoCollections().getDepots();
 		List<String> oldSelection = depotsList.getSelectedValuesList();
 
-		// Setting the list data will remove old selection. To prevent doing events twice
-		// we set the flag that value is adjusting, because we will set the selected values again.
+		// Setting the list data will remove old selection. To prevent doing events
+		// twice
+		// we set the flag that value is adjusting, because we will set the selected
+		// values again.
 		// Both actions will then be united into one event only
 		depotsList.setValueIsAdjusting(true);
 		depotsList.setListData(persistenceController.getHostInfoCollections().getDepotNamesList());
@@ -1110,7 +1114,6 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		Logging.devel(this, "sel value list " + selValuesList);
 		String selectedGroup = getActivatedGroupModel().getGroupName();
 		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
 				.getProductTable().getSelectedIDs();
@@ -1298,7 +1301,8 @@ public class ConfigedMain {
 				// Do when closing without option
 			}
 
-			// We set editing target because after restarting the configed, we will show this panel!
+			// We set editing target because after restarting the configed, we will show
+			// this panel!
 			editingTarget = EditingTarget.CLIENTS;
 		}
 
