@@ -89,7 +89,7 @@ public final class HealthCheckSettingsDialog {
 		});
 		selectedHosts.setText(Utils.getListStringRepresentation(defaultSelection));
 
-		selectedHostList = new ListSelectionDialog(dialog,
+		selectedHostList = new ListSelectionDialog(null,
 				Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
 		List<String> hostNames = new ArrayList<>(persistenceController.getHostInfoCollections().getDepotNamesList());
 		hostNames.addAll(persistenceController.getHostInfoCollections().getOpsiHostNames());
@@ -176,7 +176,8 @@ public final class HealthCheckSettingsDialog {
 		// Get the selection to restore it if the user cancels the dialog
 		List<String> previousSelection = selectedHostList.getSelectedValues();
 
-		selectedHostList.show();
+		// We need to give dialog as an argument because dialog was not yet created at the time we created the dialog
+		selectedHostList.show(dialog);
 
 		if (selectedHostList.wasAccepted()) {
 			selectedHosts.setText(Utils.getListStringRepresentation(selectedHostList.getSelectedValues()));

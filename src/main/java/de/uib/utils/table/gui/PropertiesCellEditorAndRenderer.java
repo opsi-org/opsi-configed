@@ -101,7 +101,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		unusedfield = new JLabel();
 
-		listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(), null, true);
+		listSelectionDialog = new ListSelectionDialog(null, null, true);
 		listSelectionDialog.setMultiSelection();
 	}
 
@@ -119,7 +119,8 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 			return null;
 		}
@@ -199,7 +200,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(value));
 		listSelectionDialog.setEditable(modelProducer.isEditable(row));
-		listSelectionDialog.show();
+		listSelectionDialog.show(ConfigedMain.getMainFrame());
 
 		// We should put this code into invokeLater, because otherwise we will call stop 
 		// or cancel editing before it actually began. Editing would not have an effect
