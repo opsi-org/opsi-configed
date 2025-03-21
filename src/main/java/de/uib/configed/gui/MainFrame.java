@@ -218,6 +218,14 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuViewLicenseManagement.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(jMenuViewLicenseManagement, "scriptingScript");
 
+		JMenuItem nextView = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuViewNextView"));
+		nextView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK));
+		nextView.addActionListener(event -> switchView(true));
+
+		JMenuItem prevView = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuViewPreviousView"));
+		prevView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_DOWN_MASK));
+		prevView.addActionListener(event -> switchView(false));
+
 		jMenuView.add(jMenuViewClientsConfiguration);
 		jMenuView.add(jMenuViewDepotConfiguration);
 		jMenuView.add(jMenuViewServerConfiguration);
@@ -225,6 +233,9 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuView.add(jMenuViewOpsiModuleInformation);
 		jMenuView.add(jMenuViewHealthCheck);
 		jMenuView.add(jMenuViewLicenseManagement);
+		jMenuView.addSeparator();
+		jMenuView.add(nextView);
+		jMenuView.add(prevView);
 
 		return jMenuView;
 	}
@@ -674,20 +685,47 @@ public class MainFrame extends JFrame implements KeyListener {
 		}
 
 		if (e.isControlDown()) {
-			switchViewBasedOnKeyCode(e.getKeyCode());
+			int keyCode = e.getKeyCode();
+			if (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_7) {
+				switchViewBasedOnViewIndex(keyCode - KeyEvent.VK_0);
+			} else if (keyCode == KeyEvent.VK_DOWN) {
+				switchView(true);
+			} else if (keyCode == KeyEvent.VK_UP) {
+				switchView(false);
+			} else {
+				Logging.info(this, "Unknown key combination");
+			}
 		}
 	}
 
-	private void switchViewBasedOnKeyCode(int keyCode) {
-		switch (keyCode) {
-		case KeyEvent.VK_1 -> leftControlBar.selectView(EditingTarget.CLIENTS);
-		case KeyEvent.VK_2 -> leftControlBar.selectView(EditingTarget.DEPOTS);
-		case KeyEvent.VK_3 -> leftControlBar.selectView(EditingTarget.SERVER);
-		case KeyEvent.VK_4 -> leftControlBar.selectView(EditingTarget.DASHBOARD);
-		case KeyEvent.VK_5 -> leftControlBar.selectView(EditingTarget.OPSI_MODULES);
-		case KeyEvent.VK_6 -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK);
-		case KeyEvent.VK_7 -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT);
-		default -> Logging.info(this, "Unknown key combination CTRL+" + keyCode);
+	private void switchView(boolean isNext) {
+		EditingTarget editingTarget = ConfigedMain.getEditingTarget();
+		int currentView = editingTarget.ordinal() + 1;
+		int targetView = currentView;
+
+		targetView += isNext ? 1 : -1;
+
+		if (targetView < 1) {
+			targetView = 7;
+		} else if (targetView > 7) {
+			targetView = 1;
+		} else {
+			// Not needed.
+		}
+
+		switchViewBasedOnViewIndex(targetView);
+	}
+
+	private void switchViewBasedOnViewIndex(int index) {
+		switch (index) {
+		case 1 -> leftControlBar.selectView(EditingTarget.CLIENTS);
+		case 2 -> leftControlBar.selectView(EditingTarget.DEPOTS);
+		case 3 -> leftControlBar.selectView(EditingTarget.SERVER);
+		case 4 -> leftControlBar.selectView(EditingTarget.DASHBOARD);
+		case 5 -> leftControlBar.selectView(EditingTarget.OPSI_MODULES);
+		case 6 -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK);
+		case 7 -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT);
+		default -> Logging.info(this, "Unknown view index" + index);
 		}
 	}
 
