@@ -182,33 +182,40 @@ public class MainFrame extends JFrame implements KeyListener {
 		JMenuItem jMenuViewClientsConfiguration = new JMenuItem(
 				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jMenuViewClientsConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.CLIENTS));
+		jMenuViewClientsConfiguration.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(jMenuViewClientsConfiguration, "desktop");
 
 		JMenuItem jMenuViewDepotConfiguration = new JMenuItem(Configed.getResourceValue("depotConfiguration"));
 		jMenuViewDepotConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.DEPOTS));
+		jMenuViewDepotConfiguration.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(jMenuViewDepotConfiguration, "dbms");
 
 		JMenuItem jMenuViewServerConfiguration = new JMenuItem(
 				Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 		jMenuViewServerConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.SERVER));
+		jMenuViewServerConfiguration.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(jMenuViewServerConfiguration, "settings");
 
 		JMenuItem jMenuViewDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
 		jMenuViewDashboard.addActionListener(event -> leftControlBar.selectView(EditingTarget.DASHBOARD));
+		jMenuViewDashboard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(jMenuViewDashboard, "dataSchema");
 
 		JMenuItem jMenuViewOpsiModuleInformation = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), Icons.getOpsiModulesIcon(16));
 		jMenuViewOpsiModuleInformation
 				.addActionListener(event -> leftControlBar.selectView(EditingTarget.OPSI_MODULES));
+		jMenuViewOpsiModuleInformation.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK));
 
 		JMenuItem jMenuViewHealthCheck = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jMenuViewHealthCheck.addActionListener(event -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK));
 		Icons.addIntellijIconToMenuItem(jMenuViewHealthCheck, "springBootHealth");
+		jMenuViewHealthCheck.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK));
 
 		JMenuItem jMenuViewLicenseManagement = new JMenuItem(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jMenuViewLicenseManagement
 				.addActionListener(event -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT));
+		jMenuViewLicenseManagement.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(jMenuViewLicenseManagement, "scriptingScript");
 
 		jMenuView.add(jMenuViewClientsConfiguration);
@@ -661,8 +668,26 @@ public class MainFrame extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		Logging.devel(this, "control is down " + e.isControlDown());
 		if ((e.isControlDown() && e.isShiftDown()) && e.getKeyCode() == KeyEvent.VK_I) {
 			configedMain.invertSelection();
+		}
+
+		if (e.isControlDown()) {
+			switchViewBasedOnKeyCode(e.getKeyCode());
+		}
+	}
+
+	private void switchViewBasedOnKeyCode(int keyCode) {
+		switch (keyCode) {
+		case KeyEvent.VK_1 -> leftControlBar.selectView(EditingTarget.CLIENTS);
+		case KeyEvent.VK_2 -> leftControlBar.selectView(EditingTarget.DEPOTS);
+		case KeyEvent.VK_3 -> leftControlBar.selectView(EditingTarget.SERVER);
+		case KeyEvent.VK_4 -> leftControlBar.selectView(EditingTarget.DASHBOARD);
+		case KeyEvent.VK_5 -> leftControlBar.selectView(EditingTarget.OPSI_MODULES);
+		case KeyEvent.VK_6 -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK);
+		case KeyEvent.VK_7 -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT);
+		default -> Logging.info(this, "Unknown key combination CTRL+" + keyCode);
 		}
 	}
 
