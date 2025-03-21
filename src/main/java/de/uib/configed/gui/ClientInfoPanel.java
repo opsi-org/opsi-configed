@@ -151,7 +151,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		checkBoxHealthCheckActive = new FlatTriStateCheckBox(
 				Configed.getResourceValue("NewClientDialog.healthCheckActive"));
 		checkBoxHealthCheckActive.setAllowIndeterminate(false);
-		checkBoxHealthCheckActive.addActionListener(event -> wanConfigAction());
 		checkBoxHealthCheckActive.setFocusable(false);
 		checkBoxHealthCheckActive.setEnabled(false);
 		checkBoxHealthCheckActive.setSelected(persistenceController.getHealthDataService()

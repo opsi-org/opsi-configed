@@ -67,7 +67,7 @@ public class SingleCommandPackageUpdater implements SingleCommand, CommandWithPa
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SingleCommandPackageUpdater.title");
+		return Configed.getResourceValue("PackageUpdaterDialog.title");
 	}
 
 	@Override

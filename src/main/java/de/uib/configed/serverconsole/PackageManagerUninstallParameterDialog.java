@@ -188,6 +188,8 @@ public class PackageManagerUninstallParameterDialog {
 		jLabelUninstall.setFont(jLabelUninstall.getFont().deriveFont(Font.BOLD));
 		jLabelUninstall.setText(Configed.getResourceValue("PackageManagerUninstallParameterDialog.jLabelUninstall"));
 
+		jLabelLoglevel.setFont(jLabelLoglevel.getFont().deriveFont(Font.BOLD));
+
 		jComboBoxLogLevel = new JComboBox<>();
 		for (int i = 3; i <= 9; i++) {
 			jComboBoxLogLevel.addItem(i);

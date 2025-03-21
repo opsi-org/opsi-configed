@@ -66,7 +66,7 @@ public class UserRolesConfigDataService {
 	public static final String CONFIG_CLIENTD_EVENT_STARTUP = "opsiclientd.event_gui_startup.active";
 	public static final String CONFIG_CLIENTD_EVENT_STARTUP_USER = "opsiclientd.event_gui_startup{user_logged_in}.active";
 	public static final String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";
-	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "event_net_connection.active";
+	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "opsiclientd.event_net_connection.active";
 
 	private CacheManager cacheManager;
 	private AbstractPOJOExecutioner exec;
@@ -139,9 +139,6 @@ public class UserRolesConfigDataService {
 				doesUserBelongToSystemsReadOnlyGroup()));
 		executor.waitForCompletion();
 
-		Map<String, List<Object>> serverPropertyMap = persistenceController.getConfigDataService()
-				.getConfigDefaultValuesPD();
-
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
@@ -163,8 +160,8 @@ public class UserRolesConfigDataService {
 			keyUserRegisterValue = checkUserRolesModulePD();
 		}
 
-		if (serverPropertyMap.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null
-				|| setUserRegisterVal) {
+		if (persistenceController.getConfigDataService().getConfigDefaultValuesPD()
+				.get(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER) == null || setUserRegisterVal) {
 			List<Object> readyObjects = new ArrayList<>();
 			Map<String, Object> item = Utils.createNOMBoolConfig(OpsiServiceNOMPersistenceController.KEY_USER_REGISTER,
 					keyUserRegisterValue, "without given values the primary value setting is false");
