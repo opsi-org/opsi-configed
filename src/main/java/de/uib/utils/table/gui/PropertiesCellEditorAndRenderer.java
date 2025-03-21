@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -107,10 +108,25 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	private void actOnEditorComponentAction(JTextField editorComponent) {
 		String newItem = editorComponent.getText();
-		comboBox.addItem(newItem);
+		if (!containsItem(newItem)) {
+			comboBox.addItem(newItem);
+		}
 		comboBox.setSelectedItem(newItem);
 
 		stopCellEditing();
+	}
+
+	private boolean containsItem(String item) {
+		ComboBoxModel<String> model = comboBox.getModel();
+		int size = model.getSize();
+
+		for (int i = 0; i < size; i++) {
+			if (item.equals(model.getElementAt(i))) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
@@ -173,8 +189,11 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	private Component getSingleValueEditor(String key, Object value, int row) {
 		selectionMode = SINGLE_SELECTION;
 
-		comboBox.setModel(new DefaultComboBoxModel<>(
-				modelProducer.getListCellOptions(key).getPossibleValues().toArray(new String[0])));
+		ComboBoxModel<String> comboBoxModel = comboBox.getModel();
+		if (comboBoxModel == null || comboBoxModel.getSize() == 0) {
+			comboBox.setModel(new DefaultComboBoxModel<>(
+					modelProducer.getListCellOptions(key).getPossibleValues().toArray(new String[0])));
+		}
 		if (((List<?>) value).isEmpty()) {
 			comboBox.setSelectedItem(null);
 		} else {
