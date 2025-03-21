@@ -1,6 +1,6 @@
 ## [4.3.7.X] - XXXX-XX-XX
 ### Added
-- View menu for navigating main views alongside keyshortcuts (and circular navigation)
+- View menu for navigating main views alongside key shortcuts (and circular navigation)
 
 ## [4.3.7.1] - 2025-02-20
 ## Changed
