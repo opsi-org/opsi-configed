@@ -1,3 +1,8 @@
+## [4.3.8.X] - XXXX-XX-XX
+### Added
+- View menu for navigating main views alongside key shortcuts (and circular navigation)
+
+
 ## [4.3.7.3] - 2025-03-24
 ### Fixed
 - Don't add newly added options for single-value property-keys to the wrong properties

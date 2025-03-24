@@ -6,6 +6,9 @@
 
 package de.uib.configed.gui;
 
+import java.util.Enumeration;
+
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
@@ -20,6 +23,8 @@ import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 
 public class LeftControlBar extends JToolBar {
+	private ButtonGroup buttonGroup;
+
 	public LeftControlBar() {
 		super(SwingConstants.VERTICAL);
 
@@ -48,7 +53,7 @@ public class LeftControlBar extends JToolBar {
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DASHBOARD));
 
-		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiModulesIcon());
+		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiModulesIcon(32));
 		jButtonOpsiLicenses.setSelectedIcon(
 				Icons.getOpsiIcon(32, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT));
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
@@ -64,7 +69,7 @@ public class LeftControlBar extends JToolBar {
 		jButtonLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelLicenses"));
 		jButtonLicenses.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.LICENSE_MANAGEMENT));
 
-		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup = new ButtonGroup();
 		buttonGroup.add(jButtonClientsConfiguration);
 		buttonGroup.add(jButtonDepotsConfiguration);
 		buttonGroup.add(jButtonServerConfiguration);
@@ -80,5 +85,58 @@ public class LeftControlBar extends JToolBar {
 		add(jButtonOpsiLicenses);
 		add(jButtonHealthCheck);
 		add(jButtonLicenses);
+	}
+
+	public void selectView(EditingTarget editingTarget) {
+		Enumeration<AbstractButton> elements = buttonGroup.getElements();
+
+		while (elements.hasMoreElements()) {
+			AbstractButton element = elements.nextElement();
+			String toolTipText = element.getToolTipText();
+
+			switch (editingTarget) {
+			case CLIENTS:
+				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.labelClientsConfiguration"),
+						toolTipText);
+				break;
+
+			case DEPOTS:
+				activateButtonIfMatched(element, Configed.getResourceValue("depotConfiguration"), toolTipText);
+				break;
+
+			case SERVER:
+				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.labelServerConfiguration"),
+						toolTipText);
+				break;
+
+			case DASHBOARD:
+				activateButtonIfMatched(element, Configed.getResourceValue("Dashboard.title"), toolTipText);
+				break;
+
+			case OPSI_MODULES:
+				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
+						toolTipText);
+				break;
+
+			case HEALTH_CHECK:
+				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"),
+						toolTipText);
+				break;
+
+			case LICENSE_MANAGEMENT:
+				activateButtonIfMatched(element, Configed.getResourceValue("MainFrame.labelLicenses"), toolTipText);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	private static void activateButtonIfMatched(AbstractButton button, String expectedText, String actualText) {
+		if (actualText.equals(expectedText)) {
+			button.setSelected(true);
+			button.doClick();
+		}
 	}
 }
