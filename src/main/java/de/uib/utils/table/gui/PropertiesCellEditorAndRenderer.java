@@ -166,7 +166,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
 			result = getMultiValueEditor(table, value, row);
 		} else {
-			result = getSingleValueEditor(key, value, row);
+			result = getSingleValueEditor(value, row);
 		}
 
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
@@ -186,14 +186,11 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return checkBox;
 	}
 
-	private Component getSingleValueEditor(String key, Object value, int row) {
+	private Component getSingleValueEditor(Object value, int row) {
 		selectionMode = SINGLE_SELECTION;
 
-		ComboBoxModel<String> comboBoxModel = comboBox.getModel();
-		if (comboBoxModel == null || comboBoxModel.getSize() == 0) {
-			comboBox.setModel(new DefaultComboBoxModel<>(
-					modelProducer.getListCellOptions(key).getPossibleValues().toArray(new String[0])));
-		}
+		comboBox.setModel(modelProducer.getComboBoxModel(row));
+
 		if (((List<?>) value).isEmpty()) {
 			comboBox.setSelectedItem(null);
 		} else {

@@ -6,12 +6,15 @@
 
 package de.uib.utils.table.gui;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.ListModel;
 
 import de.uib.configed.type.ConfigOption;
 
 public interface ListModelProducer {
 	ListModel<String> getListModel(int row);
+
+	ComboBoxModel<String> getComboBoxModel(int row);
 
 	int getSelectionMode(int row);
 
