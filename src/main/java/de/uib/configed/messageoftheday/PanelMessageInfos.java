@@ -124,6 +124,10 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 			date = motdData.get(OpsiServiceNOMPersistenceController.CONFIG_KEY_MSG_OF_DAY_DEVICE_VALID_UNTIL);
 		}
 		textArea.setText(text);
+		markdownPreview.setText(text != null ? text : "");
+		if (date == null) {
+			date = "0";
+		}
 		boolean emptyOrZero = date.isEmpty() || "0".equals(date);
 		Logging.debug("PanelMessageInfos resetData ", type, " date '", date, "' emptyOrZero: ", emptyOrZero);
 		if (emptyOrZero) {
@@ -142,8 +146,10 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		dateTimePicker.setEnabled(true);
 		infiniteDateChooserButton.setSelected(false);
 		// get date from datetimepicker
-		long unixTime = dateTimePicker.getDateTimePicker().getDateTimeValueUnix();
-		dateTimePicker.getDateTimePicker().setDateTimeValue(unixTime);
+		if (date == null) {
+			date = "0";
+		}
+		dateTimePicker.getDateTimePicker().setDateTimeValue(Long.valueOf(date));
 	}
 
 	private void selectInfiniteDateOption() {

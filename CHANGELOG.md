@@ -1,6 +1,12 @@
-## [4.3.7.X] - XXXX-XX-XX
+## [4.3.X.X] - XXXX-XX-XX
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
+
+## [4.3.7.2] - 2025-03-24
+## Fixed
+- Don't clear newly added options for single-value properties (if selected)
+- `NPEs` occuring when opening "Message of the day" dialog
+- Show correct warning for opsi modules classic warning dialog
 
 ## [4.3.7.1] - 2025-02-20
 ## Changed

@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import de.uib.utils.logging.Logging;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -32,22 +33,12 @@ import javafx.util.StringConverter;
  */
 public class DateTimePicker extends DatePicker {
 	public static final String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm";
-	public static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_FORMAT);
 	public static final ZoneId ZONEID = ZoneId.systemDefault();
 
 	private IDateTimePickerCaller caller;
-	private DateTimeFormatter formatter;
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DEFAULT_FORMAT);
 	private ObjectProperty<LocalDateTime> dateTimeValue = new SimpleObjectProperty<>(
 			LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
-
-	@java.lang.SuppressWarnings("squid:S110")
-	private ObjectProperty<String> format = new SimpleObjectProperty<String>() {
-		@Override
-		public void set(String newValue) {
-			super.set(newValue);
-			formatter = DateTimeFormatter.ofPattern(newValue);
-		}
-	};
 
 	public DateTimePicker(IDateTimePickerCaller caller) {
 		Logging.debug("DateTimePicker constructor");
@@ -58,7 +49,6 @@ public class DateTimePicker extends DatePicker {
 
 	public void init() {
 		getStyleClass().add("datetime-picker");
-		setFormat(DEFAULT_FORMAT);
 		setConverter(new InternalConverter());
 		setDayCellFactory(param -> new DateCell() {
 			@Override
@@ -69,7 +59,6 @@ public class DateTimePicker extends DatePicker {
 		});
 	}
 
-	// @java.lang.SuppressWarnings("squid:S4968")
 	public void initData() {
 		// Syncronize changes to the underlying date value back to the dateTimeValue
 		valueProperty().addListener(
@@ -115,24 +104,12 @@ public class DateTimePicker extends DatePicker {
 				false, false, false, false));
 	}
 
-	public long getDateTimeValueUnix() {
-		LocalDateTime ldt = dateTimeValue.get();
-		long unixTime = ldt.atZone(DateTimePicker.ZONEID).toEpochSecond();
-		Logging.debug("DateTimePicker getDateTimeValueUnix: ", unixTime);
-		return unixTime;
-	}
-
 	public LocalDateTime getDateTimeValue() {
 		Logging.debug("DateTimePicker getDateTimeValueLDT: ", dateTimeValue.get());
 		return dateTimeValue.get();
 	}
 
 	public void setDateTimeValue(long unixTime) {
-		Logging.debug("DateTimePicker setDateTimeValueUnix0: ", unixTime);
-		setDateTimeValue(unixTime, true);
-	}
-
-	public void setDateTimeValue(long unixTime, boolean notify) {
 		Logging.debug("DateTimePicker setDateTimeValueUnix1: ", unixTime);
 		if (unixTime <= 0) {
 			setDateTimeValue(null);
@@ -140,10 +117,10 @@ public class DateTimePicker extends DatePicker {
 		}
 
 		LocalDateTime value = LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTime), DateTimePicker.ZONEID);
-		setDateTimeValue(value, notify);
+		setDateTimeValue(value, true);
 	}
 
-	public void setDateTimeValue(LocalDateTime dateTime) {
+	private void setDateTimeValue(LocalDateTime dateTime) {
 		Logging.debug("DateTimePicker setDateTimeValueLDT2: ", dateTime);
 		setDateTimeValue(dateTime, true);
 	}
@@ -155,7 +132,7 @@ public class DateTimePicker extends DatePicker {
 	 * @param notify   If true, the gui will be updated and the caller will be
 	 *                 notified
 	 */
-	public void setDateTimeValue(LocalDateTime dateTime, boolean notify) {
+	private void setDateTimeValue(LocalDateTime dateTime, boolean notify) {
 		if (dateTime == null) {
 			Logging.debug("DateTimePicker setDateTimeValueLDT3: null");
 			return;
@@ -167,8 +144,10 @@ public class DateTimePicker extends DatePicker {
 			return;
 		}
 
-		getEditor().setText(dateTime.format(formatter));
-		Logging.debug("DateTimePicker setDateTimeValue new editor: ", getEditor().getText());
+		Platform.runLater(() -> {
+			getEditor().setText(dateTime.format(formatter));
+			Logging.debug("DateTimePicker setDateTimeValue new editor: ", getEditor().getText());
+		});
 		if (notify) {
 			if (caller == null) {
 				Logging.warning("Caller is null");
@@ -180,41 +159,18 @@ public class DateTimePicker extends DatePicker {
 		}
 	}
 
-	public ObjectProperty<LocalDateTime> dateTimeValueProperty() {
-		Logging.debug("DateTimePicker dateTimeValueProperty");
-		return dateTimeValue;
-	}
-
-	public String getFormat() {
-		Logging.debug("DateTimePicker getFormat: ", format.get());
-		return format.get();
-	}
-
-	public ObjectProperty<String> formatProperty() {
-		Logging.debug("DateTimePicker formatProperty");
-		return format;
-	}
-
-	public void setFormat(String format) {
-		Logging.debug("DateTimePicker setFormat: ", format);
-		this.format.set(format);
-	}
-
 	class InternalConverter extends StringConverter<LocalDate> {
 		public String toString(LocalDate object) {
 			Logging.trace("DateTimePicker InternalConverter toString was: ", object);
 			LocalDateTime value = object == null ? null : getDateTimeValue();
 			String s = (value != null) ? value.format(formatter) : "";
 			Logging.trace("DateTimePicker InternalConverter toString is: ", s);
-			setDateTimeValue(value);
 			return s;
 		}
 
 		public LocalDate fromString(String value) {
 			Logging.trace("DateTimePicker InternalConverter fromString: ", value);
 			if (value == null || "0".equals(value) || "".equals(value)) {
-				setDateTimeValue(null);
-
 				return null;
 			}
 			LocalDateTime currValue = getDateTimeValue();
@@ -222,8 +178,6 @@ public class DateTimePicker extends DatePicker {
 				LocalDateTime currValue2 = LocalDateTime.parse(value, formatter);
 				if (currValue2.compareTo(datetimeNow()) <= 0) {
 					Logging.error("DateTime Error: Date is in the past. Set datetime to now.");
-					setDateTimeValue(currValue);
-
 					return datetimeNow().toLocalDate();
 				}
 				currValue = currValue2;
@@ -231,7 +185,6 @@ public class DateTimePicker extends DatePicker {
 				Logging.error(e, "DateTime InternalConverter Error. Set previous value.");
 			}
 
-			setDateTimeValue(currValue);
 			return currValue.toLocalDate();
 		}
 	}
