@@ -14,7 +14,6 @@ import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
@@ -36,7 +35,12 @@ import de.uib.utils.logging.Logging;
 
 public class LeftToolBar extends JToolBar {
 	// Inititalize it here so that we keep the reference throughout a full reload
-	private JPopupMenu jMenuServerConsole = new JPopupMenu(CommandFactory.PARENT_NULL);
+	private JMenu jMenuServerConsole = new JMenu(CommandFactory.PARENT_NULL);
+
+	// We also need a reference to the menu bar version of the server console menu
+	private JMenu jMenuServerConsoleMenuBar = new JMenu(CommandFactory.PARENT_NULL);
+
+	private JButton terminalButton;
 
 	private ConfigedMain configedMain;
 
@@ -45,28 +49,26 @@ public class LeftToolBar extends JToolBar {
 
 		this.configedMain = configedMain;
 
-		setupMenuServerConsole();
+		setupMenuServerConsole(configedMain, jMenuServerConsole);
+
+		setupMenuServerConsole(configedMain, jMenuServerConsoleMenuBar);
 
 		initToolBar();
 	}
 
 	private void initToolBar() {
-		JButton terminalButton = new JButton(Icons.getIntellijIcon("terminal", 32));
+		terminalButton = new JButton(Icons.getIntellijIcon("terminal", 32));
 		terminalButton.setToolTipText(CommandFactory.PARENT_NULL);
 
 		// I want the popup on the right of the button, but 
-		terminalButton.addActionListener(event -> jMenuServerConsole.show(terminalButton, terminalButton.getWidth(),
-				terminalButton.getHeight() - jMenuServerConsole.getPreferredSize().height));
-
-		terminalButton.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+		terminalButton.addActionListener(
+				event -> jMenuServerConsole.getPopupMenu().show(terminalButton, terminalButton.getWidth(),
+						terminalButton.getHeight() - jMenuServerConsole.getPopupMenu().getPreferredSize().height));
 
 		add(terminalButton);
 	}
 
-	private void setupMenuServerConsole() {
+	public static void setupMenuServerConsole(ConfigedMain configedMain, JMenu jMenuServerConsole) {
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
 		jMenuCommandControl
@@ -80,14 +82,14 @@ public class LeftToolBar extends JToolBar {
 		Icons.addOpsiIconToMenuItem(menuOpsi);
 		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
 				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
-		Logging.info(this, "setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
+		Logging.info("setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
-		addCommandsToMenuServer(menuOpsi, commandsAreDeactivated);
+		addCommandsToMenuServer(configedMain, jMenuServerConsole, menuOpsi, commandsAreDeactivated);
 		if (menuOpsi.getSubElements().length != 0) {
 			menuOpsi.addSeparator();
 		}
-		addDefaultOpsiCommandsToMenuOpsi(menuOpsi, commandsAreDeactivated);
+		addDefaultOpsiCommandsToMenuOpsi(configedMain, menuOpsi, commandsAreDeactivated);
 
 		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly()
@@ -105,14 +107,14 @@ public class LeftToolBar extends JToolBar {
 		boolean forbiddenClients = forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS);
 
 		if (forbiddenConfigServer && forbiddenDepots && forbiddenClients) {
-			Logging.info(this, "setupMenuServerConsole all forbidden");
+			Logging.info("setupMenuServerConsole all forbidden");
 			String s = " " + Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden");
 			jMenuTerminal.setText(jMenuTerminal.getText() + s);
 			jMenuTerminal.setEnabled(false);
 		} else {
-			Logging.info(this, "setupMenuServerConsole forbiddenItems ", forbiddenItems);
-			Logging.info(this, "setupMenuServerConsole forbiddenConfigServer ", forbiddenConfigServer,
-					" forbiddenDepots ", forbiddenDepots, " forbiddenClients ", forbiddenClients);
+			Logging.info("setupMenuServerConsole forbiddenItems ", forbiddenItems);
+			Logging.info("setupMenuServerConsole forbiddenConfigServer ", forbiddenConfigServer, " forbiddenDepots ",
+					forbiddenDepots, " forbiddenClients ", forbiddenClients);
 			jMenuTerminal.addActionListener((ActionEvent e) -> {
 				Messagebus.initMessagebus(configedMain);
 				TerminalFrame terminal = new TerminalFrame(configedMain);
@@ -124,7 +126,8 @@ public class LeftToolBar extends JToolBar {
 		jMenuServerConsole.add(jMenuTerminal);
 	}
 
-	private void addDefaultOpsiCommandsToMenuOpsi(JMenu menuOpsi, boolean commandsAreDeactivated) {
+	private static void addDefaultOpsiCommandsToMenuOpsi(ConfigedMain configedMain, JMenu menuOpsi,
+			boolean commandsAreDeactivated) {
 		for (final SingleCommand command : CommandFactory.getDefaultOpsiCommands()) {
 			JMenuItem jMenuOpsiCommand = new JMenuItem(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
@@ -135,30 +138,32 @@ public class LeftToolBar extends JToolBar {
 		}
 	}
 
-	private void addCommandsToMenuServer(JMenu menuOpsi, boolean commandsAreDeactivated) {
+	private static void addCommandsToMenuServer(ConfigedMain configedMain, JMenu jMenuServerConsole, JMenu menuOpsi,
+			boolean commandsAreDeactivated) {
 		final CommandFactory factory = CommandFactory.getInstance();
 		Map<String, List<MultiCommandTemplate>> sortedComs = factory.getCommandMapSortedByParent();
 
-		Logging.debug(this, "setupMenuServer add commands to menu commands sortedComs ", sortedComs);
+		Logging.debug("setupMenuServer add commands to menu commands sortedComs ", sortedComs);
 		for (Entry<String, List<MultiCommandTemplate>> entry : sortedComs.entrySet()) {
 			String parentMenuName = entry.getKey();
 			JMenu parentMenu = new JMenu(parentMenuName);
 
-			Logging.info(this, "parent menu text ", parentMenuName);
+			Logging.info("parent menu text ", parentMenuName);
 			if (parentMenuName.equals(CommandFactory.PARENT_OPSI)) {
 				jMenuServerConsole.add(menuOpsi);
 				jMenuServerConsole.addSeparator();
 			}
 
-			addSubCommands(menuOpsi, parentMenu, entry.getValue(), commandsAreDeactivated);
+			addSubCommands(configedMain, jMenuServerConsole, menuOpsi, parentMenu, entry.getValue(),
+					commandsAreDeactivated);
 		}
 	}
 
-	private void addSubCommands(JMenu menuOpsi, JMenu parentMenu, List<MultiCommandTemplate> listCom,
-			boolean commandsAreDeactivated) {
+	private static void addSubCommands(ConfigedMain configedMain, JMenu jMenuServerConsole, JMenu menuOpsi,
+			JMenu parentMenu, List<MultiCommandTemplate> listCom, boolean commandsAreDeactivated) {
 		for (final MultiCommandTemplate com : listCom) {
 			JMenuItem jMenuItem = new JMenuItem(com.getMenuText());
-			Logging.info(this, "command menuitem text ", com.getMenuText());
+			Logging.info("command menuitem text ", com.getMenuText());
 			jMenuItem.setToolTipText(com.getToolTipText());
 			jMenuItem.addActionListener((ActionEvent e) -> {
 				CommandExecutor executor = new CommandExecutor(configedMain, com);
@@ -180,8 +185,25 @@ public class LeftToolBar extends JToolBar {
 		}
 	}
 
+	public JMenu getJMenuServerConsoleMenuBar() {
+		return jMenuServerConsoleMenuBar;
+	}
+
 	public void reloadServerConsoleMenu() {
+		terminalButton.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+
 		jMenuServerConsole.removeAll();
-		setupMenuServerConsole();
+		setupMenuServerConsole(configedMain, jMenuServerConsole);
+
+		jMenuServerConsoleMenuBar.setEnabled(!PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().isGlobalReadOnly()
+				&& UserConfig.getCurrentUserConfig()
+						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+
+		jMenuServerConsoleMenuBar.removeAll();
+		setupMenuServerConsole(configedMain, jMenuServerConsoleMenuBar);
 	}
 }

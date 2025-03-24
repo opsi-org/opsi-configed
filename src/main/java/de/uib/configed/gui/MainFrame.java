@@ -109,11 +109,11 @@ public class MainFrame extends JFrame implements KeyListener {
 
 		this.setIconImage(Icons.getMainIcon());
 
-		setJMenuBar(initMenuBar());
-
 		leftControlBar = new LeftControlBar();
 		leftToolBar = new LeftToolBar(configedMain);
 		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
+
+		setJMenuBar(initMenuBar());
 
 		showClientConfiguration();
 
@@ -525,6 +525,7 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuBar.add(createJMenuView());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
+		jMenuBar.add(leftToolBar.getJMenuServerConsoleMenuBar());
 
 		jMenuBar.add(jMenuExtras());
 		jMenuBar.add(createJMenuHelp());
