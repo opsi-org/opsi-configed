@@ -40,7 +40,7 @@ public class LeftToolBar extends JToolBar {
 	// We also need a reference to the menu bar version of the server console menu
 	private JMenu jMenuServerConsoleMenuBar = new JMenu(CommandFactory.PARENT_NULL);
 
-	private JButton terminalButton;
+	private JButton terminalButton = new JButton(Icons.getIntellijIcon("terminal", 32));
 
 	private ConfigedMain configedMain;
 
@@ -49,15 +49,12 @@ public class LeftToolBar extends JToolBar {
 
 		this.configedMain = configedMain;
 
-		setupMenuServerConsole(configedMain, jMenuServerConsole);
-
-		setupMenuServerConsole(configedMain, jMenuServerConsoleMenuBar);
+		loadServerConsoleMenu();
 
 		initToolBar();
 	}
 
 	private void initToolBar() {
-		terminalButton = new JButton(Icons.getIntellijIcon("terminal", 32));
 		terminalButton.setToolTipText(CommandFactory.PARENT_NULL);
 
 		// I want the popup on the right of the button, but 
@@ -68,7 +65,7 @@ public class LeftToolBar extends JToolBar {
 		add(terminalButton);
 	}
 
-	public static void setupMenuServerConsole(ConfigedMain configedMain, JMenu jMenuServerConsole) {
+	private static void setupMenuServerConsole(ConfigedMain configedMain, JMenu jMenuServerConsole) {
 		JMenuItem jMenuCommandControl = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuCommandControl"));
 		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
 		jMenuCommandControl
@@ -189,13 +186,12 @@ public class LeftToolBar extends JToolBar {
 		return jMenuServerConsoleMenuBar;
 	}
 
-	public void reloadServerConsoleMenu() {
+	private void loadServerConsoleMenu() {
 		terminalButton.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly()
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
-		jMenuServerConsole.removeAll();
 		setupMenuServerConsole(configedMain, jMenuServerConsole);
 
 		jMenuServerConsoleMenuBar.setEnabled(!PersistenceControllerFactory.getPersistenceController()
@@ -203,7 +199,13 @@ public class LeftToolBar extends JToolBar {
 				&& UserConfig.getCurrentUserConfig()
 						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
 
-		jMenuServerConsoleMenuBar.removeAll();
 		setupMenuServerConsole(configedMain, jMenuServerConsoleMenuBar);
+	}
+
+	public void reloadServerConsoleMenu() {
+		jMenuServerConsole.removeAll();
+		jMenuServerConsoleMenuBar.removeAll();
+
+		loadServerConsoleMenu();
 	}
 }
