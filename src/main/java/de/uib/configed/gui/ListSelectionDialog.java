@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -116,7 +117,11 @@ public class ListSelectionDialog {
 	}
 
 	public void show() {
-		dialog.setLocationRelativeTo(dialog.getParent());
+		show(dialog.getParent());
+	}
+
+	public void show(Container parent) {
+		dialog.setLocationRelativeTo(parent);
 		dialog.pack();
 		dialog.setVisible(true);
 	}

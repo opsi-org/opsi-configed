@@ -59,22 +59,18 @@ public class CreateConfigDialog {
 	public CreateConfigDialog(EditMapPanelX editMapPanelX) {
 		this.editMapPanelX = editMapPanelX;
 
-		// We need to create the dialog before initializing the panels,
-		// because the listSelectionDialogs need the dialog as parent
-		JOptionPane pane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
-				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
-
-		dialog = pane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
-
 		initGeneralPanel();
 		initBooleanDetailsPanel();
 		initUnicodeDetailsPanel();
 
+		// Create the tabbed pane after the details panels have been initialized
 		initPanel();
 
-		pane.setMessage(jTabbedPane);
-		dialog.pack();
+		JOptionPane pane = new JOptionPane(jTabbedPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+
+		dialog = pane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 
 		dialog.setVisible(true);
 
@@ -149,7 +145,7 @@ public class CreateConfigDialog {
 				.addComponent(possibleValuesTextField));
 	}
 
-	private static JTextField createTextFieldAssociated(ListSelectionDialog selectionListDialog) {
+	private JTextField createTextFieldAssociated(ListSelectionDialog selectionListDialog) {
 		JTextField jTextField = new JTextField();
 		jTextField.setEnabled(false);
 		jTextField.addMouseListener(new MouseAdapter() {
@@ -162,11 +158,11 @@ public class CreateConfigDialog {
 		return jTextField;
 	}
 
-	private static void activateSelection(ListSelectionDialog listSelectionDialog, JTextField jTextField) {
+	private void activateSelection(ListSelectionDialog listSelectionDialog, JTextField jTextField) {
 		// We need to call this before setVisible
 		List<String> savedSelectedValues = listSelectionDialog.getSelectedValues();
 
-		listSelectionDialog.show();
+		listSelectionDialog.show(dialog);
 
 		if (listSelectionDialog.wasAccepted()) {
 			jTextField.setText(PropertiesCellEditorAndRenderer.formatList(listSelectionDialog.getSelectedValues()));

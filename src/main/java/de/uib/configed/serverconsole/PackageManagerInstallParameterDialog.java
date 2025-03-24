@@ -61,9 +61,6 @@ public class PackageManagerInstallParameterDialog {
 		this.configedMain = configedMain;
 		fromMakeProductfile = fullPathToPackage;
 
-		initInstances();
-		initLayout();
-
 		JButton buttonExecute = new JButton(Configed.getResourceValue("buttonExecute"));
 		buttonExecute.addActionListener(actionEvent -> execute());
 
@@ -73,6 +70,14 @@ public class PackageManagerInstallParameterDialog {
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
 		dialog.setModal(false);
+
+		// Create the panel after the dialog has been created, because 
+		// we need the dialog for the panel
+		initInstances();
+		initLayout();
+
+		// We need to pack the dialog because the size of the mainPanel has changed
+		dialog.pack();
 
 		// the dialog should resize to the size of the content
 		installCurlPanel.addDialogToReactOn(dialog);

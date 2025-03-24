@@ -41,7 +41,7 @@ public class SingleCommandOpsiPackageManagerInstall extends SingleCommandOpsiPac
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SingleCommandOpsiPackageManagerInstall.title");
+		return Configed.getResourceValue("PackageManagerInstallParameterDialog.title");
 	}
 
 	@Override
