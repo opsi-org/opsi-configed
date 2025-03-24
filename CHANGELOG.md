@@ -1,3 +1,7 @@
+## [4.3.7.X] - XXXX-XX-XX
+## Fixed
+- Don't clear newly added options for single-value properties (if selected)
+
 ## [4.3.7.1] - 2025-02-20
 ## Changed
 - Enable copy & paste in "About opsi-configed" dialog
