@@ -4,6 +4,7 @@
 
 ### Fixed
 - Issue: after reloading all data, the properties for the products (localboot and netboot) are gone.
+- `NPEs` occuring when opening "Message of the day" dialog
 - Correct location of list selection dialog in health check client selection and property editing
 - Create the correct config `opsiclientd.event_net_connection.active` and not `event_net_connection.active`
 
