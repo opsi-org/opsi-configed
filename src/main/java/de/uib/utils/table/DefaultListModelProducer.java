@@ -6,6 +6,7 @@
 
 package de.uib.utils.table;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
@@ -16,6 +17,10 @@ public class DefaultListModelProducer implements ListModelProducer {
 	private static ConfigOption defaultConfigOption = new ConfigOption();
 
 	public ListModel<String> getListModel(int row) {
+		return null;
+	}
+
+	public ComboBoxModel<String> getComboBoxModel(int row) {
 		return null;
 	}
 

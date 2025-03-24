@@ -1,11 +1,15 @@
+## [4.3.7.3] - 2025-03-24
+### Fixed
+- Don't add newly added options for single-value property-keys to the wrong properties
+
 ## [4.3.7.2] - 2025-03-24
-## Fixed
+### Fixed
 - Don't clear newly added options for single-value properties (if selected)
 - `NPEs` occuring when opening "Message of the day" dialog
 - Show correct warning for opsi modules classic warning dialog
 
 ## [4.3.7.1] - 2025-02-20
-## Changed
+### Changed
 - Enable copy & paste in "About opsi-configed" dialog
 
 ### Fixed
