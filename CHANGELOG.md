@@ -1,4 +1,4 @@
-## [4.3.7.X] - XXXX-XX-XX
+## [4.3.7.2] - 2025-03-24
 ## Fixed
 - Don't clear newly added options for single-value properties (if selected)
 - `NPEs` occuring when opening "Message of the day" dialog
