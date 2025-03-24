@@ -2,6 +2,7 @@
 ## Fixed
 - Don't clear newly added options for single-value properties (if selected)
 - `NPEs` occuring when opening "Message of the day" dialog
+- Show correct warning for opsi modules classic warning dialog
 
 ## [4.3.7.1] - 2025-02-20
 ## Changed
