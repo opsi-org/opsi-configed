@@ -2,6 +2,9 @@
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
 
+### Changed
+- Accept changes in product properties, configs (host parameters) and depot configuration directly from editor without pressing ENTER
+
 
 ## [4.3.7.3] - 2025-03-24
 ### Fixed
