@@ -1,6 +1,9 @@
 ## [4.3.8.X] - XXXX-XX-XX
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
+
+### Changed
+- Accept changes in product properties, configs (host parameters) and depot configuration directly from editor without pressing ENTER
 - Show a menu for the server console in the menu bar on the top
 
 ## [4.3.7.3] - 2025-03-24
