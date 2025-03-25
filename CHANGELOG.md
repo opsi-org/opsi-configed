@@ -3,6 +3,9 @@
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
 - Show a menu for the server console in the menu bar on the top
 
+### Changed
+- Make dialogs resizable and/or non-modal
+
 ## [4.3.7.3] - 2025-03-24
 ### Fixed
 - Don't add newly added options for single-value property-keys to the wrong properties
