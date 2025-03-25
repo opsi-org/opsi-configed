@@ -19,6 +19,7 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,6 +29,7 @@ import javax.swing.ListSelectionModel;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
@@ -52,7 +54,11 @@ public class ListSelectionDialog {
 		JPanel panel = createPanel(editable);
 		jOptionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-		dialog = jOptionPane.createDialog(owner, title);
+		dialog = new JDialog((JFrame) owner, title);
+		dialog.setContentPane(jOptionPane);
+		dialog.setResizable(true);
+		dialog.pack();
+		dialog.setLocationRelativeTo(owner != null ? owner : ConfigedMain.getMainFrame());
 	}
 
 	private JPanel createPanel(boolean editable) {

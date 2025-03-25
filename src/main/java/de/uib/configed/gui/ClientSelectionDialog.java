@@ -142,9 +142,13 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { buttonSearch, buttonReset, Configed.getResourceValue("buttonClose") });
 
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+		dialog = new JDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
+		dialog.setContentPane(optionPane);
 		dialog.setModalityType(ModalityType.MODELESS);
+		dialog.setResizable(true);
+		dialog.pack();
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	public void show(String searchName) {
