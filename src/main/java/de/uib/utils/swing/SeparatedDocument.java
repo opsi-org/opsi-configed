@@ -48,17 +48,23 @@ public class SeparatedDocument extends CheckedDocument {
 
 	@Override
 	protected void applyMask(AttributeSet a) throws BadLocationException {
-		int oriLength = getLength();
-		int insertOffs = 0;
-		for (int i = 0; i < oriLength - 1; i++) {
-			if (i % partsLength == 0) {
-				insertOffs = insertOffs + partsLength;
-				if (!getText(insertOffs, 1).equals(separator) && insertOffs < size) {
-					insertStringPlain(insertOffs, separator, a);
+		int expectedOffset = partsLength;
+		while (expectedOffset <= getLength() && expectedOffset < size) {
+			if (expectedOffset == getLength()) {
+				insertStringPlain(expectedOffset, separator, a);
+			} else {
+				String existing;
+				try {
+					existing = getText(expectedOffset, 1);
+				} catch (BadLocationException e) {
+					Logging.debug(this, "Failed to retrieve text", e);
+					break;
 				}
-
-				insertOffs++;
+				if (!separator.equals(existing)) {
+					insertStringPlain(expectedOffset, separator, a);
+				}
 			}
+			expectedOffset = expectedOffset + partsLength + 1;
 		}
 	}
 }
