@@ -1,4 +1,4 @@
-## [4.3.8.X] - XXXX-XX-XX
+## [4.3.8.0] - 2025-03-25
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
 
