@@ -17,23 +17,6 @@ import de.uib.utils.datastructure.AbstractTableEntry;
 import de.uib.utils.datastructure.StringValuedRelationElement;
 
 public class SWAuditEntry extends AbstractTableEntry {
-	/*
-	 * type of auditSoftware_getObjects resp
-	 * SOFTWARE in opsi data base
-	 * 
-	 * | Field | Type | Null | Key | Default
-	 * | installSize | bigint(20) | YES | | NULL
-	 * | name | varchar(100) | NO | PRI | NULL
-	 * | version | varchar(100) | NO | PRI | NULL
-	 * | subVersion | varchar(100) | NO | PRI | NULL
-	 * | language | varchar(10) | NO | PRI | NULL
-	 * | architecture | varchar(3) | NO | PRI | NULL
-	 * | windowsSoftwareId | varchar(100) | NO | MUL | NULL
-	 * | windowsDisplayName | varchar(100) | NO | | NULL
-	 * | windowsDisplayVersion | varchar(100) | NO | | NULL
-	 * | type | varchar(30) | NO | MUL | NULL
-	 */
-
 	public static final String ID = "ID";
 	public static final String NAME = "name";
 	public static final String VERSION = "version";
