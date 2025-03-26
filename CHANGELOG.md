@@ -1,6 +1,7 @@
 ## [4.3.8.X] - XXXX-XX-XX
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
+- `isOperatingSystem` column to software information table
 
 ### Changed
 - Accept changes in product properties, configs (host parameters) and depot configuration directly from editor without pressing ENTER
