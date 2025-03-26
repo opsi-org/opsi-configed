@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -333,9 +334,15 @@ public class PanelSWInfo extends JPanel {
 			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 			title = scanInfo;
 		} else {
+			Optional<String> osName = tableData.values().stream()
+					.filter(innerMap -> Boolean.TRUE.equals(innerMap.get(SWAuditEntry.IS_OPERATING_SYSTEM)))
+					.map(innerMap -> (String) innerMap.get(SWAuditEntry.NAME)).findFirst();
 			Logging.debug(this, "retrieved size  ", tableData.size());
 			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
+			if (osName.isPresent()) {
+				scanInfo += " on " + osName.get();
+			}
 			title = scanInfo;
 		}
 
