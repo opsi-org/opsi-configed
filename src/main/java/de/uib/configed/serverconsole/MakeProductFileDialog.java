@@ -102,10 +102,14 @@ public class MakeProductFileDialog {
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION,
 				null, new Object[] { buttonExecute, buttonPackageManager, Configed.getResourceValue("buttonCancel") });
 
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("MakeProductFileDialog.title"));
+		dialog = new JDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("MakeProductFileDialog.title"));
+		dialog.setContentPane(optionPane);
 		dialog.setModal(false);
+		dialog.setResizable(true);
+		dialog.pack();
 		dialog.setVisible(true);
+
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void initComponents() {

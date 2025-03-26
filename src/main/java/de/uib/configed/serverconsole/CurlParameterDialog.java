@@ -86,10 +86,14 @@ public class CurlParameterDialog {
 
 		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION,
 				null, new Object[] { buttonExecute, buttonParameterInfo, Configed.getResourceValue("buttonCancel") });
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("CurlParameterDialog.title"));
+		dialog = new JDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("CurlParameterDialog.title"));
+		dialog.setContentPane(optionPane);
 		dialog.setModal(false);
+		dialog.setResizable(true);
+		dialog.pack();
 		dialog.setVisible(true);
+
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void init() {
@@ -186,7 +190,7 @@ public class CurlParameterDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(inputPanelLayout.createSequentialGroup()
 						.addComponent(jComboBoxDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE).addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addComponent(jLabelLoglevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

@@ -67,9 +67,14 @@ public class PackageManagerInstallParameterDialog {
 		JOptionPane optionPane = new JOptionPane(mainPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { buttonExecute, Configed.getResourceValue("buttonCancel") });
 
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+		dialog = new JDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
+		dialog.setContentPane(optionPane);
 		dialog.setModal(false);
+		dialog.setResizable(true);
+		dialog.pack();
+
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		// Create the panel after the dialog has been created, because 
 		// we need the dialog for the panel

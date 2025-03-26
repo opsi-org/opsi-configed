@@ -74,9 +74,13 @@ public final class EditTerminalCommandsDialog {
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { saveButton, Configed.getResourceValue("buttonCancel") });
 
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("MainFrame.jMenuCommandControl"));
+		dialog = new JDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("MainFrame.jMenuCommandControl"));
+		dialog.setContentPane(optionPane);
 		dialog.setModal(false);
+		dialog.setResizable(true);
+		dialog.pack();
+
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	public void show() {

@@ -69,8 +69,12 @@ public class CSVImportDataDialog {
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("CSVImportDataDialog.title"));
+		dialog = new JDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"));
+		dialog.setContentPane(optionPane);
+		dialog.setResizable(true);
+		dialog.pack();
+
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private JPanel createPanel() {
