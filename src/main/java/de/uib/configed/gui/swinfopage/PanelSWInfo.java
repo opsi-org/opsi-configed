@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui.swinfopage;
 
+import java.awt.Component;
+import java.awt.Font;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -239,6 +241,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
 
+		panelTable.getJTable().setDefaultRenderer(Object.class, new OSTableCellRenderer());
 		panelTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(400);
 		panelTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(200);
 		panelTable.getJTable().getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -258,7 +261,7 @@ public class PanelSWInfo extends JPanel {
 		tableSorter.setSortKeys(list);
 		tableSorter.sort();
 
-		jTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
+		jTable.setDefaultRenderer(Object.class, new OSTableCellRenderer());
 		jTable.getColumnModel().getColumn(0).setPreferredWidth(400);
 		jTable.getColumnModel().getColumn(1).setPreferredWidth(200);
 		jTable.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -293,6 +296,24 @@ public class PanelSWInfo extends JPanel {
 
 			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getJTable(),
 					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
+		}
+	}
+
+	private static class OSTableCellRenderer extends ColorTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+					column);
+			boolean isOperatingSystem = (Boolean) table.getValueAt(row, 7);
+
+			if (isOperatingSystem) {
+				cellComponent.setFont(cellComponent.getFont().deriveFont(Font.BOLD));
+			} else {
+				cellComponent.setFont(cellComponent.getFont().deriveFont(Font.PLAIN));
+			}
+
+			return cellComponent;
 		}
 	}
 
