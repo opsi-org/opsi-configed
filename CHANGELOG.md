@@ -8,6 +8,7 @@
 
 ### Fixed
 - Beep sounds, when entering MAC, OTP, and SystemUUID
+- `IndexOutOfBoundsException` when trying to import clients via CSV
 
 ## [4.3.7.3] - 2025-03-24
 ### Fixed
