@@ -17,7 +17,8 @@ public class SWAuditClientEntry {
 	public static final String LICENSE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
 	public static final List<String> KEYS = List.of(SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
-			SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENSE_KEY, SWAuditEntry.WINDOWS_SOFTWARE_ID);
+			SWAuditEntry.ARCHITECTURE, SWAuditEntry.LANGUAGE, LICENSE_KEY, SWAuditEntry.WINDOWS_SOFTWARE_ID,
+			SWAuditEntry.IS_OPERATING_SYSTEM);
 
 	private String swIdent;
 	private String lastModificationS;

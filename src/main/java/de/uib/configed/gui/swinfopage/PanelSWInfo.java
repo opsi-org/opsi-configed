@@ -38,6 +38,7 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ExporterToCSV;
@@ -45,6 +46,7 @@ import de.uib.utils.table.ExporterToPDF;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.TableModelFilterCondition;
+import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.PanelGenEditTable;
 import de.uib.utils.table.provider.DefaultTableProvider;
@@ -240,6 +242,8 @@ public class PanelSWInfo extends JPanel {
 		panelTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(400);
 		panelTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(200);
 		panelTable.getJTable().getColumnModel().getColumn(2).setPreferredWidth(100);
+		panelTable.getJTable().getColumnModel().getColumn(7)
+				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
 
 		csvExportTable = new ExporterToCSV(panelTable.getJTable());
 	}
@@ -258,6 +262,8 @@ public class PanelSWInfo extends JPanel {
 		jTable.getColumnModel().getColumn(0).setPreferredWidth(400);
 		jTable.getColumnModel().getColumn(1).setPreferredWidth(200);
 		jTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+		jTable.getColumnModel().getColumn(7)
+				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
 		jTable.setColumnSelectionAllowed(true);
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
