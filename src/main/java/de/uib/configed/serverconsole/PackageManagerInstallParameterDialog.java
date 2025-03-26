@@ -72,9 +72,6 @@ public class PackageManagerInstallParameterDialog {
 		dialog.setContentPane(optionPane);
 		dialog.setModal(false);
 		dialog.setResizable(true);
-		dialog.pack();
-
-		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		// Create the panel after the dialog has been created, because 
 		// we need the dialog for the panel
@@ -83,6 +80,8 @@ public class PackageManagerInstallParameterDialog {
 
 		// We need to pack the dialog because the size of the mainPanel has changed
 		dialog.pack();
+
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		// the dialog should resize to the size of the content
 		installCurlPanel.addDialogToReactOn(dialog);
