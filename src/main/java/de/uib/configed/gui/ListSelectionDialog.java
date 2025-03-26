@@ -9,6 +9,7 @@ package de.uib.configed.gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +20,6 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -54,7 +54,7 @@ public class ListSelectionDialog {
 		JPanel panel = createPanel(editable);
 		jOptionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-		dialog = new JDialog((JFrame) owner, title);
+		dialog = new JDialog((Window) owner, title);
 		dialog.setContentPane(jOptionPane);
 		dialog.setResizable(true);
 		dialog.pack();
