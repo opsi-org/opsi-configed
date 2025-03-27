@@ -99,9 +99,14 @@ public final class EditTerminalCommandsDialog {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(controlPanel).addComponent(commandPanel));
-		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(controlPanel).addGap(Globals.GAP_SIZE)
-				.addComponent(commandPanel));
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(controlPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(commandPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(controlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(commandPanel, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
 		((CommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
 				actionEvent -> ((CommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(dialog));
@@ -247,8 +252,7 @@ public final class EditTerminalCommandsDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonTestCommand, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE).addComponent(parameterPanel, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 

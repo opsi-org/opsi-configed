@@ -92,6 +92,8 @@ public class CurlParameterDialog {
 				Configed.getResourceValue("CurlParameterDialog.title"));
 		dialog.setModal(false);
 		dialog.pack();
+
+		Utils.restrictVerticalResizing(dialog, dialog.getPreferredSize().height);
 		dialog.setVisible(true);
 
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());

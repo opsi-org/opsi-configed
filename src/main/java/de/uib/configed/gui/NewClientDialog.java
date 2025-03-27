@@ -306,7 +306,8 @@ public final class NewClientDialog {
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// NOTES
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelNotes).addComponent(jTextNodesScrollPane, 100, 100, 100)
+				.addGap(Globals.GAP_SIZE).addComponent(jLabelNotes)
+				.addComponent(jTextNodesScrollPane, 100, 100, Short.MAX_VALUE)
 
 				/////// SYSTEM UUID
 				.addGap(Globals.GAP_SIZE).addComponent(jLabelSystemUUID)

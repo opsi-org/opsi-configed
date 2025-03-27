@@ -92,7 +92,7 @@ public class ListSelectionDialog {
 
 		verticalGroup.addGap(Globals.GAP_SIZE);
 		verticalGroup.addComponent(listScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
+				Short.MAX_VALUE);
 
 		// Add additional component if not null
 		if (editable) {

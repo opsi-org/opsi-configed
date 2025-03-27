@@ -183,32 +183,76 @@ public class CSVImportDataDialog {
 		panel.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(importOptionsLabel)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(importOptionsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(startLineLabel)
-						.addGap(Globals.GAP_SIZE).addComponent(startLineInput).addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(splittingOptionsLabel)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(startLineLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(startLineInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(tabsOption)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(splittingOptionsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE).addComponent(commaOption).addGap(Globals.GAP_SIZE)
-						.addComponent(semicolonOption).addGap(Globals.GAP_SIZE).addComponent(spaceOption)
-						.addGap(Globals.GAP_SIZE).addComponent(otherOption).addGap(Globals.GAP_SIZE)
-						.addComponent(otherDelimiterInput).addGap(Globals.MIN_GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(quoteLabel)
-						.addGap(Globals.GAP_SIZE).addComponent(quoteOptions))
-				.addComponent(thePanel));
+						.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(otherOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(thePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(importOptionsLabel).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(startLineLabel)
-						.addComponent(startLineInput))
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(splittingOptionsLabel).addGap(Globals.MIN_GAP_SIZE)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(tabsOption)
-						.addComponent(commaOption).addComponent(semicolonOption).addComponent(spaceOption)
-						.addComponent(otherOption).addComponent(otherDelimiterInput))
-				.addGap(Globals.MIN_GAP_SIZE).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(quoteLabel).addComponent(quoteOptions))
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(thePanel));
+				.addComponent(importOptionsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(startLineLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(startLineInput, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(splittingOptionsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(tabsOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(commaOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(semicolonOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(spaceOption, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(otherOption).addComponent(otherDelimiterInput, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(quoteLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(quoteOptions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(thePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		return panel;
 	}
