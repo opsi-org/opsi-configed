@@ -237,7 +237,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (selectionMode == BOOLEAN) {
 			return Collections.singletonList(checkBox.getChecked());
 		} else if (selectionMode == SINGLE_SELECTION) {
-			return Collections.singletonList(comboBox.getSelectedItem());
+			return Collections.singletonList(comboBox.getEditor().getItem());
 		} else {
 			return listSelectionDialog.getSelectedValues();
 		}
