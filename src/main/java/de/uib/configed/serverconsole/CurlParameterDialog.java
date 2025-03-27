@@ -28,6 +28,7 @@ import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandCurl;
 import de.uib.configed.serverconsole.command.SingleCommandHelp;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class CurlParameterDialog {
@@ -86,10 +87,10 @@ public class CurlParameterDialog {
 
 		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION,
 				null, new Object[] { buttonExecute, buttonParameterInfo, Configed.getResourceValue("buttonCancel") });
-		dialog = new JDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("CurlParameterDialog.title"));
-		dialog.setContentPane(optionPane);
+		Utils.enableDialogResizing(optionPane);
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("CurlParameterDialog.title"));
 		dialog.setModal(false);
-		dialog.setResizable(true);
 		dialog.pack();
 		dialog.setVisible(true);
 

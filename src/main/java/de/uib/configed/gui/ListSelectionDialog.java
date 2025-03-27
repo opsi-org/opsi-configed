@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +31,7 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModel;
 import de.uib.utils.table.gui.SearchTargetModelFromJList;
@@ -53,10 +53,9 @@ public class ListSelectionDialog {
 	public ListSelectionDialog(Component owner, String title, boolean editable) {
 		JPanel panel = createPanel(editable);
 		jOptionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		Utils.enableDialogResizing(jOptionPane);
 
-		dialog = new JDialog((Window) owner, title);
-		dialog.setContentPane(jOptionPane);
-		dialog.setResizable(true);
+		dialog = jOptionPane.createDialog(owner, title);
 		dialog.pack();
 		dialog.setLocationRelativeTo(owner != null ? owner : ConfigedMain.getMainFrame());
 	}

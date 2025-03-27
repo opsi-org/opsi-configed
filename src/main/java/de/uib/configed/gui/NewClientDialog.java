@@ -77,18 +77,13 @@ public final class NewClientDialog {
 		JButton buttonCreate = new JButton(Configed.getResourceValue("NewClientDialog.buttonCreate"));
 		buttonCreate.addActionListener(actionEvent -> create());
 
-		optionPane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+		optionPane = new JOptionPane(createPanel(), JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { buttonCreate, Configed.getResourceValue("buttonClose") });
+		Utils.enableDialogResizing(optionPane);
 
-		dialog = new JDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("NewClientDialog.title"));
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("NewClientDialog.title"));
 		dialog.setModal(false);
-		dialog.setResizable(true);
-
-		// We need to create the panel after the creation because the panel needs the dialog
-		JPanel panel = createPanel();
-
-		optionPane.setMessage(panel);
-		dialog.setContentPane(optionPane);
 		dialog.pack();
 	}
 

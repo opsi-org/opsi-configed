@@ -65,11 +65,10 @@ public class OpsiSetRightsParameterDialog {
 
 		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { jButtonExecute, Configed.getResourceValue("buttonCancel") });
-		JDialog dialog = new JDialog(ConfigedMain.getMainFrame(),
+		Utils.enableDialogResizing(optionPane);
+		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("SingleCommandOpsiSetRights.title"));
-		dialog.setContentPane(optionPane);
 		dialog.setModal(false);
-		dialog.setResizable(true);
 		dialog.pack();
 		dialog.setVisible(true);
 

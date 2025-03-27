@@ -37,6 +37,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEditTable;
@@ -68,10 +69,11 @@ public class CSVImportDataDialog {
 		JPanel panel = createPanel();
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		Utils.enableDialogResizing(optionPane);
 
-		dialog = new JDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"));
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("CSVImportDataDialog.title"));
 		dialog.setContentPane(optionPane);
-		dialog.setResizable(true);
 		dialog.pack();
 
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());

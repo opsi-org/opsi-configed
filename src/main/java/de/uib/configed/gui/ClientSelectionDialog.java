@@ -81,6 +81,7 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SearchQueryExecutor;
 import de.uib.utils.swing.TextInputField;
@@ -141,12 +142,11 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { buttonSearch, buttonReset, Configed.getResourceValue("buttonClose") });
+		Utils.enableDialogResizing(optionPane);
 
-		dialog = new JDialog(ConfigedMain.getMainFrame(),
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		dialog.setContentPane(optionPane);
 		dialog.setModalityType(ModalityType.MODELESS);
-		dialog.setResizable(true);
 		dialog.pack();
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
