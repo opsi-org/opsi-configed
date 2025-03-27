@@ -9,15 +9,15 @@ package de.uib.utils.datastructure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
+public abstract class AbstractTableEntry extends LinkedHashMap<String, Object> {
 	// very similar to RelationElement
 	// static values and methods (resp. methods based on static values)
 	// must be defined in subclasses
 
 	// object values and methods
-	protected Map<String, String> entryRetrieved;
+	protected Map<String, ? extends Object> entryRetrieved;
 
-	protected AbstractTableEntry(Map<String, String> entry) {
+	protected AbstractTableEntry(Map<String, ? extends Object> entry) {
 		entryRetrieved = entry;
 	}
 
