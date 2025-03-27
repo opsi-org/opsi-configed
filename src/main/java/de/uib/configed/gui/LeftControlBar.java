@@ -53,7 +53,7 @@ public class LeftControlBar extends JToolBar {
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DASHBOARD));
 
-		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiModulesIcon(32));
+		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiThemeIcon(32));
 		jButtonOpsiLicenses.setSelectedIcon(
 				Icons.getOpsiIcon(32, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT));
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));

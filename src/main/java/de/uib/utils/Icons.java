@@ -165,6 +165,10 @@ public final class Icons {
 		return icon.derive(size, size);
 	}
 
+	public static FlatSVGIcon getOpsiThemeIcon(int size) {
+		return getOpsiIcon(size, FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+	}
+
 	public static FlatSVGIcon getOpsiIcon(int size, Color color) {
 		return getOpsiIcon(size).setColorFilter(new ColorFilter(oldColor -> color));
 	}

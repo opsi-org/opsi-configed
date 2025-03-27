@@ -202,7 +202,8 @@ public class MainFrame extends JFrame implements KeyListener {
 		Icons.addIntellijIconToMenuItem(jMenuViewDashboard, "dataSchema");
 
 		JMenuItem jMenuViewOpsiModuleInformation = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), Icons.getOpsiModulesIcon(16));
+				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), Icons.getOpsiThemeIcon(16));
+		jMenuViewOpsiModuleInformation.setSelectedIcon(Icons.getOpsiIcon(16, Globals.OPSI_FOREGROUND_DARK));
 		jMenuViewOpsiModuleInformation
 				.addActionListener(event -> leftControlBar.selectView(EditingTarget.OPSI_MODULES));
 		jMenuViewOpsiModuleInformation.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK));
