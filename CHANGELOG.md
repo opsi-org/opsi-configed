@@ -1,3 +1,7 @@
+## [4.3.8.X] - XXXX-XX-XX
+### Changed
+- Make dialogs resizable and/or non-modal
+
 ## [4.3.8.0] - 2025-03-25
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
@@ -6,13 +10,8 @@
 - Accept changes in product properties, configs (host parameters) and depot configuration directly from editor without pressing ENTER
 - Show a menu for the server console in the menu bar on the top
 
-<<<<<<< HEAD
-### Changed
-- Make dialogs resizable and/or non-modal
-=======
 ### Fixed
 - Beep sounds, when entering MAC, OTP, and SystemUUID
->>>>>>> v4.3
 
 ## [4.3.7.3] - 2025-03-24
 ### Fixed
