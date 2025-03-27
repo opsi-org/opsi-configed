@@ -1,4 +1,4 @@
-## [4.3.8.X] - XXXX-XX-XX
+## [4.3.8.1] - 2025-03-27
 ### Fixed
 - Icon to select all products appears when depot selection changes (even if all products are selected)
 
