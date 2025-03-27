@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -242,6 +243,18 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
 
+		if (panelTable.getJTable().getRowSorter() instanceof TableRowSorter) {
+			TableRowSorter<? extends TableModel> rowSorter = (TableRowSorter<? extends TableModel>) panelTable
+					.getJTable().getRowSorter();
+			rowSorter.setComparator(7, new OSComparator());
+
+			List<RowSorter.SortKey> sortKeys = new ArrayList<>(2);
+			sortKeys.add(new RowSorter.SortKey(7, SortOrder.ASCENDING));
+			sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+			rowSorter.setSortKeys(sortKeys);
+			rowSorter.sort();
+		}
+
 		panelTable.getJTable().setDefaultRenderer(Object.class, new OSTableCellRenderer());
 		panelTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(400);
 		panelTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(200);
@@ -257,7 +270,10 @@ public class PanelSWInfo extends JPanel {
 
 		jTable.setAutoCreateRowSorter(true);
 		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
-		List<RowSorter.SortKey> list = new ArrayList<>(1);
+		tableSorter.setComparator(7, new OSComparator());
+
+		List<RowSorter.SortKey> list = new ArrayList<>(2);
+		list.add(new RowSorter.SortKey(7, SortOrder.ASCENDING));
 		list.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		tableSorter.setSortKeys(list);
 		tableSorter.sort();
@@ -297,6 +313,18 @@ public class PanelSWInfo extends JPanel {
 
 			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getJTable(),
 					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
+		}
+	}
+
+	private static class OSComparator implements Comparator<Boolean> {
+		@Override
+		public int compare(Boolean o1, Boolean o2) {
+			boolean b1 = o1;
+			boolean b2 = o2;
+			if (b1 == b2) {
+				return 0;
+			}
+			return b1 ? -1 : 1;
 		}
 	}
 
