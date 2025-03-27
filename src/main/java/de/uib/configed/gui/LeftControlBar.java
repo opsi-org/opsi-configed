@@ -14,12 +14,9 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
-import de.uib.configed.Globals;
 import de.uib.utils.Icons;
 
 public class LeftControlBar extends JToolBar {
@@ -53,9 +50,8 @@ public class LeftControlBar extends JToolBar {
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 		jButtonDashboard.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.DASHBOARD));
 
-		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiThemeIcon(32));
-		jButtonOpsiLicenses.setSelectedIcon(
-				Icons.getOpsiIcon(32, FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT));
+		JToggleButton jButtonOpsiLicenses = new JToggleButton(Icons.getOpsiModulesIcon(32));
+		jButtonOpsiLicenses.setSelectedIcon(Icons.getActiveOpsiModulesIcon(32));
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
 

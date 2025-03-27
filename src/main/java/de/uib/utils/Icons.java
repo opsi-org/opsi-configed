@@ -8,6 +8,7 @@ package de.uib.utils;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
@@ -101,38 +102,6 @@ public final class Icons {
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
-	public static FlatSVGIcon getOpsiModulesIcon(int size) {
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-
-		Color iconColor = null;
-		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
-			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!OpsiLicensing.isExtendedView());
-
-			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				iconColor = Globals.OPSI_ERROR;
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				iconColor = Globals.OPSI_WARNING;
-				break;
-
-			case LicensingInfoMap.STATE_OKAY:
-				iconColor = Globals.OPSI_OK;
-				break;
-
-			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
-				break;
-			}
-		}
-
-		return getOpsiIcon(size, iconColor);
-	}
-
 	public static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
 
@@ -173,6 +142,73 @@ public final class Icons {
 		return getOpsiIcon(size).setColorFilter(new ColorFilter(oldColor -> color));
 	}
 
+	public static ImageIcon getSelectedOpsiModulesIcon(int size) {
+		return getOpsiModulesIcon(size, Globals.OPSI_FOREGROUND_DARK);
+	}
+
+	public static ImageIcon getActiveOpsiModulesIcon(int size) {
+		return getOpsiModulesIcon(size, Globals.getActiveColor());
+	}
+
+	public static ImageIcon getOpsiModulesIcon(int size) {
+		return getOpsiModulesIcon(size, null);
+	}
+
+	/* 
+	 * @param color the color of the opsi icon. If null, the theme color will be used.
+	 */
+	private static ImageIcon getOpsiModulesIcon(int size, Color color) {
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+
+		Color iconColor = null;
+		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
+			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
+					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
+					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+					!OpsiLicensing.isExtendedView());
+
+			switch (licensingInfoMap.getWarningLevel()) {
+			case LicensingInfoMap.STATE_OVER_LIMIT:
+				iconColor = Globals.OPSI_ERROR;
+				break;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
+				iconColor = Globals.OPSI_WARNING;
+				break;
+
+			case LicensingInfoMap.STATE_OKAY:
+				Logging.info("icon will remain null, we don't want to show a dot when modules are okay");
+				break;
+
+			default:
+				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
+				break;
+			}
+		}
+
+		FlatSVGIcon opsiIcon;
+		if (color == null) {
+			opsiIcon = getOpsiThemeIcon(size);
+		} else {
+			opsiIcon = getOpsiIcon(size, color);
+		}
+
+		if (iconColor == null) {
+			return opsiIcon;
+		} else {
+			return addDotIcon(opsiIcon, size, iconColor);
+		}
+	}
+
+	private static ImageIcon addDotIcon(ImageIcon image, int size, Color dotColor) {
+		FlatSVGIcon point = getIntellijIcon("point", dotColor, size / 4);
+
+		BufferedImage bufferedImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+		bufferedImage.getGraphics().drawImage(image.getImage(), 0, 0, null);
+		bufferedImage.getGraphics().drawImage(point.getImage(), size / 4 * 3, size / 4 * 3, null);
+		return new ImageIcon(bufferedImage);
+	}
+
 	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
 		FlatSVGIcon icon = new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/favicon.svg");
 
@@ -189,9 +225,8 @@ public final class Icons {
 
 	public static FlatSVGIcon getSelectedIntellijIcon(String iconName) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
-		Color newColor = FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT;
 
-		return new FlatSVGIcon(path).setColorFilter(new ColorFilter(color -> newColor));
+		return new FlatSVGIcon(path).setColorFilter(new ColorFilter(color -> Globals.getActiveColor()));
 	}
 
 	public static FlatSVGIcon getSelectedIntellijIcon(String iconName, int size) {
