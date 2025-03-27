@@ -1,3 +1,7 @@
+## [4.3.8.X] - XXXX-XX-XX
+### Fixed
+- Icon to select all products appears when depot selection changes (even if all products are selected)
+
 ## [4.3.8.0] - 2025-03-25
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
