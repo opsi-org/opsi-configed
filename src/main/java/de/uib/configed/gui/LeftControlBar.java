@@ -55,8 +55,8 @@ public class LeftControlBar extends JToolBar {
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		jButtonOpsiLicenses.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.OPSI_MODULES));
 
-		JToggleButton jButtonHealthCheck = new JToggleButton(Icons.getHealthCheckIcon(32));
-		jButtonHealthCheck.setSelectedIcon(Icons.getActiveHealthCheckIcon(32));
+		JToggleButton jButtonHealthCheck = new JToggleButton();
+		Icons.addActiveHealthCheckIcon(jButtonHealthCheck, 32);
 		jButtonHealthCheck.setToolTipText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jButtonHealthCheck.addActionListener(event -> ConfigedMain.setEditingTarget(EditingTarget.HEALTH_CHECK));
 

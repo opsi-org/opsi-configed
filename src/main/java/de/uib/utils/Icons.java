@@ -203,15 +203,37 @@ public final class Icons {
 		}
 	}
 
-	public static ImageIcon getSelectedHealthCheckIcon(int size) {
-		return getHealthCheckIcon(size, Globals.OPSI_FOREGROUND_DARK);
+	/**
+	 * We will set the icons for the health check and then load the "real" icons
+	 * in a separate thread because it may take a lot of time to load the health
+	 * check.
+	 */
+	public static void addActiveHealthCheckIcon(AbstractButton button, int size) {
+		button.setIcon(Icons.getIntellijIcon("springBootHealth", 32));
+		button.setSelectedIcon(Icons.getIntellijIcon("springBootHealth", Globals.getActiveColor(), 32));
+
+		new Thread(() -> {
+			button.setIcon(getHealthCheckIcon(size));
+			button.setSelectedIcon(getHealthCheckIcon(size, Globals.getActiveColor()));
+		}).start();
 	}
 
-	public static ImageIcon getActiveHealthCheckIcon(int size) {
-		return getHealthCheckIcon(size, Globals.getActiveColor());
+	/**
+	 * We will set the icons for the health check and then load the "real" icons
+	 * in a separate thread because it may take a lot of time to load the health
+	 * check.
+	 */
+	public static void addSelectedHealthCheckIcon(AbstractButton button, int size) {
+		button.setIcon(Icons.getIntellijIcon("springBootHealth"));
+		button.setSelectedIcon(Icons.getIntellijIcon("springBootHealth", Globals.OPSI_FOREGROUND_DARK));
+
+		new Thread(() -> {
+			button.setIcon(getHealthCheckIcon(size));
+			button.setSelectedIcon(getHealthCheckIcon(size, Globals.OPSI_FOREGROUND_DARK));
+		}).start();
 	}
 
-	public static ImageIcon getHealthCheckIcon(int size) {
+	private static ImageIcon getHealthCheckIcon(int size) {
 		return getHealthCheckIcon(size, null);
 	}
 

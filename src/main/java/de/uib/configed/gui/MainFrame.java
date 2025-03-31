@@ -208,9 +208,8 @@ public class MainFrame extends JFrame implements KeyListener {
 				.addActionListener(event -> leftControlBar.selectView(EditingTarget.OPSI_MODULES));
 		jMenuViewOpsiModuleInformation.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK));
 
-		JMenuItem jMenuViewHealthCheck = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"),
-				Icons.getHealthCheckIcon(16));
-		jMenuViewHealthCheck.setSelectedIcon(Icons.getSelectedHealthCheckIcon(16));
+		JMenuItem jMenuViewHealthCheck = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		Icons.addSelectedHealthCheckIcon(jMenuViewHealthCheck, 16);
 		jMenuViewHealthCheck.addActionListener(event -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK));
 		jMenuViewHealthCheck.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK));
 
