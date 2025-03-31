@@ -1,3 +1,11 @@
+## [4.3.8.X] - XXXX-XX-XX
+### Fixed
+- `NullPointerExxception` when products are selected and depot (which has no products) changed
+- Incorrect product selected when depot is changed
+
+### Changed
+- Select all products/clients on depot change or all data realod if no prior selection exist (or couldn't find product/client)
+
 ## [4.3.8.1] - 2025-03-27
 ### Fixed
 - Icon to select all products appears when depot selection changes (even if all products are selected)
