@@ -13,6 +13,8 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 
+import com.formdev.flatlaf.FlatLaf;
+
 /**
  * This class contains app constants
  */
@@ -174,5 +176,9 @@ public final class Globals {
 
 	public static Color getGreyCell2() {
 		return greyCell2;
+	}
+
+	public static Color getActiveColor() {
+		return FlatLaf.isLafDark() ? ICON_ACTIVE_DARK : ICON_ACTIVE_LIGHT;
 	}
 }

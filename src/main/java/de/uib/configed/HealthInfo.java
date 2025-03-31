@@ -23,6 +23,11 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
  * saved in a file.
  */
 public final class HealthInfo {
+	public static final String ERROR = "error";
+	public static final String WARNING = "warning";
+	public static final String OK = "ok";
+
+	private static final List<String> statusLevels = Arrays.asList(OK, WARNING, ERROR);
 	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -116,10 +121,21 @@ public final class HealthInfo {
 
 	private static void sortHealthDataBasedOnStatusLevel(List<Map<String, Object>> healthData) {
 		Collections.sort(healthData, (Map<String, Object> map1, Map<String, Object> map2) -> {
-			List<String> statusLevels = Arrays.asList("error", "warning", "ok");
 			String status1 = (String) map1.get("check_status");
 			String status2 = (String) map2.get("check_status");
-			return Integer.compare(statusLevels.indexOf(status1), statusLevels.indexOf(status2));
+			return -Integer.compare(statusLevels.indexOf(status1), statusLevels.indexOf(status2));
 		});
+	}
+
+	public static String getMaxWarningLevel() {
+		int warningLevel = 0;
+
+		List<Map<String, Object>> healthData = persistenceController.getHealthDataService().checkHealthPD();
+
+		for (Map<String, Object> data : healthData) {
+			warningLevel = Math.max(warningLevel, statusLevels.indexOf(data.get("check_status")));
+		}
+
+		return statusLevels.get(warningLevel);
 	}
 }
