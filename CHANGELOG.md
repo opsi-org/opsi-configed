@@ -1,6 +1,11 @@
+## [4.3.8.1] - 2025-03-27
+### Fixed
+- Icon to select all products appears when depot selection changes (even if all products are selected)
+
 ## [4.3.8.0] - 2025-03-25
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
+- `isOperatingSystem` column to software information table
 
 ### Changed
 - Accept changes in product properties, configs (host parameters) and depot configuration directly from editor without pressing ENTER
@@ -8,6 +13,7 @@
 
 ### Fixed
 - Beep sounds, when entering MAC, OTP, and SystemUUID
+- `IndexOutOfBoundsException` when trying to import clients via CSV
 
 ## [4.3.7.3] - 2025-03-24
 ### Fixed

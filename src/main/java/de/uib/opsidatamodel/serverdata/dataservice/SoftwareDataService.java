@@ -299,7 +299,8 @@ public class SoftwareDataService {
 		}
 
 		String[] callAttributes = new String[] { SWAuditEntry.NAME, SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION,
-				SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE, SWAuditEntry.WINDOWS_SOFTWARE_ID };
+				SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE, SWAuditEntry.WINDOWS_SOFTWARE_ID,
+				SWAuditEntry.IS_OPERATING_SYSTEM };
 		Map<String, Object> callFilter = new HashMap<>();
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.AUDIT_SOFTWARE_GET_OBJECTS,
 				new Object[] { callAttributes, callFilter });
@@ -317,7 +318,7 @@ public class SoftwareDataService {
 		for (Map<String, Object> map : list) {
 			i++;
 			SWAuditEntry entry = new SWAuditEntry(map);
-			String swName = entry.get(SWAuditEntry.NAME);
+			String swName = entry.get(SWAuditEntry.NAME).toString();
 			String swIdent = entry.getIdent();
 			installedSoftwareInformation.put(swIdent, entry);
 
@@ -362,13 +363,13 @@ public class SoftwareDataService {
 
 	private static boolean showForLicensing(SWAuditEntry entry, String swName) {
 		for (String marker : linuxSWnameMarkers) {
-			String version = entry.get(SWAuditEntry.VERSION);
+			String version = entry.get(SWAuditEntry.VERSION).toString();
 			if (swName.indexOf(marker) > -1 || version.indexOf(marker) > -1) {
 				return false;
 			}
 		}
 
-		return !entry.get(SWAuditEntry.SUB_VERSION).startsWith(LINUX_SUBVERSION_MARKER);
+		return !entry.get(SWAuditEntry.SUB_VERSION).toString().startsWith(LINUX_SUBVERSION_MARKER);
 	}
 
 	public Map<String, List<SWAuditClientEntry>> getSoftwareAuditOnClients(Collection<String> clients) {

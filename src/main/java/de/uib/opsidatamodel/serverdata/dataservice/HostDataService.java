@@ -103,7 +103,7 @@ public class HostDataService {
 			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(11));
 
 			// A blank/empty string is an illegal opsi-host-key so we need to replace it with null
-			String opsiHostKey = ((String) client.get(13)).isBlank() ? null : ((String) client.get(13)).trim();
+			String opsiHostKey = ((String) client.get(12)).isBlank() ? null : ((String) client.get(12)).trim();
 
 			String newClientId = hostname + "." + domainname;
 
