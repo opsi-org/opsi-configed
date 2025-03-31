@@ -212,6 +212,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				addSelectionPath(path);
 			}
 		}
+
+		if (getSelectionPaths() == null || getSelectionPaths().length == 0) {
+			addSelectionPath(new TreePath(model.getPathToRoot(groupNodeFullList)));
+		}
 	}
 
 	private DefaultMutableTreeNode getNodeFromMap(Map.Entry<String, Map<String, Object>> node) {
