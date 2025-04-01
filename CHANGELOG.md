@@ -1,6 +1,7 @@
 ## [4.3.X.X] - 2025-XX-XX
 ### Changed
 - Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
+- Focus on group name field when creating new group
 
 ### Add
 - Show a point in the Health Check icon to show if there is a warning/error in the Health Check
