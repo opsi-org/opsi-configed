@@ -299,8 +299,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		String groupId = node.toString();
 
-		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("description"),
+		JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
+		labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+
+		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), labelDescription,
 				Configed.getResourceValue("ClientTree.editGroup") + ": " + groupId, JOptionPane.PLAIN_MESSAGE, null,
 				null, groups.get(groupId).get("description"));
 
