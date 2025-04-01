@@ -5,6 +5,7 @@
 - Focus on group name field when creating new group
 - Scroll to bottom when search criterion is added in `ClientSelectionDialog`
 - Select all products/clients on depot change or all data realod if no prior selection exist (or couldn't find product/client)
+- Make saved searches dialog resizable
 
 ### Add
 - Show a point in the Health Check icon to show if there is a warning/error in the Health Check

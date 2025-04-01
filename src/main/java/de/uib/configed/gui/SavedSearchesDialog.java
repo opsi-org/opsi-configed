@@ -35,6 +35,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SearchQueryExecutor;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
@@ -68,6 +69,7 @@ public class SavedSearchesDialog {
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
 				new Object[] { Configed.getResourceValue("search"), Configed.getResourceValue("buttonCancel") });
+		Utils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
