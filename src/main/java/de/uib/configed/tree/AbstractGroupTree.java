@@ -24,6 +24,7 @@ import java.util.TreeMap;
 
 import javax.swing.DropMode;
 import javax.swing.GroupLayout;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -391,17 +392,28 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 					.addComponent(groupDescriptionField));
 
 			String newGroupKey = null;
+			JOptionPane optionPane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
+				@Override
+				public void selectInitialValue() {
+					super.selectInitialValue();
+					groupNameField.requestFocusInWindow();
+				}
+			};
+
+			JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("ClientTree.addNode"));
 
 			do {
-				int answer = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
-						new Object[] { inscription, panel }, Configed.getResourceValue("ClientTree.addNode"),
-						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, 0);
+				optionPane.setMessage(new Object[] { inscription, panel });
+				dialog.pack();
+				dialog.setVisible(true);
 
-				if (answer == JOptionPane.OK_OPTION) {
+				if (optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
 					newGroupKey = groupNameField.getText().toLowerCase(Locale.ROOT);
 				} else {
 					return null;
 				}
+
 				inscription = Configed.getResourceValue("ClientTree.requestNotExistingGroupName");
 			} while ("".equals(newGroupKey) || groups.keySet().contains(newGroupKey));
 
