@@ -80,8 +80,6 @@ public class PackageManagerInstallParameterDialog {
 		// We need to pack the dialog because the size of the mainPanel has changed
 		dialog.pack();
 
-		Utils.restrictVerticalResizing(dialog, dialog.getPreferredSize().height);
-
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		// the dialog should resize to the size of the content

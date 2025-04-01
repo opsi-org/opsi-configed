@@ -6,12 +6,9 @@
 
 package de.uib.utils;
 
-import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Window;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.io.BufferedReader;
@@ -485,20 +482,5 @@ public final class Utils {
 			}
 		};
 		optionPane.addHierarchyListener(listener);
-	}
-
-	public static void restrictVerticalResizing(Component component, int fixedHeight) {
-		Dimension size = component.getSize();
-		component.setSize(size.width, fixedHeight);
-
-		component.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				Dimension current = component.getSize();
-				if (current.height != fixedHeight) {
-					component.setSize(current.width, fixedHeight);
-				}
-			}
-		});
 	}
 }
