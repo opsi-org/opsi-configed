@@ -166,7 +166,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		Map<String, Map<String, Object>> expandedNodes = new HashMap<>();
 
 		Enumeration<TreePath> expanded = getExpandedDescendants(new TreePath(rootNode));
-		List<TreePath> selectionPaths = Arrays.asList(getSelectionPaths());
+		List<TreePath> selectionPaths = Arrays
+				.asList(getSelectionPaths() != null ? getSelectionPaths() : new TreePath[0]);
 
 		if (expanded != null) {
 			while (expanded.hasMoreElements()) {
@@ -186,8 +187,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				map.put("selected", true);
 				if (!((DefaultMutableTreeNode) path.getLastPathComponent()).getAllowsChildren()) {
 					map.put("parent", path.getParentPath().getLastPathComponent().toString());
-					map.put("index", model.getIndexOfChild(path.getParentPath().getLastPathComponent(),
-							path.getLastPathComponent()));
+					map.put("child", path.getLastPathComponent());
 				}
 				String parent = !((DefaultMutableTreeNode) path.getLastPathComponent()).getAllowsChildren()
 						? (path.getParentPath().getLastPathComponent().toString() + "/"
@@ -218,6 +218,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				addSelectionPath(path);
 			}
 		}
+
+		if (getSelectionPaths() == null || getSelectionPaths().length == 0) {
+			addSelectionPath(new TreePath(model.getPathToRoot(groupNodeFullList)));
+		}
 	}
 
 	private DefaultMutableTreeNode getNodeFromMap(Map.Entry<String, Map<String, Object>> node) {
@@ -225,7 +229,8 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		if (result == null && node.getValue().containsKey("parent")) {
 			DefaultMutableTreeNode parentNode = groupNodes.get(node.getValue().get("parent"));
 			if (parentNode.getChildCount() > 0) {
-				result = (DefaultMutableTreeNode) parentNode.getChildAt((int) node.getValue().get("index"));
+				String child = node.getValue().get("child").toString();
+				result = getChildWithUserObjectString(child, parentNode);
 			}
 		}
 		return result;
