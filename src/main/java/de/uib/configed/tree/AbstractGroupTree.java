@@ -6,6 +6,7 @@
 
 package de.uib.configed.tree;
 
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,7 +23,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.DropMode;
+import javax.swing.GroupLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -36,6 +40,7 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -361,18 +366,34 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 
 		if (node.getAllowsChildren()) {
+			JLabel labelGroupName = new JLabel(Configed.getResourceValue("ClientTree.editNode.label.groupname"));
+			labelGroupName.setFont(labelGroupName.getFont().deriveFont(Font.BOLD));
+
 			JTextField groupNameField = new JTextField();
+
+			JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
+			labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+
 			JTextField groupDescriptionField = new JTextField();
 			String inscription = "";
+
+			JPanel panel = new JPanel();
+			GroupLayout layout = new GroupLayout(panel);
+			panel.setLayout(layout);
+
+			layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelGroupName)
+					.addComponent(groupNameField).addGap(Globals.GAP_SIZE).addComponent(labelDescription)
+					.addComponent(groupDescriptionField));
+			layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addComponent(labelGroupName).addComponent(groupNameField).addComponent(labelDescription)
+					.addComponent(groupDescriptionField));
 
 			String newGroupKey = null;
 
 			do {
-				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-						new Object[] { inscription, Configed.getResourceValue("ClientTree.editNode.label.groupname"),
-								groupNameField, Configed.getResourceValue("description"), groupDescriptionField },
-						Configed.getResourceValue("ClientTree.addNode"), JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.PLAIN_MESSAGE);
+				int answer = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
+						new Object[] { inscription, panel }, Configed.getResourceValue("ClientTree.addNode"),
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, 0);
 
 				if (answer == JOptionPane.OK_OPTION) {
 					newGroupKey = groupNameField.getText().toLowerCase(Locale.ROOT);
