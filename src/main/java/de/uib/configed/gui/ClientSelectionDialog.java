@@ -1155,6 +1155,8 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		int diffSize = scrollPane.getPreferredSize().width - scrollPane.getSize().width
 				+ scrollPane.getVerticalScrollBar().getWidth();
 		dialog.setSize(dialog.getWidth() + diffSize, dialog.getHeight());
+		SwingUtilities.invokeLater(
+				() -> scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum()));
 	}
 
 	private void selectOperation(ActionEvent actionEvent) {
