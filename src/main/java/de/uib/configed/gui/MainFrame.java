@@ -203,13 +203,14 @@ public class MainFrame extends JFrame implements KeyListener {
 
 		JMenuItem jMenuViewOpsiModuleInformation = new JMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), Icons.getOpsiModulesIcon(16));
+		jMenuViewOpsiModuleInformation.setSelectedIcon(Icons.getSelectedOpsiModulesIcon(16));
 		jMenuViewOpsiModuleInformation
 				.addActionListener(event -> leftControlBar.selectView(EditingTarget.OPSI_MODULES));
 		jMenuViewOpsiModuleInformation.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK));
 
 		JMenuItem jMenuViewHealthCheck = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		Icons.addSelectedHealthCheckIcon(jMenuViewHealthCheck, 16);
 		jMenuViewHealthCheck.addActionListener(event -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK));
-		Icons.addIntellijIconToMenuItem(jMenuViewHealthCheck, "springBootHealth");
 		jMenuViewHealthCheck.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK));
 
 		JMenuItem jMenuViewLicenseManagement = new JMenuItem(Configed.getResourceValue("MainFrame.labelLicenses"));
@@ -680,7 +681,6 @@ public class MainFrame extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		Logging.devel(this, "control is down " + e.isControlDown());
 		if ((e.isControlDown() && e.isShiftDown()) && e.getKeyCode() == KeyEvent.VK_I) {
 			configedMain.invertSelection();
 		}

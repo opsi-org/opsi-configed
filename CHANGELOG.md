@@ -1,10 +1,15 @@
-## [4.3.8.X] - XXXX-XX-XX
+## [4.3.X.X] - 2025-XX-XX
+### Changed
+- Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
+- Select all products/clients on depot change or all data realod if no prior selection exist (or couldn't find product/client)
+
+### Add
+- Show a point in the Health Check icon to show if there is a warning/error in the Health Check
+
 ### Fixed
+- When searching with search button (magnifying glass), the search isn't performed while cursor isn't placed in the display field.
 - `NullPointerExxception` when products are selected and depot (which has no products) changed
 - Incorrect product selected when depot is changed
-
-### Changed
-- Select all products/clients on depot change or all data realod if no prior selection exist (or couldn't find product/client)
 
 ## [4.3.8.1] - 2025-03-27
 ### Fixed
