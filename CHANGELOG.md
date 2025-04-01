@@ -5,6 +5,9 @@
 ### Add
 - Show a point in the Health Check icon to show if there is a warning/error in the Health Check
 
+### Fixed
+- When searching with search button (magnifying glass), the search isn't performed while cursor isn't placed in the display field.
+
 ## [4.3.8.1] - 2025-03-27
 ### Fixed
 - Icon to select all products appears when depot selection changes (even if all products are selected)
