@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
@@ -77,12 +78,15 @@ public final class NewClientDialog {
 		JButton buttonCreate = new JButton(Configed.getResourceValue("NewClientDialog.buttonCreate"));
 		buttonCreate.addActionListener(actionEvent -> create());
 
-		optionPane = new JOptionPane(createPanel(), JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+		JScrollPane scrollPane = new JScrollPane(createPanel());
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { buttonCreate, Configed.getResourceValue("buttonClose") });
 		Utils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title"));
+		dialog.setMinimumSize(new Dimension(0, 0));
 		dialog.setModal(false);
 		dialog.pack();
 	}
