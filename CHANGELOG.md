@@ -1,10 +1,22 @@
-## [4.3.8.X] - XXXX-XX-XX
+## [4.3.X.X] - 2025-XX-XX
 ### Changed
+- Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
 - Make dialogs resizable and/or non-modal
+
+### Add
+- Show a point in the Health Check icon to show if there is a warning/error in the Health Check
+
+### Fixed
+- When searching with search button (magnifying glass), the search isn't performed while cursor isn't placed in the display field.
+
+## [4.3.8.1] - 2025-03-27
+### Fixed
+- Icon to select all products appears when depot selection changes (even if all products are selected)
 
 ## [4.3.8.0] - 2025-03-25
 ### Added
 - View menu for navigating main views alongside key shortcuts (and circular navigation)
+- `isOperatingSystem` column to software information table
 
 ### Changed
 - Accept changes in product properties, configs (host parameters) and depot configuration directly from editor without pressing ENTER
@@ -12,6 +24,7 @@
 
 ### Fixed
 - Beep sounds, when entering MAC, OTP, and SystemUUID
+- `IndexOutOfBoundsException` when trying to import clients via CSV
 
 ## [4.3.7.3] - 2025-03-24
 ### Fixed

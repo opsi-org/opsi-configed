@@ -142,8 +142,7 @@ public class ConfigedMain {
 				productTree.reInitTree();
 				refreshClientListKeepingGroup();
 
-				ButtonTabComponent comp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
-				comp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
+				initTabComponents();
 			}
 		}
 	};
@@ -340,33 +339,33 @@ public class ConfigedMain {
 		editingTarget = newEditingTarget;
 
 		switch (editingTarget) {
-			case CLIENTS:
-				mainFrame.showClientConfiguration();
-				break;
+		case CLIENTS:
+			mainFrame.showClientConfiguration();
+			break;
 
-			case DEPOTS:
-				mainFrame.showDepotConfiguration();
-				break;
+		case DEPOTS:
+			mainFrame.showDepotConfiguration();
+			break;
 
-			case SERVER:
-				mainFrame.showServerConfiguration();
-				break;
+		case SERVER:
+			mainFrame.showServerConfiguration();
+			break;
 
-			case DASHBOARD:
-				mainFrame.showDashboard();
-				break;
+		case DASHBOARD:
+			mainFrame.showDashboard();
+			break;
 
-			case OPSI_MODULES:
-				mainFrame.showOpsiModules();
-				break;
+		case OPSI_MODULES:
+			mainFrame.showOpsiModules();
+			break;
 
-			case HEALTH_CHECK:
-				mainFrame.showHealthDataAction();
-				break;
+		case HEALTH_CHECK:
+			mainFrame.showHealthDataAction();
+			break;
 
-			case LICENSE_MANAGEMENT:
-				mainFrame.startLicensingManagement();
-				break;
+		case LICENSE_MANAGEMENT:
+			mainFrame.startLicensingManagement();
+			break;
 		}
 	}
 

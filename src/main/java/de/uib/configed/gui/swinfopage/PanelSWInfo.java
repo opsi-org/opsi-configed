@@ -6,12 +6,16 @@
 
 package de.uib.configed.gui.swinfopage;
 
+import java.awt.Component;
+import java.awt.Font;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -38,6 +42,7 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
+import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.ExporterToCSV;
@@ -45,6 +50,7 @@ import de.uib.utils.table.ExporterToPDF;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.TableModelFilterCondition;
+import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
 import de.uib.utils.table.gui.PanelGenEditTable;
 import de.uib.utils.table.provider.DefaultTableProvider;
@@ -237,9 +243,24 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
 
+		if (panelTable.getJTable().getRowSorter() instanceof TableRowSorter) {
+			TableRowSorter<? extends TableModel> rowSorter = (TableRowSorter<? extends TableModel>) panelTable
+					.getJTable().getRowSorter();
+			rowSorter.setComparator(7, new OSComparator());
+
+			List<RowSorter.SortKey> sortKeys = new ArrayList<>(2);
+			sortKeys.add(new RowSorter.SortKey(7, SortOrder.ASCENDING));
+			sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+			rowSorter.setSortKeys(sortKeys);
+			rowSorter.sort();
+		}
+
+		panelTable.getJTable().setDefaultRenderer(Object.class, new OSTableCellRenderer());
 		panelTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(400);
 		panelTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(200);
 		panelTable.getJTable().getColumnModel().getColumn(2).setPreferredWidth(100);
+		panelTable.getJTable().getColumnModel().getColumn(7)
+				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
 
 		csvExportTable = new ExporterToCSV(panelTable.getJTable());
 	}
@@ -249,15 +270,20 @@ public class PanelSWInfo extends JPanel {
 
 		jTable.setAutoCreateRowSorter(true);
 		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
-		List<RowSorter.SortKey> list = new ArrayList<>(1);
+		tableSorter.setComparator(7, new OSComparator());
+
+		List<RowSorter.SortKey> list = new ArrayList<>(2);
+		list.add(new RowSorter.SortKey(7, SortOrder.ASCENDING));
 		list.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		tableSorter.setSortKeys(list);
 		tableSorter.sort();
 
-		jTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
+		jTable.setDefaultRenderer(Object.class, new OSTableCellRenderer());
 		jTable.getColumnModel().getColumn(0).setPreferredWidth(400);
 		jTable.getColumnModel().getColumn(1).setPreferredWidth(200);
 		jTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+		jTable.getColumnModel().getColumn(7)
+				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
 		jTable.setColumnSelectionAllowed(true);
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
@@ -290,6 +316,36 @@ public class PanelSWInfo extends JPanel {
 		}
 	}
 
+	private static class OSComparator implements Comparator<Boolean> {
+		@Override
+		public int compare(Boolean o1, Boolean o2) {
+			boolean b1 = o1;
+			boolean b2 = o2;
+			if (b1 == b2) {
+				return 0;
+			}
+			return b1 ? -1 : 1;
+		}
+	}
+
+	private static class OSTableCellRenderer extends ColorTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+					column);
+			boolean isOperatingSystem = (Boolean) table.getValueAt(row, 7);
+
+			if (isOperatingSystem) {
+				cellComponent.setFont(cellComponent.getFont().deriveFont(Font.BOLD));
+			} else {
+				cellComponent.setFont(cellComponent.getFont().deriveFont(Font.PLAIN));
+			}
+
+			return cellComponent;
+		}
+	}
+
 	private Map<String, Map<String, Object>> retrieveSWInfoMap() {
 		if (hostId == null) {
 			return new HashMap<>();
@@ -306,9 +362,15 @@ public class PanelSWInfo extends JPanel {
 			scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 			title = scanInfo;
 		} else {
+			Optional<String> osName = tableData.values().stream()
+					.filter(innerMap -> Boolean.TRUE.equals(innerMap.get(SWAuditEntry.IS_OPERATING_SYSTEM)))
+					.map(innerMap -> (String) innerMap.get(SWAuditEntry.NAME)).findFirst();
 			Logging.debug(this, "retrieved size  ", tableData.size());
 			scanInfo = "Scan " + persistenceController.getSoftwareDataService()
 					.getLastSoftwareAuditModification(swAuditClientEntries, hostId);
+			if (osName.isPresent()) {
+				scanInfo += " on " + osName.get();
+			}
 			title = scanInfo;
 		}
 
