@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseAdapter;
@@ -77,17 +78,16 @@ public final class NewClientDialog {
 		JButton buttonCreate = new JButton(Configed.getResourceValue("NewClientDialog.buttonCreate"));
 		buttonCreate.addActionListener(actionEvent -> create());
 
-		optionPane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+		JScrollPane scrollPane = new JScrollPane(createPanel());
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { buttonCreate, Configed.getResourceValue("buttonClose") });
+		Utils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title"));
+		dialog.setMinimumSize(new Dimension(0, 0));
 		dialog.setModal(false);
-
-		// We need to create the panel after the creation because the panel needs the dialog
-		JPanel panel = createPanel();
-
-		optionPane.setMessage(panel);
 		dialog.pack();
 	}
 
@@ -310,7 +310,8 @@ public final class NewClientDialog {
 						GroupLayout.PREFERRED_SIZE)
 
 				/////// NOTES
-				.addGap(Globals.GAP_SIZE).addComponent(jLabelNotes).addComponent(jTextNodesScrollPane, 100, 100, 100)
+				.addGap(Globals.GAP_SIZE).addComponent(jLabelNotes)
+				.addComponent(jTextNodesScrollPane, 100, 100, Short.MAX_VALUE)
 
 				/////// SYSTEM UUID
 				.addGap(Globals.GAP_SIZE).addComponent(jLabelSystemUUID)

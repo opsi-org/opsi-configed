@@ -66,6 +66,7 @@ public class PackageManagerInstallParameterDialog {
 
 		JOptionPane optionPane = new JOptionPane(mainPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { buttonExecute, Configed.getResourceValue("buttonCancel") });
+		Utils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("PackageManagerInstallParameterDialog.title"));
@@ -78,6 +79,8 @@ public class PackageManagerInstallParameterDialog {
 
 		// We need to pack the dialog because the size of the mainPanel has changed
 		dialog.pack();
+
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		// the dialog should resize to the size of the content
 		installCurlPanel.addDialogToReactOn(dialog);
