@@ -219,13 +219,15 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuViewLicenseManagement.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK));
 		Icons.addIntellijIconToMenuItem(jMenuViewLicenseManagement, "scriptingScript");
 
-		JMenuItem nextView = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuViewNextView"));
-		nextView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK));
-		nextView.addActionListener(event -> switchView(true));
-
 		JMenuItem prevView = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuViewPreviousView"));
+		Icons.addIntellijIconToMenuItem(prevView, "up");
 		prevView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_DOWN_MASK));
 		prevView.addActionListener(event -> switchView(false));
+
+		JMenuItem nextView = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuViewNextView"));
+		Icons.addIntellijIconToMenuItem(nextView, "down");
+		nextView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK));
+		nextView.addActionListener(event -> switchView(true));
 
 		jMenuView.add(jMenuViewClientsConfiguration);
 		jMenuView.add(jMenuViewDepotConfiguration);
@@ -235,8 +237,8 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuView.add(jMenuViewHealthCheck);
 		jMenuView.add(jMenuViewLicenseManagement);
 		jMenuView.addSeparator();
-		jMenuView.add(nextView);
 		jMenuView.add(prevView);
+		jMenuView.add(nextView);
 
 		return jMenuView;
 	}
