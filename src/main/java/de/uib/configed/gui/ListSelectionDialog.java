@@ -149,6 +149,21 @@ public class ListSelectionDialog {
 
 	public void setModel(ListModel<String> model) {
 		jList.setModel(model);
+
+		// Without this the search won't work
+		updateSearchTargetModel(model);
+	}
+
+	private void updateSearchTargetModel(ListModel<String> model) {
+		List<String> list = new ArrayList<>();
+		for (int i = 0; i < model.getSize(); i++) {
+			String element = model.getElementAt(i);
+			list.add(element);
+		}
+
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, list, list);
+		searchPane.setTargetModel(searchTargetModel);
+
 	}
 
 	public void addItem(String element) {
@@ -157,6 +172,9 @@ public class ListSelectionDialog {
 			model.addElement(element);
 			jList.addSelectionInterval(model.size() - 1, model.size() - 1);
 			jList.ensureIndexIsVisible(jList.getMaxSelectionIndex());
+
+			// Without this the search won't work
+			updateSearchTargetModel(model);
 		}
 	}
 
