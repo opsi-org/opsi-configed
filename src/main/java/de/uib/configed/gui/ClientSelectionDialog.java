@@ -126,7 +126,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			.getPersistenceController();
 
 	public ClientSelectionDialog(ConfigedMain configedMain, SavedSearchesDialog savedSearchesDialog) {
-
 		this.configedMain = configedMain;
 		this.savedSearchesDialog = savedSearchesDialog;
 		manager = new SelectionManager();
@@ -146,6 +145,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
+		dialog.setMinimumSize(new Dimension(0, 0));
 		dialog.setModalityType(ModalityType.MODELESS);
 		dialog.pack();
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
