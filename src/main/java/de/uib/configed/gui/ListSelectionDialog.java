@@ -28,8 +28,10 @@ import javax.swing.ListSelectionModel;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModel;
 import de.uib.utils.table.gui.SearchTargetModelFromJList;
@@ -51,8 +53,11 @@ public class ListSelectionDialog {
 	public ListSelectionDialog(Component owner, String title, boolean editable) {
 		JPanel panel = createPanel(editable);
 		jOptionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		Utils.enableDialogResizing(jOptionPane);
 
 		dialog = jOptionPane.createDialog(owner, title);
+		dialog.pack();
+		dialog.setLocationRelativeTo(owner != null ? owner : ConfigedMain.getMainFrame());
 	}
 
 	private JPanel createPanel(boolean editable) {
@@ -87,7 +92,7 @@ public class ListSelectionDialog {
 
 		verticalGroup.addGap(Globals.GAP_SIZE);
 		verticalGroup.addComponent(listScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
+				Short.MAX_VALUE);
 
 		// Add additional component if not null
 		if (editable) {

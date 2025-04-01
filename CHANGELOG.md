@@ -1,6 +1,9 @@
 ## [4.3.X.X] - 2025-XX-XX
 ### Changed
 - Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
+- Make dialogs resizable and/or non-modal
+- Focus on group name field when creating new group
+- Scroll to bottom when search criterion is added in `ClientSelectionDialog`
 - Select all products/clients on depot change or all data realod if no prior selection exist (or couldn't find product/client)
 
 ### Add

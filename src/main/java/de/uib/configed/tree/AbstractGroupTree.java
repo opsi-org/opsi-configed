@@ -6,6 +6,7 @@
 
 package de.uib.configed.tree;
 
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,7 +23,11 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.DropMode;
+import javax.swing.GroupLayout;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -36,6 +41,7 @@ import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -299,8 +305,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 		String groupId = node.toString();
 
-		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("description"),
+		JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
+		labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+
+		String answer = (String) JOptionPane.showInputDialog(ConfigedMain.getMainFrame(), labelDescription,
 				Configed.getResourceValue("ClientTree.editGroup") + ": " + groupId, JOptionPane.PLAIN_MESSAGE, null,
 				null, groups.get(groupId).get("description"));
 
@@ -366,24 +374,51 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 
 		if (node.getAllowsChildren()) {
+			JLabel labelGroupName = new JLabel(Configed.getResourceValue("ClientTree.editNode.label.groupname"));
+			labelGroupName.setFont(labelGroupName.getFont().deriveFont(Font.BOLD));
+
 			JTextField groupNameField = new JTextField();
+
+			JLabel labelDescription = new JLabel(Configed.getResourceValue("description"));
+			labelDescription.setFont(labelDescription.getFont().deriveFont(Font.BOLD));
+
 			JTextField groupDescriptionField = new JTextField();
 			String inscription = "";
 
+			JPanel panel = new JPanel();
+			GroupLayout layout = new GroupLayout(panel);
+			panel.setLayout(layout);
+
+			layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelGroupName)
+					.addComponent(groupNameField).addGap(Globals.GAP_SIZE).addComponent(labelDescription)
+					.addComponent(groupDescriptionField));
+			layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addComponent(labelGroupName).addComponent(groupNameField).addComponent(labelDescription)
+					.addComponent(groupDescriptionField));
+
 			String newGroupKey = null;
+			JOptionPane optionPane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
+				@Override
+				public void selectInitialValue() {
+					super.selectInitialValue();
+					groupNameField.requestFocusInWindow();
+				}
+			};
+
+			JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("ClientTree.addNode"));
 
 			do {
-				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-						new Object[] { inscription, Configed.getResourceValue("ClientTree.editNode.label.groupname"),
-								groupNameField, Configed.getResourceValue("description"), groupDescriptionField },
-						Configed.getResourceValue("ClientTree.addNode"), JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.PLAIN_MESSAGE);
+				optionPane.setMessage(new Object[] { inscription, panel });
+				dialog.pack();
+				dialog.setVisible(true);
 
-				if (answer == JOptionPane.OK_OPTION) {
+				if (optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
 					newGroupKey = groupNameField.getText().toLowerCase(Locale.ROOT);
 				} else {
 					return null;
 				}
+
 				inscription = Configed.getResourceValue("ClientTree.requestNotExistingGroupName");
 			} while ("".equals(newGroupKey) || groups.keySet().contains(newGroupKey));
 
