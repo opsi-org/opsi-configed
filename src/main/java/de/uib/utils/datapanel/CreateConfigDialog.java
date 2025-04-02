@@ -21,7 +21,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -48,7 +47,7 @@ public class CreateConfigDialog {
 	private JCheckBox isEditable;
 	private JCheckBox isMultiValue;
 
-	private JTabbedPane jTabbedPane;
+	private JPanel panel;
 
 	private JPanel generalPanel;
 	private JPanel booleanDetailsPanel;
@@ -66,7 +65,7 @@ public class CreateConfigDialog {
 		// Create the tabbed pane after the details panels have been initialized
 		initPanel();
 
-		JOptionPane pane = new JOptionPane(jTabbedPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+		JOptionPane pane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
 
 		dialog = pane.createDialog(ConfigedMain.getMainFrame(),
@@ -95,6 +94,8 @@ public class CreateConfigDialog {
 				.addGap(0, 0, Short.MAX_VALUE));
 		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(defaultLabel)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(booleanDefault));
+
+		booleanDetailsPanel.setVisible(false);
 	}
 
 	private void initUnicodeDetailsPanel() {
@@ -216,15 +217,22 @@ public class CreateConfigDialog {
 	}
 
 	private void initPanel() {
-		jTabbedPane = new JTabbedPane();
-		jTabbedPane.putClientProperty("JTabbedPane.tabAreaAlignment", "fill");
-		jTabbedPane.putClientProperty("JTabbedPane.tabWidthMode", "equal");
-		jTabbedPane.addTab(Configed.getResourceValue("CreateConfigDialog.generalOptions"), generalPanel);
-		jTabbedPane.addTab(Configed.getResourceValue("CreateConfigDialog.details"), unicodeDetailsPanel);
+		panel = new JPanel();
+
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(generalPanel)
+				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(generalPanel)
+				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel));
 	}
 
 	private void updateDetailsTab() {
-		jTabbedPane.setComponentAt(1, isBoolean.isSelected() ? booleanDetailsPanel : unicodeDetailsPanel);
+		booleanDetailsPanel.setVisible(isBoolean.isSelected());
+		unicodeDetailsPanel.setVisible(!isBoolean.isSelected());
+
+		dialog.pack();
 	}
 
 	private void createConfig() {

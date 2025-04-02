@@ -8,6 +8,7 @@
 - Make saved searches dialog resizable
 - Show hidden files and folders in File Chooser
 - Copy element of list selection dialog into extra field on double click
+- Redesign dialog to create configs
 
 ### Add
 - Show a point in the Health Check icon to show if there is a warning/error in the Health Check
