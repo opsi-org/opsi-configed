@@ -15,6 +15,7 @@
 - `NullPointerExxception` when products are selected and depot (which has no products) changed
 - Incorrect product selected when depot is changed
 - Search in values of product property, depot configuration and host configuration
+- Don't call methods twice when reloading product data table (in client and depot configuration)
 
 ## [4.3.8.1] - 2025-03-27
 ### Fixed
