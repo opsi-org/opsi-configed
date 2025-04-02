@@ -242,6 +242,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		});
 
 		chooserDriverPath = new JFileChooser();
+		chooserDriverPath.setFileHidingEnabled(false);
 		chooserDriverPath.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		SwingUtilities.updateComponentTreeUI(chooserDriverPath);
 
@@ -249,6 +250,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		chooserDriverPath.setDialogTitle(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
 		chooserServerpath = new JFileChooser();
+		chooserServerpath.setFileHidingEnabled(false);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);
 

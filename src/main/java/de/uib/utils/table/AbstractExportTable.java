@@ -132,6 +132,7 @@ public abstract class AbstractExportTable {
 	protected String checkFile(String filename, FileNameExtensionFilter exFilter) {
 		if (filename == null) {
 			JFileChooser chooser = new JFileChooser(exportDirectory);
+			chooser.setFileHidingEnabled(false);
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
 			chooser.addChoosableFileFilter(exFilter);
@@ -200,6 +201,7 @@ public abstract class AbstractExportTable {
 		File defaultFile = new File(writeToFile);
 
 		JFileChooser chooser = new JFileChooser(exportDirectory);
+		chooser.setFileHidingEnabled(false);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));
 
