@@ -9,6 +9,8 @@ package de.uib.configed.gui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -69,6 +71,14 @@ public class ListSelectionDialog {
 
 		jList = new JList<>();
 		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && editingTextField != null) {
+					editingTextField.setText(jList.getSelectedValue());
+				}
+			}
+		});
 		JScrollPane listScrollPane = new JScrollPane(jList);
 		listScrollPane.setPreferredSize(new Dimension(200, 200));
 
