@@ -120,7 +120,7 @@ public class ListModelProducerForVisualDatamap implements ListModelProducer {
 
 			while (iter.hasNext()) {
 				String entry = (String) iter.next();
-				if (model.getIndexOf(entry) != -1 && entry != null) {
+				if (model.getIndexOf(entry) == -1 && entry != null) {
 					model.addElement(entry);
 				}
 			}
