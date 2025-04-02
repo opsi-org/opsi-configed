@@ -16,6 +16,7 @@
 - Incorrect product selected when depot is changed
 - Search in values of product property, depot configuration and host configuration
 - Duplicate values in properties combo box
+- Don't call methods twice when reloading product data table (in client and depot configuration)
 
 ## [4.3.8.1] - 2025-03-27
 ### Fixed

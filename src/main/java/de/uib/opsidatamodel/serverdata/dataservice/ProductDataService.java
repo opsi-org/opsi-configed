@@ -181,8 +181,7 @@ public class ProductDataService {
 			return;
 		}
 
-		Logging.info(this, "retrieveProductsAllDepotsPD, reload");
-		retrieveProductInfosPD();
+		Logging.info(this, "retrieveProductsAllDepotsPD");
 
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
@@ -348,7 +347,6 @@ public class ProductDataService {
 		if (cacheManager.isDataCached(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTY_DEFINITIONS)) {
 			return;
 		}
-		retrieveProductsAllDepotsPD();
 
 		Map<String, Map<String, Map<String, ConfigOption>>> depot2Product2PropertyDefinitions = new HashMap<>();
 		String[] callAttributes = new String[] {};
@@ -402,7 +400,6 @@ public class ProductDataService {
 		if (cacheManager.isDataCached(CacheIdentifier.DEPOT_TO_PRODUCT_TO_DEPENDENCY_INFOS)) {
 			return;
 		}
-		retrieveProductsAllDepotsPD();
 
 		Map<String, Map<String, List<Map<String, String>>>> depot2product2dependencyInfos = new HashMap<>();
 
@@ -649,8 +646,6 @@ public class ProductDataService {
 			return;
 		}
 
-		retrieveProductInfosPD();
-
 		Set<String> productIds = new TreeSet<>();
 		Map<String, Map<String, String>> productDefaultStates = new TreeMap<>();
 
@@ -816,9 +811,8 @@ public class ProductDataService {
 
 	public Map<String, ConfigName2ConfigValue> getDefaultProductPropertiesPD(String depotId) {
 		Logging.debug(this, "getDefaultProductProperties for depot ", depotId);
-		retrieveDepotProductPropertiesPD();
-		Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = cacheManager
-				.getCachedData(CacheIdentifier.DEPOT_TO_PRODUCT_TO_PROPERTIES, Map.class);
+
+		Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = getDepot2product2propertiesPD();
 		if (depot2product2properties == null) {
 			Logging.error("no product properties ");
 			return new HashMap<>();

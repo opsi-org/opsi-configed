@@ -27,8 +27,6 @@ public class DepotProductPropertiesDataReloadHandler implements ReloadHandler {
 	public void handle(String event) {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 		cacheManager.clearCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_INFOS);
-		executor.runInParallel(() -> productDataService.retrieveProductInfosPD());
-
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_PACKAGES);
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_NETBOOT_PRODUCTS);
 		cacheManager.clearCachedData(CacheIdentifier.DEPOT_TO_LOCALBOOT_PRODUCTS);
