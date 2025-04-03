@@ -63,8 +63,6 @@ public class MainPanelManager {
 
 	private TopToolBarManager topToolBarManager;
 
-	private JLabel opsiLogo;
-
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -77,8 +75,6 @@ public class MainPanelManager {
 		this.productTree = productTree;
 
 		topToolBarManager = new TopToolBarManager(configedMain);
-
-		opsiLogo = new JLabel(Icons.getOpsiLogoWide());
 
 		initialInitialization(depotsList, mainFrame);
 	}
@@ -249,6 +245,7 @@ public class MainPanelManager {
 	}
 
 	private JPanel createPanel(JComponent component, List<JButton> toolBarButtons, String title) {
+		JLabel opsiLogo = new JLabel(Icons.getOpsiLogoWide());
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(
 				titleLabel.getFont().deriveFont(Font.BOLD).deriveFont((float) (titleLabel.getFont().getSize() + 2)));
