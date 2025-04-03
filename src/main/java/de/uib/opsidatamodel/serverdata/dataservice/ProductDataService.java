@@ -364,8 +364,7 @@ public class ProductDataService {
 
 			String versionInfo = productVersion + FOR_KEY + packageVersion;
 
-			Map<String, Map<String, List<String>>> product2VersionInfo2Depots = cacheManager
-					.getCachedData(CacheIdentifier.PRODUCT_TO_VERSION_INFO_TO_DEPOTS, Map.class);
+			Map<String, Map<String, List<String>>> product2VersionInfo2Depots = getProduct2VersionInfo2DepotsPD();
 			if (product2VersionInfo2Depots.get(productId) == null
 					|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
 				Logging.debug(this, "retrieveAllProductPropertyDefinitions: no depot for ", productId, " version ",

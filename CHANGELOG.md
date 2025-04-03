@@ -1,4 +1,4 @@
-## [4.3.X.X] - 2025-XX-XX
+## [4.3.8.2] - 2025-04-03
 ### Changed
 - Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
 - Make dialogs resizable and/or non-modal
