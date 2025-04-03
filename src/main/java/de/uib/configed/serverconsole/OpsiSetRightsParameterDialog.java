@@ -65,10 +65,15 @@ public class OpsiSetRightsParameterDialog {
 
 		JOptionPane optionPane = new JOptionPane(inputPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { jButtonExecute, Configed.getResourceValue("buttonCancel") });
+		Utils.enableDialogResizing(optionPane);
 		JDialog dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("SingleCommandOpsiSetRights.title"));
 		dialog.setModal(false);
+		dialog.pack();
+
 		dialog.setVisible(true);
+
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void init() {
@@ -109,7 +114,7 @@ public class OpsiSetRightsParameterDialog {
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(inputPanelLayout.createSequentialGroup()
 						.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE).addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 

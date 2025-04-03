@@ -89,8 +89,6 @@ public class ConfigedMain {
 	private String clientInDepot = "";
 	private HostInfo hostInfo = new HostInfo();
 
-	private Set<String> allowedClients;
-
 	// collection of retrieved software audit and hardware maps
 
 	private ClientTablePanel clientTablePanel;
@@ -144,8 +142,7 @@ public class ConfigedMain {
 				productTree.reInitTree();
 				refreshClientListKeepingGroup();
 
-				ButtonTabComponent comp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
-				comp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
+				initTabComponents();
 			}
 		}
 	};
@@ -813,8 +810,10 @@ public class ConfigedMain {
 
 		int[] columnWidths = ConfigedUtilityMethods.getTableColumnWidths(clientTablePanel.getClientTable());
 
-		// We want to deactivate the listener here, since we want it to react only later when
-		// the values are selected. We only reactivate the listener if it was active before.
+		// We want to deactivate the listener here, since we want it to react only later
+		// when
+		// the values are selected. We only reactivate the listener if it was active
+		// before.
 		boolean listenerDeactivated = clientTablePanel.deactivateListSelectionListener();
 		clientTablePanel.getClientTable().updateModel(tm);
 		if (listenerDeactivated) {
@@ -1079,8 +1078,10 @@ public class ConfigedMain {
 		depots = persistenceController.getHostInfoCollections().getDepots();
 		List<String> oldSelection = depotsList.getSelectedValuesList();
 
-		// Setting the list data will remove old selection. To prevent doing events twice
-		// we set the flag that value is adjusting, because we will set the selected values again.
+		// Setting the list data will remove old selection. To prevent doing events
+		// twice
+		// we set the flag that value is adjusting, because we will set the selected
+		// values again.
 		// Both actions will then be united into one event only
 		depotsList.setValueIsAdjusting(true);
 		depotsList.setListData(persistenceController.getHostInfoCollections().getDepotNamesList());
@@ -1112,6 +1113,11 @@ public class ConfigedMain {
 		Set<String> selValuesList = clientTablePanel.getClientTable().getSelectedSet();
 		Logging.info(this, "reloadData, selValuesList.size ", clientTablePanel.getClientTable().getSelectedRowCount());
 
+		String selectedGroup = getActivatedGroupModel().getGroupName();
+		Set<String> selectedLocalbootProducts = mainFrame.getClientConfiguration().getPanelLocalbootProductSettings()
+				.getProductTable().getSelectedIDs();
+		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
+				.getProductTable().getSelectedIDs();
 		clientTablePanel.deactivateListSelectionListener();
 		depotsList.removeListSelectionListener(depotsListSelectionListener);
 
@@ -1142,11 +1148,25 @@ public class ConfigedMain {
 			}
 		}
 
+		selectedClients = new ArrayList<>(clientsLeft);
+
 		Logging.info(this, "reloadData, selected clients now ", Logging.getSize(clientsLeft));
 
 		Logging.debug(this, " reset the values, particularly in list ");
+
+		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.activateListSelectionListener();
+		clientTree.produceActiveParents();
+		clientTree.updateSelectedObjectsInTable();
+
+		mainFrame.getClientConfiguration().getPanelLocalbootProductSettings().getProductTable()
+				.setSelection(selectedLocalbootProducts);
+		mainFrame.getClientConfiguration().getPanelNetbootProductSettings().getProductTable()
+				.setSelection(selectedNetbootProducts);
+		productTree.produceActiveParents();
+		productTree.updateSelectedObjectsInTable();
+
 		depotsList.addListSelectionListener(depotsListSelectionListener);
 
 		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
@@ -1159,6 +1179,8 @@ public class ConfigedMain {
 		mainFrame.deactivateLoadingPane();
 
 		updatePage();
+
+		initTabComponents();
 	}
 
 	private static void updatePage() {
@@ -1278,7 +1300,8 @@ public class ConfigedMain {
 				// Do when closing without option
 			}
 
-			// We set editing target because after restarting the configed, we will show this panel!
+			// We set editing target because after restarting the configed, we will show
+			// this panel!
 			editingTarget = EditingTarget.CLIENTS;
 		}
 

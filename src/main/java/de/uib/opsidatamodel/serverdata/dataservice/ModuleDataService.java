@@ -382,10 +382,6 @@ public class ModuleDataService {
 				}
 			}
 		}
-		String warningText = String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"), "" + 23,
-				"" + "key asöldkfj", "" + 23324);
-
-		missingModulesPermissionInfo.add(warningText);
 
 		Logging.info(this, "modules resulting  ", opsiModules);
 		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos ", missingModulesPermissionInfo);
@@ -402,9 +398,9 @@ public class ModuleDataService {
 	private void callOpsiLicenseMissingModules(List<String> missingModulesPermissionInfo) {
 		if (!missingModulesPermissionInfo.isEmpty()) {
 			SwingUtilities.invokeLater(() -> {
-				StringBuilder info = new StringBuilder(":\n");
+				StringBuilder info = new StringBuilder();
 				for (String moduleInfo : missingModulesPermissionInfo) {
-					info.append(moduleInfo + "\n");
+					info.append(moduleInfo + "<br>");
 				}
 
 				Logging.info(this, "missingModules ", info);

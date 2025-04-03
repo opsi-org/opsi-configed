@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -101,16 +102,31 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		unusedfield = new JLabel();
 
-		listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(), null, true);
+		listSelectionDialog = new ListSelectionDialog(null, null, true);
 		listSelectionDialog.setMultiSelection();
 	}
 
 	private void actOnEditorComponentAction(JTextField editorComponent) {
 		String newItem = editorComponent.getText();
-		comboBox.addItem(newItem);
+		if (!containsItem(newItem)) {
+			comboBox.addItem(newItem);
+		}
 		comboBox.setSelectedItem(newItem);
 
 		stopCellEditing();
+	}
+
+	private boolean containsItem(String item) {
+		ComboBoxModel<String> model = comboBox.getModel();
+		int size = model.getSize();
+
+		for (int i = 0; i < size; i++) {
+			if (item.equals(model.getElementAt(i))) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
@@ -119,7 +135,8 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 			return null;
 		}
@@ -149,7 +166,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
 			result = getMultiValueEditor(table, value, row);
 		} else {
-			result = getSingleValueEditor(key, value, row);
+			result = getSingleValueEditor(value, row);
 		}
 
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
@@ -169,11 +186,11 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return checkBox;
 	}
 
-	private Component getSingleValueEditor(String key, Object value, int row) {
+	private Component getSingleValueEditor(Object value, int row) {
 		selectionMode = SINGLE_SELECTION;
 
-		comboBox.setModel(new DefaultComboBoxModel<>(
-				modelProducer.getListCellOptions(key).getPossibleValues().toArray(new String[0])));
+		comboBox.setModel(modelProducer.getComboBoxModel(row));
+
 		if (((List<?>) value).isEmpty()) {
 			comboBox.setSelectedItem(null);
 		} else {
@@ -199,7 +216,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(value));
 		listSelectionDialog.setEditable(modelProducer.isEditable(row));
-		listSelectionDialog.show();
+		listSelectionDialog.show(ConfigedMain.getMainFrame());
 
 		// We should put this code into invokeLater, because otherwise we will call stop 
 		// or cancel editing before it actually began. Editing would not have an effect
@@ -220,7 +237,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (selectionMode == BOOLEAN) {
 			return Collections.singletonList(checkBox.getChecked());
 		} else if (selectionMode == SINGLE_SELECTION) {
-			return Collections.singletonList(comboBox.getSelectedItem());
+			return Collections.singletonList(comboBox.getEditor().getItem());
 		} else {
 			return listSelectionDialog.getSelectedValues();
 		}

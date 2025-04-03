@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.productpage;
 
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -99,6 +100,9 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		JButton copyListButton = new JButton(Configed.getResourceValue("DependenciesTree.copyListButton"));
 
 		dependenciesTreePathLabel = new JLabel();
+		// We need to set a different font, otherwise the arrow is not shown
+		dependenciesTreePathLabel
+				.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, dependenciesTreePathLabel.getFont().getSize()));
 		dependenciesTreePathLabel
 				.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor"), 1));
 

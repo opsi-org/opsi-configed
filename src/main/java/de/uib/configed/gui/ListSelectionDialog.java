@@ -7,7 +7,10 @@
 package de.uib.configed.gui;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,8 +30,10 @@ import javax.swing.ListSelectionModel;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.SearchTargetModel;
 import de.uib.utils.table.gui.SearchTargetModelFromJList;
@@ -50,8 +55,11 @@ public class ListSelectionDialog {
 	public ListSelectionDialog(Component owner, String title, boolean editable) {
 		JPanel panel = createPanel(editable);
 		jOptionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		Utils.enableDialogResizing(jOptionPane);
 
 		dialog = jOptionPane.createDialog(owner, title);
+		dialog.pack();
+		dialog.setLocationRelativeTo(owner != null ? owner : ConfigedMain.getMainFrame());
 	}
 
 	private JPanel createPanel(boolean editable) {
@@ -63,6 +71,14 @@ public class ListSelectionDialog {
 
 		jList = new JList<>();
 		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && editingTextField != null) {
+					editingTextField.setText(jList.getSelectedValue());
+				}
+			}
+		});
 		JScrollPane listScrollPane = new JScrollPane(jList);
 		listScrollPane.setPreferredSize(new Dimension(200, 200));
 
@@ -86,7 +102,7 @@ public class ListSelectionDialog {
 
 		verticalGroup.addGap(Globals.GAP_SIZE);
 		verticalGroup.addComponent(listScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				GroupLayout.PREFERRED_SIZE);
+				Short.MAX_VALUE);
 
 		// Add additional component if not null
 		if (editable) {
@@ -116,7 +132,11 @@ public class ListSelectionDialog {
 	}
 
 	public void show() {
-		dialog.setLocationRelativeTo(dialog.getParent());
+		show(dialog.getParent());
+	}
+
+	public void show(Container parent) {
+		dialog.setLocationRelativeTo(parent);
 		dialog.pack();
 		dialog.setVisible(true);
 	}
@@ -139,6 +159,21 @@ public class ListSelectionDialog {
 
 	public void setModel(ListModel<String> model) {
 		jList.setModel(model);
+
+		// Without this the search won't work
+		updateSearchTargetModel(model);
+	}
+
+	private void updateSearchTargetModel(ListModel<String> model) {
+		List<String> list = new ArrayList<>();
+		for (int i = 0; i < model.getSize(); i++) {
+			String element = model.getElementAt(i);
+			list.add(element);
+		}
+
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(jList, list, list);
+		searchPane.setTargetModel(searchTargetModel);
+
 	}
 
 	public void addItem(String element) {
@@ -147,6 +182,9 @@ public class ListSelectionDialog {
 			model.addElement(element);
 			jList.addSelectionInterval(model.size() - 1, model.size() - 1);
 			jList.ensureIndexIsVisible(jList.getMaxSelectionIndex());
+
+			// Without this the search won't work
+			updateSearchTargetModel(model);
 		}
 	}
 

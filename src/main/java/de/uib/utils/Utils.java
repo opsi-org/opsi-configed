@@ -6,7 +6,11 @@
 
 package de.uib.utils;
 
+import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Window;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.io.BufferedReader;
 import java.io.Console;
 import java.io.File;
@@ -29,6 +33,8 @@ import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -71,7 +77,11 @@ public final class Utils {
 		message.append("running on java version " + COMPLETE_VERSION_INFO + "\n");
 		message.append("on architecture " + System.getProperty("os.arch"));
 
-		JOptionPane.showMessageDialog(parent, message,
+		JTextArea jTextArea = new JTextArea(message.toString());
+		jTextArea.setEditable(false);
+		jTextArea.setCaretPosition(0);
+
+		JOptionPane.showMessageDialog(parent, jTextArea,
 				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME,
 				JOptionPane.PLAIN_MESSAGE);
 	}
@@ -458,5 +468,19 @@ public final class Utils {
 
 	private static String retrieveEverythingAfterDir(String filePath, String dir) {
 		return filePath.substring(filePath.indexOf(dir) + dir.length());
+	}
+
+	public static void enableDialogResizing(JOptionPane optionPane) {
+		HierarchyListener listener = new HierarchyListener() {
+			@Override
+			public void hierarchyChanged(HierarchyEvent e) {
+				Window window = SwingUtilities.getWindowAncestor(optionPane);
+				if (window instanceof Dialog dialog && !dialog.isResizable()) {
+					dialog.setResizable(true);
+					optionPane.removeHierarchyListener(this);
+				}
+			}
+		};
+		optionPane.addHierarchyListener(listener);
 	}
 }

@@ -204,7 +204,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		}
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
-				Character.MIN_VALUE, 6, true));
+				Character.MIN_VALUE, 6, false));
 		fieldOTP.addKeyListener(this);
 		fieldOTP.setVisible(false);
 

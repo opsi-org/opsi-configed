@@ -17,23 +17,6 @@ import de.uib.utils.datastructure.AbstractTableEntry;
 import de.uib.utils.datastructure.StringValuedRelationElement;
 
 public class SWAuditEntry extends AbstractTableEntry {
-	/*
-	 * type of auditSoftware_getObjects resp
-	 * SOFTWARE in opsi data base
-	 * 
-	 * | Field | Type | Null | Key | Default
-	 * | installSize | bigint(20) | YES | | NULL
-	 * | name | varchar(100) | NO | PRI | NULL
-	 * | version | varchar(100) | NO | PRI | NULL
-	 * | subVersion | varchar(100) | NO | PRI | NULL
-	 * | language | varchar(10) | NO | PRI | NULL
-	 * | architecture | varchar(3) | NO | PRI | NULL
-	 * | windowsSoftwareId | varchar(100) | NO | MUL | NULL
-	 * | windowsDisplayName | varchar(100) | NO | | NULL
-	 * | windowsDisplayVersion | varchar(100) | NO | | NULL
-	 * | type | varchar(30) | NO | MUL | NULL
-	 */
-
 	public static final String ID = "ID";
 	public static final String NAME = "name";
 	public static final String VERSION = "version";
@@ -41,6 +24,7 @@ public class SWAuditEntry extends AbstractTableEntry {
 	public static final String ARCHITECTURE = "architecture";
 	public static final String LANGUAGE = "language";
 	public static final String WINDOWS_SOFTWARE_ID = "windowsSoftwareID";
+	public static final String IS_OPERATING_SYSTEM = "isOperatingSystem";
 
 	public static final String EXISTING_IDS = "(variants)";
 
@@ -52,7 +36,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 		KEYS_FOR_GUI_TABLES.add(SUB_VERSION);
 		KEYS_FOR_GUI_TABLES.add(ARCHITECTURE);
 		KEYS_FOR_GUI_TABLES.add(LANGUAGE);
-
 		KEYS_FOR_GUI_TABLES.add(WINDOWS_SOFTWARE_ID);
 	}
 
@@ -82,8 +65,10 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 		super.remap(WINDOWS_SOFTWARE_ID, "windowsSoftwareId");
 
+		super.remap(IS_OPERATING_SYSTEM, IS_OPERATING_SYSTEM);
+
 		// not included in key-values
-		String subversion = entryRetrieved.get(SUB_VERSION);
+		String subversion = entryRetrieved.get(SUB_VERSION).toString();
 
 		if (subversion == null) {
 			subversion = "";
@@ -91,9 +76,10 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 		super.put(SUB_VERSION, subversion);
 
-		ident = Utils.pseudokey(new String[] { super.get(NAME), super.get(VERSION), subversion, super.get(LANGUAGE),
-				super.get(ARCHITECTURE) });
-		identReduced = Utils.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
+		ident = Utils.pseudokey(new String[] { super.get(NAME).toString(), super.get(VERSION).toString(), subversion,
+				super.get(LANGUAGE).toString(), super.get(ARCHITECTURE).toString() });
+		identReduced = Utils
+				.pseudokey(new String[] { super.get(VERSION).toString(), super.get(ARCHITECTURE).toString() });
 
 		super.put(ID, ident);
 	}

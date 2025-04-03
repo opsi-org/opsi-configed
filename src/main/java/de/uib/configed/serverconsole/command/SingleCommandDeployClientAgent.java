@@ -72,7 +72,7 @@ public class SingleCommandDeployClientAgent implements SingleCommand, CommandWit
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SingleCommandDeployClientAgent.title");
+		return Configed.getResourceValue("DeployClientAgentParameterDialog.title");
 	}
 
 	@Override

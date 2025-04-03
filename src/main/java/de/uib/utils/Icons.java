@@ -8,6 +8,7 @@ package de.uib.utils;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
@@ -19,6 +20,7 @@ import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
+import de.uib.configed.HealthInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -101,38 +103,6 @@ public final class Icons {
 		return new FlatSVGIcon(Globals.IMAGE_BASE + "intellij/" + iconName + ".svg").setColorFilter(filter);
 	}
 
-	public static FlatSVGIcon getOpsiModulesIcon() {
-		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-				.getPersistenceController();
-
-		Color iconColor = null;
-		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
-			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
-					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
-					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
-					!OpsiLicensing.isExtendedView());
-
-			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				iconColor = Globals.OPSI_ERROR;
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				iconColor = Globals.OPSI_WARNING;
-				break;
-
-			case LicensingInfoMap.STATE_OKAY:
-				iconColor = Globals.OPSI_OK;
-				break;
-
-			default:
-				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
-				break;
-			}
-		}
-
-		return getOpsiIcon(32, iconColor);
-	}
-
 	public static FlatSVGIcon getIntellijIcon(String iconName, Color color) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
 
@@ -165,8 +135,154 @@ public final class Icons {
 		return icon.derive(size, size);
 	}
 
+	public static FlatSVGIcon getOpsiThemeIcon(int size) {
+		return getOpsiIcon(size, FlatLaf.isLafDark() ? Globals.OPSI_FOREGROUND_DARK : Globals.OPSI_FOREGROUND_LIGHT);
+	}
+
 	public static FlatSVGIcon getOpsiIcon(int size, Color color) {
 		return getOpsiIcon(size).setColorFilter(new ColorFilter(oldColor -> color));
+	}
+
+	public static ImageIcon getSelectedOpsiModulesIcon(int size) {
+		return getOpsiModulesIcon(size, Globals.OPSI_FOREGROUND_DARK);
+	}
+
+	public static ImageIcon getActiveOpsiModulesIcon(int size) {
+		return getOpsiModulesIcon(size, Globals.getActiveColor());
+	}
+
+	public static ImageIcon getOpsiModulesIcon(int size) {
+		return getOpsiModulesIcon(size, null);
+	}
+
+	/* 
+	 * @param color the color of the opsi icon. If null, the theme color will be used.
+	 */
+	private static ImageIcon getOpsiModulesIcon(int size, Color iconColor) {
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+
+		Color dotColor = null;
+		if (persistenceController.getModuleDataService().isOpsiUserAdminPD()) {
+			LicensingInfoMap licensingInfoMap = LicensingInfoMap.getInstance(
+					persistenceController.getModuleDataService().getOpsiLicensingInfoOpsiAdminPD(),
+					persistenceController.getConfigDataService().getConfigDefaultValuesPD(),
+					!OpsiLicensing.isExtendedView());
+
+			switch (licensingInfoMap.getWarningLevel()) {
+			case LicensingInfoMap.STATE_OVER_LIMIT:
+				dotColor = Globals.OPSI_ERROR;
+				break;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
+				dotColor = Globals.OPSI_WARNING;
+				break;
+
+			case LicensingInfoMap.STATE_OKAY:
+				Logging.info("icon will remain null, we don't want to show a dot when modules are okay");
+				break;
+
+			default:
+				Logging.warning(Utils.class, "unexpected warninglevel: ", licensingInfoMap.getWarningLevel());
+				break;
+			}
+		}
+
+		FlatSVGIcon opsiIcon;
+		if (iconColor == null) {
+			opsiIcon = getOpsiThemeIcon(size);
+		} else {
+			opsiIcon = getOpsiIcon(size, iconColor);
+		}
+
+		if (dotColor == null) {
+			return opsiIcon;
+		} else if (Globals.OPSI_FOREGROUND_DARK.equals(iconColor)) {
+			return addDotIcon(opsiIcon, size, iconColor);
+		} else {
+			return addDotIcon(opsiIcon, size, dotColor);
+		}
+	}
+
+	/**
+	 * We will set the icons for the health check and then load the "real" icons
+	 * in a separate thread because it may take a lot of time to load the health
+	 * check.
+	 */
+	public static void addActiveHealthCheckIcon(AbstractButton button, int size) {
+		button.setIcon(Icons.getIntellijIcon("springBootHealth", 32));
+		button.setSelectedIcon(Icons.getIntellijIcon("springBootHealth", Globals.getActiveColor(), 32));
+
+		new Thread(() -> {
+			button.setIcon(getHealthCheckIcon(size));
+			button.setSelectedIcon(getHealthCheckIcon(size, Globals.getActiveColor()));
+		}).start();
+	}
+
+	/**
+	 * We will set the icons for the health check and then load the "real" icons
+	 * in a separate thread because it may take a lot of time to load the health
+	 * check.
+	 */
+	public static void addSelectedHealthCheckIcon(AbstractButton button, int size) {
+		button.setIcon(Icons.getIntellijIcon("springBootHealth"));
+		button.setSelectedIcon(Icons.getIntellijIcon("springBootHealth", Globals.OPSI_FOREGROUND_DARK));
+
+		new Thread(() -> {
+			button.setIcon(getHealthCheckIcon(size));
+			button.setSelectedIcon(getHealthCheckIcon(size, Globals.OPSI_FOREGROUND_DARK));
+		}).start();
+	}
+
+	private static ImageIcon getHealthCheckIcon(int size) {
+		return getHealthCheckIcon(size, null);
+	}
+
+	private static ImageIcon getHealthCheckIcon(int size, Color iconColor) {
+
+		Color dotColor = null;
+
+		String warningLevel = HealthInfo.getMaxWarningLevel();
+		switch (warningLevel) {
+		case HealthInfo.ERROR:
+			dotColor = Globals.OPSI_ERROR;
+			break;
+
+		case HealthInfo.WARNING:
+			dotColor = Globals.OPSI_WARNING;
+			break;
+
+		case HealthInfo.OK:
+			Logging.info("icon will remain null, we don't want to show a dot when health check are okay");
+			break;
+
+		default:
+			Logging.warning(Utils.class, "unexpected warninglevel: ", HealthInfo.getMaxWarningLevel());
+			break;
+		}
+
+		FlatSVGIcon opsiIcon;
+		if (iconColor == null) {
+			opsiIcon = getIntellijIcon("springBootHealth", size);
+		} else {
+			opsiIcon = getIntellijIcon("springBootHealth", iconColor, size);
+		}
+
+		if (dotColor == null) {
+			return opsiIcon;
+		} else if (Globals.OPSI_FOREGROUND_DARK.equals(iconColor)) {
+			return addDotIcon(opsiIcon, size, iconColor);
+		} else {
+			return addDotIcon(opsiIcon, size, dotColor);
+		}
+	}
+
+	private static ImageIcon addDotIcon(ImageIcon image, int size, Color dotColor) {
+		FlatSVGIcon point = getIntellijIcon("point", dotColor, size / 4);
+
+		BufferedImage bufferedImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+		bufferedImage.getGraphics().drawImage(image.getImage(), 0, 0, null);
+		bufferedImage.getGraphics().drawImage(point.getImage(), size / 4 * 3, size / 4 * 3, null);
+		return new ImageIcon(bufferedImage);
 	}
 
 	public static void addOpsiIconToMenuItem(AbstractButton abstractButton) {
@@ -185,9 +301,8 @@ public final class Icons {
 
 	public static FlatSVGIcon getSelectedIntellijIcon(String iconName) {
 		String path = Globals.IMAGE_BASE + "intellij/" + iconName + ".svg";
-		Color newColor = FlatLaf.isLafDark() ? Globals.ICON_ACTIVE_DARK : Globals.ICON_ACTIVE_LIGHT;
 
-		return new FlatSVGIcon(path).setColorFilter(new ColorFilter(color -> newColor));
+		return new FlatSVGIcon(path).setColorFilter(new ColorFilter(color -> Globals.getActiveColor()));
 	}
 
 	public static FlatSVGIcon getSelectedIntellijIcon(String iconName, int size) {

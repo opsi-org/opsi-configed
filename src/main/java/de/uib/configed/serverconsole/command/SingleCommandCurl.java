@@ -82,7 +82,7 @@ public class SingleCommandCurl implements SingleCommand, CommandWithParameters {
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SingleCommandCurl.title");
+		return Configed.getResourceValue("CurlParameterDialog.title");
 	}
 
 	@Override

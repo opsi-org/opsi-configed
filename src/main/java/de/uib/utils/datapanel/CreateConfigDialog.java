@@ -21,7 +21,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -48,7 +47,7 @@ public class CreateConfigDialog {
 	private JCheckBox isEditable;
 	private JCheckBox isMultiValue;
 
-	private JTabbedPane jTabbedPane;
+	private JPanel panel;
 
 	private JPanel generalPanel;
 	private JPanel booleanDetailsPanel;
@@ -59,22 +58,18 @@ public class CreateConfigDialog {
 	public CreateConfigDialog(EditMapPanelX editMapPanelX) {
 		this.editMapPanelX = editMapPanelX;
 
-		// We need to create the dialog before initializing the panels,
-		// because the listSelectionDialogs need the dialog as parent
-		JOptionPane pane = new JOptionPane(null, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
-				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
-
-		dialog = pane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
-
 		initGeneralPanel();
 		initBooleanDetailsPanel();
 		initUnicodeDetailsPanel();
 
+		// Create the tabbed pane after the details panels have been initialized
 		initPanel();
 
-		pane.setMessage(jTabbedPane);
-		dialog.pack();
+		JOptionPane pane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
+				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+
+		dialog = pane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("EditMapPanel.PopupMenu.AddEntry"));
 
 		dialog.setVisible(true);
 
@@ -99,6 +94,8 @@ public class CreateConfigDialog {
 				.addGap(0, 0, Short.MAX_VALUE));
 		layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(defaultLabel)
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(booleanDefault));
+
+		booleanDetailsPanel.setVisible(false);
 	}
 
 	private void initUnicodeDetailsPanel() {
@@ -149,7 +146,7 @@ public class CreateConfigDialog {
 				.addComponent(possibleValuesTextField));
 	}
 
-	private static JTextField createTextFieldAssociated(ListSelectionDialog selectionListDialog) {
+	private JTextField createTextFieldAssociated(ListSelectionDialog selectionListDialog) {
 		JTextField jTextField = new JTextField();
 		jTextField.setEnabled(false);
 		jTextField.addMouseListener(new MouseAdapter() {
@@ -162,11 +159,11 @@ public class CreateConfigDialog {
 		return jTextField;
 	}
 
-	private static void activateSelection(ListSelectionDialog listSelectionDialog, JTextField jTextField) {
+	private void activateSelection(ListSelectionDialog listSelectionDialog, JTextField jTextField) {
 		// We need to call this before setVisible
 		List<String> savedSelectedValues = listSelectionDialog.getSelectedValues();
 
-		listSelectionDialog.show();
+		listSelectionDialog.show(dialog);
 
 		if (listSelectionDialog.wasAccepted()) {
 			jTextField.setText(PropertiesCellEditorAndRenderer.formatList(listSelectionDialog.getSelectedValues()));
@@ -220,15 +217,22 @@ public class CreateConfigDialog {
 	}
 
 	private void initPanel() {
-		jTabbedPane = new JTabbedPane();
-		jTabbedPane.putClientProperty("JTabbedPane.tabAreaAlignment", "fill");
-		jTabbedPane.putClientProperty("JTabbedPane.tabWidthMode", "equal");
-		jTabbedPane.addTab(Configed.getResourceValue("CreateConfigDialog.generalOptions"), generalPanel);
-		jTabbedPane.addTab(Configed.getResourceValue("CreateConfigDialog.details"), unicodeDetailsPanel);
+		panel = new JPanel();
+
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(generalPanel)
+				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(generalPanel)
+				.addComponent(unicodeDetailsPanel).addComponent(booleanDetailsPanel));
 	}
 
 	private void updateDetailsTab() {
-		jTabbedPane.setComponentAt(1, isBoolean.isSelected() ? booleanDetailsPanel : unicodeDetailsPanel);
+		booleanDetailsPanel.setVisible(isBoolean.isSelected());
+		unicodeDetailsPanel.setVisible(!isBoolean.isSelected());
+
+		dialog.pack();
 	}
 
 	private void createConfig() {

@@ -39,6 +39,7 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
@@ -109,11 +110,11 @@ public class MainFrame extends JFrame implements KeyListener {
 
 		this.setIconImage(Icons.getMainIcon());
 
-		setJMenuBar(initMenuBar());
-
 		leftControlBar = new LeftControlBar();
 		leftToolBar = new LeftToolBar(configedMain);
 		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
+
+		setJMenuBar(initMenuBar());
 
 		showClientConfiguration();
 
@@ -174,6 +175,73 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuFile.add(jMenuFileExit);
 
 		return jMenuFile;
+	}
+
+	private JMenu createJMenuView() {
+		JMenu jMenuView = new JMenu(Configed.getResourceValue("MainFrame.jMenuView"));
+
+		JMenuItem jMenuViewClientsConfiguration = new JMenuItem(
+				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
+		jMenuViewClientsConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.CLIENTS));
+		jMenuViewClientsConfiguration.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK));
+		Icons.addIntellijIconToMenuItem(jMenuViewClientsConfiguration, "desktop");
+
+		JMenuItem jMenuViewDepotConfiguration = new JMenuItem(Configed.getResourceValue("depotConfiguration"));
+		jMenuViewDepotConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.DEPOTS));
+		jMenuViewDepotConfiguration.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK));
+		Icons.addIntellijIconToMenuItem(jMenuViewDepotConfiguration, "dbms");
+
+		JMenuItem jMenuViewServerConfiguration = new JMenuItem(
+				Configed.getResourceValue("MainFrame.labelServerConfiguration"));
+		jMenuViewServerConfiguration.addActionListener(event -> leftControlBar.selectView(EditingTarget.SERVER));
+		jMenuViewServerConfiguration.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK));
+		Icons.addIntellijIconToMenuItem(jMenuViewServerConfiguration, "settings");
+
+		JMenuItem jMenuViewDashboard = new JMenuItem(Configed.getResourceValue("Dashboard.title"));
+		jMenuViewDashboard.addActionListener(event -> leftControlBar.selectView(EditingTarget.DASHBOARD));
+		jMenuViewDashboard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_DOWN_MASK));
+		Icons.addIntellijIconToMenuItem(jMenuViewDashboard, "dataSchema");
+
+		JMenuItem jMenuViewOpsiModuleInformation = new JMenuItem(
+				Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), Icons.getOpsiModulesIcon(16));
+		jMenuViewOpsiModuleInformation.setSelectedIcon(Icons.getSelectedOpsiModulesIcon(16));
+		jMenuViewOpsiModuleInformation
+				.addActionListener(event -> leftControlBar.selectView(EditingTarget.OPSI_MODULES));
+		jMenuViewOpsiModuleInformation.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK));
+
+		JMenuItem jMenuViewHealthCheck = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		Icons.addSelectedHealthCheckIcon(jMenuViewHealthCheck, 16);
+		jMenuViewHealthCheck.addActionListener(event -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK));
+		jMenuViewHealthCheck.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK));
+
+		JMenuItem jMenuViewLicenseManagement = new JMenuItem(Configed.getResourceValue("MainFrame.labelLicenses"));
+		jMenuViewLicenseManagement
+				.addActionListener(event -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT));
+		jMenuViewLicenseManagement.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK));
+		Icons.addIntellijIconToMenuItem(jMenuViewLicenseManagement, "scriptingScript");
+
+		JMenuItem prevView = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuViewPreviousView"));
+		Icons.addIntellijIconToMenuItem(prevView, "up");
+		prevView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.CTRL_DOWN_MASK));
+		prevView.addActionListener(event -> switchView(false));
+
+		JMenuItem nextView = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuViewNextView"));
+		Icons.addIntellijIconToMenuItem(nextView, "down");
+		nextView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.CTRL_DOWN_MASK));
+		nextView.addActionListener(event -> switchView(true));
+
+		jMenuView.add(jMenuViewClientsConfiguration);
+		jMenuView.add(jMenuViewDepotConfiguration);
+		jMenuView.add(jMenuViewServerConfiguration);
+		jMenuView.add(jMenuViewDashboard);
+		jMenuView.add(jMenuViewOpsiModuleInformation);
+		jMenuView.add(jMenuViewHealthCheck);
+		jMenuView.add(jMenuViewLicenseManagement);
+		jMenuView.addSeparator();
+		jMenuView.add(prevView);
+		jMenuView.add(nextView);
+
+		return jMenuView;
 	}
 
 	public static JMenu createJMenuTheme(Runnable runnable) {
@@ -507,8 +575,10 @@ public class MainFrame extends JFrame implements KeyListener {
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(createJMenuFile());
+		jMenuBar.add(createJMenuView());
 		jMenuBar.add(createJMenuClientSelection());
 		jMenuBar.add(clientMenu.getJMenu());
+		jMenuBar.add(leftToolBar.getJMenuServerConsoleMenuBar());
 
 		jMenuBar.add(jMenuExtras());
 		jMenuBar.add(createJMenuHelp());
@@ -665,6 +735,50 @@ public class MainFrame extends JFrame implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if ((e.isControlDown() && e.isShiftDown()) && e.getKeyCode() == KeyEvent.VK_I) {
 			configedMain.invertSelection();
+		}
+
+		if (e.isControlDown()) {
+			int keyCode = e.getKeyCode();
+			if (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_7) {
+				switchViewBasedOnViewIndex(keyCode - KeyEvent.VK_0);
+			} else if (keyCode == KeyEvent.VK_DOWN) {
+				switchView(true);
+			} else if (keyCode == KeyEvent.VK_UP) {
+				switchView(false);
+			} else {
+				Logging.info(this, "Unknown key combination");
+			}
+		}
+	}
+
+	private void switchView(boolean isNext) {
+		EditingTarget editingTarget = ConfigedMain.getEditingTarget();
+		int currentView = editingTarget.ordinal() + 1;
+		int targetView = currentView;
+
+		targetView += isNext ? 1 : -1;
+
+		if (targetView < 1) {
+			targetView = 7;
+		} else if (targetView > 7) {
+			targetView = 1;
+		} else {
+			// Not needed.
+		}
+
+		switchViewBasedOnViewIndex(targetView);
+	}
+
+	private void switchViewBasedOnViewIndex(int index) {
+		switch (index) {
+		case 1 -> leftControlBar.selectView(EditingTarget.CLIENTS);
+		case 2 -> leftControlBar.selectView(EditingTarget.DEPOTS);
+		case 3 -> leftControlBar.selectView(EditingTarget.SERVER);
+		case 4 -> leftControlBar.selectView(EditingTarget.DASHBOARD);
+		case 5 -> leftControlBar.selectView(EditingTarget.OPSI_MODULES);
+		case 6 -> leftControlBar.selectView(EditingTarget.HEALTH_CHECK);
+		case 7 -> leftControlBar.selectView(EditingTarget.LICENSE_MANAGEMENT);
+		default -> Logging.info(this, "Unknown view index" + index);
 		}
 	}
 
