@@ -63,6 +63,8 @@ public class MainPanelManager {
 
 	private TopToolBarManager topToolBarManager;
 
+	private JLabel opsiLogo;
+
 	private ConfigedMain configedMain;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -75,6 +77,8 @@ public class MainPanelManager {
 		this.productTree = productTree;
 
 		topToolBarManager = new TopToolBarManager(configedMain);
+
+		opsiLogo = new JLabel(Icons.getOpsiLogoWide().derive(0.72F));
 
 		initialInitialization(depotsList, mainFrame);
 	}
@@ -265,12 +269,14 @@ public class MainPanelManager {
 						.addComponent(generalToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(titleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(opsiLogo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addComponent(component));
 		layout.setHorizontalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(generalToolBar)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(titleLabel)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(opsiLogo))
 				.addComponent(component));
 
 		return panel;
