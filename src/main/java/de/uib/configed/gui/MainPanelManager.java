@@ -7,8 +7,10 @@
 package de.uib.configed.gui;
 
 import java.awt.Font;
+import java.util.List;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -144,7 +146,7 @@ public class MainPanelManager {
 		groupLayout.setHorizontalGroup(
 				groupLayout.createParallelGroup().addComponent(jSplitPane).addComponent(hostsStatusPanel));
 
-		return createPanel(jPanel, topToolBarManager.getConfigurationToolBar(),
+		return createPanel(jPanel, topToolBarManager.getConfigurationButtons(),
 				Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 	}
 
@@ -178,8 +180,7 @@ public class MainPanelManager {
 			depotConfigurationSplitPane.setBorder(new EmptyBorder(0, 0, Globals.MIN_GAP_SIZE, 0));
 		}
 
-		return createPanel(depotConfigurationSplitPane, new JToolBar(),
-				Configed.getResourceValue("depotConfiguration"));
+		return createPanel(depotConfigurationSplitPane, null, Configed.getResourceValue("depotConfiguration"));
 	}
 
 	public JPanel getServerConfigurationPanel() {
@@ -191,15 +192,14 @@ public class MainPanelManager {
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
 
-		return createPanel(serverConfiguration, new JToolBar(),
-				Configed.getResourceValue("MainFrame.labelServerConfiguration"));
+		return createPanel(serverConfiguration, null, Configed.getResourceValue("MainFrame.labelServerConfiguration"));
 	}
 
 	public JPanel getDashBoardPanel() {
 		Logging.info(this, "initDashboardpanel");
 		if (dashboardPanel == null) {
 			dashboard = new Dashboard(configedMain);
-			dashboardPanel = createPanel(dashboard, new JToolBar(), Configed.getResourceValue("Dashboard.title"));
+			dashboardPanel = createPanel(dashboard, null, Configed.getResourceValue("Dashboard.title"));
 		}
 
 		return dashboardPanel;
@@ -208,7 +208,7 @@ public class MainPanelManager {
 	public JPanel getOpsiLicensingPanel() {
 		if (licensingInfoPanel == null) {
 			OpsiLicensing opsiLicensing = new OpsiLicensing();
-			licensingInfoPanel = createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingToolBar(opsiLicensing),
+			licensingInfoPanel = createPanel(opsiLicensing, topToolBarManager.getOpsiLicensingButtons(opsiLicensing),
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 		}
 
@@ -219,7 +219,7 @@ public class MainPanelManager {
 		Logging.info(this, "init health check panel", healthCheckPanel);
 		if (healthCheckPanel == null) {
 			HealthCheck healthCheck = new HealthCheck();
-			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckToolBar(healthCheck),
+			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckButtons(healthCheck),
 					Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		}
 
@@ -237,32 +237,40 @@ public class MainPanelManager {
 			Logging.info(this, "initLicensesFrame  diff ", endmillis - startmillis);
 
 			licenseManagementPanel = createPanel(licenseManagement,
-					topToolBarManager.getLicensingManagementToolbar(this),
+					topToolBarManager.getLicensingManagementButtons(this),
 					Configed.getResourceValue("MainFrame.labelLicenses"));
 		}
 
 		return licenseManagementPanel;
 	}
 
-	private JPanel createPanel(JComponent component, JToolBar toolBar, String title) {
+	private JPanel createPanel(JComponent component, List<JButton> toolBarButtons, String title) {
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(
 				titleLabel.getFont().deriveFont(Font.BOLD).deriveFont((float) (titleLabel.getFont().getSize() + 2)));
 
 		JToolBar generalToolBar = topToolBarManager.createGeneralToolBar();
 
+		if (toolBarButtons != null) {
+			generalToolBar.addSeparator();
+			toolBarButtons.forEach(generalToolBar::add);
+		}
+
 		JPanel panel = new JPanel();
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout
-				.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(generalToolBar).addComponent(titleLabel).addComponent(toolBar))
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(generalToolBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(titleLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addComponent(component));
 		layout.setHorizontalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(generalToolBar)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(titleLabel)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(toolBar))
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
 				.addComponent(component));
 
 		return panel;

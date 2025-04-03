@@ -7,6 +7,9 @@
 package de.uib.configed.gui;
 
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
@@ -70,7 +73,7 @@ public class TopToolBarManager {
 		return jToolBar;
 	}
 
-	public JToolBar getOpsiLicensingToolBar(OpsiLicensing opsiLicensing) {
+	public List<JButton> getOpsiLicensingButtons(OpsiLicensing opsiLicensing) {
 		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("reloadData"));
 		reloadButton.addActionListener((ActionEvent actionEvent) -> {
@@ -78,13 +81,10 @@ public class TopToolBarManager {
 			opsiLicensing.reload();
 		});
 
-		JToolBar toolBar = new JToolBar();
-		toolBar.add(reloadButton);
-
-		return toolBar;
+		return Collections.singletonList(reloadButton);
 	}
 
-	public JToolBar getHealthCheckToolBar(HealthCheck healthCheck) {
+	public List<JButton> getHealthCheckButtons(HealthCheck healthCheck) {
 		JButton downloadButton = new JButton(Icons.getIntellijIcon("download", 24));
 		downloadButton.setToolTipText(Configed.getResourceValue("download"));
 		downloadButton.addActionListener(actionEvent -> healthCheck.saveAsZip());
@@ -94,14 +94,10 @@ public class TopToolBarManager {
 		healthCheckSettingsButton
 				.addActionListener(actionEvent -> new HealthCheckSettingsDialog().showHealthCheckSettings());
 
-		JToolBar jToolBar = new JToolBar();
-		jToolBar.add(downloadButton);
-		jToolBar.add(healthCheckSettingsButton);
-
-		return jToolBar;
+		return Arrays.asList(downloadButton, healthCheckSettingsButton);
 	}
 
-	public JToolBar getConfigurationToolBar() {
+	public List<JButton> getConfigurationButtons() {
 		JButton addClientButton = new JButton(Icons.getIntellijIcon("add", 24));
 		addClientButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
 		addClientButton.addActionListener(event -> ExtraFrameController.callNewClientDialog());
@@ -117,21 +113,14 @@ public class TopToolBarManager {
 		clientSearchButton.setToolTipText(Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
 		clientSearchButton.addActionListener(event -> ExtraFrameController.callClientSelectionDialog(configedMain));
 
-		JToolBar jToolBar = new JToolBar();
-		jToolBar.add(addClientButton);
-		jToolBar.add(clientSearchButton);
-
-		return jToolBar;
+		return Arrays.asList(addClientButton, clientSearchButton);
 	}
 
-	public JToolBar getLicensingManagementToolbar(MainPanelManager mainPanelManager) {
+	public List<JButton> getLicensingManagementButtons(MainPanelManager mainPanelManager) {
 		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		reloadButton.addActionListener(event -> mainPanelManager.reloadLicensesAction());
 
-		JToolBar jToolBar = new JToolBar();
-		jToolBar.add(reloadButton);
-
-		return jToolBar;
+		return Arrays.asList(reloadButton);
 	}
 }
