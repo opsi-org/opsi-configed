@@ -78,7 +78,7 @@ public class MainPanelManager {
 
 		topToolBarManager = new TopToolBarManager(configedMain);
 
-		opsiLogo = new JLabel(Icons.getOpsiLogoWide().derive(0.72F));
+		opsiLogo = new JLabel(Icons.getOpsiLogoWide());
 
 		initialInitialization(depotsList, mainFrame);
 	}

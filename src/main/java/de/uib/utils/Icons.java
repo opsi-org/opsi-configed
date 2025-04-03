@@ -347,6 +347,6 @@ public final class Icons {
 			iconName += "_dark";
 		}
 
-		return new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/" + iconName + ".svg").derive(139, 50);
+		return new FlatSVGIcon(Globals.IMAGE_BASE + "opsilogos/" + iconName + ".svg").derive(100, 36);
 	}
 }
