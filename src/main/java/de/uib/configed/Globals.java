@@ -144,6 +144,7 @@ public final class Globals {
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
 
 	public static final int DEFAULT_PORT = 4447;
+	public static final int DEFAULT_TIMEOUT = 5000;
 
 	// Colors for table cells
 	private static Color magentaCell1;
