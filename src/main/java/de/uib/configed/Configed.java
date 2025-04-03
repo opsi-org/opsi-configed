@@ -332,8 +332,8 @@ public final class Configed {
 	public static void main(CommandLine cmd) {
 		processArgs(cmd);
 
-		// Set timeout for login
-		System.setProperty("sun.net.client.defaultConnectTimeout", "5000");
+		// Set timeout for login // seems that this timeout is not used if server is incorrect; setting timeout additionally in ServerFacade
+		System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
 		Logging.debug("configed: args recognized");
 
 		initLogging();
