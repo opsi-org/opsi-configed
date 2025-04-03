@@ -17,6 +17,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.utils.logging.Logging;
@@ -145,6 +146,10 @@ public class ConnectionHandler {
 	}
 
 	public HttpsURLConnection establishConnection(boolean doOutput, boolean useInsecure) {
+		return establishConnection(doOutput, useInsecure, Globals.DEFAULT_TIMEOUT);
+	}
+
+	public HttpsURLConnection establishConnection(boolean doOutput, boolean useInsecure, int timeout) {
 		if (serviceURL == null) {
 			return null;
 		}
@@ -155,6 +160,8 @@ public class ConnectionHandler {
 
 		try {
 			connection = (HttpsURLConnection) serviceURL.openConnection();
+			connection.setConnectTimeout(timeout);
+			connection.setReadTimeout(timeout);
 			connection.setDoOutput(doOutput);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
