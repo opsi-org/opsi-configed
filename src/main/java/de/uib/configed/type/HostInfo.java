@@ -35,7 +35,7 @@ public class HostInfo {
 	public static final String HOST_TYPE_KEY = "type";
 	public static final String CLIENT_IP_ADDRESS_KEY = "ipAddress";
 	public static final String CLIENT_WAN_CONFIG_KEY = "wanConfig";
-	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "clientShutdownInstall";
+	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "install_on_shutdown";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
 	public static final String CLIENT_OS_KEY = "operating_system";
 	public static final String UEFI_BOOT_KEY = "uefi_boot";
