@@ -404,11 +404,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = false;
 	}
 
-	public void setUefiBoot() {
-		Boolean value = persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients());
-
-		Logging.info(this, "setUefiBoot ", value);
-		checkBoxUEFIBoot.setChecked(value);
+	public void setUefiBoot(boolean uefiBoot) {
+		Logging.info(this, "setUefiBoot ", uefiBoot);
+		checkBoxUEFIBoot.setChecked(uefiBoot);
 	}
 
 	public void setWANConfig(Boolean value) {

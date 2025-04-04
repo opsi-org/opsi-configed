@@ -875,45 +875,6 @@ public class ConfigDataService {
 		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
 
-	/**
-	 * Checks if the given clients have an entry for UEFI boot. That means, the
-	 * client has a client config with an entry
-	 * {@code clientconfig.uefinetbootlabel}.
-	 *
-	 * @param clients for which to check the existence of UEFI boot entry
-	 * @return null if clients have different values or if client list is empty
-	 */
-	@SuppressWarnings({ "java:S2447" })
-	public Boolean isUEFI43(Iterable<String> clients) {
-		Boolean isUEFI = null;
-
-		for (String client : clients) {
-			Map<String, Object> clientConfig = getHostConfigsPD().get(client);
-			if (clientConfig == null) {
-				isUEFI = false;
-				continue;
-			}
-
-			Object uefiConfig = clientConfig.get("clientconfig.uefinetbootlabel");
-
-			if (uefiConfig instanceof List && !((List<?>) uefiConfig).isEmpty()) {
-				if (Boolean.FALSE.equals(isUEFI)) {
-					return null;
-				} else {
-					isUEFI = true;
-				}
-			} else {
-				if (Boolean.TRUE.equals(isUEFI)) {
-					return null;
-				} else {
-					isUEFI = false;
-				}
-			}
-		}
-
-		return isUEFI;
-	}
-
 	public boolean configureInstallByShutdown(String clientId, boolean shutdownInstall) {
 		return setHostBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
 				clientId, shutdownInstall);

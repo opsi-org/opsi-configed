@@ -38,6 +38,7 @@ public class HostInfo {
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "clientShutdownInstall";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
 	public static final String CLIENT_OS_KEY = "operating_system";
+	public static final String UEFI_BOOT_KEY = "uefi_boot";
 
 	public static final String DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL = "depotId";
 	public static final String CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL = "clientDescription";
@@ -93,6 +94,7 @@ public class HostInfo {
 	private Boolean clientShutdownInstall;
 
 	private String clientOS;
+	private Boolean uefiBoot;
 
 	public Map<String, Object> getDisplayRowMap0() {
 		Map<String, Object> unordered = new HashMap<>();
@@ -141,6 +143,7 @@ public class HostInfo {
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
 
 		unordered.put(CLIENT_OS_KEY, clientOS);
+		unordered.put(UEFI_BOOT_KEY, uefiBoot);
 
 		Logging.debug(this, "getMap clientName ", clientName);
 
@@ -222,6 +225,10 @@ public class HostInfo {
 
 		case CLIENT_OS_KEY:
 			clientOS = "" + value;
+			break;
+
+		case UEFI_BOOT_KEY:
+			uefiBoot = (Boolean) value;
 			break;
 
 		default:
@@ -321,6 +328,7 @@ public class HostInfo {
 		created = showValue((String) pcInfo.get(CREATED_KEY));
 		lastSeen = showValue((String) pcInfo.get(LAST_SEEN_KEY));
 		clientOS = showValue((String) pcInfo.get(CLIENT_OS_KEY));
+		uefiBoot = showValue((Boolean) pcInfo.get(UEFI_BOOT_KEY));
 
 		depotOfClient = showValue((String) pcInfo.get(DEPOT_OF_CLIENT_KEY));
 
@@ -369,7 +377,7 @@ public class HostInfo {
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientIpAddress(clientIpAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS(clientOS);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot();
+		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot(uefiBoot);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig(clientWanConfig);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setShutdownInstall(clientShutdownInstall);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setOpsiHostKey(hostKey);
