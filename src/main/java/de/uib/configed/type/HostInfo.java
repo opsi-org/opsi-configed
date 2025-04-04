@@ -34,7 +34,7 @@ public class HostInfo {
 	public static final String HOST_KEY_KEY = "opsiHostKey";
 	public static final String HOST_TYPE_KEY = "type";
 	public static final String CLIENT_IP_ADDRESS_KEY = "ipAddress";
-	public static final String CLIENT_WAN_CONFIG_KEY = "wanConfig";
+	public static final String CLIENT_WAN_CONFIG_KEY = "wan_vpn";
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "install_on_shutdown";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
 	public static final String CLIENT_OS_KEY = "operating_system";
