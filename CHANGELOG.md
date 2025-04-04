@@ -3,6 +3,9 @@
 - Don't call RPC-methods twice when reloading license management
 - Resolved an issue where the UI would freeze during login when connecting to an invalid server.
 
+### Changed
+- Make `SavedSearchesDialog` modeless
+
 ## [4.3.8.2] - 2025-04-03
 ### Changed
 - Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
