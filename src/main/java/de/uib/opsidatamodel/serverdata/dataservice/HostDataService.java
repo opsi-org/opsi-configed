@@ -423,15 +423,32 @@ public class HostDataService {
 		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
 	}
 
+	public void setOS(String hostId, String address) {
+		updateHost(hostId, HostInfo.CLIENT_OS_KEY, address);
+	}
+
 	public List<Map<String, Object>> getOpsiHosts() {
 		String[] callAttributes = new String[] {};
-		Map<?, ?> callFilter = new HashMap<>();
+		Map<String, Object> callFilter = new HashMap<>();
+		List<String> hostTypes = new ArrayList<>();
+		hostTypes.add(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER);
+		hostTypes.add(HostInfo.HOST_TYPE_VALUE_OPSI_DEPOT_SERVER);
+		callFilter.put(HostInfo.HOST_TYPE_KEY, hostTypes);
 		TimeCheck timer = new TimeCheck(this, "getOpsiHosts").start();
 		Logging.notice(this, "host_getObjects");
 		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(
 				new OpsiMethodCall(RPCMethodName.HOST_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
 		timer.stop();
 		return opsiHosts;
+	}
+
+	public List<Map<String, Object>> getOpsiClients() {
+		TimeCheck timer = new TimeCheck(this, "getOpsiClients").start();
+		Logging.notice(this, "host_getClients");
+		List<Map<String, Object>> opsiClients = exec
+				.getListOfMaps(new OpsiMethodCall(RPCMethodName.HOST_GET_CLIENTS, new Object[0]));
+		timer.stop();
+		return opsiClients;
 	}
 
 	public List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
@@ -588,6 +605,7 @@ public class HostDataService {
 			possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL);
 
 			result = new ArrayList<>();
 			result.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
@@ -595,6 +613,7 @@ public class HostDataService {
 			result.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
 			result.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
 			result.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+			result.add(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL);
 
 			// create config for service
 			Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
@@ -611,7 +630,6 @@ public class HostDataService {
 
 		} else {
 			result = givenList;
-			// but not if we want to change the default values:
 		}
 
 		return result;

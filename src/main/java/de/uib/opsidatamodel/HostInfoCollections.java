@@ -127,7 +127,7 @@ public class HostInfoCollections {
 
 		// find depots and build entries for them
 		retrieveDepotsPD(opsiHosts);
-		retrieveClientsPD(opsiHosts);
+		retrieveClientsPD(persistenceController.getHostDataService().getOpsiClients());
 
 		Map<String, Map<String, Object>> masterDepots = cacheManager.getCachedData(CacheIdentifier.MASTER_DEPOTS,
 				Map.class);
@@ -244,10 +244,6 @@ public class HostInfoCollections {
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
 		for (Map<String, Object> host : opsiHosts) {
-			if (!((String) host.get(HostInfo.HOST_TYPE_KEY)).equals(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT)) {
-				continue;
-			}
-
 			String name = (String) host.get(HostInfo.HOSTNAME_KEY);
 			boolean depotFound = false;
 			String depotId = null;

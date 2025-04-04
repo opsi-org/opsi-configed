@@ -360,6 +360,13 @@ public final class ClientMenuManager implements MenuListener {
 			configedMain.toggleColumn(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL);
 		});
 
+		JCheckBoxMenuItem jCheckBoxMenuItemShowOSColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
+		jCheckBoxMenuItemShowOSColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
+				.get(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowOSColumn
+				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL));
+
 		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
@@ -371,6 +378,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShowColumns.add(jCheckBoxMenuItemShowInstallByShutdown);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowHealthCheckActiveColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowOSColumn);
 
 		return jMenuShowColumns;
 	}

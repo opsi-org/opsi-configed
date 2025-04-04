@@ -47,6 +47,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientSystemUUID;
 	private JLabel labelClientMacAddress;
 	private JLabel labelClientIPAddress;
+	private JLabel labelClientOS;
 	private JLabel labelOneTimePassword;
 	private JLabel labelOpsiHostKey;
 
@@ -64,6 +65,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JTextField systemUUIDField;
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
+	private JTextField osField;
 	private JTextField jTextFieldOneTimePassword;
 	private FlatPasswordField hostKeyField;
 
@@ -100,6 +102,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+		labelClientOS = new JLabel(Configed.getResourceValue("operatingSystem"));
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsi-host-key");
 
@@ -138,6 +141,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' },
 				28, Character.MIN_VALUE, 4, false), "", 24);
 		ipAddressField.getDocument().addDocumentListener(this);
+
+		osField = new JTextField();
+		osField.setEditable(false);
 
 		checkBoxUEFIBoot = new FlatTriStateCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
 		checkBoxUEFIBoot.setAllowIndeterminate(false);
@@ -223,6 +229,11 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addComponent(ipAddressField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
+				/////// OPERATING SYSTEM
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(osField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
 				/////// INSTALL BY SHUTDOWN
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
 						checkBoxInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -296,6 +307,13 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.addComponent(labelClientIPAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(ipAddressField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+
+				/////// OPERATING SYSTEM
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelClientOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(osField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				////// INSTALL BY SHUTDOWN
@@ -377,6 +395,12 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	public void setClientIpAddress(String s) {
 		dataAreChangedProgramatically = true;
 		ipAddressField.setText(s);
+		dataAreChangedProgramatically = false;
+	}
+
+	public void setClientOS(String s) {
+		dataAreChangedProgramatically = true;
+		osField.setText(s);
 		dataAreChangedProgramatically = false;
 	}
 

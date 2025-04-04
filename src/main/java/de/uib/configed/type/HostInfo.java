@@ -37,6 +37,7 @@ public class HostInfo {
 	public static final String CLIENT_WAN_CONFIG_KEY = "wanConfig";
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "clientShutdownInstall";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
+	public static final String CLIENT_OS_KEY = "operating_system";
 
 	public static final String DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL = "depotId";
 	public static final String CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL = "clientDescription";
@@ -56,13 +57,15 @@ public class HostInfo {
 	public static final String CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL = "installByShutdown";
 	public static final String HEALTH_CHECK_ACTIVE_FIELD_LABEL = "healthCheckActive";
 
+	public static final String CLIENT_OS_DISPLAY_FIELD_LABEL = "operatingSystem";
+
 	public static final List<String> ORDERING_DISPLAY_FIELDS = List.of(HOST_NAME_DISPLAY_FIELD_LABEL,
 			CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL,
 			CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, LAST_SEEN_DISPLAY_FIELD_LABEL, CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL,
 			CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL,
 			CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
 			CREATED_DISPLAY_FIELD_LABEL, CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL,
-			HEALTH_CHECK_ACTIVE_FIELD_LABEL);
+			HEALTH_CHECK_ACTIVE_FIELD_LABEL, CLIENT_OS_DISPLAY_FIELD_LABEL);
 
 	public static final String IS_MASTER_DEPOT_KEY = "isMasterDepot";
 
@@ -89,6 +92,8 @@ public class HostInfo {
 
 	private Boolean clientShutdownInstall;
 
+	private String clientOS;
+
 	public Map<String, Object> getDisplayRowMap0() {
 		Map<String, Object> unordered = new HashMap<>();
 
@@ -105,6 +110,8 @@ public class HostInfo {
 
 		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
 		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
+
+		unordered.put(CLIENT_OS_DISPLAY_FIELD_LABEL, clientOS);
 
 		Logging.debug(this, "getMap clientName ", clientName, " : ", unordered);
 
@@ -133,6 +140,8 @@ public class HostInfo {
 
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
 
+		unordered.put(CLIENT_OS_KEY, clientOS);
+
 		Logging.debug(this, "getMap clientName ", clientName);
 
 		return unordered;
@@ -153,6 +162,7 @@ public class HostInfo {
 		keys.add(CLIENT_WAN_CONFIG_KEY);
 		keys.add(CLIENT_SHUTDOWN_INSTALL_KEY);
 		keys.add(HOST_KEY_KEY);
+		keys.add(CLIENT_OS_KEY);
 		return Collections.unmodifiableList(keys);
 	}
 
@@ -208,6 +218,10 @@ public class HostInfo {
 
 		case CLIENT_SHUTDOWN_INSTALL_KEY:
 			clientShutdownInstall = (Boolean) value;
+			break;
+
+		case CLIENT_OS_KEY:
+			clientOS = "" + value;
 			break;
 
 		default:
@@ -306,6 +320,7 @@ public class HostInfo {
 		hostType = showValue((String) pcInfo.get(HOST_TYPE_KEY));
 		created = showValue((String) pcInfo.get(CREATED_KEY));
 		lastSeen = showValue((String) pcInfo.get(LAST_SEEN_KEY));
+		clientOS = showValue((String) pcInfo.get(CLIENT_OS_KEY));
 
 		depotOfClient = showValue((String) pcInfo.get(DEPOT_OF_CLIENT_KEY));
 
@@ -352,6 +367,7 @@ public class HostInfo {
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientSystemUUID(clientSystemUUID);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMacAddress(clientMacAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientIpAddress(clientIpAddress);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS(clientOS);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot();
 		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig(clientWanConfig);
@@ -590,7 +606,7 @@ public class HostInfo {
 		return "(" + clientName + ";" + depotOfClient + ";" + clientDescription + ";" + clientInventoryNumber + ";"
 				+ clientOneTimePassword + ";" + clientNotes + ";" + clientSystemUUID + ";" + clientMacAddress + ";"
 				+ clientIpAddress + ";" + lastSeen + ";" + created + ";" + clientWanConfig + ";" + clientShutdownInstall
-				+ ")";
+				+ ";" + clientOS + ")";
 	}
 
 	public void resetValues() {
@@ -611,5 +627,7 @@ public class HostInfo {
 		clientIpAddress = "";
 		clientWanConfig = false;
 		clientShutdownInstall = false;
+
+		clientOS = "";
 	}
 }
