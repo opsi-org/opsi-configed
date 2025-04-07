@@ -162,7 +162,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (modelProducer.getListCellOptions(key) == null) {
 			return null;
 		} else if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
-			result = getBooleanEditor(value);
+			result = getBooleanEditor(value, key);
 		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
 			result = getMultiValueEditor(table, value, row);
 		} else {
@@ -173,14 +173,14 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return result;
 	}
 
-	private Component getBooleanEditor(Object value) {
+	private Component getBooleanEditor(Object value, String key) {
 		selectionMode = BOOLEAN;
 
 		// We want a checkbox
 		if (((List<?>) value).isEmpty()) {
 			checkBox.setIndeterminate(true);
 		} else {
-			checkBox.setChecked((Boolean) ((List<?>) value).get(0));
+			checkBox.setChecked(resolveBooleanState(value, key));
 		}
 
 		return checkBox;
@@ -259,7 +259,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			if (((List<?>) value).isEmpty()) {
 				rendererCheckBox.setIndeterminate(true);
 			} else {
-				rendererCheckBox.setChecked((Boolean) ((List<?>) value).get(0));
+				rendererCheckBox.setChecked(resolveBooleanState(value, key));
 			}
 
 			result = rendererCheckBox;
@@ -268,6 +268,18 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 
 		return result;
+	}
+
+	private boolean resolveBooleanState(Object value, String key) {
+		Object firstVal = ((List<?>) value).get(0);
+		boolean boolState;
+		if (firstVal instanceof Boolean) {
+			boolState = (Boolean) firstVal;
+		} else {
+			boolState = (Boolean) PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+					.getConfigOptionsPD().get(key).getDefaultValues().get(0);
+		}
+		return boolState;
 	}
 
 	public static String formatList(Object value) {
