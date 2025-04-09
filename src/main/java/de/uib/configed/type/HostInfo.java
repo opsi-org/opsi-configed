@@ -567,7 +567,7 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getConfigDataService().configureInstallByShutdown(client, shutdownInstall);
+			persistenceController.getHostDataService().setInstallOnShutdown(client, shutdownInstall);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SHUTDOWN_INSTALL_KEY,
 					shutdownInstall);
 		}
@@ -590,10 +590,7 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			if (!(persistenceController.getConfigDataService().setWANConfigs(client, wanStandard))) {
-				Logging.error(this, "wan settings could not be set");
-			}
-
+			persistenceController.getHostDataService().setWanConfig(client, wanStandard);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_WAN_CONFIG_KEY,
 					wanStandard);
 		}

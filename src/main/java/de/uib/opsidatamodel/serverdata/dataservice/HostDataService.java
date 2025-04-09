@@ -369,7 +369,7 @@ public class HostDataService {
 			return;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_OBJECTS,
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS,
 				new Object[] { hostUpdates.values() });
 
 		if (exec.doCall(omc)) {
@@ -377,7 +377,7 @@ public class HostDataService {
 		}
 	}
 
-	private void updateHost(String hostId, String property, String value) {
+	private void updateHost(String hostId, String property, Object value) {
 		if (hostUpdates == null) {
 			hostUpdates = new HashMap<>();
 		}
@@ -388,8 +388,7 @@ public class HostDataService {
 			hostUpdateMap = new HashMap<>();
 		}
 
-		hostUpdateMap.put("ident", hostId);
-		hostUpdateMap.put(HostInfo.HOST_TYPE_KEY, HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
+		hostUpdateMap.put("id", hostId);
 		hostUpdateMap.put(property, value);
 
 		hostUpdates.put(hostId, hostUpdateMap);
@@ -421,6 +420,14 @@ public class HostDataService {
 
 	public void setIpAddress(String hostId, String address) {
 		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
+	}
+
+	public void setWanConfig(String hostId, boolean wanConfig) {
+		updateHost(hostId, HostInfo.CLIENT_WAN_CONFIG_KEY, wanConfig);
+	}
+
+	public void setInstallOnShutdown(String hostId, boolean installOnShutdown) {
+		updateHost(hostId, HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, installOnShutdown);
 	}
 
 	public void setOS(String hostId, String address) {
