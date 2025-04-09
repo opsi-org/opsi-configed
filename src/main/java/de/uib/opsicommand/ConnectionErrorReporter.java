@@ -155,8 +155,8 @@ public final class ConnectionErrorReporter {
 
 	private void displayCancelConfigedDialog() {
 		displayConfirmDialog(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), this::displayMFADialog,
-				() -> Main.endApp(Main.NO_ERROR));
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"),
+				() -> Main.endApp(Main.NO_ERROR), this::displayMFADialog);
 	}
 
 	private void displayConfirmDialog(Object message, String title, Runnable onOK, Runnable onCancel) {
