@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
@@ -72,7 +73,7 @@ public class ConfigedMain {
 	private static String host;
 	private static String user;
 	private static String password;
-	private static String otp;
+	private static volatile String otp;
 	private static boolean useSSO;
 
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
@@ -105,6 +106,8 @@ public class ConfigedMain {
 	private int clientCount;
 
 	private Map<String, String> sessionInfo = new HashMap<>();
+
+	private static CountDownLatch otpWaiter;
 
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, HEALTH_CHECK, LICENSE_MANAGEMENT
@@ -1352,6 +1355,40 @@ public class ConfigedMain {
 
 	public static void setOTP(String otp) {
 		ConfigedMain.otp = otp;
+		if (otpWaiter != null) {
+			otpWaiter.countDown();
+		}
+	}
+
+	public static String getOTP() {
+		return otp;
+	}
+
+	/**
+	 * Resets the OTP wait cycle. Should be called before initiating a new OTP
+	 * input cycle from the MFA dialog.
+	 */
+	public static synchronized void resetOTPWaiter() {
+		otpWaiter = new CountDownLatch(1);
+	}
+
+	/**
+	 * Blocks execution until the OTP is provided via
+	 * {@link #setOTP(String otp)}. It is recommended to call this method only
+	 * when MFA is enabled, to wait for user input.
+	 * 
+	 * @return the OTP string provided by the user.
+	 */
+	public static synchronized String waitForOTPInput() {
+		try {
+			otpWaiter.await();
+			otpWaiter = null;
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			Logging.error("ConfigedMain waiting for OTP interrupted: " + e.getMessage());
+			return "";
+		}
+		return otp;
 	}
 
 	public static void setUseSSO(boolean useSSO) {

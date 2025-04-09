@@ -165,6 +165,7 @@ public class OpsiServiceNOMPersistenceController {
 		Logging.debug(this, "create");
 
 		init();
+		ParallelTaskExecutor.allowNewTasks(true);
 		if (useSSO) {
 			Logging.warning("ONOMPC useSSO true");
 			exec = new ServerFacade(server);

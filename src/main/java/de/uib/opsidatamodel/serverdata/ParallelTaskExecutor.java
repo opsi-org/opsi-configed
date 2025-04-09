@@ -7,10 +7,15 @@
 package de.uib.opsidatamodel.serverdata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import de.uib.utils.logging.Logging;
 
 /**
  * Provides utility methods to execute tasks in parallel and wait for their
@@ -19,8 +24,15 @@ import java.util.concurrent.Executors;
  * continuing.
  */
 public class ParallelTaskExecutor {
+	private static volatile boolean newTasksAllowed = true;
+	private static final List<ParallelTaskExecutor> executors = Collections.synchronizedList(new ArrayList<>());
+
 	private final List<CompletableFuture<Void>> futures = new ArrayList<>();
 	private ExecutorService executorService = Executors.newCachedThreadPool();
+
+	public ParallelTaskExecutor() {
+		executors.add(this);
+	}
 
 	/**
 	 * Executes a given task in parallel. The task will be executed
@@ -41,8 +53,59 @@ public class ParallelTaskExecutor {
 	public void waitForCompletion() {
 		if (!futures.isEmpty()) {
 			CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-			allOf.join();
+			try {
+				allOf.join();
+			} catch (CompletionException e) {
+				// If the cause is a CancellationException then cancellation was expected.
+				if (e.getCause() instanceof CancellationException) {
+					Logging.info("One or more tasks were cancelled as expected.");
+				} else {
+					// Re-throw any unexpected exception
+					throw e;
+				}
+			}
 		}
 		executorService.shutdown();
+	}
+
+	/**
+	 * Cancels all submitted tasks in this executor. Attempts to cancel each
+	 * task and initiate an immediate shutdown of the executor service.
+	 */
+	public void cancelAllTasks() {
+		for (CompletableFuture<Void> future : futures) {
+			future.cancel(true);
+		}
+		executorService.shutdownNow();
+	}
+
+	/**
+	 * Static method to cancel all tasks in all recorded ParallelTaskExecutor
+	 * instances.
+	 */
+	public static void cancelAllExecutorsTasks() {
+		synchronized (executors) {
+			for (ParallelTaskExecutor executor : executors) {
+				executor.cancelAllTasks();
+			}
+			executors.clear();
+		}
+		newTasksAllowed = false;
+	}
+
+	/**
+	 * Re-enables new tasks to be accepted.
+	 */
+	public static void allowNewTasks(boolean allow) {
+		newTasksAllowed = allow;
+	}
+
+	/**
+	 * Checks if the executor is currently accepting new tasks.
+	 * 
+	 * @return true if new tasks are allowed, false otherwise.
+	 */
+	public static boolean isNewTasksAllowed() {
+		return newTasksAllowed;
 	}
 }

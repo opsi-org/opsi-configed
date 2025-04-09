@@ -38,6 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateManager;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
@@ -366,6 +367,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
+		if (!ParallelTaskExecutor.isNewTasksAllowed()) {
+			return new HashMap<>();
+		}
+
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(omc));
 		HttpsURLConnection connection = handler.establishConnection(true);
 		setConnectionState(handler.getConnectionState());
@@ -575,23 +580,28 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private void handleResponseCode(HttpsURLConnection connection) throws IOException {
-		Logging.debug(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage());
+		int responseCode = connection.getResponseCode();
+		String responseMessage = connection.getResponseMessage();
+		Logging.debug(this, "Response ", responseCode, " ", responseMessage);
 
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
-				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+		if (responseCode == HttpURLConnection.HTTP_ACCEPTED || responseCode == HttpURLConnection.HTTP_OK) {
+			// Normal response; clear error flag if needed
 			setConnectionState(new ConnectionState(ConnectionState.CONNECTED, "ok"));
-		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+		} else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
 			Logging.debug("Unauthorized: ", sessionId, ", mfa=", Utils.isMultiFactorAuthenticationEnabled());
 			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
+				ParallelTaskExecutor.cancelAllExecutorsTasks();
+
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-				password = ConfigedMain.getPassword();
+				otp = ConfigedMain.waitForOTPInput();
 				setConnectionState(new ConnectionState(ConnectionState.UNAUTHORIZED));
 			} else {
-				setConnectionState(new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage()));
+				setConnectionState(new ConnectionState(ConnectionState.ERROR, responseMessage));
 			}
 		} else {
-			setConnectionState(new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage()));
-			Logging.error(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage(), " ",
+			ParallelTaskExecutor.cancelAllExecutorsTasks();
+			setConnectionState(new ConnectionState(ConnectionState.ERROR, responseMessage));
+			Logging.error(this, "Response ", responseCode, " ", responseMessage, " ",
 					retrieveErrorFromResponse(connection));
 		}
 	}
@@ -696,4 +706,5 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public String getSessionId() {
 		return sessionId;
 	}
+
 }

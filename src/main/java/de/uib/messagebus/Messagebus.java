@@ -277,11 +277,17 @@ public class Messagebus implements MessagebusListener {
 		return instance;
 	}
 
-	public void disconnect() throws InterruptedException {
+	public void disconnect() {
 		if (messagebusWebSocket != null && isConnected()) {
 			disconnecting = true;
-			messagebusWebSocket.closeBlocking();
-			Logging.info(this, "Connection to messagebus closed");
+			try {
+				messagebusWebSocket.closeBlocking();
+				connected = false;
+				Logging.info(this, "Connection to messagebus closed");
+			} catch (InterruptedException e) {
+				Logging.error(this, e, "Error disconnecting messagebus");
+				Thread.currentThread().interrupt();
+			}
 		} else {
 			Logging.info(this, "Messagebus not connected");
 		}
