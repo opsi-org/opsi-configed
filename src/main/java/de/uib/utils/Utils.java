@@ -483,4 +483,14 @@ public final class Utils {
 		};
 		optionPane.addHierarchyListener(listener);
 	}
+
+	public static Boolean toBoolean(Object obj) {
+		if (obj instanceof Boolean bool) {
+			return bool;
+		}
+		if (obj instanceof String) {
+			return Boolean.valueOf(obj.toString());
+		}
+		return false;
+	}
 }

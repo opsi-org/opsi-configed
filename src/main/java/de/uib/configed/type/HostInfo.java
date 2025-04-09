@@ -18,6 +18,7 @@ import de.uib.configed.gui.ClientTablePanel;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostInfo {
@@ -247,7 +248,7 @@ public class HostInfo {
 			break;
 
 		case UEFI_BOOT_KEY:
-			uefiBoot = (Boolean) value;
+			uefiBoot = Utils.toBoolean(value);
 			break;
 
 		default:
