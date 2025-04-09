@@ -6,16 +6,16 @@ project:
   maintainer: uib GmbH info@uib.de
   licenses:
     - license: AGPL-3.0
-  # version is currently not important, since we are not using it for changelogs. 
-  # It may be used in the future for opsi-dev-tools git-tag command
-  version: "{{version}}"
+  version: 4.3.8.2
   version_files:
-    # pom.xml: 'project.version' # yml not supported now
+    pom.xml: '.version' # yml not supported now
     # other examples:
     # opsi-dev-tool.yml: pull-binaries[0].version
     # frontend/package.json: '$.version'
     # backend/addon/webgui/python/const.py: 'ADDON_VERSION'
-
+  changelog_filename: CHANGELOG.md
+  date_files:
+    src/main/java/de/uib/configed/Globals.java: VERDATE;%Y-%m-%d
 
 # command to create changelos: `opsi-dev-tool -l 5 changelog from-git output`
 # command to create git tag: `opsi-dev-cli git-tag` (https://gitlab.uib.gmbh/uib/opsi-webgui/-/blob/v5/CONTRIBUTING.md#release)
