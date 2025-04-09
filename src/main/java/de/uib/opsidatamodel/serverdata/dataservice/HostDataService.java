@@ -189,7 +189,7 @@ public class HostDataService {
 	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
 			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject,
 			List<Map<String, Object>> configStatesJsonObject) {
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CREATE_OBJECTS, new Object[] { clientsJsonObject });
+		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS, new Object[] { clientsJsonObject });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
