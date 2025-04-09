@@ -56,15 +56,14 @@ public class ParallelTaskExecutor {
 			try {
 				allOf.join();
 			} catch (CompletionException e) {
-				// If the cause is a CancellationException then cancellation was expected.
 				if (e.getCause() instanceof CancellationException) {
 					Logging.info("One or more tasks were cancelled as expected.");
 				} else {
-					// Re-throw any unexpected exception
 					throw e;
 				}
 			}
 		}
+		executors.remove(this);
 		executorService.shutdown();
 	}
 
