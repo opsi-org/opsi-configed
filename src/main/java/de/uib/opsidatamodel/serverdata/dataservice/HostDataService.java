@@ -86,7 +86,6 @@ public class HostDataService {
 		List<Map<String, Object>> clientsJsonObject = new ArrayList<>();
 		List<Map<String, Object>> productsNetbootJsonObject = new ArrayList<>();
 		List<Map<String, Object>> groupsJsonObject = new ArrayList<>();
-		List<Map<String, Object>> configStatesJsonObject = new ArrayList<>();
 
 		for (List<Object> client : clients) {
 			String hostname = ((String) client.get(0)).trim();
@@ -127,28 +126,6 @@ public class HostDataService {
 			itemDepot.put(OpsiServiceNOMPersistenceController.CONFIG_ID,
 					OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
 
-			configStatesJsonObject.add(itemDepot);
-
-			if (wanConfig) {
-				configStatesJsonObject = configDataService.addWANConfigStates(newClientId, configStatesJsonObject);
-			}
-
-			if (shutdownInstall) {
-				List<Object> valuesShI = new ArrayList<>();
-				valuesShI.add(true);
-
-				Map<String, Object> itemShI = Utils
-						.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
-				itemShI.put(OpsiServiceNOMPersistenceController.OBJECT_ID, newClientId);
-				itemShI.put(OpsiServiceNOMPersistenceController.VALUES_ID, valuesShI);
-				itemShI.put(OpsiServiceNOMPersistenceController.CONFIG_ID,
-						OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
-
-				Logging.info(this, "create client, config item for shutdownInstall ", itemShI);
-
-				configStatesJsonObject.add(itemShI);
-			}
-
 			addGroupsToList(((String) client.get(9)), newClientId, groupsJsonObject);
 
 			HostInfo hostInfo = new HostInfo();
@@ -163,8 +140,7 @@ public class HostDataService {
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 		}
 
-		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject,
-				configStatesJsonObject);
+		return doCallsForClientCreation(clientsJsonObject, groupsJsonObject, productsNetbootJsonObject);
 	}
 
 	private void addGroupsToList(String groupsAsString, String newClientId,
@@ -187,22 +163,15 @@ public class HostDataService {
 	}
 
 	private boolean doCallsForClientCreation(List<Map<String, Object>> clientsJsonObject,
-			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject,
-			List<Map<String, Object>> configStatesJsonObject) {
+			List<Map<String, Object>> groupsJsonObject, List<Map<String, Object>> productsNetbootJsonObject) {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_UPDATE_CLIENTS, new Object[] { clientsJsonObject });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
-			if (!configStatesJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-						new Object[] { configStatesJsonObject });
-				result = exec.doCall(omc);
-			}
-
 			if (!groupsJsonObject.isEmpty()) {
 				omc = new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_CREATE_OBJECTS,
 						new Object[] { groupsJsonObject });
-				result = result && exec.doCall(omc);
+				result = exec.doCall(omc);
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
@@ -238,10 +207,6 @@ public class HostDataService {
 		result = exec.doCall(omc);
 
 		if (result) {
-			result = updateConfigsForClient(depotId, newClientId, wanConfig, shutdownInstall);
-		}
-
-		if (result) {
 			result = updateGroupsForClient(groups, newClientId);
 		}
 
@@ -273,46 +238,6 @@ public class HostDataService {
 		}
 
 		return result;
-	}
-
-	private boolean updateConfigsForClient(String depotId, String newClientId, boolean wanConfig,
-			boolean shutdownInstall) {
-		List<Map<String, Object>> jsonObjects = new ArrayList<>();
-
-		Map<String, Object> itemDepot = Utils.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
-		List<String> valuesDepot = new ArrayList<>();
-		valuesDepot.add(depotId);
-		itemDepot.put(OpsiServiceNOMPersistenceController.OBJECT_ID, newClientId);
-		itemDepot.put(OpsiServiceNOMPersistenceController.VALUES_ID, valuesDepot);
-		itemDepot.put(OpsiServiceNOMPersistenceController.CONFIG_ID,
-				OpsiServiceNOMPersistenceController.CONFIG_DEPOT_ID);
-
-		jsonObjects.add(itemDepot);
-
-		if (wanConfig) {
-			jsonObjects = configDataService.addWANConfigStates(newClientId, jsonObjects);
-		}
-
-		if (shutdownInstall) {
-			List<Object> valuesShI = new ArrayList<>();
-			valuesShI.add(true);
-
-			Map<String, Object> itemShI = Utils.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
-			itemShI.put(OpsiServiceNOMPersistenceController.OBJECT_ID, newClientId);
-
-			itemShI.put(OpsiServiceNOMPersistenceController.VALUES_ID, valuesShI);
-			itemShI.put(OpsiServiceNOMPersistenceController.CONFIG_ID,
-					OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
-
-			Logging.info(this, "create client, config item for shutdownInstall ", itemShI);
-
-			jsonObjects.add(itemShI);
-		}
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-				new Object[] { jsonObjects });
-
-		return exec.doCall(omc);
 	}
 
 	private boolean updateGroupsForClient(String[] groups, String newClientId) {
