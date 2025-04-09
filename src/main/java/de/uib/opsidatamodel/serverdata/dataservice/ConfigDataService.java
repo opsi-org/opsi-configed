@@ -198,11 +198,6 @@ public class ConfigDataService {
 		return cacheManager.getCachedData(CacheIdentifier.WAN_CONFIGURATION, Map.class);
 	}
 
-	public Map<String, List<Object>> getNotWanConfigurationPD() {
-		retrieveWANConfigOptionsPD();
-		return cacheManager.getCachedData(CacheIdentifier.NOT_WAN_CONFIGURATION, Map.class);
-	}
-
 	public Map<String, ConfigOption> retrieveWANConfigOptionsPD() {
 		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + WAN_PARTKEY);
@@ -212,7 +207,6 @@ public class ConfigDataService {
 		Map<String, ConfigOption> notWanConfigOptions = extractSubConfigOptionsByInitial(
 				OpsiServiceNOMPersistenceController.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + ".");
 
-		Map<String, List<Object>> notWanConfiguration = new HashMap<>();
 		Map<String, List<Object>> wanConfiguration = new HashMap<>();
 
 		List<Object> values = null;
@@ -220,14 +214,9 @@ public class ConfigDataService {
 		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
 			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
 				Logging.error(this, "WAN config option key ", notWanConfigOption.getKey(), " is non BOOL_CONFIG");
-				notWanConfiguration.put(notWanConfigOption.getKey(), null);
 				wanConfiguration.put(notWanConfigOption.getKey(), null);
 			} else {
 				Boolean b = (Boolean) notWanConfigOption.getValue().getDefaultValues().get(0);
-
-				values = new ArrayList<>();
-				values.add(b);
-				notWanConfiguration.put(notWanConfigOption.getKey(), values);
 
 				values = new ArrayList<>();
 				values.add(!b);
@@ -237,8 +226,6 @@ public class ConfigDataService {
 
 		cacheManager.setCachedData(CacheIdentifier.WAN_CONFIGURATION, wanConfiguration);
 		Logging.info(this, "getWANConfigOptions wanConfiguration ", wanConfiguration);
-		cacheManager.setCachedData(CacheIdentifier.NOT_WAN_CONFIGURATION, notWanConfiguration);
-		Logging.info(this, "getWANConfigOptions notWanConfiguration  ", notWanConfiguration);
 
 		return allWanConfigOptions;
 	}

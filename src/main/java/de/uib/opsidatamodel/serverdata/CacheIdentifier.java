@@ -77,11 +77,6 @@ public enum CacheIdentifier {
 	WAN_CONFIGURATION("wan_configuration"),
 
 	/**
-	 * return type {@code Map<String, List<Object>>}
-	 */
-	NOT_WAN_CONFIGURATION("not_wan_configuration"),
-
-	/**
 	 * return type {@code Map<String, Object>}
 	 */
 	OPSI_LICENSING_INFO_NO_OPSI_ADMIN("opsi_licensing_info_no_opsi_admin"),
