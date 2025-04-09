@@ -367,6 +367,16 @@ public final class ClientMenuManager implements MenuListener {
 		jCheckBoxMenuItemShowOSColumn
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL));
 
+		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceVendorColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
+		jCheckBoxMenuItemShowDeviceVendorColumn.addActionListener(
+				event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL));
+
+		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceModelColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+		jCheckBoxMenuItemShowDeviceModelColumn.addActionListener(
+				event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL));
+
 		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
@@ -379,6 +389,8 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowHealthCheckActiveColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowOSColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceVendorColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceModelColumn);
 
 		return jMenuShowColumns;
 	}

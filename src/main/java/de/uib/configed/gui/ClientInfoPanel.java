@@ -48,6 +48,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientMacAddress;
 	private JLabel labelClientIPAddress;
 	private JLabel labelClientOS;
+	private JLabel labelClientDeviceVendor;
+	private JLabel labelClientDeviceModel;
 	private JLabel labelOneTimePassword;
 	private JLabel labelOpsiHostKey;
 
@@ -66,6 +68,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JTextField macAddressField;
 	private JTextField ipAddressField;
 	private JTextField osField;
+	private JTextField deviceVendorField;
+	private JTextField deviceModelField;
 	private JTextField jTextFieldOneTimePassword;
 	private FlatPasswordField hostKeyField;
 
@@ -103,6 +107,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
 		labelClientOS = new JLabel(Configed.getResourceValue("operatingSystem"));
+		labelClientDeviceVendor = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+		labelClientDeviceModel = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsi-host-key");
 
@@ -144,6 +150,12 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		osField = new JTextField();
 		osField.setEditable(false);
+
+		deviceVendorField = new JTextField();
+		deviceVendorField.setEditable(false);
+
+		deviceModelField = new JTextField();
+		deviceModelField.setEditable(false);
 
 		checkBoxUEFIBoot = new FlatTriStateCheckBox(Configed.getResourceValue("NewClientDialog.boottype"));
 		checkBoxUEFIBoot.setAllowIndeterminate(false);
@@ -234,6 +246,16 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 						.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addComponent(osField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
+				/////// DEVICE VENDOR
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelClientDeviceVendor, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(deviceVendorField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
+				/////// DEVICE MODEL
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelClientDeviceModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addComponent(deviceModelField, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
 				/////// INSTALL BY SHUTDOWN
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
 						checkBoxInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -314,6 +336,20 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.addComponent(labelClientOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(osField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+
+				/////// DEVICE VENDOR
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelClientDeviceVendor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(deviceVendorField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+
+				/////// DEVICE MODEL
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelClientDeviceModel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(deviceModelField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
 				////// INSTALL BY SHUTDOWN
@@ -401,6 +437,18 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	public void setClientOS(String s) {
 		dataAreChangedProgramatically = true;
 		osField.setText(s);
+		dataAreChangedProgramatically = false;
+	}
+
+	public void setClientDeviceVendor(String s) {
+		dataAreChangedProgramatically = true;
+		deviceVendorField.setText(s);
+		dataAreChangedProgramatically = false;
+	}
+
+	public void setClientDeviceModel(String s) {
+		dataAreChangedProgramatically = true;
+		deviceModelField.setText(s);
 		dataAreChangedProgramatically = false;
 	}
 

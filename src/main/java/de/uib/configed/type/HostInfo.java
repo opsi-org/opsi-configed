@@ -38,6 +38,8 @@ public class HostInfo {
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "install_on_shutdown";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
 	public static final String CLIENT_OS_KEY = "operating_system";
+	public static final String CLIENT_DEVICE_VENDOR_KEY = "device_vendor";
+	public static final String CLIENT_DEVICE_MODEL_KEY = "device_model";
 	public static final String UEFI_BOOT_KEY = "uefi_boot";
 
 	public static final String DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL = "depotId";
@@ -59,6 +61,8 @@ public class HostInfo {
 	public static final String HEALTH_CHECK_ACTIVE_FIELD_LABEL = "healthCheckActive";
 
 	public static final String CLIENT_OS_DISPLAY_FIELD_LABEL = "operatingSystem";
+	public static final String CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL = "deviceVendor";
+	public static final String CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL = "deviceModel";
 
 	public static final List<String> ORDERING_DISPLAY_FIELDS = List.of(HOST_NAME_DISPLAY_FIELD_LABEL,
 			CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL,
@@ -66,7 +70,8 @@ public class HostInfo {
 			CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL,
 			CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
 			CREATED_DISPLAY_FIELD_LABEL, CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL,
-			HEALTH_CHECK_ACTIVE_FIELD_LABEL, CLIENT_OS_DISPLAY_FIELD_LABEL);
+			HEALTH_CHECK_ACTIVE_FIELD_LABEL, CLIENT_OS_DISPLAY_FIELD_LABEL, CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL,
+			CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL);
 
 	public static final String IS_MASTER_DEPOT_KEY = "isMasterDepot";
 
@@ -94,6 +99,8 @@ public class HostInfo {
 	private Boolean clientShutdownInstall;
 
 	private String clientOS;
+	private String clientDeviceVendor;
+	private String clientDeviceModel;
 	private Boolean uefiBoot;
 
 	public Map<String, Object> getDisplayRowMap0() {
@@ -114,6 +121,8 @@ public class HostInfo {
 		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 
 		unordered.put(CLIENT_OS_DISPLAY_FIELD_LABEL, clientOS);
+		unordered.put(CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, clientDeviceVendor);
+		unordered.put(CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL, clientDeviceModel);
 
 		Logging.debug(this, "getMap clientName ", clientName, " : ", unordered);
 
@@ -143,6 +152,8 @@ public class HostInfo {
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
 
 		unordered.put(CLIENT_OS_KEY, clientOS);
+		unordered.put(CLIENT_DEVICE_VENDOR_KEY, clientDeviceVendor);
+		unordered.put(CLIENT_DEVICE_MODEL_KEY, clientDeviceModel);
 		unordered.put(UEFI_BOOT_KEY, uefiBoot);
 
 		Logging.debug(this, "getMap clientName ", clientName);
@@ -225,6 +236,14 @@ public class HostInfo {
 
 		case CLIENT_OS_KEY:
 			clientOS = "" + value;
+			break;
+
+		case CLIENT_DEVICE_VENDOR_KEY:
+			clientDeviceVendor = "" + value;
+			break;
+
+		case CLIENT_DEVICE_MODEL_KEY:
+			clientDeviceModel = "" + value;
 			break;
 
 		case UEFI_BOOT_KEY:
@@ -328,6 +347,8 @@ public class HostInfo {
 		created = showValue((String) pcInfo.get(CREATED_KEY));
 		lastSeen = showValue((String) pcInfo.get(LAST_SEEN_KEY));
 		clientOS = showValue((String) pcInfo.get(CLIENT_OS_KEY));
+		clientDeviceVendor = showValue((String) pcInfo.get(CLIENT_DEVICE_VENDOR_KEY));
+		clientDeviceModel = showValue((String) pcInfo.get(CLIENT_DEVICE_MODEL_KEY));
 		uefiBoot = showValue((Boolean) pcInfo.get(UEFI_BOOT_KEY));
 
 		depotOfClient = showValue((String) pcInfo.get(DEPOT_OF_CLIENT_KEY));
@@ -376,6 +397,8 @@ public class HostInfo {
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMacAddress(clientMacAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientIpAddress(clientIpAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS(clientOS);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceVendor(clientDeviceVendor);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceModel(clientDeviceModel);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot(uefiBoot);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig(clientWanConfig);
@@ -637,5 +660,7 @@ public class HostInfo {
 		clientShutdownInstall = false;
 
 		clientOS = "";
+		clientDeviceVendor = "";
+		clientDeviceModel = "";
 	}
 }
