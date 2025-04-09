@@ -36,13 +36,3 @@ RUN set -ex; \
     apt-get clean -y; \
     rm -rf /var/lib/apt/lists/*
 ENV DEBIAN_FRONTEND=dialog
-
-
-# echo "========================================== Install dev-tools"
-RUN wget http://binaryindex.uib.gmbh/development/opsi-dev-tools/linux/x64/opsi-dev-tools_linux_x64_1.30.0.tar.gz
-RUN tar -xf opsi-dev-tools_linux_x64_1.30.0.tar.gz
-RUN ./opsi-dev-tool --self-install
-RUN opsi-dev-tool --self-upgrade
-# RUN opsi-dev-tool git-hooks --install
-RUN rm -f opsi-dev-tools_linux_x64_1.30.0.tar.gz opsi-dev-tools_linux_x64_1.30.0.tar.gz.1
-RUN rm -f opsi-dev-tool

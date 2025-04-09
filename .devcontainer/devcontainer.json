@@ -15,6 +15,7 @@
     // "forwardPorts": [],
     // Use 'postCreateCommand' to run commands after the container is created.
     // "postCreateCommand": "java -version",
+    "postStartCommand": "/workspaces/opsi-configed/.devcontainer/postStartCommand.sh",
     // Configure tool-specific properties.
     "customizations": {
         "vscode": {
