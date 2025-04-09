@@ -8,6 +8,7 @@ package de.uib.opsicommand;
 
 import java.awt.event.ActionEvent;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -31,6 +32,7 @@ import de.uib.utils.swing.SeparatedDocument;
  */
 public final class ConnectionErrorReporter {
 	private static ConnectionErrorReporter instance;
+	private static final AtomicBoolean dialogOpened = new AtomicBoolean(false);
 	private ConnectionState conStat;
 
 	private ConnectionErrorReporter(ConnectionState conStat) {
@@ -150,24 +152,31 @@ public final class ConnectionErrorReporter {
 				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },
 				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"),
 				() -> ConfigedMain.getMainFrame().reconnectOTP(new String(otpField.getPassword())),
-				this::displayCancelConfigedDialog);
+				() -> SwingUtilities.invokeLater(this::displayCancelConfigedDialog));
 	}
 
 	private void displayCancelConfigedDialog() {
 		displayConfirmDialog(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
 				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"),
-				() -> Main.endApp(Main.NO_ERROR), this::displayMFADialog);
+				() -> Main.endApp(Main.NO_ERROR), () -> SwingUtilities.invokeLater(this::displayMFADialog));
 	}
 
 	private void displayConfirmDialog(Object message, String title, Runnable onOK, Runnable onCancel) {
+		if (dialogOpened.get()) {
+			return;
+		}
 		runOnEventDispatchThread(() -> {
-			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message, title,
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-			if (answer == JOptionPane.OK_OPTION) {
-				onOK.run();
-			} else {
-				onCancel.run();
+			dialogOpened.set(true);
+			try {
+				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message, title,
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				if (answer == JOptionPane.OK_OPTION) {
+					onOK.run();
+				} else {
+					onCancel.run();
+				}
+			} finally {
+				dialogOpened.set(false);
 			}
 		});
 	}
