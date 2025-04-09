@@ -266,14 +266,6 @@ public class HostInfoCollections {
 
 			Logging.debug(this, "getConfigs for ", name);
 
-			host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
-					persistenceController.getConfigDataService().isInstallByShutdownConfigured(name));
-
-			boolean result = persistenceController.getConfigDataService().findBooleanConfigurationComparingToDefaults(
-					name, persistenceController.getConfigDataService().getWanConfigurationPD());
-			Logging.debug(this, "host ", name, " wan config ", result);
-			host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
-
 			HostInfo hostInfo = null;
 			String myDepot = null;
 

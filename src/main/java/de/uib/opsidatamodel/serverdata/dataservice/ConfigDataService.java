@@ -296,84 +296,6 @@ public class ConfigDataService {
 		persistenceController.notifyPanelCompleteWinProducts();
 	}
 
-	public List<Map<String, Object>> addWANConfigStates(String clientId, List<Map<String, Object>> jsonObjects) {
-		return addWANConfigStates(clientId, true, jsonObjects);
-	}
-
-	private List<Map<String, Object>> addWANConfigStates(String clientId, boolean wan,
-			List<Map<String, Object>> jsonObjects) {
-		retrieveWANConfigOptionsPD();
-
-		Map<String, List<Object>> wanConfiguration = getWanConfigurationPD();
-		Map<String, List<Object>> notWanConfiguration = getNotWanConfigurationPD();
-
-		Logging.debug(this, "addWANConfigState  wanConfiguration ", wanConfiguration, "\n ", wanConfiguration.size());
-		Logging.debug(this, "addWANConfigState  wanConfiguration.keySet() ", wanConfiguration.keySet());
-
-		Logging.debug(this, "addWANConfigState  notWanConfiguration ", notWanConfiguration, "\n ",
-				notWanConfiguration.size());
-		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() ", notWanConfiguration.keySet());
-
-		setConfig(notWanConfiguration);
-		Logging.info(this, "set notWanConfiguration members where no entry exists");
-		// send to opsiserver only new configs
-		setConfig(true);
-
-		Map<String, List<Object>> specifiedConfiguration;
-
-		if (wan) {
-			specifiedConfiguration = wanConfiguration;
-		} else {
-			specifiedConfiguration = notWanConfiguration;
-		}
-
-		if (jsonObjects == null) {
-			jsonObjects = new ArrayList<>();
-		}
-
-		for (Entry<String, List<Object>> config : specifiedConfiguration.entrySet()) {
-			Logging.info(this, "addWANConfigState configId ", config.getKey());
-			Map<String, Object> item = Utils.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
-
-			item.put(OpsiServiceNOMPersistenceController.CONFIG_ID, config.getKey());
-
-			Logging.info(this, "addWANConfigState values ", config.getValue());
-
-			item.put(OpsiServiceNOMPersistenceController.VALUES_ID, config.getValue());
-
-			item.put(OpsiServiceNOMPersistenceController.OBJECT_ID, clientId);
-
-			Logging.info(this, "addWANConfigState configId, item ", config.getKey(), ", ", item);
-
-			// locally, hopefully the RPC call will work
-			if (getHostConfigsPD().get(clientId) == null) {
-				Logging.info(this, "addWANConfigState; until now, no config(State) existed for client ", clientId,
-						" no local update");
-				getHostConfigsPD().put(clientId, new HashMap<>());
-			}
-
-			getHostConfigsPD().get(clientId).put(config.getKey(), config.getValue());
-
-			// prepare for JSON RPC
-			jsonObjects.add(item);
-		}
-
-		return jsonObjects;
-	}
-
-	public boolean setWANConfigs(String clientId, boolean wan) {
-		boolean result = false;
-		Logging.info(this, "setWANConfigs ", clientId, " . ", wan);
-
-		List<Map<String, Object>> jsonObjects = addWANConfigStates(clientId, wan, null);
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-				new Object[] { jsonObjects });
-		result = exec.doCall(omc);
-
-		return result;
-	}
-
 	// send config updates and clear the collection
 	public void updateConfigs() {
 		setConfig(false);
@@ -875,11 +797,6 @@ public class ConfigDataService {
 		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
 
-	public boolean configureInstallByShutdown(String clientId, boolean shutdownInstall) {
-		return setHostBooleanConfigValue(OpsiServiceNOMPersistenceController.KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
-				clientId, shutdownInstall);
-	}
-
 	// for checking if WAN default configuration is set
 	public boolean findBooleanConfigurationComparingToDefaults(String host,
 			Map<String, List<Object>> defaultConfiguration) {
@@ -923,26 +840,6 @@ public class ConfigDataService {
 			Logging.debug(this, "valueFromConfigStateAsExpected ", result);
 		}
 		return result;
-	}
-
-	private boolean setHostBooleanConfigValue(String configId, String hostName, boolean val) {
-		Logging.info(this, "setHostBooleanConfigValue ", hostName, " configId ", configId, " val ", val);
-
-		List<Object> values = new ArrayList<>();
-		values.add(val);
-
-		Map<String, Object> item = Utils.createNOMitem(OpsiServiceNOMPersistenceController.CONFIG_STATE_TYPE);
-		item.put(OpsiServiceNOMPersistenceController.OBJECT_ID, hostName);
-		item.put(OpsiServiceNOMPersistenceController.VALUES_ID, values);
-		item.put(OpsiServiceNOMPersistenceController.CONFIG_ID, configId);
-
-		List<Map<String, Object>> jsonObjects = new ArrayList<>();
-		jsonObjects.add(item);
-
-		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_STATE_UPDATE_OBJECTS,
-				new Object[] { jsonObjects });
-
-		return exec.doCall(omc);
 	}
 
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
