@@ -179,7 +179,7 @@ public class ListSelectionDialog {
 
 	public void addItem(String element) {
 		DefaultListModel<String> model = (DefaultListModel<String>) jList.getModel();
-		if (!model.contains(element)) {
+		if (!model.contains(element) && !element.isBlank()) {
 			model.addElement(element);
 			jList.addSelectionInterval(model.size() - 1, model.size() - 1);
 			jList.ensureIndexIsVisible(jList.getMaxSelectionIndex());
