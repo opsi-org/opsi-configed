@@ -355,10 +355,6 @@ public class HostDataService {
 		updateHost(hostId, HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, installOnShutdown);
 	}
 
-	public void setOS(String hostId, String address) {
-		updateHost(hostId, HostInfo.CLIENT_OS_KEY, address);
-	}
-
 	public List<Map<String, Object>> getOpsiHosts() {
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
