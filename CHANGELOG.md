@@ -6,6 +6,9 @@
 - Issue: If property key contains secret, the value of that key should be hidden
 - Issue: localboot and netboot tables not updated on reload (only on global reload)
 
+### Changed
+- Make `SavedSearchesDialog` modeless
+
 ## [4.3.8.2] - 2025-04-03
 ### Changed
 - Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
