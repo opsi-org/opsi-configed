@@ -279,6 +279,7 @@ public class HostInfoCollections {
 			host2hostInfo.put(name, hostInfo);
 			depot2Host2HostInfo.get(myDepot).put(name, hostInfo);
 		}
+		addOpsiHostNames(new ArrayList<>(host2hostInfo.keySet()));
 		cacheManager.setCachedData(CacheIdentifier.HOST_TO_HOST_INFO, host2hostInfo);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 	}
