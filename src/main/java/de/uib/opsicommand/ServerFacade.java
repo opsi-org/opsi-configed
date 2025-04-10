@@ -367,7 +367,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
-		if (!ParallelTaskExecutor.isNewTasksAllowed()) {
+		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
 			return new HashMap<>();
 		}
 
@@ -396,8 +396,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
 
 					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
-				} else if (getConnectionState().getState() == ConnectionState.UNAUTHORIZED) {
-					return retrieveResponse(omc);
 				} else {
 					Logging.warning(this, "Encountered unhandled connection state: ", getConnectionState());
 				}
@@ -593,8 +591,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-				otp = ConfigedMain.waitForOTPInput();
-				setConnectionState(new ConnectionState(ConnectionState.UNAUTHORIZED));
+				if (otp.equals(ConfigedMain.getOTP())) {
+					Logging.debug(this, "MFA error encountered, we wait for new OTP input");
+					otp = ConfigedMain.waitForOTPInput();
+				} else {
+					Logging.debug(this, "old OTP was used, we set it to use new OTP");
+					otp = ConfigedMain.getOTP();
+				}
+				setConnectionState(new ConnectionState(ConnectionState.RETRY_CONNECTION));
 			} else {
 				setConnectionState(new ConnectionState(ConnectionState.ERROR, responseMessage));
 			}

@@ -152,21 +152,20 @@ public final class ConnectionErrorReporter {
 				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },
 				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"),
 				() -> ConfigedMain.getMainFrame().reconnectOTP(new String(otpField.getPassword())),
-				() -> SwingUtilities.invokeLater(this::displayCancelConfigedDialog));
+				() -> SwingUtilities.invokeLater(() -> displayCancelConfigedDialog()));
 	}
 
 	private void displayCancelConfigedDialog() {
 		displayConfirmDialog(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
 				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"),
-				() -> Main.endApp(Main.NO_ERROR), () -> SwingUtilities.invokeLater(this::displayMFADialog));
+				() -> Main.endApp(Main.NO_ERROR), () -> SwingUtilities.invokeLater(() -> displayMFADialog()));
 	}
 
 	private void displayConfirmDialog(Object message, String title, Runnable onOK, Runnable onCancel) {
-		if (dialogOpened.get()) {
+		if (!dialogOpened.compareAndSet(false, true)) {
 			return;
 		}
 		runOnEventDispatchThread(() -> {
-			dialogOpened.set(true);
 			try {
 				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message, title,
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);

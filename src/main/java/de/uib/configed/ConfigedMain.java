@@ -1386,7 +1386,7 @@ public class ConfigedMain {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			Logging.error("ConfigedMain waiting for OTP interrupted: " + e.getMessage());
-			return "";
+			return null;
 		}
 		return otp;
 	}
