@@ -3,6 +3,8 @@
 - Don't call RPC-methods twice when reloading license management
 - Resolved an issue where the UI would freeze during login when connecting to an invalid server.
 - Save function, when adding new configs.
+- Issue: If property key contains secret, the value of that key should be hidden
+- Issue: localboot and netboot tables not updated on reload (only on global reload)
 
 ## [4.3.8.2] - 2025-04-03
 ### Changed
