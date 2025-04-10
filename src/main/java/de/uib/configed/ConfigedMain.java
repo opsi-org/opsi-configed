@@ -652,7 +652,7 @@ public class ConfigedMain {
 				pcinfo = new HostInfo();
 			}
 
-			Map<String, Object> rowmap = pcinfo.getDisplayRowMap0();
+			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
 
 			String sessionValue = "";
 			if (sessionInfo.get(clientId) != null) {

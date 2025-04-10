@@ -104,30 +104,30 @@ public class HostInfo {
 	private String clientDeviceModel;
 	private Boolean uefiBoot;
 
-	public Map<String, Object> getDisplayRowMap0() {
-		Map<String, Object> unordered = new HashMap<>();
+	public Map<String, Object> getDisplayRowMap() {
+		Map<String, Object> displayRowMap = new HashMap<>();
 
-		unordered.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
-		unordered.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientDescription);
-		unordered.put(CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInventoryNumber);
-		unordered.put(LAST_SEEN_DISPLAY_FIELD_LABEL, lastSeen);
+		displayRowMap.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
+		displayRowMap.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientDescription);
+		displayRowMap.put(CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInventoryNumber);
+		displayRowMap.put(LAST_SEEN_DISPLAY_FIELD_LABEL, lastSeen);
 
-		unordered.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, clientWanConfig);
-		unordered.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, clientIpAddress);
-		unordered.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, clientSystemUUID);
-		unordered.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, clientMacAddress);
-		unordered.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, clientShutdownInstall);
+		displayRowMap.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, clientWanConfig);
+		displayRowMap.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, clientIpAddress);
+		displayRowMap.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, clientSystemUUID);
+		displayRowMap.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, clientMacAddress);
+		displayRowMap.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, clientShutdownInstall);
 
-		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
-		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
+		displayRowMap.put(CREATED_DISPLAY_FIELD_LABEL, created);
+		displayRowMap.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 
-		unordered.put(CLIENT_OS_DISPLAY_FIELD_LABEL, clientOS);
-		unordered.put(CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, clientDeviceVendor);
-		unordered.put(CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL, clientDeviceModel);
+		displayRowMap.put(CLIENT_OS_DISPLAY_FIELD_LABEL, clientOS);
+		displayRowMap.put(CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, clientDeviceVendor);
+		displayRowMap.put(CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL, clientDeviceModel);
 
-		Logging.debug(this, "getMap clientName ", clientName, " : ", unordered);
+		Logging.debug(this, "getMap clientName ", clientName, " : ", displayRowMap);
 
-		return unordered;
+		return displayRowMap;
 	}
 
 	public Map<String, Object> getMap() {
