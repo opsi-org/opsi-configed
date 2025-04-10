@@ -71,7 +71,7 @@ public class ListSelectionDialog {
 
 		jList = new JList<>();
 		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jList.setFixedCellHeight(15);
+		jList.setFixedCellHeight(20);
 		jList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
