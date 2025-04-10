@@ -297,7 +297,6 @@ public class ConfigedMain {
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
 		executor.runInParallel(() -> persistenceController.getProductDataService().retrieveDepotProductPropertiesPD());
-		executor.runInParallel(() -> persistenceController.getHealthDataService().retrieveHostsWithHealthCheck());
 		executor.waitForCompletion();
 
 		ExtraFrameController.reloadDialogs();
@@ -423,11 +422,8 @@ public class ConfigedMain {
 
 		if (selectedClients.size() == 1) {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
-			mainFrame.getClientConfiguration().getClientInfoPanel()
-					.updateHealthCheckActiveCheckBoxStatus(selectedClients.get(0));
 		} else {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
-			mainFrame.getClientConfiguration().getClientInfoPanel().updateHealthCheckActiveCheckBoxStatus(null);
 		}
 
 		hostInfo.resetGui();
@@ -644,8 +640,6 @@ public class ConfigedMain {
 		Logging.info(this, "buildPclistTableModel host_displayFields ",
 				persistenceController.getHostDataService().getHostDisplayFields());
 
-		Set<Object> hostsWithActiveHealthCheck = persistenceController.getHealthDataService()
-				.getHostsWithActiveHealthCheck();
 		for (String clientId : clientIds) {
 			HostInfo pcinfo = pcinfos.get(clientId);
 			if (pcinfo == null) {
@@ -661,7 +655,6 @@ public class ConfigedMain {
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
 			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
-			rowmap.put(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL, hostsWithActiveHealthCheck.contains(clientId));
 
 			List<Object> rowItems = new ArrayList<>();
 
@@ -763,7 +756,7 @@ public class ConfigedMain {
 		configureColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, opsiCheckMarkCellRenderer);
 		configureColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
 		configureColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
-		configureColumn(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL, defaultCheckMarkCellRenderer);
+		configureColumn(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
 	}
 
 	private void configureColumn(String fieldLabel, TableCellRenderer renderer) {

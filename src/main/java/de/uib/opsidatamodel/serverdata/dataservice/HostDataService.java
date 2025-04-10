@@ -532,7 +532,7 @@ public class HostDataService {
 			possibleValues.add(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
-			possibleValues.add(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL);

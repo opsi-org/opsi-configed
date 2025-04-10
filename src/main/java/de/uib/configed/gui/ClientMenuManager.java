@@ -352,12 +352,12 @@ public final class ClientMenuManager implements MenuListener {
 		JCheckBoxMenuItem jCheckBoxMenuItemShowHealthCheckActiveColumn = new JCheckBoxMenuItem(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.healthCheckActive"));
 		jCheckBoxMenuItemShowHealthCheckActiveColumn.setSelected(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL));
+				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowHealthCheckActiveColumn.addActionListener((ActionEvent event) -> {
 			ConfigedMain.getMainFrame().getClientConfiguration().getClientInfoPanel()
 					.hideHealthCheckActiveCheckBox(Boolean.FALSE.equals(persistenceController.getHostDataService()
-							.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
-			configedMain.toggleColumn(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL);
+							.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
+			configedMain.toggleColumn(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL);
 		});
 
 		JCheckBoxMenuItem jCheckBoxMenuItemShowOSColumn = new JCheckBoxMenuItem(

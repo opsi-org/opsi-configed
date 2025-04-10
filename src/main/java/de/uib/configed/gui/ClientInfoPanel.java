@@ -171,16 +171,14 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		checkBoxHealthCheckActive.setAllowIndeterminate(false);
 		checkBoxHealthCheckActive.setFocusable(false);
 		checkBoxHealthCheckActive.setEnabled(false);
-		checkBoxHealthCheckActive.setSelected(persistenceController.getHealthDataService()
-				.getHostsWithActiveHealthCheck().contains(labelClientID.getText()));
 		checkBoxHealthCheckActive.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
+				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 
 		openHealthCheckSettingsDialogButton = new JButton(Icons.getIntellijIcon("settings"));
 		openHealthCheckSettingsDialogButton
 				.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.title"));
 		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
+				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 		openHealthCheckSettingsDialogButton.addActionListener(
 				e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain.getSelectedClients()));
 
@@ -452,7 +450,13 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = false;
 	}
 
-	public void setUefiBoot(boolean uefiBoot) {
+	public void setClientMonitoring(Boolean value) {
+		dataAreChangedProgramatically = true;
+		checkBoxHealthCheckActive.setChecked(value);
+		dataAreChangedProgramatically = false;
+	}
+
+	public void setUefiBoot(Boolean uefiBoot) {
 		Logging.info(this, "setUefiBoot ", uefiBoot);
 		checkBoxUEFIBoot.setChecked(uefiBoot);
 	}
@@ -596,12 +600,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	public void hideHealthCheckActiveCheckBox(boolean hide) {
 		checkBoxHealthCheckActive.setVisible(hide);
 		openHealthCheckSettingsDialogButton.setVisible(hide);
-	}
-
-	public void updateHealthCheckActiveCheckBoxStatus(String clientId) {
-		checkBoxHealthCheckActive.setChecked(clientId != null
-				? persistenceController.getHealthDataService().getHostsWithActiveHealthCheck().contains(clientId)
-				: null);
 	}
 
 	// DocumentListener
