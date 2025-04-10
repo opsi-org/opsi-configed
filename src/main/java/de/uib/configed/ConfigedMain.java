@@ -443,7 +443,7 @@ public class ConfigedMain {
 
 		Logging.info(this, "updateHostInfo, produce hostInfo  selectedClients.length ", selectedClients.size());
 
-		if (!selectedClients.isEmpty()) {
+		if (!selectedClients.isEmpty() && !pcinfos.isEmpty()) {
 			hostInfo.setValues(pcinfos.get(selectedClients.get(0)).getMap());
 
 			Logging.debug(this, "updateHostInfo, produce hostInfo first selClient ", selectedClients.get(0));
