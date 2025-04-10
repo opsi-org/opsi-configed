@@ -543,7 +543,6 @@ public class HostDataService {
 			result.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
 			result.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
 			result.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-			result.add(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL);
 
 			// create config for service
 			Map<String, Object> item = Utils.createNOMitem("UnicodeConfig");
