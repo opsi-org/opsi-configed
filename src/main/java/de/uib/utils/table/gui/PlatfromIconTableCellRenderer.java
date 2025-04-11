@@ -29,7 +29,7 @@ public class PlatfromIconTableCellRenderer extends ColorTableCellRenderer {
 		super.getTableCellRendererComponent(table, null, isSelected, hasFocus, row, column);
 		Logging.debug("row=", row, ", column=", column, ", value=", value);
 		if (MACOS.equals(value)) {
-			setIcon(Icons.getThemeIcons8Icon("macos", 16));
+			setIcon(Icons.getThemeSVGRepoIcon("macos", 16));
 			setToolTipText(MACOS);
 		} else if (WINDOWS.equals(value)) {
 			setIcon(Icons.getThemeIntellijIcon("microsoftWindows", 16));

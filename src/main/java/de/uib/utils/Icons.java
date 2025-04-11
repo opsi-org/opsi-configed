@@ -81,8 +81,8 @@ public final class Icons {
 		return getThemeIcon(iconName, "intellij", size);
 	}
 
-	public static FlatSVGIcon getThemeIcons8Icon(String iconName, int size) {
-		return getThemeIcon(iconName, "icons8", size);
+	public static FlatSVGIcon getThemeSVGRepoIcon(String iconName, int size) {
+		return getThemeIcon(iconName, "svgrepo", size);
 	}
 
 	private static FlatSVGIcon getThemeIcon(String iconName, String folder, int size) {

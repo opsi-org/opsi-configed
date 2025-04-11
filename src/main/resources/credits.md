@@ -99,7 +99,7 @@ Author(s): JetBrains
 Websize: https://intellij-icons.jetbrains.design/
 License: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-**Icons8 Icons**
-Author(s): Icons8
-Websize: https://icons8.com/icons
-License: [Universal Multimedia License Agreement for Icons8](https://intercom.help/icons8-7fb7577e8170/en/articles/5534926-universal-multimedia-license-agreement-for-icons8)
+**MacOS Icon From SVGRepo**
+Author(s): Orchid
+Websize: https://www.svgrepo.com/svg/509155/macos
+License: [MIT License](https://mit-license.org/)
