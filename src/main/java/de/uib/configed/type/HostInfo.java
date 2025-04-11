@@ -451,10 +451,12 @@ public class HostInfo {
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMacAddress(clientMacAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientIpAddress(clientIpAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS(clientOS);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceVendor(clientDeviceVendor);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceModel(clientDeviceModel);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceType(clientDeviceType);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceVendorAndModel(clientDeviceVendor,
+				clientDeviceModel);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMonitoring(clientMonitoring);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientPlatform(clientOSType);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot(uefiBoot);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig(clientWanConfig);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setShutdownInstall(clientShutdownInstall);

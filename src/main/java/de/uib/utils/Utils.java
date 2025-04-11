@@ -36,6 +36,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -492,5 +494,19 @@ public final class Utils {
 			return Boolean.valueOf(obj.toString());
 		}
 		return false;
+	}
+
+	public static FlatSVGIcon determineIconBasedOnPlatform(String platform, int size) {
+		FlatSVGIcon icon = null;
+		if ("macos".equals(platform)) {
+			icon = Icons.getThemeSVGRepoIcon("macos", size);
+		} else if ("windows".equals(platform)) {
+			icon = Icons.getThemeIntellijIcon("microsoftWindows", size);
+		} else if ("linux".equals(platform)) {
+			icon = Icons.getThemeIntellijIcon("linux", size);
+		} else {
+			icon = null;
+		}
+		return icon;
 	}
 }
