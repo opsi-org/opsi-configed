@@ -105,8 +105,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
 		labelClientOS = new JLabel();
-		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclsitTableModel.operatingSystem"));
-		labelClientDeviceType = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType"));
+		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
+		labelClientDeviceType = new JLabel();
+		labelClientDeviceType.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType"));
 		labelClientDeviceVendorAndModel = new JLabel();
 		labelClientDeviceVendorAndModel
 				.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor") + " // "
@@ -416,13 +417,16 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		} else if (vendor.isBlank()) {
 			labelClientDeviceVendorAndModel.setText(model);
 			labelClientDeviceVendorAndModel
-					.setToolTipText(Configed.getResourceValue("Configed.pclistTableModel.deviceModel"));
+					.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
 		} else if (model.isBlank()) {
 			labelClientDeviceVendorAndModel.setText(vendor);
 			labelClientDeviceVendorAndModel
-					.setToolTipText(Configed.getResourceValue("Configed.pclistTableModel.deviceVendor"));
+					.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
 		} else {
 			labelClientDeviceVendorAndModel.setText(vendor + " // " + model);
+			labelClientDeviceVendorAndModel
+					.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor") + " // "
+							+ Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
 		}
 		dataAreChangedProgramatically = false;
 	}
@@ -435,7 +439,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientPlatform(String value) {
 		dataAreChangedProgramatically = true;
-		labelClientID.setIcon(Utils.determineIconBasedOnPlatform(value, 25));
+		labelClientID.setIcon(Utils.determineIconBasedOnPlatform(value, 20));
 		dataAreChangedProgramatically = false;
 	}
 

@@ -25,6 +25,7 @@ import javax.swing.table.TableRowSorter;
 import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
@@ -63,7 +64,9 @@ public class ClientTable extends JTable implements MessagebusListener {
 		Set<String> result = new HashSet<>(getSelectedRowCount());
 
 		for (int i : getSelectedRows()) {
-			result.add((String) getValueAt(i, 0));
+			int col = persistenceController.getHostDataService().getHostDisplayFields()
+					.get(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL) ? 1 : 0;
+			result.add((String) getValueAt(i, col));
 		}
 
 		return result;
