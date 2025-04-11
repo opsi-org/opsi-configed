@@ -38,6 +38,9 @@ public class HostInfo {
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "install_on_shutdown";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
 	public static final String CLIENT_OS_KEY = "operating_system";
+	public static final String CLIENT_OS_TYPE_KEY = "operating_system_type";
+	public static final String CLIENT_OS_ARCHITECTURE_KEY = "operating_system_architecture";
+	public static final String CLIENT_DEVICE_TYPE_KEY = "device_type";
 	public static final String CLIENT_DEVICE_VENDOR_KEY = "device_vendor";
 	public static final String CLIENT_DEVICE_MODEL_KEY = "device_model";
 	public static final String UEFI_BOOT_KEY = "uefi_boot";
@@ -62,16 +65,21 @@ public class HostInfo {
 	public static final String CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL = "healthCheckActive";
 
 	public static final String CLIENT_OS_DISPLAY_FIELD_LABEL = "operatingSystem";
+	public static final String CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL = "operatingSystemType";
+	public static final String CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL = "operatingSystemArchitecture";
+	public static final String CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL = "deviceType";
 	public static final String CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL = "deviceVendor";
 	public static final String CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL = "deviceModel";
 
-	public static final List<String> ORDERING_DISPLAY_FIELDS = List.of(HOST_NAME_DISPLAY_FIELD_LABEL,
-			CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL,
-			CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, LAST_SEEN_DISPLAY_FIELD_LABEL, CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL,
-			CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL,
-			CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
-			CREATED_DISPLAY_FIELD_LABEL, CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL,
+	public static final List<String> ORDERING_DISPLAY_FIELDS = List.of(CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL,
+			HOST_NAME_DISPLAY_FIELD_LABEL, CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL,
+			CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, CLIENT_CONNECTED_DISPLAY_FIELD_LABEL,
+			LAST_SEEN_DISPLAY_FIELD_LABEL, CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL,
+			CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL,
+			CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, CREATED_DISPLAY_FIELD_LABEL,
+			CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL,
 			CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, CLIENT_OS_DISPLAY_FIELD_LABEL,
+			CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL, CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL,
 			CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL);
 
 	public static final String IS_MASTER_DEPOT_KEY = "isMasterDepot";
@@ -100,6 +108,9 @@ public class HostInfo {
 	private Boolean clientShutdownInstall;
 
 	private String clientOS;
+	private String clientOSType;
+	private String clientOSArchitecture;
+	private String clientDeviceType;
 	private String clientDeviceVendor;
 	private String clientDeviceModel;
 	private Boolean clientMonitoring;
@@ -108,6 +119,7 @@ public class HostInfo {
 	public Map<String, Object> getDisplayRowMap() {
 		Map<String, Object> displayRowMap = new HashMap<>();
 
+		displayRowMap.put(CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, clientOSType);
 		displayRowMap.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
 		displayRowMap.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientDescription);
 		displayRowMap.put(CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInventoryNumber);
@@ -123,6 +135,8 @@ public class HostInfo {
 		displayRowMap.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 
 		displayRowMap.put(CLIENT_OS_DISPLAY_FIELD_LABEL, clientOS);
+		displayRowMap.put(CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL, clientOSArchitecture);
+		displayRowMap.put(CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL, clientDeviceType);
 		displayRowMap.put(CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, clientDeviceVendor);
 		displayRowMap.put(CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL, clientDeviceModel);
 		displayRowMap.put(CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, clientMonitoring);
@@ -155,6 +169,9 @@ public class HostInfo {
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
 
 		unordered.put(CLIENT_OS_KEY, clientOS);
+		unordered.put(CLIENT_OS_TYPE_KEY, clientOSType);
+		unordered.put(CLIENT_OS_ARCHITECTURE_KEY, clientOSArchitecture);
+		unordered.put(CLIENT_DEVICE_TYPE_KEY, clientDeviceType);
 		unordered.put(CLIENT_DEVICE_VENDOR_KEY, clientDeviceVendor);
 		unordered.put(CLIENT_DEVICE_MODEL_KEY, clientDeviceModel);
 		unordered.put(CLIENT_MONITORING_KEY, clientMonitoring);
@@ -239,6 +256,18 @@ public class HostInfo {
 
 		case CLIENT_OS_KEY:
 			clientOS = "" + value;
+			break;
+
+		case CLIENT_OS_TYPE_KEY:
+			clientOSType = "" + value;
+			break;
+
+		case CLIENT_OS_ARCHITECTURE_KEY:
+			clientOSArchitecture = "" + value;
+			break;
+
+		case CLIENT_DEVICE_TYPE_KEY:
+			clientDeviceType = "" + value;
 			break;
 
 		case CLIENT_DEVICE_VENDOR_KEY:
@@ -354,6 +383,9 @@ public class HostInfo {
 		created = showValue((String) pcInfo.get(CREATED_KEY));
 		lastSeen = showValue((String) pcInfo.get(LAST_SEEN_KEY));
 		clientOS = showValue((String) pcInfo.get(CLIENT_OS_KEY));
+		clientOSType = showValue((String) pcInfo.get(CLIENT_OS_TYPE_KEY));
+		clientOSArchitecture = showValue((String) pcInfo.get(CLIENT_OS_ARCHITECTURE_KEY));
+		clientDeviceType = showValue((String) pcInfo.get(CLIENT_DEVICE_TYPE_KEY));
 		clientDeviceVendor = showValue((String) pcInfo.get(CLIENT_DEVICE_VENDOR_KEY));
 		clientDeviceModel = showValue((String) pcInfo.get(CLIENT_DEVICE_MODEL_KEY));
 		clientMonitoring = showValue((Boolean) pcInfo.get(CLIENT_MONITORING_KEY));

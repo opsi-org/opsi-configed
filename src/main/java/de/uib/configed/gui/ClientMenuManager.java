@@ -367,13 +367,38 @@ public final class ClientMenuManager implements MenuListener {
 		jCheckBoxMenuItemShowOSColumn
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL));
 
+		JCheckBoxMenuItem jCheckBoxMenuItemShowOSTypeColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystemType"));
+		jCheckBoxMenuItemShowOSTypeColumn.setSelected(persistenceController.getHostDataService().getHostDisplayFields()
+				.get(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowOSTypeColumn
+				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL));
+
+		JCheckBoxMenuItem jCheckBoxMenuItemShowOSArchitectureColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystemArchitecture"));
+		jCheckBoxMenuItemShowOSArchitectureColumn.setSelected(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowOSArchitectureColumn.addActionListener(
+				event -> configedMain.toggleColumn(HostInfo.CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL));
+
+		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceTypeColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType"));
+		jCheckBoxMenuItemShowDeviceTypeColumn.setSelected(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowDeviceTypeColumn
+				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL));
+
 		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceVendorColumn = new JCheckBoxMenuItem(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
+		jCheckBoxMenuItemShowDeviceVendorColumn.setSelected(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowDeviceVendorColumn.addActionListener(
 				event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL));
 
 		JCheckBoxMenuItem jCheckBoxMenuItemShowDeviceModelColumn = new JCheckBoxMenuItem(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+		jCheckBoxMenuItemShowDeviceModelColumn.setSelected(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL));
 		jCheckBoxMenuItemShowDeviceModelColumn.addActionListener(
 				event -> configedMain.toggleColumn(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL));
 
@@ -389,6 +414,9 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuShowColumns.add(jCheckBoxMenuItemShowDepotColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowHealthCheckActiveColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowOSColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowOSTypeColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowOSArchitectureColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceTypeColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceVendorColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowDeviceModelColumn);
 

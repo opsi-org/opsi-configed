@@ -493,7 +493,9 @@ public class HostDataService {
 		// check if have to initialize the server property
 		configuredByService = produceHostDisplayFields(configuredByService);
 
+		boolean displayOSType = false;
 		Map<String, Boolean> hostDisplayFields = new LinkedHashMap<>();
+		hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, displayOSType);
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 		// always shown, we put it here because of ordering and repeat the statement
 		// after the loop if it has been set to false
@@ -501,10 +503,12 @@ public class HostDataService {
 		List<String> userSavedDisplayFields = Arrays
 				.asList(UserPreferences.get(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS).split(","));
 		for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
+			displayOSType = HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL.equals(field);
 			hostDisplayFields.put(field,
 					configuredByService.indexOf(field) > -1 || userSavedDisplayFields.contains(field));
 		}
 
+		hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, displayOSType);
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, hostDisplayFields);
 	}
@@ -534,6 +538,9 @@ public class HostDataService {
 			possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CLIENT_OS_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL);
+			possibleValues.add(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL);
 			possibleValues.add(HostInfo.CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL);
 
