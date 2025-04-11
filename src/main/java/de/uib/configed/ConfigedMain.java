@@ -59,6 +59,7 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.ButtonTabComponent;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
+import de.uib.utils.table.gui.DeviceTypeIconTableCellRenderer;
 import de.uib.utils.table.gui.PlatfromIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
 
@@ -753,13 +754,15 @@ public class ConfigedMain {
 				Icons.getIntellijIcon("checkmark", null), null);
 		BooleanIconTableCellRenderer opsiCheckMarkCellRenderer = new BooleanIconTableCellRenderer(
 				Icons.getIntellijIcon("checkmark", Globals.OPSI_OK), null);
-		PlatfromIconTableCellRenderer iconTableCellRenderer = new PlatfromIconTableCellRenderer();
+		PlatfromIconTableCellRenderer platformIconTableCellRenderer = new PlatfromIconTableCellRenderer();
+		DeviceTypeIconTableCellRenderer deviceTypeIconTableCellRenderer = new DeviceTypeIconTableCellRenderer();
 
 		configureColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, opsiCheckMarkCellRenderer);
 		configureColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
 		configureColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
 		configureColumn(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
-		configureColumn(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, iconTableCellRenderer);
+		configureColumn(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, platformIconTableCellRenderer);
+		configureColumn(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL, deviceTypeIconTableCellRenderer);
 	}
 
 	private void configureColumn(String fieldLabel, TableCellRenderer renderer) {

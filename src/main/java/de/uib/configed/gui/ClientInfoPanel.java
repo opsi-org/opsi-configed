@@ -49,7 +49,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientMacAddress;
 	private JLabel labelClientIPAddress;
 	private JLabel labelClientOS;
-	private JLabel labelClientDeviceType;
 	private JLabel labelClientDeviceVendorAndModel;
 	private JLabel labelOneTimePassword;
 	private JLabel labelOpsiHostKey;
@@ -106,8 +105,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
 		labelClientOS = new JLabel();
 		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
-		labelClientDeviceType = new JLabel();
-		labelClientDeviceType.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType"));
 		labelClientDeviceVendorAndModel = new JLabel();
 		labelClientDeviceVendorAndModel
 				.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor") + " // "
@@ -205,7 +202,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				/////// HOST
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
 				.addComponent(labelClientID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelClientDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(labelClientDeviceVendorAndModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
@@ -273,8 +269,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT,
 						Globals.DEFAULT_JLABEL_HEIGHT)
-				.addComponent(labelClientDeviceType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelClientDeviceVendorAndModel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(labelClientOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -403,17 +398,17 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = false;
 	}
 
-	public void setClientDeviceType(String s) {
+	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
 		dataAreChangedProgramatically = true;
-		labelClientDeviceType.setText(s);
-		dataAreChangedProgramatically = false;
-	}
-
-	public void setClientDeviceVendorAndModel(String vendor, String model) {
-		dataAreChangedProgramatically = true;
+		if (deviceType != null) {
+			labelClientDeviceVendorAndModel.setIcon(Utils.determineIconBasedOnDeviceType(deviceType, 20));
+		} else {
+			labelClientDeviceVendorAndModel.setIcon(null);
+		}
 		if (vendor.isBlank() && model.isBlank()) {
 			labelClientDeviceVendorAndModel.setText("");
 			labelClientDeviceVendorAndModel.setToolTipText(null);
+			labelClientDeviceVendorAndModel.setIcon(null);
 		} else if (vendor.isBlank()) {
 			labelClientDeviceVendorAndModel.setText(model);
 			labelClientDeviceVendorAndModel

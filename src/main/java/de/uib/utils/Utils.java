@@ -509,4 +509,22 @@ public final class Utils {
 		}
 		return icon;
 	}
+
+	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
+		FlatSVGIcon icon = null;
+		if ("notebook".equals(value)) {
+			icon = Icons.getThemeSVGRepoIcon("laptop", 16);
+		} else if ("desktop".equals(value)) {
+			icon = Icons.getThemeSVGRepoIcon("desktop", 16);
+		} else if ("virtual_machine".equals(value)) {
+			icon = Icons.getThemeSVGRepoIcon("virtualMachine", 16);
+		} else if ("convertible".equals(value)) {
+			icon = Icons.getThemeSVGRepoIcon("convertible", 16);
+		} else if ("other".equals(value)) {
+			icon = Icons.getThemeIntellijIcon("questionMark", 16);
+		} else {
+			icon = null;
+		}
+		return icon;
+	}
 }

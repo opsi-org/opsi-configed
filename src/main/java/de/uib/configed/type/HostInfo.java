@@ -451,9 +451,8 @@ public class HostInfo {
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMacAddress(clientMacAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientIpAddress(clientIpAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS(clientOS);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceType(clientDeviceType);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceVendorAndModel(clientDeviceVendor,
-				clientDeviceModel);
+				clientDeviceModel, clientDeviceType);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMonitoring(clientMonitoring);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientPlatform(clientOSType);
