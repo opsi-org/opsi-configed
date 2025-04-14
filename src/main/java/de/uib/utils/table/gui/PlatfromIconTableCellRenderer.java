@@ -32,10 +32,10 @@ public class PlatfromIconTableCellRenderer extends ColorTableCellRenderer {
 			setIcon(Icons.getThemeSVGRepoIcon("macos", 16));
 			setToolTipText(MACOS);
 		} else if (WINDOWS.equals(value)) {
-			setIcon(Icons.getThemeIntellijIcon("microsoftWindows", 16));
+			setIcon(Icons.getThemeSVGRepoIcon("windows", 16));
 			setToolTipText(WINDOWS);
 		} else if (LINUX.equals(value)) {
-			setIcon(Icons.getThemeIntellijIcon("linux", 16));
+			setIcon(Icons.getThemeSVGRepoIcon("linux", 16));
 			setToolTipText(LINUX);
 		} else {
 			setIcon(null);

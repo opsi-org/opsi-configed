@@ -501,27 +501,31 @@ public final class Utils {
 		if ("macos".equals(platform)) {
 			icon = Icons.getThemeSVGRepoIcon("macos", size);
 		} else if ("windows".equals(platform)) {
-			icon = Icons.getThemeIntellijIcon("microsoftWindows", size);
+			icon = Icons.getThemeSVGRepoIcon("windows", size);
 		} else if ("linux".equals(platform)) {
-			icon = Icons.getThemeIntellijIcon("linux", size);
+			//icon = Icons.getThemeIntellijIcon("linux", size);
+			icon = Icons.getThemeSVGRepoIcon("linux", size);
 		} else {
 			icon = null;
 		}
 		return icon;
 	}
 
+	public static FlatSVGIcon determineIconBasedOnDeviceType(String value) {
+		return determineIconBasedOnDeviceType(value, 16);
+	}
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
 		FlatSVGIcon icon = null;
 		if ("notebook".equals(value)) {
-			icon = Icons.getThemeSVGRepoIcon("laptop", 16);
+			icon = Icons.getThemeSVGRepoIcon("laptop", size);
 		} else if ("desktop".equals(value)) {
-			icon = Icons.getThemeSVGRepoIcon("desktop", 16);
+			icon = Icons.getThemeSVGRepoIcon("desktop", size);
 		} else if ("virtual_machine".equals(value)) {
-			icon = Icons.getThemeSVGRepoIcon("virtualMachine", 16);
+			icon = Icons.getThemeSVGRepoIcon("virtualMachine", size);
 		} else if ("convertible".equals(value)) {
-			icon = Icons.getThemeSVGRepoIcon("convertible", 16);
+			icon = Icons.getThemeSVGRepoIcon("convertible", size);
 		} else if ("other".equals(value)) {
-			icon = Icons.getThemeIntellijIcon("questionMark", 16);
+			icon = Icons.getThemeIntellijIcon("questionMark", size);
 		} else {
 			icon = null;
 		}

@@ -93,7 +93,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private void initComponents() {
 		labelClientID = new JLabel();
 
-		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD));
+		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(15.0f));
+
 
 		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
 		labelClientInventoryNumber = new JLabel(
