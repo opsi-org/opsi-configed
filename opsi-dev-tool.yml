@@ -8,16 +8,12 @@ project:
     - license: AGPL-3.0
   version: 4.3.8.2
   version_files:
-    pom.xml: '.version' # yml not supported now
-    # other examples:
-    # opsi-dev-tool.yml: pull-binaries[0].version
-    # frontend/package.json: '$.version'
-    # backend/addon/webgui/python/const.py: 'ADDON_VERSION'
-  changelog_filename: CHANGELOG.md
-  date_files:
-    src/main/java/de/uib/configed/Globals.java: VERDATE;%Y-%m-%d
+    pom.xml: '.version' # will update the version in pom.xml
+  changelog_filename: CHANGELOG.md # will be used as default changelog file. This file is prioritized over the public commit messages.
+  date_files: 
+    src/main/java/de/uib/configed/Globals.java: VERDATE;%Y-%m-%d # the variable VERDATE will be replaced with the current date
 
-# command to create changelos: `opsi-dev-tool -l 5 changelog from-git output`
+# commit message formats `[pub,<X>] this is a public message` `<X>` is usually `fix`, `chg`, `new`
 # command to create git tag: `opsi-dev-cli git-tag` (https://gitlab.uib.gmbh/uib/opsi-webgui/-/blob/v5/CONTRIBUTING.md#release)
 
-# todo / discussion / open questions: https://gitlab.uib.gmbh/uib/opsi-configed/-/merge_requests/305
+# https://gitlab.uib.gmbh/uib/opsi-configed/-/merge_requests/305

@@ -15,5 +15,4 @@ rm -f opsi-dev-tools_linux_x64_${MIN_VERSION}.tar.gz
 
 
 opsi-dev-cli self upgrade # using script from ~/.local/bin/opsi-dev-tool
-#opsi-dev-tool git-hooks --install # optional
 opsi-dev-cli --version
