@@ -5,7 +5,7 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc  # for future shells
 source ~/.bashrc 
 
 echo "== Install dev-tools"
-MIN_VERSION=1.32.1 # will be updated to latest version, just indicate the required minimum version
+MIN_VERSION=1.33.2 # will be updated to latest version, just indicate the required minimum version
 wget http://binaryindex.uib.gmbh/development/opsi-dev-tools/linux/x64/opsi-dev-tools_linux_x64_${MIN_VERSION}.tar.gz
 tar -xf opsi-dev-tools_linux_x64_${MIN_VERSION}.tar.gz
 mv opsi-dev-tool opsi-dev-cli
