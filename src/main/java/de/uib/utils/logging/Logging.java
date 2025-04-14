@@ -122,19 +122,7 @@ public final class Logging {
 		String logFilename = "";
 
 		try {
-			File logDirectory;
-			if (logDirectoryName == null || logDirectoryName.isEmpty()) {
-				if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
-					// Windows
-					logDirectory = new File(System.getenv(WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator
-							+ RELATIVE_LOG_DIR_WINDOWS);
-				} else {
-					logDirectory = new File(System.getProperty(ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator
-							+ RELATIVE_LOG_DIR_UNIX);
-				}
-			} else {
-				logDirectory = new File(logDirectoryName);
-			}
+			File logDirectory = getDirectory();
 			logDirectory = logDirectory.getCanonicalFile();
 
 			logDirectoryName = logDirectory.getAbsolutePath();
@@ -158,15 +146,58 @@ public final class Logging {
 		}
 	}
 
+	public static synchronized void updateLogfile() {
+		File logDirectory = getDirectory();
+		File currentLogfile = new File(getCurrentLogfilePath());
+		File updatedLogFile = new File(logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_"
+				+ ConfigedMain.getHost() + "_" + ConfigedMain.getUser() + extension);
+
+		if (currentLogfile.renameTo(updatedLogFile)) {
+			if (NUMBER_OF_LOG_FILES > 0) {
+				treatOtherLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, ConfigedMain.getHost(),
+						ConfigedMain.getUser());
+			}
+			logFilenameInUse = updatedLogFile.getAbsolutePath();
+			info("Log file renamed successfully " + updatedLogFile.getName());
+		} else {
+			info("Failed to rename log file " + currentLogfile.getName());
+		}
+	}
+
+	private static File getDirectory() {
+		File logDirectory;
+		if (logDirectoryName == null || logDirectoryName.isEmpty()) {
+			if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
+				logDirectory = new File(System.getenv(WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator
+						+ RELATIVE_LOG_DIR_WINDOWS);
+			} else {
+				logDirectory = new File(
+						System.getProperty(ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator + RELATIVE_LOG_DIR_UNIX);
+			}
+		} else {
+			logDirectory = new File(logDirectoryName);
+		}
+		return logDirectory;
+	}
+
 	// Renames the other existing logfiles
 	private static void treatOtherLogFiles(String logFilename, File logDirectory) {
+		treatOtherLogFiles(logFilename, logDirectory, null, null);
+	}
+
+	private static void treatOtherLogFiles(String logFilename, File logDirectory, String host, String user) {
 		File logFile = new File(logFilename);
 		String[] logFilenames = new String[NUMBER_OF_LOG_FILES];
 		File[] logFiles = new File[NUMBER_OF_LOG_FILES];
 
 		for (int i = 0; i < NUMBER_OF_LOG_FILES; i++) {
-			logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_" + i
-					+ extension;
+			if (host != null && user != null) {
+				logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_" + host
+						+ "_" + user + "_" + i + extension;
+			} else {
+				logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_" + i
+						+ extension;
+			}
 			logFiles[i] = new File(logFilenames[i]);
 		}
 
