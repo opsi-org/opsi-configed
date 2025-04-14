@@ -152,11 +152,12 @@ public final class Logging {
 		File updatedLogFile = new File(logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_"
 				+ ConfigedMain.getHost() + "_" + ConfigedMain.getUser() + extension);
 
+		if (NUMBER_OF_LOG_FILES > 0) {
+			treatOtherLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, ConfigedMain.getHost(),
+					ConfigedMain.getUser());
+		}
+
 		if (currentLogfile.renameTo(updatedLogFile)) {
-			if (NUMBER_OF_LOG_FILES > 0) {
-				treatOtherLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, ConfigedMain.getHost(),
-						ConfigedMain.getUser());
-			}
 			logFilenameInUse = updatedLogFile.getAbsolutePath();
 			info("Log file renamed successfully " + updatedLogFile.getName());
 		} else {
