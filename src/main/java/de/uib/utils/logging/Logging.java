@@ -135,7 +135,7 @@ public final class Logging {
 			logFilename = new File(logFilename).getAbsolutePath();
 
 			if (NUMBER_OF_LOG_FILES > 0) {
-				treatOtherLogFiles(logFilename, logDirectory);
+				rotateLogFiles(logFilename, logDirectory);
 			}
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename), false, StandardCharsets.UTF_8);
@@ -153,7 +153,7 @@ public final class Logging {
 				+ ConfigedMain.getHost() + "_" + ConfigedMain.getUser() + extension);
 
 		if (NUMBER_OF_LOG_FILES > 0) {
-			treatOtherLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, ConfigedMain.getHost(),
+			rotateLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, ConfigedMain.getHost(),
 					ConfigedMain.getUser());
 		}
 
@@ -181,12 +181,11 @@ public final class Logging {
 		return logDirectory;
 	}
 
-	// Renames the other existing logfiles
-	private static void treatOtherLogFiles(String logFilename, File logDirectory) {
-		treatOtherLogFiles(logFilename, logDirectory, null, null);
+	private static void rotateLogFiles(String logFilename, File logDirectory) {
+		rotateLogFiles(logFilename, logDirectory, null, null);
 	}
 
-	private static void treatOtherLogFiles(String logFilename, File logDirectory, String host, String user) {
+	private static void rotateLogFiles(String logFilename, File logDirectory, String host, String user) {
 		File logFile = new File(logFilename);
 		String[] logFilenames = new String[NUMBER_OF_LOG_FILES];
 		File[] logFiles = new File[NUMBER_OF_LOG_FILES];
