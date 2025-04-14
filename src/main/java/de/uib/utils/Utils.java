@@ -506,7 +506,8 @@ public final class Utils {
 			//icon = Icons.getThemeIntellijIcon("linux", size);
 			icon = Icons.getThemeSVGRepoIcon("linux", size);
 		} else {
-			icon = null;
+			icon = Icons.getThemeIntellijIcon("questionMark", size);
+			//icon = null;
 		}
 		return icon;
 	}
@@ -514,6 +515,7 @@ public final class Utils {
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value) {
 		return determineIconBasedOnDeviceType(value, 16);
 	}
+
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
 		FlatSVGIcon icon = null;
 		if ("notebook".equals(value)) {
@@ -527,7 +529,8 @@ public final class Utils {
 		} else if ("other".equals(value)) {
 			icon = Icons.getThemeIntellijIcon("questionMark", size);
 		} else {
-			icon = null;
+			icon = Icons.getThemeIntellijIcon("questionMark", size);
+			//icon = null;
 		}
 		return icon;
 	}

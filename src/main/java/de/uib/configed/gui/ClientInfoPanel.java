@@ -49,7 +49,11 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientMacAddress;
 	private JLabel labelClientIPAddress;
 	private JLabel labelClientOS;
-	private JLabel labelClientDeviceVendorAndModel;
+	private JLabel labelUnknownDeviceInfo;
+	private JLabel labelDeviceType = new JLabel();
+	private JLabel labelDeviceTypeIcon = new JLabel();
+	private JLabel labelVendor = new JLabel();
+	private JLabel labelModel = new JLabel();
 	private JLabel labelOneTimePassword;
 	private JLabel labelOpsiHostKey;
 
@@ -93,8 +97,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private void initComponents() {
 		labelClientID = new JLabel();
 
-		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(15.0f));
-
+		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0f));
 
 		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
 		labelClientInventoryNumber = new JLabel(
@@ -104,12 +107,14 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+		labelUnknownDeviceInfo = new JLabel();
 		labelClientOS = new JLabel();
 		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
-		labelClientDeviceVendorAndModel = new JLabel();
-		labelClientDeviceVendorAndModel
-				.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor") + " // "
-						+ Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+		// panelClientDeviceInfo = new JPanel();
+		// panelClientDeviceInfo.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor")
+		// 		+ " // " + Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+		// panelClientDeviceInfo.setLayout(new GroupLayout(panelClientDeviceInfo));
+
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsi-host-key");
 
@@ -203,9 +208,23 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				/////// HOST
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
 				.addComponent(labelClientID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelClientDeviceVendorAndModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
+				/////// Operating System
+				.addGroup(layoutClientPane.createSequentialGroup()
+						//.addGap(labelDeviceTypeIcon.getWidth(), labelDeviceTypeIcon.getWidth(), 24)
+						.addGap(labelDeviceTypeIcon.getWidth(), labelDeviceTypeIcon.getWidth(),
+								labelDeviceTypeIcon.getWidth())
+						.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				/////// DEVICE INFO
+				.addGroup(layoutClientPane.createSequentialGroup()
+						.addGroup(layoutClientPane.createParallelGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
+								labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						//.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
+						).addGap(Globals.MIN_GAP_SIZE)
+						.addGroup(layoutClientPane.createParallelGroup()
+								.addComponent(labelDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(labelVendor, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(labelModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(labelUnknownDeviceInfo, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				/////// DESCRIPTION
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
@@ -268,13 +287,28 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT,
-						Globals.DEFAULT_JLABEL_HEIGHT)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientDeviceVendorAndModel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addComponent(labelClientOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT + 4,
+						Globals.DEFAULT_JLABEL_HEIGHT + 8)
+				/////// Operating System
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(labelClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
+				/////// DEVICE INFO
+				.addGroup(layoutClientPane.createParallelGroup()
+						// baaar
+						.addGroup(layoutClientPane.createSequentialGroup().addComponent(labelDeviceTypeIcon, 0,
+								Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
+						//.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
+						)
+
+						.addGroup(layoutClientPane.createSequentialGroup()
+								.addComponent(labelDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+										Globals.DEFAULT_JLABEL_HEIGHT)
+								.addComponent(labelVendor, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+										Globals.DEFAULT_JLABEL_HEIGHT)
+								.addComponent(labelModel, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+										Globals.DEFAULT_JLABEL_HEIGHT)
+								.addComponent(labelUnknownDeviceInfo, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+										Globals.DEFAULT_JLABEL_HEIGHT)))
 
 				/////// DESCRIPTION
 				.addGap(Globals.GAP_SIZE)
@@ -393,37 +427,57 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = false;
 	}
 
+	private void setUnknownDeviceInfoIfNeeded() {
+		// if (labelClientOS.getText().isBlank() && labelVendor.getText().isBlank() && labelModel.getText().isBlank()) {
+		// 	labelUnknownDeviceInfo.setVisible(true);
+		// 	labelUnknownDeviceInfo
+		// 			.setText(Configed.getResourceValue("ConfigedMain.pclistTableModel.unknownDeviceInfo"));
+		// } else {
+		// 	labelUnknownDeviceInfo.setVisible(false);
+		// }
+	}
+
 	public void setClientOS(String s) {
 		dataAreChangedProgramatically = true;
 		labelClientOS.setText(s);
+		labelClientOS.setVisible(!s.isBlank());
+		setUnknownDeviceInfoIfNeeded();
 		dataAreChangedProgramatically = false;
 	}
 
 	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
 		dataAreChangedProgramatically = true;
-		if (deviceType != null) {
-			labelClientDeviceVendorAndModel.setIcon(Utils.determineIconBasedOnDeviceType(deviceType, 20));
-		} else {
-			labelClientDeviceVendorAndModel.setIcon(null);
-		}
+
+		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceType, 20));
+		labelDeviceType.setText(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceType.toString()));
+		labelVendor.setVisible(false);
+		labelModel.setVisible(false);
 		if (vendor.isBlank() && model.isBlank()) {
-			labelClientDeviceVendorAndModel.setText("");
-			labelClientDeviceVendorAndModel.setToolTipText(null);
-			labelClientDeviceVendorAndModel.setIcon(null);
+			labelVendor.setText("");
+			labelModel.setText("");
+			labelVendor.setToolTipText(null);
+			labelModel.setToolTipText(null);
+			// labelClientDeviceVendorAndModel.setText("");
+			// labelClientDeviceVendorAndModel.setToolTipText(null);
+			// labelClientDeviceVendorAndModel.setIcon(null);
 		} else if (vendor.isBlank()) {
-			labelClientDeviceVendorAndModel.setText(model);
-			labelClientDeviceVendorAndModel
-					.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+			labelModel.setVisible(true);
+			labelModel.setText(model);
+			labelModel.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
 		} else if (model.isBlank()) {
-			labelClientDeviceVendorAndModel.setText(vendor);
-			labelClientDeviceVendorAndModel
-					.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
+			labelVendor.setVisible(true);
+			labelVendor.setText(vendor);
+			labelVendor.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
 		} else {
-			labelClientDeviceVendorAndModel.setText(vendor + " // " + model);
-			labelClientDeviceVendorAndModel
-					.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor") + " // "
-							+ Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+			labelVendor.setVisible(true);
+			labelModel.setVisible(true);
+			labelVendor.setText(vendor);
+			labelModel.setText(model);
 		}
+
+		setUnknownDeviceInfoIfNeeded();
+
 		dataAreChangedProgramatically = false;
 	}
 
@@ -435,7 +489,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientPlatform(String value) {
 		dataAreChangedProgramatically = true;
-		labelClientID.setIcon(Utils.determineIconBasedOnPlatform(value, 20));
+		labelClientID.setIcon(Utils.determineIconBasedOnPlatform(value, 24));
 		dataAreChangedProgramatically = false;
 	}
 

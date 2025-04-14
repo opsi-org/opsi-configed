@@ -43,7 +43,8 @@ public class DeviceTypeIconTableCellRenderer extends ColorTableCellRenderer {
 			setIcon(Icons.getThemeSVGRepoIcon("convertible", 16));
 			setToolTipText(CONVERTIBLE);
 		} else if (OTHER.equals(value)) {
-			setIcon(Icons.getThemeIntellijIcon("questionMark", 16));
+			//setIcon(null); // its actually same as null, cause we do not know what the device type is
+			setIcon(Icons.getThemeIntellijIcon("questionMark", 16)); // affects sorting.. 
 			setToolTipText(OTHER);
 		} else {
 			if (value != null && !value.toString().isBlank()) {
