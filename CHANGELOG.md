@@ -929,7 +929,7 @@
 - Faster creation of clients with CSV-Import
 - new Logging (standard-loglevel is now 4, performance is now better)
 
-## [4.2.18.1] - 2022-20-18
+## [4.2.18.1] - 2022-10-18
 
 ### Added
 - CSV-Import for creating new clients
