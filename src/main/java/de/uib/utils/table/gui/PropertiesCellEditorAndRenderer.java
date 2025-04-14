@@ -270,11 +270,11 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return result;
 	}
 
-	private boolean resolveBooleanState(Object value, String key) {
+	private static boolean resolveBooleanState(Object value, String key) {
 		Object firstVal = ((List<?>) value).get(0);
 		boolean boolState;
-		if (firstVal instanceof Boolean) {
-			boolState = (Boolean) firstVal;
+		if (firstVal instanceof Boolean val) {
+			boolState = val;
 		} else {
 			boolState = (Boolean) PersistenceControllerFactory.getPersistenceController().getConfigDataService()
 					.getConfigOptionsPD().get(key).getDefaultValues().get(0);
