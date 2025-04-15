@@ -503,12 +503,11 @@ public class HostDataService {
 		List<String> userSavedDisplayFields = Arrays
 				.asList(UserPreferences.get(UserPreferences.CLIENTS_TABLE_DISPLAY_FIELDS).split(","));
 		for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
-			displayOSType = HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL.equals(field);
 			hostDisplayFields.put(field,
 					configuredByService.indexOf(field) > -1 || userSavedDisplayFields.contains(field));
 		}
 
-		hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, displayOSType);
+		// hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, displayOSType);
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, hostDisplayFields);
 	}
