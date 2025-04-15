@@ -12,6 +12,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ComboBoxModel;
@@ -31,6 +32,7 @@ import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
+import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -276,8 +278,16 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (firstVal instanceof Boolean val) {
 			boolState = val;
 		} else {
-			boolState = (Boolean) PersistenceControllerFactory.getPersistenceController().getConfigDataService()
-					.getConfigOptionsPD().get(key).getDefaultValues().get(0);
+			Map<String, ConfigOption> configOptions = PersistenceControllerFactory.getPersistenceController()
+					.getConfigDataService().getConfigOptionsPD();
+			if (configOptions.containsKey(key)) {
+				boolState = (Boolean) PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+						.getConfigOptionsPD().get(key).getDefaultValues().get(0);
+			} else {
+				Logging.info(
+						key + " is not part of config options, setting value to false - original value is " + firstVal);
+				boolState = false;
+			}
 		}
 		return boolState;
 	}
