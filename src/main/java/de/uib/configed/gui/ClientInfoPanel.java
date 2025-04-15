@@ -215,13 +215,11 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				/////// HOST
 				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
 				.addComponent(labelClientID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				/////// Operating System
-				.addGroup(layoutClientPane.createSequentialGroup()
-						//.addGap(labelDeviceTypeIcon.getWidth(), labelDeviceTypeIcon.getWidth(), 24)
-						.addGap(labelDeviceTypeIcon.getWidth(), labelDeviceTypeIcon.getWidth(),
-								labelDeviceTypeIcon.getWidth())
+				/////// Operating System (long label)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				/////// DEVICE INFO
+				/////// DEVICE INFO (icon, vendor, model)
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
@@ -289,13 +287,14 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addGap(Globals.GAP_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT + 4,
 						Globals.DEFAULT_JLABEL_HEIGHT + 8)
-				/////// Operating System
+				/////// Operating System (long label)
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
-				/////// DEVICE INFO
+				/////// DEVICE INFO (icon, vendor, model)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutClientPane.createParallelGroup()
 						.addComponent(labelDeviceTypeIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
 								Globals.DEFAULT_JLABEL_HEIGHT)
