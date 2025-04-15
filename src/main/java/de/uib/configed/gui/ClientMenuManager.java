@@ -308,6 +308,27 @@ public final class ClientMenuManager implements MenuListener {
 		jCheckBoxMenuItemShowIPAddressColumn
 				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
 
+		JCheckBoxMenuItem jCheckBoxMenuItemShowlastSeenColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientLastSeen"));
+		jCheckBoxMenuItemShowlastSeenColumn.setSelected(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowlastSeenColumn
+				.addActionListener(event -> configedMain.toggleColumn(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL));
+
+		JCheckBoxMenuItem jCheckBoxMenuItemShowDescriptionColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
+		jCheckBoxMenuItemShowDescriptionColumn.setSelected(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowDescriptionColumn
+				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL));
+
+		JCheckBoxMenuItem jCheckBoxMenuItemShowConnectedColumn = new JCheckBoxMenuItem(
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+		jCheckBoxMenuItemShowConnectedColumn.setSelected(persistenceController.getHostDataService()
+				.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
+		jCheckBoxMenuItemShowConnectedColumn
+				.addActionListener(event -> configedMain.toggleColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
+
 		JCheckBoxMenuItem jCheckBoxMenuItemShowSystemUUIDColumn = new JCheckBoxMenuItem(
 				Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
 		jCheckBoxMenuItemShowSystemUUIDColumn.setSelected(persistenceController.getHostDataService()
@@ -405,6 +426,9 @@ public final class ClientMenuManager implements MenuListener {
 		JMenu jMenuShowColumns = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		jMenuShowColumns.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowIPAddressColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowlastSeenColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowDescriptionColumn);
+		jMenuShowColumns.add(jCheckBoxMenuItemShowConnectedColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowSystemUUIDColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowHardwareAddressColumn);
 		jMenuShowColumns.add(jCheckBoxMenuItemShowSessionInfoColumn);

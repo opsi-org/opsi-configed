@@ -85,7 +85,10 @@ public class ClientTable extends JTable implements MessagebusListener {
 
 		setModel(tableModel);
 		TableRowSorter<?> rowSorter = (TableRowSorter<?>) getRowSorter();
-		rowSorter.setComparator(1, Comparator.comparing(String::toString));
+		// if table has more than 1 column, we need to sort the second column by name
+		if (tableModel.getColumnCount() > 1) {
+			rowSorter.setComparator(1, Comparator.comparing(String::toString));
+		}
 		rowSorter.setComparator(0, stringComparatorIgnoringNullEmpty());
 	}
 

@@ -493,9 +493,8 @@ public class HostDataService {
 		// check if have to initialize the server property
 		configuredByService = produceHostDisplayFields(configuredByService);
 
-		boolean displayOSType = false;
 		Map<String, Boolean> hostDisplayFields = new LinkedHashMap<>();
-		hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, displayOSType);
+		hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, true); // can be overridden by user
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 		// always shown, we put it here because of ordering and repeat the statement
 		// after the loop if it has been set to false
@@ -562,7 +561,6 @@ public class HostDataService {
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { item });
 
 			exec.doCall(omc);
-
 		} else {
 			result = givenList;
 		}
