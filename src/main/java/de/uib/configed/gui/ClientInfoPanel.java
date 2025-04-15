@@ -49,15 +49,14 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientMacAddress;
 	private JLabel labelClientIPAddress;
 	private JLabel labelClientOS;
-	private JLabel labelUnknownDeviceInfo;
-	private JLabel labelDeviceType = new JLabel();
-	private JLabel labelDeviceTypeIcon = new JLabel();
-	private JLabel labelVendor = new JLabel();
-	private JLabel labelModel = new JLabel();
+	private JLabel labelDeviceType;
+	private JLabel labelDeviceTypeIcon;
+	private JTextArea jTextAreaVendorModel;
 	private JLabel labelOneTimePassword;
 	private JLabel labelOpsiHostKey;
 
 	private JScrollPane scrollpaneNotes;
+	private JScrollPane scrollpaneVendorModel;
 
 	private JLabel labelClientID;
 	private FlatTriStateCheckBox checkBoxInstallByShutdown;
@@ -107,13 +106,21 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
-		labelUnknownDeviceInfo = new JLabel();
+
 		labelClientOS = new JLabel();
 		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
-		// panelClientDeviceInfo = new JPanel();
-		// panelClientDeviceInfo.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor")
-		// 		+ " // " + Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
-		// panelClientDeviceInfo.setLayout(new GroupLayout(panelClientDeviceInfo));
+		labelDeviceType = new JLabel();
+		labelDeviceTypeIcon = new JLabel();
+
+		jTextAreaVendorModel = new JTextArea();
+		jTextAreaVendorModel.setEditable(false);
+		jTextAreaVendorModel.setRows(2);
+		jTextAreaVendorModel.setBorder(null);
+
+		scrollpaneVendorModel = new JScrollPane(jTextAreaVendorModel);
+		scrollpaneVendorModel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollpaneVendorModel.setBorder(null);
 
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsi-host-key");
@@ -215,16 +222,12 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 								labelDeviceTypeIcon.getWidth())
 						.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				/////// DEVICE INFO
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGroup(layoutClientPane.createParallelGroup().addGap(Globals.MIN_GAP_SIZE).addComponent(
-								labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						//.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-						).addGap(Globals.MIN_GAP_SIZE)
-						.addGroup(layoutClientPane.createParallelGroup()
-								.addComponent(labelDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(labelVendor, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(labelModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(labelUnknownDeviceInfo, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(30, 30, 30)
+						.addComponent(scrollpaneVendorModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				/////// DESCRIPTION
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
@@ -294,21 +297,11 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.addComponent(labelClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
 				/////// DEVICE INFO
 				.addGroup(layoutClientPane.createParallelGroup()
-						// baaar
-						.addGroup(layoutClientPane.createSequentialGroup().addComponent(labelDeviceTypeIcon, 0,
-								Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
-						//.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-						)
-
-						.addGroup(layoutClientPane.createSequentialGroup()
-								.addComponent(labelDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-										Globals.DEFAULT_JLABEL_HEIGHT)
-								.addComponent(labelVendor, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-										Globals.DEFAULT_JLABEL_HEIGHT)
-								.addComponent(labelModel, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-										Globals.DEFAULT_JLABEL_HEIGHT)
-								.addComponent(labelUnknownDeviceInfo, 0, Globals.DEFAULT_JLABEL_HEIGHT,
-										Globals.DEFAULT_JLABEL_HEIGHT)))
+						.addComponent(labelDeviceTypeIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT)
+						.addComponent(labelDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT))
+				.addComponent(scrollpaneVendorModel, 0, Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE,
+						Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE)
 
 				/////// DESCRIPTION
 				.addGap(Globals.GAP_SIZE)
@@ -427,21 +420,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = false;
 	}
 
-	private void setUnknownDeviceInfoIfNeeded() {
-		// if (labelClientOS.getText().isBlank() && labelVendor.getText().isBlank() && labelModel.getText().isBlank()) {
-		// 	labelUnknownDeviceInfo.setVisible(true);
-		// 	labelUnknownDeviceInfo
-		// 			.setText(Configed.getResourceValue("ConfigedMain.pclistTableModel.unknownDeviceInfo"));
-		// } else {
-		// 	labelUnknownDeviceInfo.setVisible(false);
-		// }
-	}
-
 	public void setClientOS(String s) {
 		dataAreChangedProgramatically = true;
 		labelClientOS.setText(s);
-		labelClientOS.setVisible(!s.isBlank());
-		setUnknownDeviceInfoIfNeeded();
 		dataAreChangedProgramatically = false;
 	}
 
@@ -449,34 +430,28 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = true;
 
 		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceType, 20));
+		String deviceTypeResourceKey = deviceType == null ? "" : deviceType;
 		labelDeviceType.setText(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceType.toString()));
-		labelVendor.setVisible(false);
-		labelModel.setVisible(false);
+				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey));
+		// labelVendor.setVisible(false);
+		// labelModel.setVisible(false);
+		jTextAreaVendorModel.setText("");
 		if (vendor.isBlank() && model.isBlank()) {
-			labelVendor.setText("");
-			labelModel.setText("");
-			labelVendor.setToolTipText(null);
-			labelModel.setToolTipText(null);
-			// labelClientDeviceVendorAndModel.setText("");
-			// labelClientDeviceVendorAndModel.setToolTipText(null);
-			// labelClientDeviceVendorAndModel.setIcon(null);
+			jTextAreaVendorModel.setToolTipText(null);
 		} else if (vendor.isBlank()) {
-			labelModel.setVisible(true);
-			labelModel.setText(model);
-			labelModel.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+			jTextAreaVendorModel.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+			jTextAreaVendorModel.append(model);
 		} else if (model.isBlank()) {
-			labelVendor.setVisible(true);
-			labelVendor.setText(vendor);
-			labelVendor.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
+			jTextAreaVendorModel
+					.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
+			jTextAreaVendorModel.append(vendor);
 		} else {
-			labelVendor.setVisible(true);
-			labelModel.setVisible(true);
-			labelVendor.setText(vendor);
-			labelModel.setText(model);
-		}
+			jTextAreaVendorModel.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor")
+					+ "\n" + Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+			jTextAreaVendorModel.append(vendor + "\n");
+			jTextAreaVendorModel.append(model);
 
-		setUnknownDeviceInfoIfNeeded();
+		}
 
 		dataAreChangedProgramatically = false;
 	}
