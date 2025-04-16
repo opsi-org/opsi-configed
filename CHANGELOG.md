@@ -5,6 +5,7 @@
 - Save function, when adding new configs.
 - Issue: If property key contains secret, the value of that key should be hidden
 - Issue: localboot and netboot tables not updated on reload (only on global reload)
+- Invalid directory name created when specifying port server for connection (for the first time and not using SSS)
 
 ### Changed
 - Make `SavedSearchesDialog` modeless
