@@ -427,11 +427,16 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
 		dataAreChangedProgramatically = true;
+		String deviceTypeIcon = deviceType == null ? "" : (deviceType.equals("<<intern:empty>>") ? "" : deviceType);
+		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceTypeIcon, 20));
 
-		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceType, 20));
 		String deviceTypeResourceKey = deviceType == null ? "" : deviceType;
-		labelDeviceType.setText(
-				Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey));
+		if (deviceTypeResourceKey == "<<intern:empty>>") {
+			labelDeviceType.setText("");
+		} else {
+			labelDeviceType.setText(
+					Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey));
+		}
 		// labelVendor.setVisible(false);
 		// labelModel.setVisible(false);
 		jTextAreaVendorModel.setText("");
