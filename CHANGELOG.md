@@ -16,6 +16,9 @@
 - Increase height of an empty value (if any exists in property) in multi selection dialog
 - Save logfiles based on server and user 
 
+### Added
+- Include operating system and device info in client view
+
 ## [4.3.8.2] - 2025-04-03
 ### Changed
 - Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon

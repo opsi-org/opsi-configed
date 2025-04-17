@@ -64,9 +64,6 @@ public class HostDataReloadHandler implements ReloadHandler {
 		executor.runInParallel(() -> groupDataService.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP,
 				"clientId", CacheIdentifier.FGROUP_TO_MEMBERS));
 
-		cacheManager.clearCachedData(CacheIdentifier.HOSTS_WITH_ACTIVE_HEALTH_CHECK);
-		executor.runInParallel(() -> healthDataService.retrieveHostsWithHealthCheck());
-
 		executor.waitForCompletion();
 	}
 }

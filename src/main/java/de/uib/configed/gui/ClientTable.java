@@ -25,6 +25,7 @@ import javax.swing.table.TableRowSorter;
 import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
@@ -63,7 +64,9 @@ public class ClientTable extends JTable implements MessagebusListener {
 		Set<String> result = new HashSet<>(getSelectedRowCount());
 
 		for (int i : getSelectedRows()) {
-			result.add((String) getValueAt(i, 0));
+			int col = persistenceController.getHostDataService().getHostDisplayFields()
+					.get(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL) ? 1 : 0;
+			result.add((String) getValueAt(i, col));
 		}
 
 		return result;
@@ -81,7 +84,41 @@ public class ClientTable extends JTable implements MessagebusListener {
 		tableModel.addTableModelListener(this);
 
 		setModel(tableModel);
-		((TableRowSorter<?>) getRowSorter()).setComparator(0, Comparator.comparing(String::toString));
+		TableRowSorter<?> rowSorter = (TableRowSorter<?>) getRowSorter();
+		// if table has more than 1 column, we need to sort the second column by name
+		if (tableModel.getColumnCount() > 1) {
+			rowSorter.setComparator(1, Comparator.comparing(String::toString));
+		}
+		rowSorter.setComparator(0, stringComparatorIgnoringNullEmpty());
+	}
+
+	/**
+	 * Returns a comparator that sorts string values while always placing null
+	 * or empty strings at the bottom regardless of sort direction.
+	 *
+	 * @param ascending if true, sorts in natural order; if false, in reverse
+	 *                  order.
+	 */
+	@SuppressWarnings("unchecked")
+	private Comparator<Object> stringComparatorIgnoringNullEmpty() {
+		return (o1, o2) -> {
+			boolean isAscending = ((TableRowSorter<?>) getRowSorter()).getSortKeys().get(0)
+					.getSortOrder() == SortOrder.ASCENDING;
+
+			boolean isO1Invalid = (o1 == null || o1.toString().trim().isEmpty());
+			boolean isO2Invalid = (o2 == null || o2.toString().trim().isEmpty());
+
+			if (isO1Invalid && isO2Invalid) {
+				return 0;
+			}
+			if (isO1Invalid) {
+				return isAscending ? 1 : -1;
+			}
+			if (isO2Invalid) {
+				return isAscending ? -1 : 1;
+			}
+			return ((Comparable<Object>) o1).compareTo(o2);
+		};
 	}
 
 	public void moveToFirstSelected() {

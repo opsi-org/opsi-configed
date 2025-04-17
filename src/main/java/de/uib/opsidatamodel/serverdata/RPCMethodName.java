@@ -24,8 +24,8 @@ public enum RPCMethodName {
 
 	USER_GET_OBJECTS("user_getObjects"),
 
-	HOST_GET_OBJECTS("host_getObjects"), HOST_CREATE_OBJECTS("host_createObjects"),
-	HOST_UPDATE_OBJECTS("host_updateObjects"), HOST_DELETE("host_delete"),
+	HOST_GET_OBJECTS("host_getObjects"), HOST_GET_CLIENTS("host_getClients"), HOST_CREATE_OBJECTS("host_createObjects"),
+	HOST_UPDATE_OBJECTS("host_updateObjects"), HOST_UPDATE_CLIENTS("host_updateClients"), HOST_DELETE("host_delete"),
 	HOST_RENAME_OPSI_CLIENT("host_renameOpsiClient"),
 	HOST_GET_MESSAGEBUS_CONNECTED_IDS("host_getMessagebusConnectedIds"),
 
@@ -110,7 +110,6 @@ public enum RPCMethodName {
 	SET_RIGHTS("setRights"),
 
 	SERVICE_HEALTH_CHECK("service_healthCheck"), SERVICE_GET_DIAGNOSTIC_DATA("service_getDiagnosticData"),
-	SERVICE_GET_HOSTS_WITH_ACTIVE_HEALTH_CHECK("service_getHostsWithActiveHealthCheck"),
 
 	/**
 	 * This enum only exists for testing purposes.
