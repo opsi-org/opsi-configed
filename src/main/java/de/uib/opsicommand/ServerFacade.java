@@ -287,8 +287,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		// has to be value between 1 and 43300 [sec]
-		// requestProperties.put("X-opsi-session-lifetime", "900"); // 900 sec = 15 min
-		requestProperties.put("X-opsi-session-lifetime", "300"); // 5 min = 300 sec
+		requestProperties.put("X-opsi-session-lifetime", "300");
 		requestProperties.put("Accept-Encoding", "lz4, gzip");
 		requestProperties.put("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION);
 		requestProperties.put("Accept", "application/msgpack");
