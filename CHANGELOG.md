@@ -1,4 +1,4 @@
-## [4.3.x.x] - 2025-xx-xx
+## [4.3.9.0] - 2025-04-17
 ### Fixed
 - Don't call RPC-methods twice when reloading license management
 - Resolved an issue where the UI would freeze during login when connecting to an invalid server.
