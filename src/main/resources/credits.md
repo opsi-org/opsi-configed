@@ -99,11 +99,6 @@ Author(s): JetBrains
 Websize: https://intellij-icons.jetbrains.design/
 License: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-**MacOS Icon From SVGRepo**
-Author(s): Orchid
-Websize: https://www.svgrepo.com/svg/509155/macos
-License: [MIT License](https://mit-license.org/)
-
 **Virtual Machine Icon From SVGRepo**
 Author(s): vmware
 Websize: https://www.svgrepo.com/svg/372762/vm
