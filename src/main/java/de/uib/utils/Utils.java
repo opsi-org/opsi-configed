@@ -273,9 +273,9 @@ public final class Utils {
 		}
 	}
 
-	public static boolean isKeyForSecretValue(String s) {
-		String t = s.toLowerCase(Locale.ROOT);
-		return t.indexOf("password") > -1 || t.startsWith("secret");
+	public static boolean isKeyForSecretValue(String key) {
+		String keyLowerCase = key.toLowerCase(Locale.ROOT);
+		return keyLowerCase.indexOf("password") > -1 || keyLowerCase.indexOf("secret") > -1;
 	}
 
 	public static String getSeconds() {

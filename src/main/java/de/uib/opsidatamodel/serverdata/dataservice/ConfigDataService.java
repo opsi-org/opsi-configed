@@ -335,7 +335,8 @@ public class ConfigDataService {
 		for (Map<String, Object> callConfig : configCollection) {
 			if (callConfig.get("defaultValues") == null) {
 				callsConfigDeleteCollection.add(callConfig);
-			} else if (!restrictToMissing || usedConfigIds.contains(callConfig.get("ident"))) {
+				callsConfigUpdateCollection.removeIf(item -> callConfig.get("ident").equals(item.get("ident")));
+			} else if ((!restrictToMissing || usedConfigIds.contains(callConfig.get("ident")))) {
 				callConfig.put("defaultValues", callConfig.get("defaultValues"));
 				callConfig.put("possibleValues", callConfig.get("possibleValues"));
 				callsConfigUpdateCollection.add(callConfig);

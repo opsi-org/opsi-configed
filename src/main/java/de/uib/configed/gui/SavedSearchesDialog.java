@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class SavedSearchesDialog {
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
+		dialog.setModalityType(ModalityType.MODELESS);
 
 		waitForUserInput();
 	}

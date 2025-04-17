@@ -70,9 +70,13 @@ public class LoginThread extends Thread {
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 			loginDialog.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
-
-			// we can start the configed and login
 			Logging.info(this, "connected with persis ", persistenceController);
+			if (useSSO) {
+				// Using SSO, so the browser window is currently in the foreground.
+				// Bring the login dialog back to the front.
+				loginDialog.setVisible(true);
+				loginDialog.toFront();
+			}
 			configedMain.setPersistenceController(persistenceController);
 			configedMain.loadDataAndGo();
 		} else {
