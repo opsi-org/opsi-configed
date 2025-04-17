@@ -11,6 +11,7 @@
 - Make `SavedSearchesDialog` modeless
 - Disallow to add empty property values to properties in multi selection dialog
 - Increase height of an empty value (if any exists in property) in multi selection dialog
+- Save logfiles based on server and user 
 
 ## [4.3.8.2] - 2025-04-03
 ### Changed

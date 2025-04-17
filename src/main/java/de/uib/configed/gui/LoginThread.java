@@ -59,6 +59,7 @@ public class LoginThread extends Thread {
 		persistenceController = PersistenceControllerFactory.getNewPersistenceController((String) selectedHost, user,
 				String.valueOf(password), String.valueOf(otp), useSSO);
 
+		Logging.updateLogfile();
 		Logging.info(this, "got persis, == null ", persistenceController == null);
 
 		Logging.info(this, "waitingTask can be set to ready");
