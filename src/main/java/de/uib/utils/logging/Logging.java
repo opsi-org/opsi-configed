@@ -32,7 +32,7 @@ import de.uib.configed.ConfigedMain;
 
 @SuppressWarnings("java:S923")
 public final class Logging {
-	private static String logDirectoryName;
+	private static String baseLogDirectoryPath;
 	private static String logFilenameInUse;
 
 	private static final String LOG_FILE_DELIMITER = "configed";
@@ -40,6 +40,7 @@ public final class Logging {
 	public static final String ENV_VARIABLE_FOR_USER_DIRECTORY = "user.home";
 	private static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
 	private static final String RELATIVE_LOG_DIR_UNIX = ".configed";
+	private static final String LOGS_DIR = "logs";
 	private static String extension = ".log";
 
 	public static final int LEVEL_SECRET = 9;
@@ -122,24 +123,10 @@ public final class Logging {
 		String logFilename = "";
 
 		try {
-			File logDirectory;
-			if (logDirectoryName == null || logDirectoryName.isEmpty()) {
-				if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
-					// Windows
-					logDirectory = new File(System.getenv(WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator
-							+ RELATIVE_LOG_DIR_WINDOWS);
-				} else {
-					logDirectory = new File(System.getProperty(ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator
-							+ RELATIVE_LOG_DIR_UNIX);
-				}
-			} else {
-				logDirectory = new File(logDirectoryName);
-			}
+			File logDirectory = getDirectory();
 			logDirectory = logDirectory.getCanonicalFile();
 
-			logDirectoryName = logDirectory.getAbsolutePath();
-
-			info("Logging directory is: ", logDirectoryName);
+			info("Logging directory is: ", baseLogDirectoryPath);
 
 			logDirectory.mkdirs();
 
@@ -147,26 +134,100 @@ public final class Logging {
 			logFilename = new File(logFilename).getAbsolutePath();
 
 			if (NUMBER_OF_LOG_FILES > 0) {
-				treatOtherLogFiles(logFilename, logDirectory);
+				rotateLogFiles(logFilename, logDirectory);
 			}
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename), false, StandardCharsets.UTF_8);
 			logFilenameInUse = logFilename;
 		} catch (IOException ex) {
-			Logging.error(ex, "file ", logFilename, " or directory ", logDirectoryName, " not found...");
+			Logging.error(ex, "file ", logFilename, " or directory ", baseLogDirectoryPath, " not found...");
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}
 	}
 
-	// Renames the other existing logfiles
-	private static void treatOtherLogFiles(String logFilename, File logDirectory) {
+	public static synchronized void updateLogfile() {
+		File logDirectory = getDirectory();
+		File currentLogfile = new File(getCurrentLogfilePath());
+		File updatedLogFile = new File(logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_"
+				+ ConfigedMain.getHost() + "_" + ConfigedMain.getUser() + extension);
+
+		if (NUMBER_OF_LOG_FILES > 0) {
+			rotateLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, ConfigedMain.getHost(),
+					ConfigedMain.getUser());
+		}
+
+		if (currentLogfile.renameTo(updatedLogFile)) {
+			logFilenameInUse = updatedLogFile.getAbsolutePath();
+			info("Log file renamed successfully " + updatedLogFile.getName());
+		} else {
+			info("Failed to rename log file " + currentLogfile.getName());
+		}
+	}
+
+	private static synchronized File getDirectory() {
+		File logDirectory;
+
+		if (baseLogDirectoryPath != null) {
+			logDirectory = new File(baseLogDirectoryPath);
+		} else {
+			logDirectory = getBaseLogDirectoryBasedOnOS();
+			baseLogDirectoryPath = logDirectory.getAbsolutePath();
+		}
+
+		if (ConfigedMain.getHost() != null) {
+			logDirectory = changeLogDirectory(logDirectory);
+		}
+
+		return logDirectory;
+	}
+
+	private static File getBaseLogDirectoryBasedOnOS() {
+		File baseLogDirectory;
+
+		if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
+			baseLogDirectory = new File(
+					System.getenv(WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator + RELATIVE_LOG_DIR_WINDOWS);
+		} else {
+			baseLogDirectory = new File(
+					System.getProperty(ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator + RELATIVE_LOG_DIR_UNIX);
+		}
+
+		return baseLogDirectory;
+	}
+
+	private static File changeLogDirectory(File logDirectory) {
+		String newDirPath = logDirectory.getAbsolutePath() + File.separator + ConfigedMain.getHost() + File.separator
+				+ LOGS_DIR;
+		File newLogDirectory = new File(newDirPath);
+
+		if (!newLogDirectory.exists()) {
+			if (newLogDirectory.mkdirs()) {
+				Logging.info("directory created: " + newDirPath);
+			} else {
+				Logging.warning("failed to create directory: " + newDirPath);
+			}
+		}
+
+		return newLogDirectory;
+	}
+
+	private static void rotateLogFiles(String logFilename, File logDirectory) {
+		rotateLogFiles(logFilename, logDirectory, null, null);
+	}
+
+	private static void rotateLogFiles(String logFilename, File logDirectory, String host, String user) {
 		File logFile = new File(logFilename);
 		String[] logFilenames = new String[NUMBER_OF_LOG_FILES];
 		File[] logFiles = new File[NUMBER_OF_LOG_FILES];
 
 		for (int i = 0; i < NUMBER_OF_LOG_FILES; i++) {
-			logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_" + i
-					+ extension;
+			if (host != null && user != null) {
+				logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_" + host
+						+ "_" + user + "_" + i + extension;
+			} else {
+				logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_" + i
+						+ extension;
+			}
 			logFiles[i] = new File(logFilenames[i]);
 		}
 
@@ -429,7 +490,7 @@ public final class Logging {
 		dialog.setVisible(true);
 	}
 
-	public static void setLogDirectoryName(String logDirectoryName) {
-		Logging.logDirectoryName = logDirectoryName;
+	public static void setBaseLogDirectoryPath(String baseLogDirectoryPath) {
+		Logging.baseLogDirectoryPath = baseLogDirectoryPath;
 	}
 }
