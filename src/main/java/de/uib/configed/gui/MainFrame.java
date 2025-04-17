@@ -46,6 +46,7 @@ import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
+import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
@@ -285,6 +286,9 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	public void reconnectOTP(String otp) {
+		if (Messagebus.getInstance() != null) {
+			Messagebus.getInstance().disconnect();
+		}
 		persistenceController.getExecutioner().setOTP(otp);
 
 		CacheManager.getInstance().clearAllCachedData();
