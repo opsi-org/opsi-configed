@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
@@ -43,7 +42,6 @@ import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.DependenciesModel;
-import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
@@ -69,12 +67,6 @@ public class ConfigedMain {
 
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
-
-	private static String host;
-	private static String user;
-	private static String password;
-	private static volatile String otp;
-	private static boolean useSSO;
 
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
@@ -106,8 +98,6 @@ public class ConfigedMain {
 	private int clientCount;
 
 	private Map<String, String> sessionInfo = new HashMap<>();
-
-	private static CountDownLatch otpWaiter;
 
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER, DASHBOARD, OPSI_MODULES, HEALTH_CHECK, LICENSE_MANAGEMENT
@@ -149,24 +139,6 @@ public class ConfigedMain {
 			}
 		}
 	};
-
-	public ConfigedMain(String host, String user, String password, String otp, boolean useSSO) {
-		if (ConfigedMain.host == null) {
-			setHost(host);
-		}
-		if (ConfigedMain.user == null) {
-			setUser(user);
-		}
-		if (ConfigedMain.password == null) {
-			setPassword(password);
-		}
-		if (ConfigedMain.otp == null) {
-			setOTP(otp);
-		}
-		if (!ConfigedMain.useSSO) {
-			setUseSSO(useSSO);
-		}
-	}
 
 	public static MainFrame getMainFrame() {
 		return mainFrame;
@@ -270,16 +242,6 @@ public class ConfigedMain {
 
 		initialDataLoader = new InitialDataLoader(this);
 		initialDataLoader.execute();
-	}
-
-	public void init() {
-		Logging.debug(this, "init");
-
-		// we start with a language
-
-		InstallationStateTableModel.restartColumnDict();
-
-		setupLoginDialog(this);
 	}
 
 	protected void preloadData() {
@@ -513,11 +475,11 @@ public class ConfigedMain {
 	}
 
 	// returns true if we have a PersistenceController and are connected
-	private static void setupLoginDialog(ConfigedMain configedMain) {
+	public static void setupLoginDialog(ConfigedMain configedMain, String host, String user, String password,
+			String otp, boolean useSSO) {
 		Logging.debug(" create password dialog ");
 		loginDialog = new LoginDialog(configedMain);
 
-		// check if we started with preferred values
 		if (host != null && !host.isEmpty()) {
 			loginDialog.setHost(host);
 		}
@@ -1326,72 +1288,5 @@ public class ConfigedMain {
 		if (closeInstance(checkdirty)) {
 			Main.endApp(exitcode);
 		}
-	}
-
-	public static String getHost() {
-		return host;
-	}
-
-	public static void setHost(String host) {
-		Logging.trace("Setting host from ", ConfigedMain.host, "to", host);
-		ConfigedMain.host = host;
-	}
-
-	public static String getUser() {
-		return user;
-	}
-
-	public static void setUser(String user) {
-		ConfigedMain.user = user;
-	}
-
-	public static String getPassword() {
-		return password;
-	}
-
-	public static void setPassword(String password) {
-		ConfigedMain.password = password;
-	}
-
-	public static void setOTP(String otp) {
-		ConfigedMain.otp = otp;
-		if (otpWaiter != null) {
-			otpWaiter.countDown();
-		}
-	}
-
-	public static String getOTP() {
-		return otp;
-	}
-
-	/**
-	 * Resets the OTP wait cycle. Should be called before initiating a new OTP
-	 * input cycle from the MFA dialog.
-	 */
-	public static synchronized void resetOTPWaiter() {
-		otpWaiter = new CountDownLatch(1);
-	}
-
-	/**
-	 * Blocks execution until the OTP is provided via
-	 * {@link #setOTP(String otp)}. It is recommended to call this method only
-	 * when MFA is enabled, to wait for user input.
-	 * 
-	 * @return the OTP string provided by the user.
-	 */
-	public static synchronized String waitForOTPInput() {
-		try {
-			otpWaiter.await();
-			otpWaiter = null;
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			Logging.error("ConfigedMain waiting for OTP interrupted: " + e.getMessage());
-			return null;
-		}
-		return otp;
-	}
-
-	public static void setUseSSO(boolean useSSO) {
-		ConfigedMain.useSSO = useSSO;
 	}
 }

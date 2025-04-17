@@ -140,7 +140,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private String produceURL() {
-		String host = ConfigedMain.getHost();
+		String host = persistenceController.getExecutioner().getHost();
 		if (host == null) {
 			Logging.error(this, "Host is null");
 			return null;

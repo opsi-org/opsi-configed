@@ -169,10 +169,12 @@ public class OpsiServiceNOMPersistenceController {
 		if (useSSO) {
 			Logging.warning("ONOMPC useSSO true");
 			exec = new ServerFacade(server);
+			exec.setUseSSO(true);
 		} else {
 			Logging.warning("ONOMPC useSSO false server ", server, " user ", user, " password ", password.length(),
 					" otp ", otp);
 			exec = new ServerFacade(server, user, password, otp);
+			exec.setUseSSO(false);
 		}
 
 		Logging.info(this, "connection state ", exec.getConnectionState());

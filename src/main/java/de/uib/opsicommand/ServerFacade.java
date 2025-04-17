@@ -18,10 +18,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
@@ -66,11 +68,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private static final Pattern userPattern = Pattern.compile("user:");
 
 	private static OpsiServerVersionRetriever versionRetriever;
+	private CountDownLatch otpWaiter;
 
 	private String host;
 	private String username;
 	private String password;
-	private String otp;
+	private volatile String otp;
+	private boolean useSSO;
 	private String sessionId;
 	private int portHTTPS = Globals.DEFAULT_PORT;
 	private boolean useSAML;
@@ -254,10 +258,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Logging.error(this, "username not received");
 			} else {
 				username = userPattern.split(uname, 2)[1];
-				ConfigedMain.setUser(username);
-				if (host != null && !host.equals(ConfigedMain.getHost())) {
-					ConfigedMain.setHost(host);
-				}
 				isAuthenticated = (boolean) result.get("authenticated");
 			}
 		}
@@ -590,12 +590,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-				if (otp.equals(ConfigedMain.getOTP())) {
+				if (otp.equals(getOTP())) {
 					Logging.debug(this, "MFA error encountered, we wait for new OTP input");
-					otp = ConfigedMain.waitForOTPInput();
+					otp = waitForOTPInput();
 				} else {
 					Logging.debug(this, "old OTP was used, we set it to use new OTP");
-					otp = ConfigedMain.getOTP();
+					otp = getOTP();
 				}
 				setConnectionState(new ConnectionState(ConnectionState.RETRY_CONNECTION));
 			} else {
@@ -684,6 +684,15 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	/**
+	 * Retrieve used host by the connection.
+	 *
+	 * @return used host by the connection.
+	 */
+	public String getHost() {
+		return host;
+	}
+
+	/**
 	 * Retrieve used username by the connection.
 	 *
 	 * @return used username by the connection.
@@ -710,4 +719,80 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return sessionId;
 	}
 
+	public synchronized void setOTP(String otp) {
+		this.otp = otp;
+		if (otpWaiter != null) {
+			otpWaiter.countDown();
+		}
+	}
+
+	public synchronized String getOTP() {
+		return otp;
+	}
+
+	/**
+	 * Resets the OTP wait cycle. Should be called before initiating a new OTP
+	 * input cycle from the MFA dialog.
+	 */
+	public synchronized void resetOTPWaiter() {
+		otpWaiter = new CountDownLatch(1);
+	}
+
+	/**
+	 * Blocks execution until the OTP is provided via
+	 * {@link #setOTP(String otp)}. It is recommended to call this method only
+	 * when MFA is enabled, to wait for user input.
+	 * 
+	 * @return the OTP string provided by the user.
+	 */
+	public synchronized String waitForOTPInput() {
+		try {
+			otpWaiter.await();
+			otpWaiter = null;
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			Logging.error("ConfigedMain waiting for OTP interrupted: " + e.getMessage());
+			return null;
+		}
+		return otp;
+	}
+
+	public void setUseSSO(boolean useSSO) {
+		this.useSSO = useSSO;
+	}
+
+	public boolean useSSO() {
+		return useSSO;
+	}
+
+	/**
+	 * Securely clears all authentication-related fields, overwriting sensitive
+	 * data in memory.
+	 */
+	public void clearAuthenticationData() {
+		host = null;
+		username = null;
+
+		wipeSensitiveString(password);
+		password = null;
+
+		wipeSensitiveString(otp);
+		otp = null;
+
+		otpWaiter = null;
+		useSSO = false;
+	}
+
+	/**
+	 * Overwrites the contents of a String with null characters to reduce the
+	 * risk of sensitive data lingering in memory.
+	 * 
+	 * @param value the String to wipe
+	 */
+	private static void wipeSensitiveString(String value) {
+		if (value != null) {
+			char[] chars = value.toCharArray();
+			Arrays.fill(chars, '\0');
+		}
+	}
 }

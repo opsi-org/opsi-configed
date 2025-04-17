@@ -20,6 +20,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.certificate.CertificateManager;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 
@@ -146,7 +147,7 @@ public final class ConnectionErrorReporter {
 		otpField.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, true));
 
-		ConfigedMain.resetOTPWaiter();
+		PersistenceControllerFactory.getPersistenceController().getExecutioner().resetOTPWaiter();
 
 		displayConfirmDialog(
 				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },

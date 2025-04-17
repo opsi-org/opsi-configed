@@ -194,14 +194,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
 
 		fieldUser.addKeyListener(this);
-		if (ConfigedMain.getUser() != null) {
-			fieldUser.setText(ConfigedMain.getUser());
-		}
-
 		passwordField.addKeyListener(this);
-		if (ConfigedMain.getPassword() != null) {
-			passwordField.setText(ConfigedMain.getPassword());
-		}
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
 				Character.MIN_VALUE, 6, false));
@@ -234,12 +227,14 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 	private void initSSO() {
 		Logging.warning("LoginDialog.initSSO");
-		String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
+		String host = (String) fieldHost.getSelectedItem();
 		if (host == null || host.isEmpty()) {
 			Logging.debug(this, "No host provided");
 			return;
 		} else if (wasSuccessfullyAuthenticated()) {
 			Logging.warning("was connected");
+		} else {
+			// Not needed.
 		}
 		ssoActiveByServer = true;
 		Logging.info("get auth info for ", host);
@@ -398,14 +393,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		Logging.info(this, "started  tryConnecting with SSO ", useSSO);
 		setActivated(false);
 		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
-		if (useSSO) {
-			ConfigedMain.setUseSSO(useSSO);
-		} else {
-			ConfigedMain.setUser(user);
-			ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
-		}
-		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
-		Configed.initSavedStates();
+		Configed.initSavedStates(fieldHost.getSelectedItem().toString().toLowerCase(Locale.ROOT));
 
 		Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());
 		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());

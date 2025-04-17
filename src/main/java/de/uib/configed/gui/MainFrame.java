@@ -117,7 +117,8 @@ public class MainFrame extends JFrame implements KeyListener {
 
 		showClientConfiguration();
 
-		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
+		setTitle("(" + persistenceController.getExecutioner().getUsername() + ") "
+				+ persistenceController.getExecutioner().getHost() + " - " + Globals.APPNAME);
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
@@ -270,10 +271,9 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	private void logout() {
-		ConfigedMain.setHost(null);
-		ConfigedMain.setUser(null);
-		ConfigedMain.setPassword(null);
-		ConfigedMain.setUseSSO(false);
+		if (persistenceController != null) {
+			persistenceController.getExecutioner().clearAuthenticationData();
+		}
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
 		resetData();
@@ -285,7 +285,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	public void reconnectOTP(String otp) {
-		ConfigedMain.setOTP(otp);
+		persistenceController.getExecutioner().setOTP(otp);
 
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
