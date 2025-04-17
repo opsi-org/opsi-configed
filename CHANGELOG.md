@@ -1,7 +1,4 @@
 ## [4.3.x.x] - 2025-xx-xx
-### Changed
-- Improved boolean state handling in cell editor/renderer
-
 ### Fixed
 - Don't call RPC-methods twice when reloading license management
 - Resolved an issue where the UI would freeze during login when connecting to an invalid server.
@@ -15,6 +12,7 @@
 - Disallow to add empty property values to properties in multi selection dialog
 - Increase height of an empty value (if any exists in property) in multi selection dialog
 - Save logfiles based on server and user 
+- Improved boolean state handling in cell editor/renderer
 
 ### Added
 - Include operating system and device info in client view
