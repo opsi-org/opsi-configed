@@ -22,7 +22,6 @@ import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utils.DataChangedObserver;
@@ -166,8 +165,6 @@ public class MapTableModel extends AbstractTableModel {
 	}
 
 	public void addConfigEntry(String key, Object defaultValues, Object possibleValues) {
-		((ConfigUpdateCollection) updateCollection).setMasterConfig(true);
-
 		data.put(key, defaultValues);
 		oridata.put(key, possibleValues);
 		Logging.debug(this, " keys ", keys);
@@ -185,8 +182,6 @@ public class MapTableModel extends AbstractTableModel {
 
 		notifyChange();
 		fireTableDataChanged();
-
-		((ConfigUpdateCollection) updateCollection).setMasterConfig(false);
 	}
 
 	public void removeEntry(String key) {
@@ -293,7 +288,6 @@ public class MapTableModel extends AbstractTableModel {
 	}
 
 	public void removeConfigEntry(String key) {
-		((ConfigUpdateCollection) updateCollection).setMasterConfig(true);
 		data.remove(key);
 		oridata.remove(key);
 
@@ -310,8 +304,6 @@ public class MapTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 
 		updateCollection.addMap(configChanges);
-
-		((ConfigUpdateCollection) updateCollection).setMasterConfig(false);
 	}
 
 	private void weHaveChangedStoredMaps() {
