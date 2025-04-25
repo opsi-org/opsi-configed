@@ -272,8 +272,11 @@ public class MainPanelManager {
 				.addComponent(component));
 		layout.setHorizontalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(generalToolBar)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(titleLabel)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE).addComponent(opsiLogo))
+						// We add the gaps of the preferred sizes of the components to center the titlelabel
+						.addGap(Globals.MIN_GAP_SIZE, (int) opsiLogo.getPreferredSize().getWidth(), Short.MAX_VALUE)
+						.addComponent(titleLabel).addGap(Globals.MIN_GAP_SIZE,
+								(int) generalToolBar.getPreferredSize().getWidth(), Short.MAX_VALUE)
+						.addComponent(opsiLogo))
 				.addComponent(component));
 
 		return panel;
