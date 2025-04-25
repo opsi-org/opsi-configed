@@ -497,17 +497,12 @@ public final class Utils {
 	}
 
 	public static FlatSVGIcon determineIconBasedOnPlatform(String platform, int size) {
-		FlatSVGIcon icon = null;
-		if ("macos".equals(platform)) {
-			icon = Icons.getThemeSVGRepoIcon("macos", size);
-		} else if ("windows".equals(platform)) {
-			icon = Icons.getThemeSVGRepoIcon("windows", size);
-		} else if ("linux".equals(platform)) {
-			icon = Icons.getThemeSVGRepoIcon("linux", size);
-		} else {
-			icon = Icons.getThemeIntellijIcon("questionMark", size);
-		}
-		return icon;
+		return switch (platform) {
+		case "macos" -> Icons.getThemeSVGRepoIcon("macos", size);
+		case "windows" -> Icons.getThemeSVGRepoIcon("windows", size);
+		case "linux" -> Icons.getThemeSVGRepoIcon("linux", size);
+		default -> Icons.getThemeIntellijIcon("questionMark", size);
+		};
 	}
 
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value) {
@@ -515,20 +510,13 @@ public final class Utils {
 	}
 
 	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
-		FlatSVGIcon icon = null;
-		if ("notebook".equals(value)) {
-			icon = Icons.getThemeSVGRepoIcon("laptop", size);
-		} else if ("desktop".equals(value)) {
-			icon = Icons.getThemeSVGRepoIcon("desktop", size);
-		} else if ("virtual_machine".equals(value)) {
-			icon = Icons.getThemeSVGRepoIcon("virtualMachine", size);
-		} else if ("convertible".equals(value)) {
-			icon = Icons.getThemeSVGRepoIcon("convertible", size);
-		} else if ("other".equals(value)) {
-			icon = Icons.getThemeIntellijIcon("questionMark", size);
-		} else {
-			icon = Icons.getThemeIntellijIcon("questionMark", size);
-		}
-		return icon;
+		return switch (value) {
+		case "notebook" -> Icons.getThemeSVGRepoIcon("laptop", size);
+		case "desktop" -> Icons.getThemeSVGRepoIcon("desktop", size);
+		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
+		case "convertible" -> Icons.getThemeSVGRepoIcon("convertible", size);
+		case "other" -> Icons.getThemeIntellijIcon("questionMark", size);
+		default -> Icons.getThemeIntellijIcon("questionMark", size);
+		};
 	}
 }

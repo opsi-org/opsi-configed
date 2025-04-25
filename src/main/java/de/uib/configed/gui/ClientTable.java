@@ -64,8 +64,8 @@ public class ClientTable extends JTable implements MessagebusListener {
 		Set<String> result = new HashSet<>(getSelectedRowCount());
 
 		for (int i : getSelectedRows()) {
-			int col = persistenceController.getHostDataService().getHostDisplayFields()
-					.get(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL) ? 1 : 0;
+			int col = Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
+					.get(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL)) ? 1 : 0;
 			result.add((String) getValueAt(i, col));
 		}
 
