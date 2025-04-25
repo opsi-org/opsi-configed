@@ -494,7 +494,8 @@ public class HostDataService {
 		configuredByService = produceHostDisplayFields(configuredByService);
 
 		Map<String, Boolean> hostDisplayFields = new LinkedHashMap<>();
-		hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, true); // can be overridden by user
+		// can be overridden by user
+		hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, true);
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 		// always shown, we put it here because of ordering and repeat the statement
 		// after the loop if it has been set to false
@@ -506,7 +507,6 @@ public class HostDataService {
 					configuredByService.indexOf(field) > -1 || userSavedDisplayFields.contains(field));
 		}
 
-		// hostDisplayFields.put(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, displayOSType);
 		hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_DISPLAY_FIELDS, hostDisplayFields);
 	}

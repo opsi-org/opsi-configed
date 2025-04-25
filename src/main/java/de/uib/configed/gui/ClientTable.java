@@ -101,16 +101,17 @@ public class ClientTable extends JTable implements MessagebusListener {
 	 */
 	@SuppressWarnings("unchecked")
 	private Comparator<Object> stringComparatorIgnoringNullEmpty() {
-		return (o1, o2) -> {
-			boolean isAscending = ((TableRowSorter<?>) getRowSorter()).getSortKeys().get(0)
-					.getSortOrder() == SortOrder.ASCENDING;
-
+		return (Object o1, Object o2) -> {
 			boolean isO1Invalid = (o1 == null || o1.toString().trim().isEmpty());
 			boolean isO2Invalid = (o2 == null || o2.toString().trim().isEmpty());
 
 			if (isO1Invalid && isO2Invalid) {
 				return 0;
 			}
+
+			boolean isAscending = ((TableRowSorter<?>) getRowSorter()).getSortKeys().get(0)
+					.getSortOrder() == SortOrder.ASCENDING;
+
 			if (isO1Invalid) {
 				return isAscending ? 1 : -1;
 			}

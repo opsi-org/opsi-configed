@@ -96,7 +96,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private void initComponents() {
 		labelClientID = new JLabel();
 
-		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0f));
+		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
 		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
 		labelClientInventoryNumber = new JLabel(
@@ -427,18 +427,17 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
 		dataAreChangedProgramatically = true;
-		String deviceTypeIcon = deviceType == null ? "" : (deviceType.equals("<<intern:empty>>") ? "" : deviceType);
+		String deviceTypeIcon = deviceType == null ? "" : ("<<intern:empty>>".equals(deviceType) ? "" : deviceType);
 		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceTypeIcon, 20));
 
 		String deviceTypeResourceKey = deviceType == null ? "" : deviceType;
-		if (deviceTypeResourceKey == "<<intern:empty>>") {
+		if ("<<intern:empty>>".equals(deviceTypeResourceKey)) {
 			labelDeviceType.setText("");
 		} else {
 			labelDeviceType.setText(
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey));
 		}
-		// labelVendor.setVisible(false);
-		// labelModel.setVisible(false);
+
 		jTextAreaVendorModel.setText("");
 		if (vendor.isBlank() && model.isBlank()) {
 			jTextAreaVendorModel.setToolTipText(null);

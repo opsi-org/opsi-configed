@@ -503,11 +503,9 @@ public final class Utils {
 		} else if ("windows".equals(platform)) {
 			icon = Icons.getThemeSVGRepoIcon("windows", size);
 		} else if ("linux".equals(platform)) {
-			//icon = Icons.getThemeIntellijIcon("linux", size);
 			icon = Icons.getThemeSVGRepoIcon("linux", size);
 		} else {
 			icon = Icons.getThemeIntellijIcon("questionMark", size);
-			//icon = null;
 		}
 		return icon;
 	}
@@ -530,7 +528,6 @@ public final class Utils {
 			icon = Icons.getThemeIntellijIcon("questionMark", size);
 		} else {
 			icon = Icons.getThemeIntellijIcon("questionMark", size);
-			//icon = null;
 		}
 		return icon;
 	}

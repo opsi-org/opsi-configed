@@ -44,7 +44,8 @@ public class DeviceTypeIconTableCellRenderer extends ColorTableCellRenderer {
 			setToolTipText(CONVERTIBLE);
 		} else if (OTHER.equals(value)) {
 			//setIcon(null); // its actually same as null, cause we do not know what the device type is
-			setIcon(Icons.getThemeIntellijIcon("questionMark", 16)); // affects sorting.. 
+			// affects sorting.. 
+			setIcon(Icons.getThemeIntellijIcon("questionMark", 16));
 			setToolTipText(OTHER);
 		} else {
 			if (value != null && !value.toString().isBlank()) {

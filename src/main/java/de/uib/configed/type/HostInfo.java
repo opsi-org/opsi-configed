@@ -713,10 +713,12 @@ public class HostInfo {
 		clientShutdownInstall = false;
 
 		clientOS = "";
-		clientOSType = "<<intern:empty>>"; // unknown icon is used (e.g. multiple selected clients)
+		// unknown icon is used (e.g. multiple selected clients)
+		clientOSType = "<<intern:empty>>";
 		clientOSArchitecture = "";
 		clientDeviceVendor = "";
 		clientDeviceModel = "";
-		clientDeviceType = "<<intern:empty>>"; // empty text used (e.g. multiple selected clients)
+		// empty text used (e.g. multiple selected clients)
+		clientDeviceType = "<<intern:empty>>";
 	}
 }
