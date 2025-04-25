@@ -54,6 +54,7 @@
     "remoteUser": "vscode",
     "runArgs": [
         "--privileged",
-        "--add-host=host.docker.internal:host-gateway" // to access hosts "localhost:4447" from container use "host.docker.internal:4447" instead
+        "--add-host=host.docker.internal:host-gateway", // to access hosts "localhost:4447" from container use "host.docker.internal:4447" instead
+        "--add-host=sonarqube.uib.gmbh:192.168.100.11"
     ]
 }
