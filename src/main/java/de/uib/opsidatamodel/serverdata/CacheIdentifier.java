@@ -77,11 +77,6 @@ public enum CacheIdentifier {
 	WAN_CONFIGURATION("wan_configuration"),
 
 	/**
-	 * return type {@code Map<String, List<Object>>}
-	 */
-	NOT_WAN_CONFIGURATION("not_wan_configuration"),
-
-	/**
 	 * return type {@code Map<String, Object>}
 	 */
 	OPSI_LICENSING_INFO_NO_OPSI_ADMIN("opsi_licensing_info_no_opsi_admin"),
@@ -490,12 +485,7 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code boolean}
 	 */
-	MFA_ENABLED("mfa_enabled"),
-
-	/**
-	 * return type {@code Set<Object>}
-	 */
-	HOSTS_WITH_ACTIVE_HEALTH_CHECK("hosts_with_active_health_check");
+	MFA_ENABLED("mfa_enabled");
 
 	private final String displayName;
 

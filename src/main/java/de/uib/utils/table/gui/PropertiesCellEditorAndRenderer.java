@@ -12,6 +12,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ComboBoxModel;
@@ -31,6 +32,7 @@ import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
+import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -162,7 +164,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (modelProducer.getListCellOptions(key) == null) {
 			return null;
 		} else if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
-			result = getBooleanEditor(value);
+			result = getBooleanEditor(value, key);
 		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
 			result = getMultiValueEditor(table, value, row);
 		} else {
@@ -173,14 +175,14 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		return result;
 	}
 
-	private Component getBooleanEditor(Object value) {
+	private Component getBooleanEditor(Object value, String key) {
 		selectionMode = BOOLEAN;
 
 		// We want a checkbox
 		if (((List<?>) value).isEmpty()) {
 			checkBox.setIndeterminate(true);
 		} else {
-			checkBox.setChecked((Boolean) ((List<?>) value).get(0));
+			checkBox.setChecked(resolveBooleanState(value, key));
 		}
 
 		return checkBox;
@@ -259,7 +261,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			if (((List<?>) value).isEmpty()) {
 				rendererCheckBox.setIndeterminate(true);
 			} else {
-				rendererCheckBox.setChecked((Boolean) ((List<?>) value).get(0));
+				rendererCheckBox.setChecked(resolveBooleanState(value, key));
 			}
 
 			result = rendererCheckBox;
@@ -268,6 +270,26 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 
 		return result;
+	}
+
+	private static boolean resolveBooleanState(Object value, String key) {
+		Object firstVal = ((List<?>) value).get(0);
+		boolean boolState;
+		if (firstVal instanceof Boolean val) {
+			boolState = val;
+		} else {
+			Map<String, ConfigOption> configOptions = PersistenceControllerFactory.getPersistenceController()
+					.getConfigDataService().getConfigOptionsPD();
+			if (configOptions.containsKey(key)) {
+				boolState = (Boolean) PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+						.getConfigOptionsPD().get(key).getDefaultValues().get(0);
+			} else {
+				Logging.info(
+						key + " is not part of config options, setting value to false - original value is " + firstVal);
+				boolState = false;
+			}
+		}
+		return boolState;
 	}
 
 	public static String formatList(Object value) {

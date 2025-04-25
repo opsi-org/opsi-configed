@@ -71,6 +71,7 @@ public class ListSelectionDialog {
 
 		jList = new JList<>();
 		jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jList.setFixedCellHeight(20);
 		jList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -178,7 +179,7 @@ public class ListSelectionDialog {
 
 	public void addItem(String element) {
 		DefaultListModel<String> model = (DefaultListModel<String>) jList.getModel();
-		if (!model.contains(element)) {
+		if (!model.contains(element) && !element.isBlank()) {
 			model.addElement(element);
 			jList.addSelectionInterval(model.size() - 1, model.size() - 1);
 			jList.ensureIndexIsVisible(jList.getMaxSelectionIndex());

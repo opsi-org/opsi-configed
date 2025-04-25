@@ -1,7 +1,21 @@
-## [4.3.x.x] - 2025-xx-xx
+## [4.3.9.0] - 2025-04-17
 ### Fixed
 - Don't call RPC-methods twice when reloading license management
 - Resolved an issue where the UI would freeze during login when connecting to an invalid server.
+- Save function, when adding new configs.
+- Issue: If property key contains secret, the value of that key should be hidden
+- Issue: localboot and netboot tables not updated on reload (only on global reload)
+- Invalid directory name created when specifying port server for connection (for the first time and not using SSS)
+
+### Changed
+- Make `SavedSearchesDialog` modeless
+- Disallow to add empty property values to properties in multi selection dialog
+- Increase height of an empty value (if any exists in property) in multi selection dialog
+- Save logfiles based on server and user 
+- Improved boolean state handling in cell editor/renderer
+
+### Added
+- Include operating system and device info in client view
 
 ## [4.3.8.2] - 2025-04-03
 ### Changed
