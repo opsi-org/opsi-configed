@@ -37,6 +37,7 @@ import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 
@@ -47,10 +48,15 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientSystemUUID;
 	private JLabel labelClientMacAddress;
 	private JLabel labelClientIPAddress;
+	private JLabel labelClientOS;
+	private JLabel labelDeviceType;
+	private JLabel labelDeviceTypeIcon;
+	private JTextArea jTextAreaVendorModel;
 	private JLabel labelOneTimePassword;
 	private JLabel labelOpsiHostKey;
 
 	private JScrollPane scrollpaneNotes;
+	private JScrollPane scrollpaneVendorModel;
 
 	private JLabel labelClientID;
 	private FlatTriStateCheckBox checkBoxInstallByShutdown;
@@ -90,7 +96,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private void initComponents() {
 		labelClientID = new JLabel();
 
-		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD));
+		labelClientID.setFont(labelClientID.getFont().deriveFont(Font.BOLD).deriveFont(16.0F));
 
 		labelClientDescription = new JLabel(Configed.getResourceValue("description"));
 		labelClientInventoryNumber = new JLabel(
@@ -100,6 +106,22 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		labelClientMacAddress = new JLabel(
 				Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		labelClientIPAddress = new JLabel(Configed.getResourceValue("ipAddress"));
+
+		labelClientOS = new JLabel();
+		labelClientOS.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.operatingSystem"));
+		labelDeviceType = new JLabel();
+		labelDeviceTypeIcon = new JLabel();
+
+		jTextAreaVendorModel = new JTextArea();
+		jTextAreaVendorModel.setEditable(false);
+		jTextAreaVendorModel.setRows(2);
+		jTextAreaVendorModel.setBorder(null);
+
+		scrollpaneVendorModel = new JScrollPane(jTextAreaVendorModel);
+		scrollpaneVendorModel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollpaneVendorModel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollpaneVendorModel.setBorder(null);
+
 		labelOneTimePassword = new JLabel(Configed.getResourceValue("ConfigedMain.pclistTableModel.oneTimePassword"));
 		labelOpsiHostKey = new JLabel("opsi-host-key");
 
@@ -151,19 +173,16 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		checkBoxHealthCheckActive = new FlatTriStateCheckBox(
 				Configed.getResourceValue("NewClientDialog.healthCheckActive"));
 		checkBoxHealthCheckActive.setAllowIndeterminate(false);
-		checkBoxHealthCheckActive.addActionListener(event -> wanConfigAction());
 		checkBoxHealthCheckActive.setFocusable(false);
 		checkBoxHealthCheckActive.setEnabled(false);
-		checkBoxHealthCheckActive.setSelected(persistenceController.getHealthDataService()
-				.getHostsWithActiveHealthCheck().contains(labelClientID.getText()));
 		checkBoxHealthCheckActive.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
+				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 
 		openHealthCheckSettingsDialogButton = new JButton(Icons.getIntellijIcon("settings"));
 		openHealthCheckSettingsDialogButton
 				.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.title"));
 		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
-				.getHostDisplayFields().get(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL)));
+				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 		openHealthCheckSettingsDialogButton.addActionListener(
 				e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain.getSelectedClients()));
 
@@ -194,11 +213,19 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		setLayout(layoutClientPane);
 		layoutClientPane.setHorizontalGroup(layoutClientPane.createParallelGroup()
 				/////// HOST
-				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(labelClientID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
-
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
+				.addComponent(labelClientID, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				/////// Operating System (long label)
+				.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelClientOS, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				/////// DEVICE INFO (icon, vendor, model)
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelDeviceTypeIcon, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE)
+						.addComponent(labelDeviceType, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGroup(layoutClientPane.createSequentialGroup().addGap(30, 30, 30)
+						.addComponent(scrollpaneVendorModel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				/////// DESCRIPTION
 				.addGroup(layoutClientPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
@@ -260,9 +287,20 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT,
-						Globals.DEFAULT_JLABEL_HEIGHT)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(labelClientID, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT + 4,
+						Globals.DEFAULT_JLABEL_HEIGHT + 8)
+				/////// Operating System (long label)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(labelClientOS, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT)
+				/////// DEVICE INFO (icon, vendor, model)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(layoutClientPane.createParallelGroup()
+						.addComponent(labelDeviceTypeIcon, 0, Globals.DEFAULT_JLABEL_HEIGHT,
+								Globals.DEFAULT_JLABEL_HEIGHT)
+						.addComponent(labelDeviceType, 0, Globals.DEFAULT_JLABEL_HEIGHT, Globals.DEFAULT_JLABEL_HEIGHT))
+				.addComponent(scrollpaneVendorModel, 0, Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE,
+						Globals.DEFAULT_JLABEL_HEIGHT * 2 + Globals.GAP_SIZE)
 
 				/////// DESCRIPTION
 				.addGap(Globals.GAP_SIZE)
@@ -381,11 +419,61 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = false;
 	}
 
-	public void setUefiBoot() {
-		Boolean value = persistenceController.getConfigDataService().isUEFI43(configedMain.getSelectedClients());
+	public void setClientOS(String s) {
+		dataAreChangedProgramatically = true;
+		labelClientOS.setText(s);
+		dataAreChangedProgramatically = false;
+	}
 
-		Logging.info(this, "setUefiBoot ", value);
-		checkBoxUEFIBoot.setChecked(value);
+	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
+		dataAreChangedProgramatically = true;
+		String deviceTypeIcon = deviceType == null ? "" : ("<<intern:empty>>".equals(deviceType) ? "" : deviceType);
+		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceTypeIcon, 20));
+
+		String deviceTypeResourceKey = deviceType == null ? "" : deviceType;
+		if ("<<intern:empty>>".equals(deviceTypeResourceKey)) {
+			labelDeviceType.setText("");
+		} else {
+			labelDeviceType.setText(
+					Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey));
+		}
+
+		jTextAreaVendorModel.setText("");
+		if (vendor.isBlank() && model.isBlank()) {
+			jTextAreaVendorModel.setToolTipText(null);
+		} else if (vendor.isBlank()) {
+			jTextAreaVendorModel.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+			jTextAreaVendorModel.append(model);
+		} else if (model.isBlank()) {
+			jTextAreaVendorModel
+					.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor"));
+			jTextAreaVendorModel.append(vendor);
+		} else {
+			jTextAreaVendorModel.setToolTipText(Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceVendor")
+					+ "\n" + Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceModel"));
+			jTextAreaVendorModel.append(vendor + "\n");
+			jTextAreaVendorModel.append(model);
+
+		}
+
+		dataAreChangedProgramatically = false;
+	}
+
+	public void setClientMonitoring(Boolean value) {
+		dataAreChangedProgramatically = true;
+		checkBoxHealthCheckActive.setChecked(value);
+		dataAreChangedProgramatically = false;
+	}
+
+	public void setClientPlatform(String value) {
+		dataAreChangedProgramatically = true;
+		labelClientID.setIcon(Utils.determineIconBasedOnPlatform(value, 24));
+		dataAreChangedProgramatically = false;
+	}
+
+	public void setUefiBoot(Boolean uefiBoot) {
+		Logging.info(this, "setUefiBoot ", uefiBoot);
+		checkBoxUEFIBoot.setChecked(uefiBoot);
 	}
 
 	public void setWANConfig(Boolean value) {
@@ -527,12 +615,6 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 	public void hideHealthCheckActiveCheckBox(boolean hide) {
 		checkBoxHealthCheckActive.setVisible(hide);
 		openHealthCheckSettingsDialogButton.setVisible(hide);
-	}
-
-	public void updateHealthCheckActiveCheckBoxStatus(String clientId) {
-		checkBoxHealthCheckActive.setChecked(clientId != null
-				? persistenceController.getHealthDataService().getHostsWithActiveHealthCheck().contains(clientId)
-				: null);
 	}
 
 	// DocumentListener

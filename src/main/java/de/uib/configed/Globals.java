@@ -13,6 +13,8 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 
+import com.formdev.flatlaf.FlatLaf;
+
 /**
  * This class contains app constants
  */
@@ -20,7 +22,7 @@ import javax.swing.UIManager;
 public final class Globals {
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2025-03-13";
+	public static final String VERDATE = "2025-04-17";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
@@ -142,6 +144,7 @@ public final class Globals {
 	public static final String IMAGE_BASE = "de/uib/configed/gui/";
 
 	public static final int DEFAULT_PORT = 4447;
+	public static final int DEFAULT_TIMEOUT = 5000;
 
 	// Colors for table cells
 	private static Color magentaCell1;
@@ -174,5 +177,9 @@ public final class Globals {
 
 	public static Color getGreyCell2() {
 		return greyCell2;
+	}
+
+	public static Color getActiveColor() {
+		return FlatLaf.isLafDark() ? ICON_ACTIVE_DARK : ICON_ACTIVE_LIGHT;
 	}
 }

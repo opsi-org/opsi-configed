@@ -198,6 +198,7 @@ public class HealthCheck extends JPanel {
 
 	public void saveAsZip() {
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		jFileChooser.setFileHidingEnabled(false);
 		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Zip file (.zip)", "zip");
 		jFileChooser.addChoosableFileFilter(fileFilter);
 		jFileChooser.setAcceptAllFileFilterUsed(false);

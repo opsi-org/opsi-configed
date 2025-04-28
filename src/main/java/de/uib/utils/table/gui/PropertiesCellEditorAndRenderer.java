@@ -12,8 +12,10 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -30,6 +32,7 @@ import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ListSelectionDialog;
+import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigOption.TYPE;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -101,16 +104,31 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		unusedfield = new JLabel();
 
-		listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(), null, true);
+		listSelectionDialog = new ListSelectionDialog(null, null, true);
 		listSelectionDialog.setMultiSelection();
 	}
 
 	private void actOnEditorComponentAction(JTextField editorComponent) {
 		String newItem = editorComponent.getText();
-		comboBox.addItem(newItem);
+		if (!containsItem(newItem)) {
+			comboBox.addItem(newItem);
+		}
 		comboBox.setSelectedItem(newItem);
 
 		stopCellEditing();
+	}
+
+	private boolean containsItem(String item) {
+		ComboBoxModel<String> model = comboBox.getModel();
+		int size = model.getSize();
+
+		for (int i = 0; i < size; i++) {
+			if (item.equals(model.getElementAt(i))) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
@@ -119,7 +137,8 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+				.isGlobalReadOnly()) {
 			Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 			return null;
 		}
@@ -145,35 +164,35 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (modelProducer.getListCellOptions(key) == null) {
 			return null;
 		} else if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
-			result = getBooleanEditor(value);
+			result = getBooleanEditor(value, key);
 		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
 			result = getMultiValueEditor(table, value, row);
 		} else {
-			result = getSingleValueEditor(key, value, row);
+			result = getSingleValueEditor(value, row);
 		}
 
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 		return result;
 	}
 
-	private Component getBooleanEditor(Object value) {
+	private Component getBooleanEditor(Object value, String key) {
 		selectionMode = BOOLEAN;
 
 		// We want a checkbox
 		if (((List<?>) value).isEmpty()) {
 			checkBox.setIndeterminate(true);
 		} else {
-			checkBox.setChecked((Boolean) ((List<?>) value).get(0));
+			checkBox.setChecked(resolveBooleanState(value, key));
 		}
 
 		return checkBox;
 	}
 
-	private Component getSingleValueEditor(String key, Object value, int row) {
+	private Component getSingleValueEditor(Object value, int row) {
 		selectionMode = SINGLE_SELECTION;
 
-		comboBox.setModel(new DefaultComboBoxModel<>(
-				modelProducer.getListCellOptions(key).getPossibleValues().toArray(new String[0])));
+		comboBox.setModel(modelProducer.getComboBoxModel(row));
+
 		if (((List<?>) value).isEmpty()) {
 			comboBox.setSelectedItem(null);
 		} else {
@@ -199,7 +218,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(value));
 		listSelectionDialog.setEditable(modelProducer.isEditable(row));
-		listSelectionDialog.show();
+		listSelectionDialog.show(ConfigedMain.getMainFrame());
 
 		// We should put this code into invokeLater, because otherwise we will call stop 
 		// or cancel editing before it actually began. Editing would not have an effect
@@ -220,7 +239,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (selectionMode == BOOLEAN) {
 			return Collections.singletonList(checkBox.getChecked());
 		} else if (selectionMode == SINGLE_SELECTION) {
-			return Collections.singletonList(comboBox.getSelectedItem());
+			return Collections.singletonList(comboBox.getEditor().getItem());
 		} else {
 			return listSelectionDialog.getSelectedValues();
 		}
@@ -242,7 +261,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 			if (((List<?>) value).isEmpty()) {
 				rendererCheckBox.setIndeterminate(true);
 			} else {
-				rendererCheckBox.setChecked((Boolean) ((List<?>) value).get(0));
+				rendererCheckBox.setChecked(resolveBooleanState(value, key));
 			}
 
 			result = rendererCheckBox;
@@ -251,6 +270,26 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 
 		return result;
+	}
+
+	private static boolean resolveBooleanState(Object value, String key) {
+		Object firstVal = ((List<?>) value).get(0);
+		boolean boolState;
+		if (firstVal instanceof Boolean val) {
+			boolState = val;
+		} else {
+			Map<String, ConfigOption> configOptions = PersistenceControllerFactory.getPersistenceController()
+					.getConfigDataService().getConfigOptionsPD();
+			if (configOptions.containsKey(key)) {
+				boolState = (Boolean) PersistenceControllerFactory.getPersistenceController().getConfigDataService()
+						.getConfigOptionsPD().get(key).getDefaultValues().get(0);
+			} else {
+				Logging.info(
+						key + " is not part of config options, setting value to false - original value is " + firstVal);
+				boolState = false;
+			}
+		}
+		return boolState;
 	}
 
 	public static String formatList(Object value) {

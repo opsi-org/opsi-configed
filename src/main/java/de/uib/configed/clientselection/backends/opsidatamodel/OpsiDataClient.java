@@ -44,7 +44,7 @@ public class OpsiDataClient {
 	private Map<String, String> softwareValue;
 
 	// current swaudit to be checked
-	private Map<String, String> swauditValue;
+	private Map<String, Object> swauditValue;
 	private Iterator<Map<String, Object>> hardwareIterator;
 
 	// current hardware to be checked
@@ -145,7 +145,7 @@ public class OpsiDataClient {
 	}
 
 	/** Set the current software audit value */
-	public void setCurrentSwAuditValue(Map<String, String> value) {
+	public void setCurrentSwAuditValue(Map<String, Object> value) {
 		swauditValue = value;
 	}
 

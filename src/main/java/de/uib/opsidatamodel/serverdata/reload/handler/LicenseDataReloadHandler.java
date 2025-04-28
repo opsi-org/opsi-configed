@@ -45,8 +45,6 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_INFORMATION_FOR_LICENSING);
 		cacheManager.clearCachedData(CacheIdentifier.INSTALLED_SOFTWARE_NAME_TO_SW_INFO);
-		executor.runInParallel(softwareDataService::retrieveInstalledSoftwareInformationPD);
-
 		cacheManager.clearCachedData(CacheIdentifier.SOFTWARE_WITHOUT_ASSOCIATED_LICENSE_POOL);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_SOFTWARE_LIST);
 		cacheManager.clearCachedData(CacheIdentifier.FLICENSE_POOL_TO_UNKNOWN_SOFTWARE_LIST);
@@ -58,8 +56,6 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS);
 		cacheManager.clearCachedData(CacheIdentifier.LICENSE_CONTRACTS_TO_NOTIFY);
-		executor.runInParallel(softwareDataService::retrieveLicenseStatisticsPD);
-
 		cacheManager.clearCachedData(CacheIdentifier.LICENSES);
 		executor.runInParallel(licenseDataService::retrieveLicensesPD);
 

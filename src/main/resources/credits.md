@@ -98,3 +98,8 @@ License: https://github.com/tukaani-project/xz-java/blob/master/COPYING
 Author(s): JetBrains
 Websize: https://intellij-icons.jetbrains.design/
 License: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+**Virtual Machine Icon From SVGRepo**
+Author(s): vmware
+Websize: https://www.svgrepo.com/svg/372762/vm
+License: [MIT License](https://mit-license.org/)

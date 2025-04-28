@@ -1,4 +1,82 @@
-## [4.3.7.0] - 2025-xx-xx
+## [4.3.9.0] - 2025-04-17
+### Fixed
+- Don't call RPC-methods twice when reloading license management
+- Resolved an issue where the UI would freeze during login when connecting to an invalid server.
+- Save function, when adding new configs.
+- Issue: If property key contains secret, the value of that key should be hidden
+- Issue: localboot and netboot tables not updated on reload (only on global reload)
+- Invalid directory name created when specifying port server for connection (for the first time and not using SSS)
+
+### Changed
+- Make `SavedSearchesDialog` modeless
+- Disallow to add empty property values to properties in multi selection dialog
+- Increase height of an empty value (if any exists in property) in multi selection dialog
+- Save logfiles based on server and user 
+- Improved boolean state handling in cell editor/renderer
+
+### Added
+- Include operating system and device info in client view
+
+## [4.3.8.2] - 2025-04-03
+### Changed
+- Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
+- Make dialogs resizable and/or non-modal
+- Focus on group name field when creating new group
+- Scroll to bottom when search criterion is added in `ClientSelectionDialog`
+- Select all products/clients on depot change or all data realod if no prior selection exist (or couldn't find product/client)
+- Make saved searches dialog resizable
+- Show hidden files and folders in File Chooser
+- Copy element of list selection dialog into extra field on double click
+- Redesign dialog to create configs
+
+### Add
+- Show a point in the Health Check icon to show if there is a warning/error in the Health Check
+
+### Fixed
+- When searching with search button (magnifying glass), the search isn't performed while cursor isn't placed in the display field.
+- `NullPointerExxception` when products are selected and depot (which has no products) changed
+- Incorrect product selected when depot is changed
+- Search in values of product property, depot configuration and host configuration
+- Duplicate values in properties combo box
+- Don't call methods twice when reloading product data table (in client and depot configuration)
+
+## [4.3.8.1] - 2025-03-27
+### Fixed
+- Icon to select all products appears when depot selection changes (even if all products are selected)
+
+## [4.3.8.0] - 2025-03-25
+### Added
+- View menu for navigating main views alongside key shortcuts (and circular navigation)
+- `isOperatingSystem` column to software information table
+
+### Changed
+- Accept changes in product properties, configs (host parameters) and depot configuration directly from editor without pressing ENTER
+- Show a menu for the server console in the menu bar on the top
+
+### Fixed
+- Beep sounds, when entering MAC, OTP, and SystemUUID
+- `IndexOutOfBoundsException` when trying to import clients via CSV
+
+## [4.3.7.3] - 2025-03-24
+### Fixed
+- Don't add newly added options for single-value property-keys to the wrong properties
+
+## [4.3.7.2] - 2025-03-24
+### Fixed
+- Don't clear newly added options for single-value properties (if selected)
+- `NPEs` occuring when opening "Message of the day" dialog
+- Show correct warning for opsi modules classic warning dialog
+
+## [4.3.7.1] - 2025-02-20
+### Changed
+- Enable copy & paste in "About opsi-configed" dialog
+
+### Fixed
+- Issue: after reloading all data, the properties for the products (localboot and netboot) are gone.
+- Correct location of list selection dialog in health check client selection and property editing
+- Create the correct config `opsiclientd.event_net_connection.active` and not `event_net_connection.active`
+
+## [4.3.7.0] - 2025-02-18
 ### Added
 - Feature for selecting multiple groups in host and product tree
 - Show loading screen on search query execution
@@ -10,6 +88,8 @@
 
 ### Fixed
 - Highlighting issue in Health Check dialog under Windows
+- Issue: lost selection after full reload
+- Issue: cancel selection buttons incorrectly shown after full reload
 
 ## [4.3.6.8] - 2025-03-13
 ### Fixed

@@ -146,6 +146,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		}
 
 		chooserDirectory = new JFileChooser();
+		chooserDirectory.setFileHidingEnabled(false);
 		chooserDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);
 

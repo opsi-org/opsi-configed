@@ -81,6 +81,7 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SearchQueryExecutor;
 import de.uib.utils.swing.TextInputField;
@@ -125,7 +126,6 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 			.getPersistenceController();
 
 	public ClientSelectionDialog(ConfigedMain configedMain, SavedSearchesDialog savedSearchesDialog) {
-
 		this.configedMain = configedMain;
 		this.savedSearchesDialog = savedSearchesDialog;
 		manager = new SelectionManager();
@@ -141,10 +141,14 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null,
 				new Object[] { buttonSearch, buttonReset, Configed.getResourceValue("buttonClose") });
+		Utils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
+		dialog.setMinimumSize(new Dimension(0, 0));
 		dialog.setModalityType(ModalityType.MODELESS);
+		dialog.pack();
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	public void show(String searchName) {
@@ -1151,6 +1155,8 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		int diffSize = scrollPane.getPreferredSize().width - scrollPane.getSize().width
 				+ scrollPane.getVerticalScrollBar().getWidth();
 		dialog.setSize(dialog.getWidth() + diffSize, dialog.getHeight());
+		SwingUtilities.invokeLater(
+				() -> scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum()));
 	}
 
 	private void selectOperation(ActionEvent actionEvent) {

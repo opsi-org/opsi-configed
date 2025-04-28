@@ -31,20 +31,20 @@ public class LicensepoolEntry extends AbstractTableEntry {
 	}
 
 	@Override
-	public String put(String key, String value) {
+	public String put(String key, Object value) {
 		if (KEYS.indexOf(key) <= -1) {
 			Logging.error(this, "not valid key: ", key);
 			return null;
 		} else {
-			return super.put(key, value);
+			return super.put(key, value) != null ? super.put(key, value).toString() : "";
 		}
 	}
 
 	public String getLicensepoolId() {
 		if (get(ID_SERVICE_KEY) != null) {
-			return get(ID_SERVICE_KEY);
+			return get(ID_SERVICE_KEY).toString();
 		}
 
-		return get(ID_KEY);
+		return get(ID_KEY).toString();
 	}
 }

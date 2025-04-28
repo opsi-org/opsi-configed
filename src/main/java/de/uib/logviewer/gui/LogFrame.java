@@ -233,6 +233,7 @@ public class LogFrame extends JFrame {
 
 	public static String openFile(String title) {
 		JFileChooser chooser = new JFileChooser(fileName);
+		chooser.setFileHidingEnabled(false);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
 				"logfiles: .log, .zip, .gz, .7z, .txt", "log", "zip", "gz", "7z", "txt"));

@@ -690,8 +690,9 @@ public class LogPane extends JPanel implements KeyListener {
 
 	private void search() {
 		Logging.debug(this, "Searching string in log");
+		Object item = jComboBoxSearch.getEditor().getItem();
 
-		if (jComboBoxSearch.getSelectedItem() == null || jComboBoxSearch.getSelectedItem().toString().isEmpty()) {
+		if (item == null || item.toString().isEmpty()) {
 			Logging.info(this, "item to search for is null or empty, do nothing");
 			return;
 		}
@@ -699,17 +700,16 @@ public class LogPane extends JPanel implements KeyListener {
 		jTextPane.requestFocus();
 		jTextPane.setCaretPosition(jTextPane.getCaretPosition());
 		searcher.setLastReturnedOffset(jTextPane.getCaretPosition());
-		int offset = searcher.search(jComboBoxSearch.getSelectedItem().toString());
+		int offset = searcher.search(item.toString());
 
 		// does not exist
 		if (jComboBoxSearch.getSelectedIndex() <= -1) {
-			jComboBoxSearch.addItem(jComboBoxSearch.getSelectedItem().toString());
+			jComboBoxSearch.addItem(item.toString());
 			jComboBoxSearch.repaint();
 		}
 		if (offset != -1) {
 			try {
-				jTextPane.scrollRectToVisible(jTextPane
-						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
+				jTextPane.scrollRectToVisible(jTextPane.modelToView2D(offset + item.toString().length()).getBounds());
 				jTextPane.setCaretPosition(offset);
 				jTextPane.getCaret().setVisible(true);
 				jTextPane.setCaretPosition(offset);

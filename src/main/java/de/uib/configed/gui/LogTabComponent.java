@@ -127,6 +127,7 @@ public class LogTabComponent extends LogPane {
 
 	private void setFileChooser() {
 		chooser = new JFileChooser();
+		chooser.setFileHidingEnabled(false);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);

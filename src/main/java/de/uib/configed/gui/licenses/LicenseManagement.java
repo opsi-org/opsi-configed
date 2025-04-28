@@ -172,6 +172,9 @@ public class LicenseManagement extends JTabbedPane {
 	}
 
 	private void initTabs() {
+		// We load the data here because it's parallelized and more efficient
+		persistenceController.reloadData(ReloadEvent.LICENSE_DATA_RELOAD.toString());
+
 		// panelAssignToLPools
 		licensesPanelsTabNames.put(LicensesTabStatus.LICENSEPOOL,
 				Configed.getResourceValue("ConfigedMain.Licenses.TabLicensepools"));
@@ -213,7 +216,6 @@ public class LicenseManagement extends JTabbedPane {
 		ControlPanelLicensesStatistics controlPanelLicensesStatistics = new ControlPanelLicensesStatistics();
 		addTab(LicensesTabStatus.STATISTICS, controlPanelLicensesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicensesStatistics);
-
 	}
 
 	private LicensesTabStatus reactToStateChangeRequest(LicensesTabStatus newState) {

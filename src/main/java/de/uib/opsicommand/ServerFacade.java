@@ -125,7 +125,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.error(this, "SAML connection failed");
 			return;
 		}
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), this.host + "_" + this.portHTTPS);
 		checkServerVersion();
 	}
 
@@ -135,6 +135,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	public Map<String, List<String>> getHeaders() {
 		Logging.info("getHeaders started");
+		int timeout = 2000;
+		System.setProperty("sun.net.client.defaultConnectTimeout", timeout + "");
 		Map<String, String> requestProperties = new HashMap<>();
 		requestProperties.put("Accept", "application/json");
 		if (sessionId != null) {
@@ -142,11 +144,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 		URL url = makeURL("/auth/session_id");
 		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
-		HttpsURLConnection connection = handler.establishConnection(true, true);
+		HttpsURLConnection connection = handler.establishConnection(true, true, timeout);
 		setConnectionState(handler.getConnectionState());
 		if (connection == null) {
 			Logging.warning("try to get headers, but connection is null. ", "conStat ", getConnectionState(), "state: ",
 					getConnectionState().getState());
+			System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
 			return new HashMap<>();
 		}
 		Map<String, List<String>> result = new HashMap<>();
@@ -156,6 +159,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		} catch (IOException ex) {
 			Logging.error(this, ex, "Exception while trying to get headers");
 		}
+		System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
 		return result;
 	}
 

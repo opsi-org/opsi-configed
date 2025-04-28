@@ -55,6 +55,7 @@ public class PMInstallLocalPanel extends PMInstallPanel {
 		jButtonAutoCompletion = autocompletion.getButton();
 
 		JFileChooser jFileChooser = new JFileChooser();
+		jFileChooser.setFileHidingEnabled(false);
 		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		jFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		jFileChooser.setDialogTitle(Configed.getResourceValue("PMInstallLocalPanel.titleDialogLocalFrom"));

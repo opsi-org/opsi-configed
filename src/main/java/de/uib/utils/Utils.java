@@ -6,7 +6,11 @@
 
 package de.uib.utils;
 
+import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Window;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.io.BufferedReader;
 import java.io.Console;
 import java.io.File;
@@ -29,6 +33,10 @@ import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -71,7 +79,11 @@ public final class Utils {
 		message.append("running on java version " + COMPLETE_VERSION_INFO + "\n");
 		message.append("on architecture " + System.getProperty("os.arch"));
 
-		JOptionPane.showMessageDialog(parent, message,
+		JTextArea jTextArea = new JTextArea(message.toString());
+		jTextArea.setEditable(false);
+		jTextArea.setCaretPosition(0);
+
+		JOptionPane.showMessageDialog(parent, jTextArea,
 				Configed.getResourceValue("Utils.aboutOpsiConfiged") + " " + Globals.APPNAME,
 				JOptionPane.PLAIN_MESSAGE);
 	}
@@ -261,9 +273,9 @@ public final class Utils {
 		}
 	}
 
-	public static boolean isKeyForSecretValue(String s) {
-		String t = s.toLowerCase(Locale.ROOT);
-		return t.indexOf("password") > -1 || t.startsWith("secret");
+	public static boolean isKeyForSecretValue(String key) {
+		String keyLowerCase = key.toLowerCase(Locale.ROOT);
+		return keyLowerCase.indexOf("password") > -1 || keyLowerCase.indexOf("secret") > -1;
 	}
 
 	public static String getSeconds() {
@@ -458,5 +470,53 @@ public final class Utils {
 
 	private static String retrieveEverythingAfterDir(String filePath, String dir) {
 		return filePath.substring(filePath.indexOf(dir) + dir.length());
+	}
+
+	public static void enableDialogResizing(JOptionPane optionPane) {
+		HierarchyListener listener = new HierarchyListener() {
+			@Override
+			public void hierarchyChanged(HierarchyEvent e) {
+				Window window = SwingUtilities.getWindowAncestor(optionPane);
+				if (window instanceof Dialog dialog && !dialog.isResizable()) {
+					dialog.setResizable(true);
+					optionPane.removeHierarchyListener(this);
+				}
+			}
+		};
+		optionPane.addHierarchyListener(listener);
+	}
+
+	public static Boolean toBoolean(Object obj) {
+		if (obj instanceof Boolean bool) {
+			return bool;
+		}
+		if (obj instanceof String) {
+			return Boolean.valueOf(obj.toString());
+		}
+		return false;
+	}
+
+	public static FlatSVGIcon determineIconBasedOnPlatform(String platform, int size) {
+		return switch (platform) {
+		case "macos" -> Icons.getThemeSVGRepoIcon("macos", size);
+		case "windows" -> Icons.getThemeSVGRepoIcon("windows", size);
+		case "linux" -> Icons.getThemeSVGRepoIcon("linux", size);
+		default -> Icons.getThemeIntellijIcon("questionMark", size);
+		};
+	}
+
+	public static FlatSVGIcon determineIconBasedOnDeviceType(String value) {
+		return determineIconBasedOnDeviceType(value, 16);
+	}
+
+	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
+		return switch (value) {
+		case "notebook" -> Icons.getThemeSVGRepoIcon("laptop", size);
+		case "desktop" -> Icons.getThemeSVGRepoIcon("desktop", size);
+		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
+		case "convertible" -> Icons.getThemeSVGRepoIcon("convertible", size);
+		case "other" -> Icons.getThemeIntellijIcon("questionMark", size);
+		default -> Icons.getThemeIntellijIcon("questionMark", size);
+		};
 	}
 }

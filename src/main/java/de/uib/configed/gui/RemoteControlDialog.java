@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
@@ -60,6 +61,7 @@ public class RemoteControlDialog implements DocumentListener {
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
+		dialog.setModalityType(ModalityType.MODELESS);
 	}
 
 	public void setListModel(ListModel<String> model) {

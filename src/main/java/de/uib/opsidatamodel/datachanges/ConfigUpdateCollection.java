@@ -9,6 +9,8 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -21,8 +23,6 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private boolean masterConfig;
-
 	public ConfigUpdateCollection(List<String> objectIds) {
 		super();
 		this.objectIds = objectIds;
@@ -33,7 +33,7 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 		boolean result = true;
 
 		for (String objectId : objectIds) {
-			if (masterConfig) {
+			if (ConfigedMain.getEditingTarget() == EditingTarget.SERVER) {
 				Logging.debug(this, "adding ConfigUpdateCommand");
 				result = add(new ConfigUpdateCommand(POJOReMapper.remap(map)));
 			} else {
@@ -59,9 +59,5 @@ public class ConfigUpdateCollection extends DefaultUpdateCollection {
 		persistenceController.getConfigDataService().updateConfigStates();
 
 		clear();
-	}
-
-	public void setMasterConfig(boolean b) {
-		masterConfig = b;
 	}
 }

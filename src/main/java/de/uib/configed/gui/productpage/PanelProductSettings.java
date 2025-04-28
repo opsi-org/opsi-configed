@@ -295,8 +295,7 @@ public class PanelProductSettings extends JSplitPane {
 	private void reloadAction() {
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 
-		persistenceController.reloadData(ReloadEvent.DEPOT_PRODUCT_PROPERTIES_DATA_RELOAD.toString());
-		persistenceController.reloadData(CacheIdentifier.PRODUCT_PROPERTIES.toString());
+		persistenceController.reloadData(ReloadEvent.PRODUCT_DATA_RELOAD.toString());
 
 		// We want to rebuild the shown page in the client configuration after reload
 		ConfigedMain.getMainFrame().getClientConfiguration().stateChanged(null);

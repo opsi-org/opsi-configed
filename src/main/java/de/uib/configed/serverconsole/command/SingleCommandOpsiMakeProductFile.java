@@ -98,7 +98,7 @@ public class SingleCommandOpsiMakeProductFile implements SingleCommand, CommandW
 
 	@Override
 	public String getMenuText() {
-		return Configed.getResourceValue("SingleCommandOpsiMakeProductFile.title");
+		return Configed.getResourceValue("MakeProductFileDialog.title");
 	}
 
 	@Override

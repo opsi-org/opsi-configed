@@ -127,7 +127,7 @@ public class HostInfoCollections {
 
 		// find depots and build entries for them
 		retrieveDepotsPD(opsiHosts);
-		retrieveClientsPD(opsiHosts);
+		retrieveClientsPD(persistenceController.getHostDataService().getOpsiClients());
 
 		Map<String, Map<String, Object>> masterDepots = cacheManager.getCachedData(CacheIdentifier.MASTER_DEPOTS,
 				Map.class);
@@ -244,10 +244,6 @@ public class HostInfoCollections {
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
 		for (Map<String, Object> host : opsiHosts) {
-			if (!((String) host.get(HostInfo.HOST_TYPE_KEY)).equals(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT)) {
-				continue;
-			}
-
 			String name = (String) host.get(HostInfo.HOSTNAME_KEY);
 			boolean depotFound = false;
 			String depotId = null;
@@ -270,14 +266,6 @@ public class HostInfoCollections {
 
 			Logging.debug(this, "getConfigs for ", name);
 
-			host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
-					persistenceController.getConfigDataService().isInstallByShutdownConfigured(name));
-
-			boolean result = persistenceController.getConfigDataService().findBooleanConfigurationComparingToDefaults(
-					name, persistenceController.getConfigDataService().getWanConfigurationPD());
-			Logging.debug(this, "host ", name, " wan config ", result);
-			host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
-
 			HostInfo hostInfo = null;
 			String myDepot = null;
 
@@ -291,6 +279,7 @@ public class HostInfoCollections {
 			host2hostInfo.put(name, hostInfo);
 			depot2Host2HostInfo.get(myDepot).put(name, hostInfo);
 		}
+		addOpsiHostNames(new ArrayList<>(host2hostInfo.keySet()));
 		cacheManager.setCachedData(CacheIdentifier.HOST_TO_HOST_INFO, host2hostInfo);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 	}

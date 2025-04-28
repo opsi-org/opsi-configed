@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListModel;
@@ -28,6 +30,7 @@ import de.uib.utils.table.gui.ListModelProducer;
 
 public class ListModelProducerForVisualDatamap implements ListModelProducer {
 	private Map<Integer, ListModel<String>> listmodels = new HashMap<>();
+	private Map<Integer, ComboBoxModel<String>> comboboxmodels = new HashMap<>();
 
 	private Map<String, ConfigOption> optionsMap;
 	private Map<String, Object> currentData;
@@ -82,6 +85,47 @@ public class ListModelProducerForVisualDatamap implements ListModelProducer {
 			}
 		}
 		listmodels.put(row, model);
+
+		return model;
+	}
+
+	@Override
+	public ComboBoxModel<String> getComboBoxModel(int row) {
+		// column can be assumed to be 1
+
+		if (comboboxmodels.containsKey(row)) {
+			// we already built a model
+			return comboboxmodels.get(row);
+		}
+
+		Logging.info(this, "getComboBoxModel, row ", row);
+
+		// build comboboxmodel
+
+		String key = (String) table.getValueAt(row, 0);
+
+		ConfigOption options = getListCellOptions(key);
+
+		List<Object> values = options.getPossibleValues();
+		Logging.info(this, "getComboBoxModel key ", key, " the option values ", values);
+		Logging.info(this, "getComboBoxModel key ", key, " options  ", options);
+
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+		Iterator<? extends Object> iter = values.iterator();
+		while (iter.hasNext()) {
+			model.addElement(POJOReMapper.remap(iter.next()));
+		}
+		if (currentData.get(key) instanceof List) {
+			iter = ((List<?>) currentData.get(key)).iterator();
+
+			while (iter.hasNext()) {
+				String entry = (String) iter.next();
+				if (model.getIndexOf(entry) == -1 && entry != null) {
+					model.addElement(entry);
+				}
+			}
+		}
+		comboboxmodels.put(row, model);
 
 		return model;
 	}
