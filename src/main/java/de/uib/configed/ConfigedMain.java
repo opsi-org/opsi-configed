@@ -23,7 +23,7 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
-import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -62,6 +62,7 @@ import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.table.gui.DeviceTypeIconTableCellRenderer;
 import de.uib.utils.table.gui.PlatfromIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
+import javafx.util.Pair;
 
 public class ConfigedMain {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -307,9 +308,7 @@ public class ConfigedMain {
 	public void toggleColumn(String column) {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
 		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
-
-		setRebuiltClientListTableModel(false, false);
-		clientTablePanel.getClientTable().initSortKeys();
+		setRebuiltClientListTableModel(true, false);
 
 		// We need to make first selected visible again after resetting sortKeys
 		clientTablePanel.getClientTable().moveToFirstSelected();
@@ -798,7 +797,8 @@ public class ConfigedMain {
 				"setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree, Set selectValues)  : ",
 				restoreSortKeys, ", ", rebuildTree, ",  selectValues.size() ", Logging.getSize(selectValues));
 
-		List<? extends SortKey> saveSortKeys = clientTablePanel.getClientTable().getRowSorter().getSortKeys();
+		Logging.info(this, "setRebuiltClientListTableModel save sort keys ");
+		List<Pair<String, SortOrder>> sortKeyNames = clientTablePanel.getClientTable().getSortedNames();
 
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected ",
 				clientTablePanel.getClientTable().getSelectedRowCount());
@@ -826,7 +826,7 @@ public class ConfigedMain {
 		setSelectionPanelCols();
 
 		if (restoreSortKeys) {
-			clientTablePanel.getClientTable().getRowSorter().setSortKeys(saveSortKeys);
+			clientTablePanel.getClientTable().setSortedByNames(sortKeyNames);
 		}
 
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() ",

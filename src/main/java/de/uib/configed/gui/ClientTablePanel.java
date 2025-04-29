@@ -56,7 +56,9 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 	private void initComponents() {
 		scrollpane = new JScrollPane();
-
+		//int clientIdIndex = persistenceController.getHostInfoCollections().getClientIdIndex();
+		//int clientIdIndex = clientTablePanel.getClientTable().
+		// Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey())
 		clientTable = new ClientTable(configedMain);
 
 		// Ask to be notified of selection changes.
