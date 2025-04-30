@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
 
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -36,6 +36,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.userprefs.UserPreferences;
+import javafx.util.Pair;
 
 public class ProductPageManager implements MessagebusListener {
 	// the properties for one product and all selected clients
@@ -120,7 +121,8 @@ public class ProductPageManager implements MessagebusListener {
 				.retrieveProductPropertiesPD(configedMain.getClientTablePanel().getClientTable().getSelectedSet());
 
 		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
-		List<? extends SortKey> currentSortKeysProducts = panelProductSettings.getProductTable().getSortKeys();
+
+		List<Pair<String, SortOrder>> sortKeyNames = panelProductSettings.getProductTable().getSortedNames();
 		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
 		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
 
@@ -143,7 +145,7 @@ public class ProductPageManager implements MessagebusListener {
 				displayFields);
 		panelProductSettings.setTableModel(istmForSelectedClients);
 
-		panelProductSettings.getProductTable().setSortKeys(currentSortKeysProducts);
+		panelProductSettings.getProductTable().setSortedByNames(sortKeyNames);
 
 		if (!oldProductSelection.isEmpty()) {
 			panelProductSettings.getProductTable().setSelection(oldProductSelection);
