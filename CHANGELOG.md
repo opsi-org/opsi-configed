@@ -1,8 +1,3 @@
-## [4.3.x.x] - 2025-xx-xx
-### Fixed
-- Sorting of table columns after showing/hiding columns
-
-
 ## [4.3.9.0] - 2025-04-17
 ### Fixed
 - Don't call RPC-methods twice when reloading license management
