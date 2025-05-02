@@ -74,7 +74,7 @@ public class TopToolBarManager {
 	}
 
 	public List<JButton> getOpsiLicensingButtons(OpsiLicensing opsiLicensing) {
-		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
+		JButton reloadButton = new JButton(Icons.getOpsiReloadIcon(24));
 		reloadButton.setToolTipText(Configed.getResourceValue("reloadData"));
 		reloadButton.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
@@ -117,7 +117,7 @@ public class TopToolBarManager {
 	}
 
 	public List<JButton> getLicensingManagementButtons(MainPanelManager mainPanelManager) {
-		JButton reloadButton = new JButton(Icons.getIntellijIcon("refresh", 24));
+		JButton reloadButton = new JButton(Icons.getReloadButton("scriptingScript", 24));
 		reloadButton.setToolTipText(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"));
 		reloadButton.addActionListener(event -> mainPanelManager.reloadLicensesAction());
 
