@@ -92,6 +92,11 @@ public class HostInfoCollections {
 		return cacheManager.getCachedData(CacheIdentifier.DEPOT_NAMES_LIST, List.class);
 	}
 
+	public List<String> getAllDepotNamesList() {
+		retrieveOpsiHostsPD();
+		return cacheManager.getCachedData(CacheIdentifier.ALL_DEPOT_NAMES_LIST, List.class);
+	}
+
 	public Map<String, Map<String, Object>> getAllDepots() {
 		retrieveOpsiHostsPD();
 		return cacheManager.getCachedData(CacheIdentifier.ALL_DEPOTS, Map.class);
@@ -140,13 +145,21 @@ public class HostInfoCollections {
 		}
 
 		TreeSet<String> depotNamesSorted = new TreeSet<>(masterDepots.keySet());
+		TreeSet<String> allDepotNamesSorted = new TreeSet<>(
+				cacheManager.getCachedData(CacheIdentifier.ALL_DEPOTS, Map.class).keySet());
+
 		depotNamesSorted.remove(configServer);
+		allDepotNamesSorted.remove(configServer);
 
 		List<String> depotNamesList = cacheManager.getCachedData(CacheIdentifier.DEPOT_NAMES_LIST, List.class);
+		List<String> allDepotNamesList = new ArrayList<>();
+		allDepotNamesList.add(configServer);
 
 		depotNamesList.addAll(depotNamesSorted);
+		allDepotNamesList.addAll(allDepotNamesSorted);
 
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_NAMES_LIST, depotNamesList);
+		cacheManager.setCachedData(CacheIdentifier.ALL_DEPOT_NAMES_LIST, allDepotNamesList);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
 
 		Logging.info(this, "retrieveOpsiHosts  hostnames size ",

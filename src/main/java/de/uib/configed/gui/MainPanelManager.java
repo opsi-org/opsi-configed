@@ -151,7 +151,7 @@ public class MainPanelManager {
 	public JPanel getDepotConfigurationSplitPane() {
 		if (depotConfigurationSplitPane == null) {
 			DepotsList depotsList = new DepotsList(configedMain);
-			depotsList.setListData(persistenceController.getHostInfoCollections().getDepotNamesList());
+			depotsList.setListData(persistenceController.getHostInfoCollections().getAllDepotNamesList());
 			depotsList.setInfo(persistenceController.getHostInfoCollections().getDepots());
 			DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 

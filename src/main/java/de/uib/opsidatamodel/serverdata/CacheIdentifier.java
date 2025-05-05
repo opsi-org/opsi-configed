@@ -458,6 +458,11 @@ public enum CacheIdentifier {
 	DEPOT_NAMES_LIST("depot_names_list"),
 
 	/**
+	 * return type {@code List<String>}
+	 */
+	ALL_DEPOT_NAMES_LIST("all_depot_names_list"),
+
+	/**
 	 * return type {@code Map<String, HostInfo>}
 	 */
 	MAP_PC_INFO_MAP("map_pc_info_map"),
