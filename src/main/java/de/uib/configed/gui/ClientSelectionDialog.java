@@ -446,7 +446,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
 		jCheckBox.setFocusable(false);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
-		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "not" : ""));
+		jCheckBox.addChangeListener(changeEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "not" : ""));
 
 		jCheckBox.addMouseListener(new MouseAdapter() {
 			@Override
@@ -471,7 +471,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
 		jCheckBox.setFocusable(false);
 		jCheckBox.setForeground(Globals.OPSI_WARNING);
-		jCheckBox.addActionListener(actionEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
+		jCheckBox.addChangeListener(changeEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "and" : "or"));
 
 		jCheckBox.addMouseListener(new MouseAdapter() {
 			@Override
