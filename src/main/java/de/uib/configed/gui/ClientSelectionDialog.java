@@ -442,28 +442,31 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 	}
 
 	private static JCheckBox createNOTCheckBox() {
-		JCheckBox jCheckBox = new JCheckBox(new ImageIcon());
+		JCheckBox jCheckBox = new JCheckBox("not", new ImageIcon());
 		jCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
 		jCheckBox.setFocusable(false);
-		jCheckBox.setForeground(Globals.OPSI_WARNING);
-		jCheckBox.addChangeListener(changeEvent -> jCheckBox.setText(jCheckBox.isSelected() ? "not" : ""));
+		updateNOTCheckBox(jCheckBox);
+		jCheckBox.addChangeListener(changeEvent -> updateNOTCheckBox(jCheckBox));
 
 		jCheckBox.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				jCheckBox.setText("not");
 				jCheckBox.setForeground(new Color(Globals.OPSI_WARNING.getRed(), Globals.OPSI_WARNING.getGreen(),
 						Globals.OPSI_WARNING.getBlue(), 128));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				jCheckBox.setText(jCheckBox.isSelected() ? "not" : "");
-				jCheckBox.setForeground(Globals.OPSI_WARNING);
+				updateNOTCheckBox(jCheckBox);
 			}
 		});
 
 		return jCheckBox;
+	}
+
+	private static void updateNOTCheckBox(JCheckBox jCheckBox) {
+		jCheckBox.setForeground(new Color(Globals.OPSI_WARNING.getRed(), Globals.OPSI_WARNING.getGreen(),
+				Globals.OPSI_WARNING.getBlue(), jCheckBox.isSelected() ? 255 : 0));
 	}
 
 	private static JCheckBox createANDORCheckBox() {
