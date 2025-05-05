@@ -152,7 +152,7 @@ public class MainPanelManager {
 		if (depotConfigurationSplitPane == null) {
 			DepotsList depotsList = new DepotsList(configedMain);
 			depotsList.setListData(persistenceController.getHostInfoCollections().getAllDepotNamesList());
-			depotsList.setInfo(persistenceController.getHostInfoCollections().getDepots());
+			depotsList.setInfo(persistenceController.getHostInfoCollections().getAllDepots());
 			DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 
 			JLabel depotSelectionLabel = new JLabel(Configed.getResourceValue("depotSelection"));
