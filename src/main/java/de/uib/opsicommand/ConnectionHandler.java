@@ -24,6 +24,7 @@ import de.uib.utils.logging.Logging;
 
 public class ConnectionHandler {
 	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET" };
+	private static final int DEFAULT_READ_TIMEOUT_MS = 60_000;
 
 	private URL serviceURL;
 	private Map<String, String> requestProperties;
@@ -161,7 +162,7 @@ public class ConnectionHandler {
 		try {
 			connection = (HttpsURLConnection) serviceURL.openConnection();
 			connection.setConnectTimeout(timeout);
-			connection.setReadTimeout(timeout);
+			connection.setReadTimeout(DEFAULT_READ_TIMEOUT_MS);
 			connection.setDoOutput(doOutput);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
