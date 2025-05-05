@@ -143,9 +143,8 @@ public class HostInfoCollections {
 		depotNamesSorted.remove(configServer);
 
 		List<String> depotNamesList = cacheManager.getCachedData(CacheIdentifier.DEPOT_NAMES_LIST, List.class);
-		for (String depot : depotNamesSorted) {
-			depotNamesList.add(depot);
-		}
+
+		depotNamesList.addAll(depotNamesSorted);
 
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_NAMES_LIST, depotNamesList);
 		cacheManager.setCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, depot2Host2HostInfo);
