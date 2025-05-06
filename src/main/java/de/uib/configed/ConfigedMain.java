@@ -737,9 +737,7 @@ public class ConfigedMain {
 	public void setClientsFilteredAndSelected(Set<String> filterIds, Set<String> selectedIds) {
 		clientsFilteredByTree.clear();
 		if (filterIds != null) {
-			for (String filterId : filterIds) {
-				clientsFilteredByTree.add(filterId);
-			}
+			clientsFilteredByTree.addAll(filterIds);
 		}
 		setRebuiltClientListTableModel(true, false, selectedIds);
 	}

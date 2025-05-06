@@ -343,7 +343,7 @@ public final class CommandParameterParser {
 	}
 
 	private String getConfigServerName() {
-		List<String> depots = persistenceController.getHostInfoCollections().getDepotNamesList();
+		List<String> depots = persistenceController.getHostInfoCollections().getAllDepotNamesList();
 		for (String depot : depots) {
 			if (depot.startsWith(ConfigedMain.getHost())) {
 				Logging.debug(this, "getConfig_serverName ", ConfigedMain.getHost());

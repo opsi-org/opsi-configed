@@ -269,10 +269,7 @@ public class GenTableModel extends AbstractTableModel {
 				i++;
 			}
 
-			rows = new ArrayList<>();
-			for (List<Object> value : mapRows.values()) {
-				rows.add(value);
-			}
+			rows = new ArrayList<>(mapRows.values());
 		}
 	}
 
