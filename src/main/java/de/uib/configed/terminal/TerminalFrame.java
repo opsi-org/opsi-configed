@@ -220,7 +220,7 @@ public final class TerminalFrame implements MessagebusListener {
 		}
 
 		// list of *all depots* to e.g. distinguish between depots and clients in list of connected devices
-		List<String> depotsList = persistenceController.getHostInfoCollections().getDepotNamesList();
+		List<String> depotsList = persistenceController.getHostInfoCollections().getAllDepotNamesList();
 		Logging.info(this, "terminal, depotsList: ", depotsList);
 
 		Set<String> allClientsDepotsConnected2Msgbus = getAllowedHostsByUserRolesHosts(depotsList);
