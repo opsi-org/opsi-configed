@@ -63,7 +63,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private JTextField fieldByAuditPath;
 	private JLabel labelClientName;
 
-	private JComboBox<String> comboChooseDepot;
+	private JLabel depot;
 	private JComboBox<String> comboChooseWinProduct;
 
 	private JLabel labelDriverToIntegrate;
@@ -162,7 +162,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	private JButton buttonUploadDrivers;
 
-	private String selectedDepot;
 	private String winProduct = "";
 
 	private JLabel jLabelTopic;
@@ -177,11 +176,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		defineChoosers();
 
-		selectedDepot = (String) comboChooseDepot.getSelectedItem();
-		depotProductDirectory = SmbConnect.buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
+		depotProductDirectory = SmbConnect.buildSambaTarget(depot.getText(), SmbConnect.PRODUCT_SHARE_RW);
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
+		jLabelTopic.setFont(jLabelTopic.getFont().deriveFont(Font.BOLD));
 
 		labelDriverToIntegrate = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 		labelDriverToIntegrate.setFont(labelDriverToIntegrate.getFont().deriveFont(Font.BOLD));
@@ -225,14 +224,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void defineChoosers() {
-		comboChooseDepot = new JComboBox<>();
-
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(
-				persistenceController.getHostInfoCollections().getDepotNamesList().toArray(new String[0])));
-
-		comboChooseDepot.setEnabled(false);
-
-		comboChooseDepot.addActionListener(actionEvent -> selectedDepot = (String) comboChooseDepot.getSelectedItem());
+		depot = new JLabel(persistenceController.getHostInfoCollections().getDepotNamesList().getFirst());
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
@@ -288,7 +280,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		fieldByAuditPath.setEditable(false);
 
 		labelClientName = new JLabel();
-		labelClientName.setFont(labelClientName.getFont().deriveFont(Font.BOLD));
 
 		JLabel jLabelDepotServer = new JLabel(Configed.getResourceValue("PanelDriverUpload.DepotServer"));
 		jLabelDepotServer.setFont(jLabelDepotServer.getFont().deriveFont(Font.BOLD));
@@ -353,16 +344,14 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
 		layoutByAuditInfo.setVerticalGroup(layoutByAuditInfo.createSequentialGroup()
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelClientName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+				.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(labelClientName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jLabelDepotServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboChooseDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -410,54 +399,47 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 
-		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createParallelGroup()
-				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.GAP_SIZE).addComponent(labelClientName, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(jLabelDepotServer)
-						.addComponent(comboChooseDepot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createParallelGroup().addGroup(layoutByAuditInfo
+				.createParallelGroup()
+				.addComponent(jLabelTopic, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(labelClientName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jLabelDepotServer)
+				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutByAuditInfo.createSequentialGroup()
+						.addComponent(jLabelShowDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonShowDrivers, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(layoutByAuditInfo.createSequentialGroup()
+						.addComponent(jLabelCreateDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(jLabelShowDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonShowDrivers,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(jLabelCreateDrivers, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.MIN_GAP_SIZE).addComponent(btnCreateDrivers, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(labelDriverToIntegrate, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(fieldDriverPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectDriverFiles,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.MIN_GAP_SIZE).addComponent(btnCreateDrivers, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(labelDriverToIntegrate, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutByAuditInfo.createSequentialGroup()
+						.addComponent(fieldDriverPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectDriverFiles, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutByAuditInfo.createSequentialGroup()
+						.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE).addComponent(buttonCallChooserServerpath,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
+						.addGap(Globals.GAP_SIZE).addComponent(buttonCallChooserServerpath, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -634,8 +616,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	public void setDepot() {
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(
-				new String[] { persistenceController.getHostInfoCollections().getConfigServer() }));
+		depot.setText(persistenceController.getHostInfoCollections().getConfigServer());
 	}
 
 	private void produceTarget() {
