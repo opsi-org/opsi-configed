@@ -52,7 +52,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 		super.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		super.setAutoCreateRowSorter(true);
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		super.getTableHeader().setReorderingAllowed(false);
+		//	super.getTableHeader().setReorderingAllowed(false);
 
 		// true destroys setSelectedRow etc
 		super.setColumnSelectionAllowed(false);
@@ -102,7 +102,12 @@ public class ClientTable extends JTable implements MessagebusListener {
 	 * @return
 	 */
 	private int getColumnIndexByTitle(String columnTitle) {
-		return convertColumnIndexToView(getColumn(columnTitle).getModelIndex());
+		try {
+			return convertColumnIndexToView(getColumn(columnTitle).getModelIndex());
+		} catch (IllegalArgumentException e) {
+			Logging.info(this, e, "getColumnIndexByTitle: ", columnTitle, " not found");
+			return -1;
+		}
 	}
 
 	public void initSortKeys() {
