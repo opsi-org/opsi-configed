@@ -10,6 +10,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -156,11 +157,29 @@ public final class Logging {
 					ConfigedMain.getUser());
 		}
 
+		closeLogWriter();
 		if (currentLogfile.renameTo(updatedLogFile)) {
 			logFilenameInUse = updatedLogFile.getAbsolutePath();
 			info("Log file renamed successfully " + updatedLogFile.getName());
 		} else {
 			info("Failed to rename log file " + currentLogfile.getName());
+		}
+		reopenLogWriter();
+	}
+
+	private static synchronized void closeLogWriter() {
+		if (logFileWriter != null) {
+			logFileWriter.flush();
+			logFileWriter.close();
+			logFileWriter = null;
+		}
+	}
+
+	private static synchronized void reopenLogWriter() {
+		try {
+			logFileWriter = new PrintWriter(new FileWriter(logFilenameInUse, true));
+		} catch (IOException e) {
+			System.err.println("Failed to reopen log writer: " + e.getMessage());
 		}
 	}
 
