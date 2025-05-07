@@ -360,25 +360,25 @@ public final class Icons {
 	}
 
 	public static ImageIcon getReloadButton(String iconName, int size) {
-		return getReloadButton(getIntellijIcon(iconName, size / 2), size);
+		return getReloadButton(getIntellijIcon(iconName, size), size);
 	}
 
 	public static ImageIcon getOpsiReloadIcon(int size) {
-		return getReloadButton(getOpsiThemeIcon(size / 2), size);
+		return getReloadButton(getOpsiThemeIcon(size), size);
 	}
 
 	private static ImageIcon getReloadButton(ImageIcon icon, int size) {
-		FlatSVGIcon refreshIcon = getIntellijIcon("refresh", size);
+		FlatSVGIcon refreshIcon = getIntellijIcon("refresh", size / 2);
 
 		BufferedImage iconBufferedImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D iconBufferedGraphics = iconBufferedImage.createGraphics();
 
-		iconBufferedGraphics.drawImage(refreshIcon.getImage(), 0, 0, null);
+		iconBufferedGraphics.drawImage(icon.getImage(), 0, 0, null);
 
 		iconBufferedGraphics.setBackground(new Color(255, 255, 255, 0));
 		iconBufferedGraphics.clearRect(size / 2, size / 2, size / 2, size / 2);
 
-		iconBufferedGraphics.drawImage(icon.getImage(), size / 2, size / 2, null);
+		iconBufferedGraphics.drawImage(refreshIcon.getImage(), size / 2, size / 2, null);
 
 		return new ImageIcon(iconBufferedImage);
 	}
