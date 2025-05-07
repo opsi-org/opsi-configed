@@ -26,7 +26,6 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
@@ -39,6 +38,7 @@ import de.uib.utils.table.gui.ColorTableCellRenderer;
 import javafx.util.Pair;
 
 public class ClientTable extends JTable implements MessagebusListener {
+	private String clientNameTitle;
 
 	private ConfigedMain configedMain;
 
@@ -57,6 +57,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 		// true destroys setSelectedRow etc
 		super.setColumnSelectionAllowed(false);
 
+		clientNameTitle = Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName");
 	}
 
 	/**
@@ -69,7 +70,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 	private List<SortKey> getPrimaryOrderingKeys() {
 		List<SortKey> primaryOrderingKeys = new ArrayList<>();
 		// try getting index of column clientName (it might not be zero, because of new column "platform")
-		int sortIndex = getColumnIndexByTitle(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"));
+		int sortIndex = getColumnIndexByTitle(clientNameTitle);
 		if (sortIndex == -1) {
 			sortIndex = 0;
 		}
@@ -77,13 +78,17 @@ public class ClientTable extends JTable implements MessagebusListener {
 		return primaryOrderingKeys;
 	}
 
+	public String getClientName(int row) {
+		int col = getColumnIndexByTitle(clientNameTitle);
+
+		return (String) getValueAt(row, col);
+	}
+
 	public Set<String> getSelectedSet() {
 		Set<String> result = new HashSet<>(getSelectedRowCount());
 
 		for (int i : getSelectedRows()) {
-			int col = Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
-					.get(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL)) ? 1 : 0;
-			result.add((String) getValueAt(i, col));
+			result.add(getClientName(i));
 		}
 
 		return result;

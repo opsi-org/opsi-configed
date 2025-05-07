@@ -200,7 +200,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 			for (int i = 0; i < clientTable.getRowCount(); i++) {
 				Logging.debug(this, "setSelectedValues checkValue for i ", i, ": ", clientTable.getValueAt(i, 0));
 
-				if (clientsToSelect.contains(clientTable.getValueAt(i, 0))) {
+				if (clientsToSelect.contains(clientTable.getClientName(i))) {
 					selectionModel.addSelectionInterval(i, i);
 					Logging.debug(this, "setSelectedValues add interval ", i);
 				}
