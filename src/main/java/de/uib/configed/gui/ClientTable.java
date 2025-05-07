@@ -102,12 +102,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 	 * @return
 	 */
 	private int getColumnIndexByTitle(String columnTitle) {
-		for (int i = 0; i < getColumnCount(); i++) {
-			if (getColumnName(i).equals(columnTitle)) {
-				return i;
-			}
-		}
-		return -1;
+		return convertColumnIndexToView(getColumn(columnTitle).getModelIndex());
 	}
 
 	public void initSortKeys() {

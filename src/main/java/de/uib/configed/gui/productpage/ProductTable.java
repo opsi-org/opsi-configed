@@ -110,12 +110,7 @@ public class ProductTable extends JTable {
 	 * @return index of the column with the given title or -1 if not found
 	 */
 	private int getColumnIndexByTitle(String columnTitle) {
-		for (int i = 0; i < getColumnCount(); i++) {
-			if (getColumnName(i).equals(columnTitle)) {
-				return i;
-			}
-		}
-		return -1;
+		return convertColumnIndexToView(getColumn(columnTitle).getModelIndex());
 	}
 
 	/**
@@ -171,7 +166,8 @@ public class ProductTable extends JTable {
 	public void setSortedByNames(List<Pair<String, SortOrder>> sortKeyNames) {
 		Logging.debug(this, "sortKeyNames sort key names ", sortKeyNames);
 		if (sortKeyNames == null || sortKeyNames.isEmpty()) {
-			setSortKeys(getPrimaryOrderingKeys()); // use default sort keys
+			// use default sort keys
+			setSortKeys(getPrimaryOrderingKeys());
 		} else {
 			setSortKeys(getSortedKeysByNames(sortKeyNames));
 		}
