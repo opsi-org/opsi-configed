@@ -209,7 +209,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 			return CONFIG_SERVER_SESSION_CHANNEL;
 		}
 		List<String> depotNames = PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
-				.getDepotNamesList();
+				.getAllDepotNamesList();
 		return depotNames.contains(session) ? ("service:depot:" + session + ":terminal") : ("host:" + session);
 	}
 

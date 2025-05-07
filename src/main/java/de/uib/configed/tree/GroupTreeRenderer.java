@@ -30,10 +30,10 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 	private ImageIcon objectIcon;
 	private ImageIcon objectSelectedIcon;
 
-	private ImageIcon groupIcon = Icons.getThemeIcon("groups", 16);
+	private ImageIcon groupIcon = Icons.getThemeIntellijIcon("groups", 16);
 	private ImageIcon groupContainsSelectedIcon = Icons.getThemeFilledIcon("groups", 16);
 
-	private ImageIcon groupOpenIcon = Icons.getThemeIcon("groups_open", 16);
+	private ImageIcon groupOpenIcon = Icons.getThemeIntellijIcon("groups_open", 16);
 	private ImageIcon groupOpenContainsSelectedIcon = Icons.getThemeFilledIcon("groups_open", 16);
 
 	public GroupTreeRenderer(AbstractGroupTree abstractGroupTree) {
@@ -42,10 +42,10 @@ public class GroupTreeRenderer extends DefaultTreeCellRenderer {
 		super.setPreferredSize(Globals.LABEL_SIZE_OF_JTREE);
 
 		if (abstractGroupTree instanceof ClientTree) {
-			objectIcon = Icons.getThemeIcon("desktop", 16);
+			objectIcon = Icons.getThemeIntellijIcon("desktop", 16);
 			objectSelectedIcon = Icons.getThemeFilledIcon("desktop", 16);
 		} else {
-			objectIcon = Icons.getThemeIcon("package", 16);
+			objectIcon = Icons.getThemeIntellijIcon("package", 16);
 			objectSelectedIcon = Icons.getThemeFilledIcon("package", 16);
 		}
 	}

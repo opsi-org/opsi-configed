@@ -5,7 +5,7 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN set -ex; \ 
+RUN set -ex; \
     apt-get update; \
     # Adding non-root user
     groupadd --gid "$USER_GID" "$USERNAME"; \

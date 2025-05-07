@@ -36,6 +36,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -482,5 +484,39 @@ public final class Utils {
 			}
 		};
 		optionPane.addHierarchyListener(listener);
+	}
+
+	public static Boolean toBoolean(Object obj) {
+		if (obj instanceof Boolean bool) {
+			return bool;
+		}
+		if (obj instanceof String) {
+			return Boolean.valueOf(obj.toString());
+		}
+		return false;
+	}
+
+	public static FlatSVGIcon determineIconBasedOnPlatform(String platform, int size) {
+		return switch (platform) {
+		case "macos" -> Icons.getThemeSVGRepoIcon("macos", size);
+		case "windows" -> Icons.getThemeSVGRepoIcon("windows", size);
+		case "linux" -> Icons.getThemeSVGRepoIcon("linux", size);
+		default -> Icons.getThemeIntellijIcon("questionMark", size);
+		};
+	}
+
+	public static FlatSVGIcon determineIconBasedOnDeviceType(String value) {
+		return determineIconBasedOnDeviceType(value, 16);
+	}
+
+	public static FlatSVGIcon determineIconBasedOnDeviceType(String value, int size) {
+		return switch (value) {
+		case "notebook" -> Icons.getThemeSVGRepoIcon("laptop", size);
+		case "desktop" -> Icons.getThemeSVGRepoIcon("desktop", size);
+		case "virtual_machine" -> Icons.getThemeSVGRepoIcon("virtualMachine", size);
+		case "convertible" -> Icons.getThemeSVGRepoIcon("convertible", size);
+		case "other" -> Icons.getThemeIntellijIcon("questionMark", size);
+		default -> Icons.getThemeIntellijIcon("questionMark", size);
+		};
 	}
 }

@@ -144,7 +144,7 @@ public class PackageManagerUninstallParameterDialog {
 			textFieldSelectedDepots.setEditable(false);
 		}
 
-		for (String depot : persistenceController.getHostInfoCollections().getDepotNamesList()) {
+		for (String depot : persistenceController.getHostInfoCollections().getAllDepotNamesList()) {
 			if (isPossibleDepot(depot, selectedProduct)) {
 				Logging.info(this, "taking this depot ", depot);
 				result.add(depot);

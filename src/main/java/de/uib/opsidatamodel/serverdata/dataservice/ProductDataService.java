@@ -290,13 +290,8 @@ public class ProductDataService {
 
 		List<String> attribs = new ArrayList<>();
 
-		for (String key : OpsiPackage.SERVICE_KEYS) {
-			attribs.add(key);
-		}
-
-		for (String scriptKey : ActionRequest.getScriptKeys()) {
-			attribs.add(scriptKey);
-		}
+		attribs.addAll(OpsiPackage.SERVICE_KEYS);
+		attribs.addAll(ActionRequest.getScriptKeys());
 
 		attribs.add(OpsiProductInfo.SERVICE_KEY_USER_LOGIN_SCRIPT);
 		attribs.add(OpsiProductInfo.SERVICE_KEY_PRIORITY);

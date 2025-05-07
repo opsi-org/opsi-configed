@@ -24,6 +24,7 @@ import javax.swing.table.TableRowSorter;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
@@ -34,9 +35,10 @@ import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
+import javafx.util.Pair;
 
 public class ClientTable extends JTable implements MessagebusListener {
-	private List<SortKey> primaryOrderingKeys;
+	private String clientNameTitle;
 
 	private ConfigedMain configedMain;
 
@@ -50,27 +52,122 @@ public class ClientTable extends JTable implements MessagebusListener {
 		super.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		super.setAutoCreateRowSorter(true);
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		super.getTableHeader().setReorderingAllowed(false);
+		//	super.getTableHeader().setReorderingAllowed(false);
 
 		// true destroys setSelectedRow etc
 		super.setColumnSelectionAllowed(false);
 
-		primaryOrderingKeys = new ArrayList<>();
-		primaryOrderingKeys.add(new SortKey(0, SortOrder.ASCENDING));
+		clientNameTitle = Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName");
+	}
+
+	/**
+	 * Returns the default ordering for the table. Tries to get the index of the
+	 * clientName column, if not found, it defaults to 0 (clientName may not be
+	 * the first column)
+	 * 
+	 * @return
+	 */
+	private List<SortKey> getPrimaryOrderingKeys() {
+		List<SortKey> primaryOrderingKeys = new ArrayList<>();
+		// try getting index of column clientName (it might not be zero, because of new column "platform")
+		int sortIndex = getColumnIndexByTitle(clientNameTitle);
+		if (sortIndex == -1) {
+			sortIndex = 0;
+		}
+		primaryOrderingKeys.add(new SortKey(sortIndex, SortOrder.ASCENDING));
+		return primaryOrderingKeys;
+	}
+
+	public String getClientName(int row) {
+		int col = getColumnIndexByTitle(clientNameTitle);
+
+		return (String) getValueAt(row, col);
 	}
 
 	public Set<String> getSelectedSet() {
 		Set<String> result = new HashSet<>(getSelectedRowCount());
 
 		for (int i : getSelectedRows()) {
-			result.add((String) getValueAt(i, 0));
+			result.add(getClientName(i));
 		}
 
 		return result;
 	}
 
+	/**
+	 * Returns the index of the column with the given title. If no column with
+	 * the given title is found, -1 is returned.
+	 * 
+	 * @param columnTitle
+	 * @return
+	 */
+	private int getColumnIndexByTitle(String columnTitle) {
+		try {
+			return convertColumnIndexToView(getColumn(columnTitle).getModelIndex());
+		} catch (IllegalArgumentException e) {
+			Logging.info(this, e, "getColumnIndexByTitle: ", columnTitle, " not found");
+			return -1;
+		}
+	}
+
 	public void initSortKeys() {
-		getRowSorter().setSortKeys(primaryOrderingKeys);
+		Logging.debug("Init Sort Keys");
+		setSortKeys(getPrimaryOrderingKeys());
+	}
+
+	@SuppressWarnings("java:S1452")
+	public List<? extends SortKey> getSortKeys() {
+		return getRowSorter().getSortKeys();
+	}
+
+	public void setSortKeys(List<SortKey> sortKeys) {
+		getRowSorter().setSortKeys(sortKeys);
+	}
+
+	/**
+	 * Returns the column title and sortorder of current sort keys.
+	 * 
+	 * @return List of pairs of column title and sort order
+	 */
+	public List<Pair<String, SortOrder>> getSortedNames() {
+		List<? extends SortKey> saveSortKeys = getSortKeys();
+		Logging.debug(this, "getSortedNames sort keys ");
+		List<Pair<String, SortOrder>> sortKeyNames = new ArrayList<>();
+		for (SortKey sortKey : saveSortKeys) {
+			String columnKey = getColumnName(sortKey.getColumn());
+			Logging.debug("\tColumn index " + sortKey.getColumn(), " key ", columnKey);
+			sortKeyNames.add(new Pair<>(columnKey, sortKey.getSortOrder()));
+		}
+		Logging.debug(this, "getSortedNames sort names ", sortKeyNames);
+		return sortKeyNames;
+	}
+
+	/**
+	 * Get list of SortKey objects (includes indexes) from list of column names
+	 * 
+	 * @param sortKeyNames
+	 * @return
+	 */
+	private List<SortKey> getSortedKeysByNames(List<Pair<String, SortOrder>> sortKeyNames) {
+		List<SortKey> newSortKeys = new ArrayList<>();
+		for (Pair<String, SortOrder> pair : sortKeyNames) {
+			int columnIndex = getColumnIndexByTitle(pair.getKey());
+			if (columnIndex != -1) {
+				newSortKeys.add(new SortKey(columnIndex, pair.getValue()));
+			}
+		}
+		Logging.debug(this, "getSortedKeysByNames new sort keys ", newSortKeys);
+		return newSortKeys;
+	}
+
+	/**
+	 * Set the sort keys of the table by the given list of column names and sort
+	 * orders.
+	 * 
+	 * @param sortKeyNames
+	 */
+	public void setSortedByNames(List<Pair<String, SortOrder>> sortKeyNames) {
+		setSortKeys(getSortedKeysByNames(sortKeyNames));
 	}
 
 	public void updateModel(TableModel tableModel) {
@@ -81,7 +178,42 @@ public class ClientTable extends JTable implements MessagebusListener {
 		tableModel.addTableModelListener(this);
 
 		setModel(tableModel);
-		((TableRowSorter<?>) getRowSorter()).setComparator(0, Comparator.comparing(String::toString));
+		TableRowSorter<?> rowSorter = (TableRowSorter<?>) getRowSorter();
+		// if table has more than 1 column, we need to sort the second column by name
+		if (tableModel.getColumnCount() > 1) {
+			rowSorter.setComparator(1, Comparator.comparing(String::toString));
+		}
+		rowSorter.setComparator(0, stringComparatorIgnoringNullEmpty());
+	}
+
+	/**
+	 * Returns a comparator that sorts string values while always placing null
+	 * or empty strings at the bottom regardless of sort direction.
+	 *
+	 * @param ascending if true, sorts in natural order; if false, in reverse
+	 *                  order.
+	 */
+	@SuppressWarnings("unchecked")
+	private Comparator<Object> stringComparatorIgnoringNullEmpty() {
+		return (Object o1, Object o2) -> {
+			boolean isO1Invalid = (o1 == null || o1.toString().trim().isEmpty());
+			boolean isO2Invalid = (o2 == null || o2.toString().trim().isEmpty());
+
+			if (isO1Invalid && isO2Invalid) {
+				return 0;
+			}
+
+			boolean isAscending = ((TableRowSorter<?>) getRowSorter()).getSortKeys().get(0)
+					.getSortOrder() == SortOrder.ASCENDING;
+
+			if (isO1Invalid) {
+				return isAscending ? 1 : -1;
+			}
+			if (isO2Invalid) {
+				return isAscending ? -1 : 1;
+			}
+			return ((Comparable<Object>) o1).compareTo(o2);
+		};
 	}
 
 	public void moveToFirstSelected() {

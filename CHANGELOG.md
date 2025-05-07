@@ -1,4 +1,4 @@
-## [4.3.x.x] - 2025-xx-xx
+## [4.3.9.0] - 2025-04-17
 ### Fixed
 - Don't call RPC-methods twice when reloading license management
 - Resolved an issue where the UI would freeze during login when connecting to an invalid server.
@@ -11,6 +11,11 @@
 - Make `SavedSearchesDialog` modeless
 - Disallow to add empty property values to properties in multi selection dialog
 - Increase height of an empty value (if any exists in property) in multi selection dialog
+- Save logfiles based on server and user 
+- Improved boolean state handling in cell editor/renderer
+
+### Added
+- Include operating system and device info in client view
 
 ## [4.3.8.2] - 2025-04-03
 ### Changed
@@ -24,7 +29,7 @@
 - Copy element of list selection dialog into extra field on double click
 - Redesign dialog to create configs
 
-### Add
+### Added
 - Show a point in the Health Check icon to show if there is a warning/error in the Health Check
 
 ### Fixed
@@ -1004,7 +1009,7 @@
 - Faster creation of clients with CSV-Import
 - new Logging (standard-loglevel is now 4, performance is now better)
 
-## [4.2.18.1] - 2022-20-18
+## [4.2.18.1] - 2022-10-18
 
 ### Added
 - CSV-Import for creating new clients

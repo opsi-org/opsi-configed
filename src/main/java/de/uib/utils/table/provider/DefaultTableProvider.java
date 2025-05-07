@@ -76,9 +76,7 @@ public class DefaultTableProvider {
 		if (rows != null && rowsCopy != null) {
 			rows.clear();
 
-			for (List<Object> rowCopy : rowsCopy) {
-				rows.add(rowCopy);
-			}
+			rows.addAll(rowsCopy);
 		}
 
 		resetRows();

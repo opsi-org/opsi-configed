@@ -34,9 +34,17 @@ public class HostInfo {
 	public static final String HOST_KEY_KEY = "opsiHostKey";
 	public static final String HOST_TYPE_KEY = "type";
 	public static final String CLIENT_IP_ADDRESS_KEY = "ipAddress";
-	public static final String CLIENT_WAN_CONFIG_KEY = "wanConfig";
-	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "clientShutdownInstall";
+	public static final String CLIENT_WAN_CONFIG_KEY = "wan_vpn";
+	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "install_on_shutdown";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
+	public static final String CLIENT_OS_KEY = "operating_system";
+	public static final String CLIENT_OS_TYPE_KEY = "operating_system_type";
+	public static final String CLIENT_OS_ARCHITECTURE_KEY = "operating_system_architecture";
+	public static final String CLIENT_DEVICE_TYPE_KEY = "device_type";
+	public static final String CLIENT_DEVICE_VENDOR_KEY = "device_vendor";
+	public static final String CLIENT_DEVICE_MODEL_KEY = "device_model";
+	public static final String UEFI_BOOT_KEY = "uefi_boot";
+	public static final String CLIENT_MONITORING_KEY = "monitoring";
 
 	public static final String DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL = "depotId";
 	public static final String CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL = "clientDescription";
@@ -54,15 +62,25 @@ public class HostInfo {
 
 	public static final String CLIENT_CONNECTED_DISPLAY_FIELD_LABEL = "clientConnected";
 	public static final String CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL = "installByShutdown";
-	public static final String HEALTH_CHECK_ACTIVE_FIELD_LABEL = "healthCheckActive";
+	public static final String CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL = "healthCheckActive";
 
-	public static final List<String> ORDERING_DISPLAY_FIELDS = List.of(HOST_NAME_DISPLAY_FIELD_LABEL,
-			CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL,
-			CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, LAST_SEEN_DISPLAY_FIELD_LABEL, CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL,
-			CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL,
-			CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL,
-			CREATED_DISPLAY_FIELD_LABEL, CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL,
-			HEALTH_CHECK_ACTIVE_FIELD_LABEL);
+	public static final String CLIENT_OS_DISPLAY_FIELD_LABEL = "operatingSystem";
+	public static final String CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL = "operatingSystemType";
+	public static final String CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL = "operatingSystemArchitecture";
+	public static final String CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL = "deviceType";
+	public static final String CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL = "deviceVendor";
+	public static final String CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL = "deviceModel";
+
+	public static final List<String> ORDERING_DISPLAY_FIELDS = List.of(CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL,
+			HOST_NAME_DISPLAY_FIELD_LABEL, CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL,
+			CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, CLIENT_CONNECTED_DISPLAY_FIELD_LABEL,
+			LAST_SEEN_DISPLAY_FIELD_LABEL, CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL,
+			CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL,
+			CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, CREATED_DISPLAY_FIELD_LABEL,
+			CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL,
+			CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, CLIENT_OS_DISPLAY_FIELD_LABEL,
+			CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL, CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL,
+			CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL);
 
 	public static final String IS_MASTER_DEPOT_KEY = "isMasterDepot";
 
@@ -89,26 +107,43 @@ public class HostInfo {
 
 	private Boolean clientShutdownInstall;
 
-	public Map<String, Object> getDisplayRowMap0() {
-		Map<String, Object> unordered = new HashMap<>();
+	private String clientOS;
+	private String clientOSType;
+	private String clientOSArchitecture;
+	private String clientDeviceType;
+	private String clientDeviceVendor;
+	private String clientDeviceModel;
+	private Boolean clientMonitoring;
+	private Boolean uefiBoot;
 
-		unordered.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
-		unordered.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientDescription);
-		unordered.put(CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInventoryNumber);
-		unordered.put(LAST_SEEN_DISPLAY_FIELD_LABEL, lastSeen);
+	public Map<String, Object> getDisplayRowMap() {
+		Map<String, Object> displayRowMap = new HashMap<>();
 
-		unordered.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, clientWanConfig);
-		unordered.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, clientIpAddress);
-		unordered.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, clientSystemUUID);
-		unordered.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, clientMacAddress);
-		unordered.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, clientShutdownInstall);
+		displayRowMap.put(CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, clientOSType);
+		displayRowMap.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
+		displayRowMap.put(CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL, clientDescription);
+		displayRowMap.put(CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, clientInventoryNumber);
+		displayRowMap.put(LAST_SEEN_DISPLAY_FIELD_LABEL, lastSeen);
 
-		unordered.put(CREATED_DISPLAY_FIELD_LABEL, created);
-		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
+		displayRowMap.put(CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, clientWanConfig);
+		displayRowMap.put(CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, clientIpAddress);
+		displayRowMap.put(CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, clientSystemUUID);
+		displayRowMap.put(CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, clientMacAddress);
+		displayRowMap.put(CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, clientShutdownInstall);
 
-		Logging.debug(this, "getMap clientName ", clientName, " : ", unordered);
+		displayRowMap.put(CREATED_DISPLAY_FIELD_LABEL, created);
+		displayRowMap.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 
-		return unordered;
+		displayRowMap.put(CLIENT_OS_DISPLAY_FIELD_LABEL, clientOS);
+		displayRowMap.put(CLIENT_OS_ARCHITECTURE_DISPLAY_FIELD_LABEL, clientOSArchitecture);
+		displayRowMap.put(CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL, clientDeviceType);
+		displayRowMap.put(CLIENT_DEVICE_VENDOR_DISPLAY_FIELD_LABEL, clientDeviceVendor);
+		displayRowMap.put(CLIENT_DEVICE_MODEL_DISPLAY_FIELD_LABEL, clientDeviceModel);
+		displayRowMap.put(CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, clientMonitoring);
+
+		Logging.debug(this, "getMap clientName ", clientName, " : ", displayRowMap);
+
+		return displayRowMap;
 	}
 
 	public Map<String, Object> getMap() {
@@ -132,6 +167,15 @@ public class HostInfo {
 		unordered.put(CLIENT_WAN_CONFIG_KEY, clientWanConfig);
 
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
+
+		unordered.put(CLIENT_OS_KEY, clientOS);
+		unordered.put(CLIENT_OS_TYPE_KEY, clientOSType);
+		unordered.put(CLIENT_OS_ARCHITECTURE_KEY, clientOSArchitecture);
+		unordered.put(CLIENT_DEVICE_TYPE_KEY, clientDeviceType);
+		unordered.put(CLIENT_DEVICE_VENDOR_KEY, clientDeviceVendor);
+		unordered.put(CLIENT_DEVICE_MODEL_KEY, clientDeviceModel);
+		unordered.put(CLIENT_MONITORING_KEY, clientMonitoring);
+		unordered.put(UEFI_BOOT_KEY, uefiBoot);
 
 		Logging.debug(this, "getMap clientName ", clientName);
 
@@ -208,6 +252,38 @@ public class HostInfo {
 
 		case CLIENT_SHUTDOWN_INSTALL_KEY:
 			clientShutdownInstall = (Boolean) value;
+			break;
+
+		case CLIENT_OS_KEY:
+			clientOS = "" + value;
+			break;
+
+		case CLIENT_OS_TYPE_KEY:
+			clientOSType = "" + value;
+			break;
+
+		case CLIENT_OS_ARCHITECTURE_KEY:
+			clientOSArchitecture = "" + value;
+			break;
+
+		case CLIENT_DEVICE_TYPE_KEY:
+			clientDeviceType = "" + value;
+			break;
+
+		case CLIENT_DEVICE_VENDOR_KEY:
+			clientDeviceVendor = "" + value;
+			break;
+
+		case CLIENT_DEVICE_MODEL_KEY:
+			clientDeviceModel = "" + value;
+			break;
+
+		case CLIENT_MONITORING_KEY:
+			clientMonitoring = (Boolean) value;
+			break;
+
+		case UEFI_BOOT_KEY:
+			uefiBoot = (Boolean) value;
 			break;
 
 		default:
@@ -306,6 +382,14 @@ public class HostInfo {
 		hostType = showValue((String) pcInfo.get(HOST_TYPE_KEY));
 		created = showValue((String) pcInfo.get(CREATED_KEY));
 		lastSeen = showValue((String) pcInfo.get(LAST_SEEN_KEY));
+		clientOS = showValue((String) pcInfo.get(CLIENT_OS_KEY));
+		clientOSType = showValue((String) pcInfo.get(CLIENT_OS_TYPE_KEY));
+		clientOSArchitecture = showValue((String) pcInfo.get(CLIENT_OS_ARCHITECTURE_KEY));
+		clientDeviceType = showValue((String) pcInfo.get(CLIENT_DEVICE_TYPE_KEY));
+		clientDeviceVendor = showValue((String) pcInfo.get(CLIENT_DEVICE_VENDOR_KEY));
+		clientDeviceModel = showValue((String) pcInfo.get(CLIENT_DEVICE_MODEL_KEY));
+		clientMonitoring = showValue((Boolean) pcInfo.get(CLIENT_MONITORING_KEY));
+		uefiBoot = showValue((Boolean) pcInfo.get(UEFI_BOOT_KEY));
 
 		depotOfClient = showValue((String) pcInfo.get(DEPOT_OF_CLIENT_KEY));
 
@@ -321,6 +405,8 @@ public class HostInfo {
 
 		// save values which could be mixed
 		Boolean clientWanConfigSave = clientWanConfig;
+		Boolean clientMonitoringSave = clientMonitoring;
+		Boolean clientUefiBootSave = uefiBoot;
 		Boolean clientShutdownInstallSave = clientShutdownInstall;
 
 		// empty everything
@@ -330,6 +416,18 @@ public class HostInfo {
 			clientWanConfig = null;
 		} else {
 			clientWanConfig = clientWanConfigSave;
+		}
+
+		if (!secondInfo.clientMonitoring.equals(clientMonitoringSave)) {
+			clientMonitoring = null;
+		} else {
+			clientMonitoring = clientMonitoringSave;
+		}
+
+		if (!secondInfo.uefiBoot.equals(clientUefiBootSave)) {
+			uefiBoot = null;
+		} else {
+			uefiBoot = clientUefiBootSave;
 		}
 
 		if (!secondInfo.clientShutdownInstall.equals(clientShutdownInstallSave)) {
@@ -352,8 +450,13 @@ public class HostInfo {
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientSystemUUID(clientSystemUUID);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMacAddress(clientMacAddress);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientIpAddress(clientIpAddress);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOS(clientOS);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientDeviceVendorAndModel(clientDeviceVendor,
+				clientDeviceModel, clientDeviceType);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientOneTimePasswordText(clientOneTimePassword);
-		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot();
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientMonitoring(clientMonitoring);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setClientPlatform(clientOSType);
+		mainFrame.getClientConfiguration().getClientInfoPanel().setUefiBoot(uefiBoot);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setWANConfig(clientWanConfig);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setShutdownInstall(clientShutdownInstall);
 		mainFrame.getClientConfiguration().getClientInfoPanel().setOpsiHostKey(hostKey);
@@ -520,7 +623,7 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			persistenceController.getConfigDataService().configureInstallByShutdown(client, shutdownInstall);
+			persistenceController.getHostDataService().setInstallOnShutdown(client, shutdownInstall);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SHUTDOWN_INSTALL_KEY,
 					shutdownInstall);
 		}
@@ -543,10 +646,7 @@ public class HostInfo {
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getPersistenceController();
-			if (!(persistenceController.getConfigDataService().setWANConfigs(client, wanStandard))) {
-				Logging.error(this, "wan settings could not be set");
-			}
-
+			persistenceController.getHostDataService().setWanConfig(client, wanStandard);
 			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_WAN_CONFIG_KEY,
 					wanStandard);
 		}
@@ -590,7 +690,7 @@ public class HostInfo {
 		return "(" + clientName + ";" + depotOfClient + ";" + clientDescription + ";" + clientInventoryNumber + ";"
 				+ clientOneTimePassword + ";" + clientNotes + ";" + clientSystemUUID + ";" + clientMacAddress + ";"
 				+ clientIpAddress + ";" + lastSeen + ";" + created + ";" + clientWanConfig + ";" + clientShutdownInstall
-				+ ")";
+				+ ";" + clientOS + ")";
 	}
 
 	public void resetValues() {
@@ -611,5 +711,14 @@ public class HostInfo {
 		clientIpAddress = "";
 		clientWanConfig = false;
 		clientShutdownInstall = false;
+
+		clientOS = "";
+		// unknown icon is used (e.g. multiple selected clients)
+		clientOSType = "<<intern:empty>>";
+		clientOSArchitecture = "";
+		clientDeviceVendor = "";
+		clientDeviceModel = "";
+		// empty text used (e.g. multiple selected clients)
+		clientDeviceType = "<<intern:empty>>";
 	}
 }

@@ -23,7 +23,7 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
-import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -58,7 +58,10 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.ButtonTabComponent;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
+import de.uib.utils.table.gui.DeviceTypeIconTableCellRenderer;
+import de.uib.utils.table.gui.PlatfromIconTableCellRenderer;
 import de.uib.utils.userprefs.UserPreferences;
+import javafx.util.Pair;
 
 public class ConfigedMain {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -262,7 +265,6 @@ public class ConfigedMain {
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllGroupsPD());
 		executor.runInParallel(() -> persistenceController.getGroupDataService().retrieveAllObject2GroupsPD());
 		executor.runInParallel(() -> persistenceController.getProductDataService().retrieveDepotProductPropertiesPD());
-		executor.runInParallel(() -> persistenceController.getHealthDataService().retrieveHostsWithHealthCheck());
 		executor.waitForCompletion();
 
 		ExtraFrameController.reloadDialogs();
@@ -271,9 +273,7 @@ public class ConfigedMain {
 	public void toggleColumn(String column) {
 		boolean visible = persistenceController.getHostDataService().getHostDisplayFields().get(column);
 		persistenceController.getHostDataService().getHostDisplayFields().put(column, !visible);
-
-		setRebuiltClientListTableModel(false, false);
-		clientTablePanel.getClientTable().initSortKeys();
+		setRebuiltClientListTableModel(true, false);
 
 		// We need to make first selected visible again after resetting sortKeys
 		clientTablePanel.getClientTable().moveToFirstSelected();
@@ -388,11 +388,8 @@ public class ConfigedMain {
 
 		if (selectedClients.size() == 1) {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
-			mainFrame.getClientConfiguration().getClientInfoPanel()
-					.updateHealthCheckActiveCheckBoxStatus(selectedClients.get(0));
 		} else {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID("");
-			mainFrame.getClientConfiguration().getClientInfoPanel().updateHealthCheckActiveCheckBoxStatus(null);
 		}
 
 		hostInfo.resetGui();
@@ -412,7 +409,7 @@ public class ConfigedMain {
 
 		Logging.info(this, "updateHostInfo, produce hostInfo  selectedClients.length ", selectedClients.size());
 
-		if (!selectedClients.isEmpty()) {
+		if (!selectedClients.isEmpty() && !pcinfos.isEmpty()) {
 			hostInfo.setValues(pcinfos.get(selectedClients.get(0)).getMap());
 
 			Logging.debug(this, "updateHostInfo, produce hostInfo first selClient ", selectedClients.get(0));
@@ -609,15 +606,13 @@ public class ConfigedMain {
 		Logging.info(this, "buildPclistTableModel host_displayFields ",
 				persistenceController.getHostDataService().getHostDisplayFields());
 
-		Set<Object> hostsWithActiveHealthCheck = persistenceController.getHealthDataService()
-				.getHostsWithActiveHealthCheck();
 		for (String clientId : clientIds) {
 			HostInfo pcinfo = pcinfos.get(clientId);
 			if (pcinfo == null) {
 				pcinfo = new HostInfo();
 			}
 
-			Map<String, Object> rowmap = pcinfo.getDisplayRowMap0();
+			Map<String, Object> rowmap = pcinfo.getDisplayRowMap();
 
 			String sessionValue = "";
 			if (sessionInfo.get(clientId) != null) {
@@ -626,7 +621,6 @@ public class ConfigedMain {
 
 			rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
 			rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, isHostConnected(clientId));
-			rowmap.put(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL, hostsWithActiveHealthCheck.contains(clientId));
 
 			List<Object> rowItems = new ArrayList<>();
 
@@ -708,9 +702,7 @@ public class ConfigedMain {
 	public void setClientsFilteredAndSelected(Set<String> filterIds, Set<String> selectedIds) {
 		clientsFilteredByTree.clear();
 		if (filterIds != null) {
-			for (String filterId : filterIds) {
-				clientsFilteredByTree.add(filterId);
-			}
+			clientsFilteredByTree.addAll(filterIds);
 		}
 		setRebuiltClientListTableModel(true, false, selectedIds);
 	}
@@ -724,11 +716,15 @@ public class ConfigedMain {
 				Icons.getIntellijIcon("checkmark", null), null);
 		BooleanIconTableCellRenderer opsiCheckMarkCellRenderer = new BooleanIconTableCellRenderer(
 				Icons.getIntellijIcon("checkmark", Globals.OPSI_OK), null);
+		PlatfromIconTableCellRenderer platformIconTableCellRenderer = new PlatfromIconTableCellRenderer();
+		DeviceTypeIconTableCellRenderer deviceTypeIconTableCellRenderer = new DeviceTypeIconTableCellRenderer();
 
 		configureColumn(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, opsiCheckMarkCellRenderer);
 		configureColumn(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
 		configureColumn(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
-		configureColumn(HostInfo.HEALTH_CHECK_ACTIVE_FIELD_LABEL, defaultCheckMarkCellRenderer);
+		configureColumn(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL, defaultCheckMarkCellRenderer);
+		configureColumn(HostInfo.CLIENT_OS_TYPE_DISPLAY_FIELD_LABEL, platformIconTableCellRenderer);
+		configureColumn(HostInfo.CLIENT_DEVICE_TYPE_DISPLAY_FIELD_LABEL, deviceTypeIconTableCellRenderer);
 	}
 
 	private void configureColumn(String fieldLabel, TableCellRenderer renderer) {
@@ -764,7 +760,8 @@ public class ConfigedMain {
 				"setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree, Set selectValues)  : ",
 				restoreSortKeys, ", ", rebuildTree, ",  selectValues.size() ", Logging.getSize(selectValues));
 
-		List<? extends SortKey> saveSortKeys = clientTablePanel.getClientTable().getRowSorter().getSortKeys();
+		Logging.info(this, "setRebuiltClientListTableModel save sort keys ");
+		List<Pair<String, SortOrder>> sortKeyNames = clientTablePanel.getClientTable().getSortedNames();
 
 		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected ",
 				clientTablePanel.getClientTable().getSelectedRowCount());
@@ -792,7 +789,7 @@ public class ConfigedMain {
 		setSelectionPanelCols();
 
 		if (restoreSortKeys) {
-			clientTablePanel.getClientTable().getRowSorter().setSortKeys(saveSortKeys);
+			clientTablePanel.getClientTable().setSortedByNames(sortKeyNames);
 		}
 
 		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() ",

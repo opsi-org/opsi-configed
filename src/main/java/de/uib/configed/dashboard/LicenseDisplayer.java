@@ -184,10 +184,7 @@ public class LicenseDisplayer {
 
 		List<MapBasedTableEditItem> updateCollection;
 
-		columnNames = new ArrayList<>();
-		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
-			columnNames.add(key);
-		}
+		columnNames = new ArrayList<>(SWAuditEntry.ID_VARIANTS_COLS);
 
 		updateCollection = new ArrayList<>();
 

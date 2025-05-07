@@ -136,7 +136,7 @@ public class Main {
 
 	private static void parseArgs(CommandLine cmd) {
 		if (cmd.hasOption("d")) {
-			Logging.setLogDirectoryName(cmd.getOptionValue("d"));
+			Logging.setBaseLogDirectoryPath(cmd.getOptionValue("d"));
 		}
 
 		if (cmd.hasOption("loglevel")) {

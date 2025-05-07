@@ -142,7 +142,7 @@ public class PMInstallSettingsPanel extends PMInstallPanel {
 			jTextFieldSelecteddepots.setEditable(false);
 		}
 
-		for (String depot : persistenceController.getHostInfoCollections().getDepotNamesList()) {
+		for (String depot : persistenceController.getHostInfoCollections().getAllDepotNamesList()) {
 			if (persistenceController.getUserRolesConfigDataService().hasDepotPermission(depot)) {
 				result.add(depot);
 			}

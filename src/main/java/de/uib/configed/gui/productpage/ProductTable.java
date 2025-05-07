@@ -24,6 +24,7 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.tree.AbstractGroupTree;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utils.logging.Logging;
+import javafx.util.Pair;
 
 public class ProductTable extends JTable {
 	public ProductTable() {
@@ -45,11 +46,13 @@ public class ProductTable extends JTable {
 
 		clearSelection();
 
+		int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
+
 		if (selectedIDs == null || selectedIDs.isEmpty()) {
 			Logging.info("selectedIds is null or empty");
 		} else {
 			for (int row = 0; row < getRowCount(); row++) {
-				Object productId = getValueAt(row, 0);
+				Object productId = getValueAt(row, col);
 				if (selectedIDs.contains(productId)) {
 					addRowSelectionInterval(row, row);
 				}
@@ -94,12 +97,107 @@ public class ProductTable extends JTable {
 
 	public Set<String> getSelectedIDs() {
 		Set<String> result = new HashSet<>();
+		int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
 
 		for (int selectionElement : getSelectedRows()) {
-			result.add((String) getValueAt(selectionElement, 0));
+			result.add((String) getValueAt(selectionElement, col));
 		}
 
 		return result;
+	}
+
+	/**
+	 * Returns the index of the column with the given title.
+	 * 
+	 * @param columnTitle
+	 * @return index of the column with the given title or -1 if not found
+	 */
+	private int getColumnIndexByTitle(String columnTitle) {
+		try {
+			return convertColumnIndexToView(getColumn(columnTitle).getModelIndex());
+		} catch (IllegalArgumentException e) {
+			Logging.info(this, e, "getColumnIndexByTitle: ", columnTitle, " not found");
+			return -1;
+		}
+	}
+
+	/**
+	 * Returns the column title and sortorder of current sort keys.
+	 * 
+	 * @return List of pairs of column title and sort order
+	 */
+	public List<Pair<String, SortOrder>> getSortedNames() {
+		List<? extends SortKey> saveSortKeys = getSortKeys();
+		if (saveSortKeys == null || saveSortKeys.isEmpty() || getColumnCount() == 0) {
+			Logging.debug(this, "getSortedNames sort keys is null or empty");
+			return Collections.emptyList();
+		}
+		Logging.debug(this, "getSortedNames sort keys ", saveSortKeys);
+		List<Pair<String, SortOrder>> sortKeyNames = new ArrayList<>();
+		for (SortKey sortKey : saveSortKeys) {
+			String columnKey = getColumnName(sortKey.getColumn());
+			Logging.debug("\tColumn index ", sortKey.getColumn(), " columnKey ", columnKey, " sortOrder ",
+					sortKey.getSortOrder());
+			if (columnKey == null || columnKey.isEmpty()) {
+				continue;
+			}
+			sortKeyNames.add(new Pair<>(columnKey, sortKey.getSortOrder()));
+		}
+		Logging.debug(this, "getSortedNames sort names ", sortKeyNames);
+		return sortKeyNames;
+	}
+
+	/**
+	 * Get list of SortKey objects (includes indexes) from list of column names
+	 * 
+	 * @param sortKeyNames
+	 * @return
+	 */
+	private List<SortKey> getSortedKeysByNames(List<Pair<String, SortOrder>> sortKeyNames) {
+		List<SortKey> newSortKeys = new ArrayList<>();
+		for (Pair<String, SortOrder> pair : sortKeyNames) {
+			int columnIndex = getColumnIndexByTitle(pair.getKey());
+			if (columnIndex != -1) {
+				newSortKeys.add(new SortKey(columnIndex, pair.getValue()));
+			}
+		}
+		Logging.debug(this, "getSortedKeysByNames new sort keys ", newSortKeys);
+		return newSortKeys;
+	}
+
+	/**
+	 * Set the sort keys of the table model by the given column names and sort
+	 * orders. Use default sort keys if the list is null or empty.
+	 * 
+	 * @param sortKeyNames
+	 */
+	public void setSortedByNames(List<Pair<String, SortOrder>> sortKeyNames) {
+		Logging.debug(this, "sortKeyNames sort key names ", sortKeyNames);
+		if (sortKeyNames == null || sortKeyNames.isEmpty()) {
+			// use default sort keys
+			setSortKeys(getPrimaryOrderingKeys());
+		} else {
+			setSortKeys(getSortedKeysByNames(sortKeyNames));
+		}
+	}
+
+	/**
+	 * Returns the (default) ordering keys of the table model. Tries to get the
+	 * index of the default column name "productId". If not found, use 0 as
+	 * index.
+	 * 
+	 * @return
+	 */
+	private List<SortKey> getPrimaryOrderingKeys() {
+		Logging.debug(this, "getPrimaryOrderingKeys, use index of productId column or 0");
+		List<SortKey> primaryOrderingKeys = new ArrayList<>();
+		// try getting index of column clientName (it might not be zero, because of new column "platform")
+		int sortIndex = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
+		if (sortIndex == -1) {
+			sortIndex = 0;
+		}
+		primaryOrderingKeys.add(new SortKey(sortIndex, SortOrder.ASCENDING));
+		return primaryOrderingKeys;
 	}
 
 	@SuppressWarnings("java:S1452")
@@ -107,7 +205,7 @@ public class ProductTable extends JTable {
 		if (getRowSorter() != null) {
 			return getRowSorter().getSortKeys();
 		} else {
-			return Collections.singletonList(new SortKey(0, SortOrder.ASCENDING));
+			return getPrimaryOrderingKeys();
 		}
 	}
 

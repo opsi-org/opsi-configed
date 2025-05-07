@@ -29,7 +29,7 @@ public class LeftControlBar extends JToolBar {
 	}
 
 	private void initControlIcons() {
-		JToggleButton jButtonClientsConfiguration = new JToggleButton(Icons.getThemeIcon("desktop", 32));
+		JToggleButton jButtonClientsConfiguration = new JToggleButton(Icons.getThemeIntellijIcon("desktop", 32));
 		jButtonClientsConfiguration.setSelectedIcon(Icons.getSelectedThemeIntelljIcon("desktop", 32));
 		jButtonClientsConfiguration.setToolTipText(Configed.getResourceValue("MainFrame.labelClientsConfiguration"));
 		jButtonClientsConfiguration.setSelected(true);

@@ -55,4 +55,3 @@ understandable.
 This project is licensed under the [AGPL-3.0 License](LICENSE). By contributing
 to this project, you agree that your contributions will be licensed under the
 same license.
-

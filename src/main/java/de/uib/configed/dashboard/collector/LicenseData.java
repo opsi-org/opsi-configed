@@ -81,11 +81,7 @@ public final class LicenseData {
 		}
 
 		for (Entry<String, NavigableSet<String>> entry : expiredLicenseContracts.entrySet()) {
-			NavigableSet<String> expiredLicenseContractSet = entry.getValue();
-
-			for (String expiredLicense : expiredLicenseContractSet) {
-				expiredLicenses.add(expiredLicense);
-			}
+			expiredLicenses.addAll(entry.getValue());
 		}
 	}
 
