@@ -46,11 +46,13 @@ public class ProductTable extends JTable {
 
 		clearSelection();
 
+		int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
+
 		if (selectedIDs == null || selectedIDs.isEmpty()) {
 			Logging.info("selectedIds is null or empty");
 		} else {
 			for (int row = 0; row < getRowCount(); row++) {
-				Object productId = getValueAt(row, 0);
+				Object productId = getValueAt(row, col);
 				if (selectedIDs.contains(productId)) {
 					addRowSelectionInterval(row, row);
 				}
@@ -95,9 +97,10 @@ public class ProductTable extends JTable {
 
 	public Set<String> getSelectedIDs() {
 		Set<String> result = new HashSet<>();
+		int col = getColumnIndexByTitle(Configed.getResourceValue("InstallationStateTableModel.productId"));
 
 		for (int selectionElement : getSelectedRows()) {
-			result.add((String) getValueAt(selectionElement, 0));
+			result.add((String) getValueAt(selectionElement, col));
 		}
 
 		return result;
@@ -110,12 +113,12 @@ public class ProductTable extends JTable {
 	 * @return index of the column with the given title or -1 if not found
 	 */
 	private int getColumnIndexByTitle(String columnTitle) {
-		for (int i = 0; i < getColumnCount(); i++) {
-			if (getColumnName(i).equals(columnTitle)) {
-				return i;
-			}
+		try {
+			return convertColumnIndexToView(getColumn(columnTitle).getModelIndex());
+		} catch (IllegalArgumentException e) {
+			Logging.info(this, e, "getColumnIndexByTitle: ", columnTitle, " not found");
+			return -1;
 		}
-		return -1;
 	}
 
 	/**
@@ -171,7 +174,8 @@ public class ProductTable extends JTable {
 	public void setSortedByNames(List<Pair<String, SortOrder>> sortKeyNames) {
 		Logging.debug(this, "sortKeyNames sort key names ", sortKeyNames);
 		if (sortKeyNames == null || sortKeyNames.isEmpty()) {
-			setSortKeys(getPrimaryOrderingKeys()); // use default sort keys
+			// use default sort keys
+			setSortKeys(getPrimaryOrderingKeys());
 		} else {
 			setSortKeys(getSortedKeysByNames(sortKeyNames));
 		}
