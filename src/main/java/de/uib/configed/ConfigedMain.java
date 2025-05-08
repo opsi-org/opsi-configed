@@ -243,6 +243,8 @@ public class ConfigedMain {
 		Messagebus.getInstance().getWebSocket().registerListener(connectedHostsManager);
 		Messagebus.getInstance().getWebSocket().registerListener(mainFrame.getHostsStatusPanel());
 		Messagebus.getInstance().getWebSocket().registerListener(clientTablePanel.getClientTable());
+		Messagebus.getInstance().getWebSocket()
+				.registerListener(mainFrame.getClientConfiguration().getProductPageManager());
 	}
 
 	public ClientSearch getClientSearch() {
