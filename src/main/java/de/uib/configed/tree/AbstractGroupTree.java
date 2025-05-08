@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 
 import javax.swing.DropMode;
 import javax.swing.GroupLayout;
@@ -257,24 +258,31 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 	public Set<String> collectParentIDs(Collection<String> elementIds) {
 		Set<String> result = new HashSet<>();
-
-		recursivelyCollectParentIDs(result, rootNode, elementIds);
-
+		recursivelyCollectParentIDs(rootNode, elementIds, (id, path) -> result.addAll(path));
 		return result;
 	}
 
-	private static void recursivelyCollectParentIDs(Set<String> allNodes, DefaultMutableTreeNode node,
-			Collection<String> nodeIds) {
+	public Map<String, Set<String>> collectAggregatedParentIDs(Collection<String> elementIds) {
+		Map<String, Set<String>> result = new HashMap<>();
+		recursivelyCollectParentIDs(rootNode, elementIds,
+				(id, path) -> result.computeIfAbsent(id, k -> new HashSet<>()).addAll(path));
+		return result;
+	}
+
+	private static void recursivelyCollectParentIDs(DefaultMutableTreeNode node, Collection<String> nodeIds,
+			BiConsumer<String, List<String>> onMatch) {
 		Enumeration<TreeNode> children = node.children();
 
 		while (children.hasMoreElements()) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) children.nextElement();
+			String childId = child.toString();
 
-			if (nodeIds.contains(child.toString())) {
-				allNodes.addAll(Arrays.stream(node.getPath()).map(Object::toString).toList());
+			if (nodeIds.contains(childId)) {
+				List<String> path = Arrays.stream(child.getPath()).map(Object::toString).toList();
+				onMatch.accept(childId, path);
 			}
 
-			recursivelyCollectParentIDs(allNodes, child, nodeIds);
+			recursivelyCollectParentIDs(child, nodeIds, onMatch);
 		}
 	}
 
