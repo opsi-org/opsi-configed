@@ -6,6 +6,7 @@
 
 package de.uib.configed;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,10 @@ public class CopyClient {
 	private String newIpAddress;
 	private String newSystemUUID;
 	private String newMacAddress;
+
+	public enum CopyOption {
+		GROUPS, PRODUCTS, PRODUCT_PROPERTIES, CONFIG_STATES
+	}
 
 	/**
 	 * Creates {@link CopyClient} object with provided information.
@@ -81,13 +86,21 @@ public class CopyClient {
 	 * Copies provided client, by creating it and copying client's groups,
 	 * products, product's properties and config states.
 	 */
-	public void copy() {
+	public void copy(Collection<CopyOption> options) {
 		Logging.debug("Copy client: ", clientToCopy, " -> ", newClientNameWithDomain);
 		copyClient();
-		copyGroups();
-		copyProducts();
-		copyProductProperties();
-		copyConfigStates();
+		if (options.contains(CopyOption.GROUPS)) {
+			copyGroups();
+		}
+		if (options.contains(CopyOption.PRODUCTS)) {
+			copyProducts();
+		}
+		if (options.contains(CopyOption.PRODUCT_PROPERTIES)) {
+			copyProductProperties();
+		}
+		if (options.contains(CopyOption.CONFIG_STATES)) {
+			copyConfigStates();
+		}
 	}
 
 	private void copyClient() {
