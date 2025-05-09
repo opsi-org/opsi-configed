@@ -36,7 +36,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateManager;
@@ -396,9 +395,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					Logging.warning(this, "Encountered unhandled connection state: ", getConnectionState());
 				}
 			} catch (SocketTimeoutException ste) {
-				Logging.info(this, ste, "Timeout reached");
-				ConnectionErrorReporter.getInstance().notify(Configed.getResourceValue("LoginDialog.timeoutReached"),
-						ConnectionErrorType.TIMEOUT_ERROR);
+				Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
+						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
+				setConnectionState(new ConnectionState(ConnectionState.TIMEOUT));
 				return new HashMap<>();
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
@@ -459,9 +458,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				addHeaderFieldsToMap(connection, responseHeader);
 				Logging.debug(this, "Connection state after communication: ", getConnectionState());
 			} catch (SocketTimeoutException ste) {
-				Logging.info(this, ste, "Timeout reached");
-				ConnectionErrorReporter.getInstance().notify(Configed.getResourceValue("LoginDialog.timeoutReached"),
-						ConnectionErrorType.TIMEOUT_ERROR);
+				Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
+						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
+				setConnectionState(new ConnectionState(ConnectionState.TIMEOUT));
 				return new HashMap<>();
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");

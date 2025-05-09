@@ -67,7 +67,7 @@ public final class ConnectionErrorReporter {
 		case FAILED_CERTIFICATE_VALIDATION_ERROR:
 			displayFailedCertificateValidationDialog(message);
 			break;
-		case FAILED_CERTIFICATE_DOWNLOAD_ERROR, INVALID_HOSTNAME_ERROR, TIMEOUT_ERROR:
+		case FAILED_CERTIFICATE_DOWNLOAD_ERROR, INVALID_HOSTNAME_ERROR, TIMEOUT_ERROR, GENERAL_ERROR:
 			displayGeneralDialog(message);
 			break;
 		case MFA_ERROR:
