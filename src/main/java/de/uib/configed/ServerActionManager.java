@@ -250,23 +250,15 @@ public final class ServerActionManager {
 		EnumSet<CopyClient.CopyOption> options = EnumSet.allOf(CopyClient.CopyOption.class);
 
 		JLabel label = new JLabel(Configed.getResourceValue("ConfigedMain.chooseOptionsToCopy"));
-		JCheckBox copyGroups = new JCheckBox(Configed.getResourceValue("ConfigedMain.groups.option"));
-		copyGroups.setSelected(true);
-		copyGroups.addActionListener(
-				event -> updateOptions(options, CopyClient.CopyOption.GROUPS, copyGroups.isSelected()));
-		JCheckBox copyProducts = new JCheckBox(Configed.getResourceValue("ConfigedMain.products.option"));
-		copyProducts.setSelected(true);
-		copyProducts.addActionListener(
-				event -> updateOptions(options, CopyClient.CopyOption.PRODUCTS, copyProducts.isSelected()));
-		JCheckBox copyProductProperties = new JCheckBox(
-				Configed.getResourceValue("ConfigedMain.productProperties.option"));
-		copyProductProperties.setSelected(true);
-		copyProductProperties.addActionListener(event -> updateOptions(options,
-				CopyClient.CopyOption.PRODUCT_PROPERTIES, copyProductProperties.isSelected()));
-		JCheckBox copyConfigs = new JCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"));
-		copyConfigs.setSelected(true);
-		copyConfigs.addActionListener(
-				event -> updateOptions(options, CopyClient.CopyOption.CONFIG_STATES, copyConfigs.isSelected()));
+		JCheckBox copyGroups = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.groups.option"), options,
+				CopyClient.CopyOption.GROUPS);
+		JCheckBox copyProducts = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.products.option"),
+				options, CopyClient.CopyOption.PRODUCTS);
+		JCheckBox copyProductProperties = createOptionCheckBox(
+				Configed.getResourceValue("ConfigedMain.productProperties.option"), options,
+				CopyClient.CopyOption.PRODUCT_PROPERTIES);
+		JCheckBox copyConfigs = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"), options,
+				CopyClient.CopyOption.CONFIG_STATES);
 
 		JPanel panel = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(panel);
@@ -280,10 +272,10 @@ public final class ServerActionManager {
 		messageText.append(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
 
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(jTextHostname)
-				.addGap(Globals.GAP_SIZE).addComponent(copyGroups).addComponent(label).addComponent(copyProducts)
+				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
 				.addComponent(copyProductProperties).addComponent(copyConfigs));
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTextHostname)
-				.addGap(Globals.GAP_SIZE).addComponent(copyGroups).addComponent(label).addComponent(copyProducts)
+				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
 				.addComponent(copyProductProperties).addComponent(copyConfigs));
 
 		Object[] message = new Object[] { messageText.toString(), panel };
@@ -322,6 +314,14 @@ public final class ServerActionManager {
 			}
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 		}
+	}
+
+	private static JCheckBox createOptionCheckBox(String title, EnumSet<CopyClient.CopyOption> options,
+			CopyClient.CopyOption option) {
+		JCheckBox optionCheckBox = new JCheckBox(title);
+		optionCheckBox.setSelected(true);
+		optionCheckBox.addActionListener(event -> updateOptions(options, option, optionCheckBox.isSelected()));
+		return optionCheckBox;
 	}
 
 	private static void updateOptions(Set<CopyClient.CopyOption> options, CopyClient.CopyOption option,
