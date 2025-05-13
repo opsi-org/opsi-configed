@@ -12,6 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -33,6 +35,9 @@ public final class UserPreferences {
 			try {
 				if (!propertiesFile.createNewFile()) {
 					Logging.warning("error creating saved states file");
+				} else {
+					Logging.info("migrating user preferences");
+					migrateUserPreferences();
 				}
 			} catch (IOException e) {
 				Logging.warning(e, "error creating saved states file");
@@ -51,10 +56,44 @@ public final class UserPreferences {
 	private UserPreferences() {
 	}
 
+	public static void migrateUserPreferences() {
+		Preferences prefs = Preferences.userNodeForPackage(UserPreferences.class);
+		Properties props = new Properties();
+
+		try {
+			String[] keys = prefs.keys();
+			for (String key : keys) {
+				String value = prefs.get(key, "");
+				props.setProperty(key, value);
+			}
+
+			try (FileOutputStream out = new FileOutputStream(propertiesFile)) {
+				props.store(out, "migrated user preferences");
+			}
+
+			Logging.info("migration successful!");
+			deleteOldUserPreferences(prefs);
+		} catch (IOException ioe) {
+			Logging.error("error occured while migrating user preferences " + ioe);
+		} catch (BackingStoreException bse) {
+			Logging.error("error occured while contacting backing store " + bse);
+		}
+	}
+
+	private static void deleteOldUserPreferences(Preferences oldPreferences) {
+		try {
+			Logging.info("deleting old user preferences");
+			oldPreferences.removeNode();
+			oldPreferences.flush();
+			Logging.info("succesfully deleted old user preferences");
+		} catch (BackingStoreException bse) {
+			Logging.error("error occured while contacting backing store " + bse);
+		}
+	}
+
 	public static void set(String key, String value) {
 		properties.put(key, value);
 		store();
-		remove("test");
 	}
 
 	public static String get(String key) {
