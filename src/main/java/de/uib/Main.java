@@ -29,7 +29,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utils.FeatureActivationChecker;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
@@ -187,7 +186,6 @@ public class Main {
 			}
 		}
 
-		OpsiMethodCall.report();
 		Logging.info("regularly exiting app with code ", exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {
