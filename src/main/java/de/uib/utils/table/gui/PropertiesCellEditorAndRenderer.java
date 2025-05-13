@@ -276,26 +276,26 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 	private static boolean resolveBooleanState(Object value, String key) {
 		Object firstVal = ((List<?>) value).get(0);
 		boolean boolState;
-		Logging.debug(
-				"firstVal = [" + firstVal + "], type = " + (firstVal != null ? firstVal.getClass().getName() : "null"));
+		Logging.debug("firstVal = [", firstVal, "], type = ",
+				(firstVal != null ? firstVal.getClass().getName() : "null"));
 		if (firstVal instanceof Boolean boolVal) {
-			Logging.debug("evaluating key: '" + key + "' with value: '" + boolVal + "' (type: Bool)");
+			Logging.debug("evaluating key: '", key, "' with value: '", boolVal, "' (type: Bool)");
 			boolState = boolVal;
 		} else if (firstVal instanceof String strVal) {
-			Logging.debug("evaluating key: '" + key + "' with value: '" + strVal + "' (type: String)");
+			Logging.debug("evaluating key: '", key, "' with value: '", strVal, "' (type: String)");
 			String normalized = strVal.trim().toLowerCase(Locale.ROOT);
 			if ("true".equals(normalized)) {
 				boolState = true;
 			} else if ("false".equals(normalized)) {
 				boolState = false;
 			} else {
-				Logging.debug("value for key '" + key
-						+ "' is not a recognizable Boolean. Attempting to resolve via config options.");
+				Logging.debug("value for key '", key,
+						"' is not a recognizable Boolean. Attempting to resolve via config options.");
 				boolState = getDefaultBoolean(key, firstVal);
 			}
 		} else {
-			Logging.debug("value for key '" + key
-					+ "' is not a recognizable Boolean. Attempting to resolve via config options.");
+			Logging.debug("value for key '", key,
+					"' is not a recognizable Boolean. Attempting to resolve via config options.");
 			boolState = getDefaultBoolean(key, firstVal);
 		}
 		return boolState;
@@ -306,11 +306,10 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		Map<String, ConfigOption> configOptions = PersistenceControllerFactory.getPersistenceController()
 				.getConfigDataService().getConfigOptionsPD();
 		if (configOptions.containsKey(key)) {
-			Logging.debug("using default config value for key: " + key);
+			Logging.debug("using default config value for key: ", key);
 			return (Boolean) configOptions.get(key).getDefaultValues().get(0);
 		} else {
-			Logging.debug(
-					"config key '" + key + "' not found. Using fallback: false (original input = " + firstVal + ")");
+			Logging.debug("config key '", key, "' not found. Using fallback: false (original input = ", firstVal, ")");
 			return false;
 		}
 	}
