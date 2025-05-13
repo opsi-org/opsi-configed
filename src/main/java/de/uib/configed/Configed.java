@@ -27,7 +27,6 @@ import de.uib.configed.clientselection.SavedSearchQuery;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -250,18 +249,6 @@ public final class Configed {
 			}
 			if (canonicalPath != null) {
 				savedStatesLocationName = canonicalPath;
-			}
-		}
-
-		if (cmd.hasOption("collect_queries_until_no")) {
-			String no = cmd.getOptionValue("collect_queries_until_no");
-
-			try {
-				OpsiMethodCall.setMaxCollectSize(Integer.parseInt(no));
-			} catch (NumberFormatException ex) {
-				Logging.debug("  \n\nArgument >", no, "< has no integer format");
-				Main.showHelp();
-				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
 		}
 

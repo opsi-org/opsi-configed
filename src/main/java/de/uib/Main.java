@@ -84,8 +84,6 @@ public class Main {
 		options.getOption("qg").setArgs(2);
 		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
-		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
-				+ OpsiMethodCall.getMaxCollecSize() + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
 		options.addOption(null, "localizationfile", true,
 				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
 		options.addOption(null, "localizationstrings", false,
