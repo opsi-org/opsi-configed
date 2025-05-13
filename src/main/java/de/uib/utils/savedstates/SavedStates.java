@@ -53,7 +53,7 @@ public class SavedStates {
 	}
 
 	public void store() throws IOException {
-		store("");
+		store(null);
 	}
 
 	public void store(String comments) throws IOException {
