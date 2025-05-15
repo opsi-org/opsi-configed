@@ -104,34 +104,34 @@ public final class Configed {
 
 		LicensingInfoMap.requestRefresh();
 
-		ConfigedMain configedMain = new ConfigedMain();
+		SwingUtilities.invokeLater(Configed::initLoginDialog);
+	}
 
-		SwingUtilities.invokeLater(() -> {
-			Logging.debug("init");
+	private static void initLoginDialog() {
+		Logging.debug("init");
 
-			// we start with a language
+		// we start with a language
 
-			InstallationStateTableModel.restartColumnDict();
+		InstallationStateTableModel.restartColumnDict();
 
-			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-					.getPersistenceController();
-			String host = paramHost;
-			String user = paramUser;
-			String password = paramPassword;
-			String otp = paramOTP;
-			boolean useSSO = paramSSO;
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+		String host = paramHost;
+		String user = paramUser;
+		String password = paramPassword;
+		String otp = paramOTP;
+		boolean useSSO = paramSSO;
 
-			if (persistenceController != null) {
-				ServerFacade exec = persistenceController.getExecutioner();
-				host = exec.getHost();
-				user = exec.getUsername();
-				password = exec.getPassword();
-				otp = exec.getOTP();
-				useSSO = exec.useSSO();
-			}
+		if (persistenceController != null) {
+			ServerFacade exec = persistenceController.getExecutioner();
+			host = exec.getHost();
+			user = exec.getUsername();
+			password = exec.getPassword();
+			otp = exec.getOTP();
+			useSSO = exec.useSSO();
+		}
 
-			ConfigedMain.setupLoginDialog(configedMain, host, user, password, otp, useSSO);
-		});
+		ConfigedMain.setupLoginDialog(host, user, password, otp, useSSO);
 	}
 
 	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP,

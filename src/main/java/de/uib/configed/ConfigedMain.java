@@ -474,10 +474,9 @@ public class ConfigedMain {
 	}
 
 	// returns true if we have a PersistenceController and are connected
-	public static void setupLoginDialog(ConfigedMain configedMain, String host, String user, String password,
-			String otp, boolean useSSO) {
+	public static void setupLoginDialog(String host, String user, String password, String otp, boolean useSSO) {
 		Logging.debug(" create password dialog ");
-		loginDialog = new LoginDialog(configedMain);
+		loginDialog = new LoginDialog();
 
 		if (host != null && !host.isEmpty()) {
 			loginDialog.setHost(host);

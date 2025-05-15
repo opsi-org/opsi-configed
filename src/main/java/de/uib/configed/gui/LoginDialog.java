@@ -41,8 +41,6 @@ import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.userprefs.UserPreferences;
 
 public class LoginDialog extends JFrame implements KeyListener {
-	private ConfigedMain configedMain;
-
 	private GlassPane glassPane;
 
 	private JLabel jLabelTitle;
@@ -79,9 +77,9 @@ public class LoginDialog extends JFrame implements KeyListener {
 		}
 	};
 
-	public LoginDialog(ConfigedMain configedMain) {
+	public LoginDialog() {
 		super();
-		this.configedMain = configedMain;
+
 		initGuiElements();
 		setupLayout();
 		setServers();
@@ -215,7 +213,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		jButtonSSO.addActionListener(actionEvent -> tryConnecting(true));
 	}
 
-	private boolean wasSuccessfullyAuthenticated() {
+	private static boolean wasSuccessfullyAuthenticated() {
 		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 				.getPersistenceController();
 		if (persistenceController != null) {
@@ -399,8 +397,8 @@ public class LoginDialog extends JFrame implements KeyListener {
 		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());
 		Logging.info(this, "starting thread");
 
-		new LoginThread(this, configedMain, fieldHost.getSelectedItem(), user, passwordField.getPassword(),
-				fieldOTP.getPassword(), useSSO).start();
+		new LoginThread(this, fieldHost.getSelectedItem(), user, passwordField.getPassword(), fieldOTP.getPassword(),
+				useSSO).start();
 	}
 
 	private static void endProgram() {

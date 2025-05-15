@@ -24,7 +24,6 @@ import de.uib.utils.logging.Logging;
  */
 public class LoginThread extends Thread {
 	private LoginDialog loginDialog;
-	private ConfigedMain configedMain;
 	private Object selectedHost;
 	private String user;
 	private char[] password;
@@ -33,10 +32,9 @@ public class LoginThread extends Thread {
 
 	private OpsiServiceNOMPersistenceController persistenceController;
 
-	public LoginThread(LoginDialog loginDialog, ConfigedMain configedMain, Object selectedHost, String user,
-			char[] password, char[] otp, boolean useSSO) {
+	public LoginThread(LoginDialog loginDialog, Object selectedHost, String user, char[] password, char[] otp,
+			boolean useSSO) {
 		this.loginDialog = loginDialog;
-		this.configedMain = configedMain;
 		this.selectedHost = selectedHost;
 		this.user = user;
 		this.password = password;
@@ -78,6 +76,8 @@ public class LoginThread extends Thread {
 				loginDialog.setVisible(true);
 				loginDialog.toFront();
 			}
+
+			ConfigedMain configedMain = new ConfigedMain();
 			configedMain.setPersistenceController(persistenceController);
 			configedMain.loadDataAndGo();
 		} else {

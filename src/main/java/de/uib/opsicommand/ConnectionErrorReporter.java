@@ -144,36 +144,41 @@ public final class ConnectionErrorReporter {
 
 		PersistenceControllerFactory.getPersistenceController().getExecutioner().resetOTPWaiter();
 
-		displayConfirmDialog(
+		displayConfirmDialogInEventDispatchThread(
 				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },
 				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"),
 				() -> ConfigedMain.getMainFrame().reconnectOTP(new String(otpField.getPassword())),
-				() -> SwingUtilities.invokeLater(() -> displayCancelConfigedDialog()));
+				() -> SwingUtilities.invokeLater(this::displayCancelConfigedDialog));
 	}
 
 	private void displayCancelConfigedDialog() {
-		displayConfirmDialog(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
+		displayConfirmDialogInEventDispatchThread(
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
 				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"),
-				() -> Main.endApp(Main.NO_ERROR), () -> SwingUtilities.invokeLater(() -> displayMFADialog()));
+				() -> Main.endApp(Main.NO_ERROR), () -> SwingUtilities.invokeLater(this::displayMFADialog));
 	}
 
-	private void displayConfirmDialog(Object message, String title, Runnable onOK, Runnable onCancel) {
+	private void displayConfirmDialogInEventDispatchThread(Object message, String title, Runnable onOK,
+			Runnable onCancel) {
 		if (!dialogOpened.compareAndSet(false, true)) {
 			return;
 		}
-		runOnEventDispatchThread(() -> {
-			try {
-				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message, title,
-						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-				if (answer == JOptionPane.OK_OPTION) {
-					onOK.run();
-				} else {
-					onCancel.run();
-				}
-			} finally {
-				dialogOpened.set(false);
+
+		runOnEventDispatchThread(() -> showConfirmDialog(message, title, onOK, onCancel));
+	}
+
+	private static void showConfirmDialog(Object message, String title, Runnable onOK, Runnable onCancel) {
+		try {
+			int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message, title,
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			if (answer == JOptionPane.OK_OPTION) {
+				onOK.run();
+			} else {
+				onCancel.run();
 			}
-		});
+		} finally {
+			dialogOpened.set(false);
+		}
 	}
 
 	/**
