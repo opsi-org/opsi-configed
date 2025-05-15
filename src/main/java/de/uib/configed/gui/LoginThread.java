@@ -8,10 +8,10 @@ package de.uib.configed.gui;
 
 import java.text.MessageFormat;
 
-import javax.swing.JOptionPane;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.opsicommand.ConnectionErrorReporter;
+import de.uib.opsicommand.ConnectionErrorType;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.serverdata.CacheManager;
@@ -84,19 +84,25 @@ public class LoginThread extends Thread {
 			// Clear cache
 			CacheManager.getInstance().clearAllCachedData();
 			// return to Passwordfield
-			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
+			ConnectionState connectionState = PersistenceControllerFactory.getConnectionState();
+			if (connectionState.getState() == ConnectionState.INTERRUPTED) {
 				// return to password dialog
 				Logging.info(this, "interrupted");
 			} else {
 				Logging.info(this, "not connected, timeout or not authorized. state: ",
 						PersistenceControllerFactory.getConnectionState().getState());
-				Logging.info(this, "serverVersion ", ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
-
+				Logging.info(this,
+						ServerFacade.getOpsiServerVersionRetriever() != null
+								? ("serverVersion " + ServerFacade.getOpsiServerVersionRetriever().getServerVersion())
+								: "could not retrieve server version");
 				String message;
+				ConnectionErrorType errorType = ConnectionErrorType.GENERAL_ERROR;
 
-				if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.TIMEOUT) {
+				if (connectionState.getState() == ConnectionState.TIMEOUT) {
 					message = Configed.getResourceValue("LoginDialog.timeoutReached");
-				} else if (!ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
+					errorType = ConnectionErrorType.TIMEOUT_ERROR;
+				} else if (ServerFacade.getOpsiServerVersionRetriever() != null
+						&& !ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
 					message = Configed.getResourceValue("LoginDialog.oldServerVersion");
 				} else {
 					message = new MessageFormat(
@@ -104,9 +110,7 @@ public class LoginThread extends Thread {
 									new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() });
 				}
 
-				JOptionPane.showMessageDialog(loginDialog, message,
-						Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.title"),
-						JOptionPane.ERROR_MESSAGE);
+				ConnectionErrorReporter.getInstance().notify(message, errorType);
 			}
 
 			loginDialog.returnToLogin();

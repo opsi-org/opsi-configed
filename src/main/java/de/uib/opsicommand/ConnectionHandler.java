@@ -24,6 +24,7 @@ import de.uib.utils.logging.Logging;
 
 public class ConnectionHandler {
 	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET" };
+	private static final int DEFAULT_READ_TIMEOUT_MS = 60_000;
 
 	private URL serviceURL;
 	private Map<String, String> requestProperties;
@@ -161,7 +162,7 @@ public class ConnectionHandler {
 		try {
 			connection = (HttpsURLConnection) serviceURL.openConnection();
 			connection.setConnectTimeout(timeout);
-			connection.setReadTimeout(timeout);
+			connection.setReadTimeout(DEFAULT_READ_TIMEOUT_MS);
 			connection.setDoOutput(doOutput);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
@@ -197,13 +198,16 @@ public class ConnectionHandler {
 			// We need to reset the certificate validators when the validation failed
 			// so that new validators can be created on the next try
 			CertificateValidatorFactory.resetCertificateValidators();
-		} catch (IOException ex) {
-			if (ex instanceof SocketTimeoutException) {
-				conStat = new ConnectionState(ConnectionState.TIMEOUT, ex.toString());
-				Logging.warning(ex, "Timeout exception reached, we have a set timeout of",
-						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
+		} catch (SocketTimeoutException ste) {
+			conStat = new ConnectionState(ConnectionState.TIMEOUT, ste.toString());
+			Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
+					System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
 
-			} else if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
+			// We need to reset the certificate validators when the validation failed
+			// so that new validators can be created on the next try
+			CertificateValidatorFactory.resetCertificateValidators();
+		} catch (IOException ex) {
+			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				conStat = reporter.getConnectionState();
 			} else {
 				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());

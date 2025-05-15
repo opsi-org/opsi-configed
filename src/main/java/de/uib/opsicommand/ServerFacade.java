@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -102,7 +103,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * @param password to use for the authentication.
 	 */
 	public ServerFacade(String host, String username, String password, String otp) {
-		Logging.warning("ServerFacade ", host, " username ", username, " otp ", otp, " sessionId ", sessionId);
 		if (host == null || username == null || password == null) {
 			throw new IllegalArgumentException("All or some parameters are null");
 		}
@@ -398,6 +398,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				} else {
 					Logging.warning(this, "Encountered unhandled connection state: ", getConnectionState());
 				}
+			} catch (SocketTimeoutException ste) {
+				Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
+						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
+				setConnectionState(new ConnectionState(ConnectionState.TIMEOUT));
+				return new HashMap<>();
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
 			}
@@ -456,6 +461,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				result = retrieveResponseBasedOnContentTypeToObject(connection.getContentType(), stream, resultkey);
 				addHeaderFieldsToMap(connection, responseHeader);
 				Logging.debug(this, "Connection state after communication: ", getConnectionState());
+			} catch (SocketTimeoutException ste) {
+				Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
+						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
+				setConnectionState(new ConnectionState(ConnectionState.TIMEOUT));
+				return new HashMap<>();
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
 				return new HashMap<>();

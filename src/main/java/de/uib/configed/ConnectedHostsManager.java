@@ -12,6 +12,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import de.uib.configed.gui.ClientTable;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
@@ -52,13 +53,12 @@ public class ConnectedHostsManager implements MessagebusListener {
 		AbstractTableModel model = configedMain.getClientTablePanel().getTableModel();
 
 		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+		ClientTable clientTable = configedMain.getClientTablePanel().getClientTable();
 
-		for (int row = 0; row < model.getRowCount(); row++) {
-			if (model.getValueAt(row, 0).equals(clientName)) {
-				model.setValueAt(connectedHostsByMessagebus.contains(clientName), row, col);
-
+		for (int row = 0; row < clientTable.getRowCount(); row++) {
+			if (clientTable.getClientName(row).equals(clientName)) {
+				clientTable.setValueAt(connectedHostsByMessagebus.contains(clientName), row, col);
 				model.fireTableCellUpdated(row, col);
-
 				Logging.info(this, "connectionStatus for client ", clientName, " updated in table");
 				return;
 			}

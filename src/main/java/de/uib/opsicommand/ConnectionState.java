@@ -79,6 +79,7 @@ public final class ConnectionState {
 		case RETRY_CONNECTION -> "Reconnecting";
 		case UNAUTHORIZED -> "Unauthorized";
 		case ERROR -> "Error";
+		case TIMEOUT -> "Timeout";
 		default -> "UNKNOWN State";
 		};
 	}

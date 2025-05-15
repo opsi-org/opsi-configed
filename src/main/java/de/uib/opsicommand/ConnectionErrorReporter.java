@@ -73,10 +73,7 @@ public final class ConnectionErrorReporter {
 		case FAILED_CERTIFICATE_VALIDATION_ERROR:
 			displayFailedCertificateValidationDialog(message);
 			break;
-		case FAILED_CERTIFICATE_DOWNLOAD_ERROR:
-			displayGeneralDialog(message);
-			break;
-		case INVALID_HOSTNAME_ERROR:
+		case FAILED_CERTIFICATE_DOWNLOAD_ERROR, INVALID_HOSTNAME_ERROR, TIMEOUT_ERROR, GENERAL_ERROR:
 			displayGeneralDialog(message);
 			break;
 		case MFA_ERROR:
@@ -133,9 +130,7 @@ public final class ConnectionErrorReporter {
 
 	private void displayGeneralDialog(String message) {
 		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
-				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"),
-				JOptionPane.OK_CANCEL_OPTION);
-
+				Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.title"), JOptionPane.OK_CANCEL_OPTION);
 		conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 	}
 
