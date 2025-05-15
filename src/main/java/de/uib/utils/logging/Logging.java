@@ -30,6 +30,8 @@ import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.opsicommand.ServerFacade;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 @SuppressWarnings("java:S923")
 public final class Logging {
@@ -147,14 +149,16 @@ public final class Logging {
 	}
 
 	public static synchronized void updateLogfile() {
+		final ServerFacade executioner = PersistenceControllerFactory.getPersistenceController().getExecutioner();
+
 		File logDirectory = getDirectory();
 		File currentLogfile = new File(getCurrentLogfilePath());
 		File updatedLogFile = new File(logDirectory.getAbsolutePath() + File.separator + LOG_FILE_DELIMITER + "_"
-				+ ConfigedMain.getHost() + "_" + ConfigedMain.getUser() + extension);
+				+ executioner.getHost() + "_" + executioner.getUsername() + extension);
 
 		if (NUMBER_OF_LOG_FILES > 0) {
-			rotateLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, ConfigedMain.getHost(),
-					ConfigedMain.getUser());
+			rotateLogFiles(updatedLogFile.getAbsolutePath(), logDirectory, executioner.getHost(),
+					executioner.getUsername());
 		}
 
 		closeLogWriter();
@@ -184,6 +188,9 @@ public final class Logging {
 	}
 
 	private static synchronized File getDirectory() {
+		final ServerFacade executioner = PersistenceControllerFactory.getPersistenceController() != null
+				? PersistenceControllerFactory.getPersistenceController().getExecutioner()
+				: null;
 		File logDirectory;
 
 		if (baseLogDirectoryPath != null) {
@@ -193,7 +200,7 @@ public final class Logging {
 			baseLogDirectoryPath = logDirectory.getAbsolutePath();
 		}
 
-		if (ConfigedMain.getHost() != null) {
+		if (executioner != null && executioner.getHost() != null) {
 			logDirectory = changeLogDirectory(logDirectory);
 		}
 
@@ -215,7 +222,8 @@ public final class Logging {
 	}
 
 	private static File changeLogDirectory(File logDirectory) {
-		String newDirPath = logDirectory.getAbsolutePath() + File.separator + ConfigedMain.getHost() + File.separator
+		final ServerFacade executioner = PersistenceControllerFactory.getPersistenceController().getExecutioner();
+		String newDirPath = logDirectory.getAbsolutePath() + File.separator + executioner.getHost() + File.separator
 				+ LOGS_DIR;
 		File newLogDirectory = new File(newDirPath);
 
@@ -462,6 +470,13 @@ public final class Logging {
 
 	public static void clearErrorList() {
 		errorList.clear();
+	}
+
+	public static void clearErrorListAndHide() {
+		errorList.clear();
+		if (dialog != null) {
+			dialog.setVisible(false);
+		}
 	}
 
 	// if errors Occurred show a window with the logged errors

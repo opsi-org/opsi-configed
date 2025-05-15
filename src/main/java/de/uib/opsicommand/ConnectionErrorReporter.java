@@ -7,17 +7,22 @@
 package de.uib.opsicommand;
 
 import java.awt.event.ActionEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.SwingUtilities;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.certificate.CertificateManager;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.SeparatedDocument;
 
 /**
  * {@code ConnectionErrorReporter} reports connection errors, that occur during
@@ -28,6 +33,7 @@ import de.uib.utils.logging.Logging;
  */
 public final class ConnectionErrorReporter {
 	private static ConnectionErrorReporter instance;
+	private static final AtomicBoolean dialogOpened = new AtomicBoolean(false);
 	private ConnectionState conStat;
 
 	private ConnectionErrorReporter(ConnectionState conStat) {
@@ -130,31 +136,66 @@ public final class ConnectionErrorReporter {
 
 	private void displayMFADialog() {
 		Logging.info("Unauthorized, show password dialog");
+		Logging.clearErrorListAndHide();
+		JPasswordField otpField = new JPasswordField();
 
-		JPasswordField passwordField = new JPasswordField();
+		otpField.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
+				Character.MIN_VALUE, 6, true));
 
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewPassword"), passwordField },
-				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"), JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE);
+		PersistenceControllerFactory.getPersistenceController().getExecutioner().resetOTPWaiter();
 
-		// The user has clicked on the OK button.
-		if (answer == 0) {
-			ConfigedMain.setPassword(new String(passwordField.getPassword()));
-		} else {
-			displayCancelConfigedDialog();
-		}
+		displayConfirmDialog(
+				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },
+				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"),
+				() -> ConfigedMain.getMainFrame().reconnectOTP(new String(otpField.getPassword())),
+				() -> SwingUtilities.invokeLater(() -> displayCancelConfigedDialog()));
 	}
 
 	private void displayCancelConfigedDialog() {
-		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
-				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"), JOptionPane.OK_CANCEL_OPTION);
+		displayConfirmDialog(Configed.getResourceValue("ConnectionErrorReporter.closeConfigedInfo"),
+				Configed.getResourceValue("ConnectionErrorReporter.closeConfigedTitle"),
+				() -> Main.endApp(Main.NO_ERROR), () -> SwingUtilities.invokeLater(() -> displayMFADialog()));
+	}
 
-		if (answer == 0) {
-			displayMFADialog();
+	private void displayConfirmDialog(Object message, String title, Runnable onOK, Runnable onCancel) {
+		if (!dialogOpened.compareAndSet(false, true)) {
+			return;
+		}
+		runOnEventDispatchThread(() -> {
+			try {
+				int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message, title,
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				if (answer == JOptionPane.OK_OPTION) {
+					onOK.run();
+				} else {
+					onCancel.run();
+				}
+			} finally {
+				dialogOpened.set(false);
+			}
+		});
+	}
+
+	/**
+	 * Ensures that the provided Runnable executes on the Swing Event Dispatch
+	 * Thread (EDT). If the current thread is the EDT, the task runs
+	 * immediately; otherwise, it is executed synchronously on the EDT using
+	 * invokeAndWait.
+	 *
+	 * @param runnable the task to be executed on the EDT
+	 */
+	private void runOnEventDispatchThread(Runnable runnable) {
+		if (SwingUtilities.isEventDispatchThread()) {
+			runnable.run();
 		} else {
-			Main.endApp(Main.NO_ERROR);
+			try {
+				SwingUtilities.invokeAndWait(runnable::run);
+			} catch (InterruptedException ie) {
+				Thread.currentThread().interrupt();
+				Logging.error(this, "Thread was interrupted while waiting for EDT execution.", ie);
+			} catch (InvocationTargetException ite) {
+				Logging.error(this, "Exception thrown by runnable while executing on the EDT.", ite);
+			}
 		}
 	}
 

@@ -32,6 +32,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ServerFacade;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
@@ -193,7 +194,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.getEditor().getEditorComponent().addFocusListener(myFocusListener);
 
 		fieldUser.addKeyListener(this);
-
 		passwordField.addKeyListener(this);
 
 		fieldOTP.setDocument(new SeparatedDocument(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 6,
@@ -215,13 +215,27 @@ public class LoginDialog extends JFrame implements KeyListener {
 		jButtonSSO.addActionListener(actionEvent -> tryConnecting(true));
 	}
 
+	private boolean wasSuccessfullyAuthenticated() {
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+		if (persistenceController != null) {
+			Logging.warning("Connection state ", persistenceController.getConnectionState());
+			return true;
+		}
+		return false;
+	}
+
 	private void initSSO() {
-		String host = (ConfigedMain.getHost() != null) ? ConfigedMain.getHost() : (String) fieldHost.getSelectedItem();
+		Logging.warning("LoginDialog.initSSO");
+		String host = (String) fieldHost.getSelectedItem();
 		if (host == null || host.isEmpty()) {
 			Logging.debug(this, "No host provided");
 			return;
+		} else if (wasSuccessfullyAuthenticated()) {
+			Logging.warning("was connected");
+		} else {
+			// Not needed.
 		}
-
 		ssoActiveByServer = true;
 		Logging.info("get auth info for ", host);
 		ServerFacade serverFacade = new ServerFacade(host, false);
@@ -379,14 +393,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 		Logging.info(this, "started  tryConnecting with SSO ", useSSO);
 		setActivated(false);
 		String user = fieldUser.getText().toLowerCase(Locale.ROOT);
-		if (useSSO) {
-			ConfigedMain.setUseSSO(useSSO);
-		} else {
-			ConfigedMain.setUser(user);
-			ConfigedMain.setPassword(String.valueOf(passwordField.getPassword()));
-		}
-		ConfigedMain.setHost((String) fieldHost.getSelectedItem());
-		Configed.initSavedStates();
+		Configed.initSavedStates(fieldHost.getSelectedItem().toString().toLowerCase(Locale.ROOT));
 
 		Logging.info(this, "we are in EventDispatchThread ", SwingUtilities.isEventDispatchThread());
 		Logging.info(this, "  Thread.currentThread() ", Thread.currentThread());

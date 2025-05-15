@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
@@ -44,8 +43,8 @@ public class UserDataService {
 		return cacheManager.getCachedData(CacheIdentifier.MFA_ENABLED, Boolean.class);
 	}
 
-	public void checkMultiFactorAuthenticationPD() {
-		cacheManager.setCachedData(CacheIdentifier.MFA_ENABLED, getOTPSecret(ConfigedMain.getUser()) != null);
+	public void checkMultiFactorAuthenticationPD(String user) {
+		cacheManager.setCachedData(CacheIdentifier.MFA_ENABLED, getOTPSecret(user) != null);
 	}
 
 	private String getOTPSecret(String userId) {

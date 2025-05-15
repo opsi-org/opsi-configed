@@ -46,6 +46,7 @@ import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
+import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
@@ -117,7 +118,8 @@ public class MainFrame extends JFrame implements KeyListener {
 
 		showClientConfiguration();
 
-		setTitle("(" + ConfigedMain.getUser() + ") " + ConfigedMain.getHost() + " - " + Globals.APPNAME);
+		setTitle("(" + persistenceController.getExecutioner().getUsername() + ") "
+				+ persistenceController.getExecutioner().getHost() + " - " + Globals.APPNAME);
 
 		glassPane = new GlassPane();
 		setGlassPane(glassPane);
@@ -270,15 +272,29 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	private void logout() {
-		ConfigedMain.setHost(null);
-		ConfigedMain.setUser(null);
-		ConfigedMain.setPassword(null);
-		ConfigedMain.setUseSSO(false);
+		if (persistenceController != null) {
+			persistenceController.getExecutioner().clearAuthenticationData();
+		}
 		CacheManager.getInstance().clearAllCachedData();
 		Configed.getSavedStates().removeAll();
 		resetData();
 
 		// We need to reset the validators so that new ones will be created when reconnecting
+		CertificateValidatorFactory.resetCertificateValidators();
+
+		restartConfiged();
+	}
+
+	public void reconnectOTP(String otp) {
+		if (Messagebus.getInstance() != null) {
+			Messagebus.getInstance().disconnect();
+		}
+		persistenceController.getExecutioner().setOTP(otp);
+
+		CacheManager.getInstance().clearAllCachedData();
+		Configed.getSavedStates().removeAll();
+		resetData();
+
 		CertificateValidatorFactory.resetCertificateValidators();
 
 		restartConfiged();
@@ -295,7 +311,11 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	private static void restartConfiged() {
-		ConfigedMain.closeInstance(true);
+		restartConfiged(true);
+	}
+
+	private static void restartConfiged(boolean checkdirty) {
+		ConfigedMain.closeInstance(checkdirty);
 		ExtraFrameController.deleteInstances();
 		new Thread() {
 			@Override

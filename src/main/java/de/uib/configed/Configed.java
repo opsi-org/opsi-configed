@@ -26,7 +26,9 @@ import de.uib.Main;
 import de.uib.configed.clientselection.SavedSearchQuery;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
+import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.messages.Messages;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -47,6 +49,7 @@ public final class Configed {
 	private static Properties extraLocalization;
 	private static boolean showLocalizationStrings;
 
+	private static String host;
 	private static String user;
 	private static String password;
 	private static String otp;
@@ -101,9 +104,34 @@ public final class Configed {
 
 		LicensingInfoMap.requestRefresh();
 
-		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, paramOTP, paramSSO);
+		ConfigedMain configedMain = new ConfigedMain();
 
-		SwingUtilities.invokeLater(configedMain::init);
+		SwingUtilities.invokeLater(() -> {
+			Logging.debug("init");
+
+			// we start with a language
+
+			InstallationStateTableModel.restartColumnDict();
+
+			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+					.getPersistenceController();
+			String host = paramHost;
+			String user = paramUser;
+			String password = paramPassword;
+			String otp = paramOTP;
+			boolean useSSO = paramSSO;
+
+			if (persistenceController != null) {
+				ServerFacade exec = persistenceController.getExecutioner();
+				host = exec.getHost();
+				user = exec.getUsername();
+				password = exec.getPassword();
+				otp = exec.getOTP();
+				useSSO = exec.useSSO();
+			}
+
+			ConfigedMain.setupLoginDialog(configedMain, host, user, password, otp, useSSO);
+		});
 	}
 
 	private static void setParamValues(String paramHost, String paramUser, String paramPassword, String paramOTP,
@@ -147,8 +175,8 @@ public final class Configed {
 	}
 
 	private static void addMissingArgs() {
-		if (ConfigedMain.getHost() == null) {
-			ConfigedMain.setHost(Utils.getCLIParam("Host: "));
+		if (host == null) {
+			host = Utils.getCLIParam("Host: ");
 		}
 		if (user == null) {
 			user = Utils.getCLIParam("User: ").toLowerCase(Locale.ROOT);
@@ -163,7 +191,7 @@ public final class Configed {
 
 	private static void processLoginOptions(CommandLine cmd) {
 		if (cmd.hasOption("h")) {
-			ConfigedMain.setHost(cmd.getOptionValue("h"));
+			host = cmd.getOptionValue("h");
 		}
 
 		if (cmd.hasOption("u")) {
@@ -319,11 +347,10 @@ public final class Configed {
 
 	private static void checkArgsAndStart() {
 		Logging.debug("initiating configed");
-		String host = ConfigedMain.getHost();
 
 		if (optionCLIQuerySearch) {
 			addMissingArgs();
-			initSavedStates();
+			initSavedStates(host);
 			Logging.debug("optionCLIQuerySearch");
 			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, useSSO, savedSearch);
 
@@ -331,7 +358,7 @@ public final class Configed {
 			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLIDefineGroupBySearch) {
 			addMissingArgs();
-			initSavedStates();
+			initSavedStates(host);
 			Logging.debug("optionCLIDefineGroupBySearch");
 
 			SavedSearchQuery query = new SavedSearchQuery(host, user, password, otp, useSSO, savedSearch);
@@ -360,7 +387,7 @@ public final class Configed {
 			Logging.debug("UserConfigProducing");
 
 			addMissingArgs();
-			initSavedStates();
+			initSavedStates(host);
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 					.getNewPersistenceController(host, user, password, otp, useSSO);
@@ -379,12 +406,12 @@ public final class Configed {
 		new Configed(host, user, password, otp, useSSO);
 	}
 
-	public static void initSavedStates() {
+	public static void initSavedStates(String host) {
 		File savedStatesDir = null;
 
 		if (savedStatesLocationName != null) {
 			Logging.info("trying to write saved states to ", savedStatesLocationName);
-			String directoryName = getSavedStatesDirectoryName(savedStatesLocationName);
+			String directoryName = getSavedStatesDirectoryName(savedStatesLocationName, host);
 			savedStatesDir = new File(directoryName);
 			Logging.info("writing saved states, created file ", savedStatesDir);
 
@@ -405,7 +432,7 @@ public final class Configed {
 
 		if (savedStatesLocationName == null || Configed.getSavedStates() == null) {
 			Logging.info("writing saved states to ", Utils.getSavedStatesDefaultLocation());
-			savedStatesDir = new File(getSavedStatesDirectoryName(Utils.getSavedStatesDefaultLocation()));
+			savedStatesDir = new File(getSavedStatesDirectoryName(Utils.getSavedStatesDefaultLocation(), host));
 
 			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
 				Logging.warning("mkdirs for saved states failed, in savedStatesDefaultLocation");
@@ -431,8 +458,8 @@ public final class Configed {
 		Configed.getSavedStates().setProperty("saveUsageCount", String.valueOf(oldUsageCount + 1));
 	}
 
-	private static String getSavedStatesDirectoryName(String locationName) {
-		return locationName + File.separator + ConfigedMain.getHost().replace(":", "_");
+	private static String getSavedStatesDirectoryName(String locationName, String host) {
+		return locationName + File.separator + host.replace(":", "_");
 	}
 
 	public static SavedStates getSavedStates() {

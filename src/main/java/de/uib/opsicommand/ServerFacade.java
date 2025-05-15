@@ -19,10 +19,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
@@ -39,6 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateManager;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.TimeCheck;
@@ -66,11 +69,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private static final Pattern userPattern = Pattern.compile("user:");
 
 	private static OpsiServerVersionRetriever versionRetriever;
+	private CountDownLatch otpWaiter;
 
 	private String host;
 	private String username;
 	private String password;
 	private String otp;
+	private boolean useSSO;
 	private String sessionId;
 	private int portHTTPS = Globals.DEFAULT_PORT;
 	private boolean useSAML;
@@ -80,6 +85,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public ServerFacade(String host, boolean connect) {
+		Logging.warning("ServerFacade ", host, " connect ", connect);
 		if (host == null) {
 			return;
 		}
@@ -126,7 +132,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			Logging.error(this, "SAML connection failed");
 			return;
 		}
-		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), this.host + "_" + this.portHTTPS);
+		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		checkServerVersion();
 	}
 
@@ -252,10 +258,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Logging.error(this, "username not received");
 			} else {
 				username = userPattern.split(uname, 2)[1];
-				ConfigedMain.setUser(username);
-				if (host != null && !host.equals(ConfigedMain.getHost())) {
-					ConfigedMain.setHost(host);
-				}
 				isAuthenticated = (boolean) result.get("authenticated");
 			}
 		}
@@ -285,7 +287,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		// has to be value between 1 and 43300 [sec]
-		requestProperties.put("X-opsi-session-lifetime", "900");
+		requestProperties.put("X-opsi-session-lifetime", "300");
 		requestProperties.put("Accept-Encoding", "lz4, gzip");
 		requestProperties.put("User-Agent", Globals.APPNAME_SERVER_CONNECTION + " " + Globals.VERSION);
 		requestProperties.put("Accept", "application/msgpack");
@@ -364,6 +366,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
+		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
+			return new HashMap<>();
+		}
+
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(omc));
 		HttpsURLConnection connection = handler.establishConnection(true);
 		setConnectionState(handler.getConnectionState());
@@ -389,8 +395,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					Logging.info(this, "guessContentType ", URLConnection.guessContentTypeFromStream(stream));
 
 					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
-				} else if (getConnectionState().getState() == ConnectionState.UNAUTHORIZED) {
-					return retrieveResponse(omc);
 				} else {
 					Logging.warning(this, "Encountered unhandled connection state: ", getConnectionState());
 				}
@@ -583,23 +587,34 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private void handleResponseCode(HttpsURLConnection connection) throws IOException {
-		Logging.debug(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage());
+		int responseCode = connection.getResponseCode();
+		String responseMessage = connection.getResponseMessage();
+		Logging.debug(this, "Response ", responseCode, " ", responseMessage);
 
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
-				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+		if (responseCode == HttpURLConnection.HTTP_ACCEPTED || responseCode == HttpURLConnection.HTTP_OK) {
+			// Normal response; clear error flag if needed
 			setConnectionState(new ConnectionState(ConnectionState.CONNECTED, "ok"));
-		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+		} else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
 			Logging.debug("Unauthorized: ", sessionId, ", mfa=", Utils.isMultiFactorAuthenticationEnabled());
 			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
+				ParallelTaskExecutor.cancelAllExecutorsTasks();
+
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-				password = ConfigedMain.getPassword();
-				setConnectionState(new ConnectionState(ConnectionState.UNAUTHORIZED));
+				if (otp.equals(getOTP())) {
+					Logging.debug(this, "MFA error encountered, we wait for new OTP input");
+					otp = waitForOTPInput();
+				} else {
+					Logging.debug(this, "old OTP was used, we set it to use new OTP");
+					otp = getOTP();
+				}
+				setConnectionState(new ConnectionState(ConnectionState.RETRY_CONNECTION));
 			} else {
-				setConnectionState(new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage()));
+				setConnectionState(new ConnectionState(ConnectionState.ERROR, responseMessage));
 			}
 		} else {
-			setConnectionState(new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage()));
-			Logging.error(this, "Response ", connection.getResponseCode(), " ", connection.getResponseMessage(), " ",
+			ParallelTaskExecutor.cancelAllExecutorsTasks();
+			setConnectionState(new ConnectionState(ConnectionState.ERROR, responseMessage));
+			Logging.error(this, "Response ", responseCode, " ", responseMessage, " ",
 					retrieveErrorFromResponse(connection));
 		}
 	}
@@ -679,6 +694,15 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	/**
+	 * Retrieve used host by the connection.
+	 *
+	 * @return used host by the connection.
+	 */
+	public String getHost() {
+		return host;
+	}
+
+	/**
 	 * Retrieve used username by the connection.
 	 *
 	 * @return used username by the connection.
@@ -703,5 +727,82 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 */
 	public String getSessionId() {
 		return sessionId;
+	}
+
+	public synchronized void setOTP(String otp) {
+		this.otp = otp;
+		if (otpWaiter != null) {
+			otpWaiter.countDown();
+		}
+	}
+
+	public synchronized String getOTP() {
+		return otp;
+	}
+
+	/**
+	 * Resets the OTP wait cycle. Should be called before initiating a new OTP
+	 * input cycle from the MFA dialog.
+	 */
+	public synchronized void resetOTPWaiter() {
+		otpWaiter = new CountDownLatch(1);
+	}
+
+	/**
+	 * Blocks execution until the OTP is provided via
+	 * {@link #setOTP(String otp)}. It is recommended to call this method only
+	 * when MFA is enabled, to wait for user input.
+	 * 
+	 * @return the OTP string provided by the user.
+	 */
+	public synchronized String waitForOTPInput() {
+		try {
+			otpWaiter.await();
+			otpWaiter = null;
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			Logging.error("ConfigedMain waiting for OTP interrupted: " + e.getMessage());
+			return null;
+		}
+		return otp;
+	}
+
+	public void setUseSSO(boolean useSSO) {
+		this.useSSO = useSSO;
+	}
+
+	public boolean useSSO() {
+		return useSSO;
+	}
+
+	/**
+	 * Securely clears all authentication-related fields, overwriting sensitive
+	 * data in memory.
+	 */
+	public void clearAuthenticationData() {
+		host = null;
+		username = null;
+
+		wipeSensitiveString(password);
+		password = null;
+
+		wipeSensitiveString(otp);
+		otp = null;
+
+		otpWaiter = null;
+		useSSO = false;
+	}
+
+	/**
+	 * Overwrites the contents of a String with null characters to reduce the
+	 * risk of sensitive data lingering in memory.
+	 * 
+	 * @param value the String to wipe
+	 */
+	private static void wipeSensitiveString(String value) {
+		if (value != null) {
+			char[] chars = value.toCharArray();
+			Arrays.fill(chars, '\0');
+		}
 	}
 }

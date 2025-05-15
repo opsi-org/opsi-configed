@@ -28,15 +28,18 @@ import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineImpl;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class WebDAVClient {
 	private Sardine sardine;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public WebDAVClient() {
 		HttpClientBuilder builder = HttpClientBuilder.create();
@@ -50,9 +53,10 @@ public class WebDAVClient {
 			sardine = new SardineImpl(builder);
 		} else {
 			sardine = new SardineImpl(builder);
-			int port = getPortFromHost(ConfigedMain.getHost());
-			sardine.enablePreemptiveAuthentication(ConfigedMain.getHost(), port, port);
-			sardine.setCredentials(ConfigedMain.getUser(), ConfigedMain.getPassword());
+			int port = getPortFromHost(persistenceController.getExecutioner().getHost());
+			sardine.enablePreemptiveAuthentication(persistenceController.getExecutioner().getHost(), port, port);
+			sardine.setCredentials(persistenceController.getExecutioner().getUsername(),
+					persistenceController.getExecutioner().getPassword());
 		}
 	}
 
@@ -122,7 +126,8 @@ public class WebDAVClient {
 	}
 
 	private String getBaseURL() {
-		return "https://" + ConfigedMain.getHost() + ":" + getPortFromHost(ConfigedMain.getHost()) + "/dav/";
+		return "https://" + persistenceController.getExecutioner().getHost() + ":"
+				+ getPortFromHost(persistenceController.getExecutioner().getHost()) + "/dav/";
 	}
 
 	@SuppressWarnings({ "squid:S2972" })
