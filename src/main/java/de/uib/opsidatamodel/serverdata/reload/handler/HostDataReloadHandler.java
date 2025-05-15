@@ -42,7 +42,7 @@ public class HostDataReloadHandler implements ReloadHandler {
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 
 		// Both of these caches will be reloaded in the method 
-		// retrieveFNode2TreeparentsPD
+		// retrieveFNode2TreeparentsPD. That's why it should not be parallelized.
 		cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
 		cacheManager.clearCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS);
 		executor.runInParallel(hostInfoCollections::retrieveFNode2TreeparentsPD);
