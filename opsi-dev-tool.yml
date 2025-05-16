@@ -1,16 +1,17 @@
 project:
   name: opsi-configed
   summary: opsi-configed management interface
-  description: opsi-configed management interface for the client management system opsi
+  description: opsi-configed management interface for the client management system
+    opsi
   homepage: https://www.opsi.org
   maintainer: uib GmbH info@uib.de
   licenses:
     - license: AGPL-3.0
-  version: 4.3.10.0
+  version: "4.3.10.0"
   version_files:
-    pom.xml: '.version' # will update the version in pom.xml
+    pom.xml: 'version' # will update the version in pom.xml
   changelog_filename: CHANGELOG.md # will be used as default changelog file. This file is prioritized over the public commit messages.
-  date_files: 
+  date_files:
     src/main/java/de/uib/configed/Globals.java: VERDATE;%Y-%m-%d # the variable VERDATE will be replaced with the current date
 
 # commit message formats `[pub,<X>] this is a public message` `<X>` is usually `fix`, `chg`, `new`
