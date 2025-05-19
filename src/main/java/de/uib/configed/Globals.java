@@ -27,6 +27,7 @@ public final class Globals {
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2024 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
 
+	public static final String MIN_SERVER_VERSION = "4.3.31.0";
 	public static final String APPNAME = "opsi-configed";
 	public static final String APPNAME_SERVER_CONNECTION = "opsi config editor";
 
