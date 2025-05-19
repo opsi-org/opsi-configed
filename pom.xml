@@ -1,387 +1,385 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:project xmlns:ns0="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <ns0:modelVersion>4.0.0</ns0:modelVersion>
 
-    <groupId>configed</groupId>
-    <artifactId>configed</artifactId>
-    <packaging>jar</packaging>
-    <version>4.3.10.0</version>
+    <ns0:groupId>configed</ns0:groupId>
+    <ns0:artifactId>configed</ns0:artifactId>
+    <ns0:packaging>jar</ns0:packaging>
+    <ns0:version>4.3.10.0</ns0:version>
 
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <ns0:properties>
+        <ns0:maven.compiler.source>21</ns0:maven.compiler.source>
+        <ns0:maven.compiler.target>21</ns0:maven.compiler.target>
+        <ns0:project.build.sourceEncoding>UTF-8</ns0:project.build.sourceEncoding>
 
-        <timestamp>${maven.build.timestamp}</timestamp>
-        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
+        <ns0:timestamp>${maven.build.timestamp}</ns0:timestamp>
+        <ns0:maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</ns0:maven.build.timestamp.format>
 
-        <javafx.version>21</javafx.version>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.language>java</sonar.language>
-    </properties>
+        <ns0:javafx.version>21</ns0:javafx.version>
+        <ns0:sonar.dynamicAnalysis>reuseReports</ns0:sonar.dynamicAnalysis>
+        <ns0:sonar.language>java</ns0:sonar.language>
+    </ns0:properties>
 
-    <repositories>
-        <repository>
-            <id>jetbrains</id>
-            <url>https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/</url>
-        </repository>
-    </repositories>
+    <ns0:repositories>
+        <ns0:repository>
+            <ns0:id>jetbrains</ns0:id>
+            <ns0:url>https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/</ns0:url>
+        </ns0:repository>
+    </ns0:repositories>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.4.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>de.uib.Main</mainClass>
-                            <addDefaultImplementationEntries>
+    <ns0:build>
+        <ns0:plugins>
+            <ns0:plugin>
+                <ns0:groupId>org.apache.maven.plugins</ns0:groupId>
+                <ns0:artifactId>maven-assembly-plugin</ns0:artifactId>
+                <ns0:version>3.4.2</ns0:version>
+                <ns0:configuration>
+                    <ns0:archive>
+                        <ns0:manifest>
+                            <ns0:mainClass>de.uib.Main</ns0:mainClass>
+                            <ns0:addDefaultImplementationEntries>
                                 true
-                            </addDefaultImplementationEntries>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>create-my-bundle</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+                            </ns0:addDefaultImplementationEntries>
+                        </ns0:manifest>
+                    </ns0:archive>
+                </ns0:configuration>
+                <ns0:executions>
+                    <ns0:execution>
+                        <ns0:id>create-my-bundle</ns0:id>
+                        <ns0:phase>package</ns0:phase>
+                        <ns0:goals>
+                            <ns0:goal>single</ns0:goal>
+                        </ns0:goals>
+                        <ns0:configuration>
+                            <ns0:descriptorRefs>
+                                <ns0:descriptorRef>jar-with-dependencies</ns0:descriptorRef>
+                            </ns0:descriptorRefs>
+                        </ns0:configuration>
+                    </ns0:execution>
+                </ns0:executions>
+            </ns0:plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>4.0.0-M3</version>
-            </plugin>
+            <ns0:plugin>
+                <ns0:groupId>org.apache.maven.plugins</ns0:groupId>
+                <ns0:artifactId>maven-site-plugin</ns0:artifactId>
+                <ns0:version>4.0.0-M3</ns0:version>
+            </ns0:plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M7</version>
-            </plugin>
-        </plugins>
+            <ns0:plugin>
+                <ns0:groupId>org.apache.maven.plugins</ns0:groupId>
+                <ns0:artifactId>maven-surefire-plugin</ns0:artifactId>
+                <ns0:version>3.0.0-M7</ns0:version>
+            </ns0:plugin>
+        </ns0:plugins>
 
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.sonarsource.scanner.maven</groupId>
-                    <artifactId>sonar-maven-plugin</artifactId>
-                    <version>3.7.0.1746</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+        <ns0:pluginManagement>
+            <ns0:plugins>
+                <ns0:plugin>
+                    <ns0:groupId>org.sonarsource.scanner.maven</ns0:groupId>
+                    <ns0:artifactId>sonar-maven-plugin</ns0:artifactId>
+                    <ns0:version>3.7.0.1746</ns0:version>
+                </ns0:plugin>
+            </ns0:plugins>
+        </ns0:pluginManagement>
+    </ns0:build>
 
 
-    <dependencies>
+    <ns0:dependencies>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.15.1</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>commons-io</ns0:groupId>
+            <ns0:artifactId>commons-io</ns0:artifactId>
+            <ns0:version>2.15.1</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
         <!-- Ab Version 7 kann es inkompatibel sein... zudem neue Lizenz laut Rupert-->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itextpdf</artifactId>
-            <version>5.5.13.3</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>com.itextpdf</ns0:groupId>
+            <ns0:artifactId>itextpdf</ns0:artifactId>
+            <ns0:version>5.5.13.3</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.lz4/lz4-java -->
-        <dependency>
-            <groupId>org.lz4</groupId>
-            <artifactId>lz4-java</artifactId>
-            <version>1.8.0</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.lz4</ns0:groupId>
+            <ns0:artifactId>lz4-java</ns0:artifactId>
+            <ns0:version>1.8.0</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
-        <dependency>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>3.10.0.2594</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.sonarsource.scanner.maven</ns0:groupId>
+            <ns0:artifactId>sonar-maven-plugin</ns0:artifactId>
+            <ns0:version>3.10.0.2594</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>win</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-swing</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>win</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>win</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-controls</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>win</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>win</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-base</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>win</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>win</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-fxml</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>win</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>win</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-graphics</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>win</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>mac-aarch64</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-swing</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>mac-aarch64</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>mac-aarch64</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-controls</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>mac-aarch64</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>mac-aarch64</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-base</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>mac-aarch64</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>mac-aarch64</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-fxml</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>mac-aarch64</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>mac-aarch64</classifier>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx-graphics</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:classifier>mac-aarch64</ns0:classifier>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx</artifactId>
-            <version>${javafx.version}</version>
-            <type>pom</type>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.openjfx</ns0:groupId>
+            <ns0:artifactId>javafx</ns0:artifactId>
+            <ns0:version>${javafx.version}</ns0:version>
+            <ns0:type>pom</ns0:type>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx-fontawesome -->
-        <dependency>
-            <groupId>de.jensd</groupId>
-            <artifactId>fontawesomefx-fontawesome</artifactId>
-            <version>4.7.0-9.1.2</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>de.jensd</ns0:groupId>
+            <ns0:artifactId>fontawesomefx-fontawesome</ns0:artifactId>
+            <ns0:version>4.7.0-9.1.2</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx-commons -->
-        <dependency>
-            <groupId>de.jensd</groupId>
-            <artifactId>fontawesomefx-commons</artifactId>
-            <version>9.1.2</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>de.jensd</ns0:groupId>
+            <ns0:artifactId>fontawesomefx-commons</ns0:artifactId>
+            <ns0:version>9.1.2</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.commonmark/commonmark -->
-        <dependency>
-            <groupId>org.commonmark</groupId>
-            <artifactId>commonmark</artifactId>
-            <version>0.21.0</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.commonmark</ns0:groupId>
+            <ns0:artifactId>commonmark</ns0:artifactId>
+            <ns0:version>0.21.0</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.commonmark/commonmark-ext-autolink -->
-        <dependency>
-            <groupId>org.commonmark</groupId>
-            <artifactId>commonmark-ext-autolink</artifactId>
-            <version>0.21.0</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.commonmark</ns0:groupId>
+            <ns0:artifactId>commonmark-ext-autolink</ns0:artifactId>
+            <ns0:version>0.21.0</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20231013</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.json</ns0:groupId>
+            <ns0:artifactId>json</ns0:artifactId>
+            <ns0:version>20231013</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf -->
-        <dependency>
-            <groupId>com.formdev</groupId>
-            <artifactId>flatlaf</artifactId>
-            <version>3.4.1</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>com.formdev</ns0:groupId>
+            <ns0:artifactId>flatlaf</ns0:artifactId>
+            <ns0:version>3.4.1</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket -->
-        <dependency>
-            <groupId>org.java-websocket</groupId>
-            <artifactId>Java-WebSocket</artifactId>
-            <version>1.5.5</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.java-websocket</ns0:groupId>
+            <ns0:artifactId>Java-WebSocket</ns0:artifactId>
+            <ns0:version>1.5.5</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.16.1</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>com.fasterxml.jackson.core</ns0:groupId>
+            <ns0:artifactId>jackson-databind</ns0:artifactId>
+            <ns0:version>2.16.1</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf-extras -->
-        <dependency>
-            <groupId>com.formdev</groupId>
-            <artifactId>flatlaf-extras</artifactId>
-            <version>3.4.1</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>com.formdev</ns0:groupId>
+            <ns0:artifactId>flatlaf-extras</ns0:artifactId>
+            <ns0:version>3.4.1</ns0:version>
+        </ns0:dependency>
 
 
         <!-- https://mvnrepository.com/artifact/org.msgpack/msgpack-core -->
-        <dependency>
-            <groupId>org.msgpack</groupId>
-            <artifactId>msgpack-core</artifactId>
-            <version>0.9.8</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.msgpack</ns0:groupId>
+            <ns0:artifactId>msgpack-core</ns0:artifactId>
+            <ns0:version>0.9.8</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.msgpack/jackson-dataformat-msgpack -->
-        <dependency>
-            <groupId>org.msgpack</groupId>
-            <artifactId>jackson-dataformat-msgpack</artifactId>
-            <version>0.9.8</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.msgpack</ns0:groupId>
+            <ns0:artifactId>jackson-dataformat-msgpack</ns0:artifactId>
+            <ns0:version>0.9.8</ns0:version>
+        </ns0:dependency>
 
         <!--
         https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-core/ -->
-        <dependency>
-            <groupId>org.jetbrains.jediterm</groupId>
-            <artifactId>jediterm-core</artifactId>
-            <version>3.41</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.jetbrains.jediterm</ns0:groupId>
+            <ns0:artifactId>jediterm-core</ns0:artifactId>
+            <ns0:version>3.41</ns0:version>
+        </ns0:dependency>
 
         <!--
         https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/jediterm/jediterm-ui/ -->
-        <dependency>
-            <groupId>org.jetbrains.jediterm</groupId>
-            <artifactId>jediterm-ui</artifactId>
-            <version>3.41</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.jetbrains.jediterm</ns0:groupId>
+            <ns0:artifactId>jediterm-ui</ns0:artifactId>
+            <ns0:version>3.41</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib -->
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-            <version>1.9.23</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.jetbrains.kotlin</ns0:groupId>
+            <ns0:artifactId>kotlin-stdlib</ns0:artifactId>
+            <ns0:version>1.9.23</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-artifact -->
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-artifact</artifactId>
-            <version>3.9.0</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.apache.maven</ns0:groupId>
+            <ns0:artifactId>maven-artifact</ns0:artifactId>
+            <ns0:version>3.9.0</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.11</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.slf4j</ns0:groupId>
+            <ns0:artifactId>slf4j-api</ns0:artifactId>
+            <ns0:version>2.0.11</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.7</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.slf4j</ns0:groupId>
+            <ns0:artifactId>slf4j-simple</ns0:artifactId>
+            <ns0:version>2.0.7</ns0:version>
+        </ns0:dependency>
 
         <!--
         https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding-all-platforms -->
-        <dependency>
-            <groupId>net.sf.sevenzipjbinding</groupId>
-            <artifactId>sevenzipjbinding-all-platforms</artifactId>
-            <version>16.02-2.01</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>net.sf.sevenzipjbinding</ns0:groupId>
+            <ns0:artifactId>sevenzipjbinding-all-platforms</ns0:artifactId>
+            <ns0:version>16.02-2.01</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding -->
-        <dependency>
-            <groupId>net.sf.sevenzipjbinding</groupId>
-            <artifactId>sevenzipjbinding</artifactId>
-            <version>16.02-2.01</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>net.sf.sevenzipjbinding</ns0:groupId>
+            <ns0:artifactId>sevenzipjbinding</ns0:artifactId>
+            <ns0:version>16.02-2.01</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>1.6.0</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>commons-cli</ns0:groupId>
+            <ns0:artifactId>commons-cli</ns0:artifactId>
+            <ns0:version>1.6.0</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.lz4/lz4-pure-java -->
-        <dependency>
-            <groupId>org.lz4</groupId>
-            <artifactId>lz4-pure-java</artifactId>
-            <version>1.8.0</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.lz4</ns0:groupId>
+            <ns0:artifactId>lz4-pure-java</ns0:artifactId>
+            <ns0:version>1.8.0</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.26.1</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.apache.commons</ns0:groupId>
+            <ns0:artifactId>commons-compress</ns0:artifactId>
+            <ns0:version>1.26.1</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-csv</artifactId>
-            <version>1.10.0</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.apache.commons</ns0:groupId>
+            <ns0:artifactId>commons-csv</ns0:artifactId>
+            <ns0:version>1.10.0</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/org.tukaani/xz -->
-        <dependency>
-            <groupId>org.tukaani</groupId>
-            <artifactId>xz</artifactId>
-            <version>1.9</version>
-        </dependency>
+        <ns0:dependency>
+            <ns0:groupId>org.tukaani</ns0:groupId>
+            <ns0:artifactId>xz</ns0:artifactId>
+            <ns0:version>1.9</ns0:version>
+        </ns0:dependency>
 
         <!-- https://mvnrepository.com/artifact/com.github.lookfirst/sardine -->
-        <dependency>
-            <groupId>com.github.lookfirst</groupId>
-            <artifactId>sardine</artifactId>
-            <version>5.12</version>
-        </dependency>
-    </dependencies>
-</project>
+        <ns0:dependency>
+            <ns0:groupId>com.github.lookfirst</ns0:groupId>
+            <ns0:artifactId>sardine</ns0:artifactId>
+            <ns0:version>5.12</ns0:version>
+        </ns0:dependency>
+    </ns0:dependencies>
+</ns0:project>
