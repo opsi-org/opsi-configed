@@ -42,7 +42,6 @@ import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.DependenciesModel;
-import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
@@ -71,12 +70,6 @@ public class ConfigedMain {
 
 	private static MainFrame mainFrame;
 	private static LoginDialog loginDialog;
-
-	private static String host;
-	private static String user;
-	private static String password;
-	private static String otp;
-	private static boolean useSSO;
 
 	private static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
@@ -149,24 +142,6 @@ public class ConfigedMain {
 			}
 		}
 	};
-
-	public ConfigedMain(String host, String user, String password, String otp, boolean useSSO) {
-		if (ConfigedMain.host == null) {
-			setHost(host);
-		}
-		if (ConfigedMain.user == null) {
-			setUser(user);
-		}
-		if (ConfigedMain.password == null) {
-			setPassword(password);
-		}
-		if (ConfigedMain.otp == null) {
-			setOTP(otp);
-		}
-		if (!ConfigedMain.useSSO) {
-			setUseSSO(useSSO);
-		}
-	}
 
 	public static MainFrame getMainFrame() {
 		return mainFrame;
@@ -272,16 +247,6 @@ public class ConfigedMain {
 
 		initialDataLoader = new InitialDataLoader(this);
 		initialDataLoader.execute();
-	}
-
-	public void init() {
-		Logging.debug(this, "init");
-
-		// we start with a language
-
-		InstallationStateTableModel.restartColumnDict();
-
-		setupLoginDialog(this);
 	}
 
 	protected void preloadData() {
@@ -509,11 +474,10 @@ public class ConfigedMain {
 	}
 
 	// returns true if we have a PersistenceController and are connected
-	private static void setupLoginDialog(ConfigedMain configedMain) {
+	public static void setupLoginDialog(String host, String user, String password, String otp, boolean useSSO) {
 		Logging.debug(" create password dialog ");
-		loginDialog = new LoginDialog(configedMain);
+		loginDialog = new LoginDialog();
 
-		// check if we started with preferred values
 		if (host != null && !host.isEmpty()) {
 			loginDialog.setHost(host);
 		}
@@ -1322,38 +1286,5 @@ public class ConfigedMain {
 		if (closeInstance(checkdirty)) {
 			Main.endApp(exitcode);
 		}
-	}
-
-	public static String getHost() {
-		return host;
-	}
-
-	public static void setHost(String host) {
-		Logging.trace("Setting host from ", ConfigedMain.host, "to", host);
-		ConfigedMain.host = host;
-	}
-
-	public static String getUser() {
-		return user;
-	}
-
-	public static void setUser(String user) {
-		ConfigedMain.user = user;
-	}
-
-	public static String getPassword() {
-		return password;
-	}
-
-	public static void setPassword(String password) {
-		ConfigedMain.password = password;
-	}
-
-	public static void setOTP(String otp) {
-		ConfigedMain.otp = otp;
-	}
-
-	public static void setUseSSO(boolean useSSO) {
-		ConfigedMain.useSSO = useSSO;
 	}
 }

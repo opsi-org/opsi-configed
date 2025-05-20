@@ -515,7 +515,8 @@ public class UserRolesConfigDataService {
 		}
 
 		if (applyUserSpecializedConfigPD()) {
-			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{" + ConfigedMain.getUser() + "}.";
+			userConfigPart = OpsiServiceNOMPersistenceController.KEY_USER_ROOT + ".{"
+					+ persistenceController.getExecutioner().getUsername() + "}.";
 		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 		}
@@ -795,10 +796,17 @@ public class UserRolesConfigDataService {
 					persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD(),
 					"default path to opsiproducts"));
 		} else {
-			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to ",
-					configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
-			persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(
-					(String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0));
+			String workbenchDefaultValue = configDefaultValues.get(CONFIGED_WORKBENCH_KEY).isEmpty()
+					? persistenceController.getConfigDataService().getConfigedWorkbenchDefaultValuePD()
+					: (String) configDefaultValues.get(CONFIGED_WORKBENCH_KEY).get(0);
+			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to ", workbenchDefaultValue);
+
+			if (configDefaultValues.get(CONFIGED_WORKBENCH_KEY).isEmpty()) {
+				readyObjects.add(ConfigDataService.produceConfigEntry("UnicodeConfig", CONFIGED_WORKBENCH_KEY,
+						workbenchDefaultValue, "default path to opsiproducts"));
+			}
+
+			persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(workbenchDefaultValue);
 		}
 
 		// configuration of opsiclientd extra events

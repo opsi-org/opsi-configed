@@ -29,7 +29,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utils.FeatureActivationChecker;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
@@ -84,8 +83,6 @@ public class Main {
 		options.getOption("qg").setArgs(2);
 		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
-		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
-				+ OpsiMethodCall.getMaxCollecSize() + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
 		options.addOption(null, "localizationfile", true,
 				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
 		options.addOption(null, "localizationstrings", false,
@@ -189,7 +186,6 @@ public class Main {
 			}
 		}
 
-		OpsiMethodCall.report();
 		Logging.info("regularly exiting app with code ", exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {

@@ -16,9 +16,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class UserConfigProducing {
@@ -31,6 +31,9 @@ public class UserConfigProducing {
 
 	private Map<String, List<Object>> serverconfigValuesMap;
 	private Map<String, ConfigOption> configOptionsMap;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public UserConfigProducing(boolean notUsingDefaultUser, String configserver, Collection<String> existingDepots,
 			Collection<String> existingHostgroups, Collection<String> existingProductgroups,
@@ -53,14 +56,14 @@ public class UserConfigProducing {
 		Set<String> roleparts = new TreeSet<>();
 		produceRoleAndUserParts(userparts, roleparts);
 
-		Logging.info(this, "we have got logged in user ", ConfigedMain.getUser(), " and configure based on it ",
-				notUsingDefaultUser);
+		Logging.info(this, "we have got logged in user ", persistenceController.getExecutioner().getUsername(),
+				" and configure based on it ", notUsingDefaultUser);
 
-		if (notUsingDefaultUser && ConfigedMain.getUser() != null
-				&& !serverconfigValuesMap.containsKey(ConfigedMain.getUser())) {
+		if (notUsingDefaultUser && persistenceController.getExecutioner().getUsername() != null
+				&& !serverconfigValuesMap.containsKey(persistenceController.getExecutioner().getUsername())) {
 			Logging.info(this, "supply logged in user");
-			userparts.add(ConfigedMain.getUser());
-			createPropertySubclass(ConfigedMain.getUser(), UserConfig.CONFIGKEY_STR_USER);
+			userparts.add(persistenceController.getExecutioner().getUsername());
+			createPropertySubclass(persistenceController.getExecutioner().getUsername(), UserConfig.CONFIGKEY_STR_USER);
 		}
 
 		supplyAllPermissionEntries(userparts, roleparts);
@@ -202,7 +205,7 @@ public class UserConfigProducing {
 		}
 
 		if (notUsingDefaultUser) {
-			UserConfig.setCurrentConfig(userConfigs.get(ConfigedMain.getUser()));
+			UserConfig.setCurrentConfig(userConfigs.get(persistenceController.getExecutioner().getUsername()));
 		} else {
 			UserConfig.setCurrentConfig(defaultUserConfig);
 		}

@@ -14,13 +14,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
-import de.uib.utils.logging.Logging;
 
 public class OpsiMethodCall {
 	public static final boolean BACKGROUND_DEFAULT = true;
 	private static final int DEFAULT_JSON_ID = 1;
-	private static final List<String> collectedCalls = new ArrayList<>();
-	private static int maxCollectSize = -1;
 
 	private String methodname;
 
@@ -38,7 +35,6 @@ public class OpsiMethodCall {
 		this.methodname = methodname.toString();
 		this.parameters = parameters;
 		this.background = background;
-		collectCall();
 	}
 
 	/**
@@ -48,24 +44,6 @@ public class OpsiMethodCall {
 	 */
 	public OpsiMethodCall(RPCMethodName methodname, Object[] parameters) {
 		this(methodname, parameters, false);
-	}
-
-	private void collectCall() {
-		// -1 means deactivated; 0 means infinite
-		if (maxCollectSize < 0 || (maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)) {
-			return;
-		}
-
-		collectedCalls.add(this.getMethodname() + "\n\t" + this.getParameter());
-	}
-
-	public static void report() {
-		Logging.debug("================================================   collected calls, maxCollectSize ",
-				maxCollectSize);
-
-		Logging.debug("collectedCalls", collectedCalls);
-
-		Logging.debug("================================================");
 	}
 
 	public String getMethodname() {
@@ -143,13 +121,5 @@ public class OpsiMethodCall {
 		map.put("params", params);
 
 		return map;
-	}
-
-	public static int getMaxCollecSize() {
-		return maxCollectSize;
-	}
-
-	public static void setMaxCollectSize(int maxCollectSize) {
-		OpsiMethodCall.maxCollectSize = maxCollectSize;
 	}
 }

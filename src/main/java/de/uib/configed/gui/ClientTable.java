@@ -183,7 +183,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 		if (tableModel.getColumnCount() > 1) {
 			rowSorter.setComparator(1, Comparator.comparing(String::toString));
 		}
-		rowSorter.setComparator(0, stringComparatorIgnoringNullEmpty());
+		rowSorter.setComparator(0, this::compareStringIgnoringNull);
 	}
 
 	/**
@@ -193,27 +193,24 @@ public class ClientTable extends JTable implements MessagebusListener {
 	 * @param ascending if true, sorts in natural order; if false, in reverse
 	 *                  order.
 	 */
-	@SuppressWarnings("unchecked")
-	private Comparator<Object> stringComparatorIgnoringNullEmpty() {
-		return (Object o1, Object o2) -> {
-			boolean isO1Invalid = (o1 == null || o1.toString().trim().isEmpty());
-			boolean isO2Invalid = (o2 == null || o2.toString().trim().isEmpty());
+	private int compareStringIgnoringNull(Object o1, Object o2) {
+		boolean isO1Invalid = (o1 == null || o1.toString().trim().isEmpty());
+		boolean isO2Invalid = (o2 == null || o2.toString().trim().isEmpty());
 
-			if (isO1Invalid && isO2Invalid) {
-				return 0;
-			}
+		if (isO1Invalid && isO2Invalid) {
+			return 0;
+		}
 
-			boolean isAscending = ((TableRowSorter<?>) getRowSorter()).getSortKeys().get(0)
-					.getSortOrder() == SortOrder.ASCENDING;
+		boolean isAscending = ((TableRowSorter<?>) getRowSorter()).getSortKeys().get(0)
+				.getSortOrder() == SortOrder.ASCENDING;
 
-			if (isO1Invalid) {
-				return isAscending ? 1 : -1;
-			}
-			if (isO2Invalid) {
-				return isAscending ? -1 : 1;
-			}
-			return ((Comparable<Object>) o1).compareTo(o2);
-		};
+		if (isO1Invalid) {
+			return isAscending ? 1 : -1;
+		}
+		if (isO2Invalid) {
+			return isAscending ? -1 : 1;
+		}
+		return ((Comparable<Object>) o1).compareTo(o2);
 	}
 
 	public void moveToFirstSelected() {

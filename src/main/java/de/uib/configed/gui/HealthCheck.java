@@ -211,7 +211,7 @@ public class HealthCheck extends JPanel {
 				fileName = fileName.concat(".zip");
 			}
 
-			String dirname = ConfigedMain.getHost();
+			String dirname = persistenceController.getExecutioner().getHost();
 
 			if (dirname.contains(":")) {
 				dirname = dirname.replace(":", "_");
@@ -241,7 +241,7 @@ public class HealthCheck extends JPanel {
 	}
 
 	private static String getDirectoryLocation() {
-		String dirname = ConfigedMain.getHost();
+		String dirname = PersistenceControllerFactory.getPersistenceController().getExecutioner().getHost();
 		if (dirname.contains(":")) {
 			dirname = dirname.replace(":", "_");
 		}

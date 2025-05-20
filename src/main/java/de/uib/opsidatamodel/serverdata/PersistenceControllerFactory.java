@@ -50,7 +50,7 @@ public final class PersistenceControllerFactory {
 
 		while (persistenceController.getConnectionState().getState() == ConnectionState.UNDEFINED
 				|| persistenceController.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
-			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD();
+			persistenceController.getUserDataService().checkMultiFactorAuthenticationPD(user);
 		}
 
 		staticPersistControl = persistenceController;

@@ -427,7 +427,12 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 
 	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
 		dataAreChangedProgramatically = true;
-		String deviceTypeIcon = deviceType == null ? "" : ("<<intern:empty>>".equals(deviceType) ? "" : deviceType);
+		String deviceTypeIcon;
+		if (deviceType == null) {
+			deviceTypeIcon = "";
+		} else {
+			deviceTypeIcon = ("<<intern:empty>>".equals(deviceType) ? "" : deviceType);
+		}
 		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceTypeIcon, 20));
 
 		String deviceTypeResourceKey = deviceType == null ? "" : deviceType;
