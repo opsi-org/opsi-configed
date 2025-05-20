@@ -76,11 +76,7 @@ public class OpsiServerVersionRetriever {
 		if (compareVersion == null) {
 			return false;
 		}
-		Logging.warning(this, "compareVersion: ", compareVersion);
-		Logging.warning(this, "serverVersion: ", serverVersionString);
-		boolean res = serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
-		Logging.warning(this, "isServerVersionAtLeast: ", res);
-		return res;
+		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
 	}
 
 	public String getServerVersion() {
