@@ -102,6 +102,10 @@ public class LoginThread extends Thread {
 				if (connectionState.getState() == ConnectionState.TIMEOUT) {
 					message = Configed.getResourceValue("LoginDialog.timeoutReached");
 					errorType = ConnectionErrorType.TIMEOUT_ERROR;
+
+				} else if (ServerFacade.getOpsiServerVersionRetriever() != null && !ServerFacade
+						.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_MAJOR_VERSION)) {
+					message = String.format(Configed.getResourceValue("LoginDialog.oldServerVersion"));
 				} else if (ServerFacade.getOpsiServerVersionRetriever() != null && !ServerFacade
 						.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)) {
 					message = String.format(Configed.getResourceValue("LoginDialog.minServerVersion"),
