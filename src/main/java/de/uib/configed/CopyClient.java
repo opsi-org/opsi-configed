@@ -36,40 +36,9 @@ public class CopyClient {
 	private HostInfo clientToCopy;
 	private String newClientName;
 	private String newClientNameWithDomain;
-	private String newDescription;
-	private String newInventoryNumber;
-	private String newNotes;
-	private String newIpAddress;
-	private String newSystemUUID;
-	private String newMacAddress;
 
 	public enum CopyOption {
 		GROUPS, PRODUCTS, PRODUCT_PROPERTIES, CONFIG_STATES
-	}
-
-	/**
-	 * Creates {@link CopyClient} object with provided information.
-	 *
-	 * @param clientToCopy       client to copy
-	 * @param newClientName      client name for the client's copy
-	 * @param newDescription     client description
-	 * @param newInventoryNumber client inventory number
-	 * @param newNotes           client notes
-	 * @param newIpAddress       client IP address
-	 * @param newSystemUUID      client system UUID
-	 * @param newMacAddress      client MAC address
-	 */
-	public CopyClient(HostInfo clientToCopy, String newClientName, String newDescription, String newInventoryNumber,
-			String newNotes, String newIpAddress, String newSystemUUID, String newMacAddress) {
-		this.clientToCopy = clientToCopy;
-		this.newClientName = newClientName;
-		this.newClientNameWithDomain = newClientName + "." + Utils.getDomainFromClientName(clientToCopy.getName());
-		this.newDescription = newDescription;
-		this.newInventoryNumber = newInventoryNumber;
-		this.newNotes = newNotes;
-		this.newIpAddress = newIpAddress;
-		this.newSystemUUID = newSystemUUID;
-		this.newMacAddress = newMacAddress;
 	}
 
 	/**
@@ -79,7 +48,8 @@ public class CopyClient {
 	 * @param newClientName client name for the client's copy
 	 */
 	public CopyClient(HostInfo clientToCopy, String newClientName) {
-		this(clientToCopy, newClientName, "", "", "", "", "", "");
+		this.clientToCopy = clientToCopy;
+		this.newClientName = newClientName;
 	}
 
 	/**
@@ -105,9 +75,8 @@ public class CopyClient {
 
 	private void copyClient() {
 		persistenceController.getHostDataService().createClient(newClientName,
-				Utils.getDomainFromClientName(clientToCopy.getName()), clientToCopy.getInDepot(), newDescription,
-				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
-				clientToCopy.getShutdownInstall(), clientToCopy.getWanConfig(), null, "");
+				Utils.getDomainFromClientName(clientToCopy.getName()), clientToCopy.getInDepot(), "", "", "", "", "",
+				"", clientToCopy.getShutdownInstall(), clientToCopy.getWanConfig(), null, "");
 	}
 
 	private void copyGroups() {
