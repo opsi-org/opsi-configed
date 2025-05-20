@@ -68,7 +68,7 @@ public class LoginThread extends Thread {
 	private void actAfterWaiting() {
 		Logging.debug(this, "actAfterWaiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
-				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
+				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)) {
 			loginDialog.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
 			Logging.info(this, "connected with persis ", persistenceController);
 			if (useSSO) {
@@ -105,7 +105,8 @@ public class LoginThread extends Thread {
 				} else if (ServerFacade.getOpsiServerVersionRetriever() != null && !ServerFacade
 						.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)) {
 					message = String.format(Configed.getResourceValue("LoginDialog.minServerVersion"),
-							Globals.MIN_SERVER_VERSION, Globals.MIN_SERVER_VERSION);
+							Globals.MIN_SERVER_VERSION,
+							ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
 				} else {
 					message = new MessageFormat(
 							Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")).format(

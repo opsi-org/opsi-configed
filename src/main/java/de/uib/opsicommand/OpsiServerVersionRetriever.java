@@ -18,6 +18,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
 
+import de.uib.configed.Configed;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsicommand.certificate.InsecureCertificateValidator;
@@ -75,7 +76,11 @@ public class OpsiServerVersionRetriever {
 		if (compareVersion == null) {
 			return false;
 		}
-		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
+		Logging.warning(this, "compareVersion: ", compareVersion);
+		Logging.warning(this, "serverVersion: ", serverVersionString);
+		boolean res = serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
+		Logging.warning(this, "isServerVersionAtLeast: ", res);
+		return res;
 	}
 
 	public String getServerVersion() {
@@ -162,7 +167,7 @@ public class OpsiServerVersionRetriever {
 
 	private void setServerVersionNotFound() {
 		setServerVersion(new int[] { 4, 3, 0, 0 });
-		serverVersionString = "Server version not found (assume 4.3)";
+		serverVersionString = Configed.getResourceValue("ServerFacade.serverVersionString.notFound");
 	}
 
 	private void setServerVersion(int[] serverVersion) {
