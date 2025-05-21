@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionErrorReporter;
 import de.uib.opsicommand.ConnectionErrorType;
 import de.uib.opsicommand.ConnectionState;
@@ -67,7 +68,7 @@ public class LoginThread extends Thread {
 	private void actAfterWaiting() {
 		Logging.debug(this, "actAfterWaiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
-				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
+				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)) {
 			loginDialog.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
 			Logging.info(this, "connected with persis ", persistenceController);
 			if (useSSO) {
@@ -101,9 +102,14 @@ public class LoginThread extends Thread {
 				if (connectionState.getState() == ConnectionState.TIMEOUT) {
 					message = Configed.getResourceValue("LoginDialog.timeoutReached");
 					errorType = ConnectionErrorType.TIMEOUT_ERROR;
-				} else if (ServerFacade.getOpsiServerVersionRetriever() != null
-						&& !ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3")) {
+				} else if (ServerFacade.getOpsiServerVersionRetriever() != null && !ServerFacade
+						.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_MAJOR_VERSION)) {
 					message = Configed.getResourceValue("LoginDialog.oldServerVersion");
+				} else if (ServerFacade.getOpsiServerVersionRetriever() != null && !ServerFacade
+						.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)) {
+					message = String.format(Configed.getResourceValue("LoginDialog.minServerVersion"),
+							Globals.MIN_SERVER_VERSION,
+							ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
 				} else {
 					message = new MessageFormat(
 							Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")).format(
