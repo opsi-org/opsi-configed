@@ -1,3 +1,7 @@
+## [4.3.8.3] - 2025-05-21
+### Add
+- Message of the Day now available
+
 ## [4.3.8.2] - 2025-04-03
 ### Changed
 - Show point in the icon of opsi module validation to indicate a warning or an expired license instead of changing color of the icon
