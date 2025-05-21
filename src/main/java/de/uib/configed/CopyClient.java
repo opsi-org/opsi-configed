@@ -50,6 +50,7 @@ public class CopyClient {
 	public CopyClient(HostInfo clientToCopy, String newClientName) {
 		this.clientToCopy = clientToCopy;
 		this.newClientName = newClientName;
+		this.newClientNameWithDomain = newClientName + "." + Utils.getDomainFromClientName(clientToCopy.getName());
 	}
 
 	/**
