@@ -142,6 +142,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public Map<String, List<String>> getHeaders() {
+		if (getConnectionState() != null && getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
+			return new HashMap<>();
+		}
 		Logging.info("getHeaders started");
 		int timeout = 2000;
 		System.setProperty("sun.net.client.defaultConnectTimeout", timeout + "");
@@ -151,11 +154,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			requestProperties.put("Cookie", sessionId);
 		}
 		URL url = makeURL("/auth/session_id");
-		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
+		ConnectionHandler handler = new ConnectionHandler(url, requestProperties, false);
 		HttpsURLConnection connection = handler.establishConnection(true, true, timeout);
 		setConnectionState(handler.getConnectionState());
-		if (connection == null) {
-			Logging.warning("try to get headers, but connection is null. ", "conStat ", getConnectionState(), "state: ",
+		if (connection == null || handler.getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
+			Logging.warning("try to get headers, but no connection. ", "conStat ", getConnectionState(), "state: ",
 					getConnectionState().getState());
 			System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
 			return new HashMap<>();
@@ -375,7 +378,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
-		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
+		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()
+				|| getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
 			return new HashMap<>();
 		}
 
@@ -435,7 +439,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod.toString(), " ", requestProperties, " ",
 				json, " ", resultkey, " ", responseHeader);
 
-		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + url);
 		timeCheck.start();
 

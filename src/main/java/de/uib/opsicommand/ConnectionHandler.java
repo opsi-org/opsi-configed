@@ -9,6 +9,7 @@ package de.uib.opsicommand;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,6 +18,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
@@ -31,6 +33,7 @@ public class ConnectionHandler {
 	private ConnectionState conStat;
 	private ConnectionErrorReporter reporter;
 	private RequestMethod requestMethod = RequestMethod.POST;
+	private boolean notifyUserOfErrors;
 
 	public enum RequestMethod {
 		POST, GET, HEAD
@@ -43,10 +46,23 @@ public class ConnectionHandler {
 	 * @param requestProperties additional request properties.
 	 */
 	public ConnectionHandler(URL serviceURL, Map<String, String> requestProperties) {
+		this(serviceURL, requestProperties, true);
+	}
+
+	/**
+	 * Constructs {@code ConnectionHandler} object with provided information.
+	 *
+	 * @param serviceURL        service URL with which to connect.
+	 * @param requestProperties additional request properties.
+	 * @param notifyUserOfError whether user should be nodified of an
+	 *                          encountered connection error.
+	 */
+	public ConnectionHandler(URL serviceURL, Map<String, String> requestProperties, boolean notifyUserOfErrors) {
 		this.serviceURL = serviceURL;
 		this.requestProperties = requestProperties != null ? new HashMap<>(requestProperties) : null;
 		this.conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 		this.reporter = ConnectionErrorReporter.getNewInstance(conStat);
+		this.notifyUserOfErrors = notifyUserOfErrors;
 	}
 
 	/**
@@ -167,7 +183,7 @@ public class ConnectionHandler {
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: ", ex);
 
-			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED) {
+			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED && notifyUserOfErrors) {
 				reporter.notify(produceCertificateWarningMessage(certValidator),
 						ConnectionErrorType.FAILED_CERTIFICATE_VALIDATION_ERROR);
 			}
@@ -192,8 +208,15 @@ public class ConnectionHandler {
 			} else {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 				conStat = new ConnectionState(ConnectionState.NOT_CONNECTED, ex.toString());
-				reporter.notify(Configed.getResourceValue("ConnectionHandler.noConnection"),
-						ConnectionErrorType.GENERAL_ERROR);
+				if (notifyUserOfErrors) {
+					reporter.notify(
+							ConfigedMain.getMainFrame() == null
+									? new MessageFormat(
+											Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"))
+													.format(new Object[] { conStat.getMessage() })
+									: Configed.getResourceValue("ConnectionHandler.noConnection"),
+							ConnectionErrorType.GENERAL_ERROR);
+				}
 				Logging.warning(ex, "Exception on connecting");
 			}
 
