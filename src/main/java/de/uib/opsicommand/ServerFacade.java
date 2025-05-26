@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.opsicommand.ConnectionHandler.RequestMethod;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.utils.Utils;
@@ -191,10 +192,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		URL urlGetSid = makeURL("/auth/session_id");
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
-		Map<String, Object> result = retrieveResponse(urlGetSid, "GET", requestProperties, jsonProperties, localKeySID);
+		Map<String, Object> result = retrieveResponse(urlGetSid, RequestMethod.GET, requestProperties, jsonProperties,
+				localKeySID);
 		if (getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
 			Logging.debug("connectSAML retry connection");
-			result = retrieveResponse(urlGetSid, "GET", requestProperties, jsonProperties, localKeySID);
+			result = retrieveResponse(urlGetSid, RequestMethod.GET, requestProperties, jsonProperties, localKeySID);
 		}
 
 		if (result == null || result.isEmpty() || !result.containsKey(localKeySID)) {
@@ -242,8 +244,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, Object> jsonProperties = new HashMap<>();
 		jsonProperties.put("wait_time", 60);
 		HashMap<String, Object> responseHeader = new HashMap<>();
-		Map<String, Object> result = retrieveResponse(urlAuthenticated, "POST", requestProperties, jsonProperties,
-				"authenticated", responseHeader);
+		Map<String, Object> result = retrieveResponse(urlAuthenticated, RequestMethod.POST, requestProperties,
+				jsonProperties, "authenticated", responseHeader);
 
 		boolean isAuthenticated = false;
 
@@ -350,7 +352,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	public boolean testConnection() {
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(new byte[0]));
-		handler.setRequestMethod("HEAD");
+		handler.setRequestMethod(RequestMethod.HEAD);
 		handler.establishConnection(false);
 		return handler.getConnectionState().getState() == ConnectionState.CONNECTED;
 	}
@@ -422,15 +424,16 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public Map<String, Object> retrieveResponse(URL url, String requestMethod, Map<String, String> requestProperties,
-			Map<String, Object> json, String resultkey) {
+	public Map<String, Object> retrieveResponse(URL url, RequestMethod requestMethod,
+			Map<String, String> requestProperties, Map<String, Object> json, String resultkey) {
 		return retrieveResponse(url, requestMethod, requestProperties, json, resultkey, null);
 	}
 
-	public Map<String, Object> retrieveResponse(URL url, String requestMethod, Map<String, String> requestProperties,
-			Map<String, Object> json, String resultkey, Map<String, Object> responseHeader) {
-		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod, " ", requestProperties, " ", json, " ",
-				resultkey, " ", responseHeader);
+	public Map<String, Object> retrieveResponse(URL url, RequestMethod requestMethod,
+			Map<String, String> requestProperties, Map<String, Object> json, String resultkey,
+			Map<String, Object> responseHeader) {
+		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod.toString(), " ", requestProperties, " ",
+				json, " ", resultkey, " ", responseHeader);
 
 		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + url);

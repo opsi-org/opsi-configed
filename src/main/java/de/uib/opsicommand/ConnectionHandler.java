@@ -24,14 +24,17 @@ import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.utils.logging.Logging;
 
 public class ConnectionHandler {
-	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET", "HEAD" };
 	private static final int DEFAULT_READ_TIMEOUT_MS = 60_000;
 
 	private URL serviceURL;
 	private Map<String, String> requestProperties;
 	private ConnectionState conStat;
 	private ConnectionErrorReporter reporter;
-	private String requestMethod = "POST";
+	private RequestMethod requestMethod = RequestMethod.POST;
+
+	public enum RequestMethod {
+		POST, GET, HEAD
+	}
 
 	/**
 	 * Constructs {@code ConnectionHandler} object with provided information.
@@ -74,37 +77,12 @@ public class ConnectionHandler {
 	 * Sets the request method to use for the connection (during the
 	 * {@link #establishConnection(boolean)} method execution). By default the
 	 * request method is {@code POST}.
-	 * <p>
-	 * You can only pass supported request methods and a null, if no request
-	 * method should be used. Currently supported request methods are
-	 * {@code POST} and {@code GET}.
 	 * 
 	 * @param requestMethod to use for the connection.
 	 * @throws IllegalArgumentException if request method is not supported.
 	 */
-	public void setRequestMethod(String requestMethod) throws IllegalArgumentException {
-		if (requestMethod == null) {
-			Logging.info(this, "no request method is used");
-			this.requestMethod = requestMethod;
-			return;
-		}
-
-		boolean isMethodSupported = false;
-
-		for (String supportedRequestMethod : SUPPORTED_REQUEST_METHODS) {
-			if (supportedRequestMethod.equals(requestMethod)) {
-				isMethodSupported = true;
-				break;
-			}
-		}
-
-		if (isMethodSupported) {
-			Logging.info(this, "request method is supported: ", requestMethod);
-			this.requestMethod = requestMethod;
-		} else {
-			Logging.warning(this, "request method is unsupported: ", requestMethod);
-			throw new IllegalArgumentException("request method is unsupported: " + requestMethod);
-		}
+	public void setRequestMethod(RequestMethod requestMethod) throws IllegalArgumentException {
+		this.requestMethod = requestMethod;
 	}
 
 	/**
@@ -112,7 +90,7 @@ public class ConnectionHandler {
 	 * 
 	 * @return used request method.
 	 */
-	public String getRequestMethod() {
+	public RequestMethod getRequestMethod() {
 		return requestMethod;
 	}
 
@@ -168,7 +146,7 @@ public class ConnectionHandler {
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
 			if (requestMethod != null) {
-				connection.setRequestMethod(requestMethod);
+				connection.setRequestMethod(requestMethod.toString());
 			}
 
 			if (requestProperties != null) {
