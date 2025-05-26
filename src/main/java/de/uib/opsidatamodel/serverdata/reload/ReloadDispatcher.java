@@ -7,7 +7,9 @@
 package de.uib.opsidatamodel.serverdata.reload;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import de.uib.opsidatamodel.serverdata.reload.handler.ReloadHandler;
 import de.uib.utils.logging.Logging;
@@ -20,14 +22,25 @@ import de.uib.utils.logging.Logging;
  */
 public class ReloadDispatcher {
 	private Map<String, ReloadHandler> handlers = new HashMap<>();
+	private Set<String> activeEvents = new HashSet<>();
 
 	public void registerHandler(String event, ReloadHandler handler) {
 		handlers.put(event, handler);
 	}
 
 	public void dispatch(String event) {
+		if (activeEvents.contains(event)) {
+			Logging.warning(this, "Recursive dispatch detected for event: ", event,
+					". Skipping to prevent stack overflow.");
+			return;
+		}
 		if (handlers.containsKey(event)) {
-			handlers.get(event).handle(event);
+			try {
+				activeEvents.add(event);
+				handlers.get(event).handle(event);
+			} finally {
+				activeEvents.remove(event);
+			}
 		} else {
 			Logging.warning(this, "No reload handler is available for ", event, " reload event");
 		}

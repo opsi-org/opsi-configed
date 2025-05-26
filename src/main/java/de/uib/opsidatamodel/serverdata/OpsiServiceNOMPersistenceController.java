@@ -390,10 +390,6 @@ public class OpsiServiceNOMPersistenceController {
 	}
 
 	public void reloadData(String event) {
-		if (!ParallelTaskExecutor.isNewTasksAllowed()
-				|| exec.getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
-			return;
-		}
 		triggeredEvent = event;
 		reloadDispatcher.dispatch(event);
 	}
