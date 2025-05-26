@@ -98,8 +98,7 @@ public final class ChangedDataManager {
 		Logging.debug("checkSaveAll: anyDataChanged, ask  ", anyDataChanged, ", ", ask);
 
 		if (anyDataChanged) {
-			boolean active = PersistenceControllerFactory.getPersistenceController().getExecutioner().testConnection();
-			if (!active) {
+			if (!PersistenceControllerFactory.getPersistenceController().getExecutioner().testConnection(true)) {
 				setDataChanged(true, true);
 				return;
 			}

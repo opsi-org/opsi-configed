@@ -353,8 +353,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public boolean testConnection() {
-		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(new byte[0]));
+	public boolean testConnection(boolean notifyUserOfErrors) {
+		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(new byte[0]),
+				notifyUserOfErrors);
 		handler.setRequestMethod(RequestMethod.HEAD);
 		handler.establishConnection(false);
 		return handler.getConnectionState().getState() == ConnectionState.CONNECTED;
@@ -375,12 +376,16 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		Logging.info(this, "retrieveResponse started");
 
+		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
+			if (getConnectionState().getState() == ConnectionState.NOT_CONNECTED && testConnection(false)) {
+				ParallelTaskExecutor.allowNewTasks(true);
+			} else {
+				return new HashMap<>();
+			}
+		}
+
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
-
-		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
-			return new HashMap<>();
-		}
 
 		ConnectionHandler handler = new ConnectionHandler(makeURL(),
 				produceGeneralRequestProperties(produceMessagePack(omc)));
