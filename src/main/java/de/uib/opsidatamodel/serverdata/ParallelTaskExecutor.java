@@ -42,6 +42,9 @@ public class ParallelTaskExecutor {
 	 * @param task The {@link Runnable} task to be executed in parallel.
 	 */
 	public void runInParallel(Runnable task) {
+		if (!newTasksAllowed || executorService.isShutdown()) {
+			return;
+		}
 		CompletableFuture<Void> future = CompletableFuture.runAsync(task, executorService);
 		futures.add(future);
 	}
@@ -64,7 +67,7 @@ public class ParallelTaskExecutor {
 			}
 		}
 		executors.remove(this);
-		executorService.shutdown();
+		executorService.shutdownNow();
 	}
 
 	/**

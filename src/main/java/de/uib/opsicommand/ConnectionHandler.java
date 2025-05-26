@@ -20,10 +20,11 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.utils.logging.Logging;
 
 public class ConnectionHandler {
-	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET" };
+	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET", "HEAD" };
 	private static final int DEFAULT_READ_TIMEOUT_MS = 60_000;
 
 	private URL serviceURL;
@@ -184,6 +185,8 @@ public class ConnectionHandler {
 			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
 			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
 			connection.connect();
+
+			conStat = new ConnectionState(ConnectionState.CONNECTED);
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: ", ex);
 
@@ -210,7 +213,10 @@ public class ConnectionHandler {
 			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				conStat = reporter.getConnectionState();
 			} else {
-				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
+				ParallelTaskExecutor.cancelAllExecutorsTasks();
+				conStat = new ConnectionState(ConnectionState.NOT_CONNECTED, ex.toString());
+				reporter.notify(Configed.getResourceValue("ConnectionHandler.noConnection"),
+						ConnectionErrorType.GENERAL_ERROR);
 				Logging.warning(ex, "Exception on connecting");
 			}
 

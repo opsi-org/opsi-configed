@@ -475,6 +475,9 @@ public class ModuleDataService {
 
 	public boolean isOpsiModuleActive(OpsiModule opsiModule) {
 		Map<String, Boolean> opsiModules = getOpsiModulesPD();
+		if (opsiModules == null || opsiModules.isEmpty()) {
+			return false;
+		}
 		return Boolean.TRUE.equals(opsiModules.get(opsiModule.toString()));
 	}
 

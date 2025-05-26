@@ -168,7 +168,6 @@ public class UserRolesConfigDataService {
 			readyObjects.add(item);
 
 			OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.CONFIG_UPDATE_OBJECTS, new Object[] { readyObjects });
-
 			exec.doCall(omc);
 		}
 

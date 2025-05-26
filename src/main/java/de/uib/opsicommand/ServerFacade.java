@@ -278,7 +278,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return versionRetriever;
 	}
 
-	private Map<String, String> produceGeneralRequestProperties(OpsiMethodCall omc) {
+	private Map<String, String> produceGeneralRequestProperties(byte[] data) {
 		Map<String, String> requestProperties = new HashMap<>();
 		if (!useSAML) {
 			String authorization = Base64.getEncoder()
@@ -293,7 +293,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		requestProperties.put("Accept", "application/msgpack");
 		requestProperties.put("Content-Type", "application/msgpack");
 
-		int messageSize = produceMessagePack(omc).length;
+		int messageSize = data.length;
 
 		if (messageSize > COMPRESS_MIN_SIZE) {
 			requestProperties.put("Content-Encoding", "lz4");
@@ -348,6 +348,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
+	public boolean testConnection() {
+		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(new byte[0]));
+		handler.setRequestMethod("HEAD");
+		handler.establishConnection(false);
+		return handler.getConnectionState().getState() != ConnectionState.NOT_CONNECTED;
+	}
+
 	/**
 	 * Retrieves response from the server.
 	 * <p>
@@ -370,7 +377,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			return new HashMap<>();
 		}
 
-		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(omc));
+		ConnectionHandler handler = new ConnectionHandler(makeURL(),
+				produceGeneralRequestProperties(produceMessagePack(omc)));
 		HttpsURLConnection connection = handler.establishConnection(true);
 		setConnectionState(handler.getConnectionState());
 		sendPostRequest(connection, omc);

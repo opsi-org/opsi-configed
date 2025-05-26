@@ -129,9 +129,16 @@ public final class ConnectionErrorReporter {
 	}
 
 	private void displayGeneralDialog(String message) {
-		JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
-				Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.title"), JOptionPane.OK_CANCEL_OPTION);
-		conStat = new ConnectionState(ConnectionState.INTERRUPTED);
+		runOnEventDispatchThread(() -> {
+			if (!dialogOpened.compareAndSet(false, true)) {
+				return;
+			}
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), message,
+					Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.title"),
+					JOptionPane.OK_CANCEL_OPTION);
+			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
+			dialogOpened.set(false);
+		});
 	}
 
 	private void displayMFADialog() {

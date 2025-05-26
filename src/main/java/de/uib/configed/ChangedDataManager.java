@@ -11,6 +11,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 
 import de.uib.configed.type.HostInfo;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public final class ChangedDataManager {
@@ -97,6 +98,11 @@ public final class ChangedDataManager {
 		Logging.debug("checkSaveAll: anyDataChanged, ask  ", anyDataChanged, ", ", ask);
 
 		if (anyDataChanged) {
+			boolean active = PersistenceControllerFactory.getPersistenceController().getExecutioner().testConnection();
+			if (!active) {
+				setDataChanged(true, true);
+				return;
+			}
 			// without showing, but must be on first place since we run in this method again
 			setDataChanged(false, false);
 
