@@ -352,7 +352,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(new byte[0]));
 		handler.setRequestMethod("HEAD");
 		handler.establishConnection(false);
-		return handler.getConnectionState().getState() != ConnectionState.NOT_CONNECTED;
+		return handler.getConnectionState().getState() == ConnectionState.CONNECTED;
 	}
 
 	/**
