@@ -79,9 +79,8 @@ public class ConnectionHandler {
 	 * request method is {@code POST}.
 	 * 
 	 * @param requestMethod to use for the connection.
-	 * @throws IllegalArgumentException if request method is not supported.
 	 */
-	public void setRequestMethod(RequestMethod requestMethod) throws IllegalArgumentException {
+	public void setRequestMethod(RequestMethod requestMethod) {
 		this.requestMethod = requestMethod;
 	}
 
