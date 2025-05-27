@@ -469,7 +469,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, Object> result = new HashMap<>();
 		// receiving data
 
-		if (getConnectionState().getState() == ConnectionState.STARTED_CONNECTING) {
+		if (getConnectionState().getState() == ConnectionState.CONNECTED) {
 			try {
 				handleResponseCode(connection);
 
