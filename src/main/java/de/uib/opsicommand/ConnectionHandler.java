@@ -9,7 +9,6 @@ package de.uib.opsicommand;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -211,9 +210,7 @@ public class ConnectionHandler {
 				if (notifyUserOfErrors) {
 					reporter.notify(
 							ConfigedMain.getMainFrame() == null
-									? new MessageFormat(
-											Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"))
-													.format(new Object[] { conStat.getMessage() })
+									? Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")
 									: Configed.getResourceValue("ConnectionHandler.noConnection"),
 							ConnectionErrorType.GENERAL_ERROR);
 				}
