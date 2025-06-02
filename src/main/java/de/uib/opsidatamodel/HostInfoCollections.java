@@ -345,7 +345,15 @@ public class HostInfoCollections {
 
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
+		if (depot2Host2HostInfo == null || depot2Host2HostInfo.isEmpty()) {
+			return setOfPCs;
+		}
+
 		for (String depot : depotList) {
+			if (depot2Host2HostInfo.get(depot) == null) {
+				break;
+			}
+
 			for (Entry<String, HostInfo> client : depot2Host2HostInfo.get(depot).entrySet()) {
 				HostInfo hostInfo = client.getValue();
 

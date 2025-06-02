@@ -17,20 +17,26 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
+import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.utils.logging.Logging;
 
 public class ConnectionHandler {
-	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET" };
 	private static final int DEFAULT_READ_TIMEOUT_MS = 60_000;
 
 	private URL serviceURL;
 	private Map<String, String> requestProperties;
 	private ConnectionState conStat;
 	private ConnectionErrorReporter reporter;
-	private String requestMethod = "POST";
+	private RequestMethod requestMethod = RequestMethod.POST;
+	private boolean notifyUserOfErrors;
+
+	public enum RequestMethod {
+		POST, GET, HEAD
+	}
 
 	/**
 	 * Constructs {@code ConnectionHandler} object with provided information.
@@ -39,10 +45,23 @@ public class ConnectionHandler {
 	 * @param requestProperties additional request properties.
 	 */
 	public ConnectionHandler(URL serviceURL, Map<String, String> requestProperties) {
+		this(serviceURL, requestProperties, true);
+	}
+
+	/**
+	 * Constructs {@code ConnectionHandler} object with provided information.
+	 *
+	 * @param serviceURL        service URL with which to connect.
+	 * @param requestProperties additional request properties.
+	 * @param notifyUserOfError whether user should be nodified of an
+	 *                          encountered connection error.
+	 */
+	public ConnectionHandler(URL serviceURL, Map<String, String> requestProperties, boolean notifyUserOfErrors) {
 		this.serviceURL = serviceURL;
 		this.requestProperties = requestProperties != null ? new HashMap<>(requestProperties) : null;
 		this.conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 		this.reporter = ConnectionErrorReporter.getNewInstance(conStat);
+		this.notifyUserOfErrors = notifyUserOfErrors;
 	}
 
 	/**
@@ -73,37 +92,11 @@ public class ConnectionHandler {
 	 * Sets the request method to use for the connection (during the
 	 * {@link #establishConnection(boolean)} method execution). By default the
 	 * request method is {@code POST}.
-	 * <p>
-	 * You can only pass supported request methods and a null, if no request
-	 * method should be used. Currently supported request methods are
-	 * {@code POST} and {@code GET}.
 	 * 
 	 * @param requestMethod to use for the connection.
-	 * @throws IllegalArgumentException if request method is not supported.
 	 */
-	public void setRequestMethod(String requestMethod) throws IllegalArgumentException {
-		if (requestMethod == null) {
-			Logging.info(this, "no request method is used");
-			this.requestMethod = requestMethod;
-			return;
-		}
-
-		boolean isMethodSupported = false;
-
-		for (String supportedRequestMethod : SUPPORTED_REQUEST_METHODS) {
-			if (supportedRequestMethod.equals(requestMethod)) {
-				isMethodSupported = true;
-				break;
-			}
-		}
-
-		if (isMethodSupported) {
-			Logging.info(this, "request method is supported: ", requestMethod);
-			this.requestMethod = requestMethod;
-		} else {
-			Logging.warning(this, "request method is unsupported: ", requestMethod);
-			throw new IllegalArgumentException("request method is unsupported: " + requestMethod);
-		}
+	public void setRequestMethod(RequestMethod requestMethod) {
+		this.requestMethod = requestMethod;
 	}
 
 	/**
@@ -111,7 +104,7 @@ public class ConnectionHandler {
 	 * 
 	 * @return used request method.
 	 */
-	public String getRequestMethod() {
+	public RequestMethod getRequestMethod() {
 		return requestMethod;
 	}
 
@@ -167,7 +160,7 @@ public class ConnectionHandler {
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
 			if (requestMethod != null) {
-				connection.setRequestMethod(requestMethod);
+				connection.setRequestMethod(requestMethod.toString());
 			}
 
 			if (requestProperties != null) {
@@ -184,10 +177,12 @@ public class ConnectionHandler {
 			connection.setSSLSocketFactory(certValidator.getSSLSocketFactory());
 			connection.setHostnameVerifier(certValidator.getHostnameVerifier());
 			connection.connect();
+
+			conStat = new ConnectionState(ConnectionState.CONNECTED);
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: ", ex);
 
-			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED) {
+			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED && notifyUserOfErrors) {
 				reporter.notify(produceCertificateWarningMessage(certValidator),
 						ConnectionErrorType.FAILED_CERTIFICATE_VALIDATION_ERROR);
 			}
@@ -210,7 +205,15 @@ public class ConnectionHandler {
 			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				conStat = reporter.getConnectionState();
 			} else {
-				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
+				ParallelTaskExecutor.cancelAllExecutorsTasks();
+				conStat = new ConnectionState(ConnectionState.NOT_CONNECTED, ex.toString());
+				if (notifyUserOfErrors) {
+					reporter.notify(
+							ConfigedMain.getMainFrame() == null
+									? Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")
+									: Configed.getResourceValue("ConnectionHandler.noConnection"),
+							ConnectionErrorType.GENERAL_ERROR);
+				}
 				Logging.warning(ex, "Exception on connecting");
 			}
 

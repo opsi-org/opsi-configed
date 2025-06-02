@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.opsicommand.ConnectionHandler.RequestMethod;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.utils.Utils;
@@ -141,6 +142,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public Map<String, List<String>> getHeaders() {
+		if (getConnectionState() != null && getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
+			return new HashMap<>();
+		}
 		Logging.info("getHeaders started");
 		int timeout = 2000;
 		System.setProperty("sun.net.client.defaultConnectTimeout", timeout + "");
@@ -150,11 +154,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			requestProperties.put("Cookie", sessionId);
 		}
 		URL url = makeURL("/auth/session_id");
-		ConnectionHandler handler = new ConnectionHandler(url, requestProperties);
+		ConnectionHandler handler = new ConnectionHandler(url, requestProperties, false);
 		HttpsURLConnection connection = handler.establishConnection(true, true, timeout);
 		setConnectionState(handler.getConnectionState());
-		if (connection == null) {
-			Logging.warning("try to get headers, but connection is null. ", "conStat ", getConnectionState(), "state: ",
+		if (connection == null || handler.getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
+			Logging.warning("try to get headers, but no connection. ", "conStat ", getConnectionState(), "state: ",
 					getConnectionState().getState());
 			System.setProperty("sun.net.client.defaultConnectTimeout", Globals.DEFAULT_TIMEOUT + "");
 			return new HashMap<>();
@@ -191,10 +195,11 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		URL urlGetSid = makeURL("/auth/session_id");
 		CertificateManager.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE), host + "_" + portHTTPS);
 		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
-		Map<String, Object> result = retrieveResponse(urlGetSid, "GET", requestProperties, jsonProperties, localKeySID);
+		Map<String, Object> result = retrieveResponse(urlGetSid, RequestMethod.GET, requestProperties, jsonProperties,
+				localKeySID);
 		if (getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
 			Logging.debug("connectSAML retry connection");
-			result = retrieveResponse(urlGetSid, "GET", requestProperties, jsonProperties, localKeySID);
+			result = retrieveResponse(urlGetSid, RequestMethod.GET, requestProperties, jsonProperties, localKeySID);
 		}
 
 		if (result == null || result.isEmpty() || !result.containsKey(localKeySID)) {
@@ -242,8 +247,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, Object> jsonProperties = new HashMap<>();
 		jsonProperties.put("wait_time", 60);
 		HashMap<String, Object> responseHeader = new HashMap<>();
-		Map<String, Object> result = retrieveResponse(urlAuthenticated, "POST", requestProperties, jsonProperties,
-				"authenticated", responseHeader);
+		Map<String, Object> result = retrieveResponse(urlAuthenticated, RequestMethod.POST, requestProperties,
+				jsonProperties, "authenticated", responseHeader);
 
 		boolean isAuthenticated = false;
 
@@ -278,7 +283,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return versionRetriever;
 	}
 
-	private Map<String, String> produceGeneralRequestProperties(OpsiMethodCall omc) {
+	private Map<String, String> produceGeneralRequestProperties(byte[] data) {
 		Map<String, String> requestProperties = new HashMap<>();
 		if (!useSAML) {
 			String authorization = Base64.getEncoder()
@@ -293,7 +298,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		requestProperties.put("Accept", "application/msgpack");
 		requestProperties.put("Content-Type", "application/msgpack");
 
-		int messageSize = produceMessagePack(omc).length;
+		int messageSize = data.length;
 
 		if (messageSize > COMPRESS_MIN_SIZE) {
 			requestProperties.put("Content-Encoding", "lz4");
@@ -348,6 +353,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
+	public boolean testConnection(boolean notifyUserOfErrors) {
+		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(new byte[0]),
+				notifyUserOfErrors);
+		handler.setRequestMethod(RequestMethod.HEAD);
+		handler.establishConnection(false);
+		return handler.getConnectionState().getState() == ConnectionState.CONNECTED;
+	}
+
 	/**
 	 * Retrieves response from the server.
 	 * <p>
@@ -363,14 +376,19 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		Logging.info(this, "retrieveResponse started");
 
+		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
+			if (getConnectionState().getState() == ConnectionState.NOT_CONNECTED && testConnection(false)) {
+				ParallelTaskExecutor.allowNewTasks(true);
+			} else {
+				return new HashMap<>();
+			}
+		}
+
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
-		if ((otp == null && Utils.isMultiFactorAuthenticationEnabled()) || !ParallelTaskExecutor.isNewTasksAllowed()) {
-			return new HashMap<>();
-		}
-
-		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(omc));
+		ConnectionHandler handler = new ConnectionHandler(makeURL(),
+				produceGeneralRequestProperties(produceMessagePack(omc)));
 		HttpsURLConnection connection = handler.establishConnection(true);
 		setConnectionState(handler.getConnectionState());
 		sendPostRequest(connection, omc);
@@ -414,17 +432,17 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	public Map<String, Object> retrieveResponse(URL url, String requestMethod, Map<String, String> requestProperties,
-			Map<String, Object> json, String resultkey) {
+	public Map<String, Object> retrieveResponse(URL url, RequestMethod requestMethod,
+			Map<String, String> requestProperties, Map<String, Object> json, String resultkey) {
 		return retrieveResponse(url, requestMethod, requestProperties, json, resultkey, null);
 	}
 
-	public Map<String, Object> retrieveResponse(URL url, String requestMethod, Map<String, String> requestProperties,
-			Map<String, Object> json, String resultkey, Map<String, Object> responseHeader) {
-		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod, " ", requestProperties, " ", json, " ",
-				resultkey, " ", responseHeader);
+	public Map<String, Object> retrieveResponse(URL url, RequestMethod requestMethod,
+			Map<String, String> requestProperties, Map<String, Object> json, String resultkey,
+			Map<String, Object> responseHeader) {
+		Logging.info(this, "retrieveResponse started ", url, " ", requestMethod.toString(), " ", requestProperties, " ",
+				json, " ", resultkey, " ", responseHeader);
 
-		setConnectionState(new ConnectionState(ConnectionState.STARTED_CONNECTING));
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + url);
 		timeCheck.start();
 
@@ -451,7 +469,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		Map<String, Object> result = new HashMap<>();
 		// receiving data
 
-		if (getConnectionState().getState() == ConnectionState.STARTED_CONNECTING) {
+		if (getConnectionState().getState() == ConnectionState.CONNECTED) {
 			try {
 				handleResponseCode(connection);
 

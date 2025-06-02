@@ -6,8 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.text.MessageFormat;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -102,21 +100,25 @@ public class LoginThread extends Thread {
 				if (connectionState.getState() == ConnectionState.TIMEOUT) {
 					message = Configed.getResourceValue("LoginDialog.timeoutReached");
 					errorType = ConnectionErrorType.TIMEOUT_ERROR;
-				} else if (ServerFacade.getOpsiServerVersionRetriever() != null && !ServerFacade
-						.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_MAJOR_VERSION)) {
+				} else if (ServerFacade.getOpsiServerVersionRetriever() != null
+						&& !ServerFacade.getOpsiServerVersionRetriever()
+								.isServerVersionAtLeast(Globals.MIN_MAJOR_VERSION)
+						&& connectionState.getState() != ConnectionState.NOT_CONNECTED) {
 					message = Configed.getResourceValue("LoginDialog.oldServerVersion");
-				} else if (ServerFacade.getOpsiServerVersionRetriever() != null && !ServerFacade
-						.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)) {
+				} else if (ServerFacade.getOpsiServerVersionRetriever() != null
+						&& !ServerFacade.getOpsiServerVersionRetriever()
+								.isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)
+						&& connectionState.getState() != ConnectionState.NOT_CONNECTED) {
 					message = String.format(Configed.getResourceValue("LoginDialog.minServerVersion"),
 							Globals.MIN_SERVER_VERSION,
 							ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
 				} else {
-					message = new MessageFormat(
-							Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")).format(
-									new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() });
+					message = null;
 				}
 
-				ConnectionErrorReporter.getInstance().notify(message, errorType);
+				if (message != null) {
+					ConnectionErrorReporter.getInstance().notify(message, errorType);
+				}
 			}
 
 			loginDialog.returnToLogin();

@@ -21,7 +21,7 @@ import de.uib.utils.logging.Logging;
  * will be retrieved in POJO.
  */
 public abstract class AbstractPOJOExecutioner {
-	private AtomicReference<ConnectionState> conStat = new AtomicReference<>();
+	private final AtomicReference<ConnectionState> conStat = new AtomicReference<>();
 
 	public abstract Map<String, Object> retrieveResponse(OpsiMethodCall omc);
 
