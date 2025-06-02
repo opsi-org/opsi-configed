@@ -8,7 +8,6 @@ package de.uib.configed;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -149,9 +148,9 @@ public class CopyClient {
 	private void copyConfigStates() {
 		ConfigDataService configDataService = persistenceController.getConfigDataService();
 
-		Map<String, Object> hostConfig = new HashMap<>();
-		if (configDataService.getHostConfigsPD().get(clientToCopy.getName()) != null) {
-			hostConfig.putAll(configDataService.getHostConfigsPD().get(clientToCopy.getName()));
+		Map<String, Object> hostConfig = configDataService.getHostConfigsPD().get(clientToCopy.getName());
+		if (hostConfig == null) {
+			return;
 		}
 		ConfigName2ConfigValue clientConfigStates = new ConfigName2ConfigValue(hostConfig,
 				configDataService.getConfigOptionsPD());
