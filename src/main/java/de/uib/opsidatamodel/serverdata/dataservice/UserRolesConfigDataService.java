@@ -139,6 +139,7 @@ public class UserRolesConfigDataService {
 				doesUserBelongToSystemsReadOnlyGroup()));
 		executor.waitForCompletion();
 
+		// We need to set default data in case the user roles are deactivated
 		cacheManager.setCachedData(CacheIdentifier.SERVER_FULL_PERMISION, !isGlobalReadOnly());
 		cacheManager.setCachedData(CacheIdentifier.DEPOTS_FULL_PERMISSION, true);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS_ONLY_IF_EXPLICITLY_STATED, false);
@@ -351,6 +352,9 @@ public class UserRolesConfigDataService {
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
 			List<Object> items = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(cacheIdentifier, items.get(0));
+		} else {
+			Logging.info(this, " checkPermissions default value ", configKey);
+			cacheManager.setCachedData(cacheIdentifier, true);
 		}
 	}
 
@@ -366,12 +370,13 @@ public class UserRolesConfigDataService {
 				CacheIdentifier.TERMINAL_COMMANDS_ACTIVE);
 
 		String configKey = userPartPD() + UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
-		cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, Collections.emptyList());
 		if (serverPropertyMap.get(configKey) != null
 				&& persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.USER_ROLES)) {
 			Logging.info(this, "checkPermissions value:", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, forbiddenItems);
+		} else {
+			cacheManager.setCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, Collections.emptyList());
 		}
 	}
 

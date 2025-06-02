@@ -77,8 +77,9 @@ public class LeftToolBar extends JToolBar {
 
 		JMenu menuOpsi = new JMenu(CommandFactory.PARENT_OPSI);
 		Icons.addOpsiIconToMenuItem(menuOpsi);
-		boolean commandsAreDeactivated = !Boolean.TRUE.equals(UserConfig.getCurrentUserConfig()
-				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE));
+		boolean commandsAreDeactivated = !PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().terminalCommandsIsActive();
+
 		Logging.info("setupMenuTerminal commandsAreDeactivated ", commandsAreDeactivated);
 		CommandFactory factory = CommandFactory.getInstance();
 		factory.retrieveCommandList();
@@ -87,11 +88,6 @@ public class LeftToolBar extends JToolBar {
 			menuOpsi.addSeparator();
 		}
 		addDefaultOpsiCommandsToMenuOpsi(configedMain, menuOpsi, commandsAreDeactivated);
-
-		jMenuServerConsole.setEnabled(!PersistenceControllerFactory.getPersistenceController()
-				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
-						.terminalMenuIsActive());
 
 		JMenuItem jMenuTerminal = new JMenuItem(Configed.getResourceValue("Terminal.title"));
 		Icons.addIntellijIconToMenuItem(jMenuTerminal, "terminal");
@@ -189,15 +185,15 @@ public class LeftToolBar extends JToolBar {
 	private void loadServerConsoleMenu() {
 		terminalButton.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+				&& PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.terminalMenuIsActive());
 
 		setupMenuServerConsole(configedMain, jMenuServerConsole);
 
 		jMenuServerConsoleMenuBar.setEnabled(!PersistenceControllerFactory.getPersistenceController()
 				.getUserRolesConfigDataService().isGlobalReadOnly()
-				&& UserConfig.getCurrentUserConfig()
-						.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_MENU_ACTIVE));
+				&& PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService()
+						.terminalMenuIsActive());
 
 		setupMenuServerConsole(configedMain, jMenuServerConsoleMenuBar);
 	}
