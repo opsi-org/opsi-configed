@@ -108,6 +108,10 @@ public class CopyClient {
 
 			productStatesAndActions.forEach((Map<String, String> productInfo) -> {
 				productInfo.values().removeIf(String::isEmpty);
+				productInfo.put("clientId", newClientNameWithDomain);
+				String oldIdent = productInfo.get("ident");
+				String newIdent = oldIdent.replaceFirst(clientToCopy.getName(), newClientNameWithDomain);
+				productInfo.put("ident", newIdent);
 				persistenceController.getProductDataService().updateProductOnClient(newClientNameWithDomain,
 						productInfo.get("productId"), getProductType(productInfo.get("productId")), productInfo);
 			});
