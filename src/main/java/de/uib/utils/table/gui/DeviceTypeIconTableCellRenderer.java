@@ -19,6 +19,7 @@ public class DeviceTypeIconTableCellRenderer extends ColorTableCellRenderer {
 	private static final String NOTEBOOK = "notebook";
 	private static final String VIRTUAL_MACHINE = "virtual_machine";
 	private static final String CONVERTIBLE = "convertible";
+	private static final String SERVER = "server";
 	private static final String OTHER = "other";
 
 	public DeviceTypeIconTableCellRenderer() {
@@ -42,9 +43,12 @@ public class DeviceTypeIconTableCellRenderer extends ColorTableCellRenderer {
 		} else if (CONVERTIBLE.equals(value)) {
 			setIcon(Icons.getThemeSVGRepoIcon("convertible", 16));
 			setToolTipText(CONVERTIBLE);
+		} else if (SERVER.equals(value)) {
+			setIcon(Icons.getThemeSVGRepoIcon("server", 16));
+			setToolTipText(SERVER);
 		} else if (OTHER.equals(value)) {
 			//setIcon(null); // its actually same as null, cause we do not know what the device type is
-			// affects sorting.. 
+			// affects sorting..
 			setIcon(Icons.getThemeIntellijIcon("questionMark", 16));
 			setToolTipText(OTHER);
 		} else {
