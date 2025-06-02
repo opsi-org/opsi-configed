@@ -468,7 +468,7 @@ public class HostInfo {
 			clientDescription = (String) sourceOfChanges.get(CLIENT_DESCRIPTION_KEY);
 			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue("description"));
 			if (col > -1) {
-				clientTablePanel.getTableModel().setValueAt(clientDescription, row, col);
+				clientTablePanel.getClientTable().setValueAt(clientDescription, row, col);
 			}
 
 			// restoring old value
@@ -491,7 +491,7 @@ public class HostInfo {
 			int col = clientTablePanel.getTableModel()
 					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
 			if (col > -1) {
-				clientTablePanel.getTableModel().setValueAt(clientInventoryNumber, row, col);
+				clientTablePanel.getClientTable().setValueAt(clientInventoryNumber, row, col);
 			}
 
 			// restoring old value
@@ -544,7 +544,7 @@ public class HostInfo {
 			int col = clientTablePanel.getTableModel()
 					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSystemUUID"));
 			if (col > -1) {
-				clientTablePanel.getTableModel().setValueAt(clientMacAddress, row, col);
+				clientTablePanel.getClientTable().setValueAt(clientMacAddress, row, col);
 			}
 
 			// restoring old value
@@ -567,7 +567,7 @@ public class HostInfo {
 			int col = clientTablePanel.getTableModel()
 					.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 			if (col > -1) {
-				clientTablePanel.getTableModel().setValueAt(clientMacAddress, row, col);
+				clientTablePanel.getClientTable().setValueAt(clientMacAddress, row, col);
 			}
 
 			// restoring old value
@@ -589,7 +589,7 @@ public class HostInfo {
 
 			int col = clientTablePanel.getTableModel().findColumn(Configed.getResourceValue("ipAddress"));
 			if (col > -1) {
-				clientTablePanel.getTableModel().setValueAt(clientIpAddress, row, col);
+				clientTablePanel.getClientTable().setValueAt(clientIpAddress, row, col);
 			}
 
 			// restoring old value
@@ -618,7 +618,7 @@ public class HostInfo {
 
 			if (col > -1) {
 				// write it into the visible table
-				clientTablePanel.getTableModel().setValueAt(shutdownInstall, row, col);
+				clientTablePanel.getClientTable().setValueAt(shutdownInstall, row, col);
 			}
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -641,7 +641,7 @@ public class HostInfo {
 
 			if (col > -1) {
 				// write it into the visible table
-				clientTablePanel.getTableModel().setValueAt(wanStandard, row, col);
+				clientTablePanel.getClientTable().setValueAt(wanStandard, row, col);
 			}
 
 			OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -664,7 +664,7 @@ public class HostInfo {
 			return;
 		}
 
-		int row = clientTablePanel.findModelRowFromValue(client);
+		int row = clientTablePanel.findModelRowFromClientName(client);
 
 		setClientDescription(clientTablePanel, client, sourceOfChanges, row);
 

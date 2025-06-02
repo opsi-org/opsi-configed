@@ -218,10 +218,10 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		return (DefaultTableModel) clientTable.getModel();
 	}
 
-	public int findModelRowFromValue(Object value) {
+	public int findModelRowFromClientName(String clientName) {
 		int result = -1;
 
-		if (value == null) {
+		if (clientName == null) {
 			return result;
 		}
 
@@ -229,12 +229,9 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		int row = 0;
 
 		while (!found && row < getTableModel().getRowCount()) {
-			Object compareValue = getTableModel().getValueAt(row, 0);
+			String compareName = clientTable.getClientName(row);
 
-			String compareVal = compareValue.toString();
-			String val = value.toString();
-
-			if (val.equals(compareVal)) {
+			if (clientName.equals(compareName)) {
 				found = true;
 				result = row;
 			}

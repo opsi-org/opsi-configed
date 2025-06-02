@@ -9,8 +9,9 @@ package de.uib.configed;
 import java.util.Map;
 
 import javax.swing.SwingWorker;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
+import de.uib.configed.gui.ClientTable;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -48,13 +49,14 @@ public class SessionInfoRetriever extends SwingWorker<Void, Void> {
 		// update column
 		if (Boolean.TRUE.equals(persistenceController.getHostDataService().getHostDisplayFields()
 				.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
-			AbstractTableModel model = configedMain.getClientTablePanel().getTableModel();
+			ClientTable clientTable = configedMain.getClientTablePanel().getClientTable();
+			DefaultTableModel model = configedMain.getClientTablePanel().getTableModel();
 
 			int col = model.findColumn(Configed.getResourceValue("sessionInfo"));
 
-			for (int row = 0; row < model.getRowCount(); row++) {
-				String clientId = (String) model.getValueAt(row, 0);
-				model.setValueAt(sessionInfo.get(clientId), row, col);
+			for (int row = 0; row < clientTable.getRowCount(); row++) {
+				String clientId = clientTable.getClientName(row);
+				clientTable.setValueAt(sessionInfo.get(clientId), row, col);
 			}
 
 			model.fireTableDataChanged();
