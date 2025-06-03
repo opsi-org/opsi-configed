@@ -34,6 +34,8 @@ import com.formdev.flatlaf.icons.FlatSearchIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.utils.FeatureActivationChecker;
+import de.uib.utils.FeatureActivationChecker.Feature;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
@@ -116,7 +118,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		popupMarkHits.setVisible(true);
 		popupMarkAndFilter.setVisible(true);
 
-		filtermark.setVisible(true);
+		filtermark.setVisible(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
 	}
 
 	public boolean isFiltering() {
@@ -196,7 +198,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(respectCase);
 		jToolBar.add(regexActive);
-		jToolBar.addSeparator();
+		if (!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
+			jToolBar.addSeparator();
+		}
 		jToolBar.add(filtermark);
 
 		flatTextFieldSearch.setTrailingComponent(jToolBar);
@@ -219,10 +223,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
 		popupMarkHits.addActionListener(actionEvent -> markAll());
 		popupMarkHits.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+		popupMarkHits.setEnabled(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
 
 		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
 		popupMarkAndFilter.addActionListener(actionEvent -> markAllAndFilter());
 		popupMarkAndFilter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
+		popupMarkAndFilter.setEnabled(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
 
 		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
 		popupEmptySearchfield.addActionListener(actionEvent -> flatTextFieldSearch.setText(""));
@@ -234,9 +240,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		JPopupMenu searchMenu = new JPopupMenu();
 		searchMenu.add(popupSearch);
 		searchMenu.add(popupSearchNext);
-		searchMenu.add(popupNewSearch);
-		searchMenu.add(popupMarkHits);
-		searchMenu.add(popupMarkAndFilter);
+		if (!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
+			searchMenu.add(popupNewSearch);
+			searchMenu.add(popupMarkHits);
+			searchMenu.add(popupMarkAndFilter);
+		}
 		searchMenu.add(popupEmptySearchfield);
 
 		flatTextFieldSearch.setComponentPopupMenu(searchMenu);
@@ -627,7 +635,13 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void documentChanged(DocumentEvent e) {
 		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			searchTheRow(selectMode);
+			if (FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
+				int columnIndex = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
+				String searchText = flatTextFieldSearch.getText();
+				targetModel.applyFilter(searchText, columnIndex, regexActive.isSelected(), respectCase.isSelected());
+			} else {
+				searchTheRow(selectMode);
+			}
 		}
 	}
 

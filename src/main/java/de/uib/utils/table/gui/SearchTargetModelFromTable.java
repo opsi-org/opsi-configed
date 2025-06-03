@@ -10,6 +10,8 @@ import java.util.Arrays;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
@@ -212,6 +214,29 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		}
 
 		returnToNotChanged(wasChanged);
+	}
+
+	@Override
+	public void applyFilter(String query, int columnIndex, boolean useRegex, boolean caseSensitive) {
+		if (table == null || table.getModel() == null) {
+			Logging.warning(this, "applyFilter: table or model is null");
+			return;
+		}
+
+		TableRowSorter<? extends TableModel> sorter;
+		if (table.getRowSorter() instanceof TableRowSorter) {
+			sorter = (TableRowSorter<? extends TableModel>) table.getRowSorter();
+		} else {
+			sorter = new TableRowSorter<>(getTableModel());
+			table.setRowSorter(sorter);
+		}
+
+		if (query == null || query.isEmpty()) {
+			sorter.setRowFilter(null);
+		} else {
+			FlexibleRowFilter filter = new FlexibleRowFilter(query, columnIndex, useRegex, caseSensitive);
+			sorter.setRowFilter(filter);
+		}
 	}
 
 	@Override
