@@ -652,11 +652,12 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			return;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_F5) {
+		if (e.getKeyCode() == KeyEvent.VK_F5 && !FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
 			if (allowSearchAction()) {
 				markAll();
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
+		} else if (e.getKeyCode() == KeyEvent.VK_F8
+				&& !FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
 			if (allowSearchAction()) {
 				markAllAndFilter();
 			}
