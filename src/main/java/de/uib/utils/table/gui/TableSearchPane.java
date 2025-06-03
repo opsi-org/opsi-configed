@@ -200,8 +200,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		jToolBar.add(regexActive);
 		if (!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
 			jToolBar.addSeparator();
+			jToolBar.add(filtermark);
 		}
-		jToolBar.add(filtermark);
 
 		flatTextFieldSearch.setTrailingComponent(jToolBar);
 	}
