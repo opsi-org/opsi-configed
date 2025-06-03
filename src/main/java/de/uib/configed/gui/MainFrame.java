@@ -416,7 +416,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	public static void addHelpLinks(JMenu jMenuHelp) {
 		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
 		Icons.addOpsiIconToMenuItem(jMenuHelpDoc);
-		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_DOC_PAGE));
+		jMenuHelpDoc.addActionListener(actionEvent -> Utils.showDocumentation());
 		jMenuHelp.add(jMenuHelpDoc);
 
 		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
@@ -431,6 +431,12 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuHelpSupport
 				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.UIB_PAGE + language + "/support"));
 		jMenuHelp.add(jMenuHelpSupport);
+
+		JMenuItem jMenuMoreAboutOpsi = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuMoreAboutOpsi"));
+		Icons.addOpsiIconToMenuItem(jMenuMoreAboutOpsi);
+		jMenuMoreAboutOpsi
+				.addActionListener(actionEvent -> Utils.showExternalDocument(Globals.OPSI_PAGE + language + "/"));
+		jMenuHelp.add(jMenuMoreAboutOpsi);
 	}
 
 	private JMenu createJMenuHelp() {

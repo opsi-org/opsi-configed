@@ -35,9 +35,11 @@ public final class Globals {
 	public static final String ICON_CONFIGED = "opsilogos/opsi-configed.png";
 	public static final String ICON_LOGVIEWER = "opsilogos/opsi-logviewer.png";
 
-	public static final String OPSI_DOC_PAGE = "http://www.opsi.org";
+	public static final String OPSI_DOC_PAGE_EN = "https://docs.opsi.org/opsi-docs-en/4.3/index.html";
+	public static final String OPSI_DOC_PAGE_DE = "https://docs.opsi.org/opsi-docs-de/4.3/index.html";
 	public static final String UIB_PAGE = "https://www.uib.de/";
 	public static final String OPSI_FORUM_PAGE = "http://forum.opsi.org";
+	public static final String OPSI_PAGE = "https://www.opsi.org/";
 
 	public static final String CERTIFICATE_FILE_NAME = "ca-certs";
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";

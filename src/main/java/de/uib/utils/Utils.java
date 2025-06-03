@@ -44,6 +44,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.productpage.TextMarkdownPane;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.type.ConfigOption;
+import de.uib.messages.Messages;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import javafx.application.Application;
@@ -216,6 +217,14 @@ public final class Utils {
 		result.add(now);
 		Logging.info("getNowTimeListValue", result);
 		return result;
+	}
+
+	public static void showDocumentation() {
+		if ("de".equals(Messages.getLocale().getLanguage())) {
+			showExternalDocument(Globals.OPSI_DOC_PAGE_DE);
+		} else {
+			showExternalDocument(Globals.OPSI_DOC_PAGE_EN);
+		}
 	}
 
 	public static void showExternalDocument(String link) {
