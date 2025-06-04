@@ -9,10 +9,13 @@ package de.uib.configed.gui.hwinfopage;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -35,19 +38,16 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.commons.io.FileUtils;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.productaction.PanelMountShare;
 import de.uib.configed.serverconsole.command.CommandExecutor;
 import de.uib.configed.serverconsole.command.SingleCommandTemplate;
-import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
+import de.uib.utils.WebDAVClient;
 import de.uib.utils.logging.Logging;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
@@ -67,10 +67,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private JComboBox<String> comboChooseWinProduct;
 
 	private JLabel labelDriverToIntegrate;
-	private PanelMountShare panelMountShare;
 
 	private String depotProductDirectory = "";
-	private boolean smbMounted;
 	private String driverDirectory = "";
 
 	private boolean stateDriverPath;
@@ -96,10 +94,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			boolean result = false;
 
 			if (fieldServerPath != null && fieldDriverPath != null) {
-				targetPath = new File(fieldServerPath.getText());
-				driverPath = new File(fieldDriverPath.getText());
+				targetPath = new File(fieldServerPath.getText().replace("\\", "/"));
+				driverPath = new File(fieldDriverPath.getText().replace("\\", "/"));
 
-				stateServerPath = targetPath.isDirectory();
+				stateServerPath = webDAVClient.existsAndIsDirectory(targetPath.getPath().replace("\\", "/"));
 				serverPathChecked.setSelected(stateServerPath);
 				Logging.info(this, "checkFiles  stateServerPath targetPath ", targetPath);
 				Logging.info(this, "checkFiles  stateServerPath driverPath ", driverPath);
@@ -171,12 +169,14 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private ConfigedMain configedMain;
 	private JDialog dialog;
 
+	private WebDAVClient webDAVClient;
+
 	public PanelDriverUpload(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 
 		defineChoosers();
 
-		depotProductDirectory = SmbConnect.buildSambaTarget(depot.getText(), SmbConnect.PRODUCT_SHARE_RW);
+		depotProductDirectory = "depot/";
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
@@ -185,26 +185,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		labelDriverToIntegrate = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 		labelDriverToIntegrate.setFont(labelDriverToIntegrate.getFont().deriveFont(Font.BOLD));
 
-		panelMountShare = new PanelMountShare(this) {
-			@Override
-			protected boolean checkConnectionToShare() {
-				boolean connected = super.checkConnectionToShare();
-
-				if (comboChooseWinProduct != null && connected) {
-					// we have an initialized gui and are connected
-
-					evaluateWinProducts();
-				}
-
-				return connected;
-			}
-		};
+		webDAVClient = new WebDAVClient();
 
 		defineChoosers();
 
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
-		smbMounted = new File(depotProductDirectory).exists();
-		panelMountShare.mount(smbMounted);
 
 		evaluateWinProducts();
 
@@ -266,11 +251,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		// not yet a depot selected
 
-		smbMounted = new File(depotProductDirectory).exists();
-
-		Logging.info(this, "retrieveWinProducts smbMounted ", smbMounted);
-
-		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(depotProductDirectory);
+		Set<String> winProducts = webDAVClient.getDirectoriesIn(depotProductDirectory, false);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
@@ -382,10 +363,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
 				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -432,7 +410,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addComponent(labelDriverLocationType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGroup(layoutByAuditInfo.createSequentialGroup()
@@ -536,14 +513,18 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private void makePath(File path) {
 		Logging.info(this, "makePath for ", path);
 
-		if (path != null && !path.exists()) {
+		if (path != null && !webDAVClient.existsAndIsDirectory(path.getPath().replace("\\", "/"))) {
 			int returnedOption = JOptionPane.showConfirmDialog(dialog,
 					Configed.getResourceValue("PanelDriverUpload.makeFilePath.text"),
 					Configed.getResourceValue("PanelDriverUpload.makeFilePath.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
-				path.mkdirs();
+				try {
+					webDAVClient.uploadDirectory(path, path.getPath().replace("\\", "/"));
+				} catch (IOException e) {
+					Logging.warning(this, "Failed to create directy ", e);
+				}
 			}
 		}
 
@@ -577,27 +558,22 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 			makePath(targetPath);
 
-			stateServerPath = targetPath.exists();
+			stateServerPath = webDAVClient.existsAndIsDirectory(targetPath.getPath().replace("\\", "/"));
 			serverPathChecked.setSelected(stateServerPath);
 			if (stateServerPath) {
 				try {
 					if (driverPath.isDirectory()) {
-						FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
+						webDAVClient.uploadDirectory(driverPath, targetPath.getPath().replace("\\", "/") + "/");
 					} else {
-						FileUtils.copyFileToDirectory(driverPath, targetPath);
+						byte[] fileBytes = Files.readAllBytes(driverPath.toPath());
+						webDAVClient.uploadFile(targetPath.getPath().replace("\\", "/") + "/" + driverPath.getName(),
+								new ByteArrayInputStream(fileBytes));
 					}
 				} catch (IOException iox) {
 					Logging.error(iox, "copy error:\n", iox);
 				}
 			} else {
 				Logging.info(this, "execute: targetPath does not exist");
-			}
-
-			if (stateServerPath) {
-				String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
-						+ winProduct + "/" + SmbConnect.unixPath(DIRECTORY_DRIVERS);
-				Logging.info(this, "set rights for ", driverDir);
-				persistenceController.getRPCMethodExecutor().setRights(driverDir);
 			}
 
 			buttonUploadDrivers.setEnabled(true);
@@ -625,10 +601,10 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			return;
 		}
 
-		String result = depotProductDirectory + File.separator + winProduct + File.separator + driverDirectory;
+		String result = depotProductDirectory + winProduct + driverDirectory + "/";
 
 		if (buttonByAudit.isSelected()) {
-			result = result + File.separator + byAuditPath;
+			result = result + byAuditPath + "/";
 		}
 
 		fieldServerPath.setText(result);
@@ -689,7 +665,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		StringBuilder result = new StringBuilder(parts[0]);
 
 		for (int i = 1; i < parts.length; i++) {
-			result.append(File.separator + parts[i]);
+			result.append("/" + parts[i]);
 		}
 
 		return result.toString();
