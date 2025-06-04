@@ -6,10 +6,18 @@
 
 package de.uib.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -83,10 +91,87 @@ public class WebDAVClient {
 	}
 
 	public void uploadFile(String location, InputStream dataSource) throws IOException {
-		sardine.put(getBaseURL() + location, dataSource);
+		sardine.put(parseURL(getBaseURL() + location), dataSource);
+	}
+
+	public void uploadDirectory(File localDir, String remotePath) throws IOException {
+		if (!localDir.isDirectory()) {
+			Logging.warning(this, "Provided file is not a directory");
+			throw new IllegalArgumentException("Provided file is not a directory");
+		}
+
+		String remoteDirUrl = parseURL(getBaseURL() + remotePath + localDir.getName());
+		sardine.createDirectory(remoteDirUrl);
+
+		uploadRecursive(localDir, remoteDirUrl);
+	}
+
+	private void uploadRecursive(File localDir, String remoteDirUrl) throws IOException {
+		for (File file : localDir.listFiles()) {
+			if (file.isDirectory()) {
+				String subDirUrl = parseURL(remoteDirUrl + "/" + file.getName());
+				sardine.createDirectory(subDirUrl);
+				uploadRecursive(file, subDirUrl);
+			} else {
+				byte[] fileBytes = Files.readAllBytes(file.toPath());
+				try (ByteArrayInputStream bais = new ByteArrayInputStream(fileBytes)) {
+					String remoteFileUrl = parseURL(remoteDirUrl + "/" + file.getName());
+					sardine.put(remoteFileUrl, bais);
+				}
+			}
+		}
+	}
+
+	private String parseURL(String rawUrl) {
+		try {
+			int pathIndex = rawUrl.indexOf('/', rawUrl.indexOf("://") + 3);
+			String base = (pathIndex > 0) ? rawUrl.substring(0, pathIndex) : rawUrl;
+			String path = (pathIndex > 0) ? rawUrl.substring(pathIndex) : "";
+
+			String[] parts = path.split("/");
+			StringBuilder encodedPath = new StringBuilder();
+			for (String part : parts) {
+				if (!part.isEmpty()) {
+					encodedPath.append("/").append(URLEncoder.encode(part, StandardCharsets.UTF_8));
+				}
+			}
+
+			URI baseUri = new URI(base);
+			URI fullUri = new URI(baseUri.getScheme(), null, baseUri.getHost(), baseUri.getPort(),
+					encodedPath.toString(), null, null);
+			return fullUri.toURL().toString();
+		} catch (URISyntaxException e) {
+			Logging.warning(this, "Failed to parse URL ", e);
+		} catch (MalformedURLException e) {
+			Logging.warning(this, "malformed URL encountered: ", rawUrl, e);
+		}
+		return "";
+	}
+
+	public boolean existsAndIsDirectory(String url) {
+		try {
+			return isDirectory(url);
+		} catch (IOException e) {
+			Logging.warning(this, "Failed to check whether directory exists ", url, e);
+			return false;
+		}
+	}
+
+	public boolean isDirectory(String url) throws IOException {
+		List<DavResource> resources = sardine.list(parseURL(getBaseURL() + url));
+		for (DavResource res : resources) {
+			if ("/".equals(res.getHref().toString())) {
+				return res.isDirectory();
+			}
+		}
+		return !resources.isEmpty() && resources.get(0).isDirectory();
 	}
 
 	public Set<String> getDirectoriesIn(String currentDirectory) {
+		return getDirectoriesIn(currentDirectory, true);
+	}
+
+	public Set<String> getDirectoriesIn(String currentDirectory, boolean includeParentDir) {
 		Set<String> directories = new TreeSet<>();
 
 		String url = getBaseURL() + currentDirectory;
@@ -96,7 +181,11 @@ public class WebDAVClient {
 			List<DavResource> resources = sardine.list(url);
 			for (DavResource resource : resources) {
 				if (resource.isDirectory()) {
-					directories.add(resource.getPath().replace("/dav/", ""));
+					String dirPath = resource.getPath().replace("/dav/", "");
+					if (!includeParentDir) {
+						dirPath = dirPath.replace(currentDirectory, "");
+					}
+					directories.add(dirPath);
 				}
 			}
 		} catch (IOException e) {
@@ -106,6 +195,11 @@ public class WebDAVClient {
 	}
 
 	public Set<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension) {
+		return getDirectoriesAndFilesIn(currentDirectory, fileExtension, true);
+	}
+
+	public Set<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension,
+			boolean includeParentDir) {
 		Set<String> directoriesAndFiles = new TreeSet<>();
 
 		String url = getBaseURL() + currentDirectory;
@@ -116,7 +210,11 @@ public class WebDAVClient {
 			for (DavResource resource : resources) {
 				if ((!resource.getDisplayName().equals(currentDirectory.substring(0, currentDirectory.length() - 1))
 						&& resource.isDirectory()) || resource.getDisplayName().endsWith(fileExtension)) {
-					directoriesAndFiles.add(resource.getPath().replace("/dav/", ""));
+					String dirPath = resource.getPath().replace("/dav/", "");
+					if (!includeParentDir) {
+						dirPath = dirPath.replace(currentDirectory, "");
+					}
+					directoriesAndFiles.add(dirPath);
 				}
 			}
 		} catch (IOException e) {
