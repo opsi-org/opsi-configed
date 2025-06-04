@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -30,16 +31,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.commons.io.FileUtils;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
+import de.uib.utils.WebDAVClient;
 import de.uib.utils.logging.Logging;
 
 public class CompleteWinProductsDialog implements NameProducer {
@@ -48,7 +47,6 @@ public class CompleteWinProductsDialog implements NameProducer {
 	private String winProduct = "";
 
 	private String depotProductDirectory;
-	private boolean smbMounted;
 
 	private JLabel depot;
 	private JComboBox<String> comboChooseWinProduct;
@@ -61,13 +59,13 @@ public class CompleteWinProductsDialog implements NameProducer {
 	private JTextField fieldPathWinPE;
 	private JTextField fieldPathInstallFiles;
 
-	private PanelMountShare panelMountShare;
-
 	private JButton buttonCallExecute;
 
 	private JFileChooser chooserFolder;
 
 	private JDialog dialog;
+
+	private WebDAVClient webDAVClient;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
@@ -76,23 +74,11 @@ public class CompleteWinProductsDialog implements NameProducer {
 		defineChoosers();
 		initComponentsForNameProducer();
 
-		depotProductDirectory = SmbConnect.buildSambaTarget(depot.getText(), SmbConnect.PRODUCT_SHARE_RW);
+		depotProductDirectory = "depot/";
 
-		panelMountShare = new PanelMountShare(this) {
-			@Override
-			protected boolean checkConnectionToShare() {
-				boolean connected = super.checkConnectionToShare();
-				if (comboChooseWinProduct != null && connected) {
-					evaluateWinProducts();
-				}
-
-				return connected;
-			}
-		};
+		webDAVClient = new WebDAVClient();
 
 		initComponents();
-		smbMounted = new File(depotProductDirectory).exists();
-		panelMountShare.mount(smbMounted);
 
 		evaluateWinProducts();
 
@@ -127,10 +113,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 		// not yet a depot selected
 
-		smbMounted = new File(depotProductDirectory).exists();
-
-		List<String> winProducts = persistenceController.getProductDataService().getWinProducts(depotProductDirectory);
-
+		Set<String> winProducts = webDAVClient.getDirectoriesIn(depotProductDirectory, false);
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
 
@@ -162,7 +145,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 	private void produceTarget() {
 		if (fieldTargetPath != null) {
-			fieldTargetPath.setText(depotProductDirectory + File.separator + winProduct);
+			fieldTargetPath.setText(depotProductDirectory + winProduct);
 			checkButtonCallExecute();
 		}
 	}
@@ -182,7 +165,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 	@Override
 	public String getDefaultName() {
-		return SmbConnect.PRODUCT_SHARE_RW;
+		return depotProductDirectory;
 	}
 
 	private void initComponentsForNameProducer() {
@@ -260,24 +243,17 @@ public class CompleteWinProductsDialog implements NameProducer {
 			Logging.debug(this, "copy  ", pathWinPE, " to ", targetDirectory);
 
 			if (!pathWinPE.isEmpty()) {
-				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_PE);
-				FileUtils.copyDirectory(new File(pathWinPE), targetDirectory);
+				targetDirectory = new File(fieldTargetPath.getText() + "/winpe");
+				webDAVClient.uploadDirectory(new File(pathWinPE), targetDirectory.getPath().replace("\\", "/"));
 			}
 
 			String pathInstallFiles = fieldPathInstallFiles.getText().trim();
 			Logging.debug(this, "copy  ", pathInstallFiles, " to ", targetDirectory);
 			if (!pathInstallFiles.isEmpty()) {
-				targetDirectory = new File(
-						fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_INSTALL_FILES);
-				FileUtils.copyDirectory(new File(pathInstallFiles), targetDirectory);
+				targetDirectory = new File(fieldTargetPath.getText() + "/installfiles");
+				webDAVClient.uploadDirectory(new File(pathInstallFiles), targetDirectory.getPath().replace("\\", "/"));
 			}
 
-			persistenceController.getRPCMethodExecutor()
-					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
-							+ winProduct + "/" + SmbConnect.DIRECTORY_PE);
-			persistenceController.getRPCMethodExecutor()
-					.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts.toArray(String[]::new)) + "/"
-							+ winProduct + "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
 			dialog.setCursor(null);
 
 			JOptionPane.showMessageDialog(dialog, "Ready", Configed.getResourceValue("CompleteWinProduct.reportTitle"),
@@ -391,9 +367,6 @@ public class CompleteWinProductsDialog implements NameProducer {
 						.addComponent(buttonCallSelectFolderInstallFiles, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -432,7 +405,6 @@ public class CompleteWinProductsDialog implements NameProducer {
 								Short.MAX_VALUE)
 						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderInstallFiles,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
