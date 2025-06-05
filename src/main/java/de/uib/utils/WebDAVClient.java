@@ -291,6 +291,15 @@ public class WebDAVClient {
 				+ getPortFromHost(persistenceController.getExecutioner().getHost()) + "/dav/";
 	}
 
+	public boolean exists(String location) {
+		try {
+			return sardine.exists(parseURL(getBaseURL() + location));
+		} catch (IOException e) {
+			Logging.warning(this, "Failed to check if file/dir exists on WebDAV server", e);
+		}
+		return false;
+	}
+
 	@SuppressWarnings({ "squid:S2972" })
 	private static class SSLSocketFactoryWrapper implements LayeredConnectionSocketFactory {
 		private final SSLSocketFactory sslSocketFactory;

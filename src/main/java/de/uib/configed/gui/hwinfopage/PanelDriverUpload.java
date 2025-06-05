@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -251,8 +252,12 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		// not yet a depot selected
 
-		Set<String> winProducts = webDAVClient.getDirectoriesIn(depotProductDirectory, false);
-
+		Set<String> allNetbootProducts = webDAVClient.getDirectoriesIn(depotProductDirectory, false);
+		Set<String> winProducts = allNetbootProducts.parallelStream().filter((String product) -> {
+			boolean hasWinpe = webDAVClient.exists(depotProductDirectory + product + "winpe");
+			boolean hasI368 = webDAVClient.exists(depotProductDirectory + product + "i368");
+			return hasWinpe || hasI368;
+		}).collect(Collectors.toSet());
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
 
