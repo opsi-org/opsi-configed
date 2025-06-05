@@ -140,12 +140,12 @@ public class CompleteWinProductsDialog implements NameProducer {
 			return;
 		}
 
-		buttonCallExecute.setEnabled(new File(fieldTargetPath.getText()).isDirectory());
+		buttonCallExecute.setEnabled(webDAVClient.existsAndIsDirectory(fieldTargetPath.getText()));
 	}
 
 	private void produceTarget() {
 		if (fieldTargetPath != null) {
-			fieldTargetPath.setText(depotProductDirectory + winProduct);
+			fieldTargetPath.setText(depotProductDirectory + winProduct + "/");
 			checkButtonCallExecute();
 		}
 	}
@@ -237,21 +237,19 @@ public class CompleteWinProductsDialog implements NameProducer {
 		dialog.setCursor(Globals.WAIT_CURSOR);
 
 		try {
-			File targetDirectory = null;
+			String targetDirectory = fieldTargetPath.getText();
 
 			String pathWinPE = fieldPathWinPE.getText().trim();
-			Logging.debug(this, "copy  ", pathWinPE, " to ", targetDirectory);
 
 			if (!pathWinPE.isEmpty()) {
-				targetDirectory = new File(fieldTargetPath.getText() + "/winpe");
-				webDAVClient.uploadDirectory(new File(pathWinPE), targetDirectory.getPath().replace("\\", "/"));
+				Logging.debug(this, "copy  ", pathWinPE, " to ", targetDirectory);
+				webDAVClient.uploadDirectory(new File(pathWinPE), targetDirectory.replace("\\", "/"));
 			}
 
 			String pathInstallFiles = fieldPathInstallFiles.getText().trim();
-			Logging.debug(this, "copy  ", pathInstallFiles, " to ", targetDirectory);
 			if (!pathInstallFiles.isEmpty()) {
-				targetDirectory = new File(fieldTargetPath.getText() + "/installfiles");
-				webDAVClient.uploadDirectory(new File(pathInstallFiles), targetDirectory.getPath().replace("\\", "/"));
+				Logging.debug(this, "copy  ", pathInstallFiles, " to ", targetDirectory);
+				webDAVClient.uploadDirectory(new File(pathInstallFiles), targetDirectory.replace("\\", "/"));
 			}
 
 			dialog.setCursor(null);
