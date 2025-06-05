@@ -102,7 +102,9 @@ public class WebDAVClient {
 		if (isInputStreamEmpty(dataSource)) {
 			sardine.put(parsedRemoteURL, new byte[0]);
 		} else {
-			sardine.put(parsedRemoteURL, dataSource);
+			InputStream uploadStream = (dataSource instanceof BufferedInputStream) ? dataSource
+					: new BufferedInputStream(dataSource);
+			sardine.put(parsedRemoteURL, uploadStream);
 		}
 	}
 
