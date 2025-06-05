@@ -6,8 +6,9 @@
 
 package de.uib.utils;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -17,11 +18,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -44,6 +47,8 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class WebDAVClient {
+	private static final int DEFAULT_UPLOAD_THREADS = Runtime.getRuntime().availableProcessors() * 2;
+
 	private Sardine sardine;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -91,7 +96,24 @@ public class WebDAVClient {
 	}
 
 	public void uploadFile(String location, InputStream dataSource) throws IOException {
-		sardine.put(parseURL(getBaseURL() + location), dataSource);
+		String remoteURL = location.startsWith(getBaseURL()) ? location : (getBaseURL() + location);
+		String parsedRemoteURL = parseURL(remoteURL);
+
+		if (isInputStreamEmpty(dataSource)) {
+			sardine.put(parsedRemoteURL, new byte[0]);
+		} else {
+			sardine.put(parsedRemoteURL, dataSource);
+		}
+	}
+
+	private static boolean isInputStreamEmpty(InputStream in) throws IOException {
+		if (!in.markSupported()) {
+			in = new BufferedInputStream(in);
+		}
+		in.mark(1);
+		int b = in.read();
+		in.reset();
+		return b == -1;
 	}
 
 	public void uploadDirectory(File localDir, String remotePath) throws IOException {
@@ -103,21 +125,39 @@ public class WebDAVClient {
 		String remoteDirUrl = parseURL(getBaseURL() + remotePath + localDir.getName());
 		sardine.createDirectory(remoteDirUrl);
 
-		uploadRecursive(localDir, remoteDirUrl);
+		ExecutorService executor = Executors.newFixedThreadPool(DEFAULT_UPLOAD_THREADS);
+		try {
+			uploadRecursiveParallel(localDir, remoteDirUrl, executor);
+		} finally {
+			executor.shutdown();
+			try {
+				if (!executor.awaitTermination(10, TimeUnit.MINUTES)) {
+					executor.shutdownNow();
+				}
+			} catch (InterruptedException e) {
+				executor.shutdownNow();
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 
-	private void uploadRecursive(File localDir, String remoteDirUrl) throws IOException {
+	private void uploadRecursiveParallel(File localDir, String remoteDirUrl, ExecutorService executor)
+			throws IOException {
 		for (File file : localDir.listFiles()) {
 			if (file.isDirectory()) {
 				String subDirUrl = parseURL(remoteDirUrl + "/" + file.getName());
 				sardine.createDirectory(subDirUrl);
-				uploadRecursive(file, subDirUrl);
+				uploadRecursiveParallel(file, subDirUrl, executor);
 			} else {
-				byte[] fileBytes = Files.readAllBytes(file.toPath());
-				try (ByteArrayInputStream bais = new ByteArrayInputStream(fileBytes)) {
-					String remoteFileUrl = parseURL(remoteDirUrl + "/" + file.getName());
-					sardine.put(remoteFileUrl, bais);
-				}
+				executor.submit(() -> {
+					try (InputStream fis = new BufferedInputStream(new FileInputStream(file))) {
+						String remoteFileUrl = parseURL(remoteDirUrl + "/" + file.getName());
+						uploadFile(remoteFileUrl, fis);
+					} catch (IOException e) {
+						Logging.warning(this,
+								"Failed to upload file: " + file.getAbsolutePath() + " - " + e.getMessage());
+					}
+				});
 			}
 		}
 	}
