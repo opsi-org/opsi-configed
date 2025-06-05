@@ -152,8 +152,7 @@ public class CopyClient {
 		if (hostConfig == null) {
 			return;
 		}
-		ConfigName2ConfigValue clientConfigStates = new ConfigName2ConfigValue(hostConfig,
-				configDataService.getConfigOptionsPD());
+		ConfigName2ConfigValue clientConfigStates = new ConfigName2ConfigValue(hostConfig, null);
 
 		configDataService.setConfigStates(newClientNameWithDomain, clientConfigStates);
 		// Trigger the config state update.
