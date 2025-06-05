@@ -37,6 +37,7 @@ import org.apache.http.protocol.HttpContext;
 
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
+import com.github.sardine.impl.SardineException;
 import com.github.sardine.impl.SardineImpl;
 
 import de.uib.configed.Globals;
@@ -99,12 +100,17 @@ public class WebDAVClient {
 		String remoteURL = location.startsWith(getBaseURL()) ? location : (getBaseURL() + location);
 		String parsedRemoteURL = parseURL(remoteURL);
 
+		Logging.info(this, "Uploading file to WebDAV: " + parsedRemoteURL);
+
 		if (isInputStreamEmpty(dataSource)) {
+			Logging.info(this, "Input stream is empty, uploading zero-byte file: " + parsedRemoteURL);
 			sardine.put(parsedRemoteURL, new byte[0]);
 		} else {
+			Logging.info(this, "Input stream is non-empty, uploading file: " + location);
 			InputStream uploadStream = (dataSource instanceof BufferedInputStream) ? dataSource
 					: new BufferedInputStream(dataSource);
 			sardine.put(parsedRemoteURL, uploadStream);
+			Logging.info(this, "Successfully uploaded file to: " + parsedRemoteURL);
 		}
 	}
 
@@ -125,7 +131,7 @@ public class WebDAVClient {
 		}
 
 		String remoteDirUrl = parseURL(getBaseURL() + remotePath + localDir.getName());
-		sardine.createDirectory(remoteDirUrl);
+		createDirectoryIfNotExists(remoteDirUrl);
 
 		ExecutorService executor = Executors.newFixedThreadPool(DEFAULT_UPLOAD_THREADS);
 		try {
@@ -136,7 +142,7 @@ public class WebDAVClient {
 				if (!executor.awaitTermination(10, TimeUnit.MINUTES)) {
 					executor.shutdownNow();
 				}
-			} catch (InterruptedException e) {
+			} catch (InterruptedException ie) {
 				executor.shutdownNow();
 				Thread.currentThread().interrupt();
 			}
@@ -148,19 +154,34 @@ public class WebDAVClient {
 		for (File file : localDir.listFiles()) {
 			if (file.isDirectory()) {
 				String subDirUrl = parseURL(remoteDirUrl + "/" + file.getName());
-				sardine.createDirectory(subDirUrl);
+				createDirectoryIfNotExists(subDirUrl);
+				Logging.info(this, "Created/checked directory: ", subDirUrl);
 				uploadRecursiveParallel(file, subDirUrl, executor);
 			} else {
 				executor.submit(() -> {
 					try (InputStream fis = new BufferedInputStream(new FileInputStream(file))) {
 						String remoteFileUrl = parseURL(remoteDirUrl + "/" + file.getName());
+						Logging.info(this, "Uploading file: ", file.getAbsolutePath(), " to ", remoteFileUrl);
 						uploadFile(remoteFileUrl, fis);
+						Logging.info(this, "Successfully uploaded file: ", file.getAbsolutePath());
 					} catch (IOException e) {
-						Logging.warning(this,
-								"Failed to upload file: " + file.getAbsolutePath() + " - " + e.getMessage());
+						Logging.warning(this, "Failed to upload file: ", file.getAbsolutePath(), " - ", e);
 					}
 				});
 			}
+		}
+	}
+
+	private void createDirectoryIfNotExists(String remoteDirUrl) {
+		try {
+			sardine.createDirectory(remoteDirUrl);
+			Logging.info(this, "Created directory: ", remoteDirUrl);
+		} catch (SardineException se) {
+			if (se.getStatusCode() != 405 && se.getStatusCode() != 409) {
+				Logging.warning(this, "Failed to create directory (SardineException): ", remoteDirUrl, " - ", se);
+			}
+		} catch (IOException ioe) {
+			Logging.warning(this, "Failed to create directory (IOException): ", remoteDirUrl, " - ", ioe);
 		}
 	}
 
@@ -182,10 +203,10 @@ public class WebDAVClient {
 			URI fullUri = new URI(baseUri.getScheme(), null, baseUri.getHost(), baseUri.getPort(),
 					encodedPath.toString(), null, null);
 			return fullUri.toURL().toString();
-		} catch (URISyntaxException e) {
-			Logging.warning(this, "Failed to parse URL ", e);
-		} catch (MalformedURLException e) {
-			Logging.warning(this, "malformed URL encountered: ", rawUrl, e);
+		} catch (URISyntaxException use) {
+			Logging.warning(this, "Failed to parse URL ", use);
+		} catch (MalformedURLException mue) {
+			Logging.warning(this, "Malformed URL encountered: ", rawUrl, mue);
 		}
 		return "";
 	}
@@ -193,8 +214,8 @@ public class WebDAVClient {
 	public boolean existsAndIsDirectory(String url) {
 		try {
 			return isDirectory(url);
-		} catch (IOException e) {
-			Logging.warning(this, "Failed to check whether directory exists ", url, e);
+		} catch (IOException ioe) {
+			Logging.warning(this, "Failed to check whether directory exists ", url, ioe);
 			return false;
 		}
 	}
@@ -217,7 +238,7 @@ public class WebDAVClient {
 		Set<String> directories = new TreeSet<>();
 
 		String url = getBaseURL() + currentDirectory;
-		Logging.info("use webdav to get directories and files in ", url);
+		Logging.info("Retrieving directory list via WebDAV ", url);
 
 		try {
 			List<DavResource> resources = sardine.list(url);
@@ -245,7 +266,7 @@ public class WebDAVClient {
 		Set<String> directoriesAndFiles = new TreeSet<>();
 
 		String url = getBaseURL() + currentDirectory;
-		Logging.info("use webdav to get directories and files in ", url);
+		Logging.info("Retrieving directory and file list via WebDAV ", url);
 
 		try {
 			List<DavResource> resources = sardine.list(url);
@@ -300,6 +321,7 @@ public class WebDAVClient {
 				sslSocket.connect(remoteAddress, connectTimeout);
 				return sslSocket;
 			} else {
+				Logging.warning(this, "Remote address may not be null");
 				throw new IllegalArgumentException("Remote address may not be null");
 			}
 		}
