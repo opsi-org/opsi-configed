@@ -74,8 +74,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		this.setLayout(layoutLeftPane);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(scrollpane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(searchPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

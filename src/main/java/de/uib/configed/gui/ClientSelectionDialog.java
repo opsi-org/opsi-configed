@@ -145,7 +145,7 @@ public class ClientSelectionDialog implements ActionListener, DocumentListener {
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		dialog.setMinimumSize(new Dimension(0, 0));
+		dialog.setMinimumSize(new Dimension());
 		dialog.setModalityType(ModalityType.MODELESS);
 		dialog.pack();
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());

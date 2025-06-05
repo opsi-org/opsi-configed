@@ -155,7 +155,8 @@ public class ProductInfoPane extends JSplitPane {
 
 		setTopComponent(productDescriptionsPanel);
 
-		setMinimumSize(new Dimension(0, 0));
+		// Make it possible to close the info pane
+		setMinimumSize(new Dimension());
 	}
 
 	private void setupBottomComponent() {

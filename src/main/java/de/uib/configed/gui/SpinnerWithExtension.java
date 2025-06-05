@@ -25,7 +25,7 @@ public class SpinnerWithExtension extends JPanel {
 	public SpinnerWithExtension() {
 		spinner = new JSpinner(
 				new SpinnerNumberModel((Number) Long.valueOf(0), Long.MIN_VALUE, Long.MAX_VALUE, Long.valueOf(1)));
-		spinner.setMinimumSize(new Dimension(0, 0));
+		spinner.setMinimumSize(new Dimension());
 		box = new JComboBox<>(new String[] { "", "k", "M", "G", "T" });
 		box.setMinimumSize(new Dimension(50, 0));
 		GroupLayout spinnerLayout = new GroupLayout(this);
