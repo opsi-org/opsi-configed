@@ -145,7 +145,8 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 	private void produceTarget() {
 		if (fieldTargetPath != null) {
-			fieldTargetPath.setText(depotProductDirectory + winProduct + "/");
+			String targetPath = depotProductDirectory + winProduct;
+			fieldTargetPath.setText(targetPath.endsWith("/") ? targetPath : (targetPath + "/"));
 			checkButtonCallExecute();
 		}
 	}
