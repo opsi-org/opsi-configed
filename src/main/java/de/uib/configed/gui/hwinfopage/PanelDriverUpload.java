@@ -114,7 +114,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				if (result) {
 					buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.execute"));
 				} else {
-					buttonUploadDrivers.setToolTipText("Treiber- bzw. Zielpfad noch nicht gefunden");
+					buttonUploadDrivers
+							.setToolTipText(Configed.getResourceValue("PanelDriverUpload.driverPathNotFound"));
 				}
 			}
 
