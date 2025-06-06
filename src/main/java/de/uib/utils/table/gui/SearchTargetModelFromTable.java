@@ -51,7 +51,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public String getColumnName(int col) {
-		return getTableModel().getColumnName(col);
+		return table.getColumnName(col);
 	}
 
 	@Override
@@ -61,12 +61,12 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public int getColumnCount() {
-		return getTableModel().getColumnCount();
+		return table.getColumnCount();
 	}
 
 	@Override
 	public int getRowCount() {
-		return getTableModel().getRowCount();
+		return table.getRowCount();
 	}
 
 	@Override

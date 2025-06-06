@@ -433,7 +433,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private int findViewRowFromValue(int startviewrow, String value) {
 		int viewrow = Math.max(0, startviewrow);
-
 		int column = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
 
 		while (viewrow < targetModel.getRowCount()) {
@@ -529,6 +528,14 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void searchNextRow(boolean select) {
 		foundrow++;
+		int rowCount = targetModel.getRowCount();
+		if (rowCount == 0) {
+			foundrow = -1;
+			return;
+		}
+		if (foundrow >= rowCount) {
+			foundrow = 0;
+		}
 		searchTheRow(foundrow, false, select);
 	}
 
@@ -558,7 +565,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void setRow(int row, boolean addSelection, boolean select) {
-		if (row == -1) {
+		if (row == -1 || row >= targetModel.getRowCount()) {
 			targetModel.setSelection(new int[0]);
 			row = 0;
 		} else if (select) {
