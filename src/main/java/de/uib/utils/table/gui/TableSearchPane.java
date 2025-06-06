@@ -7,8 +7,6 @@
 package de.uib.utils.table.gui;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
@@ -34,8 +32,6 @@ import com.formdev.flatlaf.icons.FlatSearchIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utils.FeatureActivationChecker;
-import de.uib.utils.FeatureActivationChecker.Feature;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
@@ -48,17 +44,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JToggleButton respectCase;
 	private JToggleButton regexActive;
-	private JToggleButton filtermark;
 
 	private JToggleButton buttonShowHideExtraOptions;
 
 	private JPanel navPane;
 	private PanelGenEditTable associatedPanel;
-
-	private JMenuItem popupSearch;
-	private JMenuItem popupMarkHits;
-	private JMenuItem popupMarkAndFilter;
-	private JMenuItem popupEmptySearchfield;
 
 	private boolean selectMode = true;
 
@@ -114,39 +104,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		navPane.setVisible(true);
 	}
 
-	public void setFiltering() {
-		popupMarkHits.setVisible(true);
-		popupMarkAndFilter.setVisible(true);
-
-		filtermark.setVisible(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
-	}
-
-	public boolean isFiltering() {
-		return filtermark.isVisible();
-	}
-
 	public void setSelectMode(boolean selectMode) {
 		this.selectMode = selectMode;
-	}
-
-	/**
-	 * serve graphical filtermark
-	 */
-	public void setFilterMark(boolean selected) {
-		filtermark.setSelected(selected);
-	}
-
-	private void setFiltered(boolean filtered) {
-		targetModel.setFiltered(filtered);
-
-		popupSearch.setEnabled(!filtered);
-		popupMarkHits.setEnabled(!filtered);
-		popupMarkAndFilter.setEnabled(!filtered);
-		popupEmptySearchfield.setEnabled(!filtered);
-	}
-
-	public boolean isFilteredMode() {
-		return filtermark.isSelected();
 	}
 
 	public void setNarrow(boolean narrow) {
@@ -172,11 +131,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch = new FlatTextField();
 		flatTextFieldSearch.setLeadingIcon(new FlatSearchIcon());
 		flatTextFieldSearch.setShowClearButton(true);
-
 		flatTextFieldSearch.getDocument().addDocumentListener(this);
-
 		flatTextFieldSearch.addKeyListener(this);
-
 		flatTextFieldSearch.addActionListener(actionEvent -> searchNextRow(selectMode));
 
 		comboSearchFields = new JComboBox<>();
@@ -189,25 +145,15 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		regexActive.setSelectedIcon(Icons.getSelectedIntellijIcon("regex"));
 		regexActive.setToolTipText(Configed.getResourceValue("SearchPane.mode.regex"));
 
-		filtermark = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
-		filtermark.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
-		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
-		filtermark.addItemListener(event -> filtermarkEvent());
-		filtermark.setVisible(false);
-
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(respectCase);
 		jToolBar.add(regexActive);
-		if (!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
-			jToolBar.addSeparator();
-			jToolBar.add(filtermark);
-		}
 
 		flatTextFieldSearch.setTrailingComponent(jToolBar);
 	}
 
 	private void initPopup() {
-		popupSearch = new JMenuItem(Configed.getResourceValue("search"));
+		JMenuItem popupSearch = new JMenuItem(Configed.getResourceValue("search"));
 		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
 		JMenuItem popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
@@ -215,36 +161,15 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		popupSearchNext.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 
 		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
-		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
-			setFilterMark(false);
-			searchTheRow(0, selectMode);
-		});
+		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0, selectMode));
 
-		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
-		popupMarkHits.addActionListener(actionEvent -> markAll());
-		popupMarkHits.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-		popupMarkHits.setEnabled(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
-
-		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
-		popupMarkAndFilter.addActionListener(actionEvent -> markAllAndFilter());
-		popupMarkAndFilter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
-		popupMarkAndFilter.setEnabled(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
-
-		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
+		JMenuItem popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
 		popupEmptySearchfield.addActionListener(actionEvent -> flatTextFieldSearch.setText(""));
-
-		popupMarkHits.setVisible(false);
-		popupMarkAndFilter.setVisible(false);
 
 		Logging.info(this, "buildMenuSearchfield");
 		JPopupMenu searchMenu = new JPopupMenu();
 		searchMenu.add(popupSearch);
 		searchMenu.add(popupSearchNext);
-		if (!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
-			searchMenu.add(popupNewSearch);
-			searchMenu.add(popupMarkHits);
-			searchMenu.add(popupMarkAndFilter);
-		}
 		searchMenu.add(popupEmptySearchfield);
 
 		flatTextFieldSearch.setComponentPopupMenu(searchMenu);
@@ -375,10 +300,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						GroupLayout.PREFERRED_SIZE));
 	}
 
-	private boolean allowSearchAction() {
-		return isFiltering() && !filtermark.isSelected();
-	}
-
 	private void retainOnlyAllFieldsItem() {
 		comboSearchFields.removeAllItems();
 		comboSearchFields.addItem(Configed.getResourceValue("SearchPane.search.allfields"));
@@ -486,46 +407,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 	}
 
-	/**
-	 * select all rows with value from searchfield
-	 */
-	private void markAll() {
-		Logging.info(this, "markAll");
-		targetModel.setValueIsAdjusting(true);
-		targetModel.clearSelection();
-		searchTheRow(0, true);
-
-		int startFoundrow = foundrow;
-
-		foundrow = foundrow + 1;
-
-		// adding the next row to selection
-		while (foundrow > startFoundrow) {
-			getSelectedAndSearch(true, true);
-		}
-		targetModel.setValueIsAdjusting(false);
-	}
-
-	/**
-	 * select all rows with value form searchfield, checks the filter
-	 */
-	private void markAllAndFilter() {
-		Logging.info(this, " markAllAndFilter filtering active", isFiltering());
-
-		filtermark.setSelected(false);
-		markAll();
-		filtermark.setSelected(true);
-	}
-
-	/**
-	 * sets an alternative ActionListener for the filtermark
-	 * 
-	 * @parameter ActionListener
-	 */
-	public void setFiltermarkActionListener(ActionListener li) {
-		filtermark.addActionListener(li);
-	}
-
 	private void searchNextRow(boolean select) {
 		foundrow++;
 		int rowCount = targetModel.getRowCount();
@@ -537,23 +418,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			foundrow = 0;
 		}
 		searchTheRow(foundrow, false, select);
-	}
-
-	private void getSelectedAndSearch(boolean addSelection, boolean select) {
-		int startrow = 0;
-		if (targetModel.getSelectedRow() >= 0) {
-			startrow = targetModel.getSelectedRows()[targetModel.getSelectedRows().length - 1] + 1;
-		}
-
-		if (startrow >= targetModel.getRowCount()) {
-			startrow = 0;
-		}
-
-		searchTheRow(startrow, addSelection, select);
-
-		if (foundrow == -1) {
-			searchTheRow(0, addSelection, select);
-		}
 	}
 
 	private void searchTheRow(boolean select) {
@@ -601,29 +465,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.getCaret().setVisible(true);
 	}
 
-	// ----------------------------------
-
-	private void filtermarkEvent() {
-		Logging.info(this, "actionPerformed on filtermark, isFilteredMode ", filtermark.isSelected());
-
-		// When the filtermark is not pressed it means that this event was not evoked
-		// by a click on the button. Then we want to manually control what happens with our list
-		// and not select some elements. Usually there happens another selection anyways.
-		// Also this prevents an Exception in the product table when the selection active, 
-		// but is deactivated due to a change in the product tree
-		if (filtermark.isSelected() || !filtermark.getModel().isPressed()) {
-			setFiltered(filtermark.isSelected());
-		} else {
-			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
-
-			setFiltered(false);
-
-			if (unfilteredSelection.length != 0) {
-				targetModel.setSelection(unfilteredSelection);
-			}
-		}
-	}
-
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
@@ -642,13 +483,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void documentChanged(DocumentEvent e) {
 		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			if (FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
-				int columnIndex = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
-				String searchText = flatTextFieldSearch.getText();
-				targetModel.applyFilter(searchText, columnIndex, regexActive.isSelected(), respectCase.isSelected());
-			} else {
-				searchTheRow(selectMode);
-			}
+			int columnIndex = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
+			String searchText = flatTextFieldSearch.getText();
+			targetModel.applyFilter(searchText, columnIndex, regexActive.isSelected(), respectCase.isSelected());
 		}
 	}
 
@@ -659,16 +496,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			return;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_F5 && !FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
-			if (allowSearchAction()) {
-				markAll();
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_F8
-				&& !FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
-			if (allowSearchAction()) {
-				markAllAndFilter();
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
+		if (e.getKeyCode() == KeyEvent.VK_F3) {
 			searchNextRow(selectMode);
 		} else {
 			// We want to do nothing on other keys

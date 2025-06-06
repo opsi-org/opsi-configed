@@ -38,9 +38,6 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleStatistics"), false, 0, null, true);
 		panelStatistics.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelStatistics.getTableSearchPane().setFiltering();
-
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)

@@ -59,8 +59,6 @@ import de.uib.utils.table.CursorrowObserver;
 import de.uib.utils.table.ExporterToCSV;
 import de.uib.utils.table.ExporterToPDF;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.RowNoTableModelFilterCondition;
-import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.updates.UpdateController;
 
 public class PanelGenEditTable extends JPanel
@@ -625,8 +623,6 @@ public class PanelGenEditTable extends JPanel
 		setSorter();
 
 		setDataChanged(false);
-
-		setModelFilteringBySelection();
 	}
 
 	/**
@@ -671,16 +667,6 @@ public class PanelGenEditTable extends JPanel
 		}
 
 		tableSearchPane.setSearchFieldsAll();
-	}
-
-	private void setModelFilteringBySelection() {
-		if (tableSearchPane.isFiltering() && tableModel != null
-				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
-			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
-			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
-
-			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
-		}
 	}
 
 	public void setDataChanged(boolean b) {

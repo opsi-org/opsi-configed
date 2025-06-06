@@ -55,10 +55,6 @@ public class ProductActionPanel extends JPanel {
 		searchPane.setSearchFieldsAll();
 	}
 
-	public boolean isFilteredMode() {
-		return searchPane.isFilteredMode();
-	}
-
 	public void setReloadActionHandler(ActionListener al) {
 		buttonReloadProductStates.addActionListener(al);
 	}
@@ -78,7 +74,6 @@ public class ProductActionPanel extends JPanel {
 
 	private void initData() {
 		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(panelProductSettings));
-		searchPane.setFiltering();
 	}
 
 	private void initComponents(ProductSettingsType type) {
@@ -188,9 +183,5 @@ public class ProductActionPanel extends JPanel {
 		}
 
 		panelProductSettings.getProductTable().setSelection(new HashSet<>(saveSelectedProducts));
-	}
-
-	public void setFilterMark(boolean selected) {
-		searchPane.setFilterMark(selected);
 	}
 }

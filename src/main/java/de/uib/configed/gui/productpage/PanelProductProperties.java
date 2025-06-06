@@ -130,8 +130,6 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;
 			this.propertiesPanel = propertiesPanel;
-
-			tableSearchPane.setFiltering();
 		}
 
 		@Override

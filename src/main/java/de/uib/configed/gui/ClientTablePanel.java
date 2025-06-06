@@ -65,7 +65,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		activateListSelectionListener();
 
 		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, clientTable));
-		searchPane.setFiltering();
 
 		clientTable.addKeyListener(searchPane);
 		clientTable.addKeyListener(this);
@@ -115,10 +114,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		}
 	}
 
-	public boolean isFilteredMode() {
-		return searchPane.isFilteredMode();
-	}
-
 	public ClientTable getClientTable() {
 		return clientTable;
 	}
@@ -165,10 +160,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	public synchronized void addMouseListener(MouseListener l) {
 		scrollpane.addMouseListener(l);
 		clientTable.addMouseListener(l);
-	}
-
-	public void setFilterMark(boolean selected) {
-		searchPane.setFilterMark(selected);
 	}
 
 	public final void initColumnNames() {
