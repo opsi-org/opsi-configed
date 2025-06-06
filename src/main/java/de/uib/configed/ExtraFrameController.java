@@ -113,12 +113,15 @@ public final class ExtraFrameController {
 
 	public static void startProductActionFrame() {
 		Logging.info("startProductActionFrame ");
+		ConfigedMain.getMainFrame().activateLoadingCursor();
 
 		if (completeWinProductsPanel == null) {
 			completeWinProductsPanel = new CompleteWinProductsDialog();
 		}
 
 		completeWinProductsPanel.show();
+
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 	}
 
 	public static void startGroupActionFrame(ConfigedMain configedMain) {
