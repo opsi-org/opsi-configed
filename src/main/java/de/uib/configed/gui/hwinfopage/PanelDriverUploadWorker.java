@@ -70,8 +70,8 @@ public class PanelDriverUploadWorker extends SwingWorker<Void, Void> {
 	protected void done() {
 		setWaitCursor(false);
 		ctx.executeButton.setEnabled(true);
-		JOptionPane.showMessageDialog(ctx.owner, "Ready", Configed.getResourceValue("CompleteWinProduct.reportTitle"),
-				JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(ctx.owner, Configed.getResourceValue("PanelDriverUploadWorker.reportMessage"),
+				Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void setWaitCursor(boolean wait) {
