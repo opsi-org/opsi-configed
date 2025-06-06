@@ -76,6 +76,8 @@ public final class WinProductUtils {
 	 */
 	public static boolean ensureServerDirectoryExists(java.awt.Component parentComponent, WebDAVClient webDAVClient,
 			File targetPath, String promptText, String promptTitle) {
+		boolean result = true;
+
 		if (targetPath != null && !webDAVClient.existsAndIsDirectory(targetPath.getPath().replace("\\", "/"))) {
 			int returnedOption = JOptionPane.showConfirmDialog(parentComponent, promptText, promptTitle,
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -83,15 +85,15 @@ public final class WinProductUtils {
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				try {
 					webDAVClient.uploadDirectory(targetPath, targetPath.getPath().replace("\\", "/"));
-					return true;
 				} catch (IOException e) {
 					Logging.warning(WinProductUtils.class, "Failed to create directory ", e);
-					return false;
+					result = false;
 				}
 			} else {
-				return false;
+				result = false;
 			}
 		}
-		return true;
+
+		return result;
 	}
 }

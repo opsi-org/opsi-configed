@@ -83,6 +83,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		}
 	}
 
+	@SuppressWarnings("java:S2972")
 	private class FileNameDocumentListener implements DocumentListener {
 		private boolean checkFiles() {
 			boolean result = false;
@@ -240,6 +241,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		produceTarget();
 	}
 
+	@SuppressWarnings("java:S138")
 	private void buildPanel() {
 		fieldByAuditPath = new JTextField();
 		fieldByAuditPath.setEditable(false);

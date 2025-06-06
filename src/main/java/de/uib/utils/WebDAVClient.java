@@ -244,10 +244,8 @@ public class WebDAVClient {
 			List<DavResource> resources = sardine.list(url);
 			for (DavResource resource : resources) {
 				if (resource.isDirectory()) {
-					String dirPath = resource.getPath().replace("/dav/", "");
-					if (!includeParentDir) {
-						dirPath = dirPath.replace(currentDirectory, "");
-					}
+					String dirPath = includeParentDir ? resource.getPath().replace("/dav/", "")
+							: resource.getPath().replace("/dav/", "").replace(currentDirectory, "");
 					directories.add(dirPath);
 				}
 			}
@@ -273,10 +271,8 @@ public class WebDAVClient {
 			for (DavResource resource : resources) {
 				if ((!resource.getDisplayName().equals(currentDirectory.substring(0, currentDirectory.length() - 1))
 						&& resource.isDirectory()) || resource.getDisplayName().endsWith(fileExtension)) {
-					String dirPath = resource.getPath().replace("/dav/", "");
-					if (!includeParentDir) {
-						dirPath = dirPath.replace(currentDirectory, "");
-					}
+					String dirPath = includeParentDir ? resource.getPath().replace("/dav/", "")
+							: resource.getPath().replace("/dav/", "").replace(currentDirectory, "");
 					directoriesAndFiles.add(dirPath);
 				}
 			}

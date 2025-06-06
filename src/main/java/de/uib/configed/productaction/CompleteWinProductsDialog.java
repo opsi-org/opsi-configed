@@ -231,6 +231,7 @@ public class CompleteWinProductsDialog implements NameProducer {
 		new WinProductUploadWorker(ctx).execute();
 	}
 
+	@SuppressWarnings("java:S138")
 	private JPanel initLayout() {
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
 		topicLabel.setFont(topicLabel.getFont().deriveFont(Font.BOLD));
