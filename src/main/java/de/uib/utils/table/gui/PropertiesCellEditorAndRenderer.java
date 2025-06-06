@@ -114,16 +114,19 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		Component result;
 
 		if (modelProducer.getListCellOptions(key) == null) {
-			return null;
-		} else if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
-			result = getBooleanEditor(value, key);
-		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
-			result = getMultiValueEditor(table, value, row);
+			result = null;
 		} else {
-			result = getSingleValueEditor(value, row);
+			if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
+				result = getBooleanEditor(value, key);
+			} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
+				result = getMultiValueEditor(table, value, row);
+			} else {
+				result = getSingleValueEditor(value, row);
+			}
+
+			ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 		}
 
-		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 		return result;
 	}
 
