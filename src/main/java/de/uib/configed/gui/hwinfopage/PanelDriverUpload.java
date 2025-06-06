@@ -573,6 +573,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			fieldServerPath.setText(serverPathGot);
 			fieldServerPath.setCaretPosition(serverPathGot.length());
 		}
+		serverPathChecked.setSelected(true);
 	}
 
 	private void chooseDriverPath() {

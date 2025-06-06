@@ -11,13 +11,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +28,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -49,6 +53,7 @@ import de.uib.utils.logging.Logging;
 
 public class WebDAVClient {
 	private static final int DEFAULT_UPLOAD_THREADS = Runtime.getRuntime().availableProcessors() * 2;
+	private static final Pattern ENCODING_PATTERN = Pattern.compile(".*%[0-9a-fA-F]{2}.*");
 
 	private Sardine sardine;
 
@@ -185,23 +190,69 @@ public class WebDAVClient {
 		}
 	}
 
+	public void createDirectories(String remoteDirPath) throws IOException {
+		if (remoteDirPath == null || remoteDirPath.isEmpty()) {
+			return;
+		}
+
+		for (String dirUrl : getDirectoryUrls(remoteDirPath)) {
+			if (!sardine.exists(dirUrl)) {
+				createDirectory(dirUrl);
+			}
+		}
+	}
+
+	private List<String> getDirectoryUrls(String remoteDirPath) {
+		String[] parts = remoteDirPath.split("/");
+		StringBuilder currentPath = new StringBuilder();
+		List<String> urls = new ArrayList<>();
+		for (String part : parts) {
+			if (part.isEmpty()) {
+				continue;
+			}
+			currentPath.append(encodePathSegmentIfNeeded(part)).append("/");
+			urls.add(getBaseURL() + currentPath.toString());
+		}
+		return urls;
+	}
+
+	private void createDirectory(String dirUrl) {
+		try {
+			sardine.createDirectory(dirUrl);
+			Logging.info(this, "Created directory: ", dirUrl);
+		} catch (SardineException se) {
+			if (se.getStatusCode() != 405 && se.getStatusCode() != 409) {
+				Logging.warning(this, "Failed to create directory (SardineException): ", dirUrl, " - ", se);
+			}
+		} catch (IOException ioe) {
+			Logging.warning(this, "Failed to create directory (IOException): ", dirUrl, " - ", ioe);
+		}
+	}
+
+	private String encodePathSegmentIfNeeded(String segment) {
+		if (isEncoded(segment)) {
+			return segment;
+		}
+		try {
+			return URLEncoder.encode(segment, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+		} catch (UnsupportedEncodingException e) {
+			Logging.warning(this, "Unsupported encoding", e);
+		}
+		return "";
+	}
+
+	private static boolean isEncoded(String segment) {
+		return ENCODING_PATTERN.matcher(segment).matches();
+	}
+
 	private String parseURL(String rawUrl) {
 		try {
 			int pathIndex = rawUrl.indexOf('/', rawUrl.indexOf("://") + 3);
 			String base = (pathIndex > 0) ? rawUrl.substring(0, pathIndex) : rawUrl;
 			String path = (pathIndex > 0) ? rawUrl.substring(pathIndex) : "";
 
-			String[] parts = path.split("/");
-			StringBuilder encodedPath = new StringBuilder();
-			for (String part : parts) {
-				if (!part.isEmpty()) {
-					encodedPath.append("/").append(URLEncoder.encode(part, StandardCharsets.UTF_8));
-				}
-			}
-
 			URI baseUri = new URI(base);
-			URI fullUri = new URI(baseUri.getScheme(), null, baseUri.getHost(), baseUri.getPort(),
-					encodedPath.toString(), null, null);
+			URI fullUri = new URI(baseUri.getScheme(), null, baseUri.getHost(), baseUri.getPort(), path, null, null);
 			return fullUri.toURL().toString();
 		} catch (URISyntaxException use) {
 			Logging.warning(this, "Failed to parse URL ", use);
@@ -221,9 +272,30 @@ public class WebDAVClient {
 	}
 
 	public boolean isDirectory(String url) throws IOException {
-		List<DavResource> resources = sardine.list(parseURL(getBaseURL() + url));
+		String fullUrl = parseURL(getBaseURL() + url);
+
+		String requestedPath;
+		try {
+			URI requestedUri = new URI(fullUrl);
+			requestedPath = requestedUri.getPath();
+			if (!requestedPath.endsWith("/")) {
+				requestedPath += "/";
+			}
+		} catch (URISyntaxException e) {
+			Logging.warning(this, "Invalid URI: ", fullUrl, e);
+			return false;
+		}
+
+		List<DavResource> resources = sardine.list(fullUrl);
 		for (DavResource res : resources) {
-			if ("/".equals(res.getHref().toString())) {
+			String resourcePath = res.getHref().getPath();
+			if (!resourcePath.endsWith("/")) {
+				resourcePath += "/";
+			}
+			String decodedRequestedPath = URLDecoder.decode(requestedPath, StandardCharsets.UTF_8);
+			String decodedResourcePath = URLDecoder.decode(resourcePath, StandardCharsets.UTF_8);
+
+			if (decodedRequestedPath.equals(decodedResourcePath)) {
 				return res.isDirectory();
 			}
 		}
@@ -282,7 +354,7 @@ public class WebDAVClient {
 		return directoriesAndFiles;
 	}
 
-	private String getBaseURL() {
+	public String getBaseURL() {
 		return "https://" + persistenceController.getExecutioner().getHost() + ":"
 				+ getPortFromHost(persistenceController.getExecutioner().getHost()) + "/dav/";
 	}

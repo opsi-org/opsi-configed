@@ -84,7 +84,7 @@ public final class WinProductUtils {
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
 				try {
-					webDAVClient.uploadDirectory(targetPath, targetPath.getPath().replace("\\", "/"));
+					webDAVClient.createDirectories(targetPath.getPath().replace("\\", "/"));
 				} catch (IOException e) {
 					Logging.warning(WinProductUtils.class, "Failed to create directory ", e);
 					result = false;
