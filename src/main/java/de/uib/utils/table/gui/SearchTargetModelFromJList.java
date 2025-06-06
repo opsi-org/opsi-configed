@@ -191,43 +191,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	}
 
 	@Override
-	public void setFiltered(boolean filtered) {
-		Logging.info(this, "setFiltered ", filtered);
-
-		if (filtered) {
-			unfilteredSelection = jList.getSelectedIndices();
-			theValues = new ArrayList<>();
-			theDescriptions = new ArrayList<>();
-			for (Integer i : jList.getSelectedIndices()) {
-				theValues.add(unfilteredV.get(i));
-				theDescriptions.add(unfilteredD.get(i));
-			}
-		} else {
-			theValues = unfilteredV;
-			theDescriptions = unfilteredD;
-		}
-
-		tableModel = setupTableModel(theValues, theDescriptions);
-		tableModel.fireTableChanged(new TableModelEvent(tableModel));
-		tableModel.fireTableStructureChanged();
-
-		jList.setListData(theValues.toArray(new String[0]));
-
-		if (filtered) {
-			// we mark all since we just filtered the marked ones
-
-			// selectAll : (since it is assumed that we filter the selected)
-			setValueIsAdjusting(true);
-			jList.setSelectionInterval(0, jList.getModel().getSize() - 1);
-			setValueIsAdjusting(false);
-		} else {
-			jList.setSelectionInterval(0, 0);
-		}
-
-		Logging.info(this, "setFilter ", theValues);
-	}
-
-	@Override
 	public void applyFilter(String query, int column, boolean useRegex, boolean caseSensitive) {
 		theValues.clear();
 		theDescriptions.clear();

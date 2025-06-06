@@ -74,7 +74,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param targetModel the model for delivering data and selecting
 	 */
 	public TableSearchPane(PanelGenEditTable thePanel) {
-		this(thePanel, new SearchTargetModelFromTable(thePanel));
+		this(thePanel, new SearchTargetModelFromTable(thePanel.getJTable()));
 	}
 
 	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel) {
