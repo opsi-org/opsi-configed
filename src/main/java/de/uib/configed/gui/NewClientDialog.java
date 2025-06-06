@@ -86,7 +86,7 @@ public final class NewClientDialog {
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title"));
-		dialog.setMinimumSize(new Dimension(0, 0));
+		dialog.setMinimumSize(new Dimension());
 		dialog.setModal(false);
 		dialog.pack();
 	}

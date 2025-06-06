@@ -54,8 +54,6 @@ public class PanelProductSettings extends JSplitPane {
 		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
 	}
 
-	private static final int HEIGHT_MIN = 200;
-
 	private ProductTable productTable;
 	private ProductSettingsTableModel productSettingsTableModel;
 
@@ -110,8 +108,8 @@ public class PanelProductSettings extends JSplitPane {
 		leftPane.setLayout(layoutLeftPane);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(groupPanel, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(paneProducts, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(groupPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(paneProducts, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(groupPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

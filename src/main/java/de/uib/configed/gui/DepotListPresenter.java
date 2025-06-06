@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -172,13 +171,10 @@ public class DepotListPresenter extends JPanel {
 	}
 
 	private void initComponents() {
-		// not visible in this panel
-		depotslist.setMaximumSize(new Dimension(200, 400));
-
 		scrollpaneDepotslist = new JScrollPane();
 		scrollpaneDepotslist.getViewport().add(depotslist);
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
+
 		buildPopup();
 	}
 

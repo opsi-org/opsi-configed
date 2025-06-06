@@ -104,19 +104,13 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		GroupLayout layoutEditProperties = new GroupLayout(panelTop);
 		panelTop.setLayout(layoutEditProperties);
 
-		layoutEditProperties
-				.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
-						.addComponent(scrollpaneDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
+				.addComponent(scrollpaneDepots, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(buttonSetValuesFromPackage, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
-		layoutEditProperties
-				.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollpaneDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
+				.addComponent(scrollpaneDepots, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(buttonSetValuesFromPackage, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitter.setResizeWeight(0.3);
@@ -140,7 +134,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		titlePanel.setLayout(titleLayout);
 
 		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
-				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(jLabelEditDepotProductProperties, 0, GroupLayout.PREFERRED_SIZE,

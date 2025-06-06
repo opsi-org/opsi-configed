@@ -6,13 +6,13 @@
 
 package de.uib.utils.datapanel;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -234,8 +234,6 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	}
 
 	private void buildPanel() {
-		setLayout(new BorderLayout());
-
 		table = new JTable(mapTableModel) {
 			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
@@ -260,7 +258,12 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 		jScrollPane = new JScrollPane(table);
 
-		add(jScrollPane, BorderLayout.CENTER);
+		GroupLayout layout = new GroupLayout(this);
+		setLayout(layout);
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addComponent(jScrollPane, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jScrollPane, 0,
+				GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 	}
 
 	protected void prepareRendererForJTable(JComponent jComponent, JTable table, int row, int col) {

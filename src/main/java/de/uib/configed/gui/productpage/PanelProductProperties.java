@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.productpage;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -130,6 +131,8 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;
 			this.propertiesPanel = propertiesPanel;
+
+			super.setMinimumSize(new Dimension());
 		}
 
 		@Override
