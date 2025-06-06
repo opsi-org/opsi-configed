@@ -258,10 +258,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		buttonCallSelectDriverFiles
 				.setToolTipText(Configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
 
-		JButton buttonCallChooserServerpath = new JButton(Icons.getIntellijIcon("open"));
-		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("PanelDriverUpload.determineServerPath"));
-		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
-
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
 		JButton buttonShowDrivers = new JButton(Icons.getIntellijIcon("run"));
 		buttonShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
@@ -351,11 +347,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
 				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonCallChooserServerpath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+				.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -397,11 +390,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addComponent(buttonCallChooserServerpath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
+				.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -557,23 +546,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		}
 
 		fieldServerPath.setText(result);
-	}
 
-	private void chooseServerpath() {
-		String oldServerPath = fieldServerPath.getText();
-		File currentDirectory = new File(oldServerPath);
-
-		makePath(currentDirectory);
-		chooserServerpath.setCurrentDirectory(currentDirectory);
-
-		int returnVal = chooserServerpath.showOpenDialog(dialog);
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			String serverPathGot = chooserServerpath.getSelectedFile().getPath();
-			fieldServerPath.setText(serverPathGot);
-			fieldServerPath.setCaretPosition(serverPathGot.length());
-		}
-		serverPathChecked.setSelected(true);
+		makePath(new File(result));
 	}
 
 	private void chooseDriverPath() {
