@@ -9,14 +9,10 @@ package de.uib.configed.gui.hwinfopage;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -28,7 +24,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -49,6 +44,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
 import de.uib.utils.WebDAVClient;
+import de.uib.utils.WinProductUtils;
 import de.uib.utils.logging.Logging;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
@@ -237,28 +233,13 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void evaluateWinProducts() {
-		retrieveWinProducts();
+		if (depotProductDirectory != null) {
+			comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(
+					WinProductUtils.getWinProducts(webDAVClient, depotProductDirectory).toArray(new String[0])));
+		}
 
 		winProduct = (String) comboChooseWinProduct.getSelectedItem();
 		produceTarget();
-	}
-
-	private void retrieveWinProducts() {
-		Logging.info(this, "retrieveWinProducts in ", depotProductDirectory);
-
-		if (depotProductDirectory == null) {
-			return;
-		}
-
-		// not yet a depot selected
-
-		Set<String> allNetbootProducts = webDAVClient.getDirectoriesIn(depotProductDirectory, false);
-		Set<String> winProducts = allNetbootProducts.parallelStream().filter((String product) -> {
-			boolean hasWinpe = webDAVClient.exists(depotProductDirectory + product + "winpe");
-			boolean hasI368 = webDAVClient.exists(depotProductDirectory + product + "i368");
-			return hasWinpe || hasI368;
-		}).collect(Collectors.toSet());
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
 
 	private void buildPanel() {
@@ -518,22 +499,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private void makePath(File path) {
 		Logging.info(this, "makePath for ", path);
 
-		if (path != null && !webDAVClient.existsAndIsDirectory(path.getPath().replace("\\", "/"))) {
-			int returnedOption = JOptionPane.showConfirmDialog(dialog,
-					Configed.getResourceValue("PanelDriverUpload.makeFilePath.text"),
-					Configed.getResourceValue("PanelDriverUpload.makeFilePath.title"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
+		boolean result = WinProductUtils.ensureServerDirectoryExists(dialog, webDAVClient, path,
+				Configed.getResourceValue("PanelDriverUpload.makeFilePath.text"),
+				Configed.getResourceValue("PanelDriverUpload.makeFilePath.title"));
 
-			if (returnedOption == JOptionPane.YES_OPTION) {
-				try {
-					webDAVClient.uploadDirectory(path, path.getPath().replace("\\", "/"));
-				} catch (IOException e) {
-					Logging.warning(this, "Failed to create directy ", e);
-				}
-			}
-		}
-
-		Logging.info(this, "makePath result ", path);
+		Logging.info(this, "makePath result ", path, " exists or created ", result);
 	}
 
 	private void showDrivers() {
@@ -567,13 +537,8 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			serverPathChecked.setSelected(stateServerPath);
 			if (stateServerPath) {
 				try {
-					if (driverPath.isDirectory()) {
-						webDAVClient.uploadDirectory(driverPath, targetPath.getPath().replace("\\", "/") + "/");
-					} else {
-						byte[] fileBytes = Files.readAllBytes(driverPath.toPath());
-						webDAVClient.uploadFile(targetPath.getPath().replace("\\", "/") + "/" + driverPath.getName(),
-								new ByteArrayInputStream(fileBytes));
-					}
+					WinProductUtils.uploadFileOrDirectory(webDAVClient, driverPath,
+							targetPath.getPath().replace("\\", "/") + "/");
 				} catch (IOException iox) {
 					Logging.error(iox, "copy error:\n", iox);
 				}

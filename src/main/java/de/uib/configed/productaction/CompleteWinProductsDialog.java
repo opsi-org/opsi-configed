@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -40,11 +38,10 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
 import de.uib.utils.WebDAVClient;
+import de.uib.utils.WinProductUtils;
 import de.uib.utils.logging.Logging;
 
 public class CompleteWinProductsDialog implements NameProducer {
-	// file name conventions
-
 	private String winProduct = "";
 
 	private String depotProductDirectory;
@@ -100,27 +97,14 @@ public class CompleteWinProductsDialog implements NameProducer {
 		dialog.setVisible(true);
 	}
 
-	public void evaluateWinProducts() {
-		retrieveWinProducts();
+	public final void evaluateWinProducts() {
+		if (depotProductDirectory != null) {
+			comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(
+					WinProductUtils.getWinProducts(webDAVClient, depotProductDirectory).toArray(new String[0])));
+		}
 
 		winProduct = (String) comboChooseWinProduct.getSelectedItem();
 		produceTarget();
-	}
-
-	private void retrieveWinProducts() {
-		if (depotProductDirectory == null) {
-			return;
-		}
-
-		// not yet a depot selected
-
-		Set<String> allNetbootProducts = webDAVClient.getDirectoriesIn(depotProductDirectory, false);
-		Set<String> winProducts = allNetbootProducts.parallelStream().filter((String product) -> {
-			boolean hasWinpe = webDAVClient.exists(depotProductDirectory + product + "winpe");
-			boolean hasI368 = webDAVClient.exists(depotProductDirectory + product + "i368");
-			return hasWinpe || hasI368;
-		}).collect(Collectors.toSet());
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
 
 	private void defineChoosers() {
@@ -256,13 +240,13 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 				if (!pathWinPE.isEmpty()) {
 					Logging.debug(this, "copy  ", pathWinPE, " to ", targetDirectory);
-					webDAVClient.uploadDirectory(new File(pathWinPE), targetDirectory.replace("\\", "/"));
+					WinProductUtils.uploadFileOrDirectory(webDAVClient, new File(pathWinPE), targetDirectory);
 				}
 
 				String pathInstallFiles = fieldPathInstallFiles.getText().trim();
 				if (!pathInstallFiles.isEmpty()) {
 					Logging.debug(this, "copy  ", pathInstallFiles, " to ", targetDirectory);
-					webDAVClient.uploadDirectory(new File(pathInstallFiles), targetDirectory.replace("\\", "/"));
+					WinProductUtils.uploadFileOrDirectory(webDAVClient, new File(pathInstallFiles), targetDirectory);
 				}
 
 				dialog.setCursor(null);
