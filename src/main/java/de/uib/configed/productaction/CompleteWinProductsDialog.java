@@ -7,14 +7,7 @@
 package de.uib.configed.productaction;
 
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -225,87 +218,17 @@ public class CompleteWinProductsDialog implements NameProducer {
 	}
 
 	private void execute() {
-		new UploadBackgroundThread().start();
-	}
-
-	private class UploadBackgroundThread extends Thread {
-		@Override
-		public void run() {
-			try {
-				dialog.setCursor(Globals.WAIT_CURSOR);
-				buttonCallExecute.setEnabled(false);
-				String targetDirectory = fieldTargetPath.getText();
-
-				String pathWinPE = fieldPathWinPE.getText().trim();
-
-				if (!pathWinPE.isEmpty()) {
-					Logging.debug(this, "copy  ", pathWinPE, " to ", targetDirectory);
-					WinProductUtils.uploadFileOrDirectory(webDAVClient, new File(pathWinPE), targetDirectory);
-				}
-
-				String pathInstallFiles = fieldPathInstallFiles.getText().trim();
-				if (!pathInstallFiles.isEmpty()) {
-					Logging.debug(this, "copy  ", pathInstallFiles, " to ", targetDirectory);
-					WinProductUtils.uploadFileOrDirectory(webDAVClient, new File(pathInstallFiles), targetDirectory);
-				}
-
-				dialog.setCursor(null);
-				buttonCallExecute.setEnabled(true);
-
-				JOptionPane.showMessageDialog(dialog, "Ready",
-						Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
-
-				List<String> values = new ArrayList<>();
-
-				String productKey = fieldProductKey.getText().trim();
-				values.add(productKey);
-
-				// check if product key is new and should be changed
-				Map<String, Object> propsMap = persistenceController.getProductDataService().getProductPropertiesPD(
-						persistenceController.getHostInfoCollections().getConfigServer(), winProduct);
-				Logging.debug(this, " getProductproperties ", propsMap);
-
-				String oldProductKey = null;
-
-				if (mapContainsProductKey(propsMap)) {
-					oldProductKey = (String) ((List<?>) propsMap.get("productkey")).get(0);
-				} else {
-					oldProductKey = "";
-				}
-
-				if (!oldProductKey.equals(productKey)) {
-					int returnedOption = JOptionPane.showConfirmDialog(dialog,
-							Configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
-							Configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
-							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-					if (returnedOption == JOptionPane.YES_OPTION) {
-						dialog.setCursor(Globals.WAIT_CURSOR);
-						Logging.info(this, "setCommonProductPropertyValue ", depot.getText(), ", ", winProduct, ", ",
-								values);
-						persistenceController.getProductDataService().setCommonProductPropertyValue(
-								Collections.singleton(depot.getText()), winProduct, "productkey", values);
-
-						dialog.setCursor(null);
-					}
-				}
-			} catch (IOException ex) {
-				dialog.setCursor(null);
-				Logging.error(ex, "copy error:\n", ex);
-			} catch (HeadlessException ex) {
-				dialog.setCursor(null);
-				Logging.error(ex, "Headless exception when invoking showOptionDialog");
-			}
-		}
-	}
-
-	private static boolean mapContainsProductKey(Map<String, Object> propsMap) {
-		if (propsMap == null || !(propsMap.get("productkey") instanceof List)) {
-			return false;
-		} else {
-			return !((List<?>) propsMap.get("productkey")).isEmpty()
-					&& !"".equals(((List<?>) propsMap.get("productkey")).get(0));
-		}
+		WinProductUploadWorker.Context ctx = new WinProductUploadWorker.Context();
+		ctx.owner = dialog;
+		ctx.executeButton = buttonCallExecute;
+		ctx.targetDirectory = fieldTargetPath.getText().trim();
+		ctx.pathWinPE = fieldPathWinPE.getText().trim();
+		ctx.pathInstallFiles = fieldPathInstallFiles.getText().trim();
+		ctx.productKey = fieldProductKey.getText().trim();
+		ctx.depot = depot.getText();
+		ctx.winProduct = winProduct;
+		ctx.webDAVClient = webDAVClient;
+		new WinProductUploadWorker(ctx).execute();
 	}
 
 	private JPanel initLayout() {

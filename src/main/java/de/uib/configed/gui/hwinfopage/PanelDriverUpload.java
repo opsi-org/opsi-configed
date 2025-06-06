@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,9 +67,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	private String depotProductDirectory = "";
 	private String driverDirectory = "";
 
-	private boolean stateDriverPath;
 	private JCheckBox driverPathChecked;
-	private boolean stateServerPath;
 	private JCheckBox serverPathChecked;
 
 	private static class RadioButtonIntegrationType extends JRadioButton {
@@ -94,13 +91,13 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				targetPath = new File(fieldServerPath.getText().replace("\\", "/"));
 				driverPath = new File(fieldDriverPath.getText().replace("\\", "/"));
 
-				stateServerPath = webDAVClient.existsAndIsDirectory(targetPath.getPath().replace("\\", "/"));
+				boolean stateServerPath = webDAVClient.existsAndIsDirectory(targetPath.getPath().replace("\\", "/"));
 				serverPathChecked.setSelected(stateServerPath);
 				Logging.info(this, "checkFiles  stateServerPath targetPath ", targetPath);
 				Logging.info(this, "checkFiles  stateServerPath driverPath ", driverPath);
 				Logging.info(this, "checkFiles  stateServerPath isDirectory ", stateServerPath);
 
-				stateDriverPath = driverPath.exists();
+				boolean stateDriverPath = driverPath.exists();
 				driverPathChecked.setSelected(stateDriverPath);
 				Logging.info(this, "checkFiles stateDriverPath ", stateDriverPath);
 
@@ -296,8 +293,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		JPanel panelButtonGroup = createPanelButtonGroup();
 
-		driverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
-				stateDriverPath);
+		driverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.driverpathConnected"), true);
 		driverPathChecked.setEnabled(false);
 
 		serverPathChecked = new JCheckBox(Configed.getResourceValue("PanelDriverUpload.targetdirConnected"), true);
@@ -521,34 +517,14 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 	}
 
 	private void execute() {
-		new PanelDriverUploadThread().start();
-	}
-
-	private class PanelDriverUploadThread extends Thread {
-		@Override
-		public void run() {
-			dialog.setCursor(Globals.WAIT_CURSOR);
-			buttonUploadDrivers.setEnabled(false);
-			Logging.info(this, "copy  ", driverPath, " to ", targetPath);
-
-			makePath(targetPath);
-
-			stateServerPath = webDAVClient.existsAndIsDirectory(targetPath.getPath().replace("\\", "/"));
-			serverPathChecked.setSelected(stateServerPath);
-			if (stateServerPath) {
-				try {
-					WinProductUtils.uploadFileOrDirectory(webDAVClient, driverPath,
-							targetPath.getPath().replace("\\", "/") + "/");
-				} catch (IOException iox) {
-					Logging.error(iox, "copy error:\n", iox);
-				}
-			} else {
-				Logging.info(this, "execute: targetPath does not exist");
-			}
-
-			buttonUploadDrivers.setEnabled(true);
-			dialog.setCursor(null);
-		}
+		PanelDriverUploadWorker.Context ctx = new PanelDriverUploadWorker.Context();
+		ctx.owner = dialog;
+		ctx.webDAVClient = webDAVClient;
+		ctx.executeButton = buttonUploadDrivers;
+		ctx.targetPath = targetPath;
+		ctx.driverPath = driverPath;
+		ctx.serverPathChecked = serverPathChecked;
+		new PanelDriverUploadWorker(ctx).execute();
 	}
 
 	public void setByAuditPath(String s) {
