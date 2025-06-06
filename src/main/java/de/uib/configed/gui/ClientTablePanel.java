@@ -26,11 +26,11 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
-import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.SearchTargetModelFromTable;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ClientTablePanel extends JPanel implements ListSelectionListener, KeyListener {
@@ -64,7 +64,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 		activateListSelectionListener();
 
-		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, clientTable));
+		searchPane = new TableSearchPane(new SearchTargetModelFromTable(clientTable));
 
 		clientTable.addKeyListener(searchPane);
 		clientTable.addKeyListener(this);

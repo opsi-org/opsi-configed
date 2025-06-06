@@ -26,11 +26,11 @@ import de.uib.configed.ServerActionManager;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.table.gui.SearchTargetModelFromTable;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
@@ -73,7 +73,7 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initData() {
-		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(panelProductSettings));
+		searchPane = new TableSearchPane(new SearchTargetModelFromTable(panelProductSettings.getProductTable()));
 	}
 
 	private void initComponents(ProductSettingsType type) {
