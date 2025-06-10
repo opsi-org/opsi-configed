@@ -261,7 +261,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		panelLicensePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensepool"), false, 0,
 				new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
-		panelLicensePools.setFilterKey(FilterKey.LICENSEPOOL_TABLE);
+		panelLicensePools.setFilterKey(FilterKey.LICENSE_POOL_TABLE);
 
 		panelLicenseContracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 1,

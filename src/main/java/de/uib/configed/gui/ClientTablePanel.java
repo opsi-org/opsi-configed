@@ -68,7 +68,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		activateListSelectionListener();
 
 		searchPane = new TableSearchPane(new SearchTargetModelFromTable(clientTable));
-		searchPane.setFilterKey(FilterKey.CLIENT_CONFIG);
+		searchPane.setFilterKey(FilterKey.CLIENT_TABLE);
 
 		clientTable.addKeyListener(searchPane);
 		clientTable.addKeyListener(this);
@@ -172,7 +172,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	}
 
 	public void restoreFilter() {
-		TableFilterState filterState = FilterStateManager.getFilterState(FilterKey.CLIENT_CONFIG);
+		TableFilterState filterState = FilterStateManager.getFilterState(FilterKey.CLIENT_TABLE);
 		searchPane.setFilterState(filterState);
 	}
 

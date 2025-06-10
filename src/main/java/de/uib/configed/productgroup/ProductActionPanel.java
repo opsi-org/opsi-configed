@@ -62,8 +62,9 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	public void restoreFilter() {
-		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS ? FilterKey.LOCALBOOT_PRODUCTS
-				: FilterKey.NETBOOT_PRODUCTS;
+		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+				? FilterKey.LOCALBOOT_PRODUCTS_TABLE
+				: FilterKey.NETBOOT_PRODUCTS_TABLE;
 		TableFilterState filterState = FilterStateManager.getFilterState(filterKey);
 		searchPane.setFilterState(filterState);
 	}
@@ -87,8 +88,9 @@ public class ProductActionPanel extends JPanel {
 
 	private void initData() {
 		searchPane = new TableSearchPane(new SearchTargetModelFromTable(panelProductSettings.getProductTable()));
-		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS ? FilterKey.LOCALBOOT_PRODUCTS
-				: FilterKey.NETBOOT_PRODUCTS;
+		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+				? FilterKey.LOCALBOOT_PRODUCTS_TABLE
+				: FilterKey.NETBOOT_PRODUCTS_TABLE;
 		searchPane.setFilterKey(filterKey);
 	}
 
