@@ -33,6 +33,7 @@ import de.uib.utils.datapanel.EditMapPanelX;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEditTable;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.ExternalSource;
@@ -71,6 +72,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		paneProducts = new PaneProducts(columnNames, panelEditProperties, propertiesPanel);
 		paneProducts.setTableModel(model);
 		paneProducts.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paneProducts.setFilterKey(FilterKey.DEPOT_PRODUCT_PROPERTIES_TABLE);
 
 		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING);
