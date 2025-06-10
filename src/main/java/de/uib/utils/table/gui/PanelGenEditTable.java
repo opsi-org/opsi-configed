@@ -854,7 +854,7 @@ public class PanelGenEditTable extends JPanel
 
 		String val = value.toString();
 
-		for (int viewrow = 0; viewrow < tableModel.getRowCount(); viewrow++) {
+		for (int viewrow = 0; viewrow < jTable.getRowCount(); viewrow++) {
 			Object compareValue = tableModel.getValueAt(jTable.convertRowIndexToModel(viewrow), col);
 
 			if ((compareValue == null && val.isEmpty())
