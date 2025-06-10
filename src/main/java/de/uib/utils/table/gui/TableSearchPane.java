@@ -7,6 +7,7 @@
 package de.uib.utils.table.gui;
 
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.Collator;
@@ -142,6 +143,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.addActionListener(actionEvent -> searchNextRow(selectMode));
 
 		comboSearchFields = new JComboBox<>();
+		comboSearchFields.addItemListener((ItemEvent e) -> {
+			if (!flatTextFieldSearch.getText().isBlank()) {
+				filter();
+			}
+		});
 
 		respectCase = new JToggleButton(Icons.getIntellijIcon("matchCase"));
 		respectCase.setSelectedIcon(Icons.getSelectedIntellijIcon("matchCase"));
