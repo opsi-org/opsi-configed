@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +18,13 @@ import javax.swing.JTextField;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import com.formdev.flatlaf.extras.components.FlatTextField;
+
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.messagebus.MessagebusListener;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
@@ -31,19 +34,20 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	private JLabel labelAllClientsCount;
 
-	private JTextField fieldSelectedClientsNames;
+	private FlatTextField fieldSelectedClientsNames;
 
 	private JLabel labelSelectedClientsNames;
 
 	private JLabel labelInvolvedDepots;
 	private JTextField fieldInvolvedDepots;
 
-	private JLabel connectionStateLabel;
-	private ImageIcon connectedIcon;
-	private ImageIcon disconnectedIcon;
+	private JLabel serverConnectionStateLabel;
+	private ImageIcon serverConnectedIcon;
+	private ImageIcon serverDisconnectedIcon;
+	private ImageIcon clientConnectedIcon;
+	private ImageIcon clientDisconnectedIcon;
 
 	public HostsStatusPanel() {
-		super();
 
 		initComponents();
 		setupLayout();
@@ -66,12 +70,20 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount
 				+ " (" + selectedClientsCount + ")");
 
-		String selectedClientNames = Utils.getListStringRepresentation(selectedClients);
+		if (selectedClientsCount == 1) {
+			String selectedClient = selectedClients.get(0);
 
-		fieldSelectedClientsNames.setText(selectedClientNames);
-
-		fieldSelectedClientsNames.setToolTipText(
-				"<html><body><p>" + selectedClientNames.replace(";\n", "<br\\ >") + "</p></body></html>");
+			fieldSelectedClientsNames.setText(selectedClient);
+			if (PersistenceControllerFactory.getPersistenceController().getHostDataService()
+					.getMessagebusConnectedClients().contains(selectedClient)) {
+				fieldSelectedClientsNames.setLeadingIcon(clientConnectedIcon);
+			} else {
+				fieldSelectedClientsNames.setLeadingIcon(clientDisconnectedIcon);
+			}
+		} else {
+			fieldSelectedClientsNames.setText(null);
+			fieldSelectedClientsNames.setLeadingIcon(clientDisconnectedIcon);
+		}
 
 		fieldInvolvedDepots.setText(depot);
 		fieldInvolvedDepots.setToolTipText("<html><body><p>" + depot.replace(";\n", "<br\\ >") + "</p></body></html>");
@@ -84,17 +96,23 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
 
-		fieldSelectedClientsNames = new JTextField();
+		fieldSelectedClientsNames = new FlatTextField();
 		fieldSelectedClientsNames.setEditable(false);
 		fieldSelectedClientsNames.setDragEnabled(true);
 
 		fieldInvolvedDepots = new JTextField();
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
-		disconnectedIcon = Icons.getSelectedIntellijIcon("circle", 24);
+		serverConnectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
+		serverDisconnectedIcon = Icons.getSelectedIntellijIcon("circle", 24);
+		clientConnectedIcon = Icons.getIntellijIcon("checkmark", Globals.OPSI_OK);
 
-		connectionStateLabel = new JLabel();
+		// Create a transparent icon for disconnected clients
+		// This is a workaround have an empty space
+		clientDisconnectedIcon = new ImageIcon(
+				new BufferedImage(clientConnectedIcon.getIconWidth(), 1, BufferedImage.TYPE_INT_ARGB));
+
+		serverConnectionStateLabel = new JLabel();
 	}
 
 	private void setupLayout() {
@@ -112,7 +130,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldInvolvedDepots, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(connectionStateLabel));
+				.addGap(Globals.MIN_GAP_SIZE).addComponent(serverConnectionStateLabel));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -126,20 +144,20 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(connectionStateLabel))
+						.addComponent(serverConnectionStateLabel))
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
-		connectionStateLabel.setIcon(connectedIcon);
-		connectionStateLabel.setToolTipText(CONNECTED_TOOLTIP);
+		serverConnectionStateLabel.setIcon(serverConnectedIcon);
+		serverConnectionStateLabel.setToolTipText(CONNECTED_TOOLTIP);
 	}
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-		connectionStateLabel.setIcon(disconnectedIcon);
-		connectionStateLabel.setToolTipText(DISCONNECTED_TOOLTIP);
+		serverConnectionStateLabel.setIcon(serverDisconnectedIcon);
+		serverConnectionStateLabel.setToolTipText(DISCONNECTED_TOOLTIP);
 	}
 
 	@Override
