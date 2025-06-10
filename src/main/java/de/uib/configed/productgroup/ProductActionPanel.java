@@ -30,7 +30,10 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.table.gui.FilterKey;
+import de.uib.utils.table.gui.FilterStateManager;
 import de.uib.utils.table.gui.SearchTargetModelFromTable;
+import de.uib.utils.table.gui.TableFilterState;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
@@ -43,8 +46,11 @@ public class ProductActionPanel extends JPanel {
 
 	private PanelProductSettings panelProductSettings;
 
+	private ProductSettingsType type;
+
 	public ProductActionPanel(PanelProductSettings panelProductSettings, ProductSettingsType type) {
 		this.panelProductSettings = panelProductSettings;
+		this.type = type;
 
 		initData();
 
@@ -53,6 +59,13 @@ public class ProductActionPanel extends JPanel {
 
 	public void updateSearchFields() {
 		searchPane.setSearchFieldsAll();
+	}
+
+	public void restoreFilter() {
+		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS ? FilterKey.LOCALBOOT_PRODUCTS
+				: FilterKey.NETBOOT_PRODUCTS;
+		TableFilterState filterState = FilterStateManager.getFilterState(filterKey);
+		searchPane.setFilterState(filterState);
 	}
 
 	public void setReloadActionHandler(ActionListener al) {
@@ -74,6 +87,9 @@ public class ProductActionPanel extends JPanel {
 
 	private void initData() {
 		searchPane = new TableSearchPane(new SearchTargetModelFromTable(panelProductSettings.getProductTable()));
+		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS ? FilterKey.LOCALBOOT_PRODUCTS
+				: FilterKey.NETBOOT_PRODUCTS;
+		searchPane.setFilterKey(filterKey);
 	}
 
 	private void initComponents(ProductSettingsType type) {

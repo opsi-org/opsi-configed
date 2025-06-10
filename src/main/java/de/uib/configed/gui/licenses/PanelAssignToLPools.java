@@ -30,6 +30,7 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PanelStateSwitch;
 import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
@@ -370,14 +371,17 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
+		panelLicensepools.setFilterKey(FilterKey.LICENSEPOOL_TABLE);
 
 		panelProductId2LPool = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
+		panelProductId2LPool.setFilterKey(FilterKey.LICENSE_PRODUCT_ID_TO_lICENSE_POOL_TABLE);
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
+		panelRegisteredSoftware.setFilterKey(FilterKey.LICENSE_REGISTERED_SOFTWARE);
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);

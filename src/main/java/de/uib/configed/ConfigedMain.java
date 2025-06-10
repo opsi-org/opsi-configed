@@ -1098,6 +1098,7 @@ public class ConfigedMain {
 		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.activateListSelectionListener();
+		clientTablePanel.restoreFilter();
 		clientTree.produceActiveParents();
 		clientTree.updateSelectedObjectsInTable();
 
@@ -1177,6 +1178,7 @@ public class ConfigedMain {
 		refreshClientListKeepingGroup();
 		updateHostInfo();
 		hostInfo.resetGui();
+		clientTablePanel.restoreFilter();
 
 		mainFrame.deactivateLoadingCursor();
 	}

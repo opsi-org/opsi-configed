@@ -139,6 +139,10 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.updateSearchFields();
 	}
 
+	public void restoreFilter() {
+		groupPanel.restoreFilter();
+	}
+
 	private JPopupMenu producePopupMenu() {
 		JPopupMenu popup = new JPopupMenu();
 

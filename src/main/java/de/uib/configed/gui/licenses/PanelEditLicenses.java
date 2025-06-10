@@ -21,6 +21,7 @@ import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelEditLicenses extends MultiTablePanel {
@@ -42,6 +43,7 @@ public class PanelEditLicenses extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelKeys.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelKeys.setFilterKey(FilterKey.LICENSE_KEYS_TABLE);
 
 		panelSoftwarelicenses = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSoftwarelicense"), true, 2,
@@ -49,6 +51,7 @@ public class PanelEditLicenses extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelSoftwarelicenses.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelSoftwarelicenses.setFilterKey(FilterKey.LICENSE_SOFTWARE_TABLE);
 
 		panelLicensecontracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2,
@@ -56,6 +59,7 @@ public class PanelEditLicenses extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelLicensecontracts.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelLicensecontracts.setFilterKey(FilterKey.LICENSE_CONTRACTS_TABLE);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
 		panelLicensecontracts.setAwareOfTableChangedListener(true);

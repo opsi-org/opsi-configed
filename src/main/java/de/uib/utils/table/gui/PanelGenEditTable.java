@@ -128,6 +128,8 @@ public class PanelGenEditTable extends JPanel
 
 	private AbstractExportTable exportTable;
 
+	private FilterKey filterKey;
+
 	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
 			boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
@@ -172,6 +174,11 @@ public class PanelGenEditTable extends JPanel
 
 	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition) {
 		this(title, editing, generalPopupPosition, null);
+	}
+
+	public void setFilterKey(FilterKey filterKey) {
+		this.filterKey = filterKey;
+		tableSearchPane.setFilterKey(filterKey);
 	}
 
 	private static final List<String> giveMenuitemNames(List<Integer> popups) {
@@ -219,7 +226,6 @@ public class PanelGenEditTable extends JPanel
 		exportTable = new ExporterToCSV(jTable);
 
 		tableSearchPane = new TableSearchPane(this);
-
 		tableSearchPane.setVisible(withTablesearchPane);
 
 		// add the popup to the scrollpane for the case that the table is empty
@@ -980,6 +986,17 @@ public class PanelGenEditTable extends JPanel
 
 	public void moveToLastRow() {
 		moveToRow(tableModel.getRowCount() - 1);
+	}
+
+	public void restoreFilter() {
+		if (filterKey == null) {
+			Logging.warning(this, "Filter key is null");
+			return;
+		}
+		TableFilterState filterState = FilterStateManager.getFilterState(filterKey);
+		if (filterState != null) {
+			tableSearchPane.setFilterState(filterState);
+		}
 	}
 
 	// TableModelListener

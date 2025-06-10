@@ -58,6 +58,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private final Collator comparator;
 
+	private FilterKey filterKey;
+
 	/**
 	 * Provides search functionality for tables.
 	 * 
@@ -84,6 +86,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comparator = getCollator();
 
 		init();
+	}
+
+	public void setFilterKey(FilterKey filterKey) {
+		this.filterKey = filterKey;
 	}
 
 	private void init() {
@@ -483,10 +489,35 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void documentChanged(DocumentEvent e) {
 		if (e.getDocument() == flatTextFieldSearch.getDocument()) {
-			int columnIndex = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
-			String searchText = flatTextFieldSearch.getText();
-			targetModel.applyFilter(searchText, columnIndex, regexActive.isSelected(), respectCase.isSelected());
+			filter();
+			if (filterKey != null) {
+				Logging.info(this, "Saving filter state for filter key ", filterKey);
+				FilterStateManager.saveFilterState(filterKey, getFilterState());
+			}
 		}
+	}
+
+	public TableFilterState getFilterState() {
+		return new TableFilterState(flatTextFieldSearch.getText(), comboSearchFields.getSelectedIndex(),
+				regexActive.isSelected(), respectCase.isSelected());
+	}
+
+	public void setFilterState(TableFilterState state) {
+		if (state == null) {
+			Logging.debug(this, "Filter state is null");
+			return;
+		}
+		flatTextFieldSearch.setText(state.getSearchText());
+		comboSearchFields.setSelectedIndex(state.getSearchColumnIndex());
+		regexActive.setSelected(state.isRegexActive());
+		respectCase.setSelected(state.isRespectCase());
+		filter();
+	}
+
+	private void filter() {
+		int columnIndex = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
+		String searchText = flatTextFieldSearch.getText();
+		targetModel.applyFilter(searchText, columnIndex, regexActive.isSelected(), respectCase.isSelected());
 	}
 
 	// KeyListener interface

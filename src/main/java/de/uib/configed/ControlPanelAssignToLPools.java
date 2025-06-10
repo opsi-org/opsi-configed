@@ -415,6 +415,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		modelLicensepools.reset();
 		thePanel.getPanelLicensepools().setTableModel(modelLicensepools);
+		thePanel.getPanelLicensepools().restoreFilter();
 		modelLicensepools.setEditableColumns(new int[] { 0, 1 });
 
 		JMenuItem menuItemAddPool = new JMenuItem(Configed.getResourceValue("ConfigedMain.Licenses.NewLicensepool"));
@@ -468,6 +469,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		modelProductId2LPool.reset();
 		thePanel.getPanelProductId2LPool().setTableModel(modelProductId2LPool);
+		thePanel.getPanelProductId2LPool().restoreFilter();
 		modelProductId2LPool.setEditableColumns(new int[] { 0, 1 });
 
 		JMenuItem menuItemAddRelationProductId2LPool = new JMenuItem(
@@ -548,6 +550,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelWindowsSoftwareIds.setColMarkCursorRow(COLUMN_MARK_CURSOR_ROW);
 
 		thePanel.getPanelRegisteredSoftware().setTableModel(modelWindowsSoftwareIds);
+		thePanel.getPanelRegisteredSoftware().restoreFilter();
 		thePanel.getPanelRegisteredSoftware().getJTable()
 				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		modelWindowsSoftwareIds.setEditableColumns(new int[] {});

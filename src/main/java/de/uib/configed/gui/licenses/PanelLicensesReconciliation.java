@@ -21,6 +21,7 @@ import de.uib.configed.ControlPanelLicensesReconciliation;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelLicensesReconciliation extends MultiTablePanel {
@@ -35,6 +36,7 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 		panelReconciliation = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleReconciliation"), false, 0, null, true);
 		panelReconciliation.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelReconciliation.setFilterKey(FilterKey.LICENSE_RECONCILIATION_TABLE);
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
