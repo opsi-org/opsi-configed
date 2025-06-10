@@ -74,16 +74,14 @@ public class TabbedLogPane extends JTabbedPane {
 	}
 
 	public void setDocuments(String logtype) {
-		String info = ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames();
-
 		Map<String, String> documents = getLogfilesUpdating(logtype);
-		Logging.info(this, "idents.length ", idents.length, " info: ", info);
+		Logging.info(this, "idents.length ", idents.length);
 		for (String ident : idents) {
-			setDocument(ident, documents.get(ident), info);
+			setDocument(ident, documents.get(ident));
 		}
 	}
 
-	private void setDocument(String ident, final String document, final String info) {
+	private void setDocument(String ident, final String document) {
 		int i = identsList.indexOf(ident);
 		Logging.info(this, "setDocument ", i, " document == null ", (document == null));
 		if (i < 0 || i >= idents.length) {
@@ -96,8 +94,11 @@ public class TabbedLogPane extends JTabbedPane {
 			return;
 		}
 
-		textPanes[i].setTitle(idents[i] + "  " + info);
-		textPanes[i].setInfo(info);
+		String selectedClient = configedMain.getSelectedClients().size() == 1 ? configedMain.getSelectedClients().get(0)
+				: "";
+
+		textPanes[i].setTitle(idents[i] + "  " + selectedClient);
+		textPanes[i].setInfo(selectedClient);
 		textPanes[i].setText(document);
 	}
 

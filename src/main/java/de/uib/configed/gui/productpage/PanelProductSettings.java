@@ -246,12 +246,7 @@ public class PanelProductSettings extends JSplitPane {
 		metaData.put("subject", title);
 
 		title = "";
-		if (ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots().length() != 0) {
-			title += "Depot : " + ConfigedMain.getMainFrame().getHostsStatusPanel().getInvolvedDepots();
-		}
-		if (ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames().length() != 0) {
-			title += "; Clients: " + ConfigedMain.getMainFrame().getHostsStatusPanel().getSelectedClientNames();
-		}
+		// TODO add more information
 		metaData.put("title", title);
 		metaData.put("keywords", "product settings");
 

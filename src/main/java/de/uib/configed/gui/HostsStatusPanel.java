@@ -29,17 +29,11 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
 
-	private JLabel labelActivated;
-
 	private JLabel labelAllClientsCount;
-	private JTextField fieldGroupActivated;
-	private JLabel labelGroupActivated;
 
-	private JLabel labelSelectedClientsCount;
 	private JTextField fieldSelectedClientsNames;
 
 	private JLabel labelSelectedClientsNames;
-	private JTextField fieldActivatedClientsCount;
 
 	private JLabel labelInvolvedDepots;
 	private JTextField fieldInvolvedDepots;
@@ -55,11 +49,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		setupLayout();
 	}
 
-	public void setGroupName(String s) {
-		Logging.info(this, "setGroupName ", s);
-		fieldGroupActivated.setText(s);
-	}
-
 	public String getSelectedClientNames() {
 		return fieldSelectedClientsNames.getText();
 	}
@@ -68,19 +57,14 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		return fieldInvolvedDepots.getText();
 	}
 
-	public String getGroupName() {
-		return fieldGroupActivated.getText();
-	}
-
 	public void updateValues(Integer clientsCount, List<String> selectedClients, String depot) {
 		int selectedClientsCount = selectedClients.size();
 
 		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
 				selectedClientsCount);
 
-		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
-
-		setFieldClientsCount(selectedClientsCount);
+		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount
+				+ " (" + selectedClientsCount + ")");
 
 		String selectedClientNames = Utils.getListStringRepresentation(selectedClients);
 
@@ -93,52 +77,12 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setToolTipText("<html><body><p>" + depot.replace(";\n", "<br\\ >") + "</p></body></html>");
 	}
 
-	public void setGroupClientsCount(int n) {
-		String newS = null;
-		int bracketIndex = fieldActivatedClientsCount.getText().indexOf("(");
-		if (bracketIndex > -1) {
-			String keep = fieldActivatedClientsCount.getText().substring(0, bracketIndex);
-			newS = keep + "(" + n + ")";
-		} else {
-			newS = "(" + n + ")";
-		}
-
-		fieldActivatedClientsCount.setText(newS);
-	}
-
-	private void setFieldClientsCount(Integer n) {
-		String newS = "";
-		if (n != null) {
-			newS = n + " ";
-		}
-
-		int bracketIndex = fieldActivatedClientsCount.getText().indexOf("(");
-		if (bracketIndex > -1) {
-			String keep = fieldActivatedClientsCount.getText().substring(bracketIndex);
-			newS = newS + keep;
-		}
-
-		fieldActivatedClientsCount.setText(newS);
-	}
-
 	private void initComponents() {
-		labelActivated = new JLabel(Configed.getResourceValue("MainFrame.activated"));
-
-		labelGroupActivated = new JLabel(Configed.getResourceValue("MainFrame.groupActivated"));
-
-		fieldGroupActivated = new JTextField();
-		fieldGroupActivated.setEditable(false);
-
 		labelAllClientsCount = new JLabel();
-
-		labelSelectedClientsCount = new JLabel(Configed.getResourceValue("MainFrame.labelSelected"));
 
 		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelNames"));
 
 		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
-
-		fieldActivatedClientsCount = new JTextField();
-		fieldActivatedClientsCount.setEditable(false);
 
 		fieldSelectedClientsNames = new JTextField();
 		fieldSelectedClientsNames.setEditable(false);
@@ -161,20 +105,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldGroupActivated, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedClientsNames, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldActivatedClientsCount, 0, 0, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -185,16 +118,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldActivatedClientsCount, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

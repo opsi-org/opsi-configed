@@ -177,7 +177,7 @@ public class ConfigedMain {
 
 		initTabComponents();
 
-		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusPanel());
+		activatedGroupModel = new ActivatedGroupModel();
 
 		initialTreeActivation();
 
@@ -832,9 +832,7 @@ public class ConfigedMain {
 		} else {
 			// Activate client
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-			setGroupNameForNode(selectedNode);
 			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
-
 		}
 	}
 
@@ -850,21 +848,12 @@ public class ConfigedMain {
 
 		if (selTreePaths == null) {
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-			mainFrame.getHostsStatusPanel().setGroupName("");
 			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
 		} else if (selTreePaths.length == 1) {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
 			Logging.info(this, "treeClientsSelectAction selTreePaths: ", selTreePaths.length);
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-		}
-	}
-
-	private void setGroupNameForNode(DefaultMutableTreeNode selectedNode) {
-		if (selectedClients.size() == 1 && selectedNode.getParent() != null) {
-			mainFrame.getHostsStatusPanel().setGroupName(selectedNode.getParent().toString());
-		} else {
-			mainFrame.getHostsStatusPanel().setGroupName("");
 		}
 	}
 
