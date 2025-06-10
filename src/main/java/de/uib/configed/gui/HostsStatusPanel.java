@@ -27,7 +27,6 @@ import de.uib.messagebus.MessagebusListener;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
-import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
@@ -98,8 +97,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setText(depot);
 		fieldInvolvedDepots.setToolTipText("<html><body><p>" + depot.replace(";\n", "<br\\ >") + "</p></body></html>");
 
-		labelDevice.setText(hostInfo.getClientDeviceType());
-		labelDevice.setIcon(Utils.determineIconBasedOnDeviceType(hostInfo.getClientDeviceType()));
+		labelDevice.setText(ClientInfoPanel.transformDeviceType(hostInfo.getClientDeviceType()));
+		labelDevice.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getClientDeviceType()));
 	}
 
 	private void initComponents() {
