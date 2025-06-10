@@ -64,7 +64,7 @@ public class PanelLicensesUsage extends MultiTablePanel {
 		panelLicensePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), false, 0,
 				new int[] { PopupMenuTrait.POPUP_RELOAD });
-		panelLicensePools.setFilterKey(FilterKey.LICENSE_POOL_TABLE);
+		panelLicensePools.setFilterKey(FilterKey.LICENSE_POOL_USAGE_TABLE);
 
 		panelGetAndAssignSL = new JPanel();
 		JLabel labelGetAndAssignSL = new JLabel(

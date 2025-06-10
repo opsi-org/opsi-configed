@@ -371,7 +371,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
-		panelLicensepools.setFilterKey(FilterKey.LICENSE_POOL_TABLE);
+		panelLicensepools.setFilterKey(FilterKey.LICENSE_POOL_POOLS_TABLE);
 
 		panelProductId2LPool = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
