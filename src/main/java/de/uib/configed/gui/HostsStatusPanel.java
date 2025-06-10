@@ -22,9 +22,12 @@ import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
@@ -38,6 +41,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	private JLabel labelSelectedClientsNames;
 
+	private JLabel labelDevice;
+
 	private JLabel labelInvolvedDepots;
 	private JTextField fieldInvolvedDepots;
 
@@ -46,6 +51,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	private ImageIcon serverDisconnectedIcon;
 	private ImageIcon clientConnectedIcon;
 	private ImageIcon clientDisconnectedIcon;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public HostsStatusPanel() {
 
@@ -61,21 +69,23 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		return fieldInvolvedDepots.getText();
 	}
 
-	public void updateValues(Integer clientsCount, List<String> selectedClients, String depot) {
-		int selectedClientsCount = selectedClients.size();
-
+	public void initLabelAllClientsCount(int clientsCount, int selectedClientsCount) {
 		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
 				selectedClientsCount);
-
 		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount
 				+ " (" + selectedClientsCount + ")");
+	}
+
+	public void updateValues(int clientsCount, List<String> selectedClients, String depot, HostInfo hostInfo) {
+		int selectedClientsCount = selectedClients.size();
+
+		initLabelAllClientsCount(clientsCount, selectedClientsCount);
 
 		if (selectedClientsCount == 1) {
 			String selectedClient = selectedClients.get(0);
 
 			fieldSelectedClientsNames.setText(selectedClient);
-			if (PersistenceControllerFactory.getPersistenceController().getHostDataService()
-					.getMessagebusConnectedClients().contains(selectedClient)) {
+			if (persistenceController.getHostDataService().getMessagebusConnectedClients().contains(selectedClient)) {
 				fieldSelectedClientsNames.setLeadingIcon(clientConnectedIcon);
 			} else {
 				fieldSelectedClientsNames.setLeadingIcon(clientDisconnectedIcon);
@@ -87,12 +97,17 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 		fieldInvolvedDepots.setText(depot);
 		fieldInvolvedDepots.setToolTipText("<html><body><p>" + depot.replace(";\n", "<br\\ >") + "</p></body></html>");
+
+		labelDevice.setText(hostInfo.getClientDeviceType());
+		labelDevice.setIcon(Utils.determineIconBasedOnDeviceType(hostInfo.getClientDeviceType()));
 	}
 
 	private void initComponents() {
 		labelAllClientsCount = new JLabel();
 
 		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelNames"));
+
+		labelDevice = new JLabel();
 
 		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
 
@@ -127,6 +142,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedClientsNames, 0, 0, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelDevice, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldInvolvedDepots, 0, 0, Short.MAX_VALUE)
@@ -137,6 +155,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 						.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelDevice, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

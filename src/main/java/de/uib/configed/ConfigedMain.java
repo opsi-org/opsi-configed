@@ -194,6 +194,7 @@ public class ConfigedMain {
 		Logging.debug(this, "initialTreeActivation");
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
+		mainFrame.getHostsStatusPanel().initLabelAllClientsCount(clientCount, selectedClients.size());
 	}
 
 	private void initTabComponents() {
@@ -399,7 +400,7 @@ public class ConfigedMain {
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
 				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot, hostInfo);
 
 		activatedGroupModel.setActive(selectedClients.isEmpty());
 
@@ -528,7 +529,6 @@ public class ConfigedMain {
 		clientCount = m.size();
 
 		if (mainFrame != null) {
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
 			clientTablePanel.updateTable();
 		}
 
@@ -832,7 +832,6 @@ public class ConfigedMain {
 		} else {
 			// Activate client
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
 		}
 	}
 
@@ -848,7 +847,6 @@ public class ConfigedMain {
 
 		if (selTreePaths == null) {
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-			mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot);
 		} else if (selTreePaths.length == 1) {
 			treeClientsSelectAction(selTreePaths[0]);
 		} else {
@@ -1107,8 +1105,8 @@ public class ConfigedMain {
 		Logging.debug(this, " reset the values, particularly in list ");
 
 		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
-		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.activateListSelectionListener();
+		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTree.produceActiveParents();
 		clientTree.updateSelectedObjectsInTable();
 
@@ -1123,10 +1121,6 @@ public class ConfigedMain {
 
 		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
 		mainFrame.reloadServerConsoleMenu();
-
-		updateHostInfo();
-
-		hostInfo.resetGui();
 
 		mainFrame.deactivateLoadingPane();
 
@@ -1187,7 +1181,9 @@ public class ConfigedMain {
 		persistenceController.reloadData(ReloadEvent.HOST_DATA_RELOAD.toString());
 		refreshClientListKeepingGroup();
 		updateHostInfo();
+
 		hostInfo.resetGui();
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot, hostInfo);
 
 		mainFrame.deactivateLoadingCursor();
 	}

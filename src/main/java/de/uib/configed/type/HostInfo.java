@@ -336,6 +336,10 @@ public class HostInfo {
 		return clientShutdownInstall;
 	}
 
+	public String getClientDeviceType() {
+		return clientDeviceType;
+	}
+
 	public void setShutdownInstall(boolean b) {
 		clientShutdownInstall = b;
 	}
