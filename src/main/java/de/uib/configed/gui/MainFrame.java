@@ -7,6 +7,8 @@
 package de.uib.configed.gui;
 
 import java.awt.Desktop;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -614,7 +616,8 @@ public class MainFrame extends JFrame implements KeyListener {
 		jTextArea.setEditable(false);
 
 		JButton buttonCopy = new JButton(Configed.getResourceValue("copy"));
-		buttonCopy.addActionListener(e -> jTextArea.copy());
+		buttonCopy.addActionListener(e -> Toolkit.getDefaultToolkit().getSystemClipboard()
+				.setContents(new StringSelection(Logging.getCurrentLogfilePath()), null));
 
 		JButton buttonOpen = new JButton(Configed.getResourceValue("MainFrame.showLogFileOpen"));
 		buttonOpen.addActionListener((ActionEvent event) -> {
