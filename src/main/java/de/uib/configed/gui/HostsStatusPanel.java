@@ -30,6 +30,7 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
+	private static final int MIN_WIDTH = 250;
 	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
@@ -129,10 +130,14 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedClientsNames, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE).addComponent(labelOS, 0, 0, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-				.addComponent(labelDevice, 0, 0, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-				.addComponent(serverConnectionStateLabel));
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(fieldSelectedClientsNames, MIN_WIDTH, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelOS, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelDevice, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE).addComponent(serverConnectionStateLabel));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
