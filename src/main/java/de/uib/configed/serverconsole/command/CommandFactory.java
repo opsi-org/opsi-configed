@@ -78,7 +78,7 @@ public final class CommandFactory {
 	}
 
 	public List<MultiCommandTemplate> retrieveCommandList() {
-		List<Map<String, Object>> commandlist = persistenceController.getSSHCommandDataService().retrieveCommandList();
+		List<Map<String, Object>> commandlist = persistenceController.getSSHCommandDataService().getCommandList();
 
 		commandList = new ArrayList<>();
 		knownMenus = new HashSet<>();

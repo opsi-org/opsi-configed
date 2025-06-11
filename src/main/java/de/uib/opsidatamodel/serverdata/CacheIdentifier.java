@@ -490,7 +490,12 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code boolean}
 	 */
-	MFA_ENABLED("mfa_enabled");
+	MFA_ENABLED("mfa_enabled"),
+
+	/**
+	 * return type {@code List<Map<String, Object>>}
+	 */
+	SSH_COMMAND_LIST("ssh_command_list");
 
 	private final String displayName;
 
