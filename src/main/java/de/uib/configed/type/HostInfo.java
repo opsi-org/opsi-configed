@@ -348,6 +348,14 @@ public class HostInfo {
 		return clientDeviceType;
 	}
 
+	public String getClientDeviceVendor() {
+		return clientDeviceVendor;
+	}
+
+	public String getClientDeviceModel() {
+		return clientDeviceModel;
+	}
+
 	public void setShutdownInstall(boolean b) {
 		clientShutdownInstall = b;
 	}

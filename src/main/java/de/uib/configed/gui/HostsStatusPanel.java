@@ -93,6 +93,20 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 		labelDeviceType.setText(ClientInfoPanel.transformDeviceType(hostInfo.getClientDeviceType()));
 		labelDeviceType.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getClientDeviceType()));
+
+		StringBuilder tooltipText = new StringBuilder();
+		if (!hostInfo.getClientDeviceVendor().isBlank()) {
+			tooltipText.append(hostInfo.getClientDeviceVendor());
+		}
+
+		if (!hostInfo.getClientDeviceModel().isBlank()) {
+			if (tooltipText.length() > 0) {
+				tooltipText.append("\n");
+			}
+			tooltipText.append(hostInfo.getClientDeviceModel());
+		}
+
+		labelDeviceType.setToolTipText(tooltipText.toString());
 	}
 
 	private void initComponents() {
