@@ -7,6 +7,7 @@
 package de.uib.configed.tree;
 
 import java.text.Collator;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -157,9 +159,12 @@ public class ClientTree extends AbstractGroupTree {
 		if (model != null) {
 			Set<String> allPCs = new TreeSet<>(persistenceController.getHostInfoCollections()
 					.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients));
+
+			Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
 			Set<String> permittedHostGroups = persistenceController.getUserRolesConfigDataService()
 					.getHostGroupsPermitted();
-			build(allPCs, permittedHostGroups);
+			Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups, permittedHostGroups);
+			build(allPCs, expandedPermittedHostGroups);
 		}
 	}
 
@@ -188,6 +193,29 @@ public class ClientTree extends AbstractGroupTree {
 		if (allowedClients != null) {
 			Logging.info(this, "build, allowedClients ", allowedClients.size());
 		}
+	}
+
+	@SuppressWarnings("java:S1168")
+	private static Set<String> expandPermittedHostGroups(Map<String, Map<String, String>> hostGroups,
+			Set<String> permittedGroups) {
+		if (permittedGroups == null) {
+			return null;
+		}
+
+		Set<String> expanded = new HashSet<>(permittedGroups);
+		Queue<String> queue = new ArrayDeque<>(permittedGroups);
+
+		while (!queue.isEmpty()) {
+			String currentGroup = queue.poll();
+			for (Map.Entry<String, Map<String, String>> entry : hostGroups.entrySet()) {
+				String groupId = entry.getKey();
+				String parentId = entry.getValue().get("parentGroupId");
+				if (currentGroup.equals(parentId) && expanded.add(groupId)) {
+					queue.add(groupId);
+				}
+			}
+		}
+		return expanded;
 	}
 
 	public void clear() {
