@@ -27,6 +27,7 @@ import de.uib.messagebus.MessagebusListener;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
@@ -40,6 +41,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	private JLabel labelSelectedClientsNames;
 
+	private JLabel labelOS;
 	private JLabel labelDevice;
 
 	private JLabel labelInvolvedDepots;
@@ -97,6 +99,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		fieldInvolvedDepots.setText(depot);
 		fieldInvolvedDepots.setToolTipText("<html><body><p>" + depot.replace(";\n", "<br\\ >") + "</p></body></html>");
 
+		labelOS.setText(hostInfo.getClientOS());
+		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getClientOSType(), 20));
+
 		labelDevice.setText(ClientInfoPanel.transformDeviceType(hostInfo.getClientDeviceType()));
 		labelDevice.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getClientDeviceType()));
 	}
@@ -106,6 +111,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelNames"));
 
+		labelOS = new JLabel();
 		labelDevice = new JLabel();
 
 		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
@@ -140,10 +146,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedClientsNames, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelDevice, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(labelOS, 0, 0, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
+				.addComponent(labelDevice, 0, 0, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
 				.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldInvolvedDepots, 0, 0, Short.MAX_VALUE)
@@ -154,6 +158,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 						.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelDevice, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
