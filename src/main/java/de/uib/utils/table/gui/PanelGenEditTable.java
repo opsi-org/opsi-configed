@@ -993,10 +993,7 @@ public class PanelGenEditTable extends JPanel
 			Logging.warning(this, "Filter key is null");
 			return;
 		}
-		TableFilterState filterState = FilterStateManager.getFilterState(filterKey);
-		if (filterState != null) {
-			tableSearchPane.setFilterState(filterState);
-		}
+		tableSearchPane.restoreFilter();
 	}
 
 	// TableModelListener

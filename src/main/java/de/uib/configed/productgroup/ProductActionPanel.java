@@ -31,9 +31,7 @@ import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.FilterStateManager;
 import de.uib.utils.table.gui.SearchTargetModelFromTable;
-import de.uib.utils.table.gui.TableFilterState;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
@@ -62,11 +60,7 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	public void restoreFilter() {
-		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
-				? FilterKey.LOCALBOOT_PRODUCTS_TABLE
-				: FilterKey.NETBOOT_PRODUCTS_TABLE;
-		TableFilterState filterState = FilterStateManager.getFilterState(filterKey);
-		searchPane.setFilterState(filterState);
+		searchPane.restoreFilter();
 	}
 
 	public void setReloadActionHandler(ActionListener al) {

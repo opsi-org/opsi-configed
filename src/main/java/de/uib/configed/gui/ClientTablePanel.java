@@ -31,9 +31,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.FilterStateManager;
 import de.uib.utils.table.gui.SearchTargetModelFromTable;
-import de.uib.utils.table.gui.TableFilterState;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ClientTablePanel extends JPanel implements ListSelectionListener, KeyListener {
@@ -172,8 +170,7 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 	}
 
 	public void restoreFilter() {
-		TableFilterState filterState = FilterStateManager.getFilterState(FilterKey.CLIENT_TABLE);
-		searchPane.setFilterState(filterState);
+		searchPane.restoreFilter();
 	}
 
 	public void setSelectedValues(Collection<String> clientsToSelect) {

@@ -503,12 +503,26 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 	}
 
-	public TableFilterState getFilterState() {
+	private TableFilterState getFilterState() {
 		return new TableFilterState(flatTextFieldSearch.getText(), comboSearchFields.getSelectedIndex(),
 				regexActive.isSelected(), respectCase.isSelected());
 	}
 
-	public void setFilterState(TableFilterState state) {
+	public void restoreFilter() {
+		if (filterKey == null) {
+			Logging.debug(this, "Fitler key is null - we can't proceed");
+		}
+
+		TableFilterState filterState = FilterStateManager.getFilterState(filterKey);
+		if (filterState != null) {
+			setFilterState(filterState);
+			filter();
+		} else {
+			Logging.debug(this, "Filter state for key ", filterState, " is null");
+		}
+	}
+
+	private void setFilterState(TableFilterState state) {
 		if (state == null) {
 			Logging.debug(this, "Filter state is null");
 			return;
@@ -517,7 +531,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		comboSearchFields.setSelectedIndex(state.getSearchColumnIndex());
 		regexActive.setSelected(state.isRegexActive());
 		respectCase.setSelected(state.isRespectCase());
-		filter();
 	}
 
 	private void filter() {
