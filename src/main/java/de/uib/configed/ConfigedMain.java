@@ -82,7 +82,6 @@ public class ConfigedMain {
 	private Set<String> clientsFilteredByTree = new HashSet<>();
 	private ActivatedGroupModel activatedGroupModel;
 
-	private String clientInDepot = "";
 	private HostInfo hostInfo = new HostInfo();
 
 	// collection of retrieved software audit and hardware maps
@@ -361,33 +360,12 @@ public class ConfigedMain {
 		// change in selection not via clientpage (i.e. via tree)
 		mainFrame.getClientConfiguration().stateChanged(null);
 
-		clientInDepot = "";
-
 		hostInfo.resetValues();
 
 		updateHostInfo();
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().setClientInfoEditing(selectedClients.size() == 1,
 				selectedClients.isEmpty());
-
-		// initialize the following method
-		Iterator<String> selectedDepotsIterator = getDepotsOfSelectedClients().iterator();
-		StringBuilder depotsAdded = new StringBuilder();
-
-		String singleDepot = "";
-
-		if (selectedDepotsIterator.hasNext()) {
-			singleDepot = selectedDepotsIterator.next();
-			depotsAdded.append(singleDepot);
-		}
-
-		while (selectedDepotsIterator.hasNext()) {
-			String appS = selectedDepotsIterator.next();
-			depotsAdded.append(";\n");
-			depotsAdded.append(appS);
-		}
-
-		clientInDepot = depotsAdded.toString();
 
 		if (selectedClients.size() == 1) {
 			mainFrame.getClientConfiguration().getClientInfoPanel().setClientID(selectedClients.get(0));
@@ -400,7 +378,7 @@ public class ConfigedMain {
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
 				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot, hostInfo);
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, hostInfo);
 
 		activatedGroupModel.setActive(selectedClients.isEmpty());
 
@@ -1183,7 +1161,7 @@ public class ConfigedMain {
 		updateHostInfo();
 
 		hostInfo.resetGui();
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, clientInDepot, hostInfo);
+		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, hostInfo);
 
 		mainFrame.deactivateLoadingCursor();
 	}

@@ -70,7 +70,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				+ selectedClientsCount + " (" + clientsCount + ")");
 	}
 
-	public void updateValues(int clientsCount, List<String> selectedClients, String depot, HostInfo hostInfo) {
+	public void updateValues(int clientsCount, List<String> selectedClients, HostInfo hostInfo) {
 		int selectedClientsCount = selectedClients.size();
 
 		initLabelAllClientsCount(clientsCount, selectedClientsCount);
