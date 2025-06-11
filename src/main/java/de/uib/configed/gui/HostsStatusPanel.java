@@ -20,11 +20,10 @@ import org.java_websocket.handshake.ServerHandshake;
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
@@ -50,10 +49,10 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	private ImageIcon clientConnectedIcon;
 	private ImageIcon clientDisconnectedIcon;
 
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
+	private ConfigedMain configedMain;
 
-	public HostsStatusPanel() {
+	public HostsStatusPanel(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 
 		initComponents();
 		setupLayout();
@@ -79,7 +78,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 			String selectedClient = selectedClients.get(0);
 
 			fieldSelectedClientsNames.setText(selectedClient);
-			if (persistenceController.getHostDataService().getMessagebusConnectedClients().contains(selectedClient)) {
+			if (configedMain.isHostConnected(selectedClient)) {
 				fieldSelectedClientsNames.setLeadingIcon(clientConnectedIcon);
 			} else {
 				fieldSelectedClientsNames.setLeadingIcon(clientDisconnectedIcon);

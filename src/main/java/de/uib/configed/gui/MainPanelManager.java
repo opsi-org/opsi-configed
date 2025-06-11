@@ -127,7 +127,7 @@ public class MainPanelManager {
 
 		leftTabs.setMinimumSize(new Dimension());
 		clientConfiguration = new ClientConfiguration(configedMain, mainFrame, productTree);
-		hostsStatusPanel = new HostsStatusPanel();
+		hostsStatusPanel = new HostsStatusPanel(configedMain);
 	}
 
 	public JTabbedPane getTabbedPane() {
