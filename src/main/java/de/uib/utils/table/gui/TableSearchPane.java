@@ -144,7 +144,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 		comboSearchFields = new JComboBox<>();
 		comboSearchFields.addItemListener((ItemEvent e) -> {
-			if (!flatTextFieldSearch.getText().isBlank()) {
+			Object selected = comboSearchFields.getSelectedItem();
+			if (selected != null && !flatTextFieldSearch.getText().isBlank()) {
 				filter();
 			}
 		});
