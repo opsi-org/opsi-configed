@@ -26,11 +26,12 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
-import de.uib.configed.guidata.SearchTargetModelFromClientTable;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.FilterKey;
+import de.uib.utils.table.gui.SearchTargetModelFromTable;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ClientTablePanel extends JPanel implements ListSelectionListener, KeyListener {
@@ -64,8 +65,8 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 
 		activateListSelectionListener();
 
-		searchPane = new TableSearchPane(new SearchTargetModelFromClientTable(configedMain, clientTable));
-		searchPane.setFiltering();
+		searchPane = new TableSearchPane(new SearchTargetModelFromTable(clientTable));
+		searchPane.setFilterKey(FilterKey.CLIENT_TABLE);
 
 		clientTable.addKeyListener(searchPane);
 		clientTable.addKeyListener(this);
@@ -113,10 +114,6 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 			selectionModel.removeListSelectionListener(this);
 			return true;
 		}
-	}
-
-	public boolean isFilteredMode() {
-		return searchPane.isFilteredMode();
 	}
 
 	public ClientTable getClientTable() {
@@ -167,13 +164,13 @@ public class ClientTablePanel extends JPanel implements ListSelectionListener, K
 		clientTable.addMouseListener(l);
 	}
 
-	public void setFilterMark(boolean selected) {
-		searchPane.setFilterMark(selected);
-	}
-
 	public final void initColumnNames() {
 		// New code
 		searchPane.setSearchFieldsAll();
+	}
+
+	public void restoreFilter() {
+		searchPane.restoreFilter();
 	}
 
 	public void setSelectedValues(Collection<String> clientsToSelect) {

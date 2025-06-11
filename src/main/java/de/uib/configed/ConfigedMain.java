@@ -569,16 +569,6 @@ public class ConfigedMain {
 
 		clientsForTableModel.retainAll(clientsFilteredByTree);
 
-		Logging.info(this, " clientTable isFilteredMode ", clientTablePanel.isFilteredMode());
-
-		if (clientTablePanel.isFilteredMode()) {
-			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs ",
-					selectedClients.size());
-
-			// selected clients that are in the pclist0
-			clientsForTableModel.retainAll(selectedClients);
-		}
-
 		// building table model
 		return buildTableModel(clientsForTableModel);
 	}
@@ -839,8 +829,6 @@ public class ConfigedMain {
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
-		clientTablePanel.setFilterMark(false);
-
 		clientsFilteredByTree.clear();
 		if (selTreePaths != null) {
 			for (TreePath selectionPath : selTreePaths) {
@@ -913,16 +901,6 @@ public class ConfigedMain {
 		activatedGroupModel.setDescription(clientTree.getGroups().get("" + node).get("description"));
 		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
 		activatedGroupModel.setActive(true);
-
-		// since we select based on the tree view we disable the filter
-		deactivateFilter();
-	}
-
-	public void deactivateFilter() {
-		Logging.info(this, "deactivate filter", clientTablePanel.isFilteredMode());
-		if (clientTablePanel.isFilteredMode()) {
-			setRebuiltClientListTableModel(true, false);
-		}
 	}
 
 	public ActivatedGroupModel getActivatedGroupModel() {
@@ -1120,6 +1098,7 @@ public class ConfigedMain {
 		activateGroupByTree(true, clientTree.getGroupNode(selectedGroup));
 		clientTablePanel.setSelectedValues(clientsLeft);
 		clientTablePanel.activateListSelectionListener();
+		clientTablePanel.restoreFilter();
 		clientTree.produceActiveParents();
 		clientTree.updateSelectedObjectsInTable();
 
@@ -1199,6 +1178,7 @@ public class ConfigedMain {
 		refreshClientListKeepingGroup();
 		updateHostInfo();
 		hostInfo.resetGui();
+		clientTablePanel.restoreFilter();
 
 		mainFrame.deactivateLoadingCursor();
 	}

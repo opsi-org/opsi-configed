@@ -8,8 +8,11 @@ package de.uib.utils.table.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JList;
 import javax.swing.JTable;
@@ -188,39 +191,89 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	}
 
 	@Override
-	public void setFiltered(boolean filtered) {
-		Logging.info(this, "setFiltered ", filtered);
+	public void applyFilter(String query, int column, boolean useRegex, boolean caseSensitive) {
+		theValues.clear();
+		theDescriptions.clear();
 
-		if (filtered) {
-			unfilteredSelection = jList.getSelectedIndices();
-			theValues = new ArrayList<>();
-			theDescriptions = new ArrayList<>();
-			for (Integer i : jList.getSelectedIndices()) {
-				theValues.add(unfilteredV.get(i));
-				theDescriptions.add(unfilteredD.get(i));
-			}
+		if (query == null || query.isEmpty()) {
+			restoreUnfiltered();
 		} else {
-			theValues = unfilteredV;
-			theDescriptions = unfilteredD;
+			Pattern pattern = compilePattern(query, useRegex, caseSensitive);
+			if (useRegex && pattern == null) {
+				return;
+			}
+			filterValues(query, column, useRegex, caseSensitive, pattern);
 		}
 
+		updateUI();
+	}
+
+	private void restoreUnfiltered() {
+		theValues.addAll(unfilteredV);
+		theDescriptions.addAll(unfilteredD);
+	}
+
+	private Pattern compilePattern(String query, boolean useRegex, boolean caseSensitive) {
+		if (!useRegex) {
+			return null;
+		}
+		try {
+			return caseSensitive ? Pattern.compile(query) : Pattern.compile(query, Pattern.CASE_INSENSITIVE);
+		} catch (PatternSyntaxException e) {
+			Logging.warning(this, "Invalid regex in applyFilter", e);
+			return null;
+		}
+	}
+
+	private void filterValues(String query, int column, boolean useRegex, boolean caseSensitive, Pattern pattern) {
+		String cmpQuery = caseSensitive ? query : query.toLowerCase(Locale.ROOT);
+
+		for (int i = 0; i < unfilteredV.size(); i++) {
+			String value = unfilteredV.get(i);
+			String description = unfilteredD.get(i);
+			String valueStr = value != null ? value : "";
+			String descStr = description != null ? description : "";
+
+			boolean match = useRegex ? matchesRegex(pattern, valueStr, descStr, column)
+					: matchesString(cmpQuery, valueStr, descStr, column, caseSensitive);
+
+			if (match) {
+				theValues.add(value);
+				theDescriptions.add(description);
+			}
+		}
+	}
+
+	private static boolean matchesRegex(Pattern pattern, String valueStr, String descStr, int column) {
+		return switch (column) {
+		case 0 -> pattern.matcher(valueStr).find();
+		case 1 -> pattern.matcher(descStr).find();
+		default -> pattern.matcher(valueStr).find() || pattern.matcher(descStr).find();
+		};
+	}
+
+	private static boolean matchesString(String cmpQuery, String valueStr, String descStr, int column,
+			boolean caseSensitive) {
+		String cmpValue = caseSensitive ? valueStr : valueStr.toLowerCase(Locale.ROOT);
+		String cmpDesc = caseSensitive ? descStr : descStr.toLowerCase(Locale.ROOT);
+
+		return switch (column) {
+		case 0 -> cmpValue.contains(cmpQuery);
+		case 1 -> cmpDesc.contains(cmpQuery);
+		default -> cmpValue.contains(cmpQuery) || cmpDesc.contains(cmpQuery);
+		};
+	}
+
+	private void updateUI() {
 		tableModel = setupTableModel(theValues, theDescriptions);
 		tableModel.fireTableChanged(new TableModelEvent(tableModel));
 		tableModel.fireTableStructureChanged();
 
 		jList.setListData(theValues.toArray(new String[0]));
-
-		if (filtered) {
-			// we mark all since we just filtered the marked ones
-
-			// selectAll : (since it is assumed that we filter the selected)
-			setValueIsAdjusting(true);
-			jList.setSelectionInterval(0, jList.getModel().getSize() - 1);
-			setValueIsAdjusting(false);
+		if (!theValues.isEmpty()) {
+			jList.setSelectedIndex(0);
 		} else {
-			jList.setSelectionInterval(0, 0);
+			jList.clearSelection();
 		}
-
-		Logging.info(this, "setFilter ", theValues);
 	}
 }

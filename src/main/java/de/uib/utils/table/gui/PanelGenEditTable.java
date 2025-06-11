@@ -59,8 +59,6 @@ import de.uib.utils.table.CursorrowObserver;
 import de.uib.utils.table.ExporterToCSV;
 import de.uib.utils.table.ExporterToPDF;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.RowNoTableModelFilterCondition;
-import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.updates.UpdateController;
 
 public class PanelGenEditTable extends JPanel
@@ -130,6 +128,8 @@ public class PanelGenEditTable extends JPanel
 
 	private AbstractExportTable exportTable;
 
+	private FilterKey filterKey;
+
 	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
 			boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
@@ -174,6 +174,11 @@ public class PanelGenEditTable extends JPanel
 
 	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition) {
 		this(title, editing, generalPopupPosition, null);
+	}
+
+	public void setFilterKey(FilterKey filterKey) {
+		this.filterKey = filterKey;
+		tableSearchPane.setFilterKey(filterKey);
 	}
 
 	private static final List<String> giveMenuitemNames(List<Integer> popups) {
@@ -221,7 +226,6 @@ public class PanelGenEditTable extends JPanel
 		exportTable = new ExporterToCSV(jTable);
 
 		tableSearchPane = new TableSearchPane(this);
-
 		tableSearchPane.setVisible(withTablesearchPane);
 
 		// add the popup to the scrollpane for the case that the table is empty
@@ -625,8 +629,6 @@ public class PanelGenEditTable extends JPanel
 		setSorter();
 
 		setDataChanged(false);
-
-		setModelFilteringBySelection();
 	}
 
 	/**
@@ -671,16 +673,6 @@ public class PanelGenEditTable extends JPanel
 		}
 
 		tableSearchPane.setSearchFieldsAll();
-	}
-
-	private void setModelFilteringBySelection() {
-		if (tableSearchPane.isFiltering() && tableModel != null
-				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
-			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
-			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
-
-			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
-		}
 	}
 
 	public void setDataChanged(boolean b) {
@@ -862,7 +854,7 @@ public class PanelGenEditTable extends JPanel
 
 		String val = value.toString();
 
-		for (int viewrow = 0; viewrow < tableModel.getRowCount(); viewrow++) {
+		for (int viewrow = 0; viewrow < jTable.getRowCount(); viewrow++) {
 			Object compareValue = tableModel.getValueAt(jTable.convertRowIndexToModel(viewrow), col);
 
 			if ((compareValue == null && val.isEmpty())
@@ -994,6 +986,14 @@ public class PanelGenEditTable extends JPanel
 
 	public void moveToLastRow() {
 		moveToRow(tableModel.getRowCount() - 1);
+	}
+
+	public void restoreFilter() {
+		if (filterKey == null) {
+			Logging.warning(this, "Filter key is null");
+			return;
+		}
+		tableSearchPane.restoreFilter();
 	}
 
 	// TableModelListener

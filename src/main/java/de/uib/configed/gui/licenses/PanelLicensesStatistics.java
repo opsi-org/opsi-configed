@@ -21,6 +21,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEditTable;
 
 public class PanelLicensesStatistics extends MultiTablePanel {
@@ -37,9 +38,7 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 		panelStatistics = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleStatistics"), false, 0, null, true);
 		panelStatistics.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		// supply implementation of SearchTargetModelFromTable.setFiltered
-		panelStatistics.getTableSearchPane().setFiltering();
+		panelStatistics.setFilterKey(FilterKey.LICENSES_STATISTICS_TABLE);
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

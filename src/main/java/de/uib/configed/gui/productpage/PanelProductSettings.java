@@ -139,6 +139,10 @@ public class PanelProductSettings extends JSplitPane {
 		groupPanel.updateSearchFields();
 	}
 
+	public void restoreFilter() {
+		groupPanel.restoreFilter();
+	}
+
 	private JPopupMenu producePopupMenu() {
 		JPopupMenu popup = new JPopupMenu();
 
@@ -309,13 +313,8 @@ public class PanelProductSettings extends JSplitPane {
 		ServerActionManager.processActionRequestsAllProducts(groupPanel.getVisibility());
 	}
 
-	public boolean isFilteredMode() {
-		return groupPanel.isFilteredMode();
-	}
-
 	public void valueChanged(boolean doSelection) {
 		// We want to deactivate filter before changing something
-		groupPanel.setFilterMark(false);
 		productTable.valueChanged(doSelection, productTree.getSelectionPaths());
 	}
 
@@ -323,12 +322,6 @@ public class PanelProductSettings extends JSplitPane {
 		// delete old row sorter before setting new model
 		productTable.setModel(istm);
 		productSettingsTableModel.setRenderer(istm);
-
-		// We don't want to call setSelection here, since it will be called after this method
-		if (!isFilteredMode()) {
-			valueChanged(false);
-		}
-
 		Logging.debug(this, " tableProducts columns  count ", productTable.getColumnCount());
 	}
 

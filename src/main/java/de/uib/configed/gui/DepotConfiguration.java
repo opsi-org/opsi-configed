@@ -106,6 +106,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		case 1:
 			initProductPropertiesTab();
 			panelProductProperties.setProductProperties();
+			panelProductProperties.getPaneProducts().restoreFilter();
 			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 			break;

@@ -211,8 +211,6 @@ public final class ServerActionManager {
 
 		persistenceController.getHostDataService().deleteClients(configedMain.getSelectedClients());
 
-		configedMain.deactivateFilter();
-
 		configedMain.refreshClientListKeepingGroup();
 	}
 

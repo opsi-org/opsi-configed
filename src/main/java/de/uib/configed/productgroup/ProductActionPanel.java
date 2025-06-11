@@ -26,11 +26,12 @@ import de.uib.configed.ServerActionManager;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.list.ListCellRendererByIndex;
+import de.uib.utils.table.gui.FilterKey;
+import de.uib.utils.table.gui.SearchTargetModelFromTable;
 import de.uib.utils.table.gui.TableSearchPane;
 
 public class ProductActionPanel extends JPanel {
@@ -43,8 +44,11 @@ public class ProductActionPanel extends JPanel {
 
 	private PanelProductSettings panelProductSettings;
 
+	private ProductSettingsType type;
+
 	public ProductActionPanel(PanelProductSettings panelProductSettings, ProductSettingsType type) {
 		this.panelProductSettings = panelProductSettings;
+		this.type = type;
 
 		initData();
 
@@ -55,8 +59,8 @@ public class ProductActionPanel extends JPanel {
 		searchPane.setSearchFieldsAll();
 	}
 
-	public boolean isFilteredMode() {
-		return searchPane.isFilteredMode();
+	public void restoreFilter() {
+		searchPane.restoreFilter();
 	}
 
 	public void setReloadActionHandler(ActionListener al) {
@@ -77,8 +81,11 @@ public class ProductActionPanel extends JPanel {
 	}
 
 	private void initData() {
-		searchPane = new TableSearchPane(new SearchTargetModelFromInstallationStateTable(panelProductSettings));
-		searchPane.setFiltering();
+		searchPane = new TableSearchPane(new SearchTargetModelFromTable(panelProductSettings.getProductTable()));
+		FilterKey filterKey = type == ProductSettingsType.LOCALBOOT_PRODUCT_SETTINGS
+				? FilterKey.LOCALBOOT_PRODUCTS_TABLE
+				: FilterKey.NETBOOT_PRODUCTS_TABLE;
+		searchPane.setFilterKey(filterKey);
 	}
 
 	private void initComponents(ProductSettingsType type) {
@@ -188,9 +195,5 @@ public class ProductActionPanel extends JPanel {
 		}
 
 		panelProductSettings.getProductTable().setSelection(new HashSet<>(saveSelectedProducts));
-	}
-
-	public void setFilterMark(boolean selected) {
-		searchPane.setFilterMark(selected);
 	}
 }
