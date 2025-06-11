@@ -73,8 +73,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	public void initLabelAllClientsCount(int clientsCount, int selectedClientsCount) {
 		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
 				selectedClientsCount);
-		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount
-				+ " (" + selectedClientsCount + ")");
+		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  "
+				+ selectedClientsCount + " (" + clientsCount + ")");
 	}
 
 	public void updateValues(int clientsCount, List<String> selectedClients, String depot, HostInfo hostInfo) {
@@ -109,7 +109,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	private void initComponents() {
 		labelAllClientsCount = new JLabel();
 
-		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelNames"));
+		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelName"));
 
 		labelOS = new JLabel();
 		labelDevice = new JLabel();
