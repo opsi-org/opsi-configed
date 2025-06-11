@@ -43,6 +43,7 @@ import de.uib.configed.type.licenses.LicenseEntry;
 import de.uib.utils.Utils;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.CellDateEditor;
+import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEditTable;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.DatePicker;
@@ -255,16 +256,19 @@ public class PanelEnterLicense extends MultiTablePanel {
 		panelKeys = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"), true, 0,
 				new int[] { PopupMenuTrait.POPUP_RELOAD }, false);
+		panelKeys.setFilterKey(FilterKey.LICENSE_KEYS_ENTER_TABLE);
 
 		panelLicensePools = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensepool"), false, 0,
 				new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
+		panelLicensePools.setFilterKey(FilterKey.LICENSE_POOL_ENTER_TABLE);
 
 		panelLicenseContracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 1,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
+		panelLicenseContracts.setFilterKey(FilterKey.LICENSE_CONTRACTS_ENTER_TABLE);
 
 		jTextFieldLicenseID = new JTextField();
 		jTextFieldLicenseType = new JTextField();

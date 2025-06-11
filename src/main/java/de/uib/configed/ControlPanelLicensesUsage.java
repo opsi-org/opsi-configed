@@ -141,6 +141,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 
 		modelLicensesUsage.reset();
 		thePanel.getPanelUsage().setTableModel(modelLicensesUsage);
+		thePanel.getPanelUsage().restoreFilter();
 		modelLicensesUsage.setEditableColumns(new int[] { 3, 4 });
 
 		TableColumn col = thePanel.getPanelUsage().getJTable().getColumnModel().getColumn(4);
@@ -162,6 +163,7 @@ public class ControlPanelLicensesUsage extends AbstractControlMultiTablePanel {
 
 		modelLicensepools.reset();
 		thePanel.getPanelLicensePools().setTableModel(modelLicensepools);
+		thePanel.getPanelLicensePools().restoreFilter();
 	}
 
 	private void setPanelUsageUpdateController() {

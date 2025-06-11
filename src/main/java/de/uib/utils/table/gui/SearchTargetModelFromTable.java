@@ -10,18 +10,16 @@ import java.util.Arrays;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.RowNoTableModelFilterCondition;
 
 public class SearchTargetModelFromTable implements SearchTargetModel {
 	public static final String FILTER_BY_SELECTION = "filterBySelection";
 
 	protected JTable table;
-
-	// in case that we are working in our standard context
-	private PanelGenEditTable thePanel;
 
 	protected int[] selectedRows = new int[0];
 
@@ -31,11 +29,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	public SearchTargetModelFromTable(JTable table) {
 		setTable(table);
-	}
-
-	public SearchTargetModelFromTable(PanelGenEditTable thePanel) {
-		setTable(thePanel.getJTable());
-		this.thePanel = thePanel;
 	}
 
 	protected final void setTable(JTable table) {
@@ -49,7 +42,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public String getColumnName(int col) {
-		return getTableModel().getColumnName(col);
+		return table.getColumnName(col);
 	}
 
 	@Override
@@ -59,12 +52,12 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public int getColumnCount() {
-		return getTableModel().getColumnCount();
+		return table.getColumnCount();
 	}
 
 	@Override
 	public int getRowCount() {
-		return getTableModel().getRowCount();
+		return table.getRowCount();
 	}
 
 	@Override
@@ -167,51 +160,27 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		table.getSelectionModel().setValueIsAdjusting(false);
 	}
 
-	private void returnToNotChanged(boolean wasChanged) {
-		// we are not interested in changes of model induced by selection
-		if (thePanel != null && !wasChanged && thePanel.isDataChanged()) {
-			Logging.info(this, "returnToNotChanged active ");
-			thePanel.setDataChanged(false);
-		}
-	}
-
 	@Override
-	public void setFiltered(boolean filtered) {
-		boolean wasChanged = false;
-
-		if (thePanel != null) {
-			wasChanged = thePanel.isDataChanged();
+	public void applyFilter(String query, int columnIndex, boolean useRegex, boolean caseSensitive) {
+		if (table == null || table.getModel() == null) {
+			Logging.warning(this, "applyFilter: table or model is null");
+			return;
 		}
 
-		GenTableModel model = (GenTableModel) table.getModel();
-
-		if (filtered) {
-			selectedRows = table.getSelectedRows();
-		}
-
-		if (filtered && selectedRows.length > 0) {
-			int[] modelRowFilter = new int[selectedRows.length];
-			for (int i = 0; i < selectedRows.length; i++) {
-				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
-			}
-
-			Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
-
-			((RowNoTableModelFilterCondition) (model.getFilter(FILTER_BY_SELECTION).getCondition()))
-					.setFilter(modelRowFilter, model.getRows());
-
-			model.setUsingFilter(FILTER_BY_SELECTION, true);
-			model.reset();
-
-			table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
+		TableRowSorter<? extends TableModel> sorter;
+		if (table.getRowSorter() instanceof TableRowSorter) {
+			sorter = (TableRowSorter<? extends TableModel>) table.getRowSorter();
 		} else {
-			model.setUsingFilter(FILTER_BY_SELECTION, false);
-
-			// restore the original selection
-			setSelection(selectedRows);
+			sorter = new TableRowSorter<>(getTableModel());
+			table.setRowSorter(sorter);
 		}
 
-		returnToNotChanged(wasChanged);
+		if (query == null || query.isEmpty()) {
+			sorter.setRowFilter(null);
+		} else {
+			FlexibleRowFilter filter = new FlexibleRowFilter(query, columnIndex, useRegex, caseSensitive);
+			sorter.setRowFilter(filter);
+		}
 	}
 
 	@Override

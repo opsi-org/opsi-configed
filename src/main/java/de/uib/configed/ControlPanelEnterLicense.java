@@ -113,6 +113,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		modelLicensekeys.reset();
 		thePanel.getPanelKeys().setTableModel(modelLicensekeys);
+		thePanel.getPanelKeys().restoreFilter();
 		modelLicensekeys.setEditableColumns(new int[] { 2 });
 
 		setPanelKeysUpdateController();
@@ -131,6 +132,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		modelLicensepools.reset();
 		thePanel.getPanelLicensePools().setTableModel(modelLicensepools);
+		thePanel.getPanelLicensePools().restoreFilter();
 
 		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
@@ -150,6 +152,7 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 
 		modelLicensecontracts.reset();
 		thePanel.getPanelLicenseContracts().setTableModel(modelLicensecontracts);
+		thePanel.getPanelLicenseContracts().restoreFilter();
 		modelLicensecontracts.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 	}
 

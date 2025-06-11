@@ -83,6 +83,7 @@ public class ControlPanelLicensesStatistics extends AbstractControlMultiTablePan
 
 		modelStatistics.reset();
 		thePanel.getPanelStatistics().setTableModel(modelStatistics);
+		thePanel.getPanelStatistics().restoreFilter();
 		modelStatistics.setEditableColumns(new int[] {});
 	}
 }
