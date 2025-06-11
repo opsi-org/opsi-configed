@@ -6,6 +6,7 @@
 
 package de.uib.utils.table.gui;
 
+import java.awt.Color;
 import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -13,6 +14,8 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 
+import de.uib.configed.Globals;
+import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utils.logging.Logging;
 
 public class FlexibleRowFilter extends RowFilter<TableModel, Integer> {
@@ -43,7 +46,7 @@ public class FlexibleRowFilter extends RowFilter<TableModel, Integer> {
 		return searchAndFilter(pattern, entry);
 	}
 
-	@SuppressWarnings({ "java:S4968", "java:S3776" })
+	@SuppressWarnings({ "java:S4968", "java:S3776", "java:S1541" })
 	private boolean searchAndFilter(Pattern pattern, Entry<? extends TableModel, ? extends Integer> entry) {
 		int columnCount = entry.getValueCount();
 		int start = (columnIndex == -1) ? 0 : columnIndex;
@@ -51,8 +54,10 @@ public class FlexibleRowFilter extends RowFilter<TableModel, Integer> {
 		String targetQuery = caseSensitive ? query : query.toLowerCase(Locale.ROOT);
 
 		for (int i = start; i < end; i++) {
+			Object value = entry.getValue(i);
+			Color color = InstallationStatus.getLabel2TextColor().get(value);
 			String cellValue = entry.getStringValue(i);
-			if (cellValue == null) {
+			if (cellValue == null || (color != null && color.equals(Globals.INVISIBLE))) {
 				continue;
 			}
 
