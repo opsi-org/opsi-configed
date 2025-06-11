@@ -14,7 +14,6 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -44,9 +43,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	private JLabel labelOS;
 	private JLabel labelDevice;
 
-	private JLabel labelInvolvedDepots;
-	private JTextField fieldInvolvedDepots;
-
 	private JLabel serverConnectionStateLabel;
 	private ImageIcon serverConnectedIcon;
 	private ImageIcon serverDisconnectedIcon;
@@ -64,10 +60,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	public String getSelectedClientNames() {
 		return fieldSelectedClientsNames.getText();
-	}
-
-	public String getInvolvedDepots() {
-		return fieldInvolvedDepots.getText();
 	}
 
 	public void initLabelAllClientsCount(int clientsCount, int selectedClientsCount) {
@@ -96,9 +88,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 			fieldSelectedClientsNames.setLeadingIcon(clientDisconnectedIcon);
 		}
 
-		fieldInvolvedDepots.setText(depot);
-		fieldInvolvedDepots.setToolTipText("<html><body><p>" + depot.replace(";\n", "<br\\ >") + "</p></body></html>");
-
 		labelOS.setText(hostInfo.getClientOS());
 		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getClientOSType(), 20));
 
@@ -114,14 +103,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelOS = new JLabel();
 		labelDevice = new JLabel();
 
-		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
-
 		fieldSelectedClientsNames = new FlatTextField();
 		fieldSelectedClientsNames.setEditable(false);
 		fieldSelectedClientsNames.setDragEnabled(true);
-
-		fieldInvolvedDepots = new JTextField();
-		fieldInvolvedDepots.setEditable(false);
 
 		serverConnectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
 		serverDisconnectedIcon = Icons.getSelectedIntellijIcon("circle", 24);
@@ -148,10 +132,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedClientsNames, 0, 0, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE).addComponent(labelOS, 0, 0, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
 				.addComponent(labelDevice, 0, 0, Short.MAX_VALUE).addGap(Globals.GAP_SIZE)
-				.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldInvolvedDepots, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(serverConnectionStateLabel));
+				.addComponent(serverConnectionStateLabel));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -164,10 +145,6 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 						.addComponent(labelDevice, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(serverConnectionStateLabel))
 				.addGap(Globals.MIN_GAP_SIZE));

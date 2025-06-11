@@ -453,9 +453,7 @@ public final class ClientMenuManager implements MenuListener {
 		//TODO add depot information to title like Client List
 		metaData.put("header", title);
 		title = "";
-		if (mainFrame.getHostsStatusPanel().getInvolvedDepots().length() != 0) {
-			title = title + "Depot(s) : " + mainFrame.getHostsStatusPanel().getInvolvedDepots();
-		}
+		//TODO add depot information to title like Client List
 
 		metaData.put("title", title);
 		metaData.put("subject", "report of table");
