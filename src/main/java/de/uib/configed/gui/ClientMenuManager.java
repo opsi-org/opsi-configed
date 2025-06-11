@@ -38,7 +38,6 @@ import de.uib.configed.ExtraFrameController;
 import de.uib.configed.ServerActionManager;
 import de.uib.configed.SessionInfoRetriever;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -514,8 +513,7 @@ public final class ClientMenuManager implements MenuListener {
 		jMenuChangeClientID.setEnabled(countSelectedClients == 1);
 		jMenuCopyClient.setEnabled(countSelectedClients == 1);
 
-		List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
-				.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
+		List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().terminalsForbidden();
 
 		if (forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CLIENTS)
 				|| !persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.VPN)

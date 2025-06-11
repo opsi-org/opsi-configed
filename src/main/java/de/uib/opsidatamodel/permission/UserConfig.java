@@ -235,13 +235,6 @@ public class UserConfig {
 		return possibleValuesMap.get(key);
 	}
 
-	public static UserConfig getCurrentUserConfig() {
-		if (currentConfig == null) {
-			return archeoPrototypeConfig;
-		}
-		return currentConfig;
-	}
-
 	public static void setCurrentConfig(UserConfig userConfig) {
 		currentConfig = userConfig;
 	}

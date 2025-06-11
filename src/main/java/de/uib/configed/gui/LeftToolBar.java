@@ -27,7 +27,6 @@ import de.uib.configed.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.serverconsole.command.SingleCommand;
 import de.uib.configed.terminal.TerminalFrame;
 import de.uib.messagebus.Messagebus;
-import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
@@ -70,8 +69,8 @@ public class LeftToolBar extends JToolBar {
 		Icons.addIntellijIconToMenuItem(jMenuCommandControl, "edit");
 		jMenuCommandControl
 				.addActionListener(actionEvent -> ExtraFrameController.startEditTerminalCommandsDialog(configedMain));
-		jMenuCommandControl.setEnabled(UserConfig.getCurrentUserConfig()
-				.getBooleanValue(UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDCONTROL_ACTIVE));
+		jMenuCommandControl.setEnabled(PersistenceControllerFactory.getPersistenceController()
+				.getUserRolesConfigDataService().terminalCommandControlIsActive());
 		jMenuServerConsole.add(jMenuCommandControl);
 		jMenuServerConsole.addSeparator();
 
