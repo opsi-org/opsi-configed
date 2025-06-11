@@ -60,6 +60,7 @@ import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.FilterStateManager;
 import de.uib.utils.userprefs.ThemeManager;
 import de.uib.utils.userprefs.UserPreferences;
 import javafx.application.Platform;
@@ -316,6 +317,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	private static void restartConfiged(boolean checkdirty) {
 		ConfigedMain.closeInstance(checkdirty);
 		ExtraFrameController.deleteInstances();
+		FilterStateManager.clear();
 		new Thread() {
 			@Override
 			public void run() {
