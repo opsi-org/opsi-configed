@@ -42,7 +42,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	private JLabel labelSelectedClientsNames;
 
 	private JLabel labelOS;
-	private JLabel labelDevice;
+	private JLabel labelDeviceType;
 
 	private JLabel serverConnectionStateLabel;
 	private ImageIcon serverConnectedIcon;
@@ -92,8 +92,8 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelOS.setText(hostInfo.getClientOS());
 		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getClientOSType(), 20));
 
-		labelDevice.setText(ClientInfoPanel.transformDeviceType(hostInfo.getClientDeviceType()));
-		labelDevice.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getClientDeviceType()));
+		labelDeviceType.setText(ClientInfoPanel.transformDeviceType(hostInfo.getClientDeviceType()));
+		labelDeviceType.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getClientDeviceType()));
 	}
 
 	private void initComponents() {
@@ -102,7 +102,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelName"));
 
 		labelOS = new JLabel();
-		labelDevice = new JLabel();
+		labelDeviceType = new JLabel();
 
 		fieldSelectedClientsNames = new FlatTextField();
 		fieldSelectedClientsNames.setEditable(false);
@@ -134,9 +134,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addComponent(fieldSelectedClientsNames, MIN_WIDTH, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelOS, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(labelDeviceType, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelDevice, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(labelOS, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE).addComponent(serverConnectionStateLabel));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
@@ -145,9 +145,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelDeviceType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelDevice, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
