@@ -288,6 +288,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	public void reconnectOTP(String otp) {
 		if (Messagebus.getInstance() != null) {
 			Messagebus.getInstance().disconnect();
+			Messagebus.getInstance().setReconnecting(false);
 		}
 		persistenceController.getExecutioner().setOTP(otp);
 
