@@ -368,6 +368,9 @@ public class UserRolesConfigDataService {
 				CacheIdentifier.TERMINAL_MENU_ACTIVE);
 		checkKeyPermission(serverPropertyMap, userPartPD() + UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDS_ACTIVE,
 				CacheIdentifier.TERMINAL_COMMANDS_ACTIVE);
+		checkKeyPermission(serverPropertyMap,
+				userPartPD() + UserServerConsoleConfig.KEY_SERVER_CONSOLE_COMMANDCONTROL_ACTIVE,
+				CacheIdentifier.TERMINAL_COMMAND_CONTROL_ACTIVE);
 
 		String configKey = userPartPD() + UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN;
 		if (serverPropertyMap.get(configKey) != null
@@ -391,6 +394,8 @@ public class UserRolesConfigDataService {
 			Logging.info(this, " checkPermissions  value  ", serverPropertyMap.get(configKey));
 			List<Object> forbiddenItems = serverPropertyMap.get(configKey);
 			cacheManager.setCachedData(CacheIdentifier.MOTD_FORBIDDEN, forbiddenItems);
+		} else {
+			cacheManager.setCachedData(CacheIdentifier.MOTD_FORBIDDEN, new ArrayList<>());
 		}
 	}
 
@@ -915,10 +920,32 @@ public class UserRolesConfigDataService {
 		return Boolean.TRUE.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMANDS_ACTIVE, Boolean.class));
 	}
 
+	public boolean terminalCommandControlIsActive() {
+		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMAND_CONTROL_ACTIVE, Boolean.class) == null) {
+			checkTerminalPermissions();
+		}
+		return Boolean.TRUE
+				.equals(cacheManager.getCachedData(CacheIdentifier.TERMINAL_COMMAND_CONTROL_ACTIVE, Boolean.class));
+	}
+
 	public List<Object> terminalsForbidden() {
 		if (cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class) == null) {
 			checkTerminalPermissions();
 		}
 		return cacheManager.getCachedData(CacheIdentifier.TERMINAL_FORBIDDEN, List.class);
+	}
+
+	public List<Object> getForbiddenMOTD() {
+		if (cacheManager.getCachedData(CacheIdentifier.MOTD_FORBIDDEN, List.class) == null) {
+			checkFeaturesPermissions();
+		}
+		return cacheManager.getCachedData(CacheIdentifier.MOTD_FORBIDDEN, List.class);
+	}
+
+	public Set<Object> getPermittedDepots() {
+		if (cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class) == null) {
+			checkDepotPermissions();
+		}
+		return cacheManager.getCachedData(CacheIdentifier.DEPOTS_PERMITTED, Set.class);
 	}
 }

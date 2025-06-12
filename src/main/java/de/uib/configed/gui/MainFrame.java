@@ -52,7 +52,6 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
-import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserFeaturesConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -393,8 +392,7 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuExtras.add(jMenuWorkOnProducts);
 
 		JMenuItem jMenuFrameMsgOfTheDay = null;
-		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
-				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
+		List<Object> forbiddenItemsMOTD = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
 		boolean forbiddenMOTD = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE)
 				&& forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 

@@ -32,8 +32,6 @@ import de.uib.configed.gui.ListSelectionDialog;
 import de.uib.messagebus.Messagebus;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.opsidatamodel.permission.UserConfig;
-import de.uib.opsidatamodel.permission.UserOpsipermission;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -45,16 +43,16 @@ public final class TerminalFrame implements MessagebusListener {
 	private JFrame frame;
 
 	private Messagebus messagebus;
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	// User roles configs
-	private boolean depotsConfigured = UserConfig.getCurrentUserConfig()
-			.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED);
-	private boolean clientsConfigured = UserConfig.getCurrentUserConfig()
-			.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED);
-	private List<Object> allowedDepots = UserConfig.getCurrentUserConfig()
-			.getValues(UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE);
-	private List<Object> forbiddenItems = UserConfig.getCurrentUserConfig()
-			.getValues(UserServerConsoleConfig.KEY_TERMINAL_ACCESS_FORBIDDEN);
+	private boolean depotsConfigured = persistenceController.getUserRolesConfigDataService()
+			.hasDepotsFullPermissionPD();
+	private boolean clientsConfigured = persistenceController.getUserRolesConfigDataService()
+			.isAccessToHostgroupsOnlyIfExplicitlyStatedPD();
+	private Set<Object> allowedDepots = persistenceController.getUserRolesConfigDataService().getPermittedDepots();
+	private List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
 
 	private TerminalTabbedPane tabbedPane;
 	private TerminalFileUploadProgressIndicator fileUploadProgressIndicator;
@@ -63,9 +61,6 @@ public final class TerminalFrame implements MessagebusListener {
 	private Runnable callback;
 	private String session;
 	private ConfigedMain configedMain;
-
-	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	public TerminalFrame(ConfigedMain configedMain) {
 		this(false);
@@ -243,7 +238,7 @@ public final class TerminalFrame implements MessagebusListener {
 	 * @return true if configserver is allowed
 	 */
 	private boolean isConfigServerAllowed(boolean forbiddenConfigServer, boolean depotsConfigured,
-			List<Object> allowedDepots) {
+			Set<Object> allowedDepots) {
 		Logging.debug(this, "terminal, allowedDepots: ", allowedDepots);
 		String configserverName = persistenceController.getHostInfoCollections().getConfigServer();
 		boolean allowed = (!forbiddenConfigServer && (!depotsConfigured || allowedDepots.contains(configserverName)));
