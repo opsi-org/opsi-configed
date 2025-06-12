@@ -146,7 +146,6 @@ public class UserConfigProducing {
 		Logging.info(this, "supplyAllPermissionEntries defaultUserConfig ", defaultUserConfig);
 
 		Map<String, UserConfig> roleConfigs = new HashMap<>();
-		Map<String, UserConfig> userConfigs = new HashMap<>();
 
 		roleConfigs.put(UserConfig.DEFAULT_ROLE_NAME, defaultUserConfig);
 
@@ -167,7 +166,6 @@ public class UserConfigProducing {
 
 		for (String userName : userParts) {
 			UserConfig userConfig = new UserConfig(userName);
-			userConfigs.put(userName, userConfig);
 
 			String roleToPlay = UserConfig.DEFAULT_ROLE_NAME;
 			String userNameStartKey = UserConfig.KEY_USER_ROOT + ".{" + userName + "}.";
@@ -202,12 +200,6 @@ public class UserConfigProducing {
 
 			UserConfig roleConfig = roleConfigs.get(roleToPlay);
 			supplyPermissionEntriesForAUser(userName, userNameStartKey, followConfiguredRole, roleConfig, userConfig);
-		}
-
-		if (notUsingDefaultUser) {
-			UserConfig.setCurrentConfig(userConfigs.get(persistenceController.getExecutioner().getUsername()));
-		} else {
-			UserConfig.setCurrentConfig(defaultUserConfig);
 		}
 	}
 
