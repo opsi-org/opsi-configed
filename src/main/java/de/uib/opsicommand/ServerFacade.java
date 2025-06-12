@@ -86,7 +86,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public ServerFacade(String host, boolean connect) {
-		Logging.warning("ServerFacade ", host, " connect ", connect);
+		Logging.info("ServerFacade ", host, " connect ", connect);
 		if (host == null) {
 			return;
 		}

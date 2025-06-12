@@ -224,13 +224,13 @@ public class LoginDialog extends JFrame implements KeyListener {
 	}
 
 	private void initSSO() {
-		Logging.warning("LoginDialog.initSSO");
+		Logging.info("LoginDialog.initSSO");
 		String host = (String) fieldHost.getSelectedItem();
 		if (host == null || host.isEmpty()) {
 			Logging.debug(this, "No host provided");
 			return;
 		} else if (wasSuccessfullyAuthenticated()) {
-			Logging.warning("was connected");
+			Logging.info("was connected");
 		} else {
 			// Not needed.
 		}
