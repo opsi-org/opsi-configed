@@ -7,6 +7,7 @@
 package de.uib.configed.tree;
 
 import java.text.Collator;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -176,18 +178,45 @@ public class ClientTree extends AbstractGroupTree {
 		Map<String, List<String>> group2Members = produceGroup2Members(allPCs,
 				persistenceController.getGroupDataService().getFObject2GroupsPD());
 		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new ArrayList<>());
-		allowedClients = getAllowedClients(group2Members, permittedHostGroups);
+		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
+
+		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups, permittedHostGroups);
+		allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
 		allPCs = new TreeSet<>(persistenceController.getHostInfoCollections()
 				.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients));
 
 		produceTreeForALL(allPCs);
-		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(), permittedHostGroups);
+		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),
+				expandedPermittedHostGroups);
 
 		associateClientsToGroups(allPCs, group2Members);
 
 		if (allowedClients != null) {
 			Logging.info(this, "build, allowedClients ", allowedClients.size());
 		}
+	}
+
+	@SuppressWarnings("java:S1168")
+	private static Set<String> expandPermittedHostGroups(Map<String, Map<String, String>> hostGroups,
+			Set<String> permittedGroups) {
+		if (permittedGroups == null) {
+			return null;
+		}
+
+		Set<String> expanded = new HashSet<>(permittedGroups);
+		Queue<String> queue = new ArrayDeque<>(permittedGroups);
+
+		while (!queue.isEmpty()) {
+			String currentGroup = queue.poll();
+			for (Map.Entry<String, Map<String, String>> entry : hostGroups.entrySet()) {
+				String groupId = entry.getKey();
+				String parentId = entry.getValue().get("parentGroupId");
+				if (currentGroup.equals(parentId) && expanded.add(groupId)) {
+					queue.add(groupId);
+				}
+			}
+		}
+		return expanded;
 	}
 
 	public void clear() {
