@@ -22,9 +22,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -307,24 +307,7 @@ public class WebDAVClient {
 	}
 
 	public Set<String> getDirectoriesIn(String currentDirectory, boolean includeParentDir) {
-		Set<String> directories = new TreeSet<>();
-
-		String url = getBaseURL() + currentDirectory;
-		Logging.info("Retrieving directory list via WebDAV ", url);
-
-		try {
-			List<DavResource> resources = sardine.list(url);
-			for (DavResource resource : resources) {
-				if (resource.isDirectory()) {
-					String dirPath = includeParentDir ? resource.getPath().replace("/dav/", "")
-							: resource.getPath().replace("/dav/", "").replace(currentDirectory, "");
-					directories.add(dirPath);
-				}
-			}
-		} catch (IOException e) {
-			Logging.error(this, e, "Failed to retrieve directories from ", url);
-		}
-		return directories;
+		return getEntriesIn(currentDirectory, null, includeParentDir, true);
 	}
 
 	public Set<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension) {
@@ -333,25 +316,61 @@ public class WebDAVClient {
 
 	public Set<String> getDirectoriesAndFilesIn(String currentDirectory, String fileExtension,
 			boolean includeParentDir) {
-		Set<String> directoriesAndFiles = new TreeSet<>();
+		return getEntriesIn(currentDirectory, fileExtension, includeParentDir, false);
+	}
 
+	@SuppressWarnings("java:S134")
+	private Set<String> getEntriesIn(String currentDirectory, String fileExtension, boolean includeParentDir,
+			boolean dirsOnly) {
+		Set<String> entries = new HashSet<>();
 		String url = getBaseURL() + currentDirectory;
-		Logging.info("Retrieving directory and file list via WebDAV ", url);
+		Logging.info("Retrieving " + (dirsOnly ? "directory" : "directory and file") + " list via WebDAV ", url);
+
+		String basePath = "/dav/";
+		String currentDirPath = currentDirectory.endsWith("/") ? currentDirectory : (currentDirectory + "/");
+		String parentDisplayName = getParentDisplayName(currentDirectory);
 
 		try {
 			List<DavResource> resources = sardine.list(url);
 			for (DavResource resource : resources) {
-				if ((!resource.getDisplayName().equals(currentDirectory.substring(0, currentDirectory.length() - 1))
-						&& resource.isDirectory()) || resource.getDisplayName().endsWith(fileExtension)) {
-					String dirPath = includeParentDir ? resource.getPath().replace("/dav/", "")
-							: resource.getPath().replace("/dav/", "").replace(currentDirectory, "");
-					directoriesAndFiles.add(dirPath);
+				if (shouldInclude(resource, fileExtension, dirsOnly, includeParentDir, parentDisplayName)) {
+					String path = normalizePath(resource.getPath(), basePath, currentDirPath, includeParentDir);
+					if (!path.isEmpty()) {
+						entries.add(path);
+					}
 				}
 			}
 		} catch (IOException e) {
-			Logging.error(this, e, "Failed to retrieve directories and files from ", url);
+			Logging.error(this, e,
+					"Failed to retrieve " + (dirsOnly ? "directories" : "directories and files") + " from ", url);
 		}
-		return directoriesAndFiles;
+		return entries;
+	}
+
+	private static String getParentDisplayName(String currentDirectory) {
+		if (currentDirectory.endsWith("/") && currentDirectory.length() > 1) {
+			return currentDirectory.substring(0, currentDirectory.length() - 1);
+		}
+		return currentDirectory;
+	}
+
+	private static boolean shouldInclude(DavResource resource, String fileExtension, boolean dirsOnly,
+			boolean includeParentDir, String parentDisplayName) {
+		boolean isDir = resource.isDirectory();
+		boolean isFile = !dirsOnly && resource.getDisplayName() != null
+				&& resource.getDisplayName().endsWith(fileExtension);
+		boolean isParentDir = isDir && parentDisplayName.equals(resource.getDisplayName());
+		return (isDir && (!isParentDir || includeParentDir)) || isFile;
+	}
+
+	private static String normalizePath(String path, String basePath, String currentDirPath, boolean includeParentDir) {
+		if (path.startsWith(basePath)) {
+			path = path.substring(basePath.length());
+		}
+		if (!includeParentDir && path.startsWith(currentDirPath)) {
+			path = path.substring(currentDirPath.length());
+		}
+		return path;
 	}
 
 	public String getBaseURL() {
