@@ -23,6 +23,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -258,6 +259,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		buttonCallSelectDriverFiles
 				.setToolTipText(Configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
 
+		JButton buttonCallCreateTargetDirectory = new JButton(Icons.getIntellijIcon("open"));
+		buttonCallCreateTargetDirectory
+				.setToolTipText(Configed.getResourceValue("PanelDriverUpload.determineServerPath"));
+		buttonCallCreateTargetDirectory.addActionListener(actionEvent -> makePath(new File(fieldServerPath.getText())));
+
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
 		JButton buttonShowDrivers = new JButton(Icons.getIntellijIcon("run"));
 		buttonShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
@@ -347,8 +353,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
 				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(buttonCallCreateTargetDirectory, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -390,7 +399,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGroup(layoutByAuditInfo.createSequentialGroup()
+						.addComponent(fieldServerPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(buttonCallCreateTargetDirectory,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -490,6 +503,12 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		boolean result = WinProductUtils.ensureServerDirectoryExists(dialog, webDAVClient, path,
 				Configed.getResourceValue("PanelDriverUpload.makeFilePath.text"),
 				Configed.getResourceValue("PanelDriverUpload.makeFilePath.title"));
+		serverPathChecked.setSelected(result);
+
+		if (result) {
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("PanelDriverUpload.targetDirectoryExsits"),
+					Configed.getResourceValue("info"), JOptionPane.INFORMATION_MESSAGE);
+		}
 
 		Logging.info(this, "makePath result ", path, " exists or created ", result);
 	}
@@ -546,8 +565,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		}
 
 		fieldServerPath.setText(result);
-
-		makePath(new File(result));
 	}
 
 	private void chooseDriverPath() {
