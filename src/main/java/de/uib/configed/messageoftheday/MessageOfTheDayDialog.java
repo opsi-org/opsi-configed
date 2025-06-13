@@ -28,6 +28,7 @@ import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.permission.UserFeaturesConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 /**
@@ -66,6 +67,7 @@ public class MessageOfTheDayDialog {
 
 		JOptionPane optionPane = new JOptionPane(scrollpane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
 				null, new Object[] { buttonSave, Configed.getResourceValue("buttonCancel") });
+		Utils.enableDialogResizing(optionPane);
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"));
 		dialog.setModal(false);
