@@ -10,8 +10,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
@@ -30,18 +30,18 @@ public final class WinProductUtils {
 	 *                              operations.
 	 * @param depotProductDirectory The depot directory to search in (should end
 	 *                              with '/').
-	 * @return Set of product names.
+	 * @return List of product names.
 	 */
-	public static Set<String> getWinProducts(WebDAVClient webDAVClient, String depotProductDirectory) {
+	public static List<String> getWinProducts(WebDAVClient webDAVClient, String depotProductDirectory) {
 		if (depotProductDirectory == null) {
-			return Set.of();
+			return List.of();
 		}
 		Set<String> allNetbootProducts = webDAVClient.getDirectoriesIn(depotProductDirectory, false);
 		return allNetbootProducts.parallelStream().filter((String product) -> {
 			boolean hasWinpe = webDAVClient.exists(depotProductDirectory + product + "winpe");
 			boolean hasI368 = webDAVClient.exists(depotProductDirectory + product + "i368");
 			return hasWinpe || hasI368;
-		}).collect(Collectors.toSet());
+		}).sorted().toList();
 	}
 
 	/**
