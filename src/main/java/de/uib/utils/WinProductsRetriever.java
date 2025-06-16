@@ -42,7 +42,6 @@ public class WinProductsRetriever extends SwingWorker<List<String>, Void> {
 	public List<String> doInBackground() {
 		ctx.msg.setVisible(true);
 		ctx.options.setEnabled(false);
-		// ctx.owner.setCursor(Globals.WAIT_CURSOR);
 		setWaitCursor(true);
 		ConfigedMain.getMainFrame().activateLoadingCursor();
 		return WinProductUtils.getWinProducts(ctx.webDAVClient, "depot/");
@@ -57,7 +56,6 @@ public class WinProductsRetriever extends SwingWorker<List<String>, Void> {
 
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
 			setWaitCursor(false);
-			// ctx.owner.setCursor(null);
 			ctx.options.setEnabled(true);
 			ctx.msg.setVisible(false);
 			ctx.owner.revalidate();
@@ -68,8 +66,6 @@ public class WinProductsRetriever extends SwingWorker<List<String>, Void> {
 			Thread.currentThread().interrupt();
 		} catch (ExecutionException e) {
 			Logging.warning(this, "Failed to retrieve win products ", e);
-			Logging.devel(this, "Failed to retrieve win products ", e);
-			// ctx.owner.setCursor(null);
 			setWaitCursor(false);
 			ctx.msg.setVisible(false);
 			ctx.options.setEnabled(true);
