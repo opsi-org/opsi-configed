@@ -571,6 +571,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 			return;
 		}
 
+		winProduct = winProduct == null || "null".equals(winProduct) ? "" : winProduct;
 		String result = depotProductDirectory + winProduct + driverDirectory + "/";
 
 		if (buttonByAudit.isSelected()) {
