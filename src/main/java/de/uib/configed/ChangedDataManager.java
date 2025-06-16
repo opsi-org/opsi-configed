@@ -116,9 +116,12 @@ public final class ChangedDataManager {
 		if (ask) {
 			if (clientInfoDataChangedKeeper.askSave()) {
 				clientInfoDataChangedKeeper.save();
-			} else {
-				// reset to old values
+			} else if (clientInfoDataChangedKeeper.isDataChanged()) {
+				// reset to old values when data have been changed 
 				hostInfo.resetGui();
+			} else {
+				// if no data have been changed, and no client selected, we do nothing
+				Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
 			}
 		} else {
 			clientInfoDataChangedKeeper.save();
