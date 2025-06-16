@@ -36,7 +36,6 @@ public class DriverUploadDialog {
 		dialog.setModal(false);
 
 		panelDriverUpload.setDialog(dialog);
-		panelDriverUpload.evaluateWinProducts();
 	}
 
 	public void show() {
