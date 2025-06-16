@@ -9,7 +9,6 @@ package de.uib.configed.productaction;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -31,7 +30,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
 import de.uib.utils.WebDAVClient;
-import de.uib.utils.WinProductUtils;
+import de.uib.utils.WinProductsRetriever;
 import de.uib.utils.logging.Logging;
 
 public class CompleteWinProductsDialog implements NameProducer {
@@ -56,6 +55,9 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 	private JDialog dialog;
 
+	private JLabel jLabelRetrievalText = new JLabel(
+			Configed.getResourceValue("PanelDriverUpload.retrievingWinProducts"));
+
 	private WebDAVClient webDAVClient;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
@@ -71,8 +73,6 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 		initComponents();
 
-		evaluateWinProducts();
-
 		JPanel panel = initLayout();
 
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
@@ -81,6 +81,8 @@ public class CompleteWinProductsDialog implements NameProducer {
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("FProductAction.title"));
 		dialog.setModal(false);
+
+		evaluateWinProducts();
 
 		persistenceController.registerPanelCompleteWinProducts(this);
 	}
@@ -91,13 +93,17 @@ public class CompleteWinProductsDialog implements NameProducer {
 	}
 
 	public final void evaluateWinProducts() {
-		if (depotProductDirectory != null) {
-			comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(
-					WinProductUtils.getWinProducts(webDAVClient, depotProductDirectory).toArray(new String[0])));
-		}
-
-		winProduct = (String) comboChooseWinProduct.getSelectedItem();
-		produceTarget();
+		WinProductsRetriever.Context ctx = new WinProductsRetriever.Context();
+		ctx.owner = dialog;
+		ctx.webDAVClient = webDAVClient;
+		ctx.msg = jLabelRetrievalText;
+		ctx.options = comboChooseWinProduct;
+		ctx.onDone = () -> {
+			winProduct = (String) comboChooseWinProduct.getSelectedItem();
+			produceTarget();
+		};
+		WinProductsRetriever retriever = new WinProductsRetriever(ctx);
+		retriever.execute();
 	}
 
 	private void defineChoosers() {
@@ -269,8 +275,11 @@ public class CompleteWinProductsDialog implements NameProducer {
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -308,8 +317,11 @@ public class CompleteWinProductsDialog implements NameProducer {
 
 				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)

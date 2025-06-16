@@ -15,7 +15,6 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -45,6 +44,7 @@ import de.uib.utils.Icons;
 import de.uib.utils.NameProducer;
 import de.uib.utils.WebDAVClient;
 import de.uib.utils.WinProductUtils;
+import de.uib.utils.WinProductsRetriever;
 import de.uib.utils.logging.Logging;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
@@ -70,6 +70,9 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	private JCheckBox driverPathChecked;
 	private JCheckBox serverPathChecked;
+
+	private JLabel jLabelRetrievalText = new JLabel(
+			Configed.getResourceValue("PanelDriverUpload.retrievingWinProducts"));
 
 	private static class RadioButtonIntegrationType extends JRadioButton {
 		private String subdir;
@@ -182,13 +185,13 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		labelDriverToIntegrate = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 		labelDriverToIntegrate.setFont(labelDriverToIntegrate.getFont().deriveFont(Font.BOLD));
 
+		jLabelRetrievalText.setVisible(false);
+
 		webDAVClient = new WebDAVClient();
 
 		defineChoosers();
 
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
-
-		evaluateWinProducts();
 
 		buildPanel();
 
@@ -232,14 +235,18 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		chooserServerpath.setDialogTitle(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 	}
 
-	private void evaluateWinProducts() {
-		if (depotProductDirectory != null) {
-			comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(
-					WinProductUtils.getWinProducts(webDAVClient, depotProductDirectory).toArray(new String[0])));
-		}
-
-		winProduct = (String) comboChooseWinProduct.getSelectedItem();
-		produceTarget();
+	protected void evaluateWinProducts() {
+		WinProductsRetriever.Context ctx = new WinProductsRetriever.Context();
+		ctx.owner = dialog;
+		ctx.webDAVClient = webDAVClient;
+		ctx.msg = jLabelRetrievalText;
+		ctx.options = comboChooseWinProduct;
+		ctx.onDone = () -> {
+			winProduct = (String) comboChooseWinProduct.getSelectedItem();
+			produceTarget();
+		};
+		WinProductsRetriever retriever = new WinProductsRetriever(ctx);
+		retriever.execute();
 	}
 
 	@SuppressWarnings("java:S138")
@@ -323,8 +330,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(jLabelShowDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -375,8 +385,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(jLabelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layoutByAuditInfo.createSequentialGroup()
+						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGroup(layoutByAuditInfo.createSequentialGroup()
 						.addComponent(jLabelShowDrivers, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
