@@ -6,6 +6,8 @@
 
 package de.uib.configed.gui;
 
+import java.text.MessageFormat;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -112,6 +114,10 @@ public class LoginThread extends Thread {
 					message = String.format(Configed.getResourceValue("LoginDialog.minServerVersion"),
 							Globals.MIN_SERVER_VERSION,
 							ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
+				} else if (connectionState.getState() == ConnectionState.ERROR) {
+					message = new MessageFormat(
+							Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"))
+									.format(new Object[] { connectionState.getMessage() });
 				} else {
 					message = null;
 				}
