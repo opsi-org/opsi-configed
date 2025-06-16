@@ -102,31 +102,36 @@ public final class ChangedDataManager {
 				setDataChanged(true, true);
 				return;
 			}
+			// actually save the data
+			saveData(ask);
+
 			// without showing, but must be on first place since we run in this method again
 			setDataChanged(false, false);
 
-			if (ask) {
-				if (clientInfoDataChangedKeeper.askSave()) {
-					clientInfoDataChangedKeeper.save();
-				} else {
-					// reset to old values
-					hostInfo.resetGui();
-				}
-			} else {
-				clientInfoDataChangedKeeper.save();
-			}
-
-			if (!ask || generalDataChangedKeeper.askSave()) {
-				generalDataChangedKeeper.save();
-			}
-
-			if (!ask || hostConfigsDataChangedKeeper.askSave()) {
-				hostConfigsDataChangedKeeper.save();
-			} else {
-				hostConfigsDataChangedKeeper.cancel();
-			}
-
 			setDataChanged(false, true);
+		}
+	}
+
+	private static void saveData(boolean ask) {
+		if (ask) {
+			if (clientInfoDataChangedKeeper.askSave()) {
+				clientInfoDataChangedKeeper.save();
+			} else {
+				// reset to old values
+				hostInfo.resetGui();
+			}
+		} else {
+			clientInfoDataChangedKeeper.save();
+		}
+
+		if (!ask || generalDataChangedKeeper.askSave()) {
+			generalDataChangedKeeper.save();
+		}
+
+		if (!ask || hostConfigsDataChangedKeeper.askSave()) {
+			hostConfigsDataChangedKeeper.save();
+		} else {
+			hostConfigsDataChangedKeeper.cancel();
 		}
 	}
 }

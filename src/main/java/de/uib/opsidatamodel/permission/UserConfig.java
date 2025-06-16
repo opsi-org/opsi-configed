@@ -79,8 +79,6 @@ public class UserConfig {
 	// default UserConfig Objects
 	private static UserConfig archeoPrototypeConfig;
 
-	private static UserConfig currentConfig;
-
 	private String username;
 
 	private Map<String, Boolean> booleanMap;
@@ -233,17 +231,6 @@ public class UserConfig {
 		}
 
 		return possibleValuesMap.get(key);
-	}
-
-	public static UserConfig getCurrentUserConfig() {
-		if (currentConfig == null) {
-			return archeoPrototypeConfig;
-		}
-		return currentConfig;
-	}
-
-	public static void setCurrentConfig(UserConfig userConfig) {
-		currentConfig = userConfig;
 	}
 
 	public static String getUserFromKey(String key) {

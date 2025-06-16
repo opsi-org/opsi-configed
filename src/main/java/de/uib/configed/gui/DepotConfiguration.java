@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,8 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 				indexOfTab(Configed.getResourceValue("depotConfiguration")));
 
 		setSelectedIndex(1);
+
+		setMinimumSize(new Dimension());
 	}
 
 	@Override
@@ -103,6 +106,7 @@ public class DepotConfiguration extends JTabbedPane implements ChangeListener, L
 		case 1:
 			initProductPropertiesTab();
 			panelProductProperties.setProductProperties();
+			panelProductProperties.getPaneProducts().restoreFilter();
 			depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 			break;

@@ -7,14 +7,19 @@
 package de.uib.configed;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import javax.swing.GroupLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -206,8 +211,6 @@ public final class ServerActionManager {
 
 		persistenceController.getHostDataService().deleteClients(configedMain.getSelectedClients());
 
-		configedMain.deactivateFilter();
-
 		configedMain.refreshClientListKeepingGroup();
 	}
 
@@ -242,15 +245,38 @@ public final class ServerActionManager {
 		CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
 		jTextHostname.setText(copySuffixAddition.add());
 
+		EnumSet<CopyClient.CopyOption> options = EnumSet.allOf(CopyClient.CopyOption.class);
+
+		JLabel label = new JLabel(Configed.getResourceValue("ConfigedMain.chooseOptionsToCopy"));
+		JCheckBox copyGroups = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.groups.option"), options,
+				CopyClient.CopyOption.GROUPS);
+		JCheckBox copyProducts = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.products.option"),
+				options, CopyClient.CopyOption.PRODUCTS);
+		JCheckBox copyProductProperties = createOptionCheckBox(
+				Configed.getResourceValue("ConfigedMain.productProperties.option"), options,
+				CopyClient.CopyOption.PRODUCT_PROPERTIES);
+		JCheckBox copyConfigs = createOptionCheckBox(Configed.getResourceValue("ConfigedMain.configs.option"), options,
+				CopyClient.CopyOption.CONFIG_STATES);
+
+		JPanel panel = new JPanel();
+		GroupLayout groupLayout = new GroupLayout(panel);
+		panel.setLayout(groupLayout);
+
 		StringBuilder messageText = new StringBuilder();
 		messageText.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
 		messageText.append("\n");
 		messageText.append(selectedClient.get().getName());
 		messageText.append("\n");
-		messageText.append("\n");
 		messageText.append(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
 
-		Object[] message = new Object[] { messageText.toString(), jTextHostname };
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup().addComponent(jTextHostname)
+				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
+				.addComponent(copyProductProperties).addComponent(copyConfigs));
+		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup().addComponent(jTextHostname)
+				.addGap(Globals.GAP_SIZE).addComponent(label).addComponent(copyGroups).addComponent(copyProducts)
+				.addComponent(copyProductProperties).addComponent(copyConfigs));
+
+		Object[] message = new Object[] { messageText.toString(), panel };
 
 		int answer = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(), message,
 				Configed.getResourceValue("MainFrame.jMenuCopyClient"), JOptionPane.OK_CANCEL_OPTION,
@@ -278,13 +304,30 @@ public final class ServerActionManager {
 			if (proceed) {
 				persistenceController.getHostInfoCollections().addOpsiHostName(newClientNameWithDomain);
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
-				copyClient.copy();
+				copyClient.copy(options);
 
 				configedMain.setRebuiltClientListTableModel(true, true);
 				configedMain.activateGroup(false, configedMain.getActivatedGroupModel().getGroupName());
 				configedMain.setClient(newClientNameWithDomain);
 			}
 			ConfigedMain.getMainFrame().deactivateLoadingCursor();
+		}
+	}
+
+	private static JCheckBox createOptionCheckBox(String title, EnumSet<CopyClient.CopyOption> options,
+			CopyClient.CopyOption option) {
+		JCheckBox optionCheckBox = new JCheckBox(title);
+		optionCheckBox.setSelected(true);
+		optionCheckBox.addActionListener(event -> updateOptions(options, option, optionCheckBox.isSelected()));
+		return optionCheckBox;
+	}
+
+	private static void updateOptions(Set<CopyClient.CopyOption> options, CopyClient.CopyOption option,
+			boolean include) {
+		if (include && !options.contains(option)) {
+			options.add(option);
+		} else {
+			options.remove(option);
 		}
 	}
 

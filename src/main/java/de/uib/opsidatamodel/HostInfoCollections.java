@@ -332,9 +332,7 @@ public class HostInfoCollections {
 		retrieveOpsiHostsPD();
 
 		Logging.debug(this, " ------ building pcList");
-		Map<String, String> mapPCBelongsToDepot = new HashMap<>();
 		Set<String> setOfPCs = new HashSet<>();
-		Map<String, HostInfo> mapPCInfomap = new HashMap<>();
 
 		List<String> depotList = new ArrayList<>();
 		for (String depot : depots) {
@@ -348,6 +346,9 @@ public class HostInfoCollections {
 		if (depot2Host2HostInfo == null || depot2Host2HostInfo.isEmpty()) {
 			return setOfPCs;
 		}
+
+		Map<String, HostInfo> mapPCInfomap = new HashMap<>();
+		Map<String, String> mapPCBelongsToDepot = new HashMap<>();
 
 		for (String depot : depotList) {
 			if (depot2Host2HostInfo.get(depot) == null) {

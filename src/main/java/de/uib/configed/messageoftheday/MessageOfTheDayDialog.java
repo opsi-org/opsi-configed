@@ -25,7 +25,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.MainFrame;
-import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserFeaturesConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -50,8 +49,7 @@ public class MessageOfTheDayDialog {
 	private JScrollPane scrollpane = new JScrollPane();
 
 	public MessageOfTheDayDialog() {
-		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
-				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
+		List<Object> forbiddenItemsMOTD = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
 		forbiddenDevice = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE);
 		forbiddenUser = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 		if (forbiddenDevice && forbiddenUser) {

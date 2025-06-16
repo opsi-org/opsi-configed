@@ -6,8 +6,8 @@
 
 package de.uib.configed;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,36 +35,9 @@ public class CopyClient {
 	private HostInfo clientToCopy;
 	private String newClientName;
 	private String newClientNameWithDomain;
-	private String newDescription;
-	private String newInventoryNumber;
-	private String newNotes;
-	private String newIpAddress;
-	private String newSystemUUID;
-	private String newMacAddress;
 
-	/**
-	 * Creates {@link CopyClient} object with provided information.
-	 *
-	 * @param clientToCopy       client to copy
-	 * @param newClientName      client name for the client's copy
-	 * @param newDescription     client description
-	 * @param newInventoryNumber client inventory number
-	 * @param newNotes           client notes
-	 * @param newIpAddress       client IP address
-	 * @param newSystemUUID      client system UUID
-	 * @param newMacAddress      client MAC address
-	 */
-	public CopyClient(HostInfo clientToCopy, String newClientName, String newDescription, String newInventoryNumber,
-			String newNotes, String newIpAddress, String newSystemUUID, String newMacAddress) {
-		this.clientToCopy = clientToCopy;
-		this.newClientName = newClientName;
-		this.newClientNameWithDomain = newClientName + "." + Utils.getDomainFromClientName(clientToCopy.getName());
-		this.newDescription = newDescription;
-		this.newInventoryNumber = newInventoryNumber;
-		this.newNotes = newNotes;
-		this.newIpAddress = newIpAddress;
-		this.newSystemUUID = newSystemUUID;
-		this.newMacAddress = newMacAddress;
+	public enum CopyOption {
+		GROUPS, PRODUCTS, PRODUCT_PROPERTIES, CONFIG_STATES
 	}
 
 	/**
@@ -74,27 +47,36 @@ public class CopyClient {
 	 * @param newClientName client name for the client's copy
 	 */
 	public CopyClient(HostInfo clientToCopy, String newClientName) {
-		this(clientToCopy, newClientName, "", "", "", "", "", "");
+		this.clientToCopy = clientToCopy;
+		this.newClientName = newClientName;
+		this.newClientNameWithDomain = newClientName + "." + Utils.getDomainFromClientName(clientToCopy.getName());
 	}
 
 	/**
 	 * Copies provided client, by creating it and copying client's groups,
 	 * products, product's properties and config states.
 	 */
-	public void copy() {
+	public void copy(Collection<CopyOption> options) {
 		Logging.debug("Copy client: ", clientToCopy, " -> ", newClientNameWithDomain);
 		copyClient();
-		copyGroups();
-		copyProducts();
-		copyProductProperties();
-		copyConfigStates();
+		if (options.contains(CopyOption.GROUPS)) {
+			copyGroups();
+		}
+		if (options.contains(CopyOption.PRODUCTS)) {
+			copyProducts();
+		}
+		if (options.contains(CopyOption.PRODUCT_PROPERTIES)) {
+			copyProductProperties();
+		}
+		if (options.contains(CopyOption.CONFIG_STATES)) {
+			copyConfigStates();
+		}
 	}
 
 	private void copyClient() {
 		persistenceController.getHostDataService().createClient(newClientName,
-				Utils.getDomainFromClientName(clientToCopy.getName()), clientToCopy.getInDepot(), newDescription,
-				newInventoryNumber, newNotes, newIpAddress, newSystemUUID, newMacAddress,
-				clientToCopy.getShutdownInstall(), clientToCopy.getWanConfig(), null, "");
+				Utils.getDomainFromClientName(clientToCopy.getName()), clientToCopy.getInDepot(), "", "", "", "", "",
+				"", clientToCopy.getShutdownInstall(), clientToCopy.getWanConfig(), null, "");
 	}
 
 	private void copyGroups() {
@@ -125,6 +107,10 @@ public class CopyClient {
 
 			productStatesAndActions.forEach((Map<String, String> productInfo) -> {
 				productInfo.values().removeIf(String::isEmpty);
+				productInfo.put("clientId", newClientNameWithDomain);
+				String oldIdent = productInfo.get("ident");
+				String newIdent = oldIdent.replaceFirst(clientToCopy.getName(), newClientNameWithDomain);
+				productInfo.put("ident", newIdent);
 				persistenceController.getProductDataService().updateProductOnClient(newClientNameWithDomain,
 						productInfo.get("productId"), getProductType(productInfo.get("productId")), productInfo);
 			});
@@ -162,12 +148,11 @@ public class CopyClient {
 	private void copyConfigStates() {
 		ConfigDataService configDataService = persistenceController.getConfigDataService();
 
-		Map<String, Object> hostConfig = new HashMap<>();
-		if (configDataService.getHostConfigsPD().get(clientToCopy.getName()) != null) {
-			hostConfig.putAll(configDataService.getHostConfigsPD().get(clientToCopy.getName()));
+		Map<String, Object> hostConfig = configDataService.getHostConfigsPD().get(clientToCopy.getName());
+		if (hostConfig == null) {
+			return;
 		}
-		ConfigName2ConfigValue clientConfigStates = new ConfigName2ConfigValue(hostConfig,
-				configDataService.getConfigOptionsPD());
+		ConfigName2ConfigValue clientConfigStates = new ConfigName2ConfigValue(hostConfig, null);
 
 		configDataService.setConfigStates(newClientNameWithDomain, clientConfigStates);
 		// Trigger the config state update.

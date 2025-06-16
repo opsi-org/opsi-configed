@@ -7,22 +7,17 @@
 package de.uib.utils.table.gui;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
@@ -76,60 +71,16 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		checkBox = new FlatTriStateCheckBox();
 		checkBox.setAllowIndeterminate(false);
 
-		checkBox.addItemListener(itemEvent -> stopCellEditing());
-		checkBox.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent event) {
-				stopCellEditing();
-			}
-		});
+		checkBox.addActionListener(actionEvent -> stopCellEditing());
 
 		comboBox = new JComboBox<>();
 
-		JTextField editorComponent = (JTextField) comboBox.getEditor().getEditorComponent();
-		editorComponent.addActionListener((ActionEvent e) -> actOnEditorComponentAction(editorComponent));
-		editorComponent.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent event) {
-				actOnEditorComponentAction(editorComponent);
-			}
-		});
-
-		comboBox.addItemListener(itemEvent -> stopCellEditing());
-		comboBox.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent event) {
-				stopCellEditing();
-			}
-		});
+		comboBox.addActionListener(actionEvent -> stopCellEditing());
 
 		unusedfield = new JLabel();
 
 		listSelectionDialog = new ListSelectionDialog(null, null, true);
 		listSelectionDialog.setMultiSelection();
-	}
-
-	private void actOnEditorComponentAction(JTextField editorComponent) {
-		String newItem = editorComponent.getText();
-		if (!containsItem(newItem)) {
-			comboBox.addItem(newItem);
-		}
-		comboBox.setSelectedItem(newItem);
-
-		stopCellEditing();
-	}
-
-	private boolean containsItem(String item) {
-		ComboBoxModel<String> model = comboBox.getModel();
-		int size = model.getSize();
-
-		for (int i = 0; i < size; i++) {
-			if (item.equals(model.getElementAt(i))) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
@@ -163,16 +114,19 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		Component result;
 
 		if (modelProducer.getListCellOptions(key) == null) {
-			return null;
-		} else if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
-			result = getBooleanEditor(value, key);
-		} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
-			result = getMultiValueEditor(table, value, row);
+			result = null;
 		} else {
-			result = getSingleValueEditor(value, row);
+			if (modelProducer.getListCellOptions(key).getType() == TYPE.BOOL_CONFIG) {
+				result = getBooleanEditor(value, key);
+			} else if (modelProducer.getSelectionMode(row) == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
+				result = getMultiValueEditor(table, value, row);
+			} else {
+				result = getSingleValueEditor(value, row);
+			}
+
+			ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 		}
 
-		ColorTableCellRenderer.colorize(result, isSelected, row % 2 == 0, column % 2 == 0);
 		return result;
 	}
 

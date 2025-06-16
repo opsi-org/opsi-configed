@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -375,6 +376,8 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.addComponent(labelClientNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+
+		setMinimumSize(new Dimension());
 	}
 
 	public void setClientDescriptionText(String s) {

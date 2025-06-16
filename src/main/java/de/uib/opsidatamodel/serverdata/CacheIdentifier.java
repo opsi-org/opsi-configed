@@ -300,12 +300,22 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Set<String>}
 	 */
-	MOTD_FORBIDDEN("motd_forbidden"), TERMINAL_MENU_ACTIVE("terminal_menu_active"),
+	MOTD_FORBIDDEN("motd_forbidden"),
 
 	/**
-	 * return type {@code Set<String>}
+	 * return type {@code Boolean}
+	 */
+	TERMINAL_MENU_ACTIVE("terminal_menu_active"),
+
+	/**
+	 * return type {@code Bolean}
 	 */
 	TERMINAL_COMMANDS_ACTIVE("terminal_commands_active"),
+
+	/**
+	 * return type {@code Boolean}
+	 */
+	TERMINAL_COMMAND_CONTROL_ACTIVE("terminal_command_control_active"),
 
 	/**
 	 * return type {@code String}
@@ -495,7 +505,12 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code List<String>}
 	 */
-	WIN_PRODUCTS("win_products");
+	WIN_PRODUCTS("win_products"),
+
+	/**
+	 * return type {@code List<Map<String, Object>>}
+	 */
+	SSH_COMMAND_LIST("ssh_command_list");
 
 	private final String displayName;
 

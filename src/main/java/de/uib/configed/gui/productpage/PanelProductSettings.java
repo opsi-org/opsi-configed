@@ -54,8 +54,6 @@ public class PanelProductSettings extends JSplitPane {
 		NETBOOT_PRODUCT_SETTINGS, LOCALBOOT_PRODUCT_SETTINGS
 	}
 
-	private static final int HEIGHT_MIN = 200;
-
 	private ProductTable productTable;
 	private ProductSettingsTableModel productSettingsTableModel;
 
@@ -110,8 +108,8 @@ public class PanelProductSettings extends JSplitPane {
 		leftPane.setLayout(layoutLeftPane);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(groupPanel, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(paneProducts, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(groupPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(paneProducts, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(groupPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -139,6 +137,10 @@ public class PanelProductSettings extends JSplitPane {
 
 	public void updateSearchFields() {
 		groupPanel.updateSearchFields();
+	}
+
+	public void restoreFilter() {
+		groupPanel.restoreFilter();
 	}
 
 	private JPopupMenu producePopupMenu() {
@@ -311,13 +313,8 @@ public class PanelProductSettings extends JSplitPane {
 		ServerActionManager.processActionRequestsAllProducts(groupPanel.getVisibility());
 	}
 
-	public boolean isFilteredMode() {
-		return groupPanel.isFilteredMode();
-	}
-
 	public void valueChanged(boolean doSelection) {
 		// We want to deactivate filter before changing something
-		groupPanel.setFilterMark(false);
 		productTable.valueChanged(doSelection, productTree.getSelectionPaths());
 	}
 
@@ -325,12 +322,6 @@ public class PanelProductSettings extends JSplitPane {
 		// delete old row sorter before setting new model
 		productTable.setModel(istm);
 		productSettingsTableModel.setRenderer(istm);
-
-		// We don't want to call setSelection here, since it will be called after this method
-		if (!isFilteredMode()) {
-			valueChanged(false);
-		}
-
 		Logging.debug(this, " tableProducts columns  count ", productTable.getColumnCount());
 	}
 

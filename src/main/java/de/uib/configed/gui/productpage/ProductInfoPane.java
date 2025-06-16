@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.productpage;
 
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.GroupLayout;
@@ -119,23 +120,24 @@ public class ProductInfoPane extends JSplitPane {
 		GroupLayout layoutDescriptionsPanel = new GroupLayout(productDescriptionsPanel);
 		productDescriptionsPanel.setLayout(layoutDescriptionsPanel);
 
-		layoutDescriptionsPanel.setHorizontalGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(layoutDescriptionsPanel.createSequentialGroup()
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
-						.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
+		layoutDescriptionsPanel
+				.setHorizontalGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(layoutDescriptionsPanel.createSequentialGroup()
+								.addGap(0, Globals.MIN_GAP_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(0, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
 
-				.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE).addComponent(
-						jLabelProductName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(jLabelProductName, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
-				.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelLabelProductVersion, 0, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
+						.addGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
-				.addComponent(productSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+						.addComponent(productSplitPane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutDescriptionsPanel
 				.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -152,6 +154,9 @@ public class ProductInfoPane extends JSplitPane {
 						.addGap(Globals.GAP_SIZE).addComponent(productSplitPane, 0, 160, Short.MAX_VALUE));
 
 		setTopComponent(productDescriptionsPanel);
+
+		// Make it possible to close the info pane
+		setMinimumSize(new Dimension());
 	}
 
 	private void setupBottomComponent() {
@@ -171,17 +176,19 @@ public class ProductInfoPane extends JSplitPane {
 										.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-										.addComponent(depotForDependenciesLabel, 0, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
+										.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.MIN_GAP_SIZE))
 
-								.addComponent(panelProductDependencies)
+								.addComponent(panelProductDependencies, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 								.addGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(propertiesActivateButton).addGap(Globals.GAP_SIZE)
-										.addComponent(panelEditProperties.getTitlePanel()))
+										.addComponent(propertiesActivateButton, 0, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE).addComponent(panelEditProperties.getTitlePanel(), 0,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
-								.addComponent(panelEditProperties));
+								.addComponent(panelEditProperties, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutBottomComponent
 				.setVerticalGroup(layoutBottomComponent.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)

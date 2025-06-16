@@ -7,6 +7,8 @@
 package de.uib.configed.gui;
 
 import java.awt.Desktop;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -50,7 +52,6 @@ import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
-import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserFeaturesConfig;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -60,6 +61,7 @@ import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.table.gui.FilterStateManager;
 import de.uib.utils.userprefs.ThemeManager;
 import de.uib.utils.userprefs.UserPreferences;
 import javafx.application.Platform;
@@ -316,6 +318,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	private static void restartConfiged(boolean checkdirty) {
 		ConfigedMain.closeInstance(checkdirty);
 		ExtraFrameController.deleteInstances();
+		FilterStateManager.clear();
 		new Thread() {
 			@Override
 			public void run() {
@@ -389,8 +392,7 @@ public class MainFrame extends JFrame implements KeyListener {
 		jMenuExtras.add(jMenuWorkOnProducts);
 
 		JMenuItem jMenuFrameMsgOfTheDay = null;
-		List<Object> forbiddenItemsMOTD = UserConfig.getCurrentUserConfig()
-				.getValues(UserFeaturesConfig.KEY_MOTD_ACCESS_FORBIDDEN);
+		List<Object> forbiddenItemsMOTD = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
 		boolean forbiddenMOTD = forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_DEVICE)
 				&& forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 
@@ -612,7 +614,8 @@ public class MainFrame extends JFrame implements KeyListener {
 		jTextArea.setEditable(false);
 
 		JButton buttonCopy = new JButton(Configed.getResourceValue("copy"));
-		buttonCopy.addActionListener(e -> jTextArea.copy());
+		buttonCopy.addActionListener(e -> Toolkit.getDefaultToolkit().getSystemClipboard()
+				.setContents(new StringSelection(Logging.getCurrentLogfilePath()), null));
 
 		JButton buttonOpen = new JButton(Configed.getResourceValue("MainFrame.showLogFileOpen"));
 		buttonOpen.addActionListener((ActionEvent event) -> {

@@ -11,6 +11,8 @@ import java.util.Map;
 
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.RPCMethodName;
 import de.uib.utils.logging.Logging;
 
@@ -27,9 +29,12 @@ import de.uib.utils.logging.Logging;
  * retrieves or it updates internally cached data. {@code PD} stands for
  * {@code Persistent Data}.
  */
+@SuppressWarnings({ "unchecked" })
 public class CommandDataService {
 	private AbstractPOJOExecutioner exec;
 	private UserRolesConfigDataService userRolesConfigDataService;
+
+	private CacheManager cacheManager = CacheManager.getInstance();
 
 	public CommandDataService(AbstractPOJOExecutioner exec) {
 		this.exec = exec;
@@ -39,12 +44,23 @@ public class CommandDataService {
 		this.userRolesConfigDataService = userRolesConfigDataService;
 	}
 
-	public List<Map<String, Object>> retrieveCommandList() {
+	public List<Map<String, Object>> getCommandList() {
+		retrieveCommandList();
+
+		return cacheManager.getCachedData(CacheIdentifier.SSH_COMMAND_LIST, List.class);
+	}
+
+	public void retrieveCommandList() {
+		if (cacheManager.isDataCached(CacheIdentifier.SSH_COMMAND_LIST)) {
+			return;
+		}
+
 		Logging.info(this, "retrieveCommandList ");
 		List<Map<String, Object>> commands = exec
 				.getListOfMaps(new OpsiMethodCall(RPCMethodName.SSH_COMMAND_GET_OBJECTS, new Object[] {}));
 		Logging.debug(this, "retrieveCommandList commands ", commands);
-		return commands;
+
+		cacheManager.setCachedData(CacheIdentifier.SSH_COMMAND_LIST, commands);
 	}
 
 	public boolean deleteCommand(List<String> jsonObjects) {

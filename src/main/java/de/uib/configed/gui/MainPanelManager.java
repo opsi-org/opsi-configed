@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 
@@ -124,6 +125,7 @@ public class MainPanelManager {
 
 		leftTabs.setSelectedIndex(1);
 
+		leftTabs.setMinimumSize(new Dimension());
 		clientConfiguration = new ClientConfiguration(configedMain, mainFrame, productTree);
 		hostsStatusPanel = new HostsStatusPanel();
 	}
@@ -172,6 +174,8 @@ public class MainPanelManager {
 							.addComponent(depotSelectionLabel)
 							.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Short.MAX_VALUE))
 					.addComponent(depotListPresenter));
+
+			depotsListPanel.setMinimumSize(new Dimension());
 
 			depotConfigurationSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, depotsListPanel,
 					depotConfiguration);

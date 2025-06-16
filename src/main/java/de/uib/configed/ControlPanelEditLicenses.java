@@ -90,6 +90,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		modelLicensekeys.reset();
 		thePanel.getPanelKeys().setTableModel(modelLicensekeys);
+		thePanel.getPanelKeys().restoreFilter();
 		modelLicensekeys.setEditableColumns(new int[] { 0, 1, 2 });
 
 		JMenuItem menuItemAddKey = new JMenuItem(Configed.getResourceValue("ConfigedMain.Licenses.NewLicensekey"));
@@ -161,6 +162,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		modelSoftwarelicenses.reset();
 		thePanel.getPanelSoftwarelicenses().setTableModel(modelSoftwarelicenses);
+		thePanel.getPanelSoftwarelicenses().restoreFilter();
 		modelSoftwarelicenses.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 
 		TableColumn col = thePanel.getPanelSoftwarelicenses().getJTable().getColumnModel().getColumn(2);
@@ -230,6 +232,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		modelLicensecontracts.reset();
 		thePanel.getPanelLicensecontracts().setTableModel(modelLicensecontracts);
+		thePanel.getPanelLicensecontracts().restoreFilter();
 		modelLicensecontracts.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 
 		JMenuItem menuItemAddContract = new JMenuItem(

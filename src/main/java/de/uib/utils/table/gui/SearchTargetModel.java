@@ -41,7 +41,7 @@ public interface SearchTargetModel {
 
 	void setValueIsAdjusting(boolean b);
 
-	void setFiltered(boolean b);
+	void applyFilter(String query, int columnIndex, boolean useRegex, boolean caseSensitive);
 
 	int getListSelectionMode();
 }
