@@ -15,6 +15,8 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utils.logging.Logging;
 
 public final class WinProductUtils {
@@ -32,16 +34,25 @@ public final class WinProductUtils {
 	 *                              with '/').
 	 * @return List of product names.
 	 */
-	public static List<String> getWinProducts(WebDAVClient webDAVClient, String depotProductDirectory) {
+	public static List<String> getWinProductsPD(WebDAVClient webDAVClient, String depotProductDirectory) {
+		@SuppressWarnings("unchecked")
+		List<String> cachedWinProducts = CacheManager.getInstance().getCachedData(CacheIdentifier.WIN_PRODUCTS,
+				List.class);
+		if (cachedWinProducts != null) {
+			return cachedWinProducts;
+		}
+
 		if (depotProductDirectory == null) {
 			return List.of();
 		}
 		Set<String> allNetbootProducts = webDAVClient.getDirectoriesIn(depotProductDirectory, false);
-		return allNetbootProducts.parallelStream().filter((String product) -> {
+		List<String> winProducts = allNetbootProducts.parallelStream().filter((String product) -> {
 			boolean hasWinpe = webDAVClient.exists(depotProductDirectory + product + "winpe");
 			boolean hasI368 = webDAVClient.exists(depotProductDirectory + product + "i368");
 			return hasWinpe || hasI368;
 		}).sorted().toList();
+		CacheManager.getInstance().setCachedData(CacheIdentifier.WIN_PRODUCTS, winProducts);
+		return winProducts;
 	}
 
 	/**

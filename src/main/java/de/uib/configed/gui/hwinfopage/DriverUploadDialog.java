@@ -42,6 +42,7 @@ public class DriverUploadDialog {
 	public void show() {
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		dialog.setVisible(true);
+		panelDriverUpload.evaluateWinProducts();
 	}
 
 	public void setUploadParameters(String byAuditPath) {

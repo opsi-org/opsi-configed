@@ -177,6 +177,10 @@ public final class ExtraFrameController {
 		remoteControlDialog.show();
 	}
 
+	public static void resetCompleteWinProductsPanel() {
+		completeWinProductsPanel = null;
+	}
+
 	public static void deleteInstances() {
 		savedSearchesDialog = null;
 		clientSelectionDialog = null;

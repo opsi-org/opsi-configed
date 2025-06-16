@@ -41,10 +41,12 @@ public class WinProductsRetriever extends SwingWorker<List<String>, Void> {
 	@Override
 	public List<String> doInBackground() {
 		ctx.msg.setVisible(true);
+		ctx.options.removeAll();
+		ctx.options.setSelectedItem(null);
 		ctx.options.setEnabled(false);
 		setWaitCursor(true);
 		ConfigedMain.getMainFrame().activateLoadingCursor();
-		return WinProductUtils.getWinProducts(ctx.webDAVClient, "depot/");
+		return WinProductUtils.getWinProductsPD(ctx.webDAVClient, "depot/");
 	}
 
 	@Override
@@ -58,9 +60,7 @@ public class WinProductsRetriever extends SwingWorker<List<String>, Void> {
 			setWaitCursor(false);
 			ctx.options.setEnabled(true);
 			ctx.msg.setVisible(false);
-			ctx.owner.revalidate();
-			ctx.owner.pack();
-			ctx.owner.repaint();
+			resizeDialog();
 		} catch (InterruptedException e) {
 			Logging.warning(this, "Thread was interrupted", e);
 			Thread.currentThread().interrupt();
@@ -76,6 +76,14 @@ public class WinProductsRetriever extends SwingWorker<List<String>, Void> {
 	private void setWaitCursor(boolean wait) {
 		if (ctx.owner != null) {
 			ctx.owner.setCursor(wait ? Globals.WAIT_CURSOR : null);
+		}
+	}
+
+	private void resizeDialog() {
+		if (ctx.owner != null) {
+			ctx.owner.revalidate();
+			ctx.owner.pack();
+			ctx.owner.repaint();
 		}
 	}
 

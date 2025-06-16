@@ -490,7 +490,12 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code boolean}
 	 */
-	MFA_ENABLED("mfa_enabled");
+	MFA_ENABLED("mfa_enabled"),
+
+	/**
+	 * return type {@code List<String>}
+	 */
+	WIN_PRODUCTS("win_products");
 
 	private final String displayName;
 
