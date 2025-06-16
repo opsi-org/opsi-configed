@@ -15,6 +15,7 @@ import org.apache.commons.cli.CommandLine;
 
 import de.uib.logviewer.gui.LogFrame;
 import de.uib.utils.Utils;
+import de.uib.utils.WindowsPositionManager;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.logging.UncaughtConfigedExceptionHandler;
 
@@ -64,8 +65,13 @@ public final class Logviewer {
 
 		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Logging.info("screensize ", screenSize);
-		logFrame.setSize((int) screenSize.getWidth() - 150, (int) screenSize.getHeight() - 150);
-		logFrame.setLocationRelativeTo(null);
+		if (WindowsPositionManager
+				.isOnAnyScreen(WindowsPositionManager.getWindowBounds(WindowsPositionManager.LOGVIEWER))) {
+			WindowsPositionManager.loadWindowProperties(logFrame, WindowsPositionManager.LOGVIEWER);
+		} else {
+			logFrame.setSize((int) screenSize.getWidth() - 150, (int) screenSize.getHeight() - 150);
+			logFrame.setLocationRelativeTo(null);
+		}
 
 		Logging.info("mainframe nearly initialized");
 		logFrame.setVisible(true);

@@ -55,6 +55,7 @@ import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
+import de.uib.utils.WindowsPositionManager;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.ButtonTabComponent;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
@@ -453,7 +454,12 @@ public class ConfigedMain {
 		mainFrame.validate();
 
 		// center the frame:
-		locateFrame();
+		if (WindowsPositionManager
+				.isOnAnyScreen(WindowsPositionManager.getWindowBounds(WindowsPositionManager.MAIN_WINDOW))) {
+			WindowsPositionManager.loadWindowProperties(mainFrame, WindowsPositionManager.MAIN_WINDOW);
+		} else {
+			locateFrame();
+		}
 
 		// init visual states
 		Logging.debug(configedMain, "mainframe nearly initialized");
