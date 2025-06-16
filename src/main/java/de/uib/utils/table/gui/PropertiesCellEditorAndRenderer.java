@@ -173,6 +173,7 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 
 		listSelectionDialog.setPreviousSelectionValues(POJOReMapper.remap(value));
 		listSelectionDialog.setEditable(modelProducer.isEditable(row));
+		listSelectionDialog.setAlwaysOnTop(true);
 		listSelectionDialog.show(ConfigedMain.getMainFrame());
 
 		// We should put this code into invokeLater, because otherwise we will call stop 

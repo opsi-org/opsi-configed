@@ -223,4 +223,8 @@ public class ListSelectionDialog {
 	public void setMultiSelection() {
 		jList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
+
+	public void setAlwaysOnTop(boolean value) {
+		dialog.setAlwaysOnTop(value);
+	}
 }
