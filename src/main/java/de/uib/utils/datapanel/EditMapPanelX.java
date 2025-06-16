@@ -338,6 +338,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 	@Override
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ConfigOption> optionsMap) {
+		propertiesCellEditorAndRenderer.stopCellEditing();
+
 		if (optionsMap != null) {
 			modelProducer = new ListModelProducerForVisualDatamap(table, optionsMap, visualdata);
 		}
