@@ -788,6 +788,7 @@ public class ConfigedMain {
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel",
 				clientTablePanel.getClientTable().getSelectedRowCount());
 
+		clientTablePanel.restoreFilter();
 		// did lose the selection since last setting
 		clientTablePanel.setSelectedValues(selectValues);
 
