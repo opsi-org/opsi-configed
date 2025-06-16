@@ -29,6 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -332,14 +333,11 @@ public class WebDAVClient {
 
 		try {
 			List<DavResource> resources = sardine.list(url);
-			for (DavResource resource : resources) {
-				if (shouldInclude(resource, fileExtension, dirsOnly, includeParentDir, parentDisplayName)) {
-					String path = normalizePath(resource.getPath(), basePath, currentDirPath, includeParentDir);
-					if (!path.isEmpty()) {
-						entries.add(path);
-					}
-				}
-			}
+			entries.addAll(resources.parallelStream()
+					.filter(resource -> shouldInclude(resource, fileExtension, dirsOnly, includeParentDir,
+							parentDisplayName))
+					.map(resource -> normalizePath(resource.getPath(), basePath, currentDirPath, includeParentDir))
+					.filter(path -> !path.isEmpty()).collect(Collectors.toSet()));
 		} catch (IOException e) {
 			Logging.error(this, e,
 					"Failed to retrieve " + (dirsOnly ? "directories" : "directories and files") + " from ", url);
