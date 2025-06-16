@@ -164,7 +164,7 @@ public final class ConnectionErrorReporter {
 				() -> Main.endApp(Main.NO_ERROR), () -> SwingUtilities.invokeLater(this::displayMFADialog));
 	}
 
-	private void displayConfirmDialogInEventDispatchThread(Object message, String title, Runnable onOK,
+	private static void displayConfirmDialogInEventDispatchThread(Object message, String title, Runnable onOK,
 			Runnable onCancel) {
 		if (!dialogOpened.compareAndSet(false, true)) {
 			return;
