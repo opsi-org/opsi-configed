@@ -7,7 +7,6 @@
 package de.uib.opsicommand;
 
 import java.awt.event.ActionEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JButton;
@@ -192,22 +191,15 @@ public final class ConnectionErrorReporter {
 	 * Ensures that the provided Runnable executes on the Swing Event Dispatch
 	 * Thread (EDT). If the current thread is the EDT, the task runs
 	 * immediately; otherwise, it is executed synchronously on the EDT using
-	 * invokeAndWait.
+	 * invokeLater.
 	 *
 	 * @param runnable the task to be executed on the EDT
 	 */
-	private void runOnEventDispatchThread(Runnable runnable) {
+	private static void runOnEventDispatchThread(Runnable runnable) {
 		if (SwingUtilities.isEventDispatchThread()) {
 			runnable.run();
 		} else {
-			try {
-				SwingUtilities.invokeAndWait(runnable::run);
-			} catch (InterruptedException ie) {
-				Thread.currentThread().interrupt();
-				Logging.error(this, "Thread was interrupted while waiting for EDT execution.", ie);
-			} catch (InvocationTargetException ite) {
-				Logging.error(this, "Exception thrown by runnable while executing on the EDT.", ite);
-			}
+			SwingUtilities.invokeLater(runnable);
 		}
 	}
 

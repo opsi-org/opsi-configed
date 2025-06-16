@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.messagebus.Messagebus;
 import de.uib.opsicommand.ConnectionHandler.RequestMethod;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
@@ -617,8 +618,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 
+				// Don't initiate Messagebus reconnection, since the connection is restablished once
+				// correct OTP is provided. Otherwise, Messagebus reconnection attempts may block client
+				// IP address and may seem as suspicious activity.
+				Messagebus.getInstance().setReconnecting(true);
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-				if (otp.equals(getOTP())) {
+				setConnectionState(new ConnectionState(ConnectionState.NOT_CONNECTED));
+				if (otp != null && otp.equals(getOTP())) {
 					Logging.debug(this, "MFA error encountered, we wait for new OTP input");
 					otp = waitForOTPInput();
 				} else {
