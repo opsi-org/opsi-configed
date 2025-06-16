@@ -41,8 +41,6 @@ public class WinProductsRetriever extends SwingWorker<List<String>, Void> {
 	@Override
 	public List<String> doInBackground() {
 		ctx.msg.setVisible(true);
-		ctx.options.removeAll();
-		ctx.options.setSelectedItem(null);
 		ctx.options.setEnabled(false);
 		setWaitCursor(true);
 		ConfigedMain.getMainFrame().activateLoadingCursor();
