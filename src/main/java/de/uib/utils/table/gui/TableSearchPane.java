@@ -512,6 +512,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	public void restoreFilter() {
 		if (filterKey == null) {
 			Logging.debug(this, "Fitler key (", filterKey, ") is null - we can't proceed");
+			return;
 		}
 
 		TableFilterState filterState = FilterStateManager.getFilterState(filterKey);
