@@ -9,6 +9,7 @@ package de.uib.opsicommand;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,6 +23,7 @@ import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class ConnectionHandler {
@@ -210,7 +212,10 @@ public class ConnectionHandler {
 				if (notifyUserOfErrors) {
 					reporter.notify(
 							ConfigedMain.getMainFrame() == null
-									? Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")
+									? new MessageFormat(
+											Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"))
+													.format(new Object[] { PersistenceControllerFactory
+															.getConnectionState().getMessage() })
 									: Configed.getResourceValue("ConnectionHandler.noConnection"),
 							ConnectionErrorType.GENERAL_ERROR);
 				}
