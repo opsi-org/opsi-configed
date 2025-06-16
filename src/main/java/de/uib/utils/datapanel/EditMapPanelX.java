@@ -9,6 +9,7 @@ package de.uib.utils.datapanel;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import org.commonmark.ext.autolink.AutolinkExtension;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -54,6 +60,8 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 	private JMenuItem popupItemAddStringListEntry;
 
 	protected Map<String, Object> originalMap;
+
+	private Parser markdownParser = Parser.builder().extensions(Arrays.asList(AutolinkExtension.create())).build();
 
 	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 		@Override
@@ -313,8 +321,10 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 			}
 
 			if (descriptionsMap != null && descriptionsMap.get(propertyName) != null) {
-				// We want to have new lines in the html form "<br>" so they'll be shown correctly in the tooltip
-				tooltip.append("<br/><br/>").append(descriptionsMap.get(propertyName).replace("\n", "<br>"));
+				// Keep newlines as <br> in HTML so non-markdown text is displayed better
+				Node document = markdownParser.parse(descriptionsMap.get(propertyName).replace("\n", "  \n"));
+				HtmlRenderer renderer = HtmlRenderer.builder().build();
+				tooltip.append(renderer.render(document));
 			}
 		}
 
