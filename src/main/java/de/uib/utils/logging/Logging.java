@@ -301,14 +301,43 @@ public final class Logging {
 			return;
 		}
 
+		String currentTime = formatter.format(LocalDateTime.now());
+		String context = Thread.currentThread().getName();
+
+		String exceptionMessage = createExceptionMessage(ex);
+
+		String loggingMessage = createMessage(caller, message, mesg);
+
+		if (level <= logLevelConsole) {
+			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
+					"\033[0m");
+
+			System.err.println(String.format(format, level, currentTime, context, loggingMessage) + exceptionMessage);
+		}
+
+		if (level <= logLevelFile) {
+			if (!logFileInitialized) {
+				initLogFile();
+			}
+			if (logFileWriter != null) {
+				logFileWriter.println(
+						String.format(logFormat, level, currentTime, context, loggingMessage) + exceptionMessage);
+				logFileWriter.flush();
+			}
+		}
+
+		if (showOnGUI(level)) {
+			addErrorToList(loggingMessage, currentTime);
+		}
+	}
+
+	private static String createMessage(Object caller, String message, Object... mesg) {
 		StringBuilder result = new StringBuilder(message);
 		for (Object o : mesg) {
 			// python style
 			result.append(o).append(" ");
 		}
 
-		String currentTime = formatter.format(LocalDateTime.now());
-		String context = Thread.currentThread().getName();
 		if (caller instanceof Class) {
 			result.append("   (").append(((Class<?>) caller).getName()).append(")");
 
@@ -319,35 +348,17 @@ public final class Logging {
 			// Do nothing if caller is null
 		}
 
-		String exMesg = "";
-		if (ex != null) {
-			StringWriter sw = new StringWriter();
-			ex.printStackTrace(new PrintWriter(sw));
-			exMesg = "\n" + sw.toString();
+		return result.toString();
+	}
+
+	private static String createExceptionMessage(Throwable ex) {
+		if (ex == null) {
+			return "";
 		}
 
-		String loggingMessage = result.toString();
-
-		if (level <= logLevelConsole) {
-			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
-					"\033[0m");
-
-			System.err.println(String.format(format, level, currentTime, context, loggingMessage) + exMesg);
-		}
-
-		if (level <= logLevelFile) {
-			if (!logFileInitialized) {
-				initLogFile();
-			}
-			if (logFileWriter != null) {
-				logFileWriter.println(String.format(logFormat, level, currentTime, context, loggingMessage) + exMesg);
-				logFileWriter.flush();
-			}
-		}
-
-		if (showOnGUI(level)) {
-			addErrorToList(loggingMessage, currentTime);
-		}
+		StringWriter sw = new StringWriter();
+		ex.printStackTrace(new PrintWriter(sw));
+		return "\n" + sw.toString();
 	}
 
 	public static synchronized void log(int level, Object caller, Throwable ex, Object... mesg) {
