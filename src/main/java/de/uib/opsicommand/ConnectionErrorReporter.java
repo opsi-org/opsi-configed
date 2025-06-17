@@ -18,7 +18,11 @@ import javax.swing.SwingUtilities;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.MainFrame;
+import de.uib.messagebus.Messagebus;
 import de.uib.opsicommand.certificate.CertificateManager;
+import de.uib.opsicommand.certificate.CertificateValidatorFactory;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
@@ -153,8 +157,24 @@ public final class ConnectionErrorReporter {
 		displayConfirmDialogInEventDispatchThread(
 				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },
 				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"),
-				() -> ConfigedMain.reconnectOTP(new String(otpField.getPassword())),
+				() -> reconnectOTP(new String(otpField.getPassword())),
 				() -> SwingUtilities.invokeLater(this::displayCancelConfigedDialog));
+	}
+
+	private static void reconnectOTP(String otp) {
+		if (Messagebus.getInstance() != null) {
+			Messagebus.getInstance().disconnect();
+			Messagebus.getInstance().setReconnecting(false);
+		}
+		PersistenceControllerFactory.getPersistenceController().getExecutioner().setOTP(otp);
+
+		CacheManager.getInstance().clearAllCachedData();
+		Configed.getSavedStates().removeAll();
+		ConfigedMain.getMainFrame().resetData();
+
+		CertificateValidatorFactory.resetCertificateValidators();
+
+		MainFrame.restartConfiged();
 	}
 
 	private void displayCancelConfigedDialog() {
