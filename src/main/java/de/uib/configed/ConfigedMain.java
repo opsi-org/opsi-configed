@@ -25,8 +25,6 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -101,6 +99,8 @@ public class ConfigedMain {
 
 	private int clientCount;
 
+	private DepotListSelectionListener depotListSelectionListener;
+
 	private Map<String, String> sessionInfo = new HashMap<>();
 
 	public enum EditingTarget {
@@ -111,38 +111,6 @@ public class ConfigedMain {
 	private ConnectedHostsManager connectedHostsManager;
 
 	private InitialDataLoader initialDataLoader;
-
-	private ListSelectionListener depotsListSelectionListener = new ListSelectionListener() {
-		private int counter;
-
-		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			counter++;
-			Logging.info(this, "depotSelection event count  ", counter);
-
-			if (!e.getValueIsAdjusting()) {
-				depotsListValueChanged();
-			}
-		}
-
-		private void depotsListValueChanged() {
-			Logging.info(this, "depotsList selection changed");
-
-			Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
-
-			Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
-
-			// when running after the first run, we deactivate buttons
-			if (initialDataLoader.isDataLoaded()) {
-				initialTreeActivation();
-
-				productTree.reInitTree();
-				refreshClientListKeepingGroup();
-
-				initTabComponents();
-			}
-		}
-	};
 
 	public static MainFrame getMainFrame() {
 		return mainFrame;
@@ -197,7 +165,11 @@ public class ConfigedMain {
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
 	}
 
-	private void initTabComponents() {
+	public ProductTree getProductTree() {
+		return productTree;
+	}
+
+	public void initTabComponents() {
 		ButtonTabComponent depotComp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
 		depotComp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
 
@@ -432,7 +404,8 @@ public class ConfigedMain {
 		depotsList = new DepotsList(this);
 
 		Logging.info(this, "create depotsListSelectionListener");
-		depotsList.addListSelectionListener(depotsListSelectionListener);
+		depotListSelectionListener = new DepotListSelectionListener(this, depotsList, initialDataLoader);
+		depotsList.addListSelectionListener(depotListSelectionListener);
 
 		fetchDepots();
 
@@ -1067,7 +1040,7 @@ public class ConfigedMain {
 		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
 				.getProductTable().getSelectedIDs();
 		clientTablePanel.deactivateListSelectionListener();
-		depotsList.removeListSelectionListener(depotsListSelectionListener);
+		depotsList.removeListSelectionListener(depotListSelectionListener);
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
 		persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
@@ -1116,7 +1089,7 @@ public class ConfigedMain {
 		productTree.produceActiveParents();
 		productTree.updateSelectedObjectsInTable();
 
-		depotsList.addListSelectionListener(depotsListSelectionListener);
+		depotsList.addListSelectionListener(depotListSelectionListener);
 
 		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
 		mainFrame.reloadServerConsoleMenu();
@@ -1153,7 +1126,7 @@ public class ConfigedMain {
 		this.sessionInfo = sessionInfo;
 	}
 
-	private void initialTreeActivation() {
+	public void initialTreeActivation() {
 		Logging.info(this, "initialTreeActivation");
 
 		TreePath pathToSelect = null;
