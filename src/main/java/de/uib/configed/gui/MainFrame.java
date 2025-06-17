@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
@@ -50,8 +49,6 @@ public class MainFrame extends JFrame implements KeyListener {
 	private LeftToolBar leftToolBar;
 
 	private MainPanelManager mainPanelManager;
-
-	private LicenseDisplayer licenseDisplayer;
 
 	private ClientTablePanel clientTablePanel;
 
@@ -129,8 +126,6 @@ public class MainFrame extends JFrame implements KeyListener {
 
 	public void resetData() {
 		mainPanelManager.resetData();
-
-		licenseDisplayer = null;
 	}
 
 	public boolean checkSaveLicenses() {
@@ -289,26 +284,12 @@ public class MainFrame extends JFrame implements KeyListener {
 					// using it since it is not needed.
 					new JFXPanel();
 
-					Platform.runLater(() -> showLicenseDisplayer());
+					Platform.runLater(() -> LicenseDisplayer.showLicenseDisplayer(configedMain));
 				}
 
 				deactivateLoadingPane();
 			}
 		}.start();
-	}
-
-	private void showLicenseDisplayer() {
-		if (licenseDisplayer == null) {
-			try {
-				licenseDisplayer = new LicenseDisplayer();
-				licenseDisplayer.setConfigedMain(configedMain);
-				licenseDisplayer.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.warning(this, ioE, "Unable to open FXML file.");
-			}
-		} else {
-			licenseDisplayer.display();
-		}
 	}
 
 	@Override
