@@ -179,6 +179,7 @@ public final class Logging {
 		}
 	}
 
+	@SuppressWarnings({ "java:S106", "java:S1166" })
 	private static synchronized void reopenLogWriter() {
 		try {
 			logFileWriter = new PrintWriter(new FileWriter(logFilenameInUse, true));
@@ -294,6 +295,7 @@ public final class Logging {
 		return "" + c.size();
 	}
 
+	@SuppressWarnings("java:S106")
 	public static synchronized void log(int level, Object caller, Throwable ex, String message, Object... mesg) {
 		if (level > logLevelConsole && level > logLevelFile) {
 			return;
