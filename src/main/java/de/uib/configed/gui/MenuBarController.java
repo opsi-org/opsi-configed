@@ -58,6 +58,7 @@ public class MenuBarController {
 	private LeftControlBar leftControlBar;
 
 	private ClientMenuManager clientMenu;
+	private JMenuItem jMenuFileSaveConfigurations;
 
 	public MenuBarController(ConfigedMain configedMain, LeftControlBar leftControlBar) {
 		this.configedMain = configedMain;
@@ -72,8 +73,7 @@ public class MenuBarController {
 		jMenuFileExit.addActionListener(actionEvent -> ConfigedMain
 				.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0));
 
-		JMenuItem jMenuFileSaveConfigurations = new JMenuItem(
-				Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
+		jMenuFileSaveConfigurations = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		Icons.addIntellijIconToMenuItem(jMenuFileSaveConfigurations, "save");
 		jMenuFileSaveConfigurations.setEnabled(false);
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
@@ -296,8 +296,8 @@ public class MenuBarController {
 		return jMenuHelp;
 	}
 
-	public JMenuBar initMenuBar(LeftToolBar leftToolBar) {
-		clientMenu = ClientMenuManager.getNewInstance(configedMain);
+	public JMenuBar initMenuBar(LeftToolBar leftToolBar, MainFrame mainFrame) {
+		clientMenu = ClientMenuManager.getNewInstance(configedMain, mainFrame);
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(createJMenuFile());
@@ -420,4 +420,14 @@ public class MenuBarController {
 		MainFrame.restartConfiged();
 	}
 
+	public void saveConfigurationsSetEnabled(boolean enabled) {
+		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
+				&& enabled) {
+			return;
+		}
+
+		Logging.debug(this, "saveConfigurationsSetEnabled ", enabled);
+
+		jMenuFileSaveConfigurations.setEnabled(enabled);
+	}
 }

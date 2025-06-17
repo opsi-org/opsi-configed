@@ -84,10 +84,11 @@ public final class ClientMenuManager implements MenuListener {
 	private Map<String, JMenuItem> menuItemsHost;
 	private ConfigedMain configedMain;
 
-	private MainFrame mainFrame = ConfigedMain.getMainFrame();
+	private MainFrame mainFrame;
 
-	private ClientMenuManager(ConfigedMain configedMain) {
+	private ClientMenuManager(ConfigedMain configedMain, MainFrame mainFrame) {
 		this.configedMain = configedMain;
+		this.mainFrame = mainFrame;
 
 		menuItemsHost = new LinkedHashMap<>();
 		menuItemsHost.put(UserRolesConfigDataService.ITEM_ADD_CLIENT, jMenuAddClient);
@@ -97,8 +98,8 @@ public final class ClientMenuManager implements MenuListener {
 		initJMenu();
 	}
 
-	public static ClientMenuManager getNewInstance(ConfigedMain configedMain) {
-		return new ClientMenuManager(configedMain);
+	public static ClientMenuManager getNewInstance(ConfigedMain configedMain, MainFrame mainFrame) {
+		return new ClientMenuManager(configedMain, mainFrame);
 	}
 
 	public JMenu getJMenu() {

@@ -18,7 +18,6 @@ import java.util.StringJoiner;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -49,8 +48,6 @@ import javafx.embed.swing.JFXPanel;
 public class MainFrame extends JFrame implements KeyListener {
 	private ConfigedMain configedMain;
 
-	private JMenuItem jMenuFileSaveConfigurations;
-
 	private LeftControlBar leftControlBar;
 	private LeftToolBar leftToolBar;
 
@@ -59,6 +56,8 @@ public class MainFrame extends JFrame implements KeyListener {
 	private LicenseDisplayer licenseDisplayer;
 
 	private ClientTablePanel clientTablePanel;
+
+	private MenuBarController menuBarController;
 
 	private GlassPane glassPane;
 
@@ -89,8 +88,11 @@ public class MainFrame extends JFrame implements KeyListener {
 		leftToolBar = new LeftToolBar(configedMain);
 		mainPanelManager = new MainPanelManager(configedMain, this, depotsList, clientTree, productTree);
 
-		MenuBarController menuBarController = new MenuBarController(configedMain, leftControlBar);
-		setJMenuBar(menuBarController.initMenuBar(leftToolBar));
+		menuBarController = new MenuBarController(configedMain, leftControlBar);
+
+		// We need to give 'this' as an argument since the variable mainFrame is not 
+		// initialized at this point.
+		setJMenuBar(menuBarController.initMenuBar(leftToolBar, this));
 
 		showClientConfiguration();
 
@@ -214,14 +216,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	}
 
 	public void saveConfigurationsSetEnabled(boolean b) {
-		if (PersistenceControllerFactory.getPersistenceController().getUserRolesConfigDataService().isGlobalReadOnly()
-				&& b) {
-			return;
-		}
-
-		Logging.debug(this, "saveConfigurationsSetEnabled ", b);
-
-		jMenuFileSaveConfigurations.setEnabled(b);
+		menuBarController.saveConfigurationsSetEnabled(b);
 	}
 
 	public void activateLoadingPane(String infoText) {
