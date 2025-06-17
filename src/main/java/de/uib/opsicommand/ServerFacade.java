@@ -400,6 +400,15 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		Logging.info(this, "connection cipher suite ", (connection).getCipherSuite());
 
+		Map<String, Object> result = retrieveResponse(connection);
+
+		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
+		Logging.info(this, "retrieveResponse ready");
+
+		return result;
+	}
+
+	private Map<String, Object> retrieveResponse(HttpsURLConnection connection) {
 		Map<String, Object> result = new HashMap<>();
 
 		if (getConnectionState().getState() == ConnectionState.STARTED_CONNECTING
@@ -421,14 +430,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
 						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
 				setConnectionState(new ConnectionState(ConnectionState.TIMEOUT));
-				return new HashMap<>();
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
 			}
 		}
-
-		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
-		Logging.info(this, "retrieveResponse ready");
 
 		return result;
 	}
@@ -484,10 +489,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
 						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
 				setConnectionState(new ConnectionState(ConnectionState.TIMEOUT));
-				return new HashMap<>();
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
-				return new HashMap<>();
 			}
 		}
 		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
