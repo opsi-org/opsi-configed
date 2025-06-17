@@ -40,7 +40,7 @@ import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.DependenciesModel;
-import de.uib.configed.terminal.TerminalFrame;
+import de.uib.configed.terminal.TerminalController;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
@@ -111,6 +111,11 @@ public class ConfigedMain {
 	private ConnectedHostsManager connectedHostsManager;
 
 	private InitialDataLoader initialDataLoader;
+
+	public ConfigedMain() {
+		Logging.info(this, "ConfigedMain constructor called");
+		TerminalController.setConfigedMain(this);
+	}
 
 	public static MainFrame getMainFrame() {
 		return mainFrame;
@@ -1161,39 +1166,6 @@ public class ConfigedMain {
 		clientTablePanel.restoreFilter();
 
 		mainFrame.deactivateLoadingCursor();
-	}
-
-	public void openTerminalOnClient() {
-		openTerminalOnHost("Client");
-	}
-
-	public void openTerminalOnDepot() {
-		openTerminalOnHost("ConfigserverOrDepot");
-	}
-
-	private void openTerminalOnHost(String type) {
-		if (!"Client".equals(type) && !"ConfigserverOrDepot".equals(type)) {
-			throw new IllegalArgumentException("type must be either 'Client' or 'Depot'");
-		}
-		String connectToHost = ("Client".equals(type)) ? selectedClients.get(0) : depotsList.getSelectedValue();
-		if (connectToHost == null) {
-			throw new IllegalArgumentException("host must not be null. (type: " + type + ")");
-		}
-		if ("ConfigserverOrDepot".equals(type)
-				&& connectToHost.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
-			connectToHost = "Configserver";
-		}
-
-		if (!isHostConnected(connectToHost) && !"Configserver".equals(connectToHost)) {
-			Logging.info(this, type, " shell access feature is only supported for clients connected with messagebus");
-			JOptionPane.showMessageDialog(mainFrame,
-					Configed.getResourceValue("ConfigedMain.openTerminalOn" + type + "Feature.message"));
-			return;
-		}
-		TerminalFrame terminalFrame = new TerminalFrame(this);
-		terminalFrame.setMessagebus(Messagebus.getInstance());
-		terminalFrame.setSession(connectToHost);
-		terminalFrame.display();
 	}
 
 	public void invertSelection() {

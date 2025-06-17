@@ -21,8 +21,8 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.terminal.TerminalController;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -42,13 +42,10 @@ public class DepotListPresenter extends JPanel {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
-	private ConfigedMain configedMain;
-
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public DepotListPresenter(DepotsList depotsList, ConfigedMain configedMain) {
-		this.configedMain = configedMain;
+	public DepotListPresenter(DepotsList depotsList) {
 		this.depotslist = depotsList;
 
 		List<String> values = new ArrayList<>();
@@ -140,7 +137,7 @@ public class DepotListPresenter extends JPanel {
 			if (selectedDepot != null) {
 				showShell.setText(Configed.getResourceValue("MainFrame.jMenuOpenTerminalOnDepot"));
 			}
-			showShell.addActionListener(event -> configedMain.openTerminalOnDepot());
+			showShell.addActionListener(event -> TerminalController.openTerminalOnDepot());
 		}
 	}
 

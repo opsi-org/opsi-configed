@@ -37,6 +37,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.ServerActionManager;
 import de.uib.configed.SessionInfoRetriever;
+import de.uib.configed.terminal.TerminalController;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -161,7 +162,7 @@ public final class ClientMenuManager implements MenuListener {
 				event -> ExtraFrameController.startRemoteControlFrame(configedMain, persistenceController));
 
 		Icons.addIntellijIconToMenuItem(jMenuOpenTerminalOnClient, "terminal");
-		jMenuOpenTerminalOnClient.addActionListener(event -> configedMain.openTerminalOnClient());
+		jMenuOpenTerminalOnClient.addActionListener(event -> TerminalController.openTerminalOnClient());
 
 		jMenuInvertSelection.addActionListener(event -> configedMain.invertSelection());
 		jMenuInvertSelection.setAccelerator(
