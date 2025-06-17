@@ -24,7 +24,9 @@ public class DriverUploadDialog {
 
 		this.configedMain = configedMain;
 
+		ConfigedMain.getMainFrame().activateLoadingCursor();
 		panelDriverUpload = new PanelDriverUpload(configedMain);
+		ConfigedMain.getMainFrame().deactivateLoadingCursor();
 
 		JOptionPane optionPane = new JOptionPane(panelDriverUpload, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null,
@@ -39,6 +41,7 @@ public class DriverUploadDialog {
 	public void show() {
 		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		dialog.setVisible(true);
+		panelDriverUpload.evaluateWinProducts();
 	}
 
 	public void setUploadParameters(String byAuditPath) {
