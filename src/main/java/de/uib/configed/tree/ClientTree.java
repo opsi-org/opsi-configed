@@ -407,6 +407,7 @@ public class ClientTree extends AbstractGroupTree {
 		model.nodeStructureChanged(groupNodeDirectory);
 	}
 
+	@SuppressWarnings("java:S1168")
 	private static Set<String> getAllowedClients(Map<String, List<String>> group2Members,
 			Set<String> permittedHostGroups) {
 		if (permittedHostGroups == null) {

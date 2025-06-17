@@ -151,7 +151,8 @@ public class ConnectionHandler {
 		}
 		Logging.info(this, "establishing connection with ", serviceURL);
 
-		CertificateValidator certValidator = CertificateValidatorFactory.getValidator(useInsecure);
+		CertificateValidator certValidator = useInsecure ? CertificateValidatorFactory.getInsecure()
+				: CertificateValidatorFactory.getValidator();
 		HttpsURLConnection connection = null;
 
 		try {
