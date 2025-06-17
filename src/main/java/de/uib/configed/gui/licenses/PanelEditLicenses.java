@@ -45,6 +45,8 @@ public class PanelEditLicenses extends MultiTablePanel {
 		panelKeys.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelKeys.setFilterKey(FilterKey.LICENSE_KEYS_EDIT_TABLE);
 
+		panelKeys.getTableSearchPane().setFiltering();
+
 		panelSoftwarelicenses = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSoftwarelicense"), true, 2,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
@@ -52,6 +54,7 @@ public class PanelEditLicenses extends MultiTablePanel {
 				true);
 		panelSoftwarelicenses.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelSoftwarelicenses.setFilterKey(FilterKey.LICENSE_SOFTWARE_TABLE);
+		panelSoftwarelicenses.getTableSearchPane().setFiltering();
 
 		panelLicensecontracts = new PanelGenEditTable(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2,
@@ -62,6 +65,7 @@ public class PanelEditLicenses extends MultiTablePanel {
 		panelLicensecontracts.setFilterKey(FilterKey.LICENSE_CONTRACTS_EDIT_TABLE);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
+		panelLicensecontracts.getTableSearchPane().setFiltering();
 		panelLicensecontracts.setAwareOfTableChangedListener(true);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);

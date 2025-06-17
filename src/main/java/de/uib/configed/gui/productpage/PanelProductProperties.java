@@ -139,6 +139,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 			this.propertiesPanel = propertiesPanel;
 
 			super.setMinimumSize(new Dimension());
+			tableSearchPane.setFiltering();
 		}
 
 		@Override

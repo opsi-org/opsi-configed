@@ -15,20 +15,27 @@ import javax.swing.table.TableRowSorter;
 
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
+import de.uib.utils.table.RowNoTableModelFilterCondition;
 
 public class SearchTargetModelFromTable implements SearchTargetModel {
 	public static final String FILTER_BY_SELECTION = "filterBySelection";
 
 	protected JTable table;
+	private PanelGenEditTable thePanel;
 
 	protected int[] selectedRows = new int[0];
 
 	public SearchTargetModelFromTable() {
-		this((JTable) null);
+		this(null, (JTable) null);
 	}
 
 	public SearchTargetModelFromTable(JTable table) {
 		setTable(table);
+	}
+
+	public SearchTargetModelFromTable(PanelGenEditTable thePanel, JTable table) {
+		setTable(table);
+		this.thePanel = thePanel;
 	}
 
 	protected final void setTable(JTable table) {
@@ -158,6 +165,53 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			table.getSelectionModel().addSelectionInterval(selectionElement, selectionElement);
 		}
 		table.getSelectionModel().setValueIsAdjusting(false);
+	}
+
+	@Override
+	public void setFiltered(boolean filtered) {
+		boolean wasChanged = false;
+
+		if (thePanel != null) {
+			wasChanged = thePanel.isDataChanged();
+		}
+
+		GenTableModel model = (GenTableModel) table.getModel();
+
+		if (filtered) {
+			selectedRows = table.getSelectedRows();
+		}
+
+		if (filtered && selectedRows.length > 0) {
+			int[] modelRowFilter = new int[selectedRows.length];
+			for (int i = 0; i < selectedRows.length; i++) {
+				modelRowFilter[i] = table.convertRowIndexToModel(selectedRows[i]);
+			}
+
+			Logging.info(this, "setFiltered modelRowFilter ", Arrays.toString(modelRowFilter));
+
+			((RowNoTableModelFilterCondition) (model.getFilter(FILTER_BY_SELECTION).getCondition()))
+					.setFilter(modelRowFilter, model.getRows());
+
+			model.setUsingFilter(FILTER_BY_SELECTION, true);
+			model.reset();
+
+			table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
+		} else {
+			model.setUsingFilter(FILTER_BY_SELECTION, false);
+
+			// restore the original selection
+			setSelection(selectedRows);
+		}
+
+		returnToNotChanged(wasChanged);
+	}
+
+	private void returnToNotChanged(boolean wasChanged) {
+		// we are not interested in changes of model induced by selection
+		if (thePanel != null && !wasChanged && thePanel.isDataChanged()) {
+			Logging.info(this, "returnToNotChanged active ");
+			thePanel.setDataChanged(false);
+		}
 	}
 
 	@Override

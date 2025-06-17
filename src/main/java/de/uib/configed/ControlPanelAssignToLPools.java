@@ -127,9 +127,15 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(false);
 
+		boolean wasUsingSelectedFilter = modelWindowsSoftwareIds
+				.isUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED);
+		Logging.info(this, "setSoftwareIdsFromLicensePool wasUsingSelectedFilter ", wasUsingSelectedFilter);
+
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, false);
 
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED, false);
+
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(false);
 
 		thePanel.getFieldSelectedLicensePoolId().setText(poolID);
 		thePanel.getFieldSelectedLicensePoolId().setToolTipText(poolID);
@@ -195,6 +201,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		produceFilterSets(softwareIdsForPool);
 
+		Logging.info(this, "setSoftwareIdsFromLicensePool setUsingFilter ",
+				GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, " to ", wasUsingSelectedFilter);
+		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
+				wasUsingSelectedFilter);
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(wasUsingSelectedFilter);
+
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED,
 				softwareShowAllMeans != SoftwareShowAllMeans.ALL);
 
@@ -228,6 +240,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		Logging.debug(this, "setSoftwareIdsFromLicensePool  selectedKeys ",
 				thePanel.getPanelRegisteredSoftware().getSelectedKeys());
+		if (wasUsingSelectedFilter) {
+			setVisualSelection(thePanel.getPanelRegisteredSoftware().getSelectedKeys());
+		}
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 		thePanel.getPanelRegisteredSoftware().setAwareOfSelectionListener(true);
 	}
@@ -579,6 +594,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				new TableModelFilter(windowsSoftwareFilterConditionDontShowAssociatedToOtherPool));
 		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED, false);
 
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(false);
 		thePanel.getPanelRegisteredSoftware().setDataChanged(false);
 
 		initializePanelRegisteredSoftwareMenuItems(columnNames);
@@ -604,6 +620,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			softwareShow = SoftwareShowMode.ASSIGNED;
 			setSWAssignments();
 		});
+
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane()
+				.setFiltermarkActionListener(actionEvent -> registeredSoftwareFiltermarkAction());
 
 		JMenuItem menuItemSoftwareShowAll = new JMenuItem(
 				Configed.getResourceValue("ConfigedMain.Licenses.PopupWindowsSoftwareShowAll"));
@@ -633,6 +652,19 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.getPanelRegisteredSoftware().getJTable().getColumnModel()
 				.getColumn(columnNames.indexOf("language"));
 		col.setMaxWidth(60);
+	}
+
+	private void registeredSoftwareFiltermarkAction() {
+		if (softwareShow == SoftwareShowMode.ALL) {
+			softwareShow = SoftwareShowMode.ASSIGNED;
+			setSWAssignments();
+		} else if (softwareShow == SoftwareShowMode.ASSIGNED) {
+			softwareShow = SoftwareShowMode.ALL;
+			setSWAssignments();
+		} else {
+			// Should not happen because SoftwareShowMode has only two elements
+			Logging.warning(this, "softwareShow has Value ", softwareShow, " that does not exist in SoftwareShowMode");
+		}
 	}
 
 	private String updateLicensepool(Map<String, Object> rowmap) {
@@ -824,6 +856,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				usingShowSelectedFilter);
 
+		thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFilterMark(usingShowSelectedFilter);
 		setVisualSelection(selectedKeys);
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
@@ -856,7 +889,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		this.softwareDirectionOfAssignment = direction;
 
 		if (oldDirection != direction) {
-			if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
+			if (direction == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
+				thePanel.getPanelRegisteredSoftware().getTableSearchPane().setFiltering();
+			} else if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
 				resetCounters(null);
 				thePanel.getFieldCountAssignedInEditing().setText("");
 			} else {

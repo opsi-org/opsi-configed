@@ -110,6 +110,8 @@ public class PanelLicensesUsage extends MultiTablePanel {
 		panelUsage.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelUsage.setFilterKey(FilterKey.LICENSE_USAGE_TABLE);
 
+		panelUsage.getTableSearchPane().setFiltering();
+
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
 		GroupLayout layout = new GroupLayout(this);
