@@ -43,6 +43,7 @@ import de.uib.messages.Messages;
 import de.uib.utils.ExtractorUtil;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
+import de.uib.utils.WindowsPositionManager;
 import de.uib.utils.logging.Logging;
 
 public class LogFrame extends JFrame {
@@ -178,6 +179,7 @@ public class LogFrame extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				WindowsPositionManager.saveWindowProperties(LogFrame.this, WindowsPositionManager.LOGVIEWER);
 				Main.endApp(Main.NO_ERROR);
 			}
 		});

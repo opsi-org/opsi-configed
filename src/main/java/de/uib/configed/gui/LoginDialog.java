@@ -36,6 +36,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
+import de.uib.utils.WindowsPositionManager;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.userprefs.UserPreferences;
@@ -365,7 +366,12 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.requestFocus();
 		// Sets the window on the main screen
 		pack();
-		setLocationRelativeTo(null);
+		if (WindowsPositionManager
+				.isOnAnyScreen(WindowsPositionManager.getWindowBounds(WindowsPositionManager.MAIN_WINDOW))) {
+			WindowsPositionManager.centerDialogOnWindowScreen(this);
+		} else {
+			setLocationRelativeTo(null);
+		}
 		setResizable(false);
 		setVisible(true);
 	}

@@ -25,6 +25,8 @@ public final class UserPreferences {
 	public static final String CLIENTS_TABLE_DISPLAY_FIELDS = "clients_table_display_fields";
 	public static final String LOCALBOOT_TABLE_DISPLAY_FIELDS = "localboot_table_display_fields";
 	public static final String NETBOOT_TABLE_DISPLAY_FIELDS = "netboot_table_display_fields";
+	public static final String WINDOW_BOUNDS = "window_bounds";
+	public static final String WINDOW_STATE = "window_state";
 
 	private static Properties properties = new Properties();
 	private static File propertiesFile = new File(
@@ -98,6 +100,10 @@ public final class UserPreferences {
 
 	public static String get(String key) {
 		return properties.getProperty(key, "");
+	}
+
+	public static String get(String key, String defaultValue) {
+		return properties.getProperty(key, defaultValue);
 	}
 
 	public static void setBoolean(String key, Boolean value) {

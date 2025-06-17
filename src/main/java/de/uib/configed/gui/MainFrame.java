@@ -40,6 +40,7 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.PopupMouseListener;
 import de.uib.utils.Utils;
+import de.uib.utils.WindowsPositionManager;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.gui.FilterStateManager;
 import javafx.application.Platform;
@@ -78,6 +79,8 @@ public class MainFrame extends JFrame implements KeyListener {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent event) {
+				WindowsPositionManager.saveWindowProperties(ConfigedMain.getMainFrame(),
+						WindowsPositionManager.MAIN_WINDOW);
 				ConfigedMain.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
 			}
 		});
