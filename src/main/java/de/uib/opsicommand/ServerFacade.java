@@ -572,39 +572,48 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private Map<String, Object> retrieveResponseBasedOnContentTypeToObject(String contentType, InputStream stream,
 			String resultKey) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
 		Logging.debug("retrieveResponseBasedOnContentType ", contentType);
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result;
 		if (contentType.contains("application/json")) {
-			String resultStr = readInputStream(stream).strip();
-			if (resultStr.isEmpty()) {
-				result.put(resultStr, result);
-			} else if (resultStr.startsWith("{")) {
-				result = mapper.readValue(resultStr, new TypeReference<Map<String, Object>>() {
-				});
-			} else if (resultStr.startsWith("[")) {
-				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object[]>() {
-				}));
-			} else if (resultStr.startsWith("\"")) {
-				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
-				}));
-			} else if ("true".equals(resultStr)) {
-				result.put(resultKey, true);
-			} else if ("false".equals(resultStr)) {
-				result.put(resultKey, false);
-			} else if ("null".equals(resultStr)) {
-				result.put(resultKey, null);
-			} else if (resultStr.contains(".")) {
-				result.put(resultKey, Float.parseFloat(resultStr));
-			} else {
-				result.put(resultKey, Integer.parseInt(resultStr));
-			}
+			result = getJSONResult(stream, resultKey);
 		} else if (contentType.contains("application/msgpack")) {
-			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			result = new ObjectMapper().readValue(stream, new TypeReference<Map<String, Object>>() {
 			});
 		} else {
 			Logging.error(this, "Unsupported Content-Type: ", contentType);
+			result = new HashMap<>();
 		}
+		return result;
+	}
+
+	private static Map<String, Object> getJSONResult(InputStream stream, String resultKey) throws IOException {
+		Map<String, Object> result = new HashMap<>();
+
+		ObjectMapper mapper = new ObjectMapper();
+		String resultStr = readInputStream(stream).strip();
+		if (resultStr.isEmpty()) {
+			result.put(resultStr, result);
+		} else if (resultStr.startsWith("{")) {
+			result = mapper.readValue(resultStr, new TypeReference<Map<String, Object>>() {
+			});
+		} else if (resultStr.startsWith("[")) {
+			result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object[]>() {
+			}));
+		} else if (resultStr.startsWith("\"")) {
+			result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
+			}));
+		} else if ("true".equals(resultStr)) {
+			result.put(resultKey, true);
+		} else if ("false".equals(resultStr)) {
+			result.put(resultKey, false);
+		} else if ("null".equals(resultStr)) {
+			result.put(resultKey, null);
+		} else if (resultStr.contains(".")) {
+			result.put(resultKey, Float.parseFloat(resultStr));
+		} else {
+			result.put(resultKey, Integer.parseInt(resultStr));
+		}
+
 		return result;
 	}
 
