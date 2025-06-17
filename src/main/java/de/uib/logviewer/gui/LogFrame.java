@@ -37,7 +37,7 @@ import javax.swing.KeyStroke;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.MainFrame;
+import de.uib.configed.gui.MenuBarController;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utils.ExtractorUtil;
@@ -100,7 +100,7 @@ public class LogFrame extends JFrame {
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileClose);
 		jMenuFile.add(jMenuFileSave);
-		jMenuFile.add(MainFrame.createJMenuTheme(this::restartLogFrame));
+		jMenuFile.add(MenuBarController.createJMenuTheme(this::restartLogFrame));
 		jMenuFile.add(Messages.createJMenuLanguages(this::restartLogFrame));
 		jMenuFile.add(jMenuFileExit);
 		return jMenuFile;
@@ -131,15 +131,15 @@ public class LogFrame extends JFrame {
 
 	private JMenu setupMenuHelp() {
 		JMenu jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
-		MainFrame.addHelpLinks(jMenuHelp);
+		MenuBarController.addHelpLinks(jMenuHelp);
 
 		jMenuHelp.addSeparator();
 
-		MainFrame.addLogfileMenus(jMenuHelp, this);
+		MenuBarController.addLogfileMenus(jMenuHelp, this);
 
 		jMenuHelp.addSeparator();
 
-		MainFrame.addCreditsMenus(jMenuHelp, this);
+		MenuBarController.addCreditsMenus(jMenuHelp, this);
 
 		return jMenuHelp;
 	}
