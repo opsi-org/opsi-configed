@@ -200,13 +200,13 @@ public class ClientTable extends JTable implements MessagebusListener {
 		if (isO1Invalid && isO2Invalid) {
 			return 0;
 		} else if (isO1Invalid || isO2Invalid) {
-			return compareInvalids(o1, o2, isO1Invalid, isO2Invalid);
+			return compareInvalids(isO1Invalid);
 		} else {
 			return ((Comparable<Object>) o1).compareTo(o2);
 		}
 	}
 
-	private int compareInvalids(Object o1, Object o2, boolean isO1Invalid, boolean isO2Invalid) {
+	private int compareInvalids(boolean isO1Invalid) {
 		boolean isAscending = ((TableRowSorter<?>) getRowSorter()).getSortKeys().get(0)
 				.getSortOrder() == SortOrder.ASCENDING;
 
