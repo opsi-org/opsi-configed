@@ -366,7 +366,12 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.requestFocus();
 		// Sets the window on the main screen
 		pack();
-		WindowsPositionManager.centerDialogOnWindowScreen(this);
+		if (WindowsPositionManager
+				.isOnAnyScreen(WindowsPositionManager.getWindowBounds(WindowsPositionManager.MAIN_WINDOW))) {
+			WindowsPositionManager.centerDialogOnWindowScreen(this);
+		} else {
+			setLocationRelativeTo(null);
+		}
 		setResizable(false);
 		setVisible(true);
 	}
