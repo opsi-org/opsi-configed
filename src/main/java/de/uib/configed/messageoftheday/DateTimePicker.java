@@ -59,20 +59,10 @@ public class DateTimePicker extends DatePicker {
 		});
 	}
 
+	@SuppressWarnings({ "java:S4968" })
 	public void initData() {
 		// Syncronize changes to the underlying date value back to the dateTimeValue
-		valueProperty().addListener(
-				(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) -> {
-					Logging.debug("DateTimePicker valueProperty listener newValue: ", newValue, " oldValue: ",
-							oldValue);
-					if (newValue == null) {
-						setDateTimeValue(null);
-					} else if (dateTimeValue.get() == null) {
-						setDateTimeValue(LocalDateTime.of(newValue, LocalTime.MAX));
-					} else {
-						setDateTimeValue(LocalDateTime.of(newValue, LocalTime.MAX));
-					}
-				});
+		valueProperty().addListener(this::setDateTimeValueLambda);
 
 		// Syncronize changes to dateTimeValue back to the underlying date value
 		dateTimeValue.addListener((ObservableValue<? extends LocalDateTime> observable, LocalDateTime oldValue,
@@ -90,6 +80,17 @@ public class DateTimePicker extends DatePicker {
 						simulateEnterPressed();
 					}
 				});
+	}
+
+	@SuppressWarnings({ "java:S4968" })
+	private void setDateTimeValueLambda(ObservableValue<? extends LocalDate> observable, LocalDate oldValue,
+			LocalDate newValue) {
+		Logging.debug("DateTimePicker valueProperty listener newValue: ", newValue, " oldValue: ", oldValue);
+		if (newValue == null) {
+			setDateTimeValue(null);
+		} else {
+			setDateTimeValue(LocalDateTime.of(newValue, LocalTime.MAX));
+		}
 	}
 
 	private static LocalDateTime datetimeNow() {
