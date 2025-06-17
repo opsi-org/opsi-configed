@@ -89,44 +89,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	@SuppressWarnings("java:S2972")
 	private class FileNameDocumentListener implements DocumentListener {
-		private boolean checkFiles() {
-			boolean result = false;
-
-			if (fieldServerPath != null && fieldDriverPath != null) {
-				targetPath = new File(fieldServerPath.getText().replace("\\", "/"));
-				driverPath = new File(fieldDriverPath.getText().replace("\\", "/"));
-
-				boolean stateServerPath = webDAVClient.existsAndIsDirectory(targetPath.getPath().replace("\\", "/"));
-				serverPathChecked.setSelected(stateServerPath);
-				Logging.info(this, "checkFiles  stateServerPath targetPath ", targetPath);
-				Logging.info(this, "checkFiles  stateServerPath driverPath ", driverPath);
-				Logging.info(this, "checkFiles  stateServerPath isDirectory ", stateServerPath);
-
-				boolean stateDriverPath = driverPath.exists();
-				driverPathChecked.setSelected(stateDriverPath);
-				Logging.info(this, "checkFiles stateDriverPath ", stateDriverPath);
-
-				if (stateServerPath && stateDriverPath) {
-					result = true;
-				}
-			}
-
-			Logging.info(this, "checkFiles ", result);
-
-			if (buttonUploadDrivers != null) {
-				buttonUploadDrivers.setEnabled(result);
-
-				if (result) {
-					buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.execute"));
-				} else {
-					buttonUploadDrivers
-							.setToolTipText(Configed.getResourceValue("PanelDriverUpload.driverPathNotFound"));
-				}
-			}
-
-			return result;
-		}
-
 		@Override
 		public void changedUpdate(DocumentEvent e) {
 			Logging.debug(this, "changedUpdate ");
@@ -247,6 +209,43 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		};
 		WinProductsRetriever retriever = new WinProductsRetriever(ctx);
 		retriever.execute();
+	}
+
+	private boolean checkFiles() {
+		boolean result = false;
+
+		if (fieldServerPath != null && fieldDriverPath != null) {
+			targetPath = new File(fieldServerPath.getText().replace("\\", "/"));
+			driverPath = new File(fieldDriverPath.getText().replace("\\", "/"));
+
+			boolean stateServerPath = webDAVClient.existsAndIsDirectory(targetPath.getPath().replace("\\", "/"));
+			serverPathChecked.setSelected(stateServerPath);
+			Logging.info(this, "checkFiles  stateServerPath targetPath ", targetPath);
+			Logging.info(this, "checkFiles  stateServerPath driverPath ", driverPath);
+			Logging.info(this, "checkFiles  stateServerPath isDirectory ", stateServerPath);
+
+			boolean stateDriverPath = driverPath.exists();
+			driverPathChecked.setSelected(stateDriverPath);
+			Logging.info(this, "checkFiles stateDriverPath ", stateDriverPath);
+
+			if (stateServerPath && stateDriverPath) {
+				result = true;
+			}
+		}
+
+		Logging.info(this, "checkFiles ", result);
+
+		if (buttonUploadDrivers != null) {
+			buttonUploadDrivers.setEnabled(result);
+
+			if (result) {
+				buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.execute"));
+			} else {
+				buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.driverPathNotFound"));
+			}
+		}
+
+		return result;
 	}
 
 	@SuppressWarnings("java:S138")
@@ -521,6 +520,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		if (result) {
 			JOptionPane.showMessageDialog(this, Configed.getResourceValue("PanelDriverUpload.targetDirectoryExsits"),
 					Configed.getResourceValue("info"), JOptionPane.INFORMATION_MESSAGE);
+			checkFiles();
 		}
 
 		Logging.info(this, "makePath result ", path, " exists or created ", result);
