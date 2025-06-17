@@ -45,6 +45,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JToggleButton respectCase;
 	private JToggleButton regexActive;
+	private JToggleButton filterMark;
 
 	private JToggleButton buttonShowHideExtraOptions;
 
@@ -158,9 +159,17 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		regexActive.setSelectedIcon(Icons.getSelectedIntellijIcon("regex"));
 		regexActive.setToolTipText(Configed.getResourceValue("SearchPane.mode.regex"));
 
+		filterMark = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
+		filterMark.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
+		filterMark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
+		filterMark.setSelected(true);
+		filterMark.addItemListener(event -> filter());
+
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(respectCase);
 		jToolBar.add(regexActive);
+		jToolBar.addSeparator();
+		jToolBar.add(filterMark);
 
 		flatTextFieldSearch.setTrailingComponent(jToolBar);
 	}
@@ -510,6 +519,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void restoreFilter() {
+		if (!filterMark.isSelected()) {
+			return;
+		}
+
 		if (filterKey == null) {
 			Logging.debug(this, "Fitler key (", filterKey, ") is null - we can't proceed");
 			return;
@@ -536,6 +549,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void filter() {
+		if (!filterMark.isSelected() && comboSearchFields.getSelectedItem() != null) {
+			return;
+		}
+
 		int columnIndex = targetModel.findColumn((String) comboSearchFields.getSelectedItem());
 		String searchText = flatTextFieldSearch.getText();
 		targetModel.applyFilter(searchText, columnIndex, regexActive.isSelected(), respectCase.isSelected());
