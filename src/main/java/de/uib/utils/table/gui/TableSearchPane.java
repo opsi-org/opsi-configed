@@ -35,8 +35,6 @@ import com.formdev.flatlaf.icons.FlatSearchIcon;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.utils.FeatureActivationChecker;
-import de.uib.utils.FeatureActivationChecker.Feature;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 
@@ -57,7 +55,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private PanelGenEditTable associatedPanel;
 
 	private JMenuItem popupSearch;
-	private JMenuItem popupMarkHits;
 	private JMenuItem popupMarkAndFilter;
 	private JMenuItem popupEmptySearchfield;
 
@@ -122,10 +119,9 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setFiltering() {
-		popupMarkHits.setVisible(true);
 		popupMarkAndFilter.setVisible(true);
 
-		filtermark.setVisible(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
+		filtermark.setVisible(true);
 	}
 
 	public boolean isFiltering() {
@@ -147,7 +143,6 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		targetModel.setFiltered(filtered);
 
 		popupSearch.setEnabled(!filtered);
-		popupMarkHits.setEnabled(!filtered);
 		popupMarkAndFilter.setEnabled(!filtered);
 		popupEmptySearchfield.setEnabled(!filtered);
 	}
@@ -211,10 +206,8 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(respectCase);
 		jToolBar.add(regexActive);
-		if (!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
-			jToolBar.addSeparator();
-			jToolBar.add(filtermark);
-		}
+		jToolBar.addSeparator();
+		jToolBar.add(filtermark);
 
 		flatTextFieldSearch.setTrailingComponent(jToolBar);
 	}
@@ -233,31 +226,21 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			searchTheRow(0, selectMode);
 		});
 
-		popupMarkHits = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markall"));
-		popupMarkHits.addActionListener(actionEvent -> markAll());
-		popupMarkHits.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-		popupMarkHits.setEnabled(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
-
 		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
 		popupMarkAndFilter.addActionListener(actionEvent -> markAllAndFilter());
 		popupMarkAndFilter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
-		popupMarkAndFilter.setEnabled(!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER));
 
 		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
 		popupEmptySearchfield.addActionListener(actionEvent -> flatTextFieldSearch.setText(""));
 
-		popupMarkHits.setVisible(false);
 		popupMarkAndFilter.setVisible(false);
 
 		Logging.info(this, "buildMenuSearchfield");
 		JPopupMenu searchMenu = new JPopupMenu();
 		searchMenu.add(popupSearch);
 		searchMenu.add(popupSearchNext);
-		if (!FeatureActivationChecker.isFeatureActivated(Feature.NEW_FILTER)) {
-			searchMenu.add(popupNewSearch);
-			searchMenu.add(popupMarkHits);
-			searchMenu.add(popupMarkAndFilter);
-		}
+		searchMenu.add(popupNewSearch);
+		searchMenu.add(popupMarkAndFilter);
 		searchMenu.add(popupEmptySearchfield);
 
 		flatTextFieldSearch.setComponentPopupMenu(searchMenu);
@@ -707,11 +690,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			return;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (allowSearchAction()) {
-				markAll();
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
+		if (e.getKeyCode() == KeyEvent.VK_F8) {
 			if (allowSearchAction()) {
 				markAllAndFilter();
 			}

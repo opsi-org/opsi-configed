@@ -32,7 +32,6 @@ import de.uib.utils.logging.Logging;
  */
 public final class FeatureActivationChecker {
 	public enum Feature {
-		NEW_FILTER
 	}
 
 	private static EnumSet<Feature> activatedFeatures;
