@@ -6,7 +6,6 @@
 
 package de.uib.opsidatamodel.serverdata.dataservice;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,7 +24,6 @@ import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
-import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
@@ -985,29 +983,6 @@ public class ProductDataService {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.PRODUCT_ON_DEPOT_GET_IDENTS,
 				new Object[] { callReturnType, callFilter });
 		return exec.getListOfMaps(omc);
-	}
-
-	public List<String> getWinProducts(String depotProductDirectory) {
-		List<String> winProducts = new ArrayList<>();
-		if (depotProductDirectory == null) {
-			return winProducts;
-		}
-
-		boolean smbMounted = new File(depotProductDirectory).exists();
-
-		for (String product : new TreeSet<>(
-				getAllNetbootProductNames(persistenceController.getHostInfoCollections().getConfigServer()))) {
-			if (!smbMounted
-					|| new File(
-							depotProductDirectory + File.separator + product + File.separator + SmbConnect.DIRECTORY_PE)
-									.exists()
-					|| new File(depotProductDirectory + File.separator + product + File.separator
-							+ SmbConnect.DIRECTORY_I368).exists()) {
-				winProducts.add(product);
-			}
-		}
-
-		return winProducts;
 	}
 
 	public void updateProductOnClient(String pcname, String productname, int producttype,

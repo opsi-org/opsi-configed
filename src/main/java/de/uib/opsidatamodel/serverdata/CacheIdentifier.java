@@ -503,6 +503,11 @@ public enum CacheIdentifier {
 	MFA_ENABLED("mfa_enabled"),
 
 	/**
+	 * return type {@code List<String>}
+	 */
+	WIN_PRODUCTS("win_products"),
+
+	/**
 	 * return type {@code List<Map<String, Object>>}
 	 */
 	SSH_COMMAND_LIST("ssh_command_list");

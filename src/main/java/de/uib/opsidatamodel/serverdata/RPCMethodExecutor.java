@@ -44,15 +44,6 @@ public class RPCMethodExecutor {
 		this.hostInfoCollections = hostInfoCollections;
 	}
 
-	public boolean setRights(String path) {
-		Logging.info(this, "setRights for path ", path);
-		String[] args = new String[] { path };
-		if (path == null) {
-			args = new String[] {};
-		}
-		return exec.doCall(new OpsiMethodCall(RPCMethodName.SET_RIGHTS, args));
-	}
-
 	public List<String> wakeOnLanOpsi43(Collection<String> hostIds) {
 		OpsiMethodCall omc = new OpsiMethodCall(RPCMethodName.HOST_CONTROL_START, new Object[] { hostIds });
 

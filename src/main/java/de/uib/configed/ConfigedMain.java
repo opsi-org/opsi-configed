@@ -1108,6 +1108,8 @@ public class ConfigedMain {
 		updatePage();
 
 		initTabComponents();
+
+		ExtraFrameController.resetCompleteWinProductsPanel();
 	}
 
 	private static void updatePage() {
