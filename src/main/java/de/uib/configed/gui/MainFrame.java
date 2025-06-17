@@ -31,9 +31,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
-import de.uib.messagebus.Messagebus;
-import de.uib.opsicommand.certificate.CertificateValidatorFactory;
-import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
@@ -129,22 +126,6 @@ public class MainFrame extends JFrame implements KeyListener {
 	// configure interaction
 	// ------------------------------------------------------------------------------------------
 	// menus
-
-	public void reconnectOTP(String otp) {
-		if (Messagebus.getInstance() != null) {
-			Messagebus.getInstance().disconnect();
-			Messagebus.getInstance().setReconnecting(false);
-		}
-		persistenceController.getExecutioner().setOTP(otp);
-
-		CacheManager.getInstance().clearAllCachedData();
-		Configed.getSavedStates().removeAll();
-		resetData();
-
-		CertificateValidatorFactory.resetCertificateValidators();
-
-		restartConfiged();
-	}
 
 	public void resetData() {
 		mainPanelManager.resetData();

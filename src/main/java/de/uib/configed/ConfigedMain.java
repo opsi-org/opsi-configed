@@ -48,10 +48,13 @@ import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.Messagebus;
+import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
@@ -853,6 +856,22 @@ public class ConfigedMain {
 			Logging.info(this, "treeClientsSelectAction selTreePaths: ", selTreePaths.length);
 			setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 		}
+	}
+
+	public static void reconnectOTP(String otp) {
+		if (Messagebus.getInstance() != null) {
+			Messagebus.getInstance().disconnect();
+			Messagebus.getInstance().setReconnecting(false);
+		}
+		PersistenceControllerFactory.getPersistenceController().getExecutioner().setOTP(otp);
+
+		CacheManager.getInstance().clearAllCachedData();
+		Configed.getSavedStates().removeAll();
+		mainFrame.resetData();
+
+		CertificateValidatorFactory.resetCertificateValidators();
+
+		MainFrame.restartConfiged();
 	}
 
 	private void setGroupNameForNode(DefaultMutableTreeNode selectedNode) {

@@ -153,7 +153,7 @@ public final class ConnectionErrorReporter {
 		displayConfirmDialogInEventDispatchThread(
 				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },
 				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"),
-				() -> ConfigedMain.getMainFrame().reconnectOTP(new String(otpField.getPassword())),
+				() -> ConfigedMain.reconnectOTP(new String(otpField.getPassword())),
 				() -> SwingUtilities.invokeLater(this::displayCancelConfigedDialog));
 	}
 
