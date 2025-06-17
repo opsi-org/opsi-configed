@@ -115,7 +115,6 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 	// server path finding
 	private JTextField fieldServerPath;
-	private JFileChooser chooserServerpath;
 
 	private File driverPath;
 	private File targetPath;
@@ -188,7 +187,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		chooserDriverPath.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserDriverPath.setDialogTitle(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
-		chooserServerpath = new JFileChooser();
+		JFileChooser chooserServerpath = new JFileChooser();
 		chooserServerpath.setFileHidingEnabled(false);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);
