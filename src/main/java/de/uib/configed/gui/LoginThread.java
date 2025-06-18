@@ -69,18 +69,7 @@ public class LoginThread extends Thread {
 		Logging.debug(this, "actAfterWaiting");
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED
 				&& ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)) {
-			loginDialog.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
-			Logging.info(this, "connected with persis ", persistenceController);
-			if (useSSO) {
-				// Using SSO, so the browser window is currently in the foreground.
-				// Bring the login dialog back to the front.
-				loginDialog.setVisible(true);
-				loginDialog.toFront();
-			}
-
-			ConfigedMain configedMain = new ConfigedMain();
-			configedMain.setPersistenceController(persistenceController);
-			configedMain.loadDataAndGo();
+			login();
 		} else {
 			// Clear cache
 			CacheManager.getInstance().clearAllCachedData();
@@ -96,38 +85,53 @@ public class LoginThread extends Thread {
 						ServerFacade.getOpsiServerVersionRetriever() != null
 								? ("serverVersion " + ServerFacade.getOpsiServerVersionRetriever().getServerVersion())
 								: "could not retrieve server version");
-				String message;
-				ConnectionErrorType errorType = ConnectionErrorType.GENERAL_ERROR;
-
-				if (connectionState.getState() == ConnectionState.TIMEOUT) {
-					message = Configed.getResourceValue("LoginDialog.timeoutReached");
-					errorType = ConnectionErrorType.TIMEOUT_ERROR;
-				} else if (ServerFacade.getOpsiServerVersionRetriever() != null
-						&& !ServerFacade.getOpsiServerVersionRetriever()
-								.isServerVersionAtLeast(Globals.MIN_MAJOR_VERSION)
-						&& connectionState.getState() != ConnectionState.NOT_CONNECTED) {
-					message = Configed.getResourceValue("LoginDialog.oldServerVersion");
-				} else if (ServerFacade.getOpsiServerVersionRetriever() != null
-						&& !ServerFacade.getOpsiServerVersionRetriever()
-								.isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)
-						&& connectionState.getState() != ConnectionState.NOT_CONNECTED) {
-					message = String.format(Configed.getResourceValue("LoginDialog.minServerVersion"),
-							Globals.MIN_SERVER_VERSION,
-							ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
-				} else if (connectionState.getState() == ConnectionState.ERROR) {
-					message = new MessageFormat(
-							Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"))
-									.format(new Object[] { connectionState.getMessage() });
-				} else {
-					message = null;
-				}
-
-				if (message != null) {
-					ConnectionErrorReporter.getInstance().notify(message, errorType);
-				}
+				showWarningDialog(connectionState);
 			}
 
 			loginDialog.returnToLogin();
+		}
+	}
+
+	private void login() {
+		loginDialog.setInfoText(Configed.getResourceValue("LoadingObserver.start"));
+		Logging.info(this, "connected with persis ", persistenceController);
+		if (useSSO) {
+			// Using SSO, so the browser window is currently in the foreground.
+			// Bring the login dialog back to the front.
+			loginDialog.setVisible(true);
+			loginDialog.toFront();
+		}
+
+		ConfigedMain configedMain = new ConfigedMain();
+		configedMain.setPersistenceController(persistenceController);
+		configedMain.loadDataAndGo();
+	}
+
+	private static void showWarningDialog(ConnectionState connectionState) {
+		String message;
+		ConnectionErrorType errorType = ConnectionErrorType.GENERAL_ERROR;
+
+		if (connectionState.getState() == ConnectionState.TIMEOUT) {
+			message = Configed.getResourceValue("LoginDialog.timeoutReached");
+			errorType = ConnectionErrorType.TIMEOUT_ERROR;
+		} else if (ServerFacade.getOpsiServerVersionRetriever() != null
+				&& !ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_MAJOR_VERSION)
+				&& connectionState.getState() != ConnectionState.NOT_CONNECTED) {
+			message = Configed.getResourceValue("LoginDialog.oldServerVersion");
+		} else if (ServerFacade.getOpsiServerVersionRetriever() != null
+				&& !ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast(Globals.MIN_SERVER_VERSION)
+				&& connectionState.getState() != ConnectionState.NOT_CONNECTED) {
+			message = String.format(Configed.getResourceValue("LoginDialog.minServerVersion"),
+					Globals.MIN_SERVER_VERSION, ServerFacade.getOpsiServerVersionRetriever().getServerVersion());
+		} else if (connectionState.getState() == ConnectionState.ERROR) {
+			message = new MessageFormat(Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"))
+					.format(new Object[] { connectionState.getMessage() });
+		} else {
+			message = null;
+		}
+
+		if (message != null) {
+			ConnectionErrorReporter.getInstance().notify(message, errorType);
 		}
 	}
 }
