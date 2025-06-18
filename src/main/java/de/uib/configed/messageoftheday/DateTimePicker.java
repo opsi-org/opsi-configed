@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 import de.uib.utils.logging.Logging;
 import javafx.application.Platform;
@@ -23,7 +22,6 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.util.StringConverter;
 
 /**
  * A DateTimePicker with configurable datetime format where both date and time
@@ -49,7 +47,7 @@ public class DateTimePicker extends DatePicker {
 
 	public void init() {
 		getStyleClass().add("datetime-picker");
-		setConverter(new InternalConverter());
+		setConverter(new InternalConverter(this));
 		setDayCellFactory(param -> new DateCell() {
 			@Override
 			public void updateItem(LocalDate date, boolean empty) {
@@ -93,7 +91,7 @@ public class DateTimePicker extends DatePicker {
 		}
 	}
 
-	private static LocalDateTime datetimeNow() {
+	public static LocalDateTime datetimeNow() {
 		Logging.debug("DateTimePicker datetimeNow");
 		Instant time = Instant.now();
 		return time.atZone(DateTimePicker.ZONEID).toLocalDateTime();
@@ -160,33 +158,8 @@ public class DateTimePicker extends DatePicker {
 		}
 	}
 
-	class InternalConverter extends StringConverter<LocalDate> {
-		public String toString(LocalDate object) {
-			Logging.trace("DateTimePicker InternalConverter toString was: ", object);
-			LocalDateTime value = object == null ? null : getDateTimeValue();
-			String s = (value != null) ? value.format(formatter) : "";
-			Logging.trace("DateTimePicker InternalConverter toString is: ", s);
-			return s;
-		}
-
-		public LocalDate fromString(String value) {
-			Logging.trace("DateTimePicker InternalConverter fromString: ", value);
-			if (value == null || "0".equals(value) || "".equals(value)) {
-				return null;
-			}
-			LocalDateTime currValue = getDateTimeValue();
-			try {
-				LocalDateTime currValue2 = LocalDateTime.parse(value, formatter);
-				if (currValue2.compareTo(datetimeNow()) <= 0) {
-					Logging.error("DateTime Error: Date is in the past. Set datetime to now.");
-					return datetimeNow().toLocalDate();
-				}
-				currValue = currValue2;
-			} catch (DateTimeParseException e) {
-				Logging.error(e, "DateTime InternalConverter Error. Set previous value.");
-			}
-
-			return currValue.toLocalDate();
-		}
+	public DateTimeFormatter getFormatter() {
+		Logging.debug("DateTimePicker getFormatter: ", formatter);
+		return formatter;
 	}
 }
