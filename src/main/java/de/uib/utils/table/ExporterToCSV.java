@@ -54,7 +54,7 @@ public class ExporterToCSV extends AbstractExportTable {
 
 	private void writeToCSVFile(String fileName, boolean selectedOnly) {
 		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setQuote(STRING_DELIMITER).setQuoteMode(QuoteMode.ALL)
-				.setDelimiter(CSV_SEPARATOR).build();
+				.setDelimiter(CSV_SEPARATOR).get();
 		try (BufferedWriter writer = Files.newBufferedWriter(new File(fileName).toPath(), StandardCharsets.UTF_8);
 				CSVPrinter printer = new CSVPrinter(writer, csvFormat)) {
 			writeHeader(printer);
