@@ -7,15 +7,14 @@
 package de.uib.utils.table;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import de.uib.utils.logging.Logging;
 
 public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
-	private Map<Object, Boolean> selectionInfo;
+	private Set<Object> filter;
 
 	@Override
 	public void setFilter(Set<Object> filter) {
@@ -28,38 +27,28 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 		}
 
 		if (rows == null || modelRowNoFilter == null || modelRowNoFilter.length == 0) {
-			selectionInfo = null;
+			filter = null;
 			return;
 		}
 
-		selectionInfo = new HashMap<>();
+		filter = new HashSet<>();
 
 		for (int i : modelRowNoFilter) {
-			if (i >= rows.size()) {
-				Logging.warning(this, "setFilter: impossible selection index ", i);
-			} else {
-				selectionInfo.put(rows.get(i), true);
-			}
+			filter.add(rows.get(i));
 		}
 	}
 
 	@Override
 	public boolean test(List<Object> row) {
-		if (selectionInfo == null) {
+		if (filter == null) {
 			return true;
 		}
 
-		Boolean found = selectionInfo.get(row);
-
-		if (found == null) {
-			return false;
-		}
-
-		return found;
+		return filter.contains(row);
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " ( selectionInfo == null? ) " + (selectionInfo == null);
+		return getClass().getName() + " ( filter == null? ) " + (filter == null);
 	}
 }
