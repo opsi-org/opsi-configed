@@ -256,14 +256,13 @@ public class MenuBarController {
 				&& forbiddenItemsMOTD.contains(UserFeaturesConfig.KEY_OPT_MOTD_USER);
 
 		if (ServerFacade.getOpsiServerVersionRetriever().isServerVersionAtLeast("4.3.15.2")) {
-			jMenuFrameMsgOfTheDay = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"));
+			jMenuFrameMsgOfTheDay = new JMenuItem(Configed.getResourceValue("MessageOfTheDay.title"));
 			jMenuFrameMsgOfTheDay.addActionListener((ActionEvent e) -> new MessageOfTheDayDialog());
 
 			jMenuFrameMsgOfTheDay.setEnabled(!forbiddenMOTD);
 			if (forbiddenMOTD) {
-				jMenuFrameMsgOfTheDay.setText(
-						String.format("%s %s", Configed.getResourceValue("MainFrame.jMenuFrameMessageOfTheDay"),
-								Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden")));
+				jMenuFrameMsgOfTheDay.setText(String.format("%s %s", Configed.getResourceValue("MessageOfTheDay.title"),
+						Configed.getResourceValue("MainFrame.jMenu.attribute.forbidden")));
 			}
 
 		}
