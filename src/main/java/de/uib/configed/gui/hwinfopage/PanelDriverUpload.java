@@ -137,7 +137,11 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 
 		defineChoosers();
 
-		depotProductDirectory = "depot/";
+		String webDavPath = persistenceController.getHostInfoCollections().getConfigServerWebDavPath();
+		depotProductDirectory = webDavPath != null && !webDavPath.isEmpty() ? webDavPath : "depot/";
+		if (!depotProductDirectory.endsWith("/")) {
+			depotProductDirectory += "/";
+		}
 		Logging.info(this, "depotProductDirectory ", depotProductDirectory);
 
 		jLabelTopic = new JLabel(Configed.getResourceValue("PanelDriverUpload.topic"));
@@ -517,7 +521,7 @@ public class PanelDriverUpload extends JPanel implements NameProducer {
 		serverPathChecked.setSelected(result);
 
 		if (result) {
-			JOptionPane.showMessageDialog(this, Configed.getResourceValue("PanelDriverUpload.targetDirectoryExsits"),
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("PanelDriverUpload.targetDirectoryExists"),
 					Configed.getResourceValue("info"), JOptionPane.INFORMATION_MESSAGE);
 			checkFiles();
 		}

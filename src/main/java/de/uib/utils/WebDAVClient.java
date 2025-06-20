@@ -372,8 +372,8 @@ public class WebDAVClient {
 	}
 
 	public String getBaseURL() {
-		return "https://" + persistenceController.getExecutioner().getHost() + ":"
-				+ getPortFromHost(persistenceController.getExecutioner().getHost()) + "/dav/";
+		String webdavBaseURI = persistenceController.getHostInfoCollections().getConfigServerWebDavBaseURI();
+		return webdavBaseURI + "/dav/";
 	}
 
 	public boolean exists(String location) {

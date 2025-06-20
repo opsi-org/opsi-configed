@@ -37,6 +37,7 @@ public class HostInfo {
 	public static final String CLIENT_WAN_CONFIG_KEY = "wan_vpn";
 	public static final String CLIENT_SHUTDOWN_INSTALL_KEY = "install_on_shutdown";
 	public static final String DEPOT_WORKBENCH_KEY = "workbenchLocalUrl";
+	public static final String DEPOT_WEBDAV_URL = "depotWebdavUrl";
 	public static final String CLIENT_OS_KEY = "operating_system";
 	public static final String CLIENT_OS_TYPE_KEY = "operating_system_type";
 	public static final String CLIENT_OS_ARCHITECTURE_KEY = "operating_system_architecture";

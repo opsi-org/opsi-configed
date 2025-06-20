@@ -440,6 +440,16 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code String}
 	 */
+	CONFIG_SERVER_WEBDAV_BASE_URI("config_server_webdav_base_uri"),
+
+	/**
+	 * return type {@code String}
+	 */
+	CONFIG_SERVER_WEBDAV_PATH("config_server_webdav_path"),
+
+	/**
+	 * return type {@code String}
+	 */
 	CONFIG_SERVER("config_server"),
 
 	/**
