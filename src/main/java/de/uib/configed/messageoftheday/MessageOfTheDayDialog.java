@@ -69,7 +69,7 @@ public class MessageOfTheDayDialog {
 				null, new Object[] { buttonSave, Configed.getResourceValue("buttonCancel") });
 		Utils.enableDialogResizing(optionPane);
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("ConfigedMain.MessageOfTheDay.title"));
+				Configed.getResourceValue("MessageOfTheDay.title"));
 		dialog.setModal(false);
 
 		buttonSave.addActionListener((ActionEvent event) -> {
