@@ -20,7 +20,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class ClientData {
 	private static Map<String, List<Client>> clients = new HashMap<>();
@@ -30,10 +29,13 @@ public final class ClientData {
 
 	private static String selectedDepot;
 
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
+	private static OpsiServiceNOMPersistenceController persistenceController;
 
 	private ClientData() {
+	}
+
+	public static void initData(OpsiServiceNOMPersistenceController persistenceController) {
+		ClientData.persistenceController = persistenceController;
 	}
 
 	public static List<Client> getClients() {

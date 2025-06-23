@@ -31,7 +31,6 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.licenses.LicenseUsageEntry;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.CheckedDocument;
@@ -43,16 +42,16 @@ public final class ServerActionManager {
 
 	private static ConfigedMain configedMain;
 
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
+	private static OpsiServiceNOMPersistenceController persistenceController;
 
 	// We want a private empty constructor to prevent instantiation of this class
 	private ServerActionManager() {
 	}
 
 	// We need to init the data since in the beginning they're not there yet
-	public static void initData(ConfigedMain configedMain) {
+	public static void initData(ConfigedMain configedMain, OpsiServiceNOMPersistenceController persistenceController) {
 		ServerActionManager.configedMain = configedMain;
+		ServerActionManager.persistenceController = persistenceController;
 	}
 
 	public static void createClients(List<List<Object>> clients) {

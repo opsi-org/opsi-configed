@@ -28,6 +28,7 @@ import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
+import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
@@ -139,6 +140,7 @@ public class MainFrame extends JFrame implements KeyListener {
 	private static void restartConfiged(boolean checkdirty) {
 		ConfigedMain.closeInstance(checkdirty);
 		ExtraFrameController.deleteInstances();
+		CommandFactory.destroyInstance();
 		FilterStateManager.clear();
 		new Thread() {
 			@Override

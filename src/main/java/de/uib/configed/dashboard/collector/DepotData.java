@@ -10,16 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 
 public final class DepotData {
 	private static Map<String, Map<String, Object>> depots = new HashMap<>();
 
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
+	private static OpsiServiceNOMPersistenceController persistenceController;
 
 	private DepotData() {
+	}
+
+	public static void initData(OpsiServiceNOMPersistenceController persistenceController) {
+		DepotData.persistenceController = persistenceController;
 	}
 
 	public static Map<String, Map<String, Object>> getDepots() {

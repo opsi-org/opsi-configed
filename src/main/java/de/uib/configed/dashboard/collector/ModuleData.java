@@ -11,17 +11,19 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class ModuleData {
 	private static List<String> modules = new ArrayList<>();
 	private static List<String> activeModules = new ArrayList<>();
 	private static List<String> expiredModules = new ArrayList<>();
 
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
+	private static OpsiServiceNOMPersistenceController persistenceController;
 
 	private ModuleData() {
+	}
+
+	public static void initData(OpsiServiceNOMPersistenceController persistenceController) {
+		ModuleData.persistenceController = persistenceController;
 	}
 
 	public static List<String> getModules() {
