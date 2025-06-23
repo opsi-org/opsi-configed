@@ -44,7 +44,8 @@ public class UserDataService {
 	}
 
 	public void checkMultiFactorAuthenticationPD(String user) {
-		cacheManager.setCachedData(CacheIdentifier.MFA_ENABLED, getOTPSecret(user) != null);
+		String otpSecret = getOTPSecret(user);
+		cacheManager.setCachedData(CacheIdentifier.MFA_ENABLED, (otpSecret != null && !otpSecret.isEmpty()));
 	}
 
 	private String getOTPSecret(String userId) {
