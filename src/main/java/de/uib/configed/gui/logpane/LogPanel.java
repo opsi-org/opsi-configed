@@ -41,6 +41,8 @@ public class LogPanel extends JPanel implements KeyListener {
 	public static final int MIN_LEVEL = 1;
 	private static final int MAX_LEVEL = 9;
 
+	private static final int TYPES_LIST_MAX_SHOW_COUNT = 25;
+
 	protected LogTextPane logTextPane;
 
 	private JScrollPane jScrollPane;
@@ -57,8 +59,6 @@ public class LogPanel extends JPanel implements KeyListener {
 
 	private String title;
 	private String info;
-
-	private int typesListMaxShowCount = 25;
 
 	public LogPanel(String defaultText, boolean withPopup) {
 		Logging.info(this, "initializing");
@@ -363,8 +363,8 @@ public class LogPanel extends JPanel implements KeyListener {
 			comboType.setEnabled(true);
 
 			int maxRowCount = logTextPane.getTypesList().size() + 1;
-			if (maxRowCount > typesListMaxShowCount) {
-				maxRowCount = typesListMaxShowCount;
+			if (maxRowCount > TYPES_LIST_MAX_SHOW_COUNT) {
+				maxRowCount = TYPES_LIST_MAX_SHOW_COUNT;
 			}
 
 			comboType.setMaximumRowCount(maxRowCount);
