@@ -245,7 +245,6 @@ public class WebDAVClient {
 	}
 
 	private static boolean isEncoded(String segment) {
-		boolean encoded = ENCODING_PATTERN.matcher(segment).matches();
 		return ENCODING_PATTERN.matcher(segment).matches();
 	}
 
