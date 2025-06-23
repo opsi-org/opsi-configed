@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public final class WinProductUtils {
@@ -74,6 +75,8 @@ public final class WinProductUtils {
 			webDAVClient.uploadFile((targetPath.endsWith("/") ? targetPath : (targetPath + "/")) + source.getName(),
 					new ByteArrayInputStream(fileBytes));
 		}
+		PersistenceControllerFactory.getPersistenceController().getRPCMethodExecutor()
+				.setRights("/var/lib/opsi" + targetPath);
 	}
 
 	/**

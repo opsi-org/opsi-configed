@@ -117,4 +117,13 @@ public class RPCMethodExecutor {
 
 		return errors;
 	}
+
+	public boolean setRights(String path) {
+		Logging.info(this, "setRights for path ", path);
+		String[] args = new String[] { path };
+		if (path == null) {
+			args = new String[] {};
+		}
+		return exec.doCall(new OpsiMethodCall(RPCMethodName.SET_RIGHTS, args));
+	}
 }
