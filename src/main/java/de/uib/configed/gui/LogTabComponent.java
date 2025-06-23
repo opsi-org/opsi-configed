@@ -21,12 +21,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.logpane.LogPane;
+import de.uib.configed.gui.logpane.LogPanel;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
-public class LogTabComponent extends LogPane {
+public class LogTabComponent extends LogPanel {
 	private static final String ALL_LOGFILES_SUFFIX = "all";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 

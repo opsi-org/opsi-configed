@@ -13,10 +13,10 @@ import java.nio.charset.StandardCharsets;
 import javax.swing.JOptionPane;
 
 import de.uib.configed.Configed;
-import de.uib.configed.gui.logpane.LogPane;
+import de.uib.configed.gui.logpane.LogPanel;
 import de.uib.utils.logging.Logging;
 
-public class StandaloneLogPane extends LogPane {
+public class StandaloneLogPane extends LogPanel {
 	private LogFrame logFrame;
 
 	public StandaloneLogPane(LogFrame logFrame) {
@@ -28,7 +28,7 @@ public class StandaloneLogPane extends LogPane {
 	@Override
 	public void reload() {
 		int caretPosition = getCaretPosition();
-		super.setText(reloadFile(logFrame.getFileName()));
+		super.setLogText(reloadFile(logFrame.getFileName()));
 		super.setTitle(logFrame.getFileName());
 		super.setCaretPosition(caretPosition);
 		super.removeAllHighlights();
@@ -36,7 +36,7 @@ public class StandaloneLogPane extends LogPane {
 
 	public void close() {
 		LogFrame.resetFileName();
-		super.setText(logFrame.getFileName());
+		super.setLogText(logFrame.getFileName());
 		super.setTitle(logFrame.getFileName());
 		super.removeAllHighlights();
 	}
@@ -45,7 +45,7 @@ public class StandaloneLogPane extends LogPane {
 	public void download() {
 		String fn = LogFrame.openFile(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		if (fn != null && !fn.isEmpty()) {
-			saveToFile(fn, lines);
+			saveToFile(fn, logTextPane.getLines());
 			super.setTitle(fn);
 		}
 	}
