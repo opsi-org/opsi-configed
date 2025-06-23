@@ -813,6 +813,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		wipeSensitiveString(otp);
 		otp = null;
 
+		wipeSensitiveString(sessionId);
+		sessionId = null;
+
 		otpWaiter = null;
 		useSSO = false;
 	}
