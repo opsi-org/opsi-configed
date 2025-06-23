@@ -136,12 +136,12 @@ public class WebDAVClient {
 			throw new IllegalArgumentException("Provided file is not a directory");
 		}
 
-		String remoteDirUrl = parseURL(getBaseURL() + remotePath + localDir.getName());
-		createDirectoryIfNotExists(remoteDirUrl);
+		String rawDirPath = remotePath + localDir.getName();
+		createDirectoryIfNotExists(parseURL(getBaseURL() + rawDirPath));
 
 		ExecutorService executor = Executors.newFixedThreadPool(DEFAULT_UPLOAD_THREADS);
 		try {
-			uploadRecursiveParallel(localDir, remoteDirUrl, executor);
+			uploadRecursiveParallel(localDir, getBaseURL() + rawDirPath, executor);
 		} finally {
 			executor.shutdown();
 			try {
@@ -159,14 +159,15 @@ public class WebDAVClient {
 			throws IOException {
 		for (File file : localDir.listFiles()) {
 			if (file.isDirectory()) {
-				String subDirUrl = parseURL(remoteDirUrl + "/" + file.getName());
+				String rawSubDirPath = remoteDirUrl + "/" + file.getName();
+				String subDirUrl = parseURL(rawSubDirPath);
 				createDirectoryIfNotExists(subDirUrl);
 				Logging.info(this, "Created/checked directory: ", subDirUrl);
-				uploadRecursiveParallel(file, subDirUrl, executor);
+				uploadRecursiveParallel(file, rawSubDirPath, executor);
 			} else {
 				executor.submit(() -> {
 					try (InputStream fis = new BufferedInputStream(new FileInputStream(file))) {
-						String remoteFileUrl = parseURL(remoteDirUrl + "/" + file.getName());
+						String remoteFileUrl = remoteDirUrl + "/" + file.getName();
 						Logging.info(this, "Uploading file: ", file.getAbsolutePath(), " to ", remoteFileUrl);
 						uploadFile(remoteFileUrl, fis);
 						Logging.info(this, "Successfully uploaded file: ", file.getAbsolutePath());
@@ -235,7 +236,8 @@ public class WebDAVClient {
 			return segment;
 		}
 		try {
-			return URLEncoder.encode(segment, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+			String encodedSegment = URLEncoder.encode(segment, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+			return encodedSegment;
 		} catch (UnsupportedEncodingException e) {
 			Logging.warning(this, "Unsupported encoding", e);
 		}
@@ -243,6 +245,7 @@ public class WebDAVClient {
 	}
 
 	private static boolean isEncoded(String segment) {
+		boolean encoded = ENCODING_PATTERN.matcher(segment).matches();
 		return ENCODING_PATTERN.matcher(segment).matches();
 	}
 
