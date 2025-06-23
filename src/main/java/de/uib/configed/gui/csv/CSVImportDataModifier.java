@@ -87,10 +87,10 @@ public class CSVImportDataModifier {
 
 	@SuppressWarnings({ "java:S135", "java:S1168" })
 	private List<Map<String, Object>> extractDataFromCSV(CSVFormat format, int startLine) {
-		format = format.builder().setCommentMarker('#').setHeader().build();
+		format = format.builder().setCommentMarker('#').setHeader().get();
 		List<Map<String, Object>> csvData = new ArrayList<>();
 		try (BufferedReader reader = Files.newBufferedReader(new File(csvFile).toPath(), StandardCharsets.UTF_8);
-				CSVParser parser = new CSVParser(reader, format)) {
+				CSVParser parser = CSVParser.parse(reader, format)) {
 			List<String> headerNames = parser.getHeaderNames();
 			List<String> importantHeaderNames = new ArrayList<>();
 			importantHeaderNames.add(HostInfo.HOSTNAME_KEY);

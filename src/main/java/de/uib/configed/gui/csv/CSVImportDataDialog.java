@@ -131,7 +131,7 @@ public class CSVImportDataDialog {
 		quoteOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				format = format.builder().setQuote(quoteOptions.getSelectedItem().toString().charAt(0))
-						.setQuoteMode(QuoteMode.ALL).build();
+						.setQuoteMode(QuoteMode.ALL).get();
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		});
@@ -145,7 +145,7 @@ public class CSVImportDataDialog {
 				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
 				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).build();
+					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
 					modifier.updateTable(format, startLine, thePanel);
 				}
 			});
@@ -153,7 +153,7 @@ public class CSVImportDataDialog {
 
 		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener(() -> {
 			if (!otherDelimiterInput.getText().isEmpty()) {
-				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).build();
+				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		}));
@@ -326,7 +326,7 @@ public class CSVImportDataDialog {
 		}
 
 		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
-				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().build();
+				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().get();
 		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
 		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
 		csvImportDataDialog.setDetectedOptions();
