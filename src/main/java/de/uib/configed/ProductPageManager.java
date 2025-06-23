@@ -36,7 +36,6 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.userprefs.UserPreferences;
-import javafx.util.Pair;
 
 public class ProductPageManager implements MessagebusListener {
 	// the properties for one product and all selected clients
@@ -122,7 +121,7 @@ public class ProductPageManager implements MessagebusListener {
 
 		Set<String> oldProductSelection = panelProductSettings.getProductTable().getSelectedIDs();
 
-		List<Pair<String, SortOrder>> sortKeyNames = panelProductSettings.getProductTable().getSortedNames();
+		Map<String, SortOrder> sortKeyNames = panelProductSettings.getProductTable().getSortedNames();
 		Logging.info(this, "setProductsPage: oldProductSelection ", oldProductSelection);
 		Logging.debug(this, "setProductsPage: changedProductStates ", changedProductStates);
 
