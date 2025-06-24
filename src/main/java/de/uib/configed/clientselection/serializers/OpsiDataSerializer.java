@@ -523,43 +523,13 @@ public class OpsiDataSerializer {
 
 			String[] elementPath = (String[]) data.get(KEY_ELEMENT_PATH);
 
-			if (elementName.equals(ELEMENT_NAME_SOFTWARE_NAME_ELEMENT)) {
-				element = manager.getNewSoftwareNameElement();
-			} else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
-				element = new GroupWithSubgroupsElement(
-						persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
-			} else if (elementName.equals(ELEMENT_NAME_GROUP)) {
-				// constructing a compatibility with format without GroupWithSubgroupsElement
-				if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
-					element = new GroupWithSubgroupsElement(
-							persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
-				} else {
-					element = new GroupElement(
-							persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
-				}
-			} else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
-				if (hardware == null) {
-					hardware = manager.getBackend().getHardwareList();
-				}
-				Logging.info(this, "getOperation elementPath[0] ", elementPath[0]);
-				List<AbstractSelectElement> elements = hardware.get(elementPath[0]);
-
-				for (AbstractSelectElement possibleElement : elements) {
-					Logging.info(this, "getOperation possibleElement.getClassName() ", possibleElement,
-							" compare with elementName ", elementName, " or perhaps with elementPathS ", elementPathS);
-
-					// originally, but is nonsense -------------------------------------------
-					if (possibleElement.getClassName().equals(elementName)
-							&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
-						element = possibleElement;
-						break;
-					}
-				}
-			} else {
-				element = (AbstractSelectElement) Class
-						.forName("de.uib.configed.clientselection.elements." + elementName).getDeclaredConstructor()
-						.newInstance();
-			}
+			element = switch (elementName) {
+			case ELEMENT_NAME_SOFTWARE_NAME_ELEMENT -> manager.getNewSoftwareNameElement();
+			case ELEMENT_NAME_GROUP_WITH_SUBGROUPS -> new GroupWithSubgroupsElement(
+					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+			case ELEMENT_NAME_GROUP -> getGroupElement(subelementName);
+			default -> getDefaultElement(elementName, hardware, elementPath, elementPathS);
+			};
 		}
 
 		if (element != null) {
@@ -567,6 +537,52 @@ public class OpsiDataSerializer {
 					element.getPath());
 		}
 		return element;
+	}
+
+	private AbstractSelectElement getDefaultElement(String elementName,
+			Map<String, List<AbstractSelectElement>> hardware, String[] elementPath, String elementPathS)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException,
+			InvocationTargetException {
+		if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
+			return getGeneriSelectElement(elementName, elementPath, hardware, elementPathS);
+		} else {
+			return (AbstractSelectElement) Class.forName("de.uib.configed.clientselection.elements." + elementName)
+					.getDeclaredConstructor().newInstance();
+		}
+	}
+
+	private AbstractSelectElement getGeneriSelectElement(String elementName, String[] elementPath,
+			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) {
+		Logging.info(this, "getGeneriSelectElement elementName ", elementName, " elementPathS ", elementPathS);
+		if (hardware == null) {
+			hardware = manager.getBackend().getHardwareList();
+		}
+		Logging.info(this, "getOperation elementPath[0] ", elementPath[0]);
+		List<AbstractSelectElement> elements = hardware.get(elementPath[0]);
+
+		for (AbstractSelectElement possibleElement : elements) {
+			Logging.info(this, "getOperation possibleElement.getClassName() ", possibleElement,
+					" compare with elementName ", elementName, " or perhaps with elementPathS ", elementPathS);
+
+			// originally, but is nonsense -------------------------------------------
+			if (possibleElement.getClassName().equals(elementName)
+					&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
+				return possibleElement;
+			}
+		}
+
+		return null;
+	}
+
+	private AbstractSelectElement getGroupElement(String subelementName) {
+		Logging.info(this, "getGroupElement subelementName ", subelementName);
+		if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
+			return new GroupWithSubgroupsElement(
+					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+		} else {
+			return new GroupElement(
+					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+		}
 	}
 
 	/* Create data from the operation recursively. */
