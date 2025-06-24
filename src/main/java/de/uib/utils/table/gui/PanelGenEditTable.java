@@ -130,6 +130,43 @@ public class PanelGenEditTable extends JPanel
 
 	private AbstractExportTable exportTable;
 
+	private Map<Integer, Runnable> popupCreators = Map.of(PopupMenuTrait.POPUP_SEPARATOR, () -> addPopupItem(null),
+			PopupMenuTrait.POPUP_SAVE, () -> {
+				menuItemSave = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.saveData"));
+				menuItemSave.setEnabled(false);
+				menuItemSave.addActionListener(actionEvent -> commit());
+				addPopupItem(menuItemSave);
+			}, POPUP_CANCEL, () -> {
+				menuItemCancel = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.abandonNewData"));
+				menuItemCancel.setEnabled(false);
+				menuItemCancel.addActionListener(actionEvent -> cancel());
+				addPopupItem(menuItemCancel);
+			}, PopupMenuTrait.POPUP_RELOAD, () -> addPopupItemReload(), POPUP_SORT_AGAIN, () -> {
+				JMenuItem menuItemSortAgain = new JMenuItem(
+						Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
+				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
+
+				addPopupItem(menuItemSortAgain);
+			}, POPUP_DELETE_ROW, () -> addPopupMenuDeleteRow(), PopupMenuTrait.POPUP_PRINT, () -> {
+				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
+				Icons.addIntellijIconToMenuItem(menuItemPrint, "print");
+				menuItemPrint.addActionListener(actionEvent -> print());
+
+				addPopupItem(menuItemPrint);
+			}, PopupMenuTrait.POPUP_EXPORT_CSV, () -> {
+				JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
+				addPopupItem(menuItemExportCSV);
+			}, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, () -> {
+				JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
+				addPopupItem(menuItemExportSelectedCSV);
+			}, PopupMenuTrait.POPUP_PDF, () -> {
+				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
+				Icons.addThemeIconInvertedToMenuItem(menuItemPDF, "anyType");
+				menuItemPDF.addActionListener(actionEvent -> exportTable());
+
+				addPopupItem(menuItemPDF);
+			});
+
 	private FilterKey filterKey;
 
 	public PanelGenEditTable(String title, boolean editing, int generalPopupPosition, int[] popupsWanted,
@@ -415,71 +452,13 @@ public class PanelGenEditTable extends JPanel
 		Logging.info(this, "addPopupmenuStandardpart, supplemented internalpopups ", giveMenuitemNames(internalpopups));
 
 		for (int popuptype : internalpopups) {
-			switch (popuptype) {
-			case PopupMenuTrait.POPUP_SEPARATOR:
-				addPopupItem(null);
-				break;
-
-			case PopupMenuTrait.POPUP_SAVE:
-				menuItemSave = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.saveData"));
-				menuItemSave.setEnabled(false);
-				menuItemSave.addActionListener(actionEvent -> commit());
-				addPopupItem(menuItemSave);
-				break;
-
-			case POPUP_CANCEL:
-				menuItemCancel = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.abandonNewData"));
-				menuItemCancel.setEnabled(false);
-				menuItemCancel.addActionListener(actionEvent -> cancel());
-				addPopupItem(menuItemCancel);
-				break;
-
-			case PopupMenuTrait.POPUP_RELOAD:
-				addPopupItemReload();
-				break;
-
-			case POPUP_SORT_AGAIN:
-				JMenuItem menuItemSortAgain = new JMenuItem(
-						Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
-				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
-
-				addPopupItem(menuItemSortAgain);
-				break;
-
-			case POPUP_DELETE_ROW:
-				addPopupMenuDeleteRow();
-				break;
-
-			case PopupMenuTrait.POPUP_PRINT:
-				JMenuItem menuItemPrint = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.print"));
-				Icons.addIntellijIconToMenuItem(menuItemPrint, "print");
-				menuItemPrint.addActionListener(actionEvent -> print());
-
-				addPopupItem(menuItemPrint);
-				break;
-
-			case PopupMenuTrait.POPUP_EXPORT_CSV:
-				JMenuItem menuItemExportCSV = exportTable.getMenuItemExport();
-				addPopupItem(menuItemExportCSV);
-				break;
-
-			case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV:
-				JMenuItem menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
-				addPopupItem(menuItemExportSelectedCSV);
-				break;
-
-			case PopupMenuTrait.POPUP_PDF:
-				JMenuItem menuItemPDF = new JMenuItem(Configed.getResourceValue("FGeneralDialog.pdf"));
-				Icons.addThemeIconInvertedToMenuItem(menuItemPDF, "anyType");
-				menuItemPDF.addActionListener(actionEvent -> exportTable());
-
-				addPopupItem(menuItemPDF);
-				break;
-
-			default:
-				Logging.warning(this, "no case found for popuptype in addPopupmenuStandardpart");
-				break;
+			Runnable popupCreator = popupCreators.get(popuptype);
+			if (popupCreator == null) {
+				Logging.warning(this, "no popup factory found for popuptype ", popuptype);
+				continue;
 			}
+
+			popupCreator.run();
 		}
 	}
 
