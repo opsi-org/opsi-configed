@@ -199,17 +199,15 @@ public class OpsiDataSerializer {
 	}
 
 	private static String objectToString(Object object) {
-		if (object == null) {
-			return "null";
-		} else if (object instanceof String || object instanceof Integer || object instanceof Long) {
-			return "\"" + object + "\"";
-		} else if (object instanceof SelectData.DataType) {
-			return object.toString();
-		} else if (object instanceof String[] stringArrayObject) {
-			return stringArrayToString(stringArrayObject);
-		} else {
-			throw new IllegalArgumentException("Unknown type");
-		}
+		return switch (object) {
+		case null -> "null";
+		case String s -> "\"" + s + "\"";
+		case Integer i -> "\"" + i + "\"";
+		case Long l -> "\"" + l + "\"";
+		case SelectData.DataType dataType -> dataType.toString();
+		case String[] array -> stringArrayToString(array);
+		default -> throw new IllegalArgumentException("Unknown type: " + object.getClass());
+		};
 	}
 
 	private static String stringArrayToString(String[] data) {
