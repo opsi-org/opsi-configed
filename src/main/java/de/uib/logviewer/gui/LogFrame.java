@@ -9,7 +9,6 @@ package de.uib.logviewer.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -175,15 +174,16 @@ public class LogFrame extends JFrame {
 		return jToolBar;
 	}
 
-	private void guiInit() {
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				WindowsPositionManager.saveWindowProperties(LogFrame.this, WindowsPositionManager.LOGVIEWER);
-				Main.endApp(Main.NO_ERROR);
-			}
-		});
+	@Override
+	public void processWindowEvent(WindowEvent e) {
+		super.processWindowEvent(e);
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+			WindowsPositionManager.saveWindowProperties(LogFrame.this, WindowsPositionManager.LOGVIEWER);
+			Main.endApp(Main.NO_ERROR);
+		}
+	}
 
+	private void guiInit() {
 		this.setIconImage(Icons.getMainIcon());
 
 		JToolBar jToolBar = createIconsToolbar();

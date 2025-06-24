@@ -8,7 +8,6 @@ package de.uib.configed.gui;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -70,16 +69,18 @@ public class MainFrame extends JFrame implements KeyListener {
 		guiInit(depotsList, clientTree, productTree);
 	}
 
-	private void guiInit(DepotsList depotsList, ClientTree clientTree, ProductTree productTree) {
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent event) {
-				WindowsPositionManager.saveWindowProperties(ConfigedMain.getMainFrame(),
-						WindowsPositionManager.MAIN_WINDOW);
-				ConfigedMain.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
-			}
-		});
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
+		super.processWindowEvent(e);
 
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+			WindowsPositionManager.saveWindowProperties(ConfigedMain.getMainFrame(),
+					WindowsPositionManager.MAIN_WINDOW);
+			ConfigedMain.finishApp(!persistenceController.getUserRolesConfigDataService().isGlobalReadOnly(), 0);
+		}
+	}
+
+	private void guiInit(DepotsList depotsList, ClientTree clientTree, ProductTree productTree) {
 		this.setIconImage(Icons.getMainIcon());
 
 		leftControlBar = new LeftControlBar();
