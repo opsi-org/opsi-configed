@@ -7,6 +7,7 @@
 package de.uib.configed.clientselection.serializers;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -456,6 +457,63 @@ public class OpsiDataSerializer {
 			Logging.info(this, "getOperation, elementPath in data ", elementPathS);
 		}
 		// Element
+		AbstractSelectElement element = getSelectElement(data, hardware, elementPathS);
+
+		// Children
+		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
+		List<AbstractSelectOperation> children = new LinkedList<>();
+		if (childrenData != null) {
+			for (Map<String, Object> child : childrenData) {
+				children.add(getOperation(child, hardware));
+			}
+		}
+
+		// Operation
+		String operationName = (String) data.get(KEY_OPERATION);
+		Logging.info(this, "getOperation Operation name: ", operationName);
+		AbstractSelectOperation operation;
+
+		if (getSearchDataVersion() == 1) {
+			operation = parseOperationVersion1(operationName, element, children);
+		} else {
+			Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
+			Logging.info(this, "getOperation operationClass  ", operationClass.toString());
+			if (element != null) {
+				Logging.info(this, "getOperation element != null, element  ", element);
+				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
+			} else if (children.size() == 1) {
+				Class<?> list = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
+				Logging.info(this, "getOperation List name: ", list);
+				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children.get(0));
+			} else {
+				Class<?> list = Class.forName("java.util.List");
+				Logging.info(this, "getOperation List name: ", list);
+				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
+			}
+		}
+
+		Logging.info(this, "getOperation  ", operation);
+
+		// Data
+		SelectData.DataType dataType = (SelectData.DataType) data.get(KEY_DATA_TYPE);
+		Logging.info(this, "getOperation dataType ", dataType);
+		Object realData = data.get("data");
+		Logging.info(this, "getOperation realData ", realData);
+		SelectData selectData;
+		if (dataType == null) {
+			selectData = null;
+		} else {
+			selectData = new SelectData(realData, dataType);
+		}
+
+		operation.setSelectData(selectData);
+
+		return operation;
+	}
+
+	private AbstractSelectElement getSelectElement(Map<String, Object> data,
+			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		AbstractSelectElement element = null;
 		String elementName = (String) data.get(KEY_ELEMENT_NAME);
 		Logging.info(this, "Element name: ", elementName);
@@ -508,57 +566,7 @@ public class OpsiDataSerializer {
 			Logging.info(this, "getOperation element ", element, " class ", element.getClass(), " path ",
 					element.getPath());
 		}
-
-		// Children
-		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
-		List<AbstractSelectOperation> children = new LinkedList<>();
-		if (childrenData != null) {
-			for (Map<String, Object> child : childrenData) {
-				children.add(getOperation(child, hardware));
-			}
-		}
-
-		// Operation
-		String operationName = (String) data.get(KEY_OPERATION);
-		Logging.info(this, "getOperation Operation name: ", operationName);
-		AbstractSelectOperation operation;
-
-		if (getSearchDataVersion() == 1) {
-			operation = parseOperationVersion1(operationName, element, children);
-		} else {
-			Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
-			Logging.info(this, "getOperation operationClass  ", operationClass.toString());
-			if (element != null) {
-				Logging.info(this, "getOperation element != null, element  ", element);
-				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
-			} else if (children.size() == 1) {
-				Class<?> list = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
-				Logging.info(this, "getOperation List name: ", list);
-				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children.get(0));
-			} else {
-				Class<?> list = Class.forName("java.util.List");
-				Logging.info(this, "getOperation List name: ", list);
-				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
-			}
-		}
-
-		Logging.info(this, "getOperation  ", operation);
-
-		// Data
-		SelectData.DataType dataType = (SelectData.DataType) data.get(KEY_DATA_TYPE);
-		Logging.info(this, "getOperation dataType ", dataType);
-		Object realData = data.get("data");
-		Logging.info(this, "getOperation realData ", realData);
-		SelectData selectData;
-		if (dataType == null || data == null) {
-			selectData = null;
-		} else {
-			selectData = new SelectData(realData, dataType);
-		}
-
-		operation.setSelectData(selectData);
-
-		return operation;
+		return element;
 	}
 
 	/* Create data from the operation recursively. */
