@@ -67,7 +67,11 @@ public class CompleteWinProductsDialog implements NameProducer {
 		defineChoosers();
 		initComponentsForNameProducer();
 
-		depotProductDirectory = "depot/";
+		String webDavPath = persistenceController.getHostInfoCollections().getConfigServerWebDavPath();
+		depotProductDirectory = webDavPath != null && !webDavPath.isEmpty() ? webDavPath : "depot/";
+		if (!depotProductDirectory.endsWith("/")) {
+			depotProductDirectory += "/";
+		}
 
 		webDAVClient = new WebDAVClient();
 
