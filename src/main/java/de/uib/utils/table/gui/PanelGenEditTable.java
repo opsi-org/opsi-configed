@@ -904,16 +904,16 @@ public class PanelGenEditTable extends JPanel
 		return true;
 	}
 
-	public boolean moveToKeyValue(String keyValue) {
+	public void moveToKeyValue(String keyValue) {
 		if (keyValue == null) {
-			return false;
+			return;
 		}
 
-		boolean found = false;
-
 		if (tableModel.getKeyCol() > -1) {
-			found = moveToValue(keyValue, tableModel.getKeyCol());
+			moveToValue(keyValue, tableModel.getKeyCol());
 		} else {
+			boolean found = false;
+
 			// try to use pseudokey
 			int viewrow = 0;
 
@@ -938,11 +938,9 @@ public class PanelGenEditTable extends JPanel
 				setSelectedRow(viewrow);
 			} else {
 				// try value for col 0 as target for search
-				found = moveToValue(keyValue, 0);
+				moveToValue(keyValue, 0);
 			}
 		}
-
-		return found;
 	}
 
 	public void moveToRow(int n) {
