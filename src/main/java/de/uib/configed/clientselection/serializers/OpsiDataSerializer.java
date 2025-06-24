@@ -616,31 +616,16 @@ public class OpsiDataSerializer {
 			}
 			throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
 		}
-		if ("Hardware".equals(name)) {
-			return new HardwareOperation(children.get(0));
-		}
 
-		if ("Software".equals(name)) {
-			return new SoftwareOperation(children.get(0));
-		}
-
-		if ("SwAudit".equals(name)) {
-			return new SwAuditOperation(children.get(0));
-		}
-
-		if ("and".equals(name)) {
-			return new AndOperation(children);
-		}
-
-		if ("or".equals(name)) {
-			return new OrOperation(children);
-		}
-
-		if ("not".equals(name)) {
-			return new NotOperation(children.get(0));
-		}
-
-		throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
+		return switch (name) {
+		case "Hardware" -> new HardwareOperation(children.get(0));
+		case "Software" -> new SoftwareOperation(children.get(0));
+		case "SwAudit" -> new SwAuditOperation(children.get(0));
+		case "and" -> new AndOperation(children);
+		case "or" -> new OrOperation(children);
+		case "not" -> new NotOperation(children.get(0));
+		default -> throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
+		};
 	}
 
 	/*
