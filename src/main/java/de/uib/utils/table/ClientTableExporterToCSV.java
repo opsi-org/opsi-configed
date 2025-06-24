@@ -65,23 +65,22 @@ public class ClientTableExporterToCSV extends ExporterToCSV {
 	private String getRowValue(String columnName, HostInfo clientInfo) {
 		String clientName = clientInfo.getName();
 
-		if ("id".equals(columnName)) {
-			return clientName.substring(0, clientName.indexOf("."));
-		} else if ("domain".equals(columnName)) {
-			return clientName.substring(clientName.indexOf(".") + 1, clientName.length());
-		} else if ("groups".equals(columnName)) {
-			Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
+		return switch (columnName) {
+		case "id" -> clientName.substring(0, clientName.indexOf("."));
+		case "domain" -> clientName.substring(clientName.indexOf(".") + 1);
+		case "groups" -> getGroupsValue(clientName);
+		default -> clientInfo.getMap().get(columnName).toString();
+		};
+	}
 
-			// We need to add an empty set if there are no groups
-			if (fObject2Groups.containsKey(clientName)) {
-				return String.join(",", fObject2Groups.get(clientName));
-			} else {
-				return "";
-			}
-		} else if (clientInfo.getMap().get(columnName) instanceof Boolean b) {
-			return Boolean.toString(b);
+	private String getGroupsValue(String clientName) {
+		Map<String, Set<String>> fObject2Groups = persistenceController.getGroupDataService().getFObject2GroupsPD();
+
+		// We need to add an empty set if there are no groups
+		if (fObject2Groups.containsKey(clientName)) {
+			return String.join(",", fObject2Groups.get(clientName));
 		} else {
-			return (String) clientInfo.getMap().get(columnName);
+			return "";
 		}
 	}
 
