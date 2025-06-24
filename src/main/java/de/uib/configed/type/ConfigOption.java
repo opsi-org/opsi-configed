@@ -38,6 +38,7 @@ public class ConfigOption extends RetrievedMap {
 
 	public ConfigOption(Map<String, Object> object) {
 		super(object);
+		buildConfigOption();
 	}
 
 	public ConfigOption() {
@@ -71,9 +72,7 @@ public class ConfigOption extends RetrievedMap {
 		return createConfigOption(description, type, editable, multiValue, defaultValues, possibleValues);
 	}
 
-	@Override
-	protected void build() {
-		super.build();
+	private void buildConfigOption() {
 		// overwrite values
 		if (retrieved == null || retrieved.get("possibleValues") == null) {
 			put("possibleValues", new ArrayList<>());

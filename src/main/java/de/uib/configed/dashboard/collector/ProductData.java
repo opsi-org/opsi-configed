@@ -43,7 +43,7 @@ public final class ProductData {
 
 	public static void initData(OpsiServiceNOMPersistenceController persistenceController) {
 		ProductData.persistenceController = persistenceController;
-		depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());;
+		depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 	}
 
 	public static List<String> getProducts() {
