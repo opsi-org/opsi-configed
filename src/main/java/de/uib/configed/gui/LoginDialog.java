@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -81,6 +80,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	public LoginDialog() {
 		super();
 
+		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		initGuiElements();
 		setupLayout();
 		setServers();
@@ -409,14 +409,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 	private static void endProgram() {
 		ConfigedMain.finishApp(false, 0);
-	}
-
-	@Override
-	protected void processWindowEvent(WindowEvent e) {
-		super.processWindowEvent(e);
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			endProgram();
-		}
 	}
 
 	@Override
