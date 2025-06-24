@@ -39,26 +39,28 @@ public class MapItemsUpdateController implements UpdateController {
 
 		Iterator<MapBasedTableEditItem> iter = updateCollection.iterator();
 
-		String lastKeyValue = "";
+		String lastKeyValue = null;
 
 		while (iter.hasNext() && success) {
 			MapBasedTableEditItem updateItem = iter.next();
 
 			Logging.debug(this, " handling updateItem ", updateItem);
 
-			if (updateItem.getSource() == this.tablemodel) {
-				if (updateItem.keyChanged()) {
-					String result = updater.sendUpdate(updateItem.getRowAsMap());
+			if (updateItem.getSource() != this.tablemodel) {
+				continue;
+			}
 
-					success = result != null;
-					if (success) {
-						successfullInsertsWithNewKeys.add(updateItem);
+			if (updateItem.keyChanged()) {
+				String result = updater.sendUpdate(updateItem.getRowAsMap());
 
-						lastKeyValue = result;
-					}
-				} else {
-					success = updater.sendDelete(updateItem.getRowAsMap());
+				success = result != null;
+				if (success) {
+					successfullInsertsWithNewKeys.add(updateItem);
+
+					lastKeyValue = result;
 				}
+			} else {
+				success = updater.sendDelete(updateItem.getRowAsMap());
 			}
 		}
 
