@@ -218,7 +218,7 @@ public class ConfigedMain {
 		dependenciesModel = new DependenciesModel();
 		// Init data for these manager classes so they can work
 		ChangedDataManager.initData(this, hostInfo);
-		ServerActionManager.initData(this);
+		ServerActionManager.initData(this, persistenceController);
 		Messagebus.initMessagebus(this);
 
 		clientSearch = new ClientSearch();

@@ -14,7 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 /**
@@ -28,8 +27,6 @@ public final class HealthInfo {
 	public static final String OK = "ok";
 
 	private static final List<String> statusLevels = Arrays.asList(OK, WARNING, ERROR);
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
 
 	private HealthInfo() {
 	}
@@ -41,7 +38,8 @@ public final class HealthInfo {
 	 * @return processed data with or without detailed information
 	 */
 	public static String getHealthData() {
-		List<Map<String, Object>> healthData = persistenceController.getHealthDataService().checkHealthPD();
+		List<Map<String, Object>> healthData = PersistenceControllerFactory.getPersistenceController()
+				.getHealthDataService().checkHealthPD();
 		StringBuilder healthDataBuilder = new StringBuilder();
 
 		sortHealthDataBasedOnStatusLevel(healthData);
@@ -70,7 +68,8 @@ public final class HealthInfo {
 
 	private static Map<String, Map<String, Object>> produceMap(boolean includeDetailedInformation) {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
-		List<Map<String, Object>> healthData = persistenceController.getHealthDataService().checkHealthPD();
+		List<Map<String, Object>> healthData = PersistenceControllerFactory.getPersistenceController()
+				.getHealthDataService().checkHealthPD();
 
 		sortHealthDataBasedOnStatusLevel(healthData);
 
@@ -97,8 +96,8 @@ public final class HealthInfo {
 	}
 
 	private static String produceHealthDetails(Map<String, Object> healthData) {
-		List<Map<String, Object>> healthDetails = persistenceController.getHealthDataService()
-				.retrieveHealthDetails((String) ((Map<?, ?>) healthData.get("check")).get("id"));
+		List<Map<String, Object>> healthDetails = PersistenceControllerFactory.getPersistenceController()
+				.getHealthDataService().retrieveHealthDetails((String) ((Map<?, ?>) healthData.get("check")).get("id"));
 
 		sortHealthDataBasedOnStatusLevel(healthDetails);
 
@@ -130,7 +129,8 @@ public final class HealthInfo {
 	public static String getMaxWarningLevel() {
 		int warningLevel = 0;
 
-		List<Map<String, Object>> healthData = persistenceController.getHealthDataService().checkHealthPD();
+		List<Map<String, Object>> healthData = PersistenceControllerFactory.getPersistenceController()
+				.getHealthDataService().checkHealthPD();
 
 		for (Map<String, Object> data : healthData) {
 			warningLevel = Math.max(warningLevel, statusLevels.indexOf(data.get("check_status")));
