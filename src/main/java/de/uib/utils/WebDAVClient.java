@@ -236,8 +236,7 @@ public class WebDAVClient {
 			return segment;
 		}
 		try {
-			String encodedSegment = URLEncoder.encode(segment, StandardCharsets.UTF_8.toString()).replace("+", "%20");
-			return encodedSegment;
+			return URLEncoder.encode(segment, StandardCharsets.UTF_8.toString()).replace("+", "%20");
 		} catch (UnsupportedEncodingException e) {
 			Logging.warning(this, "Unsupported encoding", e);
 		}
