@@ -164,15 +164,10 @@ public class ModuleDataService {
 		return cacheManager.getCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, Map.class);
 	}
 
-	private void produceOpsiModulesInfoClassicOpsi43PD() {
+	private Map<String, Object> createOpsiModulesInformation(Map<String, Boolean> opsiModules,
+			Map<String, ModulePermissionValue> opsiModulesPermissions) {
 		// keeps the info for displaying to the user
 		Map<String, Object> opsiModulesDisplayInfo = new HashMap<>();
-
-		Map<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
-		// has the actual signal if a module is active
-		Map<String, Boolean> opsiModules = new HashMap<>();
-
-		final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
 		Map<String, Object> opsiInformation = produceOpsiInformationPD();
 		// prepare the user info
@@ -186,12 +181,6 @@ public class ModuleDataService {
 
 		opsiCountModules.keySet().removeAll(POJOReMapper.remap(opsiInformation.get("obsolete_modules")));
 		hostInfoCollections.retrieveOpsiHostsPD();
-
-		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
-
-		int countClients = hostInfoCollections.getCountClients();
-
-		LocalDateTime today = LocalDateTime.now();
 
 		Logging.info(this, "opsiModulesInfo ", opsiModulesInfo);
 
@@ -238,6 +227,13 @@ public class ModuleDataService {
 		}
 
 		cacheManager.setCachedData(CacheIdentifier.OPSI_MODULES_DISPLAY_INFO, opsiModulesDisplayInfo);
+
+		return opsiCountModules;
+	}
+
+	private void produceModulesData(Map<String, Boolean> opsiModules, Map<String, Object> opsiCountModules,
+			Map<String, ModulePermissionValue> opsiModulesPermissions) {
+		ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
 
 		Logging.info(this, "modules resulting step 1 ", opsiModules);
 		Logging.info(this, "countModules is  ", opsiCountModules);
@@ -294,7 +290,7 @@ public class ModuleDataService {
 					} else if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
 						LocalDateTime expiresDate = expiresForThisModule.getDate();
 
-						if (today.isAfter(expiresDate)) {
+						if (LocalDateTime.now().isAfter(expiresDate)) {
 							opsiModules.put(key, false);
 						}
 					} else {
@@ -303,9 +299,12 @@ public class ModuleDataService {
 				}
 			}
 		}
+	}
 
-		Logging.info(this, "modules resulting step 2  ", opsiModules);
-		Logging.info(this, "count Modules is  ", opsiCountModules);
+	private List<String> produceMissingModulesPermissionInfo(Map<String, Boolean> opsiModules,
+			Map<String, ModulePermissionValue> opsiModulesPermissions) {
+		int countClients = hostInfoCollections.getCountClients();
+		final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
 		for (String key : MODULE_CHECKED) {
 			int countClientsInThisBlock = countClients;
@@ -344,7 +343,7 @@ public class ModuleDataService {
 					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
 					missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
 
-					if (today.isAfter(noticeDate)) {
+					if (LocalDateTime.now().isAfter(noticeDate)) {
 						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
 					}
 				}
@@ -382,6 +381,24 @@ public class ModuleDataService {
 				}
 			}
 		}
+
+		return missingModulesPermissionInfo;
+	}
+
+	private void produceOpsiModulesInfoClassicOpsi43PD() {
+		// has the actual signal if a module is active
+		Map<String, Boolean> opsiModules = new HashMap<>();
+		Map<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
+
+		Map<String, Object> opsiCountModules = createOpsiModulesInformation(opsiModules, opsiModulesPermissions);
+
+		Logging.info(this, "modules resulting step 2  ", opsiModules);
+		Logging.info(this, "count Modules is  ", opsiCountModules);
+
+		produceModulesData(opsiModules, opsiCountModules, opsiModulesPermissions);
+
+		List<String> missingModulesPermissionInfo = produceMissingModulesPermissionInfo(opsiModules,
+				opsiModulesPermissions);
 
 		Logging.info(this, "modules resulting  ", opsiModules);
 		Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos ", missingModulesPermissionInfo);
