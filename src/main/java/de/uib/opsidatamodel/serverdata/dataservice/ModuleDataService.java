@@ -260,45 +260,51 @@ public class ModuleDataService {
 				if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
 					opsiModules.put(key, false);
 				} else {
-					Integer warningLimit = null;
-					Integer stopLimit = null;
-
-					Logging.info(this, " retrieveOpsiModules ", key, " up to now globalMaxClients ", globalMaxClients);
-
-					Logging.info(this, " retrieveOpsiModules ", key, " maxClientsForThisModule.getNumber ",
-							maxClientsForThisModule.getNumber());
-
-					globalMaxClients = calculateModulePermission(globalMaxClients, maxClientsForThisModule.getNumber());
-
-					Logging.info(this, " retrieveOpsiModules ", key, " result:  globalMaxClients is ",
-							globalMaxClients);
-
-					Integer newGlobalLimit = globalMaxClients.getNumber();
-
-					// global limit is changed by this module a real warning
-					// and error limit exists
-					if (newGlobalLimit != null) {
-						warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
-						stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
-					}
-
-					Logging.info(this, " retrieveOpsiModules ", key, " old  warningLimit ", warningLimit, " stopLimit ",
-							stopLimit);
-
-					if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
-						opsiModules.put(key, false);
-					} else if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-						LocalDateTime expiresDate = expiresForThisModule.getDate();
-
-						if (LocalDateTime.now().isAfter(expiresDate)) {
-							opsiModules.put(key, false);
-						}
-					} else {
-						// Do nothing since nothing expired
-					}
+					globalMaxClients = treatModuleLicense(globalMaxClients, opsiModules, key, maxClientsForThisModule,
+							expiresForThisModule);
 				}
 			}
 		}
+	}
+
+	private ExtendedInteger treatModuleLicense(ExtendedInteger globalMaxClients, Map<String, Boolean> opsiModules,
+			String key, ExtendedInteger maxClientsForThisModule, ExtendedDate expiresForThisModule) {
+		Integer warningLimit = null;
+		Integer stopLimit = null;
+
+		Logging.info(this, " retrieveOpsiModules ", key, " up to now globalMaxClients ", globalMaxClients);
+
+		Logging.info(this, " retrieveOpsiModules ", key, " maxClientsForThisModule.getNumber ",
+				maxClientsForThisModule.getNumber());
+
+		globalMaxClients = calculateModulePermission(globalMaxClients, maxClientsForThisModule.getNumber());
+
+		Logging.info(this, " retrieveOpsiModules ", key, " result:  globalMaxClients is ", globalMaxClients);
+
+		Integer newGlobalLimit = globalMaxClients.getNumber();
+
+		// global limit is changed by this module a real warning
+		// and error limit exists
+		if (newGlobalLimit != null) {
+			warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
+			stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
+		}
+
+		Logging.info(this, " retrieveOpsiModules ", key, " old  warningLimit ", warningLimit, " stopLimit ", stopLimit);
+
+		if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
+			opsiModules.put(key, false);
+		} else if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+			LocalDateTime expiresDate = expiresForThisModule.getDate();
+
+			if (LocalDateTime.now().isAfter(expiresDate)) {
+				opsiModules.put(key, false);
+			}
+		} else {
+			// Do nothing since nothing expired
+		}
+
+		return globalMaxClients;
 	}
 
 	private List<String> produceMissingModulesPermissionInfo(Map<String, Boolean> opsiModules,
