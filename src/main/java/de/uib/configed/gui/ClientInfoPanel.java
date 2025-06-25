@@ -184,8 +184,9 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 				.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.title"));
 		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
-		openHealthCheckSettingsDialogButton.addActionListener(
-				e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain.getSelectedClients()));
+		openHealthCheckSettingsDialogButton
+				.addActionListener(e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain,
+						configedMain.getSelectedClients(), checkBoxHealthCheckActive.getState()));
 
 		checkBoxInstallByShutdown = new FlatTriStateCheckBox(
 				Configed.getResourceValue("NewClientDialog.installByShutdown"));
