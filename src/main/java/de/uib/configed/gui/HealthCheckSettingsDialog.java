@@ -62,11 +62,14 @@ public final class HealthCheckSettingsDialog {
 
 	private JDialog dialog;
 
-	public void showHealthCheckSettings() {
-		showHealthCheckSettings(new ArrayList<>(), FlatTriStateCheckBox.State.SELECTED);
+	private ConfigedMain configedMain;
+
+	public void showHealthCheckSettings(ConfigedMain configedMain) {
+		showHealthCheckSettings(configedMain, new ArrayList<>(), FlatTriStateCheckBox.State.SELECTED);
 	}
 
-	public void showHealthCheckSettings(List<String> defaultSelection, State state) {
+	public void showHealthCheckSettings(ConfigedMain configedMain, List<String> defaultSelection, State state) {
+		this.configedMain = configedMain;
 		Logging.info(this, "show health check settings dialog");
 
 		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel(defaultSelection, state));
@@ -180,6 +183,7 @@ public final class HealthCheckSettingsDialog {
 		saveButton.addActionListener((ActionEvent actionEvent) -> {
 			Logging.info(this, "User clicked save button");
 			save();
+			configedMain.reloadHosts();
 			dialog.setVisible(false);
 		});
 

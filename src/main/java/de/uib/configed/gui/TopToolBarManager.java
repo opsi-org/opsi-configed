@@ -91,8 +91,8 @@ public class TopToolBarManager {
 
 		JButton healthCheckSettingsButton = new JButton(Icons.getIntellijIcon("settings", 24));
 		healthCheckSettingsButton.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.tooltip"));
-		healthCheckSettingsButton
-				.addActionListener(actionEvent -> new HealthCheckSettingsDialog().showHealthCheckSettings());
+		healthCheckSettingsButton.addActionListener(
+				actionEvent -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain));
 
 		return Arrays.asList(downloadButton, healthCheckSettingsButton);
 	}
