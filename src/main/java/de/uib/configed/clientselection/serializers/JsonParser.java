@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.function.BooleanSupplier;
 
 import de.uib.utils.logging.Logging;
 
@@ -25,6 +27,12 @@ class JsonParser {
 	private boolean inList;
 	private Deque<PositionType> stack;
 
+	// This map contains the characters that can be encountered in the JSON-like
+	// syntax and the corresponding actions to be taken when they are encountered.
+	private Map<Character, BooleanSupplier> characterMap = Map.of(' ', () -> false, ':', this::handleColon, ',',
+			this::handleComma, '{', this::handleOpenCurlyBrace, '}', this::handleCloseCurlyBrace, '[',
+			this::handleOpenSquareBracket, ']', this::handleCloseSquareBracket);
+
 	public enum PositionType {
 		OBJECT_BEGIN, OBJECT_END, LIST_BEGIN, LIST_END, JSON_NAME, JSON_VALUE
 	}
@@ -38,42 +46,93 @@ class JsonParser {
 		int i;
 
 		while ((i = reader.read()) != -1) {
+			Logging.devel("", (char) i);
 			Logging.debug(this, (char) i, " ", currentPosition);
 			managePosition();
 			char c = (char) i;
-			if (Character.isWhitespace(c)) {
-				// Do nothing for whitespaces
-			} else if (c == ':' && currentPosition == PositionType.JSON_NAME) {
-				currentPosition = PositionType.JSON_VALUE;
-			} else if (c == ',' && currentPosition == PositionType.JSON_VALUE) {
-				if (!inList) {
-					currentPosition = PositionType.JSON_NAME;
+
+			if (characterMap.containsKey(c)) {
+				if (characterMap.get(c).getAsBoolean()) {
+					return true;
 				}
-			} else if (c == '{' && currentPosition == PositionType.JSON_VALUE) {
-				currentPosition = PositionType.OBJECT_BEGIN;
-				inList = false;
-				return true;
-			} else if (c == '}' && currentPosition == PositionType.JSON_VALUE) {
-				currentPosition = PositionType.OBJECT_END;
-				return true;
-			} else if (c == '[' && currentPosition == PositionType.JSON_VALUE) {
-				currentPosition = PositionType.LIST_BEGIN;
-				inList = true;
-				return true;
-			} else if (c == ']' && currentPosition == PositionType.JSON_VALUE) {
-				currentPosition = PositionType.LIST_END;
-				inList = false;
-				return true;
-			} else if ((c == '"' || Character.isLetter(c))
-					&& (currentPosition == PositionType.JSON_VALUE || currentPosition == PositionType.JSON_NAME)) {
-				currentValue = getNextValue(c);
-				return true;
+			} else if (c == '"' || Character.isLetter(c)) {
+				if (handleStringCharacter(c)) {
+					return true;
+				}
 			} else {
 				throw new IllegalArgumentException("Unexpected character: " + c);
 			}
 		}
 
 		return false;
+	}
+
+	private boolean handleColon() {
+		if (currentPosition == PositionType.JSON_NAME) {
+			currentPosition = PositionType.JSON_VALUE;
+			return false;
+		} else {
+			throw new IllegalArgumentException("Unexpected colon in position: " + currentPosition);
+		}
+	}
+
+	private boolean handleComma() {
+		if (currentPosition == PositionType.JSON_VALUE) {
+			if (!inList) {
+				currentPosition = PositionType.JSON_NAME;
+			}
+			return false;
+		} else {
+			throw new IllegalArgumentException("Unexpected comma in position: " + currentPosition);
+		}
+	}
+
+	private boolean handleOpenCurlyBrace() {
+		if (currentPosition == PositionType.JSON_VALUE) {
+			currentPosition = PositionType.OBJECT_BEGIN;
+			inList = false;
+			return true;
+		} else {
+			throw new IllegalArgumentException("Unexpected open curly brace in position: " + currentPosition);
+		}
+	}
+
+	public boolean handleCloseCurlyBrace() {
+		if (currentPosition == PositionType.JSON_VALUE) {
+			currentPosition = PositionType.OBJECT_END;
+			return true;
+		} else {
+			throw new IllegalArgumentException("Unexpected close curly brace in position: " + currentPosition);
+		}
+	}
+
+	public boolean handleOpenSquareBracket() {
+		if (currentPosition == PositionType.JSON_VALUE) {
+			currentPosition = PositionType.LIST_BEGIN;
+			inList = true;
+			return true;
+		} else {
+			throw new IllegalArgumentException("Unexpected open square bracket in position: " + currentPosition);
+		}
+	}
+
+	public boolean handleCloseSquareBracket() {
+		if (currentPosition == PositionType.JSON_VALUE) {
+			currentPosition = PositionType.LIST_END;
+			inList = false;
+			return true;
+		} else {
+			throw new IllegalArgumentException("Unexpected close square bracket in position: " + currentPosition);
+		}
+	}
+
+	public boolean handleStringCharacter(char c) throws IOException {
+		if (currentPosition == PositionType.JSON_VALUE || currentPosition == PositionType.JSON_NAME) {
+			currentValue = getNextValue(c);
+			return true;
+		} else {
+			throw new IllegalArgumentException("Unexpected quotation mark in position: " + currentPosition);
+		}
 	}
 
 	public PositionType getPositionType() {
