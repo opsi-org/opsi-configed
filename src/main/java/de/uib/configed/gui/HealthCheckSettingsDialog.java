@@ -7,7 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Font;
-import java.awt.event.ItemEvent;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GroupLayout;
-import javax.swing.JCheckBox;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -50,32 +52,31 @@ public final class HealthCheckSettingsDialog {
 	private ListSelectionDialog selectedHostList;
 	private JTextField startDowntimeField;
 	private JTextField endDowntimeField;
-	private JCheckBox checkBoxCheckActive;
+	private FlatTriStateCheckBox checkBoxCheckActive;
 	private JTextField selectedHosts;
+
+	private JLabel labelStartDowntime;
+	private JLabel labelEndDowntime;
+
+	private JButton saveButton;
 
 	private JDialog dialog;
 
 	public void showHealthCheckSettings() {
-		showHealthCheckSettings(new ArrayList<>());
+		showHealthCheckSettings(new ArrayList<>(), FlatTriStateCheckBox.State.SELECTED);
 	}
 
-	public void showHealthCheckSettings(List<String> defaultSelection) {
+	public void showHealthCheckSettings(List<String> defaultSelection, State state) {
 		Logging.info(this, "show health check settings dialog");
 
-		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel(defaultSelection));
-		jOptionPane.setOptions(
-				new Object[] { Configed.getResourceValue("save"), Configed.getResourceValue("buttonCancel") });
+		JOptionPane jOptionPane = new JOptionPane(createOptionsPanel(defaultSelection, state));
+		jOptionPane.setOptions(new Object[] { createSaveButton(), Configed.getResourceValue("buttonCancel") });
 		dialog = jOptionPane.createDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("HealthCheckSettingsDialog.title"));
 		dialog.setVisible(true);
-
-		Logging.info(this, "User selected ", jOptionPane.getValue());
-		if (jOptionPane.getValue() == Configed.getResourceValue("save")) {
-			save();
-		}
 	}
 
-	private JPanel createOptionsPanel(List<String> defaultSelection) {
+	private JPanel createOptionsPanel(List<String> defaultSelection, State state) {
 		JLabel labelSelectedHosts = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.selectedHosts"));
 		labelSelectedHosts.setFont(labelSelectedHosts.getFont().deriveFont(Font.BOLD));
 
@@ -100,10 +101,11 @@ public final class HealthCheckSettingsDialog {
 			selectedHostList.setPreviousSelectionValues(defaultSelection);
 		}
 
-		checkBoxCheckActive = new JCheckBox(Configed.getResourceValue("HealthCheckSettingsDialog.healthCheckActive"),
-				true);
+		checkBoxCheckActive = new FlatTriStateCheckBox(
+				Configed.getResourceValue("HealthCheckSettingsDialog.healthCheckActive"), state);
+		checkBoxCheckActive.setAllowIndeterminate(false);
 
-		JLabel labelStartDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
+		labelStartDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.startDowntime"));
 		labelStartDowntime.setFont(labelStartDowntime.getFont().deriveFont(Font.BOLD));
 
 		startDowntimeField = new JTextField();
@@ -118,7 +120,7 @@ public final class HealthCheckSettingsDialog {
 			}
 		});
 
-		JLabel labelEndDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
+		labelEndDowntime = new JLabel(Configed.getResourceValue("HealthCheckSettingsDialog.endDowntime"));
 		labelEndDowntime.setFont(labelEndDowntime.getFont().deriveFont(Font.BOLD));
 
 		endDowntimeField = new JTextField();
@@ -133,19 +135,7 @@ public final class HealthCheckSettingsDialog {
 			}
 		});
 
-		checkBoxCheckActive.addItemListener((ItemEvent event) -> {
-			labelStartDowntime.setEnabled(checkBoxCheckActive.isSelected());
-			startDowntimeField.setEnabled(checkBoxCheckActive.isSelected());
-			labelEndDowntime.setEnabled(checkBoxCheckActive.isSelected());
-			endDowntimeField.setEnabled(checkBoxCheckActive.isSelected());
-
-			// We want to remove the text when the checkbox is unchecked
-			// because there should be no time set anyways
-			if (!checkBoxCheckActive.isSelected()) {
-				startDowntimeField.setText(null);
-				endDowntimeField.setText(null);
-			}
-		});
+		checkBoxCheckActive.addItemListener(itemEvent -> reactToCheckBoxChange());
 
 		JPanel panel = new JPanel();
 		GroupLayout layout = new GroupLayout(panel);
@@ -168,6 +158,34 @@ public final class HealthCheckSettingsDialog {
 				.addComponent(endDowntimeField, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH, TEXT_LABEL_WIDTH));
 
 		return panel;
+	}
+
+	private void reactToCheckBoxChange() {
+		saveButton.setEnabled(true);
+		labelStartDowntime.setEnabled(checkBoxCheckActive.isSelected());
+		startDowntimeField.setEnabled(checkBoxCheckActive.isSelected());
+		labelEndDowntime.setEnabled(checkBoxCheckActive.isSelected());
+		endDowntimeField.setEnabled(checkBoxCheckActive.isSelected());
+
+		// We want to remove the text when the checkbox is unchecked
+		// because there should be no time set anyways
+		if (!checkBoxCheckActive.isSelected()) {
+			startDowntimeField.setText(null);
+			endDowntimeField.setText(null);
+		}
+	}
+
+	private JButton createSaveButton() {
+		saveButton = new JButton(Configed.getResourceValue("save"));
+		saveButton.addActionListener((ActionEvent actionEvent) -> {
+			Logging.info(this, "User clicked save button");
+			save();
+			dialog.setVisible(false);
+		});
+
+		saveButton.setEnabled(checkBoxCheckActive.getState() != State.INDETERMINATE);
+
+		return saveButton;
 	}
 
 	private void openHostSelectionDialog(JTextField selectedHosts) {
