@@ -345,50 +345,56 @@ public class ModuleDataService {
 				Logging.info(this, "retrieveOpsiModules ", key, " , maxClients ", maxAllowedClientsForThisModule,
 						" count ", countClientsInThisBlock);
 
-				if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
-					LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
-					missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
-
-					if (LocalDateTime.now().isAfter(noticeDate)) {
-						missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
-					}
-				}
-
-				if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
-					int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
-					int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
-
-					if (countClientsInThisBlock > stopCount) {
-						Logging.info(this, "retrieveOpsiModules ", key, " stopCount ", stopCount, " count clients ",
-								countClients);
-
-						String warningText = String.format(
-								Configed.getResourceValue("Permission.modules.clientcount.error"),
-								"" + countClientsInThisBlock, "" + key,
-								"" + maxAllowedClientsForThisModule.getNumber());
-
-						missingModulesPermissionInfo.add(warningText);
-
-						Logging.warning(this, warningText);
-					} else if (countClientsInThisBlock > startWarningCount) {
-						Logging.info(this, "retrieveOpsiModules ", key, " startWarningCount ", startWarningCount,
-								" count clients ", countClients);
-
-						String warningText = String.format(
-								Configed.getResourceValue("Permission.modules.clientcount.warning"),
-								"" + countClientsInThisBlock, "" + key,
-								"" + maxAllowedClientsForThisModule.getNumber());
-
-						missingModulesPermissionInfo.add(warningText);
-						Logging.warning(this, warningText);
-					} else {
-						// Do nothing when countClientsInThisBlock <= startWarningCount
-					}
-				}
+				addExpiredModulePermissionInfo(key, expiresForThisModule, missingModulesPermissionInfo);
+				addOverused(key, maxAllowedClientsForThisModule, countClientsInThisBlock, countClients,
+						missingModulesPermissionInfo);
 			}
 		}
 
 		return missingModulesPermissionInfo;
+	}
+
+	private static void addExpiredModulePermissionInfo(String key, ExtendedDate expiresForThisModule,
+			List<String> missingModulesPermissionInfo) {
+		if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+			LocalDateTime noticeDate = expiresForThisModule.getDate().minusDays(14);
+			missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
+
+			if (LocalDateTime.now().isAfter(noticeDate)) {
+				missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
+			}
+		}
+	}
+
+	private void addOverused(String key, ExtendedInteger maxAllowedClientsForThisModule, int countClientsInThisBlock,
+			int countClients, List<String> missingModulesPermissionInfo) {
+		if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
+			int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
+			int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
+
+			if (countClientsInThisBlock > stopCount) {
+				Logging.info(this, "retrieveOpsiModules ", key, " stopCount ", stopCount, " count clients ",
+						countClients);
+
+				String warningText = String.format(Configed.getResourceValue("Permission.modules.clientcount.error"),
+						"" + countClientsInThisBlock, "" + key, "" + maxAllowedClientsForThisModule.getNumber());
+
+				missingModulesPermissionInfo.add(warningText);
+
+				Logging.warning(this, warningText);
+			} else if (countClientsInThisBlock > startWarningCount) {
+				Logging.info(this, "retrieveOpsiModules ", key, " startWarningCount ", startWarningCount,
+						" count clients ", countClients);
+
+				String warningText = String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"),
+						"" + countClientsInThisBlock, "" + key, "" + maxAllowedClientsForThisModule.getNumber());
+
+				missingModulesPermissionInfo.add(warningText);
+				Logging.warning(this, warningText);
+			} else {
+				// Do nothing when countClientsInThisBlock <= startWarningCount
+			}
+		}
 	}
 
 	private void produceOpsiModulesInfoClassicOpsi43PD() {
