@@ -40,10 +40,10 @@ import de.uib.configed.type.HostInfo;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class CSVImportDataDialog {
-	private PanelGenEditTable thePanel;
+	private PanelGenEdit thePanel;
 	private CSVFormat format;
 
 	private JRadioButton tabsOption;
@@ -173,8 +173,8 @@ public class CSVImportDataDialog {
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
 		// don't use a definite max table width (-1), with popups
-		thePanel = new PanelGenEditTable("", true, 0,
-				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
+		thePanel = new PanelGenEdit("", true, 0,
+				new int[] { PanelGenEdit.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
 
 		modifier.updateTable(format, startLine, thePanel);
 

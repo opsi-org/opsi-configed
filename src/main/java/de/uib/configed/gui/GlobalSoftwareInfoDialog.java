@@ -25,10 +25,10 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class GlobalSoftwareInfoDialog {
-	private PanelGenEditTable panelGlobalSoftware;
+	private PanelGenEdit panelGlobalSoftware;
 
 	private List<String> columnNames;
 
@@ -43,7 +43,7 @@ public class GlobalSoftwareInfoDialog {
 	public GlobalSoftwareInfoDialog(ControlPanelAssignToLPools myController) {
 		this.myController = myController;
 
-		panelGlobalSoftware = new PanelGenEditTable("", false, 2);
+		panelGlobalSoftware = new PanelGenEdit("", false, 2);
 
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("FGlobalSoftwareInfo.info"));
 
@@ -111,7 +111,7 @@ public class GlobalSoftwareInfoDialog {
 		}
 	}
 
-	public PanelGenEditTable getPanelGlobalSoftware() {
+	public PanelGenEdit getPanelGlobalSoftware() {
 		return panelGlobalSoftware;
 	}
 

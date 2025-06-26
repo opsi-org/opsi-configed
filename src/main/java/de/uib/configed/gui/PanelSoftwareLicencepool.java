@@ -14,9 +14,9 @@ import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
-public class PanelSoftwareLicencepool extends PanelGenEditTable {
+public class PanelSoftwareLicencepool extends PanelGenEdit {
 	private ControlPanelAssignToLPools controlPanelAssignToLPools;
 	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
 	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
@@ -50,16 +50,16 @@ public class PanelSoftwareLicencepool extends PanelGenEditTable {
 		}
 
 		Object val = null;
-		int selRow = jTable.getSelectedRow();
+		int selRow = genEditTable.getSelectedRow();
 		if (selRow > -1) {
 			val = getValueAt(selRow, 1);
 		}
 
-		if (val != null && jTable.getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
+		if (val != null && genEditTable.getSelectedRowCount() == 1 && getTableModel().getRowCount() > 1
 				&& !((String) val).equals(Softwarename2LicensePoolDialog.VALUE_NO_LICENSE_POOL)) {
 			buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
 			labelSetAllAssignmentsToPoolFromSelectedRow
-					.setText(labelText + " " + getValueAt(jTable.getSelectedRow(), 1));
+					.setText(labelText + " " + getValueAt(genEditTable.getSelectedRow(), 1));
 		} else {
 			buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 			labelSetAllAssignmentsToPoolFromSelectedRow.setText(labelText);

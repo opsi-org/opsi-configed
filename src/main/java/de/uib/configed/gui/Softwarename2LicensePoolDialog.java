@@ -40,7 +40,7 @@ import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.DefaultTableModelFilterCondition;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.TableModelFilterCondition;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
@@ -51,12 +51,12 @@ import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class Softwarename2LicensePoolDialog {
 	public static final String VALUE_NO_LICENSE_POOL = "---";
-	private PanelGenEditTable panelSWnames;
+	private PanelGenEdit panelSWnames;
 	private GenTableModel modelSWnames;
 
 	private List<String> columnNames;
 
-	private PanelGenEditTable panelSWxLicensepool;
+	private PanelGenEdit panelSWxLicensepool;
 	private GenTableModel modelSWxLicensepool;
 	private List<String> columnNamesSWxLicensepool;
 
@@ -92,7 +92,7 @@ public class Softwarename2LicensePoolDialog {
 	public Softwarename2LicensePoolDialog(ControlPanelAssignToLPools controlPanelAssignToLPools) {
 		this.controlPanelAssignToLPools = controlPanelAssignToLPools;
 
-		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
+		panelSWnames = new PanelGenEdit("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
 
 		panelSWxLicensepool = new PanelSoftwareLicencepool(controlPanelAssignToLPools,
 				buttonSetAllAssignmentsToPoolFromSelectedRow, labelSetAllAssignmentsToPoolFromSelectedRow);
@@ -475,7 +475,7 @@ public class Softwarename2LicensePoolDialog {
 				}, updateCollection));
 	}
 
-	public PanelGenEditTable getPanelSWnames() {
+	public PanelGenEdit getPanelSWnames() {
 		return panelSWnames;
 	}
 
@@ -483,7 +483,7 @@ public class Softwarename2LicensePoolDialog {
 		return modelSWnames;
 	}
 
-	public PanelGenEditTable getPanelSWxLicensepool() {
+	public PanelGenEdit getPanelSWxLicensepool() {
 		return panelSWxLicensepool;
 	}
 

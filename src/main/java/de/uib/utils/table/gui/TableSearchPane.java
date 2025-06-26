@@ -52,7 +52,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	private JToggleButton buttonShowHideExtraOptions;
 
 	private JPanel navPane;
-	private PanelGenEditTable associatedPanel;
+	private PanelGenEdit associatedPanel;
 
 	private JMenuItem popupSearch;
 	private JMenuItem popupMarkAndFilter;
@@ -83,11 +83,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param thePanel    the model for delivering data and selecting
 	 * @param targetModel the model for delivering data and selecting
 	 */
-	public TableSearchPane(PanelGenEditTable thePanel) {
+	public TableSearchPane(PanelGenEdit thePanel) {
 		this(thePanel, new SearchTargetModelFromTable(thePanel, thePanel.getJTable()));
 	}
 
-	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel) {
+	public TableSearchPane(PanelGenEdit thePanel, SearchTargetModel targetModel) {
 		associatedPanel = thePanel;
 		this.targetModel = targetModel;
 

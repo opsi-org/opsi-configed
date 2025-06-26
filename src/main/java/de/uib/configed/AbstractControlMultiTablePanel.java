@@ -15,13 +15,13 @@ import javax.swing.JOptionPane;
 import de.uib.configed.gui.licenses.MultiTablePanel;
 import de.uib.utils.Utils;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 
 public abstract class AbstractControlMultiTablePanel {
 	protected List<GenTableModel> tableModels = new ArrayList<>();
 
-	protected List<PanelGenEditTable> tablePanes = new ArrayList<>();
+	protected List<PanelGenEdit> tablePanes = new ArrayList<>();
 
 	protected List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public abstract class AbstractControlMultiTablePanel {
 		return tableModels;
 	}
 
-	public List<PanelGenEditTable> getTablePanes() {
+	public List<PanelGenEdit> getTablePanes() {
 		return tablePanes;
 	}
 
@@ -49,7 +49,7 @@ public abstract class AbstractControlMultiTablePanel {
 			tableModel.reset();
 		}
 
-		for (PanelGenEditTable tablePanel : tablePanes) {
+		for (PanelGenEdit tablePanel : tablePanes) {
 			tablePanel.setDataChanged(false);
 		}
 	}
@@ -57,10 +57,10 @@ public abstract class AbstractControlMultiTablePanel {
 	public boolean mayLeave() {
 		boolean change = false;
 
-		Iterator<PanelGenEditTable> iterP = tablePanes.iterator();
+		Iterator<PanelGenEdit> iterP = tablePanes.iterator();
 
 		while (!change && iterP.hasNext()) {
-			PanelGenEditTable p = iterP.next();
+			PanelGenEdit p = iterP.next();
 			change = p.isDataChanged();
 		}
 

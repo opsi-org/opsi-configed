@@ -21,7 +21,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public static final String FILTER_BY_SELECTION = "filterBySelection";
 
 	protected JTable table;
-	private PanelGenEditTable thePanel;
+	private PanelGenEdit thePanel;
 
 	protected int[] selectedRows = new int[0];
 
@@ -33,7 +33,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		setTable(table);
 	}
 
-	public SearchTargetModelFromTable(PanelGenEditTable thePanel, JTable table) {
+	public SearchTargetModelFromTable(PanelGenEdit thePanel, JTable table) {
 		setTable(table);
 		this.thePanel = thePanel;
 	}

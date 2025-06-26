@@ -12,15 +12,15 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class SelectionMemorizerUpdateController implements UpdateController {
-	private PanelGenEditTable keysPanel;
+	private PanelGenEdit keysPanel;
 	private int keyCol;
-	private PanelGenEditTable panel;
+	private PanelGenEdit panel;
 	private ControlPanelAssignToLPools controlPanelAssignToLPools;
 
-	public SelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol, PanelGenEditTable panel,
+	public SelectionMemorizerUpdateController(PanelGenEdit keysPanel, int keyCol, PanelGenEdit panel,
 			ControlPanelAssignToLPools controlPanelAssignToLPools) {
 		this.keysPanel = keysPanel;
 		this.keyCol = keyCol;

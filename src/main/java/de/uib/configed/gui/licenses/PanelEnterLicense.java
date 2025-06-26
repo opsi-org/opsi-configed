@@ -44,7 +44,7 @@ import de.uib.utils.Utils;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.CellDateEditor;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.DatePicker;
 
@@ -54,9 +54,9 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 	private static final int MIN_FIELD_WIDTH = 40;
 
-	private PanelGenEditTable panelKeys;
-	private PanelGenEditTable panelLicensePools;
-	private PanelGenEditTable panelLicenseContracts;
+	private PanelGenEdit panelKeys;
+	private PanelGenEdit panelLicensePools;
+	private PanelGenEdit panelLicenseContracts;
 
 	private String selectedLicensePool = "";
 
@@ -253,20 +253,19 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private void initComponents() {
-		panelKeys = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"), true, 0,
-				new int[] { PopupMenuTrait.POPUP_RELOAD }, false);
+		panelKeys = new PanelGenEdit(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"),
+				true, 0, new int[] { PopupMenuTrait.POPUP_RELOAD }, false);
 		panelKeys.setFilterKey(FilterKey.LICENSE_KEYS_ENTER_TABLE);
 
-		panelLicensePools = new PanelGenEditTable(
+		panelLicensePools = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensepool"), false, 0,
 				new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
 		panelLicensePools.setFilterKey(FilterKey.LICENSE_POOL_ENTER_TABLE);
 
-		panelLicenseContracts = new PanelGenEditTable(
+		panelLicenseContracts = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
+						PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelLicenseContracts.setFilterKey(FilterKey.LICENSE_CONTRACTS_ENTER_TABLE);
 
@@ -573,15 +572,15 @@ public class PanelEnterLicense extends MultiTablePanel {
 		panelLicensePools.moveToValue(selectedLicensePool, 0);
 	}
 
-	public PanelGenEditTable getPanelKeys() {
+	public PanelGenEdit getPanelKeys() {
 		return panelKeys;
 	}
 
-	public PanelGenEditTable getPanelLicensePools() {
+	public PanelGenEdit getPanelLicensePools() {
 		return panelLicensePools;
 	}
 
-	public PanelGenEditTable getPanelLicenseContracts() {
+	public PanelGenEdit getPanelLicenseContracts() {
 		return panelLicenseContracts;
 	}
 }

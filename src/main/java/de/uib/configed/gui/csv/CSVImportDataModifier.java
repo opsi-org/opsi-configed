@@ -31,7 +31,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.type.HostInfo;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapSource;
 import de.uib.utils.table.provider.TableSource;
@@ -51,7 +51,7 @@ public class CSVImportDataModifier {
 		this.hiddenColumns = new ArrayList<>();
 	}
 
-	public void updateTable(CSVFormat format, int startLine, PanelGenEditTable thePanel) {
+	public void updateTable(CSVFormat format, int startLine, PanelGenEdit thePanel) {
 		model = updateModel(format, startLine, thePanel);
 		if (model == null) {
 			Logging.error(this, "Failed to update table model, returned model is null");
@@ -64,7 +64,7 @@ public class CSVImportDataModifier {
 		disableRowSorting(thePanel);
 	}
 
-	private GenTableModel updateModel(CSVFormat format, int startLine, PanelGenEditTable thePanel) {
+	private GenTableModel updateModel(CSVFormat format, int startLine, PanelGenEdit thePanel) {
 		List<Map<String, Object>> csvData = extractDataFromCSV(format, startLine);
 		if (csvData == null) {
 			return null;
@@ -137,7 +137,7 @@ public class CSVImportDataModifier {
 		return csvData;
 	}
 
-	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
+	private GenTableModel createModel(PanelGenEdit thePanel, List<Map<String, Object>> csvData,
 			List<String> columnNames, CSVFormat format) {
 		Logging.info(this, "createModel, csvData: ", csvData);
 		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
@@ -170,7 +170,7 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private void hideEmptyColumns(PanelGenEditTable thePanel) {
+	private void hideEmptyColumns(PanelGenEdit thePanel) {
 		hiddenColumns.clear();
 
 		for (int i = 0; i < thePanel.getJTable().getColumnCount(); i++) {
@@ -184,7 +184,7 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private boolean isColumnEmpty(int column, PanelGenEditTable thePanel) {
+	private boolean isColumnEmpty(int column, PanelGenEdit thePanel) {
 		int emptyRows = 0;
 		List<List<Object>> rows = model.getRows();
 
@@ -199,7 +199,7 @@ public class CSVImportDataModifier {
 		return emptyRows == rows.size();
 	}
 
-	private static void disableRowSorting(PanelGenEditTable thePanel) {
+	private static void disableRowSorting(PanelGenEdit thePanel) {
 		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(thePanel.getJTable().getModel());
 
 		int columnCount = thePanel.getJTable().getColumnCount();

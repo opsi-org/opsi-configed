@@ -31,7 +31,7 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PanelStateSwitch;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 	private JLabel fieldSelectedLicensePoolId;
@@ -46,8 +46,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private JButton buttonShowAssignedNotExisting;
 
 	private PanelRegisteredSoftware panelRegisteredSoftware;
-	private PanelGenEditTable panelLicensepools;
-	private PanelGenEditTable panelProductId2LPool;
+	private PanelGenEdit panelLicensepools;
+	private PanelGenEdit panelProductId2LPool;
 
 	private GlobalSoftwareInfoDialog fMissingSoftwareInfo;
 	private Softwarename2LicensePoolDialog fSoftwarename2LicensePool;
@@ -366,17 +366,17 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 								.addGap(Globals.GAP_SIZE));
 
-		panelLicensepools = new PanelGenEditTable(
+		panelLicensepools = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
+						PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelLicensepools.setFilterKey(FilterKey.LICENSE_POOL_POOLS_TABLE);
 
-		panelProductId2LPool = new PanelGenEditTable(
+		panelProductId2LPool = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
+						PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelProductId2LPool.setFilterKey(FilterKey.LICENSE_PRODUCT_ID_TO_LICENSE_POOL_TABLE);
 
@@ -512,11 +512,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		return panelRegisteredSoftware;
 	}
 
-	public PanelGenEditTable getPanelLicensepools() {
+	public PanelGenEdit getPanelLicensepools() {
 		return panelLicensepools;
 	}
 
-	public PanelGenEditTable getPanelProductId2LPool() {
+	public PanelGenEdit getPanelProductId2LPool() {
 		return panelProductId2LPool;
 	}
 

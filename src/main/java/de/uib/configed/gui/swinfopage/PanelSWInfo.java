@@ -52,7 +52,7 @@ import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.TableModelFilterCondition;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utils.table.gui.ColorTableCellRenderer;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
@@ -61,7 +61,7 @@ public class PanelSWInfo extends JPanel {
 	private static final String FILTER_MS_UPDATES = "withMsUpdates";
 	private static final String FILTER_MS_UPDATES2 = "withMsUpdates2";
 
-	private PanelGenEditTable panelTable;
+	private PanelGenEdit panelTable;
 	private ExporterToCSV csvExportTable;
 
 	private JPanel subPanelTitle;
@@ -153,7 +153,7 @@ public class PanelSWInfo extends JPanel {
 	private void initTableComponents() {
 		labelSuperTitle = new JLabel();
 
-		panelTable = new PanelGenEditTable("", false, 0, new int[] {}, true);
+		panelTable = new PanelGenEdit("", false, 0, new int[] {}, true);
 		panelTable.getJTable().setColumnSelectionAllowed(false);
 		panelTable.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

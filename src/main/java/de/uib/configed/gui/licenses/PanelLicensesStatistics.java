@@ -22,12 +22,12 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class PanelLicensesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;
 
-	private PanelGenEditTable panelStatistics;
+	private PanelGenEdit panelStatistics;
 
 	public PanelLicensesStatistics(AbstractControlMultiTablePanel controller) {
 		super(controller);
@@ -35,8 +35,8 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 	}
 
 	private void initComponents() {
-		panelStatistics = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleStatistics"), false, 0, null, true);
+		panelStatistics = new PanelGenEdit(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleStatistics"),
+				false, 0, null, true);
 		panelStatistics.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelStatistics.setFilterKey(FilterKey.LICENSES_STATISTICS_TABLE);
 
@@ -56,7 +56,7 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
-	public PanelGenEditTable getPanelStatistics() {
+	public PanelGenEdit getPanelStatistics() {
 		return panelStatistics;
 	}
 

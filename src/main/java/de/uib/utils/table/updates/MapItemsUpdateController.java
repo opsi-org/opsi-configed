@@ -12,15 +12,15 @@ import java.util.List;
 
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class MapItemsUpdateController implements UpdateController {
 	private GenTableModel tablemodel;
-	private PanelGenEditTable panel;
+	private PanelGenEdit panel;
 	private MapBasedUpdater updater;
 	private List<MapBasedTableEditItem> updateCollection;
 
-	public MapItemsUpdateController(PanelGenEditTable panel, GenTableModel model, MapBasedUpdater updater,
+	public MapItemsUpdateController(PanelGenEdit panel, GenTableModel model, MapBasedUpdater updater,
 			List<MapBasedTableEditItem> updateCollection) {
 		this.panel = panel;
 		this.tablemodel = model;

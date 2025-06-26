@@ -27,7 +27,7 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.LicensingInfoPanelGenEditTable;
 import de.uib.utils.table.gui.LicensingInfoTableCellRenderer;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapSource;
 import de.uib.utils.table.provider.TableSource;
@@ -48,7 +48,7 @@ public class OpsiLicensing extends JPanel {
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
 	public OpsiLicensing() {
-		PanelGenEditTable mainPanel = initLicensingInfoPanel();
+		PanelGenEdit mainPanel = initLicensingInfoPanel();
 		JPanel clientInfo = initClientInfo();
 
 		GroupLayout groupLayout = new GroupLayout(this);
@@ -69,7 +69,7 @@ public class OpsiLicensing extends JPanel {
 		theSourceMap = licenseMap.getTableMap();
 	}
 
-	private PanelGenEditTable initLicensingInfoPanel() {
+	private PanelGenEdit initLicensingInfoPanel() {
 		retrieveData();
 
 		licensingTable = new LicensingInfoPanelGenEditTable() {

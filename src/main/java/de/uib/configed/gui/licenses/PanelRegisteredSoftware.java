@@ -17,9 +17,9 @@ import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
-public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseListener {
+public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListener {
 	private ControlPanelAssignToLPools controller;
 
 	private int[] saveRowSelection;
@@ -29,8 +29,8 @@ public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseL
 		this.controller = controller;
 		tableSearchPane.showNavPane();
 
-		jTable.addMouseListener(this);
-		jTable.getTableHeader().addMouseListener(this);
+		genEditTable.addMouseListener(this);
+		genEditTable.getTableHeader().addMouseListener(this);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseL
 		super.reload();
 		Logging.info(this, "reload");
 		controller.setSoftwareIdsFromLicensePool();
-		saveRowSelection = jTable.getSelectedRows();
+		saveRowSelection = genEditTable.getSelectedRows();
 	}
 
 	@Override
@@ -89,11 +89,11 @@ public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseL
 	@Override
 	public void setSelectedValues(List<String> values, int col) {
 		super.setSelectedValues(values, col);
-		saveRowSelection = jTable.getSelectedRows();
+		saveRowSelection = genEditTable.getSelectedRows();
 	}
 
 	private boolean mouseInColumnOfMarkCursor(Point p) {
-		int mouseCol = jTable.columnAtPoint(p);
+		int mouseCol = genEditTable.columnAtPoint(p);
 
 		return mouseCol >= 0 && mouseCol == tableModel.getColMarkCursorRow();
 	}
@@ -101,10 +101,10 @@ public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseL
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Point mousePoint = e.getPoint();
-		int mouseRow = jTable.rowAtPoint(mousePoint);
+		int mouseRow = genEditTable.rowAtPoint(mousePoint);
 
 		if (mouseInColumnOfMarkCursor(mousePoint)) {
-			tableModel.setCursorRow(jTable.convertRowIndexToModel(mouseRow));
+			tableModel.setCursorRow(genEditTable.convertRowIndexToModel(mouseRow));
 		} else if (isAwareOfSelectionListener()) {
 			Logging.info(this, "mouse click in table. outside colMarkCursorRow, aware of selectionlistener");
 
@@ -125,7 +125,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseL
 				super.setSelection(saveRowSelection);
 			}
 		} else {
-			saveRowSelection = jTable.getSelectedRows();
+			saveRowSelection = genEditTable.getSelectedRows();
 			Logging.info(this, "mouseReleased set new saveRowSelection ");
 		}
 	}
@@ -148,7 +148,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable implements MouseL
 	@Override
 	public void setDataChanged(boolean b) {
 		if (b && controller.acknowledgeChangeForSWList()) {
-			int col = jTable.getEditingColumn();
+			int col = genEditTable.getEditingColumn();
 			Logging.info(this, "setDataChanged col ", col);
 			if (tableModel.gotMarkCursorRow() && col != tableModel.getColMarkCursorRow()) {
 				super.setDataChanged(true);
