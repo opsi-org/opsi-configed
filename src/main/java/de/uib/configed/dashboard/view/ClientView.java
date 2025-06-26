@@ -55,6 +55,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class ClientView implements View {
+	// Map of last seen time ranges with predicates to check if the number of days
+	// since last seen falls into the range
+	// The keys are the resource values for the labels in the UI
+	// The values are predicates that take the number of days since last seen and
+	private static Map<String, Predicate<Long>> isLastSeen = Map.of(
+			Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"), days -> days >= 0 && days <= 14,
+			Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"),
+			days -> days > 14 && days <= 30, Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"),
+			days -> days > 30);
+
 	@FXML
 	private Label clientsNumberLabel;
 	@FXML
@@ -251,18 +261,8 @@ public class ClientView implements View {
 	}
 
 	private static boolean isLastSeen(long days, String value, String clientLastSeen) {
-		if (value.equals(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")) && days >= 0
-				&& days <= 14) {
-			return true;
-		}
-
-		if (value.equals(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays")) && days > 14
-				&& days <= 30) {
-			return true;
-		}
-
-		if (value.equals(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30) {
-			return true;
+		if (isLastSeen.containsKey(value)) {
+			return isLastSeen.get(value).test(days);
 		}
 
 		return value.equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
