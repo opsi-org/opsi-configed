@@ -119,7 +119,6 @@ public class PanelGenEdit extends JPanel
 	private int oldrowcount = -1;
 
 	private Map<Integer, SortOrder> sortDescriptor;
-	private Map<Integer, SortOrder> specialSortDescriptor;
 
 	private AbstractExportTable exportTable;
 
@@ -342,12 +341,6 @@ public class PanelGenEdit extends JPanel
 	}
 
 	private void sortAgainAsConfigured() {
-		Logging.debug(this, "sortAgainAsConfigured ", specialSortDescriptor);
-
-		if (specialSortDescriptor != null && !specialSortDescriptor.isEmpty()) {
-			sortDescriptor = specialSortDescriptor;
-		}
-
 		if (sortDescriptor != null && !sortDescriptor.isEmpty()) {
 			int selRow = genEditTable.getSelectedRow();
 
