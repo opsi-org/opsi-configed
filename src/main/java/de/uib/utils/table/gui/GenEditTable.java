@@ -6,6 +6,8 @@
 
 package de.uib.utils.table.gui;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -41,6 +43,14 @@ public class GenEditTable extends JTable implements KeyListener {
 		super.setDragEnabled(true);
 		super.setDropMode(DropMode.ON);
 		super.setAutoCreateRowSorter(false);
+
+		// ComponentListener for table
+		super.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				showSelectedRow();
+			}
+		});
 	}
 
 	public void deleteRelation() {

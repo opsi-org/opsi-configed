@@ -6,8 +6,6 @@
 
 package de.uib.utils.table.gui;
 
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,10 +51,8 @@ import de.uib.utils.table.RowNoTableModelFilterCondition;
 import de.uib.utils.table.TableModelFilter;
 import de.uib.utils.table.updates.UpdateController;
 
-public class PanelGenEdit extends JPanel
-		implements TableModelListener, ListSelectionListener, ComponentListener, CursorrowObserver {
+public class PanelGenEdit extends JPanel implements TableModelListener, ListSelectionListener, CursorrowObserver {
 	public static final int POPUP_DELETE_ROW = 1;
-
 	public static final int POPUP_CANCEL = 3;
 
 	public static final int POPUP_SORT_AGAIN = 5;
@@ -233,8 +229,6 @@ public class PanelGenEdit extends JPanel
 	}
 
 	private void initComponents() {
-		addComponentListener(this);
-
 		jLabelTitle = new JLabel(title);
 
 		if (title == null || title.isEmpty()) {
@@ -858,27 +852,6 @@ public class PanelGenEdit extends JPanel
 		}
 	}
 
-	// ComponentListener for table
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-		genEditTable.showSelectedRow();
-	}
-
-	@Override
-	public void componentHidden(ComponentEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-		/* Not needed */}
-
-	// CursorrowObserver
-	@Override
 	public void rowUpdated(int modelrow) {
 		Logging.info(this, " in PanelGenEditTable rowUpdated to modelrow ", modelrow);
 	}
