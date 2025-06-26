@@ -15,10 +15,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.DefaultRowSorter;
@@ -32,14 +30,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -118,8 +113,6 @@ public class PanelGenEdit extends JPanel
 
 	private int oldrowcount = -1;
 
-	private Map<Integer, SortOrder> sortDescriptor;
-
 	private AbstractExportTable exportTable;
 
 	private Map<Integer, Runnable> popupCreators = Map.of(PopupMenuTrait.POPUP_SEPARATOR, () -> addPopupItem(null),
@@ -136,7 +129,7 @@ public class PanelGenEdit extends JPanel
 			}, PopupMenuTrait.POPUP_RELOAD, () -> addPopupItemReload(), POPUP_SORT_AGAIN, () -> {
 				JMenuItem menuItemSortAgain = new JMenuItem(
 						Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
-				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
+				menuItemSortAgain.addActionListener(actionEvent -> genEditTable.sortAgainAsConfigured());
 
 				addPopupItem(menuItemSortAgain);
 			}, POPUP_DELETE_ROW, () -> addPopupMenuDeleteRow(), PopupMenuTrait.POPUP_PRINT, () -> {
@@ -239,10 +232,6 @@ public class PanelGenEdit extends JPanel
 		genEditTable.getSelectionModel().addListSelectionListener(l);
 	}
 
-	public void removeListSelectionListener(ListSelectionListener l) {
-		genEditTable.getSelectionModel().removeListSelectionListener(l);
-	}
-
 	private void initComponents() {
 		addComponentListener(this);
 
@@ -338,26 +327,6 @@ public class PanelGenEdit extends JPanel
 
 	public void setDeleteAllowed(boolean deleteAllowed) {
 		genEditTable.setDeleteAllowed(deleteAllowed);
-	}
-
-	private void sortAgainAsConfigured() {
-		if (sortDescriptor != null && !sortDescriptor.isEmpty()) {
-			int selRow = genEditTable.getSelectedRow();
-
-			Object selVal = null;
-			if (selRow > -1 && tableModel.getKeyCol() > -1) {
-				selVal = tableModel.getValueAt(genEditTable.convertRowIndexToModel(selRow), tableModel.getKeyCol());
-			}
-
-			((DefaultRowSorter<?, ?>) genEditTable.getRowSorter()).sort();
-			setSorter();
-
-			if (selVal != null) {
-				int viewRow = findViewRowFromValue(selVal, tableModel.getKeyCol());
-				moveToRow(viewRow);
-				setSelectedRow(viewRow);
-			}
-		}
 	}
 
 	public void reload() {
@@ -506,57 +475,7 @@ public class PanelGenEdit extends JPanel
 	}
 
 	public void setSortOrder(Map<Integer, SortOrder> sortDescriptor) {
-		this.sortDescriptor = sortDescriptor;
-	}
-
-	private List<SortKey> buildSortkeysFromColumns() {
-		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor ", sortDescriptor);
-		List<SortKey> sortKeys = new ArrayList<>();
-
-		if (tableModel.getColumnCount() == 0) {
-			return new ArrayList<>();
-		} else if (sortDescriptor == null) {
-			// default sorting
-			sortDescriptor = new LinkedHashMap<>();
-
-			if (tableModel.getKeyCol() > -1) {
-				sortKeys.add(new SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
-
-				sortDescriptor.put(tableModel.getKeyCol(), SortOrder.ASCENDING);
-			} else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
-				for (Integer col : tableModel.getFinalCols()) {
-					sortKeys.add(new SortKey(col, SortOrder.ASCENDING));
-
-					sortDescriptor.put(col, SortOrder.ASCENDING);
-				}
-			} else {
-				sortKeys = null;
-			}
-		} else {
-			for (Entry<Integer, SortOrder> entry : sortDescriptor.entrySet()) {
-				sortKeys.add(new SortKey(entry.getKey(), entry.getValue()));
-			}
-		}
-
-		return sortKeys;
-	}
-
-	private void setSorter() {
-		Logging.info(this, "setSorter");
-
-		if (tableModel == null) {
-			return;
-		}
-
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
-
-		List<SortKey> sortKeys = buildSortkeysFromColumns();
-
-		if (sortKeys != null && !sortKeys.isEmpty()) {
-			sorter.setSortKeys(sortKeys);
-		}
-
-		genEditTable.setRowSorter(sorter);
+		genEditTable.setSortDescriptor(sortDescriptor);
 	}
 
 	public void setTableModel(GenTableModel m) {
@@ -567,7 +486,7 @@ public class PanelGenEdit extends JPanel
 		tableModel = m;
 		tableModel.addCursorrowObserver(this);
 
-		setSorter();
+		genEditTable.setSorter();
 
 		setDataChanged(false);
 
@@ -696,9 +615,7 @@ public class PanelGenEdit extends JPanel
 	}
 
 	public void setSelectedRow(int row) {
-		genEditTable.setRowSelectionInterval(row, row);
-
-		showSelectedRow();
+		genEditTable.setSelectedRow(row);
 	}
 
 	public void setSelection(int[] selection) {
@@ -706,13 +623,6 @@ public class PanelGenEdit extends JPanel
 		genEditTable.getSelectionModel().clearSelection();
 		for (int i = 0; i < selection.length; i++) {
 			genEditTable.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
-		}
-	}
-
-	public void showSelectedRow() {
-		int row = genEditTable.getSelectedRow();
-		if (row != -1) {
-			genEditTable.scrollRectToVisible(genEditTable.getCellRect(row, 0, false));
 		}
 	}
 
@@ -784,31 +694,14 @@ public class PanelGenEdit extends JPanel
 		Iterator<String> iter = values.iterator();
 
 		while (iter.hasNext()) {
-			int viewRow = findViewRowFromValue(iter.next(), col);
+			int viewRow = genEditTable.findViewRowFromValue(iter.next(), col);
 
 			genEditTable.getSelectionModel().addSelectionInterval(viewRow, viewRow);
 		}
 	}
 
 	public int findViewRowFromValue(Object value, int col) {
-		Logging.debug(this, "findViewRowFromValue value, col ", value, ", ", col);
-
-		if (value == null) {
-			return -1;
-		}
-
-		String val = value.toString();
-
-		for (int viewrow = 0; viewrow < genEditTable.getRowCount(); viewrow++) {
-			Object compareValue = tableModel.getValueAt(genEditTable.convertRowIndexToModel(viewrow), col);
-
-			if ((compareValue == null && val.isEmpty())
-					|| (compareValue != null && val.equals(compareValue.toString()))) {
-				return viewrow;
-			}
-		}
-
-		return -1;
+		return genEditTable.findViewRowFromValue(value, col);
 	}
 
 	public boolean moveToValue(String value, int col) {
@@ -817,7 +710,7 @@ public class PanelGenEdit extends JPanel
 
 	public boolean moveToValue(String value, int col, boolean selecting) {
 		Logging.info(this, "moveToValue ", value, " col ", col, " selecting ", selecting);
-		int viewrow = findViewRowFromValue(value, col);
+		int viewrow = genEditTable.findViewRowFromValue(value, col);
 		if (viewrow > -1) {
 			tableModel.setCursorRow(genEditTable.convertRowIndexToModel(viewrow));
 		}
@@ -874,24 +767,6 @@ public class PanelGenEdit extends JPanel
 		}
 	}
 
-	public void moveToRow(int n) {
-		if (tableModel.getRowCount() == 0) {
-			return;
-		}
-
-		if (genEditTable.getSelectedRowCount() != 1) {
-			return;
-		}
-
-		if (n < 0 || n >= genEditTable.getRowCount()) {
-			return;
-		}
-
-		genEditTable.scrollRectToVisible(genEditTable.getCellRect(n, 0, true));
-		genEditTable.setRowSelectionInterval(n, n);
-		tableModel.setCursorRow(genEditTable.convertRowIndexToModel(n));
-	}
-
 	public boolean setCursorToFirstRow() {
 		if (tableModel.getRowCount() > 0) {
 			tableModel.setCursorRow(genEditTable.convertRowIndexToModel(0));
@@ -928,7 +803,7 @@ public class PanelGenEdit extends JPanel
 	}
 
 	public void moveToLastRow() {
-		moveToRow(tableModel.getRowCount() - 1);
+		genEditTable.moveToRow(tableModel.getRowCount() - 1);
 	}
 
 	public void restoreFilter() {
@@ -987,7 +862,7 @@ public class PanelGenEdit extends JPanel
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		showSelectedRow();
+		genEditTable.showSelectedRow();
 	}
 
 	@Override
