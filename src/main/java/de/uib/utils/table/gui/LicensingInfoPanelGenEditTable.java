@@ -18,9 +18,9 @@ import de.uib.utils.swing.PopupMenuTrait;
 public class LicensingInfoPanelGenEditTable extends PanelGenEdit {
 	public LicensingInfoPanelGenEditTable() {
 		super(null, false, 0,
-				new int[] { PopupMenuTrait.POPUP_PRINT, PopupMenuTrait.POPUP_PDF, PanelGenEdit.POPUP_SORT_AGAIN,
-						PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
-						PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PopupMenuTrait.POPUP_PRINT, PopupMenuTrait.POPUP_PDF,
+						PanelGenEditPopupManager.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_EXPORT_CSV,
+						PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, PopupMenuTrait.POPUP_RELOAD },
 				false);
 
 		setMarkBoldHeaderCellRenderer();

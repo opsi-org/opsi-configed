@@ -41,6 +41,7 @@ import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 
 public class CSVImportDataDialog {
 	private PanelGenEdit thePanel;
@@ -174,7 +175,7 @@ public class CSVImportDataDialog {
 
 		// don't use a definite max table width (-1), with popups
 		thePanel = new PanelGenEdit("", true, 0,
-				new int[] { PanelGenEdit.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
+				new int[] { PanelGenEditPopupManager.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
 
 		modifier.updateTable(format, startLine, thePanel);
 

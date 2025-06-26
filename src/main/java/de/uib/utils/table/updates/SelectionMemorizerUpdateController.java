@@ -31,7 +31,7 @@ public class SelectionMemorizerUpdateController implements UpdateController {
 	@Override
 	public boolean saveChanges() {
 		Logging.debug(this, "keysPanel is null ", keysPanel == null);
-		if (keysPanel.getJTable().getSelectedRow() < 0) {
+		if (keysPanel.getGenEditTable().getSelectedRow() < 0) {
 			Logging.info(this, "no row selected");
 
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
@@ -42,7 +42,7 @@ public class SelectionMemorizerUpdateController implements UpdateController {
 			return false;
 		}
 
-		String keyValue = keysPanel.getValueAt(keysPanel.getJTable().getSelectedRow(), keyCol).toString();
+		String keyValue = keysPanel.getValueAt(keysPanel.getGenEditTable().getSelectedRow(), keyCol).toString();
 
 		boolean success = controlPanelAssignToLPools.updateLicensepool(keyValue, panel.getSelectedKeys());
 

@@ -173,9 +173,9 @@ public class CSVImportDataModifier {
 	private void hideEmptyColumns(PanelGenEdit thePanel) {
 		hiddenColumns.clear();
 
-		for (int i = 0; i < thePanel.getJTable().getColumnCount(); i++) {
+		for (int i = 0; i < thePanel.getGenEditTable().getColumnCount(); i++) {
 			if (isColumnEmpty(i, thePanel)) {
-				TableColumn column = thePanel.getJTable().getColumnModel().getColumn(i);
+				TableColumn column = thePanel.getGenEditTable().getColumnModel().getColumn(i);
 				column.setMinWidth(0);
 				column.setMaxWidth(0);
 				column.setResizable(false);
@@ -189,7 +189,7 @@ public class CSVImportDataModifier {
 		List<List<Object>> rows = model.getRows();
 
 		for (int row = 0; row < rows.size(); row++) {
-			String value = thePanel.getJTable().getValueAt(row, column).toString();
+			String value = thePanel.getGenEditTable().getValueAt(row, column).toString();
 
 			if (value.isEmpty()) {
 				emptyRows++;
@@ -200,15 +200,15 @@ public class CSVImportDataModifier {
 	}
 
 	private static void disableRowSorting(PanelGenEdit thePanel) {
-		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(thePanel.getJTable().getModel());
+		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(thePanel.getGenEditTable().getModel());
 
-		int columnCount = thePanel.getJTable().getColumnCount();
+		int columnCount = thePanel.getGenEditTable().getColumnCount();
 
 		for (int i = 0; i < columnCount; i++) {
 			rowSorter.setSortable(i, false);
 		}
 
-		thePanel.getJTable().setRowSorter(rowSorter);
+		thePanel.getGenEditTable().setRowSorter(rowSorter);
 	}
 
 	private static void makeColumnsEditable(GenTableModel model, List<String> columnNames) {

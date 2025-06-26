@@ -35,6 +35,7 @@ import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.ExternalSource;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
@@ -71,7 +72,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
 		paneProducts = new PaneProducts(columnNames, panelEditProperties, propertiesPanel);
 		paneProducts.setTableModel(model);
-		paneProducts.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paneProducts.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		paneProducts.setFilterKey(FilterKey.DEPOT_PRODUCT_PROPERTIES_TABLE);
 
 		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
@@ -107,7 +108,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 	public void setProductProperties() {
 		paneProducts.setTableModel(createTableModel());
-		int saveSelectedRow = paneProducts.getJTable().getSelectedRow();
+		int saveSelectedRow = paneProducts.getGenEditTable().getSelectedRow();
 		paneProducts.getTableModel().reset();
 
 		if (paneProducts.getTableModel().getRowCount() > 0) {
@@ -132,7 +133,8 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		public PaneProducts(List<String> columnNames, PanelEditDepotProperties panelEditDepotProperties,
 				EditMapPanelX propertiesPanel) {
-			super("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, POPUP_SORT_AGAIN }, true);
+			super("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, PanelGenEditPopupManager.POPUP_SORT_AGAIN },
+					true);
 			this.columnNames = columnNames;
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;

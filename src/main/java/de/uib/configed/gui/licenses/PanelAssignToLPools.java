@@ -32,6 +32,7 @@ import de.uib.utils.swing.PanelStateSwitch;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 	private JLabel fieldSelectedLicensePoolId;
@@ -368,15 +369,15 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		panelLicensepools = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), true, 1,
-				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
-						PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelLicensepools.setFilterKey(FilterKey.LICENSE_POOL_POOLS_TABLE);
 
 		panelProductId2LPool = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleProductId2LPool"), true, 1,
-				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
-						PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelProductId2LPool.setFilterKey(FilterKey.LICENSE_PRODUCT_ID_TO_LICENSE_POOL_TABLE);
 
@@ -457,7 +458,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		Logging.info(this, " stateChanged ", e);
 		Logging.info(this, " stateChanged modelSWnames filterinfo ",
 				fSoftwarename2LicensePool.getModelSWnames().getFilterInfo());
-		int selectedRow = panelRegisteredSoftware.getJTable().getSelectedRow();
+		int selectedRow = panelRegisteredSoftware.getGenEditTable().getSelectedRow();
 		int columnNameIndex = panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME);
 		if (selectedRow == -1 || columnNameIndex == -1) {
 			Logging.warning(this, selectedRow == -1 ? "No software is selected" : "SWAuditEntry name column not found");

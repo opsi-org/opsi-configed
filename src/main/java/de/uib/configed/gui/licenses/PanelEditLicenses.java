@@ -23,6 +23,7 @@ import de.uib.configed.Globals;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 
 public class PanelEditLicenses extends MultiTablePanel {
 	private PanelGenEdit panelKeys;
@@ -38,29 +39,29 @@ public class PanelEditLicenses extends MultiTablePanel {
 
 	private void initComponents() {
 		panelKeys = new PanelGenEdit(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"),
-				true, 1, new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
-						PanelGenEdit.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
+				true, 1, new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
-		panelKeys.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelKeys.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelKeys.setFilterKey(FilterKey.LICENSE_KEYS_EDIT_TABLE);
 
 		panelKeys.getTableSearchPane().setFiltering();
 
 		panelSoftwarelicenses = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSoftwarelicense"), true, 2,
-				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
-						PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
-		panelSoftwarelicenses.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelSoftwarelicenses.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelSoftwarelicenses.setFilterKey(FilterKey.LICENSE_SOFTWARE_TABLE);
 		panelSoftwarelicenses.getTableSearchPane().setFiltering();
 
 		panelLicensecontracts = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2,
-				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
-						PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
-		panelLicensecontracts.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelLicensecontracts.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelLicensecontracts.setFilterKey(FilterKey.LICENSE_CONTRACTS_EDIT_TABLE);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered

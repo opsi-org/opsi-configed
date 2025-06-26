@@ -37,7 +37,7 @@ public class PanelLicensesStatistics extends MultiTablePanel {
 	private void initComponents() {
 		panelStatistics = new PanelGenEdit(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleStatistics"),
 				false, 0, null, true);
-		panelStatistics.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelStatistics.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelStatistics.setFilterKey(FilterKey.LICENSES_STATISTICS_TABLE);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered

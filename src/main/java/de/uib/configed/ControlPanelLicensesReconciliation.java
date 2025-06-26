@@ -148,12 +148,12 @@ public class ControlPanelLicensesReconciliation extends AbstractControlMultiTabl
 	private void initTreatmentOfColumns() {
 		TableColumn col;
 
-		col = thePanel.getPanelReconciliation().getJTable().getColumnModel().getColumn(indexUsedByOpsi);
+		col = thePanel.getPanelReconciliation().getGenEditTable().getColumnModel().getColumn(indexUsedByOpsi);
 		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);
 
-		col = thePanel.getPanelReconciliation().getJTable().getColumnModel().getColumn(indexSWInventoryUsed);
+		col = thePanel.getPanelReconciliation().getGenEditTable().getColumnModel().getColumn(indexSWInventoryUsed);
 		col.setCellRenderer(new CheckBoxTableCellRenderer());
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);

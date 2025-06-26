@@ -154,8 +154,8 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle = new JLabel();
 
 		panelTable = new PanelGenEdit("", false, 0, new int[] {}, true);
-		panelTable.getJTable().setColumnSelectionAllowed(false);
-		panelTable.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelTable.getGenEditTable().setColumnSelectionAllowed(false);
+		panelTable.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		List<String> columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 
@@ -243,9 +243,9 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
 
-		if (panelTable.getJTable().getRowSorter() instanceof TableRowSorter) {
+		if (panelTable.getGenEditTable().getRowSorter() instanceof TableRowSorter) {
 			TableRowSorter<? extends TableModel> rowSorter = (TableRowSorter<? extends TableModel>) panelTable
-					.getJTable().getRowSorter();
+					.getGenEditTable().getRowSorter();
 			rowSorter.setComparator(7, new OSComparator());
 
 			List<RowSorter.SortKey> sortKeys = new ArrayList<>(2);
@@ -255,14 +255,14 @@ public class PanelSWInfo extends JPanel {
 			rowSorter.sort();
 		}
 
-		panelTable.getJTable().setDefaultRenderer(Object.class, new OSTableCellRenderer());
-		panelTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(400);
-		panelTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(200);
-		panelTable.getJTable().getColumnModel().getColumn(2).setPreferredWidth(100);
-		panelTable.getJTable().getColumnModel().getColumn(7)
+		panelTable.getGenEditTable().setDefaultRenderer(Object.class, new OSTableCellRenderer());
+		panelTable.getGenEditTable().getColumnModel().getColumn(0).setPreferredWidth(400);
+		panelTable.getGenEditTable().getColumnModel().getColumn(1).setPreferredWidth(200);
+		panelTable.getGenEditTable().getColumnModel().getColumn(2).setPreferredWidth(100);
+		panelTable.getGenEditTable().getColumnModel().getColumn(7)
 				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
 
-		csvExportTable = new ExporterToCSV(panelTable.getJTable());
+		csvExportTable = new ExporterToCSV(panelTable.getGenEditTable());
 	}
 
 	private void buildPanel() {
@@ -311,7 +311,7 @@ public class PanelSWInfo extends JPanel {
 				}
 			};
 
-			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getJTable(),
+			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getGenEditTable(),
 					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
 		}
 	}
@@ -485,7 +485,7 @@ public class PanelSWInfo extends JPanel {
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", "software inventory");
 
-		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable.getJTable());
+		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable.getGenEditTable());
 		pdfExportTable.setClient(hostId);
 		pdfExportTable.setMetaData(metaData);
 		pdfExportTable.setPageSizeA4Landscape();

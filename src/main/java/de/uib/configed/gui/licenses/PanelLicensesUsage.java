@@ -30,6 +30,7 @@ import de.uib.utils.swing.AutoCompletionComboBox;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 
 public class PanelLicensesUsage extends MultiTablePanel {
 	private JSplitPane splitPane;
@@ -103,11 +104,11 @@ public class PanelLicensesUsage extends MultiTablePanel {
 
 	private void initComponents() {
 		panelUsage = new PanelGenEdit(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleUsage"), true, 0,
-				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
-						PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 
-		panelUsage.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelUsage.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelUsage.setFilterKey(FilterKey.LICENSE_USAGE_TABLE);
 
 		panelUsage.getTableSearchPane().setFiltering();

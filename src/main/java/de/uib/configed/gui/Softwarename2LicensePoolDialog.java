@@ -133,9 +133,9 @@ public class Softwarename2LicensePoolDialog {
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 		labelSetAllAssignmentsToPoolFromSelectedRow.setText(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow"));
-		buttonSetAllAssignmentsToPoolFromSelectedRow
-				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(
-						(String) panelSWxLicensepool.getValueAt(panelSWxLicensepool.getJTable().getSelectedRow(), 1))));
+		buttonSetAllAssignmentsToPoolFromSelectedRow.addActionListener(
+				actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo((String) panelSWxLicensepool
+						.getValueAt(panelSWxLicensepool.getGenEditTable().getSelectedRow(), 1))));
 	}
 
 	private JPanel createPanelAction() {
@@ -259,14 +259,15 @@ public class Softwarename2LicensePoolDialog {
 			}
 		};
 
-		panelSWnames.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		panelSWnames.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
 			if (!e.getValueIsAdjusting() && dialog.isVisible()) {
-				Logging.info(this, "selectedRow ", panelSWnames.getJTable().getSelectedRow());
+				Logging.info(this, "selectedRow ", panelSWnames.getGenEditTable().getSelectedRow());
 
-				if (panelSWnames.getJTable().getSelectedRow() >= 0) {
-					String swName = (String) panelSWnames.getValueAt(panelSWnames.getJTable().getSelectedRow(), 0);
+				if (panelSWnames.getGenEditTable().getSelectedRow() >= 0) {
+					String swName = (String) panelSWnames.getValueAt(panelSWnames.getGenEditTable().getSelectedRow(),
+							0);
 
 					Logging.info(this, " setTableModelSWxLicensepool for ", swName);
 

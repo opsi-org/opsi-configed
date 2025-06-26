@@ -167,19 +167,19 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	private void initTreatmentOfColumns() {
 		TableColumn col;
 
-		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(2);
+		col = thePanel.getPanelLicenseContracts().getGenEditTable().getColumnModel().getColumn(2);
 
 		col.setCellEditor(new CellDateEditor());
 
-		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(3);
+		col = thePanel.getPanelLicenseContracts().getGenEditTable().getColumnModel().getColumn(3);
 
 		col.setCellEditor(new CellDateEditor());
 
-		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(4);
+		col = thePanel.getPanelLicenseContracts().getGenEditTable().getColumnModel().getColumn(4);
 
 		col.setCellEditor(new CellDateEditor());
 
-		col = thePanel.getPanelLicenseContracts().getJTable().getColumnModel().getColumn(5);
+		col = thePanel.getPanelLicenseContracts().getGenEditTable().getColumnModel().getColumn(5);
 
 		col.setCellEditor(new CellInputDialogEditor());
 	}

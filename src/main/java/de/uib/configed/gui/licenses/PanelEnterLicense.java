@@ -45,6 +45,7 @@ import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.CellDateEditor;
 import de.uib.utils.table.gui.FilterKey;
 import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.DatePicker;
 
@@ -102,7 +103,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private void defineListeners() {
-		panelLicenseContracts.getJTable().getSelectionModel()
+		panelLicenseContracts.getGenEditTable().getSelectionModel()
 				.addListSelectionListener(this::selectPanelLicenseContracts);
 
 		panelLicensePools.addListSelectionListener(this::selectPanelLicensePools);
@@ -130,7 +131,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 			return;
 		}
 
-		int i = panelLicensePools.getJTable().getSelectedRow();
+		int i = panelLicensePools.getGenEditTable().getSelectedRow();
 
 		selectedLicensePool = "";
 
@@ -154,14 +155,14 @@ public class PanelEnterLicense extends MultiTablePanel {
 	}
 
 	private boolean checkAndStart() {
-		if (panelLicensePools.getJTable().getSelectedRow() == -1) {
+		if (panelLicensePools.getGenEditTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectLicensepool"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
-		if (panelLicenseContracts.getJTable().getSelectedRow() == -1) {
+		if (panelLicenseContracts.getGenEditTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.pleaseSelectLicensecontract"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
@@ -174,8 +175,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 		jTextFieldEndOfLicense.setEnabled(true);
 		jTextFieldEndOfLicense.setText("");
 		jTextFieldLicenseContract.setEnabled(true);
-		jTextFieldLicenseContract
-				.setText("" + panelLicenseContracts.getValueAt(panelLicenseContracts.getJTable().getSelectedRow(), 0));
+		jTextFieldLicenseContract.setText(
+				"" + panelLicenseContracts.getValueAt(panelLicenseContracts.getGenEditTable().getSelectedRow(), 0));
 		jTextFieldLicenseContract.setEditable(false);
 
 		jTextFieldLKey.setEnabled(true);
@@ -264,8 +265,8 @@ public class PanelEnterLicense extends MultiTablePanel {
 
 		panelLicenseContracts = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 1,
-				new int[] { PanelGenEdit.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE, PanelGenEdit.POPUP_CANCEL,
-						PopupMenuTrait.POPUP_RELOAD },
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 		panelLicenseContracts.setFilterKey(FilterKey.LICENSE_CONTRACTS_ENTER_TABLE);
 
@@ -559,7 +560,7 @@ public class PanelEnterLicense extends MultiTablePanel {
 		m.put("licenseContractId", contractSendValue);
 
 		m.put("licensePoolId",
-				panelLicensePools.getValueAt(panelLicensePools.getJTable().getSelectedRow(), 0).toString());
+				panelLicensePools.getValueAt(panelLicensePools.getGenEditTable().getSelectedRow(), 0).toString());
 		m.put("licenseKey", jTextFieldLKey.getText());
 
 		enterLicenseController.saveNewLicense(m);

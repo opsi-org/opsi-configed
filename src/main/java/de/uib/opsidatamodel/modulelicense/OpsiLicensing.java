@@ -94,8 +94,8 @@ public class OpsiLicensing extends JPanel {
 
 		buildModel();
 
-		licensingTable.getJTable().getColumnModel().getColumn(0).setPreferredWidth(150);
-		licensingTable.getJTable().getColumnModel().getColumn(1).setPreferredWidth(60);
+		licensingTable.getGenEditTable().getColumnModel().getColumn(0).setPreferredWidth(150);
+		licensingTable.getGenEditTable().getColumnModel().getColumn(1).setPreferredWidth(60);
 
 		return licensingTable;
 	}
@@ -254,7 +254,7 @@ public class OpsiLicensing extends JPanel {
 
 		licensingTable.setTableModel(theModel);
 
-		licensingTable.getJTable().setDefaultRenderer(Object.class,
+		licensingTable.getGenEditTable().setDefaultRenderer(Object.class,
 				new LicensingInfoTableCellRenderer(LicensingInfoMap.getInstance()));
 	}
 
