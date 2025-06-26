@@ -8,12 +8,10 @@ package de.uib.utils.table.gui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.DefaultRowSorter;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -243,25 +241,6 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		setDataChanged(false);
 
 		setModelFilteringBySelection();
-	}
-
-	/**
-	 * set special comparator for a column
-	 */
-	public void setComparator(String colName, Comparator<Object> comparator) {
-		Logging.info(this, "setComparator ", colName, " compare by ", comparator);
-		int modelCol = tableModel.getColumnNames().indexOf(colName);
-
-		if (modelCol < 0) {
-			Logging.warning(this, "invalid column name");
-			return;
-		}
-		DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>) genEditTable.getRowSorter();
-		if (sorter == null) {
-			Logging.warning(this, "no sorter");
-		} else {
-			sorter.setComparator(modelCol, comparator);
-		}
 	}
 
 	/**
