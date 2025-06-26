@@ -45,7 +45,7 @@ public final class ServerActionManager {
 
 	private static OpsiServiceNOMPersistenceController persistenceController;
 
-	private static AtomicBoolean localChangeInProgress = new AtomicBoolean(false);
+	private static AtomicBoolean isLocalChangeInProgress = new AtomicBoolean(false);
 
 	// We want a private empty constructor to prevent instantiation of this class
 	private ServerActionManager() {
@@ -59,7 +59,7 @@ public final class ServerActionManager {
 
 	public static void createClients(List<List<Object>> clients) {
 		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList();
-		localChangeInProgress.set(true);
+		isLocalChangeInProgress.set(true);
 
 		try {
 			persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
@@ -76,13 +76,13 @@ public final class ServerActionManager {
 				persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
 			}
 		} finally {
-			localChangeInProgress.set(false);
+			isLocalChangeInProgress.set(false);
 		}
 	}
 
 	public static void createClient(String newClientID, final String[] groups) {
 		Logging.checkErrorList();
-		localChangeInProgress.set(true);
+		isLocalChangeInProgress.set(true);
 		try {
 			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
@@ -95,7 +95,7 @@ public final class ServerActionManager {
 			// Sets the client on the table
 			configedMain.setClient(newClientID);
 		} finally {
-			localChangeInProgress.set(false);
+			isLocalChangeInProgress.set(false);
 		}
 	}
 
@@ -222,7 +222,7 @@ public final class ServerActionManager {
 			return;
 		}
 
-		localChangeInProgress.set(true);
+		isLocalChangeInProgress.set(true);
 
 		try {
 			persistenceController.getHostDataService().deleteClients(configedMain.getSelectedClients());
@@ -230,7 +230,7 @@ public final class ServerActionManager {
 			configedMain.refreshClientListKeepingGroup();
 
 		} finally {
-			localChangeInProgress.set(false);
+			isLocalChangeInProgress.set(false);
 		}
 	}
 
@@ -494,6 +494,6 @@ public final class ServerActionManager {
 	}
 
 	public static boolean isLocalChangeInProgress() {
-		return localChangeInProgress.get();
+		return isLocalChangeInProgress.get();
 	}
 }
