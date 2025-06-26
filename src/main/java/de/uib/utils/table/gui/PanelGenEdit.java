@@ -852,6 +852,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		}
 	}
 
+	@Override
 	public void rowUpdated(int modelrow) {
 		Logging.info(this, " in PanelGenEditTable rowUpdated to modelrow ", modelrow);
 	}
