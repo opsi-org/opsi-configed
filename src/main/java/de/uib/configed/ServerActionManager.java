@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -44,6 +45,8 @@ public final class ServerActionManager {
 
 	private static OpsiServiceNOMPersistenceController persistenceController;
 
+	private static AtomicBoolean localChangeInProgress = new AtomicBoolean(false);
+
 	// We want a private empty constructor to prevent instantiation of this class
 	private ServerActionManager() {
 	}
@@ -56,33 +59,44 @@ public final class ServerActionManager {
 
 	public static void createClients(List<List<Object>> clients) {
 		List<String> createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList();
-		persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
-		if (persistenceController.getHostDataService().createClients(clients)) {
-			Logging.debug("createClients", clients);
-			Logging.checkErrorList();
+		localChangeInProgress.set(true);
 
-			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+		try {
+			persistenceController.getHostInfoCollections().addOpsiHostNames(createdClientNames);
+			if (persistenceController.getHostDataService().createClients(clients)) {
+				Logging.debug("createClients", clients);
+				Logging.checkErrorList();
 
-			configedMain.setRebuiltClientListTableModel(true, true);
-			configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
-			configedMain.setClients(createdClientNames);
-		} else {
-			persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
+				persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+
+				configedMain.setRebuiltClientListTableModel(true, true);
+				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
+				configedMain.setClients(createdClientNames);
+			} else {
+				persistenceController.getHostInfoCollections().removeOpsiHostNames(createdClientNames);
+			}
+		} finally {
+			localChangeInProgress.set(false);
 		}
 	}
 
 	public static void createClient(String newClientID, final String[] groups) {
 		Logging.checkErrorList();
-		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+		localChangeInProgress.set(true);
+		try {
+			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
 
-		configedMain.setRebuiltClientListTableModel(true, true);
+			configedMain.setRebuiltClientListTableModel(true, true);
 
-		if (groups.length == 0 || groups.length > 1 || !configedMain.activateGroup(false, groups[0])) {
-			configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
+			if (groups.length == 0 || groups.length > 1 || !configedMain.activateGroup(false, groups[0])) {
+				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
+			}
+
+			// Sets the client on the table
+			configedMain.setClient(newClientID);
+		} finally {
+			localChangeInProgress.set(false);
 		}
-
-		// Sets the client on the table
-		configedMain.setClient(newClientID);
 	}
 
 	public static void wakeSelectedClients() {
@@ -208,11 +222,16 @@ public final class ServerActionManager {
 			return;
 		}
 
-		persistenceController.getHostDataService().deleteClients(configedMain.getSelectedClients());
+		localChangeInProgress.set(true);
 
-		configedMain.deactivateFilter();
+		try {
+			persistenceController.getHostDataService().deleteClients(configedMain.getSelectedClients());
+			configedMain.deactivateFilter();
+			configedMain.refreshClientListKeepingGroup();
 
-		configedMain.refreshClientListKeepingGroup();
+		} finally {
+			localChangeInProgress.set(false);
+		}
 	}
 
 	private static boolean confirmActionForSelectedClients(String confirmInfo) {
@@ -472,5 +491,9 @@ public final class ServerActionManager {
 			configedMain.refreshClientListKeepingGroup();
 
 		}
+	}
+
+	public static boolean isLocalChangeInProgress() {
+		return localChangeInProgress.get();
 	}
 }

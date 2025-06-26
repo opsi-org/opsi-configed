@@ -26,6 +26,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ServerActionManager;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
@@ -244,7 +245,8 @@ public class ClientTable extends JTable implements MessagebusListener {
 		// Sleep for a little because otherwise we cannot get the needed data from the server.
 		Utils.threadSleep(this, 5);
 
-		if (!WebSocketEvent.GENERAL_EVENT.toString().equals(message.get("type")) && !message.containsKey("event")) {
+		if ((!WebSocketEvent.GENERAL_EVENT.toString().equals(message.get("type")) && !message.containsKey("event"))
+				|| ServerActionManager.isLocalChangeInProgress()) {
 			return;
 		}
 
@@ -262,11 +264,6 @@ public class ClientTable extends JTable implements MessagebusListener {
 	}
 
 	public void addClientToTable(String clientId) {
-		if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| ConfigedMain.getMainFrame().getClientConfiguration().getSelectedIndex() != 0) {
-			return;
-		}
-
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(() -> {
@@ -278,11 +275,6 @@ public class ClientTable extends JTable implements MessagebusListener {
 	}
 
 	public void removeClientFromTable(String clientId) {
-		if (!persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| ConfigedMain.getMainFrame().getClientConfiguration().getSelectedIndex() != 0) {
-			return;
-		}
-
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(configedMain::refreshClientListKeepingGroup);
