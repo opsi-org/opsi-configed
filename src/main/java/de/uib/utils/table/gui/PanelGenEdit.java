@@ -27,7 +27,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -43,7 +42,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
@@ -460,7 +458,7 @@ public class PanelGenEdit extends JPanel
 	private void addPopupMenuDeleteRow() {
 		menuItemDeleteRelation = new JMenuItem(Configed.getResourceValue("PanelGenEditTable.deleteRow"));
 		menuItemDeleteRelation.setEnabled(false);
-		menuItemDeleteRelation.addActionListener(actionEvent -> deleteRelation());
+		menuItemDeleteRelation.addActionListener(actionEvent -> genEditTable.deleteRelation());
 		addPopupItem(menuItemDeleteRelation);
 	}
 
@@ -469,18 +467,6 @@ public class PanelGenEdit extends JPanel
 			genEditTable.print();
 		} catch (PrinterException ex) {
 			Logging.error(ex, "Printing error ");
-		}
-	}
-
-	private void deleteRelation() {
-		if (genEditTable.getSelectedRowCount() == 0) {
-			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
-					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
-		} else if (genEditTable.isDeleteAllowed()) {
-			tableModel.deleteRow(getSelectedRowInModelTerms());
-		} else {
-			Logging.warning(this, "nothing to delete, since nothing selected or deleting not allowed");
 		}
 	}
 

@@ -10,9 +10,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.DropMode;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
 
 public class GenEditTable extends JTable implements KeyListener {
@@ -26,6 +30,18 @@ public class GenEditTable extends JTable implements KeyListener {
 		super.setDragEnabled(true);
 		super.setDropMode(DropMode.ON);
 		super.setAutoCreateRowSorter(false);
+	}
+
+	public void deleteRelation() {
+		if (getSelectedRowCount() == 0) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
+					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
+		} else if (isDeleteAllowed()) {
+			((GenTableModel) getModel()).deleteRow(getSelectedRowInModelTerms());
+		} else {
+			Logging.warning(this, "nothing to delete, since nothing selected or deleting not allowed");
+		}
 	}
 
 	// KeyListener interface
