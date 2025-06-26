@@ -349,7 +349,6 @@ public class PanelGenEdit extends JPanel
 				selVal = tableModel.getValueAt(genEditTable.convertRowIndexToModel(selRow), tableModel.getKeyCol());
 			}
 
-			setSortOrder(sortDescriptor);
 			((DefaultRowSorter<?, ?>) genEditTable.getRowSorter()).sort();
 			setSorter();
 
