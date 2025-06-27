@@ -273,15 +273,34 @@ public class OpsiDataSerializer {
 			throws Exception {
 		Logging.info(this, "getOperation for node ", node, "; hardware ", hardware);
 
-		String elementPathS = null;
-		if (node.elementPath() != null) {
-			elementPathS = node.elementPath().toString();
-			Logging.info(this, "getOperation, elementPath in node ", elementPathS);
-		}
-		// Element
+		String elementPathS = extractElementPath(node);
 		AbstractSelectElement element = getSelectElement(node, hardware, elementPathS);
 
-		// Children
+		List<AbstractSelectOperation> children = buildChildOperations(node, hardware);
+
+		String operationName = node.operation();
+		Logging.info(this, "getOperation Operation name: ", operationName);
+
+		AbstractSelectOperation operation = createOperation(operationName, element, children);
+
+		Logging.info(this, "getOperation  ", operation);
+
+		attachSelectData(node, operation);
+
+		return operation;
+	}
+
+	private String extractElementPath(OperationNode node) {
+		if (node.elementPath() != null) {
+			String elementPathS = node.elementPath().toString();
+			Logging.info(this, "getOperation, elementPath in node ", elementPathS);
+			return elementPathS;
+		}
+		return null;
+	}
+
+	private List<AbstractSelectOperation> buildChildOperations(OperationNode node,
+			Map<String, List<AbstractSelectElement>> hardware) throws Exception {
 		List<OperationNode> childrenData = node.children();
 		List<AbstractSelectOperation> children = new LinkedList<>();
 		if (childrenData != null) {
@@ -289,33 +308,34 @@ public class OpsiDataSerializer {
 				children.add(getOperation(child, hardware));
 			}
 		}
+		return children;
+	}
 
-		// Operation
-		String operationName = node.operation();
-		Logging.info(this, "getOperation Operation name: ", operationName);
-		AbstractSelectOperation operation;
-
+	@SuppressWarnings("java:S112")
+	private AbstractSelectOperation createOperation(String operationName, AbstractSelectElement element,
+			List<AbstractSelectOperation> children) throws Exception {
 		if (getSearchDataVersion() == 1) {
-			operation = parseOperationVersion1(operationName, element, children);
-		} else {
-			Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
-			Logging.info(this, "getOperation operationClass  ", operationClass.toString());
-			if (element != null) {
-				Logging.info(this, "getOperation element != null, element  ", element);
-				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
-			} else if (children.size() == 1) {
-				Class<?> list = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
-				Logging.info(this, "getOperation List name: ", list);
-				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children.get(0));
-			} else {
-				Class<?> list = Class.forName("java.util.List");
-				Logging.info(this, "getOperation List name: ", list);
-				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
-			}
+			return parseOperationVersion1(operationName, element, children);
 		}
 
-		Logging.info(this, "getOperation  ", operation);
+		Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
+		Logging.info(this, "getOperation operationClass  ", operationClass.toString());
 
+		if (element != null) {
+			Logging.info(this, "getOperation element != null, element  ", element);
+			return (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
+		} else if (children.size() == 1) {
+			Class<?> opClass = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
+			Logging.info(this, "getOperation List name: ", opClass);
+			return (AbstractSelectOperation) operationClass.getConstructor(opClass).newInstance(children.get(0));
+		} else {
+			Class<?> listClass = Class.forName("java.util.List");
+			Logging.info(this, "getOperation List name: ", listClass);
+			return (AbstractSelectOperation) operationClass.getConstructor(listClass).newInstance(children);
+		}
+	}
+
+	private void attachSelectData(OperationNode node, AbstractSelectOperation operation) {
 		String dataTypeStr = node.dataType();
 		checkLastDataType(dataTypeStr);
 		Object realData = node.data();
@@ -327,8 +347,6 @@ public class OpsiDataSerializer {
 			selectData = new SelectData(convertedData, lastDataType);
 		}
 		operation.setSelectData(selectData);
-
-		return operation;
 	}
 
 	private AbstractSelectElement getSelectElement(OperationNode node,
