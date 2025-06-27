@@ -87,30 +87,14 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 		return terminalId;
 	}
 
-	public String getSessionChannel() {
-		return sessionChannel;
-	}
-
 	public String getTitle() {
 		return sessionChannel == null || TerminalWidget.CONFIG_SERVER_SESSION_CHANNEL.equals(sessionChannel)
 				? PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer()
 				: sessionChannel;
 	}
 
-	public int getColumnCount() {
-		return getTerminalPanel().getTerminalSizeFromComponent().getColumns();
-	}
-
-	public int getRowCount() {
-		return getTerminalPanel().getTerminalSizeFromComponent().getRows();
-	}
-
 	public boolean ignoreKeyEvent() {
 		return ignoreKeyEvent;
-	}
-
-	public void setIgnoreKeyEvent(boolean ignoreKeyEvent) {
-		this.ignoreKeyEvent = ignoreKeyEvent;
 	}
 
 	public boolean disableUserInput() {
@@ -119,10 +103,6 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 
 	public void setDisableUserInput(boolean disableUserInput) {
 		this.disableUserInput = disableUserInput;
-	}
-
-	public boolean isViewRestricted() {
-		return isViewRestricted;
 	}
 
 	public void setViewRestricted(boolean isViewRestricted) {
