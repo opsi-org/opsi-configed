@@ -261,20 +261,23 @@ public class Softwarename2LicensePoolDialog {
 
 		panelSWnames.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
-			if (!e.getValueIsAdjusting() && dialog.isVisible()) {
-				Logging.info(this, "selectedRow ", panelSWnames.getGenEditTable().getSelectedRow());
+		panelSWnames.addListSelectionListener(this::updateTableModelSWxLicensepool);
+	}
 
-				if (panelSWnames.getGenEditTable().getSelectedRow() >= 0) {
-					String swName = (String) panelSWnames.getValueAt(panelSWnames.getGenEditTable().getSelectedRow(),
-							0);
+	private void updateTableModelSWxLicensepool(ListSelectionEvent e) {
+		if (e.getValueIsAdjusting() || dialog.isVisible()) {
+			return;
+		}
 
-					Logging.info(this, " setTableModelSWxLicensepool for ", swName);
+		Logging.info(this, "selectedRow ", panelSWnames.getGenEditTable().getSelectedRow());
 
-					setTableModelSWxLicensepool(swName);
-				}
-			}
-		});
+		if (panelSWnames.getGenEditTable().getSelectedRow() >= 0) {
+			String swName = (String) panelSWnames.getValueAt(panelSWnames.getGenEditTable().getSelectedRow(), 0);
+
+			Logging.info(this, " setTableModelSWxLicensepool for ", swName);
+
+			setTableModelSWxLicensepool(swName);
+		}
 	}
 
 	private boolean setSWxColTo(String newVal) {
