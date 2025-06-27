@@ -8,6 +8,7 @@ package de.uib.configed.clientselection.serializers;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -491,14 +492,10 @@ public class OpsiDataSerializer {
 		if (!(operation instanceof AbstractSelectGroupOperation)) {
 			Logging.debug("No group: ", operation.getClassName(), ", element path size: ",
 					operation.getElement().getPathArray().length);
-			if (operation.getElement().getPathArray().length == 1) {
-				return new HostOperation(operation);
-			} else {
-				return operation;
-			}
+			return (operation.getElement().getPathArray().length == 1) ? new HostOperation(operation) : operation;
 		}
-		if (operation instanceof HardwareOperation || operation instanceof SoftwareOperation
-				|| operation instanceof SwAuditOperation) {
+
+		if (isSpecialGroupOperation(operation)) {
 			return operation;
 		}
 
@@ -506,29 +503,38 @@ public class OpsiDataSerializer {
 			return new HostOperation(operation);
 		}
 
-		AndOperation andOperation = (AndOperation) operation;
-		AbstractSelectOperation notGroup = operation;
-		while (notGroup instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
-			notGroup = abstractSelectGroupOperation.getChildOperations().get(0);
+		return handleAndOperation((AndOperation) operation);
+	}
+
+	private static boolean isSpecialGroupOperation(AbstractSelectOperation operation) {
+		return operation instanceof HardwareOperation || operation instanceof SoftwareOperation
+				|| operation instanceof SwAuditOperation;
+	}
+
+	private static AbstractSelectOperation handleAndOperation(AndOperation andOperation) {
+		AbstractSelectOperation notGroup = unwrapGroup(andOperation);
+		AbstractSelectOperation leftNotGroup = unwrapGroup(andOperation.getChildOperations().get(1));
+
+		int notGroupPathLen = notGroup.getElement().getPathArray().length;
+		int leftNotGroupPathLen = leftNotGroup.getElement().getPathArray().length;
+
+		if (notGroupPathLen != 1) {
+			return andOperation;
 		}
 
-		AbstractSelectOperation leftNotGroup = andOperation.getChildOperations().get(1);
-		while (leftNotGroup instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
-			leftNotGroup = abstractSelectGroupOperation.getChildOperations().get(0);
-		}
-
-		if (notGroup.getElement().getPathArray().length != 1) {
-			return operation;
-		}
-
-		if (notGroup.getElement().getPathArray().length == 1 && leftNotGroup.getElement().getPathArray().length == 1) {
+		if (notGroupPathLen == 1 && leftNotGroupPathLen == 1) {
 			return new HostOperation(andOperation);
 		}
 
-		List<AbstractSelectOperation> ops = andOperation.getChildOperations();
-		HostOperation host = new HostOperation(ops.get(0));
-		ops.remove(0);
-		ops.add(0, host);
+		List<AbstractSelectOperation> ops = new ArrayList<>(andOperation.getChildOperations());
+		ops.set(0, new HostOperation(ops.get(0)));
 		return new AndOperation(ops);
+	}
+
+	private static AbstractSelectOperation unwrapGroup(AbstractSelectOperation operation) {
+		while (operation instanceof AbstractSelectGroupOperation groupOp) {
+			operation = groupOp.getChildOperations().get(0);
+		}
+		return operation;
 	}
 }
