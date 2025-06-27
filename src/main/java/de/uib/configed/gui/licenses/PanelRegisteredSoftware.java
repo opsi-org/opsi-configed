@@ -47,7 +47,7 @@ public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListen
 		super.commit();
 		PersistenceControllerFactory.getPersistenceController()
 				.reloadData(ReloadEvent.ASW_TO_LP_RELATIONS_DATA_RELOAD.toString());
-		tableModel.reset();
+		genEditTable.getModel().reset();
 
 		if (controller.getTabClient().getFSoftwarename2LicensePool() != null) {
 			Logging.info(this, "Panel.fSoftwarename2LicensePool.panelSWnames.reset");
@@ -66,11 +66,11 @@ public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListen
 	}
 
 	public void callName2Pool(int modelrow) {
-		if (tableModel.getCursorRow() < 0) {
+		if (genEditTable.getModel().getCursorRow() < 0) {
 			return;
 		}
 
-		String nameVal = (String) tableModel.getValueAt(modelrow,
+		String nameVal = (String) genEditTable.getValueAt(modelrow,
 				getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
 
 		Logging.info(this, " got name ", nameVal);
@@ -95,7 +95,7 @@ public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListen
 	private boolean mouseInColumnOfMarkCursor(Point p) {
 		int mouseCol = genEditTable.columnAtPoint(p);
 
-		return mouseCol >= 0 && mouseCol == tableModel.getColMarkCursorRow();
+		return mouseCol >= 0 && mouseCol == genEditTable.getModel().getColMarkCursorRow();
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListen
 		int mouseRow = genEditTable.rowAtPoint(mousePoint);
 
 		if (mouseInColumnOfMarkCursor(mousePoint)) {
-			tableModel.setCursorRow(genEditTable.convertRowIndexToModel(mouseRow));
+			genEditTable.getModel().setCursorRow(genEditTable.convertRowIndexToModel(mouseRow));
 		} else if (isAwareOfSelectionListener()) {
 			Logging.info(this, "mouse click in table. outside colMarkCursorRow, aware of selectionlistener");
 
@@ -150,7 +150,7 @@ public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListen
 		if (b && controller.acknowledgeChangeForSWList()) {
 			int col = genEditTable.getEditingColumn();
 			Logging.info(this, "setDataChanged col ", col);
-			if (tableModel.gotMarkCursorRow() && col != tableModel.getColMarkCursorRow()) {
+			if (genEditTable.getModel().gotMarkCursorRow() && col != genEditTable.getModel().getColMarkCursorRow()) {
 				super.setDataChanged(true);
 			}
 		} else {

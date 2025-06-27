@@ -111,8 +111,8 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		int saveSelectedRow = paneProducts.getGenEditTable().getSelectedRow();
 		paneProducts.getTableModel().reset();
 
-		if (paneProducts.getTableModel().getRowCount() > 0) {
-			if (saveSelectedRow == -1 || paneProducts.getTableModel().getRowCount() <= saveSelectedRow) {
+		if (paneProducts.getGenEditTable().getRowCount() > 0) {
+			if (saveSelectedRow == -1 || paneProducts.getGenEditTable().getRowCount() <= saveSelectedRow) {
 				paneProducts.setSelectedRow(0);
 			} else {
 				paneProducts.setSelectedRow(saveSelectedRow);

@@ -41,7 +41,6 @@ import de.uib.utils.table.updates.UpdateController;
 public class PanelGenEdit extends JPanel implements TableModelListener, ListSelectionListener, CursorrowObserver {
 	private JScrollPane jScrollPane;
 	protected GenEditTable genEditTable;
-	protected GenTableModel tableModel;
 
 	private JButton buttonCommit;
 	private JButton buttonCancel;
@@ -207,8 +206,8 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		getParent().setCursor(Globals.WAIT_CURSOR);
 
 		Logging.info(this, "in PanelGenEditTable reload()");
-		tableModel.requestReload();
-		tableModel.reset();
+		genEditTable.getModel().requestReload();
+		genEditTable.getModel().reset();
 		setDataChanged(false);
 
 		getParent().setCursor(null);
@@ -233,8 +232,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		// just in case there was one
 
 		genEditTable.setModel(m);
-		tableModel = m;
-		tableModel.addCursorrowObserver(this);
+		genEditTable.getModel().addCursorrowObserver(this);
 
 		genEditTable.setSorter();
 
@@ -269,12 +267,12 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	private void setModelFilteringBySelection() {
-		if (tableSearchPane.isFiltering() && tableModel != null
-				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
+		if (tableSearchPane.isFiltering() && genEditTable.getModel() != null
+				&& genEditTable.getModel().getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
 			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
 
-			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
+			genEditTable.getModel().chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
 		}
 	}
 
@@ -333,7 +331,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public GenTableModel getTableModel() {
-		return tableModel;
+		return genEditTable.getModel();
 	}
 
 	public TableSearchPane getTableSearchPane() {
@@ -371,7 +369,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public Object getValueAt(int row, int col) {
-		return tableModel.getValueAt(genEditTable.convertRowIndexToModel(row),
+		return genEditTable.getValueAt(genEditTable.convertRowIndexToModel(row),
 				genEditTable.convertColumnIndexToModel(col));
 	}
 
@@ -398,19 +396,21 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	public List<String> getSelectedKeys() {
 		List<String> result = new ArrayList<>();
 
-		if (tableModel.getKeyCol() < 0) {
+		if (genEditTable.getModel().getKeyCol() < 0) {
 			return result;
 		}
 
-		if (tableModel.isUsingFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION)) {
-			for (int i = 0; i < tableModel.getRowCount(); i++) {
-				result.add(tableModel.getValueAt(genEditTable.convertRowIndexToModel(i), tableModel.getKeyCol())
+		if (genEditTable.getModel().isUsingFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION)) {
+			for (int i = 0; i < genEditTable.getRowCount(); i++) {
+				result.add(genEditTable
+						.getValueAt(genEditTable.convertRowIndexToModel(i), genEditTable.getModel().getKeyCol())
 						.toString());
 			}
 		} else {
 			for (int i = 0; i < genEditTable.getSelectedRowCount(); i++) {
-				result.add(tableModel.getValueAt(genEditTable.convertRowIndexToModel(genEditTable.getSelectedRows()[i]),
-						tableModel.getKeyCol()).toString());
+				result.add(
+						genEditTable.getValueAt(genEditTable.convertRowIndexToModel(genEditTable.getSelectedRows()[i]),
+								genEditTable.getModel().getKeyCol()).toString());
 			}
 		}
 
@@ -447,7 +447,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 		Logging.info(this, "moveToValue ", value, " col ", col, " selecting ", selecting);
 		int viewrow = genEditTable.findViewRowFromValue(value, col);
 		if (viewrow > -1) {
-			tableModel.setCursorRow(genEditTable.convertRowIndexToModel(viewrow));
+			genEditTable.getModel().setCursorRow(genEditTable.convertRowIndexToModel(viewrow));
 		}
 
 		genEditTable.scrollRectToVisible(genEditTable.getCellRect(viewrow, col, false));
@@ -468,21 +468,20 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 			return;
 		}
 
-		if (tableModel.getKeyCol() > -1) {
-			moveToValue(keyValue, tableModel.getKeyCol());
+		if (genEditTable.getModel().getKeyCol() > -1) {
+			moveToValue(keyValue, genEditTable.getModel().getKeyCol());
 		} else {
 			boolean found = false;
 
 			// try to use pseudokey
 			int viewrow = 0;
 
-			while (viewrow < tableModel.getRowCount()) {
-				String[] partialkeys = new String[tableModel.getFinalCols().size()];
+			while (viewrow < genEditTable.getRowCount()) {
+				String[] partialkeys = new String[genEditTable.getModel().getFinalCols().size()];
 
-				for (int j = 0; j < tableModel.getFinalCols().size(); j++) {
-					partialkeys[j] = tableModel
-							.getValueAt(genEditTable.convertRowIndexToModel(viewrow), tableModel.getFinalCols().get(j))
-							.toString();
+				for (int j = 0; j < genEditTable.getModel().getFinalCols().size(); j++) {
+					partialkeys[j] = genEditTable.getValueAt(genEditTable.convertRowIndexToModel(viewrow),
+							genEditTable.getModel().getFinalCols().get(j)).toString();
 				}
 
 				if (keyValue.equals(Utils.pseudokey(partialkeys))) {
@@ -503,8 +502,8 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public boolean setCursorToFirstRow() {
-		if (tableModel.getRowCount() > 0) {
-			tableModel.setCursorRow(genEditTable.convertRowIndexToModel(0));
+		if (genEditTable.getRowCount() > 0) {
+			genEditTable.getModel().setCursorRow(genEditTable.convertRowIndexToModel(0));
 			genEditTable.scrollRectToVisible(genEditTable.getCellRect(0, 0, true));
 		}
 
@@ -512,24 +511,24 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public boolean setCursorToLastRow() {
-		if (tableModel.getRowCount() > 0) {
-			tableModel.setCursorRow(genEditTable.convertRowIndexToModel(tableModel.getRowCount() - 1));
-			genEditTable.scrollRectToVisible(genEditTable.getCellRect(tableModel.getRowCount() - 1, 0, true));
+		if (genEditTable.getRowCount() > 0) {
+			genEditTable.getModel().setCursorRow(genEditTable.convertRowIndexToModel(genEditTable.getRowCount() - 1));
+			genEditTable.scrollRectToVisible(genEditTable.getCellRect(genEditTable.getRowCount() - 1, 0, true));
 		}
 		return true;
 	}
 
 	public boolean advanceCursor(int d) {
 		int viewCursorRow = -1;
-		if (tableModel.getCursorRow() > -1) {
-			viewCursorRow = genEditTable.convertRowIndexToView(tableModel.getCursorRow());
+		if (genEditTable.getModel().getCursorRow() > -1) {
+			viewCursorRow = genEditTable.convertRowIndexToView(genEditTable.getModel().getCursorRow());
 		}
 
 		Logging.info(this, "advanceCursor from ", viewCursorRow);
 		int nextViewCursorRow = viewCursorRow + d;
 		Logging.info(this, "advanceCursor to ", nextViewCursorRow);
-		if (nextViewCursorRow < tableModel.getRowCount() && nextViewCursorRow >= 0) {
-			tableModel.setCursorRow(genEditTable.convertRowIndexToModel(nextViewCursorRow));
+		if (nextViewCursorRow < genEditTable.getRowCount() && nextViewCursorRow >= 0) {
+			genEditTable.getModel().setCursorRow(genEditTable.convertRowIndexToModel(nextViewCursorRow));
 		}
 
 		genEditTable.scrollRectToVisible(genEditTable.getCellRect(nextViewCursorRow, 0, true));
@@ -538,7 +537,7 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	}
 
 	public void moveToLastRow() {
-		genEditTable.moveToRow(tableModel.getRowCount() - 1);
+		genEditTable.moveToRow(genEditTable.getRowCount() - 1);
 	}
 
 	public void restoreFilter() {
@@ -553,17 +552,18 @@ public class PanelGenEdit extends JPanel implements TableModelListener, ListSele
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		Logging.debug(this, " tableChanged ", "source ", e.getSource(), " col ", e.getColumn());
-		if (tableModel != null) {
+		if (genEditTable.getModel() != null) {
 			Logging.debug(this, "tableChanged,  whereas tableModel.getColMarkCursorRow() is ",
-					tableModel.getColMarkCursorRow());
+					genEditTable.getModel().getColMarkCursorRow());
 		}
 
-		if (awareOfTableChangedListener && tableModel != null
-				&& !(tableModel.getColMarkCursorRow() > -1 && e.getColumn() == tableModel.getColMarkCursorRow())) {
+		if (awareOfTableChangedListener && genEditTable.getModel() != null
+				&& !(genEditTable.getModel().getColMarkCursorRow() > -1
+						&& e.getColumn() == genEditTable.getModel().getColMarkCursorRow())) {
 			Logging.info(this, " tableChanged, datachanged set to true");
 			setDataChanged(true);
-			if (tableModel != null && oldrowcount != tableModel.getRowCount()) {
-				oldrowcount = tableModel.getRowCount();
+			if (genEditTable.getModel() != null && oldrowcount != genEditTable.getRowCount()) {
+				oldrowcount = genEditTable.getRowCount();
 			}
 		}
 	}

@@ -69,6 +69,18 @@ public class GenEditTable extends JTable implements KeyListener {
 		this.sortDescriptor = sortDescriptor;
 	}
 
+	@Override
+	public GenTableModel getModel() {
+		TableModel model = super.getModel();
+		if (model instanceof GenTableModel) {
+			return (GenTableModel) model;
+		} else {
+			// This is not a problem, the model has just not been set yet
+			Logging.info(this, "getModel: Model is not a GenTableModel, but ", model.getClass().getName());
+			return null;
+		}
+	}
+
 	public void setSorter() {
 		Logging.info(this, "setSorter");
 
