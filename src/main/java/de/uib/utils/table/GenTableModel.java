@@ -555,19 +555,6 @@ public class GenTableModel extends AbstractTableModel {
 		fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
 	}
 
-	private boolean checkDeletionOfAddedRow(int rowNum) {
-		if (addedRows.contains(rowNum)) {
-			// Deletion of added rows is not adequately managed,
-			// therefore we reject it.
-			Logging.info(this, "no deletion of added rows");
-
-			JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
-					"Information", JOptionPane.OK_OPTION);
-			return false;
-		}
-		return true;
-	}
-
 	public void deleteRows(int[] selection) {
 		Logging.debug(this, "deleteRows ", Arrays.toString(selection));
 
@@ -588,24 +575,27 @@ public class GenTableModel extends AbstractTableModel {
 		}
 	}
 
+	private boolean checkDeletionOfAddedRow(int rowNum) {
+		if (itemFactory == null || updates == null || rows.get(rowNum) == null) {
+			Logging.warning(this, "cannot delete row ", rowNum, ", since we have itemFactory == ", itemFactory,
+					", updates == ", updates, ", rows.get(rowNum) == ", rows.get(rowNum));
+			return false;
+		}
+
+		if (addedRows.contains(rowNum)) {
+			// Deletion of added rows is not adequately managed,
+			// therefore we reject it.
+			Logging.info(this, "no deletion of added rows");
+
+			JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
+					"Information", JOptionPane.OK_OPTION);
+			return false;
+		}
+		return true;
+	}
+
 	public void deleteRow(int rowNum) {
 		Logging.debug(this, "deleteRow ", rowNum);
-
-		if (itemFactory == null) {
-			Logging.info("update item factory missing");
-			return;
-		}
-
-		if (updates == null) {
-			Logging.info("updates not initialized");
-			return;
-		}
-
-		if (rows.get(rowNum) == null) {
-			Logging.info(this, "delete row null ");
-			return;
-		}
-
 		if (!checkDeletionOfAddedRow(rowNum)) {
 			return;
 		}
