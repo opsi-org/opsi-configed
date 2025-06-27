@@ -105,8 +105,8 @@ public class OpsiDataSerializer {
 		}
 
 		Logging.info(this, "deserialize OperationNode ", node);
-		if (node.getElementPath() != null) {
-			Logging.info("deserialize, elementPath ", node.getElementPath());
+		if (node.elementPath() != null) {
+			Logging.info("deserialize, elementPath ", node.elementPath());
 		}
 
 		try {
@@ -274,15 +274,15 @@ public class OpsiDataSerializer {
 		Logging.info(this, "getOperation for node ", node, "; hardware ", hardware);
 
 		String elementPathS = null;
-		if (node.getElementPath() != null) {
-			elementPathS = node.getElementPath().toString();
+		if (node.elementPath() != null) {
+			elementPathS = node.elementPath().toString();
 			Logging.info(this, "getOperation, elementPath in node ", elementPathS);
 		}
 		// Element
 		AbstractSelectElement element = getSelectElement(node, hardware, elementPathS);
 
 		// Children
-		List<OperationNode> childrenData = node.getChildren();
+		List<OperationNode> childrenData = node.children();
 		List<AbstractSelectOperation> children = new LinkedList<>();
 		if (childrenData != null) {
 			for (OperationNode child : childrenData) {
@@ -291,7 +291,7 @@ public class OpsiDataSerializer {
 		}
 
 		// Operation
-		String operationName = node.getOperation();
+		String operationName = node.operation();
 		Logging.info(this, "getOperation Operation name: ", operationName);
 		AbstractSelectOperation operation;
 
@@ -316,9 +316,9 @@ public class OpsiDataSerializer {
 
 		Logging.info(this, "getOperation  ", operation);
 
-		String dataTypeStr = node.getDataType();
+		String dataTypeStr = node.dataType();
 		checkLastDataType(dataTypeStr);
-		Object realData = node.getData();
+		Object realData = node.data();
 		Logging.info(this, "getOperation realData ", realData);
 
 		SelectData selectData = null;
@@ -335,13 +335,13 @@ public class OpsiDataSerializer {
 			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		AbstractSelectElement element = null;
-		String elementName = node.getElement();
+		String elementName = node.element();
 		Logging.info(this, "Element name: ", elementName);
 
 		if (elementName != null && !(elementName.isEmpty())) {
-			String subelementName = node.getRefinedElement();
+			String subelementName = node.refinedElement();
 
-			List<String> elementPath = node.getElementPath();
+			List<String> elementPath = node.elementPath();
 
 			element = switch (elementName) {
 			case ELEMENT_NAME_SOFTWARE_NAME_ELEMENT -> manager.getNewSoftwareNameElement();
