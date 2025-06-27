@@ -10,12 +10,16 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
@@ -51,11 +55,12 @@ public class OpsiDataSerializer {
 	public static final String KEY_OPERATION = "operation";
 	public static final String KEY_DATA_TYPE = "dataType";
 
+	private static final ObjectMapper objectMapper = new ObjectMapper();
+
 	private SelectionManager manager;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private JsonParser parser;
 	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;
 	private int searchDataVersion;
@@ -64,6 +69,8 @@ public class OpsiDataSerializer {
 		this.manager = manager;
 		searches = new HashMap<>();
 		searchDataVersion = DATA_VERSION;
+		objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+		objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
 	}
 
 	/**
@@ -104,7 +111,7 @@ public class OpsiDataSerializer {
 
 		Logging.info(this, "deserialize data ", data);
 		if (data.get(KEY_ELEMENT_PATH) != null) {
-			Logging.info("deserialize, elementPath ", Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH)));
+			Logging.info("deserialize, elementPath ", (List<String>) data.get(KEY_ELEMENT_PATH));
 		}
 
 		try {
@@ -138,7 +145,6 @@ public class OpsiDataSerializer {
 	 */
 	public AbstractSelectOperation load(String name) {
 		Logging.info(this, "load ", name);
-
 		Map<String, Object> data = getData(name);
 		return deserialize(data);
 	}
@@ -147,25 +153,32 @@ public class OpsiDataSerializer {
 	 * produce map format of serializiation object
 	 */
 	private Map<String, Object> decipher(String serialization) {
-		Map<String, Object> map = new HashMap<>();
-		parser = new JsonParser(serialization);
 		try {
-			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.OBJECT_BEGIN) {
-				return map;
+			return parseAndExtractData(serialization);
+		} catch (IOException originalEx) {
+			Logging.warning(this,
+					"Failed to parse JSON (probably old saved search). Possibly due to unquoted 'dataType' field. Retrying with fix. Original error: ",
+					originalEx.getMessage());
+
+			String fixed = serialization.replaceAll("(\"dataType\"\\s*:\\s*)(\\w+)", "$1\"$2\"");
+
+			try {
+				return parseAndExtractData(fixed);
+			} catch (IOException retryEx) {
+				Logging.error(this, retryEx, "Retry also failed when parsing fixed JSON. Original error: ",
+						originalEx.getMessage(), " | Retry error: ", retryEx.getMessage());
+				return new HashMap<>();
 			}
-		} catch (IOException e) {
-			Logging.error(this, e, e.getMessage());
-			return map;
 		}
-		map = parseObject();
-		int version;
-		if (!map.containsKey("version")) {
-			version = 1;
-		} else {
-			version = Integer.valueOf((String) map.get("version"));
-		}
-		searchDataVersion = version;
-		return (Map<String, Object>) map.get("data");
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> parseAndExtractData(String json) throws IOException {
+		Map<String, Object> map = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
+		});
+		searchDataVersion = Integer.parseInt(String.valueOf(map.getOrDefault("version", 1)));
+		Object data = map.get("data");
+		return (data instanceof Map) ? (Map<String, Object>) data : new HashMap<>();
 	}
 
 	/** Get the data for the given saved search */
@@ -182,16 +195,19 @@ public class OpsiDataSerializer {
 
 	/** Save the search data with the given name. */
 	private void saveData(String name, String description, Map<String, Object> data) {
-		String jsonString;
+		try {
+			Map<String, Object> wrapper = new HashMap<>();
+			wrapper.put("version", DATA_VERSION);
+			wrapper.put("data", data);
+			String jsonString = objectMapper.writeValueAsString(wrapper);
 
-		jsonString = "{ \"version\" : \"" + DATA_VERSION + "\", \"data\" : ";
-		jsonString += createJsonRecursive(data);
-		jsonString += " }";
-
-		Logging.info(this, name, ": ", jsonString);
-		searches.put(name, jsonString);
-		SavedSearch saveObj = new SavedSearch(name, jsonString, description);
-		persistenceController.getConfigDataService().saveSearch(saveObj);
+			Logging.info(this, name, ": ", jsonString);
+			searches.put(name, jsonString);
+			SavedSearch saveObj = new SavedSearch(name, jsonString, description);
+			persistenceController.getConfigDataService().saveSearch(saveObj);
+		} catch (IOException e) {
+			Logging.error(this, e, e.getMessage());
+		}
 	}
 
 	/** Get the data version of the currently loaded saved search */
@@ -199,217 +215,20 @@ public class OpsiDataSerializer {
 		return searchDataVersion;
 	}
 
-	private static String objectToString(Object object) {
-		return switch (object) {
-		case null -> "null";
-		case String s -> "\"" + s + "\"";
-		case Integer i -> "\"" + i + "\"";
-		case Long l -> "\"" + l + "\"";
-		case SelectData.DataType dataType -> dataType.toString();
-		case String[] array -> stringArrayToString(array);
-		default -> throw new IllegalArgumentException("Unknown type: " + object.getClass());
-		};
-	}
-
-	private static String stringArrayToString(String[] data) {
-		StringBuilder result = new StringBuilder("[ ");
-
-		for (int i = 0; i < data.length - 1; i++) {
-			result.append(objectToString(data[i]));
-			result.append(", ");
-		}
-		return result + objectToString(data[data.length - 1]) + " ]";
-	}
-
 	public static String createJsonRecursive(Map<?, ?> objects) {
-		StringBuilder builder = new StringBuilder(255);
-		builder.append("{ ");
-		builder.append("\"element\" : ");
-
-		builder.append(objectToString(objects.get("element")));
-		builder.append(", ");
-
-		// compatibility with refinements
-		if (objects.containsKey(KEY_SUBELEMENT_NAME)) {
-			builder.append("\"");
-			builder.append(KEY_SUBELEMENT_NAME);
-			builder.append("\" : ");
-			builder.append(objectToString(objects.get(KEY_SUBELEMENT_NAME)));
-			builder.append(", ");
-		}
-
-		builder.append("\"elementPath\" : ");
-		builder.append(objectToString(objects.get("elementPath")));
-		builder.append(", \"operation\" : ");
-		builder.append(objectToString(objects.get("operation")));
-		builder.append(", \"dataType\" : ");
-		builder.append(objectToString(objects.get("dataType")));
-		builder.append(", \"data\" : ");
-		builder.append(objectToString(objects.get("data")));
-		builder.append(", \"children\" : ");
-		List<?> children = (List<?>) objects.get("children");
-		if (children == null) {
-			builder.append("null");
-		} else {
-			appendChildrenToBuilder(children, builder);
-		}
-		builder.append(" }");
-
-		return builder.toString();
-	}
-
-	private static void appendChildrenToBuilder(List<?> children, StringBuilder builder) {
-		builder.append("[ ");
-		Iterator<?> childIterator = children.iterator();
-		while (childIterator.hasNext()) {
-			Object child = childIterator.next();
-			if (child instanceof Map) {
-				builder.append(createJsonRecursive((Map<?, ?>) child));
-
-				if (childIterator.hasNext()) {
-					builder.append(", ");
-				}
-			} else {
-				Logging.warning("child is not a map, but ", child.getClass());
-			}
-		}
-		builder.append(" ]");
-	}
-
-	private Map<String, Object> parseObject() {
-		Map<String, Object> result = new HashMap<>();
-		String name = null;
-
 		try {
-			while (parser.next()) {
-				switch (parser.getPositionType()) {
-				case OBJECT_BEGIN:
-					addObjectToResult(result, name);
-					break;
-				case OBJECT_END:
-					return result;
-				case LIST_BEGIN:
-					addListToResult(result, name);
-					break;
-				case JSON_NAME:
-					name = parser.getValue();
-					name = name.substring(1, name.length() - 1);
-					Logging.debug(this, name);
-					break;
-				case JSON_VALUE:
-					addValueToResult(result, name);
-					break;
-				default:
-					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
-				}
-			}
+			return objectMapper.writeValueAsString(objects);
 		} catch (IOException e) {
-			throw new IllegalArgumentException("IOException in parser", e);
+			Logging.error(OpsiDataSerializer.class, e, "Error serializing map to JSON: ", e.getMessage());
+			return "{}";
 		}
-
-		throw new IllegalArgumentException("Reached EOF");
-	}
-
-	private Object parseList(String name) {
-		List<Object> list = new LinkedList<>();
-		boolean done = false;
-
-		try {
-			while (!done && parser.next()) {
-				switch (parser.getPositionType()) {
-				case LIST_END:
-					done = true;
-					break;
-				case OBJECT_BEGIN:
-					list.add(parseObject());
-					break;
-				case JSON_VALUE:
-					list.add(stringToObject(parser.getValue(), ""));
-					break;
-				default:
-					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
-				}
-			}
-		} catch (IOException e) {
-			throw new IllegalArgumentException("IOException in parser", e);
-		}
-
-		Logging.debug(this, "parseList ", list);
-
-		if (!done) {
-			throw new IllegalArgumentException("Unexpected EOF");
-		}
-
-		if ("elementPath".equals(name)) {
-			return list.toArray(new String[0]);
-		}
-
-		return list;
-	}
-
-	private void addObjectToResult(Map<String, Object> result, String name) {
-		if (name == null) {
-			Logging.warning(this, "name is null, in case OBJECT_BEGIN");
-		} else {
-			result.put(name, parseObject());
-		}
-	}
-
-	private void addListToResult(Map<String, Object> result, String name) {
-		if (name == null) {
-			Logging.warning(this, "name is null, in case LIST_BEGIN");
-		} else {
-			result.put(name, parseList(name));
-		}
-	}
-
-	private void addValueToResult(Map<String, Object> result, String name) {
-		if (name == null) {
-			Logging.warning(this, "name is null, in case JSON_VALUE");
-		} else {
-			result.put(name, stringToObject(parser.getValue(), name));
-		}
-	}
-
-	private Object stringToObject(String value, String name) {
-		Logging.debug(this, "stringToObject: ", name);
-		if ("null".equals(value)) {
-			return null;
-		}
-
-		if ("data".equals(name)) {
-			return getStringForData(value);
-		}
-
-		if (value.startsWith("\"")) {
-			return value.substring(1, value.length() - 1);
-		}
-
-		if ("dataType".equals(name)) {
-			checkLastDataType(value);
-
-			Logging.info(this, "lastDataType is now ", lastDataType);
-
-			return lastDataType;
-		}
-
-		throw new IllegalArgumentException(value + " was not expected here");
-	}
-
-	private Object getStringForData(String value) {
-		value = value.substring(1, value.length() - 1);
-
-		return switch (lastDataType) {
-		case NONE_TYPE -> null;
-		case TEXT_TYPE, DATE_TYPE -> value;
-		case DOUBLE_TYPE -> Double.valueOf(value);
-		case INTEGER_TYPE -> Integer.valueOf(value);
-		case BIG_INTEGER_TYPE -> Long.valueOf(value);
-		default -> throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
-		};
 	}
 
 	private void checkLastDataType(String value) {
+		if (value == null || "null".equals(value)) {
+			return;
+		}
+
 		switch (value) {
 		// In old searches, we still have "EnumType", but this will now
 		// due to refactoring be replaced by "TextType"
@@ -443,6 +262,21 @@ public class OpsiDataSerializer {
 		}
 	}
 
+	private static Object convertData(String data, DataType dataType) {
+		if (data == null || dataType == null) {
+			return null;
+		}
+
+		return switch (dataType) {
+		case NONE_TYPE -> null;
+		case TEXT_TYPE, DATE_TYPE -> data;
+		case DOUBLE_TYPE -> Double.valueOf(data);
+		case INTEGER_TYPE -> Integer.valueOf(data);
+		case BIG_INTEGER_TYPE -> Long.valueOf(data);
+		default -> throw new IllegalArgumentException("Type " + dataType + " not expected here");
+		};
+	}
+
 	/*
 	 * Create a SelectOperation from the given data. This function works
 	 * recursively.
@@ -453,7 +287,7 @@ public class OpsiDataSerializer {
 
 		String elementPathS = null;
 		if (data.get(KEY_ELEMENT_PATH) != null) {
-			elementPathS = Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH));
+			elementPathS = ((List<String>) data.get(KEY_ELEMENT_PATH)).toString();
 			Logging.info(this, "getOperation, elementPath in data ", elementPathS);
 		}
 		// Element
@@ -494,18 +328,16 @@ public class OpsiDataSerializer {
 
 		Logging.info(this, "getOperation  ", operation);
 
-		// Data
-		SelectData.DataType dataType = (SelectData.DataType) data.get(KEY_DATA_TYPE);
-		Logging.info(this, "getOperation dataType ", dataType);
+		String dataTypeStr = (String) data.get(KEY_DATA_TYPE);
+		checkLastDataType(dataTypeStr);
 		Object realData = data.get("data");
 		Logging.info(this, "getOperation realData ", realData);
-		SelectData selectData;
-		if (dataType == null) {
-			selectData = null;
-		} else {
-			selectData = new SelectData(realData, dataType);
-		}
 
+		SelectData selectData = null;
+		if (dataTypeStr != null && realData != null) {
+			Object convertedData = convertData(realData.toString(), lastDataType);
+			selectData = new SelectData(convertedData, lastDataType);
+		}
 		operation.setSelectData(selectData);
 
 		return operation;
@@ -521,7 +353,7 @@ public class OpsiDataSerializer {
 		if (elementName != null && !(elementName.isEmpty())) {
 			String subelementName = (String) data.get(KEY_SUBELEMENT_NAME);
 
-			String[] elementPath = (String[]) data.get(KEY_ELEMENT_PATH);
+			List<String> elementPath = (List<String>) data.get(KEY_ELEMENT_PATH);
 
 			element = switch (elementName) {
 			case ELEMENT_NAME_SOFTWARE_NAME_ELEMENT -> manager.getNewSoftwareNameElement();
@@ -540,7 +372,7 @@ public class OpsiDataSerializer {
 	}
 
 	private AbstractSelectElement getDefaultElement(String elementName,
-			Map<String, List<AbstractSelectElement>> hardware, String[] elementPath, String elementPathS)
+			Map<String, List<AbstractSelectElement>> hardware, List<String> elementPath, String elementPathS)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException,
 			InvocationTargetException {
 		if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
@@ -551,14 +383,14 @@ public class OpsiDataSerializer {
 		}
 	}
 
-	private AbstractSelectElement getGeneriSelectElement(String elementName, String[] elementPath,
+	private AbstractSelectElement getGeneriSelectElement(String elementName, List<String> elementPath,
 			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) {
 		Logging.info(this, "getGeneriSelectElement elementName ", elementName, " elementPathS ", elementPathS);
 		if (hardware == null) {
 			hardware = manager.getBackend().getHardwareList();
 		}
-		Logging.info(this, "getOperation elementPath[0] ", elementPath[0]);
-		List<AbstractSelectElement> elements = hardware.get(elementPath[0]);
+		Logging.info(this, "getOperation elementPath[0] ", elementPath.get(0));
+		List<AbstractSelectElement> elements = hardware.get(elementPath.get(0));
 
 		for (AbstractSelectElement possibleElement : elements) {
 			Logging.info(this, "getOperation possibleElement.getClassName() ", possibleElement,
