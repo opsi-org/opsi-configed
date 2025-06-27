@@ -53,6 +53,8 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class LicenseDisplayer {
+	private static LicenseDisplayer instance;
+
 	@FXML
 	private TextFlow textflow;
 	@FXML
@@ -71,6 +73,20 @@ public class LicenseDisplayer {
 	private Stage stage;
 
 	private ConfigedMain configedMain;
+
+	public static void showLicenseDisplayer(ConfigedMain configedMain) {
+		if (instance == null) {
+			try {
+				instance = new LicenseDisplayer();
+				instance.setConfigedMain(configedMain);
+				instance.initAndShowGUI();
+			} catch (IOException ioE) {
+				Logging.warning(ioE, "Unable to open FXML file.");
+			}
+		} else {
+			instance.display();
+		}
+	}
 
 	public void setConfigedMain(ConfigedMain configedMain) {
 		this.configedMain = configedMain;

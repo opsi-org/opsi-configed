@@ -9,6 +9,7 @@ package de.uib.opsicommand;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,6 +23,7 @@ import de.uib.configed.Globals;
 import de.uib.opsicommand.certificate.CertificateValidator;
 import de.uib.opsicommand.certificate.CertificateValidatorFactory;
 import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class ConnectionHandler {
@@ -143,13 +145,18 @@ public class ConnectionHandler {
 		return establishConnection(doOutput, useInsecure, Globals.DEFAULT_TIMEOUT);
 	}
 
-	public HttpsURLConnection establishConnection(boolean doOutput, boolean useInsecure, int timeout) {
+	public HttpsURLConnection establishInsecureConnection(boolean doOutput, int timeout) {
+		return establishConnection(doOutput, true, timeout);
+	}
+
+	private HttpsURLConnection establishConnection(boolean doOutput, boolean useInsecure, int timeout) {
 		if (serviceURL == null) {
 			return null;
 		}
 		Logging.info(this, "establishing connection with ", serviceURL);
 
-		CertificateValidator certValidator = CertificateValidatorFactory.getValidator(useInsecure);
+		CertificateValidator certValidator = useInsecure ? CertificateValidatorFactory.getInsecure()
+				: CertificateValidatorFactory.getValidator();
 		HttpsURLConnection connection = null;
 
 		try {
@@ -182,10 +189,7 @@ public class ConnectionHandler {
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: ", ex);
 
-			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED && notifyUserOfErrors) {
-				reporter.notify(produceCertificateWarningMessage(certValidator),
-						ConnectionErrorType.FAILED_CERTIFICATE_VALIDATION_ERROR);
-			}
+			reportSSLException(certValidator);
 
 			conStat = reporter.getConnectionState();
 			connection = null;
@@ -202,20 +206,7 @@ public class ConnectionHandler {
 			// so that new validators can be created on the next try
 			CertificateValidatorFactory.resetCertificateValidators();
 		} catch (IOException ex) {
-			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
-				conStat = reporter.getConnectionState();
-			} else {
-				ParallelTaskExecutor.cancelAllExecutorsTasks();
-				conStat = new ConnectionState(ConnectionState.NOT_CONNECTED, ex.toString());
-				if (notifyUserOfErrors) {
-					reporter.notify(
-							ConfigedMain.getMainFrame() == null
-									? Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content")
-									: Configed.getResourceValue("ConnectionHandler.noConnection"),
-							ConnectionErrorType.GENERAL_ERROR);
-				}
-				Logging.warning(ex, "Exception on connecting");
-			}
+			reportIOException(ex);
 
 			connection = null;
 
@@ -225,6 +216,30 @@ public class ConnectionHandler {
 		}
 
 		return connection;
+	}
+
+	private void reportSSLException(CertificateValidator certValidator) {
+		if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED && notifyUserOfErrors) {
+			reporter.notify(produceCertificateWarningMessage(certValidator),
+					ConnectionErrorType.FAILED_CERTIFICATE_VALIDATION_ERROR);
+		}
+	}
+
+	private void reportIOException(IOException ex) {
+		if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
+			conStat = reporter.getConnectionState();
+		} else {
+			ParallelTaskExecutor.cancelAllExecutorsTasks();
+			conStat = new ConnectionState(ConnectionState.NOT_CONNECTED, ex.toString());
+			if (notifyUserOfErrors) {
+				reporter.notify(ConfigedMain.getMainFrame() == null
+						? new MessageFormat(Configed.getResourceValue("LoginDialog.noConnectionMessageDialog.content"))
+								.format(new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() })
+						: Configed.getResourceValue("ConnectionHandler.noConnection"),
+						ConnectionErrorType.GENERAL_ERROR);
+			}
+			Logging.warning(ex, "Exception on connecting");
+		}
 	}
 
 	private static String produceCertificateWarningMessage(CertificateValidator certValidator) {

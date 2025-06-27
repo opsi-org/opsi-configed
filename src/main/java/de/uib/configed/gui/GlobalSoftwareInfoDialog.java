@@ -25,10 +25,10 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class GlobalSoftwareInfoDialog {
-	private PanelGenEditTable panelGlobalSoftware;
+	private PanelGenEdit panelGlobalSoftware;
 
 	private List<String> columnNames;
 
@@ -43,7 +43,7 @@ public class GlobalSoftwareInfoDialog {
 	public GlobalSoftwareInfoDialog(ControlPanelAssignToLPools myController) {
 		this.myController = myController;
 
-		panelGlobalSoftware = new PanelGenEditTable("", false, 2);
+		panelGlobalSoftware = new PanelGenEdit("", false, 2);
 
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("FGlobalSoftwareInfo.info"));
 
@@ -84,7 +84,7 @@ public class GlobalSoftwareInfoDialog {
 			columnNames.add(key);
 		}
 
-		panelGlobalSoftware.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelGlobalSoftware.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
 	public void setTableModel(GenTableModel model) {
@@ -104,14 +104,15 @@ public class GlobalSoftwareInfoDialog {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {
 				int row = panelGlobalSoftware.findViewRowFromValue(key, 0);
 				Logging.info(this, "doAction2 key, ", key, ", row ", row);
-				Logging.info(this, "doAction2 model row ", panelGlobalSoftware.getJTable().convertRowIndexToModel(row));
+				Logging.info(this, "doAction2 model row ",
+						panelGlobalSoftware.getGenEditTable().convertRowIndexToModel(row));
 				panelGlobalSoftware.getTableModel()
-						.deleteRow(panelGlobalSoftware.getJTable().convertRowIndexToModel(row));
+						.deleteRow(panelGlobalSoftware.getGenEditTable().convertRowIndexToModel(row));
 			}
 		}
 	}
 
-	public PanelGenEditTable getPanelGlobalSoftware() {
+	public PanelGenEdit getPanelGlobalSoftware() {
 		return panelGlobalSoftware;
 	}
 

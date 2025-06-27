@@ -28,7 +28,6 @@ import de.uib.configed.dashboard.collector.LicenseData;
 import de.uib.configed.dashboard.collector.ModuleData;
 import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.messages.Messages;
-import de.uib.utils.logging.Logging;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -164,8 +163,6 @@ public class MainView implements View {
 
 	private DepotInfo depotInfo;
 
-	private LicenseDisplayer licenseDisplayer;
-
 	private ConfigedMain configedMain;
 
 	@SuppressWarnings("java:S4968")
@@ -250,7 +247,7 @@ public class MainView implements View {
 
 		clientDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.CLIENT_VIEW));
 		productDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.PRODUCT_VIEW));
-		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> displayLicenseInfo());
+		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> LicenseDisplayer.showLicenseDisplayer(configedMain));
 
 		selectedDepotComboBox.getSelectionModel().selectedItemProperty().removeListener(depotSelectionListener);
 		selectedDepotComboBox.getSelectionModel().selectedItemProperty().addListener(depotSelectionListener);
@@ -263,20 +260,6 @@ public class MainView implements View {
 			styleAccordingToSelectedTheme();
 		});
 		loadData();
-	}
-
-	private void displayLicenseInfo() {
-		if (licenseDisplayer == null) {
-			try {
-				licenseDisplayer = new LicenseDisplayer();
-				licenseDisplayer.setConfigedMain(configedMain);
-				licenseDisplayer.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.warning(this, ioE, "Unable to open FXML file.");
-			}
-		} else {
-			licenseDisplayer.display();
-		}
 	}
 
 	private void styleAccordingToSelectedTheme() {

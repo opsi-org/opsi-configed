@@ -202,7 +202,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				// We do not need to update the preview on remove
+				markdownPreview.setText(textArea.getText());
 			}
 
 			@Override
@@ -212,7 +212,7 @@ public class PanelMessageInfos extends JPanel implements IDateTimePickerCaller {
 
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
-				// Plain text components do not fire these events
+				markdownPreview.setText(textArea.getText());
 			}
 		});
 	}

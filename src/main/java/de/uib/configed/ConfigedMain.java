@@ -25,8 +25,6 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -42,7 +40,7 @@ import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.LoginDialog;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.guidata.DependenciesModel;
-import de.uib.configed.terminal.TerminalFrame;
+import de.uib.configed.terminal.TerminalController;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
 import de.uib.configed.tree.ProductTree;
@@ -55,6 +53,7 @@ import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
+import de.uib.utils.WindowsPositionManager;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.ButtonTabComponent;
 import de.uib.utils.table.gui.BooleanIconTableCellRenderer;
@@ -99,6 +98,8 @@ public class ConfigedMain {
 
 	private int clientCount;
 
+	private DepotListSelectionListener depotListSelectionListener;
+
 	private Map<String, String> sessionInfo = new HashMap<>();
 
 	public enum EditingTarget {
@@ -110,37 +111,10 @@ public class ConfigedMain {
 
 	private InitialDataLoader initialDataLoader;
 
-	private ListSelectionListener depotsListSelectionListener = new ListSelectionListener() {
-		private int counter;
-
-		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			counter++;
-			Logging.info(this, "depotSelection event count  ", counter);
-
-			if (!e.getValueIsAdjusting()) {
-				depotsListValueChanged();
-			}
-		}
-
-		private void depotsListValueChanged() {
-			Logging.info(this, "depotsList selection changed");
-
-			Configed.getSavedStates().setProperty("selectedDepots", depotsList.getSelectedValuesList().toString());
-
-			Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
-
-			// when running after the first run, we deactivate buttons
-			if (initialDataLoader.isDataLoaded()) {
-				initialTreeActivation();
-
-				productTree.reInitTree();
-				refreshClientListKeepingGroup();
-
-				initTabComponents();
-			}
-		}
-	};
+	public ConfigedMain() {
+		Logging.info(this, "ConfigedMain constructor called");
+		TerminalController.setConfigedMain(this);
+	}
 
 	public static MainFrame getMainFrame() {
 		return mainFrame;
@@ -196,7 +170,11 @@ public class ConfigedMain {
 		mainFrame.getHostsStatusPanel().initLabelAllClientsCount(clientCount, selectedClients.size());
 	}
 
-	private void initTabComponents() {
+	public ProductTree getProductTree() {
+		return productTree;
+	}
+
+	public void initTabComponents() {
 		ButtonTabComponent depotComp = (ButtonTabComponent) mainFrame.getTabbedPane().getTabComponentAt(0);
 		depotComp.showButton(depots.size() != depotsList.getSelectedValuesList().size());
 
@@ -240,7 +218,7 @@ public class ConfigedMain {
 		dependenciesModel = new DependenciesModel();
 		// Init data for these manager classes so they can work
 		ChangedDataManager.initData(this, hostInfo);
-		ServerActionManager.initData(this);
+		ServerActionManager.initData(this, persistenceController);
 		Messagebus.initMessagebus(this);
 
 		clientSearch = new ClientSearch();
@@ -410,7 +388,8 @@ public class ConfigedMain {
 		depotsList = new DepotsList(this);
 
 		Logging.info(this, "create depotsListSelectionListener");
-		depotsList.addListSelectionListener(depotsListSelectionListener);
+		depotListSelectionListener = new DepotListSelectionListener(this, depotsList, initialDataLoader);
+		depotsList.addListSelectionListener(depotListSelectionListener);
 
 		fetchDepots();
 
@@ -432,7 +411,12 @@ public class ConfigedMain {
 		mainFrame.validate();
 
 		// center the frame:
-		locateFrame();
+		if (WindowsPositionManager
+				.isOnAnyScreen(WindowsPositionManager.getWindowBounds(WindowsPositionManager.MAIN_WINDOW))) {
+			WindowsPositionManager.loadWindowProperties(mainFrame, WindowsPositionManager.MAIN_WINDOW);
+		} else {
+			locateFrame();
+		}
 
 		// init visual states
 		Logging.debug(configedMain, "mainframe nearly initialized");
@@ -546,6 +530,16 @@ public class ConfigedMain {
 		}
 
 		clientsForTableModel.retainAll(clientsFilteredByTree);
+
+		Logging.info(this, " clientTable isFilteredMode ", clientTablePanel.isFilteredMode());
+
+		if (clientTablePanel.isFilteredMode()) {
+			Logging.info(this, "buildPclistTableModel with filterCLientList, number of selected pcs ",
+					selectedClients.size());
+
+			// selected clients that are in the pclist0
+			clientsForTableModel.retainAll(selectedClients);
+		}
 
 		// building table model
 		return buildTableModel(clientsForTableModel);
@@ -766,6 +760,7 @@ public class ConfigedMain {
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel",
 				clientTablePanel.getClientTable().getSelectedRowCount());
 
+		clientTablePanel.restoreFilter();
 		// did lose the selection since last setting
 		clientTablePanel.setSelectedValues(selectValues);
 
@@ -804,6 +799,8 @@ public class ConfigedMain {
 	}
 
 	public void treeClientsSelectAction(TreePath[] selTreePaths) {
+		clientTablePanel.setFilterMark(false);
+
 		clientsFilteredByTree.clear();
 		if (selTreePaths != null) {
 			for (TreePath selectionPath : selTreePaths) {
@@ -866,6 +863,16 @@ public class ConfigedMain {
 		activatedGroupModel.setDescription(clientTree.getGroups().get("" + node).get("description"));
 		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
 		activatedGroupModel.setActive(true);
+
+		// since we select based on the tree view we disable the filter
+		deactivateFilter();
+	}
+
+	public void deactivateFilter() {
+		Logging.info(this, "deactivate filter", clientTablePanel.isFilteredMode());
+		if (clientTablePanel.isFilteredMode()) {
+			setRebuiltClientListTableModel(true, false);
+		}
 	}
 
 	public ActivatedGroupModel getActivatedGroupModel() {
@@ -1025,7 +1032,7 @@ public class ConfigedMain {
 		Set<String> selectedNetbootProducts = mainFrame.getClientConfiguration().getPanelNetbootProductSettings()
 				.getProductTable().getSelectedIDs();
 		clientTablePanel.deactivateListSelectionListener();
-		depotsList.removeListSelectionListener(depotsListSelectionListener);
+		depotsList.removeListSelectionListener(depotListSelectionListener);
 
 		persistenceController.reloadData(CacheIdentifier.ALL_DATA.toString());
 		persistenceController.getUserRolesConfigDataService().checkConfigurationPD();
@@ -1074,7 +1081,7 @@ public class ConfigedMain {
 		productTree.produceActiveParents();
 		productTree.updateSelectedObjectsInTable();
 
-		depotsList.addListSelectionListener(depotsListSelectionListener);
+		depotsList.addListSelectionListener(depotListSelectionListener);
 
 		Logging.info(this, "reloadData, selected clients now, after resetting ", Logging.getSize(selectedClients));
 		mainFrame.reloadServerConsoleMenu();
@@ -1084,6 +1091,8 @@ public class ConfigedMain {
 		updatePage();
 
 		initTabComponents();
+
+		ExtraFrameController.resetCompleteWinProductsPanel();
 	}
 
 	private static void updatePage() {
@@ -1107,7 +1116,7 @@ public class ConfigedMain {
 		this.sessionInfo = sessionInfo;
 	}
 
-	private void initialTreeActivation() {
+	public void initialTreeActivation() {
 		Logging.info(this, "initialTreeActivation");
 
 		TreePath pathToSelect = null;
@@ -1144,39 +1153,6 @@ public class ConfigedMain {
 		clientTablePanel.restoreFilter();
 
 		mainFrame.deactivateLoadingCursor();
-	}
-
-	public void openTerminalOnClient() {
-		openTerminalOnHost("Client");
-	}
-
-	public void openTerminalOnDepot() {
-		openTerminalOnHost("ConfigserverOrDepot");
-	}
-
-	private void openTerminalOnHost(String type) {
-		if (!"Client".equals(type) && !"ConfigserverOrDepot".equals(type)) {
-			throw new IllegalArgumentException("type must be either 'Client' or 'Depot'");
-		}
-		String connectToHost = ("Client".equals(type)) ? selectedClients.get(0) : depotsList.getSelectedValue();
-		if (connectToHost == null) {
-			throw new IllegalArgumentException("host must not be null. (type: " + type + ")");
-		}
-		if ("ConfigserverOrDepot".equals(type)
-				&& connectToHost.equals(persistenceController.getHostInfoCollections().getConfigServer())) {
-			connectToHost = "Configserver";
-		}
-
-		if (!isHostConnected(connectToHost) && !"Configserver".equals(connectToHost)) {
-			Logging.info(this, type, " shell access feature is only supported for clients connected with messagebus");
-			JOptionPane.showMessageDialog(mainFrame,
-					Configed.getResourceValue("ConfigedMain.openTerminalOn" + type + "Feature.message"));
-			return;
-		}
-		TerminalFrame terminalFrame = new TerminalFrame(this);
-		terminalFrame.setMessagebus(Messagebus.getInstance());
-		terminalFrame.setSession(connectToHost);
-		terminalFrame.display();
 	}
 
 	public void invertSelection() {

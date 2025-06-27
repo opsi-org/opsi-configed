@@ -7,6 +7,7 @@
 package de.uib.configed.clientselection.serializers;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -199,17 +200,15 @@ public class OpsiDataSerializer {
 	}
 
 	private static String objectToString(Object object) {
-		if (object == null) {
-			return "null";
-		} else if (object instanceof String || object instanceof Integer || object instanceof Long) {
-			return "\"" + object + "\"";
-		} else if (object instanceof SelectData.DataType) {
-			return object.toString();
-		} else if (object instanceof String[] stringArrayObject) {
-			return stringArrayToString(stringArrayObject);
-		} else {
-			throw new IllegalArgumentException("Unknown type");
-		}
+		return switch (object) {
+		case null -> "null";
+		case String s -> "\"" + s + "\"";
+		case Integer i -> "\"" + i + "\"";
+		case Long l -> "\"" + l + "\"";
+		case SelectData.DataType dataType -> dataType.toString();
+		case String[] array -> stringArrayToString(array);
+		default -> throw new IllegalArgumentException("Unknown type: " + object.getClass());
+		};
 	}
 
 	private static String stringArrayToString(String[] data) {
@@ -458,58 +457,7 @@ public class OpsiDataSerializer {
 			Logging.info(this, "getOperation, elementPath in data ", elementPathS);
 		}
 		// Element
-		AbstractSelectElement element = null;
-		String elementName = (String) data.get(KEY_ELEMENT_NAME);
-		Logging.info(this, "Element name: ", elementName);
-
-		if (elementName != null && !(elementName.isEmpty())) {
-			String subelementName = (String) data.get(KEY_SUBELEMENT_NAME);
-
-			String[] elementPath = (String[]) data.get(KEY_ELEMENT_PATH);
-
-			if (elementName.equals(ELEMENT_NAME_SOFTWARE_NAME_ELEMENT)) {
-				element = manager.getNewSoftwareNameElement();
-			} else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
-				element = new GroupWithSubgroupsElement(
-						persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
-			} else if (elementName.equals(ELEMENT_NAME_GROUP)) {
-				// constructing a compatibility with format without GroupWithSubgroupsElement
-				if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
-					element = new GroupWithSubgroupsElement(
-							persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
-				} else {
-					element = new GroupElement(
-							persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
-				}
-			} else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
-				if (hardware == null) {
-					hardware = manager.getBackend().getHardwareList();
-				}
-				Logging.info(this, "getOperation elementPath[0] ", elementPath[0]);
-				List<AbstractSelectElement> elements = hardware.get(elementPath[0]);
-
-				for (AbstractSelectElement possibleElement : elements) {
-					Logging.info(this, "getOperation possibleElement.getClassName() ", possibleElement,
-							" compare with elementName ", elementName, " or perhaps with elementPathS ", elementPathS);
-
-					// originally, but is nonsense -------------------------------------------
-					if (possibleElement.getClassName().equals(elementName)
-							&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
-						element = possibleElement;
-						break;
-					}
-				}
-			} else {
-				element = (AbstractSelectElement) Class
-						.forName("de.uib.configed.clientselection.elements." + elementName).getDeclaredConstructor()
-						.newInstance();
-			}
-		}
-
-		if (element != null) {
-			Logging.info(this, "getOperation element ", element, " class ", element.getClass(), " path ",
-					element.getPath());
-		}
+		AbstractSelectElement element = getSelectElement(data, hardware, elementPathS);
 
 		// Children
 		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
@@ -552,7 +500,7 @@ public class OpsiDataSerializer {
 		Object realData = data.get("data");
 		Logging.info(this, "getOperation realData ", realData);
 		SelectData selectData;
-		if (dataType == null || data == null) {
+		if (dataType == null) {
 			selectData = null;
 		} else {
 			selectData = new SelectData(realData, dataType);
@@ -561,6 +509,80 @@ public class OpsiDataSerializer {
 		operation.setSelectData(selectData);
 
 		return operation;
+	}
+
+	private AbstractSelectElement getSelectElement(Map<String, Object> data,
+			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+		AbstractSelectElement element = null;
+		String elementName = (String) data.get(KEY_ELEMENT_NAME);
+		Logging.info(this, "Element name: ", elementName);
+
+		if (elementName != null && !(elementName.isEmpty())) {
+			String subelementName = (String) data.get(KEY_SUBELEMENT_NAME);
+
+			String[] elementPath = (String[]) data.get(KEY_ELEMENT_PATH);
+
+			element = switch (elementName) {
+			case ELEMENT_NAME_SOFTWARE_NAME_ELEMENT -> manager.getNewSoftwareNameElement();
+			case ELEMENT_NAME_GROUP_WITH_SUBGROUPS -> new GroupWithSubgroupsElement(
+					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+			case ELEMENT_NAME_GROUP -> getGroupElement(subelementName);
+			default -> getDefaultElement(elementName, hardware, elementPath, elementPathS);
+			};
+		}
+
+		if (element != null) {
+			Logging.info(this, "getOperation element ", element, " class ", element.getClass(), " path ",
+					element.getPath());
+		}
+		return element;
+	}
+
+	private AbstractSelectElement getDefaultElement(String elementName,
+			Map<String, List<AbstractSelectElement>> hardware, String[] elementPath, String elementPathS)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException,
+			InvocationTargetException {
+		if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
+			return getGeneriSelectElement(elementName, elementPath, hardware, elementPathS);
+		} else {
+			return (AbstractSelectElement) Class.forName("de.uib.configed.clientselection.elements." + elementName)
+					.getDeclaredConstructor().newInstance();
+		}
+	}
+
+	private AbstractSelectElement getGeneriSelectElement(String elementName, String[] elementPath,
+			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) {
+		Logging.info(this, "getGeneriSelectElement elementName ", elementName, " elementPathS ", elementPathS);
+		if (hardware == null) {
+			hardware = manager.getBackend().getHardwareList();
+		}
+		Logging.info(this, "getOperation elementPath[0] ", elementPath[0]);
+		List<AbstractSelectElement> elements = hardware.get(elementPath[0]);
+
+		for (AbstractSelectElement possibleElement : elements) {
+			Logging.info(this, "getOperation possibleElement.getClassName() ", possibleElement,
+					" compare with elementName ", elementName, " or perhaps with elementPathS ", elementPathS);
+
+			// originally, but is nonsense -------------------------------------------
+			if (possibleElement.getClassName().equals(elementName)
+					&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
+				return possibleElement;
+			}
+		}
+
+		return null;
+	}
+
+	private AbstractSelectElement getGroupElement(String subelementName) {
+		Logging.info(this, "getGroupElement subelementName ", subelementName);
+		if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
+			return new GroupWithSubgroupsElement(
+					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+		} else {
+			return new GroupElement(
+					persistenceController.getGroupDataService().getHostGroupIds().toArray(new String[0]));
+		}
 	}
 
 	/* Create data from the operation recursively. */
@@ -616,31 +638,16 @@ public class OpsiDataSerializer {
 			}
 			throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
 		}
-		if ("Hardware".equals(name)) {
-			return new HardwareOperation(children.get(0));
-		}
 
-		if ("Software".equals(name)) {
-			return new SoftwareOperation(children.get(0));
-		}
-
-		if ("SwAudit".equals(name)) {
-			return new SwAuditOperation(children.get(0));
-		}
-
-		if ("and".equals(name)) {
-			return new AndOperation(children);
-		}
-
-		if ("or".equals(name)) {
-			return new OrOperation(children);
-		}
-
-		if ("not".equals(name)) {
-			return new NotOperation(children.get(0));
-		}
-
-		throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
+		return switch (name) {
+		case "Hardware" -> new HardwareOperation(children.get(0));
+		case "Software" -> new SoftwareOperation(children.get(0));
+		case "SwAudit" -> new SwAuditOperation(children.get(0));
+		case "and" -> new AndOperation(children);
+		case "or" -> new OrOperation(children);
+		case "not" -> new NotOperation(children.get(0));
+		default -> throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
+		};
 	}
 
 	/*

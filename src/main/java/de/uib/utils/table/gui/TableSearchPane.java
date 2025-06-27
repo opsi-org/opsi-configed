@@ -7,6 +7,8 @@
 package de.uib.utils.table.gui;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -45,11 +47,16 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 
 	private JToggleButton respectCase;
 	private JToggleButton regexActive;
+	private JToggleButton filtermark;
 
 	private JToggleButton buttonShowHideExtraOptions;
 
 	private JPanel navPane;
-	private PanelGenEditTable associatedPanel;
+	private PanelGenEdit associatedPanel;
+
+	private JMenuItem popupSearch;
+	private JMenuItem popupMarkAndFilter;
+	private JMenuItem popupEmptySearchfield;
 
 	private boolean selectMode = true;
 
@@ -76,11 +83,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	 * @param thePanel    the model for delivering data and selecting
 	 * @param targetModel the model for delivering data and selecting
 	 */
-	public TableSearchPane(PanelGenEditTable thePanel) {
-		this(thePanel, new SearchTargetModelFromTable(thePanel.getJTable()));
+	public TableSearchPane(PanelGenEdit thePanel) {
+		this(thePanel, new SearchTargetModelFromTable(thePanel, thePanel.getGenEditTable()));
 	}
 
-	public TableSearchPane(PanelGenEditTable thePanel, SearchTargetModel targetModel) {
+	public TableSearchPane(PanelGenEdit thePanel, SearchTargetModel targetModel) {
 		associatedPanel = thePanel;
 		this.targetModel = targetModel;
 
@@ -111,8 +118,37 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		navPane.setVisible(true);
 	}
 
+	public void setFiltering() {
+		popupMarkAndFilter.setVisible(true);
+
+		filtermark.setVisible(true);
+	}
+
+	public boolean isFiltering() {
+		return filtermark.isVisible();
+	}
+
 	public void setSelectMode(boolean selectMode) {
 		this.selectMode = selectMode;
+	}
+
+	/**
+	 * serve graphical filtermark
+	 */
+	public void setFilterMark(boolean selected) {
+		filtermark.setSelected(selected);
+	}
+
+	private void setFiltered(boolean filtered) {
+		targetModel.setFiltered(filtered);
+
+		popupSearch.setEnabled(!filtered);
+		popupMarkAndFilter.setEnabled(!filtered);
+		popupEmptySearchfield.setEnabled(!filtered);
+	}
+
+	public boolean isFilteredMode() {
+		return filtermark.isSelected();
 	}
 
 	public void setNarrow(boolean narrow) {
@@ -138,8 +174,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch = new FlatTextField();
 		flatTextFieldSearch.setLeadingIcon(new FlatSearchIcon());
 		flatTextFieldSearch.setShowClearButton(true);
+
 		flatTextFieldSearch.getDocument().addDocumentListener(this);
+
 		flatTextFieldSearch.addKeyListener(this);
+
 		flatTextFieldSearch.addActionListener(actionEvent -> searchNextRow(selectMode));
 
 		comboSearchFields = new JComboBox<>();
@@ -158,15 +197,23 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		regexActive.setSelectedIcon(Icons.getSelectedIntellijIcon("regex"));
 		regexActive.setToolTipText(Configed.getResourceValue("SearchPane.mode.regex"));
 
+		filtermark = new JToggleButton(Icons.getIntellijIcon("funnelRegular"));
+		filtermark.setSelectedIcon(Icons.getSelectedIntellijIcon("funnelRegular"));
+		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
+		filtermark.addItemListener(event -> filtermarkEvent());
+		filtermark.setVisible(false);
+
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(respectCase);
 		jToolBar.add(regexActive);
+		jToolBar.addSeparator();
+		jToolBar.add(filtermark);
 
 		flatTextFieldSearch.setTrailingComponent(jToolBar);
 	}
 
 	private void initPopup() {
-		JMenuItem popupSearch = new JMenuItem(Configed.getResourceValue("search"));
+		popupSearch = new JMenuItem(Configed.getResourceValue("search"));
 		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
 		JMenuItem popupSearchNext = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnext"));
@@ -174,15 +221,26 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		popupSearchNext.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 
 		JMenuItem popupNewSearch = new JMenuItem(Configed.getResourceValue("SearchPane.popup.searchnew"));
-		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0, selectMode));
+		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
+			setFilterMark(false);
+			searchTheRow(0, selectMode);
+		});
 
-		JMenuItem popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
+		popupMarkAndFilter = new JMenuItem(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
+		popupMarkAndFilter.addActionListener(actionEvent -> markAllAndFilter());
+		popupMarkAndFilter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
+
+		popupEmptySearchfield = new JMenuItem(Configed.getResourceValue("SearchPane.popup.empty"));
 		popupEmptySearchfield.addActionListener(actionEvent -> flatTextFieldSearch.setText(""));
+
+		popupMarkAndFilter.setVisible(false);
 
 		Logging.info(this, "buildMenuSearchfield");
 		JPopupMenu searchMenu = new JPopupMenu();
 		searchMenu.add(popupSearch);
 		searchMenu.add(popupSearchNext);
+		searchMenu.add(popupNewSearch);
+		searchMenu.add(popupMarkAndFilter);
 		searchMenu.add(popupEmptySearchfield);
 
 		flatTextFieldSearch.setComponentPopupMenu(searchMenu);
@@ -313,6 +371,10 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 						GroupLayout.PREFERRED_SIZE));
 	}
 
+	private boolean allowSearchAction() {
+		return isFiltering() && !filtermark.isSelected();
+	}
+
 	private void retainOnlyAllFieldsItem() {
 		comboSearchFields.removeAllItems();
 		comboSearchFields.addItem(Configed.getResourceValue("SearchPane.search.allfields"));
@@ -420,6 +482,46 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		}
 	}
 
+	/**
+	 * select all rows with value from searchfield
+	 */
+	private void markAll() {
+		Logging.info(this, "markAll");
+		targetModel.setValueIsAdjusting(true);
+		targetModel.clearSelection();
+		searchTheRow(0, true);
+
+		int startFoundrow = foundrow;
+
+		foundrow = foundrow + 1;
+
+		// adding the next row to selection
+		while (foundrow > startFoundrow) {
+			getSelectedAndSearch(true, true);
+		}
+		targetModel.setValueIsAdjusting(false);
+	}
+
+	/**
+	 * select all rows with value form searchfield, checks the filter
+	 */
+	private void markAllAndFilter() {
+		Logging.info(this, " markAllAndFilter filtering active", isFiltering());
+
+		filtermark.setSelected(false);
+		markAll();
+		filtermark.setSelected(true);
+	}
+
+	/**
+	 * sets an alternative ActionListener for the filtermark
+	 * 
+	 * @parameter ActionListener
+	 */
+	public void setFiltermarkActionListener(ActionListener li) {
+		filtermark.addActionListener(li);
+	}
+
 	private void searchNextRow(boolean select) {
 		foundrow++;
 		int rowCount = targetModel.getRowCount();
@@ -431,6 +533,23 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			foundrow = 0;
 		}
 		searchTheRow(foundrow, false, select);
+	}
+
+	private void getSelectedAndSearch(boolean addSelection, boolean select) {
+		int startrow = 0;
+		if (targetModel.getSelectedRow() >= 0) {
+			startrow = targetModel.getSelectedRows()[targetModel.getSelectedRows().length - 1] + 1;
+		}
+
+		if (startrow >= targetModel.getRowCount()) {
+			startrow = 0;
+		}
+
+		searchTheRow(startrow, addSelection, select);
+
+		if (foundrow == -1) {
+			searchTheRow(0, addSelection, select);
+		}
 	}
 
 	private void searchTheRow(boolean select) {
@@ -478,6 +597,29 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.getCaret().setVisible(true);
 	}
 
+	// ----------------------------------
+
+	private void filtermarkEvent() {
+		Logging.info(this, "actionPerformed on filtermark, isFilteredMode ", filtermark.isSelected());
+
+		// When the filtermark is not pressed it means that this event was not evoked
+		// by a click on the button. Then we want to manually control what happens with our list
+		// and not select some elements. Usually there happens another selection anyways.
+		// Also this prevents an Exception in the product table when the selection active, 
+		// but is deactivated due to a change in the product tree
+		if (filtermark.isSelected() || !filtermark.getModel().isPressed()) {
+			setFiltered(filtermark.isSelected());
+		} else {
+			int[] unfilteredSelection = targetModel.getUnfilteredSelection();
+
+			setFiltered(false);
+
+			if (unfilteredSelection.length != 0) {
+				targetModel.setSelection(unfilteredSelection);
+			}
+		}
+	}
+
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
@@ -512,6 +654,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	public void restoreFilter() {
 		if (filterKey == null) {
 			Logging.debug(this, "Fitler key (", filterKey, ") is null - we can't proceed");
+			return;
 		}
 
 		TableFilterState filterState = FilterStateManager.getFilterState(filterKey);
@@ -547,7 +690,11 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 			return;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_F3) {
+		if (e.getKeyCode() == KeyEvent.VK_F8) {
+			if (allowSearchAction()) {
+				markAllAndFilter();
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 			searchNextRow(selectMode);
 		} else {
 			// We want to do nothing on other keys

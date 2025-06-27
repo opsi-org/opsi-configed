@@ -26,6 +26,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.ServerActionManager;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
 import de.uib.opsicommand.POJOReMapper;
@@ -199,18 +200,22 @@ public class ClientTable extends JTable implements MessagebusListener {
 
 		if (isO1Invalid && isO2Invalid) {
 			return 0;
+		} else if (isO1Invalid || isO2Invalid) {
+			return compareInvalids(isO1Invalid);
+		} else {
+			return ((Comparable<Object>) o1).compareTo(o2);
 		}
+	}
 
+	private int compareInvalids(boolean isO1Invalid) {
 		boolean isAscending = ((TableRowSorter<?>) getRowSorter()).getSortKeys().get(0)
 				.getSortOrder() == SortOrder.ASCENDING;
 
 		if (isO1Invalid) {
 			return isAscending ? 1 : -1;
-		}
-		if (isO2Invalid) {
+		} else {
 			return isAscending ? -1 : 1;
 		}
-		return ((Comparable<Object>) o1).compareTo(o2);
 	}
 
 	public void moveToFirstSelected() {
@@ -240,7 +245,8 @@ public class ClientTable extends JTable implements MessagebusListener {
 		// Sleep for a little because otherwise we cannot get the needed data from the server.
 		Utils.threadSleep(this, 5);
 
-		if (!WebSocketEvent.GENERAL_EVENT.toString().equals(message.get("type")) && !message.containsKey("event")) {
+		if ((!WebSocketEvent.GENERAL_EVENT.toString().equals(message.get("type")) && !message.containsKey("event"))
+				|| ServerActionManager.isLocalChangeInProgress()) {
 			return;
 		}
 
@@ -258,11 +264,6 @@ public class ClientTable extends JTable implements MessagebusListener {
 	}
 
 	public void addClientToTable(String clientId) {
-		if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| ConfigedMain.getMainFrame().getClientConfiguration().getSelectedIndex() != 0) {
-			return;
-		}
-
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(() -> {
@@ -274,11 +275,6 @@ public class ClientTable extends JTable implements MessagebusListener {
 	}
 
 	public void removeClientFromTable(String clientId) {
-		if (!persistenceController.getHostInfoCollections().getOpsiHostNames().contains(clientId)
-				|| ConfigedMain.getMainFrame().getClientConfiguration().getSelectedIndex() != 0) {
-			return;
-		}
-
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(configedMain::refreshClientListKeepingGroup);

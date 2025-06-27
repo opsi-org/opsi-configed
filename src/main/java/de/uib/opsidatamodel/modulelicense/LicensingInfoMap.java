@@ -387,9 +387,9 @@ public final class LicensingInfoMap {
 			}
 		} else {
 			moduleInfo = new HashMap<>();
-			moduleInfo.put(CLIENT_NUMBER, "0");
-			moduleInfo.put(LICENSE_IDS, "[]");
-			moduleInfo.put(STATE, "unlicensed");
+			moduleInfo.put(CLIENT_NUMBER, 0);
+			moduleInfo.put(LICENSE_IDS, Collections.emptyList());
+			moduleInfo.put(STATE, STATE_UNLICENSED);
 		}
 
 		moduleInfo.put(AVAILABLE, available);

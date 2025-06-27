@@ -18,7 +18,6 @@ import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class ProductData {
 	private static Map<String, List<String>> products = new HashMap<>();
@@ -34,14 +33,17 @@ public final class ProductData {
 	private static int totalWindowsInstallations;
 	private static int totalMacOSInstallations;
 
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
+	private static OpsiServiceNOMPersistenceController persistenceController;
 
 	private static String selectedDepot;
-	private static List<String> depots = new ArrayList<>(
-			persistenceController.getHostInfoCollections().getAllDepots().keySet());
+	private static List<String> depots;
 
 	private ProductData() {
+	}
+
+	public static void initData(OpsiServiceNOMPersistenceController persistenceController) {
+		ProductData.persistenceController = persistenceController;
+		depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 	}
 
 	public static List<String> getProducts() {

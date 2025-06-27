@@ -109,6 +109,14 @@ public class HostInfoCollections {
 		return cacheManager.getCachedData(CacheIdentifier.HOST_TO_HOST_INFO, Map.class);
 	}
 
+	public String getConfigServerWebDavBaseURI() {
+		return cacheManager.getCachedData(CacheIdentifier.CONFIG_SERVER_WEBDAV_BASE_URI, String.class);
+	}
+
+	public String getConfigServerWebDavPath() {
+		return cacheManager.getCachedData(CacheIdentifier.CONFIG_SERVER_WEBDAV_PATH, String.class);
+	}
+
 	// build data
 	public void retrieveOpsiHostsPD() {
 		Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null ",
@@ -198,6 +206,8 @@ public class HostInfoCollections {
 				if (!workbenchPath.isEmpty()) {
 					persistenceController.getConfigDataService().setConfigedWorkbenchDefaultValuePD(workbenchPath);
 				}
+
+				retrieveConfigServerWebDavURLPD(host);
 			}
 		}
 		cacheManager.setCachedData(CacheIdentifier.CONFIG_SERVER, configServer);
@@ -221,6 +231,25 @@ public class HostInfoCollections {
 		}
 
 		return filepath;
+	}
+
+	private void retrieveConfigServerWebDavURLPD(Map<String, Object> host) {
+		String webdavURL = (String) host.get(HostInfo.DEPOT_WEBDAV_URL);
+
+		try {
+			URI uri = new URI(webdavURL);
+			String scheme = uri.getScheme();
+			scheme = scheme.startsWith("webdavs") ? "https" : "http";
+			String baseURI = scheme + "://" + uri.getAuthority();
+			if (!webdavURL.isEmpty()) {
+				CacheManager.getInstance().setCachedData(CacheIdentifier.CONFIG_SERVER_WEBDAV_BASE_URI, baseURI);
+			}
+			if (uri.getPath() != null && !uri.getPath().isEmpty()) {
+				CacheManager.getInstance().setCachedData(CacheIdentifier.CONFIG_SERVER_WEBDAV_PATH, uri.getPath());
+			}
+		} catch (URISyntaxException e) {
+			Logging.warning(this, "Failed to retrieve WebDAV URL - malformed URL ", e);
+		}
 	}
 
 	private void retrieveDepotsPD(List<Map<String, Object>> opsiHosts) {
@@ -332,9 +361,7 @@ public class HostInfoCollections {
 		retrieveOpsiHostsPD();
 
 		Logging.debug(this, " ------ building pcList");
-		Map<String, String> mapPCBelongsToDepot = new HashMap<>();
 		Set<String> setOfPCs = new HashSet<>();
-		Map<String, HostInfo> mapPCInfomap = new HashMap<>();
 
 		List<String> depotList = new ArrayList<>();
 		for (String depot : depots) {
@@ -348,6 +375,9 @@ public class HostInfoCollections {
 		if (depot2Host2HostInfo == null || depot2Host2HostInfo.isEmpty()) {
 			return setOfPCs;
 		}
+
+		Map<String, HostInfo> mapPCInfomap = new HashMap<>();
+		Map<String, String> mapPCBelongsToDepot = new HashMap<>();
 
 		for (String depot : depotList) {
 			if (depot2Host2HostInfo.get(depot) == null) {

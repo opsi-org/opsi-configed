@@ -80,7 +80,7 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	private JPanel initPanel() {
-		format = CSVFormat.DEFAULT.builder().setDelimiter(";").setCommentMarker('#').build();
+		format = CSVFormat.DEFAULT.builder().setDelimiter(";").setCommentMarker('#').get();
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
@@ -135,7 +135,7 @@ public class CSVTemplateCreatorDialog {
 		quoteOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				format = format.builder().setQuote(quoteOptions.getSelectedItem().toString().charAt(0))
-						.setQuoteMode(QuoteMode.ALL).build();
+						.setQuoteMode(QuoteMode.ALL).get();
 			}
 		});
 
@@ -148,7 +148,7 @@ public class CSVTemplateCreatorDialog {
 				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
 				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).build();
+					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
 				}
 			});
 		}
@@ -157,7 +157,7 @@ public class CSVTemplateCreatorDialog {
 			@Override
 			public void performAction() {
 				if (!otherDelimiterInput.getText().isEmpty()) {
-					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).build();
+					format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
 				}
 			}
 		});
@@ -299,7 +299,7 @@ public class CSVTemplateCreatorDialog {
 	}
 
 	private void write(String csvFile) {
-		format = format.builder().setQuoteMode(QuoteMode.ALL).build();
+		format = format.builder().setQuoteMode(QuoteMode.ALL).get();
 		try (BufferedWriter writer = Files.newBufferedWriter(new File(csvFile).toPath(), StandardCharsets.UTF_8);
 				CSVPrinter printer = new CSVPrinter(writer, format)) {
 			List<String> headers = new ArrayList<>();
@@ -311,7 +311,7 @@ public class CSVTemplateCreatorDialog {
 			});
 
 			if (includeFormatHintOption.isSelected()) {
-				format = format.builder().setCommentMarker('#').build();
+				format = format.builder().setCommentMarker('#').get();
 				printer.printComment("sep=" + format.getDelimiterString() + " -- quote=" + format.getQuoteCharacter());
 			}
 

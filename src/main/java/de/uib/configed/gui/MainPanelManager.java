@@ -81,7 +81,7 @@ public class MainPanelManager {
 	}
 
 	private void initialInitialization(DepotsList depotsList, MainFrame mainFrame) {
-		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList, configedMain);
+		DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
 
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 		scrollpaneTreeClients.getViewport().add(clientTree);
@@ -160,7 +160,7 @@ public class MainPanelManager {
 			DepotConfiguration depotConfiguration = new DepotConfiguration(configedMain, depotsList);
 
 			JLabel depotSelectionLabel = new JLabel(Configed.getResourceValue("depotSelection"));
-			DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList, configedMain);
+			DepotListPresenter depotListPresenter = new DepotListPresenter(depotsList);
 
 			JPanel depotsListPanel = new JPanel();
 			GroupLayout layout = new GroupLayout(depotsListPanel);

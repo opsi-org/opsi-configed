@@ -40,7 +40,7 @@ import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.DefaultTableModelFilterCondition;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.TableModelFilterCondition;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
@@ -51,12 +51,12 @@ import de.uib.utils.table.updates.MapTableUpdateItemFactory;
 
 public class Softwarename2LicensePoolDialog {
 	public static final String VALUE_NO_LICENSE_POOL = "---";
-	private PanelGenEditTable panelSWnames;
+	private PanelGenEdit panelSWnames;
 	private GenTableModel modelSWnames;
 
 	private List<String> columnNames;
 
-	private PanelGenEditTable panelSWxLicensepool;
+	private PanelGenEdit panelSWxLicensepool;
 	private GenTableModel modelSWxLicensepool;
 	private List<String> columnNamesSWxLicensepool;
 
@@ -92,7 +92,7 @@ public class Softwarename2LicensePoolDialog {
 	public Softwarename2LicensePoolDialog(ControlPanelAssignToLPools controlPanelAssignToLPools) {
 		this.controlPanelAssignToLPools = controlPanelAssignToLPools;
 
-		panelSWnames = new PanelGenEditTable("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
+		panelSWnames = new PanelGenEdit("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD }, true);
 
 		panelSWxLicensepool = new PanelSoftwareLicencepool(controlPanelAssignToLPools,
 				buttonSetAllAssignmentsToPoolFromSelectedRow, labelSetAllAssignmentsToPoolFromSelectedRow);
@@ -133,9 +133,9 @@ public class Softwarename2LicensePoolDialog {
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 		labelSetAllAssignmentsToPoolFromSelectedRow.setText(
 				Configed.getResourceValue("FSoftwarename2LicensePool.labelSetAllAssignmentsToPoolFromSelectedRow"));
-		buttonSetAllAssignmentsToPoolFromSelectedRow
-				.addActionListener(actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo(
-						(String) panelSWxLicensepool.getValueAt(panelSWxLicensepool.getJTable().getSelectedRow(), 1))));
+		buttonSetAllAssignmentsToPoolFromSelectedRow.addActionListener(
+				actionEvent -> panelSWxLicensepool.setDataChanged(setSWxColTo((String) panelSWxLicensepool
+						.getValueAt(panelSWxLicensepool.getGenEditTable().getSelectedRow(), 1))));
 	}
 
 	private JPanel createPanelAction() {
@@ -259,21 +259,25 @@ public class Softwarename2LicensePoolDialog {
 			}
 		};
 
-		panelSWnames.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		panelSWnames.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
-			if (!e.getValueIsAdjusting() && dialog.isVisible()) {
-				Logging.info(this, "selectedRow ", panelSWnames.getJTable().getSelectedRow());
+		panelSWnames.addListSelectionListener(this::updateTableModelSWxLicensepool);
+	}
 
-				if (panelSWnames.getJTable().getSelectedRow() >= 0) {
-					String swName = (String) panelSWnames.getValueAt(panelSWnames.getJTable().getSelectedRow(), 0);
+	private void updateTableModelSWxLicensepool(ListSelectionEvent e) {
+		if (e.getValueIsAdjusting() || dialog.isVisible()) {
+			return;
+		}
 
-					Logging.info(this, " setTableModelSWxLicensepool for ", swName);
+		Logging.info(this, "selectedRow ", panelSWnames.getGenEditTable().getSelectedRow());
 
-					setTableModelSWxLicensepool(swName);
-				}
-			}
-		});
+		if (panelSWnames.getGenEditTable().getSelectedRow() >= 0) {
+			String swName = (String) panelSWnames.getValueAt(panelSWnames.getGenEditTable().getSelectedRow(), 0);
+
+			Logging.info(this, " setTableModelSWxLicensepool for ", swName);
+
+			setTableModelSWxLicensepool(swName);
+		}
 	}
 
 	private boolean setSWxColTo(String newVal) {
@@ -475,7 +479,7 @@ public class Softwarename2LicensePoolDialog {
 				}, updateCollection));
 	}
 
-	public PanelGenEditTable getPanelSWnames() {
+	public PanelGenEdit getPanelSWnames() {
 		return panelSWnames;
 	}
 
@@ -483,7 +487,7 @@ public class Softwarename2LicensePoolDialog {
 		return modelSWnames;
 	}
 
-	public PanelGenEditTable getPanelSWxLicensepool() {
+	public PanelGenEdit getPanelSWxLicensepool() {
 		return panelSWxLicensepool;
 	}
 

@@ -9,7 +9,6 @@ package de.uib.logviewer.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,12 +36,13 @@ import javax.swing.KeyStroke;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.MainFrame;
+import de.uib.configed.gui.MenuBarController;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utils.ExtractorUtil;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
+import de.uib.utils.WindowsPositionManager;
 import de.uib.utils.logging.Logging;
 
 public class LogFrame extends JFrame {
@@ -100,7 +100,7 @@ public class LogFrame extends JFrame {
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileClose);
 		jMenuFile.add(jMenuFileSave);
-		jMenuFile.add(MainFrame.createJMenuTheme(this::restartLogFrame));
+		jMenuFile.add(MenuBarController.createJMenuTheme(this::restartLogFrame));
 		jMenuFile.add(Messages.createJMenuLanguages(this::restartLogFrame));
 		jMenuFile.add(jMenuFileExit);
 		return jMenuFile;
@@ -131,15 +131,15 @@ public class LogFrame extends JFrame {
 
 	private JMenu setupMenuHelp() {
 		JMenu jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
-		MainFrame.addHelpLinks(jMenuHelp);
+		MenuBarController.addHelpLinks(jMenuHelp);
 
 		jMenuHelp.addSeparator();
 
-		MainFrame.addLogfileMenus(jMenuHelp, this);
+		MenuBarController.addLogfileMenus(jMenuHelp, this);
 
 		jMenuHelp.addSeparator();
 
-		MainFrame.addCreditsMenus(jMenuHelp, this);
+		MenuBarController.addCreditsMenus(jMenuHelp, this);
 
 		return jMenuHelp;
 	}
@@ -174,14 +174,16 @@ public class LogFrame extends JFrame {
 		return jToolBar;
 	}
 
-	private void guiInit() {
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				Main.endApp(Main.NO_ERROR);
-			}
-		});
+	@Override
+	public void processWindowEvent(WindowEvent e) {
+		super.processWindowEvent(e);
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+			WindowsPositionManager.saveWindowProperties(LogFrame.this, WindowsPositionManager.LOGVIEWER);
+			Main.endApp(Main.NO_ERROR);
+		}
+	}
 
+	private void guiInit() {
 		this.setIconImage(Icons.getMainIcon());
 
 		JToolBar jToolBar = createIconsToolbar();
@@ -210,7 +212,7 @@ public class LogFrame extends JFrame {
 			if (!logText.isEmpty()) {
 				logPane.setTitle(fileName);
 				setTitle(fileName);
-				logPane.setText(logText);
+				logPane.setLogText(logText);
 			} else {
 				setEmptyData();
 			}
@@ -220,7 +222,7 @@ public class LogFrame extends JFrame {
 	}
 
 	private void setEmptyData() {
-		logPane.setText("");
+		logPane.setLogText("");
 		logPane.setTitle("");
 		setTitle(null);
 	}
@@ -257,7 +259,7 @@ public class LogFrame extends JFrame {
 
 		if (fileName != null && !fileName.isEmpty()) {
 			Logging.info(this, "Used memory ", Utils.usedMemory());
-			logPane.setText(readFile(fileName));
+			logPane.setLogText(readFile(fileName));
 			Logging.info(this, "Used memory ", Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
@@ -353,7 +355,7 @@ public class LogFrame extends JFrame {
 			StandaloneLogPane externalLogPane = new StandaloneLogPane(this);
 			externalLogPane.externalize(entry.getKey(), getSize());
 			externalLogPane.setTitle(entry.getKey());
-			externalLogPane.setText(entry.getValue());
+			externalLogPane.setLogText(entry.getValue());
 		}
 	}
 

@@ -16,17 +16,19 @@ import java.util.stream.Collectors;
 
 import de.uib.configed.type.licenses.LicenseContractEntry;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 
 public final class LicenseData {
 	private static List<String> licenses = new ArrayList<>();
 	private static List<String> activeLicenses = new ArrayList<>();
 	private static List<String> expiredLicenses = new ArrayList<>();
 
-	private static OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
+	private static OpsiServiceNOMPersistenceController persistenceController;
 
 	private LicenseData() {
+	}
+
+	public static void initData(OpsiServiceNOMPersistenceController persistenceController) {
+		LicenseData.persistenceController = persistenceController;
 	}
 
 	public static List<String> getLicenses() {

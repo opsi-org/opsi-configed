@@ -29,13 +29,14 @@ import de.uib.configed.Globals;
 import de.uib.utils.swing.AutoCompletionComboBox;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 
 public class PanelLicensesUsage extends MultiTablePanel {
 	private JSplitPane splitPane;
 
-	private PanelGenEditTable panelUsage;
-	private PanelGenEditTable panelLicensePools;
+	private PanelGenEdit panelUsage;
+	private PanelGenEdit panelLicensePools;
 
 	private JPanel panelGetAndAssignSL;
 	private JComboBox<String> comboClient;
@@ -61,7 +62,7 @@ public class PanelLicensesUsage extends MultiTablePanel {
 	}
 
 	private void initSubPanel() {
-		panelLicensePools = new PanelGenEditTable(
+		panelLicensePools = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicensepools"), false, 0,
 				new int[] { PopupMenuTrait.POPUP_RELOAD });
 		panelLicensePools.setFilterKey(FilterKey.LICENSE_POOL_USAGE_TABLE);
@@ -102,13 +103,15 @@ public class PanelLicensesUsage extends MultiTablePanel {
 	}
 
 	private void initComponents() {
-		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleUsage"), true,
-				0, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
+		panelUsage = new PanelGenEdit(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleUsage"), true, 0,
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
 
-		panelUsage.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelUsage.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelUsage.setFilterKey(FilterKey.LICENSE_USAGE_TABLE);
+
+		panelUsage.getTableSearchPane().setFiltering();
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
@@ -128,11 +131,11 @@ public class PanelLicensesUsage extends MultiTablePanel {
 		comboClient.setModel(modelsource);
 	}
 
-	public PanelGenEditTable getPanelUsage() {
+	public PanelGenEdit getPanelUsage() {
 		return panelUsage;
 	}
 
-	public PanelGenEditTable getPanelLicensePools() {
+	public PanelGenEdit getPanelLicensePools() {
 		return panelLicensePools;
 	}
 }

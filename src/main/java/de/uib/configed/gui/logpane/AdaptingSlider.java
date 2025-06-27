@@ -22,15 +22,15 @@ import de.uib.configed.Globals;
 import de.uib.utils.logging.Logging;
 
 public class AdaptingSlider extends JSlider implements ChangeListener, MouseWheelListener {
-	private LogPane logPane;
+	private LogPanel logPane;
 
-	public AdaptingSlider(LogPane logPane, int min, int max, int value) {
+	public AdaptingSlider(LogPanel logPane, int min, int max, int value) {
 		super(min, max, value);
 
 		init(logPane);
 	}
 
-	private void init(LogPane logPane) {
+	private void init(LogPanel logPane) {
 		this.logPane = logPane;
 
 		super.addChangeListener(this);

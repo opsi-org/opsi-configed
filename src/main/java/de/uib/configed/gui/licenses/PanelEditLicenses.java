@@ -22,12 +22,13 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 
 public class PanelEditLicenses extends MultiTablePanel {
-	private PanelGenEditTable panelKeys;
-	private PanelGenEditTable panelSoftwarelicenses;
-	private PanelGenEditTable panelLicensecontracts;
+	private PanelGenEdit panelKeys;
+	private PanelGenEdit panelSoftwarelicenses;
+	private PanelGenEdit panelLicensecontracts;
 
 	private int minVSize = 100;
 
@@ -37,31 +38,34 @@ public class PanelEditLicenses extends MultiTablePanel {
 	}
 
 	private void initComponents() {
-		panelKeys = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"), true, 1,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
+		panelKeys = new PanelGenEdit(Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleLicenseOptionsView"),
+				true, 1, new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
-		panelKeys.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelKeys.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelKeys.setFilterKey(FilterKey.LICENSE_KEYS_EDIT_TABLE);
 
-		panelSoftwarelicenses = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSoftwarelicense"), true, 2,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
-				true);
-		panelSoftwarelicenses.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		panelSoftwarelicenses.setFilterKey(FilterKey.LICENSE_SOFTWARE_TABLE);
+		panelKeys.getTableSearchPane().setFiltering();
 
-		panelLicensecontracts = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2,
-				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
+		panelSoftwarelicenses = new PanelGenEdit(
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSoftwarelicense"), true, 2,
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
 				true);
-		panelLicensecontracts.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelSoftwarelicenses.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelSoftwarelicenses.setFilterKey(FilterKey.LICENSE_SOFTWARE_TABLE);
+		panelSoftwarelicenses.getTableSearchPane().setFiltering();
+
+		panelLicensecontracts = new PanelGenEdit(
+				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleSelectLicensecontract"), true, 2,
+				new int[] { PanelGenEditPopupManager.POPUP_DELETE_ROW, PopupMenuTrait.POPUP_SAVE,
+						PanelGenEditPopupManager.POPUP_CANCEL, PopupMenuTrait.POPUP_RELOAD },
+				true);
+		panelLicensecontracts.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelLicensecontracts.setFilterKey(FilterKey.LICENSE_CONTRACTS_EDIT_TABLE);
 
 		// supply implementation of SearchTargetModelFromTable.setFiltered
+		panelLicensecontracts.getTableSearchPane().setFiltering();
 		panelLicensecontracts.setAwareOfTableChangedListener(true);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -104,15 +108,15 @@ public class PanelEditLicenses extends MultiTablePanel {
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
-	public PanelGenEditTable getPanelKeys() {
+	public PanelGenEdit getPanelKeys() {
 		return panelKeys;
 	}
 
-	public PanelGenEditTable getPanelSoftwarelicenses() {
+	public PanelGenEdit getPanelSoftwarelicenses() {
 		return panelSoftwarelicenses;
 	}
 
-	public PanelGenEditTable getPanelLicensecontracts() {
+	public PanelGenEdit getPanelLicensecontracts() {
 		return panelLicensecontracts;
 	}
 }

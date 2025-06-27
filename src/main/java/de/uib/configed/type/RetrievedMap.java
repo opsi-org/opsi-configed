@@ -19,7 +19,7 @@ public class RetrievedMap extends HashMap<String, Object> {
 		build();
 	}
 
-	protected void build() {
+	private void build() {
 		if (retrieved != null) {
 			putAll(retrieved);
 		}

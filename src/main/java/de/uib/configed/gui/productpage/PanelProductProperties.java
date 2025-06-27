@@ -34,13 +34,14 @@ import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
 import de.uib.utils.table.GenTableModel;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.ExternalSource;
 import de.uib.utils.table.updates.MapBasedTableEditItem;
 
 public class PanelProductProperties extends JSplitPane implements AncestorListener {
-	private PanelGenEditTable paneProducts;
+	private PanelGenEdit paneProducts;
 	private ProductInfoPane infoPane;
 	private ConfigedMain configedMain;
 	private DepotsList depotsList;
@@ -71,7 +72,7 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		PanelEditDepotProperties panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
 		paneProducts = new PaneProducts(columnNames, panelEditProperties, propertiesPanel);
 		paneProducts.setTableModel(model);
-		paneProducts.getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paneProducts.getGenEditTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		paneProducts.setFilterKey(FilterKey.DEPOT_PRODUCT_PROPERTIES_TABLE);
 
 		Map<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
@@ -107,11 +108,11 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 	public void setProductProperties() {
 		paneProducts.setTableModel(createTableModel());
-		int saveSelectedRow = paneProducts.getJTable().getSelectedRow();
+		int saveSelectedRow = paneProducts.getGenEditTable().getSelectedRow();
 		paneProducts.getTableModel().reset();
 
-		if (paneProducts.getTableModel().getRowCount() > 0) {
-			if (saveSelectedRow == -1 || paneProducts.getTableModel().getRowCount() <= saveSelectedRow) {
+		if (paneProducts.getGenEditTable().getRowCount() > 0) {
+			if (saveSelectedRow == -1 || paneProducts.getGenEditTable().getRowCount() <= saveSelectedRow) {
 				paneProducts.setSelectedRow(0);
 			} else {
 				paneProducts.setSelectedRow(saveSelectedRow);
@@ -119,12 +120,12 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 		}
 	}
 
-	public PanelGenEditTable getPaneProducts() {
+	public PanelGenEdit getPaneProducts() {
 		return paneProducts;
 	}
 
 	@SuppressWarnings({ "java:S2972" })
-	private class PaneProducts extends PanelGenEditTable {
+	private class PaneProducts extends PanelGenEdit {
 		private List<String> columnNames;
 		private List<String> depotsOfPackage;
 		private PanelEditDepotProperties panelEditProperties;
@@ -132,13 +133,15 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 		public PaneProducts(List<String> columnNames, PanelEditDepotProperties panelEditDepotProperties,
 				EditMapPanelX propertiesPanel) {
-			super("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, POPUP_SORT_AGAIN }, true);
+			super("", false, 0, new int[] { PopupMenuTrait.POPUP_RELOAD, PanelGenEditPopupManager.POPUP_SORT_AGAIN },
+					true);
 			this.columnNames = columnNames;
 			this.depotsOfPackage = new ArrayList<>();
 			this.panelEditProperties = panelEditDepotProperties;
 			this.propertiesPanel = propertiesPanel;
 
 			super.setMinimumSize(new Dimension());
+			tableSearchPane.setFiltering();
 		}
 
 		@Override
@@ -181,17 +184,17 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 			if (row == -1) {
 				depotsOfPackage.clear();
 			} else {
-				String productEdited = "" + jTable.getValueAt(row, columnNames.indexOf("productId"));
+				String productEdited = "" + genEditTable.getValueAt(row, columnNames.indexOf("productId"));
 
 				Logging.info(this, "selected  product: ", productEdited);
 
 				String versionInfo = OpsiPackage.produceVersionInfo(
-						"" + jTable.getValueAt(row, columnNames.indexOf("productVersion")),
-						"" + jTable.getValueAt(row, columnNames.indexOf("packageVersion")));
+						"" + genEditTable.getValueAt(row, columnNames.indexOf("productVersion")),
+						"" + genEditTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
 				List<String> depotsOfPackageAsRetrieved = persistenceController.getProductDataService()
-						.getProduct2VersionInfo2DepotsPD().get(jTable.getValueAt(row, columnNames.indexOf("productId")))
-						.get(versionInfo);
+						.getProduct2VersionInfo2DepotsPD()
+						.get(genEditTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
 				Logging.info(this, "valueChanged  versionInfo ", versionInfo);
 
@@ -207,8 +210,9 @@ public class PanelProductProperties extends JSplitPane implements AncestorListen
 
 				if (!depotsOfPackage.isEmpty()) {
 					infoPane.setEditValues(productEdited,
-							"" + jTable.getValueAt(row, columnNames.indexOf("productVersion")),
-							"" + jTable.getValueAt(row, columnNames.indexOf("packageVersion")), depotsOfPackage.get(0));
+							"" + genEditTable.getValueAt(row, columnNames.indexOf("productVersion")),
+							"" + genEditTable.getValueAt(row, columnNames.indexOf("packageVersion")),
+							depotsOfPackage.get(0));
 				}
 
 				panelEditProperties.setDepotListData(depotsOfPackage, productEdited);

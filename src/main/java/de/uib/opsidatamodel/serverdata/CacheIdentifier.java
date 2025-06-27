@@ -300,12 +300,22 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Set<String>}
 	 */
-	MOTD_FORBIDDEN("motd_forbidden"), TERMINAL_MENU_ACTIVE("terminal_menu_active"),
+	MOTD_FORBIDDEN("motd_forbidden"),
 
 	/**
-	 * return type {@code Set<String>}
+	 * return type {@code Boolean}
+	 */
+	TERMINAL_MENU_ACTIVE("terminal_menu_active"),
+
+	/**
+	 * return type {@code Bolean}
 	 */
 	TERMINAL_COMMANDS_ACTIVE("terminal_commands_active"),
+
+	/**
+	 * return type {@code Boolean}
+	 */
+	TERMINAL_COMMAND_CONTROL_ACTIVE("terminal_command_control_active"),
 
 	/**
 	 * return type {@code String}
@@ -430,6 +440,16 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code String}
 	 */
+	CONFIG_SERVER_WEBDAV_BASE_URI("config_server_webdav_base_uri"),
+
+	/**
+	 * return type {@code String}
+	 */
+	CONFIG_SERVER_WEBDAV_PATH("config_server_webdav_path"),
+
+	/**
+	 * return type {@code String}
+	 */
 	CONFIG_SERVER("config_server"),
 
 	/**
@@ -490,7 +510,17 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code boolean}
 	 */
-	MFA_ENABLED("mfa_enabled");
+	MFA_ENABLED("mfa_enabled"),
+
+	/**
+	 * return type {@code List<String>}
+	 */
+	WIN_PRODUCTS("win_products"),
+
+	/**
+	 * return type {@code List<Map<String, Object>>}
+	 */
+	SSH_COMMAND_LIST("ssh_command_list");
 
 	private final String displayName;
 

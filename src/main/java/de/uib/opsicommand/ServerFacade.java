@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.messagebus.Messagebus;
 import de.uib.opsicommand.ConnectionHandler.RequestMethod;
 import de.uib.opsicommand.certificate.CertificateManager;
 import de.uib.opsidatamodel.serverdata.ParallelTaskExecutor;
@@ -86,7 +87,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	public ServerFacade(String host, boolean connect) {
-		Logging.warning("ServerFacade ", host, " connect ", connect);
+		Logging.info("ServerFacade ", host, " connect ", connect);
 		if (host == null) {
 			return;
 		}
@@ -155,7 +156,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 		URL url = makeURL("/auth/session_id");
 		ConnectionHandler handler = new ConnectionHandler(url, requestProperties, false);
-		HttpsURLConnection connection = handler.establishConnection(true, true, timeout);
+		HttpsURLConnection connection = handler.establishInsecureConnection(true, timeout);
 		setConnectionState(handler.getConnectionState());
 		if (connection == null || handler.getConnectionState().getState() == ConnectionState.NOT_CONNECTED) {
 			Logging.warning("try to get headers, but no connection. ", "conStat ", getConnectionState(), "state: ",
@@ -399,6 +400,15 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		Logging.info(this, "connection cipher suite ", (connection).getCipherSuite());
 
+		Map<String, Object> result = retrieveResponse(connection);
+
+		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
+		Logging.info(this, "retrieveResponse ready");
+
+		return result;
+	}
+
+	private Map<String, Object> retrieveResponse(HttpsURLConnection connection) {
 		Map<String, Object> result = new HashMap<>();
 
 		if (getConnectionState().getState() == ConnectionState.STARTED_CONNECTING
@@ -420,14 +430,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
 						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
 				setConnectionState(new ConnectionState(ConnectionState.TIMEOUT));
-				return new HashMap<>();
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
 			}
 		}
-
-		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
-		Logging.info(this, "retrieveResponse ready");
 
 		return result;
 	}
@@ -483,10 +489,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				Logging.warning(ste, "Timeout exception reached, we have a set timeout of",
 						System.getProperty("sun.net.client.defaultConnectTimeout"), "ms");
 				setConnectionState(new ConnectionState(ConnectionState.TIMEOUT));
-				return new HashMap<>();
 			} catch (IOException ex) {
 				Logging.error(this, ex, "Exception while data reading");
-				return new HashMap<>();
 			}
 		}
 		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
@@ -568,39 +572,48 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private Map<String, Object> retrieveResponseBasedOnContentTypeToObject(String contentType, InputStream stream,
 			String resultKey) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
 		Logging.debug("retrieveResponseBasedOnContentType ", contentType);
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result;
 		if (contentType.contains("application/json")) {
-			String resultStr = readInputStream(stream).strip();
-			if (resultStr.isEmpty()) {
-				result.put(resultStr, result);
-			} else if (resultStr.startsWith("{")) {
-				result = mapper.readValue(resultStr, new TypeReference<Map<String, Object>>() {
-				});
-			} else if (resultStr.startsWith("[")) {
-				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object[]>() {
-				}));
-			} else if (resultStr.startsWith("\"")) {
-				result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
-				}));
-			} else if ("true".equals(resultStr)) {
-				result.put(resultKey, true);
-			} else if ("false".equals(resultStr)) {
-				result.put(resultKey, false);
-			} else if ("null".equals(resultStr)) {
-				result.put(resultKey, null);
-			} else if (resultStr.contains(".")) {
-				result.put(resultKey, Float.parseFloat(resultStr));
-			} else {
-				result.put(resultKey, Integer.parseInt(resultStr));
-			}
+			result = getJSONResult(stream, resultKey);
 		} else if (contentType.contains("application/msgpack")) {
-			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			result = new ObjectMapper().readValue(stream, new TypeReference<Map<String, Object>>() {
 			});
 		} else {
 			Logging.error(this, "Unsupported Content-Type: ", contentType);
+			result = new HashMap<>();
 		}
+		return result;
+	}
+
+	private static Map<String, Object> getJSONResult(InputStream stream, String resultKey) throws IOException {
+		Map<String, Object> result = new HashMap<>();
+
+		ObjectMapper mapper = new ObjectMapper();
+		String resultStr = readInputStream(stream).strip();
+		if (resultStr.isEmpty()) {
+			result.put(resultStr, result);
+		} else if (resultStr.startsWith("{")) {
+			result = mapper.readValue(resultStr, new TypeReference<Map<String, Object>>() {
+			});
+		} else if (resultStr.startsWith("[")) {
+			result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object[]>() {
+			}));
+		} else if (resultStr.startsWith("\"")) {
+			result.put(resultKey, mapper.readValue(resultStr, new TypeReference<Object>() {
+			}));
+		} else if ("true".equals(resultStr)) {
+			result.put(resultKey, true);
+		} else if ("false".equals(resultStr)) {
+			result.put(resultKey, false);
+		} else if ("null".equals(resultStr)) {
+			result.put(resultKey, null);
+		} else if (resultStr.contains(".")) {
+			result.put(resultKey, Float.parseFloat(resultStr));
+		} else {
+			result.put(resultKey, Integer.parseInt(resultStr));
+		}
+
 		return result;
 	}
 
@@ -617,8 +630,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			if (Utils.isMultiFactorAuthenticationEnabled() && ConfigedMain.getMainFrame() != null) {
 				ParallelTaskExecutor.cancelAllExecutorsTasks();
 
+				// Don't initiate Messagebus reconnection, since the connection is restablished once
+				// correct OTP is provided. Otherwise, Messagebus reconnection attempts may block client
+				// IP address and may seem as suspicious activity.
+				Messagebus.getInstance().setReconnecting(true);
 				ConnectionErrorReporter.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-				if (otp.equals(getOTP())) {
+				setConnectionState(new ConnectionState(ConnectionState.NOT_CONNECTED));
+				if (otp != null && otp.equals(getOTP())) {
 					Logging.debug(this, "MFA error encountered, we wait for new OTP input");
 					otp = waitForOTPInput();
 				} else {
@@ -806,6 +824,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 		wipeSensitiveString(otp);
 		otp = null;
+
+		wipeSensitiveString(sessionId);
+		sessionId = null;
 
 		otpWaiter = null;
 		useSSO = false;

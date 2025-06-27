@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -36,6 +35,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
+import de.uib.utils.WindowsPositionManager;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
 import de.uib.utils.userprefs.UserPreferences;
@@ -80,6 +80,7 @@ public class LoginDialog extends JFrame implements KeyListener {
 	public LoginDialog() {
 		super();
 
+		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		initGuiElements();
 		setupLayout();
 		setServers();
@@ -224,13 +225,13 @@ public class LoginDialog extends JFrame implements KeyListener {
 	}
 
 	private void initSSO() {
-		Logging.warning("LoginDialog.initSSO");
+		Logging.info("LoginDialog.initSSO");
 		String host = (String) fieldHost.getSelectedItem();
 		if (host == null || host.isEmpty()) {
 			Logging.debug(this, "No host provided");
 			return;
 		} else if (wasSuccessfullyAuthenticated()) {
-			Logging.warning("was connected");
+			Logging.info("was connected");
 		} else {
 			// Not needed.
 		}
@@ -365,7 +366,12 @@ public class LoginDialog extends JFrame implements KeyListener {
 		fieldHost.requestFocus();
 		// Sets the window on the main screen
 		pack();
-		setLocationRelativeTo(null);
+		if (WindowsPositionManager
+				.isOnAnyScreen(WindowsPositionManager.getWindowBounds(WindowsPositionManager.MAIN_WINDOW))) {
+			WindowsPositionManager.centerDialogOnWindowScreen(this);
+		} else {
+			setLocationRelativeTo(null);
+		}
 		setResizable(false);
 		setVisible(true);
 	}
@@ -403,14 +409,6 @@ public class LoginDialog extends JFrame implements KeyListener {
 
 	private static void endProgram() {
 		ConfigedMain.finishApp(false, 0);
-	}
-
-	@Override
-	protected void processWindowEvent(WindowEvent e) {
-		super.processWindowEvent(e);
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			endProgram();
-		}
 	}
 
 	@Override

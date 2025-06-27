@@ -40,10 +40,11 @@ import de.uib.configed.type.HostInfo;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.utils.table.gui.PanelGenEditPopupManager;
 
 public class CSVImportDataDialog {
-	private PanelGenEditTable thePanel;
+	private PanelGenEdit thePanel;
 	private CSVFormat format;
 
 	private JRadioButton tabsOption;
@@ -131,7 +132,7 @@ public class CSVImportDataDialog {
 		quoteOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				format = format.builder().setQuote(quoteOptions.getSelectedItem().toString().charAt(0))
-						.setQuoteMode(QuoteMode.ALL).build();
+						.setQuoteMode(QuoteMode.ALL).get();
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		});
@@ -145,7 +146,7 @@ public class CSVImportDataDialog {
 				otherDelimiterInput.setEnabled(e.getItem() == otherOption);
 
 				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
-					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).build();
+					format = format.builder().setDelimiter(button.getActionCommand().charAt(0)).get();
 					modifier.updateTable(format, startLine, thePanel);
 				}
 			});
@@ -153,7 +154,7 @@ public class CSVImportDataDialog {
 
 		((AbstractDocument) otherDelimiterInput.getDocument()).addDocumentListener(new InputListener(() -> {
 			if (!otherDelimiterInput.getText().isEmpty()) {
-				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).build();
+				format = format.builder().setDelimiter(otherDelimiterInput.getText().charAt(0)).get();
 				modifier.updateTable(format, startLine, thePanel);
 			}
 		}));
@@ -173,8 +174,8 @@ public class CSVImportDataDialog {
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
 		// don't use a definite max table width (-1), with popups
-		thePanel = new PanelGenEditTable("", true, 0,
-				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
+		thePanel = new PanelGenEdit("", true, 0,
+				new int[] { PanelGenEditPopupManager.POPUP_SORT_AGAIN, PopupMenuTrait.POPUP_RELOAD }, true);
 
 		modifier.updateTable(format, startLine, thePanel);
 
@@ -326,7 +327,7 @@ public class CSVImportDataDialog {
 		}
 
 		CSVFormat format = CSVFormat.DEFAULT.builder().setDelimiter(csvFormatDetector.getDelimiter())
-				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().build();
+				.setQuote(csvFormatDetector.getQuote()).setCommentMarker('#').setHeader().get();
 		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
 		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(format, modifier);
 		csvImportDataDialog.setDetectedOptions();

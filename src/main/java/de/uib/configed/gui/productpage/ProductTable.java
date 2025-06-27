@@ -9,7 +9,10 @@ package de.uib.configed.gui.productpage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.JTable;
@@ -24,7 +27,6 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.configed.tree.AbstractGroupTree;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utils.logging.Logging;
-import javafx.util.Pair;
 
 public class ProductTable extends JTable {
 	public ProductTable() {
@@ -126,14 +128,15 @@ public class ProductTable extends JTable {
 	 * 
 	 * @return List of pairs of column title and sort order
 	 */
-	public List<Pair<String, SortOrder>> getSortedNames() {
+	public Map<String, SortOrder> getSortedNames() {
 		List<? extends SortKey> saveSortKeys = getSortKeys();
 		if (saveSortKeys == null || saveSortKeys.isEmpty() || getColumnCount() == 0) {
 			Logging.debug(this, "getSortedNames sort keys is null or empty");
-			return Collections.emptyList();
+			return Collections.emptyMap();
 		}
 		Logging.debug(this, "getSortedNames sort keys ", saveSortKeys);
-		List<Pair<String, SortOrder>> sortKeyNames = new ArrayList<>();
+		// This needs to be a LinkedHashMap since the ordering is important
+		Map<String, SortOrder> sortKeyNames = new LinkedHashMap<>();
 		for (SortKey sortKey : saveSortKeys) {
 			String columnKey = getColumnName(sortKey.getColumn());
 			Logging.debug("\tColumn index ", sortKey.getColumn(), " columnKey ", columnKey, " sortOrder ",
@@ -141,7 +144,7 @@ public class ProductTable extends JTable {
 			if (columnKey == null || columnKey.isEmpty()) {
 				continue;
 			}
-			sortKeyNames.add(new Pair<>(columnKey, sortKey.getSortOrder()));
+			sortKeyNames.put(columnKey, sortKey.getSortOrder());
 		}
 		Logging.debug(this, "getSortedNames sort names ", sortKeyNames);
 		return sortKeyNames;
@@ -153,12 +156,12 @@ public class ProductTable extends JTable {
 	 * @param sortKeyNames
 	 * @return
 	 */
-	private List<SortKey> getSortedKeysByNames(List<Pair<String, SortOrder>> sortKeyNames) {
+	private List<SortKey> getSortedKeysByNames(Map<String, SortOrder> sortKeyNames) {
 		List<SortKey> newSortKeys = new ArrayList<>();
-		for (Pair<String, SortOrder> pair : sortKeyNames) {
-			int columnIndex = getColumnIndexByTitle(pair.getKey());
+		for (Entry<String, SortOrder> entry : sortKeyNames.entrySet()) {
+			int columnIndex = getColumnIndexByTitle(entry.getKey());
 			if (columnIndex != -1) {
-				newSortKeys.add(new SortKey(columnIndex, pair.getValue()));
+				newSortKeys.add(new SortKey(columnIndex, entry.getValue()));
 			}
 		}
 		Logging.debug(this, "getSortedKeysByNames new sort keys ", newSortKeys);
@@ -171,7 +174,7 @@ public class ProductTable extends JTable {
 	 * 
 	 * @param sortKeyNames
 	 */
-	public void setSortedByNames(List<Pair<String, SortOrder>> sortKeyNames) {
+	public void setSortedByNames(Map<String, SortOrder> sortKeyNames) {
 		Logging.debug(this, "sortKeyNames sort key names ", sortKeyNames);
 		if (sortKeyNames == null || sortKeyNames.isEmpty()) {
 			// use default sort keys

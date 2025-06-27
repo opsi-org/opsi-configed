@@ -12,15 +12,15 @@ import java.util.List;
 
 import de.uib.utils.logging.Logging;
 import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class MapItemsUpdateController implements UpdateController {
 	private GenTableModel tablemodel;
-	private PanelGenEditTable panel;
+	private PanelGenEdit panel;
 	private MapBasedUpdater updater;
 	private List<MapBasedTableEditItem> updateCollection;
 
-	public MapItemsUpdateController(PanelGenEditTable panel, GenTableModel model, MapBasedUpdater updater,
+	public MapItemsUpdateController(PanelGenEdit panel, GenTableModel model, MapBasedUpdater updater,
 			List<MapBasedTableEditItem> updateCollection) {
 		this.panel = panel;
 		this.tablemodel = model;
@@ -39,26 +39,28 @@ public class MapItemsUpdateController implements UpdateController {
 
 		Iterator<MapBasedTableEditItem> iter = updateCollection.iterator();
 
-		String lastKeyValue = "";
+		String lastKeyValue = null;
 
 		while (iter.hasNext() && success) {
 			MapBasedTableEditItem updateItem = iter.next();
 
 			Logging.debug(this, " handling updateItem ", updateItem);
 
-			if (updateItem.getSource() == this.tablemodel) {
-				if (updateItem.keyChanged()) {
-					String result = updater.sendUpdate(updateItem.getRowAsMap());
+			if (updateItem.getSource() != this.tablemodel) {
+				continue;
+			}
 
-					success = result != null;
-					if (success) {
-						successfullInsertsWithNewKeys.add(updateItem);
+			if (updateItem.keyChanged()) {
+				String result = updater.sendUpdate(updateItem.getRowAsMap());
 
-						lastKeyValue = result;
-					}
-				} else {
-					success = updater.sendDelete(updateItem.getRowAsMap());
+				success = result != null;
+				if (success) {
+					successfullInsertsWithNewKeys.add(updateItem);
+
+					lastKeyValue = result;
 				}
+			} else {
+				success = updater.sendDelete(updateItem.getRowAsMap());
 			}
 		}
 

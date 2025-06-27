@@ -32,7 +32,7 @@ import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
 import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 import de.uib.utils.table.provider.DefaultTableProvider;
 import de.uib.utils.table.provider.MapRetriever;
 import de.uib.utils.table.provider.RetrieverMapSource;
@@ -238,9 +238,9 @@ public class LicenseManagement extends JTabbedPane {
 		Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 		while (!change && iter.hasNext()) {
 			AbstractControlMultiTablePanel cmtp = iter.next();
-			Iterator<PanelGenEditTable> iterP = cmtp.getTablePanes().iterator();
+			Iterator<PanelGenEdit> iterP = cmtp.getTablePanes().iterator();
 			while (!change && iterP.hasNext()) {
-				PanelGenEditTable p = iterP.next();
+				PanelGenEdit p = iterP.next();
 				change = p.isDataChanged();
 			}
 		}

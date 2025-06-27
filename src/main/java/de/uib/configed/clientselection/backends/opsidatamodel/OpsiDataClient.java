@@ -93,15 +93,12 @@ public class OpsiDataClient {
 
 	/** Get a map by name */
 	public Map<String, Object> getMap(String map) {
-		if (map.equals(HOSTINFO_MAP)) {
-			return new HashMap<>(infoMap);
-		} else if (map.equals(SOFTWARE_MAP)) {
-			return new HashMap<>(softwareValue);
-		} else if (map.equals(SWAUDIT_MAP)) {
-			return new HashMap<>(swauditValue);
-		} else {
-			return getHardwareMap(map);
-		}
+		return switch (map) {
+		case HOSTINFO_MAP -> new HashMap<>(infoMap);
+		case SOFTWARE_MAP -> new HashMap<>(softwareValue);
+		case SWAUDIT_MAP -> new HashMap<>(swauditValue);
+		default -> getHardwareMap(map);
+		};
 	}
 
 	/** Get the ID of this client */

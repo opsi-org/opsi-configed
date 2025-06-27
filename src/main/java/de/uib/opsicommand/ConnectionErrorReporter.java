@@ -7,7 +7,6 @@
 package de.uib.opsicommand;
 
 import java.awt.event.ActionEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JButton;
@@ -19,7 +18,11 @@ import javax.swing.SwingUtilities;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.MainFrame;
+import de.uib.messagebus.Messagebus;
 import de.uib.opsicommand.certificate.CertificateManager;
+import de.uib.opsicommand.certificate.CertificateValidatorFactory;
+import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.SeparatedDocument;
@@ -154,8 +157,24 @@ public final class ConnectionErrorReporter {
 		displayConfirmDialogInEventDispatchThread(
 				new Object[] { Configed.getResourceValue("ConnectionErrorReporter.provideNewTOTP"), otpField },
 				Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword"),
-				() -> ConfigedMain.getMainFrame().reconnectOTP(new String(otpField.getPassword())),
+				() -> reconnectOTP(new String(otpField.getPassword())),
 				() -> SwingUtilities.invokeLater(this::displayCancelConfigedDialog));
+	}
+
+	private static void reconnectOTP(String otp) {
+		if (Messagebus.getInstance() != null) {
+			Messagebus.getInstance().disconnect();
+			Messagebus.getInstance().setReconnecting(false);
+		}
+		PersistenceControllerFactory.getPersistenceController().getExecutioner().setOTP(otp);
+
+		CacheManager.getInstance().clearAllCachedData();
+		Configed.getSavedStates().removeAll();
+		ConfigedMain.getMainFrame().resetData();
+
+		CertificateValidatorFactory.resetCertificateValidators();
+
+		MainFrame.restartConfiged();
 	}
 
 	private void displayCancelConfigedDialog() {
@@ -165,7 +184,7 @@ public final class ConnectionErrorReporter {
 				() -> Main.endApp(Main.NO_ERROR), () -> SwingUtilities.invokeLater(this::displayMFADialog));
 	}
 
-	private void displayConfirmDialogInEventDispatchThread(Object message, String title, Runnable onOK,
+	private static void displayConfirmDialogInEventDispatchThread(Object message, String title, Runnable onOK,
 			Runnable onCancel) {
 		if (!dialogOpened.compareAndSet(false, true)) {
 			return;
@@ -192,22 +211,15 @@ public final class ConnectionErrorReporter {
 	 * Ensures that the provided Runnable executes on the Swing Event Dispatch
 	 * Thread (EDT). If the current thread is the EDT, the task runs
 	 * immediately; otherwise, it is executed synchronously on the EDT using
-	 * invokeAndWait.
+	 * invokeLater.
 	 *
 	 * @param runnable the task to be executed on the EDT
 	 */
-	private void runOnEventDispatchThread(Runnable runnable) {
+	private static void runOnEventDispatchThread(Runnable runnable) {
 		if (SwingUtilities.isEventDispatchThread()) {
 			runnable.run();
 		} else {
-			try {
-				SwingUtilities.invokeAndWait(runnable::run);
-			} catch (InterruptedException ie) {
-				Thread.currentThread().interrupt();
-				Logging.error(this, "Thread was interrupted while waiting for EDT execution.", ie);
-			} catch (InvocationTargetException ite) {
-				Logging.error(this, "Exception thrown by runnable while executing on the EDT.", ite);
-			}
+			SwingUtilities.invokeLater(runnable);
 		}
 	}
 

@@ -107,7 +107,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		thePanel.getPanelKeys().addPopupItem(menuItemAddKey);
 
-		TableColumn col = thePanel.getPanelKeys().getJTable().getColumnModel().getColumn(1);
+		TableColumn col = thePanel.getPanelKeys().getGenEditTable().getColumnModel().getColumn(1);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
 			List<String> poolIds = licensesPane.getLicensePoolTableProvider().getOrderedColumn(
@@ -165,11 +165,11 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		thePanel.getPanelSoftwarelicenses().restoreFilter();
 		modelSoftwarelicenses.setEditableColumns(new int[] { 0, 1, 2, 3, 4, 5 });
 
-		TableColumn col = thePanel.getPanelSoftwarelicenses().getJTable().getColumnModel().getColumn(2);
+		TableColumn col = thePanel.getPanelSoftwarelicenses().getGenEditTable().getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenseTypes = new JComboBox<>(LicenseEntry.LICENSE_TYPES.toArray(String[]::new));
 		col.setCellEditor(new DefaultCellEditor(comboLicenseTypes));
 
-		col = thePanel.getPanelSoftwarelicenses().getJTable().getColumnModel().getColumn(4);
+		col = thePanel.getPanelSoftwarelicenses().getGenEditTable().getColumnModel().getColumn(4);
 		JComboBox<String> selectionComboBox = new JComboBox<>();
 		col.setCellEditor(new AdaptingCellEditor(selectionComboBox, (int row, int column) -> {
 			List<String> choicesAllHosts = new ArrayList<>(new TreeSet<>(persistenceController.getHostInfoCollections()
@@ -178,7 +178,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));
 
-		col = thePanel.getPanelSoftwarelicenses().getJTable().getColumnModel().getColumn(5);
+		col = thePanel.getPanelSoftwarelicenses().getGenEditTable().getColumnModel().getColumn(5);
 		col.setCellEditor(new CellDateEditor());
 
 		JMenuItem menuItemAddLicense = new JMenuItem(
@@ -247,19 +247,19 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 
 		thePanel.getPanelLicensecontracts().addPopupItem(menuItemPickLicensecontract);
 
-		TableColumn col = thePanel.getPanelLicensecontracts().getJTable().getColumnModel().getColumn(2);
+		TableColumn col = thePanel.getPanelLicensecontracts().getGenEditTable().getColumnModel().getColumn(2);
 
 		col.setCellEditor(new CellDateEditor());
 
-		col = thePanel.getPanelLicensecontracts().getJTable().getColumnModel().getColumn(3);
+		col = thePanel.getPanelLicensecontracts().getGenEditTable().getColumnModel().getColumn(3);
 
 		col.setCellEditor(new CellDateEditor());
 
-		col = thePanel.getPanelLicensecontracts().getJTable().getColumnModel().getColumn(4);
+		col = thePanel.getPanelLicensecontracts().getGenEditTable().getColumnModel().getColumn(4);
 
 		col.setCellEditor(new CellDateEditor());
 
-		col = thePanel.getPanelLicensecontracts().getJTable().getColumnModel().getColumn(5);
+		col = thePanel.getPanelLicensecontracts().getGenEditTable().getColumnModel().getColumn(5);
 
 		col.setCellEditor(new CellInputDialogEditor());
 
@@ -311,14 +311,14 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 			return;
 		}
 
-		if (thePanel.getPanelSoftwarelicenses().getJTable().getSelectedRow() == -1) {
+		if (thePanel.getPanelSoftwarelicenses().getGenEditTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
-		if (thePanel.getPanelKeys().getJTable().getSelectedRow() == -1) {
+		if (thePanel.getPanelKeys().getGenEditTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
@@ -329,7 +329,7 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 		String val = (String) modelSoftwarelicenses
 				.getValueAt(thePanel.getPanelSoftwarelicenses().getSelectedRowInModelTerms(), 0);
 
-		thePanel.getPanelKeys().setValueAt(val, thePanel.getPanelKeys().getJTable().getSelectedRow(), 0);
+		thePanel.getPanelKeys().setValueAt(val, thePanel.getPanelKeys().getGenEditTable().getSelectedRow(), 0);
 	}
 
 	private void addContract() {
@@ -361,14 +361,14 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 			return;
 		}
 
-		if (thePanel.getPanelLicensecontracts().getJTable().getSelectedRow() == -1) {
+		if (thePanel.getPanelLicensecontracts().getGenEditTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 			return;
 		}
 
-		if (thePanel.getPanelSoftwarelicenses().getJTable().getSelectedRow() == -1) {
+		if (thePanel.getPanelSoftwarelicenses().getGenEditTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licenses.SourceOrTargetRowNotSelected.text"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
@@ -379,6 +379,6 @@ public class ControlPanelEditLicenses extends AbstractControlMultiTablePanel {
 				.getValueAt(thePanel.getPanelLicensecontracts().getSelectedRowInModelTerms(), 0);
 
 		thePanel.getPanelSoftwarelicenses().setValueAt(val,
-				thePanel.getPanelSoftwarelicenses().getJTable().getSelectedRow(), 1);
+				thePanel.getPanelSoftwarelicenses().getGenEditTable().getSelectedRow(), 1);
 	}
 }

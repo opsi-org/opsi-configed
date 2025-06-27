@@ -102,31 +102,39 @@ public final class ChangedDataManager {
 				setDataChanged(true, true);
 				return;
 			}
+			// actually save the data
+			saveData(ask);
+
 			// without showing, but must be on first place since we run in this method again
 			setDataChanged(false, false);
 
-			if (ask) {
-				if (clientInfoDataChangedKeeper.askSave()) {
-					clientInfoDataChangedKeeper.save();
-				} else {
-					// reset to old values
-					hostInfo.resetGui();
-				}
-			} else {
-				clientInfoDataChangedKeeper.save();
-			}
-
-			if (!ask || generalDataChangedKeeper.askSave()) {
-				generalDataChangedKeeper.save();
-			}
-
-			if (!ask || hostConfigsDataChangedKeeper.askSave()) {
-				hostConfigsDataChangedKeeper.save();
-			} else {
-				hostConfigsDataChangedKeeper.cancel();
-			}
-
 			setDataChanged(false, true);
+		}
+	}
+
+	private static void saveData(boolean ask) {
+		if (ask) {
+			if (clientInfoDataChangedKeeper.askSave()) {
+				clientInfoDataChangedKeeper.save();
+			} else if (clientInfoDataChangedKeeper.isDataChanged()) {
+				// reset to old values when data have been changed 
+				hostInfo.resetGui();
+			} else {
+				// if no data have been changed, and no client selected, we do nothing
+				Logging.debug("clientInfoDataChangedKeeper not changed, no save needed");
+			}
+		} else {
+			clientInfoDataChangedKeeper.save();
+		}
+
+		if (!ask || generalDataChangedKeeper.askSave()) {
+			generalDataChangedKeeper.save();
+		}
+
+		if (!ask || hostConfigsDataChangedKeeper.askSave()) {
+			hostConfigsDataChangedKeeper.save();
+		} else {
+			hostConfigsDataChangedKeeper.cancel();
 		}
 	}
 }

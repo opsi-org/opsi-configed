@@ -167,9 +167,17 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		Map<String, Map<String, Object>> expandedNodes = new HashMap<>();
 
 		Enumeration<TreePath> expanded = getExpandedDescendants(new TreePath(rootNode));
+		addExpandedNodesForExpandedPaths(expanded, expandedNodes);
+
 		List<TreePath> selectionPaths = Arrays
 				.asList(getSelectionPaths() != null ? getSelectionPaths() : new TreePath[0]);
+		addExpandedNodesForSelectedPaths(selectionPaths, expandedNodes);
 
+		return expandedNodes;
+	}
+
+	private static void addExpandedNodesForExpandedPaths(Enumeration<TreePath> expanded,
+			Map<String, Map<String, Object>> expandedNodes) {
 		if (expanded != null) {
 			while (expanded.hasMoreElements()) {
 				TreePath path = expanded.nextElement();
@@ -178,7 +186,10 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				expandedNodes.put(path.getLastPathComponent().toString(), map);
 			}
 		}
+	}
 
+	private static void addExpandedNodesForSelectedPaths(List<TreePath> selectionPaths,
+			Map<String, Map<String, Object>> expandedNodes) {
 		if (selectionPaths != null) {
 			for (TreePath path : selectionPaths) {
 				Map<String, Object> map = expandedNodes.get(path.getLastPathComponent().toString()) != null
@@ -197,8 +208,6 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 				expandedNodes.put(parent, map);
 			}
 		}
-
-		return expandedNodes;
 	}
 
 	public void expandAndSelectNodes(Map<String, Map<String, Object>> nodes) {

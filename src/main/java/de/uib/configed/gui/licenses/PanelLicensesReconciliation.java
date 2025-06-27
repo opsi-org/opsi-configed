@@ -22,10 +22,10 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEditTable;
+import de.uib.utils.table.gui.PanelGenEdit;
 
 public class PanelLicensesReconciliation extends MultiTablePanel {
-	private PanelGenEditTable panelReconciliation;
+	private PanelGenEdit panelReconciliation;
 
 	public PanelLicensesReconciliation(ControlPanelLicensesReconciliation licensesReconciliationController) {
 		super(licensesReconciliationController);
@@ -33,10 +33,13 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 	}
 
 	private void initComponents() {
-		panelReconciliation = new PanelGenEditTable(
+		panelReconciliation = new PanelGenEdit(
 				Configed.getResourceValue("ConfigedMain.Licenses.SectiontitleReconciliation"), false, 0, null, true);
-		panelReconciliation.getJTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelReconciliation.getGenEditTable().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelReconciliation.setFilterKey(FilterKey.LICENSE_RECONCILIATION_TABLE);
+
+		// supply implementation of SearchTargetModelFromTable.setFiltered
+		panelReconciliation.getTableSearchPane().setFiltering();
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
@@ -51,7 +54,7 @@ public class PanelLicensesReconciliation extends MultiTablePanel {
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
-	public PanelGenEditTable getPanelReconciliation() {
+	public PanelGenEdit getPanelReconciliation() {
 		return panelReconciliation;
 	}
 

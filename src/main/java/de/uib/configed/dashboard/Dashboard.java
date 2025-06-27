@@ -18,6 +18,8 @@ import de.uib.configed.dashboard.view.ClientView;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.dashboard.view.ProductView;
 import de.uib.configed.dashboard.view.ViewManager;
+import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -38,6 +40,14 @@ public class Dashboard extends JFXPanel {
 	}
 
 	private void init() {
+		OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+		ClientData.initData(persistenceController);
+		ProductData.initData(persistenceController);
+		ModuleData.initData(persistenceController);
+		LicenseData.initData(persistenceController);
+		DepotData.initData(persistenceController);
+
 		Platform.setImplicitExit(false);
 		Platform.runLater(() -> {
 			try {
