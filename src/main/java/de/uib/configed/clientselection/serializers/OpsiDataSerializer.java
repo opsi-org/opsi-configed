@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,6 +23,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
+import de.uib.configed.clientselection.OperationNode;
+import de.uib.configed.clientselection.SavedSearchData;
 import de.uib.configed.clientselection.SelectData;
 import de.uib.configed.clientselection.SelectData.DataType;
 import de.uib.configed.clientselection.SelectionManager;
@@ -49,12 +50,6 @@ public class OpsiDataSerializer {
 	public static final String ELEMENT_NAME_SOFTWARE_NAME_ELEMENT = "SoftwareNameElement";
 	public static final String ELEMENT_NAME_GENERIC = "Generic";
 
-	public static final String KEY_ELEMENT_NAME = "element";
-	public static final String KEY_SUBELEMENT_NAME = "refinedElement";
-	public static final String KEY_ELEMENT_PATH = "elementPath";
-	public static final String KEY_OPERATION = "operation";
-	public static final String KEY_DATA_TYPE = "dataType";
-
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 
 	private SelectionManager manager;
@@ -78,9 +73,9 @@ public class OpsiDataSerializer {
 	 * already exists, overwrite it.
 	 */
 	public void save(AbstractSelectOperation topOperation, String name, String description) {
-		Map<String, Object> data = produceData(topOperation);
-		Logging.info(this, "save data ", data);
-		saveData(name, description, data);
+		OperationNode node = produceOperationNode(topOperation);
+		Logging.info(this, "save OperationNode ", node);
+		saveData(name, description, node);
 	}
 
 	/**
@@ -103,25 +98,25 @@ public class OpsiDataSerializer {
 	/**
 	 * reproduce a search
 	 */
-	public AbstractSelectOperation deserialize(Map<String, Object> data) {
-		if (data == null) {
-			Logging.warning(this, "data in Serializer.deserialize is null");
+	public AbstractSelectOperation deserialize(OperationNode node) {
+		if (node == null) {
+			Logging.warning(this, "OperationNode in Serializer.deserialize is null");
 			return null;
 		}
 
-		Logging.info(this, "deserialize data ", data);
-		if (data.get(KEY_ELEMENT_PATH) != null) {
-			Logging.info("deserialize, elementPath ", (List<String>) data.get(KEY_ELEMENT_PATH));
+		Logging.info(this, "deserialize OperationNode ", node);
+		if (node.getElementPath() != null) {
+			Logging.info("deserialize, elementPath ", node.getElementPath());
 		}
 
 		try {
-			AbstractSelectOperation operation = getOperation(data, null);
+			AbstractSelectOperation operation = getOperation(node, null);
 			if (getSearchDataVersion() == 1) {
 				operation = checkForHostGroup(operation);
 			}
 			return operation;
 		} catch (Exception e) {
-			Logging.error(e, "deserialize error for data ", data, " message ", e.getMessage());
+			Logging.error(e, "deserialize error for OperationNode ", node, " message ", e.getMessage());
 			return null;
 		}
 	}
@@ -129,13 +124,12 @@ public class OpsiDataSerializer {
 	/**
 	 * reproduce a search from a serialization string
 	 */
-
 	public AbstractSelectOperation deserialize(String serialized) {
 		Logging.info(this, "deserialize serialized ", serialized);
 		AbstractSelectOperation result = null;
 
-		Map<String, Object> data = decipher(serialized);
-		result = deserialize(data);
+		OperationNode node = decipher(serialized);
+		result = deserialize(node);
 
 		return result;
 	}
@@ -145,16 +139,16 @@ public class OpsiDataSerializer {
 	 */
 	public AbstractSelectOperation load(String name) {
 		Logging.info(this, "load ", name);
-		Map<String, Object> data = getData(name);
-		return deserialize(data);
+		OperationNode node = getData(name);
+		return deserialize(node);
 	}
 
 	/**
-	 * produce map format of serializiation object
+	 * Parse JSON string to OperationNode using SavedSearchData wrapper.
 	 */
-	private Map<String, Object> decipher(String serialization) {
+	private OperationNode decipher(String serialization) {
 		try {
-			return parseAndExtractData(serialization);
+			return parseAndExtractNode(serialization);
 		} catch (IOException originalEx) {
 			Logging.warning(this,
 					"Failed to parse JSON (probably old saved search). Possibly due to unquoted 'dataType' field. Retrying with fix. Original error: ",
@@ -163,42 +157,35 @@ public class OpsiDataSerializer {
 			String fixed = serialization.replaceAll("(\"dataType\"\\s*:\\s*)(\\w+)", "$1\"$2\"");
 
 			try {
-				return parseAndExtractData(fixed);
+				return parseAndExtractNode(fixed);
 			} catch (IOException retryEx) {
 				Logging.error(this, retryEx, "Retry also failed when parsing fixed JSON. Original error: ",
 						originalEx.getMessage(), " | Retry error: ", retryEx.getMessage());
-				return new HashMap<>();
+				return null;
 			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private Map<String, Object> parseAndExtractData(String json) throws IOException {
-		Map<String, Object> map = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
-		});
-		searchDataVersion = Integer.parseInt(String.valueOf(map.getOrDefault("version", 1)));
-		Object data = map.get("data");
-		return (data instanceof Map) ? (Map<String, Object>) data : new HashMap<>();
+	private OperationNode parseAndExtractNode(String json) throws IOException {
+		SavedSearchData data = objectMapper.readValue(json, SavedSearchData.class);
+		searchDataVersion = data.getVersion();
+		return data.getData();
 	}
 
 	/** Get the data for the given saved search */
-	private Map<String, Object> getData(String name) {
+	private OperationNode getData(String name) {
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name,
 				persistenceController.getConfigDataService().getSavedSearchesPD().get(name).getSerialization());
-
-		// controller.getSavedSearches().get(name)
 
 		String serialization = searches.get(name);
 		return decipher(serialization);
 	}
 
 	/** Save the search data with the given name. */
-	private void saveData(String name, String description, Map<String, Object> data) {
+	private void saveData(String name, String description, OperationNode node) {
 		try {
-			Map<String, Object> wrapper = new HashMap<>();
-			wrapper.put("version", DATA_VERSION);
-			wrapper.put("data", data);
+			SavedSearchData wrapper = new SavedSearchData(DATA_VERSION, node);
 			String jsonString = objectMapper.writeValueAsString(wrapper);
 
 			Logging.info(this, name, ": ", jsonString);
@@ -215,11 +202,12 @@ public class OpsiDataSerializer {
 		return searchDataVersion;
 	}
 
-	public static String createJsonRecursive(Map<?, ?> objects) {
+	public static String createJsonRecursive(OperationNode node) {
 		try {
-			return objectMapper.writeValueAsString(objects);
+			SavedSearchData wrapper = new SavedSearchData(DATA_VERSION, node);
+			return objectMapper.writeValueAsString(wrapper);
 		} catch (IOException e) {
-			Logging.error(OpsiDataSerializer.class, e, "Error serializing map to JSON: ", e.getMessage());
+			Logging.error(OpsiDataSerializer.class, e, "Error serializing OperationNode to JSON: ", e.getMessage());
 			return "{}";
 		}
 	}
@@ -278,32 +266,32 @@ public class OpsiDataSerializer {
 	}
 
 	/*
-	 * Create a SelectOperation from the given data. This function works
+	 * Create a SelectOperation from the given OperationNode. This function works
 	 * recursively.
 	 */
-	private AbstractSelectOperation getOperation(Map<String, Object> data,
-			Map<String, List<AbstractSelectElement>> hardware) throws Exception {
-		Logging.info(this, "getOperation for map ", data, "; hardware ", hardware);
+	private AbstractSelectOperation getOperation(OperationNode node, Map<String, List<AbstractSelectElement>> hardware)
+			throws Exception {
+		Logging.info(this, "getOperation for node ", node, "; hardware ", hardware);
 
 		String elementPathS = null;
-		if (data.get(KEY_ELEMENT_PATH) != null) {
-			elementPathS = ((List<String>) data.get(KEY_ELEMENT_PATH)).toString();
-			Logging.info(this, "getOperation, elementPath in data ", elementPathS);
+		if (node.getElementPath() != null) {
+			elementPathS = node.getElementPath().toString();
+			Logging.info(this, "getOperation, elementPath in node ", elementPathS);
 		}
 		// Element
-		AbstractSelectElement element = getSelectElement(data, hardware, elementPathS);
+		AbstractSelectElement element = getSelectElement(node, hardware, elementPathS);
 
 		// Children
-		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
+		List<OperationNode> childrenData = node.getChildren();
 		List<AbstractSelectOperation> children = new LinkedList<>();
 		if (childrenData != null) {
-			for (Map<String, Object> child : childrenData) {
+			for (OperationNode child : childrenData) {
 				children.add(getOperation(child, hardware));
 			}
 		}
 
 		// Operation
-		String operationName = (String) data.get(KEY_OPERATION);
+		String operationName = node.getOperation();
 		Logging.info(this, "getOperation Operation name: ", operationName);
 		AbstractSelectOperation operation;
 
@@ -328,9 +316,9 @@ public class OpsiDataSerializer {
 
 		Logging.info(this, "getOperation  ", operation);
 
-		String dataTypeStr = (String) data.get(KEY_DATA_TYPE);
+		String dataTypeStr = node.getDataType();
 		checkLastDataType(dataTypeStr);
-		Object realData = data.get("data");
+		Object realData = node.getData();
 		Logging.info(this, "getOperation realData ", realData);
 
 		SelectData selectData = null;
@@ -343,17 +331,17 @@ public class OpsiDataSerializer {
 		return operation;
 	}
 
-	private AbstractSelectElement getSelectElement(Map<String, Object> data,
+	private AbstractSelectElement getSelectElement(OperationNode node,
 			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		AbstractSelectElement element = null;
-		String elementName = (String) data.get(KEY_ELEMENT_NAME);
+		String elementName = node.getElement();
 		Logging.info(this, "Element name: ", elementName);
 
 		if (elementName != null && !(elementName.isEmpty())) {
-			String subelementName = (String) data.get(KEY_SUBELEMENT_NAME);
+			String subelementName = node.getRefinedElement();
 
-			List<String> elementPath = (List<String>) data.get(KEY_ELEMENT_PATH);
+			List<String> elementPath = node.getElementPath();
 
 			element = switch (elementName) {
 			case ELEMENT_NAME_SOFTWARE_NAME_ELEMENT -> manager.getNewSoftwareNameElement();
@@ -417,44 +405,39 @@ public class OpsiDataSerializer {
 		}
 	}
 
-	/* Create data from the operation recursively. */
-	private Map<String, Object> produceData(AbstractSelectOperation operation) {
-		Map<String, Object> map = new HashMap<>();
+	/* Create OperationNode from the operation recursively. */
+	private OperationNode produceOperationNode(AbstractSelectOperation operation) {
 		AbstractSelectElement element = operation.getElement();
+		String elementName = null;
+		String refinedElement = null;
+		List<String> elementPath = null;
+
 		if (element == null) {
-			map.put(KEY_ELEMENT_NAME, null);
-			map.put(KEY_ELEMENT_PATH, null);
+			elementName = null;
+			elementPath = null;
 		} else if (element instanceof GroupWithSubgroupsElement) {
 			// producing compatibility for version without GroupWithSubgroupsElement
-
-			map.put(KEY_ELEMENT_NAME, GroupElement.class.getSimpleName());
-			map.put(KEY_SUBELEMENT_NAME, GroupWithSubgroupsElement.class.getSimpleName());
-			map.put(KEY_ELEMENT_PATH, element.getPathArray());
+			elementName = GroupElement.class.getSimpleName();
+			refinedElement = GroupWithSubgroupsElement.class.getSimpleName();
+			elementPath = Arrays.asList(element.getPathArray());
 		} else {
-			map.put(KEY_ELEMENT_NAME, element.getClassName());
-			map.put(KEY_ELEMENT_PATH, element.getPathArray());
+			elementName = element.getClassName();
+			elementPath = Arrays.asList(element.getPathArray());
 		}
 
-		map.put(KEY_OPERATION, operation.getClassName());
-		if (operation.getSelectData() == null) {
-			map.put(KEY_DATA_TYPE, null);
-			map.put("data", null);
-		} else {
-			map.put(KEY_DATA_TYPE, operation.getSelectData().getType());
-			map.put("data", operation.getSelectData().getData());
-		}
+		String operationName = operation.getClassName();
+		String dataType = operation.getSelectData() == null ? null : operation.getSelectData().getType().toString();
+		Object data = operation.getSelectData() == null ? null : operation.getSelectData().getData();
+
+		List<OperationNode> children = null;
 		if (operation instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
-			List<Map<String, Object>> childData = new LinkedList<>();
+			children = new LinkedList<>();
 			for (AbstractSelectOperation child : abstractSelectGroupOperation.getChildOperations()) {
-				childData.add(produceData(child));
+				children.add(produceOperationNode(child));
 			}
-
-			map.put("children", childData);
-		} else {
-			map.put("children", null);
 		}
-		Logging.info(this, "produced ", map);
-		return map;
+
+		return new OperationNode(elementName, refinedElement, elementPath, operationName, dataType, data, children);
 	}
 
 	/* Parse the operations with the old (version 1) operation names */
