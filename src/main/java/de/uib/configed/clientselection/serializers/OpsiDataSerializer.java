@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,8 +25,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
-import de.uib.configed.clientselection.OperationNode;
-import de.uib.configed.clientselection.SavedSearchData;
 import de.uib.configed.clientselection.SelectData;
 import de.uib.configed.clientselection.SelectData.DataType;
 import de.uib.configed.clientselection.SelectionManager;
@@ -60,6 +59,22 @@ public class OpsiDataSerializer {
 	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;
 	private int searchDataVersion;
+
+	/**
+	 * Represents a node in the operation tree for client selection.
+	 */
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private record OperationNode(String element, String refinedElement, List<String> elementPath, String operation,
+			String dataType, Object data, List<OperationNode> children) {
+	}
+
+	/**
+	 * Represents the data structure for a saved search, including version and
+	 * the operation data.
+	 */
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private record SavedSearchData(int version, OperationNode data) {
+	}
 
 	public OpsiDataSerializer(SelectionManager manager) {
 		this.manager = manager;
