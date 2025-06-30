@@ -169,8 +169,8 @@ public class OpsiDataSerializer {
 
 	private OperationNode parseAndExtractNode(String json) throws IOException {
 		SavedSearchData data = objectMapper.readValue(json, SavedSearchData.class);
-		searchDataVersion = data.getVersion();
-		return data.getData();
+		searchDataVersion = data.version();
+		return data.data();
 	}
 
 	/** Get the data for the given saved search */
