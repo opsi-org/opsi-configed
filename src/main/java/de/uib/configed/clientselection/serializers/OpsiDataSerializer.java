@@ -56,7 +56,6 @@ public class OpsiDataSerializer {
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;
 	private int searchDataVersion;
 
@@ -228,42 +227,46 @@ public class OpsiDataSerializer {
 		}
 	}
 
-	private void checkLastDataType(String value) {
+	private DataType getDataTypeFromString(String value) {
 		if (value == null || "null".equals(value)) {
-			return;
+			return null;
 		}
+
+		DataType dataType = null;
 
 		switch (value) {
 		// In old searches, we still have "EnumType", but this will now
 		// due to refactoring be replaced by "TextType"
 		case "TextType", "EnumType":
-			lastDataType = DataType.TEXT_TYPE;
+			dataType = DataType.TEXT_TYPE;
 			break;
 
 		case "IntegerType":
-			lastDataType = DataType.INTEGER_TYPE;
+			dataType = DataType.INTEGER_TYPE;
 			break;
 
 		case "BigIntegerType":
-			lastDataType = DataType.BIG_INTEGER_TYPE;
+			dataType = DataType.BIG_INTEGER_TYPE;
 			break;
 
 		case "DoubleType":
-			lastDataType = DataType.DOUBLE_TYPE;
+			dataType = DataType.DOUBLE_TYPE;
 			break;
 
 		case "DateType":
-			lastDataType = DataType.DATE_TYPE;
+			dataType = DataType.DATE_TYPE;
 			break;
 
 		case "NoneType":
-			lastDataType = DataType.NONE_TYPE;
+			dataType = DataType.NONE_TYPE;
 			break;
 
 		default:
 			Logging.error(this, "dataType for ", value, " cannot be found...)");
 			break;
 		}
+
+		return dataType;
 	}
 
 	private static Object convertData(String data, DataType dataType) {
@@ -353,14 +356,14 @@ public class OpsiDataSerializer {
 
 	private void attachSelectData(OperationNode node, AbstractSelectOperation operation) {
 		String dataTypeStr = node.dataType();
-		checkLastDataType(dataTypeStr);
+		DataType dataType = getDataTypeFromString(dataTypeStr);
 		Object realData = node.data();
 		Logging.info(this, "getOperation realData ", realData);
 
 		SelectData selectData = null;
 		if (dataTypeStr != null && realData != null) {
-			Object convertedData = convertData(realData.toString(), lastDataType);
-			selectData = new SelectData(convertedData, lastDataType);
+			Object convertedData = convertData(realData.toString(), dataType);
+			selectData = new SelectData(convertedData, dataType);
 		}
 		operation.setSelectData(selectData);
 	}
