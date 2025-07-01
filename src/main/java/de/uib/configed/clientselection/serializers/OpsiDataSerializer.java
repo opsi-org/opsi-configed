@@ -338,20 +338,23 @@ public class OpsiDataSerializer {
 		}
 
 		Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
-		Logging.info(this, "getOperation operationClass  ", operationClass.toString());
+		Logging.info(this, "createOperation operationClass  ", operationClass.toString());
+		AbstractSelectOperation op = null;
 
 		if (element != null) {
-			Logging.info(this, "getOperation element != null, element  ", element);
-			return (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
+			Logging.info(this, "createOperation element != null, element  ", element);
+			op = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
 		} else if (children.size() == 1) {
-			Class<?> opClass = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
-			Logging.info(this, "getOperation List name: ", opClass);
-			return (AbstractSelectOperation) operationClass.getConstructor(opClass).newInstance(children.get(0));
+			Logging.info(this, "createOperation has one children  ", children.get(0));
+			op = (AbstractSelectOperation) operationClass.getConstructor(AbstractSelectOperation.class)
+					.newInstance(children.get(0));
 		} else {
-			Class<?> listClass = Class.forName("java.util.List");
-			Logging.info(this, "getOperation List name: ", listClass);
-			return (AbstractSelectOperation) operationClass.getConstructor(listClass).newInstance(children);
+			Logging.info(this, "createOperation element == null - probably has more than one chlidren  ",
+					children.size());
+			op = (AbstractSelectOperation) operationClass.getConstructor(List.class).newInstance(children);
 		}
+
+		return op;
 	}
 
 	private void attachSelectData(OperationNode node, AbstractSelectOperation operation) {
