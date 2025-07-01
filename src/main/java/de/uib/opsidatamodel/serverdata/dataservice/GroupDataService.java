@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -177,24 +178,25 @@ public class GroupDataService {
 	// client belongs
 	public Map<String, Set<String>> getFObject2GroupsPD() {
 		retrieveFObject2GroupsPD();
-		return cacheManager.getCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, Map.class);
+		return cacheManager.getCachedData(CacheIdentifier.FHOST_TO_GROUPS, Map.class);
 	}
 
 	public void retrieveFObject2GroupsPD() {
-		if (cacheManager.isDataCached(CacheIdentifier.FOBJECT_TO_GROUPS)) {
+		if (cacheManager.isDataCached(CacheIdentifier.FHOST_TO_GROUPS)) {
 			return;
 		}
 
-		String[] callAttributes = new String[] {};
-		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("groupType", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+		Map<String, Set<String>> fHostToGroups = new TreeMap<>();
+		for (Entry<String, Set<String>> entry : getFHostGroup2MembersPD().entrySet()) {
+			String groupId = entry.getKey();
+			Set<String> hostIds = entry.getValue();
+			for (String hostId : hostIds) {
+				Set<String> hosts = fHostToGroups.computeIfAbsent(hostId, k -> new TreeSet<>());
+				hosts.add(groupId);
+			}
+		}
 
-		Map<String, Map<String, String>> mappedRelations = exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall(RPCMethodName.OBJECT_TO_GROUP_GET_OBJECTS,
-						new Object[] { callAttributes, callFilter }),
-				"ident", new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" });
-		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
-		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
+		cacheManager.setCachedData(CacheIdentifier.FHOST_TO_GROUPS, fHostToGroups);
 	}
 
 	public void retrieveAllObject2GroupsPD() {
@@ -212,6 +214,9 @@ public class GroupDataService {
 		Map<String, Set<String>> hostGroups2Members = new TreeMap<>();
 		Map<String, Set<String>> productGroups2Members = new TreeMap<>();
 
+		// This will go through the result list and fill the maps
+		// hostGroups2Members and productGroups2Members with the group members.
+		// The keys are the group IDs and the values are the objects that belong to the group.
 		for (Map<String, Object> entry : resultlist) {
 			if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
 				Set<String> groupMembers = hostGroups2Members.computeIfAbsent((String) entry.get("groupId"),
@@ -310,7 +315,7 @@ public class GroupDataService {
 
 		boolean result = exec.doCall(omc);
 		if (result) {
-			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+			persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
 		}
 
 		return result;
@@ -339,7 +344,7 @@ public class GroupDataService {
 			result = exec.doCall(omc);
 
 			if (result) {
-				persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+				persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
 			}
 		}
 
@@ -358,7 +363,7 @@ public class GroupDataService {
 		boolean result = exec.doCall(omc);
 
 		if (result) {
-			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+			persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
 		}
 
 		return result;

@@ -53,7 +53,7 @@ public class HostDataReloadHandler implements ReloadHandler {
 		cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
 		executor.runInParallel(groupDataService::retrieveHostGroupsPD);
 
-		cacheManager.clearCachedData(CacheIdentifier.FOBJECT_TO_GROUPS);
+		cacheManager.clearCachedData(CacheIdentifier.FHOST_TO_GROUPS);
 		executor.runInParallel(groupDataService::retrieveFObject2GroupsPD);
 
 		cacheManager.clearCachedData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS);

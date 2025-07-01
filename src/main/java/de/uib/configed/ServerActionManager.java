@@ -67,7 +67,7 @@ public final class ServerActionManager {
 				Logging.debug("createClients", clients);
 				Logging.checkErrorList();
 
-				persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+				persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
 
 				configedMain.setRebuiltClientListTableModel(true, true);
 				configedMain.activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
@@ -84,7 +84,7 @@ public final class ServerActionManager {
 		Logging.checkErrorList();
 		isLocalChangeInProgress.set(true);
 		try {
-			persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+			persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
 
 			configedMain.setRebuiltClientListTableModel(true, true);
 

@@ -43,7 +43,7 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Map<String, Set<String>>}
 	 */
-	FOBJECT_TO_GROUPS("fObject_to_groups"),
+	FHOST_TO_GROUPS("fObject_to_groups"),
 
 	/**
 	 * return type
