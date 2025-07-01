@@ -53,7 +53,7 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 		eventHandlers.put(CacheIdentifier.FOBJECT_TO_GROUPS.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.FOBJECT_TO_GROUPS);
 			groupDataService.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
-					CacheIdentifier.FGROUP_TO_MEMBERS);
+					CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
 		});
 		eventHandlers.put(CacheIdentifier.HOST_GROUPS.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);

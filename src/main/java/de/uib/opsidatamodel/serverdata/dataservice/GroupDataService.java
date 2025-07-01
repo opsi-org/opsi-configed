@@ -152,8 +152,9 @@ public class GroupDataService {
 	}
 
 	public Map<String, Set<String>> getFHostGroup2MembersPD() {
-		retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId", CacheIdentifier.FGROUP_TO_MEMBERS);
-		return cacheManager.getCachedData(CacheIdentifier.FGROUP_TO_MEMBERS, Map.class);
+		retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
+				CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
+		return cacheManager.getCachedData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS, Map.class);
 	}
 
 	// returns the function that yields for a given groupId all objects which belong
