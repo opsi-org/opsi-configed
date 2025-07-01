@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Dialog.ModalityType;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class SavedSearchesDialog {
 		initPopupMenu();
 
 		JButton searchButton = new JButton(Configed.getResourceValue("search"));
-		searchButton.addActionListener(e -> {
+		searchButton.addActionListener((ActionEvent actionEvent) -> {
 			commit();
 			dialog.setVisible(false);
 		});

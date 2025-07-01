@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -44,6 +45,9 @@ import de.uib.utils.logging.Logging;
 
 public class OpsiDataSerializer {
 	public static final int DATA_VERSION = 2;
+	private static final String DATATYPE_REGEX_STRING = "(\"dataType\"\\s*:\\s*)(\\w+)";
+	private static final Pattern DATATYPE_REGEX = Pattern.compile(DATATYPE_REGEX_STRING,
+			Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final String ELEMENT_NAME_GROUP = "GroupElement";
 	public static final String ELEMENT_NAME_GROUP_WITH_SUBGROUPS = "GroupWithSubgroupsElement";
@@ -165,11 +169,11 @@ public class OpsiDataSerializer {
 		try {
 			return parseAndExtractNode(serialization);
 		} catch (IOException originalEx) {
-			Logging.warning(this,
-					"Failed to parse JSON (probably old saved search). Possibly due to unquoted 'dataType' field. Retrying with fix. Original error: ",
+			Logging.warning(this, "Failed to parse JSON (probably old saved search).",
+					" Possibly due to unquoted 'dataType' field. Retrying with fix. Original error: ",
 					originalEx.getMessage());
 
-			String fixed = serialization.replaceAll("(\"dataType\"\\s*:\\s*)(\\w+)", "$1\"$2\"");
+			String fixed = DATATYPE_REGEX.matcher(serialization).replaceAll("$1\"$2\"");
 
 			try {
 				return parseAndExtractNode(fixed);
@@ -446,7 +450,7 @@ public class OpsiDataSerializer {
 	}
 
 	/* Create OperationNode from the operation recursively. */
-	private OperationNode produceOperationNode(AbstractSelectOperation operation) {
+	private static OperationNode produceOperationNode(AbstractSelectOperation operation) {
 		AbstractSelectElement element = operation.getElement();
 		String elementName = null;
 		String refinedElement = null;
@@ -534,15 +538,15 @@ public class OpsiDataSerializer {
 
 	private static AbstractSelectOperation handleAndOperation(AndOperation andOperation) {
 		AbstractSelectOperation notGroup = unwrapGroup(andOperation);
-		AbstractSelectOperation leftNotGroup = unwrapGroup(andOperation.getChildOperations().get(1));
 
 		int notGroupPathLen = notGroup.getElement().getPathArray().length;
-		int leftNotGroupPathLen = leftNotGroup.getElement().getPathArray().length;
 
 		if (notGroupPathLen != 1) {
 			return andOperation;
 		}
 
+		AbstractSelectOperation leftNotGroup = unwrapGroup(andOperation.getChildOperations().get(1));
+		int leftNotGroupPathLen = leftNotGroup.getElement().getPathArray().length;
 		if (notGroupPathLen == 1 && leftNotGroupPathLen == 1) {
 			return new HostOperation(andOperation);
 		}
