@@ -166,33 +166,12 @@ public abstract class AbstractPOJOExecutioner {
 
 			String keyOfItem = originalMap.get(key);
 
-			Map<String, String> detailMap = new HashMap<>();
-
-			if (sourceVars == null) {
-				detailMap.putAll(originalMap);
-			} else if (targetVars == null) {
-				detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars);
-			} else {
-				detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, targetVars);
-			}
+			Map<String, String> detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, targetVars);
 
 			result.put(keyOfItem, detailMap);
 		}
 
 		return result;
-	}
-
-	private static Map<String, String> generateDetailMapBasedOnKeys(Map<String, String> originalMap,
-			String[] sourceVars) {
-		Map<String, String> detailMap = new HashMap<>();
-
-		for (String value : sourceVars) {
-			String val = String.valueOf(originalMap.get(value));
-
-			detailMap.put(value, val);
-		}
-
-		return detailMap;
 	}
 
 	private static Map<String, String> generateDetailMapBasedOnKeys(Map<String, String> originalMap,
