@@ -191,8 +191,8 @@ public class GroupDataService {
 			String groupId = entry.getKey();
 			Set<String> hostIds = entry.getValue();
 			for (String hostId : hostIds) {
-				Set<String> hosts = fHostToGroups.computeIfAbsent(hostId, k -> new TreeSet<>());
-				hosts.add(groupId);
+				Set<String> groupIds = fHostToGroups.computeIfAbsent(hostId, k -> new TreeSet<>());
+				groupIds.add(groupId);
 			}
 		}
 
