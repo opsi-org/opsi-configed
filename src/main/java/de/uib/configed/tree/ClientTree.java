@@ -8,7 +8,6 @@ package de.uib.configed.tree;
 
 import java.text.Collator;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -173,11 +172,9 @@ public class ClientTree extends AbstractGroupTree {
 		Logging.debug(this, "build, rebuildTree, allPCs  " + allPCs + " size " + allPCs.size());
 		Logging.info(this, "build, permittedHostGroups ", permittedHostGroups);
 
-		// we must rebuild this map since the direct call of persist.getFGroup2Members
-		// would eliminate the filter by depot etc.
-		Map<String, List<String>> group2Members = produceGroup2Members(allPCs,
-				persistenceController.getGroupDataService().getFObject2GroupsPD());
-		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new ArrayList<>());
+		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
+		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
+
 		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
 
 		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups, permittedHostGroups);
@@ -379,11 +376,11 @@ public class ClientTree extends AbstractGroupTree {
 
 	// Return null means, all clients are allowed
 	@SuppressWarnings("java:S1168")
-	public void associateClientsToGroups(Iterable<String> clientIds, Map<String, List<String>> group2Members) {
+	public void associateClientsToGroups(Iterable<String> clientIds, Map<String, Set<String>> group2Members) {
 		locationsInDirectory.clear();
 
 		// we build and link the groups
-		for (Entry<String, List<String>> entry : group2Members.entrySet()) {
+		for (Entry<String, Set<String>> entry : group2Members.entrySet()) {
 			GroupNode groupNode = groupNodes.get(entry.getKey());
 			if (groupNode == null) {
 				Logging.warning("group for groupId ", entry.getKey(), " not found");
@@ -408,7 +405,7 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@SuppressWarnings("java:S1168")
-	private static Set<String> getAllowedClients(Map<String, List<String>> group2Members,
+	private static Set<String> getAllowedClients(Map<String, Set<String>> group2Members,
 			Set<String> permittedHostGroups) {
 		if (permittedHostGroups == null) {
 			// null means, all are allowed
@@ -429,21 +426,6 @@ public class ClientTree extends AbstractGroupTree {
 		checkDirectory(clientId, null);
 		Set<GroupNode> hostingGroups = locationsInDirectory.get(clientId);
 		return !hostingGroups.isEmpty();
-	}
-
-	private static Map<String, List<String>> produceGroup2Members(Iterable<String> clientIds,
-			Map<String, Set<String>> fObject2Groups) {
-		Map<String, List<String>> group2Members = new HashMap<>();
-		for (String clientId : clientIds) {
-			if (fObject2Groups.get(clientId) != null) {
-				Set<String> belongingTo = fObject2Groups.get(clientId);
-				for (String groupId : belongingTo) {
-					List<String> memberList = group2Members.computeIfAbsent(groupId, id -> new ArrayList<>());
-					memberList.add(clientId);
-				}
-			}
-		}
-		return group2Members;
 	}
 
 	private boolean addObject2InternalGroup(String objectID, DefaultMutableTreeNode newGroupNode, TreePath newPath) {

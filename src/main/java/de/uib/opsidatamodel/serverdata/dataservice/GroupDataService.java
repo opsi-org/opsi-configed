@@ -200,7 +200,7 @@ public class GroupDataService {
 	public void retrieveAllObject2GroupsPD() {
 		// Don't load when one of the two is not null
 		// We only want to load, when both are not yet loaded
-		if (cacheManager.isDataCached(CacheIdentifier.FOBJECT_TO_GROUPS)
+		if (cacheManager.isDataCached(CacheIdentifier.FHOST_GROUP_TO_MEMBERS)
 				|| cacheManager.isDataCached(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS)) {
 			return;
 		}
@@ -209,35 +209,28 @@ public class GroupDataService {
 
 		List<Map<String, Object>> resultlist = exec.getListOfMaps(omc);
 
-		List<Object> hostGroupsList = new ArrayList<>();
-		List<Object> productGroupsList = new ArrayList<>();
+		Map<String, Set<String>> hostGroups2Members = new TreeMap<>();
+		Map<String, Set<String>> productGroups2Members = new TreeMap<>();
 
 		for (Map<String, Object> entry : resultlist) {
 			if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
-				hostGroupsList.add(entry);
+				Set<String> groupMembers = hostGroups2Members.computeIfAbsent((String) entry.get("groupId"),
+						k -> new TreeSet<>());
+				groupMembers.add((String) entry.get("objectId"));
 			} else if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY).equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
-				productGroupsList.add(entry);
+				Set<String> groupMembers = productGroups2Members.computeIfAbsent((String) entry.get("groupId"),
+						k -> new TreeSet<>());
+				groupMembers.add((String) entry.get("objectId"));
+			} else if (entry.get(Object2GroupEntry.GROUP_TYPE_KEY) == null) {
+				Logging.warning(this, "No group type found for entry: ", entry);
 			} else {
 				Logging.warning(this, "Unexpected ", Object2GroupEntry.GROUP_TYPE_KEY, ": ",
 						entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
 			}
 		}
 
-		// Generate data for host groups
-		Map<String, Map<String, String>> mappedRelationsHostGroups = AbstractPOJOExecutioner
-				.generateStringMappedObjectsByKeyResult(hostGroupsList, "ident", new String[] { "objectId", "groupId" },
-						new String[] { "clientId", "groupId" });
-
-		Map<String, Set<String>> fObject2Groups = projectToFunction(mappedRelationsHostGroups, "clientId", "groupId");
-		cacheManager.setCachedData(CacheIdentifier.FOBJECT_TO_GROUPS, fObject2Groups);
-
-		// generate data for product groups
-		Map<String, Map<String, String>> mappedRelationsProductGroups = AbstractPOJOExecutioner
-				.generateStringMappedObjectsByKeyResult(productGroupsList, "ident",
-						new String[] { "objectId", "groupId" }, new String[] { "productId", "groupId" });
-
-		cacheManager.setCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS,
-				projectToFunction(mappedRelationsProductGroups, "groupId", "productId"));
+		cacheManager.setCachedData(CacheIdentifier.FHOST_GROUP_TO_MEMBERS, hostGroups2Members);
+		cacheManager.setCachedData(CacheIdentifier.FPRODUCT_GROUP_TO_MEMBERS, productGroups2Members);
 	}
 
 	private static Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
