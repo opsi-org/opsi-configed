@@ -1,10 +1,22 @@
 image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
+
 stages:
   - set_variables
   - build_and_analyze
   - sign
   - make_opsiproduct
+
+.install_dev_tools: &install_dev_tools |
+  set -ex
+  export DEBIAN_FRONTEND=noninteractive
+  apt update
+  apt -y install debhelper osc zip
+  curl -o opsi-dev-tools.tar.gz "$OPSIDEVTOOLS_URL_LINUX_X64"
+  tar -xvf opsi-dev-tools.tar.gz
+  cp opsi-dev-tool opsi-dev-cli
+  opsi-dev-tool --self-upgrade
+  opsi-dev-tool --version
 
 set_variables:
   stage: set_variables
@@ -27,9 +39,7 @@ compile_and_package:
   script:
     - TRANSIFEX_MIN_TRANSLATION_RATE=0.0
     - '[ "$CI_COMMIT_TAG" = "" ] || TRANSIFEX_MIN_TRANSLATION_RATE=1.0'
-    - curl -o opsi-dev-tools.tar.gz "$OPSIDEVTOOLS_URL_LINUX_X64"
-    - tar -xvf opsi-dev-tools.tar.gz
-    - mv opsi-dev-tool opsi-dev-cli
+    - *install_dev_tools
     - ./opsi-dev-cli -l debug transifex upload-resource src/main/resources/de/uib/messages/opsi-configed_en.properties
     - ./opsi-dev-cli -l debug transifex download-translations opsi-configed.properties src/main/resources/de/uib/messages --min-translation-rate $TRANSIFEX_MIN_TRANSLATION_RATE -l de -l fr
     # Unfortunately we need to build en extra jar vor mac aarch6
@@ -71,12 +81,12 @@ signandupload:
   stage: sign
   script:
     - echo "CI_JOB_ID_CONFIGED=$CI_JOB_ID" > ci_job_id.env
+    - *install_dev_tools
     - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
     - mkdir opsi-configed
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps opsi-configed/
     - mkdir opsi-configed/mac_x64/
     - mv mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS opsi-configed/mac_x64/
-    - opsi-dev-tool --version
     - opsi-dev-tool --create-changelog output
     - cp output/changelog.md CHANGELOG.md
     - cp output/changelog.md opsi-configed/CHANGELOG.md
