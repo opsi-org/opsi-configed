@@ -6,9 +6,7 @@
 
 package de.uib.opsidatamodel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -27,7 +25,6 @@ public class HostGroups extends TreeMap<String, Map<String, String>> {
 
 	public HostGroups addSpecialGroups() {
 		Logging.debug(this, "addSpecialGroups check");
-		List<Map<String, String>> groups = new ArrayList<>();
 
 		// create
 		if (get(ClientTree.DIRECTORY_PERSISTENT_NAME) == null) {
@@ -39,8 +36,6 @@ public class HostGroups extends TreeMap<String, Map<String, String>> {
 			directoryGroup.put("description", "root of directory");
 
 			persistenceController.getGroupDataService().addGroup(directoryGroup, true);
-
-			groups.add(directoryGroup);
 
 			put(ClientTree.DIRECTORY_PERSISTENT_NAME, directoryGroup);
 
