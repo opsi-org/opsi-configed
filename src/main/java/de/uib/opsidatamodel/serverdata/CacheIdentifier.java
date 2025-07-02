@@ -43,7 +43,7 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Map<String, Set<String>>}
 	 */
-	FOBJECT_TO_GROUPS("fObject_to_groups"),
+	FHOST_TO_GROUPS("fObject_to_groups"),
 
 	/**
 	 * return type
@@ -325,6 +325,11 @@ public enum CacheIdentifier {
 	/**
 	 * return type {@code Map<String, Set<String>>}
 	 */
+	FHOST_GROUP_TO_MEMBERS("fhost_group_to_members"),
+
+	/**
+	 * return type {@code Map<String, Set<String>>}
+	 */
 	FPRODUCT_GROUP_TO_MEMBERS("fproduct_group_to_members"),
 
 	/**
@@ -411,11 +416,6 @@ public enum CacheIdentifier {
 	 * return type {@code Map<String, List<LicenseUsageEntry>>}
 	 */
 	FCLIENT_TO_LICENSES_USAGE_LIST("fclient_to_licenses_usage_list"),
-
-	/**
-	 * return type {@code Map<String, Set<String>>}
-	 */
-	FGROUP_TO_MEMBERS("fgroup_to_members"),
 
 	/**
 	 * return type {@code Map<String, Map<String, Object>>}

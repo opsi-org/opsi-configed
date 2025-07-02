@@ -8,14 +8,20 @@ package de.uib.configed.clientselection.serializers;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
@@ -39,31 +45,46 @@ import de.uib.utils.logging.Logging;
 
 public class OpsiDataSerializer {
 	public static final int DATA_VERSION = 2;
+	private static final String DATATYPE_REGEX_STRING = "(\"dataType\"\\s*:\\s*)(\\w+)";
+	private static final Pattern DATATYPE_REGEX = Pattern.compile(DATATYPE_REGEX_STRING,
+			Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final String ELEMENT_NAME_GROUP = "GroupElement";
 	public static final String ELEMENT_NAME_GROUP_WITH_SUBGROUPS = "GroupWithSubgroupsElement";
 	public static final String ELEMENT_NAME_SOFTWARE_NAME_ELEMENT = "SoftwareNameElement";
 	public static final String ELEMENT_NAME_GENERIC = "Generic";
 
-	public static final String KEY_ELEMENT_NAME = "element";
-	public static final String KEY_SUBELEMENT_NAME = "refinedElement";
-	public static final String KEY_ELEMENT_PATH = "elementPath";
-	public static final String KEY_OPERATION = "operation";
-	public static final String KEY_DATA_TYPE = "dataType";
+	private static final ObjectMapper objectMapper = new ObjectMapper();
 
 	private SelectionManager manager;
 
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
-	private JsonParser parser;
-	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;
 	private int searchDataVersion;
+
+	/**
+	 * Represents a node in the operation tree for client selection.
+	 */
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private record OperationNode(String element, String refinedElement, List<String> elementPath, String operation,
+			String dataType, Object data, List<OperationNode> children) {
+	}
+
+	/**
+	 * Represents the data structure for a saved search, including version and
+	 * the operation data.
+	 */
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private record SavedSearchData(int version, OperationNode data) {
+	}
 
 	public OpsiDataSerializer(SelectionManager manager) {
 		this.manager = manager;
 		searches = new HashMap<>();
 		searchDataVersion = DATA_VERSION;
+		objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+		objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
 	}
 
 	/**
@@ -71,9 +92,9 @@ public class OpsiDataSerializer {
 	 * already exists, overwrite it.
 	 */
 	public void save(AbstractSelectOperation topOperation, String name, String description) {
-		Map<String, Object> data = produceData(topOperation);
-		Logging.info(this, "save data ", data);
-		saveData(name, description, data);
+		OperationNode node = produceOperationNode(topOperation);
+		Logging.info(this, "save OperationNode ", node);
+		saveData(name, description, node);
 	}
 
 	/**
@@ -96,25 +117,25 @@ public class OpsiDataSerializer {
 	/**
 	 * reproduce a search
 	 */
-	public AbstractSelectOperation deserialize(Map<String, Object> data) {
-		if (data == null) {
-			Logging.warning(this, "data in Serializer.deserialize is null");
+	public AbstractSelectOperation deserialize(OperationNode node) {
+		if (node == null) {
+			Logging.warning(this, "OperationNode in Serializer.deserialize is null");
 			return null;
 		}
 
-		Logging.info(this, "deserialize data ", data);
-		if (data.get(KEY_ELEMENT_PATH) != null) {
-			Logging.info("deserialize, elementPath ", Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH)));
+		Logging.info(this, "deserialize OperationNode ", node);
+		if (node.elementPath() != null) {
+			Logging.info("deserialize, elementPath ", node.elementPath());
 		}
 
 		try {
-			AbstractSelectOperation operation = getOperation(data, null);
+			AbstractSelectOperation operation = getOperation(node, null);
 			if (getSearchDataVersion() == 1) {
 				operation = checkForHostGroup(operation);
 			}
 			return operation;
 		} catch (Exception e) {
-			Logging.error(e, "deserialize error for data ", data, " message ", e.getMessage());
+			Logging.error(e, "deserialize error for OperationNode ", node, " message ", e.getMessage());
 			return null;
 		}
 	}
@@ -122,13 +143,12 @@ public class OpsiDataSerializer {
 	/**
 	 * reproduce a search from a serialization string
 	 */
-
 	public AbstractSelectOperation deserialize(String serialized) {
 		Logging.info(this, "deserialize serialized ", serialized);
 		AbstractSelectOperation result = null;
 
-		Map<String, Object> data = decipher(serialized);
-		result = deserialize(data);
+		OperationNode node = decipher(serialized);
+		result = deserialize(node);
 
 		return result;
 	}
@@ -138,60 +158,62 @@ public class OpsiDataSerializer {
 	 */
 	public AbstractSelectOperation load(String name) {
 		Logging.info(this, "load ", name);
-
-		Map<String, Object> data = getData(name);
-		return deserialize(data);
+		OperationNode node = getData(name);
+		return deserialize(node);
 	}
 
 	/**
-	 * produce map format of serializiation object
+	 * Parse JSON string to OperationNode using SavedSearchData wrapper.
 	 */
-	private Map<String, Object> decipher(String serialization) {
-		Map<String, Object> map = new HashMap<>();
-		parser = new JsonParser(serialization);
+	private OperationNode decipher(String serialization) {
 		try {
-			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.OBJECT_BEGIN) {
-				return map;
+			return parseAndExtractNode(serialization);
+		} catch (IOException originalEx) {
+			Logging.warning(this, "Failed to parse JSON (probably old saved search).",
+					" Possibly due to unquoted 'dataType' field. Retrying with fix. Original error: ",
+					originalEx.getMessage());
+
+			String fixed = DATATYPE_REGEX.matcher(serialization).replaceAll("$1\"$2\"");
+
+			try {
+				return parseAndExtractNode(fixed);
+			} catch (IOException retryEx) {
+				Logging.error(this, retryEx, "Retry also failed when parsing fixed JSON. Original error: ",
+						originalEx.getMessage(), " | Retry error: ", retryEx.getMessage());
+				return null;
 			}
-		} catch (IOException e) {
-			Logging.error(this, e, e.getMessage());
-			return map;
 		}
-		map = parseObject();
-		int version;
-		if (!map.containsKey("version")) {
-			version = 1;
-		} else {
-			version = Integer.valueOf((String) map.get("version"));
-		}
-		searchDataVersion = version;
-		return (Map<String, Object>) map.get("data");
+	}
+
+	private OperationNode parseAndExtractNode(String json) throws IOException {
+		SavedSearchData data = objectMapper.readValue(json, SavedSearchData.class);
+		searchDataVersion = data.version();
+		return data.data();
 	}
 
 	/** Get the data for the given saved search */
-	private Map<String, Object> getData(String name) {
+	private OperationNode getData(String name) {
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name,
 				persistenceController.getConfigDataService().getSavedSearchesPD().get(name).getSerialization());
-
-		// controller.getSavedSearches().get(name)
 
 		String serialization = searches.get(name);
 		return decipher(serialization);
 	}
 
 	/** Save the search data with the given name. */
-	private void saveData(String name, String description, Map<String, Object> data) {
-		String jsonString;
+	private void saveData(String name, String description, OperationNode node) {
+		try {
+			SavedSearchData wrapper = new SavedSearchData(DATA_VERSION, node);
+			String jsonString = objectMapper.writeValueAsString(wrapper);
 
-		jsonString = "{ \"version\" : \"" + DATA_VERSION + "\", \"data\" : ";
-		jsonString += createJsonRecursive(data);
-		jsonString += " }";
-
-		Logging.info(this, name, ": ", jsonString);
-		searches.put(name, jsonString);
-		SavedSearch saveObj = new SavedSearch(name, jsonString, description);
-		persistenceController.getConfigDataService().saveSearch(saveObj);
+			Logging.info(this, name, ": ", jsonString);
+			searches.put(name, jsonString);
+			SavedSearch saveObj = new SavedSearch(name, jsonString, description);
+			persistenceController.getConfigDataService().saveSearch(saveObj);
+		} catch (IOException e) {
+			Logging.error(this, e, e.getMessage());
+		}
 	}
 
 	/** Get the data version of the currently loaded saved search */
@@ -199,329 +221,171 @@ public class OpsiDataSerializer {
 		return searchDataVersion;
 	}
 
-	private static String objectToString(Object object) {
-		return switch (object) {
-		case null -> "null";
-		case String s -> "\"" + s + "\"";
-		case Integer i -> "\"" + i + "\"";
-		case Long l -> "\"" + l + "\"";
-		case SelectData.DataType dataType -> dataType.toString();
-		case String[] array -> stringArrayToString(array);
-		default -> throw new IllegalArgumentException("Unknown type: " + object.getClass());
-		};
-	}
-
-	private static String stringArrayToString(String[] data) {
-		StringBuilder result = new StringBuilder("[ ");
-
-		for (int i = 0; i < data.length - 1; i++) {
-			result.append(objectToString(data[i]));
-			result.append(", ");
-		}
-		return result + objectToString(data[data.length - 1]) + " ]";
-	}
-
-	public static String createJsonRecursive(Map<?, ?> objects) {
-		StringBuilder builder = new StringBuilder(255);
-		builder.append("{ ");
-		builder.append("\"element\" : ");
-
-		builder.append(objectToString(objects.get("element")));
-		builder.append(", ");
-
-		// compatibility with refinements
-		if (objects.containsKey(KEY_SUBELEMENT_NAME)) {
-			builder.append("\"");
-			builder.append(KEY_SUBELEMENT_NAME);
-			builder.append("\" : ");
-			builder.append(objectToString(objects.get(KEY_SUBELEMENT_NAME)));
-			builder.append(", ");
-		}
-
-		builder.append("\"elementPath\" : ");
-		builder.append(objectToString(objects.get("elementPath")));
-		builder.append(", \"operation\" : ");
-		builder.append(objectToString(objects.get("operation")));
-		builder.append(", \"dataType\" : ");
-		builder.append(objectToString(objects.get("dataType")));
-		builder.append(", \"data\" : ");
-		builder.append(objectToString(objects.get("data")));
-		builder.append(", \"children\" : ");
-		List<?> children = (List<?>) objects.get("children");
-		if (children == null) {
-			builder.append("null");
-		} else {
-			appendChildrenToBuilder(children, builder);
-		}
-		builder.append(" }");
-
-		return builder.toString();
-	}
-
-	private static void appendChildrenToBuilder(List<?> children, StringBuilder builder) {
-		builder.append("[ ");
-		Iterator<?> childIterator = children.iterator();
-		while (childIterator.hasNext()) {
-			Object child = childIterator.next();
-			if (child instanceof Map) {
-				builder.append(createJsonRecursive((Map<?, ?>) child));
-
-				if (childIterator.hasNext()) {
-					builder.append(", ");
-				}
-			} else {
-				Logging.warning("child is not a map, but ", child.getClass());
-			}
-		}
-		builder.append(" ]");
-	}
-
-	private Map<String, Object> parseObject() {
-		Map<String, Object> result = new HashMap<>();
-		String name = null;
-
+	public static String createJsonRecursive(OperationNode node) {
 		try {
-			while (parser.next()) {
-				switch (parser.getPositionType()) {
-				case OBJECT_BEGIN:
-					addObjectToResult(result, name);
-					break;
-				case OBJECT_END:
-					return result;
-				case LIST_BEGIN:
-					addListToResult(result, name);
-					break;
-				case JSON_NAME:
-					name = parser.getValue();
-					name = name.substring(1, name.length() - 1);
-					Logging.debug(this, name);
-					break;
-				case JSON_VALUE:
-					addValueToResult(result, name);
-					break;
-				default:
-					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
-				}
-			}
+			SavedSearchData wrapper = new SavedSearchData(DATA_VERSION, node);
+			return objectMapper.writeValueAsString(wrapper);
 		} catch (IOException e) {
-			throw new IllegalArgumentException("IOException in parser", e);
-		}
-
-		throw new IllegalArgumentException("Reached EOF");
-	}
-
-	private Object parseList(String name) {
-		List<Object> list = new LinkedList<>();
-		boolean done = false;
-
-		try {
-			while (!done && parser.next()) {
-				switch (parser.getPositionType()) {
-				case LIST_END:
-					done = true;
-					break;
-				case OBJECT_BEGIN:
-					list.add(parseObject());
-					break;
-				case JSON_VALUE:
-					list.add(stringToObject(parser.getValue(), ""));
-					break;
-				default:
-					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
-				}
-			}
-		} catch (IOException e) {
-			throw new IllegalArgumentException("IOException in parser", e);
-		}
-
-		Logging.debug(this, "parseList ", list);
-
-		if (!done) {
-			throw new IllegalArgumentException("Unexpected EOF");
-		}
-
-		if ("elementPath".equals(name)) {
-			return list.toArray(new String[0]);
-		}
-
-		return list;
-	}
-
-	private void addObjectToResult(Map<String, Object> result, String name) {
-		if (name == null) {
-			Logging.warning(this, "name is null, in case OBJECT_BEGIN");
-		} else {
-			result.put(name, parseObject());
+			Logging.error(OpsiDataSerializer.class, e, "Error serializing OperationNode to JSON: ", e.getMessage());
+			return "{}";
 		}
 	}
 
-	private void addListToResult(Map<String, Object> result, String name) {
-		if (name == null) {
-			Logging.warning(this, "name is null, in case LIST_BEGIN");
-		} else {
-			result.put(name, parseList(name));
-		}
-	}
-
-	private void addValueToResult(Map<String, Object> result, String name) {
-		if (name == null) {
-			Logging.warning(this, "name is null, in case JSON_VALUE");
-		} else {
-			result.put(name, stringToObject(parser.getValue(), name));
-		}
-	}
-
-	private Object stringToObject(String value, String name) {
-		Logging.debug(this, "stringToObject: ", name);
-		if ("null".equals(value)) {
+	private DataType getDataTypeFromString(String value) {
+		if (value == null || "null".equals(value)) {
 			return null;
 		}
 
-		if ("data".equals(name)) {
-			return getStringForData(value);
-		}
+		DataType dataType = null;
 
-		if (value.startsWith("\"")) {
-			return value.substring(1, value.length() - 1);
-		}
-
-		if ("dataType".equals(name)) {
-			checkLastDataType(value);
-
-			Logging.info(this, "lastDataType is now ", lastDataType);
-
-			return lastDataType;
-		}
-
-		throw new IllegalArgumentException(value + " was not expected here");
-	}
-
-	private Object getStringForData(String value) {
-		value = value.substring(1, value.length() - 1);
-
-		return switch (lastDataType) {
-		case NONE_TYPE -> null;
-		case TEXT_TYPE, DATE_TYPE -> value;
-		case DOUBLE_TYPE -> Double.valueOf(value);
-		case INTEGER_TYPE -> Integer.valueOf(value);
-		case BIG_INTEGER_TYPE -> Long.valueOf(value);
-		default -> throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
-		};
-	}
-
-	private void checkLastDataType(String value) {
 		switch (value) {
 		// In old searches, we still have "EnumType", but this will now
 		// due to refactoring be replaced by "TextType"
 		case "TextType", "EnumType":
-			lastDataType = DataType.TEXT_TYPE;
+			dataType = DataType.TEXT_TYPE;
 			break;
 
 		case "IntegerType":
-			lastDataType = DataType.INTEGER_TYPE;
+			dataType = DataType.INTEGER_TYPE;
 			break;
 
 		case "BigIntegerType":
-			lastDataType = DataType.BIG_INTEGER_TYPE;
+			dataType = DataType.BIG_INTEGER_TYPE;
 			break;
 
 		case "DoubleType":
-			lastDataType = DataType.DOUBLE_TYPE;
+			dataType = DataType.DOUBLE_TYPE;
 			break;
 
 		case "DateType":
-			lastDataType = DataType.DATE_TYPE;
+			dataType = DataType.DATE_TYPE;
 			break;
 
 		case "NoneType":
-			lastDataType = DataType.NONE_TYPE;
+			dataType = DataType.NONE_TYPE;
 			break;
 
 		default:
 			Logging.error(this, "dataType for ", value, " cannot be found...)");
 			break;
 		}
+
+		return dataType;
+	}
+
+	private static Object convertData(String data, DataType dataType) {
+		if (data == null || dataType == null) {
+			return null;
+		}
+
+		return switch (dataType) {
+		case NONE_TYPE -> null;
+		case TEXT_TYPE, DATE_TYPE -> data;
+		case DOUBLE_TYPE -> Double.valueOf(data);
+		case INTEGER_TYPE -> Integer.valueOf(data);
+		case BIG_INTEGER_TYPE -> Long.valueOf(data);
+		default -> throw new IllegalArgumentException("Type " + dataType + " not expected here");
+		};
 	}
 
 	/*
-	 * Create a SelectOperation from the given data. This function works
+	 * Create a SelectOperation from the given OperationNode. This function works
 	 * recursively.
 	 */
-	private AbstractSelectOperation getOperation(Map<String, Object> data,
-			Map<String, List<AbstractSelectElement>> hardware) throws Exception {
-		Logging.info(this, "getOperation for map ", data, "; hardware ", hardware);
+	private AbstractSelectOperation getOperation(OperationNode node, Map<String, List<AbstractSelectElement>> hardware)
+			throws Exception {
+		Logging.info(this, "getOperation for node ", node, "; hardware ", hardware);
 
-		String elementPathS = null;
-		if (data.get(KEY_ELEMENT_PATH) != null) {
-			elementPathS = Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH));
-			Logging.info(this, "getOperation, elementPath in data ", elementPathS);
-		}
-		// Element
-		AbstractSelectElement element = getSelectElement(data, hardware, elementPathS);
+		String elementPathS = extractElementPath(node);
+		AbstractSelectElement element = getSelectElement(node, hardware, elementPathS);
 
-		// Children
-		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
-		List<AbstractSelectOperation> children = new LinkedList<>();
-		if (childrenData != null) {
-			for (Map<String, Object> child : childrenData) {
-				children.add(getOperation(child, hardware));
-			}
-		}
+		List<AbstractSelectOperation> children = buildChildOperations(node, hardware);
 
-		// Operation
-		String operationName = (String) data.get(KEY_OPERATION);
+		String operationName = node.operation();
 		Logging.info(this, "getOperation Operation name: ", operationName);
-		AbstractSelectOperation operation;
 
-		if (getSearchDataVersion() == 1) {
-			operation = parseOperationVersion1(operationName, element, children);
-		} else {
-			Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
-			Logging.info(this, "getOperation operationClass  ", operationClass.toString());
-			if (element != null) {
-				Logging.info(this, "getOperation element != null, element  ", element);
-				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
-			} else if (children.size() == 1) {
-				Class<?> list = Class.forName("de.uib.configed.clientselection.AbstractSelectOperation");
-				Logging.info(this, "getOperation List name: ", list);
-				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children.get(0));
-			} else {
-				Class<?> list = Class.forName("java.util.List");
-				Logging.info(this, "getOperation List name: ", list);
-				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
-			}
-		}
+		AbstractSelectOperation operation = createOperation(operationName, element, children);
 
 		Logging.info(this, "getOperation  ", operation);
 
-		// Data
-		SelectData.DataType dataType = (SelectData.DataType) data.get(KEY_DATA_TYPE);
-		Logging.info(this, "getOperation dataType ", dataType);
-		Object realData = data.get("data");
-		Logging.info(this, "getOperation realData ", realData);
-		SelectData selectData;
-		if (dataType == null) {
-			selectData = null;
-		} else {
-			selectData = new SelectData(realData, dataType);
-		}
-
-		operation.setSelectData(selectData);
+		attachSelectData(node, operation);
 
 		return operation;
 	}
 
-	private AbstractSelectElement getSelectElement(Map<String, Object> data,
+	private String extractElementPath(OperationNode node) {
+		if (node.elementPath() != null) {
+			String elementPathS = node.elementPath().toString();
+			Logging.info(this, "getOperation, elementPath in node ", elementPathS);
+			return elementPathS;
+		}
+		return null;
+	}
+
+	private List<AbstractSelectOperation> buildChildOperations(OperationNode node,
+			Map<String, List<AbstractSelectElement>> hardware) throws Exception {
+		List<OperationNode> childrenData = node.children();
+		List<AbstractSelectOperation> children = new LinkedList<>();
+		if (childrenData != null) {
+			for (OperationNode child : childrenData) {
+				children.add(getOperation(child, hardware));
+			}
+		}
+		return children;
+	}
+
+	@SuppressWarnings("java:S112")
+	private AbstractSelectOperation createOperation(String operationName, AbstractSelectElement element,
+			List<AbstractSelectOperation> children) throws Exception {
+		if (getSearchDataVersion() == 1) {
+			return parseOperationVersion1(operationName, element, children);
+		}
+
+		Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
+		Logging.info(this, "createOperation operationClass  ", operationClass.toString());
+		AbstractSelectOperation op = null;
+
+		if (element != null) {
+			Logging.info(this, "createOperation element != null, element  ", element);
+			op = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
+		} else if (children.size() == 1) {
+			Logging.info(this, "createOperation has one children  ", children.get(0));
+			op = (AbstractSelectOperation) operationClass.getConstructor(AbstractSelectOperation.class)
+					.newInstance(children.get(0));
+		} else {
+			Logging.info(this, "createOperation element == null - probably has more than one chlidren  ",
+					children.size());
+			op = (AbstractSelectOperation) operationClass.getConstructor(List.class).newInstance(children);
+		}
+
+		return op;
+	}
+
+	private void attachSelectData(OperationNode node, AbstractSelectOperation operation) {
+		String dataTypeStr = node.dataType();
+		DataType dataType = getDataTypeFromString(dataTypeStr);
+		Object realData = node.data();
+		Logging.info(this, "getOperation realData ", realData);
+
+		SelectData selectData = null;
+		if (dataTypeStr != null && realData != null) {
+			Object convertedData = convertData(realData.toString(), dataType);
+			selectData = new SelectData(convertedData, dataType);
+		}
+		operation.setSelectData(selectData);
+	}
+
+	private AbstractSelectElement getSelectElement(OperationNode node,
 			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		AbstractSelectElement element = null;
-		String elementName = (String) data.get(KEY_ELEMENT_NAME);
+		String elementName = node.element();
 		Logging.info(this, "Element name: ", elementName);
 
 		if (elementName != null && !(elementName.isEmpty())) {
-			String subelementName = (String) data.get(KEY_SUBELEMENT_NAME);
+			String subelementName = node.refinedElement();
 
-			String[] elementPath = (String[]) data.get(KEY_ELEMENT_PATH);
+			List<String> elementPath = node.elementPath();
 
 			element = switch (elementName) {
 			case ELEMENT_NAME_SOFTWARE_NAME_ELEMENT -> manager.getNewSoftwareNameElement();
@@ -540,7 +404,7 @@ public class OpsiDataSerializer {
 	}
 
 	private AbstractSelectElement getDefaultElement(String elementName,
-			Map<String, List<AbstractSelectElement>> hardware, String[] elementPath, String elementPathS)
+			Map<String, List<AbstractSelectElement>> hardware, List<String> elementPath, String elementPathS)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException,
 			InvocationTargetException {
 		if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
@@ -551,14 +415,14 @@ public class OpsiDataSerializer {
 		}
 	}
 
-	private AbstractSelectElement getGeneriSelectElement(String elementName, String[] elementPath,
+	private AbstractSelectElement getGeneriSelectElement(String elementName, List<String> elementPath,
 			Map<String, List<AbstractSelectElement>> hardware, String elementPathS) {
 		Logging.info(this, "getGeneriSelectElement elementName ", elementName, " elementPathS ", elementPathS);
 		if (hardware == null) {
 			hardware = manager.getBackend().getHardwareList();
 		}
-		Logging.info(this, "getOperation elementPath[0] ", elementPath[0]);
-		List<AbstractSelectElement> elements = hardware.get(elementPath[0]);
+		Logging.info(this, "getOperation elementPath[0] ", elementPath.get(0));
+		List<AbstractSelectElement> elements = hardware.get(elementPath.get(0));
 
 		for (AbstractSelectElement possibleElement : elements) {
 			Logging.info(this, "getOperation possibleElement.getClassName() ", possibleElement,
@@ -585,44 +449,39 @@ public class OpsiDataSerializer {
 		}
 	}
 
-	/* Create data from the operation recursively. */
-	private Map<String, Object> produceData(AbstractSelectOperation operation) {
-		Map<String, Object> map = new HashMap<>();
+	/* Create OperationNode from the operation recursively. */
+	private static OperationNode produceOperationNode(AbstractSelectOperation operation) {
 		AbstractSelectElement element = operation.getElement();
+		String elementName = null;
+		String refinedElement = null;
+		List<String> elementPath = null;
+
 		if (element == null) {
-			map.put(KEY_ELEMENT_NAME, null);
-			map.put(KEY_ELEMENT_PATH, null);
+			elementName = null;
+			elementPath = null;
 		} else if (element instanceof GroupWithSubgroupsElement) {
 			// producing compatibility for version without GroupWithSubgroupsElement
-
-			map.put(KEY_ELEMENT_NAME, GroupElement.class.getSimpleName());
-			map.put(KEY_SUBELEMENT_NAME, GroupWithSubgroupsElement.class.getSimpleName());
-			map.put(KEY_ELEMENT_PATH, element.getPathArray());
+			elementName = GroupElement.class.getSimpleName();
+			refinedElement = GroupWithSubgroupsElement.class.getSimpleName();
+			elementPath = Arrays.asList(element.getPathArray());
 		} else {
-			map.put(KEY_ELEMENT_NAME, element.getClassName());
-			map.put(KEY_ELEMENT_PATH, element.getPathArray());
+			elementName = element.getClassName();
+			elementPath = Arrays.asList(element.getPathArray());
 		}
 
-		map.put(KEY_OPERATION, operation.getClassName());
-		if (operation.getSelectData() == null) {
-			map.put(KEY_DATA_TYPE, null);
-			map.put("data", null);
-		} else {
-			map.put(KEY_DATA_TYPE, operation.getSelectData().getType());
-			map.put("data", operation.getSelectData().getData());
-		}
+		String operationName = operation.getClassName();
+		String dataType = operation.getSelectData() == null ? null : operation.getSelectData().getType().toString();
+		Object data = operation.getSelectData() == null ? null : operation.getSelectData().getData();
+
+		List<OperationNode> children = null;
 		if (operation instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
-			List<Map<String, Object>> childData = new LinkedList<>();
+			children = new LinkedList<>();
 			for (AbstractSelectOperation child : abstractSelectGroupOperation.getChildOperations()) {
-				childData.add(produceData(child));
+				children.add(produceOperationNode(child));
 			}
-
-			map.put("children", childData);
-		} else {
-			map.put("children", null);
 		}
-		Logging.info(this, "produced ", map);
-		return map;
+
+		return new OperationNode(elementName, refinedElement, elementPath, operationName, dataType, data, children);
 	}
 
 	/* Parse the operations with the old (version 1) operation names */
@@ -658,14 +517,10 @@ public class OpsiDataSerializer {
 		if (!(operation instanceof AbstractSelectGroupOperation)) {
 			Logging.debug("No group: ", operation.getClassName(), ", element path size: ",
 					operation.getElement().getPathArray().length);
-			if (operation.getElement().getPathArray().length == 1) {
-				return new HostOperation(operation);
-			} else {
-				return operation;
-			}
+			return (operation.getElement().getPathArray().length == 1) ? new HostOperation(operation) : operation;
 		}
-		if (operation instanceof HardwareOperation || operation instanceof SoftwareOperation
-				|| operation instanceof SwAuditOperation) {
+
+		if (isSpecialGroupOperation(operation)) {
 			return operation;
 		}
 
@@ -673,29 +528,38 @@ public class OpsiDataSerializer {
 			return new HostOperation(operation);
 		}
 
-		AndOperation andOperation = (AndOperation) operation;
-		AbstractSelectOperation notGroup = operation;
-		while (notGroup instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
-			notGroup = abstractSelectGroupOperation.getChildOperations().get(0);
+		return handleAndOperation((AndOperation) operation);
+	}
+
+	private static boolean isSpecialGroupOperation(AbstractSelectOperation operation) {
+		return operation instanceof HardwareOperation || operation instanceof SoftwareOperation
+				|| operation instanceof SwAuditOperation;
+	}
+
+	private static AbstractSelectOperation handleAndOperation(AndOperation andOperation) {
+		AbstractSelectOperation notGroup = unwrapGroup(andOperation);
+
+		int notGroupPathLen = notGroup.getElement().getPathArray().length;
+
+		if (notGroupPathLen != 1) {
+			return andOperation;
 		}
 
-		AbstractSelectOperation leftNotGroup = andOperation.getChildOperations().get(1);
-		while (leftNotGroup instanceof AbstractSelectGroupOperation abstractSelectGroupOperation) {
-			leftNotGroup = abstractSelectGroupOperation.getChildOperations().get(0);
-		}
-
-		if (notGroup.getElement().getPathArray().length != 1) {
-			return operation;
-		}
-
-		if (notGroup.getElement().getPathArray().length == 1 && leftNotGroup.getElement().getPathArray().length == 1) {
+		AbstractSelectOperation leftNotGroup = unwrapGroup(andOperation.getChildOperations().get(1));
+		int leftNotGroupPathLen = leftNotGroup.getElement().getPathArray().length;
+		if (notGroupPathLen == 1 && leftNotGroupPathLen == 1) {
 			return new HostOperation(andOperation);
 		}
 
-		List<AbstractSelectOperation> ops = andOperation.getChildOperations();
-		HostOperation host = new HostOperation(ops.get(0));
-		ops.remove(0);
-		ops.add(0, host);
+		List<AbstractSelectOperation> ops = new ArrayList<>(andOperation.getChildOperations());
+		ops.set(0, new HostOperation(ops.get(0)));
 		return new AndOperation(ops);
+	}
+
+	private static AbstractSelectOperation unwrapGroup(AbstractSelectOperation operation) {
+		while (operation instanceof AbstractSelectGroupOperation groupOp) {
+			operation = groupOp.getChildOperations().get(0);
+		}
+		return operation;
 	}
 }

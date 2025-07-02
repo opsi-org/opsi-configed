@@ -506,7 +506,8 @@ public class UserRolesConfigDataService {
 			Set<String> productGroupsPermitted, String productGroup) {
 		String parentGroupId = productGroups.get(productGroup).get("parentGroupId");
 
-		while (productGroups.containsKey(parentGroupId)) {
+		// this cannot be null since it's a TreeMap
+		while (parentGroupId != null && productGroups.containsKey(parentGroupId)) {
 			if (productGroupsPermitted.contains(parentGroupId)) {
 				return true;
 			} else {

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.swing.JMenuItem;
 import javax.swing.table.TableColumn;
@@ -52,8 +51,8 @@ public class ControlPanelEnterLicense extends AbstractControlMultiTablePanel {
 	}
 
 	public Set<String> getChoicesAllHosts() {
-		return new TreeSet<>(persistenceController.getHostInfoCollections()
-				.getClientsForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients()));
+		return persistenceController.getHostInfoCollections().getClientsForDepots(configedMain.getSelectedDepots(),
+				configedMain.getAllowedClients());
 	}
 
 	public void saveNewLicense(Map<String, String> m) {

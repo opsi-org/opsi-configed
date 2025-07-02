@@ -485,16 +485,16 @@ public class ConfigedMain {
 	private Set<String> produceClientSetForDepots(Set<String> allowedClients) {
 		Logging.info(this, " producePcListForDepots ", depotsList.getSelectedValuesList(),
 				" running with allowedClients ", allowedClients);
-		Set<String> m = persistenceController.getHostInfoCollections()
+		Set<String> clientsForDepot = persistenceController.getHostInfoCollections()
 				.getClientsForDepots(depotsList.getSelectedValuesList(), allowedClients);
 
-		clientCount = m.size();
+		clientCount = clientsForDepot.size();
 
 		if (mainFrame != null) {
 			clientTablePanel.updateTable();
 		}
 
-		return m;
+		return clientsForDepot;
 	}
 
 	private TableModel buildClientListTableModel(boolean rebuildTree) {

@@ -29,7 +29,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ServerActionManager;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messagebus.WebSocketEvent;
-import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
@@ -251,19 +250,16 @@ public class ClientTable extends JTable implements MessagebusListener {
 		}
 
 		String eventType = (String) message.get("event");
-
-		Map<String, Object> eventData = POJOReMapper.remap(message.get("data"));
-
 		if (WebSocketEvent.HOST_CREATED.toString().equals(eventType)) {
-			addClientToTable((String) eventData.get("id"));
+			addClientToTable();
 		} else if (WebSocketEvent.HOST_DELETED.toString().equals(eventType)) {
-			removeClientFromTable((String) eventData.get("id"));
+			removeClientFromTable();
 		} else {
 			// Other events are handled by other listeners.
 		}
 	}
 
-	public void addClientToTable(String clientId) {
+	public void addClientToTable() {
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(() -> {
@@ -274,7 +270,7 @@ public class ClientTable extends JTable implements MessagebusListener {
 		});
 	}
 
-	public void removeClientFromTable(String clientId) {
+	public void removeClientFromTable() {
 		persistenceController.reloadData(ReloadEvent.OPSI_HOST_DATA_RELOAD.toString());
 
 		SwingUtilities.invokeLater(configedMain::refreshClientListKeepingGroup);

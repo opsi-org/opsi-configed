@@ -7,6 +7,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Dialog.ModalityType;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.TreeMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -68,8 +70,14 @@ public class SavedSearchesDialog {
 		// The visibleList already needs to exist
 		initPopupMenu();
 
+		JButton searchButton = new JButton(Configed.getResourceValue("search"));
+		searchButton.addActionListener((ActionEvent actionEvent) -> {
+			commit();
+			dialog.setVisible(false);
+		});
+
 		optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
-				new Object[] { Configed.getResourceValue("search"), Configed.getResourceValue("buttonCancel") });
+				new Object[] { searchButton, Configed.getResourceValue("buttonCancel") });
 		Utils.enableDialogResizing(optionPane);
 
 		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
@@ -104,8 +112,8 @@ public class SavedSearchesDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() > 1) {
-					dialog.setVisible(false);
 					commit();
+					dialog.setVisible(false);
 				}
 			}
 		});

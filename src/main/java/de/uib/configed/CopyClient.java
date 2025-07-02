@@ -89,7 +89,7 @@ public class CopyClient {
 		}
 
 		persistenceController.getGroupDataService().addHost2Groups(newClientNameWithDomain, clientGroups);
-		persistenceController.reloadData(CacheIdentifier.FOBJECT_TO_GROUPS.toString());
+		persistenceController.reloadData(CacheIdentifier.FHOST_TO_GROUPS.toString());
 	}
 
 	private void copyProducts() {

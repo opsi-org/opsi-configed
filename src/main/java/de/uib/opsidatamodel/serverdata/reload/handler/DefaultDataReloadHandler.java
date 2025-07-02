@@ -50,10 +50,10 @@ public class DefaultDataReloadHandler implements ReloadHandler {
 			cacheManager.clearCachedData(CacheIdentifier.RELATIONS_AUDIT_HARDWARE_ON_HOST);
 			hardwareDataService.retrieveHardwareOnClientPD();
 		});
-		eventHandlers.put(CacheIdentifier.FOBJECT_TO_GROUPS.toString(), (Void v) -> {
-			cacheManager.clearCachedData(CacheIdentifier.FOBJECT_TO_GROUPS);
+		eventHandlers.put(CacheIdentifier.FHOST_TO_GROUPS.toString(), (Void v) -> {
+			cacheManager.clearCachedData(CacheIdentifier.FHOST_TO_GROUPS);
 			groupDataService.retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId",
-					CacheIdentifier.FGROUP_TO_MEMBERS);
+					CacheIdentifier.FHOST_GROUP_TO_MEMBERS);
 		});
 		eventHandlers.put(CacheIdentifier.HOST_GROUPS.toString(), (Void v) -> {
 			cacheManager.clearCachedData(CacheIdentifier.HOST_GROUPS);
