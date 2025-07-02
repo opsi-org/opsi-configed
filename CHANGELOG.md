@@ -162,13 +162,12 @@
 - Rework Saved Searches Dialog and Remote Control dialog in order use JOptionPane instead of own classes
 
 
-## We go back to version 4.3.6.x because the release of opsi 4.4 was canceled...
-
-## [4.4.0.14] - 2025-01-09
+## [4.3.4.14] - 2025-01-09
 ### Fixed
 - Not saving ProductPropertyStates and ConfigStates when you edit again after saving
 
 ### Changed
+- Released as 4.4.0.14
 - Use normal login without SSO when password or OTP field active and pressing "ENTER"-key
 - Don't stop configed when there are irregular arguments
 - Use new CellEditor to edit date in tables
@@ -179,25 +178,34 @@
 - Add option of Visibility to method processActionRequest ("Execute") in product tables
 - Add options to Health Check to en/disable the check for clients and depots
 
-## [4.4.0.13] - 2024-12-09
+## [4.3.4.13] - 2024-12-09
+
 ### Changed
+- Released as 4.4.0.13
 - Rework editing and creation of configs, configStates, productProperties and depot properties
 
-## [4.4.0.12] - 2024-12-04
+## [4.3.4.12] - 2024-12-04
+
+### Changed
+- Released as 4.4.0.12
 ### Fixed
 - No selection when no element found from search
 - Remember last used domain to create client
 - Always show loading animation when loading data
 
-## [4.4.0.11] - 2024-11-13
+## [4.3.4.11] - 2024-11-13
+
 ### Changed
+- Released as 4.4.0.11
 - Improve login dialog usability
 
-## [4.4.0.10] - 2024-11-06
+## [4.3.4.10] - 2024-11-06
 ### Added
 - Add option to log in via Single Sign On (SSO)
+### Changed 
+- Released as 4.4.0.10
 
-## [4.4.0.9] - 2024-10-30
+## [4.3.4.9] - 2024-10-30
 ### Fixed
 - Correct path for saving certificates when entering port in login dialog
 - Start configed when trusting the certificate once
@@ -206,12 +214,15 @@
 - Correctly deactivate filter in client selection
 
 ### Changed
+- Released as 4.4.0.9
 - Move reload and save buttons to top toolbar
 - Some small changes in component and gap sizes
 - Health Check now works with new opsiconfd version
 
-## [4.4.0.8] - 2024-09-25
+## [4.3.4.8] - 2024-09-25
+
 ### Changed
+- Released as 4.4.0.8
 - Make it possible to delete/create configs in config state editing for depots and clients
 - Don't create unnecessary copies of configs when (re)loading -> better performance
 - Rotate up to 10 logfiles
@@ -222,8 +233,10 @@
 - Create whole path of folders for CA-Certificate if folders don't exist yet
 
 
-## [4.4.0.7] - 2024-09-18
+## [4.3.4.7] - 2024-09-18
+
 ### Changed
+- Released as 4.4.0.7
 - Remove unnecessary feature to arrange dialogs
 - Cast Maps/Lists instead of remapping them always, better for performance
 - Remove waiting loop in when loading data in login. Will save up to 500ms every login.
@@ -237,33 +250,37 @@
 - Nullpointer Exception when reloading host configs of a depot
 - Also reset netboot product states when the user wants to reset Localboot AND Netboot product states
 
-## [4.4.0.6] - 2024-09-05
+## [4.3.4.6] - 2024-09-05
 ### Fixed
 - Show correctly the new lines ("\n") in tooltips
 - Correct support page in help menu
 
 ### Changed
+- Released as 4.4.0.6
 - Small change in Layout in Dialogs
 - Rework GUI design, put View change to the left, etc.
 
 
-## [4.4.0.5] - 2024-08-15
+## [4.3.4.5] - 2024-08-15
 
 ### Changed
+- Released as 4.4.0.4
 - Keep connection and certificate validators so that they don't have to be recreated with every server request to improve performance
 
-## [4.4.0.4] - 2024-08-14
+## [4.3.4.4] - 2024-08-14
 
 ### Changed
+- Released as 4.4.0.4
 - Show licenses management, opsi licensing info, health check and the dashboard in MainFrame
 
 ### Fixed
 - Space between options in command for uninstalling opsi products
 
 
-## [4.4.0.3] - 2024-08-08
+## [4.3.4.3] - 2024-08-08
 
 ### Changed
+- Released as 4.4.0.3
 - Only show enabled tabs in Client/Depot/Server configuration
 - Lazy loading for all tabs in Client/Depot/Server configuration apart from Client and Product tables
 
@@ -273,9 +290,10 @@
 - Start Remote Desktop Processes synchronuously instead of one after another when selected several clients
 
 
-## [4.4.0.2] - 2024-07-18
+## [4.3.4.2] - 2024-07-18
 
 ### Changed
+- Released as 4.4.0.2
 - Assume server version 4.3 if no header was found
 - Show that data have changed in client info only when really changed (and not by pressing "CTRL" for example)
 - Show border around tooltip in dark mode
@@ -287,9 +305,10 @@
 - Don't use native library from flatlaf in MacOS to prevent crashes
 
 
-## [4.4.0.1] - 2024-07-11
+## [4.3.4.1] - 2024-07-11
 
 ### Changed
+- Released as 4.4.0.1
 - All icons (apart from the hardware icons) have been replaced. Mainly by Intellij Icons in SVG format
 - Checking for client reachability is removed since it's obsolete thanks to the messagebus
 
