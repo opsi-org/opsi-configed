@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -361,7 +360,7 @@ public class HostInfoCollections {
 		retrieveOpsiHostsPD();
 
 		Logging.debug(this, " ------ building pcList");
-		Set<String> setOfPCs = new HashSet<>();
+		Set<String> setOfPCs = new TreeSet<>();
 
 		List<String> depotList = new ArrayList<>();
 		for (String depot : depots) {

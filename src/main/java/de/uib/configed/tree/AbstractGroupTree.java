@@ -443,7 +443,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 
 			// Now variable gotName equals true
 			Map<String, String> newGroup = new HashMap<>();
-			newGroup.put("groupId", newGroupKey);
+			newGroup.put("id", newGroupKey);
 			newGroup.put("parentGroupId", node.toString());
 			newGroup.put("description", description);
 
@@ -550,7 +550,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		GroupNode groupNode = new GroupNode(groupId);
 
 		Map<String, String> groupMap = new HashMap<>();
-		groupMap.put("groupId", groupId);
+		groupMap.put("id", groupId);
 		if (parentId != null) {
 			groupMap.put("parentGroupId", parentId);
 		}

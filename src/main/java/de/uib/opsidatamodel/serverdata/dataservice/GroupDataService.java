@@ -20,7 +20,7 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.opsicommand.AbstractPOJOExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.HostGroups;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.serverdata.CacheIdentifier;
 import de.uib.opsidatamodel.serverdata.CacheManager;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -89,16 +89,21 @@ public class GroupDataService {
 		String[] callAttributes = new String[] {};
 		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-		HostGroups result = new HostGroups(exec.getStringMappedObjectsByKey(
-				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }),
-				"ident", new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }));
-		Logging.debug(this, "getHostGroups ", result);
-		result = result.addSpecialGroups();
-		Logging.debug(this, "getHostGroups ", result);
-		result.alterToWorkingVersion();
-		Logging.debug(this, "getHostGroups rebuilt", result);
-		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, result);
+
+		List<Map<String, Object>> result = exec.getListOfMaps(
+				new OpsiMethodCall(RPCMethodName.GROUP_GET_OBJECTS, new Object[] { callAttributes, callFilter }));
+
+		Map<String, Map<String, String>> hostGroups = new HashMap<>();
+
+		for (Map<String, Object> entry : result) {
+			hostGroups.put((String) entry.get("id"), POJOReMapper.remap(entry));
+		}
+		Logging.debug(this, "getHostGroups ", hostGroups);
+		addSpecialGroups(hostGroups);
+		Logging.debug(this, "getHostGroups ", hostGroups);
+		alterToWorkingVersion(hostGroups);
+		Logging.debug(this, "getHostGroups rebuilt", hostGroups);
+		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, hostGroups);
 	}
 
 	public void retrieveAllGroupsPD() {
@@ -113,37 +118,61 @@ public class GroupDataService {
 
 		List<Map<String, Object>> resultlist = exec.getListOfMaps(omc);
 
-		List<Object> hostGroupsList = new ArrayList<>();
-		List<Object> productGroupsList = new ArrayList<>();
+		Map<String, Map<String, String>> hostGroups = new TreeMap<>();
+		Map<String, Map<String, String>> productGroups = new TreeMap<>();
 
 		for (Map<String, Object> entry : resultlist) {
 			if (entry.get("type").equals(Object2GroupEntry.GROUP_TYPE_HOSTGROUP)) {
-				hostGroupsList.add(entry);
+				hostGroups.put((String) entry.get("id"), (Map<String, String>) POJOReMapper.remap(entry));
 			} else if (entry.get("type").equals(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP)) {
-				productGroupsList.add(entry);
+				productGroups.put((String) entry.get("id"), (Map<String, String>) POJOReMapper.remap(entry));
 			} else {
 				Logging.warning(this, "Unexpected type: ", entry.get(Object2GroupEntry.GROUP_TYPE_KEY));
 			}
 		}
 
-		// Load data for hostGroups
-		Map<String, Map<String, String>> source = AbstractPOJOExecutioner.generateStringMappedObjectsByKeyResult(
-				hostGroupsList, "ident", new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" });
-
-		HostGroups hostGroups = new HostGroups(source);
 		Logging.debug(this, "getHostGroups ", hostGroups);
-		hostGroups = hostGroups.addSpecialGroups();
-		Logging.debug(this, "getHostGroups ", hostGroups);
-		hostGroups.alterToWorkingVersion();
+		addSpecialGroups(hostGroups);
+		alterToWorkingVersion(hostGroups);
 		Logging.debug(this, "getHostGroups rebuilt", hostGroups);
 		cacheManager.setCachedData(CacheIdentifier.HOST_GROUPS, hostGroups);
 
-		// Load data for productGroups
-		Map<String, Map<String, String>> result = AbstractPOJOExecutioner.generateStringMappedObjectsByKeyResult(
-				productGroupsList, "ident", new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" });
-		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS, result);
+		cacheManager.setCachedData(CacheIdentifier.PRODUCT_GROUPS, productGroups);
+	}
+
+	private void addSpecialGroups(Map<String, Map<String, String>> hostGroups) {
+		Logging.debug(this, "addSpecialGroups check");
+
+		hostGroups.computeIfAbsent(ClientTree.DIRECTORY_PERSISTENT_NAME, (String key) -> {
+			Logging.debug(this, "addSpecialGroups");
+			Map<String, String> directoryGroup = new HashMap<>();
+
+			directoryGroup.put("id", ClientTree.DIRECTORY_PERSISTENT_NAME);
+			directoryGroup.put("parentGroupId", null);
+			directoryGroup.put("description", "root of directory");
+
+			persistenceController.getGroupDataService().addGroup(directoryGroup, true);
+
+			return directoryGroup;
+		});
+	}
+
+	private void alterToWorkingVersion(Map<String, Map<String, String>> hostGroups) {
+		Logging.debug(this, "alterToWorkingVersion we have ", this);
+
+		for (Map<String, String> groupInfo : hostGroups.values()) {
+			if (ClientTree.DIRECTORY_PERSISTENT_NAME.equals(groupInfo.get("parentGroupId"))) {
+				groupInfo.put("parentGroupId", ClientTree.DIRECTORY_NAME);
+			}
+		}
+
+		Map<String, String> directoryGroup = hostGroups.get(ClientTree.DIRECTORY_PERSISTENT_NAME);
+		if (directoryGroup != null) {
+			directoryGroup.put("id", ClientTree.DIRECTORY_NAME);
+		}
+
+		hostGroups.put(ClientTree.DIRECTORY_NAME, directoryGroup);
+		hostGroups.remove(ClientTree.DIRECTORY_PERSISTENT_NAME);
 	}
 
 	public Map<String, Set<String>> getFProductGroup2Members() {
@@ -374,7 +403,7 @@ public class GroupDataService {
 			return false;
 		}
 
-		String id = newgroup.get("groupId");
+		String id = newgroup.get("id");
 		String parentId = newgroup.get("parentGroupId");
 		if (parentId == null || parentId.equals(AbstractGroupTree.ALL_GROUPS_NAME)) {
 			parentId = null;
