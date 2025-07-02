@@ -76,9 +76,11 @@ signandupload:
     - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps opsi-configed/
     - mkdir opsi-configed/mac_x64/
     - mv mac_x64/$CONFIGED_JAR_NAME_WITH_DEPS opsi-configed/mac_x64/
-    - opsi-dev-cli changelog from-git output 
+    - opsi-dev-tool --version
+    - opsi-dev-tool --create-changelog output
     - cp output/changelog.md CHANGELOG.md
     - cp output/changelog.md opsi-configed/CHANGELOG.md
+
     - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
     - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION'
   needs:
@@ -90,6 +92,7 @@ signandupload:
         - ci_job_id.env
     paths:
       - output/changelog.md
+      - CHANGELOG.md
     expire_in: 2 day
 
 trigger_opsiproduct_pipeline:
