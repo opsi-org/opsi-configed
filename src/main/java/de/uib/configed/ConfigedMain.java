@@ -535,7 +535,7 @@ public class ConfigedMain {
 		}
 
 		if (rebuildTree) {
-			rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
+			rebuildTree(clientsForTableModel, permittedHostGroups);
 		}
 
 		// changes the produced unfilteredList
@@ -547,7 +547,7 @@ public class ConfigedMain {
 			Logging.info(this, "buildPclistTableModel, rebuildTree  ", rebuildTree);
 
 			if (rebuildTree) {
-				rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
+				rebuildTree(clientsForTableModel, permittedHostGroups);
 			}
 		}
 
