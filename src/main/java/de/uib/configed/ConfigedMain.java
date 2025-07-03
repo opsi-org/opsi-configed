@@ -505,14 +505,8 @@ public class ConfigedMain {
 
 		Logging.info(this, "buildPclistTableModel, rebuildTree  ", rebuildTree);
 
-		Set<String> permittedHostGroups = null;
-		if (!persistenceController.getUserRolesConfigDataService().isAccessToHostgroupsOnlyIfExplicitlyStatedPD()) {
-			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
-			permittedHostGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
-		}
-
 		if (rebuildTree) {
-			rebuildTree(permittedHostGroups);
+			rebuildTree();
 		}
 
 		// changes the produced unfilteredList
@@ -524,7 +518,7 @@ public class ConfigedMain {
 			Logging.info(this, "buildPclistTableModel, rebuildTree  ", rebuildTree);
 
 			if (rebuildTree) {
-				rebuildTree(permittedHostGroups);
+				rebuildTree();
 			}
 		}
 
@@ -607,9 +601,9 @@ public class ConfigedMain {
 		return model;
 	}
 
-	private void rebuildTree(Set<String> permittedHostGroups) {
+	private void rebuildTree() {
 		clientTree.clear();
-		clientTree.build(permittedHostGroups);
+		clientTree.build();
 	}
 
 	public void setClient(String clientName) {

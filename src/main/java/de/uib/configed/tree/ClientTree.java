@@ -156,9 +156,7 @@ public class ClientTree extends AbstractGroupTree {
 		pathToALL = new TreePath(new Object[] { rootNode, groupNodeFullList });
 
 		if (model != null) {
-			Set<String> permittedHostGroups = persistenceController.getUserRolesConfigDataService()
-					.getHostGroupsPermitted();
-			build(permittedHostGroups);
+			build();
 		}
 	}
 
@@ -166,15 +164,14 @@ public class ClientTree extends AbstractGroupTree {
 		return allowedClients;
 	}
 
-	public void build(Set<String> permittedHostGroups) {
-		Logging.info(this, "build, permittedHostGroups ", permittedHostGroups);
+	public void build() {
 
 		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
 		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
 
 		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
 
-		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups, permittedHostGroups);
+		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
 		allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
 		Set<String> allPCs = persistenceController.getHostInfoCollections()
 				.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients);
@@ -191,8 +188,8 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@SuppressWarnings("java:S1168")
-	private static Set<String> expandPermittedHostGroups(Map<String, Map<String, String>> hostGroups,
-			Set<String> permittedGroups) {
+	private Set<String> expandPermittedHostGroups(Map<String, Map<String, String>> hostGroups) {
+		Set<String> permittedGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
 		if (permittedGroups == null) {
 			return null;
 		}
