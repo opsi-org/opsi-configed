@@ -428,12 +428,13 @@ public final class OpsiDataBackend {
 			Logging.debug(this, "getClients softwareMap ");
 		}
 
-		swauditMap = getSwAuditOnClients(clientNames);
-
-		getHardwareConfig();
+		if (hasSwAudit) {
+			swauditMap = getSwAuditOnClients(clientNames);
+		}
 
 		Logging.debug(this, "getClients hasHardware ", hasHardware);
 		if (hasHardware) {
+			getHardwareConfig();
 			getHardwareOnClient(clientNames);
 		} else {
 			// dont use older data after a reload request
