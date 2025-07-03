@@ -28,13 +28,9 @@ public class OpsiDataBigIntLessThanOperation extends BigIntLessThanOperation imp
 	public boolean doesMatch(OpsiDataClient client) {
 		Object realData = client.getMap(map).get(key);
 		if (realData instanceof Long longData) {
-			if (longData < data) {
-				return true;
-			}
+			return longData < data;
 		} else if (realData instanceof Integer integerData) {
-			if (integerData < data) {
-				return true;
-			}
+			return integerData < data;
 		} else {
 			Logging.error(this, "data is no BigInteger!", realData);
 		}

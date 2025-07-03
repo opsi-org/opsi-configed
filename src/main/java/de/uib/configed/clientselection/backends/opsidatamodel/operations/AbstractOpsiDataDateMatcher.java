@@ -34,17 +34,10 @@ public abstract class AbstractOpsiDataDateMatcher {
 			return false;
 		}
 
-		String realData = realMap.get(key).toString();
-
-		return checkData(realData);
+		return checkData(realMap.get(key).toString());
 	}
 
 	private boolean checkData(final String realdata) {
-		if (!(realdata instanceof String)) {
-			Logging.debug(this, "OpsiDataDateMatcher data not a string: ", realdata);
-			return false;
-		}
-
 		if ("".equals(realdata)) {
 			return false;
 		}
