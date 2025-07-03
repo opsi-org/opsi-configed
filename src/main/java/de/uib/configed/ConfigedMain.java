@@ -165,8 +165,6 @@ public class ConfigedMain {
 		Logging.debug(this, "initialTreeActivation");
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
-		mainFrame.getHostsStatusPanel().updateSelectedClients(clientTablePanel.getClientTable().getRowCount(),
-				selectedClients.size());
 	}
 
 	public ProductTree getProductTree() {
