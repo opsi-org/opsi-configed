@@ -336,7 +336,6 @@ public class UserConfigProducing {
 			String startKey) {
 		List<Object> selectedValuesProductgroups = null;
 		List<Object> possibleValuesProductgroups = null;
-		Set<Object> oldPossibleValuesProductgroups = null;
 		Set<Object> currentPossibleValuesProductgroupsListed = null;
 
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
@@ -352,13 +351,6 @@ public class UserConfigProducing {
 
 		userConfig.setValues(partkey, selectedValuesProductgroups);
 
-		if (configOptionsMap.get(configKeyList) == null
-				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesProductgroups = new TreeSet<>();
-		} else {
-			oldPossibleValuesProductgroups = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
-		}
-
 		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
 
 		if (prototypeObligatory) {
@@ -373,8 +365,6 @@ public class UserConfigProducing {
 
 		Logging.info(this, "updateProductGroups selectedValuesProductgroups before supplying ",
 				selectedValuesProductgroups);
-		Logging.info(this, "updateProductGroups oldPossibleValuesProductgroupsListed before supplying ",
-				oldPossibleValuesProductgroups);
 		Logging.info(this, "updateProductGroups currentPossibleValuesProductgroupsListed before supplying ",
 				currentPossibleValuesProductgroupsListed);
 	}

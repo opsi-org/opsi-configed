@@ -254,7 +254,7 @@ public final class LicensingInfoMap {
 			result = new ArrayList<>(knownModulesList);
 		}
 
-		result.removeAll(new HashSet<>(obsoleteModules));
+		result.removeAll(obsoleteModules);
 
 		Collections.sort(result);
 		return result;

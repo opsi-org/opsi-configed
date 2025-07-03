@@ -8,7 +8,6 @@ package de.uib.configed.productgroup;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -199,7 +198,7 @@ public class ProductActionPanel extends JPanel {
 			installationStateTableModel.finishCollectiveChange();
 		}
 
-		panelProductSettings.getProductTable().setSelection(new HashSet<>(saveSelectedProducts));
+		panelProductSettings.getProductTable().setSelection(saveSelectedProducts);
 	}
 
 	public void setFilterMark(boolean selected) {
