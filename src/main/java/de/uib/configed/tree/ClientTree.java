@@ -156,11 +156,9 @@ public class ClientTree extends AbstractGroupTree {
 		pathToALL = new TreePath(new Object[] { rootNode, groupNodeFullList });
 
 		if (model != null) {
-			Set<String> allPCs = persistenceController.getHostInfoCollections()
-					.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients);
 			Set<String> permittedHostGroups = persistenceController.getUserRolesConfigDataService()
 					.getHostGroupsPermitted();
-			build(allPCs, permittedHostGroups);
+			build(permittedHostGroups);
 		}
 	}
 
@@ -168,8 +166,7 @@ public class ClientTree extends AbstractGroupTree {
 		return allowedClients;
 	}
 
-	public void build(Collection<String> allPCs, Set<String> permittedHostGroups) {
-		Logging.debug(this, "build, rebuildTree, allPCs  " + allPCs + " size " + allPCs.size());
+	public void build(Set<String> permittedHostGroups) {
 		Logging.info(this, "build, permittedHostGroups ", permittedHostGroups);
 
 		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
@@ -179,8 +176,8 @@ public class ClientTree extends AbstractGroupTree {
 
 		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups, permittedHostGroups);
 		allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
-		allPCs = persistenceController.getHostInfoCollections().getClientsForDepots(configedMain.getSelectedDepots(),
-				allowedClients);
+		Set<String> allPCs = persistenceController.getHostInfoCollections()
+				.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients);
 
 		produceTreeForALL(allPCs);
 		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),

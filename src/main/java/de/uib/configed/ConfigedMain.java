@@ -512,7 +512,7 @@ public class ConfigedMain {
 		}
 
 		if (rebuildTree) {
-			rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
+			rebuildTree(permittedHostGroups);
 		}
 
 		// changes the produced unfilteredList
@@ -524,7 +524,7 @@ public class ConfigedMain {
 			Logging.info(this, "buildPclistTableModel, rebuildTree  ", rebuildTree);
 
 			if (rebuildTree) {
-				rebuildTree(new TreeSet<>(clientsForTableModel), permittedHostGroups);
+				rebuildTree(permittedHostGroups);
 			}
 		}
 
@@ -607,9 +607,9 @@ public class ConfigedMain {
 		return model;
 	}
 
-	private void rebuildTree(Collection<String> allPCs, Set<String> permittedHostGroups) {
+	private void rebuildTree(Set<String> permittedHostGroups) {
 		clientTree.clear();
-		clientTree.build(allPCs, permittedHostGroups);
+		clientTree.build(permittedHostGroups);
 	}
 
 	public void setClient(String clientName) {
