@@ -1,0 +1,129 @@
+
+package de.uib.configed.gui.healthcheck;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+
+import de.uib.configed.gui.TeaComponent.UpdateResult;
+
+class UpdateTest {
+
+	private HealthCheckModel makeModelWithHealthData(Map<String, Map<String, Object>> healthData) {
+		return HealthCheckModel.initial(healthData);
+	}
+
+	private Map<String, Map<String, Object>> makeHealthDataWithShowDetails(Map<String, Boolean> showDetailsMap) {
+		Map<String, Map<String, Object>> healthData = new HashMap<>();
+		for (Map.Entry<String, Boolean> entry : showDetailsMap.entrySet()) {
+			Map<String, Object> details = new HashMap<>();
+			details.put("showDetails", entry.getValue());
+			healthData.put(entry.getKey(), details);
+		}
+		return healthData;
+	}
+
+	@Test
+	void updateWithExpandAllMsgSetsAllShowDetailsTrue() {
+		Map<String, Boolean> initialShowDetails = new HashMap<>();
+		initialShowDetails.put("entry1", false);
+		initialShowDetails.put("entry2", false);
+		initialShowDetails.put("entry3", true);
+		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
+		HealthCheckMsg msg = new HealthCheckMsg.ExpandAll();
+
+		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
+
+		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
+		assertEquals(true, updatedHealthData.get("entry1").get("showDetails"));
+		assertEquals(true, updatedHealthData.get("entry2").get("showDetails"));
+		assertEquals(true, updatedHealthData.get("entry3").get("showDetails"));
+		assertTrue(result.effect() instanceof HealthCheckEffect.None);
+	}
+
+	@Test
+	void updateWithCollapseAllMsgSetsAllShowDetailsTrue() {
+		Map<String, Boolean> initialShowDetails = new HashMap<>();
+		initialShowDetails.put("entry1", false);
+		initialShowDetails.put("entry2", true);
+		initialShowDetails.put("entry3", true);
+		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
+		HealthCheckMsg msg = new HealthCheckMsg.CollapseAll();
+
+		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
+
+		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
+		assertEquals(false, updatedHealthData.get("entry1").get("showDetails"));
+		assertEquals(false, updatedHealthData.get("entry2").get("showDetails"));
+		assertEquals(false, updatedHealthData.get("entry3").get("showDetails"));
+		assertTrue(result.effect() instanceof HealthCheckEffect.None);
+	}
+
+	@Test
+	void updateWithHealthDataRefreshedMsgSetsAllShowDetailsTrue() {
+		Map<String, Boolean> initialShowDetails = new HashMap<>();
+		initialShowDetails.put("entry1", false);
+		initialShowDetails.put("entry2", true);
+		initialShowDetails.put("entry3", true);
+		Map<String, Map<String, Object>> initialData = makeHealthDataWithShowDetails(initialShowDetails);
+		initialShowDetails.put("entry2", false);
+		Map<String, Map<String, Object>> reloadedData = makeHealthDataWithShowDetails(initialShowDetails);
+		HealthCheckModel model = makeModelWithHealthData(initialData);
+		HealthCheckMsg msg = new HealthCheckMsg.HealthDataRefreshed(reloadedData);
+
+		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
+
+		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
+		assertEquals(false, updatedHealthData.get("entry1").get("showDetails"));
+		assertEquals(false, updatedHealthData.get("entry2").get("showDetails"));
+		assertEquals(true, updatedHealthData.get("entry3").get("showDetails"));
+		assertTrue(result.effect() instanceof HealthCheckEffect.None);
+	}
+
+	@Test
+	void updateWithToggleDetailsMsgTogglesShowDetailsForKey() {
+		Map<String, Boolean> initialShowDetails = new HashMap<>();
+		initialShowDetails.put("entryA", false);
+		initialShowDetails.put("entryB", true);
+		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
+		HealthCheckMsg msg = new HealthCheckMsg.ToggleDetails("entryA");
+
+		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
+
+		Map<String, Map<String, Object>> updatedHealthData = result.model().getHealthData();
+		assertEquals(true, updatedHealthData.get("entryA").get("showDetails"));
+		assertEquals(true, updatedHealthData.get("entryB").get("showDetails"));
+		assertTrue(result.effect() instanceof HealthCheckEffect.None);
+	}
+
+	@Test
+	void updateWithCopyHealthInformationMsgReturnsEffectCopy() {
+		Map<String, Boolean> initialShowDetails = new HashMap<>();
+		initialShowDetails.put("entryX", false);
+		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
+		HealthCheckMsg msg = new HealthCheckMsg.CopyHealthInformation();
+
+		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
+
+		assertSame(model, result.model());
+		assertTrue(result.effect() instanceof HealthCheckEffect.Copy);
+	}
+
+	@Test
+	void updateWithDownloadDiagnosticDataMsgReturnsEffectDownload() {
+		Map<String, Boolean> initialShowDetails = new HashMap<>();
+		initialShowDetails.put("entryX", false);
+		HealthCheckModel model = makeModelWithHealthData(makeHealthDataWithShowDetails(initialShowDetails));
+		HealthCheckMsg msg = new HealthCheckMsg.DownloadDiagnosticData();
+
+		UpdateResult<HealthCheckModel, HealthCheckEffect> result = HealthCheckUpdate.update(model, msg);
+
+		assertSame(model, result.model());
+		assertTrue(result.effect() instanceof HealthCheckEffect.Download);
+	}
+}

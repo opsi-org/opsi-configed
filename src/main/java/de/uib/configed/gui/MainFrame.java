@@ -27,6 +27,7 @@ import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.LicenseDisplayer;
+import de.uib.configed.gui.healthcheck.HealthCheckDataLoader;
 import de.uib.configed.serverconsole.command.CommandFactory;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;

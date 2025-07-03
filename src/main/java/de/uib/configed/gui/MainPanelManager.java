@@ -28,6 +28,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.ConfigedMain.EditingTarget;
 import de.uib.configed.Globals;
 import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.gui.healthcheck.HealthCheckComponent;
 import de.uib.configed.gui.licenses.LicenseManagement;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.ProductTree;
@@ -222,8 +223,8 @@ public class MainPanelManager {
 	public JPanel getHealthCheckPanel() {
 		Logging.info(this, "init health check panel", healthCheckPanel);
 		if (healthCheckPanel == null) {
-			HealthCheck healthCheck = new HealthCheck();
-			healthCheckPanel = createPanel(healthCheck, topToolBarManager.getHealthCheckButtons(healthCheck),
+			HealthCheckComponent healthCheck = new HealthCheckComponent();
+			healthCheckPanel = createPanel(healthCheck.initUI(), topToolBarManager.getHealthCheckButtons(healthCheck),
 					Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		}
 

@@ -33,6 +33,7 @@ import de.uib.configed.ChangedDataManager;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.serverdata.OpsiModule;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -185,7 +186,7 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		openHealthCheckSettingsDialogButton.setVisible(Boolean.TRUE.equals(persistenceController.getHostDataService()
 				.getHostDisplayFields().get(HostInfo.CLIENT_HEALTH_CHECK_ACTIVE_DISPLAY_FIELD_LABEL)));
 		openHealthCheckSettingsDialogButton
-				.addActionListener(e -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain,
+				.addActionListener(e -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain,
 						configedMain.getSelectedClients(), checkBoxHealthCheckActive.getState()));
 
 		checkBoxInstallByShutdown = new FlatTriStateCheckBox(

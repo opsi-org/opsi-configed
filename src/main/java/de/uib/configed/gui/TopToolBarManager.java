@@ -21,6 +21,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ExtraFrameController;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.healthcheck.HealthCheckComponent;
+import de.uib.configed.gui.healthcheck.settings.HealthCheckSettingsComponent;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.modulelicense.OpsiLicensing;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
@@ -84,7 +86,7 @@ public class TopToolBarManager {
 		return Collections.singletonList(reloadButton);
 	}
 
-	public List<JButton> getHealthCheckButtons(HealthCheck healthCheck) {
+	public List<JButton> getHealthCheckButtons(HealthCheckComponent healthCheck) {
 		JButton downloadButton = new JButton(Icons.getIntellijIcon("download", 24));
 		downloadButton.setToolTipText(Configed.getResourceValue("download"));
 		downloadButton.addActionListener(actionEvent -> healthCheck.saveAsZip());
@@ -92,7 +94,7 @@ public class TopToolBarManager {
 		JButton healthCheckSettingsButton = new JButton(Icons.getIntellijIcon("settings", 24));
 		healthCheckSettingsButton.setToolTipText(Configed.getResourceValue("HealthCheckSettingsDialog.tooltip"));
 		healthCheckSettingsButton.addActionListener(
-				actionEvent -> new HealthCheckSettingsDialog().showHealthCheckSettings(configedMain));
+				actionEvent -> new HealthCheckSettingsComponent().showHealthCheckSettings(configedMain));
 
 		return Arrays.asList(downloadButton, healthCheckSettingsButton);
 	}
