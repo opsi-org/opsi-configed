@@ -241,7 +241,7 @@ public class UserConfigProducing {
 			String startKey) {
 		List<Object> selectedValuesDepot = null;
 		List<Object> possibleValuesDepot = null;
-		Set<Object> oldPossibleValuesDepot = null;
+		List<Object> oldPossibleValuesDepot = null;
 		Set<Object> currentPossibleValuesDepotListed = null;
 
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
@@ -260,9 +260,9 @@ public class UserConfigProducing {
 
 		if (configOptionsMap.get(configKeyList) == null
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesDepot = new TreeSet<>();
+			oldPossibleValuesDepot = new ArrayList<>();
 		} else {
-			oldPossibleValuesDepot = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
+			oldPossibleValuesDepot = configOptionsMap.get(configKeyList).getPossibleValues();
 		}
 
 		Logging.info(this, "oldPossibleValuesDepot ", oldPossibleValuesDepot);
@@ -290,7 +290,7 @@ public class UserConfigProducing {
 			String startKey, String username) {
 		List<Object> selectedValuesHostgroup = null;
 		List<Object> possibleValuesHostgroup = null;
-		Set<Object> oldPossibleValuesHostgroup = null;
+		List<Object> oldPossibleValuesHostgroup = null;
 		Set<Object> currentPossibleValuesHostgroupListed = null;
 
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
@@ -308,9 +308,9 @@ public class UserConfigProducing {
 
 		if (configOptionsMap.get(configKeyList) == null
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesHostgroup = new TreeSet<>();
+			oldPossibleValuesHostgroup = new ArrayList<>();
 		} else {
-			oldPossibleValuesHostgroup = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
+			oldPossibleValuesHostgroup = configOptionsMap.get(configKeyList).getPossibleValues();
 		}
 
 		if (prototypeObligatory) {
