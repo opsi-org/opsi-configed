@@ -335,8 +335,6 @@ public class UserConfigProducing {
 	private void updateProductGroups(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
 			String startKey) {
 		List<Object> selectedValuesProductgroups = null;
-		List<Object> possibleValuesProductgroups = null;
-		Set<Object> currentPossibleValuesProductgroupsListed = null;
 
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
 		String configKeyList = startKey + partkey;
@@ -351,17 +349,16 @@ public class UserConfigProducing {
 
 		userConfig.setValues(partkey, selectedValuesProductgroups);
 
-		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
+		List<Object> currentPossibleValuesProductgroupsListed;
 
 		if (prototypeObligatory) {
-			possibleValuesProductgroups = prototypeConfig.getPossibleValues(partkey);
-			currentPossibleValuesProductgroupsListed.addAll(possibleValuesProductgroups);
+			currentPossibleValuesProductgroupsListed = prototypeConfig.getPossibleValues(partkey);
 		} else {
-			Set<Object> posVals = new TreeSet<>(existingProductgroups);
-			currentPossibleValuesProductgroupsListed.addAll(posVals);
+			currentPossibleValuesProductgroupsListed = new ArrayList<>(existingProductgroups);
+			currentPossibleValuesProductgroupsListed.sort(null);
 		}
 
-		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesProductgroupsListed));
+		userConfig.setPossibleValues(partkey, currentPossibleValuesProductgroupsListed);
 
 		Logging.info(this, "updateProductGroups selectedValuesProductgroups before supplying ",
 				selectedValuesProductgroups);
@@ -376,8 +373,6 @@ public class UserConfigProducing {
 		// und setzt übergegebene possibleValues
 
 		List<Object> selectedValuesProductgroups = null;
-		List<Object> possibleValuesProductgroups = null;
-		Set<Object> currentPossibleValuesProductgroupsListed = null;
 
 		String configKeyList = startKey + partkey;
 
@@ -395,17 +390,16 @@ public class UserConfigProducing {
 
 		userConfig.setValues(partkey, selectedValuesProductgroups);
 
-		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
+		List<Object> currentPossibleValuesProductgroupsListed;
 
 		if (prototypeObligatory) {
-			possibleValuesProductgroups = prototypeConfig.getPossibleValues(partkey);
-			currentPossibleValuesProductgroupsListed.addAll(possibleValuesProductgroups);
+			currentPossibleValuesProductgroupsListed = prototypeConfig.getPossibleValues(partkey);
 		} else {
-			Set<Object> posVals = new TreeSet<>(possibleValues);
-			currentPossibleValuesProductgroupsListed.addAll(posVals);
+			currentPossibleValuesProductgroupsListed = new ArrayList<>(possibleValues);
+			currentPossibleValuesProductgroupsListed.sort(null);
 		}
 
-		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesProductgroupsListed));
+		userConfig.setPossibleValues(partkey, currentPossibleValuesProductgroupsListed);
 
 		Logging.info(this, "updateProductGroups selectedValuesProductgroups before supplying ",
 				selectedValuesProductgroups);
