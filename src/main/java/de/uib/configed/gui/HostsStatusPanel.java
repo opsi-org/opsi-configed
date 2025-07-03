@@ -36,9 +36,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	private JLabel labelAllClientsCount;
 
-	private FlatTextField fieldSelectedClientsNames;
+	private JLabel labelSelectedClients;
 
-	private JLabel labelSelectedClientsNames;
+	private FlatTextField fieldSelectedClientsNames;
 
 	private JLabel labelOS;
 	private JLabel labelDeviceType;
@@ -62,17 +62,23 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		return fieldSelectedClientsNames.getText();
 	}
 
-	public void initLabelAllClientsCount(int clientsCount, int selectedClientsCount) {
-		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
-				selectedClientsCount);
-		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  "
-				+ selectedClientsCount + " (" + clientsCount + ")");
+	public void updateAllClientsCount(int clientsCount) {
+		Logging.info(this, "updateTotalClients clientsCount ", clientsCount);
+		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
 	}
 
-	public void updateValues(int clientsCount, List<String> selectedClients, HostInfo hostInfo) {
+	public void updateSelectedClients(int selectedClientsCount, int clientsInTable) {
+		Logging.info(this, "updateValues clientsInTable, selectedClientsCount ", clientsInTable, ", ",
+				selectedClientsCount);
+
+		labelSelectedClients.setText(Configed.getResourceValue("MainFrame.labelSelectedClients") + "  "
+				+ selectedClientsCount + " (" + clientsInTable + ")");
+	}
+
+	public void updateValues(int clientsInTable, List<String> selectedClients, HostInfo hostInfo) {
 		int selectedClientsCount = selectedClients.size();
 
-		initLabelAllClientsCount(clientsCount, selectedClientsCount);
+		updateSelectedClients(selectedClientsCount, clientsInTable);
 
 		if (selectedClientsCount == 1) {
 			String selectedClient = selectedClients.get(0);
@@ -112,7 +118,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	private void initComponents() {
 		labelAllClientsCount = new JLabel();
 
-		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelName"));
+		labelSelectedClients = new JLabel();
 
 		labelOS = new JLabel();
 		labelDeviceType = new JLabel();
@@ -141,9 +147,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(labelSelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addComponent(fieldSelectedClientsNames, MIN_WIDTH, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
@@ -156,7 +162,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelSelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelDeviceType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

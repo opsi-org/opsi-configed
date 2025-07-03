@@ -96,8 +96,6 @@ public class ConfigedMain {
 	private Map<String, Map<String, Object>> depots;
 	private String depotRepresentative;
 
-	private int clientCount;
-
 	private DepotListSelectionListener depotListSelectionListener;
 
 	private Map<String, String> sessionInfo = new HashMap<>();
@@ -167,7 +165,8 @@ public class ConfigedMain {
 		Logging.debug(this, "initialTreeActivation");
 
 		mainFrame.getClientConfiguration().getClientInfoPanel().updateClientCheckboxText();
-		mainFrame.getHostsStatusPanel().initLabelAllClientsCount(clientCount, selectedClients.size());
+		mainFrame.getHostsStatusPanel().updateSelectedClients(clientTablePanel.getClientTable().getRowCount(),
+				selectedClients.size());
 	}
 
 	public ProductTree getProductTree() {
@@ -356,7 +355,8 @@ public class ConfigedMain {
 		Logging.info(this, "actOnListSelection update hosts status selectedClients ", selectedClients.size(),
 				" as well as ", clientTablePanel.getClientTable().getSelectedRowCount());
 
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, hostInfo);
+		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients,
+				hostInfo);
 
 		activatedGroupModel.setActive(selectedClients.isEmpty());
 
@@ -485,16 +485,15 @@ public class ConfigedMain {
 	private Set<String> produceClientSetForDepots(Set<String> allowedClients) {
 		Logging.info(this, " producePcListForDepots ", depotsList.getSelectedValuesList(),
 				" running with allowedClients ", allowedClients);
-		Set<String> clientsForDepot = persistenceController.getHostInfoCollections()
+		Set<String> clientsForDepots = persistenceController.getHostInfoCollections()
 				.getClientsForDepots(depotsList.getSelectedValuesList(), allowedClients);
 
-		clientCount = clientsForDepot.size();
-
 		if (mainFrame != null) {
+			mainFrame.getHostsStatusPanel().updateAllClientsCount(clientsForDepots.size());
 			clientTablePanel.updateTable();
 		}
 
-		return clientsForDepot;
+		return clientsForDepots;
 	}
 
 	private TableModel buildClientListTableModel(boolean rebuildTree) {
@@ -599,6 +598,12 @@ public class ConfigedMain {
 
 		Logging.info(this, "buildPclistTableModel, model column count ", model.getColumnCount());
 
+		// Clear the selected clients because we have a new model with no selected clients
+		selectedClients.clear();
+		if (mainFrame != null) {
+			// Update the info on the bottom with new data
+			mainFrame.getHostsStatusPanel().updateSelectedClients(selectedClients.size(), clientIds.size());
+		}
 		return model;
 	}
 
@@ -1149,7 +1154,8 @@ public class ConfigedMain {
 		updateHostInfo();
 
 		hostInfo.resetGui();
-		mainFrame.getHostsStatusPanel().updateValues(clientCount, selectedClients, hostInfo);
+		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients,
+				hostInfo);
 		clientTablePanel.restoreFilter();
 
 		mainFrame.deactivateLoadingCursor();
