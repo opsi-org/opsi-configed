@@ -59,7 +59,7 @@ public class GenEditTable extends JTable implements KeyListener {
 					Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
 					Configed.getResourceValue("ConfigedMain.Licenses.hint.title"), JOptionPane.OK_OPTION);
 		} else if (isDeleteAllowed()) {
-			getModel().deleteRow(getSelectedRowInModelTerms());
+			getGenTableModel().deleteRow(getSelectedRowInModelTerms());
 		} else {
 			Logging.warning(this, "nothing to delete, since nothing selected or deleting not allowed");
 		}
@@ -69,8 +69,7 @@ public class GenEditTable extends JTable implements KeyListener {
 		this.sortDescriptor = sortDescriptor;
 	}
 
-	@Override
-	public GenTableModel getModel() {
+	public GenTableModel getGenTableModel() {
 		TableModel model = super.getModel();
 		if (model instanceof GenTableModel genTableModel) {
 			return genTableModel;
@@ -84,7 +83,8 @@ public class GenEditTable extends JTable implements KeyListener {
 	public void setSorter() {
 		Logging.info(this, "setSorter");
 
-		if (!(getModel() instanceof GenTableModel)) {
+		if (getGenTableModel() == null) {
+			Logging.warning(this, "setSorter: Model is not a GenTableModel, cannot set sorter");
 			return;
 		}
 
@@ -104,15 +104,15 @@ public class GenEditTable extends JTable implements KeyListener {
 			int selRow = getSelectedRow();
 
 			Object selVal = null;
-			if (selRow > -1 && getModel().getKeyCol() > -1) {
-				selVal = getValueAt(convertRowIndexToModel(selRow), getModel().getKeyCol());
+			if (selRow > -1 && getGenTableModel().getKeyCol() > -1) {
+				selVal = getValueAt(convertRowIndexToModel(selRow), getGenTableModel().getKeyCol());
 			}
 
 			((DefaultRowSorter<?, ?>) getRowSorter()).sort();
 			setSorter();
 
 			if (selVal != null) {
-				int viewRow = findViewRowFromValue(selVal, getModel().getKeyCol());
+				int viewRow = findViewRowFromValue(selVal, getGenTableModel().getKeyCol());
 				moveToRow(viewRow);
 				setSelectedRow(viewRow);
 			}
@@ -168,7 +168,7 @@ public class GenEditTable extends JTable implements KeyListener {
 
 		scrollRectToVisible(getCellRect(n, 0, true));
 		setRowSelectionInterval(n, n);
-		getModel().setCursorRow(convertRowIndexToModel(n));
+		getGenTableModel().setCursorRow(convertRowIndexToModel(n));
 	}
 
 	private List<SortKey> buildSortkeysFromColumns() {
@@ -181,12 +181,12 @@ public class GenEditTable extends JTable implements KeyListener {
 			// default sorting
 			sortDescriptor = new LinkedHashMap<>();
 
-			if (getModel().getKeyCol() > -1) {
-				sortKeys.add(new SortKey(getModel().getKeyCol(), SortOrder.ASCENDING));
+			if (getGenTableModel().getKeyCol() > -1) {
+				sortKeys.add(new SortKey(getGenTableModel().getKeyCol(), SortOrder.ASCENDING));
 
-				sortDescriptor.put(getModel().getKeyCol(), SortOrder.ASCENDING);
-			} else if (getModel().getFinalCols() != null && !getModel().getFinalCols().isEmpty()) {
-				for (Integer col : getModel().getFinalCols()) {
+				sortDescriptor.put(getGenTableModel().getKeyCol(), SortOrder.ASCENDING);
+			} else if (getGenTableModel().getFinalCols() != null && !getGenTableModel().getFinalCols().isEmpty()) {
+				for (Integer col : getGenTableModel().getFinalCols()) {
 					sortKeys.add(new SortKey(col, SortOrder.ASCENDING));
 
 					sortDescriptor.put(col, SortOrder.ASCENDING);
@@ -233,7 +233,7 @@ public class GenEditTable extends JTable implements KeyListener {
 
 	public void deleteSelectedRow() {
 		if (getSelectedRowCount() > 0) {
-			getModel().deleteRow(getSelectedRowInModelTerms());
+			getGenTableModel().deleteRow(getSelectedRowInModelTerms());
 		}
 	}
 }
