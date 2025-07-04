@@ -47,7 +47,7 @@ public final class TerminalFrame implements MessagebusListener {
 			.getPersistenceController();
 
 	// User roles configs
-	private boolean depotsConfigured = persistenceController.getUserRolesConfigDataService()
+	private boolean fullDepotsPermission = persistenceController.getUserRolesConfigDataService()
 			.hasDepotsFullPermissionPD();
 	private boolean clientsConfigured = persistenceController.getUserRolesConfigDataService()
 			.isAccessToHostgroupsOnlyIfExplicitlyStatedPD();
@@ -205,7 +205,7 @@ public final class TerminalFrame implements MessagebusListener {
 		List<String> resultListAllowedDevices = new ArrayList<>();
 
 		if (isConfigServerAllowed(forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER),
-				depotsConfigured, allowedDepots)) {
+				fullDepotsPermission, allowedDepots)) {
 			resultListAllowedDevices.add("Configserver");
 		}
 
@@ -230,20 +230,21 @@ public final class TerminalFrame implements MessagebusListener {
 	 * 
 	 * @param forbiddenConfigServer true if configserver is forbidden by
 	 *                              'connect.terminal.forbidden'
-	 * @param depotsConfigured      true if user roles
-	 *                              'priviliges.host.depotaccess.*' are
+	 * @param fullDepotsPermission  true if user roles
+	 *                              'priviliges.host.depotaccess.*' are not
 	 *                              configured
 	 * @param allowedDepots         List of allowed depots by user role
 	 *                              'priviliges.host.depotaccess.depots'
 	 * @return true if configserver is allowed
 	 */
-	private boolean isConfigServerAllowed(boolean forbiddenConfigServer, boolean depotsConfigured,
+	private boolean isConfigServerAllowed(boolean forbiddenConfigServer, boolean fullDepotsPermission,
 			Set<Object> allowedDepots) {
 		Logging.debug(this, "terminal, allowedDepots: ", allowedDepots);
 		String configserverName = persistenceController.getHostInfoCollections().getConfigServer();
-		boolean allowed = (!forbiddenConfigServer && (!depotsConfigured || allowedDepots.contains(configserverName)));
+		boolean allowed = (!forbiddenConfigServer
+				&& (fullDepotsPermission || allowedDepots.contains(configserverName)));
 		Logging.debug(this, "terminal, configserver allowed (", allowed, "): ", configserverName,
-				" (depotsConfigured: ", depotsConfigured, "allowedDepots: ", allowedDepots, ", ");
+				" (depotsConfigured: ", fullDepotsPermission, "allowedDepots: ", allowedDepots, ", ");
 		return allowed;
 	}
 
@@ -272,11 +273,11 @@ public final class TerminalFrame implements MessagebusListener {
 		Logging.info(this, "terminal, clientsForDepots: ", clientsOfAllowedDepots);
 
 		// filter clients and depots by configured permissions (user roles)
-		if (depotsConfigured || clientsConfigured) {
+		if (fullDepotsPermission || clientsConfigured) {
 			for (String clientOrDepot : allClientsDepotsConnected2MsgbusCopy) {
 				boolean isDepot = allDepots.contains(clientOrDepot);
 
-				if (isDepot && depotsConfigured && !allowedDepots.contains(clientOrDepot)) {
+				if (isDepot && fullDepotsPermission && !allowedDepots.contains(clientOrDepot)) {
 					allClientsDepotsConnected2Msgbus.remove(clientOrDepot);
 				} else if (!isDepot && !clientsOfAllowedDepots.contains(clientOrDepot)) {
 					allClientsDepotsConnected2Msgbus.remove(clientOrDepot);
