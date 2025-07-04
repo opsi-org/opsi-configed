@@ -241,7 +241,7 @@ public class UserConfigProducing {
 			String startKey) {
 		List<Object> selectedValuesDepot = null;
 		List<Object> possibleValuesDepot = null;
-		Set<Object> oldPossibleValuesDepot = null;
+		List<Object> oldPossibleValuesDepot = null;
 		Set<Object> currentPossibleValuesDepotListed = null;
 
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
@@ -260,9 +260,9 @@ public class UserConfigProducing {
 
 		if (configOptionsMap.get(configKeyList) == null
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesDepot = new TreeSet<>();
+			oldPossibleValuesDepot = new ArrayList<>();
 		} else {
-			oldPossibleValuesDepot = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
+			oldPossibleValuesDepot = configOptionsMap.get(configKeyList).getPossibleValues();
 		}
 
 		Logging.info(this, "oldPossibleValuesDepot ", oldPossibleValuesDepot);
@@ -290,7 +290,7 @@ public class UserConfigProducing {
 			String startKey, String username) {
 		List<Object> selectedValuesHostgroup = null;
 		List<Object> possibleValuesHostgroup = null;
-		Set<Object> oldPossibleValuesHostgroup = null;
+		List<Object> oldPossibleValuesHostgroup = null;
 		Set<Object> currentPossibleValuesHostgroupListed = null;
 
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
@@ -308,9 +308,9 @@ public class UserConfigProducing {
 
 		if (configOptionsMap.get(configKeyList) == null
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesHostgroup = new TreeSet<>();
+			oldPossibleValuesHostgroup = new ArrayList<>();
 		} else {
-			oldPossibleValuesHostgroup = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
+			oldPossibleValuesHostgroup = configOptionsMap.get(configKeyList).getPossibleValues();
 		}
 
 		if (prototypeObligatory) {
@@ -335,9 +335,6 @@ public class UserConfigProducing {
 	private void updateProductGroups(UserConfig userConfig, UserConfig prototypeConfig, boolean prototypeObligatory,
 			String startKey) {
 		List<Object> selectedValuesProductgroups = null;
-		List<Object> possibleValuesProductgroups = null;
-		Set<Object> oldPossibleValuesProductgroups = null;
-		Set<Object> currentPossibleValuesProductgroupsListed = null;
 
 		String partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
 		String configKeyList = startKey + partkey;
@@ -352,29 +349,19 @@ public class UserConfigProducing {
 
 		userConfig.setValues(partkey, selectedValuesProductgroups);
 
-		if (configOptionsMap.get(configKeyList) == null
-				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesProductgroups = new TreeSet<>();
-		} else {
-			oldPossibleValuesProductgroups = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
-		}
-
-		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
+		List<Object> currentPossibleValuesProductgroupsListed;
 
 		if (prototypeObligatory) {
-			possibleValuesProductgroups = prototypeConfig.getPossibleValues(partkey);
-			currentPossibleValuesProductgroupsListed.addAll(possibleValuesProductgroups);
+			currentPossibleValuesProductgroupsListed = prototypeConfig.getPossibleValues(partkey);
 		} else {
-			Set<Object> posVals = new TreeSet<>(existingProductgroups);
-			currentPossibleValuesProductgroupsListed.addAll(posVals);
+			currentPossibleValuesProductgroupsListed = new ArrayList<>(existingProductgroups);
+			currentPossibleValuesProductgroupsListed.sort(null);
 		}
 
-		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesProductgroupsListed));
+		userConfig.setPossibleValues(partkey, currentPossibleValuesProductgroupsListed);
 
 		Logging.info(this, "updateProductGroups selectedValuesProductgroups before supplying ",
 				selectedValuesProductgroups);
-		Logging.info(this, "updateProductGroups oldPossibleValuesProductgroupsListed before supplying ",
-				oldPossibleValuesProductgroups);
 		Logging.info(this, "updateProductGroups currentPossibleValuesProductgroupsListed before supplying ",
 				currentPossibleValuesProductgroupsListed);
 	}
@@ -386,8 +373,6 @@ public class UserConfigProducing {
 		// und setzt übergegebene possibleValues
 
 		List<Object> selectedValuesProductgroups = null;
-		List<Object> possibleValuesProductgroups = null;
-		Set<Object> currentPossibleValuesProductgroupsListed = null;
 
 		String configKeyList = startKey + partkey;
 
@@ -405,17 +390,16 @@ public class UserConfigProducing {
 
 		userConfig.setValues(partkey, selectedValuesProductgroups);
 
-		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
+		List<Object> currentPossibleValuesProductgroupsListed;
 
 		if (prototypeObligatory) {
-			possibleValuesProductgroups = prototypeConfig.getPossibleValues(partkey);
-			currentPossibleValuesProductgroupsListed.addAll(possibleValuesProductgroups);
+			currentPossibleValuesProductgroupsListed = prototypeConfig.getPossibleValues(partkey);
 		} else {
-			Set<Object> posVals = new TreeSet<>(possibleValues);
-			currentPossibleValuesProductgroupsListed.addAll(posVals);
+			currentPossibleValuesProductgroupsListed = new ArrayList<>(possibleValues);
+			currentPossibleValuesProductgroupsListed.sort(null);
 		}
 
-		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesProductgroupsListed));
+		userConfig.setPossibleValues(partkey, currentPossibleValuesProductgroupsListed);
 
 		Logging.info(this, "updateProductGroups selectedValuesProductgroups before supplying ",
 				selectedValuesProductgroups);

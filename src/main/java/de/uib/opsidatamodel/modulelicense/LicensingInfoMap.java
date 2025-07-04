@@ -254,7 +254,7 @@ public final class LicensingInfoMap {
 			result = new ArrayList<>(knownModulesList);
 		}
 
-		result.removeAll(new HashSet<>(obsoleteModules));
+		result.removeAll(obsoleteModules);
 
 		Collections.sort(result);
 		return result;
@@ -353,12 +353,11 @@ public final class LicensingInfoMap {
 			currentTimeOverModuleList = new HashSet<>();
 		}
 
-		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
-
+		Map<String, Map<String, Map<String, Object>>> resultMap = new TreeMap<>();
 		Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(jOResult.get(DATES));
 
 		for (String key : datesKeys) {
-			Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
+			Map<String, Map<String, Object>> modulesMapToDate = new TreeMap<>();
 
 			// iterate over date entries
 			Map<String, Object> moduleToDate = dates.get(key).get(MODULES);
@@ -370,10 +369,10 @@ public final class LicensingInfoMap {
 
 				modulesMapToDate.put(currentModule, moduleInfo);
 			}
-			resultMap.put(key, new TreeMap<>(modulesMapToDate));
+			resultMap.put(key, modulesMapToDate);
 		}
 
-		return new TreeMap<>(checkTimeWarning(resultMap));
+		return checkTimeWarning(resultMap);
 	}
 
 	private Map<String, Object> createModuleInfo(String currentModule, Map<String, Object> moduleToDate, String key) {
@@ -421,7 +420,7 @@ public final class LicensingInfoMap {
 	 */
 	private Map<String, Map<String, Object>> produceTableMapFromDatesMap(
 			Map<String, Map<String, Map<String, Object>>> datesM) {
-		Map<String, Map<String, Object>> resultMap = new HashMap<>();
+		Map<String, Map<String, Object>> resultMap = new TreeMap<>();
 
 		columnNames = new ArrayList<>();
 		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
@@ -450,7 +449,7 @@ public final class LicensingInfoMap {
 			resultMap.put(currentModule, line);
 		}
 
-		return new TreeMap<>(resultMap);
+		return resultMap;
 	}
 
 	/**

@@ -11,6 +11,7 @@ project:
   #version_files:
   #  pom.xml: '.version' # will update the version in pom.xml
   changelog_filename: CHANGELOG.md # will be used as default changelog file. This file is prioritized over the public commit messages.
+  changelog_ignore_versions: "4\\.4\\.0\\.(1[0-4]|[1-9])"
   date_files:
     src/main/java/de/uib/configed/Globals.java: VERDATE;%Y-%m-%d # the variable VERDATE will be replaced with the current date
 

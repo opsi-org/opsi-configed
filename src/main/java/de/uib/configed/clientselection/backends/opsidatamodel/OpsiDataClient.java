@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uib.configed.type.SWAuditClientEntry;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.utils.logging.Logging;
 
 public class OpsiDataClient {
@@ -94,9 +95,9 @@ public class OpsiDataClient {
 	/** Get a map by name */
 	public Map<String, Object> getMap(String map) {
 		return switch (map) {
-		case HOSTINFO_MAP -> new HashMap<>(infoMap);
-		case SOFTWARE_MAP -> new HashMap<>(softwareValue);
-		case SWAUDIT_MAP -> new HashMap<>(swauditValue);
+		case HOSTINFO_MAP -> infoMap;
+		case SOFTWARE_MAP -> POJOReMapper.remap(softwareValue);
+		case SWAUDIT_MAP -> swauditValue;
 		default -> getHardwareMap(map);
 		};
 	}

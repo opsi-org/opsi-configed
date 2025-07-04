@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeSet;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -93,8 +92,8 @@ public class ClientSearch {
 	private String getLocalbootProductsFromSelection() {
 		ListSelectionDialog listSelectionDialog = new ListSelectionDialog(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("MainFrame.productSelection"));
-		listSelectionDialog.setListData(new ArrayList<>(
-				new TreeSet<>(persistenceController.getProductDataService().getAllLocalbootProductNames())));
+		listSelectionDialog.setListData(
+				new ArrayList<>(persistenceController.getProductDataService().getAllLocalbootProductNames()));
 		listSelectionDialog.setMultiSelection();
 		listSelectionDialog.show();
 		return listSelectionDialog.wasAccepted() ? listSelectionDialog.getSelectedValue() : "";

@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -45,8 +44,7 @@ public class ProductTree extends AbstractGroupTree {
 	@Override
 	protected void createTree() {
 		List<String> depotIds = configedMain.getSelectedDepots();
-		Set<String> productIds = new TreeSet<>(
-				persistenceController.getProductDataService().getAllLocalbootProductNames(depotIds));
+		Set<String> productIds = persistenceController.getProductDataService().getAllLocalbootProductNames(depotIds);
 		productIds.addAll(persistenceController.getProductDataService().getAllNetbootProductNames(depotIds));
 
 		Map<String, DefaultMutableTreeNode> nodeMap = new HashMap<>();

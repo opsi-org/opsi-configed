@@ -36,9 +36,7 @@ public class OpsiDataIntLessOrEqualOperation extends IntLessOrEqualOperation imp
 
 		Object realData = realMap.get(key);
 		if (realData instanceof Integer integerData) {
-			if (integerData <= data) {
-				return true;
-			}
+			return integerData <= data;
 		} else {
 			Logging.warning(this, "data is no Integer!");
 		}
