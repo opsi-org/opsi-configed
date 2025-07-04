@@ -767,7 +767,7 @@ public class ConfigedMain {
 		Logging.info(this, "setRebuiltClientListTableModel");
 	}
 
-	private Set<String> getDepotsOfSelectedClients() {
+	public Set<String> getDepotsOfSelectedClients() {
 		Set<String> depotsOfSelectedClients = new TreeSet<>();
 
 		for (String selectedClient : selectedClients) {

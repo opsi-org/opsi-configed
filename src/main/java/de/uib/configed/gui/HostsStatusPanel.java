@@ -14,6 +14,7 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -38,10 +39,13 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 
 	private JLabel labelSelectedClients;
 
-	private FlatTextField fieldSelectedClientsNames;
+	private FlatTextField fieldSelectedClientName;
 
 	private JLabel labelOS;
 	private JLabel labelDeviceType;
+
+	private JLabel labelDepots;
+	private JTextField fieldDepots;
 
 	private JLabel serverConnectionStateLabel;
 	private ImageIcon serverConnectedIcon;
@@ -59,7 +63,7 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	}
 
 	public String getSelectedClientNames() {
-		return fieldSelectedClientsNames.getText();
+		return fieldSelectedClientName.getText();
 	}
 
 	public void updateAllClientsCount(int clientsCount) {
@@ -78,20 +82,20 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	public void updateValues(int clientsInTable, List<String> selectedClients, HostInfo hostInfo) {
 		int selectedClientsCount = selectedClients.size();
 
-		updateSelectedClients(selectedClientsCount, clientsInTable);
+		updateSelectedClients(configedMain.getSelectedClients().size(), clientsInTable);
 
 		if (selectedClientsCount == 1) {
 			String selectedClient = selectedClients.get(0);
 
-			fieldSelectedClientsNames.setText(selectedClient);
+			fieldSelectedClientName.setText(selectedClient);
 			if (configedMain.isHostConnected(selectedClient)) {
-				fieldSelectedClientsNames.setLeadingIcon(clientConnectedIcon);
+				fieldSelectedClientName.setLeadingIcon(clientConnectedIcon);
 			} else {
-				fieldSelectedClientsNames.setLeadingIcon(clientDisconnectedIcon);
+				fieldSelectedClientName.setLeadingIcon(clientDisconnectedIcon);
 			}
 		} else {
-			fieldSelectedClientsNames.setText(null);
-			fieldSelectedClientsNames.setLeadingIcon(clientDisconnectedIcon);
+			fieldSelectedClientName.setText(null);
+			fieldSelectedClientName.setLeadingIcon(clientDisconnectedIcon);
 		}
 
 		labelOS.setText(hostInfo.getClientOS());
@@ -113,6 +117,11 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		}
 
 		labelDeviceType.setToolTipText(tooltipText.toString());
+
+		String depotsOfClients = configedMain.getDepotsOfSelectedClients().toString();
+		depotsOfClients = depotsOfClients.substring(1, depotsOfClients.length() - 1);
+		fieldDepots.setText(depotsOfClients);
+		fieldDepots.setToolTipText(depotsOfClients.replace(", ", "\n"));
 	}
 
 	private void initComponents() {
@@ -123,9 +132,14 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelOS = new JLabel();
 		labelDeviceType = new JLabel();
 
-		fieldSelectedClientsNames = new FlatTextField();
-		fieldSelectedClientsNames.setEditable(false);
-		fieldSelectedClientsNames.setDragEnabled(true);
+		labelDepots = new JLabel(Configed.getResourceValue("MainFrame.labelDepots"));
+		fieldDepots = new JTextField();
+		fieldDepots.setEditable(false);
+		fieldDepots.setDragEnabled(true);
+
+		fieldSelectedClientName = new FlatTextField();
+		fieldSelectedClientName.setEditable(false);
+		fieldSelectedClientName.setDragEnabled(true);
 
 		serverConnectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
 		serverDisconnectedIcon = Icons.getSelectedIntellijIcon("circle", 24);
@@ -150,13 +164,18 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addComponent(labelSelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(fieldSelectedClientsNames, MIN_WIDTH, GroupLayout.PREFERRED_SIZE,
+				.addComponent(fieldSelectedClientName, MIN_WIDTH, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelDeviceType, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
 				.addComponent(labelOS, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE).addComponent(serverConnectionStateLabel));
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+				.addComponent(labelDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addComponent(fieldDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(serverConnectionStateLabel));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -168,7 +187,11 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(fieldSelectedClientName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(serverConnectionStateLabel))
 				.addGap(Globals.MIN_GAP_SIZE));
