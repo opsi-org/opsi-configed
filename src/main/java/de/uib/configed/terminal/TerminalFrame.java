@@ -49,7 +49,7 @@ public final class TerminalFrame implements MessagebusListener {
 	// User roles configs
 	private boolean fullDepotsPermission = persistenceController.getUserRolesConfigDataService()
 			.hasDepotsFullPermissionPD();
-	private boolean clientsConfigured = persistenceController.getUserRolesConfigDataService()
+	private boolean fullClientsPermission = persistenceController.getUserRolesConfigDataService()
 			.isAccessToHostgroupsOnlyIfExplicitlyStatedPD();
 	private Set<Object> allowedDepots = persistenceController.getUserRolesConfigDataService().getPermittedDepots();
 	private List<Object> forbiddenItems = persistenceController.getUserRolesConfigDataService().getForbiddenMOTD();
@@ -273,11 +273,11 @@ public final class TerminalFrame implements MessagebusListener {
 		Logging.info(this, "terminal, clientsForDepots: ", clientsOfAllowedDepots);
 
 		// filter clients and depots by configured permissions (user roles)
-		if (fullDepotsPermission || clientsConfigured) {
+		if (!fullDepotsPermission || !fullClientsPermission) {
 			for (String clientOrDepot : allClientsDepotsConnected2MsgbusCopy) {
 				boolean isDepot = allDepots.contains(clientOrDepot);
 
-				if (isDepot && fullDepotsPermission && !allowedDepots.contains(clientOrDepot)) {
+				if (isDepot && !fullDepotsPermission && !allowedDepots.contains(clientOrDepot)) {
 					allClientsDepotsConnected2Msgbus.remove(clientOrDepot);
 				} else if (!isDepot && !clientsOfAllowedDepots.contains(clientOrDepot)) {
 					allClientsDepotsConnected2Msgbus.remove(clientOrDepot);
