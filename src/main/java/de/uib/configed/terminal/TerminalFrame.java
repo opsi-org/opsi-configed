@@ -226,7 +226,7 @@ public final class TerminalFrame implements MessagebusListener {
 		return resultListAllowedDevices;
 	}
 
-	private void separateDepotsAndClients(List<String> resultList, List<String> filteredHosts,
+	private static void separateDepotsAndClients(List<String> resultList, List<String> filteredHosts,
 			List<String> depotsList) {
 		Set<String> uniqueHosts = new LinkedHashSet<>(filteredHosts);
 		List<String> depots = new ArrayList<>();
