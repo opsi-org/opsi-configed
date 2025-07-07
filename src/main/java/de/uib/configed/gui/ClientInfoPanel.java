@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -429,23 +430,29 @@ public class ClientInfoPanel extends JPanel implements DocumentListener {
 		dataAreChangedProgramatically = false;
 	}
 
-	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
-		dataAreChangedProgramatically = true;
-		String deviceTypeIcon;
-		if (deviceType == null) {
-			deviceTypeIcon = "";
-		} else {
-			deviceTypeIcon = ("<<intern:empty>>".equals(deviceType) ? "" : deviceType);
+	public static ImageIcon getDeviceTypeIcon(String deviceType) {
+		if (deviceType == null || "<<intern:empty>>".equals(deviceType)) {
+			deviceType = "";
 		}
-		labelDeviceTypeIcon.setIcon(Utils.determineIconBasedOnDeviceType(deviceTypeIcon, 20));
 
+		return Utils.determineIconBasedOnDeviceType(deviceType, 20);
+	}
+
+	public static String transformDeviceType(String deviceType) {
 		String deviceTypeResourceKey = deviceType == null ? "" : deviceType;
 		if ("<<intern:empty>>".equals(deviceTypeResourceKey)) {
-			labelDeviceType.setText("");
+			return "";
 		} else {
-			labelDeviceType.setText(
-					Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey));
+			return Configed.getResourceValue("ConfigedMain.pclistTableModel.deviceType." + deviceTypeResourceKey);
 		}
+	}
+
+	public void setClientDeviceVendorAndModel(String vendor, String model, String deviceType) {
+		dataAreChangedProgramatically = true;
+
+		labelDeviceTypeIcon.setIcon(getDeviceTypeIcon(deviceType));
+
+		labelDeviceType.setText(transformDeviceType(deviceType));
 
 		jTextAreaVendorModel.setText("");
 		if (vendor.isBlank() && model.isBlank()) {

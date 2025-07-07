@@ -451,15 +451,10 @@ public final class ClientMenuManager implements MenuListener {
 	private void createPdf() {
 		Map<String, String> metaData = new HashMap<>();
 		String title = Configed.getResourceValue("MainFrame.ClientList");
-
-		if (mainFrame.getHostsStatusPanel().getGroupName().length() != 0) {
-			title = title + ": " + mainFrame.getHostsStatusPanel().getGroupName();
-		}
+		//TODO add depot information to title like Client List
 		metaData.put("header", title);
 		title = "";
-		if (mainFrame.getHostsStatusPanel().getInvolvedDepots().length() != 0) {
-			title = title + "Depot(s) : " + mainFrame.getHostsStatusPanel().getInvolvedDepots();
-		}
+		//TODO add depot information to title like Client List
 
 		metaData.put("title", title);
 		metaData.put("subject", "report of table");
