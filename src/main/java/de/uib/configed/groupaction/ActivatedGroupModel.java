@@ -9,7 +9,6 @@ package de.uib.configed.groupaction;
 import java.util.Set;
 
 import de.uib.configed.Configed;
-import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.utils.logging.Logging;
 
 public class ActivatedGroupModel {
@@ -20,20 +19,12 @@ public class ActivatedGroupModel {
 
 	private boolean active;
 
-	private HostsStatusPanel hostsInfo;
-
-	public ActivatedGroupModel(HostsStatusPanel hostsInfo) {
-		this.hostsInfo = hostsInfo;
-	}
-
 	public void setActive(boolean b) {
 		Logging.info(this, "setActive ", b);
 
 		active = b;
 
 		if (b && groupName != null) {
-			hostsInfo.setGroupName(groupName);
-			hostsInfo.setGroupClientsCount(associatedClients.size());
 			Configed.getSavedStates().setProperty("groupname", groupName);
 		}
 	}
@@ -45,7 +36,6 @@ public class ActivatedGroupModel {
 	public void setNode(String name) {
 		Logging.info(this, "setNode ", name);
 		groupName = name;
-		hostsInfo.setGroupName(name);
 	}
 
 	public void setDescription(String s) {
@@ -54,7 +44,6 @@ public class ActivatedGroupModel {
 
 	public void setAssociatedClients(Set<String> clients) {
 		associatedClients = clients;
-		hostsInfo.setGroupClientsCount(clients.size());
 	}
 
 	public Set<String> getAssociatedClients() {

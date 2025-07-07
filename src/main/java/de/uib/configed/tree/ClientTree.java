@@ -156,11 +156,7 @@ public class ClientTree extends AbstractGroupTree {
 		pathToALL = new TreePath(new Object[] { rootNode, groupNodeFullList });
 
 		if (model != null) {
-			Set<String> allPCs = persistenceController.getHostInfoCollections()
-					.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients);
-			Set<String> permittedHostGroups = persistenceController.getUserRolesConfigDataService()
-					.getHostGroupsPermitted();
-			build(allPCs, permittedHostGroups);
+			build();
 		}
 	}
 
@@ -168,19 +164,17 @@ public class ClientTree extends AbstractGroupTree {
 		return allowedClients;
 	}
 
-	public void build(Collection<String> allPCs, Set<String> permittedHostGroups) {
-		Logging.debug(this, "build, rebuildTree, allPCs  " + allPCs + " size " + allPCs.size());
-		Logging.info(this, "build, permittedHostGroups ", permittedHostGroups);
+	public void build() {
 
 		Map<String, Set<String>> group2Members = persistenceController.getGroupDataService().getFHostGroup2MembersPD();
 		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, new HashSet<>());
 
 		Map<String, Map<String, String>> hostGroups = persistenceController.getGroupDataService().getHostGroupsPD();
 
-		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups, permittedHostGroups);
+		Set<String> expandedPermittedHostGroups = expandPermittedHostGroups(hostGroups);
 		allowedClients = getAllowedClients(group2Members, expandedPermittedHostGroups);
-		allPCs = persistenceController.getHostInfoCollections().getClientsForDepots(configedMain.getSelectedDepots(),
-				allowedClients);
+		Set<String> allPCs = persistenceController.getHostInfoCollections()
+				.getClientsForDepots(configedMain.getSelectedDepots(), allowedClients);
 
 		produceTreeForALL(allPCs);
 		produceAndLinkGroups(persistenceController.getGroupDataService().getHostGroupsPD(),
@@ -194,8 +188,8 @@ public class ClientTree extends AbstractGroupTree {
 	}
 
 	@SuppressWarnings("java:S1168")
-	private static Set<String> expandPermittedHostGroups(Map<String, Map<String, String>> hostGroups,
-			Set<String> permittedGroups) {
+	private Set<String> expandPermittedHostGroups(Map<String, Map<String, String>> hostGroups) {
+		Set<String> permittedGroups = persistenceController.getUserRolesConfigDataService().getHostGroupsPermitted();
 		if (permittedGroups == null) {
 			return null;
 		}

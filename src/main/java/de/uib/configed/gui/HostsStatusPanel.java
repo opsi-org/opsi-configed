@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
@@ -17,140 +18,156 @@ import javax.swing.JTextField;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import com.formdev.flatlaf.extras.components.FlatTextField;
+
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.utils.Icons;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
+	private static final int MIN_WIDTH = 250;
 	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
 
-	private JLabel labelActivated;
-
 	private JLabel labelAllClientsCount;
-	private JTextField fieldGroupActivated;
-	private JLabel labelGroupActivated;
 
-	private JLabel labelSelectedClientsCount;
-	private JTextField fieldSelectedClientsNames;
+	private JLabel labelSelectedClients;
 
-	private JLabel labelSelectedClientsNames;
-	private JTextField fieldActivatedClientsCount;
+	private FlatTextField fieldSelectedClientName;
 
-	private JLabel labelInvolvedDepots;
-	private JTextField fieldInvolvedDepots;
+	private JLabel labelOS;
+	private JLabel labelDeviceType;
 
-	private JLabel connectionStateLabel;
-	private ImageIcon connectedIcon;
-	private ImageIcon disconnectedIcon;
+	private JLabel labelDepots;
+	private JTextField fieldDepots;
 
-	public HostsStatusPanel() {
-		super();
+	private JLabel serverConnectionStateLabel;
+	private ImageIcon serverConnectedIcon;
+	private ImageIcon serverDisconnectedIcon;
+	private ImageIcon clientConnectedIcon;
+	private ImageIcon clientDisconnectedIcon;
+
+	private ConfigedMain configedMain;
+
+	public HostsStatusPanel(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 
 		initComponents();
 		setupLayout();
 	}
 
-	public void setGroupName(String s) {
-		Logging.info(this, "setGroupName ", s);
-		fieldGroupActivated.setText(s);
-	}
-
 	public String getSelectedClientNames() {
-		return fieldSelectedClientsNames.getText();
+		return fieldSelectedClientName.getText();
 	}
 
-	public String getInvolvedDepots() {
-		return fieldInvolvedDepots.getText();
+	public void updateAllClientsCount(int clientsCount) {
+		Logging.info(this, "updateTotalClients clientsCount ", clientsCount);
+		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
 	}
 
-	public String getGroupName() {
-		return fieldGroupActivated.getText();
+	public void updateValues(int clientsInTable, List<String> selectedClients, HostInfo hostInfo) {
+		updateSelectedClientsCount(configedMain.getSelectedClients().size(), clientsInTable);
+
+		// We must update the text before updating the connection status
+		// because the connection status icon is set based on the text in fieldSelectedClientName
+		updateSelectedClientText(selectedClients);
+
+		updateClientConnectionStatus();
+
+		updateSelectedClientInfo(hostInfo);
+
+		updateDepotsOfSelectedClients();
 	}
 
-	public void updateValues(Integer clientsCount, List<String> selectedClients, String depot) {
-		int selectedClientsCount = selectedClients.size();
-
-		Logging.info(this, "updateValues clientsCount, selectedClientsCount ", clientsCount, ", ",
+	public void updateSelectedClientsCount(int selectedClientsCount, int clientsInTable) {
+		Logging.info(this, "updateValues clientsInTable, selectedClientsCount ", clientsInTable, ", ",
 				selectedClientsCount);
 
-		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
-
-		setFieldClientsCount(selectedClientsCount);
-
-		String selectedClientNames = Utils.getListStringRepresentation(selectedClients);
-
-		fieldSelectedClientsNames.setText(selectedClientNames);
-
-		fieldSelectedClientsNames.setToolTipText(
-				"<html><body><p>" + selectedClientNames.replace(";\n", "<br\\ >") + "</p></body></html>");
-
-		fieldInvolvedDepots.setText(depot);
-		fieldInvolvedDepots.setToolTipText("<html><body><p>" + depot.replace(";\n", "<br\\ >") + "</p></body></html>");
+		labelSelectedClients.setText(Configed.getResourceValue("MainFrame.labelSelectedClients") + "  "
+				+ selectedClientsCount + " (" + clientsInTable + ")");
 	}
 
-	public void setGroupClientsCount(int n) {
-		String newS = null;
-		int bracketIndex = fieldActivatedClientsCount.getText().indexOf("(");
-		if (bracketIndex > -1) {
-			String keep = fieldActivatedClientsCount.getText().substring(0, bracketIndex);
-			newS = keep + "(" + n + ")";
+	private void updateSelectedClientText(List<String> selectedClients) {
+		if (selectedClients.size() == 1) {
+			String selectedClient = selectedClients.get(0);
+			fieldSelectedClientName.setText(selectedClient);
 		} else {
-			newS = "(" + n + ")";
+			fieldSelectedClientName.setText(null);
 		}
-
-		fieldActivatedClientsCount.setText(newS);
 	}
 
-	private void setFieldClientsCount(Integer n) {
-		String newS = "";
-		if (n != null) {
-			newS = n + " ";
+	public void updateClientConnectionStatus() {
+		String clientName = fieldSelectedClientName.getText();
+		Logging.info(this, "updateClientConnectionStatus clientName ", clientName);
+		if (clientName.isEmpty() || !configedMain.isHostConnected(clientName)) {
+			fieldSelectedClientName.setLeadingIcon(clientDisconnectedIcon);
+		} else {
+			fieldSelectedClientName.setLeadingIcon(clientConnectedIcon);
+		}
+	}
+
+	private void updateSelectedClientInfo(HostInfo hostInfo) {
+		labelOS.setText(hostInfo.getClientOS());
+		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getClientOSType(), 20));
+
+		labelDeviceType.setText(ClientInfoPanel.transformDeviceType(hostInfo.getClientDeviceType()));
+		labelDeviceType.setIcon(ClientInfoPanel.getDeviceTypeIcon(hostInfo.getClientDeviceType()));
+
+		StringBuilder tooltipText = new StringBuilder();
+		if (!hostInfo.getClientDeviceVendor().isBlank()) {
+			tooltipText.append(hostInfo.getClientDeviceVendor());
 		}
 
-		int bracketIndex = fieldActivatedClientsCount.getText().indexOf("(");
-		if (bracketIndex > -1) {
-			String keep = fieldActivatedClientsCount.getText().substring(bracketIndex);
-			newS = newS + keep;
+		if (!hostInfo.getClientDeviceModel().isBlank()) {
+			if (tooltipText.length() > 0) {
+				tooltipText.append("\n");
+			}
+			tooltipText.append(hostInfo.getClientDeviceModel());
 		}
 
-		fieldActivatedClientsCount.setText(newS);
+		labelDeviceType.setToolTipText(tooltipText.toString());
+	}
+
+	private void updateDepotsOfSelectedClients() {
+		String depotsOfClients = configedMain.getDepotsOfSelectedClients().toString();
+		depotsOfClients = depotsOfClients.substring(1, depotsOfClients.length() - 1);
+		fieldDepots.setText(depotsOfClients);
+		fieldDepots.setToolTipText(depotsOfClients.replace(", ", "\n"));
 	}
 
 	private void initComponents() {
-		labelActivated = new JLabel(Configed.getResourceValue("MainFrame.activated"));
-
-		labelGroupActivated = new JLabel(Configed.getResourceValue("MainFrame.groupActivated"));
-
-		fieldGroupActivated = new JTextField();
-		fieldGroupActivated.setEditable(false);
-
 		labelAllClientsCount = new JLabel();
 
-		labelSelectedClientsCount = new JLabel(Configed.getResourceValue("MainFrame.labelSelected"));
+		labelSelectedClients = new JLabel();
 
-		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelNames"));
+		labelOS = new JLabel();
+		labelDeviceType = new JLabel();
 
-		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
+		labelDepots = new JLabel(Configed.getResourceValue("MainFrame.labelDepots"));
+		fieldDepots = new JTextField();
+		fieldDepots.setEditable(false);
+		fieldDepots.setDragEnabled(true);
 
-		fieldActivatedClientsCount = new JTextField();
-		fieldActivatedClientsCount.setEditable(false);
+		fieldSelectedClientName = new FlatTextField();
+		fieldSelectedClientName.setEditable(false);
+		fieldSelectedClientName.setDragEnabled(true);
 
-		fieldSelectedClientsNames = new JTextField();
-		fieldSelectedClientsNames.setEditable(false);
-		fieldSelectedClientsNames.setDragEnabled(true);
+		serverConnectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
+		serverDisconnectedIcon = Icons.getSelectedIntellijIcon("circle", 24);
+		clientConnectedIcon = Icons.getIntellijIcon("checkmark", Globals.OPSI_OK);
 
-		fieldInvolvedDepots = new JTextField();
-		fieldInvolvedDepots.setEditable(false);
+		// Create a transparent icon for disconnected clients
+		// This is a workaround have an empty space
+		clientDisconnectedIcon = new ImageIcon(
+				new BufferedImage(clientConnectedIcon.getIconWidth(), 1, BufferedImage.TYPE_INT_ARGB));
 
-		connectedIcon = Icons.getSelectedIntellijIcon("circle_checkmark", 24);
-		disconnectedIcon = Icons.getSelectedIntellijIcon("circle", 24);
-
-		connectionStateLabel = new JLabel();
+		serverConnectionStateLabel = new JLabel();
 	}
 
 	private void setupLayout() {
@@ -161,62 +178,52 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(labelSelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(fieldSelectedClientName, MIN_WIDTH, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelDeviceType, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelOS, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
+				.addComponent(labelDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldGroupActivated, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldSelectedClientsNames, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldActivatedClientsCount, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.GAP_SIZE)
-				.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(fieldInvolvedDepots, 0, 0, Short.MAX_VALUE)
-				.addGap(Globals.MIN_GAP_SIZE).addComponent(connectionStateLabel));
+				.addComponent(fieldDepots, MIN_WIDTH, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE).addComponent(serverConnectionStateLabel));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelAllClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelSelectedClients, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelDeviceType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelOS, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(fieldSelectedClientName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldActivatedClientsCount, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(fieldDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(connectionStateLabel))
+						.addComponent(serverConnectionStateLabel))
 				.addGap(Globals.MIN_GAP_SIZE));
 	}
 
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
-		connectionStateLabel.setIcon(connectedIcon);
-		connectionStateLabel.setToolTipText(CONNECTED_TOOLTIP);
+		serverConnectionStateLabel.setIcon(serverConnectedIcon);
+		serverConnectionStateLabel.setToolTipText(CONNECTED_TOOLTIP);
 	}
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-		connectionStateLabel.setIcon(disconnectedIcon);
-		connectionStateLabel.setToolTipText(DISCONNECTED_TOOLTIP);
+		serverConnectionStateLabel.setIcon(serverDisconnectedIcon);
+		serverConnectionStateLabel.setToolTipText(DISCONNECTED_TOOLTIP);
 	}
 
 	@Override

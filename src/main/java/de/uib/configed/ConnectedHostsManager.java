@@ -41,12 +41,20 @@ public class ConnectedHostsManager implements MessagebusListener {
 
 	public void addClientToConnectedList(String clientId) {
 		connectedHostsByMessagebus.add(clientId);
-		updateConnectionStatusInTable(clientId);
+		updateConnectionStatusInGUI(clientId);
 	}
 
 	public void removeClientFromConnectedList(String clientId) {
 		connectedHostsByMessagebus.remove(clientId);
-		updateConnectionStatusInTable(clientId);
+		updateConnectionStatusInGUI(clientId);
+	}
+
+	private void updateConnectionStatusInGUI(String clientName) {
+		// Update the connection status in the HostsStatusPanel
+		ConfigedMain.getMainFrame().getHostsStatusPanel().updateClientConnectionStatus();
+
+		// Update the connection status in the ClientTable
+		updateConnectionStatusInTable(clientName);
 	}
 
 	private void updateConnectionStatusInTable(String clientName) {
