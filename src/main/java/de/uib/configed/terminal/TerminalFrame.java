@@ -13,8 +13,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -180,7 +180,6 @@ public final class TerminalFrame implements MessagebusListener {
 		// result list (allowed clients and depots connected by message bus)
 		List<String> clientsConnectedByMessagebus = getAllowedDevices();
 
-		Collections.sort(clientsConnectedByMessagebus);
 		sessionsDialog.setListData(clientsConnectedByMessagebus);
 		sessionsDialog.show();
 
@@ -201,7 +200,7 @@ public final class TerminalFrame implements MessagebusListener {
 	 * @return List of allowed devices (clients and depots/server)
 	 */
 	private List<String> getAllowedDevices() {
-		// result list (allowed clients and depots connected by message bus)
+		// Result list (allowed clients and depots connected by message bus)
 		List<String> resultListAllowedDevices = new ArrayList<>();
 
 		if (isConfigServerAllowed(forbiddenItems.contains(UserServerConsoleConfig.KEY_OPT_CONFIGSERVER),
@@ -218,9 +217,30 @@ public final class TerminalFrame implements MessagebusListener {
 		List<String> depotsList = persistenceController.getHostInfoCollections().getAllDepotNamesList();
 		Logging.info(this, "terminal, depotsList: ", depotsList);
 
-		Set<String> allClientsDepotsConnected2Msgbus = getAllowedHostsByUserRolesHosts(depotsList);
-		filterByMsgbusForbiddenConfig(resultListAllowedDevices, allClientsDepotsConnected2Msgbus, depotsList);
+		Set<String> allowedHosts = getAllowedHostsByUserRolesHosts(depotsList);
+
+		List<String> filteredHosts = new ArrayList<>(allowedHosts);
+		filterByMsgbusForbiddenConfig(filteredHosts, allowedHosts, depotsList);
+		separateDepotsAndClients(resultListAllowedDevices, filteredHosts, depotsList);
+
 		return resultListAllowedDevices;
+	}
+
+	private void separateDepotsAndClients(List<String> resultList, List<String> filteredHosts,
+			List<String> depotsList) {
+		Set<String> uniqueHosts = new LinkedHashSet<>(filteredHosts);
+		List<String> depots = new ArrayList<>();
+		List<String> clients = new ArrayList<>();
+
+		for (String host : uniqueHosts) {
+			(depotsList.contains(host) ? depots : clients).add(host);
+		}
+
+		depots.sort(String.CASE_INSENSITIVE_ORDER);
+		clients.sort(String.CASE_INSENSITIVE_ORDER);
+
+		resultList.addAll(depots);
+		resultList.addAll(clients);
 	}
 
 	/**
