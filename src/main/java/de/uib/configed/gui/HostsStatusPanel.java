@@ -71,7 +71,21 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
 	}
 
-	public void updateSelectedClients(int selectedClientsCount, int clientsInTable) {
+	public void updateValues(int clientsInTable, List<String> selectedClients, HostInfo hostInfo) {
+		updateSelectedClientsCount(configedMain.getSelectedClients().size(), clientsInTable);
+
+		// We must update the text before updating the connection status
+		// because the connection status icon is set based on the text in fieldSelectedClientName
+		updateSelectedClientText(selectedClients);
+
+		updateClientConnectionStatus();
+
+		updateSelectedClientInfo(hostInfo);
+
+		updateDepotsOfSelectedClients();
+	}
+
+	public void updateSelectedClientsCount(int selectedClientsCount, int clientsInTable) {
 		Logging.info(this, "updateValues clientsInTable, selectedClientsCount ", clientsInTable, ", ",
 				selectedClientsCount);
 
@@ -79,25 +93,26 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 				+ selectedClientsCount + " (" + clientsInTable + ")");
 	}
 
-	public void updateValues(int clientsInTable, List<String> selectedClients, HostInfo hostInfo) {
-		int selectedClientsCount = selectedClients.size();
-
-		updateSelectedClients(configedMain.getSelectedClients().size(), clientsInTable);
-
-		if (selectedClientsCount == 1) {
+	private void updateSelectedClientText(List<String> selectedClients) {
+		if (selectedClients.size() == 1) {
 			String selectedClient = selectedClients.get(0);
-
 			fieldSelectedClientName.setText(selectedClient);
-			if (configedMain.isHostConnected(selectedClient)) {
-				fieldSelectedClientName.setLeadingIcon(clientConnectedIcon);
-			} else {
-				fieldSelectedClientName.setLeadingIcon(clientDisconnectedIcon);
-			}
 		} else {
 			fieldSelectedClientName.setText(null);
-			fieldSelectedClientName.setLeadingIcon(clientDisconnectedIcon);
 		}
+	}
 
+	public void updateClientConnectionStatus() {
+		String clientName = fieldSelectedClientName.getText();
+		Logging.info(this, "updateClientConnectionStatus clientName ", clientName);
+		if (clientName.isEmpty() || !configedMain.isHostConnected(clientName)) {
+			fieldSelectedClientName.setLeadingIcon(clientDisconnectedIcon);
+		} else {
+			fieldSelectedClientName.setLeadingIcon(clientConnectedIcon);
+		}
+	}
+
+	private void updateSelectedClientInfo(HostInfo hostInfo) {
 		labelOS.setText(hostInfo.getClientOS());
 		labelOS.setIcon(Utils.determineIconBasedOnPlatform(hostInfo.getClientOSType(), 20));
 
@@ -117,7 +132,9 @@ public class HostsStatusPanel extends JPanel implements MessagebusListener {
 		}
 
 		labelDeviceType.setToolTipText(tooltipText.toString());
+	}
 
+	private void updateDepotsOfSelectedClients() {
 		String depotsOfClients = configedMain.getDepotsOfSelectedClients().toString();
 		depotsOfClients = depotsOfClients.substring(1, depotsOfClients.length() - 1);
 		fieldDepots.setText(depotsOfClients);

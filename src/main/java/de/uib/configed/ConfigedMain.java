@@ -594,7 +594,7 @@ public class ConfigedMain {
 		selectedClients.clear();
 		if (mainFrame != null) {
 			// Update the info on the bottom with new data
-			mainFrame.getHostsStatusPanel().updateSelectedClients(selectedClients.size(), clientIds.size());
+			mainFrame.getHostsStatusPanel().updateSelectedClientsCount(selectedClients.size(), clientIds.size());
 		}
 		return model;
 	}
