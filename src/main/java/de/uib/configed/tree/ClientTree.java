@@ -370,7 +370,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	// Return null means, all clients are allowed
 	@SuppressWarnings("java:S1168")
-	public void associateClientsToGroups(Iterable<String> clientIds, Map<String, Set<String>> group2Members) {
+	public void associateClientsToGroups(Collection<String> clientIds, Map<String, Set<String>> group2Members) {
 		locationsInDirectory.clear();
 
 		// we build and link the groups
@@ -380,7 +380,9 @@ public class ClientTree extends AbstractGroupTree {
 				Logging.warning("group for groupId ", entry.getKey(), " not found");
 			} else {
 				boolean register = isInDirectory(groupNode);
-				produceClients(entry.getValue(), groupNode, register);
+				Set<String> clientsOfGroup = new HashSet<>(entry.getValue());
+				clientsOfGroup.retainAll(clientIds);
+				produceClients(clientsOfGroup, groupNode, register);
 			}
 		}
 
