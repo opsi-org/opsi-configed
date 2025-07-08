@@ -31,14 +31,14 @@ public class ProductTree extends AbstractGroupTree {
 	public ProductTree(ConfigedMain configedMain) {
 		super(configedMain);
 
-		super.expandPath(new TreePath(groupNodeFullList.getPath()));
+		super.expandPath(new TreePath(groupNodeAllObjects.getPath()));
 	}
 
 	public void setPanels(PanelProductSettings localbootPanel, PanelProductSettings netbootPanel) {
 		this.localbootPanel = localbootPanel;
 		this.netbootPanel = netbootPanel;
 
-		setSelectionPath(new TreePath(groupNodeFullList.getPath()));
+		setSelectionPath(new TreePath(groupNodeAllObjects.getPath()));
 	}
 
 	@Override
@@ -71,10 +71,10 @@ public class ProductTree extends AbstractGroupTree {
 		groupNodeGroups.setAllowsOnlyGroupChilds(true);
 		groupNodeGroups.setFixed(true);
 
-		groupNodeFullList = produceGroupNode(Configed.getResourceValue("ProductTree.allProducts"),
+		groupNodeAllObjects = produceGroupNode(Configed.getResourceValue("ProductTree.allProducts"),
 				Configed.getResourceValue("ProductTree.allProducts.tooltip"));
-		groupNodeFullList.setImmutable(true);
-		groupNodeFullList.setFixed(true);
+		groupNodeAllObjects.setImmutable(true);
+		groupNodeAllObjects.setFixed(true);
 
 		for (Entry<String, Map<String, String>> groupEntry : productGroups.entrySet()) {
 			if ("null".equals(groupEntry.getValue().get("parentGroupId"))
@@ -100,11 +100,11 @@ public class ProductTree extends AbstractGroupTree {
 		}
 
 		for (String productId : productIds) {
-			groupNodeFullList.add(new DefaultMutableTreeNode(productId, false));
+			groupNodeAllObjects.add(new DefaultMutableTreeNode(productId, false));
 		}
 
 		rootNode.add(groupNodeGroups);
-		rootNode.add(groupNodeFullList);
+		rootNode.add(groupNodeAllObjects);
 	}
 
 	@Override

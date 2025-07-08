@@ -146,14 +146,14 @@ public class ClientTree extends AbstractGroupTree {
 		rootNode.add(groupNodeDirectory);
 
 		// ALL
-		groupNodeFullList = produceGroupNode(ALL_CLIENTS_NAME,
+		groupNodeAllObjects = produceGroupNode(ALL_CLIENTS_NAME,
 				Configed.getResourceValue("AbstractGroupTree.allClients.tooltip"));
 
-		rootNode.add(groupNodeFullList);
-		groupNodeFullList.setImmutable(true);
-		groupNodeFullList.setFixed(true);
+		rootNode.add(groupNodeAllObjects);
+		groupNodeAllObjects.setImmutable(true);
+		groupNodeAllObjects.setFixed(true);
 
-		pathToALL = new TreePath(new Object[] { rootNode, groupNodeFullList });
+		pathToALL = new TreePath(new Object[] { rootNode, groupNodeAllObjects });
 
 		if (model != null) {
 			build();
@@ -212,7 +212,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	public void clear() {
 		// clear jtree model
-		groupNodeFullList.removeAllChildren();
+		groupNodeAllObjects.removeAllChildren();
 		groupNodeDirectory.removeAllChildren();
 		groupNodeGroups.removeAllChildren();
 
@@ -286,7 +286,7 @@ public class ClientTree extends AbstractGroupTree {
 
 	public void produceTreeForALL(Collection<String> clientIds) {
 		clientNodesInDirectory.clear();
-		produceClients(clientIds, groupNodeFullList);
+		produceClients(clientIds, groupNodeAllObjects);
 	}
 
 	// we produce all partial pathes that are defined by the persistent groups

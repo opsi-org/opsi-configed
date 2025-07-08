@@ -56,7 +56,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	public final GroupNode rootNode = new GroupNode("");
 
 	protected GroupNode groupNodeGroups;
-	protected GroupNode groupNodeFullList;
+	protected GroupNode groupNodeAllObjects;
 
 	protected Map<String, Map<String, String>> groups = new TreeMap<>();
 	// map of all group maps,
@@ -87,7 +87,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	public boolean isGroupNodeFullList(DefaultMutableTreeNode compareNode) {
-		return groupNodeFullList.equals(compareNode);
+		return groupNodeAllObjects.equals(compareNode);
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		groupNodes.clear();
 		groups.clear();
 		rootNode.removeAllChildren();
-		groupNodeFullList.removeAllChildren();
+		groupNodeAllObjects.removeAllChildren();
 		model.nodeStructureChanged(rootNode);
 		createTree();
 
@@ -230,7 +230,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 		}
 
 		if (getSelectionPaths() == null || getSelectionPaths().length == 0) {
-			addSelectionPath(new TreePath(model.getPathToRoot(groupNodeFullList)));
+			addSelectionPath(new TreePath(model.getPathToRoot(groupNodeAllObjects)));
 		}
 	}
 
@@ -594,7 +594,7 @@ public abstract class AbstractGroupTree extends JTree implements TreeSelectionLi
 	}
 
 	public boolean isChildOfALL(TreeNode node) {
-		return node.getParent() == groupNodeFullList;
+		return node.getParent() == groupNodeAllObjects;
 	}
 
 	public void moveGroupTo(String importID, GroupNode groupNode, GroupNode sourceParentNode,
