@@ -497,7 +497,7 @@ public class ConfigedMain {
 	private TableModel buildClientListTableModel(boolean rebuildTree) {
 		Logging.debug(this, "buildPclistTableModel rebuildTree ", rebuildTree);
 
-		Set<String> clientsForTableModel = produceClientSetForDepots(null);
+		Set<String> clientsForTableModel = produceClientSetForDepots(getAllowedClients());
 
 		Logging.debug(this, " unfilteredList ");
 
@@ -505,19 +505,6 @@ public class ConfigedMain {
 
 		if (rebuildTree) {
 			rebuildTree();
-		}
-
-		// changes the produced unfilteredList
-		if (getAllowedClients() != null) {
-			clientsForTableModel = produceClientSetForDepots(getAllowedClients());
-
-			Logging.info(this, " clientsForTableModel ", clientsForTableModel.size());
-
-			Logging.info(this, "buildPclistTableModel, rebuildTree  ", rebuildTree);
-
-			if (rebuildTree) {
-				rebuildTree();
-			}
 		}
 
 		clientsForTableModel.retainAll(clientsFilteredByTree);
