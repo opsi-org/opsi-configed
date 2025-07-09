@@ -480,24 +480,20 @@ public class ConfigedMain {
 		return dependenciesModel;
 	}
 
-	private Set<String> produceClientSetForDepots(Set<String> allowedClients) {
+	private TableModel buildClientListTableModel(boolean rebuildTree) {
+		Logging.debug(this, "buildPclistTableModel rebuildTree ", rebuildTree);
+
 		Logging.info(this, " producePcListForDepots ", depotsList.getSelectedValuesList(),
-				" running with allowedClients ", allowedClients);
-		Set<String> clientsForDepots = persistenceController.getHostInfoCollections()
-				.getClientsForDepots(depotsList.getSelectedValuesList(), allowedClients);
+				" running with allowedClients ", getAllowedClients());
+
+		// We need to create a copy since we manipulate the set later
+		Set<String> clientsForDepots = new TreeSet<>(persistenceController.getHostInfoCollections()
+				.getClientsForDepots(depotsList.getSelectedValuesList(), getAllowedClients()));
 
 		if (mainFrame != null) {
 			mainFrame.getHostsStatusPanel().updateAllClientsCount(clientsForDepots.size());
 			clientTablePanel.updateTable();
 		}
-
-		return clientsForDepots;
-	}
-
-	private TableModel buildClientListTableModel(boolean rebuildTree) {
-		Logging.debug(this, "buildPclistTableModel rebuildTree ", rebuildTree);
-
-		Set<String> clientsForTableModel = produceClientSetForDepots(getAllowedClients());
 
 		Logging.debug(this, " unfilteredList ");
 
@@ -507,7 +503,7 @@ public class ConfigedMain {
 			rebuildTree();
 		}
 
-		clientsForTableModel.retainAll(clientsFilteredByTree);
+		clientsForDepots.retainAll(clientsFilteredByTree);
 
 		Logging.info(this, " clientTable isFilteredMode ", clientTablePanel.isFilteredMode());
 
@@ -516,11 +512,11 @@ public class ConfigedMain {
 					selectedClients.size());
 
 			// selected clients that are in the pclist0
-			clientsForTableModel.retainAll(selectedClients);
+			clientsForDepots.retainAll(selectedClients);
 		}
 
 		// building table model
-		return buildTableModel(clientsForTableModel);
+		return buildTableModel(clientsForDepots);
 	}
 
 	private TableModel buildTableModel(Set<String> clientIds) {

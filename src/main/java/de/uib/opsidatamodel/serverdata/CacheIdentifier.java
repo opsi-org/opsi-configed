@@ -473,6 +473,11 @@ public enum CacheIdentifier {
 	DEPOT_TO_HOST_TO_HOST_INFO("depot_to_host_to_host_info"),
 
 	/**
+	 * return type {@code  Set<String>}
+	 */
+	CLIENTS_FOR_DEPOTS("clients_for_depots"),
+
+	/**
 	 * return type {@code List<String>}
 	 */
 	DEPOT_NAMES_LIST("depot_names_list"),

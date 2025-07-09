@@ -489,7 +489,6 @@ public final class ServerActionManager {
 					(String) depotCombo.getSelectedItem());
 			Logging.checkErrorList();
 			configedMain.refreshClientListKeepingGroup();
-
 		}
 	}
 

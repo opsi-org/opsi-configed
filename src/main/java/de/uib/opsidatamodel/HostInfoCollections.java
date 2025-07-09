@@ -350,13 +350,7 @@ public class HostInfoCollections {
 		cacheManager.setCachedData(CacheIdentifier.FNODE_TO_TREE_PARENTS, fNode2TreeParents);
 	}
 
-	/**
-	 * This Method loads all clients for given depots As a side effect, all
-	 * hostinfos and the map to which depots these clients belong are loaded
-	 * 
-	 * @return Set of the clients
-	 */
-	public Set<String> getClientsForDepots(Iterable<String> depots, Collection<String> allowedClients) {
+	public void updateClientsForDepots(Iterable<String> depots, Collection<String> allowedClients) {
 		retrieveOpsiHostsPD();
 
 		Logging.debug(this, " ------ building pcList");
@@ -371,9 +365,6 @@ public class HostInfoCollections {
 
 		Map<String, Map<String, HostInfo>> depot2Host2HostInfo = cacheManager
 				.getCachedData(CacheIdentifier.DEPOT_TO_HOST_TO_HOST_INFO, Map.class);
-		if (depot2Host2HostInfo == null || depot2Host2HostInfo.isEmpty()) {
-			return setOfPCs;
-		}
 
 		Map<String, HostInfo> mapPCInfomap = new HashMap<>();
 		Map<String, String> mapPCBelongsToDepot = new HashMap<>();
@@ -396,8 +387,21 @@ public class HostInfoCollections {
 
 		cacheManager.setCachedData(CacheIdentifier.MAP_PC_INFO_MAP, mapPCInfomap);
 		cacheManager.setCachedData(CacheIdentifier.MAP_PC_BELONGS_TO_DEPOT, mapPCBelongsToDepot);
+		cacheManager.setCachedData(CacheIdentifier.CLIENTS_FOR_DEPOTS, setOfPCs);
+	}
 
-		return setOfPCs;
+	/**
+	 * This Method loads all clients for given depots As a side effect, all
+	 * hostinfos and the map to which depots these clients belong are loaded
+	 * 
+	 * @return Set of the clients
+	 */
+	public Set<String> getClientsForDepots(Iterable<String> depots, Collection<String> allowedClients) {
+		if (!cacheManager.isDataCached(CacheIdentifier.CLIENTS_FOR_DEPOTS)) {
+			updateClientsForDepots(depots, allowedClients);
+		}
+
+		return cacheManager.getCachedData(CacheIdentifier.CLIENTS_FOR_DEPOTS, Set.class);
 	}
 
 	private void setDepot(String clientName, String depotId) {

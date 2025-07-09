@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.gui.DepotsList;
+import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.logging.Logging;
 
 public class DepotListSelectionListener implements ListSelectionListener {
@@ -46,6 +47,8 @@ public class DepotListSelectionListener implements ListSelectionListener {
 
 		// when running after the first run, we deactivate buttons
 		if (initialDataLoader.isDataLoaded()) {
+			PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
+					.updateClientsForDepots(depotsList.getSelectedValuesList(), configedMain.getAllowedClients());
 			configedMain.initialTreeActivation();
 
 			configedMain.getProductTree().reInitTree();
