@@ -73,6 +73,9 @@ public class LicenseDataReloadHandler implements ReloadHandler {
 
 		if (cacheManager.isDataCached(Arrays.asList(CacheIdentifier.ROWS_LICENSES_RECONCILIATION,
 				CacheIdentifier.ROWS_LICENSES_STATISTICS))) {
+			// This must be cleared so that the clients for the depots are updated
+			cacheManager.clearCachedData(CacheIdentifier.CLIENTS_FOR_DEPOTS);
+
 			// Reload this to update the clients that we have to get audit data from (for statistics and reconciliation)
 			cacheManager.clearCachedData(CacheIdentifier.OPSI_HOST_NAMES);
 			executor.runInParallel(hostInfoCollections::retrieveOpsiHostsPD);

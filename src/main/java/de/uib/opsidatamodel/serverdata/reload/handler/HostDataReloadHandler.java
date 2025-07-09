@@ -38,6 +38,8 @@ public class HostDataReloadHandler implements ReloadHandler {
 
 	@Override
 	public void handle(String event) {
+		// This must be cleared so that the clients for the depots are updated
+		cacheManager.clearCachedData(CacheIdentifier.CLIENTS_FOR_DEPOTS);
 
 		ParallelTaskExecutor executor = new ParallelTaskExecutor();
 
