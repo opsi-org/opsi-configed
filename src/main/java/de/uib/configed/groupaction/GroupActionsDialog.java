@@ -60,9 +60,6 @@ public class GroupActionsDialog {
 
 		JPanel panel = defineImageActionPanel();
 
-		// Load data after the panel has been created
-		reload();
-
 		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
 				new Object[] { buttonSetup, buttonReload, Configed.getResourceValue("buttonCancel") });
 
