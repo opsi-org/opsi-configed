@@ -157,18 +157,37 @@ public final class TerminalFrame implements MessagebusListener {
 			return;
 		}
 
-		tabbedPane.addTerminalTab();
 		displaySessionsDialog();
+		if (session != null) {
+			tabbedPane.addTerminalTab();
+			tabbedPane.openSessionOnSelectedTab(session);
+		}
 	}
 
-	public void displaySessionsDialog() {
+	public void changeSession() {
+		if (restrictView) {
+			return;
+		}
+
+		displaySessionsDialog();
+		if (session != null) {
+			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
+			if (widget != null) {
+				tabbedPane.getSelectedTerminalWidget().close();
+				tabbedPane.resetTerminalWidgetOnSelectedTab();
+				tabbedPane.openSessionOnSelectedTab(session);
+			}
+		}
+	}
+
+	private void displaySessionsDialog() {
 		if (restrictView) {
 			return;
 		}
 
 		// We want to show the dialog on the owner of the terminal frame only if it is visible
 		Component owner;
-		if (frame.isVisible()) {
+		if (frame != null && frame.isVisible()) {
 			owner = frame;
 		} else {
 			owner = ConfigedMain.getMainFrame();
@@ -184,12 +203,9 @@ public final class TerminalFrame implements MessagebusListener {
 		sessionsDialog.show();
 
 		if (sessionsDialog.wasAccepted()) {
-			TerminalWidget widget = tabbedPane.getSelectedTerminalWidget();
-			if (widget != null) {
-				tabbedPane.getSelectedTerminalWidget().close();
-				tabbedPane.resetTerminalWidgetOnSelectedTab();
-				tabbedPane.openSessionOnSelectedTab(sessionsDialog.getSelectedValue());
-			}
+			session = sessionsDialog.getSelectedValue();
+		} else {
+			session = null;
 		}
 	}
 
@@ -371,12 +387,8 @@ public final class TerminalFrame implements MessagebusListener {
 		tabbedPane.setMessagebus(messagebus);
 		tabbedPane.init();
 		tabbedPane.addTerminalTab();
-		if (!restrictView) {
-			if (session != null) {
-				tabbedPane.openSessionOnSelectedTab(session);
-			} else {
-				displaySessionsDialog();
-			}
+		if (!restrictView && session != null) {
+			tabbedPane.openSessionOnSelectedTab(session);
 		} else {
 			tabbedPane.getSelectedTerminalWidget().connectPipedTty();
 		}
@@ -431,7 +443,10 @@ public final class TerminalFrame implements MessagebusListener {
 
 	public void display() {
 		if (frame == null) {
-			createAndShowGUI();
+			displaySessionsDialog();
+			if (restrictView || session != null) {
+				createAndShowGUI();
+			}
 		} else {
 			frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			frame.setVisible(true);

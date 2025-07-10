@@ -250,7 +250,7 @@ public class TerminalWidget extends JediTermWidget implements MessagebusListener
 						new TerminalAction(
 								((TerminalSettingsProvider) settingsProvider).getChangeSessionActionPresentation(),
 								(KeyEvent input) -> {
-									terminalFrame.displaySessionsDialog();
+									terminalFrame.changeSession();
 									return true;
 								}).withEnabledSupplier(() -> !isViewRestricted).withMnemonicKey(KeyEvent.VK_S));
 	}
