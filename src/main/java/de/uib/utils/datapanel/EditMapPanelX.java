@@ -8,6 +8,7 @@ package de.uib.utils.datapanel;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
 import javax.swing.table.TableCellRenderer;
@@ -252,6 +254,20 @@ public class EditMapPanelX extends DefaultEditMapPanel {
 
 				prepareRendererForJTable((JComponent) c, table, row, col);
 				return c;
+			}
+
+			// We need this so that the keybinding for Ctrl+S is not processed by this table
+			// but by the main frame, which will trigger the save action.
+			// This way, we will not edit the cell when pressing Ctrl+S.
+			@Override
+			public boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
+				if (ks.getKeyCode() == KeyEvent.VK_S && e.isControlDown()) {
+					// if we return false here, the keybinding will be processed by the
+					// parent component, which is the main frame, and trigger the save action
+					return false;
+				}
+
+				return super.processKeyBinding(ks, e, condition, pressed);
 			}
 		};
 
