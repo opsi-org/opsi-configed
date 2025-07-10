@@ -48,7 +48,7 @@ public class TerminalMenuBar extends JMenuBar {
 				Configed.getResourceValue("Terminal.menuBar.fileMenu.changeSession"));
 		jMenuItemChangeSession.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		jMenuItemChangeSession.addActionListener(actionEvent -> frame.displaySessionsDialog());
+		jMenuItemChangeSession.addActionListener(actionEvent -> frame.changeSession());
 
 		JMenu menuFile = new JMenu(Configed.getResourceValue("MainFrame.jMenuFile"));
 		menuFile.setEnabled(!restrictView);
