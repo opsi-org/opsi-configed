@@ -195,9 +195,20 @@ public class PropertiesCellEditorAndRenderer extends AbstractCellEditor implemen
 		if (selectionMode == BOOLEAN) {
 			return Collections.singletonList(checkBox.getChecked());
 		} else if (selectionMode == SINGLE_SELECTION) {
-			return Collections.singletonList(comboBox.getEditor().getItem());
+			return Collections.singletonList(getComboBoxValue());
 		} else {
 			return listSelectionDialog.getSelectedValues();
+		}
+	}
+
+	// The correct value for the combo box depends on whether it is editable or not.
+	// If it is editable, we return the item from the editor, otherwise we return the
+	// selected item from the combo box.
+	private Object getComboBoxValue() {
+		if (comboBox.isEditable()) {
+			return comboBox.getEditor().getItem();
+		} else {
+			return comboBox.getSelectedItem();
 		}
 	}
 
