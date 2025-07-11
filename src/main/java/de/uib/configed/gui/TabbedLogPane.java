@@ -18,14 +18,14 @@ import javax.swing.event.ChangeEvent;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.logpane.LogPanel;
+import de.uib.configed.gui.logpane.LogPaneMsg;
 import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
 public class TabbedLogPane extends JTabbedPane {
-	private LogPanel[] textPanes;
+	private LogTabComponent[] textPanes;
 	private String[] idents = Utils.getLogTypes();
 	private final List<String> identsList;
 
@@ -47,7 +47,7 @@ public class TabbedLogPane extends JTabbedPane {
 
 		identsList = Arrays.asList(idents);
 
-		textPanes = new LogPanel[idents.length];
+		textPanes = new LogTabComponent[idents.length];
 
 		for (int i = 0; i < idents.length; i++) {
 			initLogTabComponent(i, Configed.getResourceValue("MainFrame.DefaultTextForLogfiles"));
@@ -70,7 +70,7 @@ public class TabbedLogPane extends JTabbedPane {
 				configedMain);
 		logTabComponent.setLogFileType(idents[i]);
 		textPanes[i] = logTabComponent;
-		super.addTab(idents[i], textPanes[i]);
+		super.addTab(idents[i], textPanes[i].initUI());
 	}
 
 	public void setDocuments(String logtype) {
@@ -89,7 +89,7 @@ public class TabbedLogPane extends JTabbedPane {
 		}
 
 		if (document == null) {
-			textPanes[i].setLogText("");
+			textPanes[i].dispatch(new LogPaneMsg.SetLogText(document));
 			textPanes[i].setTitle("");
 			return;
 		}
@@ -99,7 +99,7 @@ public class TabbedLogPane extends JTabbedPane {
 
 		textPanes[i].setTitle(idents[i] + "  " + selectedClient);
 		textPanes[i].setInfo(selectedClient);
-		textPanes[i].setLogText(document);
+		textPanes[i].dispatch(new LogPaneMsg.SetLogText(document));
 	}
 
 	private boolean logfileExists(String logtype) {

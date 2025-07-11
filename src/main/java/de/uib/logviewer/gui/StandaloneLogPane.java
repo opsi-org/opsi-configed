@@ -9,18 +9,22 @@ package de.uib.logviewer.gui;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import de.uib.configed.Configed;
-import de.uib.configed.gui.logpane.LogPanel;
+import de.uib.configed.gui.logpane.LogPaneComponent;
+import de.uib.configed.gui.logpane.LogPaneModel;
+import de.uib.configed.gui.logpane.LogPaneMsg;
 import de.uib.utils.logging.Logging;
 
-public class StandaloneLogPane extends LogPanel {
+public class StandaloneLogPane extends LogPaneComponent {
 	private LogFrame logFrame;
 
 	public StandaloneLogPane(LogFrame logFrame) {
-		super("", true);
+		super(new LogPaneModel("", true, MIN_LEVEL, MAX_LEVEL, List.of(), null, 0, "", "", false, new ArrayList<>()));
 
 		this.logFrame = logFrame;
 	}
@@ -28,7 +32,7 @@ public class StandaloneLogPane extends LogPanel {
 	@Override
 	public void reload() {
 		int caretPosition = getCaretPosition();
-		super.setLogText(reloadFile(logFrame.getFileName()));
+		super.dispatch(new LogPaneMsg.SetLogText(reloadFile(logFrame.getFileName())));
 		super.setTitle(logFrame.getFileName());
 		super.setCaretPosition(caretPosition);
 		super.removeAllHighlights();
@@ -36,7 +40,7 @@ public class StandaloneLogPane extends LogPanel {
 
 	public void close() {
 		LogFrame.resetFileName();
-		super.setLogText(logFrame.getFileName());
+		super.dispatch(new LogPaneMsg.SetLogText(logFrame.getFileName()));
 		super.setTitle(logFrame.getFileName());
 		super.removeAllHighlights();
 	}
@@ -55,8 +59,8 @@ public class StandaloneLogPane extends LogPanel {
 			return logFrame.readFile(fn);
 		} else {
 			Logging.error(this, "File does not exist: ", fn);
-			JOptionPane.showMessageDialog(this, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn, null,
-					JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(logFrame, Configed.getResourceValue("LogFrame.fileDoesNotExist") + " " + fn,
+					null, JOptionPane.WARNING_MESSAGE);
 			return "";
 		}
 	}

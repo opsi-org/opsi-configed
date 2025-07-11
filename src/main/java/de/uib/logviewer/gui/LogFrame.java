@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -37,6 +38,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.MenuBarController;
+import de.uib.configed.gui.logpane.LogPaneMsg;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utils.ExtractorUtil;
@@ -163,7 +165,7 @@ public class LogFrame extends JFrame {
 
 		JButton iconButtonCopy = new JButton(Icons.getIntellijIcon("copy"));
 		iconButtonCopy.setToolTipText(Configed.getResourceValue("LogFrame.buttonCopy"));
-		iconButtonCopy.addActionListener(actionEvent -> logPane.floatExternal());
+		iconButtonCopy.addActionListener(actionEvent -> logPane.dispatch(new LogPaneMsg.FloatExternal()));
 
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(iconButtonOpen);
@@ -189,15 +191,16 @@ public class LogFrame extends JFrame {
 		JToolBar jToolBar = createIconsToolbar();
 
 		logPane = new StandaloneLogPane(this);
+		JComponent panel = logPane.initUI();
 
 		GroupLayout layoutIconPane1 = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layoutIconPane1);
 
 		layoutIconPane1
-				.setHorizontalGroup(layoutIconPane1.createParallelGroup().addComponent(jToolBar).addComponent(logPane));
+				.setHorizontalGroup(layoutIconPane1.createParallelGroup().addComponent(jToolBar).addComponent(panel));
 
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(jToolBar).addGap(Globals.MIN_GAP_SIZE).addComponent(logPane));
+				.addComponent(jToolBar).addGap(Globals.MIN_GAP_SIZE).addComponent(panel));
 
 		JMenuBar jMenuBar = new JMenuBar();
 		jMenuBar.add(setupMenuFile());
@@ -212,7 +215,7 @@ public class LogFrame extends JFrame {
 			if (!logText.isEmpty()) {
 				logPane.setTitle(fileName);
 				setTitle(fileName);
-				logPane.setLogText(logText);
+				logPane.dispatch(new LogPaneMsg.SetLogText(logText));
 			} else {
 				setEmptyData();
 			}
@@ -222,7 +225,7 @@ public class LogFrame extends JFrame {
 	}
 
 	private void setEmptyData() {
-		logPane.setLogText("");
+		logPane.dispatch(new LogPaneMsg.SetLogText(""));
 		logPane.setTitle("");
 		setTitle(null);
 	}
@@ -259,7 +262,7 @@ public class LogFrame extends JFrame {
 
 		if (fileName != null && !fileName.isEmpty()) {
 			Logging.info(this, "Used memory ", Utils.usedMemory());
-			logPane.setLogText(readFile(fileName));
+			logPane.dispatch(new LogPaneMsg.SetLogText(readFile(fileName)));
 			Logging.info(this, "Used memory ", Utils.usedMemory());
 			logPane.setTitle(fileName);
 			setTitle(fileName);
@@ -355,7 +358,8 @@ public class LogFrame extends JFrame {
 			StandaloneLogPane externalLogPane = new StandaloneLogPane(this);
 			externalLogPane.externalize(entry.getKey(), getSize());
 			externalLogPane.setTitle(entry.getKey());
-			externalLogPane.setLogText(entry.getValue());
+			// externalLogPane.setLogText(entry.getValue());
+			externalLogPane.dispatch(new LogPaneMsg.SetLogText(entry.getValue()));
 		}
 	}
 

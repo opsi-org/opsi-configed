@@ -11,7 +11,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -21,12 +23,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.logpane.LogPanel;
+import de.uib.configed.gui.logpane.LogPaneComponent;
+import de.uib.configed.gui.logpane.LogPaneModel;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
 
-public class LogTabComponent extends LogPanel {
+public class LogTabComponent extends LogPaneComponent {
 	private static final String ALL_LOGFILES_SUFFIX = "all";
 	private static final byte[] CRLF = new byte[] { '\r', '\n' };
 
@@ -35,7 +38,8 @@ public class LogTabComponent extends LogPanel {
 	private String logFileType;
 
 	public LogTabComponent(String defaultText, boolean withPopup, ConfigedMain configedMain) {
-		super(defaultText, withPopup);
+		super(new LogPaneModel(defaultText, withPopup, MIN_LEVEL, MAX_LEVEL, List.of(), null, 0, "", "", false,
+				new ArrayList<>()));
 		this.configedMain = configedMain;
 	}
 

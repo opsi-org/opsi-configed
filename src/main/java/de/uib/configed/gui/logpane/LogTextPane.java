@@ -39,7 +39,7 @@ public class LogTextPane extends JTextPane {
 	private TreeMap<Integer, Integer> docLinestartPosition2lineCount;
 	private TreeMap<Integer, Integer> lineCount2docLinestartPosition;
 
-	private Integer showLevel = LogPanel.MIN_LEVEL;
+	private Integer showLevel = LogPaneComponent.MIN_LEVEL;
 
 	private Integer displayFontSize = 11;
 
