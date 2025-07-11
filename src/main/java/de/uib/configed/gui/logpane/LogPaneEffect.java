@@ -9,7 +9,7 @@ package de.uib.configed.gui.logpane;
 public sealed interface LogPaneEffect permits LogPaneEffect.None, LogPaneEffect.IncreaseFontSize,
 		LogPaneEffect.DecreaseFontSize, LogPaneEffect.Reload, LogPaneEffect.Search, LogPaneEffect.SetLogText,
 		LogPaneEffect.SetType, LogPaneEffect.SetLogLevel, LogPaneEffect.Download, LogPaneEffect.DownloadAsZip,
-		LogPaneEffect.DownloadAllAsZip, LogPaneEffect.FloatExternal, LogPaneEffect.ShowDialog {
+		LogPaneEffect.DownloadAllAsZip, LogPaneEffect.FloatExternal {
 	final class None implements LogPaneEffect {}
 
 	final class IncreaseFontSize implements LogPaneEffect {}
@@ -36,8 +36,5 @@ public sealed interface LogPaneEffect permits LogPaneEffect.None, LogPaneEffect.
 	}
 
 	record FloatExternal() implements LogPaneEffect {
-	}
-
-	record ShowDialog(String message) implements LogPaneEffect {
 	}
 }

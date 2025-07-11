@@ -122,9 +122,6 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		case LogPaneEffect.DownloadAsZip downloadAsZip -> downloadAsZip();
 		case LogPaneEffect.DownloadAllAsZip downloadAllAsZip -> downloadAllAsZip();
 		case LogPaneEffect.FloatExternal floatExternal -> floatExternal();
-		case LogPaneEffect.ShowDialog(String message) -> {
-			// Do nothing.
-		}
 		case LogPaneEffect.None none -> {
 			// No operation needed
 		}
