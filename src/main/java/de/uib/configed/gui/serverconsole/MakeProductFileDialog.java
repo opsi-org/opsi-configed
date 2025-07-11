@@ -32,6 +32,7 @@ import de.uib.configed.gui.serverconsole.command.MultiCommandTemplate;
 import de.uib.configed.gui.serverconsole.command.SingleCommandOpsiMakeProductFile;
 import de.uib.configed.gui.serverconsole.command.SingleCommandOpsiSetRights;
 import de.uib.configed.gui.serverconsole.command.SingleCommandTemplate;
+import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 
@@ -117,7 +118,7 @@ public class MakeProductFileDialog {
 		jLabelDir = new JLabel(Configed.getResourceValue("MakeProductFileDialog.serverDir"));
 		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
 
-		autocompletion.setCombobox(new CompletionComboBox<>(
+		autocompletion.setCombobox(new AutoCompletionComboBox<>(
 				new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
 			@Override
 			public void setSelectedItem(Object item) {

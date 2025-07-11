@@ -23,11 +23,12 @@ import javax.swing.JTextField;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.serverconsole.command.CommandFactory;
+import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
 import de.uib.configed.share.WebDAVClient;
 import de.uib.configed.share.logging.Logging;
 
 public class CompletionComboButton {
-	private JComboBox<String> combobox;
+	private AutoCompletionComboBox<String> combobox;
 	private JButton button;
 	private JTextField textfield;
 	private Set<String> defaultvalues;
@@ -104,7 +105,7 @@ public class CompletionComboButton {
 		button = new JButton(Configed.getResourceValue("CompletionComboButton.findSubfolders"));
 		button.setToolTipText(Configed.getResourceValue("CompletionComboButton.findSubfolders.tooltip"));
 		button.addActionListener(actionEvent -> doButtonAction());
-		combobox = new CompletionComboBox<>(new DefaultComboBoxModel<>(defaultvalues.toArray(new String[0])));
+		combobox = new AutoCompletionComboBox<>(new DefaultComboBoxModel<>(defaultvalues.toArray(new String[0])));
 	}
 
 	public final void initCombobox() {
@@ -171,7 +172,7 @@ public class CompletionComboButton {
 		return combobox;
 	}
 
-	public void setCombobox(JComboBox<String> cb) {
+	public void setCombobox(AutoCompletionComboBox<String> cb) {
 		combobox = cb;
 	}
 
