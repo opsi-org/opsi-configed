@@ -9,8 +9,6 @@ package de.uib.logviewer.gui;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -24,7 +22,7 @@ public class StandaloneLogPane extends LogPaneComponent {
 	private LogFrame logFrame;
 
 	public StandaloneLogPane(LogFrame logFrame) {
-		super(new LogPaneModel("", true, MIN_LEVEL, MAX_LEVEL, List.of(), null, 0, "", "", false, new ArrayList<>()));
+		super(LogPaneModel.builder().build());
 
 		this.logFrame = logFrame;
 	}

@@ -22,7 +22,7 @@ public class LogPaneUpdate {
 		case LogPaneMsg.SetLogText(String text) -> new UpdateResult<>(model.withLogText(text),
 				new LogPaneEffect.SetLogText());
 		case LogPaneMsg.Search(String query) -> {
-			List<String> newHistory = new ArrayList<>(model.searchHistory());
+			List<String> newHistory = new ArrayList<>(model.getSearchHistory());
 			if (!newHistory.contains(query)) {
 				newHistory.add(query);
 			}

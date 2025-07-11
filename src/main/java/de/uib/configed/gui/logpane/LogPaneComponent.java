@@ -96,7 +96,7 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 		setLayout();
 
-		if (model.withPopup()) {
+		if (model.isWithPopup()) {
 			initPopupMenu();
 		}
 		return rootPanel;
@@ -104,8 +104,8 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 	@Override
 	protected void refreshView() {
-		sliderLevel.setValue(model.showLevel());
-		comboType.setSelectedItem(model.selectedType());
+		sliderLevel.setValue(model.getShowLevel());
+		comboType.setSelectedItem(model.getSelectedType());
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 		case LogPaneEffect.Reload reload -> reload();
 		case LogPaneEffect.IncreaseFontSize increaseFontSize -> increaseFontSize();
 		case LogPaneEffect.DecreaseFontSize decreaseFontSize -> reduceFontSize();
-		case LogPaneEffect.SetLogText setLogText -> setLogText(model.logText());
+		case LogPaneEffect.SetLogText setLogText -> setLogText(model.getLogText());
 		case LogPaneEffect.SetType setType -> logTextPane.applyType(comboType.getSelectedItem());
 		case LogPaneEffect.SetLogLevel setLogLevel -> activateShowLevel();
 		case LogPaneEffect.Download download -> download();
@@ -130,9 +130,9 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 
 	private void initComponents() {
 		rootPanel = new JPanel();
-		logTextPane = new LogTextPane(model.logText());
-		if (model.logText() != null) {
-			logTextPane.setText(model.logText());
+		logTextPane = new LogTextPane(model.getLogText());
+		if (model.getLogText() != null) {
+			logTextPane.setText(model.getLogText());
 		}
 
 		logTextPane.addKeyListener(this);
@@ -334,7 +334,7 @@ public class LogPaneComponent extends TeaComponent<LogPaneModel, LogPaneMsg, Log
 	}
 
 	private void floatExternal() {
-		LogPaneComponent copyOfMe = new LogPaneComponent(model.copy().withPopup(false));
+		LogPaneComponent copyOfMe = new LogPaneComponent(model.toBuilder().build().withWithPopup(false));
 		externalize(copyOfMe, title, rootPanel.getParent().getSize());
 	}
 

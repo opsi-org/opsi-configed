@@ -6,69 +6,34 @@
 
 package de.uib.configed.gui.logpane;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public record LogPaneModel(String logText, boolean withPopup, int showLevel, int maxExistingLevel,
-		List<String> typesList, String selectedType, int caretPosition, String info, String title,
-		boolean caseSensitive, List<String> searchHistory) {
-	public LogPaneModel withLogText(String logText) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
+import lombok.Builder;
+import lombok.Value;
+import lombok.With;
 
-	public LogPaneModel withPopup(boolean withPopup) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withShowLevel(int showLevel) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withMaxExistingLevel(int maxExistingLevel) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withTypesList(List<String> typesList) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withSelectedType(String selectedType) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withCaretPosition(int caretPosition) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withInfo(String info) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withTitle(String title) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withCaseSensitive(boolean caseSensitive) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel withSearchHistory(List<String> searchHistory) {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
-	public LogPaneModel copy() {
-		return new LogPaneModel(logText, withPopup, showLevel, maxExistingLevel, typesList, selectedType, caretPosition,
-				info, title, caseSensitive, searchHistory);
-	}
-
+@Value
+@With
+@Builder(toBuilder = true)
+public class LogPaneModel {
+	@Builder.Default
+	String logText = "";
+	@Builder.Default
+	boolean withPopup = true;
+	@Builder.Default
+	int showLevel = LogPaneComponent.MIN_LEVEL;
+	@Builder.Default
+	int maxExistingLevel = LogPaneComponent.MAX_LEVEL;
+	@Builder.Default
+	List<String> typesList = List.of();
+	String selectedType;
+	int caretPosition;
+	@Builder.Default
+	String info = "";
+	@Builder.Default
+	String title = "";
+	boolean caseSensitive;
+	@Builder.Default
+	List<String> searchHistory = new ArrayList<>();
 }

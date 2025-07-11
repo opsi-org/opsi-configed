@@ -11,9 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -38,8 +36,7 @@ public class LogTabComponent extends LogPaneComponent {
 	private String logFileType;
 
 	public LogTabComponent(String defaultText, boolean withPopup, ConfigedMain configedMain) {
-		super(new LogPaneModel(defaultText, withPopup, MIN_LEVEL, MAX_LEVEL, List.of(), null, 0, "", "", false,
-				new ArrayList<>()));
+		super(LogPaneModel.builder().logText(defaultText).withPopup(withPopup).build());
 		this.configedMain = configedMain;
 	}
 
