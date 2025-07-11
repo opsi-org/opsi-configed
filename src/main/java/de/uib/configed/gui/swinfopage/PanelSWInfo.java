@@ -25,12 +25,10 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -266,29 +264,6 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void buildPanel() {
-		JTable jTable = new JTable(new SWInfoTableModel());
-
-		jTable.setAutoCreateRowSorter(true);
-		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
-		tableSorter.setComparator(7, new OSComparator());
-
-		List<RowSorter.SortKey> list = new ArrayList<>(2);
-		list.add(new RowSorter.SortKey(7, SortOrder.ASCENDING));
-		list.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
-		tableSorter.setSortKeys(list);
-		tableSorter.sort();
-
-		jTable.setDefaultRenderer(Object.class, new OSTableCellRenderer());
-		jTable.getColumnModel().getColumn(0).setPreferredWidth(400);
-		jTable.getColumnModel().getColumn(1).setPreferredWidth(200);
-		jTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-		jTable.getColumnModel().getColumn(7)
-				.setCellRenderer(new BooleanIconTableCellRenderer(Icons.getIntellijIcon("checkmark"), null));
-		jTable.setColumnSelectionAllowed(true);
-		jTable.setRowSelectionAllowed(true);
-		jTable.setDragEnabled(true);
-		JScrollPane scrollPaneSWInfo = new JScrollPane(jTable);
-
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);
 
@@ -311,8 +286,8 @@ public class PanelSWInfo extends JPanel {
 				}
 			};
 
-			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getGenEditTable(),
-					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
+			popupTrait.addPopupListenersTo(
+					new JComponent[] { this, panelTable.getGenEditTable(), panelTable.getTheScrollpane() });
 		}
 	}
 
@@ -545,31 +520,5 @@ public class PanelSWInfo extends JPanel {
 		Logging.info(this, "setHost", hostId, " -- ");
 
 		this.hostId = hostId;
-	}
-
-	private static class SWInfoTableModel extends AbstractTableModel {
-		public SWInfoTableModel() {
-			super();
-		}
-
-		@Override
-		public int getRowCount() {
-			return 0;
-		}
-
-		@Override
-		public int getColumnCount() {
-			return SWAuditClientEntry.KEYS.size();
-		}
-
-		@Override
-		public String getColumnName(int column) {
-			return SWAuditClientEntry.KEYS.get(column);
-		}
-
-		@Override
-		public Object getValueAt(int row, int col) {
-			return null;
-		}
 	}
 }
