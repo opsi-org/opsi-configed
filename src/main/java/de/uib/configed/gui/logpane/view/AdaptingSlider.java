@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.logpane;
+package de.uib.configed.gui.logpane.view;
 
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -19,6 +19,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.uib.configed.Globals;
+import de.uib.configed.gui.logpane.LogPaneComponent;
+import de.uib.configed.gui.logpane.LogPaneMsg;
 import de.uib.utils.logging.Logging;
 
 public class AdaptingSlider extends JSlider implements ChangeListener, MouseWheelListener {

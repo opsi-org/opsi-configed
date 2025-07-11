@@ -4,7 +4,7 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-package de.uib.configed.gui.logpane;
+package de.uib.configed.gui.logpane.view;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -27,6 +27,7 @@ import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.logpane.LogPaneComponent;
 import de.uib.utils.logging.Logging;
 
 public class LogTextPane extends JTextPane {

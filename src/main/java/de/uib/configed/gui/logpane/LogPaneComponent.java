@@ -35,6 +35,8 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.TeaComponent;
+import de.uib.configed.gui.logpane.view.AdaptingSlider;
+import de.uib.configed.gui.logpane.view.LogTextPane;
 import de.uib.utils.Icons;
 import de.uib.utils.logging.Logging;
 import de.uib.utils.swing.PopupMenuTrait;
