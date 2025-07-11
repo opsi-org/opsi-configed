@@ -388,5 +388,13 @@
             <artifactId>sardine</artifactId>
             <version>5.13</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.13.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
