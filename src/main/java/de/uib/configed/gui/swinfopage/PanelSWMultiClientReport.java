@@ -19,12 +19,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.swing.PanelStateSwitch;
 import de.uib.configed.gui.swinfopage.PanelSWInfo.KindOfExport;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PanelStateSwitch;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelSWMultiClientReport extends JPanel {
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";

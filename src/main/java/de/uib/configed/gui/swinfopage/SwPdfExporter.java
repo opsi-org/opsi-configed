@@ -11,8 +11,8 @@ import java.util.Map;
 
 import javax.swing.JTable;
 
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ExporterToPDF;
+import de.uib.configed.gui.share.table.ExporterToPDF;
+import de.uib.configed.share.logging.Logging;
 
 public class SwPdfExporter extends AbstractSWExporter {
 	private JTable theTable;

@@ -17,24 +17,18 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.configed.ChangedDataManager;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedUtilityMethods;
-import de.uib.configed.ProductPageManager;
-import de.uib.configed.UpdateCollectionManager;
+import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.productpage.PanelProductSettings;
 import de.uib.configed.gui.productpage.PanelProductSettings.ProductSettingsType;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
-import de.uib.configed.tree.ProductTree;
-import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.gui.tree.ProductTree;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class ClientConfiguration extends JTabbedPane implements ChangeListener {
 	public static final float DIVIDER_LOCATION = 0.8F;

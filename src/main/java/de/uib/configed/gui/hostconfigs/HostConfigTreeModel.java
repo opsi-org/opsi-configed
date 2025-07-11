@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import de.uib.utils.logging.Logging;
+import de.uib.configed.share.logging.Logging;
 
 public class HostConfigTreeModel extends DefaultTreeModel {
 	public final DefaultMutableTreeNode rootNode;

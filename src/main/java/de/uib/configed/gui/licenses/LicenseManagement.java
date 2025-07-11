@@ -17,25 +17,25 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 
-import de.uib.configed.AbstractControlMultiTablePanel;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ControlPanelAssignToLPools;
-import de.uib.configed.ControlPanelEditLicenses;
-import de.uib.configed.ControlPanelEnterLicense;
-import de.uib.configed.ControlPanelLicensesReconciliation;
-import de.uib.configed.ControlPanelLicensesStatistics;
-import de.uib.configed.ControlPanelLicensesUsage;
-import de.uib.configed.type.licenses.LicenseEntry;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.PanelGenEdit;
-import de.uib.utils.table.provider.DefaultTableProvider;
-import de.uib.utils.table.provider.MapRetriever;
-import de.uib.utils.table.provider.RetrieverMapSource;
+import de.uib.configed.core.domain.serverdata.CacheIdentifier;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.AbstractControlMultiTablePanel;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.ControlPanelAssignToLPools;
+import de.uib.configed.gui.ControlPanelEditLicenses;
+import de.uib.configed.gui.ControlPanelEnterLicense;
+import de.uib.configed.gui.ControlPanelLicensesReconciliation;
+import de.uib.configed.gui.ControlPanelLicensesStatistics;
+import de.uib.configed.gui.ControlPanelLicensesUsage;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
+import de.uib.configed.gui.share.table.provider.MapRetriever;
+import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
+import de.uib.configed.gui.type.licenses.LicenseEntry;
+import de.uib.configed.share.logging.Logging;
 
 public class LicenseManagement extends JTabbedPane {
 	public enum LicensesTabStatus {

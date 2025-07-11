@@ -23,14 +23,14 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ControlPanelLicensesUsage;
-import de.uib.configed.Globals;
-import de.uib.utils.swing.AutoCompletionComboBox;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEdit;
-import de.uib.utils.table.gui.PanelGenEditPopupManager;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ControlPanelLicensesUsage;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.swing.AutoCompletionComboBox;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
 
 public class PanelLicensesUsage extends MultiTablePanel {
 	private JSplitPane splitPane;

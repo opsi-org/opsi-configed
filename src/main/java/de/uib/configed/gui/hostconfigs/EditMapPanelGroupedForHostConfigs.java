@@ -38,21 +38,21 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.datachanges.UpdateCollection;
-import de.uib.opsidatamodel.permission.UserConfig;
-import de.uib.opsidatamodel.permission.UserConfigProducing;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.PopupMouseListener;
-import de.uib.utils.datapanel.DefaultEditMapPanel;
-import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.tree.XTree;
+import de.uib.configed.core.domain.datachanges.UpdateCollection;
+import de.uib.configed.core.domain.permission.UserConfig;
+import de.uib.configed.core.domain.permission.UserConfigProducing;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
+import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.tree.XTree;
+import de.uib.configed.gui.type.ConfigOption;
+import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.logging.Logging;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends DefaultEditMapPanel implements TreeSelectionListener {

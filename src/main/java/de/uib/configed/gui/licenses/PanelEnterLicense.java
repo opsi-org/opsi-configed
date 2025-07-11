@@ -35,17 +35,17 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ControlPanelEnterLicense;
-import de.uib.configed.Globals;
-import de.uib.configed.type.licenses.LicenseEntry;
-import de.uib.utils.Utils;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.CellDateEditor;
-import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEdit;
-import de.uib.utils.table.gui.PanelGenEditPopupManager;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.ControlPanelEnterLicense;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.gui.CellDateEditor;
+import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
+import de.uib.configed.gui.type.licenses.LicenseEntry;
+import de.uib.configed.share.Utils;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.DatePicker;
 

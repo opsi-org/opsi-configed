@@ -28,9 +28,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.configed.guidata.DependenciesTreeModel;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.data.DependenciesTreeModel;
 
 public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener {
 	private DependenciesTreeModel dependenciesTreeModel;

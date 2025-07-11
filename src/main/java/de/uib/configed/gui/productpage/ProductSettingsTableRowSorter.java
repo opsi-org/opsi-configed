@@ -14,9 +14,9 @@ import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.uib.configed.Configed;
-import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.opsidatamodel.productstate.InstallationStatus;
+import de.uib.configed.core.domain.productstate.ActionRequest;
+import de.uib.configed.core.domain.productstate.InstallationStatus;
+import de.uib.configed.gui.Configed;
 
 public class ProductSettingsTableRowSorter extends TableRowSorter<TableModel> {
 	private final JTable tableProducts;

@@ -33,22 +33,22 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.POJOReMapper;
 import de.uib.configed.gui.ClientConfiguration;
-import de.uib.configed.tree.IconNode;
-import de.uib.configed.tree.IconNodeRenderer;
-import de.uib.messages.Messages;
-import de.uib.opsicommand.POJOReMapper;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.ExporterToPDF;
-import de.uib.utils.table.gui.ColorTableCellRenderer;
-import de.uib.utils.tree.XTree;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.ExporterToPDF;
+import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
+import de.uib.configed.gui.share.tree.XTree;
+import de.uib.configed.gui.tree.IconNode;
+import de.uib.configed.gui.tree.IconNodeRenderer;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";

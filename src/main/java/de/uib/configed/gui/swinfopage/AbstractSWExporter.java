@@ -16,20 +16,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.Main;
-import de.uib.configed.Configed;
-import de.uib.configed.ErrorCode;
-import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.messages.Messages;
-import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.provider.DefaultTableProvider;
-import de.uib.utils.table.provider.MapRetriever;
-import de.uib.utils.table.provider.RetrieverMapSource;
+import de.uib.configed.app.Main;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.ConnectionState;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ErrorCode;
+import de.uib.configed.gui.messages.Messages;
+import de.uib.configed.gui.share.table.GenTableModel;
+import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
+import de.uib.configed.gui.share.table.provider.MapRetriever;
+import de.uib.configed.gui.share.table.provider.RetrieverMapSource;
+import de.uib.configed.gui.type.SWAuditClientEntry;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 /**
  * Abstract class to manage batch export of SWAudit data, subclasses implement

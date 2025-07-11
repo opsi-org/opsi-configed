@@ -17,22 +17,22 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.configed.AbstractControlMultiTablePanel;
-import de.uib.configed.Configed;
-import de.uib.configed.ControlPanelAssignToLPools;
-import de.uib.configed.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
-import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowAllMeans;
-import de.uib.configed.Globals;
+import de.uib.configed.gui.AbstractControlMultiTablePanel;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ControlPanelAssignToLPools;
 import de.uib.configed.gui.GlobalSoftwareInfoDialog;
+import de.uib.configed.gui.Globals;
 import de.uib.configed.gui.Softwarename2LicensePoolDialog;
+import de.uib.configed.gui.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
+import de.uib.configed.gui.ControlPanelAssignToLPools.SoftwareShowAllMeans;
 import de.uib.configed.gui.Softwarename2LicensePoolDialog.Softwarename2LicensepoolRestriction;
-import de.uib.configed.type.SWAuditEntry;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PanelStateSwitch;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEdit;
-import de.uib.utils.table.gui.PanelGenEditPopupManager;
+import de.uib.configed.gui.share.swing.PanelStateSwitch;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
+import de.uib.configed.gui.type.SWAuditEntry;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 	private JLabel fieldSelectedLicensePoolId;

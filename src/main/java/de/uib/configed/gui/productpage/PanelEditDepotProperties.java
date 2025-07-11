@@ -32,19 +32,19 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.UpdateCollectionManager;
+import de.uib.configed.core.domain.datachanges.ProductpropertiesUpdateCollection;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.DepotListCellRenderer;
-import de.uib.configed.guidata.ListMerger;
-import de.uib.configed.type.ConfigName2ConfigValue;
-import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.datapanel.DefaultEditMapPanel;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.UpdateCollectionManager;
+import de.uib.configed.gui.data.ListMerger;
+import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
+import de.uib.configed.gui.type.ConfigName2ConfigValue;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, MouseListener, KeyListener {

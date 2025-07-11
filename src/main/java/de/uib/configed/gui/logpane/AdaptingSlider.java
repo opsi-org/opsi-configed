@@ -18,8 +18,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.configed.Globals;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.share.logging.Logging;
 
 public class AdaptingSlider extends JSlider implements ChangeListener, MouseWheelListener {
 	private LogPanel logPane;

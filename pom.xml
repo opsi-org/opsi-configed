@@ -39,7 +39,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.uib.Main</mainClass>
+                            <mainClass>de.uib.configed.app.Main</mainClass>
                             <addDefaultImplementationEntries>
                                 true
                             </addDefaultImplementationEntries>

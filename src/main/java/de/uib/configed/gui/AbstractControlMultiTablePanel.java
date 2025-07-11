@@ -1,0 +1,84 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.configed.gui;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import de.uib.configed.gui.licenses.MultiTablePanel;
+import de.uib.configed.gui.share.table.GenTableModel;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
+import de.uib.configed.share.Utils;
+
+public abstract class AbstractControlMultiTablePanel {
+	protected List<GenTableModel> tableModels = new ArrayList<>();
+
+	protected List<PanelGenEdit> tablePanes = new ArrayList<>();
+
+	protected List<MapBasedTableEditItem> updateCollection = new ArrayList<>();
+
+	public abstract MultiTablePanel getTabClient();
+
+	public List<GenTableModel> getTableModels() {
+		return tableModels;
+	}
+
+	public List<PanelGenEdit> getTablePanes() {
+		return tablePanes;
+	}
+
+	public abstract void init();
+
+	/**
+	 * called by the MultiTablePanel reset method overwrite for the real content
+	 */
+	public void initializeVisualSettings() {
+	}
+
+	public void refreshTables() {
+		for (GenTableModel tableModel : tableModels) {
+			tableModel.invalidate();
+			tableModel.reset();
+		}
+
+		for (PanelGenEdit tablePanel : tablePanes) {
+			tablePanel.setDataChanged(false);
+		}
+	}
+
+	public boolean mayLeave() {
+		boolean change = false;
+
+		Iterator<PanelGenEdit> iterP = tablePanes.iterator();
+
+		while (!change && iterP.hasNext()) {
+			PanelGenEdit p = iterP.next();
+			change = p.isDataChanged();
+		}
+
+		if (change) {
+			int returnedOption = JOptionPane.showConfirmDialog(Utils.getMasterFrame(),
+					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.text"),
+					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
+					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+			if (returnedOption == JOptionPane.YES_OPTION) {
+				return true;
+			}
+
+			Utils.getMasterFrame().setVisible(true);
+		} else {
+			return true;
+		}
+
+		return false;
+	}
+}

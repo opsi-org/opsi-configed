@@ -1,0 +1,77 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.configed.gui.dashboard.chart;
+
+import java.io.IOException;
+
+import javax.swing.UIManager;
+
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.dashboard.ComponentStyler;
+import de.uib.configed.gui.dashboard.DataChangeListener;
+import de.uib.configed.gui.dashboard.collector.ProductData;
+import de.uib.configed.share.logging.Logging;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+
+public class InstalledOSComparison extends StackPane implements DataChangeListener {
+	private static final String LINUX = "Linux";
+	private static final String WINDOWS = "Windows";
+	private static final String MACOS = "MacOS";
+
+	@FXML
+	private Text installedOSNoDataText;
+	@FXML
+	private BarChart<String, Number> installedOSComparisonBarChart;
+
+	public InstalledOSComparison() {
+		FXMLLoader fxmlLoader = new FXMLLoader(
+				InstalledOSComparison.class.getResource("/fxml/charts/installed_os_bar_chart.fxml"));
+		fxmlLoader.setRoot(this);
+		fxmlLoader.setController(this);
+
+		try {
+			fxmlLoader.load();
+		} catch (IOException ioE) {
+			Logging.error(this, ioE, "Could not load fxmlLoader");
+		}
+	}
+
+	@Override
+	public void display() {
+		installedOSNoDataText.setText(Configed.getResourceValue("Dashboard.noData"));
+
+		XYChart.Series<String, Number> data = new XYChart.Series<>();
+
+		int totalLinuxInstallations = ProductData.getTotalLinuxInstallations();
+		int totalWindowsInstallations = ProductData.getTotalWindowsInstallations();
+		int totalMacOSInstallations = ProductData.getTotalMacOSInstallations();
+
+		installedOSNoDataText.setVisible(
+				totalLinuxInstallations == 0 && totalWindowsInstallations == 0 && totalMacOSInstallations == 0);
+
+		data.getData().add(new XYChart.Data<>(LINUX, ProductData.getTotalLinuxInstallations()));
+		data.getData().add(new XYChart.Data<>(WINDOWS, ProductData.getTotalWindowsInstallations()));
+		data.getData().add(new XYChart.Data<>(MACOS, ProductData.getTotalMacOSInstallations()));
+
+		installedOSComparisonBarChart.getData().clear();
+		installedOSComparisonBarChart.getData().add(data);
+
+		ComponentStyler.styleBarChartComponent(installedOSComparisonBarChart);
+		installedOSNoDataText
+				.setStyle("-fx-fill: " + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
+	}
+
+	@Override
+	public void update(String selectedDepot) {
+		ProductData.retrieveData(selectedDepot);
+	}
+}

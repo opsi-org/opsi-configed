@@ -25,9 +25,9 @@ import javax.swing.text.StyleContext;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.share.logging.Logging;
 
 public class LogTextPane extends JTextPane {
 	public static final String DEFAULT_TYPE = "(all)";

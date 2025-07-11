@@ -8,8 +8,8 @@ package de.uib.configed.gui.licenses;
 
 import javax.swing.JPanel;
 
-import de.uib.configed.AbstractControlMultiTablePanel;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.AbstractControlMultiTablePanel;
 
 public class MultiTablePanel extends JPanel {
 	protected AbstractControlMultiTablePanel controller;

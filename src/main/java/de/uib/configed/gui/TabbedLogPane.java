@@ -15,14 +15,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.gui.logpane.LogPanel;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class TabbedLogPane extends JTabbedPane {
 	private LogPanel[] textPanes;

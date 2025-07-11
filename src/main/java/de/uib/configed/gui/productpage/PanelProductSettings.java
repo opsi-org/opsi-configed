@@ -28,26 +28,26 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 
-import de.uib.configed.ChangedDataManager;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ServerActionManager;
+import de.uib.configed.core.domain.datachanges.ProductpropertiesUpdateCollection;
+import de.uib.configed.core.domain.serverdata.CacheIdentifier;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.ProductDataService;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.ChangedDataManager;
 import de.uib.configed.gui.ClientMenuManager;
-import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.productgroup.ProductActionPanel;
-import de.uib.configed.tree.ProductTree;
-import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.dataservice.ProductDataService;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Icons;
-import de.uib.utils.PopupMouseListener;
-import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.ExporterToCSV;
-import de.uib.utils.table.ExporterToPDF;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.ServerActionManager;
+import de.uib.configed.gui.data.InstallationStateTableModel;
+import de.uib.configed.gui.productgroup.ProductActionPanel;
+import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.table.ExporterToCSV;
+import de.uib.configed.gui.share.table.ExporterToPDF;
+import de.uib.configed.gui.tree.ProductTree;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.PopupMouseListener;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelProductSettings extends JSplitPane {
 	public enum ProductSettingsType {

@@ -21,8 +21,6 @@ import javax.swing.JProgressBar;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.configed.Globals;
-
 public class GlassPane extends JComponent implements KeyListener {
 	private JLabel jLabelInfo;
 

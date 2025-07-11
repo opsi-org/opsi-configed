@@ -15,20 +15,20 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.configed.guidata.ColoredTableCellRenderer;
-import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
-import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.guidata.ProductVersionCellRenderer;
-import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.opsidatamodel.productstate.ActionResult;
-import de.uib.opsidatamodel.productstate.InstallationStatus;
-import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.utils.IntComparatorForStrings;
-import de.uib.utils.table.gui.AdaptingCellEditorValuesByIndex;
-import de.uib.utils.table.gui.ColorTableCellRenderer;
-import de.uib.utils.table.gui.DynamicCellEditor;
+import de.uib.configed.core.domain.productstate.ActionRequest;
+import de.uib.configed.core.domain.productstate.ActionResult;
+import de.uib.configed.core.domain.productstate.InstallationStatus;
+import de.uib.configed.core.domain.productstate.ProductState;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.data.ColoredTableCellRenderer;
+import de.uib.configed.gui.data.ColoredTableCellRendererByIndex;
+import de.uib.configed.gui.data.InstallationStateTableModel;
+import de.uib.configed.gui.data.ProductVersionCellRenderer;
+import de.uib.configed.gui.share.table.gui.AdaptingCellEditorValuesByIndex;
+import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
+import de.uib.configed.gui.share.table.gui.DynamicCellEditor;
+import de.uib.configed.share.IntComparatorForStrings;
 
 public class ProductSettingsTableModel {
 	private static final int WIDTH_COLUMN_PRODUCT_NAME = 170;

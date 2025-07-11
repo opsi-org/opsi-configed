@@ -33,19 +33,19 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.serverconsole.command.CommandExecutor;
-import de.uib.configed.serverconsole.command.SingleCommandTemplate;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.NameProducer;
-import de.uib.utils.WebDAVClient;
-import de.uib.utils.WinProductUtils;
-import de.uib.utils.WinProductsRetriever;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.serverconsole.command.CommandExecutor;
+import de.uib.configed.gui.serverconsole.command.SingleCommandTemplate;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.NameProducer;
+import de.uib.configed.share.WebDAVClient;
+import de.uib.configed.share.WinProductUtils;
+import de.uib.configed.share.WinProductsRetriever;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelDriverUpload extends JPanel implements NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };

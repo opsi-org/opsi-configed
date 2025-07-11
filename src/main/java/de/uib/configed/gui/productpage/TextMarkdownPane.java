@@ -17,8 +17,8 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class TextMarkdownPane extends JTextPane {
 	public TextMarkdownPane() {

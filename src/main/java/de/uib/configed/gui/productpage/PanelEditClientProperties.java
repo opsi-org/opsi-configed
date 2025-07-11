@@ -11,10 +11,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.utils.Icons;
-import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
+import de.uib.configed.share.Icons;
 
 public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private JLabel jLabelProductProperties;

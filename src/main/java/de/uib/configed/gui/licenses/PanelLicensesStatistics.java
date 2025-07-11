@@ -15,14 +15,14 @@ import javax.swing.GroupLayout;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import de.uib.configed.AbstractControlMultiTablePanel;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
-import de.uib.opsidatamodel.serverdata.CacheManager;
-import de.uib.utils.table.gui.FilterKey;
-import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.configed.core.domain.serverdata.CacheIdentifier;
+import de.uib.configed.core.domain.serverdata.CacheManager;
+import de.uib.configed.gui.AbstractControlMultiTablePanel;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.table.gui.FilterKey;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 
 public class PanelLicensesStatistics extends MultiTablePanel {
 	private static final int MIN_VSIZE = 50;

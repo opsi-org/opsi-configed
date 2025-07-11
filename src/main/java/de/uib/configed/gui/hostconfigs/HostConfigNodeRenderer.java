@@ -15,7 +15,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import de.uib.configed.Configed;
+import de.uib.configed.gui.Configed;
 
 public class HostConfigNodeRenderer extends DefaultTreeCellRenderer {
 	private static final int LABEL_WIDTH = 300;

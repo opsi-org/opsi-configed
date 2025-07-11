@@ -14,15 +14,15 @@ import java.util.NavigableMap;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
-import de.uib.configed.ChangedDataManager;
-import de.uib.opsicommand.POJOReMapper;
-import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.datapanel.DefaultEditMapPanel;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
+import de.uib.configed.core.domain.serverdata.CacheIdentifier;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.core.infrastructure.POJOReMapper;
+import de.uib.configed.gui.ChangedDataManager;
+import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelHostConfig extends JPanel {
 	// delegate

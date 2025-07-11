@@ -14,10 +14,8 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedMain.EditingTarget;
-import de.uib.utils.Icons;
+import de.uib.configed.gui.ConfigedMain.EditingTarget;
+import de.uib.configed.share.Icons;
 
 public class LeftControlBar extends JToolBar {
 	private ButtonGroup buttonGroup;

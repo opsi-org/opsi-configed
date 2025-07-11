@@ -1,0 +1,40 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.configed.gui.clientselection.backends.opsidatamodel.operations;
+
+import de.uib.configed.gui.clientselection.AbstractSelectElement;
+import de.uib.configed.gui.clientselection.ExecutableOperation;
+import de.uib.configed.gui.clientselection.backends.opsidatamodel.OpsiDataClient;
+import de.uib.configed.gui.clientselection.operations.BigIntEqualsOperation;
+import de.uib.configed.share.logging.Logging;
+
+public class OpsiDataBigIntEqualsOperation extends BigIntEqualsOperation implements ExecutableOperation {
+	private String map;
+	private String key;
+	private long data;
+
+	public OpsiDataBigIntEqualsOperation(String map, String key, long data, AbstractSelectElement element) {
+		super(element);
+		this.map = map;
+		this.key = key;
+		this.data = data;
+	}
+
+	@Override
+	public boolean doesMatch(OpsiDataClient client) {
+		Object realData = client.getMap(map).get(key);
+		if (realData instanceof Long longData) {
+			return longData == data;
+		} else if (realData instanceof Integer integerData) {
+			return integerData == data;
+		} else {
+			Logging.error(this, "data is no BigInteger!", realData);
+		}
+
+		return false;
+	}
+}

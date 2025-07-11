@@ -16,11 +16,11 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.utils.WebDAVClient;
-import de.uib.utils.WinProductUtils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.share.WebDAVClient;
+import de.uib.configed.share.WinProductUtils;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelDriverUploadWorker extends SwingWorker<Void, Void> {
 	@SuppressWarnings("java:S1104")

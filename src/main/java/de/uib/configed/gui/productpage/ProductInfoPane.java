@@ -19,14 +19,14 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.configed.type.OpsiPackage;
-import de.uib.configed.type.OpsiProductInfo;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.type.OpsiPackage;
+import de.uib.configed.gui.type.OpsiProductInfo;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class ProductInfoPane extends JSplitPane {
 	private JTextField jLabelProductID;

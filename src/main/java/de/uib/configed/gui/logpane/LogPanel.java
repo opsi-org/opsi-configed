@@ -28,12 +28,12 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 
-import de.uib.Main;
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PopupMenuTrait;
+import de.uib.configed.app.Main;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class LogPanel extends JPanel implements KeyListener {
 	private static final int SLIDER_W = 180;

@@ -20,17 +20,15 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.configed.terminal.TerminalController;
-import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.SearchTargetModel;
-import de.uib.utils.table.gui.SearchTargetModelFromJList;
-import de.uib.utils.table.gui.TableSearchPane;
+import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.share.table.gui.SearchTargetModel;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
+import de.uib.configed.gui.share.table.gui.TableSearchPane;
+import de.uib.configed.gui.terminal.TerminalController;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class DepotListPresenter extends JPanel {
 	private DepotsList depotslist;

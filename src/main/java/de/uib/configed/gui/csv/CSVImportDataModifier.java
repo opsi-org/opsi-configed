@@ -26,18 +26,18 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.type.HostInfo;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.PanelGenEdit;
-import de.uib.utils.table.provider.DefaultTableProvider;
-import de.uib.utils.table.provider.MapSource;
-import de.uib.utils.table.provider.TableSource;
-import de.uib.utils.table.updates.MapBasedTableEditItem;
-import de.uib.utils.table.updates.MapItemsUpdateController;
-import de.uib.utils.table.updates.MapTableUpdateItemFactory;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.share.table.GenTableModel;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.provider.DefaultTableProvider;
+import de.uib.configed.gui.share.table.provider.MapSource;
+import de.uib.configed.gui.share.table.provider.TableSource;
+import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;
+import de.uib.configed.gui.share.table.updates.MapItemsUpdateController;
+import de.uib.configed.gui.share.table.updates.MapTableUpdateItemFactory;
+import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.logging.Logging;
 
 public class CSVImportDataModifier {
 	private GenTableModel model;

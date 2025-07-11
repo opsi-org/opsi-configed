@@ -8,7 +8,7 @@ package de.uib.configed.gui.productpage;
 
 import javax.swing.JPanel;
 
-import de.uib.utils.datapanel.DefaultEditMapPanel;
+import de.uib.configed.gui.share.datapanel.DefaultEditMapPanel;
 
 public abstract class AbstractPanelEditProperties extends JPanel {
 	protected DefaultEditMapPanel productPropertiesPanel;

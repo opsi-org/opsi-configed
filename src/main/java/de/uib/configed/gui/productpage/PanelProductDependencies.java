@@ -12,12 +12,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import de.uib.configed.Configed;
-import de.uib.configed.Globals;
-import de.uib.configed.guidata.DependenciesModel;
-import de.uib.configed.guidata.DependenciesModel.DependenciesModelListener;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.data.DependenciesModel;
+import de.uib.configed.gui.data.DependenciesModel.DependenciesModelListener;
+import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModelListener {
 	// The label shown on top of the dependencies-panel

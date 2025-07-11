@@ -22,18 +22,18 @@ import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.guidata.ListMerger;
-import de.uib.configed.type.ConfigOption;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.Utils;
-import de.uib.utils.datapanel.EditMapPanelX;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.ExporterToPDF;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.data.ListMerger;
+import de.uib.configed.gui.share.datapanel.EditMapPanelX;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.ExporterToPDF;
+import de.uib.configed.gui.type.ConfigOption;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class EditMapPanelForHostConfigs extends EditMapPanelX {
 	private boolean includeAdditionalTooltipText;

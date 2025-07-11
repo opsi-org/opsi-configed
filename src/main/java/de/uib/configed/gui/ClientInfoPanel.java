@@ -30,18 +30,14 @@ import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.extras.components.FlatPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 
-import de.uib.configed.ChangedDataManager;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.serverdata.OpsiModule;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.SeparatedDocument;
+import de.uib.configed.core.domain.serverdata.OpsiModule;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.share.swing.SeparatedDocument;
+import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class ClientInfoPanel extends JPanel implements DocumentListener {
 	private JLabel labelClientDescription;

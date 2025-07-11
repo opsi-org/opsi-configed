@@ -33,15 +33,15 @@ import javax.swing.text.NumberFormatter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.QuoteMode;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.type.HostInfo;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.PanelGenEdit;
-import de.uib.utils.table.gui.PanelGenEditPopupManager;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.share.table.gui.PanelGenEditPopupManager;
+import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class CSVImportDataDialog {
 	private PanelGenEdit thePanel;

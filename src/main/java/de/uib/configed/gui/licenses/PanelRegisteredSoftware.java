@@ -11,13 +11,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-import de.uib.configed.ControlPanelAssignToLPools;
-import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.PopupMenuTrait;
-import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.ControlPanelAssignToLPools;
+import de.uib.configed.gui.share.swing.PopupMenuTrait;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.type.SWAuditEntry;
+import de.uib.configed.share.logging.Logging;
 
 public class PanelRegisteredSoftware extends PanelGenEdit implements MouseListener {
 	private ControlPanelAssignToLPools controller;

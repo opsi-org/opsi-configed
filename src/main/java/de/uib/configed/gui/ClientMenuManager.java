@@ -32,24 +32,19 @@ import javax.swing.event.MenuListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ExtraFrameController;
-import de.uib.configed.ServerActionManager;
-import de.uib.configed.SessionInfoRetriever;
-import de.uib.configed.terminal.TerminalController;
-import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
-import de.uib.opsidatamodel.serverdata.OpsiModule;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.dataservice.UserRolesConfigDataService;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.AbstractExportTable;
-import de.uib.utils.table.ClientTableExporterToCSV;
-import de.uib.utils.table.ExporterToCSV;
-import de.uib.utils.table.ExporterToPDF;
+import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
+import de.uib.configed.core.domain.serverdata.OpsiModule;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.dataservice.UserRolesConfigDataService;
+import de.uib.configed.gui.share.table.AbstractExportTable;
+import de.uib.configed.gui.share.table.ClientTableExporterToCSV;
+import de.uib.configed.gui.share.table.ExporterToCSV;
+import de.uib.configed.gui.share.table.ExporterToPDF;
+import de.uib.configed.gui.terminal.TerminalController;
+import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 @SuppressWarnings({ "java:S1200" })
 public final class ClientMenuManager implements MenuListener {

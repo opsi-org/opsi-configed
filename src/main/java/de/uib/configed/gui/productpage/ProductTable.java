@@ -22,11 +22,11 @@ import javax.swing.SortOrder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Configed;
-import de.uib.configed.guidata.InstallationStateTableModel;
-import de.uib.configed.tree.AbstractGroupTree;
-import de.uib.opsidatamodel.productstate.InstallationStatus;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.productstate.InstallationStatus;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.data.InstallationStateTableModel;
+import de.uib.configed.gui.tree.AbstractGroupTree;
+import de.uib.configed.share.logging.Logging;
 
 public class ProductTable extends JTable {
 	public ProductTable() {

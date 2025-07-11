@@ -9,8 +9,8 @@ package de.uib.configed.gui.hwinfopage;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
 
 public class DriverUploadDialog {
 	private PanelDriverUpload panelDriverUpload;
