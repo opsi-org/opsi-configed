@@ -34,6 +34,7 @@ import de.uib.configed.serverconsole.command.SingleCommandTemplate;
 import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
 import de.uib.utils.Utils;
 import de.uib.utils.logging.Logging;
+import de.uib.utils.swing.AutoCompletionComboBox;
 
 public class MakeProductFileDialog {
 	private static final Pattern tripleSemicolonMatcher = Pattern.compile(";;;");
@@ -117,7 +118,7 @@ public class MakeProductFileDialog {
 		jLabelDir = new JLabel(Configed.getResourceValue("MakeProductFileDialog.serverDir"));
 		jLabelDir.setFont(jLabelDir.getFont().deriveFont(Font.BOLD));
 
-		autocompletion.setCombobox(new CompletionComboBox<>(
+		autocompletion.setCombobox(new AutoCompletionComboBox<>(
 				new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
 			@Override
 			public void setSelectedItem(Object item) {

@@ -24,6 +24,11 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.PlainDocument;
 
 public class AutoCompletionComboBox<T> extends JComboBox<T> {
+	public AutoCompletionComboBox(ComboBoxModel<T> cbm) {
+		super(cbm);
+		initComponents();
+	}
+
 	public AutoCompletionComboBox() {
 		initComponents();
 	}
