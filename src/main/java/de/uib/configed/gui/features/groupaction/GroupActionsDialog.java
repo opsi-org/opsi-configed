@@ -91,7 +91,13 @@ public class GroupActionsDialog {
 	}
 
 	private void reload() {
-		setGroupLabelling(configedMain.getSelectedGroupName(),
+		String groupName = configedMain.getSelectedGroupName();
+		if (groupName == null || groupName.isEmpty()) {
+			Logging.info(this, "No group selected for group action");
+			groupName = Configed.getResourceValue("FGroupAction.noGroupSelected");
+		}
+
+		setGroupLabelling(groupName,
 				"" + configedMain.getClientTablePanel().getClientTable().getRowCount());
 
 		associatedClients = configedMain.getClientTablePanel().getClientTable().getClients();
