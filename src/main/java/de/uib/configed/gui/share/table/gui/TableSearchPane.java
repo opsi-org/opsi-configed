@@ -523,12 +523,16 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void searchNextRow(boolean select) {
-		foundrow++;
 		int rowCount = targetModel.getRowCount();
 		if (rowCount == 0) {
 			foundrow = -1;
 			return;
 		}
+
+		if (targetModel.getSelectedRows().length == 1) {
+			foundrow = targetModel.getSelectedRow() + 1;
+		}
+
 		if (foundrow >= rowCount) {
 			foundrow = 0;
 		}
