@@ -588,7 +588,7 @@ public class TableSearchPane extends JPanel implements DocumentListener, KeyList
 		flatTextFieldSearch.getCaret().setVisible(false);
 
 		// Search only for value longer than one digit
-		if (value.length() >= 2) {
+		if (value.length() >= 1) {
 			foundrow = findViewRowFromValue(startrow, value);
 
 			if (foundrow > -1 || startrow == 0) {
