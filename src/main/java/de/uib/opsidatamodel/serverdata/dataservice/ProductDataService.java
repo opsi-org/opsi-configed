@@ -868,7 +868,7 @@ public class ProductDataService {
 	 * @param product  for which to collect property values
 	 * @param property from which to collect values
 	 */
-	public List<String> getCommonProductPropertyValues(List<String> clients, String product, String property) {
+	public List<String> getCommonProductPropertyValues(Collection<String> clients, String product, String property) {
 		Logging.info(this, "getCommonProductPropertyValues for product, property, clients ", product, ", ", property,
 				"  -- ", clients);
 		String[] callAttributes = new String[] {};
@@ -1011,7 +1011,7 @@ public class ProductDataService {
 		return updateProductOnClients(updateProductOnClientItems);
 	}
 
-	public boolean updateProductOnClients(Set<String> clients, String productName, int productType,
+	public boolean updateProductOnClients(Collection<String> clients, String productName, int productType,
 			Map<String, String> changedValues) {
 		List<Map<String, Object>> updateCollection = new ArrayList<>();
 

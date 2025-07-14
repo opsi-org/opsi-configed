@@ -34,7 +34,6 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.Main;
-import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.gui.ClientTablePanel;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.LoginDialog;
@@ -79,7 +78,6 @@ public class ConfigedMain {
 	private List<String> selectedClients = new ArrayList<>();
 
 	private Set<String> clientsFilteredByTree = new HashSet<>();
-	private ActivatedGroupModel activatedGroupModel;
 
 	private HostInfo hostInfo = new HostInfo();
 
@@ -147,8 +145,6 @@ public class ConfigedMain {
 		startMainFrame(this, clientTablePanel, depotsList, clientTree, productTree);
 
 		initTabComponents();
-
-		activatedGroupModel = new ActivatedGroupModel();
 
 		initialTreeActivation();
 
@@ -262,9 +258,6 @@ public class ConfigedMain {
 		if (!persistenceController.getModuleDataService().isOpsiModuleActive(OpsiModule.LOCAL_IMAGING)) {
 			Logging.error(this,
 					"this should not happen: group actions are not available since the module \"local_imaging\" is not available");
-		} else if (!activatedGroupModel.isActive()) {
-			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.noGroupSelected"),
-					Configed.getResourceValue("error"), JOptionPane.ERROR_MESSAGE);
 		} else {
 			ExtraFrameController.startGroupActionFrame(this);
 		}
@@ -355,8 +348,6 @@ public class ConfigedMain {
 
 		mainFrame.getHostsStatusPanel().updateValues(clientTablePanel.getClientTable().getRowCount(), selectedClients,
 				hostInfo);
-
-		activatedGroupModel.setActive(selectedClients.isEmpty());
 
 		clientTree.updateSelectedObjectsInTable();
 	}
@@ -839,11 +830,6 @@ public class ConfigedMain {
 		// with this, a selected client remains selected (but in bottom line, the group
 		// seems activated, not the client)
 
-		activatedGroupModel.setNode("" + node);
-		activatedGroupModel.setDescription(clientTree.getGroups().get("" + node).get("description"));
-		activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
-		activatedGroupModel.setActive(true);
-
 		// since we select based on the tree view we disable the filter
 		deactivateFilter();
 	}
@@ -853,10 +839,6 @@ public class ConfigedMain {
 		if (clientTablePanel.isFilteredMode()) {
 			setRebuiltClientListTableModel(true, false);
 		}
-	}
-
-	public ActivatedGroupModel getActivatedGroupModel() {
-		return activatedGroupModel;
 	}
 
 	private boolean checkSynchronous(Set<String> depots) {
@@ -995,7 +977,7 @@ public class ConfigedMain {
 		clientTree.expandAndSelectNodes(nodes);
 	}
 
-	public void saveSelectedGroupName() {
+	private void saveSelectedGroupName() {
 		String groupName = getSelectedGroupName();
 		if (groupName != null) {
 			Configed.getSavedStates().setProperty("groupname", groupName);

@@ -8,6 +8,7 @@ package de.uib.configed.groupaction;
 
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class GroupActionsDialog {
 
 	private JComboBox<String> comboSelectImage;
 
-	private List<String> associatedClients;
+	private Collection<String> associatedClients;
 
 	private JDialog dialog;
 
@@ -90,10 +91,10 @@ public class GroupActionsDialog {
 	}
 
 	private void reload() {
-		setGroupLabelling(configedMain.getActivatedGroupModel().getLabel(),
-				"" + configedMain.getActivatedGroupModel().getNumberOfClients());
+		setGroupLabelling(configedMain.getSelectedGroupName(),
+				"" + configedMain.getClientTablePanel().getClientTable().getRowCount());
 
-		associatedClients = new ArrayList<>(configedMain.getActivatedGroupModel().getAssociatedClients());
+		associatedClients = configedMain.getClientTablePanel().getClientTable().getClients();
 		setImages();
 	}
 
@@ -113,16 +114,14 @@ public class GroupActionsDialog {
 
 		dialog.setCursor(Globals.WAIT_CURSOR);
 
-		persistenceController.getProductDataService().setCommonProductPropertyValue(
-				configedMain.getActivatedGroupModel().getAssociatedClients(),
+		persistenceController.getProductDataService().setCommonProductPropertyValue(associatedClients,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(ProductState.KEY_ACTION_REQUEST, "setup");
 
-		persistenceController.getProductDataService().updateProductOnClients(
-				configedMain.getActivatedGroupModel().getAssociatedClients(),
+		persistenceController.getProductDataService().updateProductOnClients(associatedClients,
 				OpsiServiceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
 				changedValues);
 

@@ -94,6 +94,16 @@ public class ClientTable extends JTable implements MessagebusListener {
 		return result;
 	}
 
+	public Set<String> getClients() {
+		Set<String> result = new HashSet<>(getRowCount());
+
+		for (int i = 0; i < getRowCount(); i++) {
+			result.add(getClientName(i));
+		}
+
+		return result;
+	}
+
 	/**
 	 * Returns the index of the column with the given title. If no column with
 	 * the given title is found, -1 is returned.
