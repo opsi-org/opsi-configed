@@ -31,7 +31,7 @@ import de.uib.configed.share.logging.Logging;
 import de.uib.configed.share.userprefs.UserPreferences;
 
 public final class Messages {
-	private static final String BUNDLE_NAME = "de/uib/messages/opsi-configed";
+	private static final String BUNDLE_NAME = "de/uib/configed/gui/messages/opsi-configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
 	private static Set<String> existingLocalesNames;
