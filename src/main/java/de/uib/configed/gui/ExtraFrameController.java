@@ -16,9 +16,9 @@ import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.configed.gui.groupaction.GroupActionsDialog;
-import de.uib.configed.gui.productaction.CompleteWinProductsDialog;
-import de.uib.configed.gui.serverconsole.EditTerminalCommandsDialog;
+import de.uib.configed.gui.features.groupaction.GroupActionsDialog;
+import de.uib.configed.gui.features.productaction.CompleteWinProductsDialog;
+import de.uib.configed.gui.features.serverconsole.EditTerminalCommandsDialog;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
 import de.uib.configed.gui.type.RemoteControl;
 import de.uib.configed.share.logging.Logging;

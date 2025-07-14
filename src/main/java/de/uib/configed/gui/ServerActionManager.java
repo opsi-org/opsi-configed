@@ -28,8 +28,8 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.share.swing.CheckedDocument;
-import de.uib.configed.gui.tree.ClientTree;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.gui.type.licenses.LicenseUsageEntry;

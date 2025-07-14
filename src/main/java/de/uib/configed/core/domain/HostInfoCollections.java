@@ -22,7 +22,7 @@ import java.util.TreeSet;
 import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.CacheManager;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.configed.gui.tree.ClientTree;
+import de.uib.configed.gui.features.tree.ClientTree;
 import de.uib.configed.gui.type.ConfigName2ConfigValue;
 import de.uib.configed.gui.type.HostInfo;
 import de.uib.configed.share.logging.Logging;

@@ -16,9 +16,9 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.licenses.LicenseManagement;
-import de.uib.configed.gui.licenses.MultiTablePanel;
-import de.uib.configed.gui.licenses.PanelEnterLicense;
+import de.uib.configed.gui.features.licenses.LicenseManagement;
+import de.uib.configed.gui.features.licenses.MultiTablePanel;
+import de.uib.configed.gui.features.licenses.PanelEnterLicense;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.CellDateEditor;
 import de.uib.configed.gui.share.table.gui.CellInputDialogEditor;

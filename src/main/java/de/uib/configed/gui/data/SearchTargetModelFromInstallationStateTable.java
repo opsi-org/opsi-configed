@@ -8,7 +8,7 @@ package de.uib.configed.gui.data;
 
 import java.util.Arrays;
 
-import de.uib.configed.gui.productpage.PanelProductSettings;
+import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.share.table.gui.SearchTargetModelFromTable;
 import de.uib.configed.share.logging.Logging;
 

@@ -30,7 +30,7 @@ import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
 import de.uib.configed.gui.data.InstallationStateTableModel;
 import de.uib.configed.gui.data.InstallationStateUpdateManager;
 import de.uib.configed.gui.data.ListMerger;
-import de.uib.configed.gui.productpage.PanelProductSettings;
+import de.uib.configed.gui.features.productpage.PanelProductSettings;
 import de.uib.configed.gui.type.OpsiPackage;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;

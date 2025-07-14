@@ -20,12 +20,12 @@ import javax.swing.SwingConstants;
 import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.messagebus.Messagebus;
-import de.uib.configed.gui.serverconsole.command.CommandExecutor;
-import de.uib.configed.gui.serverconsole.command.CommandFactory;
-import de.uib.configed.gui.serverconsole.command.CommandWithParameters;
-import de.uib.configed.gui.serverconsole.command.MultiCommandTemplate;
-import de.uib.configed.gui.serverconsole.command.SingleCommand;
-import de.uib.configed.gui.terminal.TerminalFrame;
+import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
+import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
+import de.uib.configed.gui.features.serverconsole.command.CommandWithParameters;
+import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
+import de.uib.configed.gui.features.serverconsole.command.SingleCommand;
+import de.uib.configed.gui.features.terminal.TerminalFrame;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 

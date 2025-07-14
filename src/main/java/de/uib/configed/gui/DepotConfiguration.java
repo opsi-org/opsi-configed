@@ -21,8 +21,8 @@ import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
 import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.hostconfigs.PanelHostConfig;
-import de.uib.configed.gui.productpage.PanelProductProperties;
+import de.uib.configed.gui.features.hostconfigs.PanelHostConfig;
+import de.uib.configed.gui.features.productpage.PanelProductProperties;
 import de.uib.configed.share.Utils;
 import de.uib.configed.share.logging.Logging;
 

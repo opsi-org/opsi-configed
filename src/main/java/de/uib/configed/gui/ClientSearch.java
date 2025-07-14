@@ -17,7 +17,7 @@ import javax.swing.JMenuItem;
 import de.uib.configed.core.domain.SavedSearches;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.clientselection.SelectionManager;
+import de.uib.configed.gui.features.clientselection.SelectionManager;
 import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.type.DateExtendedByVars;
 import de.uib.configed.share.logging.Logging;

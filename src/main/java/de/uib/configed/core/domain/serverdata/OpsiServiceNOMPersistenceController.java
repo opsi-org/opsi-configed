@@ -49,7 +49,7 @@ import de.uib.configed.core.infrastructure.AbstractPOJOExecutioner;
 import de.uib.configed.core.infrastructure.ConnectionState;
 import de.uib.configed.core.infrastructure.OpsiMethodCall;
 import de.uib.configed.core.infrastructure.ServerFacade;
-import de.uib.configed.gui.productaction.CompleteWinProductsDialog;
+import de.uib.configed.gui.features.productaction.CompleteWinProductsDialog;
 import de.uib.configed.gui.type.RemoteControl;
 import de.uib.configed.gui.type.SavedSearch;
 import de.uib.configed.share.logging.Logging;

@@ -37,7 +37,7 @@ import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.infrastructure.ServerFacade;
 import de.uib.configed.core.infrastructure.certificate.CertificateValidatorFactory;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
-import de.uib.configed.gui.messageoftheday.MessageOfTheDayDialog;
+import de.uib.configed.gui.features.messageoftheday.MessageOfTheDayDialog;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.Utils;

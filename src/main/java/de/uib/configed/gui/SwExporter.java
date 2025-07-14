@@ -16,8 +16,8 @@ import java.util.Map;
 
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
-import de.uib.configed.gui.swinfopage.PanelSWInfo;
-import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
+import de.uib.configed.gui.features.swinfopage.PanelSWInfo;
+import de.uib.configed.gui.features.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.gui.type.SWAuditClientEntry;
 import de.uib.configed.share.logging.Logging;
 

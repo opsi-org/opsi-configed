@@ -28,11 +28,11 @@ import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceControlle
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
 import de.uib.configed.gui.ConfigedMain.EditingTarget;
-import de.uib.configed.gui.dashboard.Dashboard;
-import de.uib.configed.gui.licenses.LicenseManagement;
+import de.uib.configed.gui.features.dashboard.Dashboard;
+import de.uib.configed.gui.features.licenses.LicenseManagement;
+import de.uib.configed.gui.features.tree.ClientTree;
+import de.uib.configed.gui.features.tree.ProductTree;
 import de.uib.configed.gui.share.swing.ButtonTabComponent;
-import de.uib.configed.gui.tree.ClientTree;
-import de.uib.configed.gui.tree.ProductTree;
 import de.uib.configed.share.Icons;
 import de.uib.configed.share.logging.Logging;
 

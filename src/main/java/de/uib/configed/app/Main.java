@@ -27,7 +27,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 import de.uib.configed.gui.Configed;
 import de.uib.configed.gui.ConfigedMain;
 import de.uib.configed.gui.Globals;
-import de.uib.configed.gui.logviewer.Logviewer;
+import de.uib.configed.gui.features.logviewer.Logviewer;
 import de.uib.configed.gui.messages.Messages;
 import de.uib.configed.share.FeatureActivationChecker;
 import de.uib.configed.share.logging.Logging;

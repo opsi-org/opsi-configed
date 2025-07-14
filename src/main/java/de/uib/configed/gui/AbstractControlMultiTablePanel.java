@@ -12,7 +12,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import de.uib.configed.gui.licenses.MultiTablePanel;
+import de.uib.configed.gui.features.licenses.MultiTablePanel;
 import de.uib.configed.gui.share.table.GenTableModel;
 import de.uib.configed.gui.share.table.gui.PanelGenEdit;
 import de.uib.configed.gui.share.table.updates.MapBasedTableEditItem;

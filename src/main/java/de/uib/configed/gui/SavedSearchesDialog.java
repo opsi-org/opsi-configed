@@ -33,7 +33,7 @@ import de.uib.configed.core.domain.serverdata.CacheIdentifier;
 import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
 import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
-import de.uib.configed.gui.clientselection.SelectionManager;
+import de.uib.configed.gui.features.clientselection.SelectionManager;
 import de.uib.configed.gui.share.swing.SearchQueryExecutor;
 import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
 import de.uib.configed.gui.share.table.gui.SearchTargetModel;
