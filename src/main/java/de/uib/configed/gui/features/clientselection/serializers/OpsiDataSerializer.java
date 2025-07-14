@@ -29,8 +29,8 @@ import de.uib.configed.gui.features.clientselection.AbstractSelectElement;
 import de.uib.configed.gui.features.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.gui.features.clientselection.AbstractSelectOperation;
 import de.uib.configed.gui.features.clientselection.SelectData;
-import de.uib.configed.gui.features.clientselection.SelectionManager;
 import de.uib.configed.gui.features.clientselection.SelectData.DataType;
+import de.uib.configed.gui.features.clientselection.SelectionManager;
 import de.uib.configed.gui.features.clientselection.elements.GroupElement;
 import de.uib.configed.gui.features.clientselection.elements.GroupWithSubgroupsElement;
 import de.uib.configed.gui.features.clientselection.operations.AndOperation;
@@ -341,7 +341,8 @@ public class OpsiDataSerializer {
 			return parseOperationVersion1(operationName, element, children);
 		}
 
-		Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
+		Class<?> operationClass = Class
+				.forName("de.uib.configed.gui.features.clientselection.operations." + operationName);
 		Logging.info(this, "createOperation operationClass  ", operationClass.toString());
 		AbstractSelectOperation op = null;
 
@@ -410,7 +411,8 @@ public class OpsiDataSerializer {
 		if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
 			return getGeneriSelectElement(elementName, elementPath, hardware, elementPathS);
 		} else {
-			return (AbstractSelectElement) Class.forName("de.uib.configed.clientselection.elements." + elementName)
+			return (AbstractSelectElement) Class
+					.forName("de.uib.configed.gui.features.clientselection.elements." + elementName)
 					.getDeclaredConstructor().newInstance();
 		}
 	}
