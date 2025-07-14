@@ -8,9 +8,8 @@ package de.uib.configed.gui;
 
 import javax.swing.SwingWorker;
 
-import de.uib.configed.ConfigedMain;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 
 public class HealthCheckDataLoader extends SwingWorker<Void, Void> {
 	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory

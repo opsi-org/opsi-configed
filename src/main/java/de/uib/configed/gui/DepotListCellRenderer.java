@@ -15,14 +15,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.UIManager;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.messagebus.Messagebus;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.messagebus.Messagebus;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class DepotListCellRenderer extends DefaultListCellRenderer {
 	Map<String, Map<String, Object>> extendedInfo;

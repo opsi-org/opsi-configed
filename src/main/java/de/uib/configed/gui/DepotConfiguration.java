@@ -17,19 +17,14 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.configed.ChangedDataManager;
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ConfigedUtilityMethods;
-import de.uib.configed.UpdateCollectionManager;
-import de.uib.configed.gui.hostconfigs.PanelHostConfig;
-import de.uib.configed.gui.productpage.PanelProductProperties;
-import de.uib.opsidatamodel.datachanges.ConfigUpdateCollection;
-import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.datachanges.ConfigUpdateCollection;
+import de.uib.configed.core.domain.datachanges.HostUpdateCollection;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.features.hostconfigs.PanelHostConfig;
+import de.uib.configed.gui.features.productpage.PanelProductProperties;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class DepotConfiguration extends JTabbedPane implements ChangeListener, ListSelectionListener {
 	private ConfigUpdateCollection configUpdateCollection;

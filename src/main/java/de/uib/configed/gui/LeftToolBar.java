@@ -17,20 +17,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ExtraFrameController;
-import de.uib.configed.serverconsole.command.CommandExecutor;
-import de.uib.configed.serverconsole.command.CommandFactory;
-import de.uib.configed.serverconsole.command.CommandWithParameters;
-import de.uib.configed.serverconsole.command.MultiCommandTemplate;
-import de.uib.configed.serverconsole.command.SingleCommand;
-import de.uib.configed.terminal.TerminalFrame;
-import de.uib.messagebus.Messagebus;
-import de.uib.opsidatamodel.permission.UserServerConsoleConfig;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.permission.UserServerConsoleConfig;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.messagebus.Messagebus;
+import de.uib.configed.gui.features.serverconsole.command.CommandExecutor;
+import de.uib.configed.gui.features.serverconsole.command.CommandFactory;
+import de.uib.configed.gui.features.serverconsole.command.CommandWithParameters;
+import de.uib.configed.gui.features.serverconsole.command.MultiCommandTemplate;
+import de.uib.configed.gui.features.serverconsole.command.SingleCommand;
+import de.uib.configed.gui.features.terminal.TerminalFrame;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class LeftToolBar extends JToolBar {
 	// Inititalize it here so that we keep the reference throughout a full reload
