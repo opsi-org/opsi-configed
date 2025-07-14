@@ -24,17 +24,14 @@ import javax.swing.table.TableRowSorter;
 
 import org.java_websocket.handshake.ServerHandshake;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ServerActionManager;
-import de.uib.messagebus.MessagebusListener;
-import de.uib.messagebus.WebSocketEvent;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.ColorTableCellRenderer;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
+import de.uib.configed.core.infrastructure.messagebus.WebSocketEvent;
+import de.uib.configed.gui.share.table.gui.ColorTableCellRenderer;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 import javafx.util.Pair;
 
 public class ClientTable extends JTable implements MessagebusListener {

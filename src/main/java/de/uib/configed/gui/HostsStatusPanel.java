@@ -20,14 +20,11 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.type.HostInfo;
-import de.uib.messagebus.MessagebusListener;
-import de.uib.utils.Icons;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.infrastructure.messagebus.MessagebusListener;
+import de.uib.configed.gui.type.HostInfo;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class HostsStatusPanel extends JPanel implements MessagebusListener {
 	private static final int MIN_WIDTH = 250;

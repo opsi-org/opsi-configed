@@ -16,8 +16,7 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
-import de.uib.configed.ConfigedMain;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
 
 public class DepotsList extends JList<String> implements ComponentListener {
 	private DepotListCellRenderer myListCellRenderer;

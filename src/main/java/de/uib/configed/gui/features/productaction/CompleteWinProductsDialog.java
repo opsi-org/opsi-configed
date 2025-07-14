@@ -1,0 +1,356 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
+package de.uib.configed.gui.features.productaction;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.Configed;
+import de.uib.configed.gui.ConfigedMain;
+import de.uib.configed.gui.Globals;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.NameProducer;
+import de.uib.configed.share.WebDAVClient;
+import de.uib.configed.share.WinProductsRetriever;
+import de.uib.configed.share.logging.Logging;
+
+public class CompleteWinProductsDialog implements NameProducer {
+	private String winProduct = "";
+
+	private String depotProductDirectory;
+
+	private JLabel depot;
+	private JComboBox<String> comboChooseWinProduct;
+	private JTextField fieldTargetPath;
+
+	private JButton buttonCallSelectFolderWinPE;
+	private JButton buttonCallSelectFolderInstallFiles;
+	private JTextField fieldProductKey;
+
+	private JTextField fieldPathWinPE;
+	private JTextField fieldPathInstallFiles;
+
+	private JButton buttonCallExecute;
+
+	private JFileChooser chooserFolder;
+
+	private JDialog dialog;
+
+	private JLabel jLabelRetrievalText = new JLabel(
+			Configed.getResourceValue("PanelDriverUpload.retrievingWinProducts"));
+
+	private WebDAVClient webDAVClient;
+
+	private OpsiServiceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
+	public CompleteWinProductsDialog() {
+		defineChoosers();
+		initComponentsForNameProducer();
+
+		String webDavPath = persistenceController.getHostInfoCollections().getConfigServerWebDavPath();
+		depotProductDirectory = webDavPath != null && !webDavPath.isEmpty() ? webDavPath : "depot/";
+		if (!depotProductDirectory.endsWith("/")) {
+			depotProductDirectory += "/";
+		}
+
+		webDAVClient = new WebDAVClient();
+
+		initComponents();
+
+		JPanel panel = initLayout();
+
+		JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null,
+				new Object[] { buttonCallExecute, Configed.getResourceValue("buttonCancel") });
+
+		dialog = optionPane.createDialog(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("FProductAction.title"));
+		dialog.setModal(false);
+
+		evaluateWinProducts();
+
+		persistenceController.registerPanelCompleteWinProducts(this);
+	}
+
+	public void show() {
+		dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		dialog.setVisible(true);
+	}
+
+	public final void evaluateWinProducts() {
+		WinProductsRetriever.Context ctx = new WinProductsRetriever.Context();
+		ctx.owner = dialog;
+		ctx.webDAVClient = webDAVClient;
+		ctx.msg = jLabelRetrievalText;
+		ctx.options = comboChooseWinProduct;
+		ctx.onDone = () -> {
+			winProduct = (String) comboChooseWinProduct.getSelectedItem();
+			produceTarget();
+		};
+		WinProductsRetriever retriever = new WinProductsRetriever(ctx);
+		retriever.execute();
+	}
+
+	private void defineChoosers() {
+		chooserFolder = new JFileChooser();
+		chooserFolder.setFileHidingEnabled(false);
+		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		SwingUtilities.updateComponentTreeUI(chooserFolder);
+
+		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooserFolder.setDialogTitle(Configed.getResourceValue("CompleteWinProducts.chooser"));
+
+		depot = new JLabel(persistenceController.getHostInfoCollections().getConfigServer());
+
+		comboChooseWinProduct = new JComboBox<>();
+		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
+			winProduct = "" + comboChooseWinProduct.getSelectedItem();
+			produceTarget();
+		});
+	}
+
+	private void checkButtonCallExecute() {
+		if (buttonCallExecute == null) {
+			return;
+		}
+
+		buttonCallExecute.setEnabled(webDAVClient.existsAndIsDirectory(fieldTargetPath.getText()));
+	}
+
+	private void produceTarget() {
+		if (fieldTargetPath != null) {
+			winProduct = winProduct == null || "null".equals(winProduct) ? "" : winProduct;
+			String targetPath = depotProductDirectory + winProduct;
+			fieldTargetPath.setText(targetPath.endsWith("/") ? targetPath : (targetPath + "/"));
+			checkButtonCallExecute();
+		}
+	}
+
+	// implements NameProducer
+	@Override
+	public String produceName() {
+		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory ", fieldTargetPath, " , ",
+				depotProductDirectory);
+		if (fieldTargetPath == null || fieldTargetPath.getText().isEmpty()
+				|| fieldTargetPath.getText().startsWith(depotProductDirectory)) {
+			return depotProductDirectory;
+		}
+
+		return fieldTargetPath.getText();
+	}
+
+	@Override
+	public String getDefaultName() {
+		return depotProductDirectory;
+	}
+
+	private void initComponentsForNameProducer() {
+		fieldTargetPath = new JTextField();
+		fieldTargetPath.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkButtonCallExecute();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkButtonCallExecute();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkButtonCallExecute();
+			}
+		});
+
+		fieldPathWinPE = new JTextField();
+	}
+
+	private void initComponents() {
+		fieldProductKey = new JTextField();
+
+		buttonCallSelectFolderWinPE = new JButton(Icons.getIntellijIcon("open"));
+		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
+
+		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
+			int returnVal = chooserFolder.showOpenDialog(dialog);
+
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String pathWinPE = chooserFolder.getSelectedFile().getPath();
+				fieldPathWinPE.setText(pathWinPE);
+				fieldPathWinPE.setCaretPosition(pathWinPE.length());
+			} else {
+				fieldPathWinPE.setText("");
+			}
+		});
+
+		buttonCallSelectFolderInstallFiles = new JButton(Icons.getIntellijIcon("open"));
+		buttonCallSelectFolderInstallFiles
+				.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));
+
+		fieldPathInstallFiles = new JTextField();
+
+		buttonCallSelectFolderInstallFiles.addActionListener((ActionEvent actionEvent) -> {
+			int returnVal = chooserFolder.showOpenDialog(dialog);
+
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
+				fieldPathInstallFiles.setText(pathInstallFiles);
+				fieldPathInstallFiles.setCaretPosition(pathInstallFiles.length());
+			} else {
+				fieldPathInstallFiles.setText("");
+			}
+		});
+
+		buttonCallExecute = new JButton(Configed.getResourceValue("CompleteWinProducts.execute"));
+
+		buttonCallExecute.setEnabled(false);
+
+		buttonCallExecute.addActionListener(actionEvent -> execute());
+	}
+
+	private void execute() {
+		WinProductUploadWorker.Context ctx = new WinProductUploadWorker.Context();
+		ctx.owner = dialog;
+		ctx.executeButton = buttonCallExecute;
+		ctx.targetDirectory = fieldTargetPath.getText().trim();
+		ctx.pathWinPE = fieldPathWinPE.getText().trim();
+		ctx.pathInstallFiles = fieldPathInstallFiles.getText().trim();
+		ctx.productKey = fieldProductKey.getText().trim();
+		ctx.depot = depot.getText();
+		ctx.winProduct = winProduct;
+		ctx.webDAVClient = webDAVClient;
+		new WinProductUploadWorker(ctx).execute();
+	}
+
+	@SuppressWarnings("java:S138")
+	private JPanel initLayout() {
+		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
+		topicLabel.setFont(topicLabel.getFont().deriveFont(Font.BOLD));
+
+		JLabel labelServer = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelServer"));
+		labelServer.setFont(labelServer.getFont().deriveFont(Font.BOLD));
+
+		JLabel labelWinProduct = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelWinProduct"));
+		labelWinProduct.setFont(labelWinProduct.getFont().deriveFont(Font.BOLD));
+
+		JLabel labelFolderWinPE = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelFolderWinPE"));
+		labelFolderWinPE.setFont(labelFolderWinPE.getFont().deriveFont(Font.BOLD));
+
+		JLabel labelFolderInstallFiles = new JLabel(
+				Configed.getResourceValue("CompleteWinProducts.labelFolderInstallFiles"));
+		labelFolderInstallFiles.setFont(labelFolderInstallFiles.getFont().deriveFont(Font.BOLD));
+
+		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
+		labelTargetPath.setFont(labelTargetPath.getFont().deriveFont(Font.BOLD));
+
+		JLabel labelProductKey = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelProductKey"));
+		labelProductKey.setFont(labelProductKey.getFont().deriveFont(Font.BOLD));
+
+		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonCallSelectFolderInstallFiles, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.GAP_SIZE)
+				.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
+
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+
+				.addComponent(labelServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(depot, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+
+				.addComponent(labelWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(comboChooseWinProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(jLabelRetrievalText, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
+				.addComponent(labelFolderWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(fieldPathWinPE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderWinPE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
+				.addComponent(labelFolderInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(fieldPathInstallFiles, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addComponent(buttonCallSelectFolderInstallFiles,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addComponent(labelTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(fieldTargetPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(labelProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(fieldProductKey, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE));
+
+		return panel;
+	}
+}

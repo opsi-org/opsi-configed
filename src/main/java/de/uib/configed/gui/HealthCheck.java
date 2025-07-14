@@ -46,14 +46,10 @@ import javax.swing.text.StyleContext;
 
 import org.json.JSONObject;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.configed.HealthInfo;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.logging.Logging;
 
 public class HealthCheck extends JPanel {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");

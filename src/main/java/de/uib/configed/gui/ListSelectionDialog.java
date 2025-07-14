@@ -30,14 +30,12 @@ import javax.swing.ListSelectionModel;
 
 import com.formdev.flatlaf.extras.components.FlatTextField;
 
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.utils.Icons;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.gui.SearchTargetModel;
-import de.uib.utils.table.gui.SearchTargetModelFromJList;
-import de.uib.utils.table.gui.TableSearchPane;
+import de.uib.configed.gui.share.table.gui.SearchTargetModel;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
+import de.uib.configed.gui.share.table.gui.TableSearchPane;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class ListSelectionDialog {
 	private JList<String> jList;

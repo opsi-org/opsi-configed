@@ -19,12 +19,10 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.gui.logpane.LogPanel;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.features.logpane.LogPanel;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class LogTabComponent extends LogPanel {
 	private static final String ALL_LOGFILES_SUFFIX = "all";

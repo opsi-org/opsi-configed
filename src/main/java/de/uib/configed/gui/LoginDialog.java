@@ -27,18 +27,15 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
-import de.uib.opsicommand.ServerFacade;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.Icons;
-import de.uib.utils.Utils;
-import de.uib.utils.WindowsPositionManager;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.SeparatedDocument;
-import de.uib.utils.userprefs.UserPreferences;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.infrastructure.ServerFacade;
+import de.uib.configed.gui.share.swing.SeparatedDocument;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.WindowsPositionManager;
+import de.uib.configed.share.logging.Logging;
+import de.uib.configed.share.userprefs.UserPreferences;
 
 public class LoginDialog extends JFrame implements KeyListener {
 	private GlassPane glassPane;

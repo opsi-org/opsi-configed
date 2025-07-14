@@ -16,16 +16,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ControlPanelAssignToLPools;
-import de.uib.configed.Globals;
-import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.table.GenTableModel;
-import de.uib.utils.table.gui.PanelGenEdit;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.gui.share.table.GenTableModel;
+import de.uib.configed.gui.share.table.gui.PanelGenEdit;
+import de.uib.configed.gui.type.SWAuditEntry;
+import de.uib.configed.share.logging.Logging;
 
 public class GlobalSoftwareInfoDialog {
 	private PanelGenEdit panelGlobalSoftware;

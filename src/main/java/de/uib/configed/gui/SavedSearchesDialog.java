@@ -28,23 +28,20 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.ExtraFrameController;
-import de.uib.configed.clientselection.SelectionManager;
-import de.uib.opsidatamodel.SavedSearches;
-import de.uib.opsidatamodel.serverdata.CacheIdentifier;
-import de.uib.opsidatamodel.serverdata.OpsiServiceNOMPersistenceController;
-import de.uib.opsidatamodel.serverdata.PersistenceControllerFactory;
-import de.uib.opsidatamodel.serverdata.reload.ReloadEvent;
-import de.uib.utils.Icons;
-import de.uib.utils.Utils;
-import de.uib.utils.logging.Logging;
-import de.uib.utils.swing.SearchQueryExecutor;
-import de.uib.utils.swing.list.ListCellRendererByIndex;
-import de.uib.utils.table.gui.SearchTargetModel;
-import de.uib.utils.table.gui.SearchTargetModelFromJList;
-import de.uib.utils.table.gui.TableSearchPane;
+import de.uib.configed.core.domain.SavedSearches;
+import de.uib.configed.core.domain.serverdata.CacheIdentifier;
+import de.uib.configed.core.domain.serverdata.OpsiServiceNOMPersistenceController;
+import de.uib.configed.core.domain.serverdata.PersistenceControllerFactory;
+import de.uib.configed.core.domain.serverdata.reload.ReloadEvent;
+import de.uib.configed.gui.features.clientselection.SelectionManager;
+import de.uib.configed.gui.share.swing.SearchQueryExecutor;
+import de.uib.configed.gui.share.swing.list.ListCellRendererByIndex;
+import de.uib.configed.gui.share.table.gui.SearchTargetModel;
+import de.uib.configed.gui.share.table.gui.SearchTargetModelFromJList;
+import de.uib.configed.gui.share.table.gui.TableSearchPane;
+import de.uib.configed.share.Icons;
+import de.uib.configed.share.Utils;
+import de.uib.configed.share.logging.Logging;
 
 public class SavedSearchesDialog {
 	private SelectionManager manager;
